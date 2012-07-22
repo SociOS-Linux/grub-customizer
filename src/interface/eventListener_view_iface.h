@@ -27,6 +27,8 @@ class EventListenerView_iface {
 	virtual void ruleSelected(void* rule)=0;
 	virtual void proxySelected(void* proxy)=0;
 
+	virtual void aboutDialog_requested()=0;
+
 	//settings dialog
 	virtual void setting_row_changed(std::string const& name)=0;
 	virtual void default_entry_predefined_toggeled()=0;

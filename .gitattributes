@@ -76,6 +76,8 @@ src/presenter/grubcfg_proxy_main.cpp -text
 src/presenter/gtk-client.cpp -text
 src/presenter/gtk-client.h -text
 src/presenter/gtk-client_main.cpp -text
+src/view/aboutDialog.cpp -text
+src/view/aboutDialog.h -text
 src/view/grubInstallDlg.cpp -text
 src/view/grubInstallDlg.h -text
 src/view/grublistCfgDlg.cpp -text

@@ -5,8 +5,7 @@ ImageMenuItemOwnKey::ImageMenuItemOwnKey(const Gtk::StockID& id, const Gtk::Acce
 }
 
 GrublistCfgDlg::GrublistCfgDlg()
-	: appName("Grub Customizer"), appVersion(GC_VERSION), //TODO: MOVE NAME AND VERSION TO config.h.in
-	tbttAdd(Gtk::Stock::ADD), tbttRemove(Gtk::Stock::REMOVE), tbttUp(Gtk::Stock::GO_UP), tbttDown(Gtk::Stock::GO_DOWN),
+	: tbttAdd(Gtk::Stock::ADD), tbttRemove(Gtk::Stock::REMOVE), tbttUp(Gtk::Stock::GO_UP), tbttDown(Gtk::Stock::GO_DOWN),
 	tbttSave(Gtk::Stock::SAVE), tbttPreferences(Gtk::Stock::PREFERENCES),
 	miFile(gettext("_File"), true), miExit(Gtk::Stock::QUIT), tbttReload(Gtk::Stock::REFRESH),
 	miEdit(gettext("_Edit"), true), miView(gettext("_View"), true), miHelp(gettext("_Help"), true),
@@ -18,7 +17,6 @@ GrublistCfgDlg::GrublistCfgDlg()
 {
 	win.set_icon_name("grub-customizer");
 
-	authors.push_back("Daniel Richter https://launchpad.net/~danielrichter2007");
 	win.set_default_size(800,600);
 	win.add(vbMainSplit);
 	
@@ -35,38 +33,6 @@ GrublistCfgDlg::GrublistCfgDlg()
 	
 	progressBar.set_pulse_step(0.1);
 	
-	dlgAbout.set_name(appName);
-	dlgAbout.set_version(appVersion);
-	dlgAbout.set_authors(authors);
-	
-	dlgAbout.set_icon_name("grub-customizer");
-	dlgAbout.set_logo_icon_name("grub-customizer");
-	dlgAbout.set_comments(gettext("Grub Customizer is a graphical interface to configure the grub2/burg settings"));
-	
-	dlgAbout.set_translator_credits(
-"Adam Czabara https://launchpad.net/~adam-czabara\n\
-Alexey Ivanov https://launchpad.net/~alexey.ivanes\n\
-Bernardo Miguel Savone https://launchpad.net/~bersil\n\
-Careone https://launchpad.net/~zzbusagain\n\
-Daniel Richter https://launchpad.net/~danielrichter2007\n\
-Emre AYTAÇ https://launchpad.net/~eaytac\n\
-Erkin Batu Altunbaş https://launchpad.net/~erkin\n\
-Eugênio F https://launchpad.net/~eugf\n\
-Fedik https://launchpad.net/~fedikw\n\
-GamePad64 https://launchpad.net/~gamepad64\n\
-GoJoMo https://launchpad.net/~tolbkni\n\
-José Humberto Melo https://launchpad.net/~josehumberto-melo\n\
-Manuel Xosé Lemos https://launchpad.net/~mxlemos\n\
-Maxime Gentils https://launchpad.net/~maxime.gentils\n\
-Michael Kotsarinis https://launchpad.net/~mk73628\n\
-Miguel Anxo Bouzada https://launchpad.net/~mbouzada\n\
-nafterburner https://launchpad.net/~nafterburner\n\
-patel https://launchpad.net/~patel\n\
-shishimaru https://launchpad.net/~salvi-uchiha\n\
-Svetoslav Stefanov https://launchpad.net/~svetlisashkov\n\
-TheMengzor https://launchpad.net/~the-mengzor\n\
-zeugma https://launchpad.net/~sunder67\
-");
 	//toolbar
 	toolbar.append(tbttSave);
 	tbttSave.set_is_important(true);
@@ -128,8 +94,6 @@ zeugma https://launchpad.net/~sunder67\
 	miStartRootSelector.set_label(gettext("Select _partition …"));
 	miStartRootSelector.set_use_underline(true);
 	
-	miExit.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlg::signal_quit_click));
-	miAbout.signal_activate().connect(sigc::mem_fun(&dlgAbout, &Gtk::AboutDialog::show_all));
 
 
 	//signals
@@ -153,10 +117,12 @@ zeugma https://launchpad.net/~sunder67\
 	miInstallGrub.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlg::signal_show_grub_install_dialog_click));
 	miStartRootSelector.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlg::signal_show_root_selector));
 	miPreferences.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlg::signal_preference_click));
+
+	miExit.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlg::signal_quit_click));
+	miAbout.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlg::signal_info_click));
 	
 	win.signal_delete_event().connect(sigc::mem_fun(this, &GrublistCfgDlg::signal_delete_event));
 
-	dlgAbout.signal_response().connect(sigc::mem_fun(this, &GrublistCfgDlg::signal_about_dlg_response));
 }
 
 void GrublistCfgDlg::setEventListener(EventListenerView_iface& eventListener) {
@@ -586,10 +552,6 @@ void GrublistCfgDlg::signal_quit_click(){
 		this->close();
 }
 
-void GrublistCfgDlg::signal_about_dlg_response(int response_id){
-	if (Gtk::RESPONSE_CLOSE)
-		dlgAbout.hide();
-}
 
 void GrublistCfgDlg::signal_show_grub_install_dialog_click(){
 	eventListener->installDialogRequest();
@@ -601,6 +563,10 @@ void GrublistCfgDlg::showErrorMessage(Glib::ustring const& msg){
 
 void GrublistCfgDlg::clear(){
 	tvConfList.refTreeStore->clear();
+}
+
+void GrublistCfgDlg::signal_info_click(){
+	eventListener->aboutDialog_requested();
 }
 
 GrubConfListing::GrubConfListing(){

@@ -42,9 +42,6 @@ class GrublistCfgDlg : public GrubConfUI {
 	GrubConfListing tvConfList;
 	Gtk::ProgressBar progressBar;
 
-	Glib::ustring appName, appVersion;
-	std::vector<Glib::ustring> authors;
-
 	Gtk::ToolButton tbttAdd, tbttRemove, tbttUp, tbttDown, tbttSave, tbttPreferences, tbttReload;
 	Gtk::ToolItem ti_sep1;
 	Gtk::VSeparator vs_sep1;
@@ -59,7 +56,6 @@ class GrublistCfgDlg : public GrubConfUI {
 	Gtk::ImageMenuItem miExit, miSave, miPreferences, miAbout, miStartRootSelector;
 	ImageMenuItemOwnKey miReload, miAdd, miRemove, miUp, miDown;
 	Gtk::Menu subFile, subEdit, subView, subHelp;
-	Gtk::AboutDialog dlgAbout;
 	
 	bool lock_state;
 
@@ -119,9 +115,9 @@ private:
 	void signal_show_grub_install_dialog_click();
 	void signal_treeview_selection_changed();
 	bool signal_delete_event(GdkEventAny* event);
-	void signal_about_dlg_response(int response_id);
 	void signal_quit_click();
 	void signal_preference_click();
+	void signal_info_click();
 };
 
 #endif

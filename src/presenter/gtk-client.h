@@ -23,6 +23,7 @@
 #include "../view/partitionChooser.h"
 #include "../view/settings_dlg_gtk.h"
 #include "../model/fbResolutionsGetter.h"
+#include "../view/aboutDialog.h"
 
 class GtkClient {
 	GrubEnv& env;
@@ -39,6 +40,7 @@ class GtkClient {
 	FbResolutionsGetter* fbResolutionsGetter;
 	DeviceDataList* deviceDataList;
 	MountTable* mountTable;
+	AboutDialog* aboutDialog;
 	
 	Glib::Dispatcher disp_sync_load, disp_sync_save, disp_thread_died, disp_updateSettingsDlgResolutionList;
 	bool config_has_been_different_on_startup_but_unsaved;
@@ -60,6 +62,7 @@ public:
 	void setFbResolutionsGetter(FbResolutionsGetter& fbResolutionsGetter);
 	void setDeviceDataList(DeviceDataList& deviceDataList);
 	void setMountTable(MountTable& mountTable);
+	void setAboutDialog(AboutDialog& aboutDialog);
 
 	void showSettingsDlg();
 	void load(bool preserveConfig = false);
@@ -103,6 +106,8 @@ public:
 	
 	void showRuleInfo(Rule* rule);
 	void showProxyInfo(Proxy* proxy);
+
+	void showAboutDialog();
 
 	//settings dialog
 	void updateSettingsDlgResolutionList();

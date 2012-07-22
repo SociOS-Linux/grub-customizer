@@ -28,6 +28,7 @@ int main(int argc, char** argv){
 	GrubSettingsDlgGtk* settingsDlg = new GrubSettingsDlgGtk;
 	DeviceDataList* deviceDataList = new DeviceDataList;
 	MountTable* mountTable = new MountTable;
+	AboutDialog* aboutDialog = new AboutDialog;
 
 	
 	presenter.setModelListCfg(*listcfg);
@@ -43,6 +44,7 @@ int main(int argc, char** argv){
 	presenter.setFbResolutionsGetter(*fbResolutionsGetter);
 	presenter.setDeviceDataList(*deviceDataList);
 	presenter.setMountTable(*mountTable);
+	presenter.setAboutDialog(*aboutDialog);
 	
 	EventListenerView evt_view(presenter);
 	listCfgView->setEventListener(evt_view);

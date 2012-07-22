@@ -63,6 +63,10 @@ void GtkClient::setMountTable(MountTable& mountTable){
 	this->mountTable = &mountTable;
 }
 
+void GtkClient::setAboutDialog(AboutDialog& aboutDialog){
+	this->aboutDialog = &aboutDialog;
+}
+
 void GtkClient::showSettingsDlg(){
 	std::list<std::string> entryTitles = this->grublistCfg->proxies.generateEntryTitleList();
 	this->settingsDlg->clearDefaultEntryChooser();
@@ -197,6 +201,10 @@ bool GtkClient::prepare(bool forceRootSelection){
 	}
 	while (!exit);
 	return true;
+}
+
+void GtkClient::showAboutDialog(){
+	this->aboutDialog->show();
 }
 
 void GtkClient::startRootSelector(){

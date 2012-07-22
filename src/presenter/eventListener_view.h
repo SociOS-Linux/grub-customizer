@@ -31,6 +31,8 @@ public:
 	void ruleSelected(void* rule);
 	void proxySelected(void* proxy);
 
+	void aboutDialog_requested();
+
 	//settings dialog
 	void setting_row_changed(std::string const& name);
 	void default_entry_predefined_toggeled();

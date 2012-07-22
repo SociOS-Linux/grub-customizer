@@ -80,6 +80,10 @@ void EventListenerView::proxySelected(void* proxy){
 	presenter.showProxyInfo((Proxy*)proxy);
 }
 
+void EventListenerView::aboutDialog_requested(){
+	presenter.showAboutDialog();
+}
+
 //settings dialog
 void EventListenerView::setting_row_changed(std::string const& name){
 	presenter.updateCustomSetting(name);

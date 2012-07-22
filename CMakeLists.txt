@@ -40,6 +40,7 @@ add_executable(grub-customizer
 	src/model/fbResolutionsGetter.cpp
 	src/model/grubInstaller.cpp
 	src/view/scriptAddDlg.cpp
+	src/view/aboutDialog.cpp
 )
 
 
