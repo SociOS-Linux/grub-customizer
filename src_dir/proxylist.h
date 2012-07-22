@@ -13,6 +13,7 @@ struct ProxyList : public std::list<Proxy> {
 	void sort();
 	void deleteProxy(Proxy* proxyPointer);
 	void clearTrash();
+	std::list<std::string> generateEntryTitleList() const;
 };
 
 #endif

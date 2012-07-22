@@ -5,9 +5,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: 1.6\n"
+"Project-Id-Version: 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-22 20:01+0200\n"
+"POT-Creation-Date: 2010-11-21 12:13+0100\n"
 "PO-Revision-Date: 2010-10-13 15:35+0200\n"
 "Last-Translator: Daniel Richter <danielrichter2007@web.de>\n"
 "Language-Team: German\n"
@@ -16,11 +16,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../src_dir/grubconfig.cpp:194 ../src_dir/grubconfig.cpp:209
+#: ../src_dir/grubconfig.cpp:203 ../src_dir/grubconfig.cpp:218
 msgid " not found. Is grub2 installed?"
 msgstr " nicht gefinden. Ist Grub2/BURG installiert?"
 
-#: ../src_dir/grubconfig.cpp:270
+#: ../src_dir/grubconfig.cpp:287
 msgid " couldn't be executed successfully. You must run this as root!"
 msgstr ""
 " konnte nicht erfolgreich ausgeführt werden. Sie müssen dieses Programm als "
@@ -68,99 +68,102 @@ msgstr ""
 msgid "_Device: "
 msgstr "_Gerät: "
 
-#: ../src_dir/grubconf_ui_gtk.cpp:58
+#: ../src_dir/grubconf_ui_gtk.cpp:54
 msgid ""
 "Grub Customizer is a graphical interface to configure the grub2/burg settings"
 msgstr ""
-"Grub Customizer ist eine grafische Benutzeroberfläche zur Anpassung der grub2/"
-"burg-Einstellungen"
+"Grub Customizer ist eine grafische Benutzeroberfläche zur Anpassung der "
+"grub2/burg-Einstellungen"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:62
+#: ../src_dir/grubconf_ui_gtk.cpp:79
 msgid "Save configuration and generate a new "
 msgstr "Konfiguration speichern und folgende Datei neu generieren: "
 
-#: ../src_dir/grubconf_ui_gtk.cpp:69
+#: ../src_dir/grubconf_ui_gtk.cpp:86
 msgid "Add a script to your configuration"
 msgstr "Script zur Konfiguration hinzufügen"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:71
+#: ../src_dir/grubconf_ui_gtk.cpp:88
 msgid "Remove a script from your configuration"
 msgstr "Script aus der Konfiguration entfernen"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:77
+#: ../src_dir/grubconf_ui_gtk.cpp:94
 msgid "Move up the selected entry or script"
 msgstr "Aktuellen Eintrag / aktuelles Script eine Position nach oben schieben"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:79
+#: ../src_dir/grubconf_ui_gtk.cpp:96
 msgid "Move down the selected entry or script"
 msgstr "Aktuellen Eintrag / aktuelles Script eine Position nach unten schieben"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:85
-msgid "reload configuration (same effect as an application restart)"
-msgstr ""
-"Konfiguration erneut laden (gleicher Effekt wie bei Neustart des Programms)"
+#: ../src_dir/grubconf_ui_gtk.cpp:104
+msgid "reload configuration"
+msgstr "Konfiguration erneut laden"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:87
+#: ../src_dir/grubconf_ui_gtk.cpp:107
 msgid "Edit grub preferences"
 msgstr "Grub-Einstellungen bearbeiten"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:116
+#: ../src_dir/grubconf_ui_gtk.cpp:136
 msgid "Select _partition …"
 msgstr "_Partition auswählen …"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:123
+#: ../src_dir/grubconf_ui_gtk.cpp:143
 msgid "Add script"
 msgstr "Script hinzufügen"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:139
+#: ../src_dir/grubconf_ui_gtk.cpp:159
 msgid "Entry"
 msgstr "Eintrag"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:154
+#: ../src_dir/grubconf_ui_gtk.cpp:174
 msgid "Install to MBR"
 msgstr "Bootloader in den MBR installieren"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:211
+#: ../src_dir/grubconf_ui_gtk.cpp:219
+msgid "BURG Mode"
+msgstr "BURG-Modus"
+
+#: ../src_dir/grubconf_ui_gtk.cpp:240
 msgid "No Bootloader found"
 msgstr "Es wurde kein Bootloader gefunden!"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:212
+#: ../src_dir/grubconf_ui_gtk.cpp:241
 msgid "Do you want to select another root partition?"
 msgstr "Möchten Sie eine andere Root-Partition auswählen?"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:219
+#: ../src_dir/grubconf_ui_gtk.cpp:248
 msgid "BURG found!"
 msgstr "BURG gefunden!"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:220
+#: ../src_dir/grubconf_ui_gtk.cpp:249
 msgid "Do you want to configure BURG instead of grub2?"
 msgstr "Wollen Sie BURG statt Grub2 konfigurieren?"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:240
+#: ../src_dir/grubconf_ui_gtk.cpp:269
 msgid "The bootloader has been installed successfully"
 msgstr "Der Bootloader wurde erfolgreich installiert!"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:245
+#: ../src_dir/grubconf_ui_gtk.cpp:274
 msgid "Error while installing the bootloader"
 msgstr "Installation des Bootloaders fehlgeschlagen"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:267
+#: ../src_dir/grubconf_ui_gtk.cpp:296
 msgid "loading configuration…"
 msgstr "Konfiguration wird geladen…"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:296
+#: ../src_dir/grubconf_ui_gtk.cpp:327
 msgid " (custom)"
 msgstr " (angepasst)"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:308
+#: ../src_dir/grubconf_ui_gtk.cpp:339
 msgid "(new Entries)"
 msgstr "(neue Einträge)"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:329
+#: ../src_dir/grubconf_ui_gtk.cpp:360
 msgid "Proxy binary not found!"
 msgstr "Proxy-Datei nicht gefunden!"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:330
+#: ../src_dir/grubconf_ui_gtk.cpp:361
 msgid ""
 "You will see all entries (uncustomized) when you run grub. This error accurs "
 "(in most cases), when you didn't install grub gustomizer currectly."
@@ -169,31 +172,31 @@ msgstr ""
 "Dieser Fehler tritt in der Regel dann auf wenn der Grub Customizer nicht "
 "korrekt installiert wurde."
 
-#: ../src_dir/grubconf_ui_gtk.cpp:346
+#: ../src_dir/grubconf_ui_gtk.cpp:379
 msgid "Configuration has been saved"
 msgstr "Konfiguration gespeichert"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:349
+#: ../src_dir/grubconf_ui_gtk.cpp:382
 msgid "updating configuration"
 msgstr "Konfiguration wird aktualisiert"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:404
+#: ../src_dir/grubconf_ui_gtk.cpp:439
 msgid "Name the Entry"
 msgstr "Geben Sie eine Bezeichnung ein!"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:519
+#: ../src_dir/grubconf_ui_gtk.cpp:555
 msgid "Default title: "
 msgstr "Vorgabetitel: "
 
-#: ../src_dir/grubconf_ui_gtk.cpp:539
+#: ../src_dir/grubconf_ui_gtk.cpp:575
 msgid "No script found"
 msgstr "Keine Skripte gefunden"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:623
+#: ../src_dir/grubconf_ui_gtk.cpp:670
 msgid "The saved configuration is not up to date!"
 msgstr "Die gespeicherte Konfiguration ist nicht aktuell!"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:624
+#: ../src_dir/grubconf_ui_gtk.cpp:671
 msgid ""
 "The generated configuration didn't equal to the saved configuration on "
 "startup. So what you see now may not be what you see when you restart your "
@@ -204,39 +207,43 @@ msgstr ""
 "führen, dass die Anzeige im Bootloader nicht der Anzeige dieses Programms "
 "entspricht Um dieses Problem zu beheben, klicken Sie auf Aktualisieren!"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:627
+#: ../src_dir/grubconf_ui_gtk.cpp:674
 msgid "_Quit without update"
 msgstr "_Beenden, ohne zu aktualisieren"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:630
+#: ../src_dir/grubconf_ui_gtk.cpp:677
 msgid "_Update & Quit"
 msgstr "_Aktualisieren und Beenden"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:634
+#: ../src_dir/grubconf_ui_gtk.cpp:681
 msgid "Do you want to save your modifications?"
 msgstr "Sollen alle vorgenommenen Änderungen gespeichert werden?"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:637
+#: ../src_dir/grubconf_ui_gtk.cpp:684
 msgid "_Quit without saving"
 msgstr "_Beenden, ohne zu speichern"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:640
+#: ../src_dir/grubconf_ui_gtk.cpp:687
 msgid "_Save & Quit"
 msgstr "_Speichern und Beenden"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:682
+#: ../src_dir/grubconf_ui_gtk.cpp:690
+msgid "AND: your modifications are still unsaved, update will save them too!"
+msgstr "UND: Es gibt noch einige ungespeicherte Änderungen!"
+
+#: ../src_dir/grubconf_ui_gtk.cpp:729
 msgid "installing the bootloader…"
 msgstr "der Bootloader wird installiert…"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:687
+#: ../src_dir/grubconf_ui_gtk.cpp:734
 msgid "Please type a device string!"
 msgstr "Bitte geben Sie einen Geräte-Pfad ein"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:697
+#: ../src_dir/grubconf_ui_gtk.cpp:744 ../src_dir/settings_dlg_gtk.cpp:91
 msgid "is active"
 msgstr "Aktiv"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:698
+#: ../src_dir/grubconf_ui_gtk.cpp:745 ../src_dir/settings_dlg_gtk.cpp:92
 msgid "name"
 msgstr "Bezeichnung"
 
@@ -356,3 +363,187 @@ msgstr "Die ausgewählte Partition konnte nicht eingebunden werden"
 msgid "Couldn't umount the selected partition"
 msgstr "Partition konnte nicht ausgehängt werden"
 
+#: ../src_dir/settings_dlg_gtk.cpp:47
+msgid "white"
+msgstr "Weiß"
+
+#: ../src_dir/settings_dlg_gtk.cpp:48
+msgid "yellow"
+msgstr "Gelb"
+
+#: ../src_dir/settings_dlg_gtk.cpp:49
+msgid "light-cyan"
+msgstr "Helles Cyan"
+
+#: ../src_dir/settings_dlg_gtk.cpp:50
+msgid "cyan"
+msgstr "Cyan"
+
+#: ../src_dir/settings_dlg_gtk.cpp:51
+msgid "light-blue"
+msgstr "Hellblau"
+
+#: ../src_dir/settings_dlg_gtk.cpp:52
+msgid "blue"
+msgstr "Blau"
+
+#: ../src_dir/settings_dlg_gtk.cpp:53
+msgid "light-green"
+msgstr "Hellgrün"
+
+#: ../src_dir/settings_dlg_gtk.cpp:54
+msgid "green"
+msgstr "Grün"
+
+#: ../src_dir/settings_dlg_gtk.cpp:55
+msgid "light-magenta"
+msgstr "Helles Magenta"
+
+#: ../src_dir/settings_dlg_gtk.cpp:56
+msgid "magenta"
+msgstr "Magenta"
+
+#: ../src_dir/settings_dlg_gtk.cpp:57
+msgid "light-red"
+msgstr "Hellrot"
+
+#: ../src_dir/settings_dlg_gtk.cpp:58
+msgid "red"
+msgstr "Rot"
+
+#: ../src_dir/settings_dlg_gtk.cpp:59
+msgid "brown"
+msgstr "Braun"
+
+#: ../src_dir/settings_dlg_gtk.cpp:60
+msgid "light-gray"
+msgstr "Hellgrau"
+
+#: ../src_dir/settings_dlg_gtk.cpp:61
+msgid "dark-gray"
+msgstr "Dunkelgrau"
+
+#: ../src_dir/settings_dlg_gtk.cpp:62
+msgid "black"
+msgstr "Schwarz"
+
+#: ../src_dir/settings_dlg_gtk.cpp:68
+msgid "pre_defined: "
+msgstr "Voreingestellt: "
+
+#: ../src_dir/settings_dlg_gtk.cpp:68
+msgid "previously _booted entry"
+msgstr "_Vorher gestarteter Eintrag"
+
+#: ../src_dir/settings_dlg_gtk.cpp:69
+msgid "default entry"
+msgstr "Vorausgewählter Eintrag"
+
+#: ../src_dir/settings_dlg_gtk.cpp:69
+msgid "visibility"
+msgstr "Anzeige"
+
+#: ../src_dir/settings_dlg_gtk.cpp:69
+msgid "show menu"
+msgstr "Menü anzeigen"
+
+#: ../src_dir/settings_dlg_gtk.cpp:70
+msgid "Timeout"
+msgstr "Anzeigedauer"
+
+#: ../src_dir/settings_dlg_gtk.cpp:70
+msgid "Seconds"
+msgstr "Sekunden"
+
+#: ../src_dir/settings_dlg_gtk.cpp:70
+msgid "kernel parameters"
+msgstr "Kernel-Parameter"
+
+#: ../src_dir/settings_dlg_gtk.cpp:71
+msgid "generate recovery entries"
+msgstr "\"Wiederherstellungs-Einträge\" generieren"
+
+#: ../src_dir/settings_dlg_gtk.cpp:71
+msgid "look for other operating systems"
+msgstr "Nach anderen Betriebssystemen suchen"
+
+#: ../src_dir/settings_dlg_gtk.cpp:72
+msgid "custom resolution: "
+msgstr "benutzerdefinierte Auflösung: "
+
+#: ../src_dir/settings_dlg_gtk.cpp:73
+msgid "font color"
+msgstr "Schriftfarbe"
+
+#: ../src_dir/settings_dlg_gtk.cpp:73
+msgid "background"
+msgstr "Hintergrund"
+
+#: ../src_dir/settings_dlg_gtk.cpp:74
+msgid "normal:"
+msgstr "Normal:"
+
+#: ../src_dir/settings_dlg_gtk.cpp:74
+msgid "highlight:"
+msgstr "Hervorgehoben:"
+
+#: ../src_dir/settings_dlg_gtk.cpp:75
+msgid "menu colors"
+msgstr "Menufarben"
+
+#: ../src_dir/settings_dlg_gtk.cpp:75
+msgid "background image"
+msgstr "Hintergrundbild"
+
+#: ../src_dir/settings_dlg_gtk.cpp:76
+msgid "copy to grub directory"
+msgstr "In das Grub-Verzeichnis kopieren"
+
+#: ../src_dir/settings_dlg_gtk.cpp:76
+msgid "remove background"
+msgstr "Hintergrund entfernen"
+
+#: ../src_dir/settings_dlg_gtk.cpp:77
+msgid ""
+"To get the colors above working,\n"
+"you have to select a background image!"
+msgstr ""
+"Damit die ausgewählen Farben verwendet werden,\n"
+"muss ein Hintergrundbild ausgewählt werden!"
+
+#: ../src_dir/settings_dlg_gtk.cpp:79
+msgid "settings"
+msgstr "Einstellungen"
+
+#: ../src_dir/settings_dlg_gtk.cpp:83
+msgid "_General"
+msgstr "_Allgemein"
+
+#: ../src_dir/settings_dlg_gtk.cpp:84
+msgid "A_ppearance"
+msgstr "_Darstellung"
+
+#: ../src_dir/settings_dlg_gtk.cpp:85
+msgid "_Advanced"
+msgstr "_Erweitert"
+
+#: ../src_dir/settings_dlg_gtk.cpp:93
+msgid "value"
+msgstr "Wert"
+
+#: ../src_dir/settings_dlg_gtk.cpp:128
+msgid "Entry %1 (by position)"
+msgstr "Eintrag %1 (nach Position)"
+
+#: ../src_dir/settings_dlg_gtk.cpp:413
+msgid ""
+"This option doesn't work when the \"os-prober\" script finds other operating "
+"systems. Disable \"%1\" if you don't need to boot other operating systems."
+msgstr ""
+"Diese option funktioniert nur, wenn der \"os-prober\" keine anderen Betriebssysteme"
+"findet. Deaktivieren Sie \"%1\" wenn Sie generell keien anderen Betriebssysteme starten möchten."
+
+#~ msgid "reload configuration (same effect as an application restart)"
+#~ msgstr ""
+#~ "Konfiguration erneut laden (gleicher Effekt wie bei Neustart des "
+#~ "Programms)"

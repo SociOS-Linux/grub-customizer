@@ -8,8 +8,10 @@ Build-Depends: debhelper (>= 7.4), libgtkmm-2.4-dev (>= 2.20.0), cmake (>=2.8.0)
 
 Architecture: any
 Depends: ${shlibs:Depends}, gksu
+Recommends: hwinfo
 Package: grub-customizer
-Description: Grub Customizer is a graphical interface to configure the grub2/burg settings
+Description: Grub Customizer - A graphical Grub 2/BURG configuration application
+ Grub Customizer is a graphical interface to configure the grub2/burg settings
  with focus on the individual list order - without losing the dynamical behavior
- of grub.
- You can also use it to repair grub using a linux live cd.
+ of grub - also usable on live cds.
+ Settings like the background or timeouts are also changable using Grub Customizer.

@@ -18,6 +18,7 @@
 #include "config.h"
 #include "mountTable.h"
 #include "umount_all.h"
+#include "settings_mng_ds.h"
 
 struct GrubConfEnvironment {
 	enum Mode {
@@ -30,7 +31,7 @@ struct GrubConfEnvironment {
 	static bool check_dir(std::string const& dir);
 	static bool isLiveCD();
 	std::string getRootDevice();
-	std::string cfg_dir, cfg_dir_noprefix, mkconfig_cmd, cfg_dir_prefix, update_cmd, install_cmd, output_config_file, output_config_dir;
+	std::string cfg_dir, cfg_dir_noprefix, mkconfig_cmd, cfg_dir_prefix, update_cmd, install_cmd, output_config_file, output_config_dir, settings_file;
 	bool burgMode;
 };
 
@@ -46,6 +47,8 @@ public:
 	bool write_lock; //prevent this config object of writing data (it waits until write_lock is false)
 	ProxyList proxies;
 	Repository repository;
+	SettingsManagerDataStore settings;
+	
 	std::string install_result;
 	std::string message;
 	bool config_has_been_different_on_startup_but_unsaved;
@@ -59,7 +62,7 @@ public:
 	bool createScriptForwarder(std::string const& scriptName) const;
 	bool removeScriptForwarder(std::string const& scriptName) const;
 	std::string readScriptForwarder(std::string const& scriptForwarderFilePath) const;
-	void load();
+	void load(bool keepConfig = false);
 	void save();
 	void readGeneratedFile(FILE* source, bool createScriptIfNotFound = false);
 
@@ -80,6 +83,7 @@ public:
 	
 	bool compare(GrubConfig const& other) const;
 	
+	void renameRule(Rule* rule, std::string const& newName);
 };
 
 #endif

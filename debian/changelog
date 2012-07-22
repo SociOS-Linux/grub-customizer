@@ -1,3 +1,10 @@
+grub-customizer (2.0-0ubuntu1~ppa1m) maverick; urgency=normal
+
+   * settings manager included
+
+ -- Daniel Richter <danielrichter2007@web.de>  Thu, 18 Nov 2010 22:43:00 +0200
+
+
 grub-customizer (1.6.4-0ubuntu1~ppa2m) maverick; urgency=low
 
    * bug #661304 fixed (multiple scripts using the same basename will not be overwritten anymore)

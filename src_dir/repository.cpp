@@ -9,7 +9,6 @@ void Repository::load(std::string const& directory, bool is_proxifiedScript_dir)
 			stat((directory+"/"+entry->d_name).c_str(), &fileProperties);
 			if ((fileProperties.st_mode & S_IFMT) != S_IFDIR){ //ignore directories
 				if (!is_proxifiedScript_dir && !ProxyScriptData::is_proxyscript(directory+"/"+entry->d_name) && std::string(entry->d_name).length() >= 4 && entry->d_name[0] >= '1' && entry->d_name[0] <= '9' && entry->d_name[1] >= '0' && entry->d_name[1] <= '9' && entry->d_name[2] == '_'){
-					std::cout << "adding " << entry->d_name << std::endl;
 					this->push_back(Script(std::string(entry->d_name).substr(3), directory+"/"+entry->d_name));
 				}
 				else if (is_proxifiedScript_dir) {
@@ -44,3 +43,10 @@ Script* Repository::getNthScript(int pos){
 	}
 	return result;
 }
+
+void Repository::deleteAllEntries(){
+	for (Repository::iterator iter = this->begin(); iter != this->end(); iter++){
+		iter->clear();
+	}
+}
+

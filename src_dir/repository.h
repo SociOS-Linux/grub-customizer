@@ -10,6 +10,7 @@ struct Repository : public std::list<Script> {
 	void load(std::string const& directory, bool is_proxifiedScript_dir);
 	Script* getScriptByFilename(std::string const& fileName, bool createScriptIfNotFound = false);
 	Script* getNthScript(int pos);
+	void deleteAllEntries();
 };
 
 #endif

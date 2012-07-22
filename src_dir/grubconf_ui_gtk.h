@@ -4,6 +4,7 @@
 #include "grubconf_ui.h"
 #include "grubconfig.h"
 #include "liveCDSetupDialog.h"
+#include "settings_dlg_gtk.h"
 #include <iostream>
 
 #include <libintl.h>
@@ -54,6 +55,8 @@ class GrubConfUIGtk : public GrubConfUI {
 	Gtk::VSeparator vs_sep2;
 	Gtk::ToolItem ti_sep3;
 	Gtk::VSeparator vs_sep3;
+	Gtk::ToolItem ti_sep4;
+	Gtk::VSeparator vs_sep4;
 	
 	Gtk::MenuItem miFile, miEdit, miView, miHelp, miInstallGrub;
 	Gtk::ImageMenuItem miExit, miSave, miPreferences, miAbout, miStartRootSelector;
@@ -97,6 +100,7 @@ public:
 	std::string show_root_selector();
 	bool requestForBurgMode();
 	
+	void reload(bool keepConfig);
 	void func_disp_grub_install_ready();
 	void signal_show_root_selector();
 	void signal_row_changed(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter);
@@ -112,6 +116,8 @@ public:
 	void signal_about_dlg_response(int response_id);
 	void signal_quit_click();
 	void signal_grub_install_dialog_response(int response_id);
+	void signal_preference_click();
+public:
 	void update_move_buttons();
 	void update_remove_button();
 	void configureOtherEntriesMarker(Gtk::TreeIter otherEntriesMarker);

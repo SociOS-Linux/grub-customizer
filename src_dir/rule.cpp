@@ -1,7 +1,7 @@
 #include "rule.h"
 
-Rule::Rule(Entry& source, bool isVisible) //generate rule for given entry
-	: type(Rule::NORMAL), isVisible(isVisible), outputName(source.name), dataSource(&source)
+Rule::Rule(Entry& source, bool isVisible) //generate rule for given entry. __idname is only required for re-syncing (soft-reload)
+	: type(Rule::NORMAL), isVisible(isVisible), __idname(source.name), outputName(source.name), dataSource(&source)
 {}
 
 Rule::operator std::string(){

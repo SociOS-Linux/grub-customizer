@@ -20,6 +20,9 @@ add_executable(../grub-customizer
 	script.cpp
 	deviceDataList.cpp
 	umount_all.cpp
+	settings_dlg_gtk.cpp
+	settings_mng_ds.cpp
+	fbResolutionsGetter.cpp
 )
 
 add_executable(../grubcfg-proxy

@@ -1,15 +1,6 @@
-grub-customizer (1.6.4-0ubuntu1~ppa2l) lucid; urgency=low
+grub-customizer (2.0-0ubuntu1~ppa1l) lucid; urgency=normal
 
-   * bug #661304 fixed (multiple scripts using the same basename will not be overwritten anymore)
-   * (new entries) will be displayed on uncustomized scripts too (the old behaviour was to fuzzy)
-   * the test, if a script requires a proxy, is now solved dynamically (the previous behaviour was: when it's modified, set proxy_required)
-   * the live cd setup assistant is now (renamed to partition chooser) accessible after loading (by menubutton click) or if no bootloader found too
-   * the toolbar button for saving the configuration is now marked as is_important (will be displayed larger in most cases)
-   * 1.6.1: fixed burg mode indentfier (has not been updated)
-   * 1.6.1: translations included
-   * 1.6.2: greek translation updated
-   * 1.6.2: translators added to the about dialog
-   * 1.6.3, 1.6.4: translations updated
+   * settings manager included
 
- -- Daniel Richter <danielrichter2007@web.de>  Tue, 16 Nov 2010 21:22:00 +0200
+ -- Daniel Richter <danielrichter2007@web.de>  Sun, 21 Nov 2010 18:27:00 +0200
 

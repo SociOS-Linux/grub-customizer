@@ -1,8 +1,6 @@
 * text=auto !eol
 /CMakeLists.txt -text
 /README -text
-/cfg_static.dump -text
-/cmake_install.cmake -text
 /config.h.in -text
 debian/changelog -text
 debian/changelog_lucid -text
@@ -10,7 +8,6 @@ debian/changelog_maverick -text
 debian/control -text
 debian/copyright -text
 debian/rules -text
-/debuild.log -text
 /grub-customizer.desktop -text
 icons/128x128.png -text svneol=unset#unset
 icons/14x14.png -text svneol=unset#unset
@@ -24,12 +21,13 @@ icons/64x64.png -text svneol=unset#unset
 my_cmake_scripts/FindPkgConfig.cmake -text
 src_dir/CMakeLists.txt -text
 src_dir/Makefile -text
-src_dir/cmake_install.cmake -text
 src_dir/config.h -text
 src_dir/deviceDataList.cpp -text
 src_dir/deviceDataList.h -text
 src_dir/entry.cpp -text
 src_dir/entry.h -text
+src_dir/fbResolutionsGetter.cpp -text
+src_dir/fbResolutionsGetter.h -text
 src_dir/generatedConfig.dump -text
 src_dir/grubcfg_proxy.cpp -text
 src_dir/grubconf_ui.h -text
@@ -56,6 +54,11 @@ src_dir/rule.cpp -text
 src_dir/rule.h -text
 src_dir/script.cpp -text
 src_dir/script.h -text
+src_dir/settings_dlg.h -text
+src_dir/settings_dlg_gtk.cpp -text
+src_dir/settings_dlg_gtk.h -text
+src_dir/settings_mng_ds.cpp -text
+src_dir/settings_mng_ds.h -text
 src_dir/umount_all.cpp -text
 src_dir/umount_all.h -text
 translation/complile_all.sh -text

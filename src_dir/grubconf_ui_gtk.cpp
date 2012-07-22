@@ -5,7 +5,7 @@ ImageMenuItemOwnKey::ImageMenuItemOwnKey(const Gtk::StockID& id, const Gtk::Acce
 }
 
 GrubConfUIGtk::GrubConfUIGtk(GrubConfig& grubConfig)
-	: grubConfig(&grubConfig), appName("Grub Customizer"), appVersion("1.6.4"),
+	: grubConfig(&grubConfig), appName("Grub Customizer"), appVersion("2.0"),
 	tbttAdd(Gtk::Stock::ADD), tbttRemove(Gtk::Stock::REMOVE), tbttUp(Gtk::Stock::GO_UP), tbttDown(Gtk::Stock::GO_DOWN),
 	tbttSave(Gtk::Stock::SAVE), tbttPreferences(Gtk::Stock::PREFERENCES),
 	miFile(gettext("_File"), true), miExit(Gtk::Stock::QUIT), tbttReload(Gtk::Stock::REFRESH),
@@ -59,6 +59,7 @@ Alexey Ivanov https://launchpad.net/~alexey.ivanes\n\
 Bernardo Miguel Savone https://launchpad.net/~bersil\n\
 Daniel Richter https://launchpad.net/~danielrichter2007\n\
 Emre AYTAÇ https://launchpad.net/~eaytac\n\
+Erkin Batu Altunbaş https://launchpad.net/~erkin\n\
 Eugênio F https://launchpad.net/~eugf\n\
 Fedik https://launchpad.net/~fedikw\n\
 GamePad64 https://launchpad.net/~gamepad64\n\
@@ -100,8 +101,11 @@ zeugma https://launchpad.net/~sunder67\
 	toolbar.append(ti_sep3);
 	
 	toolbar.append(tbttReload);
-	tbttReload.set_tooltip_text(gettext("reload configuration (same effect as an application restart)"));
-	//toolbar.append(tbttPreferences);
+	ti_sep4.add(vs_sep4);
+	toolbar.append(ti_sep4);
+	tbttReload.set_tooltip_text(gettext("reload configuration"));
+	toolbar.append(tbttPreferences);
+	tbttPreferences.set_is_important(true);
 	tbttPreferences.set_tooltip_text(gettext("Edit grub preferences"));
 	
 	disableButtons();
@@ -125,7 +129,7 @@ zeugma https://launchpad.net/~sunder67\
 	subEdit.attach(miRemove, 0,1,1,2);
 	subEdit.attach(miUp, 0,1,2,3);
 	subEdit.attach(miDown, 0,1,3,4);
-	//subEdit.attach(miPreferences, 0,1,4,5);
+	subEdit.attach(miPreferences, 0,1,4,5);
 	
 	subView.attach(miReload, 0,1,0,1);
 	
@@ -188,6 +192,7 @@ zeugma https://launchpad.net/~sunder67\
 	tbttAdd.signal_clicked().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_add_click));
 	tbttRemove.signal_clicked().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_remove_click));
 	tbttReload.signal_clicked().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_reload_click));
+	tbttPreferences.signal_clicked().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_preference_click));
 	
 	miUp.signal_activate().connect(sigc::bind<int>(sigc::mem_fun(this, &GrubConfUIGtk::signal_move_click),-1));
 	miDown.signal_activate().connect(sigc::bind<int>(sigc::mem_fun(this, &GrubConfUIGtk::signal_move_click),1));
@@ -197,6 +202,7 @@ zeugma https://launchpad.net/~sunder67\
 	miReload.signal_activate().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_reload_click));
 	miInstallGrub.signal_activate().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_show_grub_install_dialog_click));
 	miStartRootSelector.signal_activate().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_show_root_selector));
+	miPreferences.signal_activate().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_preference_click));
 	
 	cbScriptSelection.signal_changed().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_script_selection_changed));
 	
@@ -212,7 +218,7 @@ zeugma https://launchpad.net/~sunder67\
 
 void GrubConfUIGtk::event_mode_changed(){
 	if (this->grubConfig->env.burgMode)
-		win.set_title("Grub Customizer (BURG Mode)");
+		win.set_title("Grub Customizer (" + Glib::ustring(gettext("BURG Mode")) + ")");
 	else
 		win.set_title("Grub Customizer");
 }
@@ -279,7 +285,7 @@ void GrubConfUIGtk::func_disp_grub_install_ready(){
 
 void GrubConfUIGtk::run(){
 	win.show_all();
-	Glib::Thread::create(sigc::mem_fun(grubConfig, &GrubConfig::load), false);
+	Glib::Thread::create(sigc::bind(sigc::mem_fun(grubConfig, &GrubConfig::load), false), false);
 	Gtk::Main::run(win);
 }
 
@@ -304,6 +310,8 @@ void GrubConfUIGtk::update(){
 			miAdd.set_sensitive(true);
 			tbttReload.set_sensitive(true);
 			miReload.set_sensitive(true);
+			tbttPreferences.set_sensitive(true);
+			miPreferences.set_sensitive(true);
 			
 			miStartRootSelector.set_sensitive(true);
 		}
@@ -367,6 +375,8 @@ void GrubConfUIGtk::update_save(){
 		tbttAdd.set_sensitive(true);
 		miAdd.set_sensitive(true);
 		tvConfList.set_sensitive(true);
+		tbttPreferences.set_sensitive(true);
+		miPreferences.set_sensitive(true);
 		progressBar.hide();
 		statusbar.push(gettext("Configuration has been saved"));
 	}
@@ -410,13 +420,15 @@ void GrubConfUIGtk::saveConfig(){
 	modificationsUnsaved = false;
 }
 
-
-void GrubConfUIGtk::signal_reload_click(){
+void GrubConfUIGtk::reload(bool keepConfig){
 	disableButtons();
 	tvConfList.set_sensitive(false);
-	grubConfig->reset();
 	completelyLoaded = false;
-	Glib::Thread::create(sigc::mem_fun(grubConfig, &GrubConfig::load), false);
+	Glib::Thread::create(sigc::bind(sigc::mem_fun(grubConfig, &GrubConfig::load), keepConfig), false);
+}
+
+void GrubConfUIGtk::signal_reload_click(){
+	this->reload(true);
 }
 
 void GrubConfUIGtk::signal_row_changed(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter){
@@ -430,7 +442,8 @@ void GrubConfUIGtk::signal_row_changed(const Gtk::TreeModel::Path& path, const G
 					(*iter)[tvConfList.treeModel.name] = oldName; //reset name
 				}
 				else {
-					((Rule*)(*iter)[tvConfList.treeModel.relatedRule])->outputName = (Glib::ustring)(*iter)[tvConfList.treeModel.name];
+					grubConfig->renameRule((*iter)[tvConfList.treeModel.relatedRule], (Glib::ustring)(*iter)[tvConfList.treeModel.name]);
+					//((Rule*)(*iter)[tvConfList.treeModel.relatedRule])->outputName = (Glib::ustring)(*iter)[tvConfList.treeModel.name];
 				}
 			}
 			((Rule*)(*iter)[tvConfList.treeModel.relatedRule])->isVisible = (*iter)[tvConfList.treeModel.active];
@@ -601,6 +614,17 @@ void GrubConfUIGtk::signal_remove_click(){
 	modificationsUnsaved = true;
 }
 
+void GrubConfUIGtk::signal_preference_click(){
+	GrubSettingsDlgGtk dlg(grubConfig->settings, grubConfig->proxies.generateEntryTitleList(), this->grubConfig->env.burgMode, this->grubConfig->env.output_config_dir);
+	dlg.loadData();
+	dlg.run();
+	if (!modificationsUnsaved)
+		modificationsUnsaved = grubConfig->settings.getIsModified();
+	if (grubConfig->settings.reloadRequired()){
+		this->reload(true);
+	}
+}
+
 void GrubConfUIGtk::update_move_buttons(){
 	int selectedRowsCount = tvConfList.get_selection()->count_selected_rows();
 
@@ -665,7 +689,7 @@ bool GrubConfUIGtk::signal_delete_event(GdkEventAny* event){ //return value: kee
 			btnSave->set_label(gettext("_Save & Quit"));
 		}
 		if (grubConfig->config_has_been_different_on_startup_but_unsaved && modificationsUnsaved){
-			msgDlg.set_secondary_text(msgDlg.property_secondary_text()+"\n\nAND: your modifications are still unsaved, update will save them too!");
+			msgDlg.set_secondary_text(msgDlg.property_secondary_text()+"\n\n"+gettext("AND: your modifications are still unsaved, update will save them too!"));
 		}
 
 		msgDlg.set_default_response(Gtk::RESPONSE_YES);

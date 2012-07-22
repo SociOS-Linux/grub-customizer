@@ -15,6 +15,7 @@ bool GrubConfEnvironment::init(GrubConfEnvironment::Mode mode, std::string const
 		this->cfg_dir_noprefix = "/etc/burg.d";
 		this->output_config_dir =  dir_prefix+"/boot/burg";
 		this->output_config_file = dir_prefix+"/boot/burg/burg.cfg";
+		this->settings_file = dir_prefix+"/etc/default/burg";
 		break;
 	case GRUB_MODE:
 		this->burgMode = false;
@@ -25,6 +26,7 @@ bool GrubConfEnvironment::init(GrubConfEnvironment::Mode mode, std::string const
 		this->cfg_dir_noprefix = "/etc/grub.d";
 		this->output_config_dir =  dir_prefix+"/boot/grub";
 		this->output_config_file = dir_prefix+"/boot/grub/grub.cfg";
+		this->settings_file = dir_prefix+"/etc/default/grub";
 		break;
 	}
 	
@@ -184,64 +186,78 @@ std::string GrubConfig::readScriptForwarder(std::string const& scriptForwarderFi
 	return result.substr(1, result.length()-2);
 }
 
-void GrubConfig::load(){
-	send_new_load_progress(0);
-	{ //check the existence of cfg_dir
-		DIR* cfg_dir = opendir(this->env.cfg_dir.c_str());
-		if (cfg_dir)
-			closedir(cfg_dir);
-		else {
+void GrubConfig::load(bool keepConfig){
+	SettingsManagerDataStore* grubSettingsOnDisk = NULL;
+	if (!keepConfig){
+		this->reset();
+		//load the burg/grub settings file
+		this->settings.load(this->env.settings_file);
+
+		send_new_load_progress(0);
+		{ //check the existence of cfg_dir
+			DIR* cfg_dir = opendir(this->env.cfg_dir.c_str());
+			if (cfg_dir)
+				closedir(cfg_dir);
+			else {
+				if (connectedUI){
+					this->message = this->env.cfg_dir+gettext(" not found. Is grub2 installed?");
+					connectedUI->event_thread_died();
+				}
+				return; //dir doesn't exist, cancel!
+			}
+		}
+		//load scripts
+		repository.load(this->env.cfg_dir, false);
+		repository.load(this->env.cfg_dir+"/proxifiedScripts", true);
+		send_new_load_progress(0.05);
+	
+		DIR* hGrubCfgDir = opendir(this->env.cfg_dir.c_str());
+
+		if (!hGrubCfgDir){
 			if (connectedUI){
 				this->message = this->env.cfg_dir+gettext(" not found. Is grub2 installed?");
 				connectedUI->event_thread_died();
 			}
-			return; //dir doesn't exist, cancel!
+			return; //cancel this thread
 		}
-	}
-	//load scripts
-	repository.load(this->env.cfg_dir, false);
-	repository.load(this->env.cfg_dir+"/proxifiedScripts", true);
-	send_new_load_progress(0.05);
 	
-	DIR* hGrubCfgDir = opendir(this->env.cfg_dir.c_str());
-
-	if (!hGrubCfgDir){
-		if (connectedUI){
-			this->message = this->env.cfg_dir+gettext(" not found. Is grub2 installed?");
-			connectedUI->event_thread_died();
-		}
-		return; //cancel this thread
-	}
-	
-	//load proxies
-	struct dirent *entry;
-	struct stat fileProperties;
-	while (entry = readdir(hGrubCfgDir)){
-		stat((this->env.cfg_dir+"/"+entry->d_name).c_str(), &fileProperties);
-		if ((fileProperties.st_mode & S_IFMT) != S_IFDIR){ //ignore directories
-			if (entry->d_name[2] == '_' && entry->d_name[0] != '0'){ //check whether it's an script (they should be named XX_scriptname)… und block header scripts (they use a leading 0)
-				this->proxies.push_back(Proxy());
-				this->proxies.back().fileName = this->env.cfg_dir+"/"+entry->d_name;
-				this->proxies.back().index = (entry->d_name[0]-'0')*10 + (entry->d_name[1]-'0');
-				this->proxies.back().permissions = fileProperties.st_mode & ~S_IFMT;
+		//load proxies
+		struct dirent *entry;
+		struct stat fileProperties;
+		while (entry = readdir(hGrubCfgDir)){
+			stat((this->env.cfg_dir+"/"+entry->d_name).c_str(), &fileProperties);
+			if ((fileProperties.st_mode & S_IFMT) != S_IFDIR){ //ignore directories
+				if (entry->d_name[2] == '_' && entry->d_name[0] != '0'){ //check whether it's an script (they should be named XX_scriptname)… und block header scripts (they use a leading 0)
+					this->proxies.push_back(Proxy());
+					this->proxies.back().fileName = this->env.cfg_dir+"/"+entry->d_name;
+					this->proxies.back().index = (entry->d_name[0]-'0')*10 + (entry->d_name[1]-'0');
+					this->proxies.back().permissions = fileProperties.st_mode & ~S_IFMT;
 				
-				FILE* proxyFile = fopen((this->env.cfg_dir+"/"+entry->d_name).c_str(), "r");
-				ProxyScriptData data(proxyFile);
-				fclose(proxyFile);
-				if (data){
-					this->proxies.back().dataSource = repository.getScriptByFilename(this->env.cfg_dir_prefix+data.scriptCmd);
-					this->proxies.back().importRuleString(data.ruleString.c_str());
-				}
-				else {
-					this->proxies.back().dataSource = repository.getScriptByFilename(this->env.cfg_dir+"/"+entry->d_name);
-					this->proxies.back().importRuleString("+*"); //it's no proxy, so accept all
-				}
+					FILE* proxyFile = fopen((this->env.cfg_dir+"/"+entry->d_name).c_str(), "r");
+					ProxyScriptData data(proxyFile);
+					fclose(proxyFile);
+					if (data){
+						this->proxies.back().dataSource = repository.getScriptByFilename(this->env.cfg_dir_prefix+data.scriptCmd);
+						this->proxies.back().importRuleString(data.ruleString.c_str());
+					}
+					else {
+						this->proxies.back().dataSource = repository.getScriptByFilename(this->env.cfg_dir+"/"+entry->d_name);
+						this->proxies.back().importRuleString("+*"); //it's no proxy, so accept all
+					}
 				
+				}
 			}
 		}
+		closedir(hGrubCfgDir);
+		this->proxies.sort();
 	}
-	closedir(hGrubCfgDir);
-	this->proxies.sort();
+	else {
+		repository.deleteAllEntries();
+		grubSettingsOnDisk = new SettingsManagerDataStore();
+		grubSettingsOnDisk->load(env.settings_file);
+		settings.save(env.cfg_dir_prefix);
+	}
+	
 	//create proxifiedScript links & chmod other files
 
 	for (Repository::iterator iter = this->repository.begin(); iter != this->repository.end(); iter++){
@@ -280,6 +296,11 @@ void GrubConfig::load(){
 
 	
 	//restore old configuration
+	if (grubSettingsOnDisk){
+		grubSettingsOnDisk->save(env.cfg_dir_prefix);
+		delete grubSettingsOnDisk;
+		grubSettingsOnDisk = NULL;
+	}
 	while (write_lock) usleep(1000); //wait until the other thread is ready
 	this->read_lock = true;
 	for (Repository::iterator iter = this->repository.begin(); iter != this->repository.end(); iter++){
@@ -297,19 +318,21 @@ void GrubConfig::load(){
 	this->read_lock = false;
 	
 	//compare config
-	FILE* oldConfigFile = fopen(env.output_config_file.c_str(), "r");
-	if (oldConfigFile){
-		GrubConfig oldConfig;
-		oldConfig.verbose = false;
-		oldConfig.env = this->env;
-		oldConfig.readGeneratedFile(oldConfigFile, true);
-		config_has_been_different_on_startup_but_unsaved = !this->compare(oldConfig);
-		fclose(oldConfigFile);
+	if (!keepConfig){
+		FILE* oldConfigFile = fopen(env.output_config_file.c_str(), "r");
+		if (oldConfigFile){
+			GrubConfig oldConfig;
+			oldConfig.verbose = false;
+			oldConfig.env = this->env;
+			oldConfig.readGeneratedFile(oldConfigFile, true);
+			config_has_been_different_on_startup_but_unsaved = !this->compare(oldConfig);
+			fclose(oldConfigFile);
+		}
+		else
+			config_has_been_different_on_startup_but_unsaved = false;
 	}
-	else
-		config_has_been_different_on_startup_but_unsaved = false;
-	
 	send_new_load_progress(1);
+	
 }
 
 
@@ -330,8 +353,9 @@ void GrubConfig::readGeneratedFile(FILE* source, bool createScriptIfNotFound){
 				realScriptName = prefix+readScriptForwarder(realScriptName);
 			}
 			script = repository.getScriptByFilename(realScriptName, createScriptIfNotFound);
-			if (createScriptIfNotFound) //for the compare-configuration
+			if (createScriptIfNotFound){ //for the compare-configuration
 				this->proxies.push_back(Proxy(*script));
+			}
 			this->read_lock = false;
 			if (script){
 				this->send_new_load_progress(0.1 + (0.7 / this->repository.size() * ++i));
@@ -354,6 +378,9 @@ void GrubConfig::readGeneratedFile(FILE* source, bool createScriptIfNotFound){
 }
 
 void GrubConfig::save(){
+	//write the burg/grub settings file
+	this->settings.save(env.cfg_dir_prefix);
+
 	send_new_save_progress(0);
 	std::map<std::string, int> samename_counter;
 	proxies.deleteAllProxyscriptFiles();  //delete all proxies to get a clean file system
@@ -487,6 +514,11 @@ void GrubConfig::save(){
 	send_new_save_progress(1);
 }
 
+void GrubConfig::renameRule(Rule* rule, std::string const& newName){
+	if (this->settings.getValue("GRUB_DEFAULT") == rule->outputName)
+		this->settings.setValue("GRUB_DEFAULT", newName);
+	rule->outputName = newName;
+}
 
 bool GrubConfig::compare(GrubConfig const& other) const {
 	std::list<const Rule*> rlist[2];
@@ -573,6 +605,7 @@ std::string GrubConfig::getMessage() const {
 void GrubConfig::reset(){
 	this->repository.clear();
 	this->proxies.clear();
+	this->settings.clear();
 }
 
 double GrubConfig::getProgress() const {

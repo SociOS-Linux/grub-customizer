@@ -24,13 +24,9 @@ void ProxyList::sync_all(bool deleteInvalidRules, bool expand, Script* relatedSc
 }
 
 bool ProxyList::proxyRequired(Script const& script) const {
-	std::cout << "running proxyRequired (" << script.name << ")" << std::endl;
 	std::list<const Proxy*> plist = this->getProxiesByScript(script);
-	std::cout << "proxyRequired… getProxiesByScript done" << std::endl;
 	if (plist.size() == 1){
-		std::cout << "running isModified" << std::endl;
 		bool res = plist.front()->isModified();
-		std::cout << "done" << std::endl;
 		return plist.front()->isModified();
 	}
 	else
@@ -71,4 +67,18 @@ void ProxyList::clearTrash(){
 		iter->deleteFile();
 	}
 }
+
+std::list<std::string> ProxyList::generateEntryTitleList() const {
+	std::list<std::string> result;
+	for (ProxyList::const_iterator proxy_iter = this->begin(); proxy_iter != this->end(); proxy_iter++){
+		if (proxy_iter->isExecutable()){
+			for (std::list<Rule>::const_iterator rule_iter = proxy_iter->rules.begin(); rule_iter != proxy_iter->rules.end(); rule_iter++){
+				if (rule_iter->isVisible && rule_iter->type != Rule::OTHER_ENTRIES_PLACEHOLDER)
+					result.push_back(rule_iter->outputName);
+			}
+		}
+	}
+	return result;
+}
+
 
