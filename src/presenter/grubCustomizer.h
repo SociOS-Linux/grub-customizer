@@ -62,6 +62,7 @@ class GrubCustomizer {
 	bool config_has_been_different_on_startup_but_unsaved;
 	bool modificationsUnsaved;
 	bool quit_requested;
+	bool is_loading;
 	int activeThreadCount;
 	GrublistCfg::Exception thrownException; //to be used from the die() function
 public:

@@ -7,7 +7,8 @@ GrubCustomizer::GrubCustomizer(GrubEnv& env)
 	  fbResolutionsGetter(NULL), deviceDataList(NULL),
 	  mountTable(NULL), aboutDialog(NULL),
 	 env(env), config_has_been_different_on_startup_but_unsaved(false),
-	 modificationsUnsaved(false), quit_requested(false), activeThreadCount(0)
+	 modificationsUnsaved(false), quit_requested(false), activeThreadCount(0),
+	 is_loading(false)
 {
 	disp_sync_load.connect(sigc::mem_fun(this, &GrubCustomizer::syncListView_load));
 	disp_sync_save.connect(sigc::mem_fun(this, &GrubCustomizer::syncListView_save));
@@ -173,39 +174,43 @@ void GrubCustomizer::reload(){
 
 //threaded!
 void GrubCustomizer::load(bool preserveConfig){
-	this->activeThreadCount++;
+	if (!is_loading){ //allow only one load thread at the same time!
+		is_loading = true;
+		this->activeThreadCount++;
+
+		if (!preserveConfig){
+			this->grublistCfg->reset();
+			this->savedListCfg->reset();
+			//load the burg/grub settings file
+			this->settings->load();
+			disp_settings_loaded();
+		}
+		else {
+			this->settingsOnDisk->load();
+			this->settings->save();
+		}
+
+		try {
+			this->grublistCfg->load(preserveConfig);
+		}
+		catch (GrublistCfg::Exception e){
+			this->thrownException = e;
+			this->disp_thread_died();
+			return; //cancel
+		}
 	
-	if (!preserveConfig){
-		this->grublistCfg->reset();
-		this->savedListCfg->reset();
-		//load the burg/grub settings file
-		this->settings->load();
-		disp_settings_loaded();
+		if (!preserveConfig){
+			if (this->savedListCfg->loadStaticCfg())
+				this->config_has_been_different_on_startup_but_unsaved = !this->grublistCfg->compare(*this->savedListCfg);
+			else
+				this->config_has_been_different_on_startup_but_unsaved = false;
+		}
+		if (preserveConfig){
+			this->settingsOnDisk->save();
+		}
+		this->activeThreadCount--;
+		this->is_loading = false;
 	}
-	else {
-		this->settingsOnDisk->load();
-		this->settings->save();
-	}
-
-	try {
-		this->grublistCfg->load(preserveConfig);
-	}
-	catch (GrublistCfg::Exception e){
-		this->thrownException = e;
-		this->disp_thread_died();
-		return; //cancel
-	}
-
-	if (!preserveConfig){
-		if (this->savedListCfg->loadStaticCfg())
-			this->config_has_been_different_on_startup_but_unsaved = !this->grublistCfg->compare(*this->savedListCfg);
-		else
-			this->config_has_been_different_on_startup_but_unsaved = false;
-	}
-	if (preserveConfig){
-		this->settingsOnDisk->save();
-	}
-	this->activeThreadCount--;
 }
 
 void GrubCustomizer::save(){
