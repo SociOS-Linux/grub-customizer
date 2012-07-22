@@ -1,0 +1,2 @@
+/home/daniel/Dokumente/GrubCustomizer/MVP2/grub-customizer/build/CMakeFiles/grub-customizer.dir
+/home/daniel/Dokumente/GrubCustomizer/MVP2/grub-customizer/build/CMakeFiles/grubcfg-proxy.dir

@@ -15,33 +15,37 @@ include_directories(
     ${GTKMM_INCLUDE_DIRS}  )
 
 add_executable(grub-customizer
-	src/entry.cpp
-	src/grubconfig.cpp
-	src/grubconf_ui_gtk.cpp
-	src/gtk-client.cpp
-	src/libproxyscript_parser.cpp
-	src/liveCDSetupDialog.cpp
-	src/mountTable.cpp
-	src/proxy.cpp
-	src/proxylist.cpp
-	src/pscriptname_translator.cpp
-	src/repository.cpp
-	src/rule.cpp
-	src/script.cpp
-	src/deviceDataList.cpp
-	src/umount_all.cpp
-	src/settings_dlg_gtk.cpp
-	src/settings_mng_ds.cpp
-	src/fbResolutionsGetter.cpp
+	src/model/entry.cpp
+	src/model/grublistCfg.cpp
+	src/view/grubconf_ui_gtk.cpp
+	src/presenter/gtk-client_main.cpp
+	src/presenter/gtk-client.cpp
+	src/presenter/eventListener_view.cpp
+	src/presenter/eventListener_model.cpp
+	src/model/libproxyscript_parser.cpp
+	src/view/partitionChooser.cpp
+	src/model/mountTable.cpp
+	src/model/proxy.cpp
+	src/model/proxylist.cpp
+	src/model/pscriptname_translator.cpp
+	src/model/repository.cpp
+	src/model/rule.cpp
+	src/model/script.cpp
+	src/model/deviceDataList.cpp
+	src/model/umount_all.cpp
+	src/model/grubEnv.cpp
+	src/view/settings_dlg_gtk.cpp
+	src/model/settings_mng_ds.cpp
+	src/model/fbResolutionsGetter.cpp
 )
 
 
 add_executable(grubcfg-proxy
-	src/entry.cpp
-	src/rule.cpp
-	src/script.cpp
-	src/proxy.cpp
-	src/grubcfg_proxy.cpp
+	src/model/entry.cpp
+	src/model/rule.cpp
+	src/model/script.cpp
+	src/model/proxy.cpp
+	src/presenter/grubcfg_proxy_main.cpp
 )
 
 target_link_libraries(grub-customizer 

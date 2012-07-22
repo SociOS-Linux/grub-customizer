@@ -1,0 +1,1 @@
+/usr/bin/c++      CMakeFiles/grubcfg-proxy.dir/src/model/entry.cpp.o CMakeFiles/grubcfg-proxy.dir/src/model/rule.cpp.o CMakeFiles/grubcfg-proxy.dir/src/model/script.cpp.o CMakeFiles/grubcfg-proxy.dir/src/model/proxy.cpp.o CMakeFiles/grubcfg-proxy.dir/src/presenter/grubcfg_proxy_main.cpp.o  -o grubcfg-proxy -rdynamic 
