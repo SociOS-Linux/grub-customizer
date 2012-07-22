@@ -2,4 +2,4 @@
 #define LIBDIR "/usr/local/lib/grub-customizer"
 #define LOCALEDIR "/usr/local/share/locale"
 #define PARTCHOOSER_MOUNTPOINT "/media/grub-customizer_recovery_root_mountpoint"
-#define GC_VERSION "2.1b"
+#define GC_VERSION "2.1"

@@ -87,7 +87,7 @@ GrubSettingsDlgGtk::GrubSettingsDlgGtk()
 	this->set_icon_name("grub-customizer");
 	Gtk::VBox* winBox = this->get_vbox();
 	winBox->add(tabbox);
-	tabbox.append_page(vbCommonSettings, gettext("_General"), true);
+	tabbox.append_page(alignCommonSettings, gettext("_General"), true);
 	tabbox.append_page(vbAppearanceSettings, gettext("A_ppearance"), true);
 	tabbox.append_page(vbAllEntries, gettext("_Advanced"), true);
 	
@@ -139,6 +139,8 @@ GrubSettingsDlgGtk::GrubSettingsDlgGtk()
 	cbDefEntry.set_wrap_width(2);
 	
 	//view group
+	alignCommonSettings.add(vbCommonSettings);
+	alignCommonSettings.set_padding(20, 0, 0, 0);
 	vbCommonSettings.pack_start(groupView, Gtk::PACK_SHRINK);
 	groupView.add(alignView);
 	groupView.set_shadow_type(Gtk::SHADOW_NONE);
@@ -325,7 +327,7 @@ void GrubSettingsDlgGtk::selectCustomOption(std::string const& name){
 std::string GrubSettingsDlgGtk::getSelectedCustomOption(){
 	std::list<Gtk::TreeModel::Path> p = tvAllEntries.get_selection()->get_selected_rows();
 	if (p.size() == 1)
-		return (Glib::ustring)(*refAsListStore->get_iter(p.front()))[asTreeModel.old_name];
+		return (Glib::ustring)(*refAsListStore->get_iter(p.front()))[asTreeModel.name];
 	else
 		return "";
 }

@@ -7,9 +7,9 @@
 #include "../config.h"
 #include "../interface/grublistCfgDlg.h"
 
-//TODO: Edit -> Rename
-//TODO: Edit -> activate/unactivate
-//TODO: Script descriptions (to avoid two custom entries)
+//TODO: Edit -> Rename [v3]
+//TODO: Edit -> activate/unactivate [v3]
+//TODO: Script descriptions (to avoid two custom entries) [v3]
 class GrubConfListing : public Gtk::TreeView {
 public:
 	struct TreeModel : public Gtk::TreeModelColumnRecord {
@@ -62,6 +62,8 @@ class GrublistCfgDlgGtk : public GrublistCfgDlg {
 	
 	bool lock_state;
 
+	Gtk::MessageDialog burgSwitcher, pchooserQuestionDlg;
+
 	Gtk::TreeModel::iterator getIterByProxyPtr(void* proxyPtr) const;
 	Gtk::TreeModel::iterator getIterByRulePtr(void* rulePtr) const;
 	void update_move_buttons();
@@ -71,10 +73,14 @@ class GrublistCfgDlgGtk : public GrublistCfgDlg {
 public:
 	GrublistCfgDlgGtk();
 	void setEventListener(EventListener_listCfgDlg& eventListener);
+	void show();
 	void run();
 	void close();
-	bool requestForRootSelection();
-	bool requestForBurgMode();
+	void showBurgSwitcher();
+	void hideBurgSwitcher();
+	void showPartitionChooserQuestion();
+	void hidePartitionChooserQuestion();
+	bool isVisible();
 	
 	void setIsBurgMode(bool isBurgMode);
 	
@@ -122,6 +128,8 @@ private:
 	void signal_quit_click();
 	void signal_preference_click();
 	void signal_info_click();
+	void signal_burg_switcher_response(int response_id);
+	void signal_partition_chooser_question_response(int response_id);
 };
 
 #endif

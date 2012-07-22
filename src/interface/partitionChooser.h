@@ -32,8 +32,6 @@ public:
 	virtual void removeAllSubmountpoints()=0;
 	//show error message (type=what should be showed, PartitionChooser decides which text should be displayed)
 	virtual void showErrorMessage(MountExceptionType type)=0;
-	//show this dialog, wait until it has been closed/hidden
-	virtual void run()=0;
 	//hide the dialog
 	virtual void hide()=0;
 	//show the dialog, but don't wail until it has been closed/hidden

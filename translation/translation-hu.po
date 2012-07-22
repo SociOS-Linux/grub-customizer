@@ -1,4 +1,4 @@
-# Greek translation for grub-customizer
+# Hungarian translation for grub-customizer
 # Copyright (c) 2010 Rosetta Contributors and Canonical Ltd 2010
 # This file is distributed under the same license as the grub-customizer package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-11-28 22:09+0100\n"
-"PO-Revision-Date: 2010-12-05 20:29+0000\n"
-"Last-Translator: Daniel Richter <danielrichter2007@web.de>\n"
-"Language-Team: Greek <el@li.org>\n"
+"PO-Revision-Date: 2010-12-18 15:21+0000\n"
+"Last-Translator: Papp Bence <papp.bence89@gmail.com>\n"
+"Language-Team: Hungarian <hu@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -19,40 +19,39 @@ msgstr ""
 
 #: ../src/grubconfig.cpp:203 ../src/grubconfig.cpp:218
 msgid " not found. Is grub2 installed?"
-msgstr " δεν βρέθηκε. Έχει εγκατασταθεί το grub2;"
+msgstr " nem található. A grub2 telepítve van?"
 
 #: ../src/grubconfig.cpp:287
 msgid " couldn't be executed successfully. You must run this as root!"
-msgstr ""
-" δεν ήταν δυνατή η επιτυχής εκτέλεση. Πρέπει να το εκτελέσετε ως root!"
+msgstr " nem lehet sikeresen végrehajtani. Root jogokkal kell futtatni!"
 
 #: ../src/grubconf_ui_gtk.cpp:11
 msgid "_File"
-msgstr "_Αρχείο"
+msgstr "_Fájl"
 
 #: ../src/grubconf_ui_gtk.cpp:12
 msgid "_Edit"
-msgstr "_Επεξεργασία"
+msgstr "_Szerkesztés"
 
 #: ../src/grubconf_ui_gtk.cpp:12
 msgid "_View"
-msgstr "_Προβολή"
+msgstr "_Nézet"
 
 #: ../src/grubconf_ui_gtk.cpp:12
 msgid "_Help"
-msgstr "_Βοήθεια"
+msgstr "_Súgó"
 
 #: ../src/grubconf_ui_gtk.cpp:13
 msgid "_Install to MBR …"
-msgstr "Ε_γκατάσταση στο MBR …"
+msgstr "_Telepítés az MBR-be..."
 
 #: ../src/grubconf_ui_gtk.cpp:18
 msgid "Script to insert:"
-msgstr "Script που θα εισαχθεί:"
+msgstr "Beillesztendő script:"
 
 #: ../src/grubconf_ui_gtk.cpp:18
 msgid "Preview:"
-msgstr "Προεπισκόπηση:"
+msgstr "Előnézet:"
 
 #: ../src/grubconf_ui_gtk.cpp:20
 msgid ""
@@ -60,141 +59,139 @@ msgid ""
 "files to the bootloaders data directory\n"
 "(if they don't already exist)."
 msgstr ""
-"Εγκατάσταση του bootloader στο MBR και τοποθέτηση μερικών\n"
-"αρχείων στον κατάλογο δεδομένων των bootloader\n"
-"(αν δεν υπάρχουν ήδη)."
+"Boottöltő telepítése az MBR-be és néhány\n"
+"fájlt a boottöltő adat mappájába\n"
+"(ha még nem léteznek)."
 
 #: ../src/grubconf_ui_gtk.cpp:21
 msgid "_Device: "
-msgstr "_Συσκευή: "
+msgstr "_Eszköz: "
 
 #: ../src/grubconf_ui_gtk.cpp:54
 msgid ""
 "Grub Customizer is a graphical interface to configure the grub2/burg settings"
-msgstr ""
-"Ο Διαμορφωτής του Grub είναι μια γραφική διεπαφή για τη διαμόρφωση των "
-"ρυθμίσεων του grub2/burg"
+msgstr "Grub Customizer egy grafikus interfész a grub2/burg beállításához"
 
 #: ../src/grubconf_ui_gtk.cpp:82
 msgid "Save configuration and generate a new "
-msgstr "Αποθήκευση διαμόρφωσης και δημιουργία νέας "
+msgstr "Konfiguráció mentése és új generálása "
 
 #: ../src/grubconf_ui_gtk.cpp:89
 msgid "Add a script to your configuration"
-msgstr "Προσθήκη script στη διαμόρφωσή σας"
+msgstr "Script hozzáadása a konfigurációhoz"
 
 #: ../src/grubconf_ui_gtk.cpp:91
 msgid "Remove a script from your configuration"
-msgstr "Αφαίρεση script από τη διαμόρφωσή σας"
+msgstr "Script eltávolítása"
 
 #: ../src/grubconf_ui_gtk.cpp:97
 msgid "Move up the selected entry or script"
-msgstr "Μετακινήστε πάνω την επιλεγμένη καταχώρηση ή script"
+msgstr "A kiválasztott bejegyzés vagy script feljebb mozgatása"
 
 #: ../src/grubconf_ui_gtk.cpp:99
 msgid "Move down the selected entry or script"
-msgstr "Μετακινήστε κάτω την επιλεγμένη καταχώρηση ή script"
+msgstr "A kiválasztott bejegyzés vagy script lejjebb mozgatása"
 
 #: ../src/grubconf_ui_gtk.cpp:107
 msgid "reload configuration"
-msgstr "επαναφόρτωση διαμόρφωσης"
+msgstr "konfiguráció újratöltése"
 
 #: ../src/grubconf_ui_gtk.cpp:110
 msgid "Edit grub preferences"
-msgstr "Επεξεργασία προτιμήσεων του grub"
+msgstr "Grub tulajdonságok szerkesztése"
 
 #: ../src/grubconf_ui_gtk.cpp:139
 msgid "Select _partition …"
-msgstr "Επιλογή _κατάτμησης …"
+msgstr "_Partició kiválasztása ..."
 
 #: ../src/grubconf_ui_gtk.cpp:146
 msgid "Add script"
-msgstr "Προσθήκη script"
+msgstr "Script hozzáadása"
 
 #: ../src/grubconf_ui_gtk.cpp:162
 msgid "Entry"
-msgstr "Καταχώρηση"
+msgstr "Bejegyzés"
 
 #: ../src/grubconf_ui_gtk.cpp:177
 msgid "Install to MBR"
-msgstr "Εγκατάσταση στο MBR"
+msgstr "MBR-be telepítés"
 
 #: ../src/grubconf_ui_gtk.cpp:222
 msgid "BURG Mode"
-msgstr "Κατάσταση BURG"
+msgstr "BURG Mód"
 
 #: ../src/grubconf_ui_gtk.cpp:243
 msgid "No Bootloader found"
-msgstr "Δεν βρέθηκε Bootloader"
+msgstr "Nem található boottöltő"
 
 #: ../src/grubconf_ui_gtk.cpp:244
 msgid "Do you want to select another root partition?"
-msgstr "Θέλετε να επιλέξετε άλλη ριζική (root) κατάτμηση;"
+msgstr "Szeretne más root partíciót kiválasztani?"
 
 #: ../src/grubconf_ui_gtk.cpp:251
 msgid "BURG found!"
-msgstr "Βρέθηκε το BURG!"
+msgstr "BURG megtlálva!"
 
 #: ../src/grubconf_ui_gtk.cpp:252
 msgid "Do you want to configure BURG instead of grub2?"
-msgstr "Θέλετε να διαμορφώσετε το BURG αντί για το grub2;"
+msgstr "Szeretné a BURG-ot konfigurálni a grub2 helyett?"
 
 #: ../src/grubconf_ui_gtk.cpp:272
 msgid "The bootloader has been installed successfully"
-msgstr "Ο bootloader εγκαταστάθηκε επιτυχώς"
+msgstr "A boottöltő sikeresen telepítve"
 
 #: ../src/grubconf_ui_gtk.cpp:277
 msgid "Error while installing the bootloader"
-msgstr "Σφάλμα κατά την εγκατάσταση του bootloader"
+msgstr "Hiba a boottöltő telepítése során"
 
 #: ../src/grubconf_ui_gtk.cpp:299
 msgid "loading configuration…"
-msgstr "φόρτωση διαμόρφωσης…"
+msgstr "konfiguráció betöltése..."
 
 #: ../src/grubconf_ui_gtk.cpp:330
 msgid " (custom)"
-msgstr " (προσαρμοσμένη)"
+msgstr " (egyéni)"
 
 #: ../src/grubconf_ui_gtk.cpp:342
 msgid "(new Entries)"
-msgstr "(νέες καταχωρήσεις)"
+msgstr "(új Bejegyzés)"
 
 #: ../src/grubconf_ui_gtk.cpp:363
 msgid "Proxy binary not found!"
-msgstr "Δεν βρέθηκε proxy binary!"
+msgstr "Proxy nem található!"
 
 #: ../src/grubconf_ui_gtk.cpp:364
 msgid ""
 "You will see all entries (uncustomized) when you run grub. This error accurs "
 "(in most cases), when you didn't install grub gustomizer currectly."
 msgstr ""
-"Βλέπετε όλες τις καταχωρήσεις (χωρίς διαμόρφωση) όταν εκτελείτε το grub. "
-"Αυτό το σφάλμα συμβαίνει (στις περισσότερες περιπτώσεις), όταν δεν έχετε "
-"εγκαταστήσει τον διαμορφωτή του grub σωστά."
+"Az összes bejegyzést így fogja látni (nincs testre szabva), amikor futtatja "
+"a grub-ot. Ez a hiba akkor fordul elő (a legtöbb esetben), amikor a grub "
+"customizer nincs helyesen telepítve."
 
 #: ../src/grubconf_ui_gtk.cpp:382
 msgid "Configuration has been saved"
-msgstr "Η διαμόρφωση αποθηκεύτηκε"
+msgstr "Konfiguráció elmentve"
 
 #: ../src/grubconf_ui_gtk.cpp:385
 msgid "updating configuration"
-msgstr "ενημέρωση διαμόρφωσης"
+msgstr "konfiguráció frissítése"
 
 #: ../src/grubconf_ui_gtk.cpp:442
 msgid "Name the Entry"
-msgstr "Ονομάστε την καταχώρηση"
+msgstr "A bejegyzés neve"
 
 #: ../src/grubconf_ui_gtk.cpp:558
 msgid "Default title: "
-msgstr "Προεπιλεγμένος τίτλος: "
+msgstr "Alapértelmezett cím: "
 
 #: ../src/grubconf_ui_gtk.cpp:578
 msgid "No script found"
-msgstr "Δεν βρέθηκε script"
+msgstr "Script nem található"
 
 #: ../src/grubconf_ui_gtk.cpp:673
 msgid "The saved configuration is not up to date!"
-msgstr "Η αποθηκευμένη διαμόρφωση δεν είναι ενήμερη!"
+msgstr "Az elmentett konfiguráció nem naprakész!"
 
 #: ../src/grubconf_ui_gtk.cpp:674
 msgid ""
@@ -202,80 +199,78 @@ msgid ""
 "startup. So what you see now may not be what you see when you restart your "
 "pc. To fix this, click update!"
 msgstr ""
-"Η δημιουργημένη διαμόρφωση δεν είναι ίδια με την αποθηκευμένη διαμόρφωση "
-"κατά την εκκίνηση. Έτσι, ό,τι βλέπετε τώρα μπορεί να μην είναι ό,τι θα δείτε "
-"όταν επανεκκινήσετε τον υπολογιστή σας. Για να το διορθώσετε, πατήστε "
-"ενημέρωση!"
+"A generált konfiguráció nem egyezett meg az elmentett konfigurációval "
+"induláskor. Tehát amit most lát nem ugyanaz mit akkor fog látni mikor újra "
+"indítja a számítógépét. Hogy javítsa ezt, kattintson a frissítésre!"
 
 #: ../src/grubconf_ui_gtk.cpp:677
 msgid "_Quit without update"
-msgstr "Έ_ξοδος χωρίς ενημέρωση"
+msgstr "_Kilépés frissítés nélkül"
 
 #: ../src/grubconf_ui_gtk.cpp:680
 msgid "_Update & Quit"
-msgstr "_Ενημέρωση και έξοδος"
+msgstr "_Frissítés & Kilépés"
 
 #: ../src/grubconf_ui_gtk.cpp:684
 msgid "Do you want to save your modifications?"
-msgstr "Θέλετε να αποθηκεύσετε τις τροποποιήσεις σας;"
+msgstr "Szeretné menteni a módosításokat?"
 
 #: ../src/grubconf_ui_gtk.cpp:687
 msgid "_Quit without saving"
-msgstr "Έξο_δος χωρίς αποθήκευση"
+msgstr "K_ilépés mentés nélkül"
 
 #: ../src/grubconf_ui_gtk.cpp:690
 msgid "_Save & Quit"
-msgstr "_Αποθήκευση και έξοδος"
+msgstr "_Mentés @ Kilépés"
 
 #: ../src/grubconf_ui_gtk.cpp:693
 msgid "AND: your modifications are still unsaved, update will save them too!"
 msgstr ""
-"AND: οι τροποποιήσεις σας δεν έχουν αποθηκευτεί ακόμη, η ενημέρωση θα "
-"αποθηκεύσει και αυτές!"
+"ÉS: a módosítások még nincsenek mentve, a frissítés menteni is fogja őket!"
 
 #: ../src/grubconf_ui_gtk.cpp:732
 msgid "installing the bootloader…"
-msgstr "εγκατάσταση του bootloader…"
+msgstr "boottöltő telepítése..."
 
 #: ../src/grubconf_ui_gtk.cpp:737
 msgid "Please type a device string!"
-msgstr "Παρακαλούμε πληκτρολογήστε ένα αλφαριθμητικό συσκευής!"
+msgstr ""
 
 #: ../src/grubconf_ui_gtk.cpp:747 ../src/settings_dlg_gtk.cpp:92
 msgid "is active"
-msgstr "είναι ενεργή"
+msgstr "aktív"
 
 #: ../src/grubconf_ui_gtk.cpp:748 ../src/settings_dlg_gtk.cpp:93
 msgid "name"
-msgstr "όνομα"
+msgstr "név"
 
 #: ../src/gtk-client.cpp:14
 msgid " command not found, cannot proceed"
-msgstr " δεν βρέθηκε η εντολή, αδύνατη η συνέχεια"
+msgstr " parancs nem található, nem hajtható végre"
 
 #: ../src/liveCDSetupDialog.cpp:5
 msgid "_use another partition: "
-msgstr "_χρήση άλλης κατάτμησης: "
+msgstr "_használjon más partíciót: "
 
 #: ../src/liveCDSetupDialog.cpp:6
 msgid "Mount selected Filesystem"
-msgstr "Προσάρτηση του επιλεγμένου συστήματος αρχείων"
+msgstr "Kivélasztott Fájlrendszer felcsatlakoztatása"
 
 #: ../src/liveCDSetupDialog.cpp:7
 msgid "Unmount mounted Filesystem"
-msgstr "Αποπροσάρτηση του επιλεγμένου συστήματος αρχείων"
+msgstr "Felcsatlakoztatott Fájlrendszerek lecsatolása"
 
 #: ../src/liveCDSetupDialog.cpp:10
 msgid ""
 "These are the mountpoints of your fstab file.\n"
 "Please select every grub/boot related partition."
 msgstr ""
-"Αυτά είναι τα σημεία προσάρτησης του αρχείου σας fstab.\n"
-"Παρακαλούμε επιλέξτε κάθε σχετική με το grub/boot κατάτμηση."
+"Ezek az fstab fájlban található csatolási helyek.\n"
+"Kérem válassza ki a grub/boot-al rendelkező partíciókat."
 
 #: ../src/liveCDSetupDialog.cpp:15
 msgid "You started Grub Customizer using the live CD."
-msgstr "Εκκινήσατε το Διαμορφωτή του Grub χρησιμοποιώντας το live CD."
+msgstr "A Grub Customizer-t live CD használatkor indította."
 
 #: ../src/liveCDSetupDialog.cpp:17
 msgid ""
@@ -285,12 +280,12 @@ msgid ""
 "again and save the configuration (or run update-grub/update-burg)\n"
 "to get the entry back!"
 msgstr ""
-"Επιλέξατε να χρησιμοποιήσετε άλλη κατάτμηση.\n"
-"Παρακαλώ σημειώστε: Το os-prober (ανίχνευση λειτουργικού) μπορεί να μη βρει "
-"το λειτουργικό που εκτελείτε.\n"
-"Έτσι εκτελέστε τον Διαμορφωτή του Grub στο σύστημα στόχο\n"
-"ξανά και αποθηκεύστε τη διαμόρφωση (ή εκτελέστε update-grub/update-burg)\n"
-"για να ξαναβάλετε την καταχώρηση!"
+"Ön azt az opciót választotta, hogy más partíciót választ.\n"
+"Megjegyzés: Az os-prober script talán nem találja meg az éppen futó "
+"rendszerét.\n"
+"Ezért futtassa újra a cél rendszeren és\n"
+"mentse a konfigurációt (vagy futtassa: update-grub/update-burg),\n"
+"hogy vissza kapja a bejegyzéseket!"
 
 #: ../src/liveCDSetupDialog.cpp:19
 msgid ""
@@ -304,248 +299,236 @@ msgid ""
 "as the actually running one.\n"
 "If not, you will get an error message when trying to load the configuration."
 msgstr ""
-"Πριν μπορέσετε να επεξεργασθείτε την διαμόρφωση του grub σας πρέπει να\n"
-"προσαρτήσετε τις απαραίτητες κατατμήσεις.\n"
-"\n"
-"Αυτός ο βοηθός θα σας βοηθήσει σε αυτό.\n"
-"\n"
-"\n"
-"Παρακαλώ βεβαιωθείτε ότι το σύστημα στόχος βασίζεται στην ίδια αρχιτεκτονική "
-"επεξεργαστή\n"
-"με αυτό που πραγματικά εκτελείται αυτή τη στιγμή.\n"
-"Αν όχι, θα εμφανιστεί ένα μήνυμα λάθους κατά την προσπάθεια φόρτωσης της "
-"διαμόρφωσης."
 
 #: ../src/liveCDSetupDialog.cpp:21
 msgid "Grub Customizer: Partition chooser"
-msgstr "Διαμορφωτής του Grub: Επιλογέας κατατμήσεων"
+msgstr "Grub Customizer: Partíció választás"
 
 #: ../src/liveCDSetupDialog.cpp:25
 msgid "Select and mount your root partition"
-msgstr "Επιλέξτε και προσαρτήσετε την ριζική σας κατάτμηση"
+msgstr "Válassza ki és csatolja fe a root partícióját"
 
 #: ../src/liveCDSetupDialog.cpp:43
 msgid "partition"
-msgstr "κατάτμηση"
+msgstr "partíció"
 
 #: ../src/liveCDSetupDialog.cpp:44
 msgid "type"
-msgstr "τύπος"
+msgstr "típus"
 
 #: ../src/liveCDSetupDialog.cpp:45
 msgid "label"
-msgstr "ετικέτα"
+msgstr "címke"
 
 #: ../src/liveCDSetupDialog.cpp:62
 msgid "Select required submountpoints"
-msgstr "Επιλέξτε τα απαιτούμενα υποσημεία προσάρτησης"
+msgstr "Válassza ki a szükséges alcsatlakozási helyeket"
 
 #: ../src/liveCDSetupDialog.cpp:82
 msgid "Partition Chooser"
-msgstr "Επιλογέας κατατμήσεων"
+msgstr "Partíció Választó"
 
 #: ../src/liveCDSetupDialog.cpp:152
 msgid "Mount failed!"
-msgstr "Αποτυχία προσάρτησης!"
+msgstr "Felcsatlakoztatás sikertelen!"
 
 #: ../src/liveCDSetupDialog.cpp:167
 msgid "This seems not to be a root file system (no fstab found)"
-msgstr ""
-"Αυτό δεν φαίνεται να είναι ριζικό σύστημα αρχείων (δεν βρέθηκε fstab)"
+msgstr "Úgy tűnik ez nem root fájl rendszer (fstab nem található)"
 
 #: ../src/liveCDSetupDialog.cpp:176
 msgid "umount failed!"
-msgstr "Αποτυχία αποπροσάρτησης!"
+msgstr "lecsatolás sikertelen!"
 
 #: ../src/liveCDSetupDialog.cpp:210
 msgid "Couldn't mount the selected partition"
-msgstr "Αποτυχία προσάρτησης της επιλεγμένης κατάτμησης"
+msgstr "Nem csatlakoztatható fel a kiválasztott partíció"
 
 #: ../src/liveCDSetupDialog.cpp:212
 msgid "Couldn't umount the selected partition"
-msgstr "Αποτυχία αποπροσάρτησης της επιλεγμένης κατάτμησης"
+msgstr "Nem csatlakoztatható le a kiválasztott partíció"
 
 #: ../src/settings_dlg_gtk.cpp:47
 msgid "white"
-msgstr "λευκό"
+msgstr "fehér"
 
 #: ../src/settings_dlg_gtk.cpp:48
 msgid "yellow"
-msgstr "κίτρινο"
+msgstr "sárga"
 
 #: ../src/settings_dlg_gtk.cpp:49
 msgid "light-cyan"
-msgstr "ανοιχτό κυανό"
+msgstr "világos-ciánkék"
 
 #: ../src/settings_dlg_gtk.cpp:50
 msgid "cyan"
-msgstr "κυανό"
+msgstr "ciánkék"
 
 #: ../src/settings_dlg_gtk.cpp:51
 msgid "light-blue"
-msgstr "ανοιχτό μπλε"
+msgstr "világoskék"
 
 #: ../src/settings_dlg_gtk.cpp:52
 msgid "blue"
-msgstr "μπλε"
+msgstr "kék"
 
 #: ../src/settings_dlg_gtk.cpp:53
 msgid "light-green"
-msgstr "ανοιχτό πράσινο"
+msgstr "világoszöld"
 
 #: ../src/settings_dlg_gtk.cpp:54
 msgid "green"
-msgstr "πράσινο"
+msgstr "zöld"
 
 #: ../src/settings_dlg_gtk.cpp:55
 msgid "light-magenta"
-msgstr "ανοιχτό μωβ"
+msgstr "világos-magenta"
 
 #: ../src/settings_dlg_gtk.cpp:56
 msgid "magenta"
-msgstr "μωβ"
+msgstr "magenta"
 
 #: ../src/settings_dlg_gtk.cpp:57
 msgid "light-red"
-msgstr "ανοιχτό κόκκινο"
+msgstr "világospiros"
 
 #: ../src/settings_dlg_gtk.cpp:58
 msgid "red"
-msgstr "κόκκινο"
+msgstr "piros"
 
 #: ../src/settings_dlg_gtk.cpp:59
 msgid "brown"
-msgstr "καφέ"
+msgstr "barna"
 
 #: ../src/settings_dlg_gtk.cpp:60
 msgid "light-gray"
-msgstr "ανοιχτό γκρι"
+msgstr "világosszürke"
 
 #: ../src/settings_dlg_gtk.cpp:61
 msgid "dark-gray"
-msgstr "σκούρο γκρι"
+msgstr "sötétszürke"
 
 #: ../src/settings_dlg_gtk.cpp:62
 msgid "transparent"
-msgstr "διαφανές"
+msgstr "átlátszó"
 
 #: ../src/settings_dlg_gtk.cpp:62
 msgid "black"
-msgstr "μαύρο"
+msgstr "fekete"
 
 #: ../src/settings_dlg_gtk.cpp:68
 msgid "pre_defined: "
-msgstr "προ_καθορισμένο: "
+msgstr "előre_definiált: "
 
 #: ../src/settings_dlg_gtk.cpp:68
 msgid "previously _booted entry"
-msgstr "καταχώρηση _προηγούμενης εκκίνησης συστήματος"
+msgstr "előzetesen _bootolt bejegyzés"
 
 #: ../src/settings_dlg_gtk.cpp:69
 msgid "default entry"
-msgstr "προεπιλεγμένη καταχώρηση"
+msgstr "alapértelmezett bejegyzés"
 
 #: ../src/settings_dlg_gtk.cpp:69
 msgid "visibility"
-msgstr "ορατότητα"
+msgstr "láthatóság"
 
 #: ../src/settings_dlg_gtk.cpp:69
 msgid "show menu"
-msgstr "εμφάνιση μενού"
+msgstr "menü mutatása"
 
 #: ../src/settings_dlg_gtk.cpp:70
 msgid "Timeout"
-msgstr "Λήξη χρονικού ορίου"
+msgstr "Várakozási idő"
 
 #: ../src/settings_dlg_gtk.cpp:70
 msgid "Seconds"
-msgstr "Δευτερόλεπτα"
+msgstr "Másodpercek"
 
 #: ../src/settings_dlg_gtk.cpp:70
 msgid "kernel parameters"
-msgstr "παράμετροι πυρήνα"
+msgstr "kernel paraméterek"
 
 #: ../src/settings_dlg_gtk.cpp:71
 msgid "generate recovery entries"
-msgstr "δημιουργία καταχωρήσεων επαναφοράς"
+msgstr "helyreállító bejegyzés generálása"
 
 #: ../src/settings_dlg_gtk.cpp:71
 msgid "look for other operating systems"
-msgstr "έρευνα για άλλα λειτουργικά συστήματα"
+msgstr "más operációs rendszer keresése"
 
 #: ../src/settings_dlg_gtk.cpp:72
 msgid "custom resolution: "
-msgstr "προσαρμοσμένη ανάλυση: "
+msgstr "egyéni felbontás: "
 
 #: ../src/settings_dlg_gtk.cpp:73
 msgid "font color"
-msgstr "χρώμα γραμματοσειράς"
+msgstr "betűszín"
 
 #: ../src/settings_dlg_gtk.cpp:73
 msgid "background"
-msgstr "φόντο"
+msgstr "háttér"
 
 #: ../src/settings_dlg_gtk.cpp:74
 msgid "normal:"
-msgstr "κανονικό:"
+msgstr "normális:"
 
 #: ../src/settings_dlg_gtk.cpp:74
 msgid "highlight:"
-msgstr "επισήμανση:"
+msgstr "kiemelés:"
 
 #: ../src/settings_dlg_gtk.cpp:75
 msgid "menu colors"
-msgstr "χρώματα μενού"
+msgstr "menü színei"
 
 #: ../src/settings_dlg_gtk.cpp:75
 msgid "background image"
-msgstr "εικόνα παρασκηνίου"
+msgstr "háttérkép"
 
 #: ../src/settings_dlg_gtk.cpp:76
 msgid "copy to grub directory"
-msgstr "αντιγραφή στον κατάλογο του grub"
+msgstr "grub mappa másolása"
 
 #: ../src/settings_dlg_gtk.cpp:76
 msgid "remove background"
-msgstr "αφαίρεση παρασκηνίου"
+msgstr "háttér törlése"
 
 #: ../src/settings_dlg_gtk.cpp:77
 msgid ""
 "To get the colors above working,\n"
 "you have to select a background image!"
 msgstr ""
-"Για να δουλέψουν τα παραπάνω χρώματα,\n"
-"πρέπει να επιλέξετε μια εικόνα παρασκηνίου!"
+"Ahhoz, hogy a fenti színek működjenek,\n"
+"ki kell választania egy háttérképet!"
 
 #: ../src/settings_dlg_gtk.cpp:80
 msgid "settings"
-msgstr "ρυθμίσεις"
+msgstr "beállítások"
 
 #: ../src/settings_dlg_gtk.cpp:84
 msgid "_General"
-msgstr "_Γενικά"
+msgstr "Á_ltalános"
 
 #: ../src/settings_dlg_gtk.cpp:85
 msgid "A_ppearance"
-msgstr "Ε_μφάνιση"
+msgstr "_Megjelenés"
 
 #: ../src/settings_dlg_gtk.cpp:86
 msgid "_Advanced"
-msgstr "Για προ_χωρημένους"
+msgstr "_Speciális"
 
 #: ../src/settings_dlg_gtk.cpp:94
 msgid "value"
-msgstr "τιμή"
+msgstr "érték"
 
 #: ../src/settings_dlg_gtk.cpp:129
 msgid "Entry %1 (by position)"
-msgstr "Καταχώρηση %1 (ως προς τη θέση)"
+msgstr "Bejegyzés %1 (pozíció szerint)"
 
 #: ../src/settings_dlg_gtk.cpp:419
 msgid ""
 "This option doesn't work when the \"os-prober\" script finds other operating "
 "systems. Disable \"%1\" if you don't need to boot other operating systems."
 msgstr ""
-"Αυτή η επιλογή δεν δουλεύει όταν το σενάριο ενεργειών (script) \"os-prober\" "
-"βρίσκει άλλα λειτουργικά συστήματα. Απενεργοποιήστε το \"%1\" αν δεν "
-"χρειάζεται να εκκινείτε με άλλα λειτουργικά συστήματα."
+"Ez az opció nem működik, amikor az \"os-prober\" script talál más operációs "
+"rendszereket. Tiltsa le \"%1\", ha nem akar bebootolni más operációs "
+"rendszert."

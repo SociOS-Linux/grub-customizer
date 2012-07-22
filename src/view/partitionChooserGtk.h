@@ -17,7 +17,6 @@
  * create a new instance while the presenter simply needs to call show() or hide() on the PartitionChooser.
  */
 
-//TODO: don't use run() to start this (only if standalone)
 class PartitionChooserGtk : public PartitionChooser {
 	Gtk::Assistant* assistant;
 	Gtk::Label lblMessage, lblSubmountpointDescription;
@@ -55,7 +54,6 @@ class PartitionChooserGtk : public PartitionChooser {
 	void removeAllSubmountpoints();
 	void submountpoint_toggle(Gtk::CheckButton& sender);
 	void showErrorMessage(MountExceptionType type);
-	void run();
 	void hide();
 	void show();
 	Gtk::CheckButton& getSubmountpointCheckboxByLabel(Glib::ustring const& label);

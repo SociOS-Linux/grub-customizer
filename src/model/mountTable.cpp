@@ -104,7 +104,6 @@ void MountTable::loadData(std::string const& rootDirectory){
 		FILE* mtabfile = fopen("/etc/mtab", "r"); //use global mtab - the local one is unmanaged
 		if (mtabfile){
 			mtab = MountTable(mtabfile, "", true);
-			mtab.print();
 			fclose(mtabfile);
 		}
 		this->sync(mtab);
@@ -116,7 +115,6 @@ void MountTable::clear(std::string const& prefix){
 	MountTable::iterator iter = this->begin();
 	while (iter != this->end()){
 		if (iter->mountpoint.substr(0, iter->mountpoint.length()) == prefix){
-			std::cout << "erasing " << iter->mountpoint << std::endl;
 			this->erase(iter);
 			iter = this->begin();
 		}
@@ -180,7 +178,6 @@ void MountTable::umountAll(std::string const& prefix){
 }
 
 void MountTable::mountRootFs(std::string const& device, std::string const& mountpoint){
-	this->print();
 	this->add(Mountpoint(device, mountpoint, "")).mount();
 	this->loadData(mountpoint);
 	FILE* fstab = fopen((mountpoint + "/etc/fstab").c_str(), "r");
@@ -199,11 +196,10 @@ void MountTable::mountRootFs(std::string const& device, std::string const& mount
 	else
 		throw MOUNT_ERR_NO_FSTAB;
 	this->loaded = true;
-	this->print();
 }
 
-void MountTable::print(){
-	for (MountTable::iterator iter = this->begin(); iter != this->end(); iter++){
+void MountTable::print() const {
+	for (MountTable::const_iterator iter = this->begin(); iter != this->end(); iter++){
 		std::cout << "[" << (iter->isMounted ? "x" : " ")  << "] " <<  iter->device << " " << iter->mountpoint << std::endl;
 	}
 }

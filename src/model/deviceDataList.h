@@ -8,5 +8,6 @@ public:
 	DeviceDataList(FILE* blkidOutput);
 	DeviceDataList();
 	void loadData(FILE* blkidOutput);
+	void clear();
 };
 #endif

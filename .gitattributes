@@ -94,9 +94,12 @@ src/view/scriptAddDlgGtk.h -text
 src/view/settingsDlgGtk.cpp -text
 src/view/settingsDlgGtk.h -text
 translation/complile_all.sh -text
-translation/messages.pot -text
 translation/translation-bg.mo -text svneol=unset#unset
 translation/translation-bg.po -text
+translation/translation-cs.mo -text svneol=unset#unset
+translation/translation-cs.po -text
+translation/translation-cy.mo -text svneol=unset#unset
+translation/translation-cy.po -text
 translation/translation-de.mo -text svneol=unset#unset
 translation/translation-de.po -text
 translation/translation-el.mo -text svneol=unset#unset
@@ -109,6 +112,8 @@ translation/translation-gl.mo -text svneol=unset#unset
 translation/translation-gl.po -text
 translation/translation-hr.mo -text svneol=unset#unset
 translation/translation-hr.po -text
+translation/translation-hu.mo -text svneol=unset#unset
+translation/translation-hu.po -text
 translation/translation-it.mo -text svneol=unset#unset
 translation/translation-it.po -text
 translation/translation-pl.mo -text svneol=unset#unset
@@ -123,3 +128,4 @@ translation/translation-uk.mo -text svneol=unset#unset
 translation/translation-uk.po -text
 translation/translation-zh_CN.mo -text svneol=unset#unset
 translation/translation-zh_CN.po -text
+translation/translation.pot -text

@@ -21,6 +21,8 @@ public:
 	virtual void addToPreview(Glib::ustring const& name)=0;
 	//show this dialog
 	virtual void show()=0;
+	//thise this dialog
+	virtual void hide()=0;
 };
 
 #endif

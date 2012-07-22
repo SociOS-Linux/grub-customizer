@@ -1,5 +1,14 @@
 #include "rule.h"
 
+std::string str_replace(const std::string &search, const std::string &replace, std::string subject) {
+	size_t pos = 0;
+	while (pos < subject.length() && (pos = subject.find(search, pos)) != -1){
+		subject.replace(pos, search.length(), replace);
+		pos += replace.length();
+	}
+	return subject;
+}
+
 Rule::Rule(Entry& source, bool isVisible) //generate rule for given entry. __idname is only required for re-syncing (soft-reload)
 	: type(Rule::NORMAL), isVisible(isVisible), __idname(source.name), outputName(source.name), dataSource(&source)
 {}
@@ -7,13 +16,13 @@ Rule::Rule(Entry& source, bool isVisible) //generate rule for given entry. __idn
 Rule::operator std::string(){
 	std::string result = isVisible ? "+" : "-";
 	if (dataSource)
-		result += "'"+dataSource->name+"'"; //TODO: replace containing "'" by "''"
+		result += "'"+str_replace("'", "''", dataSource->name)+"'";
 	else if (type == OTHER_ENTRIES_PLACEHOLDER)
 		result += "*";
 	else
 		result += "???";
 	if (type == NORMAL && (dataSource && dataSource->name != outputName))
-		result += " as '"+outputName+"'";
+		result += " as '"+str_replace("'", "''", outputName)+"'";
 	return result;
 }
 

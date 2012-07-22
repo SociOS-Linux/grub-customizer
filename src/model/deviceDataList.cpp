@@ -42,3 +42,7 @@ void DeviceDataList::loadData(FILE* blkidOutput){
 		}
 	}
 }
+
+void DeviceDataList::clear(){
+	this->std::map<std::string, std::map<std::string, std::string> >::clear();
+}

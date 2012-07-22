@@ -15,14 +15,18 @@ public:
 	};
 	//function to assign the event listener
 	virtual void setEventListener(EventListener_listCfgDlg& eventListener)=0;
+	//show this dialog without waiting
+	virtual void show()=0;
 	//show this dialog and wait until the window has been closed
 	virtual void run()=0;
 	//hide this window and close the whole application
 	virtual void close()=0;
-	//ask the user if he wants to select another root partition
-	virtual bool requestForRootSelection()=0;
-	//ask the user if he wants to configure burg instead of grub
-	virtual bool requestForBurgMode()=0;
+
+	virtual void showBurgSwitcher()=0;
+	virtual void hideBurgSwitcher()=0;
+	virtual void showPartitionChooserQuestion()=0;
+	virtual void hidePartitionChooserQuestion()=0;
+	virtual bool isVisible()=0;
 
 	//notifies the window about which mode is used (grub<>burg)
 	virtual void setIsBurgMode(bool isBurgMode)=0;

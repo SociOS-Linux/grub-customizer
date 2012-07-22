@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-11-28 22:09+0100\n"
-"PO-Revision-Date: 2010-11-30 11:35+0000\n"
-"Last-Translator: Emre AYTAÇ <Unknown>\n"
+"PO-Revision-Date: 2010-12-05 20:20+0000\n"
+"Last-Translator: Daniel Richter <danielrichter2007@web.de>\n"
 "Language-Team: Turkish <tr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-11-30 18:28+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-01-20 18:32+0000\n"
+"X-Generator: Launchpad (build 12214)\n"
 
 #: ../src/grubconfig.cpp:203 ../src/grubconfig.cpp:218
 msgid " not found. Is grub2 installed?"
@@ -159,13 +159,15 @@ msgstr "(yeni Girdiler)"
 
 #: ../src/grubconf_ui_gtk.cpp:363
 msgid "Proxy binary not found!"
-msgstr ""
+msgstr "Proxy ikili kod programı bulunamadı!"
 
 #: ../src/grubconf_ui_gtk.cpp:364
 msgid ""
 "You will see all entries (uncustomized) when you run grub. This error accurs "
 "(in most cases), when you didn't install grub gustomizer currectly."
 msgstr ""
+"grub'ı çalıştırdığınızda tüm girişleri (değiştirilmemiş) bulacaksınız. Bu "
+"hata (genelde), grub customizer düzgün kurulamadığı zaman gerçekleşir."
 
 #: ../src/grubconf_ui_gtk.cpp:382
 msgid "Configuration has been saved"
@@ -197,6 +199,9 @@ msgid ""
 "startup. So what you see now may not be what you see when you restart your "
 "pc. To fix this, click update!"
 msgstr ""
+"Üretilen ayarlama, başlangıçtaki kaydedilmiş ayarlamayla aynı değil. O "
+"yüzden; şu an gördüğünüz, bilgisayarınızı yeniden başlattığınızda "
+"göreceğinizle aynı olmayabilir. Bunu düzeltmek için, güncelle'yi tıklayın!"
 
 #: ../src/grubconf_ui_gtk.cpp:677
 msgid "_Quit without update"
@@ -221,6 +226,7 @@ msgstr "Kaydet & Çık"
 #: ../src/grubconf_ui_gtk.cpp:693
 msgid "AND: your modifications are still unsaved, update will save them too!"
 msgstr ""
+"VE: değiştirmeleriniz hala kaydedilmedi, güncelleme onları da kaydedecektir!"
 
 #: ../src/grubconf_ui_gtk.cpp:732
 msgid "installing the bootloader…"
@@ -228,7 +234,7 @@ msgstr "önyükleyici kuruluyor…"
 
 #: ../src/grubconf_ui_gtk.cpp:737
 msgid "Please type a device string!"
-msgstr ""
+msgstr "Lütfen bir cihaz dizisi girin!"
 
 #: ../src/grubconf_ui_gtk.cpp:747 ../src/settings_dlg_gtk.cpp:92
 msgid "is active"
@@ -259,6 +265,8 @@ msgid ""
 "These are the mountpoints of your fstab file.\n"
 "Please select every grub/boot related partition."
 msgstr ""
+"Bunlar fstab dosyanızın bağlama noktaları.\n"
+"Lütfen tüm grub/boot ile alakalı bölümü seçin."
 
 #: ../src/liveCDSetupDialog.cpp:15
 msgid "You started Grub Customizer using the live CD."
@@ -308,7 +316,7 @@ msgstr "etiket"
 
 #: ../src/liveCDSetupDialog.cpp:62
 msgid "Select required submountpoints"
-msgstr ""
+msgstr "Gereken alt bağlama noktalarını seçin"
 
 #: ../src/liveCDSetupDialog.cpp:82
 msgid "Partition Chooser"
@@ -368,11 +376,11 @@ msgstr "yeşil"
 
 #: ../src/settings_dlg_gtk.cpp:55
 msgid "light-magenta"
-msgstr ""
+msgstr "açık-eflatun"
 
 #: ../src/settings_dlg_gtk.cpp:56
 msgid "magenta"
-msgstr ""
+msgstr "eflatun"
 
 #: ../src/settings_dlg_gtk.cpp:57
 msgid "light-red"
@@ -396,7 +404,7 @@ msgstr "koyu-gri"
 
 #: ../src/settings_dlg_gtk.cpp:62
 msgid "transparent"
-msgstr ""
+msgstr "şeffaf"
 
 #: ../src/settings_dlg_gtk.cpp:62
 msgid "black"
@@ -483,6 +491,8 @@ msgid ""
 "To get the colors above working,\n"
 "you have to select a background image!"
 msgstr ""
+"Yukarıdaki renkleri çalıştırabilmek için,\n"
+"bir arkaplan resmi seçmelisiniz!"
 
 #: ../src/settings_dlg_gtk.cpp:80
 msgid "settings"
@@ -506,7 +516,7 @@ msgstr "değer"
 
 #: ../src/settings_dlg_gtk.cpp:129
 msgid "Entry %1 (by position)"
-msgstr ""
+msgstr "Giriş %1 (bulunduğu yere göre)"
 
 #: ../src/settings_dlg_gtk.cpp:419
 msgid ""
@@ -516,7 +526,3 @@ msgstr ""
 "Bu seçenek \"os-prober\" betiği diğer işletim sistemlerini bulduğunda "
 "çalışmaz. Diğer işletim sistemlerini önyüklemeye ihtiyaç duymuyorsanız "
 "\"%1\" etkisiz kılın."
-
-#~ msgid "reload configuration (same effect as an application restart)"
-#~ msgstr ""
-#~ "yapılandırmayı geri yükle (uygulamayı yeniden başlatma etkisi sağlar)"

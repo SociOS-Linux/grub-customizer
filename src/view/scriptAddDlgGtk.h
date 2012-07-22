@@ -26,6 +26,7 @@ public:
 	void clearPreview();
 	void addToPreview(Glib::ustring const& name);
 	void show();
+	void hide();
 };
 
 #endif

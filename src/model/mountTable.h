@@ -44,7 +44,7 @@ class MountTable : public std::list<Mountpoint> {
 	void remove(Mountpoint const& mountpoint);
 	void umountAll(std::string const& prefix);
 	void mountRootFs(std::string const& device, std::string const& mountpoint);
-	void print();
+	void print() const;
 };
 #endif
 

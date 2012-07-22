@@ -10,7 +10,7 @@ void EventListener::settings_dialog_request(){
 }
 
 void EventListener::reload_request(){
-	Glib::Thread::create(sigc::bind(sigc::mem_fun(&presenter, &GrubCustomizer::load), true), false);
+	presenter.reload();
 }
 
 void EventListener::save_request(){
@@ -23,7 +23,7 @@ void EventListener::rootSelectorCompleted(){
 
 
 void EventListener::rootSelector_request(){
-	presenter.startRootSelector();
+	presenter.showPartitionChooser();
 }
 
 void EventListener::installDialogRequest(){
@@ -50,7 +50,7 @@ void EventListener::removeProxy_requested(void* p){
 	presenter.removeProxy((Proxy*)p);
 }
 
-bool EventListener::exitRequest(){
+void EventListener::exitRequest(){
 	return presenter.quit();
 }
 
@@ -78,6 +78,21 @@ void EventListener::ruleSelected(void* rule){
 }
 void EventListener::proxySelected(void* proxy){
 	presenter.showProxyInfo((Proxy*)proxy);
+}
+
+void EventListener::burgSwitcher_cancelled(){
+	presenter.handleCancelResponse();
+}
+void EventListener::burgSwitcher_response(bool burgChosen){
+	presenter.init(burgChosen ? GrubEnv::BURG_MODE : GrubEnv::GRUB_MODE);
+}
+
+void EventListener::partitionChooserQuestion_response(bool is_positive){
+	presenter.hidePartitionChooserQuestion();
+	if (is_positive)
+		presenter.showPartitionChooser();
+	else
+		presenter.handleCancelResponse();
 }
 
 void EventListener::aboutDialog_requested(){

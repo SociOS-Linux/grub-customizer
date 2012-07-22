@@ -5,6 +5,7 @@
 #include "../interface/grublistCfgDlg.h"
 #include <glibmm/thread.h>
 #include <glibmm/dispatcher.h>
+#include <gtkmm/main.h>
 #include <libintl.h>
 #include <locale.h>
 #include "../config.h"
@@ -28,8 +29,6 @@
 
 #include <giomm/file.h>
 
-//TODO: allow settings manager startup after loading the settings - don't wait until everything is loaded
-
 /**
  * master class of Grub Customizer.
  * Coordinates all the windows (views) and data objects.
@@ -41,6 +40,7 @@
  * interfaces. The model doesn't use interfaces yet, but it's set from outside too. So it should be
  * not too much work to change this.
  */
+
 class GrubCustomizer {
 	GrubEnv& env;
 	GrublistCfg* grublistCfg;
@@ -83,17 +83,22 @@ public:
 	void setMountTable(MountTable& mountTable);
 	void setAboutDialog(AboutDialog& aboutDialog);
 
+	//init functions
+	void init();
+	void init(GrubEnv::Mode mode);
+	void hidePartitionChooserQuestion();
+	void showPartitionChooser();
+	void handleCancelResponse();
+
 	void showSettingsDlg();
+	void reload();
 	void load(bool preserveConfig = false);
 	void save();
 	void save_thread();
 	GrubCustomizer(GrubEnv& env);
 	
-	void run();
 	void renameEntry(Rule* rule, std::string const& newName);
 	void reset();
-	bool prepare(bool forceRootSelection = false);
-	void startRootSelector();
 	void initRootSelector();
 	
 	void syncEntryList();
@@ -117,7 +122,7 @@ public:
 	void activateSettingsBtn();
 	void updateSettingsDlg();
 	
-	bool quit();
+	void quit(bool force = false);
 	
 	void syncProxyState(void* proxy);
 	void syncRuleState(Rule* entry);

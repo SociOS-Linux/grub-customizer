@@ -4,6 +4,8 @@
 #include "entry.h"
 #include <iostream>
 
+std::string str_replace(const std::string &search, const std::string &replace, std::string subject);
+
 struct Rule {
 	Entry* dataSource;
 	std::string outputName;

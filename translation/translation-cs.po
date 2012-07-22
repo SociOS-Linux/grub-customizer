@@ -1,56 +1,57 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Czech translation for grub-customizer
+# Copyright (c) 2011 Rosetta Contributors and Canonical Ltd 2011
+# This file is distributed under the same license as the grub-customizer package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2011.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: 2.0.4\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: grub-customizer\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-11-28 22:09+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2011-01-15 17:20+0000\n"
+"Last-Translator: Jan Bažant aka Brbla <brbla@brbla.net>\n"
+"Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2011-01-20 18:32+0000\n"
+"X-Generator: Launchpad (build 12214)\n"
 
 #: ../src/grubconfig.cpp:203 ../src/grubconfig.cpp:218
 msgid " not found. Is grub2 installed?"
-msgstr ""
+msgstr " nenalezeno. Je grub2 nainstalován?"
 
 #: ../src/grubconfig.cpp:287
 msgid " couldn't be executed successfully. You must run this as root!"
-msgstr ""
+msgstr " nemůže být úspěšně provedeno. Je nutné spustit to jako root!"
 
 #: ../src/grubconf_ui_gtk.cpp:11
 msgid "_File"
-msgstr ""
+msgstr "_Soubor"
 
 #: ../src/grubconf_ui_gtk.cpp:12
 msgid "_Edit"
-msgstr ""
+msgstr "_Upravit"
 
 #: ../src/grubconf_ui_gtk.cpp:12
 msgid "_View"
-msgstr ""
+msgstr "_Zobrazit"
 
 #: ../src/grubconf_ui_gtk.cpp:12
 msgid "_Help"
-msgstr ""
+msgstr "_Nápověda"
 
 #: ../src/grubconf_ui_gtk.cpp:13
 msgid "_Install to MBR …"
-msgstr ""
+msgstr "_Instalovat do MBR …"
 
 #: ../src/grubconf_ui_gtk.cpp:18
 msgid "Script to insert:"
-msgstr ""
+msgstr "Skript k vložení:"
 
 #: ../src/grubconf_ui_gtk.cpp:18
 msgid "Preview:"
-msgstr ""
+msgstr "Náhled:"
 
 #: ../src/grubconf_ui_gtk.cpp:20
 msgid ""
@@ -61,96 +62,97 @@ msgstr ""
 
 #: ../src/grubconf_ui_gtk.cpp:21
 msgid "_Device: "
-msgstr ""
+msgstr "_Zařízení: "
 
 #: ../src/grubconf_ui_gtk.cpp:54
 msgid ""
 "Grub Customizer is a graphical interface to configure the grub2/burg settings"
 msgstr ""
+"Grub Customizer je grafická nadstavba ke konfiguraci grub2/burg nastavení"
 
 #: ../src/grubconf_ui_gtk.cpp:82
 msgid "Save configuration and generate a new "
-msgstr ""
+msgstr "Uložit nastavení a vytvářet nové "
 
 #: ../src/grubconf_ui_gtk.cpp:89
 msgid "Add a script to your configuration"
-msgstr ""
+msgstr "Přidat skript pro vaši konfiguraci"
 
 #: ../src/grubconf_ui_gtk.cpp:91
 msgid "Remove a script from your configuration"
-msgstr ""
+msgstr "Odebrat skript z vaší konfigurace"
 
 #: ../src/grubconf_ui_gtk.cpp:97
 msgid "Move up the selected entry or script"
-msgstr ""
+msgstr "Posunout vybrané položky nebo skript nahoru"
 
 #: ../src/grubconf_ui_gtk.cpp:99
 msgid "Move down the selected entry or script"
-msgstr ""
+msgstr "Posunout vybrané položky nebo skript dolů"
 
 #: ../src/grubconf_ui_gtk.cpp:107
 msgid "reload configuration"
-msgstr ""
+msgstr "načíst konfiguraci znovu"
 
 #: ../src/grubconf_ui_gtk.cpp:110
 msgid "Edit grub preferences"
-msgstr ""
+msgstr "Editovat grub předvolby"
 
 #: ../src/grubconf_ui_gtk.cpp:139
 msgid "Select _partition …"
-msgstr ""
+msgstr "Vybrat _oddíl..."
 
 #: ../src/grubconf_ui_gtk.cpp:146
 msgid "Add script"
-msgstr ""
+msgstr "Přidat skript"
 
 #: ../src/grubconf_ui_gtk.cpp:162
 msgid "Entry"
-msgstr ""
+msgstr "Vstup"
 
 #: ../src/grubconf_ui_gtk.cpp:177
 msgid "Install to MBR"
-msgstr ""
+msgstr "Instalovat do MBR"
 
 #: ../src/grubconf_ui_gtk.cpp:222
 msgid "BURG Mode"
-msgstr ""
+msgstr "BURG mód"
 
 #: ../src/grubconf_ui_gtk.cpp:243
 msgid "No Bootloader found"
-msgstr ""
+msgstr "Žádný zavaděč nenalezen"
 
 #: ../src/grubconf_ui_gtk.cpp:244
 msgid "Do you want to select another root partition?"
-msgstr ""
+msgstr "Chcete si vybrat jiný kořenový oddíl?"
 
 #: ../src/grubconf_ui_gtk.cpp:251
 msgid "BURG found!"
-msgstr ""
+msgstr "BURG nalezen!"
 
 #: ../src/grubconf_ui_gtk.cpp:252
 msgid "Do you want to configure BURG instead of grub2?"
-msgstr ""
+msgstr "Chcete konfigurovat BURG místo grub2?"
 
 #: ../src/grubconf_ui_gtk.cpp:272
 msgid "The bootloader has been installed successfully"
-msgstr ""
+msgstr "Zavaděč byl úspěšně nainstalován"
 
 #: ../src/grubconf_ui_gtk.cpp:277
 msgid "Error while installing the bootloader"
-msgstr ""
+msgstr "Chyba při instalaci zavaděče"
 
 #: ../src/grubconf_ui_gtk.cpp:299
 msgid "loading configuration…"
-msgstr ""
+msgstr "načítání konfigurace..."
 
 #: ../src/grubconf_ui_gtk.cpp:330
 msgid " (custom)"
-msgstr ""
+msgstr " (vlastní)"
 
 #: ../src/grubconf_ui_gtk.cpp:342
 msgid "(new Entries)"
-msgstr ""
+msgstr "(nové položky)"
 
 #: ../src/grubconf_ui_gtk.cpp:363
 msgid "Proxy binary not found!"
@@ -164,11 +166,11 @@ msgstr ""
 
 #: ../src/grubconf_ui_gtk.cpp:382
 msgid "Configuration has been saved"
-msgstr ""
+msgstr "Konfigurace byla uložena"
 
 #: ../src/grubconf_ui_gtk.cpp:385
 msgid "updating configuration"
-msgstr ""
+msgstr "aktualizace konfigurace"
 
 #: ../src/grubconf_ui_gtk.cpp:442
 msgid "Name the Entry"
@@ -176,15 +178,15 @@ msgstr ""
 
 #: ../src/grubconf_ui_gtk.cpp:558
 msgid "Default title: "
-msgstr ""
+msgstr "Výchozí název: "
 
 #: ../src/grubconf_ui_gtk.cpp:578
 msgid "No script found"
-msgstr ""
+msgstr "Žádný skript nalezen"
 
 #: ../src/grubconf_ui_gtk.cpp:673
 msgid "The saved configuration is not up to date!"
-msgstr ""
+msgstr "Uložená konfigurace není aktuální!"
 
 #: ../src/grubconf_ui_gtk.cpp:674
 msgid ""
@@ -192,72 +194,77 @@ msgid ""
 "startup. So what you see now may not be what you see when you restart your "
 "pc. To fix this, click update!"
 msgstr ""
+"vytvořená konfigurace není shodná s konfigurací uloženou při startu. To, co "
+"vidíte teď nemusí být to, co se zobrazí při restartování pc. Chcete-li tento "
+"problém odstranit, klepněte na tlačítko Aktualizovat!"
 
 #: ../src/grubconf_ui_gtk.cpp:677
 msgid "_Quit without update"
-msgstr ""
+msgstr "U_končit bez aktualizace"
 
 #: ../src/grubconf_ui_gtk.cpp:680
 msgid "_Update & Quit"
-msgstr ""
+msgstr "_Aktualizovat & ukončit"
 
 #: ../src/grubconf_ui_gtk.cpp:684
 msgid "Do you want to save your modifications?"
-msgstr ""
+msgstr "Přejete si uložit změny?"
 
 #: ../src/grubconf_ui_gtk.cpp:687
 msgid "_Quit without saving"
-msgstr ""
+msgstr "Uko_nčit bez uložení"
 
 #: ../src/grubconf_ui_gtk.cpp:690
 msgid "_Save & Quit"
-msgstr ""
+msgstr "_Uložit & ukončit"
 
 #: ../src/grubconf_ui_gtk.cpp:693
 msgid "AND: your modifications are still unsaved, update will save them too!"
-msgstr ""
+msgstr "A: Vaše úpravy jsou stále neuložené, aktualizací se uloží také!"
 
 #: ../src/grubconf_ui_gtk.cpp:732
 msgid "installing the bootloader…"
-msgstr ""
+msgstr "instalace zavaděče..."
 
 #: ../src/grubconf_ui_gtk.cpp:737
 msgid "Please type a device string!"
-msgstr ""
+msgstr "Prosím, zadejte řetězec zařízení!"
 
 #: ../src/grubconf_ui_gtk.cpp:747 ../src/settings_dlg_gtk.cpp:92
 msgid "is active"
-msgstr ""
+msgstr "je aktivní"
 
 #: ../src/grubconf_ui_gtk.cpp:748 ../src/settings_dlg_gtk.cpp:93
 msgid "name"
-msgstr ""
+msgstr "jméno"
 
 #: ../src/gtk-client.cpp:14
 msgid " command not found, cannot proceed"
-msgstr ""
+msgstr " příkaz nenalezen, nelze pokračovat"
 
 #: ../src/liveCDSetupDialog.cpp:5
 msgid "_use another partition: "
-msgstr ""
+msgstr "Po_užijte jiný oddíl: "
 
 #: ../src/liveCDSetupDialog.cpp:6
 msgid "Mount selected Filesystem"
-msgstr ""
+msgstr "Připojit vybraný systém souborů"
 
 #: ../src/liveCDSetupDialog.cpp:7
 msgid "Unmount mounted Filesystem"
-msgstr ""
+msgstr "Odpojit připojený systém souborů"
 
 #: ../src/liveCDSetupDialog.cpp:10
 msgid ""
 "These are the mountpoints of your fstab file.\n"
 "Please select every grub/boot related partition."
 msgstr ""
+"Jedná se o přípojné body z vašeho fstab souboru.\n"
+"Prosím, vyberte každý grub/boot související s oblastí."
 
 #: ../src/liveCDSetupDialog.cpp:15
 msgid "You started Grub Customizer using the live CD."
-msgstr ""
+msgstr "Spustili jste Grub Customizer pomocí live CD."
 
 #: ../src/liveCDSetupDialog.cpp:17
 msgid ""
@@ -267,6 +274,11 @@ msgid ""
 "again and save the configuration (or run update-grub/update-burg)\n"
 "to get the entry back!"
 msgstr ""
+"Vybrali jste možnost výběru jiného oddílu.\n"
+"Vezměte prosím na vědomí: os-prober nemusí najít skutečně běžící systém.\n"
+"Spusťte Grub Customizer na cílovém systému\n"
+"znovu a uložte konfigurace (nebo spusťte update-grub/update-burg)\n"
+"abyste získali vstup zpět!"
 
 #: ../src/liveCDSetupDialog.cpp:19
 msgid ""
@@ -280,26 +292,35 @@ msgid ""
 "as the actually running one.\n"
 "If not, you will get an error message when trying to load the configuration."
 msgstr ""
+"Než budete moci upravovat své grub konfigurace, musíme\n"
+"připojit požadované oddíly.\n"
+"\n"
+"Tento pomocník vám s tím pomůže \n"
+"\n"
+"\n"
+"Ujistěte se prosím, že cílový systém je založen na stejné CPU architektuře\n"
+"jako aktuálně spuštěný. \n"
+"Pokud není,  objeví se při pokusu o načtení konfigurace chybové hlášení."
 
 #: ../src/liveCDSetupDialog.cpp:21
 msgid "Grub Customizer: Partition chooser"
-msgstr ""
+msgstr "Grub Customizer: Výběr oddílu"
 
 #: ../src/liveCDSetupDialog.cpp:25
 msgid "Select and mount your root partition"
-msgstr ""
+msgstr "Zvolit a připojit kořenový oddíl"
 
 #: ../src/liveCDSetupDialog.cpp:43
 msgid "partition"
-msgstr ""
+msgstr "oddíl"
 
 #: ../src/liveCDSetupDialog.cpp:44
 msgid "type"
-msgstr ""
+msgstr "typ"
 
 #: ../src/liveCDSetupDialog.cpp:45
 msgid "label"
-msgstr ""
+msgstr "popisek"
 
 #: ../src/liveCDSetupDialog.cpp:62
 msgid "Select required submountpoints"
@@ -307,99 +328,100 @@ msgstr ""
 
 #: ../src/liveCDSetupDialog.cpp:82
 msgid "Partition Chooser"
-msgstr ""
+msgstr "Výběr oddílu"
 
 #: ../src/liveCDSetupDialog.cpp:152
 msgid "Mount failed!"
-msgstr ""
+msgstr "Připojení se nezdařilo!"
 
 #: ../src/liveCDSetupDialog.cpp:167
 msgid "This seems not to be a root file system (no fstab found)"
 msgstr ""
+"Zdá se, že toto není kořenový souborový systém (nebyly nalezeny žádné fstab)"
 
 #: ../src/liveCDSetupDialog.cpp:176
 msgid "umount failed!"
-msgstr ""
+msgstr "odpojení se nezdařilo!"
 
 #: ../src/liveCDSetupDialog.cpp:210
 msgid "Couldn't mount the selected partition"
-msgstr ""
+msgstr "Nemohu připojit vybraný oddíl"
 
 #: ../src/liveCDSetupDialog.cpp:212
 msgid "Couldn't umount the selected partition"
-msgstr ""
+msgstr "Nemohu odpojit vybraný oddíl"
 
 #: ../src/settings_dlg_gtk.cpp:47
 msgid "white"
-msgstr ""
+msgstr "bílá"
 
 #: ../src/settings_dlg_gtk.cpp:48
 msgid "yellow"
-msgstr ""
+msgstr "žlutá"
 
 #: ../src/settings_dlg_gtk.cpp:49
 msgid "light-cyan"
-msgstr ""
+msgstr "světlá azurová"
 
 #: ../src/settings_dlg_gtk.cpp:50
 msgid "cyan"
-msgstr ""
+msgstr "azurová"
 
 #: ../src/settings_dlg_gtk.cpp:51
 msgid "light-blue"
-msgstr ""
+msgstr "světle modrá"
 
 #: ../src/settings_dlg_gtk.cpp:52
 msgid "blue"
-msgstr ""
+msgstr "modrá"
 
 #: ../src/settings_dlg_gtk.cpp:53
 msgid "light-green"
-msgstr ""
+msgstr "světle zelená"
 
 #: ../src/settings_dlg_gtk.cpp:54
 msgid "green"
-msgstr ""
+msgstr "zelená"
 
 #: ../src/settings_dlg_gtk.cpp:55
 msgid "light-magenta"
-msgstr ""
+msgstr "světlá purpurová"
 
 #: ../src/settings_dlg_gtk.cpp:56
 msgid "magenta"
-msgstr ""
+msgstr "purpurová"
 
 #: ../src/settings_dlg_gtk.cpp:57
 msgid "light-red"
-msgstr ""
+msgstr "světle červená"
 
 #: ../src/settings_dlg_gtk.cpp:58
 msgid "red"
-msgstr ""
+msgstr "červená"
 
 #: ../src/settings_dlg_gtk.cpp:59
 msgid "brown"
-msgstr ""
+msgstr "hnědá"
 
 #: ../src/settings_dlg_gtk.cpp:60
 msgid "light-gray"
-msgstr ""
+msgstr "světle šedivá"
 
 #: ../src/settings_dlg_gtk.cpp:61
 msgid "dark-gray"
-msgstr ""
+msgstr "tmavě šedivá"
 
 #: ../src/settings_dlg_gtk.cpp:62
 msgid "transparent"
-msgstr ""
+msgstr "průhledné"
 
 #: ../src/settings_dlg_gtk.cpp:62
 msgid "black"
-msgstr ""
+msgstr "černá"
 
 #: ../src/settings_dlg_gtk.cpp:68
 msgid "pre_defined: "
-msgstr ""
+msgstr "před_definované: "
 
 #: ../src/settings_dlg_gtk.cpp:68
 msgid "previously _booted entry"
@@ -411,23 +433,23 @@ msgstr ""
 
 #: ../src/settings_dlg_gtk.cpp:69
 msgid "visibility"
-msgstr ""
+msgstr "viditelnost"
 
 #: ../src/settings_dlg_gtk.cpp:69
 msgid "show menu"
-msgstr ""
+msgstr "zobrazit menu"
 
 #: ../src/settings_dlg_gtk.cpp:70
 msgid "Timeout"
-msgstr ""
+msgstr "Prodleva"
 
 #: ../src/settings_dlg_gtk.cpp:70
 msgid "Seconds"
-msgstr ""
+msgstr "Sekund"
 
 #: ../src/settings_dlg_gtk.cpp:70
 msgid "kernel parameters"
-msgstr ""
+msgstr "parametry jádra"
 
 #: ../src/settings_dlg_gtk.cpp:71
 msgid "generate recovery entries"
@@ -435,69 +457,71 @@ msgstr ""
 
 #: ../src/settings_dlg_gtk.cpp:71
 msgid "look for other operating systems"
-msgstr ""
+msgstr "hledat další operační systémy"
 
 #: ../src/settings_dlg_gtk.cpp:72
 msgid "custom resolution: "
-msgstr ""
+msgstr "vlastní rozlišení: "
 
 #: ../src/settings_dlg_gtk.cpp:73
 msgid "font color"
-msgstr ""
+msgstr "barva písma"
 
 #: ../src/settings_dlg_gtk.cpp:73
 msgid "background"
-msgstr ""
+msgstr "pozadí"
 
 #: ../src/settings_dlg_gtk.cpp:74
 msgid "normal:"
-msgstr ""
+msgstr "normální:"
 
 #: ../src/settings_dlg_gtk.cpp:74
 msgid "highlight:"
-msgstr ""
+msgstr "zvýraznění:"
 
 #: ../src/settings_dlg_gtk.cpp:75
 msgid "menu colors"
-msgstr ""
+msgstr "barvy menu"
 
 #: ../src/settings_dlg_gtk.cpp:75
 msgid "background image"
-msgstr ""
+msgstr "obrázek na pozadí"
 
 #: ../src/settings_dlg_gtk.cpp:76
 msgid "copy to grub directory"
-msgstr ""
+msgstr "kopírovat do adresáře grub"
 
 #: ../src/settings_dlg_gtk.cpp:76
 msgid "remove background"
-msgstr ""
+msgstr "odstranit pozadí"
 
 #: ../src/settings_dlg_gtk.cpp:77
 msgid ""
 "To get the colors above working,\n"
 "you have to select a background image!"
 msgstr ""
+"Aby se barvy uvedené výše použily,\n"
+"musíte vybrat obrázek na pozadí!"
 
 #: ../src/settings_dlg_gtk.cpp:80
 msgid "settings"
-msgstr ""
+msgstr "nastavení"
 
 #: ../src/settings_dlg_gtk.cpp:84
 msgid "_General"
-msgstr ""
+msgstr "_Obecné"
 
 #: ../src/settings_dlg_gtk.cpp:85
 msgid "A_ppearance"
-msgstr ""
+msgstr "_Vzhled"
 
 #: ../src/settings_dlg_gtk.cpp:86
 msgid "_Advanced"
-msgstr ""
+msgstr "_Pokročilé"
 
 #: ../src/settings_dlg_gtk.cpp:94
 msgid "value"
-msgstr ""
+msgstr "hodnota"
 
 #: ../src/settings_dlg_gtk.cpp:129
 msgid "Entry %1 (by position)"

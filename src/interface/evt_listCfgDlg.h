@@ -23,7 +23,7 @@ public:
 	//user wants to show the about dialog
 	virtual void aboutDialog_requested()=0;
 	//user wants to quit -> application asks if it should be closed (return values: true = close, false = stay opened)
-	virtual bool exitRequest()=0;
+	virtual void exitRequest()=0;
 
 	//user has activated or disabled one of the proxies (script instances)
 	virtual void signal_script_state_toggled(void* script)=0;
@@ -41,6 +41,10 @@ public:
 	virtual void ruleSelected(void* rule)=0;
 	//user has selected another proxy
 	virtual void proxySelected(void* proxy)=0;
+
+	virtual void burgSwitcher_cancelled()=0;
+	virtual void burgSwitcher_response(bool burgChosen)=0;
+	virtual void partitionChooserQuestion_response(bool is_positive)=0;
 };
 
 #endif

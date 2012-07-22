@@ -31,7 +31,7 @@ public:
 	void scriptAddDlg_applied();
 	void scriptSelected();
 	void removeProxy_requested(void* p);
-	bool exitRequest();
+	void exitRequest();
 
 	void signal_script_state_toggled(void* script);
 	void signal_entry_state_toggled(void* entry);
@@ -42,6 +42,10 @@ public:
 
 	void ruleSelected(void* rule);
 	void proxySelected(void* proxy);
+
+	void burgSwitcher_cancelled();
+	void burgSwitcher_response(bool burgChosen);
+	void partitionChooserQuestion_response(bool is_positive);
 
 	void aboutDialog_requested();
 

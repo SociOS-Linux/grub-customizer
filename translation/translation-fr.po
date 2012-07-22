@@ -8,18 +8,18 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-11-28 22:09+0100\n"
-"PO-Revision-Date: 2010-11-28 23:46+0000\n"
-"Last-Translator: Loic Treyvaud <loictreyvaud@hispeed.ch>\n"
+"PO-Revision-Date: 2011-01-19 12:25+0000\n"
+"Last-Translator: Thibaut Panis <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-11-30 18:28+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-01-20 18:32+0000\n"
+"X-Generator: Launchpad (build 12214)\n"
 
 #: ../src/grubconfig.cpp:203 ../src/grubconfig.cpp:218
 msgid " not found. Is grub2 installed?"
-msgstr " non trouvé. Est-ce que grub2 est installé ?"
+msgstr " non trouvé. Est grub2 installé ?"
 
 #: ../src/grubconfig.cpp:287
 msgid " couldn't be executed successfully. You must run this as root!"
@@ -36,7 +36,7 @@ msgstr "_Éditer"
 
 #: ../src/grubconf_ui_gtk.cpp:12
 msgid "_View"
-msgstr ""
+msgstr "_Affichage"
 
 #: ../src/grubconf_ui_gtk.cpp:12
 msgid "_Help"
@@ -121,7 +121,7 @@ msgstr "Installer sur le MBR"
 
 #: ../src/grubconf_ui_gtk.cpp:222
 msgid "BURG Mode"
-msgstr ""
+msgstr "mode BURG"
 
 #: ../src/grubconf_ui_gtk.cpp:243
 msgid "No Bootloader found"
@@ -161,7 +161,7 @@ msgstr "(nouvelles entrées)"
 
 #: ../src/grubconf_ui_gtk.cpp:363
 msgid "Proxy binary not found!"
-msgstr ""
+msgstr "Binaire du proxy non trouvé !"
 
 #: ../src/grubconf_ui_gtk.cpp:364
 msgid ""
@@ -239,11 +239,11 @@ msgstr "Installation du programme de démarrage..."
 
 #: ../src/grubconf_ui_gtk.cpp:737
 msgid "Please type a device string!"
-msgstr ""
+msgstr "Tapez, s'il vous plaît, une chaîne de périphérique !"
 
 #: ../src/grubconf_ui_gtk.cpp:747 ../src/settings_dlg_gtk.cpp:92
 msgid "is active"
-msgstr ""
+msgstr "est actif"
 
 #: ../src/grubconf_ui_gtk.cpp:748 ../src/settings_dlg_gtk.cpp:93
 msgid "name"
@@ -251,7 +251,7 @@ msgstr "nom"
 
 #: ../src/gtk-client.cpp:14
 msgid " command not found, cannot proceed"
-msgstr ""
+msgstr " commande non trouvée, ne peut pas continuer"
 
 #: ../src/liveCDSetupDialog.cpp:5
 msgid "_use another partition: "
@@ -270,6 +270,8 @@ msgid ""
 "These are the mountpoints of your fstab file.\n"
 "Please select every grub/boot related partition."
 msgstr ""
+"Ce sont les points de montage de votre fichier fstab.\n"
+"Veuillez choisir chaque partition liée à grub/boot."
 
 #: ../src/liveCDSetupDialog.cpp:15
 msgid "You started Grub Customizer using the live CD."
@@ -283,6 +285,12 @@ msgid ""
 "again and save the configuration (or run update-grub/update-burg)\n"
 "to get the entry back!"
 msgstr ""
+"Vous avez choisi l'option pour choisir une autre partition.\n"
+"Notez : Le exploreur de système d'exploitation pourrait ne pas trouver votre "
+"système actuellement en cours d'utilisation.\n"
+"En conséquence, lancez à nouveau le logiciel de personalisation de Grub sur "
+"le système de destination et enregistrer la configuration (ou lancez update-"
+"grub/update-burg) pour retrouver l'entrée !"
 
 #: ../src/liveCDSetupDialog.cpp:19
 msgid ""
@@ -322,15 +330,15 @@ msgstr "partition"
 
 #: ../src/liveCDSetupDialog.cpp:44
 msgid "type"
-msgstr ""
+msgstr "type"
 
 #: ../src/liveCDSetupDialog.cpp:45
 msgid "label"
-msgstr ""
+msgstr "étiquette"
 
 #: ../src/liveCDSetupDialog.cpp:62
 msgid "Select required submountpoints"
-msgstr ""
+msgstr "choisissez les sous-points de montage nécessaires"
 
 #: ../src/liveCDSetupDialog.cpp:82
 msgid "Partition Chooser"
@@ -366,7 +374,7 @@ msgstr "jaune"
 
 #: ../src/settings_dlg_gtk.cpp:49
 msgid "light-cyan"
-msgstr ""
+msgstr "cyan clair"
 
 #: ../src/settings_dlg_gtk.cpp:50
 msgid "cyan"
@@ -374,7 +382,7 @@ msgstr "cyan"
 
 #: ../src/settings_dlg_gtk.cpp:51
 msgid "light-blue"
-msgstr ""
+msgstr "bleu clair"
 
 #: ../src/settings_dlg_gtk.cpp:52
 msgid "blue"
@@ -382,7 +390,7 @@ msgstr "bleu"
 
 #: ../src/settings_dlg_gtk.cpp:53
 msgid "light-green"
-msgstr ""
+msgstr "vert clair"
 
 #: ../src/settings_dlg_gtk.cpp:54
 msgid "green"
@@ -390,7 +398,7 @@ msgstr "vert"
 
 #: ../src/settings_dlg_gtk.cpp:55
 msgid "light-magenta"
-msgstr ""
+msgstr "magenta clair"
 
 #: ../src/settings_dlg_gtk.cpp:56
 msgid "magenta"
@@ -398,7 +406,7 @@ msgstr "magenta"
 
 #: ../src/settings_dlg_gtk.cpp:57
 msgid "light-red"
-msgstr ""
+msgstr "rouge clair"
 
 #: ../src/settings_dlg_gtk.cpp:58
 msgid "red"
@@ -410,15 +418,15 @@ msgstr "brun"
 
 #: ../src/settings_dlg_gtk.cpp:60
 msgid "light-gray"
-msgstr ""
+msgstr "gris clair"
 
 #: ../src/settings_dlg_gtk.cpp:61
 msgid "dark-gray"
-msgstr ""
+msgstr "gris foncé"
 
 #: ../src/settings_dlg_gtk.cpp:62
 msgid "transparent"
-msgstr ""
+msgstr "transparent"
 
 #: ../src/settings_dlg_gtk.cpp:62
 msgid "black"
@@ -426,11 +434,11 @@ msgstr "noir"
 
 #: ../src/settings_dlg_gtk.cpp:68
 msgid "pre_defined: "
-msgstr ""
+msgstr "pré_défini : "
 
 #: ../src/settings_dlg_gtk.cpp:68
 msgid "previously _booted entry"
-msgstr ""
+msgstr "entrée précédemment _amorcée"
 
 #: ../src/settings_dlg_gtk.cpp:69
 msgid "default entry"
@@ -446,7 +454,7 @@ msgstr "afficher le menu"
 
 #: ../src/settings_dlg_gtk.cpp:70
 msgid "Timeout"
-msgstr ""
+msgstr "Délai d'expiration"
 
 #: ../src/settings_dlg_gtk.cpp:70
 msgid "Seconds"
@@ -466,7 +474,7 @@ msgstr "recherche d'autres systèmes d'éxploitation"
 
 #: ../src/settings_dlg_gtk.cpp:72
 msgid "custom resolution: "
-msgstr ""
+msgstr "résolution personallisée : "
 
 #: ../src/settings_dlg_gtk.cpp:73
 msgid "font color"
@@ -505,6 +513,8 @@ msgid ""
 "To get the colors above working,\n"
 "you have to select a background image!"
 msgstr ""
+"Pour que les couleurs ci-dessus fonctionnent,\n"
+"vous devez sélectionner une image de fond !"
 
 #: ../src/settings_dlg_gtk.cpp:80
 msgid "settings"
@@ -512,30 +522,29 @@ msgstr "paramètres"
 
 #: ../src/settings_dlg_gtk.cpp:84
 msgid "_General"
-msgstr ""
+msgstr "_Général"
 
 #: ../src/settings_dlg_gtk.cpp:85
 msgid "A_ppearance"
-msgstr ""
+msgstr "A_pparence"
 
 #: ../src/settings_dlg_gtk.cpp:86
 msgid "_Advanced"
-msgstr ""
+msgstr "_Avancé"
 
 #: ../src/settings_dlg_gtk.cpp:94
 msgid "value"
-msgstr ""
+msgstr "valeur"
 
 #: ../src/settings_dlg_gtk.cpp:129
 msgid "Entry %1 (by position)"
-msgstr ""
+msgstr "Entrée %1 (par emplacement)"
 
 #: ../src/settings_dlg_gtk.cpp:419
 msgid ""
 "This option doesn't work when the \"os-prober\" script finds other operating "
 "systems. Disable \"%1\" if you don't need to boot other operating systems."
 msgstr ""
-
-#~ msgid "reload configuration (same effect as an application restart)"
-#~ msgstr ""
-#~ "recharger la configuration (même effet que le redémarrage d'une application)"
+"Cette option ne fonctionne pas lorsque le script de \"détection de système\" "
+"trouve d'autres systèmes d'exploitation. Désactiver \"%1\" si vous n'avez "
+"pas besoin de démarrer d'autres systèmes d'exploitation."

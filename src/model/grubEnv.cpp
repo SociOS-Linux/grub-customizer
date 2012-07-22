@@ -74,5 +74,14 @@ std::string GrubEnv::getRootDevice(){
 	return mtab.getEntryByMountpoint(cfg_dir_prefix == "" ? "/" : cfg_dir_prefix).device;
 }
 
+std::list<GrubEnv::Mode> GrubEnv::getAvailableModes(){
+	std::list<Mode> result;
+	if (this->init(GrubEnv::BURG_MODE, this->cfg_dir_prefix))
+		result.push_back(GrubEnv::BURG_MODE);
+	if (this->init(GrubEnv::GRUB_MODE, this->cfg_dir_prefix))
+		result.push_back(GrubEnv::GRUB_MODE);
+	return result;
+}
+
 
 

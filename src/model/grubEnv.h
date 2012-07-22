@@ -21,6 +21,7 @@ struct GrubEnv {
 	std::string getRootDevice();
 	std::string cfg_dir, cfg_dir_noprefix, mkconfig_cmd, cfg_dir_prefix, update_cmd, install_cmd, output_config_file, output_config_dir, settings_file;
 	bool burgMode;
+	std::list<GrubEnv::Mode> getAvailableModes();
 };
 
 #endif

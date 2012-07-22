@@ -80,12 +80,7 @@ void GrubCustomizer::updateSettingsDlg(){
 	this->syncSettings();
 }
 
-void GrubCustomizer::showSettingsDlg(){
-	this->settingsDlg->show(env.burgMode);
-	
-}
-
-void GrubCustomizer::run(){
+void GrubCustomizer::init(){
 	if   ( !grublistCfg
 		or !listCfgDlg
 		or !settingsDlg
@@ -103,24 +98,67 @@ void GrubCustomizer::run(){
 	) {
 		throw INCOMPLETE;
 	}
-
 	savedListCfg->verbose = false;
 
 	FILE* blkidProc = popen("blkid", "r");
 	if (blkidProc){
+		deviceDataList->clear();
 		deviceDataList->loadData(blkidProc);
 		pclose(blkidProc);
 	}
 
-	bool do_continue = this->prepare();
-	if (do_continue){
-		this->listCfgDlg->setLockState(1|4|8);
-		Glib::Thread::create(sigc::bind(sigc::mem_fun(this, &GrubCustomizer::load), false), false);
-		this->listCfgDlg->run();
-	}
+	//dir_prefix may be set by partition chooser (if not, the root partition is used)
 
-	if (this->mountTable->getEntryByMountpoint(PARTCHOOSER_MOUNTPOINT))
-		this->mountTable->umountAll(PARTCHOOSER_MOUNTPOINT);
+	if (GrubEnv::isLiveCD() && env.cfg_dir_prefix == ""){
+		this->initRootSelector();
+		partitionChooser->show();
+	}
+	else {
+		std::list<GrubEnv::Mode> modes = this->env.getAvailableModes();
+		if (modes.size() == 2)
+			this->listCfgDlg->showBurgSwitcher();
+		else if (modes.size() == 1)
+			this->init(modes.front());
+		else if (modes.size() == 0)
+			this->listCfgDlg->showPartitionChooserQuestion();
+	}
+}
+
+void GrubCustomizer::init(GrubEnv::Mode mode){
+	this->env.init(mode, env.cfg_dir_prefix);
+	this->listCfgDlg->setLockState(1|4|8);
+	this->listCfgDlg->setIsBurgMode(mode == GrubEnv::BURG_MODE);
+	this->listCfgDlg->show();
+	this->listCfgDlg->hideBurgSwitcher();
+
+	if (this->grublistCfg->cfgDirIsClean() == false)
+		this->grublistCfg->cleanupCfgDir();
+
+	Glib::Thread::create(sigc::bind(sigc::mem_fun(this, &GrubCustomizer::load), false), false);
+}
+
+void GrubCustomizer::hidePartitionChooserQuestion(){
+	this->listCfgDlg->hidePartitionChooserQuestion();
+}
+
+void GrubCustomizer::showPartitionChooser(){
+	this->initRootSelector();
+	this->partitionChooser->show();
+}
+
+void GrubCustomizer::handleCancelResponse(){
+	if (!listCfgDlg->isVisible())
+		Gtk::Main::quit();
+}
+
+void GrubCustomizer::showSettingsDlg(){
+	this->settingsDlg->show(env.burgMode);
+}
+
+void GrubCustomizer::reload(){
+	this->syncSettings();
+	this->listCfgDlg->setLockState(1|4|8);
+	Glib::Thread::create(sigc::bind(sigc::mem_fun(this, &GrubCustomizer::load), true), false);
 }
 
 //threaded!
@@ -129,6 +167,7 @@ void GrubCustomizer::load(bool preserveConfig){
 	
 	if (!preserveConfig){
 		this->grublistCfg->reset();
+		this->savedListCfg->reset();
 		//load the burg/grub settings file
 		this->settings->load();
 		disp_settings_loaded();
@@ -189,62 +228,11 @@ void GrubCustomizer::reset(){
 	this->settings->clear();
 }
 
-bool GrubCustomizer::prepare(bool forceRootSelection){
-	bool exit = true;
-	bool firstRun = true;
-	std::string root = env.cfg_dir_prefix;
-	do {
-		exit = true;
-		
-		bool burg_found = env.init(GrubEnv::BURG_MODE, root);
-		bool grub_found = env.init(GrubEnv::GRUB_MODE, root);
-		bool isLiveCD = GrubEnv::isLiveCD();
-		if (forceRootSelection || isLiveCD && firstRun || !burg_found && !grub_found){
-			if (!forceRootSelection && !burg_found && !grub_found && (!isLiveCD || !firstRun)){
-				bool selectRoot = listCfgDlg->requestForRootSelection();
-				if (!selectRoot)
-					return false;
-			}
-
-			this->initRootSelector();
-			partitionChooser->run();
-
-			if (env.cfg_dir_prefix == "")
-				return false;
-			else {
-				forceRootSelection = false;
-				exit = false;
-			}
-		}
-		else if (grub_found || burg_found){
-			GrubEnv::Mode mode = GrubEnv::GRUB_MODE;
-			if (grub_found && burg_found){
-				if (listCfgDlg->requestForBurgMode())
-					mode = GrubEnv::BURG_MODE;
-			}
-			else if (burg_found)
-				mode = GrubEnv::BURG_MODE;
-			
-			env.init(mode, root);
-			listCfgDlg->setIsBurgMode(mode == GrubEnv::BURG_MODE);
-			
-			if (this->grublistCfg->cfgDirIsClean() == false)
-				this->grublistCfg->cleanupCfgDir();
-		}
-		
-		firstRun = false;
-	}
-	while (!exit);
-	return true;
-}
 
 void GrubCustomizer::showAboutDialog(){
 	this->aboutDialog->show();
 }
 
-void GrubCustomizer::startRootSelector(){
-	bool done = this->prepare(true);
-}
 
 void GrubCustomizer::initRootSelector(){
 	mountTable->loadData("");
@@ -319,19 +307,25 @@ void GrubCustomizer::umountRootFs(){
 	//clear list cfg dialog
 	this->reset();
 	this->syncListView_load();
-	listCfgDlg->setLockState(3);
+	listCfgDlg->setLockState(1|2|8);
+	this->syncSettings();
 }
 
 
 void GrubCustomizer::cancelPartitionChooser(){
 	this->partitionChooser->hide();
+	this->handleCancelResponse();
 }
 
 
 void GrubCustomizer::applyPartitionChooser(){
 	this->partitionChooser->hide();
-	Glib::Thread::create(sigc::bind(sigc::mem_fun(this, &GrubCustomizer::load), false), false);
-	listCfgDlg->setLockState(1|4|8);
+	listCfgDlg->setLockState(1|2|8);
+	this->syncSettings();
+	settingsDlg->hide();
+	scriptAddDlg->hide();
+	this->env.cfg_dir_prefix = PARTCHOOSER_MOUNTPOINT;
+	this->init();
 }
 
 void GrubCustomizer::mountSubmountpoint(Glib::ustring const& submountpoint){
@@ -379,7 +373,7 @@ void GrubCustomizer::installGrub(std::string device){
 	installer->threadable_install(device);
 	this->activeThreadCount--;
 	if (this->activeThreadCount == 0 && this->quit_requested)
-		this->listCfgDlg->close();
+		this->quit(true);
 }
 
 void GrubCustomizer::showMessageGrubInstallCompleted(std::string const& msg){
@@ -434,7 +428,7 @@ void GrubCustomizer::syncListView_load(){
 	}
 	else {
 		if (this->quit_requested)
-			this->listCfgDlg->close();
+			this->quit(true);
 		this->listCfgDlg->hideProgressBar();
 		this->listCfgDlg->setStatusText("");
 	}
@@ -471,7 +465,7 @@ void GrubCustomizer::syncListView_save(){
 			this->grublistCfg->error_proxy_not_found = false;
 		}
 		if (this->quit_requested)
-			listCfgDlg->close();
+			this->quit(true);
 		
 		this->listCfgDlg->setLockState(0);
 		
@@ -496,7 +490,7 @@ void GrubCustomizer::die(){
 			);
 			break;
 	}
-	this->listCfgDlg->close(); //exit
+	this->quit(true); //exit
 }
 
 void GrubCustomizer::activateSettingsBtn(){
@@ -504,23 +498,28 @@ void GrubCustomizer::activateSettingsBtn(){
 	this->listCfgDlg->setLockState(1);
 }
 
-bool GrubCustomizer::quit(){
-	int dlgResponse = this->listCfgDlg->showExitConfirmDialog(this->config_has_been_different_on_startup_but_unsaved*2 + this->modificationsUnsaved);
-	if (dlgResponse == 1){
-		this->save(); //starts a thread that delays the application exiting
+void GrubCustomizer::quit(bool force){
+	if (force){
+		if (this->mountTable->getEntryByMountpoint(PARTCHOOSER_MOUNTPOINT))
+			this->mountTable->umountAll(PARTCHOOSER_MOUNTPOINT);
+		Gtk::Main::quit();
 	}
-	
-	if (dlgResponse != 0){
-		if (this->activeThreadCount != 0){
-			this->quit_requested = true;
-			this->grublistCfg->cancelThreads();
-			return false;
+	else {
+		int dlgResponse = this->listCfgDlg->showExitConfirmDialog(this->config_has_been_different_on_startup_but_unsaved*2 + this->modificationsUnsaved);
+		if (dlgResponse == 1){
+			this->save(); //starts a thread that delays the application exiting
 		}
-		else {
-			return true; //close the window
+
+		if (dlgResponse != 0){
+			if (this->activeThreadCount != 0){
+				this->quit_requested = true;
+				this->grublistCfg->cancelThreads();
+			}
+			else {
+				this->quit(true); //re-run with force option
+			}
 		}
 	}
-	return false;
 }
 
 void GrubCustomizer::syncProxyState(void* proxy){

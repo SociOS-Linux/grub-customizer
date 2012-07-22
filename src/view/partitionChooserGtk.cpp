@@ -218,11 +218,6 @@ void PartitionChooserGtk::submountpoint_toggle(Gtk::CheckButton& sender){
 }
 
 
-void PartitionChooserGtk::run(){
-	this->show();
-	Gtk::Main::run(*assistant);
-}
-
 void PartitionChooserGtk::setIsMounted(bool isMounted){
 	this->isMounted = isMounted;
 	this->updateSensitivity();

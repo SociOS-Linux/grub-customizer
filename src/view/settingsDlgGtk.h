@@ -33,10 +33,6 @@ public:
 	GrubColorChooser(bool blackIsTransparent = false);
 };
 
-//TODO: when starting the settings manager, disable the reload button and the partition chooser!
-//TODO: allow adding/removing of generic settings?
-//TODO: advanced: hide mapped values by default
-//TODO: add space below the first tab button
 class GrubSettingsDlgGtk : public Gtk::Dialog, public SettingsDlg {
 	struct AdvancedSettingsTreeModel : public Gtk::TreeModelColumnRecord {
 		Gtk::TreeModelColumn<bool> active;
@@ -61,6 +57,7 @@ class GrubSettingsDlgGtk : public Gtk::Dialog, public SettingsDlg {
 	Gtk::Button bttAddCustomEntry, bttRemoveCustomEntry;
 
 	Gtk::VBox vbCommonSettings, vbAppearanceSettings;
+	Gtk::Alignment alignCommonSettings;
 	
 	Pango::AttrList attrDefaultEntry;
 	Pango::Attribute aDefaultEntry;

@@ -72,4 +72,8 @@ void ScriptAddDlgGtk::show(){
 	this->show_all();
 }
 
+void ScriptAddDlgGtk::hide(){
+	this->Gtk::Dialog::hide();
+}
+
 

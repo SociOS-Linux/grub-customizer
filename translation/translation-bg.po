@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-11-28 22:09+0100\n"
-"PO-Revision-Date: 2010-11-22 02:27+0000\n"
+"PO-Revision-Date: 2010-12-11 12:35+0000\n"
 "Last-Translator: Svetoslav Stefanov <svetlisashkov@yahoo.com>\n"
 "Language-Team: Bulgarian <bg@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-11-30 18:28+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-01-20 18:32+0000\n"
+"X-Generator: Launchpad (build 12214)\n"
 
 #: ../src/grubconfig.cpp:203 ../src/grubconfig.cpp:218
 msgid " not found. Is grub2 installed?"
@@ -236,7 +236,7 @@ msgstr "Инсталиране на програмата за начално з�
 
 #: ../src/grubconf_ui_gtk.cpp:737
 msgid "Please type a device string!"
-msgstr ""
+msgstr "Моля въведете устройство!"
 
 #: ../src/grubconf_ui_gtk.cpp:747 ../src/settings_dlg_gtk.cpp:92
 msgid "is active"
@@ -543,7 +543,3 @@ msgstr ""
 "Тази опция не работи, когато скриптът \"os-prober\" намери други операционни "
 "системи. Изключете \"%1\", ако нямате нужда да зареждате други операционни "
 "системи."
-
-#~ msgid "reload configuration (same effect as an application restart)"
-#~ msgstr ""
-#~ "презареждане на конфигурацията (същото като рестартиране на приложението)"

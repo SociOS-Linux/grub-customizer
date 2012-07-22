@@ -62,7 +62,8 @@ int main(int argc, char** argv){
 	installer->setEventListener(evt);
 	fbResolutionsGetter->setEventListener(evt);
 	
-	presenter.run();
+	presenter.init();
+	app.run();
 }
 
 

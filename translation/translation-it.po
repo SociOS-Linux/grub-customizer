@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-11-28 22:09+0100\n"
-"PO-Revision-Date: 2010-11-06 11:26+0000\n"
+"PO-Revision-Date: 2010-12-11 12:38+0000\n"
 "Last-Translator: Daniel Richter <danielrichter2007@web.de>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-11-30 18:28+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-01-20 18:32+0000\n"
+"X-Generator: Launchpad (build 12214)\n"
 
 #: ../src/grubconfig.cpp:203 ../src/grubconfig.cpp:218
 msgid " not found. Is grub2 installed?"
@@ -95,7 +95,7 @@ msgstr "Sposta in basso la voce selezionata"
 
 #: ../src/grubconf_ui_gtk.cpp:107
 msgid "reload configuration"
-msgstr ""
+msgstr "ricarica configurazione"
 
 #: ../src/grubconf_ui_gtk.cpp:110
 msgid "Edit grub preferences"
@@ -119,7 +119,7 @@ msgstr "Installa nel MBR"
 
 #: ../src/grubconf_ui_gtk.cpp:222
 msgid "BURG Mode"
-msgstr ""
+msgstr "Modalità BURG"
 
 #: ../src/grubconf_ui_gtk.cpp:243
 msgid "No Bootloader found"
@@ -227,6 +227,8 @@ msgstr "_Salva ed esci"
 #: ../src/grubconf_ui_gtk.cpp:693
 msgid "AND: your modifications are still unsaved, update will save them too!"
 msgstr ""
+"E: le modifiche non sono state ancora salvate, l'aggiornamento salverà anche "
+"quelle!"
 
 #: ../src/grubconf_ui_gtk.cpp:732
 msgid "installing the bootloader…"
@@ -360,184 +362,185 @@ msgstr "Impossibile smontare la partizione selezionata"
 
 #: ../src/settings_dlg_gtk.cpp:47
 msgid "white"
-msgstr ""
+msgstr "bianco"
 
 #: ../src/settings_dlg_gtk.cpp:48
 msgid "yellow"
-msgstr ""
+msgstr "giallo"
 
 #: ../src/settings_dlg_gtk.cpp:49
 msgid "light-cyan"
-msgstr ""
+msgstr "cìano-chiaro"
 
 #: ../src/settings_dlg_gtk.cpp:50
 msgid "cyan"
-msgstr ""
+msgstr "cìano"
 
 #: ../src/settings_dlg_gtk.cpp:51
 msgid "light-blue"
-msgstr ""
+msgstr "blu-chiaro"
 
 #: ../src/settings_dlg_gtk.cpp:52
 msgid "blue"
-msgstr ""
+msgstr "blu"
 
 #: ../src/settings_dlg_gtk.cpp:53
 msgid "light-green"
-msgstr ""
+msgstr "verde-chiaro"
 
 #: ../src/settings_dlg_gtk.cpp:54
 msgid "green"
-msgstr ""
+msgstr "verde"
 
 #: ../src/settings_dlg_gtk.cpp:55
 msgid "light-magenta"
-msgstr ""
+msgstr "magenta-chiaro"
 
 #: ../src/settings_dlg_gtk.cpp:56
 msgid "magenta"
-msgstr ""
+msgstr "magenta"
 
 #: ../src/settings_dlg_gtk.cpp:57
 msgid "light-red"
-msgstr ""
+msgstr "rosso-chiaro"
 
 #: ../src/settings_dlg_gtk.cpp:58
 msgid "red"
-msgstr ""
+msgstr "rosso"
 
 #: ../src/settings_dlg_gtk.cpp:59
 msgid "brown"
-msgstr ""
+msgstr "marone"
 
 #: ../src/settings_dlg_gtk.cpp:60
 msgid "light-gray"
-msgstr ""
+msgstr "grigio-chiaro"
 
 #: ../src/settings_dlg_gtk.cpp:61
 msgid "dark-gray"
-msgstr ""
+msgstr "grigio-scuro"
 
 #: ../src/settings_dlg_gtk.cpp:62
 msgid "transparent"
-msgstr ""
+msgstr "trasparente"
 
 #: ../src/settings_dlg_gtk.cpp:62
 msgid "black"
-msgstr ""
+msgstr "nero"
 
 #: ../src/settings_dlg_gtk.cpp:68
 msgid "pre_defined: "
-msgstr ""
+msgstr "di _default: "
 
 #: ../src/settings_dlg_gtk.cpp:68
 msgid "previously _booted entry"
-msgstr ""
+msgstr "voce precedentemente _avviata"
 
 #: ../src/settings_dlg_gtk.cpp:69
 msgid "default entry"
-msgstr ""
+msgstr "voce di default"
 
 #: ../src/settings_dlg_gtk.cpp:69
 msgid "visibility"
-msgstr ""
+msgstr "visibilità"
 
 #: ../src/settings_dlg_gtk.cpp:69
 msgid "show menu"
-msgstr ""
+msgstr "mostra il menu"
 
 #: ../src/settings_dlg_gtk.cpp:70
 msgid "Timeout"
-msgstr ""
+msgstr "Tempo d'attesa"
 
 #: ../src/settings_dlg_gtk.cpp:70
 msgid "Seconds"
-msgstr ""
+msgstr "Secondi"
 
 #: ../src/settings_dlg_gtk.cpp:70
 msgid "kernel parameters"
-msgstr ""
+msgstr "Paràmetri del kernel"
 
 #: ../src/settings_dlg_gtk.cpp:71
 msgid "generate recovery entries"
-msgstr ""
+msgstr "creare voci di restauro"
 
 #: ../src/settings_dlg_gtk.cpp:71
 msgid "look for other operating systems"
-msgstr ""
+msgstr "cercare altri sistemi operativi"
 
 #: ../src/settings_dlg_gtk.cpp:72
 msgid "custom resolution: "
-msgstr ""
+msgstr "personalizzare risoluzione: "
 
 #: ../src/settings_dlg_gtk.cpp:73
 msgid "font color"
-msgstr ""
+msgstr "colore della fonte"
 
 #: ../src/settings_dlg_gtk.cpp:73
 msgid "background"
-msgstr ""
+msgstr "sfondo"
 
 #: ../src/settings_dlg_gtk.cpp:74
 msgid "normal:"
-msgstr ""
+msgstr "normale:"
 
 #: ../src/settings_dlg_gtk.cpp:74
 msgid "highlight:"
-msgstr ""
+msgstr "evidenziato:"
 
 #: ../src/settings_dlg_gtk.cpp:75
 msgid "menu colors"
-msgstr ""
+msgstr "colori del menu"
 
 #: ../src/settings_dlg_gtk.cpp:75
 msgid "background image"
-msgstr ""
+msgstr "immagine di sfondo"
 
 #: ../src/settings_dlg_gtk.cpp:76
 msgid "copy to grub directory"
-msgstr ""
+msgstr "copia nella directory grub"
 
 #: ../src/settings_dlg_gtk.cpp:76
 msgid "remove background"
-msgstr ""
+msgstr "rimuovere lo sfondo"
 
 #: ../src/settings_dlg_gtk.cpp:77
 msgid ""
 "To get the colors above working,\n"
 "you have to select a background image!"
 msgstr ""
+"Per ottenere i colori scelti in precedenza,\n"
+"è necessario selezionare un'immagine di sfondo!"
 
 #: ../src/settings_dlg_gtk.cpp:80
 msgid "settings"
-msgstr ""
+msgstr "impostazioni"
 
 #: ../src/settings_dlg_gtk.cpp:84
 msgid "_General"
-msgstr ""
+msgstr "_Generale"
 
 #: ../src/settings_dlg_gtk.cpp:85
 msgid "A_ppearance"
-msgstr ""
+msgstr "A_spetto"
 
 #: ../src/settings_dlg_gtk.cpp:86
 msgid "_Advanced"
-msgstr ""
+msgstr "_Avanzate"
 
 #: ../src/settings_dlg_gtk.cpp:94
 msgid "value"
-msgstr ""
+msgstr "valore"
 
 #: ../src/settings_dlg_gtk.cpp:129
 msgid "Entry %1 (by position)"
-msgstr ""
+msgstr "Voce %1 (come posizione)"
 
 #: ../src/settings_dlg_gtk.cpp:419
 msgid ""
 "This option doesn't work when the \"os-prober\" script finds other operating "
 "systems. Disable \"%1\" if you don't need to boot other operating systems."
 msgstr ""
-
-#~ msgid "reload configuration (same effect as an application restart)"
-#~ msgstr ""
-#~ "ricarica la configurazione (stesso effetto del riavvio dell' applicazione)"
+"Questa opzione non funziona quando il \"os-prober\" script trova altri "
+"sistemi operativi. Disattiva \"% 1\" se non c'è bisogno di avviare altri "
+"sistemi operativi."
