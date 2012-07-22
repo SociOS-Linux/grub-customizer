@@ -72,14 +72,7 @@ void GtkClient::showSettingsDlg(){
 
 	this->syncSettings();
 	this->settingsDlg->show(env.burgMode);
-	this->settingsDlg->run();
-	this->settingsDlg->hide();
 	
-	if (!this->modificationsUnsaved)
-		this->modificationsUnsaved = settings->getIsModified();
-	if (this->settings->reloadRequired()){
-		Glib::Thread::create(sigc::bind(sigc::mem_fun(this, &GtkClient::load), true), false);
-	}
 }
 
 void GtkClient::run(){
@@ -693,6 +686,15 @@ void GtkClient::updateColorSettings(){
 void GtkClient::removeBackgroundImage(){
 	this->settings->setIsActive("GRUB_MENU_PICTURE", false);
 	this->syncSettings();
+}
+
+void GtkClient::hideSettingsDialog(){
+	this->settingsDlg->hide();
+	if (!this->modificationsUnsaved)
+		this->modificationsUnsaved = settings->getIsModified();
+	if (this->settings->reloadRequired()){
+		Glib::Thread::create(sigc::bind(sigc::mem_fun(this, &GtkClient::load), true), false);
+	}
 }
 
 void GtkClient::updateTimeoutSetting(){

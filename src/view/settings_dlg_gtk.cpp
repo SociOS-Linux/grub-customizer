@@ -249,6 +249,11 @@ void GrubSettingsDlgGtk::show(bool burgMode) {
 	}
 }
 
+
+void GrubSettingsDlgGtk::on_hide() {
+	this->eventListener->settings_dialog_hide_request();
+}
+
 void GrubSettingsDlgGtk::addEntryToDefaultEntryChooser(std::string const& entryTitle){
 	event_lock = true;
 	cbDefEntry.append_text(Glib::ustring::compose(gettext("Entry %1 (by position)"), ++defEntry_item_count));

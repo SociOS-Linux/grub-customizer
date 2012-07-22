@@ -43,6 +43,7 @@ class EventListenerView_iface {
 	virtual void backgroundChange_requested()=0;
 	virtual void backgroundCopy_requested()=0;
 	virtual void backgroundRemove_requested()=0;
+	virtual void settings_dialog_hide_request()=0;
 
 	//root selector
 	virtual void partitionChooser_applied()=0;

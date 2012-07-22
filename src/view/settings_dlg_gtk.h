@@ -125,6 +125,7 @@ class GrubSettingsDlgGtk : public Gtk::Dialog, public GrubSettingsDlg {
 	void signal_other_image_chosen();
 	void signal_bttCopyBackground_clicked();
 	void signal_bttRemoveBackground_clicked();
+	void on_hide();
 	public:
 	enum DefEntryType {
 		DEF_ENTRY_PREDEFINED,

@@ -127,6 +127,10 @@ void EventListenerView::backgroundRemove_requested(){
 	presenter.removeBackgroundImage();
 }
 
+void EventListenerView::settings_dialog_hide_request(){
+	presenter.hideSettingsDialog();
+}
+
 //partition chooser
 void EventListenerView::partitionChooser_applied(){
 	presenter.applyPartitionChooser();

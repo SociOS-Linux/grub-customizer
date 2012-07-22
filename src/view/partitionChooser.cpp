@@ -8,9 +8,8 @@ PartitionChooser::PartitionChooser(bool isLiveCD)
 	submountpoint_toggle_run_event(true),
 	is_cancelled(false),
 	lblSubmountpointDescription(gettext("These are the mountpoints of your fstab file.\nPlease select every grub/boot related partition."), Gtk::ALIGN_LEFT),
-	isMounted(false)
+	isMounted(false), assistant(NULL)
 {
-	this->append_page(vbIntroPage);
 	Glib::ustring message;
 	if (isLiveCD)
 		message = gettext("You started Grub Customizer using the live CD.");
@@ -19,11 +18,6 @@ PartitionChooser::PartitionChooser(bool isLiveCD)
 	
 	lblMessage.set_text(message+"\n\n"+gettext("Before you can edit your grub configuration we have to\nmount the required partitions.\n\nThis assistant will help you doing this.\n\n\nPlease ensure the target system is based on the same cpu architecture\nas the actually running one.\nIf not, you will get an error message when trying to load the configuration."));
 	vbIntroPage.add(lblMessage);
-	set_page_title(vbIntroPage, gettext("Grub Customizer: Partition chooser"));
-	set_icon_name("grub-customizer");
-	
-	this->append_page(vbRootSelectPage);
-	set_page_title(vbRootSelectPage, gettext("Select and mount your root partition"));
 	vbRootSelectPage.pack_start(scrRootPartitionSelection);
 	vbRootSelectPage.pack_start(hbCustomPartition, Gtk::PACK_SHRINK);
 	vbRootSelectPage.pack_start(hbMountButtons, Gtk::PACK_SHRINK);
@@ -58,19 +52,44 @@ PartitionChooser::PartitionChooser(bool isLiveCD)
 	bttUmountFs.signal_clicked().connect(sigc::mem_fun(this, &PartitionChooser::signal_btt_umount_click));
 	
 	lvRootPartitionSelection.get_selection()->signal_changed().connect(sigc::mem_fun(this, &PartitionChooser::signal_lvRootPartitionSelection_changed));
-	
-	this->append_page(vbAdditionalMountSelectionPage);
-	this->set_page_title(vbAdditionalMountSelectionPage, gettext("Select required submountpoints"));
-	vbAdditionalMountSelectionPageList.set_border_width(10);
-	this->set_page_type(vbAdditionalMountSelectionPage, Gtk::ASSISTANT_PAGE_CONFIRM);
 
-	this->set_title(Glib::ustring("Grub Customizer: ")+gettext("Partition Chooser"));
-	this->set_icon_name("grub-customizer");
-	this->set_default_size(640, 480);
+	vbAdditionalMountSelectionPageList.set_border_width(10);
 }
 
 void PartitionChooser::setEventListener(EventListenerView_iface& eventListener){
 	this->eventListener = &eventListener;
+}
+
+void PartitionChooser::init(bool useExisting){
+	if (this->assistant && !this->assistant->is_visible() && !useExisting){
+		delete this->assistant;
+		this->assistant = NULL;
+	}
+	if (!this->assistant){
+		this->assistant = new Gtk::Assistant;
+
+		this->assistant->append_page(vbIntroPage);
+		this->assistant->set_page_title(vbIntroPage, gettext("Grub Customizer: Partition chooser"));
+		this->assistant->set_icon_name("grub-customizer");
+
+		this->assistant->append_page(vbRootSelectPage);
+		this->assistant->set_page_title(vbRootSelectPage, gettext("Select and mount your root partition"));
+		this->assistant->append_page(vbAdditionalMountSelectionPage);
+		this->assistant->set_page_title(vbAdditionalMountSelectionPage, gettext("Select required submountpoints"));
+		this->assistant->set_page_type(vbAdditionalMountSelectionPage, Gtk::ASSISTANT_PAGE_CONFIRM);
+
+		this->assistant->signal_cancel().connect(sigc::mem_fun(this, &PartitionChooser::on_cancel));
+		this->assistant->signal_apply().connect(sigc::mem_fun(this, &PartitionChooser::on_apply));
+
+		this->assistant->set_title(Glib::ustring("Grub Customizer: ")+gettext("Partition Chooser"));
+		this->assistant->set_icon_name("grub-customizer");
+		this->assistant->set_default_size(640, 480);
+	}
+}
+
+Gtk::Assistant& PartitionChooser::getWindow(){
+	this->init();
+	return *this->assistant;
 }
 
 void PartitionChooser::addPartitionSelectorItem(Glib::ustring const& device, Glib::ustring const& type, Glib::ustring const& label){
@@ -83,6 +102,12 @@ void PartitionChooser::clearPartitionSelector(){
 	lvRootPartitionSelection.clear_items();
 }
 
+void PartitionChooser::hide(){
+	this->getWindow().hide();
+}
+void PartitionChooser::show(){
+	this->getWindow().show_all();
+}
 
 
 void PartitionChooser::signal_custom_partition_toggled(){
@@ -101,12 +126,12 @@ void PartitionChooser::signal_custom_partition_typing(){
 
 void PartitionChooser::removeAllSubmountpoints(){
 	//delete all existing submountpoint checkbuttons
-	Glib::ListHandle< Widget* > allChilds = vbAdditionalMountSelectionPageList.get_children();
-	for (Glib::ListHandle<Widget*>::iterator iter = allChilds.begin(); iter != allChilds.end(); iter++){
+	Glib::ListHandle< Gtk::Widget* > allChilds = vbAdditionalMountSelectionPageList.get_children();
+	for (Glib::ListHandle<Gtk::Widget*>::iterator iter = allChilds.begin(); iter != allChilds.end(); iter++){
 		vbAdditionalMountSelectionPageList.remove(**iter);
 		delete &**iter;
 	}
-	this->set_page_type(vbRootSelectPage, Gtk::ASSISTANT_PAGE_CONFIRM);
+	this->getWindow().set_page_type(vbRootSelectPage, Gtk::ASSISTANT_PAGE_CONFIRM);
 }
 
 void PartitionChooser::addSubmountpoint(std::string const& mountpoint, bool isMounted){
@@ -117,7 +142,7 @@ void PartitionChooser::addSubmountpoint(std::string const& mountpoint, bool isMo
 	vbAdditionalMountSelectionPageList.pack_start(*cb, Gtk::PACK_SHRINK);
 	vbAdditionalMountSelectionPageList.hide(); //is required to see the checkboxes… I don't know why (rendering problem of gtk)
 	vbAdditionalMountSelectionPageList.show_all();
-	this->set_page_type(vbRootSelectPage, Gtk::ASSISTANT_PAGE_CONTENT);
+	this->getWindow().set_page_type(vbRootSelectPage, Gtk::ASSISTANT_PAGE_CONTENT);
 }
 
 std::string PartitionChooser::getSelectedDevice(){
@@ -139,14 +164,14 @@ void PartitionChooser::signal_btt_mount_click(){
 
 
 void PartitionChooser::updateSensitivity(){
-	set_page_complete(vbIntroPage, true);
-	set_page_complete(vbAdditionalMountSelectionPage, true);
+	this->getWindow().set_page_complete(vbIntroPage, true);
+	this->getWindow().set_page_complete(vbAdditionalMountSelectionPage, true);
 	bttUmountFs.set_sensitive(isMounted);
 	bttMountFs.set_sensitive(!isMounted && (chkCustomPartition.get_active() && txtCustomPartition.get_text_length() || !chkCustomPartition.get_active() && lvRootPartitionSelection.get_selected().size()));
 	lvRootPartitionSelection.set_sensitive(!isMounted && !chkCustomPartition.get_active());
 	txtCustomPartition.set_sensitive(!isMounted && chkCustomPartition.get_active());
 	chkCustomPartition.set_sensitive(!isMounted);
-	set_page_complete(vbRootSelectPage, isMounted);
+	this->getWindow().set_page_complete(vbRootSelectPage, isMounted);
 }
 
 
@@ -160,8 +185,8 @@ void PartitionChooser::on_apply(){
 }
 
 Gtk::CheckButton& PartitionChooser::getSubmountpointCheckboxByLabel(Glib::ustring const& label){
-	Glib::ListHandle< Widget* > allChilds = vbAdditionalMountSelectionPageList.get_children();
-	for (Glib::ListHandle<Widget*>::iterator iter = allChilds.begin(); iter != allChilds.end(); iter++){
+	Glib::ListHandle< Gtk::Widget* > allChilds = vbAdditionalMountSelectionPageList.get_children();
+	for (Glib::ListHandle<Gtk::Widget*>::iterator iter = allChilds.begin(); iter != allChilds.end(); iter++){
 		if (((Gtk::CheckButton*)*iter)->get_label() == label)
 			return (Gtk::CheckButton&)**iter;
 	}
@@ -188,9 +213,10 @@ void PartitionChooser::submountpoint_toggle(Gtk::CheckButton& sender){
 
 
 void PartitionChooser::run(){
+	this->init(false);
 	this->updateSensitivity();
-	this->show_all();
-	Gtk::Main::run(*this);
+	this->show();
+	Gtk::Main::run(*assistant);
 }
 
 void PartitionChooser::setIsMounted(bool isMounted){

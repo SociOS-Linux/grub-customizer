@@ -47,6 +47,7 @@ public:
 	void backgroundChange_requested();
 	void backgroundCopy_requested();
 	void backgroundRemove_requested();
+	void settings_dialog_hide_request();
 
 	//root selector
 	void partitionChooser_applied();

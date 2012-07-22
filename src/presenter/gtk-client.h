@@ -122,6 +122,7 @@ public:
 	void updateUseCustomResolution();
 	void copyBackgroundImageToGrubDirectory();
 	void removeBackgroundImage();
+	void hideSettingsDialog();
 
 	//partition chooser
 	void mountRootFs();

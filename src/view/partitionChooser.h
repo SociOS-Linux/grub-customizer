@@ -8,8 +8,16 @@
 #include <locale.h>
 #include <iostream>
 #include "../config.h"
-//TODO: fix blank window when Gtk::Assistant will be reopened
-class PartitionChooser : public Gtk::Assistant {
+
+/**
+ * Gtk::Assistant seem to be buggy: after applying the assistant, a call of show() brings a broken (empty)
+ * Window until the user clicks next. The only solution seems to be in creating a new dialog.
+ * So I didn't derive Gtk::Assistant but using a pointer to such an object. This allows to
+ * create a new instance while the presenter simply needs to call show() or hide() on the PartitionChooser.
+ */
+
+class PartitionChooser {
+	Gtk::Assistant* assistant;
 	Gtk::Label lblMessage, lblSubmountpointDescription;
 	Gtk::ListViewText lvRootPartitionSelection;
 	Gtk::ScrolledWindow scrRootPartitionSelection;
@@ -24,6 +32,8 @@ class PartitionChooser : public Gtk::Assistant {
 	Gtk::Button bttMountFs, bttUmountFs;
 	bool submountpoint_toggle_run_event;
 	EventListenerView_iface* eventListener;
+	void init(bool useExisting = true);
+	Gtk::Assistant& getWindow();
 	public:
 	bool is_cancelled;
 	PartitionChooser(bool isLiveCD);
@@ -45,6 +55,8 @@ class PartitionChooser : public Gtk::Assistant {
 	void submountpoint_toggle(Gtk::CheckButton& sender);
 	void showErrorMessage(MountException::Type type);
 	void run();
+	void hide();
+	void show();
 	Gtk::CheckButton& getSubmountpointCheckboxByLabel(Glib::ustring const& label);
 	void setSubmountpointSelectionState(Glib::ustring const& submountpoint, bool new_isSelected);
 	void setIsMounted(bool isMounted);
