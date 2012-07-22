@@ -33,6 +33,7 @@ struct Proxy {
 	short int permissions;
 	std::string fileName; //may be the same as Script::fileName
 	Script* dataSource;
+	std::list<std::list<std::string> > __idPathList; //to be used by sync();
 	Proxy();
 	Proxy(Script& dataSource);
 	bool isExecutable() const;

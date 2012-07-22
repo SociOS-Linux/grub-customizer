@@ -35,6 +35,7 @@ std::list<Rule> Proxy::parseRuleString(const char** ruleString) {
 
 	bool inString = false, inAlias = false;
 	std::string name;
+	std::list<std::string> path;
 	bool visible = false;
 	const char* iter = NULL;
 	for (iter = *ruleString; *iter && (*iter != '}' || inString || inAlias); iter++) {
@@ -44,14 +45,19 @@ std::list<Rule> Proxy::parseRuleString(const char** ruleString) {
 			visible = false;
 		else if (*iter == '\'' && iter[1] != '\''){
 			inString = !inString;
-			if (!inString){
-				if (inAlias)
-					rules.back().outputName = name;
-				else
-					rules.push_back(Rule(Rule::NORMAL, name, visible));
-				inAlias = false;
+			if (iter[1] != '/') {
+				if (!inString){
+					if (inAlias)
+						rules.back().outputName = name;
+					else {
+						path.push_back(name);
+						rules.push_back(Rule(Rule::NORMAL, path, visible));
+						path.clear();
+					}
+					inAlias = false;
+				}
+				name = "";
 			}
-			name = "";
 		}
 		else if (!inString && *iter == '*')
 			rules.push_back(Rule(Rule::OTHER_ENTRIES_PLACEHOLDER, "*", visible));
@@ -63,7 +69,10 @@ std::list<Rule> Proxy::parseRuleString(const char** ruleString) {
 		}
 		else if (!inString && *iter == 'a' && *++iter == 's')
 			inAlias = true;
-		else if (!inString && !inAlias && *iter == '{'){
+		else if (!inString && !inAlias && *iter == '/'){
+			path.push_back(name);
+			name = "";
+		} else if (!inString && !inAlias && *iter == '{'){
 			iter++;
 			rules.back().subRules = Proxy::parseRuleString(&iter);
 		}
@@ -110,7 +119,8 @@ void Proxy::sync_connectExisting(Rule* parent) {
 	std::list<Rule>& list = parent ? parent->subRules : this->rules;
 	for (std::list<Rule>::iterator iter = list.begin(); iter != list.end(); iter++) {
 		if (iter->type != Rule::OTHER_ENTRIES_PLACEHOLDER){
-			iter->dataSource = this->dataSource->getEntryByName(iter->__idname);
+			this->__idPathList.push_back(iter->__idpath);
+			iter->dataSource = this->dataSource->getEntryByPath(iter->__idpath);
 			if (iter->subRules.size()) {
 				this->sync_connectExisting(&*iter);
 			}
@@ -135,7 +145,7 @@ void Proxy::sync_expand(Rule* parent) {
 		Rule* relatedRule = this->getRuleByEntry(*iter, this->rules);
 //		std::cout << "related rule for " << iter->name << ": " << relatedRule << std::endl;
 		if (!relatedRule){
-			otherEntryRules.push_back(Rule(*iter, other_entries_iter->isVisible)); //generate rule for given entry
+			otherEntryRules.push_back(Rule(*iter, other_entries_iter->isVisible, this->__idPathList, this->dataSource->buildPath(*iter))); //generate rule for given entry
 		} else if (iter->subEntries.size()) {
 			this->sync_expand(relatedRule);
 		}

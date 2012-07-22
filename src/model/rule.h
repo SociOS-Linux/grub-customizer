@@ -27,14 +27,16 @@ std::string str_replace(const std::string &search, const std::string &replace, s
 struct Rule {
 	Entry* dataSource;
 	std::string outputName;
-	std::string __idname; //should only be used by sync()!
+	std::string __idname; //should only be used by sync()! DEPRECATED!
+	std::list<std::string> __idpath; //should only be used by sync()!
 	bool isVisible;
 	std::list<Rule> subRules;
 	enum RuleType {
 		NORMAL, OTHER_ENTRIES_PLACEHOLDER
 	} type;
 	Rule(RuleType type, std::string name, bool isVisible);
-	Rule(Entry& source, bool isVisible); //generate rule for given entry
+	Rule(RuleType type, std::list<std::string> path, bool isVisible);
+	Rule(Entry& source, bool isVisible, std::list<std::list<std::string> > const& pathesToIgnore = std::list<std::list<std::string> >(), std::list<std::string> const& currentPath = std::list<std::string>()); //generate rule for given entry
 	operator std::string();
 	void print() const;
 	std::string getEntryName() const;

@@ -24,19 +24,20 @@ Script::Script(std::string const& name, std::string const& fileName)
 bool Script::isInScriptDir(std::string const& cfg_dir) const {
 	return this->fileName.substr(cfg_dir.length(), std::string("/proxifiedScripts/").length()) == "/proxifiedScripts/";
 }
-Entry* Script::getEntryByName(std::string const& name){
-	return this->getEntryByName(name, *this);
+Entry* Script::getEntryByPath(std::list<std::string> const& path){
+	Entry* result = NULL;
+	for (std::list<std::string>::const_iterator iter = path.begin(); iter != path.end(); iter++) {
+		result = this->getEntryByName(*iter, result != NULL ? result->subEntries : *this);
+		if (result == NULL)
+			return NULL;
+	}
+	return result;
 }
 
 Entry* Script::getEntryByName(std::string const& name, std::list<Entry>& parentList) {
 	for (Script::iterator iter = parentList.begin(); iter != parentList.end(); iter++){
 		if (iter->name == name)
 			return &*iter;
-		if (iter->subEntries.size()) {
-			Entry* result = this->getEntryByName(name, iter->subEntries);
-			if (result != NULL)
-				return result;
-		}
 	}
 	return NULL;
 }
@@ -64,3 +65,26 @@ bool Script::moveFile(std::string const& newPath, short int permissions){
 	}
 	return false;
 }
+
+std::list<std::string> Script::buildPath(Entry const& entry, Entry const* parent) {
+	std::list<Entry> const& list = parent ? parent->subEntries : *this;
+	for (std::list<Entry>::const_iterator iter = list.begin(); iter != list.end(); iter++) {
+		if (&*iter == &entry) {
+			std::list<std::string> result;
+			result.push_back(iter->name);
+			return result;
+		}
+		if (iter->type == Entry::SUBMENU) {
+			try {
+				std::list<std::string> result = this->buildPath(entry, &*iter);
+				result.push_front(iter->name);
+				return result;
+			} catch (Script::Exception e) {
+				//continue
+			}
+		}
+	}
+	throw ELEMENT_NOT_FOUND;
+}
+
+

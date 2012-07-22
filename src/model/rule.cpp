@@ -27,12 +27,29 @@ std::string str_replace(const std::string &search, const std::string &replace, s
 	return subject;
 }
 
-Rule::Rule(Entry& source, bool isVisible) //generate rule for given entry. __idname is only required for re-syncing (soft-reload)
+Rule::Rule(Entry& source, bool isVisible, std::list<std::list<std::string> > const& pathesToIgnore, std::list<std::string> const& currentPath) //generate rule for given entry. __idname is only required for re-syncing (soft-reload)
 	: type(Rule::NORMAL), isVisible(isVisible), __idname(source.name), outputName(source.name), dataSource(&source)
 {
-	this->subRules.push_front(Rule(Rule::OTHER_ENTRIES_PLACEHOLDER, "*", true));
+	if (source.type == Entry::SUBMENU) {
+		this->subRules.push_front(Rule(Rule::OTHER_ENTRIES_PLACEHOLDER, "*", true));
+	}
 	for (std::list<Entry>::iterator iter = source.subEntries.begin(); iter != source.subEntries.end(); iter++) {
-		this->subRules.push_back(Rule(*iter, isVisible));
+		std::list<std::string> currentPath_in_loop = currentPath;
+		currentPath_in_loop.push_back(iter->name);
+
+		//find out if currentPath is on the blacklist
+		bool currentPath_in_loop_is_blacklisted = false;
+		for (std::list<std::list<std::string> >::const_iterator pti_iter = pathesToIgnore.begin(); pti_iter != pathesToIgnore.end(); pti_iter++) {
+			if (*pti_iter == currentPath_in_loop) {
+				currentPath_in_loop_is_blacklisted = true;
+				break;
+			}
+		}
+
+		//add this entry as rule if not blacklisted
+		if (!currentPath_in_loop_is_blacklisted){
+			this->subRules.push_back(Rule(*iter, isVisible, pathesToIgnore, currentPath_in_loop));
+		}
 	}
 }
 
@@ -63,6 +80,10 @@ Rule::Rule(RuleType type, std::string name, bool isVisible)
 	: type(type), isVisible(isVisible), __idname(name), outputName(name), dataSource(NULL)
 {}
 
+Rule::Rule(RuleType type, std::list<std::string> path, bool isVisible)
+	: type(type), isVisible(isVisible), __idpath(path), outputName(path.back()), dataSource(NULL)
+{}
+
 std::string Rule::getEntryName() const {
 	if (this->dataSource)
 		return this->dataSource->name;
@@ -73,6 +94,14 @@ std::string Rule::getEntryName() const {
 
 void Rule::print() const {
 	if (this->isVisible && this->dataSource){
-		std::cout << "menuentry \""+this->outputName+"\""+this->dataSource->extension+"{\n"+this->dataSource->content+"}\n";
+		std::cout << "menuentry \""+this->outputName+"\""+this->dataSource->extension+"{\n";
+		if (this->subRules.size() == 0) {
+			std::cout << this->dataSource->content;
+		} else {
+			for (std::list<Rule>::const_iterator iter = this->subRules.begin(); iter != this->subRules.end(); iter++) {
+				iter->print();
+			}
+		}
+		std::cout << "}\n";
 	}
 }

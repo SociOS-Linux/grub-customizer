@@ -26,13 +26,17 @@
 #include "entry.h"
 
 struct Script : public std::list<Entry> {
+	enum Exception {
+		ELEMENT_NOT_FOUND
+	};
 	std::string name, fileName;
 	Script(std::string const& name, std::string const& fileName);
 	bool isInScriptDir(std::string const& cfg_dir) const;
-	Entry* getEntryByName(std::string const& name);
+	Entry* getEntryByPath(std::list<std::string> const& path);
 	Entry* getEntryByName(std::string const& name, std::list<Entry>& parentList);
 	void moveToBasedir(std::string const& cfg_dir); //moves the file from any location to grub.d and adds the prefix PS_ (proxified Script) or DS_ (default script)
 	bool moveFile(std::string const& newPath, short int permissions = -1);
+	std::list<std::string> buildPath(Entry const& entry, Entry const* parent = NULL);
 };
 
 #endif
