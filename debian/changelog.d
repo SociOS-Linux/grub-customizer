@@ -1,5 +1,11 @@
 #!/bin/sh
 cat << EOF
+grub-customizer (2.0.6-0ubuntu1~ppa2$1) $2; urgency=medium
+
+   * Brasilian translation updated (now complete)
+
+ -- Daniel Richter <danielrichter2007@web.de>  Wed, 08 Dec 2010 20:45:42 +0100
+
 grub-customizer (2.0.6-0ubuntu1~ppa1$1) $2; urgency=medium
 
    * first upstream release (LP: #684977)
