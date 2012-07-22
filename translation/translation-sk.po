@@ -1,0 +1,543 @@
+# Slovak translation for grub-customizer
+# Copyright (c) 2011 Rosetta Contributors and Canonical Ltd 2011
+# This file is distributed under the same license as the grub-customizer package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: grub-customizer\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2010-11-28 22:09+0100\n"
+"PO-Revision-Date: 2011-01-30 20:33+0000\n"
+"Last-Translator: Tomas Hasko <Unknown>\n"
+"Language-Team: Slovak <sk@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2011-02-02 22:40+0000\n"
+"X-Generator: Launchpad (build 12274)\n"
+
+#: ../src/grubconfig.cpp:203 ../src/grubconfig.cpp:218
+msgid " not found. Is grub2 installed?"
+msgstr " nenájdené. Je grub2 nainštalovaný?"
+
+#: ../src/grubconfig.cpp:287
+msgid " couldn't be executed successfully. You must run this as root!"
+msgstr " nemôžem vykonať operáciu. Musíš ju spustiť ako root!"
+
+#: ../src/grubconf_ui_gtk.cpp:11
+msgid "_File"
+msgstr "_Súbor"
+
+#: ../src/grubconf_ui_gtk.cpp:12
+msgid "_Edit"
+msgstr "Upraviť"
+
+#: ../src/grubconf_ui_gtk.cpp:12
+msgid "_View"
+msgstr "Zobraziť"
+
+#: ../src/grubconf_ui_gtk.cpp:12
+msgid "_Help"
+msgstr "_Pomocník"
+
+#: ../src/grubconf_ui_gtk.cpp:13
+msgid "_Install to MBR …"
+msgstr "_Inštalujem do MBR..."
+
+#: ../src/grubconf_ui_gtk.cpp:18
+msgid "Script to insert:"
+msgstr "Skript pre vloženie:"
+
+#: ../src/grubconf_ui_gtk.cpp:18
+msgid "Preview:"
+msgstr "Náhľad:"
+
+#: ../src/grubconf_ui_gtk.cpp:20
+msgid ""
+"Install the bootloader to MBR and put some\n"
+"files to the bootloaders data directory\n"
+"(if they don't already exist)."
+msgstr ""
+"Nainštalovať zavádzač do MBR a vložiť nejaké\n"
+"súbory do adresára zavádzača\n"
+"(ak už neexistujú)."
+
+#: ../src/grubconf_ui_gtk.cpp:21
+msgid "_Device: "
+msgstr "_Zariadenie: "
+
+#: ../src/grubconf_ui_gtk.cpp:54
+msgid ""
+"Grub Customizer is a graphical interface to configure the grub2/burg settings"
+msgstr ""
+"Grub Customizer je grafické rozhranie na konfiguráciu nastavení grub2/burg"
+
+#: ../src/grubconf_ui_gtk.cpp:82
+msgid "Save configuration and generate a new "
+msgstr "Uložiť konfiguráciu a vytvoriť novú "
+
+#: ../src/grubconf_ui_gtk.cpp:89
+msgid "Add a script to your configuration"
+msgstr "Pridať skript pre konfiguráciu"
+
+#: ../src/grubconf_ui_gtk.cpp:91
+msgid "Remove a script from your configuration"
+msgstr "Odobrať skript z konfigurácie"
+
+#: ../src/grubconf_ui_gtk.cpp:97
+msgid "Move up the selected entry or script"
+msgstr "Zaradiť vyššie vybranú položku alebo skript"
+
+#: ../src/grubconf_ui_gtk.cpp:99
+msgid "Move down the selected entry or script"
+msgstr "Posunúť nadol vybranú položku alebo skript"
+
+#: ../src/grubconf_ui_gtk.cpp:107
+msgid "reload configuration"
+msgstr "znovu načítať konfiguráciu"
+
+#: ../src/grubconf_ui_gtk.cpp:110
+msgid "Edit grub preferences"
+msgstr "Editovať grub nastavenia"
+
+#: ../src/grubconf_ui_gtk.cpp:139
+msgid "Select _partition …"
+msgstr "Vyberte _partíciu ..."
+
+#: ../src/grubconf_ui_gtk.cpp:146
+msgid "Add script"
+msgstr "Pridať script"
+
+#: ../src/grubconf_ui_gtk.cpp:162
+msgid "Entry"
+msgstr "Položka"
+
+#: ../src/grubconf_ui_gtk.cpp:177
+msgid "Install to MBR"
+msgstr "Inštalovať do MBR"
+
+#: ../src/grubconf_ui_gtk.cpp:222
+msgid "BURG Mode"
+msgstr "mód BURG"
+
+#: ../src/grubconf_ui_gtk.cpp:243
+msgid "No Bootloader found"
+msgstr ""
+
+#: ../src/grubconf_ui_gtk.cpp:244
+msgid "Do you want to select another root partition?"
+msgstr "Chcete si vybrať iný koreňový adresár?"
+
+#: ../src/grubconf_ui_gtk.cpp:251
+msgid "BURG found!"
+msgstr "BURG nájdený!"
+
+#: ../src/grubconf_ui_gtk.cpp:252
+msgid "Do you want to configure BURG instead of grub2?"
+msgstr "Do you want to configure BURG instead of grub2?"
+
+#: ../src/grubconf_ui_gtk.cpp:272
+msgid "The bootloader has been installed successfully"
+msgstr "Zavádzač bol úspešne naištalovaný"
+
+#: ../src/grubconf_ui_gtk.cpp:277
+msgid "Error while installing the bootloader"
+msgstr "Chyba pri inštalácii zavádzača"
+
+#: ../src/grubconf_ui_gtk.cpp:299
+msgid "loading configuration…"
+msgstr "načítavanie konfigurácie ..."
+
+#: ../src/grubconf_ui_gtk.cpp:330
+msgid " (custom)"
+msgstr " (vlastné)"
+
+#: ../src/grubconf_ui_gtk.cpp:342
+msgid "(new Entries)"
+msgstr "(nové položky)"
+
+#: ../src/grubconf_ui_gtk.cpp:363
+msgid "Proxy binary not found!"
+msgstr ""
+
+#: ../src/grubconf_ui_gtk.cpp:364
+msgid ""
+"You will see all entries (uncustomized) when you run grub. This error accurs "
+"(in most cases), when you didn't install grub gustomizer currectly."
+msgstr ""
+
+#: ../src/grubconf_ui_gtk.cpp:382
+msgid "Configuration has been saved"
+msgstr "Konfikurácia bola uložená"
+
+#: ../src/grubconf_ui_gtk.cpp:385
+msgid "updating configuration"
+msgstr "aktualizovanie konfigurácie"
+
+#: ../src/grubconf_ui_gtk.cpp:442
+msgid "Name the Entry"
+msgstr "Názov položky"
+
+#: ../src/grubconf_ui_gtk.cpp:558
+msgid "Default title: "
+msgstr "Predvolený názov: "
+
+#: ../src/grubconf_ui_gtk.cpp:578
+msgid "No script found"
+msgstr "Žiadny nájdený script"
+
+#: ../src/grubconf_ui_gtk.cpp:673
+msgid "The saved configuration is not up to date!"
+msgstr "Uložená konfigurácia nie je aktuálna!"
+
+#: ../src/grubconf_ui_gtk.cpp:674
+msgid ""
+"The generated configuration didn't equal to the saved configuration on "
+"startup. So what you see now may not be what you see when you restart your "
+"pc. To fix this, click update!"
+msgstr ""
+"Vygenerovaná konfigurácia nebola totožná uloženej konfigurácii pri štarte. "
+"Takže to, čo vidíte teraz nemusí byť to, čo uvidíte, pri reštartovaní Vášho "
+"počítača. Ak chcete tento problém odstrániť, kliknite na tlačidlo "
+"Aktualizovať!"
+
+#: ../src/grubconf_ui_gtk.cpp:677
+msgid "_Quit without update"
+msgstr "_Ukončiť bez aktualázie"
+
+#: ../src/grubconf_ui_gtk.cpp:680
+msgid "_Update & Quit"
+msgstr "_Aktualizovať a Ukončiť"
+
+#: ../src/grubconf_ui_gtk.cpp:684
+msgid "Do you want to save your modifications?"
+msgstr "Prajete si uložiť zmeny?"
+
+#: ../src/grubconf_ui_gtk.cpp:687
+msgid "_Quit without saving"
+msgstr "_Ukončiť bez uloženia"
+
+#: ../src/grubconf_ui_gtk.cpp:690
+msgid "_Save & Quit"
+msgstr "_Uložiť a Ukončiť"
+
+#: ../src/grubconf_ui_gtk.cpp:693
+msgid "AND: your modifications are still unsaved, update will save them too!"
+msgstr "A: Vaše úpravy sú stále neuložené, uložia sa spolu s aktualizáciou!"
+
+#: ../src/grubconf_ui_gtk.cpp:732
+msgid "installing the bootloader…"
+msgstr "inštalujem zavádzač..."
+
+#: ../src/grubconf_ui_gtk.cpp:737
+msgid "Please type a device string!"
+msgstr "Prosím, zadajte reťazec zariadenia!"
+
+#: ../src/grubconf_ui_gtk.cpp:747 ../src/settings_dlg_gtk.cpp:92
+msgid "is active"
+msgstr "je aktívne"
+
+#: ../src/grubconf_ui_gtk.cpp:748 ../src/settings_dlg_gtk.cpp:93
+msgid "name"
+msgstr "názov"
+
+#: ../src/gtk-client.cpp:14
+msgid " command not found, cannot proceed"
+msgstr " príkaz nenájdený, nemôžem pokračovať"
+
+#: ../src/liveCDSetupDialog.cpp:5
+msgid "_use another partition: "
+msgstr "_použiť inú partíciu: "
+
+#: ../src/liveCDSetupDialog.cpp:6
+msgid "Mount selected Filesystem"
+msgstr "Namontovať vybraný súborový systém"
+
+#: ../src/liveCDSetupDialog.cpp:7
+msgid "Unmount mounted Filesystem"
+msgstr "Odmontovať namontovaný súborový systém"
+
+#: ../src/liveCDSetupDialog.cpp:10
+msgid ""
+"These are the mountpoints of your fstab file.\n"
+"Please select every grub/boot related partition."
+msgstr ""
+"Toto sú Vaše prípojné body Vášho fstab súboru.\n"
+"Prosím, vyberte každú grub/zavádzajúcu súvisiacu oblasť."
+
+#: ../src/liveCDSetupDialog.cpp:15
+msgid "You started Grub Customizer using the live CD."
+msgstr "Spustili ste Grub Customizer pomocou live CD."
+
+#: ../src/liveCDSetupDialog.cpp:17
+msgid ""
+"You selected the option for choosing another partition.\n"
+"Please note: The os-prober may not find your actually running system.\n"
+"So run Grub Customizer on the target system\n"
+"again and save the configuration (or run update-grub/update-burg)\n"
+"to get the entry back!"
+msgstr ""
+"Vybrali ste možnosť výberu iného diskového oddielu.\n"
+"Vezmite prosím na vedomie: \"os-prober\" nemusí nájsť Váš aktuláne spustení "
+"systém.\n"
+"Takže spustite \"Grub Customizer\" na cieľovom systéme\n"
+"znova a uložte konfiguráciu (alebo spustite \"update-grub/update-burg\"),\n"
+"aby ste získali položku späť!"
+
+#: ../src/liveCDSetupDialog.cpp:19
+msgid ""
+"Before you can edit your grub configuration we have to\n"
+"mount the required partitions.\n"
+"\n"
+"This assistant will help you doing this.\n"
+"\n"
+"\n"
+"Please ensure the target system is based on the same cpu architecture\n"
+"as the actually running one.\n"
+"If not, you will get an error message when trying to load the configuration."
+msgstr ""
+"Než budete môcť upravovať svoju grub konfiguráciu musíme\n"
+"pripojiť požadované diskové oddiely.\n"
+"\n"
+"Tento pomocník vám pomôže ako to urobiť.\n"
+"\n"
+"\n"
+"Uistite sa prosím, cieľový systém je založený na rovnakej CPU architektúre\n"
+"ako na práve bežiacom systéme.\n"
+"Ak sa tak nestane, dostanete chybové hlásenie pri pokuse o načítanie "
+"konfigurácie."
+
+#: ../src/liveCDSetupDialog.cpp:21
+msgid "Grub Customizer: Partition chooser"
+msgstr "Grub Customizer: Výber diskových oddielov"
+
+#: ../src/liveCDSetupDialog.cpp:25
+msgid "Select and mount your root partition"
+msgstr "Vyberte a pripojte váš koreňový oddiel"
+
+#: ../src/liveCDSetupDialog.cpp:43
+msgid "partition"
+msgstr "oddiel"
+
+#: ../src/liveCDSetupDialog.cpp:44
+msgid "type"
+msgstr "typ"
+
+#: ../src/liveCDSetupDialog.cpp:45
+msgid "label"
+msgstr "označenie"
+
+#: ../src/liveCDSetupDialog.cpp:62
+msgid "Select required submountpoints"
+msgstr ""
+
+#: ../src/liveCDSetupDialog.cpp:82
+msgid "Partition Chooser"
+msgstr "Výber diskových oddielov"
+
+#: ../src/liveCDSetupDialog.cpp:152
+msgid "Mount failed!"
+msgstr "Namontovanie zlyhalo!"
+
+#: ../src/liveCDSetupDialog.cpp:167
+msgid "This seems not to be a root file system (no fstab found)"
+msgstr ""
+"Zdá sa, že toto nie je koreňový súborový systém (žiadny \"fstab\" sa "
+"nenašiel)"
+
+#: ../src/liveCDSetupDialog.cpp:176
+msgid "umount failed!"
+msgstr "odmontovanie zlyhalo!"
+
+#: ../src/liveCDSetupDialog.cpp:210
+msgid "Couldn't mount the selected partition"
+msgstr "Nemôžem namontovať vybraný diskový oddiel"
+
+#: ../src/liveCDSetupDialog.cpp:212
+msgid "Couldn't umount the selected partition"
+msgstr "Nemôžem odmontovať vybraný diskový oddiel"
+
+#: ../src/settings_dlg_gtk.cpp:47
+msgid "white"
+msgstr "biela"
+
+#: ../src/settings_dlg_gtk.cpp:48
+msgid "yellow"
+msgstr "žltá"
+
+#: ../src/settings_dlg_gtk.cpp:49
+msgid "light-cyan"
+msgstr "svetloazúrová"
+
+#: ../src/settings_dlg_gtk.cpp:50
+msgid "cyan"
+msgstr "azúrová"
+
+#: ../src/settings_dlg_gtk.cpp:51
+msgid "light-blue"
+msgstr "svetlomodrá"
+
+#: ../src/settings_dlg_gtk.cpp:52
+msgid "blue"
+msgstr "modrá"
+
+#: ../src/settings_dlg_gtk.cpp:53
+msgid "light-green"
+msgstr "svetlozelená"
+
+#: ../src/settings_dlg_gtk.cpp:54
+msgid "green"
+msgstr "zelená"
+
+#: ../src/settings_dlg_gtk.cpp:55
+msgid "light-magenta"
+msgstr "svetlopurpurová"
+
+#: ../src/settings_dlg_gtk.cpp:56
+msgid "magenta"
+msgstr "purpurová"
+
+#: ../src/settings_dlg_gtk.cpp:57
+msgid "light-red"
+msgstr "svetločervená"
+
+#: ../src/settings_dlg_gtk.cpp:58
+msgid "red"
+msgstr "červená"
+
+#: ../src/settings_dlg_gtk.cpp:59
+msgid "brown"
+msgstr "hnedá"
+
+#: ../src/settings_dlg_gtk.cpp:60
+msgid "light-gray"
+msgstr "svetlošedá"
+
+#: ../src/settings_dlg_gtk.cpp:61
+msgid "dark-gray"
+msgstr "tmavošedá"
+
+#: ../src/settings_dlg_gtk.cpp:62
+msgid "transparent"
+msgstr "priehľadná"
+
+#: ../src/settings_dlg_gtk.cpp:62
+msgid "black"
+msgstr "čierna"
+
+#: ../src/settings_dlg_gtk.cpp:68
+msgid "pre_defined: "
+msgstr "pred_definované "
+
+#: ../src/settings_dlg_gtk.cpp:68
+msgid "previously _booted entry"
+msgstr "skôr _zavädená položka"
+
+#: ../src/settings_dlg_gtk.cpp:69
+msgid "default entry"
+msgstr "predvolená položka"
+
+#: ../src/settings_dlg_gtk.cpp:69
+msgid "visibility"
+msgstr "viditeľnosť"
+
+#: ../src/settings_dlg_gtk.cpp:69
+msgid "show menu"
+msgstr "zobraziť menu"
+
+#: ../src/settings_dlg_gtk.cpp:70
+msgid "Timeout"
+msgstr "Čas vypršal"
+
+#: ../src/settings_dlg_gtk.cpp:70
+msgid "Seconds"
+msgstr "sekundy"
+
+#: ../src/settings_dlg_gtk.cpp:70
+msgid "kernel parameters"
+msgstr "parametre jadra"
+
+#: ../src/settings_dlg_gtk.cpp:71
+msgid "generate recovery entries"
+msgstr "generovať položky na obnovu"
+
+#: ../src/settings_dlg_gtk.cpp:71
+msgid "look for other operating systems"
+msgstr "hľadať iné operačné systémy"
+
+#: ../src/settings_dlg_gtk.cpp:72
+msgid "custom resolution: "
+msgstr "vlastné rozlíšenie "
+
+#: ../src/settings_dlg_gtk.cpp:73
+msgid "font color"
+msgstr "farba písma"
+
+#: ../src/settings_dlg_gtk.cpp:73
+msgid "background"
+msgstr "pozadie"
+
+#: ../src/settings_dlg_gtk.cpp:74
+msgid "normal:"
+msgstr "normálne:"
+
+#: ../src/settings_dlg_gtk.cpp:74
+msgid "highlight:"
+msgstr "zvýrazniť:"
+
+#: ../src/settings_dlg_gtk.cpp:75
+msgid "menu colors"
+msgstr "ponuka farieb"
+
+#: ../src/settings_dlg_gtk.cpp:75
+msgid "background image"
+msgstr "obrázok pozadia"
+
+#: ../src/settings_dlg_gtk.cpp:76
+msgid "copy to grub directory"
+msgstr "skopírovať do adresára grub"
+
+#: ../src/settings_dlg_gtk.cpp:76
+msgid "remove background"
+msgstr "odstrániť pozadie"
+
+#: ../src/settings_dlg_gtk.cpp:77
+msgid ""
+"To get the colors above working,\n"
+"you have to select a background image!"
+msgstr ""
+"Ak chcete aby vyššie vybrané farby sa zobrazili,\n"
+"musíte vybrať obrázok pozadia!"
+
+#: ../src/settings_dlg_gtk.cpp:80
+msgid "settings"
+msgstr "nastavenia"
+
+#: ../src/settings_dlg_gtk.cpp:84
+msgid "_General"
+msgstr "_Hlavné"
+
+#: ../src/settings_dlg_gtk.cpp:85
+msgid "A_ppearance"
+msgstr "V_zhľad"
+
+#: ../src/settings_dlg_gtk.cpp:86
+msgid "_Advanced"
+msgstr "_Pokročilé"
+
+#: ../src/settings_dlg_gtk.cpp:94
+msgid "value"
+msgstr "hodnota"
+
+#: ../src/settings_dlg_gtk.cpp:129
+msgid "Entry %1 (by position)"
+msgstr "Položka %1 (podľa pozície)"
+
+#: ../src/settings_dlg_gtk.cpp:419
+msgid ""
+"This option doesn't work when the \"os-prober\" script finds other operating "
+"systems. Disable \"%1\" if you don't need to boot other operating systems."
+msgstr ""
+"Táto voľba nefunguje ak \"os-preber\" skript nájde iné operačné systémy. "
+"Zakážte \"% 1\", ak nepotrebujete zavádzať iné operačné systémy."

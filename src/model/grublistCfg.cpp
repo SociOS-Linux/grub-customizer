@@ -463,7 +463,7 @@ bool GrublistCfg::cfgDirIsClean(){
 		struct stat fileProperties;
 		while (entry = readdir(hGrubCfgDir)){
 			std::string fname = entry->d_name;
-			if (fname.length() >= 4 && fname.substr(0,3) == "LS_")
+			if (fname.length() >= 4 && fname.substr(0,3) == "LS_" || fname.substr(0,3) == "PS_" || fname.substr(0,3) == "DS_")
 				return false;
 		}
 		closedir(hGrubCfgDir);
@@ -477,14 +477,21 @@ void GrublistCfg::cleanupCfgDir(){
 	if (hGrubCfgDir){
 		struct dirent *entry;
 		struct stat fileProperties;
-		std::list<std::string> lsfiles;
+		std::list<std::string> lsfiles, dsfiles, psfiles;
 		std::list<std::string> proxyscripts;
 		while (entry = readdir(hGrubCfgDir)){
 			std::string fname = entry->d_name;
-			if (fname.length() >= 4 && fname.substr(0,3) == "LS_")
-				lsfiles.push_back(fname);
-			if (fname.length() >= 4 && fname[0] >= '1' && fname[0] <= '9' && fname[1] >= '0' && fname[1] <= '9' && fname[2] == '_')
-				proxyscripts.push_back(fname);
+			if (fname.length() >= 4){
+				if (fname.substr(0,3) == "LS_")
+					lsfiles.push_back(fname);
+				else if (fname.substr(0,3) == "DS_")
+					dsfiles.push_back(fname);
+				else if (fname.substr(0,3) == "PS_")
+					psfiles.push_back(fname);
+
+				else if (fname[0] >= '1' && fname[0] <= '9' && fname[1] >= '0' && fname[1] <= '9' && fname[2] == '_')
+					proxyscripts.push_back(fname);
+			}
 		}
 		closedir(hGrubCfgDir);
 		
@@ -496,6 +503,22 @@ void GrublistCfg::cleanupCfgDir(){
 		for (std::list<std::string>::iterator iter = proxyscripts.begin(); iter != proxyscripts.end(); iter++){
 			std::cout << "re-activating " << *iter << std::endl;
 			chmod((this->env.cfg_dir+"/"+(*iter)).c_str(), 0755);
+		}
+
+		//remove the DS_ prefix  (DS_10_foo -> 10_foo)
+		for (std::list<std::string>::iterator iter = dsfiles.begin(); iter != dsfiles.end(); iter++) {
+			std::cout << "renaming " << *iter << std::endl;
+			rename((this->env.cfg_dir+"/"+(*iter)).c_str(), (this->env.cfg_dir+"/"+iter->substr(3)).c_str());
+		}
+
+		//remove the PS_ prefix and add index prefix (PS_foo -> 10_foo)
+		int i = 20; //prefix
+		for (std::list<std::string>::iterator iter = psfiles.begin(); iter != psfiles.end(); iter++) {
+			std::cout << "renaming " << *iter << std::endl;
+			std::string out = *iter;
+			out.replace(0, 2, (std::string("") + char('0' + (i/10)%10) + char('0' + i%10)));
+			rename((this->env.cfg_dir+"/"+(*iter)).c_str(), (this->env.cfg_dir+"/"+out).c_str());
+			i++;
 		}
 	}
 }

@@ -623,10 +623,18 @@ GrubConfListing::GrubConfListing(){
 	this->append_column_editable(gettext("is active"), treeModel.active);
 	this->append_column_editable(gettext("name"), treeModel.name); //rows with is_editable==true will be made editable by cell renderer option
 	
-	Gtk::TreeViewColumn* pColumn = this->get_column(1);
-	Gtk::CellRendererText* pRenderer = static_cast<Gtk::CellRendererText*>(pColumn->get_first_cell_renderer());
-	pColumn->add_attribute(pRenderer->property_editable(), treeModel.is_editable);
-	pColumn->add_attribute(pRenderer->property_sensitive(), treeModel.is_sensitive);
+	{
+		Gtk::TreeViewColumn* pColumn = this->get_column(1);
+		Gtk::CellRendererText* pRenderer = static_cast<Gtk::CellRendererText*>(pColumn->get_first_cell_renderer());
+		pColumn->add_attribute(pRenderer->property_editable(), treeModel.is_editable);
+		pColumn->add_attribute(pRenderer->property_sensitive(), treeModel.is_sensitive);
+	}
+
+	{
+		Gtk::TreeViewColumn* pColumn = this->get_column(0);
+		Gtk::CellRendererText* pRenderer = static_cast<Gtk::CellRendererText*>(pColumn->get_first_cell_renderer());
+		pColumn->add_attribute(pRenderer->property_sensitive(), treeModel.is_sensitive);
+	}
 }
 
 GrubConfListing::TreeModel::TreeModel(){

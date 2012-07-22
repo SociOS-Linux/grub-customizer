@@ -1,5 +1,13 @@
 #!/bin/sh
 cat << EOF
+grub-customizer (2.1.1-0ubuntu1~ppa1$1) $2; urgency=medium
+
+   * better conf corruption detection/fix functionality
+   * improved view of disabled script entries
+   * translation updates
+
+ -- Daniel Richter <danielrichter2007@web.de>  Wed, 02 Feb 2011 23:35:36 +0100
+
 grub-customizer (2.1-0ubuntu1~ppa1$1) $2; urgency=medium
 
    * based on MVP pattern
