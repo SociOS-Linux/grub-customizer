@@ -177,6 +177,7 @@ void GrubConfUIGtk::setIsBurgMode(bool isBurgMode){
 
 bool GrubConfUIGtk::requestForRootSelection(){
 	Gtk::MessageDialog dlg(gettext("No Bootloader found"), false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO);
+	dlg.set_skip_taskbar_hint(false);
 	dlg.set_secondary_text(gettext("Do you want to select another root partition?"));
 	dlg.set_default_response(Gtk::RESPONSE_YES);
 	int result = dlg.run();
@@ -185,6 +186,7 @@ bool GrubConfUIGtk::requestForRootSelection(){
 
 bool GrubConfUIGtk::requestForBurgMode(){
 	Gtk::MessageDialog dlg(gettext("BURG found!"), false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO);
+	dlg.set_skip_taskbar_hint(false);
 	dlg.set_secondary_text(gettext("Do you want to configure BURG instead of grub2?"));
 	dlg.set_default_response(Gtk::RESPONSE_YES);
 	int result = dlg.run();
@@ -314,6 +316,8 @@ Gtk::TreeModel::iterator GrubConfUIGtk::getIterByScriptPtr(void* scriptPtr){
 			break;
 		iter++;
 	}
+	if (iter == tvConfList.refTreeStore->children().end())
+		throw "script iter not found";
 	return iter;
 }
 
@@ -327,6 +331,8 @@ Gtk::TreeModel::iterator GrubConfUIGtk::getIterByEntryPtr(void* entryPtr){
 		}
 		iter++;
 	}
+	if (iter == tvConfList.refTreeStore->children().end())
+		throw "entry iter not found";
 	return iter;
 }
 
