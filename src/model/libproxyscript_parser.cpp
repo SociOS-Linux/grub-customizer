@@ -120,6 +120,7 @@ bool ProxyScriptData::load(FILE* fpProxyScript){
 						this->ruleString += char(c);
 					}
 				}
+				is_begin_of_row = false;
 			}
 		
 			if (c == '\n')

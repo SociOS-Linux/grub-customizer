@@ -38,14 +38,15 @@ struct Entry : public CommonClass {
 	enum EntryType {
 		MENUENTRY,
 		SUBMENU,
-		ROOT_ENTRY
+		ROOT_ENTRY,
+		PLAINTEXT
 	} type;
 	bool isValid;
 	std::string name, extension, content;
 	std::list<Entry> subEntries;
 	Entry();
 	Entry(std::string name, std::string extension, std::string content = "", EntryType type = MENUENTRY);
-	Entry(FILE* sourceFile, GrubConfRow firstRow = GrubConfRow(), Logger* logger = NULL);
+	Entry(FILE* sourceFile, GrubConfRow firstRow = GrubConfRow(), Logger* logger = NULL, std::string* plaintextBuffer = NULL);
 	std::list<Entry>& getSubEntries();
 	operator bool() const;
 };

@@ -56,7 +56,7 @@ Entry::Entry()
 Entry::Entry(std::string name, std::string extension, std::string content, EntryType type)
 	: name(name), extension(extension), content(content), isValid(true), type(type)
 {}
-Entry::Entry(FILE* sourceFile, GrubConfRow firstRow, Logger* logger)
+Entry::Entry(FILE* sourceFile, GrubConfRow firstRow, Logger* logger, std::string* plaintextBuffer)
 	: isValid(false), type(MENUENTRY)
 {
 	//int c;
@@ -96,7 +96,9 @@ Entry::Entry(FILE* sourceFile, GrubConfRow firstRow, Logger* logger)
 			}
 			inEntry = true;
 		} else {
-			this->log("unmatched row: " + row.text, Logger::ERROR);
+			if (plaintextBuffer) {
+				*plaintextBuffer += row.text + "\r\n";
+			}
 		}
 		firstRow.eof = true; //disable firstRow to read the following config from file
 	}

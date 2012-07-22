@@ -218,8 +218,10 @@ void GrublistCfg::readGeneratedFile(FILE* source, bool createScriptIfNotFound){
 	GrubConfRow row;
 	Script* script;
 	int i = 0;
+	bool inScript = false;
+	std::string plaintextBuffer = "";
 	while (!cancelThreadsRequested && (row = GrubConfRow(source))){
-		if (row.text.substr(0,10) == ("### BEGIN ") && row.text.substr(row.text.length()-4,4) == " ###"){
+		if (!inScript && row.text.substr(0,10) == ("### BEGIN ") && row.text.substr(row.text.length()-4,4) == " ###"){
 			this->lock();
 			if (script)
 				this->proxies.sync_all(true, true, script);
@@ -237,8 +239,18 @@ void GrublistCfg::readGeneratedFile(FILE* source, bool createScriptIfNotFound){
 			if (script){
 				this->send_new_load_progress(0.1 + (0.7 / this->repository.size() * ++i));
 			}
-		}
-		else if (script != NULL && row.text.substr(0, 10) == "menuentry ") {
+			inScript = true;
+		} else if (inScript && row.text.substr(0,8) == ("### END ") && row.text.substr(row.text.length()-4,4) == " ###") {
+			if (plaintextBuffer != "") {
+				Entry newEntry("#text", "", plaintextBuffer, Entry::PLAINTEXT);
+				if (this->hasLogger()) {
+					newEntry.setLogger(this->getLogger());
+				}
+				plaintextBuffer = "";
+				script->push_front(newEntry);
+			}
+			inScript = false;
+		} else if (script != NULL && row.text.substr(0, 10) == "menuentry ") {
 			this->lock();
 			Entry newEntry(source, row, this->getLoggerPtr());
 			script->push_back(newEntry);
@@ -252,11 +264,29 @@ void GrublistCfg::readGeneratedFile(FILE* source, bool createScriptIfNotFound){
 			this->proxies.sync_all(false, false, script);
 			this->unlock();
 			this->send_new_load_progress(0.1 + (0.7 / this->repository.size() * i));
+		} else if (inScript) { //Plaintext
+			plaintextBuffer += row.text + "\n";
 		}
 	}
 	this->lock();
 	if (script)
 		this->proxies.sync_all(true, true, script);
+
+//	for (ProxyList::iterator iter = this->proxies.begin(); iter != this->proxies.end(); iter++) {
+//		this->log("+++++++++" + iter->fileName, Logger::INFO);
+//		for (std::list<Rule>::iterator iter2 = iter->rules.begin(); iter2 != iter->rules.end(); iter2++) {
+//			if (iter2->type == Rule::PLAINTEXT) {
+//				this->log("+++" + iter2->dataSource->content, Logger::INFO);
+//			}
+//		}
+//	}
+
+	for (Repository::iterator iter = this->repository.begin(); iter != this->repository.end(); iter++) {
+		this->log("S+++++++++" + iter->name, Logger::INFO);
+		for (Script::iterator iter2 = iter->begin(); iter2 != iter->end(); iter2++) {
+			this->log("+++" + iter2->name, Logger::INFO);
+		}
+	}
 	this->unlock();
 }
 

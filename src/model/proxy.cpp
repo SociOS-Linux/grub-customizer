@@ -39,11 +39,11 @@ std::list<Rule> Proxy::parseRuleString(const char** ruleString) {
 	bool visible = false;
 	const char* iter = NULL;
 	for (iter = *ruleString; *iter && (*iter != '}' || inString || inAlias); iter++) {
-		if (!inString && *iter == '+')
+		if (!inString && *iter == '+') {
 			visible = true;
-		else if (!inString && *iter == '-')
+		} else if (!inString && *iter == '-') {
 			visible = false;
-		else if (*iter == '\'' && iter[1] != '\''){
+		} else if (*iter == '\'' && iter[1] != '\'') {
 			inString = !inString;
 			if (iter[1] != '/') {
 				if (!inString){
@@ -58,22 +58,24 @@ std::list<Rule> Proxy::parseRuleString(const char** ruleString) {
 				}
 				name = "";
 			}
-		}
-		else if (!inString && *iter == '*') {
+		} else if (!inString && *iter == '*') {
 			rules.push_back(Rule(Rule::OTHER_ENTRIES_PLACEHOLDER, path, "*", visible));
 			path.clear();
-		}
-		else if (inString){
+		} else if (!inString && *iter == '#' && *++iter == 't' && *++iter == 'e' && *++iter == 'x' && *++iter == 't') {
+			path.push_back("#text");
+			rules.push_back(Rule(Rule::PLAINTEXT, path, "#text", visible));
+			path.clear();
+			name = "";
+		} else if (inString) {
 			name += *iter;
 			if (*iter == '\'')
 				iter++;
-		}
-		else if (!inString && *iter == 'a' && *++iter == 's')
+		} else if (!inString && *iter == 'a' && *++iter == 's') {
 			inAlias = true;
-		else if (!inString && !inAlias && *iter == '/'){
+		} else if (!inString && !inAlias && *iter == '/') {
 			path.push_back(name);
 			name = "";
-		} else if (!inString && !inAlias && *iter == '{'){
+		} else if (!inString && !inAlias && *iter == '{') {
 			iter++;
 			rules.back().subRules = Proxy::parseRuleString(&iter);
 		}
@@ -127,6 +129,7 @@ void Proxy::sync_connectExisting(Rule* parent) {
 		} else {
 			this->__idPathList_OtherEntriesPlaceHolders.push_back(path);
 		}
+
 		iter->dataSource = this->dataSource->getEntryByPath(path);
 
 		if (iter->type == Rule::OTHER_ENTRIES_PLACEHOLDER) {
@@ -189,7 +192,8 @@ void Proxy::sync_expand() {
 			std::list<Rule> newRules;
 			for (std::list<Entry>::iterator iter = dataSource->begin(); iter != dataSource->end(); iter++){
 				Rule* relatedRule = this->getRuleByEntry(*iter, this->rules, Rule::NORMAL);
-				if (!relatedRule){
+				Rule* relatedRulePt = this->getRuleByEntry(*iter, this->rules, Rule::PLAINTEXT);
+				if (!relatedRule && !relatedRulePt){
 					newRules.push_back(Rule(*iter, dataTargetIter->isVisible, *this->dataSource, this->__idPathList, this->dataSource->buildPath(*iter))); //generate rule for given entry
 				}
 			}
@@ -207,7 +211,8 @@ void Proxy::sync_cleanup(Rule* parent) {
 		bool listModified = false;
 		for (std::list<Rule>::iterator iter = list.begin(); !listModified && iter != list.end(); iter++) {
 			if (!(iter->type == Rule::NORMAL && iter->dataSource ||
-				  iter->type == Rule::OTHER_ENTRIES_PLACEHOLDER && iter->dataSource_list)) {
+				  iter->type == Rule::OTHER_ENTRIES_PLACEHOLDER && iter->dataSource_list ||
+				  iter->type == Rule::PLAINTEXT && iter->dataSource)) {
 				list.erase(iter);
 				listModified = true; //after ereasing something we have to create a new iterator
 			} else { //check contents

@@ -25,12 +25,17 @@ int main(int argc, char** argv){
 	if (argc == 2){
 		Script script("noname", "");
 		Entry newEntry;
-		while (newEntry = Entry(stdin)){
+		std::string plaintextBuffer;
+		while (newEntry = Entry(stdin, GrubConfRow(), NULL, &plaintextBuffer)) {
 			script.push_back(newEntry);
+		}
+		if (plaintextBuffer.size()) {
+			script.push_front(Entry("#text", "", plaintextBuffer, Entry::PLAINTEXT));
 		}
 		
 		Proxy proxy;
 		proxy.importRuleString(argv[1]);
+
 		proxy.dataSource = &script;
 		proxy.sync(true, true);
 		

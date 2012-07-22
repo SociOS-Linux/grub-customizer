@@ -266,6 +266,10 @@ std::string GrublistCfgDlgGtk::createNewEntriesPlaceholderString(std::string con
 	}
 }
 
+std::string GrublistCfgDlgGtk::createPlaintextString() const {
+	return gettext("(plaintext)");
+}
+
 void GrublistCfgDlgGtk::saveConfig(){
 	eventListener->save_request();
 }

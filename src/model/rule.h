@@ -32,7 +32,7 @@ struct Rule {
 	bool isVisible;
 	std::list<Rule> subRules;
 	enum RuleType {
-		NORMAL, OTHER_ENTRIES_PLACEHOLDER
+		NORMAL, OTHER_ENTRIES_PLACEHOLDER, PLAINTEXT
 	} type;
 	Rule(RuleType type, std::list<std::string> path, std::string outputName, bool isVisible);
 	Rule(RuleType type, std::list<std::string> path, bool isVisible);

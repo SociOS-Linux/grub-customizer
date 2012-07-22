@@ -470,6 +470,7 @@ void GrubCustomizer::removeProxy(Proxy* p){
 
 void GrubCustomizer::_rAppendRule(Rule& rule, Rule* parentRule){
 	bool is_other_entries_ph = rule.type == Rule::OTHER_ENTRIES_PLACEHOLDER;
+	bool is_plaintext = rule.dataSource && rule.dataSource->type == Entry::PLAINTEXT;
 	if (rule.dataSource || is_other_entries_ph){
 		std::string name;
 		if (is_other_entries_ph) {
@@ -488,11 +489,13 @@ void GrubCustomizer::_rAppendRule(Rule& rule, Rule* parentRule){
 			} catch (...) {
 				name = this->listCfgDlg->createNewEntriesPlaceholderString();
 			}
+		} else if (is_plaintext) {
+			name = this->listCfgDlg->createPlaintextString();
 		} else {
 			name = rule.outputName;
 		}
 		bool isSubmenu = rule.type == Rule::NORMAL && rule.dataSource && rule.dataSource->type == Entry::SUBMENU;
-		this->listCfgDlg->appendEntry(name, rule.isVisible, &rule, !is_other_entries_ph, isSubmenu, parentRule);
+		this->listCfgDlg->appendEntry(name, rule.isVisible, &rule, !is_other_entries_ph && !is_plaintext, isSubmenu, parentRule);
 
 		for (std::list<Rule>::iterator subruleIter = rule.subRules.begin(); subruleIter != rule.subRules.end(); subruleIter++) {
 			this->_rAppendRule(*subruleIter, &rule);

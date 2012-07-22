@@ -71,6 +71,8 @@ public:
 	virtual void showProxyNotFoundMessage()=0;
 	//creates a string for an other entry placeholder
 	virtual std::string createNewEntriesPlaceholderString(std::string const& parentMenu = "")=0;
+	//creates the string for plaintexts
+	virtual std::string createPlaintextString() const=0;
 
 	//sets a new name the list item which points to the given script
 	virtual void setProxyName(void* proxy, std::string const& name, bool isModified)=0;
