@@ -647,7 +647,7 @@ void GrubCustomizer::syncSettings(){
 	}
 	else {
 		//default grub menu colors
-		this->settingsDlg->getColorChooser(SettingsDlg::COLOR_CHOOSER_DEFAULT_FONT).selectColor("white");
+		this->settingsDlg->getColorChooser(SettingsDlg::COLOR_CHOOSER_DEFAULT_FONT).selectColor("light-gray");
 		this->settingsDlg->getColorChooser(SettingsDlg::COLOR_CHOOSER_DEFAULT_BACKGROUND).selectColor("black");
 	}
 	if (hColor != ""){
@@ -656,8 +656,8 @@ void GrubCustomizer::syncSettings(){
 	}
 	else {
 		//default grub menu colors
-		this->settingsDlg->getColorChooser(SettingsDlg::COLOR_CHOOSER_HIGHLIGHT_FONT).selectColor("black");
-		this->settingsDlg->getColorChooser(SettingsDlg::COLOR_CHOOSER_HIGHLIGHT_BACKGROUND).selectColor("light-gray");
+		this->settingsDlg->getColorChooser(SettingsDlg::COLOR_CHOOSER_HIGHLIGHT_FONT).selectColor("magenta");
+		this->settingsDlg->getColorChooser(SettingsDlg::COLOR_CHOOSER_HIGHLIGHT_BACKGROUND).selectColor("black");
 	}
 
 	std::string menuPicturePath = this->settings->getValue("GRUB_MENU_PICTURE");
