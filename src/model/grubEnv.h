@@ -25,6 +25,7 @@
 #include <cstdlib>
 #include <dirent.h>
 #include "../presenter/commonClass.h"
+#include "settingsStore.h"
 
 struct GrubEnv : public CommonClass {
 	enum Mode {
@@ -33,8 +34,10 @@ struct GrubEnv : public CommonClass {
 	};
 	GrubEnv();
 	bool init(GrubEnv::Mode mode, std::string const& dir_prefix);
+	void loadFromFile(FILE* cfg_file, std::string const& dir_prefix);
 	bool check_cmd(std::string const& cmd, std::string const& cmd_prefix = "") const;
 	bool check_dir(std::string const& dir) const;
+	std::string trim_cmd(std::string const& cmd) const;
 	std::string getRootDevice();
 	std::string cfg_dir, cfg_dir_noprefix, mkconfig_cmd, cfg_dir_prefix, update_cmd, install_cmd, output_config_file, output_config_dir, settings_file;
 	bool burgMode;

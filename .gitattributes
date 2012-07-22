@@ -78,6 +78,8 @@ src/model/rule.cpp -text
 src/model/rule.h -text
 src/model/script.cpp -text
 src/model/script.h -text
+src/model/settingsStore.cpp -text
+src/model/settingsStore.h -text
 src/model/settings_mng_ds.cpp -text
 src/model/settings_mng_ds.h -text
 src/presenter/commonClass.cpp -text

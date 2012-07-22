@@ -24,28 +24,42 @@ bool GrubEnv::init(GrubEnv::Mode mode, std::string const& dir_prefix){
 	std::string cmd_prefix = dir_prefix != "" ? "chroot '"+dir_prefix+"' " : "";
 	this->cfg_dir_prefix = dir_prefix;
 	switch (mode){
-	case BURG_MODE:
+	case BURG_MODE: {
 		this->burgMode = true;
-		this->mkconfig_cmd = "burg-mkconfig";
-		this->update_cmd = "update-burg";
-		this->install_cmd = "burg-install";
-		this->cfg_dir = dir_prefix+"/etc/burg.d";
-		this->cfg_dir_noprefix = "/etc/burg.d";
-		this->output_config_dir =  dir_prefix+"/boot/burg";
-		this->output_config_file = dir_prefix+"/boot/burg/burg.cfg";
-		this->settings_file = dir_prefix+"/etc/default/burg";
-		break;
-	case GRUB_MODE:
+		FILE* burg_cfg = fopen("/etc/grub-customizer/burg.cfg", "r");
+		if (burg_cfg) { // try to use the settings file ...
+			this->log("using custom BURG configuration", Logger::INFO);
+			this->loadFromFile(burg_cfg, dir_prefix);
+			fclose(burg_cfg);
+		} else { // otherwise use the built-in config
+			this->mkconfig_cmd = "burg-mkconfig";
+			this->update_cmd = "update-burg";
+			this->install_cmd = "burg-install";
+			this->cfg_dir = dir_prefix+"/etc/burg.d";
+			this->cfg_dir_noprefix = "/etc/burg.d";
+			this->output_config_dir =  dir_prefix+"/boot/burg";
+			this->output_config_file = dir_prefix+"/boot/burg/burg.cfg";
+			this->settings_file = dir_prefix+"/etc/default/burg";
+		}
+		} break;
+	case GRUB_MODE: {
 		this->burgMode = false;
-		this->mkconfig_cmd = "grub-mkconfig";
-		this->update_cmd = "update-grub";
-		this->install_cmd = "grub-install";
-		this->cfg_dir = dir_prefix+"/etc/grub.d";
-		this->cfg_dir_noprefix = "/etc/grub.d";
-		this->output_config_dir =  dir_prefix+"/boot/grub";
-		this->output_config_file = dir_prefix+"/boot/grub/grub.cfg";
-		this->settings_file = dir_prefix+"/etc/default/grub";
-		break;
+		FILE* grub_cfg = fopen("/etc/grub-customizer/grub.cfg", "r");
+		if (grub_cfg) { // try to use the settings file ...
+			this->log("using custom Grub2 configuration", Logger::INFO);
+			this->loadFromFile(grub_cfg, dir_prefix);
+			fclose(grub_cfg);
+		} else { // otherwise use the built-in config
+			this->mkconfig_cmd = "grub-mkconfig";
+			this->update_cmd = "update-grub";
+			this->install_cmd = "grub-install";
+			this->cfg_dir = dir_prefix+"/etc/grub.d";
+			this->cfg_dir_noprefix = "/etc/grub.d";
+			this->output_config_dir =  dir_prefix+"/boot/grub";
+			this->output_config_file = dir_prefix+"/boot/grub/grub.cfg";
+			this->settings_file = dir_prefix+"/etc/default/grub";
+		}
+		} break;
 	}
 	
 	bool is_valid = check_cmd(mkconfig_cmd, cmd_prefix) && check_cmd(update_cmd, cmd_prefix) && check_cmd(install_cmd, cmd_prefix) && check_dir(cfg_dir);
@@ -57,9 +71,21 @@ bool GrubEnv::init(GrubEnv::Mode mode, std::string const& dir_prefix){
 	return is_valid;
 }
 
+void GrubEnv::loadFromFile(FILE* cfg_file, std::string const& dir_prefix) {
+	SettingsStore ds(cfg_file);
+	this->mkconfig_cmd = ds.getValue("MKCONFIG_CMD");
+	this->update_cmd = ds.getValue("UPDATE_CMD");
+	this->install_cmd = ds.getValue("INSTALL_CMD");
+	this->cfg_dir = dir_prefix + ds.getValue("CFG_DIR");
+	this->cfg_dir_noprefix = ds.getValue("CFG_DIR");
+	this->output_config_dir =  dir_prefix + ds.getValue("OUTPUT_DIR");
+	this->output_config_file = dir_prefix + ds.getValue("OUTPUT_FILE");
+	this->settings_file = dir_prefix + ds.getValue("SETTINGS_FILE");
+}
+
 bool GrubEnv::check_cmd(std::string const& cmd, std::string const& cmd_prefix) const {
-	this->log("checking the " + cmd + " command… ", Logger::INFO);
-	FILE* proc = popen((cmd_prefix + " which " + cmd + " 2>&1").c_str(), "r");
+	this->log("checking the " + this->trim_cmd(cmd) + " command… ", Logger::INFO);
+	FILE* proc = popen((cmd_prefix + " which " + this->trim_cmd(cmd) + " 2>&1").c_str(), "r");
 	std::string output;
 	int c;
 	while ((c = fgetc(proc)) != EOF) {
@@ -83,6 +109,15 @@ bool GrubEnv::check_dir(std::string const& dir_str) const {
 		return true;
 	}
 	return false;
+}
+
+std::string GrubEnv::trim_cmd(std::string const& cmd) const {
+	int firstSpace = cmd.find_first_of(' ');
+	if (firstSpace != -1) {
+		return cmd.substr(0, firstSpace);
+	} else {
+		return cmd;
+	}
 }
 
 std::string GrubEnv::getRootDevice(){

@@ -35,6 +35,7 @@ add_executable(grub-customizer
 	src/model/grubEnv.cpp
 	src/view/settingsDlgGtk.cpp
 	src/model/settings_mng_ds.cpp
+	src/model/settingsStore.cpp
 	src/model/fbResolutionsGetter.cpp
 	src/model/grubInstaller.cpp
 	src/view/scriptAddDlgGtk.cpp

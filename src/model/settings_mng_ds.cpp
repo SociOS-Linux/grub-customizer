@@ -18,43 +18,6 @@
 
 #include "settings_mng_ds.h"
 
-SettingRow::SettingRow() : isActive(true), hasExportPrefix(false), isSetting(true) {}
-
-void SettingRow::validate(){
-	isActive = false;
-	hasExportPrefix = false;
-	isSetting = false;
-
-	if (name != "" && value != "" && (name.length() < 2 || name.substr(0,2) != "# ")){
-		isSetting = true;
-		if (name[0] != '#')
-			isActive = true;
-		else
-			name = name.substr(1);
-		
-		if (name.length() > 7 && name.substr(0,7) == "export "){
-			hasExportPrefix = true;
-			name = name.substr(7);
-		}
-	}
-	else {
-		name = "";
-		value = "";
-	}
-}
-
-std::string SettingRow::getOutput(){
-	if (isSetting) {
-		if (name != "") {
-			return (isActive ? "" : "#")+std::string(hasExportPrefix ? "export " : "")+name+"=\""+value+"\""+(comment != "" ? " #"+comment : "");
-		} else {
-			return "#UNNAMED_OPTION=\""+value+"\""; //unnamed options would destroy the grub confuguration
-		}
-	} else {
-		return plaintext;
-	}
-}
-
 SettingsManagerDataStore::SettingsManagerDataStore(GrubEnv& env)
 	: _reloadRequired(false), env(env)
 {
@@ -64,152 +27,13 @@ bool SettingsManagerDataStore::reloadRequired() const {
 	return this->_reloadRequired;
 }
 
-std::list<SettingRow>::iterator SettingsManagerDataStore::begin(bool jumpOverPlaintext){
-	std::list<SettingRow>::iterator iter = settings.begin();
-	if (jumpOverPlaintext)
-		iter_to_next_setting(iter);
-	return iter;
-}
-std::list<SettingRow>::iterator SettingsManagerDataStore::end(){
-	return settings.end();
-}
-void SettingsManagerDataStore::iter_to_next_setting(std::list<SettingRow>::iterator& iter){
-	iter++;
-	while (iter != settings.end()){
-		if (iter->isSetting)
-			break;
-		else
-			iter++;
-	}
-}
-std::string SettingsManagerDataStore::getValue(std::string const& name){
-	for (std::list<SettingRow>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
-		if (name == iter->name)
-			return iter->value;
-	}
-	return "";
-}
-bool SettingsManagerDataStore::setValue(std::string const& name, std::string const& value){
-	for (std::list<SettingRow>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
-		if (name == iter->name){
-			
-			if (iter->value != value){ //only set when the new value is really new
-				iter->value = value;
-				if (name == "GRUB_DISABLE_LINUX_RECOVERY" || name == "GRUB_DISABLE_OS_PROBER")
-					_reloadRequired = true;
-			}
-			
-			return true;
-		}
-	}
-
-	settings.push_back(SettingRow());
-	settings.back().name = name;
-	settings.back().value = value;
-	settings.back().validate();
-	if (name == "GRUB_DISABLE_LINUX_RECOVERY" || name == "GRUB_DISABLE_OS_PROBER")
-		_reloadRequired = true;
-	return false;
-}
-
-std::string SettingsManagerDataStore::addNewItem(){
-	SettingRow newRow;
-	newRow.name = "";
-	settings.push_back(newRow);
-	return newRow.name;
-}
-
-void SettingsManagerDataStore::removeItem(std::string const& name){
-	for (std::list<SettingRow>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
-		if (iter->name == name){
-			settings.erase(iter);
-			break; //must break because the iterator is invalid now!
-		}
-	}
-}
-
-void SettingsManagerDataStore::renameItem(std::string const& old_name, std::string const& new_name){
-	for (std::list<SettingRow>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
-		if (iter->name == old_name){
-			iter->name = new_name;
-			break; //must break because the iterator is invalid now!
-		}
-	}
-}
-
-bool SettingsManagerDataStore::isActive(std::string const& name, bool checkValueToo){
-	for (std::list<SettingRow>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
-		if (name == iter->name)
-			return iter->isActive && (!checkValueToo || iter->value != "false");
-	}
-}
-bool SettingsManagerDataStore::setIsActive(std::string const& name, bool value){
-	for (std::list<SettingRow>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
-		if (name == iter->name){
-			if (iter->isActive != value){
-				iter->isActive = value;
-				if (name == "GRUB_DISABLE_LINUX_RECOVERY" || name == "GRUB_DISABLE_OS_PROBER")
-					_reloadRequired = true;
-			}
-			return true;
-		}
-	}
-	return false;
-}
-
-bool SettingsManagerDataStore::setIsExport(std::string const& name, bool isExport){
-	for (std::list<SettingRow>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
-		if (name == iter->name){
-			if (iter->hasExportPrefix != isExport){
-				iter->hasExportPrefix = isExport;
-			}
-			return true;
-		}
-	}
-	return false;
-}
-
 bool SettingsManagerDataStore::load(){
 	settings.clear();
 
 	FILE* file = fopen(this->env.settings_file.c_str(), "r");
 	if (file){
-		std::string row;
-		int c;
-		int step = 0; //0: name parsing, 1: value parsing
-		bool inQuotes = false;
-		char quoteChar;
-		settings.push_back(SettingRow());
-		while ((c = fgetc(file)) != EOF){
-			if (c == '\n'){
-				settings.back().validate();
-				settings.push_back(SettingRow());
-				inQuotes = false;
-				step = 0;
-			}
-			else {
-				settings.back().plaintext += c;
-				if (c == '"' && (!inQuotes || quoteChar == c)){
-					inQuotes = !inQuotes;
-					quoteChar = '"';
-				}
-				else if (c == '\'' && (!inQuotes || quoteChar == c)){
-					inQuotes = !inQuotes;
-					quoteChar = '\'';
-				}
-				else {
-					if (step == 0 && c == '=' && !inQuotes)
-						step = 1;
-					else if (step == 0)
-						settings.back().name += c;
-					else if (step == 1)
-						settings.back().value += c;
-				}
-			}
-		}
-		if (settings.size() > 0)
-			settings.back().validate();
-		
+		SettingsStore::load(file);
+
 		fclose(file);
 		return true;
 	}
@@ -259,6 +83,39 @@ fi\n";
 		return false;
 }
 
-void SettingsManagerDataStore::clear(){
-	this->settings.clear();
+bool SettingsManagerDataStore::setValue(std::string const& name, std::string const& value){
+	for (std::list<SettingRow>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
+		if (name == iter->name){
+
+			if (iter->value != value){ //only set when the new value is really new
+				iter->value = value;
+				if (name == "GRUB_DISABLE_LINUX_RECOVERY" || name == "GRUB_DISABLE_OS_PROBER")
+					_reloadRequired = true;
+			}
+
+			return true;
+		}
+	}
+
+	settings.push_back(SettingRow());
+	settings.back().name = name;
+	settings.back().value = value;
+	settings.back().validate();
+	if (name == "GRUB_DISABLE_LINUX_RECOVERY" || name == "GRUB_DISABLE_OS_PROBER")
+		_reloadRequired = true;
+	return false;
+}
+
+bool SettingsManagerDataStore::setIsActive(std::string const& name, bool value){
+	for (std::list<SettingRow>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
+		if (name == iter->name){
+			if (iter->isActive != value){
+				iter->isActive = value;
+				if (name == "GRUB_DISABLE_LINUX_RECOVERY" || name == "GRUB_DISABLE_OS_PROBER")
+					_reloadRequired = true;
+			}
+			return true;
+		}
+	}
+	return false;
 }
