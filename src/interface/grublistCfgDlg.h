@@ -66,7 +66,7 @@ public:
 	//add script to the end of the list
 	virtual void appendScript(Glib::ustring const& name, bool is_active, void* proxyPtr)=0;
 	//add entry to the end of the last script of the list
-	virtual void appendEntry(Glib::ustring const& name, bool is_active, void* entryPtr, bool editable)=0;
+	virtual void appendEntry(Glib::ustring const& name, bool is_active, void* entryPtr, bool editable, void* parentEntry = NULL)=0;
 	//notifies the user about the problem that no grublistcfg_proxy has been found
 	virtual void showProxyNotFoundMessage()=0;
 

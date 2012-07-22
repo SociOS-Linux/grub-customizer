@@ -29,7 +29,11 @@ std::string str_replace(const std::string &search, const std::string &replace, s
 
 Rule::Rule(Entry& source, bool isVisible) //generate rule for given entry. __idname is only required for re-syncing (soft-reload)
 	: type(Rule::NORMAL), isVisible(isVisible), __idname(source.name), outputName(source.name), dataSource(&source)
-{}
+{
+	for (std::list<Entry>::iterator iter = source.subEntries.begin(); iter != source.subEntries.end(); iter++) {
+		this->subRules.push_back(Rule(*iter, isVisible));
+	}
+}
 
 Rule::operator std::string(){
 	std::string result = isVisible ? "+" : "-";

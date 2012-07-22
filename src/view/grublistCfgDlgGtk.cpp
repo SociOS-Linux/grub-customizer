@@ -232,9 +232,9 @@ void GrublistCfgDlgGtk::appendScript(Glib::ustring const& name, bool is_active, 
 	(*row)[tvConfList.treeModel.is_sensitive] = true;
 }
 
-void GrublistCfgDlgGtk::appendEntry(Glib::ustring const& name, bool is_active, void* entryPtr, bool editable){
-	Gtk::TreeIter lastScriptIter = *tvConfList.refTreeStore->children().rbegin();
-	
+void GrublistCfgDlgGtk::appendEntry(Glib::ustring const& name, bool is_active, void* entryPtr, bool editable, void* parentEntry){
+	Gtk::TreeIter lastScriptIter = parentEntry ? this->getIterByRulePtr(parentEntry) : Gtk::TreeIter(*tvConfList.refTreeStore->children().rbegin());
+
 	Gtk::TreeIter entryRow = tvConfList.refTreeStore->append(lastScriptIter->children());
 	(*entryRow)[tvConfList.treeModel.active] = is_active;
 	(*entryRow)[tvConfList.treeModel.name] = name;
@@ -319,18 +319,20 @@ Gtk::TreeModel::iterator GrublistCfgDlgGtk::getIterByProxyPtr(void* proxyPtr) co
 	return iter;
 }
 
-Gtk::TreeModel::iterator GrublistCfgDlgGtk::getIterByRulePtr(void* rulePtr) const {
-	Gtk::TreeModel::const_iterator iter = tvConfList.refTreeStore->children().begin();
-	while (iter != tvConfList.refTreeStore->children().end()){
-		for (Gtk::TreeModel::const_iterator iter2 = iter->children().begin(); iter2 != iter->children().end(); iter2++){
-			if (iter2->parent() && (*iter2)[tvConfList.treeModel.relatedRule] == rulePtr)
-				return iter2;
+Gtk::TreeModel::iterator GrublistCfgDlgGtk::getIterByRulePtr(void* rulePtr, const Gtk::TreeRow* parentRow) const {
+	const Gtk::TreeNodeChildren children = parentRow ? parentRow->children() : tvConfList.refTreeStore->children();
+	for (Gtk::TreeModel::const_iterator iter = children.begin(); iter != children.end(); iter++) {
+		if ((*iter)[tvConfList.treeModel.relatedRule] == rulePtr)
+			return iter;
+		try {
+			return this->getIterByRulePtr(rulePtr, &**iter); //recursively search for the treeview item
+		} catch (GrublistCfgDlg::Exception e) {
+			if (e != RULE_ITER_NOT_FOUND)
+				throw e;
+			//(ignore RULE_ITER_NOT_FOUND exceptions)
 		}
-		iter++;
 	}
-	if (iter == tvConfList.refTreeStore->children().end())
-		throw RULE_ITER_NOT_FOUND;
-	return iter;
+	throw RULE_ITER_NOT_FOUND;
 }
 
 void GrublistCfgDlgGtk::setProxyName(void* proxy, Glib::ustring const& name, bool isModified){

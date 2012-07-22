@@ -83,7 +83,7 @@ class GrublistCfgDlgGtk : public GrublistCfgDlg {
 	Gtk::MessageDialog burgSwitcher, pchooserQuestionDlg;
 
 	Gtk::TreeModel::iterator getIterByProxyPtr(void* proxyPtr) const;
-	Gtk::TreeModel::iterator getIterByRulePtr(void* rulePtr) const;
+	Gtk::TreeModel::iterator getIterByRulePtr(void* rulePtr, const Gtk::TreeRow* parentRow = NULL) const;
 	void update_move_buttons();
 	void update_remove_button();
 	void saveConfig();
@@ -109,7 +109,7 @@ public:
 	void hideProgressBar();
 	void setStatusText(Glib::ustring const& new_status_text);
 	void appendScript(Glib::ustring const& name, bool is_active, void* proxyPtr);
-	void appendEntry(Glib::ustring const& name, bool is_active, void* entryPtr, bool editable);
+	void appendEntry(Glib::ustring const& name, bool is_active, void* entryPtr, bool editable, void* parentEntry = NULL);
 	void showProxyNotFoundMessage();
 	
 	void setProxyName(void* proxy, Glib::ustring const& name, bool isModified);

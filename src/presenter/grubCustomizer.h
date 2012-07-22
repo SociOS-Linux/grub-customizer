@@ -83,6 +83,9 @@ class GrubCustomizer {
 	bool is_loading;
 	int activeThreadCount;
 	GrublistCfg::Exception thrownException; //to be used from the die() function
+
+	void _rAppendRule(Rule& rule, Rule* parentRule = NULL);
+
 public:
 	enum Exception {
 		INCOMPLETE

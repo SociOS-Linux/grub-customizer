@@ -448,6 +448,18 @@ void GrubCustomizer::removeProxy(Proxy* p){
 	this->modificationsUnsaved = true;
 }
 
+void GrubCustomizer::_rAppendRule(Rule& rule, Rule* parentRule){
+	bool is_other_entries_ph = rule.type == Rule::OTHER_ENTRIES_PLACEHOLDER;
+	if (rule.dataSource || is_other_entries_ph){
+		Glib::ustring name = is_other_entries_ph ? gettext("(new Entries)") : rule.outputName;
+		this->listCfgDlg->appendEntry(name, rule.isVisible, &rule, !is_other_entries_ph, parentRule);
+
+		for (std::list<Rule>::iterator subruleIter = rule.subRules.begin(); subruleIter != rule.subRules.end(); subruleIter++) {
+			this->_rAppendRule(*subruleIter, &rule);
+		}
+	}
+}
+
 void GrubCustomizer::syncListView_load(){
 	this->listCfgDlg->setLockState(1|4);
 	double progress = this->grublistCfg->getProgress();
@@ -470,11 +482,7 @@ void GrubCustomizer::syncListView_load(){
 			Glib::ustring name = iter->getScriptName() + (this->grublistCfg && iter->dataSource && (progress != 1 && iter->dataSource->fileName != iter->fileName || progress == 1 && grublistCfg->proxies.proxyRequired(*iter->dataSource)) ? gettext(" (custom)") : "");
 			this->listCfgDlg->appendScript(name, iter->isExecutable(), &(*iter));
 			for (std::list<Rule>::iterator ruleIter = iter->rules.begin(); ruleIter != iter->rules.end(); ruleIter++){
-				bool is_other_entries_ph = ruleIter->type == Rule::OTHER_ENTRIES_PLACEHOLDER;
-				if (ruleIter->dataSource || is_other_entries_ph){
-					Glib::ustring name = is_other_entries_ph ? gettext("(new Entries)") : ruleIter->outputName;
-					this->listCfgDlg->appendEntry(name, ruleIter->isVisible, &(*ruleIter), !is_other_entries_ph);
-				}
+				this->_rAppendRule(*ruleIter);
 			}
 		}
 		this->grublistCfg->unlock();

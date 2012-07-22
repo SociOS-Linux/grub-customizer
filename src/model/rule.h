@@ -29,6 +29,7 @@ struct Rule {
 	std::string outputName;
 	std::string __idname; //should only be used by sync()!
 	bool isVisible;
+	std::list<Rule> subRules;
 	enum RuleType {
 		NORMAL, OTHER_ENTRIES_PLACEHOLDER
 	} type;
