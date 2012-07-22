@@ -1,5 +1,11 @@
 #!/bin/sh
 cat << EOF
+grub-customizer (2.3.0-0ubuntu1~ppa1$1) $2; urgency=medium
+
+   * new upstream release
+
+ -- Daniel Richter <danielrichter2007@web.de>  Thu, 17 Nov 2011 23:49:51 +0100
+
 grub-customizer (2.2.2-0ubuntu1~ppa1$1) $2; urgency=medium
 
    * no printing of empty submenus

@@ -1,3 +1,17 @@
+v. 2.3
+	* improved error handling (showing grub-mkconfig errors)
+	* plaintext support (script parts outsinde of menuentries won't be removed anymore)
+
+v. 2.2.2
+	* no printing of empty submenus
+	* modification detection fixed
+
+v. 2.2.1
+	* bug 860820 (on launchpad) fixed
+
+v. 2.2.0
+	* full grub 1.99 compatibility
+
 v. 2.1.2
 	* menu colors fixed
 	* multiple loads (results in a chash) prevented
