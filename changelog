@@ -1,3 +1,5 @@
+v. 2.3.1
+	* fixed crash issue (https://bugs.launchpad.net/grub-customizer/+bug/892261)
 v. 2.3
 	* improved error handling (showing grub-mkconfig errors)
 	* plaintext support (script parts outsinde of menuentries won't be removed anymore)
