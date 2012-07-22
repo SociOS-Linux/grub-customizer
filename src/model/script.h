@@ -25,8 +25,9 @@
 #include <sys/stat.h>
 #include "entry.h"
 #include "../interface/entryPathBuilder.h"
+#include "../interface/entryPathFollower.h"
 
-struct Script : public EntryPathBilder, std::list<Entry> {
+struct Script : public EntryPathBilder, EntryPathFollower, std::list<Entry> {
 	enum Exception {
 		ELEMENT_NOT_FOUND
 	};

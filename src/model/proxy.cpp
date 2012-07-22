@@ -191,7 +191,7 @@ void Proxy::sync_expand() {
 		for (std::list<Entry>::iterator iter = dataSource->begin(); iter != dataSource->end(); iter++){
 			Rule* relatedRule = this->getRuleByEntry(*iter, this->rules);
 			if (!relatedRule){
-				newRules.push_back(Rule(*iter, dataTargetIter->isVisible, this->__idPathList, this->dataSource->buildPath(*iter))); //generate rule for given entry
+				newRules.push_back(Rule(*iter, dataTargetIter->isVisible, *this->dataSource, this->__idPathList, this->dataSource->buildPath(*iter))); //generate rule for given entry
 			}
 		}
 		dataTargetIter++;

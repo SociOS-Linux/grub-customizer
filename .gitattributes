@@ -32,6 +32,7 @@ misc/manpage.gz -text svneol=unset#unset
 src/interface/aboutDialog.h -text
 src/interface/colorChooser.h -text
 src/interface/entryPathBuilder.h -text
+src/interface/entryPathFollower.h -text
 src/interface/evt_grubInstallDlg.h -text
 src/interface/evt_listCfgDlg.h -text
 src/interface/evt_model.h -text

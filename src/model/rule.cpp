@@ -18,11 +18,14 @@
 
 #include "rule.h"
 
-Rule::Rule(Entry& source, bool isVisible, std::list<std::list<std::string> > const& pathesToIgnore, std::list<std::string> const& currentPath) //generate rule for given entry. __idname is only required for re-syncing (soft-reload)
+Rule::Rule(Entry& source, bool isVisible, EntryPathFollower& pathFollower, std::list<std::list<std::string> > const& pathesToIgnore, std::list<std::string> const& currentPath) //generate rule for given entry. __idname is only required for re-syncing (soft-reload)
 	: type(Rule::NORMAL), isVisible(isVisible), __idpath(currentPath), outputName(source.name), dataSource(&source)
 {
 	if (source.type == Entry::SUBMENU) {
-		this->subRules.push_front(Rule(Rule::OTHER_ENTRIES_PLACEHOLDER, currentPath, "*", true));
+		Rule placeholder(Rule::OTHER_ENTRIES_PLACEHOLDER, currentPath, "*", true);
+		placeholder.dataSource = pathFollower.getEntryByPath(currentPath);
+		placeholder.dataSource_list = pathFollower.getListByPath(currentPath);
+		this->subRules.push_front(placeholder);
 	}
 	for (std::list<Entry>::iterator iter = source.subEntries.begin(); iter != source.subEntries.end(); iter++) {
 		std::list<std::string> currentPath_in_loop = currentPath;
@@ -39,7 +42,7 @@ Rule::Rule(Entry& source, bool isVisible, std::list<std::list<std::string> > con
 
 		//add this entry as rule if not blacklisted
 		if (!currentPath_in_loop_is_blacklisted){
-			this->subRules.push_back(Rule(*iter, isVisible, pathesToIgnore, currentPath_in_loop));
+			this->subRules.push_back(Rule(*iter, isVisible, pathFollower, pathesToIgnore, currentPath_in_loop));
 		}
 	}
 }
