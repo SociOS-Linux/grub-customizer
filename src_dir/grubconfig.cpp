@@ -407,20 +407,17 @@ void GrubConfig::save(){
 	
 	//add or remove proxy binary
 	
-	std::cout << "A" << std::endl;
 	FILE* proxyBin = fopen("/etc/grub.d/bin/grubcfg_proxy", "r");
 	bool proxybin_exists = proxyBin != NULL;
 	if (proxyBin)
 		fclose(proxyBin);
 	
-	std::cout << "B" << std::endl;
 	if (proxyCount != 0 && !proxybin_exists){
-		std::cout << "C" << std::endl;
 		std::cout << "proxyCount: " << proxyCount << std::endl;
 		//copy proxy
 		int bin_mk_success = mkdir("/etc/grub.d/bin", 0755);
 		if (bin_mk_success == EEXIST || bin_mk_success == 0){
-			FILE* proxyBinSource = fopen("/opt/grub-customizer/grubcfg-proxy", "r");
+			FILE* proxyBinSource = fopen((std::string(LIBDIR)+"/grubcfg-proxy").c_str(), "r");
 			
 			if (proxyBinSource){
 				FILE* proxyBinTarget = fopen("/etc/grub.d/bin/grubcfg_proxy", "w");
@@ -435,7 +432,6 @@ void GrubConfig::save(){
 				fclose(proxyBinSource);
 			}
 			
-			std::cout << "D" << std::endl;
 		}
 	}
 	else if (proxyCount == 0 && proxybin_exists){
@@ -443,7 +439,6 @@ void GrubConfig::save(){
 		unlink("/etc/grub.d/bin/grubcfg_proxy");
 		rmdir("/etc/grub.d/bin");
 	}
-	std::cout << "E" << std::endl;
 	
 	//run update-grub
 	FILE* saveProc = popen("update-grub 2>&1", "r");

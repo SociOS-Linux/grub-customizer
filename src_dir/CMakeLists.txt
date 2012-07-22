@@ -22,3 +22,13 @@ add_executable(../grubcfg-proxy
 
 target_link_libraries(../grub-customizer 
     ${GTKMM_LIBRARIES}  )
+
+
+
+install(TARGETS ../grubcfg-proxy
+	DESTINATION lib/grub-customizer)
+
+install(TARGETS ../grub-customizer 
+	DESTINATION bin)
+
+

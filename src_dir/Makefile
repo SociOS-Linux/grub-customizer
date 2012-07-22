@@ -39,10 +39,10 @@ RM = /usr/bin/cmake -E remove -f
 CMAKE_EDIT_COMMAND = /usr/bin/cmake-gui
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE"
+CMAKE_SOURCE_DIR = /home/daniel/Dokumente/GrubCustomizer/grub-customizer
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE"
+CMAKE_BINARY_DIR = /home/daniel/Dokumente/GrubCustomizer/grub-customizer
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -57,6 +57,47 @@ edit_cache:
 edit_cache/fast: edit_cache
 .PHONY : edit_cache/fast
 
+# Special rule for the target install
+install: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	/usr/bin/cmake -P cmake_install.cmake
+.PHONY : install
+
+# Special rule for the target install
+install/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	/usr/bin/cmake -P cmake_install.cmake
+.PHONY : install/fast
+
+# Special rule for the target install/local
+install/local: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local
+
+# Special rule for the target install/local
+install/local/fast: install/local
+.PHONY : install/local/fast
+
+# Special rule for the target install/strip
+install/strip: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip
+
+# Special rule for the target install/strip
+install/strip/fast: install/strip
+.PHONY : install/strip/fast
+
+# Special rule for the target list_install_components
+list_install_components:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
+.PHONY : list_install_components
+
+# Special rule for the target list_install_components
+list_install_components/fast: list_install_components
+.PHONY : list_install_components/fast
+
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
@@ -69,14 +110,14 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	cd "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE" && $(CMAKE_COMMAND) -E cmake_progress_start "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE/CMakeFiles" "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE/src_dir/CMakeFiles/progress.marks"
-	cd "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE" && $(MAKE) -f CMakeFiles/Makefile2 src_dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE/CMakeFiles" 0
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(CMAKE_COMMAND) -E cmake_progress_start /home/daniel/Dokumente/GrubCustomizer/grub-customizer/CMakeFiles /home/daniel/Dokumente/GrubCustomizer/grub-customizer/src_dir/CMakeFiles/progress.marks
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f CMakeFiles/Makefile2 src_dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/daniel/Dokumente/GrubCustomizer/grub-customizer/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE" && $(MAKE) -f CMakeFiles/Makefile2 src_dir/clean
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f CMakeFiles/Makefile2 src_dir/clean
 .PHONY : clean
 
 # The main clean target
@@ -85,22 +126,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE" && $(MAKE) -f CMakeFiles/Makefile2 src_dir/preinstall
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f CMakeFiles/Makefile2 src_dir/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE" && $(MAKE) -f CMakeFiles/Makefile2 src_dir/preinstall
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f CMakeFiles/Makefile2 src_dir/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE" && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 src_dir/CMakeFiles/../grub-customizer.dir/rule:
-	cd "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE" && $(MAKE) -f CMakeFiles/Makefile2 src_dir/CMakeFiles/../grub-customizer.dir/rule
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f CMakeFiles/Makefile2 src_dir/CMakeFiles/../grub-customizer.dir/rule
 .PHONY : src_dir/CMakeFiles/../grub-customizer.dir/rule
 
 # Convenience name for target.
@@ -109,12 +150,12 @@ src_dir/CMakeFiles/../grub-customizer.dir/rule:
 
 # fast build rule for target.
 ../grub-customizer/fast:
-	cd "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE" && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/build
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/build
 .PHONY : ../grub-customizer/fast
 
 # Convenience name for target.
 src_dir/CMakeFiles/../grubcfg-proxy.dir/rule:
-	cd "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE" && $(MAKE) -f CMakeFiles/Makefile2 src_dir/CMakeFiles/../grubcfg-proxy.dir/rule
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f CMakeFiles/Makefile2 src_dir/CMakeFiles/../grubcfg-proxy.dir/rule
 .PHONY : src_dir/CMakeFiles/../grubcfg-proxy.dir/rule
 
 # Convenience name for target.
@@ -123,122 +164,185 @@ src_dir/CMakeFiles/../grubcfg-proxy.dir/rule:
 
 # fast build rule for target.
 ../grubcfg-proxy/fast:
-	cd "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE" && $(MAKE) -f src_dir/CMakeFiles/../grubcfg-proxy.dir/build.make src_dir/CMakeFiles/../grubcfg-proxy.dir/build
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f src_dir/CMakeFiles/../grubcfg-proxy.dir/build.make src_dir/CMakeFiles/../grubcfg-proxy.dir/build
 .PHONY : ../grubcfg-proxy/fast
 
-# target to build an object file
-confparser.o:
-	cd "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE" && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/confparser.o
-	cd "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE" && $(MAKE) -f src_dir/CMakeFiles/../grubcfg-proxy.dir/build.make src_dir/CMakeFiles/../grubcfg-proxy.dir/confparser.o
+confparser.o: confparser.cpp.o
 .PHONY : confparser.o
 
-# target to preprocess a source file
-confparser.i:
-	cd "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE" && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/confparser.i
-	cd "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE" && $(MAKE) -f src_dir/CMakeFiles/../grubcfg-proxy.dir/build.make src_dir/CMakeFiles/../grubcfg-proxy.dir/confparser.i
+# target to build an object file
+confparser.cpp.o:
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/confparser.cpp.o
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f src_dir/CMakeFiles/../grubcfg-proxy.dir/build.make src_dir/CMakeFiles/../grubcfg-proxy.dir/confparser.cpp.o
+.PHONY : confparser.cpp.o
+
+confparser.i: confparser.cpp.i
 .PHONY : confparser.i
 
-# target to generate assembly for a file
-confparser.s:
-	cd "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE" && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/confparser.s
-	cd "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE" && $(MAKE) -f src_dir/CMakeFiles/../grubcfg-proxy.dir/build.make src_dir/CMakeFiles/../grubcfg-proxy.dir/confparser.s
+# target to preprocess a source file
+confparser.cpp.i:
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/confparser.cpp.i
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f src_dir/CMakeFiles/../grubcfg-proxy.dir/build.make src_dir/CMakeFiles/../grubcfg-proxy.dir/confparser.cpp.i
+.PHONY : confparser.cpp.i
+
+confparser.s: confparser.cpp.s
 .PHONY : confparser.s
 
-# target to build an object file
-grubcfg_proxy.o:
-	cd "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE" && $(MAKE) -f src_dir/CMakeFiles/../grubcfg-proxy.dir/build.make src_dir/CMakeFiles/../grubcfg-proxy.dir/grubcfg_proxy.o
+# target to generate assembly for a file
+confparser.cpp.s:
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/confparser.cpp.s
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f src_dir/CMakeFiles/../grubcfg-proxy.dir/build.make src_dir/CMakeFiles/../grubcfg-proxy.dir/confparser.cpp.s
+.PHONY : confparser.cpp.s
+
+grubcfg_proxy.o: grubcfg_proxy.cpp.o
 .PHONY : grubcfg_proxy.o
 
-# target to preprocess a source file
-grubcfg_proxy.i:
-	cd "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE" && $(MAKE) -f src_dir/CMakeFiles/../grubcfg-proxy.dir/build.make src_dir/CMakeFiles/../grubcfg-proxy.dir/grubcfg_proxy.i
+# target to build an object file
+grubcfg_proxy.cpp.o:
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f src_dir/CMakeFiles/../grubcfg-proxy.dir/build.make src_dir/CMakeFiles/../grubcfg-proxy.dir/grubcfg_proxy.cpp.o
+.PHONY : grubcfg_proxy.cpp.o
+
+grubcfg_proxy.i: grubcfg_proxy.cpp.i
 .PHONY : grubcfg_proxy.i
 
-# target to generate assembly for a file
-grubcfg_proxy.s:
-	cd "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE" && $(MAKE) -f src_dir/CMakeFiles/../grubcfg-proxy.dir/build.make src_dir/CMakeFiles/../grubcfg-proxy.dir/grubcfg_proxy.s
+# target to preprocess a source file
+grubcfg_proxy.cpp.i:
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f src_dir/CMakeFiles/../grubcfg-proxy.dir/build.make src_dir/CMakeFiles/../grubcfg-proxy.dir/grubcfg_proxy.cpp.i
+.PHONY : grubcfg_proxy.cpp.i
+
+grubcfg_proxy.s: grubcfg_proxy.cpp.s
 .PHONY : grubcfg_proxy.s
 
-# target to build an object file
-grubconf_ui_gtk.o:
-	cd "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE" && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/grubconf_ui_gtk.o
+# target to generate assembly for a file
+grubcfg_proxy.cpp.s:
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f src_dir/CMakeFiles/../grubcfg-proxy.dir/build.make src_dir/CMakeFiles/../grubcfg-proxy.dir/grubcfg_proxy.cpp.s
+.PHONY : grubcfg_proxy.cpp.s
+
+grubconf_ui_gtk.o: grubconf_ui_gtk.cpp.o
 .PHONY : grubconf_ui_gtk.o
 
-# target to preprocess a source file
-grubconf_ui_gtk.i:
-	cd "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE" && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/grubconf_ui_gtk.i
+# target to build an object file
+grubconf_ui_gtk.cpp.o:
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/grubconf_ui_gtk.cpp.o
+.PHONY : grubconf_ui_gtk.cpp.o
+
+grubconf_ui_gtk.i: grubconf_ui_gtk.cpp.i
 .PHONY : grubconf_ui_gtk.i
 
-# target to generate assembly for a file
-grubconf_ui_gtk.s:
-	cd "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE" && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/grubconf_ui_gtk.s
+# target to preprocess a source file
+grubconf_ui_gtk.cpp.i:
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/grubconf_ui_gtk.cpp.i
+.PHONY : grubconf_ui_gtk.cpp.i
+
+grubconf_ui_gtk.s: grubconf_ui_gtk.cpp.s
 .PHONY : grubconf_ui_gtk.s
 
-# target to build an object file
-grubconfig.o:
-	cd "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE" && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/grubconfig.o
+# target to generate assembly for a file
+grubconf_ui_gtk.cpp.s:
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/grubconf_ui_gtk.cpp.s
+.PHONY : grubconf_ui_gtk.cpp.s
+
+grubconfig.o: grubconfig.cpp.o
 .PHONY : grubconfig.o
 
-# target to preprocess a source file
-grubconfig.i:
-	cd "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE" && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/grubconfig.i
+# target to build an object file
+grubconfig.cpp.o:
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/grubconfig.cpp.o
+.PHONY : grubconfig.cpp.o
+
+grubconfig.i: grubconfig.cpp.i
 .PHONY : grubconfig.i
 
-# target to generate assembly for a file
-grubconfig.s:
-	cd "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE" && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/grubconfig.s
+# target to preprocess a source file
+grubconfig.cpp.i:
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/grubconfig.cpp.i
+.PHONY : grubconfig.cpp.i
+
+grubconfig.s: grubconfig.cpp.s
 .PHONY : grubconfig.s
 
-# target to build an object file
-gtk-client.o:
-	cd "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE" && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/gtk-client.o
+# target to generate assembly for a file
+grubconfig.cpp.s:
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/grubconfig.cpp.s
+.PHONY : grubconfig.cpp.s
+
+gtk-client.o: gtk-client.cpp.o
 .PHONY : gtk-client.o
 
-# target to preprocess a source file
-gtk-client.i:
-	cd "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE" && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/gtk-client.i
+# target to build an object file
+gtk-client.cpp.o:
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/gtk-client.cpp.o
+.PHONY : gtk-client.cpp.o
+
+gtk-client.i: gtk-client.cpp.i
 .PHONY : gtk-client.i
 
-# target to generate assembly for a file
-gtk-client.s:
-	cd "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE" && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/gtk-client.s
+# target to preprocess a source file
+gtk-client.cpp.i:
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/gtk-client.cpp.i
+.PHONY : gtk-client.cpp.i
+
+gtk-client.s: gtk-client.cpp.s
 .PHONY : gtk-client.s
 
-# target to build an object file
-libproxy.o:
-	cd "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE" && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/libproxy.o
-	cd "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE" && $(MAKE) -f src_dir/CMakeFiles/../grubcfg-proxy.dir/build.make src_dir/CMakeFiles/../grubcfg-proxy.dir/libproxy.o
+# target to generate assembly for a file
+gtk-client.cpp.s:
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/gtk-client.cpp.s
+.PHONY : gtk-client.cpp.s
+
+libproxy.o: libproxy.cpp.o
 .PHONY : libproxy.o
 
-# target to preprocess a source file
-libproxy.i:
-	cd "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE" && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/libproxy.i
-	cd "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE" && $(MAKE) -f src_dir/CMakeFiles/../grubcfg-proxy.dir/build.make src_dir/CMakeFiles/../grubcfg-proxy.dir/libproxy.i
+# target to build an object file
+libproxy.cpp.o:
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/libproxy.cpp.o
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f src_dir/CMakeFiles/../grubcfg-proxy.dir/build.make src_dir/CMakeFiles/../grubcfg-proxy.dir/libproxy.cpp.o
+.PHONY : libproxy.cpp.o
+
+libproxy.i: libproxy.cpp.i
 .PHONY : libproxy.i
 
-# target to generate assembly for a file
-libproxy.s:
-	cd "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE" && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/libproxy.s
-	cd "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE" && $(MAKE) -f src_dir/CMakeFiles/../grubcfg-proxy.dir/build.make src_dir/CMakeFiles/../grubcfg-proxy.dir/libproxy.s
+# target to preprocess a source file
+libproxy.cpp.i:
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/libproxy.cpp.i
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f src_dir/CMakeFiles/../grubcfg-proxy.dir/build.make src_dir/CMakeFiles/../grubcfg-proxy.dir/libproxy.cpp.i
+.PHONY : libproxy.cpp.i
+
+libproxy.s: libproxy.cpp.s
 .PHONY : libproxy.s
 
-# target to build an object file
-libproxyscript_parser.o:
-	cd "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE" && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/libproxyscript_parser.o
-	cd "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE" && $(MAKE) -f src_dir/CMakeFiles/../grubcfg-proxy.dir/build.make src_dir/CMakeFiles/../grubcfg-proxy.dir/libproxyscript_parser.o
+# target to generate assembly for a file
+libproxy.cpp.s:
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/libproxy.cpp.s
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f src_dir/CMakeFiles/../grubcfg-proxy.dir/build.make src_dir/CMakeFiles/../grubcfg-proxy.dir/libproxy.cpp.s
+.PHONY : libproxy.cpp.s
+
+libproxyscript_parser.o: libproxyscript_parser.cpp.o
 .PHONY : libproxyscript_parser.o
 
-# target to preprocess a source file
-libproxyscript_parser.i:
-	cd "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE" && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/libproxyscript_parser.i
-	cd "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE" && $(MAKE) -f src_dir/CMakeFiles/../grubcfg-proxy.dir/build.make src_dir/CMakeFiles/../grubcfg-proxy.dir/libproxyscript_parser.i
+# target to build an object file
+libproxyscript_parser.cpp.o:
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/libproxyscript_parser.cpp.o
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f src_dir/CMakeFiles/../grubcfg-proxy.dir/build.make src_dir/CMakeFiles/../grubcfg-proxy.dir/libproxyscript_parser.cpp.o
+.PHONY : libproxyscript_parser.cpp.o
+
+libproxyscript_parser.i: libproxyscript_parser.cpp.i
 .PHONY : libproxyscript_parser.i
 
-# target to generate assembly for a file
-libproxyscript_parser.s:
-	cd "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE" && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/libproxyscript_parser.s
-	cd "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE" && $(MAKE) -f src_dir/CMakeFiles/../grubcfg-proxy.dir/build.make src_dir/CMakeFiles/../grubcfg-proxy.dir/libproxyscript_parser.s
+# target to preprocess a source file
+libproxyscript_parser.cpp.i:
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/libproxyscript_parser.cpp.i
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f src_dir/CMakeFiles/../grubcfg-proxy.dir/build.make src_dir/CMakeFiles/../grubcfg-proxy.dir/libproxyscript_parser.cpp.i
+.PHONY : libproxyscript_parser.cpp.i
+
+libproxyscript_parser.s: libproxyscript_parser.cpp.s
 .PHONY : libproxyscript_parser.s
+
+# target to generate assembly for a file
+libproxyscript_parser.cpp.s:
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/libproxyscript_parser.cpp.s
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f src_dir/CMakeFiles/../grubcfg-proxy.dir/build.make src_dir/CMakeFiles/../grubcfg-proxy.dir/libproxyscript_parser.cpp.s
+.PHONY : libproxyscript_parser.cpp.s
 
 # Help Target
 help:
@@ -249,6 +353,10 @@ help:
 	@echo "... ../grub-customizer"
 	@echo "... ../grubcfg-proxy"
 	@echo "... edit_cache"
+	@echo "... install"
+	@echo "... install/local"
+	@echo "... install/strip"
+	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... confparser.o"
 	@echo "... confparser.i"
@@ -282,6 +390,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd "/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE" && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

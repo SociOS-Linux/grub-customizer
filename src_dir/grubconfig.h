@@ -15,6 +15,7 @@
 #include "libproxy.h"
 #include "libproxyscript_parser.h"
 #include "grubconf_ui.h"
+#include "config.h"
 
 std::string getProxifiedScriptName(std::string const& proxyScriptPath); //return value: name of proxy or emtpy string if it isn't a proxy
 

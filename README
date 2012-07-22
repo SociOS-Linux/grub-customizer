@@ -1,4 +1,6 @@
 To compile this you have to install libgtkmm-2.4-dev, cmake and cmake
 
 Then run:
-./compile\ and\ install.sh.
+	cmake .
+	make
+	sudo make install
