@@ -178,24 +178,26 @@ void Proxy::sync_expand() {
 	assert(this->dataSource != NULL);
 	for (std::list<std::list<std::string> >::iterator oepPathIter = this->__idPathList_OtherEntriesPlaceHolders.begin(); oepPathIter != this->__idPathList_OtherEntriesPlaceHolders.end(); oepPathIter++) {
 		std::list<Entry>* dataSource = this->dataSource->getListByPath(*oepPathIter);
-		Rule* oep = this->getPlaceholderBySourceList(*dataSource, this->rules);
-		assert(oep != NULL);
-		Rule* parentRule = this->getParentRule(oep);
-		std::list<Rule>& dataTarget = parentRule ? parentRule->subRules : this->rules;
+		if (dataSource) {
+			Rule* oep = this->getPlaceholderBySourceList(*dataSource, this->rules);
+			assert(oep != NULL);
+			Rule* parentRule = this->getParentRule(oep);
+			std::list<Rule>& dataTarget = parentRule ? parentRule->subRules : this->rules;
 
-		std::list<Rule>::iterator dataTargetIter = dataTarget.begin();
-		while (dataTargetIter != dataTarget.end() && (dataTargetIter->type != Rule::OTHER_ENTRIES_PLACEHOLDER || dataTargetIter->__idpath != *oepPathIter)){
-			dataTargetIter++;
-		}
-		std::list<Rule> newRules;
-		for (std::list<Entry>::iterator iter = dataSource->begin(); iter != dataSource->end(); iter++){
-			Rule* relatedRule = this->getRuleByEntry(*iter, this->rules);
-			if (!relatedRule){
-				newRules.push_back(Rule(*iter, dataTargetIter->isVisible, *this->dataSource, this->__idPathList, this->dataSource->buildPath(*iter))); //generate rule for given entry
+			std::list<Rule>::iterator dataTargetIter = dataTarget.begin();
+			while (dataTargetIter != dataTarget.end() && (dataTargetIter->type != Rule::OTHER_ENTRIES_PLACEHOLDER || dataTargetIter->__idpath != *oepPathIter)){
+				dataTargetIter++;
 			}
+			std::list<Rule> newRules;
+			for (std::list<Entry>::iterator iter = dataSource->begin(); iter != dataSource->end(); iter++){
+				Rule* relatedRule = this->getRuleByEntry(*iter, this->rules);
+				if (!relatedRule){
+					newRules.push_back(Rule(*iter, dataTargetIter->isVisible, *this->dataSource, this->__idPathList, this->dataSource->buildPath(*iter))); //generate rule for given entry
+				}
+			}
+			dataTargetIter++;
+			dataTarget.splice(dataTargetIter, newRules);
 		}
-		dataTargetIter++;
-		dataTarget.splice(dataTargetIter, newRules);
 	}
 }
 
