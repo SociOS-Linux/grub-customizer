@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-17 23:58+0100\n"
+"POT-Creation-Date: 2011-11-22 19:34+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -183,7 +183,7 @@ msgid "(new Entries)"
 msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:270
-msgid "(plaintext)"
+msgid "(script code)"
 msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:494

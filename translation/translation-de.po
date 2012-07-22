@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-17 23:58+0100\n"
+"POT-Creation-Date: 2011-11-22 19:34+0100\n"
 "PO-Revision-Date: 2011-01-22 15:00+0000\n"
 "Last-Translator: Daniel Richter <danielrichter2007@web.de>\n"
 "Language-Team: German\n"
@@ -44,10 +44,8 @@ msgid "%1 not found. Is grub2 installed?"
 msgstr "%1 nicht gefinden. Ist Grub2/BURG installiert?"
 
 #: ../src/presenter/grubCustomizer.cpp:581
-msgid ""
-"%1 couldn't be executed successfully. error message:\n%2"
-msgstr ""
-"%1 konnte nicht erfolgreich ausgeführt werden. Fehlermeldung: %2"
+msgid "%1 couldn't be executed successfully. error message:\n %2"
+msgstr "%1 konnte nicht erfolgreich ausgeführt werden. Fehlermeldung:\n %2"
 
 #: ../src/presenter/grubCustomizer.cpp:638
 msgid "Name the Entry"
@@ -192,8 +190,8 @@ msgid "(new Entries)"
 msgstr "(neue Einträge)"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:270
-msgid "(plaintext)"
-msgstr ""
+msgid "(script code)"
+msgstr "(Script-Code)"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:494
 msgid "Default title: "
