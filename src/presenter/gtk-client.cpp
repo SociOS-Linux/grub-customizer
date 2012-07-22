@@ -358,12 +358,12 @@ void GtkClient::updateScriptEntry(Proxy* proxy){
 void GtkClient::swapRules(Rule* a, Rule* b){
 	//swap the contents behind the pointers
 	grublistCfg->swapRules(a, b);
-	this->swapRules(a,b);
+	this->listCfgDlg->swapRules(a,b);
 	this->updateScriptEntry(this->grublistCfg->proxies.getProxyByRule(a));
 }
 
 //MOVE TO PRESENTER
 void GtkClient::swapProxies(Proxy* a, Proxy* b){
 	grublistCfg->swapProxies(a,b);
-	this->swapProxies(a,b);
+	this->listCfgDlg->swapProxies(a,b);
 }

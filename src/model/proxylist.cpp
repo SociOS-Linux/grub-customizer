@@ -88,6 +88,6 @@ Proxy* ProxyList::getProxyByRule(Rule* rule) {
 				return &*proxy_iter;
 		}
 	}
-	return NULL;
+	throw "no related proxy found!";
 }
 

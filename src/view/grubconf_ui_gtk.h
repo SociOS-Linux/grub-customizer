@@ -33,7 +33,6 @@ class ImageMenuItemOwnKey : public Gtk::ImageMenuItem {
 };
 
 class GrubConfUIGtk : public GrubConfUI {
-	GrublistCfg* grubConfig;
 	EventListenerView_iface* eventListener;
 	Gtk::Window win;
 	Gtk::VBox vbMainSplit;
@@ -70,7 +69,7 @@ class GrubConfUIGtk : public GrubConfUI {
 	public: bool quit_requested, modificationsUnsaved, thread_active; //TODO: move to presenter!
 	
 public:
-	GrubConfUIGtk(GrublistCfg& grubConfig);
+	GrubConfUIGtk();
 	void setEventListener(EventListenerView_iface& eventListener);
 	void run();
 	void close();

@@ -16,7 +16,7 @@ int main(int argc, char** argv){
 	GtkClient presenter(env);
 
 	GrublistCfg* listcfg = new GrublistCfg(env);
-	GrubConfUIGtk* listCfgView = new GrubConfUIGtk(*listcfg);
+	GrubConfUIGtk* listCfgView = new GrubConfUIGtk;
 	SettingsManagerDataStore* settings = new SettingsManagerDataStore(env);
 	SettingsManagerDataStore* settingsOnDisk = new SettingsManagerDataStore(env);
 	GrubInstaller* installer = new GrubInstaller(env);
