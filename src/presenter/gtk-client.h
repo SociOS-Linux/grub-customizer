@@ -16,6 +16,8 @@
 #include "../model/grubInstaller.h"
 #include "../view/grubInstallDlg.h"
 
+#include "../view/scriptAddDlg.h"
+
 class GtkClient {
 	GrubEnv& env;
 	GrublistCfg* grublistCfg;
@@ -25,6 +27,7 @@ class GtkClient {
 	SettingsManagerDataStore* settingsOnDisk; //buffer for the existing settings
 	GrubInstaller* installer;
 	GrubInstallDlg* installDlg;
+	ScriptAddDlg* scriptAddDlg;
 public:
 	void setModelListCfg(GrublistCfg& grublistCfg);
 	void setViewListCfg(GrubConfUIGtk& listCfgDlg);
@@ -33,6 +36,7 @@ public:
 	void setSettingsBuffer(SettingsManagerDataStore& settings);
 	void setInstaller(GrubInstaller& installer);
 	void setInstallDlg(GrubInstallDlg& installDlg);
+	void setScriptAddDlg(ScriptAddDlg& scriptAddDlg);
 
 	void showSettingsDlg();
 	void load(bool keepConfig = false);
@@ -53,6 +57,10 @@ public:
 	void showInstallDialog();
 	void installGrub(std::string const& device);
 	void showMessageGrubInstallCompleted(std::string const& msg);
+	
+	void showScriptAddDlg();
+	void addScriptFromScriptAddDlg();
+	void updateScriptAddDlgPreview();
 };
 
 #endif

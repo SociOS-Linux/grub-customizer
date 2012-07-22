@@ -464,7 +464,8 @@ double GrublistCfg::getProgress() const {
 	return progress;
 }
 
-void GrublistCfg::increaseProxyPos(Proxy* proxy){
+//DEPRECATED… I don't know why didn't use the easier function earlier
+/*void GrublistCfg::increaseProxyPos(Proxy* proxy){
 	short int i = 10;
 	bool proxyToMove_found = false;
 	for (ProxyList::iterator iter = this->proxies.begin(); iter != this->proxies.end(); iter++){
@@ -479,10 +480,27 @@ void GrublistCfg::increaseProxyPos(Proxy* proxy){
 			proxyToMove_found = true;
 	}
 	this->proxies.sort();
-}
+}*/
 
 void GrublistCfg::renumerate(){
-	increaseProxyPos(NULL);
+	short int i = 10;
+	for (ProxyList::iterator iter = this->proxies.begin(); iter != this->proxies.end(); iter++){
+		iter->index = i++;
+	}
+	this->proxies.sort();
+}
+
+void GrublistCfg::swapRules(Rule* a, Rule* b){
+	Rule swap_helper = *a;
+	*a = *b;
+	*b = swap_helper;
+}
+
+void GrublistCfg::swapProxies(Proxy* a, Proxy* b){
+	int index1 = a->index;
+	a->index = b->index;
+	b->index = index1;
+	this->proxies.sort();
 }
 
 bool GrublistCfg::cfgDirIsClean(){

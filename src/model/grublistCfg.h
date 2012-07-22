@@ -62,6 +62,9 @@ public:
 	void increaseProxyPos(Proxy* proxy);
 	void renumerate();
 	
+	void swapRules(Rule* a, Rule* b);
+	void swapProxies(Proxy* a, Proxy* b);
+	
 	bool cfgDirIsClean();
 	void cleanupCfgDir();
 	

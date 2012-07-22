@@ -16,7 +16,7 @@ struct Rule {
 	Rule(Entry& source, bool isVisible); //generate rule for given entry
 	operator std::string();
 	void print() const;
-	std::string getScriptName() const;
+	std::string getEntryName() const;
 };
 
 #endif

@@ -36,3 +36,15 @@ void EventListenerView::installDialogRequest(){
 void EventListenerView::installGrub_request(std::string const& device){
 	presenter.installGrub(device);
 }
+
+void EventListenerView::scriptAddDlg_requested(){
+	presenter.showScriptAddDlg();
+}
+
+void EventListenerView::scriptAddDlg_applied(){
+	presenter.addScriptFromScriptAddDlg();
+}
+
+void EventListenerView::scriptSelected(){
+	presenter.updateScriptAddDlgPreview();
+}

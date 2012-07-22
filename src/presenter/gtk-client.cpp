@@ -33,6 +33,9 @@ void GtkClient::setInstaller(GrubInstaller& installer){
 void GtkClient::setInstallDlg(GrubInstallDlg& installDlg){
 	this->installDlg = &installDlg;
 }
+void GtkClient::setScriptAddDlg(ScriptAddDlg& scriptAddDlg){
+	this->scriptAddDlg = &scriptAddDlg;
+}
 
 void GtkClient::showSettingsDlg(){
 	this->settingsDlg->show(this->grublistCfg->proxies.generateEntryTitleList());
@@ -186,5 +189,37 @@ void GtkClient::showMessageGrubInstallCompleted(std::string const& msg){
 	installDlg->showMessageGrubInstallCompleted(msg);
 }
 
+void GtkClient::showScriptAddDlg(){
+	if (grublistCfg->repository.size() > 0){
+		scriptAddDlg->clear();
+		for (Repository::iterator iter = grublistCfg->repository.begin(); iter != grublistCfg->repository.end(); iter++){
+			scriptAddDlg->addItem(iter->name);
+		}
+	}
+	else
+		Gtk::MessageDialog(gettext("No script found")).run();
+	
+	
+	scriptAddDlg->show();
+}
 
+void GtkClient::addScriptFromScriptAddDlg(){
+	Script* script = grublistCfg->repository.getNthScript(scriptAddDlg->getSelectedEntryIndex());
+	grublistCfg->proxies.push_back(Proxy(*script));
+	grublistCfg->renumerate();
+	
+	this->listCfgDlg->setLockState(~0);
+	this->listCfgDlg->update();
+	this->listCfgDlg->setLockState(0);
+	
+	this->listCfgDlg->modificationsUnsaved = true;
+}
 
+void GtkClient::updateScriptAddDlgPreview(){
+	scriptAddDlg->clearPreview();
+	Script* selectedScript = grublistCfg->repository.getNthScript(scriptAddDlg->getSelectedEntryIndex());
+	if (selectedScript){
+		for (Script::iterator iter = selectedScript->begin(); iter != selectedScript->end(); iter++)
+			scriptAddDlg->addToPreview(iter->name);
+	}
+}

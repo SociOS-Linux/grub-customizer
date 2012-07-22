@@ -80,6 +80,8 @@ src/view/grubconf_ui_gtk.cpp -text
 src/view/grubconf_ui_gtk.h -text
 src/view/partitionChooser.cpp -text
 src/view/partitionChooser.h -text
+src/view/scriptAddDlg.cpp -text
+src/view/scriptAddDlg.h -text
 src/view/settings_dlg_gtk.cpp -text
 src/view/settings_dlg_gtk.h -text
 translation/complile_all.sh -text

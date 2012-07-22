@@ -13,6 +13,9 @@ class EventListenerView_iface {
 	virtual void rootSelector_request()=0;
 	virtual void installDialogRequest()=0;
 	virtual void installGrub_request(std::string const& device)=0;
+	virtual void scriptAddDlg_requested()=0;
+	virtual void scriptAddDlg_applied()=0;
+	virtual void scriptSelected()=0;
 };
 
 #endif

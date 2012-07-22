@@ -69,16 +69,6 @@ class GrubConfUIGtk : public GrubConfUI {
 	bool quit_requested;
 	bool lock_state;
 	public: bool modificationsUnsaved, thread_active; //TODO: move to presenter!
-	private:
-	//Script/Proxy-add-Window
-	Gtk::Dialog scriptAddDlg;
-	Gtk::VBox vbScriptPreview;
-	Gtk::HBox hbScriptSelection;
-	Gtk::ComboBoxText cbScriptSelection;
-	Gtk::ListViewText lvScriptPreview;
-	Gtk::ScrolledWindow scrScriptPreview;
-	Gtk::Label lblScriptSelection;
-	Gtk::Label lblScriptPreview;
 	
 public:
 	GrubConfUIGtk(GrublistCfg& grubConfig);
@@ -104,15 +94,13 @@ public:
 	void signal_add_click();
 	void signal_remove_click();
 	void signal_reload_click();
-	void signal_script_selection_changed();
-	void signal_scriptAddDlg_response(int response_id);
 	void signal_show_grub_install_dialog_click();
 	void signal_treeview_selection_changed();
 	bool signal_delete_event(GdkEventAny* event);
 	void signal_about_dlg_response(int response_id);
 	void signal_quit_click();
 	void signal_preference_click();
-public:
+	
 	void update_move_buttons();
 	void update_remove_button();
 	void configureOtherEntriesMarker(Gtk::TreeIter otherEntriesMarker);
@@ -127,6 +115,22 @@ public:
 	void appendScript(Glib::ustring const& name, bool is_active, void* proxyPtr);
 	void appendEntry(Glib::ustring const& name, bool is_active, void* entryPtr, bool editable);
 	void showProxyNotFoundMessage();
+	
+	Gtk::TreeModel::iterator getIterByScriptPtr(void* scriptPtr);
+	Gtk::TreeModel::iterator getIterByEntryPtr(void* entryPtr);
+	void signal_script_state_toggled(void* script);
+	void signal_entry_state_toggled(void* entry);
+	void signal_entry_renamed(void* entry);
+	void updateScriptEntry(void* entry);
+	
+	void ruleSwap_requested(Rule* a, Rule* b);
+	void proxySwap_requested(Proxy* a, Proxy* b);
+	void swapProxies(Proxy* a, Proxy* b);
+	void swapRules(Rule* a, Rule* b);
+	
+	void setDefaultTitleStatusText(Glib::ustring const& str);
+	void ruleSelected(Rule* rule);
+	void proxySelected(Proxy* proxy);
 };
 
 #endif

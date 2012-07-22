@@ -21,7 +21,7 @@ Rule::Rule(RuleType type, std::string name, bool isVisible)
 	: type(type), isVisible(isVisible), __idname(name), outputName(name), dataSource(NULL)
 {}
 
-std::string Rule::getScriptName() const {
+std::string Rule::getEntryName() const {
 	if (this->dataSource)
 		return this->dataSource->name;
 	else

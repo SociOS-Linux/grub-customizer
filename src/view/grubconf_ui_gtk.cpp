@@ -14,7 +14,6 @@ GrubConfUIGtk::GrubConfUIGtk(GrublistCfg& grubConfig)
 	miAdd(Gtk::Stock::ADD, Gtk::AccelKey('+', Gdk::CONTROL_MASK)), miRemove(Gtk::Stock::REMOVE, Gtk::AccelKey('-', Gdk::CONTROL_MASK)), miUp(Gtk::Stock::GO_UP, Gtk::AccelKey('u', Gdk::CONTROL_MASK)), miDown(Gtk::Stock::GO_DOWN, Gtk::AccelKey('d', Gdk::CONTROL_MASK)),
 	miPreferences(Gtk::Stock::PREFERENCES), miReload(Gtk::Stock::REFRESH, Gtk::AccelKey("F5")), miSave(Gtk::Stock::SAVE),
 	miAbout(Gtk::Stock::ABOUT), miStartRootSelector(Gtk::Stock::OPEN),
-	lvScriptPreview(1), lblScriptSelection(gettext("Script to insert:"), Gtk::ALIGN_LEFT), lblScriptPreview(gettext("Preview:"),Gtk::ALIGN_LEFT),
 	thread_active(false), quit_requested(false), modificationsUnsaved(false), lock_state(~0)
 {
 	disp_update_load.connect(sigc::mem_fun(this, &GrubConfUIGtk::update));
@@ -137,31 +136,7 @@ zeugma https://launchpad.net/~sunder67\
 	miExit.signal_activate().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_quit_click));
 	miAbout.signal_activate().connect(sigc::mem_fun(&dlgAbout, &Gtk::AboutDialog::show_all));
 
-	//Script/Proxy-add-Window
-	scriptAddDlg.set_title(gettext("Add script"));
-	scriptAddDlg.set_icon_name("grub-customizer");
-	scriptAddDlg.set_default_size(400, 300);
-	Gtk::VBox* vbScriptAddDlg = scriptAddDlg.get_vbox();
-	vbScriptAddDlg->set_spacing(10);
-	vbScriptAddDlg->pack_start(hbScriptSelection, Gtk::PACK_SHRINK);
-	hbScriptSelection.set_border_width(10);
-	hbScriptSelection.pack_start(lblScriptSelection);
-	hbScriptSelection.pack_start(cbScriptSelection);
-	vbScriptAddDlg->pack_start(vbScriptPreview);
-	vbScriptPreview.pack_start(lblScriptPreview, Gtk::PACK_SHRINK);
-	vbScriptPreview.pack_start(scrScriptPreview);
-	scrScriptPreview.add(lvScriptPreview);
-	vbScriptPreview.set_border_width(10);
-	scrScriptPreview.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
-	scrScriptPreview.set_shadow_type(Gtk::SHADOW_IN);
-	lvScriptPreview.set_column_title(0, gettext("Entry"));
-	lvScriptPreview.set_headers_visible(false);
-	
-	scriptAddDlg.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
-	scriptAddDlg.add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
-	
 
-	
 	//signals
 	
 	tvConfList.refTreeStore->signal_row_changed().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_row_changed));
@@ -183,10 +158,6 @@ zeugma https://launchpad.net/~sunder67\
 	miInstallGrub.signal_activate().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_show_grub_install_dialog_click));
 	miStartRootSelector.signal_activate().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_show_root_selector));
 	miPreferences.signal_activate().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_preference_click));
-	
-	cbScriptSelection.signal_changed().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_script_selection_changed));
-	
-	scriptAddDlg.signal_response().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_scriptAddDlg_response));
 	
 	win.signal_delete_event().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_delete_event));
 
@@ -430,40 +401,87 @@ void GrubConfUIGtk::signal_reload_click(){
 	eventListener->reload_request();
 }
 
-//TODO split
+//MAKE PRIVATE
+Gtk::TreeModel::iterator GrubConfUIGtk::getIterByScriptPtr(void* scriptPtr){
+	Gtk::TreeModel::iterator iter = tvConfList.refTreeStore->children().begin();
+	while (iter != tvConfList.refTreeStore->children().end()){
+		if (!iter->parent() && (*iter)[tvConfList.treeModel.relatedProxy] == scriptPtr)
+			break;
+		iter++;
+	}
+	return iter;
+}
+
+//MAKE PRIVATE
+Gtk::TreeModel::iterator GrubConfUIGtk::getIterByEntryPtr(void* entryPtr){
+	Gtk::TreeModel::iterator iter = tvConfList.refTreeStore->children().begin();
+	while (iter != tvConfList.refTreeStore->children().end()){
+		for (Gtk::TreeModel::iterator iter2 = iter->children().begin(); iter2 != iter->children().end(); iter2++){
+			if (iter2->parent() && (*iter2)[tvConfList.treeModel.relatedRule] == entryPtr)
+				return iter2;
+		}
+	}
+	return iter;
+}
+
+//MOVE TO EVENT_LISTENER
+void GrubConfUIGtk::signal_script_state_toggled(void* script){
+	Gtk::TreeModel::iterator iter = this->getIterByScriptPtr(script);
+	((Proxy*)(*iter)[tvConfList.treeModel.relatedProxy])->set_isExecutable((*iter)[tvConfList.treeModel.active]);
+	modificationsUnsaved = true;
+}
+//MOVE TO EVENT_LISTENER
+void GrubConfUIGtk::signal_entry_state_toggled(void* entry){
+	Gtk::TreeModel::iterator iter = this->getIterByEntryPtr(entry);
+	((Rule*)(*iter)[tvConfList.treeModel.relatedRule])->isVisible = (*iter)[tvConfList.treeModel.active];
+	updateScriptEntry(entry);
+	modificationsUnsaved = true;
+}
+
+//MOVE TO EVENT_LISTENER
+void GrubConfUIGtk::signal_entry_renamed(void* entry){
+	Gtk::TreeModel::iterator iter = this->getIterByEntryPtr(entry);
+	Glib::ustring oldName = ((Rule*)entry)->outputName;
+	Glib::ustring newName = (*iter)[tvConfList.treeModel.name];
+	if (newName == ""){
+		Gtk::MessageDialog(gettext("Name the Entry")).run();
+		(*iter)[tvConfList.treeModel.name] = oldName; //reset name
+	}
+	else {
+		eventListener->entry_rename_request((*iter)[tvConfList.treeModel.relatedRule], (Glib::ustring)(*iter)[tvConfList.treeModel.name]);
+	}
+	updateScriptEntry(entry);
+	modificationsUnsaved = true;
+}
+
+void GrubConfUIGtk::updateScriptEntry(void* entry){
+	Gtk::TreeModel::iterator iter = getIterByEntryPtr(entry);
+	Proxy* relatedProxy = ((Proxy*)(*iter)[tvConfList.treeModel.relatedProxy]);
+	
+	//adding (custom) if this script is modified
+	if (((Proxy*)(*iter->parent())[tvConfList.treeModel.relatedProxy])->dataSource){ //checking the Datasource before Accessing it
+		this->setLockState(~0);
+		(*iter->parent())[tvConfList.treeModel.name] = ((Proxy*)(*iter->parent())[tvConfList.treeModel.relatedProxy])->dataSource->name;
+		if (grubConfig->proxies.proxyRequired((*((Proxy*)(*iter->parent())[tvConfList.treeModel.relatedProxy])->dataSource))){
+			(*iter->parent())[tvConfList.treeModel.name] = (*iter->parent())[tvConfList.treeModel.name] + gettext(" (custom)");
+		}
+		this->setLockState(0);
+	}
+}
+
 void GrubConfUIGtk::signal_row_changed(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter){
 	if (this->lock_state == 0){
 		if (iter->parent()){ //if it's a rule row (no proxy)
 			Glib::ustring oldName = ((Rule*)(*iter)[tvConfList.treeModel.relatedRule])->outputName;
 			Glib::ustring newName = (*iter)[tvConfList.treeModel.name];
 			if (oldName != newName){
-				if (newName == ""){
-					Gtk::MessageDialog(gettext("Name the Entry")).run();
-					(*iter)[tvConfList.treeModel.name] = oldName; //reset name
-				}
-				else {
-					eventListener->entry_rename_request((*iter)[tvConfList.treeModel.relatedRule], (Glib::ustring)(*iter)[tvConfList.treeModel.name]);
-				}
+				signal_entry_renamed((Rule*)(*iter)[tvConfList.treeModel.relatedRule]);
 			}
-			((Rule*)(*iter)[tvConfList.treeModel.relatedRule])->isVisible = (*iter)[tvConfList.treeModel.active];
-			
-			Proxy* relatedProxy = ((Proxy*)(*iter)[tvConfList.treeModel.relatedProxy]);
-			
-			//adding (custom) if this script is modified
-			if (((Proxy*)(*iter->parent())[tvConfList.treeModel.relatedProxy])->dataSource){ //checking the Datasource before Accessing it
-				this->setLockState(~0);
-				(*iter->parent())[tvConfList.treeModel.name] = ((Proxy*)(*iter->parent())[tvConfList.treeModel.relatedProxy])->dataSource->name;
-				if (grubConfig->proxies.proxyRequired((*((Proxy*)(*iter->parent())[tvConfList.treeModel.relatedProxy])->dataSource))){
-					(*iter->parent())[tvConfList.treeModel.name] = (*iter->parent())[tvConfList.treeModel.name] + gettext(" (custom)");
-				}
-				this->setLockState(0);
-			}
+			signal_entry_state_toggled((Rule*)(*iter)[tvConfList.treeModel.relatedRule]);
 		}
 		else {
-			((Proxy*)(*iter)[tvConfList.treeModel.relatedProxy])->set_isExecutable((*iter)[tvConfList.treeModel.active]);
+			signal_script_state_toggled((Proxy*)(*iter)[tvConfList.treeModel.relatedProxy]);
 		}
-		
-		modificationsUnsaved = true;
 	}
 }
 
@@ -471,42 +489,72 @@ void GrubConfUIGtk::signal_show_root_selector(){
 	eventListener->rootSelector_request();
 }
 
-void GrubConfUIGtk::signal_move_click(int direction){
-	if (direction == 1 || direction == -1){
-		Gtk::TreeModel::iterator iter = tvConfList.get_selection()->get_selected();
-		Gtk::TreeModel::iterator iter2 = iter;
-		if (direction == 1){
-			iter2++;
-		}
-		else if (direction == -1){
-			iter2--;
-		}
-		
-		//if rule swap
-		if ((Rule*)(*iter)[tvConfList.treeModel.relatedRule] != NULL){
-			Rule* a = ((Rule*)(*iter)[tvConfList.treeModel.relatedRule]);
-			Rule* b = ((Rule*)(*iter2)[tvConfList.treeModel.relatedRule]);
-			//swap the contents behind the pointers
-			Rule swap_helper = *a;
-			*a = *b;
-			*b = swap_helper;
-			
-			//swap the assigned pointers
-			(*iter)[tvConfList.treeModel.relatedRule] = b;
-			(*iter2)[tvConfList.treeModel.relatedRule] = a;
-		}
-		else { //if script swap
-			grubConfig->increaseProxyPos((Proxy*)((*(direction == 1 ? iter : iter2))[tvConfList.treeModel.relatedProxy]));
-		}
-		tvConfList.refTreeStore->iter_swap(iter, iter2);
-		//std::cout << "direction: " << direction << std::endl;
-		
-		update_move_buttons();
-	}
-	else
-		std::cerr << "the only supported directions for moving are 1 or -1" << std::endl;
+
+//MOVE TO PRESENTER
+void GrubConfUIGtk::ruleSwap_requested(Rule* a, Rule* b){
+	//swap the contents behind the pointers
+	grubConfig->swapRules(a, b);
+	this->swapRules(a,b);
+}
+
+//MOVE TO PRESENTER
+void GrubConfUIGtk::proxySwap_requested(Proxy* a, Proxy* b){
+	grubConfig->swapProxies(a,b);
+	this->swapProxies(a,b);
+}
+
+void GrubConfUIGtk::swapProxies(Proxy* a, Proxy* b){
+	tvConfList.refTreeStore->iter_swap(getIterByScriptPtr(a), getIterByScriptPtr(b));
 	
+	update_move_buttons();
 	modificationsUnsaved = true;
+}
+
+void GrubConfUIGtk::swapRules(Rule* a, Rule* b){
+	Gtk::TreeModel::iterator iter1 = getIterByEntryPtr(a);
+	Gtk::TreeModel::iterator iter2 = getIterByEntryPtr(b);
+	
+	tvConfList.refTreeStore->iter_swap(iter1, iter2);
+	//swap the assigned pointers
+	(*iter1)[tvConfList.treeModel.relatedRule] = b;
+	(*iter2)[tvConfList.treeModel.relatedRule] = a;
+	
+	update_move_buttons();
+	updateScriptEntry(a);
+	updateScriptEntry(b);
+	modificationsUnsaved = true;
+}
+
+void GrubConfUIGtk::signal_move_click(int direction){
+	if (this->lock_state == 0){
+		if (direction == 1 || direction == -1){
+			Gtk::TreeModel::iterator iter = tvConfList.get_selection()->get_selected();
+			Gtk::TreeModel::iterator iter2 = iter;
+			if (direction == 1){
+				iter2++;
+			}
+			else if (direction == -1){
+				iter2--;
+			}
+		
+			//if rule swap
+			if ((Rule*)(*iter)[tvConfList.treeModel.relatedRule] != NULL){
+				Rule* a = ((Rule*)(*iter)[tvConfList.treeModel.relatedRule]);
+				Rule* b = ((Rule*)(*iter2)[tvConfList.treeModel.relatedRule]);
+			
+				ruleSwap_requested(a, b);
+
+			}
+			else { //if script swap
+				Proxy* a = (*iter)[tvConfList.treeModel.relatedProxy];
+				Proxy* b = (*iter2)[tvConfList.treeModel.relatedProxy];
+			
+				proxySwap_requested(a, b);
+			}
+		}
+		else
+			std::cerr << "the only supported directions for moving are 1 or -1" << std::endl;
+	}
 }
 
 void GrubConfUIGtk::update_remove_button(){
@@ -526,63 +574,44 @@ void GrubConfUIGtk::update_remove_button(){
 	}
 }
 
+void GrubConfUIGtk::setDefaultTitleStatusText(Glib::ustring const& str){
+	this->setStatusText(gettext("Default title: ")+str);
+}
+
+//MOVE TO EVENT_LISTENER
+void GrubConfUIGtk::ruleSelected(Rule* rule){
+	if (rule && rule->dataSource)
+		this->setDefaultTitleStatusText(rule->getEntryName());
+	else
+		this->setStatusText("");
+	this->updateButtonsState();
+}
+
+//MOVE TO EVENT_LISTENER
+void GrubConfUIGtk::proxySelected(Proxy* proxy){
+	this->setStatusText("");
+	this->updateButtonsState();
+}
+
 void GrubConfUIGtk::signal_treeview_selection_changed(){
 	if (this->lock_state == 0){
-		update_move_buttons();
-		update_remove_button();
-		
-		bool info_set = false;
+		bool rule_ev_executed = false;
 		if (tvConfList.get_selection()->count_selected_rows() == 1){
 			if (tvConfList.get_selection()->get_selected()->parent()){
 				Rule* rptr = (*tvConfList.get_selection()->get_selected())[tvConfList.treeModel.relatedRule];
-				if (rptr && rptr->dataSource){
-					statusbar.push(gettext("Default title: ")+rptr->getScriptName());
-					info_set = true;
-				}
+				this->ruleSelected(rptr);
+				rule_ev_executed = true;
 			}
 		}
-		if (!info_set)
-			statusbar.push("");
+		if (!rule_ev_executed)
+			this->proxySelected((*tvConfList.get_selection()->get_selected())[tvConfList.treeModel.relatedProxy]);
 	}
 }
 
 void GrubConfUIGtk::signal_add_click(){
-	if (grubConfig->repository.size() > 0){
-		cbScriptSelection.clear_items();
-		for (Repository::iterator iter = grubConfig->repository.begin(); iter != grubConfig->repository.end(); iter++){
-			cbScriptSelection.append_text(iter->name);
-		}
-		cbScriptSelection.set_active(0);
-		scriptAddDlg.show_all();
-	}
-	else
-		Gtk::MessageDialog(gettext("No script found")).run();
+	eventListener->scriptAddDlg_requested();
 }
 
-void GrubConfUIGtk::signal_script_selection_changed(){
-	lvScriptPreview.clear_items();
-	Script* selectedScript = grubConfig->repository.getNthScript(cbScriptSelection.get_active_row_number());
-	if (selectedScript){
-		for (Script::iterator iter = selectedScript->begin(); iter != selectedScript->end(); iter++)
-			lvScriptPreview.append_text(iter->name);
-	}
-	lvScriptPreview.columns_autosize();
-}
-
-void GrubConfUIGtk::signal_scriptAddDlg_response(int response_id){
-	if (response_id == Gtk::RESPONSE_OK){
-		Script* script = grubConfig->repository.getNthScript(cbScriptSelection.get_active_row_number());
-		grubConfig->proxies.push_back(Proxy(*script));
-		grubConfig->renumerate();
-		
-		this->setLockState(~0);
-		update();
-		this->setLockState(0);
-		
-		modificationsUnsaved = true;
-	}
-	scriptAddDlg.hide();
-}
 
 void GrubConfUIGtk::signal_remove_click(){
 	Proxy* proxyPointer = (Proxy*)(*(tvConfList.get_selection()->get_selected()))[tvConfList.treeModel.relatedProxy];

@@ -16,6 +16,9 @@ public:
 	void rootSelector_request();
 	void installDialogRequest();
 	void installGrub_request(std::string const& device);
+	void scriptAddDlg_requested();
+	void scriptAddDlg_applied();
+	void scriptSelected();
 };
 
 #endif
