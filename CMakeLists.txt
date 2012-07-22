@@ -11,9 +11,48 @@ pkg_check_modules(GTKMM gtkmm-2.4) # look into FindPkgConfig.cmake,
 
 add_subdirectory(src_dir)
 
-install(FILES translation/german.mo
+
+install(FILES translation/translation-de.mo
 	DESTINATION share/locale/de/LC_MESSAGES/
 	RENAME grub-customizer.mo)
+
+install(FILES translation/translation-bg.mo
+	DESTINATION share/locale/bg/LC_MESSAGES/
+	RENAME grub-customizer.mo)
+
+install(FILES translation/translation-el.mo
+	DESTINATION share/locale/el/LC_MESSAGES/
+	RENAME grub-customizer.mo)
+
+install(FILES translation/translation-gl.mo
+	DESTINATION share/locale/gl/LC_MESSAGES/
+	RENAME grub-customizer.mo)
+
+install(FILES translation/translation-hr.mo
+	DESTINATION share/locale/hr/LC_MESSAGES/
+	RENAME grub-customizer.mo)
+
+install(FILES translation/translation-pl.mo
+	DESTINATION share/locale/pl/LC_MESSAGES/
+	RENAME grub-customizer.mo)
+
+install(FILES translation/translation-pt_BR.mo
+	DESTINATION share/locale/pt_BR/LC_MESSAGES/
+	RENAME grub-customizer.mo)
+
+install(FILES translation/translation-ru.mo
+	DESTINATION share/locale/ru/LC_MESSAGES/
+	RENAME grub-customizer.mo)
+
+install(FILES translation/translation-tr.mo
+	DESTINATION share/locale/tr/LC_MESSAGES/
+	RENAME grub-customizer.mo)
+
+install(FILES translation/translation-uk.mo
+	DESTINATION share/locale/uk/LC_MESSAGES/
+	RENAME grub-customizer.mo)
+
+
 
 install(FILES grub-customizer.desktop
 	DESTINATION /usr/share/applications

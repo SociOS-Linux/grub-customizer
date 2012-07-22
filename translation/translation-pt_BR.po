@@ -1,0 +1,338 @@
+# Brazilian Portuguese translation for grub-customizer
+# Copyright (c) 2010 Rosetta Contributors and Canonical Ltd 2010
+# This file is distributed under the same license as the grub-customizer package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: grub-customizer\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2010-10-22 20:01+0200\n"
+"PO-Revision-Date: 2010-10-21 16:15+0000\n"
+"Last-Translator: Eugênio F <Unknown>\n"
+"Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2010-10-24 13:36+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
+
+#: ../src_dir/grubconfig.cpp:194 ../src_dir/grubconfig.cpp:209
+msgid " not found. Is grub2 installed?"
+msgstr " não encontrado. O grub2 está instalado?"
+
+#: ../src_dir/grubconfig.cpp:270
+msgid " couldn't be executed successfully. You must run this as root!"
+msgstr ""
+" não pode ser executado com êxito. Você deve executar isto como root!"
+
+#: ../src_dir/grubconf_ui_gtk.cpp:11
+msgid "_File"
+msgstr "_Arquivo"
+
+#: ../src_dir/grubconf_ui_gtk.cpp:12
+msgid "_Edit"
+msgstr "_Editar"
+
+#: ../src_dir/grubconf_ui_gtk.cpp:12
+msgid "_View"
+msgstr "_Exibir"
+
+#: ../src_dir/grubconf_ui_gtk.cpp:12
+msgid "_Help"
+msgstr "_Ajuda"
+
+#: ../src_dir/grubconf_ui_gtk.cpp:13
+msgid "_Install to MBR …"
+msgstr ""
+
+#: ../src_dir/grubconf_ui_gtk.cpp:18
+msgid "Script to insert:"
+msgstr "Script para inserir:"
+
+#: ../src_dir/grubconf_ui_gtk.cpp:18
+msgid "Preview:"
+msgstr "Pré-visualização:"
+
+#: ../src_dir/grubconf_ui_gtk.cpp:20
+msgid ""
+"Install the bootloader to MBR and put some\n"
+"files to the bootloaders data directory\n"
+"(if they don't already exist)."
+msgstr ""
+"Instalar o bootloader na MBR e colocar alguns\n"
+"arquivos no diretório de dados do bootloader\n"
+"(se já não existir)."
+
+#: ../src_dir/grubconf_ui_gtk.cpp:21
+msgid "_Device: "
+msgstr ""
+
+#: ../src_dir/grubconf_ui_gtk.cpp:58
+msgid ""
+"Grub Customizer is a graphical interface to configure the grub2/burg settings"
+msgstr ""
+"Grub Customizer é uma interface gráfica para alterar as configurações do "
+"grub2/burg"
+
+#: ../src_dir/grubconf_ui_gtk.cpp:62
+msgid "Save configuration and generate a new "
+msgstr "Salve a configuração e gere um novo "
+
+#: ../src_dir/grubconf_ui_gtk.cpp:69
+msgid "Add a script to your configuration"
+msgstr "Adicionar um script para a sua configuração"
+
+#: ../src_dir/grubconf_ui_gtk.cpp:71
+msgid "Remove a script from your configuration"
+msgstr "Remover um script da sua configuração"
+
+#: ../src_dir/grubconf_ui_gtk.cpp:77
+msgid "Move up the selected entry or script"
+msgstr "Mover para cia a entra selecionada ou script"
+
+#: ../src_dir/grubconf_ui_gtk.cpp:79
+msgid "Move down the selected entry or script"
+msgstr "Mover para baixo a entrada selecionada ou script"
+
+#: ../src_dir/grubconf_ui_gtk.cpp:85
+msgid "reload configuration (same effect as an application restart)"
+msgstr "atualizar configuração (mesmo efeito que um pedido de reiniciar)"
+
+#: ../src_dir/grubconf_ui_gtk.cpp:87
+msgid "Edit grub preferences"
+msgstr "Editar preferências do grub"
+
+#: ../src_dir/grubconf_ui_gtk.cpp:116
+msgid "Select _partition …"
+msgstr ""
+
+#: ../src_dir/grubconf_ui_gtk.cpp:123
+msgid "Add script"
+msgstr "Adicionar script"
+
+#: ../src_dir/grubconf_ui_gtk.cpp:139
+msgid "Entry"
+msgstr "Entrada"
+
+#: ../src_dir/grubconf_ui_gtk.cpp:154
+msgid "Install to MBR"
+msgstr "Instalar na MBR"
+
+#: ../src_dir/grubconf_ui_gtk.cpp:211
+msgid "No Bootloader found"
+msgstr ""
+
+#: ../src_dir/grubconf_ui_gtk.cpp:212
+msgid "Do you want to select another root partition?"
+msgstr ""
+
+#: ../src_dir/grubconf_ui_gtk.cpp:219
+msgid "BURG found!"
+msgstr "BURG encontrado!"
+
+#: ../src_dir/grubconf_ui_gtk.cpp:220
+msgid "Do you want to configure BURG instead of grub2?"
+msgstr "Você deseja configurar BURG, em vez de grub2?"
+
+#: ../src_dir/grubconf_ui_gtk.cpp:240
+msgid "The bootloader has been installed successfully"
+msgstr "O bootloader foi instalado com sucesso"
+
+#: ../src_dir/grubconf_ui_gtk.cpp:245
+msgid "Error while installing the bootloader"
+msgstr "Erro ao instalar o bootloader"
+
+#: ../src_dir/grubconf_ui_gtk.cpp:267
+msgid "loading configuration…"
+msgstr "carregando configuração..."
+
+#: ../src_dir/grubconf_ui_gtk.cpp:296
+msgid " (custom)"
+msgstr " (personalizado)"
+
+#: ../src_dir/grubconf_ui_gtk.cpp:308
+msgid "(new Entries)"
+msgstr "(Entrada nova)"
+
+#: ../src_dir/grubconf_ui_gtk.cpp:329
+msgid "Proxy binary not found!"
+msgstr ""
+
+#: ../src_dir/grubconf_ui_gtk.cpp:330
+msgid ""
+"You will see all entries (uncustomized) when you run grub. This error accurs "
+"(in most cases), when you didn't install grub gustomizer currectly."
+msgstr ""
+"Você verá todas as entradas (não personalizada) quando você executar o grub. "
+"Este erro ocorre (na maioria das vezes), quando você não instala o grub "
+"customizer corretamente."
+
+#: ../src_dir/grubconf_ui_gtk.cpp:346
+msgid "Configuration has been saved"
+msgstr "A configuração foi salva"
+
+#: ../src_dir/grubconf_ui_gtk.cpp:349
+msgid "updating configuration"
+msgstr "atualizando configuração"
+
+#: ../src_dir/grubconf_ui_gtk.cpp:404
+msgid "Name the Entry"
+msgstr "Nome da Entrada"
+
+#: ../src_dir/grubconf_ui_gtk.cpp:519
+msgid "Default title: "
+msgstr "Título padrão: "
+
+#: ../src_dir/grubconf_ui_gtk.cpp:539
+msgid "No script found"
+msgstr "Nenhum script encontrado"
+
+#: ../src_dir/grubconf_ui_gtk.cpp:623
+msgid "The saved configuration is not up to date!"
+msgstr "A configuração salva não está atualizada!"
+
+#: ../src_dir/grubconf_ui_gtk.cpp:624
+msgid ""
+"The generated configuration didn't equal to the saved configuration on "
+"startup. So what you see now may not be what you see when you restart your "
+"pc. To fix this, click update!"
+msgstr ""
+"A configuração gerada não é igual a configuração salva na inicialização. "
+"Então o que você ver agora pode não ser o que você verá quando reiniciar o "
+"pc. Para corrigir isso, clique em atualizar!"
+
+#: ../src_dir/grubconf_ui_gtk.cpp:627
+msgid "_Quit without update"
+msgstr "_Sair sem atualizar"
+
+#: ../src_dir/grubconf_ui_gtk.cpp:630
+msgid "_Update & Quit"
+msgstr "_Atualizar & Sair"
+
+#: ../src_dir/grubconf_ui_gtk.cpp:634
+msgid "Do you want to save your modifications?"
+msgstr "Você quer salvar suas modificações?"
+
+#: ../src_dir/grubconf_ui_gtk.cpp:637
+msgid "_Quit without saving"
+msgstr "_Sair sem salvar"
+
+#: ../src_dir/grubconf_ui_gtk.cpp:640
+msgid "_Save & Quit"
+msgstr "Sa_lvar & Sair"
+
+#: ../src_dir/grubconf_ui_gtk.cpp:682
+msgid "installing the bootloader…"
+msgstr "instalando o bootloader..."
+
+#: ../src_dir/grubconf_ui_gtk.cpp:687
+msgid "Please type a device string!"
+msgstr "Por favor digite o nome do dispositivo!"
+
+#: ../src_dir/grubconf_ui_gtk.cpp:697
+msgid "is active"
+msgstr "está ativo"
+
+#: ../src_dir/grubconf_ui_gtk.cpp:698
+msgid "name"
+msgstr "nome"
+
+#: ../src_dir/gtk-client.cpp:14
+msgid " command not found, cannot proceed"
+msgstr " comando não encontrado, impossível de prosseguir"
+
+#: ../src_dir/liveCDSetupDialog.cpp:5
+msgid "_use another partition: "
+msgstr "_usar outra partição: "
+
+#: ../src_dir/liveCDSetupDialog.cpp:6
+msgid "Mount selected Filesystem"
+msgstr "Montar sistema de arquivos selecionado"
+
+#: ../src_dir/liveCDSetupDialog.cpp:7
+msgid "Unmount mounted Filesystem"
+msgstr "Demontar sistema de arquivos montado"
+
+#: ../src_dir/liveCDSetupDialog.cpp:10
+msgid ""
+"These are the mountpoints of your fstab file.\n"
+"Please select every grub/boot related partition."
+msgstr ""
+"Existem pontos de montagem em seu arquivo fstab.\n"
+"Por favor selecione todas partições do grub/boot relacionada."
+
+#: ../src_dir/liveCDSetupDialog.cpp:15
+msgid "You started Grub Customizer using the live CD."
+msgstr ""
+
+#: ../src_dir/liveCDSetupDialog.cpp:17
+msgid ""
+"You selected the option for choosing another partition.\n"
+"Please note: The os-prober may not find your actually running system.\n"
+"So run Grub Customizer on the target system\n"
+"again and save the configuration (or run update-grub/update-burg)\n"
+"to get the entry back!"
+msgstr ""
+
+#: ../src_dir/liveCDSetupDialog.cpp:19
+msgid ""
+"Before you can edit your grub configuration we have to\n"
+"mount the required partitions.\n"
+"\n"
+"This assistant will help you doing this.\n"
+"\n"
+"\n"
+"Please ensure the target system is based on the same cpu architecture\n"
+"as the actually running one.\n"
+"If not, you will get an error message when trying to load the configuration."
+msgstr ""
+
+#: ../src_dir/liveCDSetupDialog.cpp:21
+msgid "Grub Customizer: Partition chooser"
+msgstr ""
+
+#: ../src_dir/liveCDSetupDialog.cpp:25
+msgid "Select and mount your root partition"
+msgstr "Selecionar e montar sua partição raiz"
+
+#: ../src_dir/liveCDSetupDialog.cpp:43
+msgid "partition"
+msgstr "partição"
+
+#: ../src_dir/liveCDSetupDialog.cpp:44
+msgid "type"
+msgstr "tipo"
+
+#: ../src_dir/liveCDSetupDialog.cpp:45
+msgid "label"
+msgstr "rótulo"
+
+#: ../src_dir/liveCDSetupDialog.cpp:62
+msgid "Select required submountpoints"
+msgstr "Selecionar os sub pontos de montagem necessários."
+
+#: ../src_dir/liveCDSetupDialog.cpp:82
+msgid "Partition Chooser"
+msgstr ""
+
+#: ../src_dir/liveCDSetupDialog.cpp:152
+msgid "Mount failed!"
+msgstr "Falha ao montar!"
+
+#: ../src_dir/liveCDSetupDialog.cpp:167
+msgid "This seems not to be a root file system (no fstab found)"
+msgstr ""
+"Esse não parece ser o sistema de arquivos raiz (fstab não encontrado)"
+
+#: ../src_dir/liveCDSetupDialog.cpp:176
+msgid "umount failed!"
+msgstr "falha ao desmontar!"
+
+#: ../src_dir/liveCDSetupDialog.cpp:210
+msgid "Couldn't mount the selected partition"
+msgstr "Impossível montar a partição selecionada"
+
+#: ../src_dir/liveCDSetupDialog.cpp:212
+msgid "Couldn't umount the selected partition"
+msgstr "Impossível desmontar a partição selecionada"

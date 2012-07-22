@@ -6,6 +6,7 @@ grub-customizer (1.6.1-0ubuntu1~ppa1m) maverick; urgency=medium
    * the live cd setup assistant is now (renamed to partition chooser) accessible after loading (by menubutton click) or if no bootloader found too
    * the toolbar button for saving the configuration is now marked as is_important (will be displayed larger in most cases)
    * 1.6.1: fixed burg mode indentfier (has not been updated)
+   * 1.6.1: translations included
 
  -- Daniel Richter <danielrichter2007@web.de>  Sat, 22 Oct 2010 11:43:00 +0200
 
