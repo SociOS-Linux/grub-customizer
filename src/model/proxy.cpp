@@ -131,25 +131,26 @@ bool Proxy::sync(bool deleteInvalidRules, bool expand){
 
 void Proxy::sync_connectExisting(Rule* parent) {
 	assert(this->dataSource != NULL);
-	this->__idPathList.clear();
+	if (parent == NULL) {
+		this->__idPathList.clear();
+	}
 	std::list<Rule>& list = parent ? parent->subRules : this->rules;
 	for (std::list<Rule>::iterator iter = list.begin(); iter != list.end(); iter++) {
-		std::list<std::string> path = iter->__idpath;
+		if (iter->type != Rule::SUBMENU) { // don't sync submenu entries
+			std::list<std::string> path = iter->__idpath;
 
-		if (iter->type != Rule::OTHER_ENTRIES_PLACEHOLDER) {
-			this->__idPathList.push_back(path);
-		} else {
-			this->__idPathList_OtherEntriesPlaceHolders.push_back(path);
-		}
+			if (iter->type != Rule::OTHER_ENTRIES_PLACEHOLDER) {
+				this->__idPathList.push_back(path);
+			} else {
+				this->__idPathList_OtherEntriesPlaceHolders.push_back(path);
+			}
 
-		iter->dataSource = this->dataSource->getEntryByPath(path);
+			iter->dataSource = this->dataSource->getEntryByPath(path);
 
-		if (iter->type == Rule::OTHER_ENTRIES_PLACEHOLDER) {
-			iter->dataSource_list = this->dataSource->getListByPath(path);
-		}
-
-
-		if (iter->subRules.size()) {
+			if (iter->type == Rule::OTHER_ENTRIES_PLACEHOLDER) {
+				iter->dataSource_list = this->dataSource->getListByPath(path);
+			}
+		} else if (iter->subRules.size()) {
 			this->sync_connectExisting(&*iter);
 		}
 	}
@@ -220,9 +221,9 @@ void Proxy::sync_expand() {
 			std::list<Rule> newRules;
 			for (std::list<Entry>::iterator iter = dataSource->begin(); iter != dataSource->end(); iter++){
 				Rule* relatedRule = this->getRuleByEntry(*iter, this->rules, Rule::NORMAL);
-				Rule* relatedRuleSm = this->getRuleByEntry(*iter, this->rules, Rule::SUBMENU);
 				Rule* relatedRulePt = this->getRuleByEntry(*iter, this->rules, Rule::PLAINTEXT);
-				if (!relatedRule && !relatedRuleSm && !relatedRulePt){
+				Rule* relatedRuleOep = this->getRuleByEntry(*iter, this->rules, Rule::OTHER_ENTRIES_PLACEHOLDER);
+				if (!relatedRule && !relatedRuleOep && !relatedRulePt){
 					newRules.push_back(Rule(*iter, dataTargetIter->isVisible, *this->dataSource, this->__idPathList, this->dataSource->buildPath(*iter))); //generate rule for given entry
 				}
 			}
@@ -239,7 +240,8 @@ void Proxy::sync_cleanup(Rule* parent) {
 	do {
 		bool listModified = false;
 		for (std::list<Rule>::iterator iter = list.begin(); !listModified && iter != list.end(); iter++) {
-			if (!((iter->type == Rule::NORMAL || iter->type == Rule::SUBMENU) && iter->dataSource ||
+			if (!(iter->type == Rule::NORMAL && iter->dataSource ||
+				  iter->type == Rule::SUBMENU && iter->subRules.size() ||
 				  iter->type == Rule::OTHER_ENTRIES_PLACEHOLDER && iter->dataSource_list ||
 				  iter->type == Rule::PLAINTEXT && iter->dataSource)) {
 				list.erase(iter);
@@ -254,31 +256,31 @@ void Proxy::sync_cleanup(Rule* parent) {
 	} while (!done);
 }
 
-bool Proxy::isModified(Rule const* parent) const {
+bool Proxy::isModified(Rule const* parentRule, Entry const* parentEntry) const {
+	assert(this->dataSource != NULL);
 	bool result = false;
-	if (!parent && this->dataSource || parent && parent->dataSource){
-		std::list<Rule> const& rlist = parent ? parent->subRules : this->rules;
-		std::list<Entry> const& elist = parent ? parent->dataSource->subEntries : *this->dataSource;
-		if (rlist.size()-1 == elist.size()){ //rules contains the other entries placeholder, so there is one more entry
-			std::list<Rule>::const_iterator ruleIter = rlist.begin();
-			std::list<Entry>::const_iterator entryIter = elist.begin();
-			if (ruleIter->type == Rule::OTHER_ENTRIES_PLACEHOLDER){ //the first element is the OTHER_ENTRIES_PLACEHOLDER by default.
-				result = !ruleIter->isVisible; //If not visible, it's modified…
-				ruleIter++;
-			}
-			while (!result && ruleIter != rlist.end() && entryIter != elist.end()){
-				if (ruleIter->outputName != entryIter->name || !ruleIter->isVisible) {
-					result = true;
-				} else if (ruleIter->dataSource && ruleIter->dataSource->type == Entry::SUBMENU) {
-					result = this->isModified(&*ruleIter);
-				}
 
-				ruleIter++;
-				entryIter++;
-			}
-		} else {
-			result = true;
+	std::list<Rule> const& rlist = parentRule ? parentRule->subRules : this->rules;
+	std::list<Entry> const& elist = parentEntry ? parentEntry->subEntries : *this->dataSource;
+	if (rlist.size()-1 == elist.size()){ //rules contains the other entries placeholder, so there is one more entry
+		std::list<Rule>::const_iterator ruleIter = rlist.begin();
+		std::list<Entry>::const_iterator entryIter = elist.begin();
+		if (ruleIter->type == Rule::OTHER_ENTRIES_PLACEHOLDER){ //the first element is the OTHER_ENTRIES_PLACEHOLDER by default.
+			result = !ruleIter->isVisible; //If not visible, it's modified…
+			ruleIter++;
 		}
+		while (!result && ruleIter != rlist.end() && entryIter != elist.end()){
+			if (ruleIter->outputName != entryIter->name || !ruleIter->isVisible) {
+				result = true;
+			} else if (ruleIter->type == Rule::SUBMENU) {
+				result = this->isModified(&*ruleIter, &*entryIter);
+			}
+
+			ruleIter++;
+			entryIter++;
+		}
+	} else {
+		result = true;
 	}
 	return result;
 }

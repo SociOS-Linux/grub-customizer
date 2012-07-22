@@ -19,7 +19,7 @@
 #include "rule.h"
 
 Rule::Rule(Entry& source, bool isVisible, EntryPathFollower& pathFollower, std::list<std::list<std::string> > const& pathesToIgnore, std::list<std::string> const& currentPath) //generate rule for given entry. __idname is only required for re-syncing (soft-reload)
-	: type(source.type == Entry::PLAINTEXT ? Rule::PLAINTEXT : (source.type == Entry::SUBMENU ? Rule::SUBMENU : Rule::NORMAL)), isVisible(isVisible), __idpath(currentPath), outputName(source.name), dataSource(&source)
+	: type(source.type == Entry::PLAINTEXT ? Rule::PLAINTEXT : (source.type == Entry::SUBMENU ? Rule::SUBMENU : Rule::NORMAL)), isVisible(isVisible), __idpath(currentPath), outputName(source.name), dataSource(source.type == Entry::SUBMENU ? NULL : &source)
 {
 	if (source.type == Entry::SUBMENU) {
 		Rule placeholder(Rule::OTHER_ENTRIES_PLACEHOLDER, currentPath, "*", true);
@@ -54,16 +54,18 @@ std::string Rule::toString(EntryPathBilder const& pathBuilder){
 	} else if (dataSource) {
 		result += pathBuilder.buildPathString(*dataSource, this->type == OTHER_ENTRIES_PLACEHOLDER);
 		result += "~" + md5(this->dataSource->content) + "~";
-	} else if (type == OTHER_ENTRIES_PLACEHOLDER) {
+	} else if (type == Rule::OTHER_ENTRIES_PLACEHOLDER) {
 		result += "*"; //root level placeholders
+	} else if (type == Rule::SUBMENU) {
+		result += "'SUBMENU'"; // dummy data source
 	} else {
 		result += "???";
 	}
-	if ((type == NORMAL || type == SUBMENU) && (dataSource && dataSource->name != outputName)) {
+	if (type == Rule::SUBMENU || (type == Rule::NORMAL && dataSource && dataSource->name != outputName)) {
 		result += " as '"+str_replace("'", "''", outputName)+"'";
 	}
 
-	if (this->subRules.size() > 0) {
+	if (type == Rule::SUBMENU && this->subRules.size() > 0) {
 		result += "{";
 		for (std::list<Rule>::iterator iter = this->subRules.begin(); iter != this->subRules.end(); iter++) {
 			if (iter != this->subRules.begin())
@@ -92,7 +94,7 @@ std::string Rule::getEntryName() const {
 
 bool Rule::hasRealSubrules() const {
 	for (std::list<Rule>::const_iterator iter = this->subRules.begin(); iter != this->subRules.end(); iter++) {
-		if (iter->isVisible && iter->dataSource && iter->type != Rule::OTHER_ENTRIES_PLACEHOLDER && (iter->dataSource->type != Entry::SUBMENU || iter->hasRealSubrules())) {
+		if (iter->isVisible && ((iter->type == Rule::NORMAL && iter->dataSource) || (iter->type == Rule::SUBMENU && iter->hasRealSubrules()))) {
 			return true;
 		}
 	}
@@ -101,18 +103,18 @@ bool Rule::hasRealSubrules() const {
 
 
 void Rule::print() const {
-	if (this->isVisible && this->dataSource) {
-		if (this->dataSource->type == Entry::PLAINTEXT) {
+	if (this->isVisible) {
+		if (this->type == Rule::PLAINTEXT && this->dataSource) {
 			std::cout << this->dataSource->content;
-		} else if (this->type != Rule::OTHER_ENTRIES_PLACEHOLDER && (this->dataSource->type != Entry::SUBMENU || this->hasRealSubrules())){
-			std::cout << (this->dataSource->type == Entry::SUBMENU ? "submenu" : "menuentry");
-			std::cout << " \""+this->outputName+"\""+this->dataSource->extension+"{\n";
-			if (this->subRules.size() == 0) {
-				std::cout << this->dataSource->content;
-			} else {
-				for (std::list<Rule>::const_iterator iter = this->subRules.begin(); iter != this->subRules.end(); iter++) {
-					iter->print();
-				}
+		} else if (this->type == Rule::NORMAL && this->dataSource) {
+			std::cout << "menuentry";
+			std::cout << " \"" << this->outputName << "\"" << this->dataSource->extension << "{\n";
+			std::cout << this->dataSource->content;
+			std::cout << "}\n";
+		} else if (this->type == Rule::SUBMENU && this->hasRealSubrules()) {
+			std::cout << "submenu" << " \"" << this->outputName << "\"" << "{\n";
+			for (std::list<Rule>::const_iterator iter = this->subRules.begin(); iter != this->subRules.end(); iter++) {
+				iter->print();
 			}
 			std::cout << "}\n";
 		}

@@ -284,9 +284,11 @@ void GrubCustomizer::save_thread(){
 }
 
 void GrubCustomizer::renameEntry(Rule* rule, std::string const& newName){
-	if (this->settings->getValue("GRUB_DEFAULT") == rule->outputName)
-		this->settings->setValue("GRUB_DEFAULT", newName);
-	this->grublistCfg->renameRule(rule, newName);
+	if (rule->type != Rule::PLAINTEXT) {
+		if (this->settings->getValue("GRUB_DEFAULT") == rule->outputName)
+			this->settings->setValue("GRUB_DEFAULT", newName);
+		this->grublistCfg->renameRule(rule, newName);
+	}
 }
 
 void GrubCustomizer::reset(){
@@ -475,21 +477,15 @@ void GrubCustomizer::removeProxy(Proxy* p){
 void GrubCustomizer::_rAppendRule(Rule& rule, Rule* parentRule){
 	bool is_other_entries_ph = rule.type == Rule::OTHER_ENTRIES_PLACEHOLDER;
 	bool is_plaintext = rule.dataSource && rule.dataSource->type == Entry::PLAINTEXT;
-	if (rule.dataSource || is_other_entries_ph){
+	bool is_submenu = rule.type == Rule::SUBMENU;
+	if (rule.dataSource || is_other_entries_ph || is_submenu){
 		std::string name;
 		if (is_other_entries_ph) {
 			try {
 				if (rule.dataSource == NULL) {
 					throw 1;
 				}
-				Proxy* proxy = this->grublistCfg->proxies.getProxyByRule(&rule);
-				//the dataSource of a menu is the associated submenu (entry) while the datasource isn't the root of a script
-				Rule* parentRule = proxy->getRuleByEntry(*rule.dataSource, proxy->rules, Rule::SUBMENU);
-				if (parentRule) {
-					name = this->listCfgDlg->createNewEntriesPlaceholderString(parentRule->outputName);
-				} else {
-					throw 1;
-				}
+				name = this->listCfgDlg->createNewEntriesPlaceholderString(rule.dataSource->name);
 			} catch (...) {
 				name = this->listCfgDlg->createNewEntriesPlaceholderString();
 			}
