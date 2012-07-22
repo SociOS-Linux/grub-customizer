@@ -24,6 +24,7 @@ bool GrubEnv::init(GrubEnv::Mode mode, std::string const& dir_prefix){
 	useDirectBackgroundProps = false;
 	std::string cmd_prefix = dir_prefix != "" ? "chroot '"+dir_prefix+"' " : "";
 	this->cfg_dir_prefix = dir_prefix;
+	std::string output_config_file_noprefix;
 	switch (mode){
 	case BURG_MODE: {
 		this->burgMode = true;
@@ -34,7 +35,6 @@ bool GrubEnv::init(GrubEnv::Mode mode, std::string const& dir_prefix){
 			fclose(burg_cfg);
 		} else { // otherwise use the built-in config
 			this->mkconfig_cmd = "burg-mkconfig";
-			this->update_cmd = "update-burg";
 			this->install_cmd = "burg-install";
 			this->mkfont_cmd = "burg-mkfont";
 			this->cfg_dir = dir_prefix+"/etc/burg.d";
@@ -53,7 +53,6 @@ bool GrubEnv::init(GrubEnv::Mode mode, std::string const& dir_prefix){
 			fclose(grub_cfg);
 		} else { // otherwise use the built-in config
 			this->mkconfig_cmd = "grub-mkconfig";
-			this->update_cmd = "update-grub";
 			this->install_cmd = "grub-install";
 			this->mkfont_cmd = "grub-mkfont";
 			this->cfg_dir = dir_prefix+"/etc/grub.d";
@@ -65,6 +64,9 @@ bool GrubEnv::init(GrubEnv::Mode mode, std::string const& dir_prefix){
 		} break;
 	}
 	
+	this->update_cmd = this->mkconfig_cmd + " -o \"" + this->output_config_file.substr(dir_prefix.size()) + "\"";
+	this->log("update-CMD: " + this->update_cmd, Logger::INFO);
+
 	bool is_valid = check_cmd(mkconfig_cmd, cmd_prefix) && check_cmd(update_cmd, cmd_prefix) && check_cmd(install_cmd, cmd_prefix) && check_dir(cfg_dir);
 	
 	this->mkconfig_cmd = cmd_prefix+this->mkconfig_cmd;
@@ -78,7 +80,6 @@ bool GrubEnv::init(GrubEnv::Mode mode, std::string const& dir_prefix){
 void GrubEnv::loadFromFile(FILE* cfg_file, std::string const& dir_prefix) {
 	SettingsStore ds(cfg_file);
 	this->mkconfig_cmd = ds.getValue("MKCONFIG_CMD");
-	this->update_cmd = ds.getValue("UPDATE_CMD");
 	this->install_cmd = ds.getValue("INSTALL_CMD");
 	this->mkfont_cmd = ds.getValue("MKFONT_CMD");
 	this->cfg_dir = dir_prefix + ds.getValue("CFG_DIR");
