@@ -25,6 +25,12 @@ void SettingRow::validate(){
 	hasExportPrefix = false;
 	isSetting = false;
 
+	// trim name and value
+	name = name.substr(name.find_first_not_of(' ') == -1 ? 0 : name.find_first_not_of(' ')); // ltrim
+	name = name.substr(0, name.find_last_not_of(' ') + 1); // rtrim
+	value = value.substr(value.find_first_not_of(' ') == -1 ? 0 : value.find_first_not_of(' ')); // ltrim
+	value = value.substr(0, value.find_last_not_of(' ') + 1); // rtrim
+
 	if (name != "" && value != "" && (name.length() < 2 || name.substr(0,2) != "# ")){
 		isSetting = true;
 		if (name[0] != '#')
@@ -34,7 +40,8 @@ void SettingRow::validate(){
 
 		if (name.length() > 7 && name.substr(0,7) == "export "){
 			hasExportPrefix = true;
-			name = name.substr(7);
+			int pos = name.find_first_not_of(' ', 7);
+			name = name.substr(pos != -1 ? pos : 7); // try to use trimmed value, but use pos 7 if there's an error
 		}
 	}
 	else {
