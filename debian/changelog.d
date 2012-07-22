@@ -1,5 +1,12 @@
 #!/bin/sh
 cat << EOF
+grub-customizer (2.2-0ubuntu1~ppa1l) lucid; urgency=medium
+
+   * grub 1.99 compatibility
+   * new icons
+
+ -- Daniel Richter <danielrichter2007@web.de>  Tue, 13 Sep 2011 23:48:25 +0200
+
 grub-customizer (2.1.2-0ubuntu1~ppa1$1) $2; urgency=medium
 
    * menu colors fixed

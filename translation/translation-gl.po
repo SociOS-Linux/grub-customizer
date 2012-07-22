@@ -14,8 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-03-26 14:24+0000\n"
-"X-Generator: Launchpad (build 12661)\n"
+"X-Launchpad-Export-Date: 2011-09-13 22:00+0000\n"
+"X-Generator: Launchpad (build 13921)\n"
 
 #: ../src/grubconfig.cpp:203 ../src/grubconfig.cpp:218
 msgid " not found. Is grub2 installed?"
@@ -97,7 +97,7 @@ msgstr "Mover cara abaixo a entrada ou script seleccionado"
 
 #: ../src/grubconf_ui_gtk.cpp:107
 msgid "reload configuration"
-msgstr ""
+msgstr "volver cargar a configuración"
 
 #: ../src/grubconf_ui_gtk.cpp:110
 msgid "Edit grub preferences"
@@ -121,7 +121,7 @@ msgstr "Instalar no MBR"
 
 #: ../src/grubconf_ui_gtk.cpp:222
 msgid "BURG Mode"
-msgstr ""
+msgstr "Modo BURG"
 
 #: ../src/grubconf_ui_gtk.cpp:243
 msgid "No Bootloader found"
@@ -229,6 +229,7 @@ msgstr "_Gardar e saír"
 #: ../src/grubconf_ui_gtk.cpp:693
 msgid "AND: your modifications are still unsaved, update will save them too!"
 msgstr ""
+"E: as modificacións aínda non foron gardadas, actualizar gardará tamén estas."
 
 #: ../src/grubconf_ui_gtk.cpp:732
 msgid "installing the bootloader…"
@@ -282,6 +283,12 @@ msgid ""
 "again and save the configuration (or run update-grub/update-burg)\n"
 "to get the entry back!"
 msgstr ""
+"Seleccionou a opción para escoller outra partición.\n"
+"Atención: «os-prober» podería non atopar o sistema que se está a executar "
+"actualmente.\n"
+"Reinicie Grub Customizer no sistema obxectivo\n"
+"e garde a configuración (ou execute «update-grub/update-burg»)\n"
+"para obter novamente a entrada."
 
 #: ../src/liveCDSetupDialog.cpp:19
 msgid ""
@@ -295,6 +302,15 @@ msgid ""
 "as the actually running one.\n"
 "If not, you will get an error message when trying to load the configuration."
 msgstr ""
+"Antes de modificar a configuración do «grub» é necesario\n"
+"montar a partición requirida.\n"
+"\n"
+"Este asistente axudaralle a facelo.\n"
+"\n"
+"\n"
+"Asegúrese de que o sistema estea baseado na mesma arquitectura de CPU\n"
+"que o que se atopa en execución.\n"
+"De non ser así, obterá unha mensaxe de erro ao tentar cargar a configuración."
 
 #: ../src/liveCDSetupDialog.cpp:21
 msgid "Grub Customizer: Partition chooser"
@@ -347,180 +363,185 @@ msgstr "Non foi posíbel desmontar a partición seleccionada"
 
 #: ../src/settings_dlg_gtk.cpp:47
 msgid "white"
-msgstr ""
+msgstr "branco"
 
 #: ../src/settings_dlg_gtk.cpp:48
 msgid "yellow"
-msgstr ""
+msgstr "amarelo"
 
 #: ../src/settings_dlg_gtk.cpp:49
 msgid "light-cyan"
-msgstr ""
+msgstr "cian-claro"
 
 #: ../src/settings_dlg_gtk.cpp:50
 msgid "cyan"
-msgstr ""
+msgstr "cian"
 
 #: ../src/settings_dlg_gtk.cpp:51
 msgid "light-blue"
-msgstr ""
+msgstr "azul-claro"
 
 #: ../src/settings_dlg_gtk.cpp:52
 msgid "blue"
-msgstr ""
+msgstr "azul"
 
 #: ../src/settings_dlg_gtk.cpp:53
 msgid "light-green"
-msgstr ""
+msgstr "verde-claro"
 
 #: ../src/settings_dlg_gtk.cpp:54
 msgid "green"
-msgstr ""
+msgstr "verde"
 
 #: ../src/settings_dlg_gtk.cpp:55
 msgid "light-magenta"
-msgstr ""
+msgstr "maxenta-claro"
 
 #: ../src/settings_dlg_gtk.cpp:56
 msgid "magenta"
-msgstr ""
+msgstr "maxenta"
 
 #: ../src/settings_dlg_gtk.cpp:57
 msgid "light-red"
-msgstr ""
+msgstr "vermello-claro"
 
 #: ../src/settings_dlg_gtk.cpp:58
 msgid "red"
-msgstr ""
+msgstr "vermello"
 
 #: ../src/settings_dlg_gtk.cpp:59
 msgid "brown"
-msgstr ""
+msgstr "marrón"
 
 #: ../src/settings_dlg_gtk.cpp:60
 msgid "light-gray"
-msgstr ""
+msgstr "gris-claro"
 
 #: ../src/settings_dlg_gtk.cpp:61
 msgid "dark-gray"
-msgstr ""
+msgstr "gris-escuro"
 
 #: ../src/settings_dlg_gtk.cpp:62
 msgid "transparent"
-msgstr ""
+msgstr "transparente"
 
 #: ../src/settings_dlg_gtk.cpp:62
 msgid "black"
-msgstr ""
+msgstr "negro"
 
 #: ../src/settings_dlg_gtk.cpp:68
 msgid "pre_defined: "
-msgstr ""
+msgstr "pre_determinado "
 
 #: ../src/settings_dlg_gtk.cpp:68
 msgid "previously _booted entry"
-msgstr ""
+msgstr "entrada _iniciada anteriormente"
 
 #: ../src/settings_dlg_gtk.cpp:69
 msgid "default entry"
-msgstr ""
+msgstr "entrada predeterminada"
 
 #: ../src/settings_dlg_gtk.cpp:69
 msgid "visibility"
-msgstr ""
+msgstr "visibilidad"
 
 #: ../src/settings_dlg_gtk.cpp:69
 msgid "show menu"
-msgstr ""
+msgstr "amosar menú"
 
 #: ../src/settings_dlg_gtk.cpp:70
 msgid "Timeout"
-msgstr ""
+msgstr "Esgotou o tempo límite"
 
 #: ../src/settings_dlg_gtk.cpp:70
 msgid "Seconds"
-msgstr ""
+msgstr "Segundos"
 
 #: ../src/settings_dlg_gtk.cpp:70
 msgid "kernel parameters"
-msgstr ""
+msgstr "Parámetros do kernel"
 
 #: ../src/settings_dlg_gtk.cpp:71
 msgid "generate recovery entries"
-msgstr ""
+msgstr "xenerar entradas de recuperación"
 
 #: ../src/settings_dlg_gtk.cpp:71
 msgid "look for other operating systems"
-msgstr ""
+msgstr "buscar outros sistemas operativos"
 
 #: ../src/settings_dlg_gtk.cpp:72
 msgid "custom resolution: "
-msgstr ""
+msgstr "personalizar a resolución "
 
 #: ../src/settings_dlg_gtk.cpp:73
 msgid "font color"
-msgstr ""
+msgstr "color da letra"
 
 #: ../src/settings_dlg_gtk.cpp:73
 msgid "background"
-msgstr ""
+msgstr "fondo"
 
 #: ../src/settings_dlg_gtk.cpp:74
 msgid "normal:"
-msgstr ""
+msgstr "normal:"
 
 #: ../src/settings_dlg_gtk.cpp:74
 msgid "highlight:"
-msgstr ""
+msgstr "resaltado:"
 
 #: ../src/settings_dlg_gtk.cpp:75
 msgid "menu colors"
-msgstr ""
+msgstr "cores do menú"
 
 #: ../src/settings_dlg_gtk.cpp:75
 msgid "background image"
-msgstr ""
+msgstr "imaxe de fondo"
 
 #: ../src/settings_dlg_gtk.cpp:76
 msgid "copy to grub directory"
-msgstr ""
+msgstr "copiar no directorio de grub"
 
 #: ../src/settings_dlg_gtk.cpp:76
 msgid "remove background"
-msgstr ""
+msgstr "retirar fondo"
 
 #: ../src/settings_dlg_gtk.cpp:77
 msgid ""
 "To get the colors above working,\n"
 "you have to select a background image!"
 msgstr ""
+"Para obter as cores elixidos enriba,\n"
+"ten que seleccionar unha imaxe de fondo."
 
 #: ../src/settings_dlg_gtk.cpp:80
 msgid "settings"
-msgstr ""
+msgstr "configuración"
 
 #: ../src/settings_dlg_gtk.cpp:84
 msgid "_General"
-msgstr ""
+msgstr "_Xeral"
 
 #: ../src/settings_dlg_gtk.cpp:85
 msgid "A_ppearance"
-msgstr ""
+msgstr "A_pariencia"
 
 #: ../src/settings_dlg_gtk.cpp:86
 msgid "_Advanced"
-msgstr ""
+msgstr "_Avanzado"
 
 #: ../src/settings_dlg_gtk.cpp:94
 msgid "value"
-msgstr ""
+msgstr "valor"
 
 #: ../src/settings_dlg_gtk.cpp:129
 msgid "Entry %1 (by position)"
-msgstr ""
+msgstr "Entrada %1 (pola posición)"
 
 #: ../src/settings_dlg_gtk.cpp:419
 msgid ""
 "This option doesn't work when the \"os-prober\" script finds other operating "
 "systems. Disable \"%1\" if you don't need to boot other operating systems."
 msgstr ""
+"Esta opción non funciona cando o script «os-prober» atopa outros sistemas "
+"operativos. Desactive «% 1» se non ten necesidade de arrancar outros "
+"sistemas operativos."

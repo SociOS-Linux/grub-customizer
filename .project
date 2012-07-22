@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>Grub Customizer 2.1</name>
+	<name>Grub Customizer 2.2</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -9,6 +9,10 @@
 			<name>org.eclipse.cdt.managedbuilder.core.genmakebuilder</name>
 			<triggers>clean,full,incremental,</triggers>
 			<arguments>
+				<dictionary>
+					<key>?children?</key>
+					<value>?name?=outputEntries\|?children?=?name?=entry\\\\\\\|\\\|\||</value>
+				</dictionary>
 				<dictionary>
 					<key>?name?</key>
 					<value></value>
@@ -23,7 +27,7 @@
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.buildArguments</key>
-					<value>-c &apos;cmake .. -DCMAKE_BUILD_TYPE=Debug &amp;&amp; make&apos;</value>
+					<value>-c &quot;cmake -DCMAKE_BUILD_TYPE=Debug .. &amp;&amp; make&quot;</value>
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.buildCommand</key>
@@ -31,7 +35,7 @@
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.buildLocation</key>
-					<value>${workspace_loc:/Grub Customizer 2.1/build}</value>
+					<value>/home/daniel/Dokumente/GrubCustomizer/2.2/build</value>
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.cleanBuildTarget</key>

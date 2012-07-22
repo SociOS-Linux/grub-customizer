@@ -8,25 +8,25 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-11-28 22:09+0100\n"
-"PO-Revision-Date: 2011-03-28 20:00+0100\n"
-"Last-Translator: Innocent De Marchi <tangram.peces@gmail.com>\n"
+"PO-Revision-Date: 2011-03-29 09:31+0000\n"
+"Last-Translator: I. De Marchi <Unknown>\n"
 "Language-Team: Catalan\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-02-02 22:40+0000\n"
-"X-Generator: Launchpad (build 12274)\n"
+"X-Launchpad-Export-Date: 2011-09-13 22:00+0000\n"
+"X-Generator: Launchpad (build 13921)\n"
 "X-Poedit-Country: SPAIN\n"
 "X-Poedit-Language: Catalan\n"
 
-#: ../src/grubconfig.cpp:203
-#: ../src/grubconfig.cpp:218
+#: ../src/grubconfig.cpp:203 ../src/grubconfig.cpp:218
 msgid " not found. Is grub2 installed?"
 msgstr " no es troba. Teniu instal·lat el grub2?"
 
 #: ../src/grubconfig.cpp:287
 msgid " couldn't be executed successfully. You must run this as root!"
-msgstr " no es pot executar. Heu d'executar-ho amb l'usuari root (administrador)."
+msgstr ""
+" no es pot executar. Heu d'executar-ho amb l'usuari root (administrador)."
 
 #: ../src/grubconf_ui_gtk.cpp:11
 msgid "_File"
@@ -71,8 +71,11 @@ msgid "_Device: "
 msgstr "_Dispositiu: "
 
 #: ../src/grubconf_ui_gtk.cpp:54
-msgid "Grub Customizer is a graphical interface to configure the grub2/burg settings"
-msgstr "Grub Customizer es una interfície gràfica per configurar les preferències de GRUB2/BURG"
+msgid ""
+"Grub Customizer is a graphical interface to configure the grub2/burg settings"
+msgstr ""
+"Grub Customizer es una interfície gràfica per configurar les preferències de "
+"GRUB2/BURG"
 
 #: ../src/grubconf_ui_gtk.cpp:82
 msgid "Save configuration and generate a new "
@@ -163,8 +166,13 @@ msgid "Proxy binary not found!"
 msgstr "No s'ha trobat el binari Proxy!"
 
 #: ../src/grubconf_ui_gtk.cpp:364
-msgid "You will see all entries (uncustomized) when you run grub. This error accurs (in most cases), when you didn't install grub gustomizer currectly."
-msgstr "Veurà totes les entrades (sense personalitzar) en engegar grub. Aquest error es produeix (en la majoria dels casos) si no s'ha instal·lat Grub Customizer correctament."
+msgid ""
+"You will see all entries (uncustomized) when you run grub. This error accurs "
+"(in most cases), when you didn't install grub gustomizer currectly."
+msgstr ""
+"Veurà totes les entrades (sense personalitzar) en engegar grub. Aquest error "
+"es produeix (en la majoria dels casos) si no s'ha instal·lat Grub Customizer "
+"correctament."
 
 #: ../src/grubconf_ui_gtk.cpp:382
 msgid "Configuration has been saved"
@@ -191,8 +199,14 @@ msgid "The saved configuration is not up to date!"
 msgstr "La configuració desada no està actualitzada"
 
 #: ../src/grubconf_ui_gtk.cpp:674
-msgid "The generated configuration didn't equal to the saved configuration on startup. So what you see now may not be what you see when you restart your pc. To fix this, click update!"
-msgstr "La configuració generada no és igual a la configuració desada en l'inici. La configuració que vegeu ara pot ésser distinta a la que veureu en tornar a engegar PC. Per solucionar aquest problema, premeu Actualitza."
+msgid ""
+"The generated configuration didn't equal to the saved configuration on "
+"startup. So what you see now may not be what you see when you restart your "
+"pc. To fix this, click update!"
+msgstr ""
+"La configuració generada no és igual a la configuració desada en l'inici. La "
+"configuració que vegeu ara pot ésser distinta a la que veureu en tornar a "
+"engegar PC. Per solucionar aquest problema, premeu Actualitza."
 
 #: ../src/grubconf_ui_gtk.cpp:677
 msgid "_Quit without update"
@@ -226,13 +240,11 @@ msgstr "instal·lant el gestor d'engegada..."
 msgid "Please type a device string!"
 msgstr "Escriviu el nom del dispositiu."
 
-#: ../src/grubconf_ui_gtk.cpp:747
-#: ../src/settings_dlg_gtk.cpp:92
+#: ../src/grubconf_ui_gtk.cpp:747 ../src/settings_dlg_gtk.cpp:92
 msgid "is active"
 msgstr "activat"
 
-#: ../src/grubconf_ui_gtk.cpp:748
-#: ../src/settings_dlg_gtk.cpp:93
+#: ../src/grubconf_ui_gtk.cpp:748 ../src/settings_dlg_gtk.cpp:93
 msgid "name"
 msgstr "nom"
 
@@ -273,7 +285,8 @@ msgid ""
 "to get the entry back!"
 msgstr ""
 "Heu seleccionat l'opció per elegir una altra partició.\n"
-"Atenció: és possible que «os-prober» no trobi el sistema que s'està executant actualment.\n"
+"Atenció: és possible que «os-prober» no trobi el sistema que s'està "
+"executant actualment.\n"
 "Reinicieu Grub Customizer en el sistema objectiu\n"
 "i desau la configuració (o executeu «update-grub»/«update-burg»)\n"
 "per obtenir l'entrada de bell nou."
@@ -296,9 +309,11 @@ msgstr ""
 "Aquest assistent vos ajudarà a fer-ho.\n"
 "\n"
 "\n"
-"Assegureu-vos de que el sistema està basat en la mateixa arquitectura de CPU\n"
+"Assegureu-vos de que el sistema està basat en la mateixa arquitectura de "
+"CPU\n"
 "que el que s'està executant ara.\n"
-"Si no es així, veureu un missatge d'error en provar de carregar la configuració."
+"Si no es així, veureu un missatge d'error en provar de carregar la "
+"configuració."
 
 #: ../src/liveCDSetupDialog.cpp:21
 msgid "Grub Customizer: Partition chooser"
@@ -334,7 +349,8 @@ msgstr "Ha fallat el muntatge!"
 
 #: ../src/liveCDSetupDialog.cpp:167
 msgid "This seems not to be a root file system (no fstab found)"
-msgstr "No pareix sigui un sistema d'arxius arrel (no s'ha trobat l'arxiu «fstab»)"
+msgstr ""
+"No pareix sigui un sistema d'arxius arrel (no s'ha trobat l'arxiu «fstab»)"
 
 #: ../src/liveCDSetupDialog.cpp:176
 msgid "umount failed!"
@@ -525,6 +541,9 @@ msgid "Entry %1 (by position)"
 msgstr "Entrada %1 (per la posició)"
 
 #: ../src/settings_dlg_gtk.cpp:419
-msgid "This option doesn't work when the \"os-prober\" script finds other operating systems. Disable \"%1\" if you don't need to boot other operating systems."
-msgstr "Aquesta opció no funciona quan el guió «os-prober» troba altres sistemes operatius. Deshabiliteu «% 1» si no heu d'engegar altres sistemes operatius."
-
+msgid ""
+"This option doesn't work when the \"os-prober\" script finds other operating "
+"systems. Disable \"%1\" if you don't need to boot other operating systems."
+msgstr ""
+"Aquesta opció no funciona quan el guió «os-prober» troba altres sistemes "
+"operatius. Deshabiliteu «% 1» si no heu d'engegar altres sistemes operatius."

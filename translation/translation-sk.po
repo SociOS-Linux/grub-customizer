@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-11-28 22:09+0100\n"
-"PO-Revision-Date: 2011-01-30 20:33+0000\n"
-"Last-Translator: Tomas Hasko <Unknown>\n"
+"PO-Revision-Date: 2011-05-18 07:33+0000\n"
+"Last-Translator: DAG Software <Unknown>\n"
 "Language-Team: Slovak <sk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-03-26 14:24+0000\n"
-"X-Generator: Launchpad (build 12661)\n"
+"X-Launchpad-Export-Date: 2011-09-13 22:00+0000\n"
+"X-Generator: Launchpad (build 13921)\n"
 
 #: ../src/grubconfig.cpp:203 ../src/grubconfig.cpp:218
 msgid " not found. Is grub2 installed?"
@@ -123,7 +123,7 @@ msgstr "mód BURG"
 
 #: ../src/grubconf_ui_gtk.cpp:243
 msgid "No Bootloader found"
-msgstr ""
+msgstr "Bootloader nenájdený"
 
 #: ../src/grubconf_ui_gtk.cpp:244
 msgid "Do you want to select another root partition?"
@@ -159,13 +159,16 @@ msgstr "(nové položky)"
 
 #: ../src/grubconf_ui_gtk.cpp:363
 msgid "Proxy binary not found!"
-msgstr ""
+msgstr "Proxy binárky nenájdené!"
 
 #: ../src/grubconf_ui_gtk.cpp:364
 msgid ""
 "You will see all entries (uncustomized) when you run grub. This error accurs "
 "(in most cases), when you didn't install grub gustomizer currectly."
 msgstr ""
+"Uvidíte všetky položky (neprispôsobené) keď spustíte grub. Táto chyba sa "
+"vyskytuje (vo väčšine prípadov), keď ste nenainštalovali \"grub customizer\" "
+"korektne."
 
 #: ../src/grubconf_ui_gtk.cpp:382
 msgid "Configuration has been saved"
@@ -330,7 +333,7 @@ msgstr "označenie"
 
 #: ../src/liveCDSetupDialog.cpp:62
 msgid "Select required submountpoints"
-msgstr ""
+msgstr "Vyberte požadované podbody pripojenia"
 
 #: ../src/liveCDSetupDialog.cpp:82
 msgid "Partition Chooser"

@@ -26,6 +26,7 @@
 class AboutDialogGtk : public Gtk::AboutDialog, public AboutDialog {
 	Glib::ustring appName, appVersion;
 	std::vector<Glib::ustring> authors;
+	std::vector<Glib::ustring> artists;
 
 	void signal_about_dlg_response(int response_id);
 public:
