@@ -65,7 +65,7 @@ GrubConfUIGtk::GrubConfUIGtk(GrubConfig& grubConfig)
 	
 	toolbar.append(tbttReload);
 	tbttReload.set_tooltip_text(gettext("reload configuration (same effect as an application restart)"));
-	toolbar.append(tbttPreferences);
+	//toolbar.append(tbttPreferences);
 	tbttPreferences.set_tooltip_text(gettext("Edit grub preferences"));
 	
 	disableButtons();
@@ -87,7 +87,7 @@ GrubConfUIGtk::GrubConfUIGtk(GrubConfig& grubConfig)
 	subEdit.attach(miRemove, 0,1,1,2);
 	subEdit.attach(miUp, 0,1,2,3);
 	subEdit.attach(miDown, 0,1,3,4);
-	subEdit.attach(miPreferences, 0,1,4,5);
+	//subEdit.attach(miPreferences, 0,1,4,5);
 	
 	subView.attach(miReload, 0,1,0,1);
 	

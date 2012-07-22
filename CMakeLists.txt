@@ -12,7 +12,11 @@ pkg_check_modules(GTKMM gtkmm-2.4) # look into FindPkgConfig.cmake,
 add_subdirectory(src_dir)
 
 install(FILES translation/german.mo
-	DESTINATION locale/de/LC_MESSAGES/
+	DESTINATION share/locale/de/LC_MESSAGES/
 	RENAME grub-customizer.mo)
+
+install(FILES grub-customizer.desktop
+	DESTINATION /usr/share/applications
+)
 
 configure_file ("config.h.in" "src_dir/config.h")

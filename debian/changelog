@@ -1,6 +1,7 @@
-grub-customizer (0.9) all; urgency=low
+grub-customizer (1.0-0ubuntu1~ppa4) lucid; urgency=low
 
    * initial release
 
- -- Daniel Richter <danielrichter2007@web.de>  Wed, 06 Oct 2010 15:22:00 +0200
+ -- Daniel Richter <danielrichter2007@web.de>  Fri, 08 Oct 2010 18:26:00 +0200
+
 
