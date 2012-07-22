@@ -79,7 +79,4 @@ void EventListenerView::ruleSelected(void* rule){
 void EventListenerView::proxySelected(void* proxy){
 	presenter.showProxyInfo((Proxy*)proxy);
 }
-void EventListenerView::fb_resolutions_loaded(){
-	presenter.updateSettingsDlgResolutionList();
-}
 

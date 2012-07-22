@@ -11,5 +11,7 @@ public:
 	void saveProgressChanged();
 	void threadDied();
 	void grubInstallCompleted(std::string const& msg);
+
+	void fb_resolutions_loaded();
 };
 #endif

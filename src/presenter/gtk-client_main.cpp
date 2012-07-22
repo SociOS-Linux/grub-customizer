@@ -45,11 +45,12 @@ int main(int argc, char** argv){
 	listCfgView->setEventListener(evt_view);
 	installDlg->setEventListener(evt_view);
 	scriptAddDlg->setEventListener(evt_view);
-	fbResolutionsGetter->setEventListener(evt_view);
+	settingsDlg->setEventListener(evt_view);
 	
 	EventListenerModel evt_model(presenter);
 	listcfg->setEventListener(evt_model);
 	installer->setEventListener(evt_model);
+	fbResolutionsGetter->setEventListener(evt_model);
 	
 	presenter.run();
 }

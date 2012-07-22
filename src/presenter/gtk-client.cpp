@@ -56,13 +56,13 @@ void GtkClient::setFbResolutionsGetter(FbResolutionsGetter& fbResolutionsGetter)
 }
 
 void GtkClient::showSettingsDlg(){
-	this->settingsDlg->show();
-
 	std::list<std::string> entryTitles = this->grublistCfg->proxies.generateEntryTitleList();
 	this->settingsDlg->clearDefaultEntryChooser();
 	for (std::list<std::string>::iterator iter = entryTitles.begin(); iter != entryTitles.end(); iter++)
 		this->settingsDlg->addEntryToDefaultEntryChooser(*iter);
 
+
+	this->settingsDlg->show();
 	this->settingsDlg->run();
 	this->settingsDlg->hide();
 	

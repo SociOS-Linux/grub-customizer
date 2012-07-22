@@ -31,6 +31,7 @@ misc/icons/64x64.png -text svneol=unset#unset
 misc/manpage.gz -text svneol=unset#unset
 misc/upstream-changelog.gz -text svneol=unset#unset
 src/config.h -text
+src/interface/colorChooser.h -text
 src/interface/eventListener_model_iface.h -text
 src/interface/eventListener_view_iface.h -text
 src/interface/grubconf_ui.h -text

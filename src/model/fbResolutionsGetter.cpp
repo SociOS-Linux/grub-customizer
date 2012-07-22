@@ -4,7 +4,7 @@ FbResolutionsGetter::FbResolutionsGetter()
 	: eventListener(NULL)
 {}
 
-void FbResolutionsGetter::setEventListener(EventListenerView_iface& eventListener){
+void FbResolutionsGetter::setEventListener(EventListenerModel_iface& eventListener){
 	this->eventListener = &eventListener;
 }
 

@@ -4,16 +4,16 @@
 #include <list>
 #include <iostream>
 #include <cstdio>
-#include "../interface/eventListener_view_iface.h"
+#include "../interface/eventListener_model_iface.h"
 
 class FbResolutionsGetter {
 	std::list<std::string> data;
-	EventListenerView_iface* eventListener;
+	EventListenerModel_iface* eventListener;
 public:
 	FbResolutionsGetter();
 	const std::list<std::string>& getData() const;
 	void load();
-	void setEventListener(EventListenerView_iface& eventListener);
+	void setEventListener(EventListenerModel_iface& eventListener);
 };
 
 #endif

@@ -6,10 +6,13 @@
 #include "../interface/settings_dlg.h"
 #include <libintl.h>
 #include "../model/grubEnv.h"
+#include "../interface/colorChooser.h"
+#include "../interface/eventListener_view_iface.h"
+#include <string>
 
 
-//a gtkmm combobox with colorful foreground and background. usedful to choose an item of a predefined color set
-class ColorChooser : public Gtk::ComboBox {
+//a gtkmm combobox with colorful foreground and background. useful to choose an item of a predefined color set
+class ColorChooserGtk : public Gtk::ComboBox, public ColorChooser {
 	struct Columns : public Gtk::TreeModelColumnRecord {
 		Gtk::TreeModelColumn<Glib::ustring> name;
 		Gtk::TreeModelColumn<Glib::ustring> idName;
@@ -20,14 +23,14 @@ class ColorChooser : public Gtk::ComboBox {
 	Columns columns;
 	Glib::RefPtr<Gtk::ListStore> refListStore;
 	public:
-	ColorChooser();
-	void addColor(Glib::ustring const& codeName, Glib::ustring const& outputName, Glib::ustring const& cell_background, Glib::ustring const& cell_foreground);
-	void selectColor(Glib::ustring const& codeName);
-	Glib::ustring getSelectedColor() const;
+	ColorChooserGtk();
+	void addColor(std::string const& codeName, std::string const& outputName, std::string const& cell_background, std::string const& cell_foreground);
+	void selectColor(std::string const& codeName);
+	std::string getSelectedColor() const;
 };
 
 //a color chooser with predifined colors for grub
-class GrubColorChooser : public ColorChooser {
+class GrubColorChooser : public ColorChooserGtk {
 public:
 	GrubColorChooser(bool blackIsTransparent = false);
 };
@@ -42,9 +45,9 @@ class GrubSettingsDlgGtk : public Gtk::Dialog, public GrubSettingsDlg {
 	};
 	AdvancedSettingsTreeModel asTreeModel;
 	Glib::RefPtr<Gtk::ListStore> refAsListStore;
-	//std::string output_config_dir;
 	GrubEnv& env;
 	bool event_lock;
+	EventListenerView_iface* eventListener;
 	
 	SettingsManagerDataStore* dataStore;
 	Gtk::Notebook tabbox;
@@ -131,24 +134,63 @@ class GrubSettingsDlgGtk : public Gtk::Dialog, public GrubSettingsDlg {
 		DEF_ENTRY_PREDEFINED,
 		DEF_ENTRY_SAVED
 	};
+	enum ColorChooserType {
+		COLOR_CHOOSER_DEFAULT_FONT,
+		COLOR_CHOOSER_DEFAULT_BACKGROUND,
+		COLOR_CHOOSER_HIGHLIGHT_FONT,
+		COLOR_CHOOSER_HIGHLIGHT_BACKGROUND
+	};
+	struct CustomOption {
+		std::string name, value;
+		bool isActive;
+		CustomOption(std::string name, std::string value, bool isActive);
+	};
 	GrubSettingsDlgGtk(SettingsManagerDataStore& dataStore, GrubEnv& env);
+	void setEventListener(EventListenerView_iface& eventListener);
 	void show();
+	ColorChooser& getColorChooser(ColorChooserType type);
 	void addEntryToDefaultEntryChooser(std::string const& entryTitle);
 	void clearDefaultEntryChooser();
 	void clearResolutionChooser();
 	void addResolution(std::string const& resolution);
-	void loadData();
-	void addSettingRow(bool isActive, Glib::ustring const& name, Glib::ustring const& value);
+	void syncSettings();
+	Glib::ustring getSelectedDefaultGrubValue();
+	void updateDefaultSetting();
+	void updateCustomSetting(std::string const& name);
+	void addCustomOption(bool isActive, Glib::ustring const& name, Glib::ustring const& value);
 	void removeAllSettingRows();
+	CustomOption getCustomOption(Glib::ustring const& name);
 	void setActiveDefEntryOption(DefEntryType option);
+	DefEntryType getActiveDefEntryOption();
 	void setDefEntry(Glib::ustring const& defEntry);
 	void setShowMenuCheckboxState(bool isActive);
+	bool getShowMenuCheckboxState();
 	void setOsProberCheckboxState(bool isActive);
+	bool getOsProberCheckboxState();
+	void showHiddenMenuOsProberConflictMessage();
+	void updateShowMenuSetting();
+	void updateOsProberSetting();
 	void setTimeoutValue(int value);
+	int getTimeoutValue();
+	void updateTimeoutSetting();
 	void setKernelParams(Glib::ustring const& params);
+	Glib::ustring getKernelParams();
+	void updateKernalParams();
 	void setRecoveryCheckboxState(bool isActive);
+	bool getRecoveryCheckboxState();
+	void updateGenerateRecoverySetting();
 	void setResolutionCheckboxState(bool isActive);
+	bool getResolutionCheckboxState();
+	void updateUseCustomResolution();
 	void setResolution(Glib::ustring const& resolution);
+	Glib::ustring getResolution();
+	void updateCustomResolution();
+	void setBackgroundImagePreviewPath(Glib::ustring const& menuPicturePath, bool isInGrubDir);
+	void updateColorSettings();
+	Glib::ustring getBackgroundImagePath();
+	void updateBackgroundImage();
+	void copyBackgroundImageToGrubDirectory();
+	void removeBackgroundImage();
 };
 
 #endif

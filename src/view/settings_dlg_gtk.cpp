@@ -1,13 +1,13 @@
 #include "settings_dlg_gtk.h"
 
-ColorChooser::Columns::Columns(){
+ColorChooserGtk::Columns::Columns(){
 	this->add(this->idName);
 	this->add(this->name);
 	this->add(this->colorCode_background);
 	this->add(this->colorCode_foreground);
 }
 
-ColorChooser::ColorChooser(){
+ColorChooserGtk::ColorChooserGtk(){
 	refListStore = Gtk::ListStore::create(columns);
 	this->set_model(refListStore);
 	
@@ -19,14 +19,14 @@ ColorChooser::ColorChooser(){
 	this->add_attribute(*cellRenderer, "background", columns.colorCode_background);
 	this->add_attribute(*cellRenderer, "foreground", columns.colorCode_foreground);
 }
-void ColorChooser::addColor(Glib::ustring const& codeName, Glib::ustring const& outputName, Glib::ustring const& cell_background, Glib::ustring const& cell_foreground){
+void ColorChooserGtk::addColor(std::string const& codeName, std::string const& outputName, std::string const& cell_background, std::string const& cell_foreground){
 	Gtk::TreeModel::iterator iter = refListStore->append();
 	(*iter)[columns.idName] = codeName;
 	(*iter)[columns.name] = outputName;
 	(*iter)[columns.colorCode_background] = cell_background;
 	(*iter)[columns.colorCode_foreground] = cell_foreground;
 }
-void ColorChooser::selectColor(Glib::ustring const& codeName){
+void ColorChooserGtk::selectColor(std::string const& codeName){
 	this->set_active(0);
 	for (Gtk::TreeModel::iterator iter = this->get_active(); iter; iter++){
 		if ((*iter)[columns.idName] == codeName){
@@ -35,15 +35,15 @@ void ColorChooser::selectColor(Glib::ustring const& codeName){
 		}
 	}
 }
-Glib::ustring ColorChooser::getSelectedColor() const {
+std::string ColorChooserGtk::getSelectedColor() const {
 	Gtk::TreeModel::iterator iter = this->get_active();
 	if (iter)
-		return (*iter)[columns.idName];
+		return (Glib::ustring)(*iter)[columns.idName];
 	else
 		return "";
 }
 
-GrubColorChooser::GrubColorChooser(bool blackIsTransparent) : ColorChooser() {
+GrubColorChooser::GrubColorChooser(bool blackIsTransparent) : ColorChooserGtk() {
 	this->addColor("white",          gettext("white"),         "#ffffff", "#000000");
 	this->addColor("yellow",         gettext("yellow"),        "#fefe54", "#000000");
 	this->addColor("light-cyan",     gettext("light-cyan"),    "#54fefe", "#000000");
@@ -62,6 +62,9 @@ GrubColorChooser::GrubColorChooser(bool blackIsTransparent) : ColorChooser() {
 	this->addColor("black", blackIsTransparent ? gettext("transparent") : gettext("black"), "#000000", "#ffffff");
 }
 
+GrubSettingsDlgGtk::CustomOption::CustomOption(std::string name, std::string value, bool isActive)
+	: name(name), value(value), isActive(isActive)
+{}
 
 GrubSettingsDlgGtk::GrubSettingsDlgGtk(SettingsManagerDataStore& dataStore, GrubEnv& env)
 	: dataStore(&dataStore), event_lock(false), env(env),
@@ -191,7 +194,6 @@ GrubSettingsDlgGtk::GrubSettingsDlgGtk(SettingsManagerDataStore& dataStore, Grub
 		lblBackgroundImage.set_attributes(attrDefaultEntry);
 		alignBackgroundImage.add(vbBackgroundImage);
 		vbBackgroundImage.pack_start(fcBackgroundImage, Gtk::PACK_SHRINK);
-		fcBackgroundImage.set_local_only(false);
 		fcBackgroundImage.set_action(Gtk::FILE_CHOOSER_ACTION_OPEN);
 		
 		vbBackgroundImage.pack_start(hbImgBtts);
@@ -232,8 +234,12 @@ GrubSettingsDlgGtk::GrubSettingsDlgGtk(SettingsManagerDataStore& dataStore, Grub
 	this->set_default_size(300, 400);
 }
 
+void GrubSettingsDlgGtk::setEventListener(EventListenerView_iface& eventListener){
+	this->eventListener = &eventListener;
+}
+
 void GrubSettingsDlgGtk::show() {
-	this->loadData();
+	this->syncSettings();
 	this->show_all();
 }
 
@@ -266,18 +272,23 @@ GrubSettingsDlgGtk::AdvancedSettingsTreeModel::AdvancedSettingsTreeModel(){
 	this->add(value);
 }
 
-void GrubSettingsDlgGtk::addSettingRow(bool isActive, Glib::ustring const& name, Glib::ustring const& value){
+void GrubSettingsDlgGtk::addCustomOption(bool isActive, Glib::ustring const& name, Glib::ustring const& value){
+	this->event_lock = true;
 	Gtk::TreeModel::iterator newItemIter = refAsListStore->append();
 	(*newItemIter)[asTreeModel.active] = isActive;
 	(*newItemIter)[asTreeModel.name] = name;
 	(*newItemIter)[asTreeModel.value] = value;
+	this->event_lock = false;
 }
 
 void GrubSettingsDlgGtk::removeAllSettingRows(){
+	this->event_lock = true;
 	this->refAsListStore->clear();
+	this->event_lock = false;
 }
 
 void GrubSettingsDlgGtk::setActiveDefEntryOption(DefEntryType option){
+	this->event_lock = true;
 	if (option == this->DEF_ENTRY_SAVED) {
 		rbDefSaved.set_active(true);
 		cbDefEntry.set_sensitive(false);
@@ -286,9 +297,11 @@ void GrubSettingsDlgGtk::setActiveDefEntryOption(DefEntryType option){
 		rbDefPredefined.set_active(true);
 		cbDefEntry.set_sensitive(true);
 	}
+	this->event_lock = false;
 }
 
 void GrubSettingsDlgGtk::setDefEntry(Glib::ustring const& defEntry){
+	this->event_lock = true;
 	if (defEntry.find_first_not_of("0123456789") == std::string::npos){
 		std::istringstream in(defEntry);
 		int defEntryNum;
@@ -296,282 +309,418 @@ void GrubSettingsDlgGtk::setDefEntry(Glib::ustring const& defEntry){
 
 		cbDefEntry.set_active(defEntryNum*2); //set active element by index, "*2" is required because there are two columns
 	}
-	else
+	else {
 		cbDefEntry.set_active_text(defEntry);
+	}
+	this->event_lock = false;
 }
 
 void GrubSettingsDlgGtk::setShowMenuCheckboxState(bool isActive){
+	this->event_lock = true;
 	chkShowMenu.set_active(isActive);
+	this->event_lock = false;
 }
 
 void GrubSettingsDlgGtk::setOsProberCheckboxState(bool isActive){
+	this->event_lock = true;
 	chkOsProber.set_active(isActive);
+	this->event_lock = false;
 }
 
 void GrubSettingsDlgGtk::setTimeoutValue(int value){
+	this->event_lock = true;
 	spTimeout.set_value(value);
+	this->event_lock = false;
 }
 
 void GrubSettingsDlgGtk::setKernelParams(Glib::ustring const& params){
+	this->event_lock = true;
 	txtKernelParams.set_text(params);
+	this->event_lock = false;
 }
 
 void GrubSettingsDlgGtk::setRecoveryCheckboxState(bool isActive){
+	this->event_lock = true;
 	chkGenerateRecovery.set_active(isActive);
+	this->event_lock = false;
 }
 
 void GrubSettingsDlgGtk::setResolutionCheckboxState(bool isActive){
+	this->event_lock = true;
 	chkResolution.set_active(isActive);
 	cbResolution.set_sensitive(isActive);
+	this->event_lock = false;
 }
 
 void GrubSettingsDlgGtk::setResolution(Glib::ustring const& resolution){
+	this->event_lock = true;
 	cbResolution.get_entry()->set_text(resolution);
+	this->event_lock = false;
 }
 
-void GrubSettingsDlgGtk::loadData(){
-	if (!event_lock){
-		event_lock = true;
-		this->removeAllSettingRows();
-		for (std::list<SettingRow>::iterator iter = dataStore->begin(); iter != dataStore->end(); dataStore->iter_to_next_setting(iter)){
-			this->addSettingRow(iter->isActive, iter->name, iter->value);
-		}
-		std::string defEntry = dataStore->getValue("GRUB_DEFAULT");
-		if (defEntry == "saved"){
-			this->setActiveDefEntryOption(DEF_ENTRY_SAVED);
-		}
-		else {
-			this->setActiveDefEntryOption(DEF_ENTRY_PREDEFINED);
-			this->setDefEntry(defEntry);
-		}
-		
-		this->setShowMenuCheckboxState(!dataStore->isActive("GRUB_HIDDEN_TIMEOUT", true));
-		this->setOsProberCheckboxState(!dataStore->isActive("GRUB_DISABLE_OS_PROBER", true));
-		
-		std::string timeoutStr;
-		if (chkShowMenu.get_active())
-			timeoutStr = dataStore->getValue("GRUB_TIMEOUT");
-		else
-			timeoutStr = dataStore->getValue("GRUB_HIDDEN_TIMEOUT");
-		std::istringstream in(timeoutStr);
-		int timeout;
-		in >> timeout;
-		this->setTimeoutValue(timeout);
-		
-		this->setKernelParams(dataStore->getValue("GRUB_CMDLINE_LINUX_DEFAULT"));
-		this->setRecoveryCheckboxState(!dataStore->isActive("GRUB_DISABLE_LINUX_RECOVERY", true));
-		
-		this->setResolutionCheckboxState(dataStore->isActive("GRUB_GFXMODE", true));
-		this->setResolution(dataStore->getValue("GRUB_GFXMODE"));
+ColorChooser& GrubSettingsDlgGtk::getColorChooser(ColorChooserType type){
+	this->event_lock = true;
+	switch (type){
+		case COLOR_CHOOSER_DEFAULT_BACKGROUND: return this->gccNormalBackground;
+		case COLOR_CHOOSER_DEFAULT_FONT: return this->gccNormalForeground;
+		case COLOR_CHOOSER_HIGHLIGHT_BACKGROUND: return this->gccHighlightBackground;
+		case COLOR_CHOOSER_HIGHLIGHT_FONT: return this->gccHighlightForeground;
+	}
+	this->event_lock = false;
+}
 
-		Glib::ustring nColor = dataStore->getValue("GRUB_COLOR_NORMAL");
-		Glib::ustring hColor = dataStore->getValue("GRUB_COLOR_HIGHLIGHT");
-		if (nColor != ""){
-			gccNormalForeground.selectColor(nColor.substr(0, nColor.find('/')));
-			gccNormalBackground.selectColor(nColor.substr(nColor.find('/')+1));
+void GrubSettingsDlgGtk::setBackgroundImagePreviewPath(Glib::ustring const& menuPicturePath, bool isInGrubDir){
+	this->event_lock = true;
+	if (menuPicturePath != ""){
+		try {
+			Glib::RefPtr<Gdk::Pixbuf> buf = Gdk::Pixbuf::create_from_file(menuPicturePath, 150, 100, true);
+			if (buf)
+				imgBackgroundImage.set(buf);
 		}
-		else {
-			//default grub menu colors
-			gccNormalForeground.selectColor("white");
-			gccNormalBackground.selectColor("black");
-		}
-		if (hColor != ""){
-			gccHighlightForeground.selectColor(hColor.substr(0, hColor.find('/')));
-			gccHighlightBackground.selectColor(hColor.substr(hColor.find('/')+1));
-		}
-		else {
-			//default grub menu colors
-			gccHighlightForeground.selectColor("black");
-			gccHighlightBackground.selectColor("light-gray");
+		catch (Glib::Error e){
+			imgBackgroundImage.set(Gtk::Stock::MISSING_IMAGE, Gtk::ICON_SIZE_DIALOG);
 		}
 
-		std::string menuPicturePath = this->dataStore->getValue("GRUB_MENU_PICTURE");
-		bool menuPicIsInGrubDir = false;
-		if (menuPicturePath != "" && menuPicturePath[0] != '/'){
-			menuPicturePath = env.output_config_dir + "/" + menuPicturePath;
-			menuPicIsInGrubDir = true;
-		}
-		
-		if (dataStore->isActive("GRUB_MENU_PICTURE") && menuPicturePath != ""){
-		
-			FILE* img_test = fopen(menuPicturePath.c_str(), "r");
-			if (img_test){
-				fclose(img_test);
-				
-				
-				try {
-					Glib::RefPtr<Gdk::Pixbuf> buf = Gdk::Pixbuf::create_from_file(menuPicturePath, 150, 100, true);
-					if (buf)
-						imgBackgroundImage.set(buf);
-				}
-				catch (Glib::Error e){
-					imgBackgroundImage.set(Gtk::Stock::MISSING_IMAGE, Gtk::ICON_SIZE_DIALOG);
-				}
-				
-				bttCopyBackground.show();
-				bttRemoveBackground.show();
-				imgBackgroundImage.show();
-				lblBackgroundRequiredInfo.hide();
-				fcBackgroundImage.set_filename(menuPicturePath);
-			}
-		}
-		else {
-			fcBackgroundImage.unselect_all();
-			imgBackgroundImage.clear();
-			bttCopyBackground.hide();
-			bttRemoveBackground.hide();
-			imgBackgroundImage.hide();
-			lblBackgroundRequiredInfo.show();
-		}
-		
-		bttCopyBackground.set_sensitive(!menuPicIsInGrubDir);
-		
+		bttCopyBackground.show();
+		bttRemoveBackground.show();
+		imgBackgroundImage.show();
+		lblBackgroundRequiredInfo.hide();
+		fcBackgroundImage.set_filename(menuPicturePath);
+	}
+	else {
+		fcBackgroundImage.unselect_all();
+		imgBackgroundImage.clear();
+		bttCopyBackground.hide();
+		bttRemoveBackground.hide();
+		imgBackgroundImage.hide();
+		lblBackgroundRequiredInfo.show();
+	}
 
-		event_lock = false;
+	bttCopyBackground.set_sensitive(!isInGrubDir);
+	this->event_lock = false;
+}
+
+//TODO: MOVE TO PRESENTER
+void GrubSettingsDlgGtk::syncSettings(){
+	this->removeAllSettingRows();
+	for (std::list<SettingRow>::iterator iter = dataStore->begin(); iter != dataStore->end(); dataStore->iter_to_next_setting(iter)){
+		this->addCustomOption(iter->isActive, iter->name, iter->value);
+	}
+	std::string defEntry = dataStore->getValue("GRUB_DEFAULT");
+	if (defEntry == "saved"){
+		this->setActiveDefEntryOption(DEF_ENTRY_SAVED);
+	}
+	else {
+		this->setActiveDefEntryOption(DEF_ENTRY_PREDEFINED);
+		this->setDefEntry(defEntry);
+	}
+
+	this->setShowMenuCheckboxState(!dataStore->isActive("GRUB_HIDDEN_TIMEOUT", true));
+	this->setOsProberCheckboxState(!dataStore->isActive("GRUB_DISABLE_OS_PROBER", true));
+
+	std::string timeoutStr;
+	if (chkShowMenu.get_active())
+		timeoutStr = dataStore->getValue("GRUB_TIMEOUT");
+	else
+		timeoutStr = dataStore->getValue("GRUB_HIDDEN_TIMEOUT");
+	std::istringstream in(timeoutStr);
+	int timeout;
+	in >> timeout;
+	this->setTimeoutValue(timeout);
+
+	this->setKernelParams(dataStore->getValue("GRUB_CMDLINE_LINUX_DEFAULT"));
+	this->setRecoveryCheckboxState(!dataStore->isActive("GRUB_DISABLE_LINUX_RECOVERY", true));
+
+	this->setResolutionCheckboxState(dataStore->isActive("GRUB_GFXMODE", true));
+	this->setResolution(dataStore->getValue("GRUB_GFXMODE"));
+
+	Glib::ustring nColor = dataStore->getValue("GRUB_COLOR_NORMAL");
+	Glib::ustring hColor = dataStore->getValue("GRUB_COLOR_HIGHLIGHT");
+	if (nColor != ""){
+		this->getColorChooser(COLOR_CHOOSER_DEFAULT_FONT).selectColor(nColor.substr(0, nColor.find('/')));
+		this->getColorChooser(COLOR_CHOOSER_DEFAULT_BACKGROUND).selectColor(nColor.substr(nColor.find('/')+1));
+	}
+	else {
+		//default grub menu colors
+		this->getColorChooser(COLOR_CHOOSER_DEFAULT_FONT).selectColor("white");
+		this->getColorChooser(COLOR_CHOOSER_DEFAULT_BACKGROUND).selectColor("black");
+	}
+	if (hColor != ""){
+		this->getColorChooser(COLOR_CHOOSER_HIGHLIGHT_FONT).selectColor(hColor.substr(0, hColor.find('/')));
+		this->getColorChooser(COLOR_CHOOSER_HIGHLIGHT_BACKGROUND).selectColor(hColor.substr(hColor.find('/')+1));
+	}
+	else {
+		//default grub menu colors
+		this->getColorChooser(COLOR_CHOOSER_HIGHLIGHT_FONT).selectColor("black");
+		this->getColorChooser(COLOR_CHOOSER_HIGHLIGHT_BACKGROUND).selectColor("light-gray");
+	}
+
+	std::string menuPicturePath = this->dataStore->getValue("GRUB_MENU_PICTURE");
+	bool menuPicIsInGrubDir = false;
+	if (menuPicturePath != "" && menuPicturePath[0] != '/'){
+		menuPicturePath = env.output_config_dir + "/" + menuPicturePath;
+		menuPicIsInGrubDir = true;
+	}
+
+	if (dataStore->isActive("GRUB_MENU_PICTURE") && menuPicturePath != ""){
+		this->setBackgroundImagePreviewPath(menuPicturePath, menuPicIsInGrubDir);
+	}
+	else {
+		this->setBackgroundImagePreviewPath("", menuPicIsInGrubDir);
 	}
 }
 
+Glib::ustring GrubSettingsDlgGtk::getSelectedDefaultGrubValue(){
+	Glib::ustring val;
+	if ((cbDefEntry.get_active_row_number() % 2) == 0) //index selected
+		val = Glib::ustring::format(cbDefEntry.get_active_row_number() / 2);
+	else //name selected
+		val = cbDefEntry.get_active_text();
+	return val;
+}
+
+GrubSettingsDlgGtk::CustomOption GrubSettingsDlgGtk::getCustomOption(Glib::ustring const& name){
+	for (Gtk::TreeModel::iterator iter = this->refAsListStore->children().begin(); iter != this->refAsListStore->children().end(); iter++){
+		if ((*iter)[asTreeModel.name] == name)
+			return CustomOption(name, Glib::ustring((*iter)[asTreeModel.value]), (*iter)[asTreeModel.active]);
+	}
+	throw "requested custom option not found";
+}
+
+//TODO: MOVE TO PRESENTER
+void GrubSettingsDlgGtk::updateCustomSetting(std::string const& name){
+	CustomOption c = this->getCustomOption(name);
+	dataStore->setValue(c.name, c.value);
+	dataStore->setIsActive(c.name, c.isActive);
+	this->syncSettings();
+}
 
 void GrubSettingsDlgGtk::signal_setting_row_changed(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter){
 	if (!event_lock){
-		event_lock = true;
-		dataStore->setValue((Glib::ustring)(*iter)[asTreeModel.name], (Glib::ustring)(*iter)[asTreeModel.value]);
-		dataStore->setIsActive((Glib::ustring)(*iter)[asTreeModel.name], (*iter)[asTreeModel.active]);
-		event_lock = false;
-		loadData();
+		this->updateCustomSetting((Glib::ustring)(*iter)[asTreeModel.name]);
 	}
 }
 
 void GrubSettingsDlgGtk::signal_default_entry_predefined_toggeled(){
 	if (!event_lock){
-		event_lock = true;
-		cbDefEntry.set_sensitive(rbDefPredefined.get_active());
-		event_lock = false;
-		if (rbDefPredefined.get_active()){ //force usage of the combobox value
-			signal_default_entry_changed();
-		}
+		this->updateDefaultSetting();
 	}
+}
+
+GrubSettingsDlgGtk::DefEntryType GrubSettingsDlgGtk::getActiveDefEntryOption(){
+	return rbDefSaved.get_active() ? DEF_ENTRY_SAVED : DEF_ENTRY_PREDEFINED;
 }
 
 void GrubSettingsDlgGtk::signal_default_entry_saved_toggeled(){
 	if (!event_lock){
-		event_lock = true;
-		if (rbDefSaved.get_active()){
-			dataStore->setValue("GRUB_DEFAULT", "saved");
-			dataStore->setValue("GRUB_SAVEDEFAULT", "true");
-			dataStore->setIsActive("GRUB_SAVEDEFAULT", true);
-			this->loadData();
-		}
-		event_lock = false;
+		updateDefaultSetting();
 	}
+}
+
+//TODO: MOVE TO Presenter
+void GrubSettingsDlgGtk::updateDefaultSetting(){
+	if (this->getActiveDefEntryOption() == DEF_ENTRY_SAVED){
+		dataStore->setValue("GRUB_DEFAULT", "saved");
+		dataStore->setValue("GRUB_SAVEDEFAULT", "true");
+		dataStore->setIsActive("GRUB_SAVEDEFAULT", true);
+	}
+	else {
+		dataStore->setValue("GRUB_DEFAULT", this->getSelectedDefaultGrubValue());
+		dataStore->setValue("GRUB_SAVEDEFAULT", "false");
+	}
+	this->syncSettings();
 }
 
 void GrubSettingsDlgGtk::signal_default_entry_changed(){
 	if (!event_lock){
-		if ((cbDefEntry.get_active_row_number() % 2) == 0) //index selected
-			dataStore->setValue("GRUB_DEFAULT", Glib::ustring::format(cbDefEntry.get_active_row_number() / 2));
-		else //name selected
-			dataStore->setValue("GRUB_DEFAULT", cbDefEntry.get_active_text());
-		dataStore->setValue("GRUB_SAVEDEFAULT", "false");
-		this->loadData();
+		this->updateDefaultSetting();
 	}
+}
+
+bool GrubSettingsDlgGtk::getShowMenuCheckboxState(){
+	return chkShowMenu.get_active();
+}
+
+bool GrubSettingsDlgGtk::getOsProberCheckboxState(){
+	return chkOsProber.get_active();
+}
+
+void GrubSettingsDlgGtk::showHiddenMenuOsProberConflictMessage(){
+	Gtk::MessageDialog(Glib::ustring::compose(gettext("This option doesn't work when the \"os-prober\" script finds other operating systems. Disable \"%1\" if you don't need to boot other operating systems."), chkOsProber.get_label())).run();
+}
+
+//TODO: MOVE TO PRESENTER
+void GrubSettingsDlgGtk::updateShowMenuSetting(){
+	dataStore->setIsActive("GRUB_HIDDEN_TIMEOUT", !this->getShowMenuCheckboxState());
+	if (!this->getShowMenuCheckboxState() && this->getOsProberCheckboxState()){
+		this->showHiddenMenuOsProberConflictMessage();
+	}
+	this->syncSettings();
 }
 
 void GrubSettingsDlgGtk::signal_showMenu_toggled(){
 	if (!event_lock){
-		dataStore->setIsActive("GRUB_HIDDEN_TIMEOUT", !chkShowMenu.get_active());
-		if (!chkShowMenu.get_active() && chkOsProber.get_active()){
-			Gtk::MessageDialog(Glib::ustring::compose(gettext("This option doesn't work when the \"os-prober\" script finds other operating systems. Disable \"%1\" if you don't need to boot other operating systems."), chkOsProber.get_label())).run();
-		}
-		this->loadData();
+		this->updateShowMenuSetting();
 	}
 }
+
+//TODO: MOVE TO PRESENTER
+void GrubSettingsDlgGtk::updateOsProberSetting(){
+	dataStore->setValue("GRUB_DISABLE_OS_PROBER", this->getOsProberCheckboxState() ? "false" : "true");
+	dataStore->setIsActive("GRUB_DISABLE_OS_PROBER", !this->getOsProberCheckboxState());
+	this->syncSettings();
+}
+
 void GrubSettingsDlgGtk::signal_osProber_toggled(){
 	if (!event_lock){
-		dataStore->setValue("GRUB_DISABLE_OS_PROBER", chkOsProber.get_active() ? "false" : "true");
-		dataStore->setIsActive("GRUB_DISABLE_OS_PROBER", !chkOsProber.get_active());
-		this->loadData();
+		this->updateOsProberSetting();
 	}
 }
+
+int GrubSettingsDlgGtk::getTimeoutValue(){
+	return spTimeout.get_value_as_int();
+}
+
+void GrubSettingsDlgGtk::updateTimeoutSetting(){
+	if (this->getShowMenuCheckboxState()){
+		dataStore->setValue("GRUB_TIMEOUT", Glib::ustring::format(this->getTimeoutValue()));
+	}
+	else {
+		dataStore->setValue("GRUB_HIDDEN_TIMEOUT", Glib::ustring::format(this->getTimeoutValue()));
+	}
+	this->syncSettings();
+}
+
 void GrubSettingsDlgGtk::signal_timeout_changed(){
 	if (!event_lock){
-		if (chkShowMenu.get_active()){
-			dataStore->setValue("GRUB_TIMEOUT", Glib::ustring::format(spTimeout.get_value_as_int()));
-		}
-		else {
-			dataStore->setValue("GRUB_HIDDEN_TIMEOUT", Glib::ustring::format(spTimeout.get_value_as_int()));
-		}
-		this->loadData();
+		this->updateTimeoutSetting();
 	}
+}
+
+Glib::ustring GrubSettingsDlgGtk::getKernelParams(){
+	return txtKernelParams.get_text();
+}
+
+//TODO: MOVE TO PRESENTER
+void GrubSettingsDlgGtk::updateKernalParams(){
+	dataStore->setValue("GRUB_CMDLINE_LINUX_DEFAULT", this->getKernelParams());
+	this->syncSettings();
 }
 
 void GrubSettingsDlgGtk::signal_kernelparams_changed(){
 	if (!event_lock){
-		dataStore->setValue("GRUB_CMDLINE_LINUX_DEFAULT", txtKernelParams.get_text());
-		this->loadData();
+		this->updateKernalParams();
 	}
 }
+
+bool GrubSettingsDlgGtk::getRecoveryCheckboxState(){
+	return chkGenerateRecovery.get_active();
+}
+
+void GrubSettingsDlgGtk::updateGenerateRecoverySetting(){
+	dataStore->setIsActive("GRUB_DISABLE_LINUX_RECOVERY", !this->getRecoveryCheckboxState());
+	this->syncSettings();
+}
+
 void GrubSettingsDlgGtk::signal_recovery_toggled(){
 	if (!event_lock){
-		dataStore->setIsActive("GRUB_DISABLE_LINUX_RECOVERY", !chkGenerateRecovery.get_active());
-		this->loadData();
+		this->updateGenerateRecoverySetting();
 	}
+}
+
+bool GrubSettingsDlgGtk::getResolutionCheckboxState(){
+	return chkResolution.get_active();
+}
+
+//TODO: MOVE TO PRESENTER
+void GrubSettingsDlgGtk::updateUseCustomResolution(){
+	dataStore->setIsActive("GRUB_GFXMODE", this->getResolutionCheckboxState());
+	this->syncSettings();
 }
 
 void GrubSettingsDlgGtk::signal_chkResolution_toggled(){
 	if (!event_lock){
-		dataStore->setIsActive("GRUB_GFXMODE", chkResolution.get_active());
-		this->loadData();
+		this->updateUseCustomResolution();
 	}
+}
+
+Glib::ustring GrubSettingsDlgGtk::getResolution(){
+	cbResolution.get_entry()->get_text();
+}
+
+void GrubSettingsDlgGtk::updateCustomResolution(){
+	dataStore->setValue("GRUB_GFXMODE", this->getResolution());
+	this->syncSettings();
 }
 
 void GrubSettingsDlgGtk::signal_resolution_selected(){
 	if (!event_lock){
-		dataStore->setValue("GRUB_GFXMODE", cbResolution.get_entry()->get_text());
-		this->loadData();
+		this->updateCustomResolution();
 	}
+}
+
+void GrubSettingsDlgGtk::updateColorSettings(){
+	if (this->getColorChooser(COLOR_CHOOSER_DEFAULT_FONT).getSelectedColor() != "" && this->getColorChooser(COLOR_CHOOSER_DEFAULT_BACKGROUND).getSelectedColor() != ""){
+		dataStore->setValue("GRUB_COLOR_NORMAL", this->getColorChooser(COLOR_CHOOSER_DEFAULT_FONT).getSelectedColor() + "/" + this->getColorChooser(COLOR_CHOOSER_DEFAULT_BACKGROUND).getSelectedColor());
+		dataStore->setIsActive("GRUB_COLOR_NORMAL", true);
+		dataStore->setIsExport("GRUB_COLOR_NORMAL", true);
+	}
+	if (this->getColorChooser(COLOR_CHOOSER_HIGHLIGHT_FONT).getSelectedColor() != "" && this->getColorChooser(COLOR_CHOOSER_HIGHLIGHT_BACKGROUND).getSelectedColor() != ""){
+		dataStore->setValue("GRUB_COLOR_HIGHLIGHT", this->getColorChooser(COLOR_CHOOSER_HIGHLIGHT_FONT).getSelectedColor() + "/" + this->getColorChooser(COLOR_CHOOSER_HIGHLIGHT_BACKGROUND).getSelectedColor());
+		dataStore->setIsActive("GRUB_COLOR_HIGHLIGHT", true);
+		dataStore->setIsExport("GRUB_COLOR_HIGHLIGHT", true);
+	}
+	this->syncSettings();
 }
 
 void GrubSettingsDlgGtk::signal_color_changed(){
 	if (!event_lock){
-		if (gccNormalForeground.getSelectedColor() != "" && gccNormalBackground.getSelectedColor() != ""){
-			dataStore->setValue("GRUB_COLOR_NORMAL", gccNormalForeground.getSelectedColor() + "/" + gccNormalBackground.getSelectedColor());
-			dataStore->setIsActive("GRUB_COLOR_NORMAL", true);
-			dataStore->setIsExport("GRUB_COLOR_NORMAL", true);
-		}
-		if (gccHighlightForeground.getSelectedColor() != "" && gccHighlightBackground.getSelectedColor() != ""){
-			dataStore->setValue("GRUB_COLOR_HIGHLIGHT", gccHighlightForeground.getSelectedColor() + "/" + gccHighlightBackground.getSelectedColor());
-			dataStore->setIsActive("GRUB_COLOR_HIGHLIGHT", true);
-			dataStore->setIsExport("GRUB_COLOR_HIGHLIGHT", true);
-		}
-		this->loadData();
+		this->updateColorSettings();
 	}
+}
+
+Glib::ustring GrubSettingsDlgGtk::getBackgroundImagePath(){
+	return fcBackgroundImage.get_filename();
+}
+
+//TODO: MOVE TO PRESENTER
+void GrubSettingsDlgGtk::copyBackgroundImageToGrubDirectory(){
+	Glib::RefPtr<Gio::File> file_src = Gio::File::create_for_path(this->getBackgroundImagePath());
+	Glib::RefPtr<Gio::File> file_dest = Gio::File::create_for_path(env.output_config_dir+"/"+file_src->get_basename());
+	file_src->copy(file_dest, Gio::FILE_COPY_OVERWRITE);
+
+	dataStore->setValue("GRUB_MENU_PICTURE", file_src->get_basename()); //The path isn't required when the image is in grub conf dir
+	this->syncSettings();
 }
 
 void GrubSettingsDlgGtk::signal_bttCopyBackground_clicked(){
 	if (!event_lock){
-		Glib::RefPtr<Gio::File> file_src = fcBackgroundImage.get_file();
-		Glib::RefPtr<Gio::File> file_dest = Gio::File::create_for_path(env.output_config_dir+"/"+file_src->get_basename());
-		file_src->copy(file_dest, Gio::FILE_COPY_OVERWRITE);
-		
-		dataStore->setValue("GRUB_MENU_PICTURE", file_src->get_basename()); //The path isn't required when the image is in grub conf dir
-		this->loadData();
+		this->copyBackgroundImageToGrubDirectory();
 	}
+}
+
+void GrubSettingsDlgGtk::removeBackgroundImage(){
+	dataStore->setIsActive("GRUB_MENU_PICTURE", false);
+	this->syncSettings();
 }
 
 void GrubSettingsDlgGtk::signal_bttRemoveBackground_clicked(){
 	if (!event_lock){
-		dataStore->setIsActive("GRUB_MENU_PICTURE", false);
-		this->loadData();
+		this->removeBackgroundImage();
 	}
+}
+
+//TODO: MOVE TO PRESENTER
+void GrubSettingsDlgGtk::updateBackgroundImage(){
+	dataStore->setValue("GRUB_MENU_PICTURE", this->getBackgroundImagePath());
+	dataStore->setIsActive("GRUB_MENU_PICTURE", true);
+	dataStore->setIsExport("GRUB_MENU_PICTURE", true);
+	this->syncSettings();
 }
 
 void GrubSettingsDlgGtk::signal_other_image_chosen(){
 	if (!event_lock){
-		dataStore->setValue("GRUB_MENU_PICTURE", fcBackgroundImage.get_filename());
-		dataStore->setIsActive("GRUB_MENU_PICTURE", true);
-		dataStore->setIsExport("GRUB_MENU_PICTURE", true);
-		this->loadData();
+		this->updateBackgroundImage();
 	}
 }
 

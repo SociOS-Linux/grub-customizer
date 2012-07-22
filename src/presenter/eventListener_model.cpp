@@ -20,3 +20,8 @@ void EventListenerModel::threadDied(){
 void EventListenerModel::grubInstallCompleted(std::string const& msg){
 	presenter.showMessageGrubInstallCompleted(msg);
 }
+
+
+void EventListenerModel::fb_resolutions_loaded(){
+	presenter.updateSettingsDlgResolutionList();
+}
