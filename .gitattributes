@@ -1,28 +1,7 @@
 * text=auto !eol
-/CMakeCache.txt -text
-CMakeFiles/CMakeCCompiler.cmake -text
-CMakeFiles/CMakeCXXCompiler.cmake -text
-CMakeFiles/CMakeDetermineCompilerABI_C.bin -text svneol=unset#unset
-CMakeFiles/CMakeDetermineCompilerABI_CXX.bin -text svneol=unset#unset
-CMakeFiles/CMakeDirectoryInformation.cmake -text
-CMakeFiles/CMakeOutput.log -text
-CMakeFiles/CMakeSystem.cmake -text
-CMakeFiles/CompilerIdC/CMakeCCompilerId.c -text
-CMakeFiles/CompilerIdC/a.out -text svneol=unset#unset
-CMakeFiles/CompilerIdCXX/CMakeCXXCompilerId.cpp -text
-CMakeFiles/CompilerIdCXX/a.out -text svneol=unset#unset
-CMakeFiles/Makefile.cmake -text
-CMakeFiles/Makefile2 -text
-CMakeFiles/TargetDirectories.txt -text
-CMakeFiles/cmake.check_cache -text
-CMakeFiles/progress.marks -text
 /CMakeLists.txt -text
-/Makefile -text
 /README -text
-/cmake_install.cmake -text
 /compile[!!-~]and[!!-~]install.sh -text
-/grub-customizer -text svneol=unset#unset
-/grubcfg-proxy -text svneol=unset#unset
 my_cmake_scripts/FindPkgConfig.cmake -text
 src_dir/CMakeFiles/CMakeDirectoryInformation.cmake -text
 src_dir/CMakeFiles/grub-customizer.dir/CXX.includecache -text
