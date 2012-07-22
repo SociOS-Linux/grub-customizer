@@ -22,6 +22,7 @@
 #include "script.h"
 #include <sys/stat.h>
 #include <assert.h>
+#include <unistd.h>
 
 struct Proxy {
 	enum Exception {
