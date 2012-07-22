@@ -18,19 +18,16 @@ class PartitionChooser : public Gtk::Assistant {
 	Gtk::VBox vbIntroPage, vbRootSelectPage, vbAdditionalMountSelectionPage;
 	Gtk::ScrolledWindow scrAdditionalMountSelectionPage;
 	Gtk::VBox vbAdditionalMountSelectionPageList;
-	std::string mountpoint;
+	bool isMounted;
 	Gtk::HBox hbMountButtons;
 	Gtk::Button bttMountFs, bttUmountFs;
 	bool submountpoint_toggle_run_event;
-	bool is_cancelled;
 	EventListenerView_iface* eventListener;
-	MountTable rootFstab;
 	public:
+	bool is_cancelled;
 	PartitionChooser(bool isLiveCD);
 	void setEventListener(EventListenerView_iface& eventListener);
 	void updateSensitivity();
-	void readPartitionInfo();
-	void generateSubmountpointSelection(std::string const& prefix);
 	void signal_custom_partition_toggled();
 	void signal_lvRootPartitionSelection_changed();
 	void signal_custom_partition_typing();
@@ -40,12 +37,18 @@ class PartitionChooser : public Gtk::Assistant {
 	void on_apply();
 
 	std::string getSelectedDevice();
+	void addPartitionSelectorItem(Glib::ustring const& device, Glib::ustring const& type, Glib::ustring const& label);
+	void clearPartitionSelector();
 	void addSubmountpoint(std::string const& mountpoint, bool isMounted);
 	void removeAllSubmountpoints();
 	void submountpoint_toggle(Gtk::CheckButton& sender);
-	std::string getRootMountpoint() const;
-	bool isCancelled() const;
+	void showErrorMessage(MountException::Type type);
+	std::string getRootMountpoint() const; //TODO: remove
+	bool isCancelled() const; //TODO: remove
 	Glib::ustring run();
+	Gtk::CheckButton& getSubmountpointCheckboxByLabel(Glib::ustring const& label);
+	void setSubmountpointSelectionState(Glib::ustring const& submountpoint, bool new_isSelected);
+	void setIsMounted(bool isMounted);
 };
 #endif
 

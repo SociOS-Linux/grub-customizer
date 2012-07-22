@@ -126,3 +126,28 @@ void EventListenerView::backgroundCopy_requested(){
 void EventListenerView::backgroundRemove_requested(){
 	presenter.removeBackgroundImage();
 }
+
+//partition chooser
+void EventListenerView::partitionChooser_applied(){
+	presenter.applyPartitionChooser();
+}
+
+void EventListenerView::partitionChooser_cancelled(){
+	presenter.cancelPartitionChooser();
+}
+
+void EventListenerView::rootFsMount_request(){
+	presenter.mountRootFs();
+}
+
+void EventListenerView::rootFsUmount_request(){
+	presenter.umountRootFs();
+}
+
+void EventListenerView::submountpoint_mount_request(std::string const& mountpoint){
+	presenter.mountSubmountpoint(mountpoint);
+}
+
+void EventListenerView::submountpoint_umount_request(std::string const& mountpoint){
+	presenter.umountSubmountpoint(mountpoint);
+}

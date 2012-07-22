@@ -37,6 +37,8 @@ class GtkClient {
 	PartitionChooser* partitionChooser;
 	GrublistCfg* savedListCfg;
 	FbResolutionsGetter* fbResolutionsGetter;
+	DeviceDataList* deviceDataList;
+	MountTable* mountTable;
 	
 	Glib::Dispatcher disp_sync_load, disp_sync_save, disp_thread_died, disp_updateSettingsDlgResolutionList;
 	bool config_has_been_different_on_startup_but_unsaved;
@@ -56,6 +58,8 @@ public:
 	void setPartitionChooser(PartitionChooser& partitionChooser);
 	void setSavedListCfg(GrublistCfg& savedListCfg);
 	void setFbResolutionsGetter(FbResolutionsGetter& fbResolutionsGetter);
+	void setDeviceDataList(DeviceDataList& deviceDataList);
+	void setMountTable(MountTable& mountTable);
 
 	void showSettingsDlg();
 	void load(bool preserveConfig = false);
@@ -68,6 +72,7 @@ public:
 	void reset();
 	bool prepare(bool forceRootSelection = false);
 	void startRootSelector();
+	void initRootSelector();
 	
 	void syncEntryList();
 	void updateSaveProgress();
@@ -117,6 +122,16 @@ public:
 	void updateUseCustomResolution();
 	void copyBackgroundImageToGrubDirectory();
 	void removeBackgroundImage();
+
+	//partition chooser
+	void mountRootFs();
+	void umountRootFs();
+	void cancelPartitionChooser();
+	void applyPartitionChooser();
+	void mountSubmountpoint(Glib::ustring const& submountpoint);
+	void umountSubmountpoint(Glib::ustring const& submountpoint);
+	void readPartitionInfo();
+	void generateSubmountpointSelection(std::string const& prefix);
 };
 
 #endif

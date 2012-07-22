@@ -47,6 +47,14 @@ public:
 	void backgroundChange_requested();
 	void backgroundCopy_requested();
 	void backgroundRemove_requested();
+
+	//root selector
+	void partitionChooser_applied();
+	void partitionChooser_cancelled();
+	void rootFsMount_request();
+	void rootFsUmount_request();
+	void submountpoint_mount_request(std::string const& mountpoint);
+	void submountpoint_umount_request(std::string const& mountpoint);
 };
 
 #endif

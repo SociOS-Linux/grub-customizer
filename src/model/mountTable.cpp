@@ -48,7 +48,6 @@ MountTable::MountTable(std::string const& rootDirectory){
 
 MountTable::MountTable(){}
 
-//TODO: prevent Duplicates
 void MountTable::loadData(FILE* source, std::string const& prefix, bool default_isMounted_flag){
 	int c;
 	int rowEntryPos = 0;

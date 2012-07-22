@@ -43,6 +43,14 @@ class EventListenerView_iface {
 	virtual void backgroundChange_requested()=0;
 	virtual void backgroundCopy_requested()=0;
 	virtual void backgroundRemove_requested()=0;
+
+	//root selector
+	virtual void partitionChooser_applied()=0;
+	virtual void partitionChooser_cancelled()=0;
+	virtual void rootFsMount_request()=0;
+	virtual void rootFsUmount_request()=0;
+	virtual void submountpoint_mount_request(std::string const& mountpoint)=0;
+	virtual void submountpoint_umount_request(std::string const& mountpoint)=0;
 };
 
 #endif

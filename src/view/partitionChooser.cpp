@@ -7,7 +7,8 @@ PartitionChooser::PartitionChooser(bool isLiveCD)
 	bttUmountFs(gettext("Unmount mounted Filesystem")),
 	submountpoint_toggle_run_event(true),
 	is_cancelled(false),
-	lblSubmountpointDescription(gettext("These are the mountpoints of your fstab file.\nPlease select every grub/boot related partition."), Gtk::ALIGN_LEFT)
+	lblSubmountpointDescription(gettext("These are the mountpoints of your fstab file.\nPlease select every grub/boot related partition."), Gtk::ALIGN_LEFT),
+	isMounted(false)
 {
 	this->append_page(vbIntroPage);
 	Glib::ustring message;
@@ -72,16 +73,17 @@ void PartitionChooser::setEventListener(EventListenerView_iface& eventListener){
 	this->eventListener = &eventListener;
 }
 
-void PartitionChooser::readPartitionInfo(){
-	FILE* ddl_proc = popen("blkid", "r");
-	DeviceDataList ddl(ddl_proc);
-	for (DeviceDataList::iterator iter = ddl.begin(); iter != ddl.end(); iter++){
-		guint index = lvRootPartitionSelection.append_text(iter->first);
-		lvRootPartitionSelection.set_text(index, 1, iter->second["TYPE"]);
-		lvRootPartitionSelection.set_text(index, 2, iter->second["LABEL"]);
-	}
-	pclose(ddl_proc);
+void PartitionChooser::addPartitionSelectorItem(Glib::ustring const& device, Glib::ustring const& type, Glib::ustring const& label){
+	guint index = lvRootPartitionSelection.append_text(device);
+	lvRootPartitionSelection.set_text(index, 1, type);
+	lvRootPartitionSelection.set_text(index, 2, label);
 }
+
+void PartitionChooser::clearPartitionSelector(){
+	lvRootPartitionSelection.clear_items();
+}
+
+
 
 void PartitionChooser::signal_custom_partition_toggled(){
 	updateSensitivity();
@@ -95,21 +97,7 @@ void PartitionChooser::signal_custom_partition_typing(){
 	updateSensitivity();
 }
 
-//TODO: MOVE TO PRESENTER
-void PartitionChooser::generateSubmountpointSelection(std::string const& prefix){
-	this->removeAllSubmountpoints();
 
-	//create new submountpoint checkbuttons
-	for (MountTable::const_iterator iter = rootFstab.begin(); iter != rootFstab.end(); iter++){
-		if (iter->mountpoint.length() > prefix.length()
-		 && iter->mountpoint != prefix + "/dev"
-		 && iter->mountpoint != prefix + "/proc"
-		 && iter->mountpoint != prefix + "/sys"
-		) {
-			this->addSubmountpoint(iter->mountpoint.substr(prefix.length()), iter->isMounted);
-		}
-	}
-}
 
 void PartitionChooser::removeAllSubmountpoints(){
 	//delete all existing submountpoint checkbuttons
@@ -136,88 +124,70 @@ std::string PartitionChooser::getSelectedDevice(){
 	return chkCustomPartition.get_active() ? txtCustomPartition.get_text() : lvRootPartitionSelection.get_text(lvRootPartitionSelection.get_selected()[0],0);
 }
 
-void PartitionChooser::signal_btt_mount_click(){
-	std::string selectedDevice = this->getSelectedDevice();
-	mountpoint = PARTCHOOSER_MOUNTPOINT;
-	mkdir(mountpoint.c_str(), 0755);
-	try {
-		rootFstab.clear(mountpoint);
-		rootFstab.mountRootFs(selectedDevice, mountpoint);
-		this->generateSubmountpointSelection(mountpoint);
+void PartitionChooser::showErrorMessage(MountException::Type type){
+	switch (type){
+		case MountException::MOUNT_FAILED:       Gtk::MessageDialog(gettext("Mount failed!")).run(); break;
+		case MountException::MOUNT_ERR_NO_FSTAB: Gtk::MessageDialog(gettext("This seems not to be a root file system (no fstab found)")).run();
 	}
-	catch (MountException e) {
-		if (e.type == MountException::MOUNT_FAILED){
-			Gtk::MessageDialog(gettext("Mount failed!")).run();
-			mountpoint = "";
-		}
-		else if (e.type == MountException::MOUNT_ERR_NO_FSTAB){
-			Gtk::MessageDialog(gettext("This seems not to be a root file system (no fstab found)")).run();
-			rootFstab.getEntryByMountpoint(mountpoint).umount();
-			mountpoint = "";
-		}
-	}
-	updateSensitivity();
 }
 
-void PartitionChooser::signal_btt_umount_click(){
-	try {
-		this->rootFstab.umountAll(mountpoint);
-		this->rootFstab.clear(mountpoint);
-		mountpoint = "";
-	}
-	catch (MountException e){
-		if (e.type == MountException::MOUNT_FAILED)
-			Gtk::MessageDialog(gettext("umount failed!")).run();
-	}
-	updateSensitivity();
+
+
+void PartitionChooser::signal_btt_mount_click(){
+	this->eventListener->rootFsMount_request();
 }
+
 
 void PartitionChooser::updateSensitivity(){
 	set_page_complete(vbIntroPage, true);
 	set_page_complete(vbAdditionalMountSelectionPage, true);
-	bttUmountFs.set_sensitive(mountpoint != "");
-	bttMountFs.set_sensitive(mountpoint == "" && (chkCustomPartition.get_active() && txtCustomPartition.get_text_length() || !chkCustomPartition.get_active() && lvRootPartitionSelection.get_selected().size()));
-	lvRootPartitionSelection.set_sensitive(mountpoint == "" && !chkCustomPartition.get_active());
-	txtCustomPartition.set_sensitive(mountpoint == "" && chkCustomPartition.get_active());
-	chkCustomPartition.set_sensitive(mountpoint == "");
-	set_page_complete(vbRootSelectPage, mountpoint != "");
+	bttUmountFs.set_sensitive(isMounted);
+	bttMountFs.set_sensitive(!isMounted && (chkCustomPartition.get_active() && txtCustomPartition.get_text_length() || !chkCustomPartition.get_active() && lvRootPartitionSelection.get_selected().size()));
+	lvRootPartitionSelection.set_sensitive(!isMounted && !chkCustomPartition.get_active());
+	txtCustomPartition.set_sensitive(!isMounted && chkCustomPartition.get_active());
+	chkCustomPartition.set_sensitive(!isMounted);
+	set_page_complete(vbRootSelectPage, isMounted);
 }
 
 
 void PartitionChooser::on_cancel(){
-	this->is_cancelled = true;
-	this->hide();
+	this->eventListener->partitionChooser_cancelled();
 }
 
+
 void PartitionChooser::on_apply(){
-	this->hide();
+	this->eventListener->partitionChooser_applied();
 }
+
+Gtk::CheckButton& PartitionChooser::getSubmountpointCheckboxByLabel(Glib::ustring const& label){
+	Glib::ListHandle< Widget* > allChilds = vbAdditionalMountSelectionPageList.get_children();
+	for (Glib::ListHandle<Widget*>::iterator iter = allChilds.begin(); iter != allChilds.end(); iter++){
+		if (((Gtk::CheckButton*)*iter)->get_label() == label)
+			return (Gtk::CheckButton&)**iter;
+	}
+	throw "Checkbutton not found"; //TODO: use object or enum
+}
+
+void PartitionChooser::setSubmountpointSelectionState(Glib::ustring const& submountpoint, bool new_isSelected){
+	Gtk::CheckButton& target = this->getSubmountpointCheckboxByLabel(submountpoint);
+	submountpoint_toggle_run_event = false;
+	target.set_active(new_isSelected);
+	submountpoint_toggle_run_event = true;
+}
+
+
 
 void PartitionChooser::submountpoint_toggle(Gtk::CheckButton& sender){
 	if (submountpoint_toggle_run_event){
-		try {
-			Mountpoint& m = this->rootFstab.getEntryRefByMountpoint(mountpoint + sender.get_label());
-			if (sender.get_active())
-				m.mount();
-			else
-				m.umount();
-		}
-		catch (MountException e){
-			if (e.type == MountException::MOUNT_FAILED){
-				if (sender.get_active())
-					Gtk::MessageDialog(gettext("Couldn't mount the selected partition")).run();
-				else
-					Gtk::MessageDialog(gettext("Couldn't umount the selected partition")).run();
-			}
-			submountpoint_toggle_run_event = false;
-			sender.set_active(!sender.get_active()); //reset checkbox
-			submountpoint_toggle_run_event = true;
-		}
+		if (sender.get_active())
+			this->eventListener->submountpoint_mount_request(sender.get_label());
+		else
+			this->eventListener->submountpoint_umount_request(sender.get_label());
 	}
 }
 
 std::string PartitionChooser::getRootMountpoint() const {
-	return mountpoint;
+	return isMounted ? PARTCHOOSER_MOUNTPOINT : "";
 }
 
 bool PartitionChooser::isCancelled() const {
@@ -225,14 +195,6 @@ bool PartitionChooser::isCancelled() const {
 }
 
 Glib::ustring PartitionChooser::run(){
-	rootFstab.loadData("");
-	rootFstab.loadData(PARTCHOOSER_MOUNTPOINT);
-	if (rootFstab.getEntryByMountpoint(PARTCHOOSER_MOUNTPOINT)){
-		mountpoint = PARTCHOOSER_MOUNTPOINT;
-		this->generateSubmountpointSelection(mountpoint);
-	}
-	this->readPartitionInfo();
-	this->updateSensitivity();
 	this->show_all();
 	Gtk::Main::run(*this);
 	if (this->isCancelled())
@@ -241,5 +203,10 @@ Glib::ustring PartitionChooser::run(){
 		return this->getRootMountpoint();
 }
 
+void PartitionChooser::setIsMounted(bool isMounted){
+	this->isMounted = isMounted;
+}
 
-
+void PartitionChooser::signal_btt_umount_click(){
+	this->eventListener->rootFsUmount_request();
+}

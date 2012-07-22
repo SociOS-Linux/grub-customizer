@@ -55,6 +55,14 @@ void GtkClient::setFbResolutionsGetter(FbResolutionsGetter& fbResolutionsGetter)
 	this->fbResolutionsGetter = &fbResolutionsGetter;
 }
 
+void GtkClient::setDeviceDataList(DeviceDataList& deviceDataList){
+	this->deviceDataList = &deviceDataList;
+}
+
+void GtkClient::setMountTable(MountTable& mountTable){
+	this->mountTable = &mountTable;
+}
+
 void GtkClient::showSettingsDlg(){
 	std::list<std::string> entryTitles = this->grublistCfg->proxies.generateEntryTitleList();
 	this->settingsDlg->clearDefaultEntryChooser();
@@ -81,6 +89,13 @@ void GtkClient::run(){
 		this->listCfgDlg->run();
 	}
 	this->grublistCfg->umountSwitchedRootPartition(); //cleanup… only if another partition has been mounted
+
+	savedListCfg->verbose = false;
+	FILE* blkidProc = popen("blkid", "r");
+	if (blkidProc){
+		deviceDataList->loadData(blkidProc);
+		pclose(blkidProc);
+	}
 }
 
 void GtkClient::load(bool preserveConfig){
@@ -200,6 +215,120 @@ void GtkClient::startRootSelector(){
 		this->reset();
 		this->syncListView_load();
 		listCfgDlg->setLockState(3);
+	}
+}
+
+void GtkClient::initRootSelector(){
+	mountTable->loadData("");
+	mountTable->loadData(PARTCHOOSER_MOUNTPOINT);
+	if (mountTable->getEntryByMountpoint(PARTCHOOSER_MOUNTPOINT)){
+		partitionChooser->setIsMounted(true);
+		this->generateSubmountpointSelection(PARTCHOOSER_MOUNTPOINT);
+	}
+	else
+		partitionChooser->setIsMounted(false);
+	this->readPartitionInfo();
+	this->partitionChooser->updateSensitivity();
+}
+
+//TODO: MOVE TO PRESENTER
+void GtkClient::readPartitionInfo(){
+	for (DeviceDataList::iterator iter = deviceDataList->begin(); iter != deviceDataList->end(); iter++){
+		this->partitionChooser->addPartitionSelectorItem(iter->first, iter->second["TYPE"], iter->second["LABEL"]);
+	}
+}
+
+//TODO: MOVE TO PRESENTER
+void GtkClient::generateSubmountpointSelection(std::string const& prefix){
+	this->partitionChooser->removeAllSubmountpoints();
+
+	//create new submountpoint checkbuttons
+	for (MountTable::const_iterator iter = mountTable->begin(); iter != mountTable->end(); iter++){
+		if (iter->mountpoint.length() > prefix.length()
+		 && iter->mountpoint != prefix + "/dev"
+		 && iter->mountpoint != prefix + "/proc"
+		 && iter->mountpoint != prefix + "/sys"
+		) {
+			this->partitionChooser->addSubmountpoint(iter->mountpoint.substr(prefix.length()), iter->isMounted);
+		}
+	}
+}
+
+//TODO: MOVE TO PRESENTER
+void GtkClient::mountRootFs(){
+	std::string selectedDevice = this->partitionChooser->getSelectedDevice();
+	partitionChooser->setIsMounted(true);
+	mkdir(PARTCHOOSER_MOUNTPOINT, 0755);
+	try {
+		mountTable->clear(PARTCHOOSER_MOUNTPOINT);
+		mountTable->mountRootFs(selectedDevice, PARTCHOOSER_MOUNTPOINT);
+		this->generateSubmountpointSelection(PARTCHOOSER_MOUNTPOINT);
+	}
+	catch (MountException e) {
+		if (e.type == MountException::MOUNT_FAILED){
+			this->partitionChooser->showErrorMessage(MountException::MOUNT_FAILED);
+			partitionChooser->setIsMounted(false);
+		}
+		else if (e.type == MountException::MOUNT_ERR_NO_FSTAB){
+			this->partitionChooser->showErrorMessage(MountException::MOUNT_ERR_NO_FSTAB);
+			mountTable->getEntryByMountpoint(PARTCHOOSER_MOUNTPOINT).umount();
+			partitionChooser->setIsMounted(false);
+		}
+	}
+	partitionChooser->updateSensitivity();
+}
+
+
+//TODO: MOVE TO PRESENTER
+void GtkClient::umountRootFs(){
+	try {
+		this->mountTable->umountAll(PARTCHOOSER_MOUNTPOINT);
+		this->mountTable->clear(PARTCHOOSER_MOUNTPOINT);
+		partitionChooser->setIsMounted(false);
+	}
+	catch (MountException e){
+		if (e.type == MountException::MOUNT_FAILED)
+			Gtk::MessageDialog(gettext("umount failed!")).run();
+	}
+	partitionChooser->updateSensitivity();
+}
+
+
+//TODO: MOVE TO PRESENTER
+void GtkClient::cancelPartitionChooser(){
+	this->partitionChooser->is_cancelled = true;
+	this->partitionChooser->hide();
+}
+
+
+//TODO: MOVE TO PRESENTER
+void GtkClient::applyPartitionChooser(){
+	this->partitionChooser->hide();
+}
+
+//TODO: MOVE to presenter
+void GtkClient::mountSubmountpoint(Glib::ustring const& submountpoint){
+	try {
+		this->mountTable->getEntryRefByMountpoint(PARTCHOOSER_MOUNTPOINT + submountpoint).mount();
+	}
+	catch (MountException e){
+		if (e.type == MountException::MOUNT_FAILED){
+			Gtk::MessageDialog(gettext("Couldn't mount the selected partition")).run();
+		}
+		this->partitionChooser->setSubmountpointSelectionState(submountpoint, false); //reset checkbox
+	}
+}
+
+//TODO: move to presenter
+void GtkClient::umountSubmountpoint(Glib::ustring const& submountpoint){
+	try {
+		this->mountTable->getEntryRefByMountpoint(PARTCHOOSER_MOUNTPOINT + submountpoint).umount();
+	}
+	catch (MountException e){
+		if (e.type == MountException::MOUNT_FAILED){
+			Gtk::MessageDialog(gettext("Couldn't umount the selected partition")).run();
+		}
+		this->partitionChooser->setSubmountpointSelectionState(submountpoint, true); //reset checkbox
 	}
 }
 
