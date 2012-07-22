@@ -43,6 +43,8 @@ public:
 	void save_request();
 	void rootSelectorCompleted();
 	void rootSelector_request();
+	void createSubmenuRequest(void* childItem);
+	void removeSubmenuRequest(void* childItem);
 	void installDialogRequest();
 	void installGrub_request(std::string const& device);
 	void scriptAddDlg_requested();

@@ -373,8 +373,78 @@ Rule& Proxy::moveRule(Rule* rule, int direction) {
 			newRule = &ruleList.back();
 		}
 	}
-	ruleList.erase(this->getListIterator(*rule, ruleList));
+
+	if (ruleList.size() == 1) {
+		// delete parent list if empty
+		Rule* parent = this->getParentRule(rule);
+		std::list<Rule>& parentOfParent = this->getRuleList(this->getParentRule(this->getParentRule(rule)));
+		parentOfParent.erase(this->getListIterator(*parent, parentOfParent));
+	} else {
+		ruleList.erase(this->getListIterator(*rule, ruleList));
+	}
+
+
 	return *newRule;
+}
+
+Rule* Proxy::removeSubmenu(Rule* childItem) {
+	Rule* parent = this->getParentRule(childItem);
+
+	// search items before and after the submenu
+	std::list<Rule> rulesBefore;
+	std::list<Rule> rulesAfter;
+	bool isBehindChildtem = false;
+	for (std::list<Rule>::iterator iter = parent->subRules.begin(); iter != parent->subRules.end(); iter++) {
+		if (&*iter != childItem) {
+			if (!isBehindChildtem) {
+				rulesBefore.push_back(*iter);
+			} else {
+				rulesAfter.push_back(*iter);
+			}
+		} else {
+			isBehindChildtem = true;
+		}
+	}
+	Rule oldSubmenu = *parent;
+	oldSubmenu.subRules.clear();
+
+	// replace the submenu
+	*parent = *childItem;
+
+	// add the rules before and/or after to new submenus
+	if (rulesBefore.size() || rulesAfter.size()) {
+		std::list<Rule>* list = NULL;
+		Rule* parentRule = this->getParentRule(parent);
+		if (parentRule) {
+			list = &parentRule->subRules;
+		} else {
+			list = &this->rules;
+		}
+		assert(list != NULL);
+
+		if (rulesBefore.size()) {
+			Rule newSubmenu = oldSubmenu;
+			newSubmenu.subRules = rulesBefore;
+			list->insert(this->getListIterator(*parent, *list), newSubmenu);
+		}
+
+		if (rulesAfter.size()) {
+			Rule newSubmenu = oldSubmenu;
+			newSubmenu.subRules = rulesAfter;
+			std::list<Rule>::iterator iter = this->getListIterator(*parent, *list);
+			iter++;
+			list->insert(iter, newSubmenu);
+		}
+	}
+
+	return parent;
+}
+
+Rule* Proxy::createSubmenu(Rule* childItem) {
+	Rule childCopy = *childItem;
+	*childItem = Rule(Rule::SUBMENU, std::list<std::string>(), "", true);
+	childItem->subRules.push_back(childCopy);
+	return childItem;
 }
 
 Rule* Proxy::getParentRule(Rule* child, Rule* root) {

@@ -65,7 +65,7 @@ class GrublistCfgDlgGtk : public GrublistCfgDlg, public CommonClass {
 	GrubConfListing tvConfList;
 	Gtk::ProgressBar progressBar;
 
-	Gtk::ToolButton tbttAdd, tbttRemove, tbttUp, tbttDown, tbttSave, tbttPreferences, tbttReload;
+	Gtk::ToolButton tbttAdd, tbttRemove, tbttUp, tbttDown, tbttSave, tbttPreferences, tbttReload, tbttLeft, tbttRight;
 	Gtk::ToolItem ti_sep1;
 	Gtk::VSeparator vs_sep1;
 	Gtk::ToolItem ti_sep2;
@@ -74,10 +74,12 @@ class GrublistCfgDlgGtk : public GrublistCfgDlg, public CommonClass {
 	Gtk::VSeparator vs_sep3;
 	Gtk::ToolItem ti_sep4;
 	Gtk::VSeparator vs_sep4;
+	Gtk::ToolItem ti_sep5;
+	Gtk::VSeparator vs_sep5;
 	
 	Gtk::MenuItem miFile, miEdit, miView, miHelp, miInstallGrub;
 	Gtk::ImageMenuItem miExit, miSave, miPreferences, miAbout, miStartRootSelector;
-	ImageMenuItemOwnKey miReload, miAdd, miRemove, miUp, miDown;
+	ImageMenuItemOwnKey miReload, miAdd, miRemove, miUp, miDown, miLeft, miRight;
 	Gtk::Menu subFile, subEdit, subView, subHelp;
 	
 	bool lock_state;
@@ -135,7 +137,7 @@ public:
 	bool getProxyState(void* proxy);
 	void setProxyState(void* proxy, bool isActive);
 
-	void selectRule(void* rule);
+	void selectRule(void* rule, bool startEdit = false);
 
 protected:
 	void setEntrySensibility(const Gtk::TreeNodeChildren& list, bool sensibility);
@@ -148,6 +150,8 @@ private:
 	void signal_remove_click();
 	void signal_reload_click();
 	void signal_show_grub_install_dialog_click();
+	void signal_move_left_click();
+	void signal_move_right_click();
 	void signal_treeview_selection_changed();
 	bool signal_delete_event(GdkEventAny* event);
 	void signal_quit_click();

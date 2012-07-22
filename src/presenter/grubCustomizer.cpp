@@ -681,6 +681,18 @@ void GrubCustomizer::swapProxies(Proxy* a, Proxy* b){
 }
 
 
+void GrubCustomizer::createSubmenu(Rule* childItem) {
+	Rule* newItem = this->grublistCfg->createSubmenu(childItem);
+	this->syncListView_load();
+	this->listCfgDlg->selectRule(newItem, true);
+}
+
+void GrubCustomizer::removeSubmenu(Rule* childItem) {
+	Rule* newItem = this->grublistCfg->removeSubmenu(childItem);
+	this->syncListView_load();
+	this->listCfgDlg->selectRule(newItem);
+}
+
 void GrubCustomizer::showRuleInfo(Rule* rule){
 	if (rule && rule->dataSource)
 		this->listCfgDlg->setDefaultTitleStatusText(rule->getEntryName());

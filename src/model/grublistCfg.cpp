@@ -475,6 +475,9 @@ bool GrublistCfg::compareLists(std::list<Rule const*> a, std::list<Rule const*> 
 
 	std::list<const Rule*>::iterator self_iter = a.begin(), other_iter = b.begin();
 	while (self_iter != a.end() && other_iter != b.end()){
+		if ((*self_iter)->type != (*other_iter)->type) {
+			return false;
+		}
 		assert((*self_iter)->type == (*other_iter)->type);
 		//check this Rule
 		if ((*self_iter)->outputName != (*other_iter)->outputName)
@@ -559,6 +562,14 @@ void GrublistCfg::swapProxies(Proxy* a, Proxy* b){
 	a->index = b->index;
 	b->index = index1;
 	this->proxies.sort();
+}
+
+Rule* GrublistCfg::createSubmenu(Rule* child) {
+	return this->proxies.getProxyByRule(child)->createSubmenu(child);
+}
+
+Rule* GrublistCfg::removeSubmenu(Rule* child) {
+	return this->proxies.getProxyByRule(child)->removeSubmenu(child);
 }
 
 bool GrublistCfg::cfgDirIsClean(){

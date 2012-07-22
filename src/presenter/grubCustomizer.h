@@ -151,6 +151,8 @@ public:
 	void updateScriptEntry(Proxy* proxy);
 	void moveRule(void* rule, int direction);
 	void swapProxies(Proxy* a, Proxy* b);
+	void createSubmenu(Rule* childItem);
+	void removeSubmenu(Rule* childItem);
 	
 	void showRuleInfo(Rule* rule);
 	void showProxyInfo(Proxy* proxy);

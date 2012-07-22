@@ -34,6 +34,10 @@ public:
 	virtual void rootSelector_request()=0;
 	//user wants to show the grub install dialog
 	virtual void installDialogRequest()=0;
+	//user wants to create a new submenu
+	virtual void createSubmenuRequest(void* childItem)=0;
+	//user wants to remove a submenu
+	virtual void removeSubmenuRequest(void* childItem)=0;
 	//user wants to show the dialog which lets him add new scripts
 	virtual void scriptAddDlg_requested()=0;
 	//user wants to remove one of the proxies (script instances)

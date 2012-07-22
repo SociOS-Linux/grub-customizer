@@ -44,6 +44,15 @@ void EventListener::rootSelector_request(){
 	presenter.showPartitionChooser();
 }
 
+
+void EventListener::createSubmenuRequest(void* childItem) {
+	presenter.createSubmenu((Rule*)childItem);
+}
+
+void EventListener::removeSubmenuRequest(void* childItem) {
+	presenter.removeSubmenu((Rule*)childItem);
+}
+
 void EventListener::installDialogRequest(){
 	presenter.showInstallDialog();
 }

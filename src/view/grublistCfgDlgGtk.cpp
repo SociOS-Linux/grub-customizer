@@ -24,11 +24,13 @@ ImageMenuItemOwnKey::ImageMenuItemOwnKey(const Gtk::StockID& id, const Gtk::Acce
 
 GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	: tbttAdd(Gtk::Stock::ADD), tbttRemove(Gtk::Stock::REMOVE), tbttUp(Gtk::Stock::GO_UP), tbttDown(Gtk::Stock::GO_DOWN),
+	tbttLeft(Gtk::Stock::GO_BACK), tbttRight(Gtk::Stock::GO_FORWARD),
 	tbttSave(Gtk::Stock::SAVE), tbttPreferences(Gtk::Stock::PREFERENCES),
 	miFile(gettext("_File"), true), miExit(Gtk::Stock::QUIT), tbttReload(Gtk::Stock::REFRESH),
 	miEdit(gettext("_Edit"), true), miView(gettext("_View"), true), miHelp(gettext("_Help"), true),
 	miInstallGrub(gettext("_Install to MBR …"), true),
 	miAdd(Gtk::Stock::ADD, Gtk::AccelKey('+', Gdk::CONTROL_MASK)), miRemove(Gtk::Stock::REMOVE, Gtk::AccelKey('-', Gdk::CONTROL_MASK)), miUp(Gtk::Stock::GO_UP, Gtk::AccelKey('u', Gdk::CONTROL_MASK)), miDown(Gtk::Stock::GO_DOWN, Gtk::AccelKey('d', Gdk::CONTROL_MASK)),
+	miLeft(Gtk::Stock::GO_BACK, Gtk::AccelKey('l', Gdk::CONTROL_MASK)), miRight(Gtk::Stock::GO_FORWARD, Gtk::AccelKey('r', Gdk::CONTROL_MASK)),
 	miPreferences(Gtk::Stock::PREFERENCES), miReload(Gtk::Stock::REFRESH, Gtk::AccelKey("F5")), miSave(Gtk::Stock::SAVE),
 	miAbout(Gtk::Stock::ABOUT), miStartRootSelector(Gtk::Stock::OPEN),
 	lock_state(~0), burgSwitcher(gettext("BURG found!"), false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO),
@@ -72,6 +74,15 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	toolbar.append(tbttDown);
 	tbttDown.set_tooltip_text(gettext("Move down the selected entry or script"));
 	
+	ti_sep5.add(vs_sep5);
+	toolbar.append(ti_sep5);
+
+	toolbar.append(tbttLeft);
+	tbttLeft.set_tooltip_text(gettext("remove this entry from the current submenu"));
+
+	toolbar.append(tbttRight);
+	tbttRight.set_tooltip_text(gettext("add this entry to a new submenu"));
+
 	ti_sep3.add(vs_sep3);
 	toolbar.append(ti_sep3);
 	
@@ -104,7 +115,9 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	subEdit.attach(miRemove, 0,1,1,2);
 	subEdit.attach(miUp, 0,1,2,3);
 	subEdit.attach(miDown, 0,1,3,4);
-	subEdit.attach(miPreferences, 0,1,4,5);
+	subEdit.attach(miLeft, 0,1,4,5);
+	subEdit.attach(miRight, 0,1,5,6);
+	subEdit.attach(miPreferences, 0,1,6,7);
 	
 	subView.attach(miReload, 0,1,0,1);
 	
@@ -136,11 +149,15 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	tbttSave.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::saveConfig));
 	tbttAdd.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_add_click));
 	tbttRemove.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_remove_click));
+	tbttLeft.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_move_left_click));
+	tbttRight.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_move_right_click));
 	tbttReload.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_reload_click));
 	tbttPreferences.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_preference_click));
 	
 	miUp.signal_activate().connect(sigc::bind<int>(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_move_click),-1));
 	miDown.signal_activate().connect(sigc::bind<int>(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_move_click),1));
+	miLeft.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_move_left_click));
+	miRight.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_move_right_click));
 	miSave.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::saveConfig));
 	miAdd.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_add_click));
 	miRemove.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_remove_click));
@@ -289,6 +306,10 @@ void GrublistCfgDlgGtk::setLockState(int state){
 	miUp.set_sensitive((state & 1) == 0);
 	tbttDown.set_sensitive((state & 1) == 0);
 	miDown.set_sensitive((state & 1) == 0);
+	tbttLeft.set_sensitive((state & 1) == 0);
+	miLeft.set_sensitive((state & 1) == 0);
+	tbttRight.set_sensitive((state & 1) == 0);
+	miRight.set_sensitive((state & 1) == 0);
 
 	tbttAdd.set_sensitive((state & 1) == 0);
 	miAdd.set_sensitive((state & 1) == 0);
@@ -427,9 +448,12 @@ void GrublistCfgDlgGtk::setProxyState(void* proxy, bool isActive){
 	this->setLockState(0);
 }
 
-void GrublistCfgDlgGtk::selectRule(void* rule) {
+void GrublistCfgDlgGtk::selectRule(void* rule, bool startEdit) {
 	try {
 		this->tvConfList.get_selection()->select(this->getIterByRulePtr(rule));
+		if (startEdit) {
+			this->tvConfList.set_cursor(this->tvConfList.refTreeStore->get_path(this->getIterByRulePtr(rule)), *this->tvConfList.get_column(1), true);
+		}
 	} catch (GrublistCfgDlg::Exception e) {
 		if (e != RULE_ITER_NOT_FOUND)
 			throw e;
@@ -536,11 +560,23 @@ void GrublistCfgDlgGtk::signal_preference_click(){
 
 void GrublistCfgDlgGtk::update_move_buttons(){
 	int selectedRowsCount = tvConfList.get_selection()->count_selected_rows();
+	bool is_toplevel = false;
+	bool is_secondLevel = false;
+	if (selectedRowsCount > 0) {
+		is_toplevel = tvConfList.get_selection()->get_selected()->parent() ? false : true;
+		if (!is_toplevel) {
+			is_secondLevel = tvConfList.get_selection()->get_selected()->parent()->parent() ? false : true;
+		}
+	}
 
 	tbttUp.set_sensitive(selectedRowsCount == 1);
 	miUp.set_sensitive(selectedRowsCount == 1);
 	tbttDown.set_sensitive(selectedRowsCount == 1);
 	miDown.set_sensitive(selectedRowsCount == 1);
+	tbttLeft.set_sensitive(selectedRowsCount == 1 && !is_toplevel && !is_secondLevel); //selected entry must be inside a submenu
+	miLeft.set_sensitive(selectedRowsCount == 1 && !is_toplevel && !is_secondLevel); //selected entry must be inside a submenu
+	tbttRight.set_sensitive(selectedRowsCount == 1 && !is_toplevel);
+	miRight.set_sensitive(selectedRowsCount == 1 && !is_toplevel);
 	
 //	if (selectedRowsCount == 1){
 //		Gtk::TreeModel::iterator selectedRowIter = tvConfList.get_selection()->get_selected();
@@ -629,6 +665,16 @@ void GrublistCfgDlgGtk::signal_quit_click(){
 
 void GrublistCfgDlgGtk::signal_show_grub_install_dialog_click(){
 	eventListener->installDialogRequest();
+}
+
+void GrublistCfgDlgGtk::signal_move_left_click() {
+	Gtk::TreeModel::iterator iter = tvConfList.get_selection()->get_selected();
+	eventListener->removeSubmenuRequest((void*)(*iter)[tvConfList.treeModel.relatedRule]);
+}
+
+void GrublistCfgDlgGtk::signal_move_right_click() {
+	Gtk::TreeModel::iterator iter = tvConfList.get_selection()->get_selected();
+	eventListener->createSubmenuRequest((void*)(*iter)[tvConfList.treeModel.relatedRule]);
 }
 
 void GrublistCfgDlgGtk::showErrorMessage(std::string const& msg, std::vector<std::string> const& values = std::vector<std::string>()){

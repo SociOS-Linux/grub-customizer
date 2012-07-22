@@ -53,6 +53,8 @@ struct Proxy {
 	bool generateFile(std::string const& path, int cfg_dir_prefix_length, std::string const& cfg_dir_noprefix); //before running this function, the realted script file must be saved!
 	std::string getScriptName();
 	Rule& moveRule(Rule* rule, int direction);
+	Rule* removeSubmenu(Rule* childItem);
+	Rule* createSubmenu(Rule* childItem);
 private:
 	Rule* getParentRule(Rule* child, Rule* root = NULL);
 	std::list<Rule>& getRuleList(Rule* parentElement);

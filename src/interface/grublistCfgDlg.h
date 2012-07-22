@@ -108,7 +108,7 @@ public:
 	virtual void setProxyState(void* proxy, bool isActive)=0;
 
 	//select the given rule
-	virtual void selectRule(void* rule)=0;
+	virtual void selectRule(void* rule, bool startEdit = false)=0;
 };
 
 #endif
