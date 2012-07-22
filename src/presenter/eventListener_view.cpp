@@ -31,7 +31,7 @@ void EventListenerView::installDialogRequest(){
 }
 
 void EventListenerView::installGrub_request(std::string const& device){
-	presenter.installGrub(device);
+	Glib::Thread::create(sigc::bind<std::string>(sigc::mem_fun(&presenter, &GtkClient::installGrub), device), false);
 }
 
 void EventListenerView::scriptAddDlg_requested(){

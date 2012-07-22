@@ -1,4 +1,4 @@
-#include "grubconf_ui_gtk.h"
+#include "grublistCfgDlg.h"
 
 ImageMenuItemOwnKey::ImageMenuItemOwnKey(const Gtk::StockID& id, const Gtk::AccelKey& accel_key) : Gtk::ImageMenuItem(id){
 	set_accel_key(accel_key);
@@ -14,7 +14,7 @@ GrubConfUIGtk::GrubConfUIGtk()
 	miAdd(Gtk::Stock::ADD, Gtk::AccelKey('+', Gdk::CONTROL_MASK)), miRemove(Gtk::Stock::REMOVE, Gtk::AccelKey('-', Gdk::CONTROL_MASK)), miUp(Gtk::Stock::GO_UP, Gtk::AccelKey('u', Gdk::CONTROL_MASK)), miDown(Gtk::Stock::GO_DOWN, Gtk::AccelKey('d', Gdk::CONTROL_MASK)),
 	miPreferences(Gtk::Stock::PREFERENCES), miReload(Gtk::Stock::REFRESH, Gtk::AccelKey("F5")), miSave(Gtk::Stock::SAVE),
 	miAbout(Gtk::Stock::ABOUT), miStartRootSelector(Gtk::Stock::OPEN),
-	thread_active(false), quit_requested(false), lock_state(~0)
+	lock_state(~0)
 {
 	win.set_icon_name("grub-customizer");
 
@@ -157,8 +157,6 @@ zeugma https://launchpad.net/~sunder67\
 	win.signal_delete_event().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_delete_event));
 
 	dlgAbout.signal_response().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_about_dlg_response));
-
-	thread_active = true;
 }
 
 void GrubConfUIGtk::setEventListener(EventListenerView_iface& eventListener) {

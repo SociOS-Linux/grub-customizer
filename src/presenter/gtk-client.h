@@ -2,7 +2,7 @@
 #define GTK_CLIENT_INCLUDED
 
 #include "../model/grublistCfg.h"
-#include "../view/grubconf_ui_gtk.h"
+#include "../view/grublistCfgDlg.h"
 #include <glibmm/thread.h>
 #include <glibmm/dispatcher.h>
 #include <libintl.h>
@@ -39,7 +39,10 @@ class GtkClient {
 	Glib::Dispatcher disp_sync_load, disp_sync_save, disp_thread_died;
 	bool config_has_been_different_on_startup_but_unsaved;
 	bool modificationsUnsaved;
+	bool quit_requested;
+	int activeThreadCount;
 public:
+
 	void setModelListCfg(GrublistCfg& grublistCfg);
 	void setViewListCfg(GrubConfUIGtk& listCfgDlg);
 	void setViewSettingsDialog(GrubSettingsDlgGtk& settingsDlg);
@@ -68,7 +71,7 @@ public:
 	void showErrorThreadDied();
 	
 	void showInstallDialog();
-	void installGrub(std::string const& device);
+	void installGrub(std::string device);
 	void showMessageGrubInstallCompleted(std::string const& msg);
 	
 	void showScriptAddDlg();

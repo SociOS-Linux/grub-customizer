@@ -1,4 +1,7 @@
 * text=auto !eol
+/.cproject -text
+/.project -text
+.settings/org.eclipse.cdt.ui.prefs -text
 /CMakeLists.txt -text
 /COPYING -text
 /README -text
@@ -76,8 +79,8 @@ src/presenter/gtk-client.h -text
 src/presenter/gtk-client_main.cpp -text
 src/view/grubInstallDlg.cpp -text
 src/view/grubInstallDlg.h -text
-src/view/grubconf_ui_gtk.cpp -text
-src/view/grubconf_ui_gtk.h -text
+src/view/grublistCfgDlg.cpp -text
+src/view/grublistCfgDlg.h -text
 src/view/partitionChooser.cpp -text
 src/view/partitionChooser.h -text
 src/view/scriptAddDlg.cpp -text

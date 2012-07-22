@@ -5,7 +5,7 @@ GtkClient::GtkClient(GrubEnv& env)
 	  installer(NULL), installDlg(NULL), settingsOnDisk(NULL), scriptAddDlg(NULL),
 	  partitionChooser(NULL), savedListCfg(NULL),
 	 env(env), config_has_been_different_on_startup_but_unsaved(false),
-	 modificationsUnsaved(false)
+	 modificationsUnsaved(false), quit_requested(false), activeThreadCount(0)
 {
 	disp_sync_load.connect(sigc::mem_fun(this, &GtkClient::syncListView_load));
 	disp_sync_save.connect(sigc::mem_fun(this, &GtkClient::syncListView_save));
@@ -72,6 +72,7 @@ void GtkClient::run(){
 }
 
 void GtkClient::load(bool keepConfig){
+	this->activeThreadCount++;
 	this->listCfgDlg->setLockState(5);
 	
 	if (!keepConfig){
@@ -92,11 +93,11 @@ void GtkClient::load(bool keepConfig){
 	if (keepConfig){
 		this->settingsOnDisk->save();
 	}
+	this->activeThreadCount--;
 }
 
 void GtkClient::save(){
 	this->config_has_been_different_on_startup_but_unsaved = false;
-	this->listCfgDlg->thread_active = true; //deprecated
 	this->modificationsUnsaved = false; //deprecated
 
 	this->listCfgDlg->setLockState(5);
@@ -105,8 +106,10 @@ void GtkClient::save(){
 }
 
 void GtkClient::save_thread(){
+	this->activeThreadCount++;
 	this->settings->save();
 	this->grublistCfg->save();
+	this->activeThreadCount--;
 }
 
 void GtkClient::renameEntry(Rule* rule, std::string const& newName){
@@ -200,8 +203,12 @@ void GtkClient::showInstallDialog(){
 	installDlg->show();
 }
 
-void GtkClient::installGrub(std::string const& device){
-	Glib::Thread::create(sigc::bind<std::string>(sigc::mem_fun(installer, &GrubInstaller::threadable_install), device), false);
+void GtkClient::installGrub(std::string device){
+	this->activeThreadCount++;
+	installer->threadable_install(device);
+	this->activeThreadCount--;
+	if (this->activeThreadCount == 0 && this->quit_requested)
+		this->listCfgDlg->close();
 }
 
 void GtkClient::showMessageGrubInstallCompleted(std::string const& msg){
@@ -255,8 +262,7 @@ void GtkClient::syncListView_load(){
 		this->listCfgDlg->setStatusText(gettext("loading configuration…"));
 	}
 	else {
-		this->listCfgDlg->thread_active = false; //deprecated
-		if (this->listCfgDlg->quit_requested) //deprecated
+		if (this->quit_requested)
 			this->listCfgDlg->close();
 		this->listCfgDlg->hideProgressBar();
 		this->listCfgDlg->setStatusText("");
@@ -292,8 +298,7 @@ void GtkClient::syncListView_save(){
 			this->listCfgDlg->showProxyNotFoundMessage();
 			this->grublistCfg->error_proxy_not_found = false;
 		}
-		listCfgDlg->thread_active = false;
-		if (this->listCfgDlg->quit_requested) //deprecated
+		if (this->quit_requested)
 			listCfgDlg->close();
 		
 		this->listCfgDlg->setLockState(0);
@@ -319,8 +324,8 @@ bool GtkClient::quit(){
 	}
 	
 	if (dlgResponse != 0){
-		if (this->listCfgDlg->thread_active){
-			this->listCfgDlg->quit_requested = true;
+		if (this->activeThreadCount != 0){
+			this->quit_requested = true;
 			this->grublistCfg->cancelThreads();
 			return true;
 		}

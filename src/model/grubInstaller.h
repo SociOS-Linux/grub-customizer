@@ -10,8 +10,8 @@ class GrubInstaller {
 	EventListenerModel_iface* eventListener;
 public:
 	GrubInstaller(GrubEnv& env);
-	void threadable_install(std::string device);
-	std::string install(std::string device);
+	void threadable_install(std::string const& device);
+	std::string install(std::string const& device);
 	void setEventListener(EventListenerModel_iface& eventListener);
 };
 

@@ -1,5 +1,5 @@
-#ifndef GRUBCONF_UI_GTK_INCLUDED
-#define GRUBCONF_UI_GTK_INCLUDED
+#ifndef GRUBLIST_CFG_DLG_INCLUDED
+#define GRUBLIST_CFG_DLG_INCLUDED
 #include <gtkmm.h>
 #include "../interface/grubconf_ui.h"
 #include "../interface/eventListener_view_iface.h"
@@ -60,10 +60,10 @@ class GrubConfUIGtk : public GrubConfUI {
 	Gtk::Menu subFile, subEdit, subView, subHelp;
 	Gtk::AboutDialog dlgAbout;
 	
-	
 	bool lock_state;
-	public: bool quit_requested, thread_active; //TODO: move to presenter!
-	
+
+	Gtk::TreeModel::iterator getIterByScriptPtr(void* scriptPtr);
+	Gtk::TreeModel::iterator getIterByEntryPtr(void* entryPtr);
 public:
 	GrubConfUIGtk();
 	void setEventListener(EventListenerView_iface& eventListener);
@@ -107,8 +107,6 @@ public:
 	void appendEntry(Glib::ustring const& name, bool is_active, void* entryPtr, bool editable);
 	void showProxyNotFoundMessage();
 	
-	Gtk::TreeModel::iterator getIterByScriptPtr(void* scriptPtr);
-	Gtk::TreeModel::iterator getIterByEntryPtr(void* entryPtr);
 	void setProxyName(void* proxy, Glib::ustring const& name, bool isModified);
 	
 	void swapProxies(void* a, void* b);

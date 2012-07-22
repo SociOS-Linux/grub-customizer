@@ -17,7 +17,7 @@ include_directories(
 add_executable(grub-customizer
 	src/model/entry.cpp
 	src/model/grublistCfg.cpp
-	src/view/grubconf_ui_gtk.cpp
+	src/view/grublistCfgDlg.cpp
 	src/view/grubInstallDlg.cpp
 	src/presenter/gtk-client_main.cpp
 	src/presenter/gtk-client.cpp
