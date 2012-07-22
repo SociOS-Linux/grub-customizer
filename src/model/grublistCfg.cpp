@@ -225,8 +225,17 @@ void GrublistCfg::readGeneratedFile(FILE* source, bool createScriptIfNotFound){
 	while (!cancelThreadsRequested && (row = GrubConfRow(source))){
 		if (!inScript && row.text.substr(0,10) == ("### BEGIN ") && row.text.substr(row.text.length()-4,4) == " ###"){
 			this->lock();
-			if (script)
+			if (script) {
+				if (plaintextBuffer != "") {
+					Entry newEntry("#text", "", plaintextBuffer, Entry::PLAINTEXT);
+					if (this->hasLogger()) {
+						newEntry.setLogger(this->getLogger());
+					}
+					script->push_front(newEntry);
+				}
 				this->proxies.sync_all(true, true, script);
+			}
+			plaintextBuffer = "";
 			std::string scriptName = row.text.substr(10, row.text.length()-14);
 			std::string prefix = this->env.cfg_dir_prefix;
 			std::string realScriptName = prefix+scriptName;
@@ -243,14 +252,6 @@ void GrublistCfg::readGeneratedFile(FILE* source, bool createScriptIfNotFound){
 			}
 			inScript = true;
 		} else if (inScript && row.text.substr(0,8) == ("### END ") && row.text.substr(row.text.length()-4,4) == " ###") {
-			if (plaintextBuffer != "") {
-				Entry newEntry("#text", "", plaintextBuffer, Entry::PLAINTEXT);
-				if (this->hasLogger()) {
-					newEntry.setLogger(this->getLogger());
-				}
-				plaintextBuffer = "";
-				script->push_front(newEntry);
-			}
 			inScript = false;
 		} else if (script != NULL && row.text.substr(0, 10) == "menuentry ") {
 			this->lock();
