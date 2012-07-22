@@ -25,6 +25,7 @@
 #include "../interface/colorChooser.h"
 #include "../interface/evt_settings.h"
 #include <string>
+#include "../presenter/commonClass.h"
 
 
 //a gtkmm combobox with colorful foreground and background. useful to choose an item of a predefined color set
@@ -51,7 +52,7 @@ public:
 	GrubColorChooser(bool blackIsTransparent = false);
 };
 
-class GrubSettingsDlgGtk : public Gtk::Dialog, public SettingsDlg {
+class GrubSettingsDlgGtk : public Gtk::Dialog, public SettingsDlg, public CommonClass {
 	struct AdvancedSettingsTreeModel : public Gtk::TreeModelColumnRecord {
 		Gtk::TreeModelColumn<bool> active;
 		Gtk::TreeModelColumn<Glib::ustring> name;

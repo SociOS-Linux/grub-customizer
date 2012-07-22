@@ -21,9 +21,9 @@
 #include <list>
 #include <string>
 #include <cstdio>
-#include <iostream>
 #include <sys/stat.h> //mkdir
 #include "grubEnv.h"
+#include "../presenter/commonClass.h"
 
 struct SettingRow {
 	SettingRow();
@@ -33,7 +33,7 @@ struct SettingRow {
 	std::string getOutput();
 };
 
-class SettingsManagerDataStore {
+class SettingsManagerDataStore : public CommonClass {
 	std::list<SettingRow> settings;
 	std::string filePath;
 	bool _reloadRequired;

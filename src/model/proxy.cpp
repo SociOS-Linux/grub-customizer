@@ -87,12 +87,10 @@ void Proxy::importRuleString(const char* ruleString){
 }
 
 Rule* Proxy::getRuleByEntry(Entry const& entry, std::list<Rule>& list, Rule::RuleType ruletype) {
-//	std::cout << "rule count: " << list.size() << std::endl;
 	for (std::list<Rule>::iterator rule_iter = list.begin(); rule_iter != list.end(); rule_iter++){
 		if (&entry == rule_iter->dataSource && rule_iter->type == ruletype)
 			return &*rule_iter;
 		else {
-//			std::cout << entry.name << " != " << rule_iter->__idname << std::endl;
 			Rule* result = this->getRuleByEntry(entry, rule_iter->subRules, ruletype);
 			if (result)
 				return result;

@@ -22,7 +22,9 @@
 #include "../interface/evt_grubInstallDlg.h"
 #include <libintl.h>
 #include "../interface/grubInstallDlg.h"
-class GrubInstallDlgGtk : public Gtk::Dialog, public GrubInstallDlg {
+#include "../presenter/commonClass.h"
+
+class GrubInstallDlgGtk : public Gtk::Dialog, public GrubInstallDlg, public CommonClass {
 	Gtk::Label lblDescription;
 	Gtk::HBox hbDevice;
 	Gtk::Label lblDevice, lblInstallInfo;

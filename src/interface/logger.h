@@ -15,24 +15,21 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+#ifndef LOGGER_H_INCLUDED
+#define LOGGER_H_INCLUDED
 
-#ifndef GC_ABOUNTDIALOG_GTK_INCLUDED
-#define GC_ABOUNTDIALOG_GTK_INCLUDED
-#include <gtkmm.h>
-#include "../config.h"
-#include <libintl.h>
-#include "../interface/aboutDialog.h"
-#include "../presenter/commonClass.h"
+#include <string>
 
-class AboutDialogGtk : public Gtk::AboutDialog, public AboutDialog, public CommonClass {
-	Glib::ustring appName, appVersion;
-	std::vector<Glib::ustring> authors;
-	std::vector<Glib::ustring> artists;
-
-	void signal_about_dlg_response(int response_id);
+class Logger {
 public:
-	AboutDialogGtk();
-	void show();
+	enum Priority {
+		EVENT,
+		IMPORTANT_EVENT,
+		INFO,
+		WARNING,
+		ERROR
+	};
+	virtual void log(std::string const& str, Priority prio) = 0;
 };
 
 #endif

@@ -16,23 +16,35 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef GC_ABOUNTDIALOG_GTK_INCLUDED
-#define GC_ABOUNTDIALOG_GTK_INCLUDED
-#include <gtkmm.h>
-#include "../config.h"
-#include <libintl.h>
-#include "../interface/aboutDialog.h"
-#include "../presenter/commonClass.h"
+#include "commonClass.h"
 
-class AboutDialogGtk : public Gtk::AboutDialog, public AboutDialog, public CommonClass {
-	Glib::ustring appName, appVersion;
-	std::vector<Glib::ustring> authors;
-	std::vector<Glib::ustring> artists;
+CommonClass::CommonClass() {
+	this->logger = NULL;
+}
 
-	void signal_about_dlg_response(int response_id);
-public:
-	AboutDialogGtk();
-	void show();
-};
-
-#endif
+void CommonClass::setLogger(Logger& logger) {
+	this->logger = &logger;
+}
+Logger const& CommonClass::getLogger() const {
+	if (this->logger == NULL) {
+		throw LOGGER_NOT_SET;
+	}
+	return *this->logger;
+}
+Logger& CommonClass::getLogger() {
+	if (this->logger == NULL) {
+		throw LOGGER_NOT_SET;
+	}
+	return *this->logger;
+}
+Logger* CommonClass::getLoggerPtr() {
+	return this->logger;
+}
+bool CommonClass::hasLogger() const {
+	return this->logger != NULL;
+}
+void CommonClass::log(std::string const& message, Logger::Priority prio) const {
+	if (this->logger) {
+		this->logger->log(message, prio);
+	}
+}

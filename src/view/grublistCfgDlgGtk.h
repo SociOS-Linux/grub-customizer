@@ -20,10 +20,10 @@
 #define GRUBLIST_CFG_DLG_GTK_INCLUDED
 #include <gtkmm.h>
 #include "../interface/evt_listCfgDlg.h"
-#include <iostream>
 #include <libintl.h>
 #include "../config.h"
 #include "../interface/grublistCfgDlg.h"
+#include "../presenter/commonClass.h"
 
 //TODO: Edit -> Rename [v3]
 //TODO: Edit -> activate/unactivate [v3]
@@ -52,7 +52,7 @@ class ImageMenuItemOwnKey : public Gtk::ImageMenuItem {
 	ImageMenuItemOwnKey(const Gtk::StockID& id, const Gtk::AccelKey& accel_key);
 };
 
-class GrublistCfgDlgGtk : public GrublistCfgDlg {
+class GrublistCfgDlgGtk : public GrublistCfgDlg, public CommonClass {
 	EventListener_listCfgDlg* eventListener;
 	Gtk::Window win;
 	Gtk::VBox vbMainSplit;

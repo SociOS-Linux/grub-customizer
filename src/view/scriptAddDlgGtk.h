@@ -22,8 +22,9 @@
 #include "../interface/evt_scriptAddDlg.h"
 #include "../interface/scriptAddDlg.h"
 #include <libintl.h>
+#include "../presenter/commonClass.h"
 
-class ScriptAddDlgGtk : public Gtk::Dialog, public ScriptAddDlg {
+class ScriptAddDlgGtk : public Gtk::Dialog, public ScriptAddDlg, public CommonClass {
 	Gtk::Dialog scriptAddDlg;
 	Gtk::VBox vbScriptPreview;
 	Gtk::HBox hbScriptSelection;

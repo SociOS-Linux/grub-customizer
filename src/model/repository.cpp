@@ -26,11 +26,16 @@ void Repository::load(std::string const& directory, bool is_proxifiedScript_dir)
 		while (entry = readdir(dir)){
 			stat((directory+"/"+entry->d_name).c_str(), &fileProperties);
 			if ((fileProperties.st_mode & S_IFMT) != S_IFDIR){ //ignore directories
+				bool scriptAdded = false;
 				if (!is_proxifiedScript_dir && !ProxyScriptData::is_proxyscript(directory+"/"+entry->d_name) && std::string(entry->d_name).length() >= 4 && entry->d_name[0] >= '1' && entry->d_name[0] <= '9' && entry->d_name[1] >= '0' && entry->d_name[1] <= '9' && entry->d_name[2] == '_'){
 					this->push_back(Script(std::string(entry->d_name).substr(3), directory+"/"+entry->d_name));
-				}
-				else if (is_proxifiedScript_dir) {
+					scriptAdded = true;
+				} else if (is_proxifiedScript_dir) {
 					this->push_back(Script(pscriptname_decode(entry->d_name), directory+"/"+entry->d_name));
+					scriptAdded = true;
+				}
+				if (scriptAdded && this->hasLogger()) {
+					this->back().setLogger(this->getLogger());
 				}
 			}
 		}
@@ -47,6 +52,10 @@ Script* Repository::getScriptByFilename(std::string const& fileName, bool create
 	if (result == NULL && createScriptIfNotFound){
 		this->push_back(Script("noname", fileName));
 		result = &this->back();
+
+		if (this->hasLogger()) {
+			this->back().setLogger(this->getLogger());
+		}
 	}
 	return result;
 }

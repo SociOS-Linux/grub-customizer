@@ -22,7 +22,7 @@
 #include <cstdio>
 #include <string>
 #include <cstdlib>
-#include <iostream>
+#include "../presenter/commonClass.h"
 
 
 struct Mountpoint {
@@ -41,7 +41,7 @@ struct Mountpoint {
 	bool isLiveCdFs();
 };
 
-class MountTable : public std::list<Mountpoint> {
+class MountTable : public std::list<Mountpoint>, public CommonClass {
 	bool loaded;
 	public:
 	enum Exception {
@@ -63,7 +63,7 @@ class MountTable : public std::list<Mountpoint> {
 	void remove(Mountpoint const& mountpoint);
 	void umountAll(std::string const& prefix);
 	void mountRootFs(std::string const& device, std::string const& mountpoint);
-	void print() const;
+	operator std::string() const;
 };
 #endif
 

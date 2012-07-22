@@ -20,7 +20,6 @@
 #define GRUB_CUSTOMIZER_PROXY_INCLUDED
 #include "rule.h"
 #include "script.h"
-#include <iostream>
 #include <sys/stat.h>
 #include <assert.h>
 

@@ -19,7 +19,6 @@
 #ifndef PSCRIPTNAME_TRANSLATOR_INCLUDED
 #define PSCRIPTNAME_TRANSLATOR_INCLUDED
 
-#include <iostream>
 #include <string>
 #include <sstream>
 

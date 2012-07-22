@@ -24,9 +24,9 @@
 #include "../interface/evt_partitionChooser.h"
 #include <libintl.h>
 #include <locale.h>
-#include <iostream>
 #include "../config.h"
 #include "../interface/partitionChooser.h"
+#include "../presenter/commonClass.h"
 
 /**
  * Gtk::Assistant seem to be buggy: after applying the assistant, a call of show() brings a broken (empty)
@@ -35,7 +35,7 @@
  * create a new instance while the presenter simply needs to call show() or hide() on the PartitionChooser.
  */
 
-class PartitionChooserGtk : public PartitionChooser {
+class PartitionChooserGtk : public PartitionChooser, public CommonClass {
 	Gtk::Assistant* assistant;
 	Gtk::Label lblMessage, lblSubmountpointDescription;
 	Gtk::ListViewText lvRootPartitionSelection;

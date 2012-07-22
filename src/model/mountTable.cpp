@@ -223,8 +223,10 @@ void MountTable::mountRootFs(std::string const& device, std::string const& mount
 	this->loaded = true;
 }
 
-void MountTable::print() const {
+MountTable::operator std::string() const {
+	std::string result;
 	for (MountTable::const_iterator iter = this->begin(); iter != this->end(); iter++){
-		std::cout << "[" << (iter->isMounted ? "x" : " ")  << "] " <<  iter->device << " " << iter->mountpoint << std::endl;
+		result += std::string("[") + (iter->isMounted ? "x" : " ")  + "] " + iter->device + " " + iter->mountpoint + "\n";
 	}
+	return result;
 }

@@ -20,7 +20,6 @@
 #define GRUB_CFG_LIBProxyScriptData_PARSER_INCLUDED
 #include <cstdio>
 #include <string>
-#include <iostream>
 
 struct ProxyScriptData {
 	std::string scriptCmd, proxyCmd, ruleString;

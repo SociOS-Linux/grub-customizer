@@ -21,8 +21,9 @@
 #include <string>
 #include "grubEnv.h"
 #include "../interface/evt_model.h"
+#include "../presenter/commonClass.h"
 
-class GrubInstaller {
+class GrubInstaller : public CommonClass {
 	GrubEnv& env;
 	std::string install_result;
 	EventListener_model* eventListener;

@@ -23,8 +23,9 @@
 #include <glibmm/dispatcher.h>
 #include <gtkmm/main.h>
 #include "grubCustomizer.h"
+#include "../presenter/commonClass.h"
 
-class GlibThreadController : public ThreadController {
+class GlibThreadController : public ThreadController, public CommonClass {
 	GrubCustomizer& app;
 
 	Glib::Dispatcher disp_sync_load, disp_sync_save, disp_thread_died, disp_updateSettingsDlgResolutionList, disp_settings_loaded;

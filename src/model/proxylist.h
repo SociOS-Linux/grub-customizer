@@ -21,13 +21,15 @@
 #include <list>
 #include <sstream>
 #include "proxy.h"
+#include "../presenter/commonClass.h"
+
 struct EntryTitleListItem {
 	std::string labelPathValue;
 	std::string labelPathLabel;
 	std::string numericPathValue;
 	std::string numericPathLabel;
 };
-struct ProxyList : public std::list<Proxy> {
+struct ProxyList : public std::list<Proxy>, public CommonClass {
 	enum Exception {
 		NO_RELATED_PROXY_FOUND
 	};

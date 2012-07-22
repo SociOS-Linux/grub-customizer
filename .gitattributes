@@ -41,6 +41,7 @@ src/interface/evt_scriptAddDlg.h -text
 src/interface/evt_settings.h -text
 src/interface/grubInstallDlg.h -text
 src/interface/grublistCfgDlg.h -text
+src/interface/logger.h -text
 src/interface/mutex.h -text
 src/interface/partitionChooser.h -text
 src/interface/scriptAddDlg.h -text
@@ -76,6 +77,8 @@ src/model/script.cpp -text
 src/model/script.h -text
 src/model/settings_mng_ds.cpp -text
 src/model/settings_mng_ds.h -text
+src/presenter/commonClass.cpp -text
+src/presenter/commonClass.h -text
 src/presenter/eventListener.cpp -text
 src/presenter/eventListener.h -text
 src/presenter/glibMutex.cpp -text
@@ -86,6 +89,8 @@ src/presenter/grubCustomizer.cpp -text
 src/presenter/grubCustomizer.h -text
 src/presenter/grubcfg_proxy_main.cpp -text
 src/presenter/gtk-client_main.cpp -text
+src/presenter/streamLogger.cpp -text
+src/presenter/streamLogger.h -text
 src/view/aboutDialogGtk.cpp -text
 src/view/aboutDialogGtk.h -text
 src/view/grubInstallDlgGtk.cpp -text

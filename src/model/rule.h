@@ -20,9 +20,9 @@
 #define GRUB_CUSTOMIZER_RULE_INCLUDED
 #include <string>
 #include "entry.h"
-#include <iostream>
 #include "../interface/entryPathBuilder.h"
 #include "../interface/entryPathFollower.h"
+#include <iostream>
 
 struct Rule {
 	Entry* dataSource; //assigned when using RuleType::OTHER_ENTRIES_PLACEHOLDER

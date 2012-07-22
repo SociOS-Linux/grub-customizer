@@ -44,6 +44,8 @@
 #include "../model/deviceDataList.h"
 #include "../interface/threadController.h"
 
+#include "commonClass.h"
+
 /**
  * master class of Grub Customizer.
  * Coordinates all the windows (views) and data objects.
@@ -56,7 +58,7 @@
  * not too much work to change this.
  */
 
-class GrubCustomizer {
+class GrubCustomizer : public CommonClass {
 	GrubEnv& env;
 	GrublistCfg* grublistCfg;
 	GrublistCfgDlg* listCfgDlg;

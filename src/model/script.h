@@ -21,13 +21,13 @@
 #include <string>
 #include <list>
 #include <cstdlib>
-#include <iostream>
 #include <sys/stat.h>
 #include "entry.h"
 #include "../interface/entryPathBuilder.h"
 #include "../interface/entryPathFollower.h"
+#include "../presenter/commonClass.h"
 
-struct Script : public EntryPathBilder, EntryPathFollower, std::list<Entry> {
+struct Script : public EntryPathBilder, EntryPathFollower, std::list<Entry>, public CommonClass {
 	enum Exception {
 		ELEMENT_NOT_FOUND
 	};

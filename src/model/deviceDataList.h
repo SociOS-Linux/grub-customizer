@@ -21,7 +21,9 @@
 #include <map>
 #include <cstdio>
 #include <string>
-class DeviceDataList : public std::map<std::string, std::map<std::string, std::string> > {
+#include "../presenter/commonClass.h"
+
+class DeviceDataList : public std::map<std::string, std::map<std::string, std::string> >, public CommonClass {
 public:
 	DeviceDataList(FILE* blkidOutput);
 	DeviceDataList();

@@ -16,23 +16,26 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef GC_ABOUNTDIALOG_GTK_INCLUDED
-#define GC_ABOUNTDIALOG_GTK_INCLUDED
-#include <gtkmm.h>
-#include "../config.h"
-#include <libintl.h>
-#include "../interface/aboutDialog.h"
-#include "../presenter/commonClass.h"
+#include "streamLogger.h"
 
-class AboutDialogGtk : public Gtk::AboutDialog, public AboutDialog, public CommonClass {
-	Glib::ustring appName, appVersion;
-	std::vector<Glib::ustring> authors;
-	std::vector<Glib::ustring> artists;
+StreamLogger::StreamLogger(std::ostream& stream) : stream(&stream) {}
 
-	void signal_about_dlg_response(int response_id);
-public:
-	AboutDialogGtk();
-	void show();
-};
+void StreamLogger::log(std::string const& message, Logger::Priority prio) {
+	if (prio == Logger::IMPORTANT_EVENT) {
+		*this->stream << " *** ";
+	} else if (prio == Logger::EVENT) {
+		*this->stream << "   * ";
+	} else {
+		*this->stream << "     ";
+	}
 
-#endif
+	if (prio == Logger::INFO) {
+		*this->stream << "[";
+	}
+	*this->stream << message;
+	if (prio == Logger::INFO) {
+		*this->stream << "]";
+	}
+
+	*this->stream << std::endl;
+}

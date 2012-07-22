@@ -33,6 +33,12 @@ void GrublistCfg::setMutex(Mutex& mutex) {
 	this->mutex = &mutex;
 }
 
+void GrublistCfg::setLogger(Logger& logger) {
+	this->CommonClass::setLogger(logger);
+	this->proxies.setLogger(logger);
+	this->repository.setLogger(logger);
+}
+
 void GrublistCfg::lock(){
 	if (this->mutex == NULL)
 		throw MISSING_MUTEX;
@@ -102,6 +108,7 @@ void GrublistCfg::load(bool preserveConfig){
 		}
 
 		//load scripts
+		this->log("loading scripts…", Logger::EVENT);
 		this->lock();
 		repository.load(this->env.cfg_dir, false);
 		repository.load(this->env.cfg_dir+"/proxifiedScripts", true);
@@ -110,6 +117,7 @@ void GrublistCfg::load(bool preserveConfig){
 	
 	
 		//load proxies
+		this->log("loading proxies…", Logger::EVENT);
 		this->lock();
 		struct dirent *entry;
 		struct stat fileProperties;
@@ -148,6 +156,7 @@ void GrublistCfg::load(bool preserveConfig){
 	}
 	
 	//create proxifiedScript links & chmod other files
+	this->log("creating proxifiedScript links & chmodding other files…", Logger::EVENT);
 
 	this->lock();
 	for (Repository::iterator iter = this->repository.begin(); iter != this->repository.end(); iter++){
@@ -158,8 +167,7 @@ void GrublistCfg::load(bool preserveConfig){
 			for (std::list<Proxy*>::iterator piter = relatedProxies.begin(); piter != relatedProxies.end(); piter++){
 				int res = chmod((*piter)->fileName.c_str(), 0644);
 			}
-		}
-		else {
+		} else {
 			//enable scripts (unproxified), in this case, Proxy::fileName == Script::fileName
 			chmod(iter->fileName.c_str(), 0755);
 		}
@@ -168,7 +176,7 @@ void GrublistCfg::load(bool preserveConfig){
 	send_new_load_progress(0.1);
 	
 	//run mkconfig
-	std::cout << "running " << this->env.mkconfig_cmd << std::endl;
+	this->log("running " + this->env.mkconfig_cmd, Logger::EVENT);
 	FILE* mkconfigProc = popen(this->env.mkconfig_cmd.c_str(), "r");
 	readGeneratedFile(mkconfigProc);
 	
@@ -176,6 +184,7 @@ void GrublistCfg::load(bool preserveConfig){
 	if (success != 0 && !cancelThreadsRequested){
 		throw GRUB_CMD_EXEC_FAILED;
 	}
+	this->log("mkconfig successfull completed", Logger::INFO);
 
 	this->send_new_load_progress(0.9);
 
@@ -183,13 +192,15 @@ void GrublistCfg::load(bool preserveConfig){
 	
 	
 	//restore old configuration
+	this->log("restoring grub configuration", Logger::EVENT);
 	this->lock();
 	for (Repository::iterator iter = this->repository.begin(); iter != this->repository.end(); iter++){
 		if (iter->isInScriptDir(env.cfg_dir)){
 			//removeScriptForwarder & reset proxy permissions
 			bool result = removeScriptForwarder(iter->fileName);
-			if (!result)
-				std::cout << "remove not successful!" << std::endl;
+			if (!result) {
+				this->log("removing of script forwarder not successful!", Logger::ERROR);
+			}
 		}
 		std::list<Proxy*> relatedProxies = proxies.getProxiesByScript(*iter);
 		for (std::list<Proxy*>::iterator piter = relatedProxies.begin(); piter != relatedProxies.end(); piter++){
@@ -198,8 +209,8 @@ void GrublistCfg::load(bool preserveConfig){
 	}
 	this->unlock();
 	
+	this->log("loading completed", Logger::EVENT);
 	send_new_load_progress(1);
-	
 }
 
 
@@ -229,13 +240,15 @@ void GrublistCfg::readGeneratedFile(FILE* source, bool createScriptIfNotFound){
 		}
 		else if (script != NULL && row.text.substr(0, 10) == "menuentry ") {
 			this->lock();
-			script->push_back(Entry(source, row));
+			Entry newEntry(source, row, this->getLoggerPtr());
+			script->push_back(newEntry);
 			this->proxies.sync_all(false, false, script);
 			this->unlock();
 			this->send_new_load_progress(0.1 + (0.7 / this->repository.size() * i));
 		} else if (script != NULL && row.text.substr(0, 8) == "submenu ") {
 			this->lock();
-			script->push_back(Entry(source, row));
+			Entry newEntry(source, row, this->getLoggerPtr());
+			script->push_back(newEntry);
 			this->proxies.sync_all(false, false, script);
 			this->unlock();
 			this->send_new_load_progress(0.1 + (0.7 / this->repository.size() * i));
@@ -277,8 +290,9 @@ void GrublistCfg::save(){
 				nameStream << relatedProxies.front()->index << "_" << script_iter->name;
 				script_iter->moveFile(this->env.cfg_dir+"/"+nameStream.str(), relatedProxies.front()->permissions);
 			}
-			else
-				std::cerr << "GrublistCfg::save: cannot move proxy… only one expected!" << std::endl;
+			else {
+				this->log("GrublistCfg::save: cannot move proxy… only one expected!", Logger::ERROR);
+			}
 		}	
 	}
 	send_new_save_progress(0.2);
@@ -311,7 +325,7 @@ void GrublistCfg::save(){
 	std::string proxy_code;
 	
 	if (proxyBin){
-		std::cerr << "proxybin does already exist!" << std::endl;
+		this->log("proxybin does already exist!", Logger::ERROR);
 		int c;
 		for (int i = 0; i < dummyproxy_code.length() && (c = fgetc(proxyBin)) != EOF; i++)
 			proxy_code += c;
@@ -336,22 +350,21 @@ void GrublistCfg::save(){
 				}
 				fclose(proxyBinTarget);
 				chmod((this->env.cfg_dir+"/bin/grubcfg_proxy").c_str(), 0755);
+			} else {
+				this->log("could not open proxy output file!", Logger::ERROR);
 			}
-			else
-				std::cerr << "could not open proxy output file!" << std::endl;
 			fclose(proxyBinSource);
-		}
-		else {
-			std::cerr << "proxy could not be copied, generating dummy!" << std::endl;
+		} else {
+			this->log("proxy could not be copied, generating dummy!", Logger::ERROR);
 			FILE* proxyBinTarget = fopen((this->env.cfg_dir+"/bin/grubcfg_proxy").c_str(), "w");
 			if (proxyBinTarget){
 				fputs(dummyproxy_code.c_str(), proxyBinTarget);
 				error_proxy_not_found = true;
 				fclose(proxyBinTarget);
 				chmod((this->env.cfg_dir+"/bin/grubcfg_proxy").c_str(), 0755);
+			} else {
+				this->log("coundn't create proxy!", Logger::ERROR);
 			}
-			else
-				std::cerr << "coundn't create proxy!" << std::endl;
 		}
 	}
 	else if (proxyCount == 0 && proxybin_exists){
@@ -363,17 +376,17 @@ void GrublistCfg::save(){
 
 	//run update-grub
 	FILE* saveProc = popen((env.update_cmd+" 2>&1").c_str(), "r");
-	if (saveProc){
+	if (saveProc) {
 		int c;
 		std::string row = "";
-		while ((c = fgetc(saveProc)) != EOF){
-			if (c == '\n'){
+		while ((c = fgetc(saveProc)) != EOF) {
+			if (c == '\n') {
 				send_new_save_progress(0.5); //a gui should use pulse() instead of set_fraction
+				this->log(row, Logger::INFO);
 				row = "";
-			}
-			else
+			} else {
 				row += char(c);
-			std::cerr << char(c); //print messages (for debugging purposes)
+			}
 		}
 		pclose(saveProc);
 	}
@@ -449,7 +462,7 @@ void GrublistCfg::send_new_load_progress(double newProgress){
 		this->eventListener->loadProgressChanged();
 	}
 	else if (this->verbose) {
-		std::cerr << "Error: cannot show updated load progress - no UI connected!" << std::endl;
+		this->log("cannot show updated load progress - no UI connected!", Logger::ERROR);
 	}
 }
 
@@ -459,7 +472,7 @@ void GrublistCfg::send_new_save_progress(double newProgress){
 		this->eventListener->saveProgressChanged();
 	}
 	else if (this->verbose) {
-		std::cerr << "Error: cannot show updated save progress - no UI connected!" << std::endl;
+		this->log("cannot show updated save progress - no UI connected!", Logger::ERROR);
 	}
 }
 
@@ -521,7 +534,7 @@ bool GrublistCfg::cfgDirIsClean(){
 	return true;
 }
 void GrublistCfg::cleanupCfgDir(){
-	std::cout << "cleaning up cfg dir!" << std::endl;
+	this->log("cleaning up cfg dir!", Logger::IMPORTANT_EVENT);
 	
 	DIR* hGrubCfgDir = opendir(this->env.cfg_dir.c_str());
 	if (hGrubCfgDir){
@@ -546,25 +559,25 @@ void GrublistCfg::cleanupCfgDir(){
 		closedir(hGrubCfgDir);
 		
 		for (std::list<std::string>::iterator iter = lsfiles.begin(); iter != lsfiles.end(); iter++){
-			std::cout << "deleting " << *iter << std::endl;
+			this->log("deleting " + *iter, Logger::EVENT);
 			unlink((this->env.cfg_dir+"/"+(*iter)).c_str());
 		}
 		//proxyscripts will be disabled before loading the config. While the provious mode will only be saved on the objects, every script should be made executable
 		for (std::list<std::string>::iterator iter = proxyscripts.begin(); iter != proxyscripts.end(); iter++){
-			std::cout << "re-activating " << *iter << std::endl;
+			this->log("re-activating " + *iter, Logger::EVENT);
 			chmod((this->env.cfg_dir+"/"+(*iter)).c_str(), 0755);
 		}
 
 		//remove the DS_ prefix  (DS_10_foo -> 10_foo)
 		for (std::list<std::string>::iterator iter = dsfiles.begin(); iter != dsfiles.end(); iter++) {
-			std::cout << "renaming " << *iter << std::endl;
+			this->log("renaming " + *iter, Logger::EVENT);
 			rename((this->env.cfg_dir+"/"+(*iter)).c_str(), (this->env.cfg_dir+"/"+iter->substr(3)).c_str());
 		}
 
 		//remove the PS_ prefix and add index prefix (PS_foo -> 10_foo)
 		int i = 20; //prefix
 		for (std::list<std::string>::iterator iter = psfiles.begin(); iter != psfiles.end(); iter++) {
-			std::cout << "renaming " << *iter << std::endl;
+			this->log("renaming " + *iter, Logger::EVENT);
 			std::string out = *iter;
 			out.replace(0, 2, (std::string("") + char('0' + (i/10)%10) + char('0' + i%10)));
 			rename((this->env.cfg_dir+"/"+(*iter)).c_str(), (this->env.cfg_dir+"/"+out).c_str());

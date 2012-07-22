@@ -19,7 +19,6 @@
 #ifndef GRUB_CUSTOMIZER_GrublistCfg_INCLUDED
 #define GRUB_CUSTOMIZER_GrublistCfg_INCLUDED
 #include <list>
-#include <iostream>
 #include <string>
 #include <sys/stat.h>
 #include <dirent.h>
@@ -40,9 +39,10 @@
 
 #include "../interface/mutex.h"
 
+#include "../presenter/commonClass.h"
 
 
-class GrublistCfg {
+class GrublistCfg : public CommonClass {
 	EventListener_model* eventListener;
 	
 	double progress;
@@ -51,6 +51,7 @@ public:
 	GrublistCfg(GrubEnv& env);
 	void setEventListener(EventListener_model& eventListener);
 	void setMutex(Mutex& mutex);
+	void setLogger(Logger& logger);
 	
 	enum Exception {
 		GRUB_CFG_DIR_NOT_FOUND,

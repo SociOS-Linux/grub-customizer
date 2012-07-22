@@ -57,13 +57,21 @@ bool GrubEnv::init(GrubEnv::Mode mode, std::string const& dir_prefix){
 	return is_valid;
 }
 
-bool GrubEnv::check_cmd(std::string const& cmd, std::string const& cmd_prefix){
-	std::cout << "checking for the " << cmd << " command… " << std::endl;
-	int res = system((cmd_prefix+" which "+cmd).c_str());
-	return res == 0;
+bool GrubEnv::check_cmd(std::string const& cmd, std::string const& cmd_prefix) const {
+	this->log("checking the " + cmd + " command… ", Logger::INFO);
+	FILE* proc = popen((cmd_prefix + " which " + cmd + " 2>&1").c_str(), "r");
+	std::string output;
+	int c;
+	while ((c = fgetc(proc)) != EOF) {
+		if (c != '\n') {
+			output += char(c);
+		}
+	}
+	this->log("found at: " + output, Logger::INFO);
+	return pclose(proc) == 0;
 }
 
-bool GrubEnv::check_dir(std::string const& dir_str){
+bool GrubEnv::check_dir(std::string const& dir_str) const {
 	DIR* dir = opendir(dir_str.c_str());
 	if (dir){
 		closedir(dir);

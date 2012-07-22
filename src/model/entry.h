@@ -21,7 +21,7 @@
 #include <cstdio>
 #include <string>
 #include <list>
-#include <iostream>
+#include "../presenter/commonClass.h"
 
 struct GrubConfRow {
 	GrubConfRow(FILE* sourceFile);
@@ -34,7 +34,7 @@ struct GrubConfRow {
 
 std::string str_replace(const std::string &search, const std::string &replace, std::string subject);
 
-struct Entry {
+struct Entry : public CommonClass {
 	enum EntryType {
 		MENUENTRY,
 		SUBMENU,
@@ -45,7 +45,7 @@ struct Entry {
 	std::list<Entry> subEntries;
 	Entry();
 	Entry(std::string name, std::string extension, std::string content = "", EntryType type = MENUENTRY);
-	Entry(FILE* sourceFile, GrubConfRow firstRow = GrubConfRow());
+	Entry(FILE* sourceFile, GrubConfRow firstRow = GrubConfRow(), Logger* logger = NULL);
 	std::list<Entry>& getSubEntries();
 	operator bool() const;
 };

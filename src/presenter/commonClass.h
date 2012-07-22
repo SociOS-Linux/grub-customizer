@@ -16,23 +16,24 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef GC_ABOUNTDIALOG_GTK_INCLUDED
-#define GC_ABOUNTDIALOG_GTK_INCLUDED
-#include <gtkmm.h>
-#include "../config.h"
-#include <libintl.h>
-#include "../interface/aboutDialog.h"
-#include "../presenter/commonClass.h"
+#ifndef COMMONCLASS_H_
+#define COMMONCLASS_H_
+#include "../interface/logger.h"
 
-class AboutDialogGtk : public Gtk::AboutDialog, public AboutDialog, public CommonClass {
-	Glib::ustring appName, appVersion;
-	std::vector<Glib::ustring> authors;
-	std::vector<Glib::ustring> artists;
-
-	void signal_about_dlg_response(int response_id);
+class CommonClass {
+	mutable Logger* logger;
 public:
-	AboutDialogGtk();
-	void show();
+	enum Exception {
+		LOGGER_NOT_SET
+	};
+	CommonClass();
+	void setLogger(Logger& logger);
+	Logger const& getLogger() const;
+	Logger& getLogger();
+	Logger* getLoggerPtr();
+	bool hasLogger() const;
+protected:
+	void log(std::string const& message, Logger::Priority prio) const;
 };
 
 #endif

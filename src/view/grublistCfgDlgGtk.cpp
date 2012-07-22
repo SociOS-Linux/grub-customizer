@@ -426,7 +426,7 @@ void GrublistCfgDlgGtk::setProxyState(void* proxy, bool isActive){
 void GrublistCfgDlgGtk::selectRule(void* rule) {
 	try {
 		this->tvConfList.get_selection()->select(this->getIterByRulePtr(rule));
-	} catch (GrublistCfgDlgGtk::Exception e) {
+	} catch (GrublistCfgDlg::Exception e) {
 		if (e != RULE_ITER_NOT_FOUND)
 			throw e;
 	}
@@ -463,8 +463,9 @@ void GrublistCfgDlgGtk::signal_move_click(int direction){
 				eventListener->proxySwap_requested(a, b);
 			}
 		}
-		else
-			std::cerr << "the only supported directions for moving are 1 or -1" << std::endl;
+		else {
+			this->log("the only supported directions for moving are 1 or -1", Logger::ERROR);
+		}
 	}
 }
 

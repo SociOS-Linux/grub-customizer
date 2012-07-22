@@ -41,6 +41,8 @@ add_executable(grub-customizer
 	src/view/aboutDialogGtk.cpp
 	src/presenter/glibMutex.cpp
 	src/presenter/glibThreadController.cpp
+	src/presenter/commonClass.cpp
+	src/presenter/streamLogger.cpp
 )
 
 
@@ -50,6 +52,7 @@ add_executable(grubcfg-proxy
 	src/model/script.cpp
 	src/model/proxy.cpp
 	src/presenter/grubcfg_proxy_main.cpp
+	src/presenter/commonClass.cpp
 )
 
 target_link_libraries(grub-customizer 

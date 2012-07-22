@@ -127,8 +127,10 @@ void GrubCustomizer::init(){
 	) {
 		throw INCOMPLETE;
 	}
+	this->log("initializing (w/o specified bootloader type)…", Logger::IMPORTANT_EVENT);
 	savedListCfg->verbose = false;
 
+	this->log("reading partition info…", Logger::EVENT);
 	FILE* blkidProc = popen("blkid", "r");
 	if (blkidProc){
 		deviceDataList->clear();
@@ -140,18 +142,21 @@ void GrubCustomizer::init(){
 	mountTable->loadData(PARTCHOOSER_MOUNTPOINT);
 
 
+	this->log("Loading Framebuffer resolutions (background process)", Logger::EVENT);
 	//loading the framebuffer resolutions in background…
 	this->getThreadController().startFramebufferResolutionLoader();
 
 	//dir_prefix may be set by partition chooser (if not, the root partition is used)
 
+	this->log("Finding out if this is a live CD", Logger::EVENT);
 	//aufs is the virtual root fileSystem used by live cds
 	if (mountTable->getEntryByMountpoint("").isLiveCdFs() && env.cfg_dir_prefix == ""){
+		this->log("is live CD", Logger::INFO);
 		partitionChooser->setIsStartedManually(false);
 		this->initRootSelector();
 		partitionChooser->show();
-	}
-	else {
+	} else {
+		this->log("running on an installed system", Logger::INFO);
 		std::list<GrubEnv::Mode> modes = this->env.getAvailableModes();
 		if (modes.size() == 2)
 			this->listCfgDlg->showBurgSwitcher();
@@ -163,15 +168,20 @@ void GrubCustomizer::init(){
 }
 
 void GrubCustomizer::init(GrubEnv::Mode mode){
+	this->log("initializing (w/ specified bootloader type)…", Logger::IMPORTANT_EVENT);
 	this->env.init(mode, env.cfg_dir_prefix);
 	this->listCfgDlg->setLockState(1|4|8);
 	this->listCfgDlg->setIsBurgMode(mode == GrubEnv::BURG_MODE);
 	this->listCfgDlg->show();
 	this->listCfgDlg->hideBurgSwitcher();
 
-	if (this->grublistCfg->cfgDirIsClean() == false)
+	this->log("Checking if the config directory is clean", Logger::EVENT);
+	if (this->grublistCfg->cfgDirIsClean() == false) {
+		this->log("cleaning up config dir", Logger::IMPORTANT_EVENT);
 		this->grublistCfg->cleanupCfgDir();
+	}
 
+	this->log("loading configuration", Logger::IMPORTANT_EVENT);
 	this->getThreadController().startLoadThread(false);
 }
 
@@ -203,41 +213,52 @@ void GrubCustomizer::reload(){
 //threaded!
 void GrubCustomizer::load(bool preserveConfig){
 	if (!is_loading){ //allow only one load thread at the same time!
+		this->log(std::string("loading - preserveConfig: ") + (preserveConfig ? "yes" : "no"), Logger::IMPORTANT_EVENT);
 		is_loading = true;
 		this->activeThreadCount++;
 
 		if (!preserveConfig){
+			this->log("unsetting saved config", Logger::EVENT);
 			this->grublistCfg->reset();
 			this->savedListCfg->reset();
 			//load the burg/grub settings file
+			this->log("loading settings", Logger::IMPORTANT_EVENT);
 			this->settings->load();
 			this->getThreadController().enableSettings();
-		}
-		else {
+		} else {
+			this->log("switching settings", Logger::IMPORTANT_EVENT);
 			this->settingsOnDisk->load();
 			this->settings->save();
 		}
 
 		try {
+			this->log("loading grub list", Logger::IMPORTANT_EVENT);
 			this->grublistCfg->load(preserveConfig);
-		}
-		catch (GrublistCfg::Exception e){
+			this->log("grub list completely loaded", Logger::IMPORTANT_EVENT);
+		} catch (GrublistCfg::Exception e){
+			this->log("error while loading the grub list", Logger::ERROR);
 			this->thrownException = e;
 			this->getThreadController().showThreadDiedError();
 			return; //cancel
 		}
 	
 		if (!preserveConfig){
-			if (this->savedListCfg->loadStaticCfg())
+			this->log("loading saved grub list", Logger::IMPORTANT_EVENT);
+			if (this->savedListCfg->loadStaticCfg()) {
 				this->config_has_been_different_on_startup_but_unsaved = !this->grublistCfg->compare(*this->savedListCfg);
-			else
+			} else {
+				this->log("saved grub list not found", Logger::WARNING);
 				this->config_has_been_different_on_startup_but_unsaved = false;
+			}
 		}
 		if (preserveConfig){
+			this->log("restoring settings", Logger::IMPORTANT_EVENT);
 			this->settingsOnDisk->save();
 		}
 		this->activeThreadCount--;
 		this->is_loading = false;
+	} else {
+		this->log("ignoring load request (only one load thread allowed at the same time)", Logger::WARNING);
 	}
 }
 
@@ -246,13 +267,14 @@ void GrubCustomizer::save(){
 	this->modificationsUnsaved = false; //deprecated
 
 	this->listCfgDlg->setLockState(1|4|8);
-
 	this->activeThreadCount++; //not in save_thead() to be faster set
 	this->getThreadController().startSaveThread();
 }
 
 void GrubCustomizer::save_thread(){
+	this->log("writing settings file", Logger::IMPORTANT_EVENT);
 	this->settings->save();
+	this->log("writing grub list configuration", Logger::IMPORTANT_EVENT);
 	this->grublistCfg->save();
 	this->activeThreadCount--;
 }
@@ -478,22 +500,23 @@ void GrubCustomizer::_rAppendRule(Rule& rule, Rule* parentRule){
 	}
 }
 
-void GrubCustomizer::syncListView_load(){
+void GrubCustomizer::syncListView_load() {
+	this->log("running GrubCustomizer::syncListView_load", Logger::INFO);
 	this->listCfgDlg->setLockState(1|4);
 	double progress = this->grublistCfg->getProgress();
-	if (progress != 1){
+	if (progress != 1) {
 		this->listCfgDlg->setProgress(progress);
 		this->listCfgDlg->setStatusText(gettext("loading configuration…"));
-	}
-	else {
-		if (this->quit_requested)
+	} else {
+		if (this->quit_requested) {
 			this->quit(true);
+		}
 		this->listCfgDlg->hideProgressBar();
 		this->listCfgDlg->setStatusText("");
 	}
 	
 	//if grubConfig is locked, it will be cancelled as early as possible
-	if (this->grublistCfg->lock_if_free()){
+	if (this->grublistCfg->lock_if_free()) {
 		this->listCfgDlg->clear();
 	
 		for (std::list<Proxy>::iterator iter = this->grublistCfg->proxies.begin(); iter != this->grublistCfg->proxies.end(); iter++){
@@ -510,9 +533,11 @@ void GrubCustomizer::syncListView_load(){
 		this->updateSettingsDlg();
 		this->listCfgDlg->setLockState(0);
 	}
+	this->log("GrubCustomizer::syncListView_load completed", Logger::INFO);
 }
 
 void GrubCustomizer::syncListView_save(){
+	this->log("running GrubCustomizer::syncListView_save", Logger::INFO);
 	this->listCfgDlg->progress_pulse();
 	if (this->grublistCfg->getProgress() == 1){
 		if (this->grublistCfg->error_proxy_not_found){
@@ -530,6 +555,7 @@ void GrubCustomizer::syncListView_save(){
 	else {
 		this->listCfgDlg->setStatusText(gettext("updating configuration"));
 	}
+	this->log("GrubCustomizer::syncListView_save completed", Logger::INFO);
 }
 
 void GrubCustomizer::die(){
