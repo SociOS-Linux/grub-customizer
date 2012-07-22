@@ -568,40 +568,30 @@ void GrublistCfgDlgGtk::update_move_buttons(){
 			is_secondLevel = tvConfList.get_selection()->get_selected()->parent()->parent() ? false : true;
 		}
 	}
+	bool isFirstProxy = false;
+	bool isLastProxy = false;
+	if (tvConfList.get_selection()->get_selected()) {
+		if (is_toplevel && tvConfList.get_selection()->get_selected() == tvConfList.refTreeStore->children().begin()) {
+			isFirstProxy = true;
+		}
+		Gtk::TreeModel::iterator iter = tvConfList.get_selection()->get_selected();
+		iter++;
+		if (is_toplevel && iter == tvConfList.refTreeStore->children().end()) {
+			isLastProxy = true;
+		}
+	} else {
+		isFirstProxy = true;
+		isLastProxy = true;
+	}
 
-	tbttUp.set_sensitive(selectedRowsCount == 1);
-	miUp.set_sensitive(selectedRowsCount == 1);
-	tbttDown.set_sensitive(selectedRowsCount == 1);
-	miDown.set_sensitive(selectedRowsCount == 1);
+	tbttUp.set_sensitive(selectedRowsCount == 1 && !isFirstProxy);
+	miUp.set_sensitive(selectedRowsCount == 1 && !isFirstProxy);
+	tbttDown.set_sensitive(selectedRowsCount == 1 && !isLastProxy);
+	miDown.set_sensitive(selectedRowsCount == 1 && !isLastProxy);
 	tbttLeft.set_sensitive(selectedRowsCount == 1 && !is_toplevel && !is_secondLevel); //selected entry must be inside a submenu
 	miLeft.set_sensitive(selectedRowsCount == 1 && !is_toplevel && !is_secondLevel); //selected entry must be inside a submenu
 	tbttRight.set_sensitive(selectedRowsCount == 1 && !is_toplevel);
 	miRight.set_sensitive(selectedRowsCount == 1 && !is_toplevel);
-	
-//	if (selectedRowsCount == 1){
-//		Gtk::TreeModel::iterator selectedRowIter = tvConfList.get_selection()->get_selected();
-//
-//		if (selectedRowIter->parent()){
-//			if (selectedRowIter->parent()->children().begin() == selectedRowIter){
-//				tbttUp.set_sensitive(false);
-//				miUp.set_sensitive(false);
-//			}
-//			if (--selectedRowIter->parent()->children().end() == selectedRowIter){
-//				tbttDown.set_sensitive(false);
-//				miDown.set_sensitive(false);
-//			}
-//		}
-//		else {
-//			if (tvConfList.refTreeStore->children().begin() == selectedRowIter){
-//				tbttUp.set_sensitive(false);
-//				miUp.set_sensitive(false);
-//			}
-//			if (--tvConfList.refTreeStore->children().end() == selectedRowIter){
-//				tbttDown.set_sensitive(false);
-//				miDown.set_sensitive(false);
-//			}
-//		}
-//	}
 }
 
 
