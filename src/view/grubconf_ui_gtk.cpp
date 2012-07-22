@@ -193,14 +193,7 @@ bool GrubConfUIGtk::requestForBurgMode(){
 
 //TODO: Partition chooser should be a member!
 std::string GrubConfUIGtk::show_root_selector(){
-	PartitionChooser setupDialog(GrubEnv::isLiveCD());
-	setupDialog.readPartitionInfo();
-	setupDialog.show();
-	Gtk::Main::run(setupDialog);
-	if (setupDialog.isCancelled())
-		return "";
-	else
-		return setupDialog.getRootMountpoint();
+	eventListener->rootSelector_requested();
 }
 
 
@@ -235,7 +228,7 @@ void GrubConfUIGtk::appendScript(Glib::ustring const& name, bool is_active, void
 	(*row)[tvConfList.treeModel.name] = name;
 	
 	(*row)[tvConfList.treeModel.relatedRule] = NULL;
-	(*row)[tvConfList.treeModel.relatedProxy] = (Proxy*)proxyPtr;
+	(*row)[tvConfList.treeModel.relatedProxy] = (void*)proxyPtr;
 	(*row)[tvConfList.treeModel.is_other_entries_marker] = false;
 	(*row)[tvConfList.treeModel.is_editable] = false;
 }
@@ -246,8 +239,8 @@ void GrubConfUIGtk::appendEntry(Glib::ustring const& name, bool is_active, void*
 	Gtk::TreeIter entryRow = tvConfList.refTreeStore->append(lastScriptIter->children());
 	(*entryRow)[tvConfList.treeModel.active] = is_active;
 	(*entryRow)[tvConfList.treeModel.name] = name;
-	(*entryRow)[tvConfList.treeModel.relatedRule] = (Rule*)entryPtr;
-	(*entryRow)[tvConfList.treeModel.relatedProxy] = (Proxy*)(*lastScriptIter)[tvConfList.treeModel.relatedProxy];
+	(*entryRow)[tvConfList.treeModel.relatedRule] = (void*)entryPtr;
+	(*entryRow)[tvConfList.treeModel.relatedProxy] = (void*)(*lastScriptIter)[tvConfList.treeModel.relatedProxy];
 	(*entryRow)[tvConfList.treeModel.is_editable] = editable;
 	
 	tvConfList.expand_all();
@@ -349,15 +342,11 @@ void GrubConfUIGtk::setProxyName(void* proxy, Glib::ustring const& name, bool is
 void GrubConfUIGtk::signal_row_changed(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter){
 	if (this->lock_state == 0){
 		if (iter->parent()){ //if it's a rule row (no proxy)
-			Glib::ustring oldName = ((Rule*)(*iter)[tvConfList.treeModel.relatedRule])->outputName;
-			Glib::ustring newName = (*iter)[tvConfList.treeModel.name];
-			if (oldName != newName){
-				eventListener->signal_entry_renamed((Rule*)(*iter)[tvConfList.treeModel.relatedRule]);
-			}
-			eventListener->signal_entry_state_toggled((Rule*)(*iter)[tvConfList.treeModel.relatedRule]);
+			eventListener->signal_entry_renamed((void*)(*iter)[tvConfList.treeModel.relatedRule]);
+			eventListener->signal_entry_state_toggled((void*)(*iter)[tvConfList.treeModel.relatedRule]);
 		}
 		else {
-			eventListener->signal_script_state_toggled((Proxy*)(*iter)[tvConfList.treeModel.relatedProxy]);
+			eventListener->signal_script_state_toggled((void*)(*iter)[tvConfList.treeModel.relatedProxy]);
 		}
 	}
 }
@@ -369,14 +358,14 @@ void GrubConfUIGtk::signal_show_root_selector(){
 
 
 
-void GrubConfUIGtk::swapProxies(Proxy* a, Proxy* b){
+void GrubConfUIGtk::swapProxies(void* a, void* b){
 	tvConfList.refTreeStore->iter_swap(getIterByScriptPtr(a), getIterByScriptPtr(b));
 	
 	update_move_buttons();
 	modificationsUnsaved = true;
 }
 
-void GrubConfUIGtk::swapRules(Rule* a, Rule* b){
+void GrubConfUIGtk::swapRules(void* a, void* b){
 	Gtk::TreeModel::iterator iter1 = getIterByEntryPtr(a);
 	Gtk::TreeModel::iterator iter2 = getIterByEntryPtr(b);
 	
@@ -431,16 +420,16 @@ void GrubConfUIGtk::signal_move_click(int direction){
 			}
 		
 			//if rule swap
-			if ((Rule*)(*iter)[tvConfList.treeModel.relatedRule] != NULL){
-				Rule* a = ((Rule*)(*iter)[tvConfList.treeModel.relatedRule]);
-				Rule* b = ((Rule*)(*iter2)[tvConfList.treeModel.relatedRule]);
+			if ((void*)(*iter)[tvConfList.treeModel.relatedRule] != NULL){
+				void* a = ((void*)(*iter)[tvConfList.treeModel.relatedRule]);
+				void* b = ((void*)(*iter2)[tvConfList.treeModel.relatedRule]);
 			
 				eventListener->ruleSwap_requested(a, b);
 
 			}
 			else { //if script swap
-				Proxy* a = (*iter)[tvConfList.treeModel.relatedProxy];
-				Proxy* b = (*iter2)[tvConfList.treeModel.relatedProxy];
+				void* a = (*iter)[tvConfList.treeModel.relatedProxy];
+				void* b = (*iter2)[tvConfList.treeModel.relatedProxy];
 			
 				eventListener->proxySwap_requested(a, b);
 			}
@@ -471,33 +460,18 @@ void GrubConfUIGtk::setDefaultTitleStatusText(Glib::ustring const& str){
 	this->setStatusText(gettext("Default title: ")+str);
 }
 
-//MOVE TO EVENT_LISTENER
-void GrubConfUIGtk::ruleSelected(Rule* rule){
-	if (rule && rule->dataSource)
-		this->setDefaultTitleStatusText(rule->getEntryName());
-	else
-		this->setStatusText("");
-	this->updateButtonsState();
-}
-
-//MOVE TO EVENT_LISTENER
-void GrubConfUIGtk::proxySelected(Proxy* proxy){
-	this->setStatusText("");
-	this->updateButtonsState();
-}
-
 void GrubConfUIGtk::signal_treeview_selection_changed(){
 	if (this->lock_state == 0){
 		bool rule_ev_executed = false;
 		if (tvConfList.get_selection()->count_selected_rows() == 1){
 			if (tvConfList.get_selection()->get_selected()->parent()){
-				Rule* rptr = (*tvConfList.get_selection()->get_selected())[tvConfList.treeModel.relatedRule];
-				this->ruleSelected(rptr);
+				void* rptr = (*tvConfList.get_selection()->get_selected())[tvConfList.treeModel.relatedRule];
+				this->eventListener->ruleSelected(rptr);
 				rule_ev_executed = true;
 			}
 		}
 		if (!rule_ev_executed)
-			this->proxySelected((*tvConfList.get_selection()->get_selected())[tvConfList.treeModel.relatedProxy]);
+			this->eventListener->proxySelected((*tvConfList.get_selection()->get_selected())[tvConfList.treeModel.relatedProxy]);
 	}
 }
 
@@ -505,7 +479,7 @@ void GrubConfUIGtk::signal_add_click(){
 	eventListener->scriptAddDlg_requested();
 }
 
-void GrubConfUIGtk::removeProxy(Proxy* p){
+void GrubConfUIGtk::removeProxy(void* p){
 	//Parameter is not really required
 	this->setLockState(~0);
 	Gtk::TreeModel::iterator iter = getIterByScriptPtr(p);
@@ -517,7 +491,7 @@ void GrubConfUIGtk::removeProxy(Proxy* p){
 }
 
 void GrubConfUIGtk::signal_remove_click(){
-	Proxy* proxyPointer = (Proxy*)(*(tvConfList.get_selection()->get_selected()))[tvConfList.treeModel.relatedProxy];
+	void* proxyPointer = (void*)(*(tvConfList.get_selection()->get_selected()))[tvConfList.treeModel.relatedProxy];
 	eventListener->removeProxy_requested(proxyPointer);
 }
 

@@ -37,6 +37,7 @@ class PartitionChooser : public Gtk::Assistant {
 	void submountpoint_toggle(Gtk::CheckButton& sender);
 	std::string getRootMountpoint() const;
 	bool isCancelled() const;
+	Glib::ustring run();
 };
 #endif
 

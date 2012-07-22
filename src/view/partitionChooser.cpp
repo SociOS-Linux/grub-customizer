@@ -82,7 +82,6 @@ PartitionChooser::PartitionChooser(bool isLiveCD)
 	this->set_title(Glib::ustring("Grub Customizer: ")+gettext("Partition Chooser"));
 	this->set_icon_name("grub-customizer");
 	this->set_default_size(640, 480);
-	this->show_all();
 }
 
 void PartitionChooser::readPartitionInfo(){
@@ -224,5 +223,15 @@ std::string PartitionChooser::getRootMountpoint() const {
 
 bool PartitionChooser::isCancelled() const {
 	return is_cancelled;
+}
+
+Glib::ustring PartitionChooser::run(){
+	this->readPartitionInfo();
+	this->show_all();
+	Gtk::Main::run(*this);
+	if (this->isCancelled())
+		return "";
+	else
+		return this->getRootMountpoint();
 }
 

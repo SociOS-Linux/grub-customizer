@@ -18,15 +18,20 @@ public:
 	void scriptAddDlg_requested();
 	void scriptAddDlg_applied();
 	void scriptSelected();
-	void removeProxy_requested(Proxy* p);
+	void removeProxy_requested(void* p);
 	bool exitRequest();
 	
 	void signal_script_state_toggled(void* script);
-	void signal_entry_state_toggled(Rule* entry);
-	void signal_entry_renamed(Rule* entry);
+	void signal_entry_state_toggled(void* entry);
+	void signal_entry_renamed(void* entry);
 	
-	void ruleSwap_requested(Rule* a, Rule* b);
-	void proxySwap_requested(Proxy* a, Proxy* b);
+	void ruleSwap_requested(void* a, void* b);
+	void proxySwap_requested(void* a, void* b);
+	
+	void rootSelector_requested();
+	
+	void ruleSelected(void* rule);
+	void proxySelected(void* proxy);
 };
 
 #endif

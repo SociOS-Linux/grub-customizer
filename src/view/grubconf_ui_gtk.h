@@ -2,12 +2,8 @@
 #define GRUBCONF_UI_GTK_INCLUDED
 #include <gtkmm.h>
 #include "../interface/grubconf_ui.h"
-#include "../model/grublistCfg.h"
-#include "partitionChooser.h"
-#include "settings_dlg_gtk.h"
-#include <iostream>
 #include "../interface/eventListener_view_iface.h"
-
+#include <iostream>
 #include <libintl.h>
 
 
@@ -16,8 +12,8 @@ public:
 	struct TreeModel : public Gtk::TreeModelColumnRecord {
 		Gtk::TreeModelColumn<bool> active;
 		Gtk::TreeModelColumn<Glib::ustring> name;
-		Gtk::TreeModelColumn<Rule*> relatedRule;
-		Gtk::TreeModelColumn<Proxy*> relatedProxy;
+		Gtk::TreeModelColumn<void*> relatedRule;
+		Gtk::TreeModelColumn<void*> relatedProxy;
 		Gtk::TreeModelColumn<bool> is_other_entries_marker;
 		Gtk::TreeModelColumn<bool> is_editable;
 		TreeModel();
@@ -115,14 +111,12 @@ public:
 	Gtk::TreeModel::iterator getIterByEntryPtr(void* entryPtr);
 	void setProxyName(void* proxy, Glib::ustring const& name, bool isModified);
 	
-	void swapProxies(Proxy* a, Proxy* b);
-	void swapRules(Rule* a, Rule* b);
+	void swapProxies(void* a, void* b);
+	void swapRules(void* a, void* b);
 	
 	void setDefaultTitleStatusText(Glib::ustring const& str);
-	void ruleSelected(Rule* rule);
-	void proxySelected(Proxy* proxy);
 	
-	void removeProxy(Proxy* p);
+	void removeProxy(void* p);
 	
 	int showExitConfirmDialog(int type);
 	void showErrorMessage(Glib::ustring const& msg);

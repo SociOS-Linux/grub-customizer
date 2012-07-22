@@ -22,6 +22,7 @@ int main(int argc, char** argv){
 	GrubInstaller* installer = new GrubInstaller(env);
 	GrubInstallDlg* installDlg = new GrubInstallDlg;
 	ScriptAddDlg* scriptAddDlg = new ScriptAddDlg;
+	PartitionChooser* partitionChooser = new PartitionChooser(GrubEnv::isLiveCD());
 	
 	GrubSettingsDlgGtk* settingsDlg = new GrubSettingsDlgGtk(*settings, env);
 	presenter.setModelListCfg(*listcfg);
@@ -32,6 +33,7 @@ int main(int argc, char** argv){
 	presenter.setInstaller(*installer);
 	presenter.setInstallDlg(*installDlg);
 	presenter.setScriptAddDlg(*scriptAddDlg);
+	presenter.setPartitionChooser(*partitionChooser);
 	
 	EventListenerView evt_view(presenter);
 	listCfgView->setEventListener(evt_view);

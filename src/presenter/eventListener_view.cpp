@@ -46,8 +46,8 @@ void EventListenerView::scriptSelected(){
 	presenter.updateScriptAddDlgPreview();
 }
 
-void EventListenerView::removeProxy_requested(Proxy* p){
-	presenter.removeProxy(p);
+void EventListenerView::removeProxy_requested(void* p){
+	presenter.removeProxy((Proxy*)p);
 }
 
 bool EventListenerView::exitRequest(){
@@ -55,20 +55,32 @@ bool EventListenerView::exitRequest(){
 }
 
 void EventListenerView::signal_script_state_toggled(void* script){
-	presenter.syncProxyState(script);
+	presenter.syncProxyState((Proxy*)script);
 }
 
-void EventListenerView::signal_entry_state_toggled(Rule* entry){
-	presenter.syncRuleState(entry);
+void EventListenerView::signal_entry_state_toggled(void* entry){
+	presenter.syncRuleState((Rule*)entry);
 }
 
-void EventListenerView::signal_entry_renamed(Rule* entry){
-	presenter.syncRuleName(entry);
+void EventListenerView::signal_entry_renamed(void* entry){
+	presenter.syncRuleName((Rule*)entry);
 }
 
-void EventListenerView::ruleSwap_requested(Rule* a, Rule* b){
-	presenter.swapRules(a,b);
+void EventListenerView::ruleSwap_requested(void* a, void* b){
+	presenter.swapRules((Rule*)a,(Rule*)b);
 }
-void EventListenerView::proxySwap_requested(Proxy* a, Proxy* b){
-	presenter.swapProxies(a,b);
+void EventListenerView::proxySwap_requested(void* a, void* b){
+	presenter.swapProxies((Proxy*)a,(Proxy*)b);
 }
+
+void EventListenerView::rootSelector_requested(){
+	presenter.startRootSelector();
+}
+
+void EventListenerView::ruleSelected(void* rule){
+	presenter.showRuleInfo((Rule*)rule);
+}
+void EventListenerView::proxySelected(void* proxy){
+	presenter.showProxyInfo((Proxy*)proxy);
+}
+

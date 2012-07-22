@@ -19,6 +19,10 @@
 
 #include "../view/scriptAddDlg.h"
 
+#include "../model/grublistCfg.h"
+#include "../view/partitionChooser.h"
+#include "../view/settings_dlg_gtk.h"
+
 class GtkClient {
 	GrubEnv& env;
 	GrublistCfg* grublistCfg;
@@ -29,6 +33,7 @@ class GtkClient {
 	GrubInstaller* installer;
 	GrubInstallDlg* installDlg;
 	ScriptAddDlg* scriptAddDlg;
+	PartitionChooser* partitionChooser;
 	
 	Glib::Dispatcher disp_sync_load, disp_sync_save, disp_thread_died;
 public:
@@ -40,6 +45,7 @@ public:
 	void setInstaller(GrubInstaller& installer);
 	void setInstallDlg(GrubInstallDlg& installDlg);
 	void setScriptAddDlg(ScriptAddDlg& scriptAddDlg);
+	void setPartitionChooser(PartitionChooser& partitionChooser);
 
 	void showSettingsDlg();
 	void load(bool keepConfig = false);
@@ -79,6 +85,9 @@ public:
 	void updateScriptEntry(Proxy* proxy);
 	void swapRules(Rule* a, Rule* b);
 	void swapProxies(Proxy* a, Proxy* b);
+	
+	void showRuleInfo(Rule* rule);
+	void showProxyInfo(Proxy* proxy);
 };
 
 #endif

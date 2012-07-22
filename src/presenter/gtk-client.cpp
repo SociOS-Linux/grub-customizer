@@ -40,6 +40,10 @@ void GtkClient::setScriptAddDlg(ScriptAddDlg& scriptAddDlg){
 	this->scriptAddDlg = &scriptAddDlg;
 }
 
+void GtkClient::setPartitionChooser(PartitionChooser& partitionChooser){
+	this->partitionChooser = &partitionChooser;
+}
+
 void GtkClient::showSettingsDlg(){
 	this->settingsDlg->show(this->grublistCfg->proxies.generateEntryTitleList());
 	this->settingsDlg->run();
@@ -121,7 +125,9 @@ bool GtkClient::prepare(bool forceRootSelection){
 				if (!selectRoot)
 					return false;
 			}
-			root = listCfgDlg->show_root_selector();
+
+			root = partitionChooser->run();
+
 			if (root == "")
 				return false;
 			else {
@@ -367,3 +373,20 @@ void GtkClient::swapProxies(Proxy* a, Proxy* b){
 	grublistCfg->swapProxies(a,b);
 	this->listCfgDlg->swapProxies(a,b);
 }
+
+
+//MOVE TO EVENT_LISTENER
+void GtkClient::showRuleInfo(Rule* rule){
+	if (rule && rule->dataSource)
+		this->listCfgDlg->setDefaultTitleStatusText(rule->getEntryName());
+	else
+		this->listCfgDlg->setStatusText("");
+	this->listCfgDlg->updateButtonsState();
+}
+
+//MOVE TO EVENT_LISTENER
+void GtkClient::showProxyInfo(Proxy* proxy){
+	this->listCfgDlg->setStatusText("");
+	this->listCfgDlg->updateButtonsState();
+}
+
