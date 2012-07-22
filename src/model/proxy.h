@@ -35,7 +35,11 @@ struct Proxy {
 	void set_isExecutable(bool value);
 	static std::list<Rule> parseRuleString(const char** ruleString);
 	void importRuleString(const char* ruleString);
+	Rule* getRuleByEntry(Entry const& entry, std::list<Rule>& list);
 	bool sync(bool deleteInvalidRules = true, bool expand = true);
+	void sync_connectExisting(Rule* parent = NULL);
+	void sync_expand(Rule* parent = NULL);
+	void sync_cleanup(Rule* parent = NULL);
 	bool isModified() const;
 	bool deleteFile();
 	bool generateFile(std::string const& path, int cfg_dir_prefix_length, std::string const& cfg_dir_noprefix); //before running this function, the realted script file must be saved!

@@ -25,12 +25,20 @@ bool Script::isInScriptDir(std::string const& cfg_dir) const {
 	return this->fileName.substr(cfg_dir.length(), std::string("/proxifiedScripts/").length()) == "/proxifiedScripts/";
 }
 Entry* Script::getEntryByName(std::string const& name){
-	Entry* result = NULL;
-	for (Script::iterator iter = this->begin(); iter != this->end() && !result; iter++){
+	return this->getEntryByName(name, *this);
+}
+
+Entry* Script::getEntryByName(std::string const& name, std::list<Entry>& parentList) {
+	for (Script::iterator iter = parentList.begin(); iter != parentList.end(); iter++){
 		if (iter->name == name)
-			result = &*iter;
+			return &*iter;
+		if (iter->subEntries.size()) {
+			Entry* result = this->getEntryByName(name, iter->subEntries);
+			if (result != NULL)
+				return result;
+		}
 	}
-	return result;
+	return NULL;
 }
 
 void Script::moveToBasedir(std::string const& cfg_dir){

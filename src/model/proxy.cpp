@@ -66,7 +66,6 @@ std::list<Rule> Proxy::parseRuleString(const char** ruleString) {
 		else if (!inString && !inAlias && *iter == '{'){
 			iter++;
 			rules.back().subRules = Proxy::parseRuleString(&iter);
-			iter--;
 		}
 	}
 	*ruleString = iter;
@@ -75,55 +74,94 @@ std::list<Rule> Proxy::parseRuleString(const char** ruleString) {
 
 void Proxy::importRuleString(const char* ruleString){
 	rules = Proxy::parseRuleString(&ruleString);
-	for (std::list<Rule>::iterator iter = rules.begin(); iter != rules.end(); iter++) {
-		std::cout << std::string(*iter) << std::endl;
+}
+
+Rule* Proxy::getRuleByEntry(Entry const& entry, std::list<Rule>& list) {
+//	std::cout << "rule count: " << list.size() << std::endl;
+	for (std::list<Rule>::iterator rule_iter = list.begin(); rule_iter != list.end(); rule_iter++){
+		if (&entry == rule_iter->dataSource)
+			return &*rule_iter;
+		else {
+//			std::cout << entry.name << " != " << rule_iter->__idname << std::endl;
+			Rule* result = this->getRuleByEntry(entry, rule_iter->subRules);
+			if (result)
+				return result;
+		}
 	}
+	return NULL;
 }
 
 bool Proxy::sync(bool deleteInvalidRules, bool expand){
 	if (this->dataSource){
-		std::list<Rule> result;
-		
-		for (std::list<Rule>::iterator iter = this->rules.begin(); iter != this->rules.end(); iter++){
-			if (iter->type != Rule::OTHER_ENTRIES_PLACEHOLDER){
-				iter->dataSource = this->dataSource->getEntryByName(iter->__idname);
-				if (iter->dataSource || !deleteInvalidRules){
-					result.push_back(*iter);
-				}
-			}
-			else
-				result.push_back(*iter);
-		}
-		rules.swap(result);
-		
-		if (expand){
-			std::list<Rule>::iterator other_entries_iter = this->rules.begin();
-			while (other_entries_iter != this->rules.end() && other_entries_iter->type != Rule::OTHER_ENTRIES_PLACEHOLDER){
-				//std::cout << other_entries_iter->outputName << " is no OTHER_ENTRIES_PLACEHOLDER" << std::endl;
-				other_entries_iter++;
-			}
-			if (other_entries_iter == this->rules.end()){
-				this->rules.push_front(Rule(Rule::OTHER_ENTRIES_PLACEHOLDER, "*", true));
-				other_entries_iter = this->rules.begin();
-			}
-			std::list<Rule> otherEntryRules;
-			for (Script::iterator iter = this->dataSource->begin(); iter != this->dataSource->end(); iter++){
-				bool entryExists = false;
-				for (std::list<Rule>::iterator rule_iter = this->rules.begin(); rule_iter != this->rules.end(); rule_iter++){
-					if (&*iter == rule_iter->dataSource)
-						entryExists = true;
-				}
-				if (!entryExists){
-					otherEntryRules.push_back(Rule(*iter, other_entries_iter->isVisible)); //generate rule for given entry
-				}
-			}
-			other_entries_iter++;
-			this->rules.splice(other_entries_iter, otherEntryRules);
-		}
+		this->sync_connectExisting();
+		if (expand)
+			this->sync_expand();
+
+		if (deleteInvalidRules)
+			this->sync_cleanup();
+
 		return true;
 	}
 	else
 		return false;
+}
+
+void Proxy::sync_connectExisting(Rule* parent) {
+	std::list<Rule>& list = parent ? parent->subRules : this->rules;
+	for (std::list<Rule>::iterator iter = list.begin(); iter != list.end(); iter++) {
+		if (iter->type != Rule::OTHER_ENTRIES_PLACEHOLDER){
+			iter->dataSource = this->dataSource->getEntryByName(iter->__idname);
+			if (iter->subRules.size()) {
+				this->sync_connectExisting(&*iter);
+			}
+		}
+	}
+}
+
+void Proxy::sync_expand(Rule* parent) {
+	std::list<Rule>& list = parent ? parent->subRules : this->rules;
+	std::list<Entry>& entries = parent ? dynamic_cast<std::list<Entry>&>(parent->dataSource->subEntries) : dynamic_cast<std::list<Entry>&>(*this->dataSource);
+
+	std::list<Rule>::iterator other_entries_iter = list.begin();
+	while (other_entries_iter != list.end() && other_entries_iter->type != Rule::OTHER_ENTRIES_PLACEHOLDER){
+		other_entries_iter++;
+	}
+	if (other_entries_iter == list.end()){
+		list.push_front(Rule(Rule::OTHER_ENTRIES_PLACEHOLDER, "*", true));
+		other_entries_iter = list.begin();
+	}
+	std::list<Rule> otherEntryRules;
+	for (Script::iterator iter = entries.begin(); iter != entries.end(); iter++){
+		Rule* relatedRule = this->getRuleByEntry(*iter, this->rules);
+//		std::cout << "related rule for " << iter->name << ": " << relatedRule << std::endl;
+		if (!relatedRule){
+			otherEntryRules.push_back(Rule(*iter, other_entries_iter->isVisible)); //generate rule for given entry
+		} else if (iter->subEntries.size()) {
+			this->sync_expand(relatedRule);
+		}
+	}
+	other_entries_iter++;
+	list.splice(other_entries_iter, otherEntryRules);
+}
+
+void Proxy::sync_cleanup(Rule* parent) {
+	std::list<Rule>& list = parent ? parent->subRules : this->rules;
+
+	bool done = false;
+	do {
+		bool listModified = false;
+		for (std::list<Rule>::iterator iter = list.begin(); !listModified && iter != list.end(); iter++) {
+			if (!iter->dataSource) {
+				list.erase(iter);
+				listModified = true; //after ereasing something we have to create a new iterator
+			} else { //check contents
+				this->sync_cleanup(&*iter);
+			}
+		}
+
+		if (!listModified)
+			done = true;
+	} while (!done);
 }
 
 bool Proxy::isModified() const {

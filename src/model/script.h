@@ -30,6 +30,7 @@ struct Script : public std::list<Entry> {
 	Script(std::string const& name, std::string const& fileName);
 	bool isInScriptDir(std::string const& cfg_dir) const;
 	Entry* getEntryByName(std::string const& name);
+	Entry* getEntryByName(std::string const& name, std::list<Entry>& parentList);
 	void moveToBasedir(std::string const& cfg_dir); //moves the file from any location to grub.d and adds the prefix PS_ (proxified Script) or DS_ (default script)
 	bool moveFile(std::string const& newPath, short int permissions = -1);
 };
