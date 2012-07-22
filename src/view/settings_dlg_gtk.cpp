@@ -250,7 +250,7 @@ void GrubSettingsDlgGtk::show(bool burgMode) {
 }
 
 
-void GrubSettingsDlgGtk::on_hide() {
+void GrubSettingsDlgGtk::on_response(int response_id) {
 	this->eventListener->settings_dialog_hide_request();
 }
 
