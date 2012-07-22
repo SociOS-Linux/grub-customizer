@@ -230,9 +230,11 @@ void GrublistCfgDlgGtk::appendScript(Glib::ustring const& name, bool is_active, 
 	(*row)[tvConfList.treeModel.is_other_entries_marker] = false;
 	(*row)[tvConfList.treeModel.is_editable] = false;
 	(*row)[tvConfList.treeModel.is_sensitive] = true;
+	(*row)[tvConfList.treeModel.font_weight] = Pango::WEIGHT_BOLD;
+	(*row)[tvConfList.treeModel.fontStyle] = Pango::STYLE_OBLIQUE;
 }
 
-void GrublistCfgDlgGtk::appendEntry(Glib::ustring const& name, bool is_active, void* entryPtr, bool editable, void* parentEntry){
+void GrublistCfgDlgGtk::appendEntry(Glib::ustring const& name, bool is_active, void* entryPtr, bool editable, bool is_submenu, void* parentEntry){
 	Gtk::TreeIter lastScriptIter = parentEntry ? this->getIterByRulePtr(parentEntry) : Gtk::TreeIter(*tvConfList.refTreeStore->children().rbegin());
 
 	Gtk::TreeIter entryRow = tvConfList.refTreeStore->append(lastScriptIter->children());
@@ -242,6 +244,8 @@ void GrublistCfgDlgGtk::appendEntry(Glib::ustring const& name, bool is_active, v
 	(*entryRow)[tvConfList.treeModel.relatedProxy] = (void*)(*lastScriptIter)[tvConfList.treeModel.relatedProxy];
 	(*entryRow)[tvConfList.treeModel.is_editable] = editable;
 	(*entryRow)[tvConfList.treeModel.is_sensitive] = (bool)(*entryRow->parent())[tvConfList.treeModel.active];
+	(*entryRow)[tvConfList.treeModel.font_weight] = is_submenu ? PANGO_WEIGHT_BOLD : PANGO_WEIGHT_NORMAL;
+	(*entryRow)[tvConfList.treeModel.fontStyle] = Pango::STYLE_NORMAL;
 	
 	tvConfList.expand_all();
 }
@@ -655,6 +659,17 @@ GrubConfListing::GrubConfListing(){
 		Gtk::CellRendererText* pRenderer = static_cast<Gtk::CellRendererText*>(pColumn->get_first_cell_renderer());
 		pColumn->add_attribute(pRenderer->property_sensitive(), treeModel.is_sensitive);
 	}
+
+	{
+		Gtk::TreeViewColumn* pColumn = this->get_column(1);
+		Gtk::CellRendererText* pRenderer = static_cast<Gtk::CellRendererText*>(pColumn->get_first_cell_renderer());
+		pColumn->add_attribute(pRenderer->property_weight(), treeModel.font_weight);
+	}
+	{
+		Gtk::TreeViewColumn* pColumn = this->get_column(1);
+		Gtk::CellRendererText* pRenderer = static_cast<Gtk::CellRendererText*>(pColumn->get_first_cell_renderer());
+		pColumn->add_attribute(pRenderer->property_style(), treeModel.fontStyle);
+	}
 }
 
 GrubConfListing::TreeModel::TreeModel(){
@@ -665,4 +680,6 @@ GrubConfListing::TreeModel::TreeModel(){
 	this->add(is_other_entries_marker);
 	this->add(is_editable);
 	this->add(is_sensitive);
+	this->add(font_weight);
+	this->add(fontStyle);
 }

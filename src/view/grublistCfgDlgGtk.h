@@ -38,6 +38,8 @@ public:
 		Gtk::TreeModelColumn<bool> is_other_entries_marker;
 		Gtk::TreeModelColumn<bool> is_editable;
 		Gtk::TreeModelColumn<bool> is_sensitive;
+		Gtk::TreeModelColumn<int> font_weight;
+		Gtk::TreeModelColumn<Pango::Style> fontStyle;
 		TreeModel();
 	};
 	TreeModel treeModel;
@@ -109,7 +111,7 @@ public:
 	void hideProgressBar();
 	void setStatusText(Glib::ustring const& new_status_text);
 	void appendScript(Glib::ustring const& name, bool is_active, void* proxyPtr);
-	void appendEntry(Glib::ustring const& name, bool is_active, void* entryPtr, bool editable, void* parentEntry = NULL);
+	void appendEntry(Glib::ustring const& name, bool is_active, void* entryPtr, bool editable, bool is_submenu, void* parentEntry = NULL);
 	void showProxyNotFoundMessage();
 	
 	void setProxyName(void* proxy, Glib::ustring const& name, bool isModified);

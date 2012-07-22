@@ -470,7 +470,8 @@ void GrubCustomizer::_rAppendRule(Rule& rule, Rule* parentRule){
 		} else {
 			name = rule.outputName;
 		}
-		this->listCfgDlg->appendEntry(name, rule.isVisible, &rule, !is_other_entries_ph, parentRule);
+		bool isSubmenu = rule.type == Rule::NORMAL && rule.dataSource && rule.dataSource->type == Entry::SUBMENU;
+		this->listCfgDlg->appendEntry(name, rule.isVisible, &rule, !is_other_entries_ph, isSubmenu, parentRule);
 
 		for (std::list<Rule>::iterator subruleIter = rule.subRules.begin(); subruleIter != rule.subRules.end(); subruleIter++) {
 			this->_rAppendRule(*subruleIter, &rule);
