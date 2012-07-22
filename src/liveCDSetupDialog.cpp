@@ -154,18 +154,19 @@ void LiveCDSetupDialog::signal_btt_mount_click(){
 	}
 	else {
 		FILE* fstabFile = fopen((mountpoint+"/etc/fstab").c_str(), "r");
+		int umountErrs = 0; //no used - only to use the return values of system in any way
 		if (fstabFile != NULL){
 			this->generateSubmountpointSelection(fstabFile);
 			fclose(fstabFile);
 			
 			//binding system mountpoints - should work. If not, this may be no problem…
-			system(("mount -o bind /proc '"+mountpoint+"/proc'").c_str());
-			system(("mount -o bind /dev '"+mountpoint+"/dev'").c_str());
-			system(("mount -o bind /sys '"+mountpoint+"/sys'").c_str());
+			system(("mount -o bind /proc '"+mountpoint+"/proc'").c_str()) || umountErrs++;
+			system(("mount -o bind /dev '"+mountpoint+"/dev'").c_str()) || umountErrs++;
+			system(("mount -o bind /sys '"+mountpoint+"/sys'").c_str()) || umountErrs++;
 		}
 		else {
 			Gtk::MessageDialog(gettext("This seems not to be a root file system (no fstab found)")).run();
-			system(("umount "+mountpoint).c_str());
+			system(("umount "+mountpoint).c_str()) || umountErrs++;
 			mountpoint = "";
 		}
 	}

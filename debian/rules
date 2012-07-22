@@ -1,4 +1,3 @@
-# REMOVE THIS LINE: For some reason, MoinMoin is eating shebang if it's on the first line.
 #!/usr/bin/make -f
 # -*- makefile -*-
 

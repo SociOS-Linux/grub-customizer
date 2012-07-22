@@ -2,7 +2,7 @@
 Name=Grub Customizer
 Comment[de]=Grub anpassen
 Comment[en]=Customize grub
-Exec=gksu grub-customizer
+Exec=su-to-root -X -c grub-customizer
 Terminal=false
 X-MultipleArgs=false
 Type=Application
