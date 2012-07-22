@@ -11,6 +11,8 @@ class EventListenerView_iface {
 	virtual void save_request()=0;
 	virtual void entry_rename_request(Rule* rule, std::string const& newName)=0;
 	virtual void rootSelector_request()=0;
+	virtual void installDialogRequest()=0;
+	virtual void installGrub_request(std::string const& device)=0;
 };
 
 #endif

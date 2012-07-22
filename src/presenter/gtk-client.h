@@ -13,6 +13,9 @@
 #include "../model/mountTable.h"
 #include "../view/partitionChooser.h"
 
+#include "../model/grubInstaller.h"
+#include "../view/grubInstallDlg.h"
+
 class GtkClient {
 	GrubEnv& env;
 	GrublistCfg* grublistCfg;
@@ -20,12 +23,16 @@ class GtkClient {
 	GrubSettingsDlgGtk* settingsDlg;
 	SettingsManagerDataStore* settings;
 	SettingsManagerDataStore* settingsOnDisk; //buffer for the existing settings
+	GrubInstaller* installer;
+	GrubInstallDlg* installDlg;
 public:
 	void setModelListCfg(GrublistCfg& grublistCfg);
 	void setViewListCfg(GrubConfUIGtk& listCfgDlg);
 	void setViewSettingsDialog(GrubSettingsDlgGtk& settingsDlg);
 	void setModelSettingsManager(SettingsManagerDataStore& settings);
 	void setSettingsBuffer(SettingsManagerDataStore& settings);
+	void setInstaller(GrubInstaller& installer);
+	void setInstallDlg(GrubInstallDlg& installDlg);
 
 	void showSettingsDlg();
 	void load(bool keepConfig = false);
@@ -41,6 +48,10 @@ public:
 	void syncEntryList();
 	void updateSaveProgress();
 	void showErrorThreadDied();
+	
+	void showInstallDialog();
+	void installGrub(std::string const& device);
+	void showMessageGrubInstallCompleted(std::string const& msg);
 };
 
 #endif

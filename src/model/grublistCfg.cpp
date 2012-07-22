@@ -445,25 +445,6 @@ void GrublistCfg::cancelThreads(){
 	cancelThreadsRequested = true;
 }
 
-void GrublistCfg::threadable_install(std::string device){
-	this->install_result = install(device);
-	if (connectedUI)
-		connectedUI->event_grub_install_ready();
-}
-
-std::string GrublistCfg::install(std::string device){
-	FILE* install_proc = popen((this->env.install_cmd+" '"+device+"' 2>&1").c_str(), "r");
-	std::string output;
-	int c;
-	while ((c = fgetc(install_proc)) != EOF){
-		output += c;
-	}
-	int success = pclose(install_proc);
-	if (success == 0)
-		return ""; //empty return string = no error
-	else
-		return output;
-}
 
 std::string GrublistCfg::getMessage() const {
 	return message;

@@ -2,45 +2,6 @@
 /CMakeLists.txt -text
 /COPYING -text
 /README -text
-build/CMakeCache.txt -text
-build/CMakeFiles/CMakeCCompiler.cmake -text
-build/CMakeFiles/CMakeCXXCompiler.cmake -text
-build/CMakeFiles/CMakeDetermineCompilerABI_C.bin -text svneol=unset#unset
-build/CMakeFiles/CMakeDetermineCompilerABI_CXX.bin -text svneol=unset#unset
-build/CMakeFiles/CMakeDirectoryInformation.cmake -text
-build/CMakeFiles/CMakeOutput.log -text
-build/CMakeFiles/CMakeSystem.cmake -text
-build/CMakeFiles/CompilerIdC/CMakeCCompilerId.c -text
-build/CMakeFiles/CompilerIdC/a.out -text svneol=unset#unset
-build/CMakeFiles/CompilerIdCXX/CMakeCXXCompilerId.cpp -text
-build/CMakeFiles/CompilerIdCXX/a.out -text svneol=unset#unset
-build/CMakeFiles/Makefile.cmake -text
-build/CMakeFiles/Makefile2 -text
-build/CMakeFiles/TargetDirectories.txt -text
-build/CMakeFiles/cmake.check_cache -text
-build/CMakeFiles/grub-customizer.dir/CXX.includecache -text
-build/CMakeFiles/grub-customizer.dir/DependInfo.cmake -text
-build/CMakeFiles/grub-customizer.dir/build.make -text
-build/CMakeFiles/grub-customizer.dir/cmake_clean.cmake -text
-build/CMakeFiles/grub-customizer.dir/depend.internal -text
-build/CMakeFiles/grub-customizer.dir/depend.make -text
-build/CMakeFiles/grub-customizer.dir/flags.make -text
-build/CMakeFiles/grub-customizer.dir/link.txt -text
-build/CMakeFiles/grub-customizer.dir/progress.make -text
-build/CMakeFiles/grubcfg-proxy.dir/CXX.includecache -text
-build/CMakeFiles/grubcfg-proxy.dir/DependInfo.cmake -text
-build/CMakeFiles/grubcfg-proxy.dir/build.make -text
-build/CMakeFiles/grubcfg-proxy.dir/cmake_clean.cmake -text
-build/CMakeFiles/grubcfg-proxy.dir/depend.internal -text
-build/CMakeFiles/grubcfg-proxy.dir/depend.make -text
-build/CMakeFiles/grubcfg-proxy.dir/flags.make -text
-build/CMakeFiles/grubcfg-proxy.dir/link.txt -text
-build/CMakeFiles/grubcfg-proxy.dir/progress.make -text
-build/CMakeFiles/progress.marks -text
-build/Makefile -text
-build/cmake_install.cmake -text
-build/grub-customizer -text svneol=unset#unset
-build/grubcfg-proxy -text svneol=unset#unset
 /config.h.in -text
 debian/changelog -text
 debian/changelog.d -text
@@ -78,6 +39,8 @@ src/model/fbResolutionsGetter.cpp -text
 src/model/fbResolutionsGetter.h -text
 src/model/grubEnv.cpp -text
 src/model/grubEnv.h -text
+src/model/grubInstaller.cpp -text
+src/model/grubInstaller.h -text
 src/model/grublistCfg.cpp -text
 src/model/grublistCfg.h -text
 src/model/libproxyscript_parser.cpp -text
@@ -100,6 +63,8 @@ src/model/settings_mng_ds.cpp -text
 src/model/settings_mng_ds.h -text
 src/model/umount_all.cpp -text
 src/model/umount_all.h -text
+src/presenter/eventListener_abstract.cpp -text
+src/presenter/eventListener_abstract.h -text
 src/presenter/eventListener_model.cpp -text
 src/presenter/eventListener_model.h -text
 src/presenter/eventListener_view.cpp -text
@@ -108,6 +73,8 @@ src/presenter/grubcfg_proxy_main.cpp -text
 src/presenter/gtk-client.cpp -text
 src/presenter/gtk-client.h -text
 src/presenter/gtk-client_main.cpp -text
+src/view/grubInstallDlg.cpp -text
+src/view/grubInstallDlg.h -text
 src/view/grubconf_ui_gtk.cpp -text
 src/view/grubconf_ui_gtk.h -text
 src/view/partitionChooser.cpp -text

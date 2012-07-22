@@ -1,7 +1,7 @@
 #include "eventListener_model.h"
 
 EventListenerModel::EventListenerModel(GtkClient& presenter)
-	: presenter(presenter)
+	: EventListener_abstract(presenter)
 {
 }
 
@@ -15,4 +15,8 @@ void EventListenerModel::saveProgressChanged(){
 
 void EventListenerModel::threadDied(){
 	presenter.showErrorThreadDied();
+}
+
+void EventListenerModel::grubInstallCompleted(std::string const& msg){
+	presenter.showMessageGrubInstallCompleted(msg);
 }

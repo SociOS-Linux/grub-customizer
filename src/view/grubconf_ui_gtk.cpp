@@ -16,14 +16,11 @@ GrubConfUIGtk::GrubConfUIGtk(GrublistCfg& grubConfig)
 	miAbout(Gtk::Stock::ABOUT), miStartRootSelector(Gtk::Stock::OPEN),
 	completelyLoaded(false),
 	lvScriptPreview(1), lblScriptSelection(gettext("Script to insert:"), Gtk::ALIGN_LEFT), lblScriptPreview(gettext("Preview:"),Gtk::ALIGN_LEFT),
-	thread_active(false), quit_requested(false), modificationsUnsaved(false),
-	lblGrubInstallDescription(gettext("Install the bootloader to MBR and put some\nfiles to the bootloaders data directory\n(if they don't already exist)."), Gtk::ALIGN_LEFT),
-	lblGrubInstallDevice(gettext("_Device: "), Gtk::ALIGN_LEFT, Gtk::ALIGN_CENTER, true)
+	thread_active(false), quit_requested(false), modificationsUnsaved(false)
 {
 	disp_update_load.connect(sigc::mem_fun(this, &GrubConfUIGtk::update));
 	disp_update_save.connect(sigc::mem_fun(this, &GrubConfUIGtk::update_save));
 	disp_thread_died.connect(sigc::mem_fun(this, &GrubConfUIGtk::thread_died_handler));
-	disp_grub_install_ready.connect(sigc::mem_fun(this, &GrubConfUIGtk::func_disp_grub_install_ready));
 
 	win.set_icon_name("grub-customizer");
 
@@ -164,23 +161,7 @@ zeugma https://launchpad.net/~sunder67\
 	scriptAddDlg.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
 	scriptAddDlg.add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
 	
-	//grub-install-dialog
-	Gtk::VBox* vbGrubInstallDialog = grubInstallDialog.get_vbox();
-	grubInstallDialog.set_icon_name("grub-customizer");
-	vbGrubInstallDialog->pack_start(lblGrubInstallDescription, Gtk::PACK_SHRINK);
-	vbGrubInstallDialog->pack_start(hbGrubInstallDevice);
-	vbGrubInstallDialog->pack_start(lblInstallInfo);
-	hbGrubInstallDevice.pack_start(lblGrubInstallDevice, Gtk::PACK_SHRINK);
-	hbGrubInstallDevice.pack_start(txtGrubInstallDevice);
-	txtGrubInstallDevice.set_text("/dev/sda");
-	grubInstallDialog.set_title(gettext("Install to MBR"));
-	vbGrubInstallDialog->set_spacing(5);
-	lblGrubInstallDevice.set_mnemonic_widget(txtGrubInstallDevice);
-	grubInstallDialog.set_border_width(5);
-	grubInstallDialog.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
-	grubInstallDialog.add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
-	grubInstallDialog.set_default_response(Gtk::RESPONSE_OK);
-	txtGrubInstallDevice.set_activates_default(true);
+
 	
 	//signals
 	
@@ -207,7 +188,6 @@ zeugma https://launchpad.net/~sunder67\
 	cbScriptSelection.signal_changed().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_script_selection_changed));
 	
 	scriptAddDlg.signal_response().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_scriptAddDlg_response));
-	grubInstallDialog.signal_response().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_grub_install_dialog_response));
 	
 	win.signal_delete_event().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_delete_event));
 
@@ -238,9 +218,6 @@ void GrubConfUIGtk::event_thread_died(){
 	disp_thread_died();
 }
 
-void GrubConfUIGtk::event_grub_install_ready(){
-	disp_grub_install_ready();
-}
 
 bool GrubConfUIGtk::bootloader_not_found_requestForRootSelection(){
 	Gtk::MessageDialog dlg(gettext("No Bootloader found"), false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO);
@@ -269,23 +246,7 @@ std::string GrubConfUIGtk::show_root_selector(){
 		return setupDialog.getRootMountpoint();
 }
 
-void GrubConfUIGtk::func_disp_grub_install_ready(){
-	std::string output = grubConfig->install_result;
-	if (output == ""){
-		Gtk::MessageDialog msg(gettext("The bootloader has been installed successfully"));
-		msg.run();
-		grubInstallDialog.hide();
-	}
-	else {
-		Gtk::MessageDialog msg(gettext("Error while installing the bootloader"), false, Gtk::MESSAGE_ERROR);
-		msg.set_secondary_text(output);
-		msg.run();
-	}
-	grubInstallDialog.set_response_sensitive(Gtk::RESPONSE_OK, true);
-	grubInstallDialog.set_response_sensitive(Gtk::RESPONSE_CANCEL, true);
-	txtGrubInstallDevice.set_sensitive(true);
-	lblInstallInfo.set_text("");
-}
+
 
 void GrubConfUIGtk::run(){
 	win.show_all();
@@ -690,25 +651,9 @@ void GrubConfUIGtk::signal_about_dlg_response(int response_id){
 }
 
 void GrubConfUIGtk::signal_show_grub_install_dialog_click(){
-	grubInstallDialog.show_all();
+	eventListener->installDialogRequest();
 }
 
-void GrubConfUIGtk::signal_grub_install_dialog_response(int response_id){
-	if (response_id == Gtk::RESPONSE_OK){
-		if (txtGrubInstallDevice.get_text().length()){
-			grubInstallDialog.set_response_sensitive(Gtk::RESPONSE_OK, false);
-			grubInstallDialog.set_response_sensitive(Gtk::RESPONSE_CANCEL, false);
-			txtGrubInstallDevice.set_sensitive(false);
-			lblInstallInfo.set_text(gettext("installing the bootloader…"));
-			
-			Glib::Thread::create(sigc::bind<std::string>(sigc::mem_fun(grubConfig, &GrublistCfg::threadable_install), txtGrubInstallDevice.get_text()), false);
-		}
-		else
-			Gtk::MessageDialog(gettext("Please type a device string!")).run();
-	}
-	else
-		grubInstallDialog.hide();
-}
 
 
 GrubConfListing::GrubConfListing(){

@@ -45,7 +45,7 @@ class GrubConfUIGtk : public GrubConfUI {
 	
 	GrubConfListing tvConfList;
 	Gtk::ProgressBar progressBar;
-	Glib::Dispatcher disp_update_load, disp_update_save, disp_thread_died, disp_grub_install_ready;
+	Glib::Dispatcher disp_update_load, disp_update_save, disp_thread_died;
 
 	Glib::ustring appName, appVersion;
 	std::vector<Glib::ustring> authors;
@@ -80,12 +80,6 @@ class GrubConfUIGtk : public GrubConfUI {
 	Gtk::Label lblScriptSelection;
 	Gtk::Label lblScriptPreview;
 	
-	//Grub Install Dialog
-	Gtk::Dialog grubInstallDialog;
-	Gtk::Label lblGrubInstallDescription;
-	Gtk::HBox hbGrubInstallDevice;
-	Gtk::Label lblGrubInstallDevice, lblInstallInfo;
-	Gtk::Entry txtGrubInstallDevice;
 public:
 	GrubConfUIGtk(GrublistCfg& grubConfig);
 	void setEventListener(EventListenerView_iface& eventListener);
@@ -96,14 +90,12 @@ public:
 	void event_load_progress_changed();
 	void event_save_progress_changed();
 	void event_thread_died();
-	void event_grub_install_ready();
 	void event_mode_changed();
 	bool bootloader_not_found_requestForRootSelection();
 	std::string show_root_selector();
 	bool requestForBurgMode();
 	
 	void reload(bool keepConfig);
-	void func_disp_grub_install_ready();
 	void signal_show_root_selector();
 	void signal_row_changed(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter);
 	void signal_move_click(int direction); //direction: -1: one position up, 1: one p. down
@@ -117,7 +109,6 @@ public:
 	bool signal_delete_event(GdkEventAny* event);
 	void signal_about_dlg_response(int response_id);
 	void signal_quit_click();
-	void signal_grub_install_dialog_response(int response_id);
 	void signal_preference_click();
 public:
 	void update_move_buttons();

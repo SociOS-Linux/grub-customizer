@@ -3,10 +3,10 @@
 
 #include "gtk-client.h"
 #include "../interface/eventListener_view_iface.h"
+#include "eventListener_abstract.h"
 
-class EventListenerView : public EventListenerView_iface {
+class EventListenerView : public EventListener_abstract, public EventListenerView_iface {
 public:
-	GtkClient& presenter;
 	EventListenerView(GtkClient& presenter);
 	void settings_dialog_request();
 	void reload_request();
@@ -14,6 +14,8 @@ public:
 	void rootSelectorCompleted();
 	void entry_rename_request(Rule* rule, std::string const& newName);
 	void rootSelector_request();
+	void installDialogRequest();
+	void installGrub_request(std::string const& device);
 };
 
 #endif

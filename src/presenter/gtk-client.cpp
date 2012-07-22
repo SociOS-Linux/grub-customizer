@@ -1,7 +1,9 @@
 #include "gtk-client.h"
 
 GtkClient::GtkClient(GrubEnv& env)
-	: grublistCfg(NULL), listCfgDlg(NULL), settingsDlg(NULL), settings(NULL), env(env)
+	: grublistCfg(NULL), listCfgDlg(NULL), settingsDlg(NULL), settings(NULL),
+	  installer(NULL), installDlg(NULL),
+	 env(env)
 {
 }
 
@@ -23,6 +25,13 @@ void GtkClient::setModelSettingsManager(SettingsManagerDataStore& settings){
 
 void GtkClient::setSettingsBuffer(SettingsManagerDataStore& settings){
 	this->settingsOnDisk = &settings;
+}
+
+void GtkClient::setInstaller(GrubInstaller& installer){
+	this->installer = &installer;
+}
+void GtkClient::setInstallDlg(GrubInstallDlg& installDlg){
+	this->installDlg = &installDlg;
 }
 
 void GtkClient::showSettingsDlg(){
@@ -159,4 +168,18 @@ void GtkClient::updateSaveProgress(){
 void GtkClient::showErrorThreadDied(){
 	listCfgDlg->event_thread_died();
 }
+
+void GtkClient::showInstallDialog(){
+	installDlg->show();
+}
+
+void GtkClient::installGrub(std::string const& device){
+	Glib::Thread::create(sigc::bind<std::string>(sigc::mem_fun(installer, &GrubInstaller::threadable_install), device), false);
+}
+
+void GtkClient::showMessageGrubInstallCompleted(std::string const& msg){
+	installDlg->showMessageGrubInstallCompleted(msg);
+}
+
+
 

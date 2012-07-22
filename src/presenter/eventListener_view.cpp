@@ -1,7 +1,7 @@
 #include "eventListener_view.h"
 
 EventListenerView::EventListenerView(GtkClient& presenter)
-	: presenter(presenter)
+	: EventListener_abstract(presenter)
 {
 }
 
@@ -29,3 +29,10 @@ void EventListenerView::rootSelector_request(){
 	presenter.startRootSelector();
 }
 
+void EventListenerView::installDialogRequest(){
+	presenter.showInstallDialog();
+}
+
+void EventListenerView::installGrub_request(std::string const& device){
+	presenter.installGrub(device);
+}
