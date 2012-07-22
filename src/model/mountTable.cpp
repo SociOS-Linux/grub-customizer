@@ -52,7 +52,7 @@ void Mountpoint::umount(){
 }
 
 bool Mountpoint::isLiveCdFs(){
-	return this->fileSystem == "aufs";
+	return this->fileSystem == "aufs" | this->fileSystem == "overlayfs";
 }
 
 MountTable::MountTable(FILE* source, std::string const& prefix, bool default_isMounted_flag){
