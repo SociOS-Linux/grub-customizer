@@ -1,3 +1,6 @@
+v. 2.3.4
+	* fixed some problem of the numeric default entry selection
+
 v. 2.3.3
 	* copying of the proxy if it exists too (solves some update problems)
 
