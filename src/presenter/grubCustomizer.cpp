@@ -456,7 +456,8 @@ void GrubCustomizer::_rAppendRule(Rule& rule, Rule* parentRule){
 					throw 1;
 				}
 				Proxy* proxy = this->grublistCfg->proxies.getProxyByRule(&rule);
-				Rule* parentRule = proxy->getRuleByEntry(*rule.dataSource, proxy->rules);
+				//the dataSource of a menu is the associated submenu (entry) while the datasource isn't the root of a script
+				Rule* parentRule = proxy->getRuleByEntry(*rule.dataSource, proxy->rules, Rule::NORMAL);
 				if (parentRule) {
 					name = this->listCfgDlg->createNewEntriesPlaceholderString(parentRule->outputName);
 				} else {

@@ -86,14 +86,14 @@ void Proxy::importRuleString(const char* ruleString){
 	rules = Proxy::parseRuleString(&ruleString);
 }
 
-Rule* Proxy::getRuleByEntry(Entry const& entry, std::list<Rule>& list) {
+Rule* Proxy::getRuleByEntry(Entry const& entry, std::list<Rule>& list, Rule::RuleType ruletype) {
 //	std::cout << "rule count: " << list.size() << std::endl;
 	for (std::list<Rule>::iterator rule_iter = list.begin(); rule_iter != list.end(); rule_iter++){
-		if (&entry == rule_iter->dataSource)
+		if (&entry == rule_iter->dataSource && rule_iter->type == ruletype)
 			return &*rule_iter;
 		else {
 //			std::cout << entry.name << " != " << rule_iter->__idname << std::endl;
-			Rule* result = this->getRuleByEntry(entry, rule_iter->subRules);
+			Rule* result = this->getRuleByEntry(entry, rule_iter->subRules, ruletype);
 			if (result)
 				return result;
 		}
@@ -190,7 +190,7 @@ void Proxy::sync_expand() {
 			}
 			std::list<Rule> newRules;
 			for (std::list<Entry>::iterator iter = dataSource->begin(); iter != dataSource->end(); iter++){
-				Rule* relatedRule = this->getRuleByEntry(*iter, this->rules);
+				Rule* relatedRule = this->getRuleByEntry(*iter, this->rules, Rule::NORMAL);
 				if (!relatedRule){
 					newRules.push_back(Rule(*iter, dataTargetIter->isVisible, *this->dataSource, this->__idPathList, this->dataSource->buildPath(*iter))); //generate rule for given entry
 				}

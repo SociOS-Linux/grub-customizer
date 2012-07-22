@@ -42,7 +42,7 @@ struct Proxy {
 	void set_isExecutable(bool value);
 	static std::list<Rule> parseRuleString(const char** ruleString);
 	void importRuleString(const char* ruleString);
-	Rule* getRuleByEntry(Entry const& entry, std::list<Rule>& list);
+	Rule* getRuleByEntry(Entry const& entry, std::list<Rule>& list, Rule::RuleType ruletype);
 	bool sync(bool deleteInvalidRules = true, bool expand = true);
 	void sync_connectExisting(Rule* parent = NULL);
 	void sync_add_placeholders(Rule* parent = NULL);
