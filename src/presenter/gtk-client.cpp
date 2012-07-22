@@ -9,7 +9,7 @@ GtkClient::GtkClient(GrubEnv& env)
 {
 	disp_sync_load.connect(sigc::mem_fun(this, &GtkClient::syncListView_load));
 	disp_sync_save.connect(sigc::mem_fun(this, &GtkClient::syncListView_save));
-	disp_thread_died.connect(sigc::mem_fun(this, &GtkClient::thread_died_handler));
+	disp_thread_died.connect(sigc::mem_fun(this, &GtkClient::die));
 	disp_updateSettingsDlgResolutionList.connect(sigc::mem_fun(this, &GtkClient::updateSettingsDlgResolutionList_dispatched));
 }
 
@@ -255,13 +255,15 @@ void GtkClient::mountRootFs(){
 		mountTable->mountRootFs(selectedDevice, PARTCHOOSER_MOUNTPOINT);
 		this->generateSubmountpointSelection(PARTCHOOSER_MOUNTPOINT);
 	}
-	catch (MountException e) {
-		if (e.type == MountException::MOUNT_FAILED){
-			this->partitionChooser->showErrorMessage(MountException::MOUNT_FAILED);
+	catch (Mountpoint::Exception e) {
+		if (e == Mountpoint::MOUNT_FAILED){
+			this->partitionChooser->showErrorMessage(PartitionChooser::MOUNT_FAILED);
 			partitionChooser->setIsMounted(false);
 		}
-		else if (e.type == MountException::MOUNT_ERR_NO_FSTAB){
-			this->partitionChooser->showErrorMessage(MountException::MOUNT_ERR_NO_FSTAB);
+	}
+	catch (MountTable::Exception e) {
+		if (e == MountTable::MOUNT_ERR_NO_FSTAB){
+			this->partitionChooser->showErrorMessage(PartitionChooser::MOUNT_ERR_NO_FSTAB);
 			mountTable->getEntryByMountpoint(PARTCHOOSER_MOUNTPOINT).umount();
 			partitionChooser->setIsMounted(false);
 		}
@@ -276,9 +278,9 @@ void GtkClient::umountRootFs(){
 		this->mountTable->clear(PARTCHOOSER_MOUNTPOINT);
 		partitionChooser->setIsMounted(false);
 	}
-	catch (MountException e){
-		if (e.type == MountException::MOUNT_FAILED)
-			Gtk::MessageDialog(gettext("umount failed!")).run();
+	catch (Mountpoint::Exception e){
+		if (e == Mountpoint::UMOUNT_FAILED)
+			this->partitionChooser->showErrorMessage(PartitionChooser::UMOUNT_FAILED);
 	}
 	partitionChooser->updateSensitivity();
 
@@ -305,9 +307,9 @@ void GtkClient::mountSubmountpoint(Glib::ustring const& submountpoint){
 	try {
 		this->mountTable->getEntryRefByMountpoint(PARTCHOOSER_MOUNTPOINT + submountpoint).mount();
 	}
-	catch (MountException e){
-		if (e.type == MountException::MOUNT_FAILED){
-			Gtk::MessageDialog(gettext("Couldn't mount the selected partition")).run();
+	catch (Mountpoint::Exception e){
+		if (e == Mountpoint::MOUNT_FAILED){
+			this->partitionChooser->showErrorMessage(PartitionChooser::SUB_MOUNT_FAILED);
 		}
 		this->partitionChooser->setSubmountpointSelectionState(submountpoint, false); //reset checkbox
 	}
@@ -317,9 +319,9 @@ void GtkClient::umountSubmountpoint(Glib::ustring const& submountpoint){
 	try {
 		this->mountTable->getEntryRefByMountpoint(PARTCHOOSER_MOUNTPOINT + submountpoint).umount();
 	}
-	catch (MountException e){
-		if (e.type == MountException::MOUNT_FAILED){
-			Gtk::MessageDialog(gettext("Couldn't umount the selected partition")).run();
+	catch (Mountpoint::Exception e){
+		if (e == Mountpoint::UMOUNT_FAILED){
+			this->partitionChooser->showErrorMessage(PartitionChooser::SUB_UMOUNT_FAILED);
 		}
 		this->partitionChooser->setSubmountpointSelectionState(submountpoint, true); //reset checkbox
 	}
@@ -449,8 +451,7 @@ void GtkClient::syncListView_save(){
 	}
 }
 
-//TODO: rename
-void GtkClient::thread_died_handler(){
+void GtkClient::die(){
 	this->listCfgDlg->showErrorMessage(this->grublistCfg->getMessage());
 	this->listCfgDlg->close(); //exit
 }

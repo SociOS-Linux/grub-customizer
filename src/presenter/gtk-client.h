@@ -93,7 +93,7 @@ public:
 	
 	void syncListView_load();
 	void syncListView_save();
-	void thread_died_handler();
+	void die();
 	
 	bool quit();
 	

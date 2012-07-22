@@ -35,6 +35,16 @@ class PartitionChooser {
 	void init(bool useExisting = true);
 	Gtk::Assistant& getWindow();
 	public:
+	enum Exception {
+		ERR_CHKBUTTON_NOT_FOUND
+	};
+	enum MountExceptionType {
+		MOUNT_FAILED,
+		UMOUNT_FAILED,
+		MOUNT_ERR_NO_FSTAB,
+		SUB_MOUNT_FAILED,
+		SUB_UMOUNT_FAILED
+	};
 	bool is_cancelled;
 	PartitionChooser(bool isLiveCD);
 	void setEventListener(EventListenerView_iface& eventListener);
@@ -53,7 +63,7 @@ class PartitionChooser {
 	void addSubmountpoint(std::string const& mountpoint, bool isMounted);
 	void removeAllSubmountpoints();
 	void submountpoint_toggle(Gtk::CheckButton& sender);
-	void showErrorMessage(MountException::Type type);
+	void showErrorMessage(MountExceptionType type);
 	void run();
 	void hide();
 	void show();

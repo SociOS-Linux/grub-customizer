@@ -3,6 +3,9 @@
 #include <list>
 #include "proxy.h"
 struct ProxyList : public std::list<Proxy> {
+	enum Exception {
+		NO_RELATED_PROXY_FOUND
+	};
 	std::list<Proxy> trash; //removed proxies
 	std::list<Proxy*> getProxiesByScript(Script const& script);
 	std::list<const Proxy*> getProxiesByScript(Script const& script) const;

@@ -46,7 +46,6 @@ public:
 	bool createScriptForwarder(std::string const& scriptName) const;
 	bool removeScriptForwarder(std::string const& scriptName) const;
 	std::string readScriptForwarder(std::string const& scriptForwarderFilePath) const;
-	//TODO: CRASH when loading my /dev/sda8!
 	void load(bool keepConfig = false);
 	void save();
 	void readGeneratedFile(FILE* source, bool createScriptIfNotFound = false);

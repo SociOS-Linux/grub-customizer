@@ -149,10 +149,13 @@ std::string PartitionChooser::getSelectedDevice(){
 	return chkCustomPartition.get_active() ? txtCustomPartition.get_text() : lvRootPartitionSelection.get_text(lvRootPartitionSelection.get_selected()[0],0);
 }
 
-void PartitionChooser::showErrorMessage(MountException::Type type){
+void PartitionChooser::showErrorMessage(MountExceptionType type){
 	switch (type){
-		case MountException::MOUNT_FAILED:       Gtk::MessageDialog(gettext("Mount failed!")).run(); break;
-		case MountException::MOUNT_ERR_NO_FSTAB: Gtk::MessageDialog(gettext("This seems not to be a root file system (no fstab found)")).run();
+		case MOUNT_FAILED:       Gtk::MessageDialog(gettext("Mount failed!")).run(); break;
+		case UMOUNT_FAILED:      Gtk::MessageDialog(gettext("umount failed!")).run(); break;
+		case MOUNT_ERR_NO_FSTAB: Gtk::MessageDialog(gettext("This seems not to be a root file system (no fstab found)")).run(); break;
+		case SUB_MOUNT_FAILED:   Gtk::MessageDialog(gettext("Couldn't mount the selected partition")).run(); break;
+		case SUB_UMOUNT_FAILED:  Gtk::MessageDialog(gettext("Couldn't umount the selected partition")).run(); break;
 	}
 }
 
@@ -190,7 +193,7 @@ Gtk::CheckButton& PartitionChooser::getSubmountpointCheckboxByLabel(Glib::ustrin
 		if (((Gtk::CheckButton*)*iter)->get_label() == label)
 			return (Gtk::CheckButton&)**iter;
 	}
-	throw "Checkbutton not found"; //TODO: use object or enum
+	throw ERR_CHKBUTTON_NOT_FOUND;
 }
 
 void PartitionChooser::setSubmountpointSelectionState(Glib::ustring const& submountpoint, bool new_isSelected){

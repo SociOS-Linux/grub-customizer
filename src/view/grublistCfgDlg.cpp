@@ -267,36 +267,34 @@ void GrublistCfgDlg::signal_reload_click(){
 	eventListener->reload_request();
 }
 
-//MAKE PRIVATE
-Gtk::TreeModel::iterator GrublistCfgDlg::getIterByScriptPtr(void* scriptPtr) const {
+Gtk::TreeModel::iterator GrublistCfgDlg::getIterByProxyPtr(void* proxyPtr) const {
 	Gtk::TreeModel::const_iterator iter = tvConfList.refTreeStore->children().begin();
 	while (iter != tvConfList.refTreeStore->children().end()){
-		if (!iter->parent() && (*iter)[tvConfList.treeModel.relatedProxy] == scriptPtr)
+		if (!iter->parent() && (*iter)[tvConfList.treeModel.relatedProxy] == proxyPtr)
 			break;
 		iter++;
 	}
 	if (iter == tvConfList.refTreeStore->children().end())
-		throw "script iter not found";
+		throw PROXY_ITER_NOT_FOUND;
 	return iter;
 }
 
-//MAKE PRIVATE
-Gtk::TreeModel::iterator GrublistCfgDlg::getIterByEntryPtr(void* entryPtr) const {
+Gtk::TreeModel::iterator GrublistCfgDlg::getIterByRulePtr(void* rulePtr) const {
 	Gtk::TreeModel::const_iterator iter = tvConfList.refTreeStore->children().begin();
 	while (iter != tvConfList.refTreeStore->children().end()){
 		for (Gtk::TreeModel::const_iterator iter2 = iter->children().begin(); iter2 != iter->children().end(); iter2++){
-			if (iter2->parent() && (*iter2)[tvConfList.treeModel.relatedRule] == entryPtr)
+			if (iter2->parent() && (*iter2)[tvConfList.treeModel.relatedRule] == rulePtr)
 				return iter2;
 		}
 		iter++;
 	}
 	if (iter == tvConfList.refTreeStore->children().end())
-		throw "entry iter not found";
+		throw RULE_ITER_NOT_FOUND;
 	return iter;
 }
 
 void GrublistCfgDlg::setProxyName(void* proxy, Glib::ustring const& name, bool isModified){
-	Gtk::TreeModel::iterator iter = getIterByScriptPtr(proxy);
+	Gtk::TreeModel::iterator iter = getIterByProxyPtr(proxy);
 	
 	//adding (custom) if this script is modified
 	this->setLockState(~0);
@@ -324,14 +322,14 @@ void GrublistCfgDlg::signal_show_root_selector(){
 
 
 void GrublistCfgDlg::swapProxies(void* a, void* b){
-	tvConfList.refTreeStore->iter_swap(getIterByScriptPtr(a), getIterByScriptPtr(b));
+	tvConfList.refTreeStore->iter_swap(getIterByProxyPtr(a), getIterByProxyPtr(b));
 	
 	update_move_buttons();
 }
 
 void GrublistCfgDlg::swapRules(void* a, void* b){
-	Gtk::TreeModel::iterator iter1 = getIterByEntryPtr(a);
-	Gtk::TreeModel::iterator iter2 = getIterByEntryPtr(b);
+	Gtk::TreeModel::iterator iter1 = getIterByRulePtr(a);
+	Gtk::TreeModel::iterator iter2 = getIterByRulePtr(b);
 	
 	tvConfList.refTreeStore->iter_swap(iter1, iter2);
 	//swap the assigned pointers
@@ -343,29 +341,29 @@ void GrublistCfgDlg::swapRules(void* a, void* b){
 
 
 Glib::ustring GrublistCfgDlg::getRuleName(void* rule){
-	Gtk::TreeModel::iterator iter = this->getIterByEntryPtr(rule);
+	Gtk::TreeModel::iterator iter = this->getIterByRulePtr(rule);
 	return (*iter)[tvConfList.treeModel.name];
 }
 void GrublistCfgDlg::setRuleName(void* rule, Glib::ustring const& newName){
-	Gtk::TreeModel::iterator iter = this->getIterByEntryPtr(rule);
+	Gtk::TreeModel::iterator iter = this->getIterByRulePtr(rule);
 	this->setLockState(~0);
 	(*iter)[tvConfList.treeModel.name] = newName;
 	this->setLockState(0);
 }
 
 bool GrublistCfgDlg::getRuleState(void* rule){
-	Gtk::TreeModel::iterator iter = this->getIterByEntryPtr(rule);
+	Gtk::TreeModel::iterator iter = this->getIterByRulePtr(rule);
 	return (*iter)[tvConfList.treeModel.active];
 }
 void GrublistCfgDlg::setRuleState(void* rule, bool newState){
-	Gtk::TreeModel::iterator iter = this->getIterByEntryPtr(rule);
+	Gtk::TreeModel::iterator iter = this->getIterByRulePtr(rule);
 	this->setLockState(~0);
 	(*iter)[tvConfList.treeModel.active] = newState;
 	this->setLockState(0);
 }
 
 bool GrublistCfgDlg::getProxyState(void* proxy){
-	Gtk::TreeModel::iterator iter = this->getIterByScriptPtr(proxy);
+	Gtk::TreeModel::iterator iter = this->getIterByProxyPtr(proxy);
 	return (*iter)[tvConfList.treeModel.active];
 }
 
@@ -445,7 +443,7 @@ void GrublistCfgDlg::signal_add_click(){
 void GrublistCfgDlg::removeProxy(void* p){
 	//Parameter is not really required
 	this->setLockState(~0);
-	Gtk::TreeModel::iterator iter = getIterByScriptPtr(p);
+	Gtk::TreeModel::iterator iter = getIterByProxyPtr(p);
 	tvConfList.refTreeStore->erase(iter);
 	this->setLockState(0);
 	

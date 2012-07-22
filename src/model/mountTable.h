@@ -6,16 +6,12 @@
 #include <cstdlib>
 #include <iostream>
 
-struct MountException {
-	enum Type {
-		MOUNT_FAILED,
-		MOUNT_ERR_NO_FSTAB
-	};
-	Type type;
-	MountException(Type type);
-};
 
 struct Mountpoint {
+	enum Exception {
+		MOUNT_FAILED,
+		UMOUNT_FAILED
+	};
 	std::string device, mountpoint, fileSystem, options, dump, pass;
 	bool isMounted;
 	bool isValid(std::string const& prefix = "") const;
@@ -26,14 +22,17 @@ struct Mountpoint {
 	void umount();
 };
 
-//TODO: Problem: Mountpoints werden mal mit relativen, mal mit absoluten Pfaden erstellt! VEREINHEITLICHEN!
 class MountTable : public std::list<Mountpoint> {
 	bool loaded;
 	public:
+	enum Exception {
+		MOUNT_ERR_NO_FSTAB,
+		MOUNTPOINT_NOT_FOUND
+	};
 	MountTable(FILE* source, std::string const& rootDirectory, bool default_isMounted_flag = false);
 	MountTable(std::string const& rootDirectory);
 	MountTable();
-	void sync_isMountedStats(MountTable const& mtab);
+	void sync(MountTable const& mtab);
 	bool isLoaded() const;
 	operator bool() const;
 	void loadData(FILE* source, std::string const& prefix, bool default_isMounted_flag = false);

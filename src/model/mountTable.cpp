@@ -1,10 +1,5 @@
 #include "mountTable.h"
 
-MountException::MountException(MountException::Type type)
-	: type(type)
-{
-}
-
 Mountpoint::Mountpoint(std::string const& mountpoint, bool isMounted) : isMounted(isMounted), mountpoint(mountpoint) {}
 
 Mountpoint::Mountpoint(std::string const& device, std::string const& mountpoint, std::string const& options, bool isMounted)
@@ -23,7 +18,7 @@ void Mountpoint::mount(){
 	if (!isMounted){
 		int res = system(("mount '"+device+"' '"+mountpoint+"'"+(options != "" ? " -o '"+options+"'" : "")).c_str());
 		if (res != 0)
-			throw MountException(MountException::MOUNT_FAILED);
+			throw MOUNT_FAILED;
 
 		this->isMounted = true;
 	}
@@ -32,7 +27,7 @@ void Mountpoint::umount(){
 	if (isMounted){
 		int res = system(("umount '"+mountpoint+"'").c_str());
 		if (res != 0)
-			throw MountException(MountException::MOUNT_FAILED);
+			throw UMOUNT_FAILED;
 
 		this->isMounted = false;
 	}
@@ -112,7 +107,7 @@ void MountTable::loadData(std::string const& rootDirectory){
 			mtab.print();
 			fclose(mtabfile);
 		}
-		this->sync_isMountedStats(mtab);
+		this->sync(mtab);
 		fclose(fstabFile);
 	}
 }
@@ -131,8 +126,7 @@ void MountTable::clear(std::string const& prefix){
 	loaded = false;
 }
 
-//TODO: this doesn't sync only the isMounted stat - RENAME!
-void MountTable::sync_isMountedStats(MountTable const& mtab){
+void MountTable::sync(MountTable const& mtab){
 	for (MountTable::const_iterator iter = mtab.begin(); iter != mtab.end(); iter++){
 		this->add(*iter);
 	}
@@ -151,7 +145,7 @@ Mountpoint& MountTable::getEntryRefByMountpoint(std::string const& mountPoint) {
 		if (iter->mountpoint == mountPoint)
 			return *iter;
 	}
-	throw "mountpoint not found!";
+	throw MOUNTPOINT_NOT_FOUND;
 }
 
 Mountpoint MountTable::getEntryByMountpoint(std::string const& mountPoint) const {
@@ -177,7 +171,6 @@ void MountTable::remove(Mountpoint const& mountpoint){
 	}
 }
 
-//TODO: Was, wenn die Partitionen nicht durch diese Instanz gemounted wurden?!
 void MountTable::umountAll(std::string const& prefix){
 	for (MountTable::reverse_iterator iter = this->rbegin(); iter != this->rend(); iter++){
 		if (iter->mountpoint.substr(0, prefix.length()) == prefix && iter->isMounted){
@@ -186,7 +179,6 @@ void MountTable::umountAll(std::string const& prefix){
 	}
 }
 
-//TODO: ggf. Funktionsnamen überdenken
 void MountTable::mountRootFs(std::string const& device, std::string const& mountpoint){
 	this->print();
 	this->add(Mountpoint(device, mountpoint, "")).mount();
@@ -200,10 +192,12 @@ void MountTable::mountRootFs(std::string const& device, std::string const& mount
 			this->add(Mountpoint("/sys", mountpoint + "/sys", "bind")).mount();
 			this->add(Mountpoint("/dev", mountpoint + "/dev", "bind")).mount();
 		}
-		catch (MountException e){} //errors while mounting any of this partitions may not be a problem
+		//errors while mounting any of this partitions may not be a problem
+		catch (MountTable::Exception e){}
+		catch (Mountpoint::Exception e){}
 	}
 	else
-		throw MountException(MountException::MOUNT_ERR_NO_FSTAB);
+		throw MOUNT_ERR_NO_FSTAB;
 	this->loaded = true;
 	this->print();
 }

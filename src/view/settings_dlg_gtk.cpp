@@ -426,7 +426,7 @@ GrubSettingsDlgGtk::CustomOption GrubSettingsDlgGtk::getCustomOption(Glib::ustri
 		if ((*iter)[asTreeModel.name] == name)
 			return CustomOption(name, Glib::ustring((*iter)[asTreeModel.value]), (*iter)[asTreeModel.active]);
 	}
-	throw "requested custom option not found";
+	throw REQUESTED_CUSTOM_OPTION_NOT_FOUND;
 }
 
 void GrubSettingsDlgGtk::signal_setting_row_changed(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter){

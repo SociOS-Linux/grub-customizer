@@ -59,9 +59,13 @@ class GrublistCfgDlg : public GrubConfUI {
 	
 	bool lock_state;
 
-	Gtk::TreeModel::iterator getIterByScriptPtr(void* scriptPtr) const;
-	Gtk::TreeModel::iterator getIterByEntryPtr(void* entryPtr) const;
+	Gtk::TreeModel::iterator getIterByProxyPtr(void* proxyPtr) const;
+	Gtk::TreeModel::iterator getIterByRulePtr(void* rulePtr) const;
 public:
+	enum Exception {
+		PROXY_ITER_NOT_FOUND,
+		RULE_ITER_NOT_FOUND
+	};
 	GrublistCfgDlg();
 	void setEventListener(EventListenerView_iface& eventListener);
 	void run();

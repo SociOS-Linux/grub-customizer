@@ -99,7 +99,7 @@ bool Proxy::isModified() const {
 			std::list<Rule>::const_iterator ruleIter = this->rules.begin();
 			Script::iterator entryIter = this->dataSource->begin();
 			if (ruleIter->type == Rule::OTHER_ENTRIES_PLACEHOLDER){ //the first element is the OTHER_ENTRIES_PLACEHOLDER by default.
-				result = !ruleIter->isVisible; //If not visible, it's modified… ARGH why didn't it work (TODO)
+				result = !ruleIter->isVisible; //If not visible, it's modified…
 				ruleIter++;
 			}
 			while (!result && ruleIter != this->rules.end() && entryIter != this->dataSource->end()){

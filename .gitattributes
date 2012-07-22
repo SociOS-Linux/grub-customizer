@@ -2,6 +2,7 @@
 /.cproject -text
 /.project -text
 .settings/org.eclipse.cdt.ui.prefs -text
+.settings/org.eclipse.ltk.core.refactoring.prefs -text
 /CMakeLists.txt -text
 /COPYING -text
 /README -text
