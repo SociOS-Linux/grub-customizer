@@ -9,34 +9,7 @@ debian/changelog_lucid -text
 debian/changelog_maverick -text
 debian/control -text
 debian/copyright -text
-debian/debhelper.log -text
-debian/files -text
 debian/rules -text
-debian/substvars -text
-debian/tmp/DEBIAN/control -text
-debian/tmp/DEBIAN/md5sums -text
-debian/tmp/usr/bin/grub-customizer -text svneol=unset#unset
-debian/tmp/usr/lib/grub-customizer/grubcfg-proxy -text svneol=unset#unset
-debian/tmp/usr/share/applications/grub-customizer.desktop -text
-debian/tmp/usr/share/doc/grub-customizer/changelog.Debian.gz -text svneol=unset#unset
-debian/tmp/usr/share/doc/grub-customizer/copyright -text
-debian/tmp/usr/share/icons/hicolor/128x128/apps/grub-customizer.png -text svneol=unset#unset
-debian/tmp/usr/share/icons/hicolor/16x16/apps/grub-customizer.png -text svneol=unset#unset
-debian/tmp/usr/share/icons/hicolor/22x22/apps/grub-customizer.png -text svneol=unset#unset
-debian/tmp/usr/share/icons/hicolor/24x24/apps/grub-customizer.png -text svneol=unset#unset
-debian/tmp/usr/share/icons/hicolor/32x32/apps/grub-customizer.png -text svneol=unset#unset
-debian/tmp/usr/share/icons/hicolor/48x48/apps/grub-customizer.png -text svneol=unset#unset
-debian/tmp/usr/share/icons/hicolor/64x64/apps/grub-customizer.png -text svneol=unset#unset
-debian/tmp/usr/share/locale/bg/LC_MESSAGES/grub-customizer.mo -text svneol=unset#unset
-debian/tmp/usr/share/locale/de/LC_MESSAGES/grub-customizer.mo -text svneol=unset#unset
-debian/tmp/usr/share/locale/el/LC_MESSAGES/grub-customizer.mo -text svneol=unset#unset
-debian/tmp/usr/share/locale/gl/LC_MESSAGES/grub-customizer.mo -text svneol=unset#unset
-debian/tmp/usr/share/locale/hr/LC_MESSAGES/grub-customizer.mo -text svneol=unset#unset
-debian/tmp/usr/share/locale/pl/LC_MESSAGES/grub-customizer.mo -text svneol=unset#unset
-debian/tmp/usr/share/locale/pt_BR/LC_MESSAGES/grub-customizer.mo -text svneol=unset#unset
-debian/tmp/usr/share/locale/ru/LC_MESSAGES/grub-customizer.mo -text svneol=unset#unset
-debian/tmp/usr/share/locale/tr/LC_MESSAGES/grub-customizer.mo -text svneol=unset#unset
-debian/tmp/usr/share/locale/uk/LC_MESSAGES/grub-customizer.mo -text svneol=unset#unset
 /debuild.log -text
 /grub-customizer.desktop -text
 icons/128x128.png -text svneol=unset#unset
@@ -97,6 +70,8 @@ translation/translation-gl.mo -text svneol=unset#unset
 translation/translation-gl.po -text
 translation/translation-hr.mo -text svneol=unset#unset
 translation/translation-hr.po -text
+translation/translation-it.mo -text svneol=unset#unset
+translation/translation-it.po -text
 translation/translation-pl.mo -text svneol=unset#unset
 translation/translation-pl.po -text
 translation/translation-pt_BR.mo -text svneol=unset#unset

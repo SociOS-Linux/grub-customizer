@@ -66,6 +66,8 @@ Manuel Xosé Lemos https://launchpad.net/~mxlemos\n\
 Michael Kotsarinis https://launchpad.net/~mk73628\n\
 Miguel Anxo Bouzada https://launchpad.net/~mbouzada\n\
 nafterburner https://launchpad.net/~nafterburner\n\
+patel https://launchpad.net/~patel\n\
+shishimaru https://launchpad.net/~salvi-uchiha\n\
 Svetoslav Stefanov https://launchpad.net/~svetlisashkov\n\
 TheMengzor https://launchpad.net/~the-mengzor\n\
 zeugma https://launchpad.net/~sunder67\

@@ -226,7 +226,7 @@ msgstr "_Speichern und Beenden"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:682
 msgid "installing the bootloader…"
-msgstr "der Bootloaders wird installiert…"
+msgstr "der Bootloader wird installiert…"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:687
 msgid "Please type a device string!"
