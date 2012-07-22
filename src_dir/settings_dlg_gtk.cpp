@@ -328,21 +328,26 @@ void GrubSettingsDlgGtk::loadData(){
 		}
 		
 		if (dataStore->isActive("GRUB_MENU_PICTURE") && menuPicturePath != ""){
-			//Glib::RefPtr<Gdk::Pixbuf> buf = Gdk::Pixbuf::create_from_file(menuPicturePath);
-			//imgBackgroundImage.property_icon_size() = 10;
+		
 			FILE* img_test = fopen(menuPicturePath.c_str(), "r");
 			if (img_test){
 				fclose(img_test);
-
-				Glib::RefPtr<Gdk::Pixbuf> buf = Gdk::Pixbuf::create_from_file(menuPicturePath, 150, 100, true);
-				if (buf)
-					imgBackgroundImage.set(buf);
-		
-				fcBackgroundImage.set_filename(menuPicturePath);
+				
+				
+				try {
+					Glib::RefPtr<Gdk::Pixbuf> buf = Gdk::Pixbuf::create_from_file(menuPicturePath, 150, 100, true);
+					if (buf)
+						imgBackgroundImage.set(buf);
+				}
+				catch (Glib::Error e){
+					imgBackgroundImage.set(Gtk::Stock::MISSING_IMAGE, Gtk::ICON_SIZE_DIALOG);
+				}
+				
 				bttCopyBackground.show();
 				bttRemoveBackground.show();
 				imgBackgroundImage.show();
 				lblBackgroundRequiredInfo.hide();
+				fcBackgroundImage.set_filename(menuPicturePath);
 			}
 		}
 		else {
