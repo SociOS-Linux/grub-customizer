@@ -9,3 +9,4 @@ StartupNotify=false
 Categories=System;Settings;
 Icon=grub-customizer
 X-Ubuntu-Gettext-Domain=grub-customizer
+X-KDE-SubstituteUID=true
