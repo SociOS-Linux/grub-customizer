@@ -4,7 +4,7 @@ Source: grub-customizer
 Homepage: https://launchpad.net/grub-customizer
 Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
 XSBC-Original-Maintainer: Daniel Richter <danielrichter2007@web.de>
-Build-Depends: debhelper (>= 7.4), libgtkmm-2.4-dev (>= 2.20.0), cmake (>=2.8.0), gettext (>=0.17)
+Build-Depends: debhelper (>= 7.3), libgtkmm-2.4-dev (>= 2.20.0), cmake (>=2.6.2), gettext (>=0.17)
 
 Architecture: any
 Depends: ${shlibs:Depends}, gksu

@@ -7,53 +7,53 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-11-21 12:13+0100\n"
-"PO-Revision-Date: 2010-11-28 06:52+0000\n"
+"POT-Creation-Date: 2010-11-28 22:09+0100\n"
+"PO-Revision-Date: 2010-11-30 08:40+0000\n"
 "Last-Translator: Careone <zzbusagain@yahoo.com.cn>\n"
 "Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-11-28 20:24+0000\n"
+"X-Launchpad-Export-Date: 2010-11-30 18:28+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: ../src_dir/grubconfig.cpp:203 ../src_dir/grubconfig.cpp:218
+#: ../src/grubconfig.cpp:203 ../src/grubconfig.cpp:218
 msgid " not found. Is grub2 installed?"
 msgstr " 未找到。确认已安装 grub2？"
 
-#: ../src_dir/grubconfig.cpp:287
+#: ../src/grubconfig.cpp:287
 msgid " couldn't be executed successfully. You must run this as root!"
 msgstr " 未能成功执行。你必须以 root 权限运行。"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:11
+#: ../src/grubconf_ui_gtk.cpp:11
 msgid "_File"
 msgstr "文件(_F)"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:12
+#: ../src/grubconf_ui_gtk.cpp:12
 msgid "_Edit"
 msgstr "编辑(_E)"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:12
+#: ../src/grubconf_ui_gtk.cpp:12
 msgid "_View"
 msgstr "查看(_V)"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:12
+#: ../src/grubconf_ui_gtk.cpp:12
 msgid "_Help"
 msgstr "帮助(_H)"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:13
+#: ../src/grubconf_ui_gtk.cpp:13
 msgid "_Install to MBR …"
 msgstr "安装到MBR...(_I)"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:18
+#: ../src/grubconf_ui_gtk.cpp:18
 msgid "Script to insert:"
 msgstr "插入脚本:"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:18
+#: ../src/grubconf_ui_gtk.cpp:18
 msgid "Preview:"
 msgstr "预览:"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:20
+#: ../src/grubconf_ui_gtk.cpp:20
 msgid ""
 "Install the bootloader to MBR and put some\n"
 "files to the bootloaders data directory\n"
@@ -62,207 +62,209 @@ msgstr ""
 "安装启动引导器到MBR，并放置相应的文件\n"
 "到启动器数据目录（如果这个目录存在）。"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:21
+#: ../src/grubconf_ui_gtk.cpp:21
 msgid "_Device: "
 msgstr "设备(_D)： "
 
-#: ../src_dir/grubconf_ui_gtk.cpp:54
+#: ../src/grubconf_ui_gtk.cpp:54
 msgid ""
 "Grub Customizer is a graphical interface to configure the grub2/burg settings"
 msgstr "Grub Customizer 是配置 grub2/burg 的图形化界面"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:79
+#: ../src/grubconf_ui_gtk.cpp:82
 msgid "Save configuration and generate a new "
 msgstr "保存并生成新的配置 "
 
-#: ../src_dir/grubconf_ui_gtk.cpp:86
+#: ../src/grubconf_ui_gtk.cpp:89
 msgid "Add a script to your configuration"
 msgstr "添加脚本到配置"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:88
+#: ../src/grubconf_ui_gtk.cpp:91
 msgid "Remove a script from your configuration"
 msgstr "从配置里删除脚本"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:94
+#: ../src/grubconf_ui_gtk.cpp:97
 msgid "Move up the selected entry or script"
-msgstr "向上移动选中的条目或脚本"
+msgstr "向上移动选中的项目或脚本"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:96
+#: ../src/grubconf_ui_gtk.cpp:99
 msgid "Move down the selected entry or script"
-msgstr "向下移动选中的条目或脚本"
+msgstr "向下移动选中的项目或脚本"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:104
+#: ../src/grubconf_ui_gtk.cpp:107
 msgid "reload configuration"
 msgstr "重新加载配置"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:107
+#: ../src/grubconf_ui_gtk.cpp:110
 msgid "Edit grub preferences"
 msgstr "编辑 grub 参数"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:136
+#: ../src/grubconf_ui_gtk.cpp:139
 msgid "Select _partition …"
 msgstr "选择分区(_P)..."
 
-#: ../src_dir/grubconf_ui_gtk.cpp:143
+#: ../src/grubconf_ui_gtk.cpp:146
 msgid "Add script"
 msgstr "添加脚本"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:159
+#: ../src/grubconf_ui_gtk.cpp:162
 msgid "Entry"
-msgstr "条目"
+msgstr "项目"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:174
+#: ../src/grubconf_ui_gtk.cpp:177
 msgid "Install to MBR"
 msgstr "安装到 MBR"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:219
+#: ../src/grubconf_ui_gtk.cpp:222
 msgid "BURG Mode"
 msgstr "BURG 模式"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:240
+#: ../src/grubconf_ui_gtk.cpp:243
 msgid "No Bootloader found"
 msgstr "未找到启动器"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:241
+#: ../src/grubconf_ui_gtk.cpp:244
 msgid "Do you want to select another root partition?"
 msgstr "选择另一个根分区？"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:248
+#: ../src/grubconf_ui_gtk.cpp:251
 msgid "BURG found!"
 msgstr "找到 BURG！"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:249
+#: ../src/grubconf_ui_gtk.cpp:252
 msgid "Do you want to configure BURG instead of grub2?"
 msgstr "要配置BURG 来代替 Grub2 ?"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:269
+#: ../src/grubconf_ui_gtk.cpp:272
 msgid "The bootloader has been installed successfully"
 msgstr "启动器安装成功"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:274
+#: ../src/grubconf_ui_gtk.cpp:277
 msgid "Error while installing the bootloader"
 msgstr "安装启动器时出现错误"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:296
+#: ../src/grubconf_ui_gtk.cpp:299
 msgid "loading configuration…"
 msgstr "载入配置中…"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:327
+#: ../src/grubconf_ui_gtk.cpp:330
 msgid " (custom)"
-msgstr ""
+msgstr " (自定义)"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:339
+#: ../src/grubconf_ui_gtk.cpp:342
 msgid "(new Entries)"
-msgstr ""
+msgstr "(新条目)"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:360
+#: ../src/grubconf_ui_gtk.cpp:363
 msgid "Proxy binary not found!"
-msgstr ""
+msgstr "二进制代理未找到！"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:361
+#: ../src/grubconf_ui_gtk.cpp:364
 msgid ""
 "You will see all entries (uncustomized) when you run grub. This error accurs "
 "(in most cases), when you didn't install grub gustomizer currectly."
-msgstr ""
+msgstr "在运行 Grub 时会看到全部项目(未自定义)。如果没有正确安装 Grub customizer ， (在大多数情况下)会出现这个错误。"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:379
+#: ../src/grubconf_ui_gtk.cpp:382
 msgid "Configuration has been saved"
 msgstr "配置已保存"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:382
+#: ../src/grubconf_ui_gtk.cpp:385
 msgid "updating configuration"
 msgstr "更新配置"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:439
+#: ../src/grubconf_ui_gtk.cpp:442
 msgid "Name the Entry"
-msgstr "命名条目"
+msgstr "项目名称"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:555
+#: ../src/grubconf_ui_gtk.cpp:558
 msgid "Default title: "
 msgstr "默认标题： "
 
-#: ../src_dir/grubconf_ui_gtk.cpp:575
+#: ../src/grubconf_ui_gtk.cpp:578
 msgid "No script found"
 msgstr "未找到脚本"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:670
+#: ../src/grubconf_ui_gtk.cpp:673
 msgid "The saved configuration is not up to date!"
 msgstr "已保存的配置不是最新的！"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:671
+#: ../src/grubconf_ui_gtk.cpp:674
 msgid ""
 "The generated configuration didn't equal to the saved configuration on "
 "startup. So what you see now may not be what you see when you restart your "
 "pc. To fix this, click update!"
-msgstr ""
+msgstr "生成的配置不等于启动时已保存的配置。重启动电脑后看到的，不一定是现在你所看到的。要修复这个问题，请点击“更新”！"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:674
+#: ../src/grubconf_ui_gtk.cpp:677
 msgid "_Quit without update"
 msgstr "不更新直接退出(_Q)"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:677
+#: ../src/grubconf_ui_gtk.cpp:680
 msgid "_Update & Quit"
 msgstr "更新并退出(_U)"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:681
+#: ../src/grubconf_ui_gtk.cpp:684
 msgid "Do you want to save your modifications?"
 msgstr "保存修改吗？"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:684
+#: ../src/grubconf_ui_gtk.cpp:687
 msgid "_Quit without saving"
 msgstr "不保存直接退出(_S)"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:687
+#: ../src/grubconf_ui_gtk.cpp:690
 msgid "_Save & Quit"
 msgstr "保存并退出(_S)"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:690
+#: ../src/grubconf_ui_gtk.cpp:693
 msgid "AND: your modifications are still unsaved, update will save them too!"
 msgstr "还有：修改还没有保存，更新时会进行保存！"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:729
+#: ../src/grubconf_ui_gtk.cpp:732
 msgid "installing the bootloader…"
 msgstr "安装启动器..."
 
-#: ../src_dir/grubconf_ui_gtk.cpp:734
+#: ../src/grubconf_ui_gtk.cpp:737
 msgid "Please type a device string!"
 msgstr "请输入设备字符串！"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:744 ../src_dir/settings_dlg_gtk.cpp:91
+#: ../src/grubconf_ui_gtk.cpp:747 ../src/settings_dlg_gtk.cpp:92
 msgid "is active"
 msgstr "活动的"
 
-#: ../src_dir/grubconf_ui_gtk.cpp:745 ../src_dir/settings_dlg_gtk.cpp:92
+#: ../src/grubconf_ui_gtk.cpp:748 ../src/settings_dlg_gtk.cpp:93
 msgid "name"
 msgstr "名称"
 
-#: ../src_dir/gtk-client.cpp:14
+#: ../src/gtk-client.cpp:14
 msgid " command not found, cannot proceed"
 msgstr " 命令未找到，无法继续"
 
-#: ../src_dir/liveCDSetupDialog.cpp:5
+#: ../src/liveCDSetupDialog.cpp:5
 msgid "_use another partition: "
 msgstr "使用另一分区(_U): "
 
-#: ../src_dir/liveCDSetupDialog.cpp:6
+#: ../src/liveCDSetupDialog.cpp:6
 msgid "Mount selected Filesystem"
 msgstr "挂载选中的文件系统"
 
-#: ../src_dir/liveCDSetupDialog.cpp:7
+#: ../src/liveCDSetupDialog.cpp:7
 msgid "Unmount mounted Filesystem"
 msgstr "卸载已挂载的文件系统"
 
-#: ../src_dir/liveCDSetupDialog.cpp:10
+#: ../src/liveCDSetupDialog.cpp:10
 msgid ""
 "These are the mountpoints of your fstab file.\n"
 "Please select every grub/boot related partition."
 msgstr ""
+"这是 fstab 文件的挂载点。\n"
+"请选择对应的 grub/boot 分区。"
 
-#: ../src_dir/liveCDSetupDialog.cpp:15
+#: ../src/liveCDSetupDialog.cpp:15
 msgid "You started Grub Customizer using the live CD."
 msgstr "已使用免安装光盘(Live CD)启动 Grub Customizer"
 
-#: ../src_dir/liveCDSetupDialog.cpp:17
+#: ../src/liveCDSetupDialog.cpp:17
 msgid ""
 "You selected the option for choosing another partition.\n"
 "Please note: The os-prober may not find your actually running system.\n"
@@ -270,8 +272,12 @@ msgid ""
 "again and save the configuration (or run update-grub/update-burg)\n"
 "to get the entry back!"
 msgstr ""
+"你选中了“选择其它分区”的选项。\n"
+"请注意： os-prober 可能找不到实际运行的操作系统。\n"
+"所以请在目标系统上重新运行 Grub Customizer 并保存配置，\n"
+"把相应的项目找回来(或者运行 update-grub/update-burg 命令)！"
 
-#: ../src_dir/liveCDSetupDialog.cpp:19
+#: ../src/liveCDSetupDialog.cpp:19
 msgid ""
 "Before you can edit your grub configuration we have to\n"
 "mount the required partitions.\n"
@@ -283,227 +289,241 @@ msgid ""
 "as the actually running one.\n"
 "If not, you will get an error message when trying to load the configuration."
 msgstr ""
+"在开始编辑 Grub 配置前，需要\n"
+"先挂载要必要的分区。\n"
+"\n"
+"本助手将帮助你来操作这些。\n"
+"\n"
+"\n"
+"请确保目标系统的 CPU 架构与实际硬件相符。\n"
+"如果不相符，在加载配置时，会出现错误信息。"
 
-#: ../src_dir/liveCDSetupDialog.cpp:21
+#: ../src/liveCDSetupDialog.cpp:21
 msgid "Grub Customizer: Partition chooser"
 msgstr "Grub Customizer: 分区选择器"
 
-#: ../src_dir/liveCDSetupDialog.cpp:25
+#: ../src/liveCDSetupDialog.cpp:25
 msgid "Select and mount your root partition"
 msgstr "选择并挂载根分区"
 
-#: ../src_dir/liveCDSetupDialog.cpp:43
+#: ../src/liveCDSetupDialog.cpp:43
 msgid "partition"
 msgstr "分区"
 
-#: ../src_dir/liveCDSetupDialog.cpp:44
+#: ../src/liveCDSetupDialog.cpp:44
 msgid "type"
 msgstr "类型"
 
-#: ../src_dir/liveCDSetupDialog.cpp:45
+#: ../src/liveCDSetupDialog.cpp:45
 msgid "label"
 msgstr "卷标"
 
-#: ../src_dir/liveCDSetupDialog.cpp:62
+#: ../src/liveCDSetupDialog.cpp:62
 msgid "Select required submountpoints"
 msgstr "选择必要的子挂载点"
 
-#: ../src_dir/liveCDSetupDialog.cpp:82
+#: ../src/liveCDSetupDialog.cpp:82
 msgid "Partition Chooser"
 msgstr "分区选择器"
 
-#: ../src_dir/liveCDSetupDialog.cpp:152
+#: ../src/liveCDSetupDialog.cpp:152
 msgid "Mount failed!"
 msgstr "挂载失败！"
 
-#: ../src_dir/liveCDSetupDialog.cpp:167
+#: ../src/liveCDSetupDialog.cpp:167
 msgid "This seems not to be a root file system (no fstab found)"
-msgstr ""
+msgstr "看起来不像是一个根文件系统(找不到 fstab 文件)"
 
-#: ../src_dir/liveCDSetupDialog.cpp:176
+#: ../src/liveCDSetupDialog.cpp:176
 msgid "umount failed!"
-msgstr ""
+msgstr "卸载(umount)失败！"
 
-#: ../src_dir/liveCDSetupDialog.cpp:210
+#: ../src/liveCDSetupDialog.cpp:210
 msgid "Couldn't mount the selected partition"
 msgstr "无法挂载选中的分区"
 
-#: ../src_dir/liveCDSetupDialog.cpp:212
+#: ../src/liveCDSetupDialog.cpp:212
 msgid "Couldn't umount the selected partition"
 msgstr "无法卸载选中的分区"
 
-#: ../src_dir/settings_dlg_gtk.cpp:47
+#: ../src/settings_dlg_gtk.cpp:47
 msgid "white"
 msgstr "白色"
 
-#: ../src_dir/settings_dlg_gtk.cpp:48
+#: ../src/settings_dlg_gtk.cpp:48
 msgid "yellow"
 msgstr "黄色"
 
-#: ../src_dir/settings_dlg_gtk.cpp:49
+#: ../src/settings_dlg_gtk.cpp:49
 msgid "light-cyan"
 msgstr "浅青色"
 
-#: ../src_dir/settings_dlg_gtk.cpp:50
+#: ../src/settings_dlg_gtk.cpp:50
 msgid "cyan"
 msgstr "青色"
 
-#: ../src_dir/settings_dlg_gtk.cpp:51
+#: ../src/settings_dlg_gtk.cpp:51
 msgid "light-blue"
 msgstr "浅蓝色"
 
-#: ../src_dir/settings_dlg_gtk.cpp:52
+#: ../src/settings_dlg_gtk.cpp:52
 msgid "blue"
 msgstr "蓝色"
 
-#: ../src_dir/settings_dlg_gtk.cpp:53
+#: ../src/settings_dlg_gtk.cpp:53
 msgid "light-green"
 msgstr "浅绿色"
 
-#: ../src_dir/settings_dlg_gtk.cpp:54
+#: ../src/settings_dlg_gtk.cpp:54
 msgid "green"
 msgstr "绿色"
 
-#: ../src_dir/settings_dlg_gtk.cpp:55
+#: ../src/settings_dlg_gtk.cpp:55
 msgid "light-magenta"
-msgstr ""
+msgstr "浅青色"
 
-#: ../src_dir/settings_dlg_gtk.cpp:56
+#: ../src/settings_dlg_gtk.cpp:56
 msgid "magenta"
 msgstr "品红"
 
-#: ../src_dir/settings_dlg_gtk.cpp:57
+#: ../src/settings_dlg_gtk.cpp:57
 msgid "light-red"
 msgstr "浅红色"
 
-#: ../src_dir/settings_dlg_gtk.cpp:58
+#: ../src/settings_dlg_gtk.cpp:58
 msgid "red"
 msgstr "红色"
 
-#: ../src_dir/settings_dlg_gtk.cpp:59
+#: ../src/settings_dlg_gtk.cpp:59
 msgid "brown"
 msgstr "褐色"
 
-#: ../src_dir/settings_dlg_gtk.cpp:60
+#: ../src/settings_dlg_gtk.cpp:60
 msgid "light-gray"
-msgstr ""
+msgstr "浅灰色"
 
-#: ../src_dir/settings_dlg_gtk.cpp:61
+#: ../src/settings_dlg_gtk.cpp:61
 msgid "dark-gray"
-msgstr ""
+msgstr "深灰色"
 
-#: ../src_dir/settings_dlg_gtk.cpp:62
+#: ../src/settings_dlg_gtk.cpp:62
+msgid "transparent"
+msgstr "透明"
+
+#: ../src/settings_dlg_gtk.cpp:62
 msgid "black"
-msgstr ""
+msgstr "黑色"
 
-#: ../src_dir/settings_dlg_gtk.cpp:68
+#: ../src/settings_dlg_gtk.cpp:68
 msgid "pre_defined: "
-msgstr ""
+msgstr "预定义(_D): "
 
-#: ../src_dir/settings_dlg_gtk.cpp:68
+#: ../src/settings_dlg_gtk.cpp:68
 msgid "previously _booted entry"
-msgstr ""
+msgstr "上一个启动项(_B)"
 
-#: ../src_dir/settings_dlg_gtk.cpp:69
+#: ../src/settings_dlg_gtk.cpp:69
 msgid "default entry"
-msgstr ""
+msgstr "默认项"
 
-#: ../src_dir/settings_dlg_gtk.cpp:69
+#: ../src/settings_dlg_gtk.cpp:69
 msgid "visibility"
-msgstr ""
+msgstr "可见"
 
-#: ../src_dir/settings_dlg_gtk.cpp:69
+#: ../src/settings_dlg_gtk.cpp:69
 msgid "show menu"
-msgstr ""
+msgstr "显示菜单"
 
-#: ../src_dir/settings_dlg_gtk.cpp:70
+#: ../src/settings_dlg_gtk.cpp:70
 msgid "Timeout"
-msgstr ""
+msgstr "延时"
 
-#: ../src_dir/settings_dlg_gtk.cpp:70
+#: ../src/settings_dlg_gtk.cpp:70
 msgid "Seconds"
-msgstr ""
+msgstr "秒"
 
-#: ../src_dir/settings_dlg_gtk.cpp:70
+#: ../src/settings_dlg_gtk.cpp:70
 msgid "kernel parameters"
-msgstr ""
+msgstr "内核参数"
 
-#: ../src_dir/settings_dlg_gtk.cpp:71
+#: ../src/settings_dlg_gtk.cpp:71
 msgid "generate recovery entries"
-msgstr ""
+msgstr "生成恢复项"
 
-#: ../src_dir/settings_dlg_gtk.cpp:71
+#: ../src/settings_dlg_gtk.cpp:71
 msgid "look for other operating systems"
-msgstr ""
+msgstr "查找其它操作系统"
 
-#: ../src_dir/settings_dlg_gtk.cpp:72
+#: ../src/settings_dlg_gtk.cpp:72
 msgid "custom resolution: "
-msgstr ""
+msgstr "自定义分辩率: "
 
-#: ../src_dir/settings_dlg_gtk.cpp:73
+#: ../src/settings_dlg_gtk.cpp:73
 msgid "font color"
-msgstr ""
+msgstr "字体颜色"
 
-#: ../src_dir/settings_dlg_gtk.cpp:73
+#: ../src/settings_dlg_gtk.cpp:73
 msgid "background"
-msgstr ""
+msgstr "背景"
 
-#: ../src_dir/settings_dlg_gtk.cpp:74
+#: ../src/settings_dlg_gtk.cpp:74
 msgid "normal:"
-msgstr ""
+msgstr "正常:"
 
-#: ../src_dir/settings_dlg_gtk.cpp:74
+#: ../src/settings_dlg_gtk.cpp:74
 msgid "highlight:"
-msgstr ""
+msgstr "高亮:"
 
-#: ../src_dir/settings_dlg_gtk.cpp:75
+#: ../src/settings_dlg_gtk.cpp:75
 msgid "menu colors"
-msgstr ""
+msgstr "菜单颜色"
 
-#: ../src_dir/settings_dlg_gtk.cpp:75
+#: ../src/settings_dlg_gtk.cpp:75
 msgid "background image"
-msgstr ""
+msgstr "背景图像"
 
-#: ../src_dir/settings_dlg_gtk.cpp:76
+#: ../src/settings_dlg_gtk.cpp:76
 msgid "copy to grub directory"
-msgstr ""
+msgstr "复制到 Grub 目录"
 
-#: ../src_dir/settings_dlg_gtk.cpp:76
+#: ../src/settings_dlg_gtk.cpp:76
 msgid "remove background"
-msgstr ""
+msgstr "删除背景"
 
-#: ../src_dir/settings_dlg_gtk.cpp:77
+#: ../src/settings_dlg_gtk.cpp:77
 msgid ""
 "To get the colors above working,\n"
 "you have to select a background image!"
 msgstr ""
+"如果想要获取上面的颜色，\n"
+"你需要选择一个背景图像！"
 
-#: ../src_dir/settings_dlg_gtk.cpp:79
+#: ../src/settings_dlg_gtk.cpp:80
 msgid "settings"
-msgstr ""
+msgstr "设置"
 
-#: ../src_dir/settings_dlg_gtk.cpp:83
+#: ../src/settings_dlg_gtk.cpp:84
 msgid "_General"
-msgstr ""
+msgstr "常规(_G)"
 
-#: ../src_dir/settings_dlg_gtk.cpp:84
+#: ../src/settings_dlg_gtk.cpp:85
 msgid "A_ppearance"
-msgstr ""
+msgstr "外观(_P)"
 
-#: ../src_dir/settings_dlg_gtk.cpp:85
+#: ../src/settings_dlg_gtk.cpp:86
 msgid "_Advanced"
-msgstr ""
+msgstr "高级(_A)"
 
-#: ../src_dir/settings_dlg_gtk.cpp:93
+#: ../src/settings_dlg_gtk.cpp:94
 msgid "value"
-msgstr ""
+msgstr "数值"
 
-#: ../src_dir/settings_dlg_gtk.cpp:128
+#: ../src/settings_dlg_gtk.cpp:129
 msgid "Entry %1 (by position)"
-msgstr ""
+msgstr "项目 %1 (按位置)"
 
-#: ../src_dir/settings_dlg_gtk.cpp:413
+#: ../src/settings_dlg_gtk.cpp:419
 msgid ""
 "This option doesn't work when the \"os-prober\" script finds other operating "
 "systems. Disable \"%1\" if you don't need to boot other operating systems."
-msgstr ""
+msgstr "如果“os-prober”脚本找到其它的操作系统，本选项无效。如果不需要启动其它的操作系统，请禁用“%1”。"
