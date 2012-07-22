@@ -1,4 +1,4 @@
-grub-customizer (1.6.3-0ubuntu1~ppa1m) maverick; urgency=low
+grub-customizer (1.6.4-0ubuntu1~ppa1m) maverick; urgency=low
 
    * bug #661304 fixed (multiple scripts using the same basename will not be overwritten anymore)
    * (new entries) will be displayed on uncustomized scripts too (the old behaviour was to fuzzy)
@@ -9,7 +9,8 @@ grub-customizer (1.6.3-0ubuntu1~ppa1m) maverick; urgency=low
    * 1.6.1: translations included
    * 1.6.2: greek translation updated
    * 1.6.2: translators added to the about dialog
+   * 1.6.3, 1.6.4: translations updated
 
- -- Daniel Richter <danielrichter2007@web.de>  Sat, 22 Oct 2010 11:43:00 +0200
+ -- Daniel Richter <danielrichter2007@web.de>  Tue, 16 Nov 2010 20:22:00 +0200
 
 
