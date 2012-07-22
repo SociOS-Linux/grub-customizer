@@ -90,6 +90,8 @@ public:
 	void cleanupCfgDir();
 	
 	bool compare(GrublistCfg const& other) const;
+	static std::list<Rule const*> getComparableRules(std::list<Rule> const& list);
+	static bool compareLists(std::list<Rule const*> a, std::list<Rule const*> b);
 	
 	void renameRule(Rule* rule, std::string const& newName);
 };

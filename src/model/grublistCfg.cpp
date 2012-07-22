@@ -400,22 +400,40 @@ bool GrublistCfg::compare(GrublistCfg const& other) const {
 			if (piter->isExecutable() && piter->dataSource){
 				std::string fname = piter->dataSource->fileName.substr(other.env.cfg_dir.length()+1);
 				if (i == 0 || fname[0] >= '1' && fname[0] <= '9' && fname[1] >= '0' && fname[1] <= '9' && fname[2] == '_'){
-					for (std::list<Rule>::const_iterator riter = piter->rules.begin(); riter != piter->rules.end(); riter++){
-						if (riter->type == Rule::NORMAL && riter->dataSource && riter->isVisible){
-							rlist[i].push_back(&*riter);
-						}
-					}
+					std::list<Rule const*> comparableRules = this->getComparableRules(piter->rules);
+					rlist[i].splice(rlist[i].end(), comparableRules);
 				}
 			}
 		}
 	}
-	if (rlist[0].size() != rlist[1].size())
+	return GrublistCfg::compareLists(rlist[0], rlist[1]);
+}
+
+std::list<Rule const*> GrublistCfg::getComparableRules(std::list<Rule> const& list) {
+	std::list<Rule const*> result;
+	for (std::list<Rule>::const_iterator riter = list.begin(); riter != list.end(); riter++){
+		if (riter->type == Rule::NORMAL && riter->dataSource && riter->isVisible){
+			result.push_back(&*riter);
+		}
+	}
+	return result;
+}
+
+bool GrublistCfg::compareLists(std::list<Rule const*> a, std::list<Rule const*> b) {
+	if (a.size() != b.size())
 		return false;
-	
-	std::list<const Rule*>::iterator self_iter = rlist[0].begin(), other_iter = rlist[1].begin();
-	while (self_iter != rlist[0].end() && other_iter != rlist[1].end()){
-		if ((*self_iter)->outputName != (*other_iter)->outputName || (*self_iter)->dataSource->extension != (*other_iter)->dataSource->extension || (*self_iter)->dataSource->content != (*other_iter)->dataSource->content)
+
+	std::list<const Rule*>::iterator self_iter = a.begin(), other_iter = b.begin();
+	while (self_iter != a.end() && other_iter != b.end()){
+		//check this Rule
+		if ((*self_iter)->outputName != (*other_iter)->outputName || (*self_iter)->dataSource->extension != (*other_iter)->dataSource->extension || (*self_iter)->dataSource->content != (*other_iter)->dataSource->content || (*self_iter)->dataSource->type != (*other_iter)->dataSource->type)
 			return false;
+		//check rules inside the submenu
+		assert((*self_iter)->dataSource && (*other_iter)->dataSource);
+		assert((*self_iter)->dataSource->type == (*other_iter)->dataSource->type);
+		if ((*self_iter)->dataSource->type == Entry::SUBMENU && !GrublistCfg::compareLists(GrublistCfg::getComparableRules((*self_iter)->subRules), GrublistCfg::getComparableRules((*other_iter)->subRules))) {
+			return false;
+		}
 		self_iter++;
 		other_iter++;
 	}
