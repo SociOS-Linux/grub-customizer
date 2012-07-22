@@ -22,29 +22,31 @@ GrublistCfg::GrublistCfg(GrubEnv& env)
  : error_proxy_not_found(false),
  progress(0),
  cancelThreadsRequested(false), verbose(true), env(env), eventListener(NULL),
- locked(false)
+ mutex(NULL)
 {}
 
 void GrublistCfg::setEventListener(EventListener_model& eventListener) {
 	this->eventListener = &eventListener;
 }
 
-
+void GrublistCfg::setMutex(Mutex& mutex) {
+	this->mutex = &mutex;
+}
 
 void GrublistCfg::lock(){
-	while (this->locked) usleep(1000); //wait until another thread is has unlocked this object
-	this->locked = true;
+	if (this->mutex == NULL)
+		throw MISSING_MUTEX;
+	this->mutex->lock();
 }
 bool GrublistCfg::lock_if_free(){
-	if (this->locked)
-		return false;
-	else {
-		this->locked = true;
-		return true;
-	}
+	if (this->mutex == NULL)
+		throw MISSING_MUTEX;
+	return this->mutex->trylock();
 }
 void GrublistCfg::unlock(){
-	this->locked = false;
+	if (this->mutex == NULL)
+		throw MISSING_MUTEX;
+	this->mutex->unlock();
 }
 
 bool GrublistCfg::createScriptForwarder(std::string const& scriptName) const {

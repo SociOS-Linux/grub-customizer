@@ -25,6 +25,7 @@
 #include "../view/partitionChooserGtk.h"
 #include "../view/scriptAddDlgGtk.h"
 #include "../view/settingsDlgGtk.h"
+#include "glibMutex.h"
 
 int main(int argc, char** argv){
 	setlocale( LC_ALL, "");
@@ -52,6 +53,8 @@ int main(int argc, char** argv){
 	SettingsDlg* settingsDlg = new GrubSettingsDlgGtk;
 	DeviceDataList* deviceDataList = new DeviceDataList;
 	AboutDialog* aboutDialog = new AboutDialogGtk;
+	GlibMutex* listCfgMutex1 = new GlibMutex;
+	GlibMutex* listCfgMutex2 = new GlibMutex;
 
 	
 	presenter.setListCfg(*listcfg);
@@ -80,6 +83,9 @@ int main(int argc, char** argv){
 	installer->setEventListener(evt);
 	fbResolutionsGetter->setEventListener(evt);
 	
+	listcfg->setMutex(*listCfgMutex1);
+	savedListCfg->setMutex(*listCfgMutex2);
+
 	presenter.init();
 	app.run();
 }

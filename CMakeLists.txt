@@ -39,6 +39,7 @@ add_executable(grub-customizer
 	src/model/grubInstaller.cpp
 	src/view/scriptAddDlgGtk.cpp
 	src/view/aboutDialogGtk.cpp
+	src/presenter/glibMutex.cpp
 )
 
 

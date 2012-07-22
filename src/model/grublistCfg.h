@@ -38,21 +38,25 @@
 #include "grubEnv.h"
 #include "../interface/evt_model.h"
 
+#include "../interface/mutex.h"
+
 
 
 class GrublistCfg {
 	EventListener_model* eventListener;
 	
 	double progress;
-	bool locked;
+	Mutex* mutex;
 public:
 	GrublistCfg(GrubEnv& env);
 	void setEventListener(EventListener_model& eventListener);
+	void setMutex(Mutex& mutex);
 	
 	enum Exception {
 		GRUB_CFG_DIR_NOT_FOUND,
 		GRUB_CMD_EXEC_FAILED,
-		NO_MOVE_TARGET_FOUND
+		NO_MOVE_TARGET_FOUND,
+		MISSING_MUTEX
 	};
 
 	ProxyList proxies;
