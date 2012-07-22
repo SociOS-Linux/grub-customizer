@@ -320,8 +320,14 @@ void GrubSettingsDlgGtk::loadData(){
 			gccHighlightBackground.selectColor("light-gray");
 		}
 
-		std::string menuPicturePath;
-		if (dataStore->isActive("GRUB_MENU_PICTURE") && (menuPicturePath = this->dataStore->getValue("GRUB_MENU_PICTURE")) != ""){
+		std::string menuPicturePath = this->dataStore->getValue("GRUB_MENU_PICTURE");
+		bool menuPicIsInGrubDir = false;
+		if (menuPicturePath != "" && menuPicturePath[0] != "/"){
+			menuPicturePath = output_config_dir + "/" + menuPicturePath;
+			menuPicIsInGrubDir = true;
+		}
+		
+		if (dataStore->isActive("GRUB_MENU_PICTURE") && menuPicturePath != ""){
 			//Glib::RefPtr<Gdk::Pixbuf> buf = Gdk::Pixbuf::create_from_file(menuPicturePath);
 			//imgBackgroundImage.property_icon_size() = 10;
 			FILE* img_test = fopen(menuPicturePath.c_str(), "r");
@@ -348,11 +354,7 @@ void GrubSettingsDlgGtk::loadData(){
 			lblBackgroundRequiredInfo.show();
 		}
 		
-		if (menuPicturePath.substr(0, 1) != "/") //when the path starts with / its an absolute path to a foreign directory
-			bttCopyBackground.set_sensitive(false);
-		else
-			bttCopyBackground.set_sensitive(true);
-		
+		bttCopyBackground.set_sensitive(!menuPicIsInGrubDir);
 		
 
 		event_lock = false;
