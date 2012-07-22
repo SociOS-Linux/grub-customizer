@@ -1,16 +1,16 @@
-# Brazilian Portuguese translation for grub-customizer
-# Copyright (c) 2010 Rosetta Contributors and Canonical Ltd 2010
+# Vietnamese translation for grub-customizer
+# Copyright (c) 2011 Rosetta Contributors and Canonical Ltd 2011
 # This file is distributed under the same license as the grub-customizer package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2011.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-09-14 00:10+0200\n"
-"PO-Revision-Date: 2011-09-22 18:04+0000\n"
-"Last-Translator: José Humberto Melo <Unknown>\n"
-"Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
+"PO-Revision-Date: 2011-09-14 19:50+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Vietnamese <vi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -19,48 +19,45 @@ msgstr ""
 
 #: ../src/presenter/grubCustomizer.cpp:417
 msgid "No script found"
-msgstr "Nenhum script encontrado"
+msgstr ""
 
 #: ../src/presenter/grubCustomizer.cpp:486
 msgid "loading configuration…"
-msgstr "carregando configuração..."
+msgstr ""
 
 #: ../src/presenter/grubCustomizer.cpp:500
 #: ../src/view/grublistCfgDlgGtk.cpp:355
 msgid " (custom)"
-msgstr " (personalizado)"
+msgstr ""
 
 #: ../src/presenter/grubCustomizer.cpp:528
 msgid "Configuration has been saved"
-msgstr "A configuração foi salva"
+msgstr ""
 
 #: ../src/presenter/grubCustomizer.cpp:531
 msgid "updating configuration"
-msgstr "atualizando configuração"
+msgstr ""
 
 #: ../src/presenter/grubCustomizer.cpp:539
 msgid " not found. Is grub2 installed?"
-msgstr " não encontrado. O grub2 está instalado?"
+msgstr " không được tìm thấy. Đã cài đặt grub2?"
 
 #: ../src/presenter/grubCustomizer.cpp:544
 msgid " couldn't be executed successfully. You must run this as root!"
-msgstr ""
-" não pôde ser executado com êxito. Você deve executar isto como root!"
+msgstr " không thể thực thi. Bạn phải chạy với quyền quản trị!"
 
 #: ../src/presenter/grubCustomizer.cpp:599
 msgid "Name the Entry"
-msgstr "Nome da Entrada"
+msgstr ""
 
 #: ../src/presenter/grubCustomizer.cpp:632
 msgid "cannot move this entry"
-msgstr "esta entrada não pode ser movida"
+msgstr ""
 
 #: ../src/view/aboutDialogGtk.cpp:36
 msgid ""
 "Grub Customizer is a graphical interface to configure the grub2/burg settings"
 msgstr ""
-"Grub Customizer é uma interface gráfica para alterar as configurações do "
-"grub2/burg"
 
 #: ../src/view/grubInstallDlgGtk.cpp:22
 msgid ""
@@ -68,134 +65,128 @@ msgid ""
 "files to the bootloaders data directory\n"
 "(if they don't already exist)."
 msgstr ""
-"Instalar o bootloader na MBR e colocar alguns\n"
-"arquivos no diretório de dados do bootloader\n"
-"(se já não existir)."
 
 #: ../src/view/grubInstallDlgGtk.cpp:23
 msgid "_Device: "
-msgstr "_Dispositivo: "
+msgstr ""
 
 #: ../src/view/grubInstallDlgGtk.cpp:33
 msgid "Install to MBR"
-msgstr "Instalar na MBR"
+msgstr ""
 
 #: ../src/view/grubInstallDlgGtk.cpp:50
 msgid "The bootloader has been installed successfully"
-msgstr "O bootloader foi instalado com sucesso"
+msgstr ""
 
 #: ../src/view/grubInstallDlgGtk.cpp:55
 msgid "Error while installing the bootloader"
-msgstr "Erro ao instalar o bootloader"
+msgstr ""
 
 #: ../src/view/grubInstallDlgGtk.cpp:71
 msgid "installing the bootloader…"
-msgstr "instalando o bootloader..."
+msgstr ""
 
 #: ../src/view/grubInstallDlgGtk.cpp:76
 msgid "Please type a device string!"
-msgstr "Por favor digite o nome do dispositivo!"
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:28
 msgid "_File"
-msgstr "_Arquivo"
+msgstr "_Tập tin"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:29
 msgid "_Edit"
-msgstr "_Editar"
+msgstr "_Chỉnh sửa"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:29
 msgid "_View"
-msgstr "_Exibir"
+msgstr "_Hiển thị"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:29
 msgid "_Help"
-msgstr "_Ajuda"
+msgstr "Trợ _giúp"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:30
 msgid "_Install to MBR …"
-msgstr "_Instalar na MBR..."
+msgstr "Cài đặt vào _MBR ..."
 
 #: ../src/view/grublistCfgDlgGtk.cpp:34
 msgid "BURG found!"
-msgstr "BURG encontrado!"
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:35
 msgid "No Bootloader found"
-msgstr "Bootloader não encontrado"
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:63
 msgid "Add a script to your configuration"
-msgstr "Adicionar um script para a sua configuração"
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:65
 msgid "Remove a script from your configuration"
-msgstr "Remover um script da sua configuração"
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:71
 msgid "Move up the selected entry or script"
-msgstr "Mover para cia a entra selecionada ou script"
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:73
 msgid "Move down the selected entry or script"
-msgstr "Mover para baixo a entrada selecionada ou script"
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:81
 msgid "reload configuration"
-msgstr "recarregar configuração"
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:84
 msgid "Edit grub preferences"
-msgstr "Editar preferências do grub"
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:113
 msgid "Select _partition …"
-msgstr "Selecionar_partição ..."
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:120
 msgid "Do you want to configure BURG instead of grub2?"
-msgstr "Você deseja configurar BURG, em vez de grub2?"
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:127
 msgid "Do you want to select another root partition?"
-msgstr "Você deseja selecionar outra partição raiz?"
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:168
 msgid "BURG Mode"
-msgstr "Modo \"Burg\""
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:172
 msgid "Save configuration and generate a new "
-msgstr "Salve a configuração e gere um novo "
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:256
 msgid "Proxy binary not found!"
-msgstr "Binário do proxy não encontrado!"
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:257
 msgid ""
 "You will see all entries (uncustomized) when you run grub. This error accurs "
 "(in most cases), when you didn't install grub gustomizer currectly."
 msgstr ""
-"Você verá todas as entradas (não personalizada) quando você executar o grub. "
-"Este erro ocorre (na maioria das vezes), quando você não instala o grub "
-"customizer corretamente."
 
 #: ../src/view/grublistCfgDlgGtk.cpp:263
 msgid "(new Entries of %1)"
-msgstr "(nova Entrada de %1)"
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:265
 msgid "(new Entries)"
-msgstr "(Entrada nova)"
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:489
 msgid "Default title: "
-msgstr "Título padrão: "
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:581
 msgid "The saved configuration is not up to date!"
-msgstr "A configuração salva não está atualizada!"
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:582
 msgid ""
@@ -203,111 +194,104 @@ msgid ""
 "startup. So what you see now may not be what you see when you restart your "
 "pc. To fix this, click update!"
 msgstr ""
-"A configuração gerada não é igual a configuração salva na inicialização. "
-"Então o que você ver agora pode não ser o que você verá quando reiniciar o "
-"pc. Para corrigir isso, clique em atualizar!"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:585
 msgid "_Quit without update"
-msgstr "_Sair sem atualizar"
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:588
 msgid "_Update & Quit"
-msgstr "_Atualizar & Sair"
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:592
 msgid "Do you want to save your modifications?"
-msgstr "Você quer salvar suas modificações?"
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:595
 msgid "_Quit without saving"
-msgstr "_Sair sem salvar"
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:598
 msgid "_Save & Quit"
-msgstr "Sa_lvar & Sair"
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:601
 msgid "AND: your modifications are still unsaved, update will save them too!"
 msgstr ""
-"Suas modificações ainda não foram salvas; a atualização as salvará também!"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:655 ../src/view/settingsDlgGtk.cpp:123
 msgid "is active"
-msgstr "está ativo"
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:656 ../src/view/settingsDlgGtk.cpp:124
 msgid "name"
-msgstr "nome"
+msgstr ""
 
 #: ../src/view/partitionChooserGtk.cpp:23
 msgid "_use another partition: "
-msgstr "_usar outra partição: "
+msgstr ""
 
 #: ../src/view/partitionChooserGtk.cpp:24
 msgid "Mount selected Filesystem"
-msgstr "Montar sistema de arquivos selecionado"
+msgstr ""
 
 #: ../src/view/partitionChooserGtk.cpp:25
 msgid "Unmount mounted Filesystem"
-msgstr "Demontar sistema de arquivos montado"
+msgstr ""
 
 #: ../src/view/partitionChooserGtk.cpp:27
 msgid ""
 "These are the mountpoints of your fstab file.\n"
 "Please select every grub/boot related partition."
 msgstr ""
-"Existem pontos de montagem em seu arquivo fstab.\n"
-"Por favor selecione todas partições do grub/boot relacionada."
 
 #: ../src/view/partitionChooserGtk.cpp:48
 msgid "partition"
-msgstr "partição"
+msgstr ""
 
 #: ../src/view/partitionChooserGtk.cpp:49
 msgid "type"
-msgstr "tipo"
+msgstr ""
 
 #: ../src/view/partitionChooserGtk.cpp:50
 msgid "label"
-msgstr "rótulo"
+msgstr ""
 
 #: ../src/view/partitionChooserGtk.cpp:82
 msgid "Grub Customizer: Partition chooser"
-msgstr "Grub Customizer: Seletor de partição"
+msgstr ""
 
 #: ../src/view/partitionChooserGtk.cpp:86
 msgid "Select and mount your root partition"
-msgstr "Selecionar e montar sua partição raiz"
+msgstr ""
 
 #: ../src/view/partitionChooserGtk.cpp:88
 msgid "Select required submountpoints"
-msgstr "Selecionar os sub pontos de montagem necessários."
+msgstr ""
 
 #: ../src/view/partitionChooserGtk.cpp:94
 msgid "Partition Chooser"
-msgstr "Seletor de Partição"
+msgstr ""
 
 #: ../src/view/partitionChooserGtk.cpp:168
 msgid "Mount failed!"
-msgstr "Falha ao montar!"
+msgstr ""
 
 #: ../src/view/partitionChooserGtk.cpp:169
 msgid "umount failed!"
-msgstr "falha ao desmontar!"
+msgstr ""
 
 #: ../src/view/partitionChooserGtk.cpp:170
 msgid "This seems not to be a root file system (no fstab found)"
 msgstr ""
-"Esse não parece ser o sistema de arquivos raiz (fstab não encontrado)"
 
 #: ../src/view/partitionChooserGtk.cpp:171
 msgid "Couldn't mount the selected partition"
-msgstr "Impossível montar a partição selecionada"
+msgstr ""
 
 #: ../src/view/partitionChooserGtk.cpp:172
 msgid "Couldn't umount the selected partition"
-msgstr "Impossível desmontar a partição selecionada"
+msgstr ""
 
 #: ../src/view/partitionChooserGtk.cpp:240
 msgid ""
@@ -317,16 +301,10 @@ msgid ""
 "again and save the configuration (or run update-grub/update-burg)\n"
 "to get the entry back!"
 msgstr ""
-"Você selecionou a opção para escolher outra partição.\n"
-"Por favor note: O os-prober não pode encontrar o seu sistema atualmente em "
-"execução.\n"
-"Então execute o Grub Customizer no sistema de destino\n"
-"novamente e salve a configuração (ou execute update-grub/update-burg)\n"
-"para obter a entrada de volta!"
 
 #: ../src/view/partitionChooserGtk.cpp:242
 msgid "You started Grub Customizer using the live CD."
-msgstr "Você iniciou o Grub Customizer usando o live CD."
+msgstr ""
 
 #: ../src/view/partitionChooserGtk.cpp:244
 msgid ""
@@ -340,209 +318,195 @@ msgid ""
 "as the actually running one.\n"
 "If not, you will get an error message when trying to load the configuration."
 msgstr ""
-"Antes de editar a configuração do grub temos que\n"
-"montar as partições necessárias.\n"
-"\n"
-"Este assistente irá ajudá-lo a fazer isso.\n"
-"\n"
-"Por favor, verifique se o sistema alvo é baseado na arquitetura da CPU "
-"mesmo\n"
-"como o atualmente em execução.\n"
-"Se não, você receberá uma mensagem de erro ao tentar carregar a configuração."
 
 #: ../src/view/scriptAddDlgGtk.cpp:23
 msgid "Script to insert:"
-msgstr "Script para inserir:"
+msgstr "Tập lệnh để chèn vào:"
 
 #: ../src/view/scriptAddDlgGtk.cpp:25
 msgid "Preview:"
-msgstr "Pré-visualização:"
+msgstr "Xem trước:"
 
 #: ../src/view/scriptAddDlgGtk.cpp:27
 msgid "Add script"
-msgstr "Adicionar script"
+msgstr ""
 
 #: ../src/view/scriptAddDlgGtk.cpp:43
 msgid "Entry"
-msgstr "Entrada"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:65
 msgid "white"
-msgstr "branco"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:66
 msgid "yellow"
-msgstr "amarelo"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:67
 msgid "light-cyan"
-msgstr "ciano-claro"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:68
 msgid "cyan"
-msgstr "ciano"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:69
 msgid "light-blue"
-msgstr "azul-claro"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:70
 msgid "blue"
-msgstr "azul"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:71
 msgid "light-green"
-msgstr "verde-claro"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:72
 msgid "green"
-msgstr "verde"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:73
 msgid "light-magenta"
-msgstr "magenta-claro"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:74
 msgid "magenta"
-msgstr "magenta"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:75
 msgid "light-red"
-msgstr "vermelho-claro"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:76
 msgid "red"
-msgstr "vermelho"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:77
 msgid "brown"
-msgstr "marrom"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:78
 msgid "light-gray"
-msgstr "cinza-claro"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:79
 msgid "dark-gray"
-msgstr "cinza-escuro"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:80
 msgid "transparent"
-msgstr "transparente"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:80
 msgid "black"
-msgstr "preto"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:92
 msgid "pre_defined: "
-msgstr "pré_definido: "
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:92
 msgid "previously _booted entry"
-msgstr "entrada previamente utilizada: _booted"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:93
 msgid "default entry"
-msgstr "entrada padrão"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:93
 msgid "visibility"
-msgstr "visibilidade"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:93
 msgid "show menu"
-msgstr "mostrar menu"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:94
 msgid "Timeout"
-msgstr "Tempo Limite"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:94
 msgid "Seconds"
-msgstr "Segundos"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:94
 msgid "kernel parameters"
-msgstr "parâmetros do kernel"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:95
 msgid "generate recovery entries"
-msgstr "gerar entradas de recuperação"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:95
 msgid "look for other operating systems"
-msgstr "procurar por outros sistemas operacionais"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:96
 msgid "custom resolution: "
-msgstr "resolução personalizada: "
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:97
 msgid "font color"
-msgstr "cor da fonte"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:97
 msgid "background"
-msgstr "plano de fundo"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:98
 msgid "normal:"
-msgstr "normal:"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:98
 msgid "highlight:"
-msgstr "principal:"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:99
 msgid "menu colors"
-msgstr "cores do menu"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:99
 msgid "background image"
-msgstr "imagem de fundo"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:100
 msgid "remove background"
-msgstr "remover plano de fundo"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:101
 msgid ""
 "To get the colors above working,\n"
 "you have to select a background image!"
 msgstr ""
-"Para ter as cores abaixo funcionando,\n"
-"você tem que selecionar uma imagem de fundo!"
 
 #: ../src/view/settingsDlgGtk.cpp:104
 msgid "settings"
-msgstr "configurações"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:108
 msgid "_General"
-msgstr "_Geral"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:109
 msgid "A_ppearance"
-msgstr "A_parência"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:110
 msgid "_Advanced"
-msgstr "_Avançado"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:125
 msgid "value"
-msgstr "valor"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:295
 msgid "Entry %1 (by position)"
-msgstr "Entrada %1 (por posição)"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:520
 msgid ""
 "This option doesn't work when the \"os-prober\" script finds other operating "
 "systems. Disable \"%1\" if you don't need to boot other operating systems."
 msgstr ""
-"Essa opção não funciona quando o script \"os-prober\" procura por outros "
-"sistemas operacionais. Desabilite \"%1\" se você não precisa inicializar "
-"outros sistemas operacionais."

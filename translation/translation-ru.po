@@ -7,53 +7,60 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-11-28 22:09+0100\n"
-"PO-Revision-Date: 2011-04-30 18:41+0000\n"
+"POT-Creation-Date: 2011-09-14 00:10+0200\n"
+"PO-Revision-Date: 2011-09-14 19:50+0000\n"
 "Last-Translator: jmb_kz <Unknown>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-09-13 22:00+0000\n"
-"X-Generator: Launchpad (build 13921)\n"
+"X-Launchpad-Export-Date: 2011-09-27 19:28+0000\n"
+"X-Generator: Launchpad (build 14041)\n"
 
-#: ../src/grubconfig.cpp:203 ../src/grubconfig.cpp:218
+#: ../src/presenter/grubCustomizer.cpp:417
+msgid "No script found"
+msgstr "Сценарии не найдены"
+
+#: ../src/presenter/grubCustomizer.cpp:486
+msgid "loading configuration…"
+msgstr "Загрузка конфигурации..."
+
+#: ../src/presenter/grubCustomizer.cpp:500
+#: ../src/view/grublistCfgDlgGtk.cpp:355
+msgid " (custom)"
+msgstr " (добавлено пользователем)"
+
+#: ../src/presenter/grubCustomizer.cpp:528
+msgid "Configuration has been saved"
+msgstr "Конфигурация сохранена"
+
+#: ../src/presenter/grubCustomizer.cpp:531
+msgid "updating configuration"
+msgstr "обновление конфигурации"
+
+#: ../src/presenter/grubCustomizer.cpp:539
 msgid " not found. Is grub2 installed?"
 msgstr " не найден. GRUB2 точно установлен?"
 
-#: ../src/grubconfig.cpp:287
+#: ../src/presenter/grubCustomizer.cpp:544
 msgid " couldn't be executed successfully. You must run this as root!"
 msgstr " не может быть выполнено успешно. Вы должны иметь права root!"
 
-#: ../src/grubconf_ui_gtk.cpp:11
-msgid "_File"
-msgstr "_Файл"
+#: ../src/presenter/grubCustomizer.cpp:599
+msgid "Name the Entry"
+msgstr "Имя пункта меню"
 
-#: ../src/grubconf_ui_gtk.cpp:12
-msgid "_Edit"
-msgstr "_Правка"
+#: ../src/presenter/grubCustomizer.cpp:632
+msgid "cannot move this entry"
+msgstr ""
 
-#: ../src/grubconf_ui_gtk.cpp:12
-msgid "_View"
-msgstr "_Вид"
+#: ../src/view/aboutDialogGtk.cpp:36
+msgid ""
+"Grub Customizer is a graphical interface to configure the grub2/burg settings"
+msgstr ""
+"Grub Customizer - это графический интерфейс для настройки grub2 и burg"
 
-#: ../src/grubconf_ui_gtk.cpp:12
-msgid "_Help"
-msgstr "_Справка"
-
-#: ../src/grubconf_ui_gtk.cpp:13
-msgid "_Install to MBR …"
-msgstr "_Установить в MBR"
-
-#: ../src/grubconf_ui_gtk.cpp:18
-msgid "Script to insert:"
-msgstr "Добавить сценарий:"
-
-#: ../src/grubconf_ui_gtk.cpp:18
-msgid "Preview:"
-msgstr "Предварительный просмотр:"
-
-#: ../src/grubconf_ui_gtk.cpp:20
+#: ../src/view/grubInstallDlgGtk.cpp:22
 msgid ""
 "Install the bootloader to MBR and put some\n"
 "files to the bootloaders data directory\n"
@@ -63,105 +70,107 @@ msgstr ""
 "несколько файлов в папку данных программы загрузки\n"
 "(если они не существуют)."
 
-#: ../src/grubconf_ui_gtk.cpp:21
+#: ../src/view/grubInstallDlgGtk.cpp:23
 msgid "_Device: "
 msgstr "_Устройство: "
 
-#: ../src/grubconf_ui_gtk.cpp:54
-msgid ""
-"Grub Customizer is a graphical interface to configure the grub2/burg settings"
-msgstr ""
-"Grub Customizer - это графический интерфейс для настройки grub2 и burg"
-
-#: ../src/grubconf_ui_gtk.cpp:82
-msgid "Save configuration and generate a new "
-msgstr "Сохранить и создать новую конфигурацию "
-
-#: ../src/grubconf_ui_gtk.cpp:89
-msgid "Add a script to your configuration"
-msgstr "Добавить этот сценарий в конфигурацию"
-
-#: ../src/grubconf_ui_gtk.cpp:91
-msgid "Remove a script from your configuration"
-msgstr "Удалить этот сценарий из конфигурации"
-
-#: ../src/grubconf_ui_gtk.cpp:97
-msgid "Move up the selected entry or script"
-msgstr "Переместить выше, пункт меню или сценарий"
-
-#: ../src/grubconf_ui_gtk.cpp:99
-msgid "Move down the selected entry or script"
-msgstr "Переместить ниже, пункт меню или сценарий"
-
-#: ../src/grubconf_ui_gtk.cpp:107
-msgid "reload configuration"
-msgstr "Перезагрузить конфигурацию"
-
-#: ../src/grubconf_ui_gtk.cpp:110
-msgid "Edit grub preferences"
-msgstr "Изменить настройки GRUB"
-
-#: ../src/grubconf_ui_gtk.cpp:139
-msgid "Select _partition …"
-msgstr "Выбрать _раздел ..."
-
-#: ../src/grubconf_ui_gtk.cpp:146
-msgid "Add script"
-msgstr "Добавить сценарий"
-
-#: ../src/grubconf_ui_gtk.cpp:162
-msgid "Entry"
-msgstr "Пункт меню"
-
-#: ../src/grubconf_ui_gtk.cpp:177
+#: ../src/view/grubInstallDlgGtk.cpp:33
 msgid "Install to MBR"
 msgstr "Установить в MBR"
 
-#: ../src/grubconf_ui_gtk.cpp:222
-msgid "BURG Mode"
-msgstr "Режим BURG"
-
-#: ../src/grubconf_ui_gtk.cpp:243
-msgid "No Bootloader found"
-msgstr "Программа загрузки не найдена"
-
-#: ../src/grubconf_ui_gtk.cpp:244
-msgid "Do you want to select another root partition?"
-msgstr "Вы действительно хотите выбрать другой корневой раздел?"
-
-#: ../src/grubconf_ui_gtk.cpp:251
-msgid "BURG found!"
-msgstr "Обнаружен BURG!"
-
-#: ../src/grubconf_ui_gtk.cpp:252
-msgid "Do you want to configure BURG instead of grub2?"
-msgstr "Вы действительно хотите сконфигурировать BURG, вместо GRUB2?"
-
-#: ../src/grubconf_ui_gtk.cpp:272
+#: ../src/view/grubInstallDlgGtk.cpp:50
 msgid "The bootloader has been installed successfully"
 msgstr "Программа загрузки была успешно установлена"
 
-#: ../src/grubconf_ui_gtk.cpp:277
+#: ../src/view/grubInstallDlgGtk.cpp:55
 msgid "Error while installing the bootloader"
 msgstr "Ошибка в процессе установки программы загрузки"
 
-#: ../src/grubconf_ui_gtk.cpp:299
-msgid "loading configuration…"
-msgstr "Загрузка конфигурации..."
+#: ../src/view/grubInstallDlgGtk.cpp:71
+msgid "installing the bootloader…"
+msgstr "установка загрузчика..."
 
-#: ../src/grubconf_ui_gtk.cpp:330
-msgid " (custom)"
-msgstr " (добавлено пользователем)"
+#: ../src/view/grubInstallDlgGtk.cpp:76
+msgid "Please type a device string!"
+msgstr "Пожалуйста укажите устройство!"
 
-#: ../src/grubconf_ui_gtk.cpp:342
-msgid "(new Entries)"
-msgstr "(новые пункты меню)"
+#: ../src/view/grublistCfgDlgGtk.cpp:28
+msgid "_File"
+msgstr "_Файл"
 
-#: ../src/grubconf_ui_gtk.cpp:363
+#: ../src/view/grublistCfgDlgGtk.cpp:29
+msgid "_Edit"
+msgstr "_Правка"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:29
+msgid "_View"
+msgstr "_Вид"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:29
+msgid "_Help"
+msgstr "_Справка"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:30
+msgid "_Install to MBR …"
+msgstr "_Установить в MBR"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:34
+msgid "BURG found!"
+msgstr "Обнаружен BURG!"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:35
+msgid "No Bootloader found"
+msgstr "Программа загрузки не найдена"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:63
+msgid "Add a script to your configuration"
+msgstr "Добавить этот сценарий в конфигурацию"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:65
+msgid "Remove a script from your configuration"
+msgstr "Удалить этот сценарий из конфигурации"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:71
+msgid "Move up the selected entry or script"
+msgstr "Переместить выше, пункт меню или сценарий"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:73
+msgid "Move down the selected entry or script"
+msgstr "Переместить ниже, пункт меню или сценарий"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:81
+msgid "reload configuration"
+msgstr "Перезагрузить конфигурацию"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:84
+msgid "Edit grub preferences"
+msgstr "Изменить настройки GRUB"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:113
+msgid "Select _partition …"
+msgstr "Выбрать _раздел ..."
+
+#: ../src/view/grublistCfgDlgGtk.cpp:120
+msgid "Do you want to configure BURG instead of grub2?"
+msgstr "Вы действительно хотите сконфигурировать BURG, вместо GRUB2?"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:127
+msgid "Do you want to select another root partition?"
+msgstr "Вы действительно хотите выбрать другой корневой раздел?"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:168
+msgid "BURG Mode"
+msgstr "Режим BURG"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:172
+msgid "Save configuration and generate a new "
+msgstr "Сохранить и создать новую конфигурацию "
+
+#: ../src/view/grublistCfgDlgGtk.cpp:256
 msgid "Proxy binary not found!"
 msgstr "Двоичный файл прокси не найден!"
 
-#: ../src/grubconf_ui_gtk.cpp:364
+#: ../src/view/grublistCfgDlgGtk.cpp:257
 msgid ""
 "You will see all entries (uncustomized) when you run grub. This error accurs "
 "(in most cases), when you didn't install grub gustomizer currectly."
@@ -170,31 +179,23 @@ msgstr ""
 "grub. Эта ошибка появляется (в большинстве случаев), при неправильной "
 "установке grub gustomizer."
 
-#: ../src/grubconf_ui_gtk.cpp:382
-msgid "Configuration has been saved"
-msgstr "Конфигурация сохранена"
+#: ../src/view/grublistCfgDlgGtk.cpp:263
+msgid "(new Entries of %1)"
+msgstr ""
 
-#: ../src/grubconf_ui_gtk.cpp:385
-msgid "updating configuration"
-msgstr "обновление конфигурации"
+#: ../src/view/grublistCfgDlgGtk.cpp:265
+msgid "(new Entries)"
+msgstr "(новые пункты меню)"
 
-#: ../src/grubconf_ui_gtk.cpp:442
-msgid "Name the Entry"
-msgstr "Имя пункта меню"
-
-#: ../src/grubconf_ui_gtk.cpp:558
+#: ../src/view/grublistCfgDlgGtk.cpp:489
 msgid "Default title: "
 msgstr "Название по умолчанию: "
 
-#: ../src/grubconf_ui_gtk.cpp:578
-msgid "No script found"
-msgstr "Сценарии не найдены"
-
-#: ../src/grubconf_ui_gtk.cpp:673
+#: ../src/view/grublistCfgDlgGtk.cpp:581
 msgid "The saved configuration is not up to date!"
 msgstr "Сохраненая конфигурация устарела!"
 
-#: ../src/grubconf_ui_gtk.cpp:674
+#: ../src/view/grublistCfgDlgGtk.cpp:582
 msgid ""
 "The generated configuration didn't equal to the saved configuration on "
 "startup. So what you see now may not be what you see when you restart your "
@@ -204,63 +205,51 @@ msgstr ""
 "загрузке. То, что вы видите сейчас, может не соответствовать  после "
 "выполнения перезагрузки компьютера. Нажмите обновить, для исправления!"
 
-#: ../src/grubconf_ui_gtk.cpp:677
+#: ../src/view/grublistCfgDlgGtk.cpp:585
 msgid "_Quit without update"
 msgstr "В_ыход без обновления"
 
-#: ../src/grubconf_ui_gtk.cpp:680
+#: ../src/view/grublistCfgDlgGtk.cpp:588
 msgid "_Update & Quit"
 msgstr "О_бновить и выйти"
 
-#: ../src/grubconf_ui_gtk.cpp:684
+#: ../src/view/grublistCfgDlgGtk.cpp:592
 msgid "Do you want to save your modifications?"
 msgstr "Вы хотите сохранить ваши изменения?"
 
-#: ../src/grubconf_ui_gtk.cpp:687
+#: ../src/view/grublistCfgDlgGtk.cpp:595
 msgid "_Quit without saving"
 msgstr "Вы_ход без обновления"
 
-#: ../src/grubconf_ui_gtk.cpp:690
+#: ../src/view/grublistCfgDlgGtk.cpp:598
 msgid "_Save & Quit"
 msgstr "_Сохранить и выйти"
 
-#: ../src/grubconf_ui_gtk.cpp:693
+#: ../src/view/grublistCfgDlgGtk.cpp:601
 msgid "AND: your modifications are still unsaved, update will save them too!"
 msgstr "И: внесённые вами изменения не сохранены, обновление сохранит их!"
 
-#: ../src/grubconf_ui_gtk.cpp:732
-msgid "installing the bootloader…"
-msgstr "установка загрузчика..."
-
-#: ../src/grubconf_ui_gtk.cpp:737
-msgid "Please type a device string!"
-msgstr "Пожалуйста укажите устройство!"
-
-#: ../src/grubconf_ui_gtk.cpp:747 ../src/settings_dlg_gtk.cpp:92
+#: ../src/view/grublistCfgDlgGtk.cpp:655 ../src/view/settingsDlgGtk.cpp:123
 msgid "is active"
 msgstr "Активность"
 
-#: ../src/grubconf_ui_gtk.cpp:748 ../src/settings_dlg_gtk.cpp:93
+#: ../src/view/grublistCfgDlgGtk.cpp:656 ../src/view/settingsDlgGtk.cpp:124
 msgid "name"
 msgstr "Название"
 
-#: ../src/gtk-client.cpp:14
-msgid " command not found, cannot proceed"
-msgstr " команда не найдена, не могу выполнить"
-
-#: ../src/liveCDSetupDialog.cpp:5
+#: ../src/view/partitionChooserGtk.cpp:23
 msgid "_use another partition: "
 msgstr "_использовать другой раздел: "
 
-#: ../src/liveCDSetupDialog.cpp:6
+#: ../src/view/partitionChooserGtk.cpp:24
 msgid "Mount selected Filesystem"
 msgstr "Подключить выбранные файловые системы"
 
-#: ../src/liveCDSetupDialog.cpp:7
+#: ../src/view/partitionChooserGtk.cpp:25
 msgid "Unmount mounted Filesystem"
 msgstr "Отключить подключеные файловые системы"
 
-#: ../src/liveCDSetupDialog.cpp:10
+#: ../src/view/partitionChooserGtk.cpp:27
 msgid ""
 "These are the mountpoints of your fstab file.\n"
 "Please select every grub/boot related partition."
@@ -268,11 +257,55 @@ msgstr ""
 "Это точки монтирования описанные в вашем файле fstab\n"
 "Пожалуйста, выберите каждый загрузочный раздел."
 
-#: ../src/liveCDSetupDialog.cpp:15
-msgid "You started Grub Customizer using the live CD."
-msgstr "Вы запустили Grub Customizer используя LiveCD."
+#: ../src/view/partitionChooserGtk.cpp:48
+msgid "partition"
+msgstr "раздел"
 
-#: ../src/liveCDSetupDialog.cpp:17
+#: ../src/view/partitionChooserGtk.cpp:49
+msgid "type"
+msgstr "тип"
+
+#: ../src/view/partitionChooserGtk.cpp:50
+msgid "label"
+msgstr "метка"
+
+#: ../src/view/partitionChooserGtk.cpp:82
+msgid "Grub Customizer: Partition chooser"
+msgstr "Grub Customizer: Выбор раздела"
+
+#: ../src/view/partitionChooserGtk.cpp:86
+msgid "Select and mount your root partition"
+msgstr "Выберите и смонтируйте корневой раздел"
+
+#: ../src/view/partitionChooserGtk.cpp:88
+msgid "Select required submountpoints"
+msgstr "Выберите запрашиваемые зависимые точки монтирования"
+
+#: ../src/view/partitionChooserGtk.cpp:94
+msgid "Partition Chooser"
+msgstr "Выбор раздела"
+
+#: ../src/view/partitionChooserGtk.cpp:168
+msgid "Mount failed!"
+msgstr "Ошибка при подключении!"
+
+#: ../src/view/partitionChooserGtk.cpp:169
+msgid "umount failed!"
+msgstr "ошибка при отключении!"
+
+#: ../src/view/partitionChooserGtk.cpp:170
+msgid "This seems not to be a root file system (no fstab found)"
+msgstr "Вероятно, это не корневая файловая система (fstab не найден)"
+
+#: ../src/view/partitionChooserGtk.cpp:171
+msgid "Couldn't mount the selected partition"
+msgstr "Не возможно подключить выбранный раздел"
+
+#: ../src/view/partitionChooserGtk.cpp:172
+msgid "Couldn't umount the selected partition"
+msgstr "Не возможно отключить выбранный раздел"
+
+#: ../src/view/partitionChooserGtk.cpp:240
 msgid ""
 "You selected the option for choosing another partition.\n"
 "Please note: The os-prober may not find your actually running system.\n"
@@ -287,7 +320,11 @@ msgstr ""
 "снова и сохраните конфигурацию (или выполните update-grub/update-burg)\n"
 "для восстановления пункта меню обратно!"
 
-#: ../src/liveCDSetupDialog.cpp:19
+#: ../src/view/partitionChooserGtk.cpp:242
+msgid "You started Grub Customizer using the live CD."
+msgstr "Вы запустили Grub Customizer используя LiveCD."
+
+#: ../src/view/partitionChooserGtk.cpp:244
 msgid ""
 "Before you can edit your grub configuration we have to\n"
 "mount the required partitions.\n"
@@ -309,199 +346,163 @@ msgstr ""
 "as the actually running one.\n"
 "If not, you will get an error message when trying to load the configuration."
 
-#: ../src/liveCDSetupDialog.cpp:21
-msgid "Grub Customizer: Partition chooser"
-msgstr "Grub Customizer: Выбор раздела"
+#: ../src/view/scriptAddDlgGtk.cpp:23
+msgid "Script to insert:"
+msgstr "Добавить сценарий:"
 
-#: ../src/liveCDSetupDialog.cpp:25
-msgid "Select and mount your root partition"
-msgstr "Выберите и смонтируйте корневой раздел"
+#: ../src/view/scriptAddDlgGtk.cpp:25
+msgid "Preview:"
+msgstr "Предварительный просмотр:"
 
-#: ../src/liveCDSetupDialog.cpp:43
-msgid "partition"
-msgstr "раздел"
+#: ../src/view/scriptAddDlgGtk.cpp:27
+msgid "Add script"
+msgstr "Добавить сценарий"
 
-#: ../src/liveCDSetupDialog.cpp:44
-msgid "type"
-msgstr "тип"
+#: ../src/view/scriptAddDlgGtk.cpp:43
+msgid "Entry"
+msgstr "Пункт меню"
 
-#: ../src/liveCDSetupDialog.cpp:45
-msgid "label"
-msgstr "метка"
-
-#: ../src/liveCDSetupDialog.cpp:62
-msgid "Select required submountpoints"
-msgstr "Выберите запрашиваемые зависимые точки монтирования"
-
-#: ../src/liveCDSetupDialog.cpp:82
-msgid "Partition Chooser"
-msgstr "Выбор раздела"
-
-#: ../src/liveCDSetupDialog.cpp:152
-msgid "Mount failed!"
-msgstr "Ошибка при подключении!"
-
-#: ../src/liveCDSetupDialog.cpp:167
-msgid "This seems not to be a root file system (no fstab found)"
-msgstr "Вероятно, это не корневая файловая система (fstab не найден)"
-
-#: ../src/liveCDSetupDialog.cpp:176
-msgid "umount failed!"
-msgstr "ошибка при отключении!"
-
-#: ../src/liveCDSetupDialog.cpp:210
-msgid "Couldn't mount the selected partition"
-msgstr "Не возможно подключить выбранный раздел"
-
-#: ../src/liveCDSetupDialog.cpp:212
-msgid "Couldn't umount the selected partition"
-msgstr "Не возможно отключить выбранный раздел"
-
-#: ../src/settings_dlg_gtk.cpp:47
+#: ../src/view/settingsDlgGtk.cpp:65
 msgid "white"
 msgstr "белый"
 
-#: ../src/settings_dlg_gtk.cpp:48
+#: ../src/view/settingsDlgGtk.cpp:66
 msgid "yellow"
 msgstr "жёлтый"
 
-#: ../src/settings_dlg_gtk.cpp:49
+#: ../src/view/settingsDlgGtk.cpp:67
 msgid "light-cyan"
 msgstr "светло-голубой"
 
-#: ../src/settings_dlg_gtk.cpp:50
+#: ../src/view/settingsDlgGtk.cpp:68
 msgid "cyan"
 msgstr "голубой"
 
-#: ../src/settings_dlg_gtk.cpp:51
+#: ../src/view/settingsDlgGtk.cpp:69
 msgid "light-blue"
 msgstr "светло-синий"
 
-#: ../src/settings_dlg_gtk.cpp:52
+#: ../src/view/settingsDlgGtk.cpp:70
 msgid "blue"
 msgstr "синий"
 
-#: ../src/settings_dlg_gtk.cpp:53
+#: ../src/view/settingsDlgGtk.cpp:71
 msgid "light-green"
 msgstr "светло-зелёный"
 
-#: ../src/settings_dlg_gtk.cpp:54
+#: ../src/view/settingsDlgGtk.cpp:72
 msgid "green"
 msgstr "зелёный"
 
-#: ../src/settings_dlg_gtk.cpp:55
+#: ../src/view/settingsDlgGtk.cpp:73
 msgid "light-magenta"
 msgstr "светло-пурпурный"
 
-#: ../src/settings_dlg_gtk.cpp:56
+#: ../src/view/settingsDlgGtk.cpp:74
 msgid "magenta"
 msgstr "пурпурный"
 
-#: ../src/settings_dlg_gtk.cpp:57
+#: ../src/view/settingsDlgGtk.cpp:75
 msgid "light-red"
 msgstr "светло-красный"
 
-#: ../src/settings_dlg_gtk.cpp:58
+#: ../src/view/settingsDlgGtk.cpp:76
 msgid "red"
 msgstr "красный"
 
-#: ../src/settings_dlg_gtk.cpp:59
+#: ../src/view/settingsDlgGtk.cpp:77
 msgid "brown"
 msgstr "коричневый"
 
-#: ../src/settings_dlg_gtk.cpp:60
+#: ../src/view/settingsDlgGtk.cpp:78
 msgid "light-gray"
 msgstr "светло-коричневый"
 
-#: ../src/settings_dlg_gtk.cpp:61
+#: ../src/view/settingsDlgGtk.cpp:79
 msgid "dark-gray"
 msgstr "тёмно-коричневый"
 
-#: ../src/settings_dlg_gtk.cpp:62
+#: ../src/view/settingsDlgGtk.cpp:80
 msgid "transparent"
 msgstr "прозрачный"
 
-#: ../src/settings_dlg_gtk.cpp:62
+#: ../src/view/settingsDlgGtk.cpp:80
 msgid "black"
 msgstr "чёрный"
 
-#: ../src/settings_dlg_gtk.cpp:68
+#: ../src/view/settingsDlgGtk.cpp:92
 msgid "pre_defined: "
 msgstr "предопределённо: "
 
-#: ../src/settings_dlg_gtk.cpp:68
+#: ../src/view/settingsDlgGtk.cpp:92
 msgid "previously _booted entry"
 msgstr "предыдущая за_груженная запись"
 
-#: ../src/settings_dlg_gtk.cpp:69
+#: ../src/view/settingsDlgGtk.cpp:93
 msgid "default entry"
 msgstr "запись по умолчанию"
 
-#: ../src/settings_dlg_gtk.cpp:69
+#: ../src/view/settingsDlgGtk.cpp:93
 msgid "visibility"
 msgstr "видимый"
 
-#: ../src/settings_dlg_gtk.cpp:69
+#: ../src/view/settingsDlgGtk.cpp:93
 msgid "show menu"
 msgstr "показать меню"
 
-#: ../src/settings_dlg_gtk.cpp:70
+#: ../src/view/settingsDlgGtk.cpp:94
 msgid "Timeout"
 msgstr "Время ожидания"
 
-#: ../src/settings_dlg_gtk.cpp:70
+#: ../src/view/settingsDlgGtk.cpp:94
 msgid "Seconds"
 msgstr "Секунды"
 
-#: ../src/settings_dlg_gtk.cpp:70
+#: ../src/view/settingsDlgGtk.cpp:94
 msgid "kernel parameters"
 msgstr "параметры ядра"
 
-#: ../src/settings_dlg_gtk.cpp:71
+#: ../src/view/settingsDlgGtk.cpp:95
 msgid "generate recovery entries"
 msgstr "создать пункты меню режимов восстановления"
 
-#: ../src/settings_dlg_gtk.cpp:71
+#: ../src/view/settingsDlgGtk.cpp:95
 msgid "look for other operating systems"
 msgstr "поиск других операционных систем"
 
-#: ../src/settings_dlg_gtk.cpp:72
+#: ../src/view/settingsDlgGtk.cpp:96
 msgid "custom resolution: "
 msgstr "собственное разрешение: "
 
-#: ../src/settings_dlg_gtk.cpp:73
+#: ../src/view/settingsDlgGtk.cpp:97
 msgid "font color"
 msgstr "цвет шрифта"
 
-#: ../src/settings_dlg_gtk.cpp:73
+#: ../src/view/settingsDlgGtk.cpp:97
 msgid "background"
 msgstr "фон"
 
-#: ../src/settings_dlg_gtk.cpp:74
+#: ../src/view/settingsDlgGtk.cpp:98
 msgid "normal:"
 msgstr "обычный:"
 
-#: ../src/settings_dlg_gtk.cpp:74
+#: ../src/view/settingsDlgGtk.cpp:98
 msgid "highlight:"
 msgstr "Выделение:"
 
-#: ../src/settings_dlg_gtk.cpp:75
+#: ../src/view/settingsDlgGtk.cpp:99
 msgid "menu colors"
 msgstr "цвета меню"
 
-#: ../src/settings_dlg_gtk.cpp:75
+#: ../src/view/settingsDlgGtk.cpp:99
 msgid "background image"
 msgstr "фоновое изображение"
 
-#: ../src/settings_dlg_gtk.cpp:76
-msgid "copy to grub directory"
-msgstr "копировать в каталог grub"
-
-#: ../src/settings_dlg_gtk.cpp:76
+#: ../src/view/settingsDlgGtk.cpp:100
 msgid "remove background"
 msgstr "убрать фон"
 
-#: ../src/settings_dlg_gtk.cpp:77
+#: ../src/view/settingsDlgGtk.cpp:101
 msgid ""
 "To get the colors above working,\n"
 "you have to select a background image!"
@@ -509,31 +510,31 @@ msgstr ""
 "Для использования цветов выбранных выше,\n"
 "вам необходимо выбрать фоновую картинку!"
 
-#: ../src/settings_dlg_gtk.cpp:80
+#: ../src/view/settingsDlgGtk.cpp:104
 msgid "settings"
 msgstr "Настройки"
 
-#: ../src/settings_dlg_gtk.cpp:84
+#: ../src/view/settingsDlgGtk.cpp:108
 msgid "_General"
 msgstr "_Общие"
 
-#: ../src/settings_dlg_gtk.cpp:85
+#: ../src/view/settingsDlgGtk.cpp:109
 msgid "A_ppearance"
 msgstr "Внешний вид"
 
-#: ../src/settings_dlg_gtk.cpp:86
+#: ../src/view/settingsDlgGtk.cpp:110
 msgid "_Advanced"
 msgstr "_Дополнительно"
 
-#: ../src/settings_dlg_gtk.cpp:94
+#: ../src/view/settingsDlgGtk.cpp:125
 msgid "value"
 msgstr "Значение"
 
-#: ../src/settings_dlg_gtk.cpp:129
+#: ../src/view/settingsDlgGtk.cpp:295
 msgid "Entry %1 (by position)"
 msgstr "Пункт меню %1 (по положению)"
 
-#: ../src/settings_dlg_gtk.cpp:419
+#: ../src/view/settingsDlgGtk.cpp:520
 msgid ""
 "This option doesn't work when the \"os-prober\" script finds other operating "
 "systems. Disable \"%1\" if you don't need to boot other operating systems."

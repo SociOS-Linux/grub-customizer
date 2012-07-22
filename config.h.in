@@ -2,4 +2,4 @@
 #define LIBDIR "${CMAKE_INSTALL_PREFIX}/lib/grub-customizer"
 #define LOCALEDIR "${CMAKE_INSTALL_PREFIX}/share/locale"
 #define PARTCHOOSER_MOUNTPOINT "/media/grub-customizer_recovery_root_mountpoint"
-#define GC_VERSION "2.2"
+#define GC_VERSION "2.2.1"

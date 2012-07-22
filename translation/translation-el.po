@@ -7,54 +7,62 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-11-28 22:09+0100\n"
-"PO-Revision-Date: 2011-01-22 15:00+0000\n"
+"POT-Creation-Date: 2011-09-14 00:10+0200\n"
+"PO-Revision-Date: 2011-09-14 19:50+0000\n"
 "Last-Translator: Daniel Richter <danielrichter2007@web.de>\n"
 "Language-Team: Greek <el@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-09-13 22:00+0000\n"
-"X-Generator: Launchpad (build 13921)\n"
+"X-Launchpad-Export-Date: 2011-09-27 19:28+0000\n"
+"X-Generator: Launchpad (build 14041)\n"
 
-#: ../src/grubconfig.cpp:203 ../src/grubconfig.cpp:218
+#: ../src/presenter/grubCustomizer.cpp:417
+msgid "No script found"
+msgstr "Δεν βρέθηκε script"
+
+#: ../src/presenter/grubCustomizer.cpp:486
+msgid "loading configuration…"
+msgstr "φόρτωση διαμόρφωσης…"
+
+#: ../src/presenter/grubCustomizer.cpp:500
+#: ../src/view/grublistCfgDlgGtk.cpp:355
+msgid " (custom)"
+msgstr " (προσαρμοσμένη)"
+
+#: ../src/presenter/grubCustomizer.cpp:528
+msgid "Configuration has been saved"
+msgstr "Η διαμόρφωση αποθηκεύτηκε"
+
+#: ../src/presenter/grubCustomizer.cpp:531
+msgid "updating configuration"
+msgstr "ενημέρωση διαμόρφωσης"
+
+#: ../src/presenter/grubCustomizer.cpp:539
 msgid " not found. Is grub2 installed?"
 msgstr " δεν βρέθηκε. Έχει εγκατασταθεί το grub2;"
 
-#: ../src/grubconfig.cpp:287
+#: ../src/presenter/grubCustomizer.cpp:544
 msgid " couldn't be executed successfully. You must run this as root!"
 msgstr ""
 " δεν ήταν δυνατή η επιτυχής εκτέλεση. Πρέπει να το εκτελέσετε ως root!"
 
-#: ../src/grubconf_ui_gtk.cpp:11
-msgid "_File"
-msgstr "_Αρχείο"
+#: ../src/presenter/grubCustomizer.cpp:599
+msgid "Name the Entry"
+msgstr "Ονομάστε την καταχώρηση"
 
-#: ../src/grubconf_ui_gtk.cpp:12
-msgid "_Edit"
-msgstr "_Επεξεργασία"
+#: ../src/presenter/grubCustomizer.cpp:632
+msgid "cannot move this entry"
+msgstr ""
 
-#: ../src/grubconf_ui_gtk.cpp:12
-msgid "_View"
-msgstr "_Προβολή"
+#: ../src/view/aboutDialogGtk.cpp:36
+msgid ""
+"Grub Customizer is a graphical interface to configure the grub2/burg settings"
+msgstr ""
+"Ο Διαμορφωτής του Grub είναι μια γραφική διεπαφή για τη διαμόρφωση των "
+"ρυθμίσεων του grub2/burg"
 
-#: ../src/grubconf_ui_gtk.cpp:12
-msgid "_Help"
-msgstr "_Βοήθεια"
-
-#: ../src/grubconf_ui_gtk.cpp:13
-msgid "_Install to MBR …"
-msgstr "Ε_γκατάσταση στο MBR …"
-
-#: ../src/grubconf_ui_gtk.cpp:18
-msgid "Script to insert:"
-msgstr "Script που θα εισαχθεί:"
-
-#: ../src/grubconf_ui_gtk.cpp:18
-msgid "Preview:"
-msgstr "Προεπισκόπηση:"
-
-#: ../src/grubconf_ui_gtk.cpp:20
+#: ../src/view/grubInstallDlgGtk.cpp:22
 msgid ""
 "Install the bootloader to MBR and put some\n"
 "files to the bootloaders data directory\n"
@@ -64,106 +72,107 @@ msgstr ""
 "αρχείων στον κατάλογο δεδομένων των bootloader\n"
 "(αν δεν υπάρχουν ήδη)."
 
-#: ../src/grubconf_ui_gtk.cpp:21
+#: ../src/view/grubInstallDlgGtk.cpp:23
 msgid "_Device: "
 msgstr "_Συσκευή: "
 
-#: ../src/grubconf_ui_gtk.cpp:54
-msgid ""
-"Grub Customizer is a graphical interface to configure the grub2/burg settings"
-msgstr ""
-"Ο Διαμορφωτής του Grub είναι μια γραφική διεπαφή για τη διαμόρφωση των "
-"ρυθμίσεων του grub2/burg"
-
-#: ../src/grubconf_ui_gtk.cpp:82
-msgid "Save configuration and generate a new "
-msgstr "Αποθήκευση διαμόρφωσης και δημιουργία νέας "
-
-#: ../src/grubconf_ui_gtk.cpp:89
-msgid "Add a script to your configuration"
-msgstr "Προσθήκη script στη διαμόρφωσή σας"
-
-#: ../src/grubconf_ui_gtk.cpp:91
-msgid "Remove a script from your configuration"
-msgstr "Αφαίρεση script από τη διαμόρφωσή σας"
-
-#: ../src/grubconf_ui_gtk.cpp:97
-msgid "Move up the selected entry or script"
-msgstr "Μετακινήστε πάνω την επιλεγμένη καταχώρηση ή script"
-
-#: ../src/grubconf_ui_gtk.cpp:99
-msgid "Move down the selected entry or script"
-msgstr "Μετακινήστε κάτω την επιλεγμένη καταχώρηση ή script"
-
-#: ../src/grubconf_ui_gtk.cpp:107
-msgid "reload configuration"
-msgstr "επαναφόρτωση διαμόρφωσης"
-
-#: ../src/grubconf_ui_gtk.cpp:110
-msgid "Edit grub preferences"
-msgstr "Επεξεργασία προτιμήσεων του grub"
-
-#: ../src/grubconf_ui_gtk.cpp:139
-msgid "Select _partition …"
-msgstr "Επιλογή _κατάτμησης …"
-
-#: ../src/grubconf_ui_gtk.cpp:146
-msgid "Add script"
-msgstr "Προσθήκη script"
-
-#: ../src/grubconf_ui_gtk.cpp:162
-msgid "Entry"
-msgstr "Καταχώρηση"
-
-#: ../src/grubconf_ui_gtk.cpp:177
+#: ../src/view/grubInstallDlgGtk.cpp:33
 msgid "Install to MBR"
 msgstr "Εγκατάσταση στο MBR"
 
-#: ../src/grubconf_ui_gtk.cpp:222
-msgid "BURG Mode"
-msgstr "Κατάσταση BURG"
-
-#: ../src/grubconf_ui_gtk.cpp:243
-msgid "No Bootloader found"
-msgstr "Δεν βρέθηκε Bootloader"
-
-#: ../src/grubconf_ui_gtk.cpp:244
-msgid "Do you want to select another root partition?"
-msgstr "Θέλετε να επιλέξετε άλλη ριζική (root) κατάτμηση;"
-
-#: ../src/grubconf_ui_gtk.cpp:251
-msgid "BURG found!"
-msgstr "Βρέθηκε το BURG!"
-
-#: ../src/grubconf_ui_gtk.cpp:252
-msgid "Do you want to configure BURG instead of grub2?"
-msgstr "Θέλετε να διαμορφώσετε το BURG αντί για το grub2;"
-
-#: ../src/grubconf_ui_gtk.cpp:272
+#: ../src/view/grubInstallDlgGtk.cpp:50
 msgid "The bootloader has been installed successfully"
 msgstr "Ο bootloader εγκαταστάθηκε επιτυχώς"
 
-#: ../src/grubconf_ui_gtk.cpp:277
+#: ../src/view/grubInstallDlgGtk.cpp:55
 msgid "Error while installing the bootloader"
 msgstr "Σφάλμα κατά την εγκατάσταση του bootloader"
 
-#: ../src/grubconf_ui_gtk.cpp:299
-msgid "loading configuration…"
-msgstr "φόρτωση διαμόρφωσης…"
+#: ../src/view/grubInstallDlgGtk.cpp:71
+msgid "installing the bootloader…"
+msgstr "εγκατάσταση του bootloader…"
 
-#: ../src/grubconf_ui_gtk.cpp:330
-msgid " (custom)"
-msgstr " (προσαρμοσμένη)"
+#: ../src/view/grubInstallDlgGtk.cpp:76
+msgid "Please type a device string!"
+msgstr "Παρακαλούμε πληκτρολογήστε ένα αλφαριθμητικό συσκευής!"
 
-#: ../src/grubconf_ui_gtk.cpp:342
-msgid "(new Entries)"
-msgstr "(νέες καταχωρήσεις)"
+#: ../src/view/grublistCfgDlgGtk.cpp:28
+msgid "_File"
+msgstr "_Αρχείο"
 
-#: ../src/grubconf_ui_gtk.cpp:363
+#: ../src/view/grublistCfgDlgGtk.cpp:29
+msgid "_Edit"
+msgstr "_Επεξεργασία"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:29
+msgid "_View"
+msgstr "_Προβολή"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:29
+msgid "_Help"
+msgstr "_Βοήθεια"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:30
+msgid "_Install to MBR …"
+msgstr "Ε_γκατάσταση στο MBR …"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:34
+msgid "BURG found!"
+msgstr "Βρέθηκε το BURG!"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:35
+msgid "No Bootloader found"
+msgstr "Δεν βρέθηκε Bootloader"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:63
+msgid "Add a script to your configuration"
+msgstr "Προσθήκη script στη διαμόρφωσή σας"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:65
+msgid "Remove a script from your configuration"
+msgstr "Αφαίρεση script από τη διαμόρφωσή σας"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:71
+msgid "Move up the selected entry or script"
+msgstr "Μετακινήστε πάνω την επιλεγμένη καταχώρηση ή script"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:73
+msgid "Move down the selected entry or script"
+msgstr "Μετακινήστε κάτω την επιλεγμένη καταχώρηση ή script"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:81
+msgid "reload configuration"
+msgstr "επαναφόρτωση διαμόρφωσης"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:84
+msgid "Edit grub preferences"
+msgstr "Επεξεργασία προτιμήσεων του grub"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:113
+msgid "Select _partition …"
+msgstr "Επιλογή _κατάτμησης …"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:120
+msgid "Do you want to configure BURG instead of grub2?"
+msgstr "Θέλετε να διαμορφώσετε το BURG αντί για το grub2;"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:127
+msgid "Do you want to select another root partition?"
+msgstr "Θέλετε να επιλέξετε άλλη ριζική (root) κατάτμηση;"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:168
+msgid "BURG Mode"
+msgstr "Κατάσταση BURG"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:172
+msgid "Save configuration and generate a new "
+msgstr "Αποθήκευση διαμόρφωσης και δημιουργία νέας "
+
+#: ../src/view/grublistCfgDlgGtk.cpp:256
 msgid "Proxy binary not found!"
 msgstr "Δεν βρέθηκε proxy binary!"
 
-#: ../src/grubconf_ui_gtk.cpp:364
+#: ../src/view/grublistCfgDlgGtk.cpp:257
 msgid ""
 "You will see all entries (uncustomized) when you run grub. This error accurs "
 "(in most cases), when you didn't install grub gustomizer currectly."
@@ -172,31 +181,23 @@ msgstr ""
 "Αυτό το σφάλμα συμβαίνει (στις περισσότερες περιπτώσεις), όταν δεν έχετε "
 "εγκαταστήσει τον διαμορφωτή του grub σωστά."
 
-#: ../src/grubconf_ui_gtk.cpp:382
-msgid "Configuration has been saved"
-msgstr "Η διαμόρφωση αποθηκεύτηκε"
+#: ../src/view/grublistCfgDlgGtk.cpp:263
+msgid "(new Entries of %1)"
+msgstr ""
 
-#: ../src/grubconf_ui_gtk.cpp:385
-msgid "updating configuration"
-msgstr "ενημέρωση διαμόρφωσης"
+#: ../src/view/grublistCfgDlgGtk.cpp:265
+msgid "(new Entries)"
+msgstr "(νέες καταχωρήσεις)"
 
-#: ../src/grubconf_ui_gtk.cpp:442
-msgid "Name the Entry"
-msgstr "Ονομάστε την καταχώρηση"
-
-#: ../src/grubconf_ui_gtk.cpp:558
+#: ../src/view/grublistCfgDlgGtk.cpp:489
 msgid "Default title: "
 msgstr "Προεπιλεγμένος τίτλος: "
 
-#: ../src/grubconf_ui_gtk.cpp:578
-msgid "No script found"
-msgstr "Δεν βρέθηκε script"
-
-#: ../src/grubconf_ui_gtk.cpp:673
+#: ../src/view/grublistCfgDlgGtk.cpp:581
 msgid "The saved configuration is not up to date!"
 msgstr "Η αποθηκευμένη διαμόρφωση δεν είναι ενήμερη!"
 
-#: ../src/grubconf_ui_gtk.cpp:674
+#: ../src/view/grublistCfgDlgGtk.cpp:582
 msgid ""
 "The generated configuration didn't equal to the saved configuration on "
 "startup. So what you see now may not be what you see when you restart your "
@@ -207,65 +208,53 @@ msgstr ""
 "όταν επανεκκινήσετε τον υπολογιστή σας. Για να το διορθώσετε, πατήστε "
 "ενημέρωση!"
 
-#: ../src/grubconf_ui_gtk.cpp:677
+#: ../src/view/grublistCfgDlgGtk.cpp:585
 msgid "_Quit without update"
 msgstr "Έ_ξοδος χωρίς ενημέρωση"
 
-#: ../src/grubconf_ui_gtk.cpp:680
+#: ../src/view/grublistCfgDlgGtk.cpp:588
 msgid "_Update & Quit"
 msgstr "_Ενημέρωση και έξοδος"
 
-#: ../src/grubconf_ui_gtk.cpp:684
+#: ../src/view/grublistCfgDlgGtk.cpp:592
 msgid "Do you want to save your modifications?"
 msgstr "Θέλετε να αποθηκεύσετε τις τροποποιήσεις σας;"
 
-#: ../src/grubconf_ui_gtk.cpp:687
+#: ../src/view/grublistCfgDlgGtk.cpp:595
 msgid "_Quit without saving"
 msgstr "Έξο_δος χωρίς αποθήκευση"
 
-#: ../src/grubconf_ui_gtk.cpp:690
+#: ../src/view/grublistCfgDlgGtk.cpp:598
 msgid "_Save & Quit"
 msgstr "_Αποθήκευση και έξοδος"
 
-#: ../src/grubconf_ui_gtk.cpp:693
+#: ../src/view/grublistCfgDlgGtk.cpp:601
 msgid "AND: your modifications are still unsaved, update will save them too!"
 msgstr ""
 "AND: οι τροποποιήσεις σας δεν έχουν αποθηκευτεί ακόμη, η ενημέρωση θα "
 "αποθηκεύσει και αυτές!"
 
-#: ../src/grubconf_ui_gtk.cpp:732
-msgid "installing the bootloader…"
-msgstr "εγκατάσταση του bootloader…"
-
-#: ../src/grubconf_ui_gtk.cpp:737
-msgid "Please type a device string!"
-msgstr "Παρακαλούμε πληκτρολογήστε ένα αλφαριθμητικό συσκευής!"
-
-#: ../src/grubconf_ui_gtk.cpp:747 ../src/settings_dlg_gtk.cpp:92
+#: ../src/view/grublistCfgDlgGtk.cpp:655 ../src/view/settingsDlgGtk.cpp:123
 msgid "is active"
 msgstr "είναι ενεργή"
 
-#: ../src/grubconf_ui_gtk.cpp:748 ../src/settings_dlg_gtk.cpp:93
+#: ../src/view/grublistCfgDlgGtk.cpp:656 ../src/view/settingsDlgGtk.cpp:124
 msgid "name"
 msgstr "όνομα"
 
-#: ../src/gtk-client.cpp:14
-msgid " command not found, cannot proceed"
-msgstr " δεν βρέθηκε η εντολή, αδύνατη η συνέχεια"
-
-#: ../src/liveCDSetupDialog.cpp:5
+#: ../src/view/partitionChooserGtk.cpp:23
 msgid "_use another partition: "
 msgstr "_χρήση άλλης κατάτμησης: "
 
-#: ../src/liveCDSetupDialog.cpp:6
+#: ../src/view/partitionChooserGtk.cpp:24
 msgid "Mount selected Filesystem"
 msgstr "Προσάρτηση του επιλεγμένου συστήματος αρχείων"
 
-#: ../src/liveCDSetupDialog.cpp:7
+#: ../src/view/partitionChooserGtk.cpp:25
 msgid "Unmount mounted Filesystem"
 msgstr "Αποπροσάρτηση του επιλεγμένου συστήματος αρχείων"
 
-#: ../src/liveCDSetupDialog.cpp:10
+#: ../src/view/partitionChooserGtk.cpp:27
 msgid ""
 "These are the mountpoints of your fstab file.\n"
 "Please select every grub/boot related partition."
@@ -273,11 +262,56 @@ msgstr ""
 "Αυτά είναι τα σημεία προσάρτησης του αρχείου σας fstab.\n"
 "Παρακαλούμε επιλέξτε κάθε σχετική με το grub/boot κατάτμηση."
 
-#: ../src/liveCDSetupDialog.cpp:15
-msgid "You started Grub Customizer using the live CD."
-msgstr "Εκκινήσατε το Διαμορφωτή του Grub χρησιμοποιώντας το live CD."
+#: ../src/view/partitionChooserGtk.cpp:48
+msgid "partition"
+msgstr "κατάτμηση"
 
-#: ../src/liveCDSetupDialog.cpp:17
+#: ../src/view/partitionChooserGtk.cpp:49
+msgid "type"
+msgstr "τύπος"
+
+#: ../src/view/partitionChooserGtk.cpp:50
+msgid "label"
+msgstr "ετικέτα"
+
+#: ../src/view/partitionChooserGtk.cpp:82
+msgid "Grub Customizer: Partition chooser"
+msgstr "Διαμορφωτής του Grub: Επιλογέας κατατμήσεων"
+
+#: ../src/view/partitionChooserGtk.cpp:86
+msgid "Select and mount your root partition"
+msgstr "Επιλέξτε και προσαρτήσετε την ριζική σας κατάτμηση"
+
+#: ../src/view/partitionChooserGtk.cpp:88
+msgid "Select required submountpoints"
+msgstr "Επιλέξτε τα απαιτούμενα υποσημεία προσάρτησης"
+
+#: ../src/view/partitionChooserGtk.cpp:94
+msgid "Partition Chooser"
+msgstr "Επιλογέας κατατμήσεων"
+
+#: ../src/view/partitionChooserGtk.cpp:168
+msgid "Mount failed!"
+msgstr "Αποτυχία προσάρτησης!"
+
+#: ../src/view/partitionChooserGtk.cpp:169
+msgid "umount failed!"
+msgstr "Αποτυχία αποπροσάρτησης!"
+
+#: ../src/view/partitionChooserGtk.cpp:170
+msgid "This seems not to be a root file system (no fstab found)"
+msgstr ""
+"Αυτό δεν φαίνεται να είναι ριζικό σύστημα αρχείων (δεν βρέθηκε fstab)"
+
+#: ../src/view/partitionChooserGtk.cpp:171
+msgid "Couldn't mount the selected partition"
+msgstr "Αποτυχία προσάρτησης της επιλεγμένης κατάτμησης"
+
+#: ../src/view/partitionChooserGtk.cpp:172
+msgid "Couldn't umount the selected partition"
+msgstr "Αποτυχία αποπροσάρτησης της επιλεγμένης κατάτμησης"
+
+#: ../src/view/partitionChooserGtk.cpp:240
 msgid ""
 "You selected the option for choosing another partition.\n"
 "Please note: The os-prober may not find your actually running system.\n"
@@ -292,7 +326,11 @@ msgstr ""
 "ξανά και αποθηκεύστε τη διαμόρφωση (ή εκτελέστε update-grub/update-burg)\n"
 "για να ξαναβάλετε την καταχώρηση!"
 
-#: ../src/liveCDSetupDialog.cpp:19
+#: ../src/view/partitionChooserGtk.cpp:242
+msgid "You started Grub Customizer using the live CD."
+msgstr "Εκκινήσατε το Διαμορφωτή του Grub χρησιμοποιώντας το live CD."
+
+#: ../src/view/partitionChooserGtk.cpp:244
 msgid ""
 "Before you can edit your grub configuration we have to\n"
 "mount the required partitions.\n"
@@ -316,200 +354,163 @@ msgstr ""
 "Αν όχι, θα εμφανιστεί ένα μήνυμα λάθους κατά την προσπάθεια φόρτωσης της "
 "διαμόρφωσης."
 
-#: ../src/liveCDSetupDialog.cpp:21
-msgid "Grub Customizer: Partition chooser"
-msgstr "Διαμορφωτής του Grub: Επιλογέας κατατμήσεων"
+#: ../src/view/scriptAddDlgGtk.cpp:23
+msgid "Script to insert:"
+msgstr "Script που θα εισαχθεί:"
 
-#: ../src/liveCDSetupDialog.cpp:25
-msgid "Select and mount your root partition"
-msgstr "Επιλέξτε και προσαρτήσετε την ριζική σας κατάτμηση"
+#: ../src/view/scriptAddDlgGtk.cpp:25
+msgid "Preview:"
+msgstr "Προεπισκόπηση:"
 
-#: ../src/liveCDSetupDialog.cpp:43
-msgid "partition"
-msgstr "κατάτμηση"
+#: ../src/view/scriptAddDlgGtk.cpp:27
+msgid "Add script"
+msgstr "Προσθήκη script"
 
-#: ../src/liveCDSetupDialog.cpp:44
-msgid "type"
-msgstr "τύπος"
+#: ../src/view/scriptAddDlgGtk.cpp:43
+msgid "Entry"
+msgstr "Καταχώρηση"
 
-#: ../src/liveCDSetupDialog.cpp:45
-msgid "label"
-msgstr "ετικέτα"
-
-#: ../src/liveCDSetupDialog.cpp:62
-msgid "Select required submountpoints"
-msgstr "Επιλέξτε τα απαιτούμενα υποσημεία προσάρτησης"
-
-#: ../src/liveCDSetupDialog.cpp:82
-msgid "Partition Chooser"
-msgstr "Επιλογέας κατατμήσεων"
-
-#: ../src/liveCDSetupDialog.cpp:152
-msgid "Mount failed!"
-msgstr "Αποτυχία προσάρτησης!"
-
-#: ../src/liveCDSetupDialog.cpp:167
-msgid "This seems not to be a root file system (no fstab found)"
-msgstr ""
-"Αυτό δεν φαίνεται να είναι ριζικό σύστημα αρχείων (δεν βρέθηκε fstab)"
-
-#: ../src/liveCDSetupDialog.cpp:176
-msgid "umount failed!"
-msgstr "Αποτυχία αποπροσάρτησης!"
-
-#: ../src/liveCDSetupDialog.cpp:210
-msgid "Couldn't mount the selected partition"
-msgstr "Αποτυχία προσάρτησης της επιλεγμένης κατάτμησης"
-
-#: ../src/liveCDSetupDialog.cpp:212
-msgid "Couldn't umount the selected partition"
-msgstr "Αποτυχία αποπροσάρτησης της επιλεγμένης κατάτμησης"
-
-#: ../src/settings_dlg_gtk.cpp:47
+#: ../src/view/settingsDlgGtk.cpp:65
 msgid "white"
 msgstr "λευκό"
 
-#: ../src/settings_dlg_gtk.cpp:48
+#: ../src/view/settingsDlgGtk.cpp:66
 msgid "yellow"
 msgstr "κίτρινο"
 
-#: ../src/settings_dlg_gtk.cpp:49
+#: ../src/view/settingsDlgGtk.cpp:67
 msgid "light-cyan"
 msgstr "ανοιχτό κυανό"
 
-#: ../src/settings_dlg_gtk.cpp:50
+#: ../src/view/settingsDlgGtk.cpp:68
 msgid "cyan"
 msgstr "κυανό"
 
-#: ../src/settings_dlg_gtk.cpp:51
+#: ../src/view/settingsDlgGtk.cpp:69
 msgid "light-blue"
 msgstr "ανοιχτό μπλε"
 
-#: ../src/settings_dlg_gtk.cpp:52
+#: ../src/view/settingsDlgGtk.cpp:70
 msgid "blue"
 msgstr "μπλε"
 
-#: ../src/settings_dlg_gtk.cpp:53
+#: ../src/view/settingsDlgGtk.cpp:71
 msgid "light-green"
 msgstr "ανοιχτό πράσινο"
 
-#: ../src/settings_dlg_gtk.cpp:54
+#: ../src/view/settingsDlgGtk.cpp:72
 msgid "green"
 msgstr "πράσινο"
 
-#: ../src/settings_dlg_gtk.cpp:55
+#: ../src/view/settingsDlgGtk.cpp:73
 msgid "light-magenta"
 msgstr "ανοιχτό μωβ"
 
-#: ../src/settings_dlg_gtk.cpp:56
+#: ../src/view/settingsDlgGtk.cpp:74
 msgid "magenta"
 msgstr "μωβ"
 
-#: ../src/settings_dlg_gtk.cpp:57
+#: ../src/view/settingsDlgGtk.cpp:75
 msgid "light-red"
 msgstr "ανοιχτό κόκκινο"
 
-#: ../src/settings_dlg_gtk.cpp:58
+#: ../src/view/settingsDlgGtk.cpp:76
 msgid "red"
 msgstr "κόκκινο"
 
-#: ../src/settings_dlg_gtk.cpp:59
+#: ../src/view/settingsDlgGtk.cpp:77
 msgid "brown"
 msgstr "καφέ"
 
-#: ../src/settings_dlg_gtk.cpp:60
+#: ../src/view/settingsDlgGtk.cpp:78
 msgid "light-gray"
 msgstr "ανοιχτό γκρι"
 
-#: ../src/settings_dlg_gtk.cpp:61
+#: ../src/view/settingsDlgGtk.cpp:79
 msgid "dark-gray"
 msgstr "σκούρο γκρι"
 
-#: ../src/settings_dlg_gtk.cpp:62
+#: ../src/view/settingsDlgGtk.cpp:80
 msgid "transparent"
 msgstr "διαφανές"
 
-#: ../src/settings_dlg_gtk.cpp:62
+#: ../src/view/settingsDlgGtk.cpp:80
 msgid "black"
 msgstr "μαύρο"
 
-#: ../src/settings_dlg_gtk.cpp:68
+#: ../src/view/settingsDlgGtk.cpp:92
 msgid "pre_defined: "
 msgstr "προ_καθορισμένο: "
 
-#: ../src/settings_dlg_gtk.cpp:68
+#: ../src/view/settingsDlgGtk.cpp:92
 msgid "previously _booted entry"
 msgstr "καταχώρηση _προηγούμενης εκκίνησης συστήματος"
 
-#: ../src/settings_dlg_gtk.cpp:69
+#: ../src/view/settingsDlgGtk.cpp:93
 msgid "default entry"
 msgstr "προεπιλεγμένη καταχώρηση"
 
-#: ../src/settings_dlg_gtk.cpp:69
+#: ../src/view/settingsDlgGtk.cpp:93
 msgid "visibility"
 msgstr "ορατότητα"
 
-#: ../src/settings_dlg_gtk.cpp:69
+#: ../src/view/settingsDlgGtk.cpp:93
 msgid "show menu"
 msgstr "εμφάνιση μενού"
 
-#: ../src/settings_dlg_gtk.cpp:70
+#: ../src/view/settingsDlgGtk.cpp:94
 msgid "Timeout"
 msgstr "Λήξη χρονικού ορίου"
 
-#: ../src/settings_dlg_gtk.cpp:70
+#: ../src/view/settingsDlgGtk.cpp:94
 msgid "Seconds"
 msgstr "Δευτερόλεπτα"
 
-#: ../src/settings_dlg_gtk.cpp:70
+#: ../src/view/settingsDlgGtk.cpp:94
 msgid "kernel parameters"
 msgstr "παράμετροι πυρήνα"
 
-#: ../src/settings_dlg_gtk.cpp:71
+#: ../src/view/settingsDlgGtk.cpp:95
 msgid "generate recovery entries"
 msgstr "δημιουργία καταχωρήσεων επαναφοράς"
 
-#: ../src/settings_dlg_gtk.cpp:71
+#: ../src/view/settingsDlgGtk.cpp:95
 msgid "look for other operating systems"
 msgstr "έρευνα για άλλα λειτουργικά συστήματα"
 
-#: ../src/settings_dlg_gtk.cpp:72
+#: ../src/view/settingsDlgGtk.cpp:96
 msgid "custom resolution: "
 msgstr "προσαρμοσμένη ανάλυση: "
 
-#: ../src/settings_dlg_gtk.cpp:73
+#: ../src/view/settingsDlgGtk.cpp:97
 msgid "font color"
 msgstr "χρώμα γραμματοσειράς"
 
-#: ../src/settings_dlg_gtk.cpp:73
+#: ../src/view/settingsDlgGtk.cpp:97
 msgid "background"
 msgstr "φόντο"
 
-#: ../src/settings_dlg_gtk.cpp:74
+#: ../src/view/settingsDlgGtk.cpp:98
 msgid "normal:"
 msgstr "κανονικό:"
 
-#: ../src/settings_dlg_gtk.cpp:74
+#: ../src/view/settingsDlgGtk.cpp:98
 msgid "highlight:"
 msgstr "επισήμανση:"
 
-#: ../src/settings_dlg_gtk.cpp:75
+#: ../src/view/settingsDlgGtk.cpp:99
 msgid "menu colors"
 msgstr "χρώματα μενού"
 
-#: ../src/settings_dlg_gtk.cpp:75
+#: ../src/view/settingsDlgGtk.cpp:99
 msgid "background image"
 msgstr "εικόνα παρασκηνίου"
 
-#: ../src/settings_dlg_gtk.cpp:76
-msgid "copy to grub directory"
-msgstr "αντιγραφή στον κατάλογο του grub"
-
-#: ../src/settings_dlg_gtk.cpp:76
+#: ../src/view/settingsDlgGtk.cpp:100
 msgid "remove background"
 msgstr "αφαίρεση παρασκηνίου"
 
-#: ../src/settings_dlg_gtk.cpp:77
+#: ../src/view/settingsDlgGtk.cpp:101
 msgid ""
 "To get the colors above working,\n"
 "you have to select a background image!"
@@ -517,31 +518,31 @@ msgstr ""
 "Για να δουλέψουν τα παραπάνω χρώματα,\n"
 "πρέπει να επιλέξετε μια εικόνα παρασκηνίου!"
 
-#: ../src/settings_dlg_gtk.cpp:80
+#: ../src/view/settingsDlgGtk.cpp:104
 msgid "settings"
 msgstr "ρυθμίσεις"
 
-#: ../src/settings_dlg_gtk.cpp:84
+#: ../src/view/settingsDlgGtk.cpp:108
 msgid "_General"
 msgstr "_Γενικά"
 
-#: ../src/settings_dlg_gtk.cpp:85
+#: ../src/view/settingsDlgGtk.cpp:109
 msgid "A_ppearance"
 msgstr "Ε_μφάνιση"
 
-#: ../src/settings_dlg_gtk.cpp:86
+#: ../src/view/settingsDlgGtk.cpp:110
 msgid "_Advanced"
 msgstr "Για προ_χωρημένους"
 
-#: ../src/settings_dlg_gtk.cpp:94
+#: ../src/view/settingsDlgGtk.cpp:125
 msgid "value"
 msgstr "τιμή"
 
-#: ../src/settings_dlg_gtk.cpp:129
+#: ../src/view/settingsDlgGtk.cpp:295
 msgid "Entry %1 (by position)"
 msgstr "Καταχώρηση %1 (ως προς τη θέση)"
 
-#: ../src/settings_dlg_gtk.cpp:419
+#: ../src/view/settingsDlgGtk.cpp:520
 msgid ""
 "This option doesn't work when the \"os-prober\" script finds other operating "
 "systems. Disable \"%1\" if you don't need to boot other operating systems."

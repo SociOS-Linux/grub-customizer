@@ -7,53 +7,60 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-11-28 22:09+0100\n"
-"PO-Revision-Date: 2011-01-22 15:00+0000\n"
+"POT-Creation-Date: 2011-09-14 00:10+0200\n"
+"PO-Revision-Date: 2011-09-14 19:50+0000\n"
 "Last-Translator: Daniel Richter <danielrichter2007@web.de>\n"
 "Language-Team: Turkish <tr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-09-13 22:00+0000\n"
-"X-Generator: Launchpad (build 13921)\n"
+"X-Launchpad-Export-Date: 2011-09-27 19:28+0000\n"
+"X-Generator: Launchpad (build 14041)\n"
 
-#: ../src/grubconfig.cpp:203 ../src/grubconfig.cpp:218
+#: ../src/presenter/grubCustomizer.cpp:417
+msgid "No script found"
+msgstr "Hiç betik yok"
+
+#: ../src/presenter/grubCustomizer.cpp:486
+msgid "loading configuration…"
+msgstr "yapılandırma yükleniyor…"
+
+#: ../src/presenter/grubCustomizer.cpp:500
+#: ../src/view/grublistCfgDlgGtk.cpp:355
+msgid " (custom)"
+msgstr " (özel)"
+
+#: ../src/presenter/grubCustomizer.cpp:528
+msgid "Configuration has been saved"
+msgstr "Yapılandırma kaydedildi"
+
+#: ../src/presenter/grubCustomizer.cpp:531
+msgid "updating configuration"
+msgstr "yapılandırma güncelleniyor"
+
+#: ../src/presenter/grubCustomizer.cpp:539
 msgid " not found. Is grub2 installed?"
 msgstr " bulunamadı. grub2 yüklü mü?"
 
-#: ../src/grubconfig.cpp:287
+#: ../src/presenter/grubCustomizer.cpp:544
 msgid " couldn't be executed successfully. You must run this as root!"
 msgstr " başarıyla başlatılamadı. Bunu root olarak çalıştırmalısınız!"
 
-#: ../src/grubconf_ui_gtk.cpp:11
-msgid "_File"
-msgstr "_Dosya"
+#: ../src/presenter/grubCustomizer.cpp:599
+msgid "Name the Entry"
+msgstr "Girdiyi Adlandır"
 
-#: ../src/grubconf_ui_gtk.cpp:12
-msgid "_Edit"
-msgstr "_Düzenle"
+#: ../src/presenter/grubCustomizer.cpp:632
+msgid "cannot move this entry"
+msgstr ""
 
-#: ../src/grubconf_ui_gtk.cpp:12
-msgid "_View"
-msgstr "_Görünüm"
+#: ../src/view/aboutDialogGtk.cpp:36
+msgid ""
+"Grub Customizer is a graphical interface to configure the grub2/burg settings"
+msgstr ""
+"Grub Customizer, grub2/burg ayarlarını yapabilen bir grafiksel arayüzdür"
 
-#: ../src/grubconf_ui_gtk.cpp:12
-msgid "_Help"
-msgstr "_Yardım"
-
-#: ../src/grubconf_ui_gtk.cpp:13
-msgid "_Install to MBR …"
-msgstr "MBR'ye yükle..."
-
-#: ../src/grubconf_ui_gtk.cpp:18
-msgid "Script to insert:"
-msgstr "Eklenecek betik:"
-
-#: ../src/grubconf_ui_gtk.cpp:18
-msgid "Preview:"
-msgstr "Önizleme:"
-
-#: ../src/grubconf_ui_gtk.cpp:20
+#: ../src/view/grubInstallDlgGtk.cpp:22
 msgid ""
 "Install the bootloader to MBR and put some\n"
 "files to the bootloaders data directory\n"
@@ -63,105 +70,107 @@ msgstr ""
 "dosyaları önyükleyici veri dizinine yerleştir\n"
 "(eğer mevcut değilse)."
 
-#: ../src/grubconf_ui_gtk.cpp:21
+#: ../src/view/grubInstallDlgGtk.cpp:23
 msgid "_Device: "
 msgstr "_Aygıt: "
 
-#: ../src/grubconf_ui_gtk.cpp:54
-msgid ""
-"Grub Customizer is a graphical interface to configure the grub2/burg settings"
-msgstr ""
-"Grub Customizer, grub2/burg ayarlarını yapabilen bir grafiksel arayüzdür"
-
-#: ../src/grubconf_ui_gtk.cpp:82
-msgid "Save configuration and generate a new "
-msgstr "Yapılandırmayı kaydet ve   oluştur "
-
-#: ../src/grubconf_ui_gtk.cpp:89
-msgid "Add a script to your configuration"
-msgstr "Yapılandırmanıza bir betik ekleyin"
-
-#: ../src/grubconf_ui_gtk.cpp:91
-msgid "Remove a script from your configuration"
-msgstr "Yapılandırmanızdan bir betik çıkarın"
-
-#: ../src/grubconf_ui_gtk.cpp:97
-msgid "Move up the selected entry or script"
-msgstr "Seçilen girdi ya da betiği yukarıya taşı"
-
-#: ../src/grubconf_ui_gtk.cpp:99
-msgid "Move down the selected entry or script"
-msgstr "Seçilen girdi ya da betiği aşağıya taşı"
-
-#: ../src/grubconf_ui_gtk.cpp:107
-msgid "reload configuration"
-msgstr "yapılandırmayı tazele"
-
-#: ../src/grubconf_ui_gtk.cpp:110
-msgid "Edit grub preferences"
-msgstr "grub tercihlerini düzenle"
-
-#: ../src/grubconf_ui_gtk.cpp:139
-msgid "Select _partition …"
-msgstr "Disk bölümü seç …"
-
-#: ../src/grubconf_ui_gtk.cpp:146
-msgid "Add script"
-msgstr "Betik ekle"
-
-#: ../src/grubconf_ui_gtk.cpp:162
-msgid "Entry"
-msgstr "Giriş"
-
-#: ../src/grubconf_ui_gtk.cpp:177
+#: ../src/view/grubInstallDlgGtk.cpp:33
 msgid "Install to MBR"
 msgstr "MBR'ye yükle"
 
-#: ../src/grubconf_ui_gtk.cpp:222
-msgid "BURG Mode"
-msgstr "BURG Kipi"
-
-#: ../src/grubconf_ui_gtk.cpp:243
-msgid "No Bootloader found"
-msgstr "Hiçbir Önyükleyici bulunamadı"
-
-#: ../src/grubconf_ui_gtk.cpp:244
-msgid "Do you want to select another root partition?"
-msgstr "Başka bir root bölümü seçmek istiyor musunuz?"
-
-#: ../src/grubconf_ui_gtk.cpp:251
-msgid "BURG found!"
-msgstr "BURG bulundu!"
-
-#: ../src/grubconf_ui_gtk.cpp:252
-msgid "Do you want to configure BURG instead of grub2?"
-msgstr "grub2 yerine BURG'u yapılandırmak ister misiniz?"
-
-#: ../src/grubconf_ui_gtk.cpp:272
+#: ../src/view/grubInstallDlgGtk.cpp:50
 msgid "The bootloader has been installed successfully"
 msgstr "Önyükleyici başarıyla yüklendi"
 
-#: ../src/grubconf_ui_gtk.cpp:277
+#: ../src/view/grubInstallDlgGtk.cpp:55
 msgid "Error while installing the bootloader"
 msgstr "Önyükleyicinin yüklenmesi sırasında hata oluştu"
 
-#: ../src/grubconf_ui_gtk.cpp:299
-msgid "loading configuration…"
-msgstr "yapılandırma yükleniyor…"
+#: ../src/view/grubInstallDlgGtk.cpp:71
+msgid "installing the bootloader…"
+msgstr "önyükleyici kuruluyor…"
 
-#: ../src/grubconf_ui_gtk.cpp:330
-msgid " (custom)"
-msgstr " (özel)"
+#: ../src/view/grubInstallDlgGtk.cpp:76
+msgid "Please type a device string!"
+msgstr "Lütfen bir cihaz dizisi girin!"
 
-#: ../src/grubconf_ui_gtk.cpp:342
-msgid "(new Entries)"
-msgstr "(yeni Girdiler)"
+#: ../src/view/grublistCfgDlgGtk.cpp:28
+msgid "_File"
+msgstr "_Dosya"
 
-#: ../src/grubconf_ui_gtk.cpp:363
+#: ../src/view/grublistCfgDlgGtk.cpp:29
+msgid "_Edit"
+msgstr "_Düzenle"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:29
+msgid "_View"
+msgstr "_Görünüm"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:29
+msgid "_Help"
+msgstr "_Yardım"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:30
+msgid "_Install to MBR …"
+msgstr "MBR'ye yükle..."
+
+#: ../src/view/grublistCfgDlgGtk.cpp:34
+msgid "BURG found!"
+msgstr "BURG bulundu!"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:35
+msgid "No Bootloader found"
+msgstr "Hiçbir Önyükleyici bulunamadı"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:63
+msgid "Add a script to your configuration"
+msgstr "Yapılandırmanıza bir betik ekleyin"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:65
+msgid "Remove a script from your configuration"
+msgstr "Yapılandırmanızdan bir betik çıkarın"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:71
+msgid "Move up the selected entry or script"
+msgstr "Seçilen girdi ya da betiği yukarıya taşı"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:73
+msgid "Move down the selected entry or script"
+msgstr "Seçilen girdi ya da betiği aşağıya taşı"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:81
+msgid "reload configuration"
+msgstr "yapılandırmayı tazele"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:84
+msgid "Edit grub preferences"
+msgstr "grub tercihlerini düzenle"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:113
+msgid "Select _partition …"
+msgstr "Disk bölümü seç …"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:120
+msgid "Do you want to configure BURG instead of grub2?"
+msgstr "grub2 yerine BURG'u yapılandırmak ister misiniz?"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:127
+msgid "Do you want to select another root partition?"
+msgstr "Başka bir root bölümü seçmek istiyor musunuz?"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:168
+msgid "BURG Mode"
+msgstr "BURG Kipi"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:172
+msgid "Save configuration and generate a new "
+msgstr "Yapılandırmayı kaydet ve   oluştur "
+
+#: ../src/view/grublistCfgDlgGtk.cpp:256
 msgid "Proxy binary not found!"
 msgstr "Proxy ikili kod programı bulunamadı!"
 
-#: ../src/grubconf_ui_gtk.cpp:364
+#: ../src/view/grublistCfgDlgGtk.cpp:257
 msgid ""
 "You will see all entries (uncustomized) when you run grub. This error accurs "
 "(in most cases), when you didn't install grub gustomizer currectly."
@@ -169,31 +178,23 @@ msgstr ""
 "grub'ı çalıştırdığınızda tüm girişleri (değiştirilmemiş) bulacaksınız. Bu "
 "hata (genelde), grub customizer düzgün kurulamadığı zaman gerçekleşir."
 
-#: ../src/grubconf_ui_gtk.cpp:382
-msgid "Configuration has been saved"
-msgstr "Yapılandırma kaydedildi"
+#: ../src/view/grublistCfgDlgGtk.cpp:263
+msgid "(new Entries of %1)"
+msgstr ""
 
-#: ../src/grubconf_ui_gtk.cpp:385
-msgid "updating configuration"
-msgstr "yapılandırma güncelleniyor"
+#: ../src/view/grublistCfgDlgGtk.cpp:265
+msgid "(new Entries)"
+msgstr "(yeni Girdiler)"
 
-#: ../src/grubconf_ui_gtk.cpp:442
-msgid "Name the Entry"
-msgstr "Girdiyi Adlandır"
-
-#: ../src/grubconf_ui_gtk.cpp:558
+#: ../src/view/grublistCfgDlgGtk.cpp:489
 msgid "Default title: "
 msgstr "Varsayılan seçenek: "
 
-#: ../src/grubconf_ui_gtk.cpp:578
-msgid "No script found"
-msgstr "Hiç betik yok"
-
-#: ../src/grubconf_ui_gtk.cpp:673
+#: ../src/view/grublistCfgDlgGtk.cpp:581
 msgid "The saved configuration is not up to date!"
 msgstr "Kayıtlı yapılandırma güncel değil!"
 
-#: ../src/grubconf_ui_gtk.cpp:674
+#: ../src/view/grublistCfgDlgGtk.cpp:582
 msgid ""
 "The generated configuration didn't equal to the saved configuration on "
 "startup. So what you see now may not be what you see when you restart your "
@@ -203,64 +204,52 @@ msgstr ""
 "yüzden; şu an gördüğünüz, bilgisayarınızı yeniden başlattığınızda "
 "göreceğinizle aynı olmayabilir. Bunu düzeltmek için, güncelle'yi tıklayın!"
 
-#: ../src/grubconf_ui_gtk.cpp:677
+#: ../src/view/grublistCfgDlgGtk.cpp:585
 msgid "_Quit without update"
 msgstr "Güncellemeden çık"
 
-#: ../src/grubconf_ui_gtk.cpp:680
+#: ../src/view/grublistCfgDlgGtk.cpp:588
 msgid "_Update & Quit"
 msgstr "Güncelle & Çık"
 
-#: ../src/grubconf_ui_gtk.cpp:684
+#: ../src/view/grublistCfgDlgGtk.cpp:592
 msgid "Do you want to save your modifications?"
 msgstr "Değişikliklerinizi kaydetmek istiyor musunuz?"
 
-#: ../src/grubconf_ui_gtk.cpp:687
+#: ../src/view/grublistCfgDlgGtk.cpp:595
 msgid "_Quit without saving"
 msgstr "Kaydetmeden çık"
 
-#: ../src/grubconf_ui_gtk.cpp:690
+#: ../src/view/grublistCfgDlgGtk.cpp:598
 msgid "_Save & Quit"
 msgstr "Kaydet & Çık"
 
-#: ../src/grubconf_ui_gtk.cpp:693
+#: ../src/view/grublistCfgDlgGtk.cpp:601
 msgid "AND: your modifications are still unsaved, update will save them too!"
 msgstr ""
 "VE: değiştirmeleriniz hala kaydedilmedi, güncelleme onları da kaydedecektir!"
 
-#: ../src/grubconf_ui_gtk.cpp:732
-msgid "installing the bootloader…"
-msgstr "önyükleyici kuruluyor…"
-
-#: ../src/grubconf_ui_gtk.cpp:737
-msgid "Please type a device string!"
-msgstr "Lütfen bir cihaz dizisi girin!"
-
-#: ../src/grubconf_ui_gtk.cpp:747 ../src/settings_dlg_gtk.cpp:92
+#: ../src/view/grublistCfgDlgGtk.cpp:655 ../src/view/settingsDlgGtk.cpp:123
 msgid "is active"
 msgstr "aktif"
 
-#: ../src/grubconf_ui_gtk.cpp:748 ../src/settings_dlg_gtk.cpp:93
+#: ../src/view/grublistCfgDlgGtk.cpp:656 ../src/view/settingsDlgGtk.cpp:124
 msgid "name"
 msgstr "isim"
 
-#: ../src/gtk-client.cpp:14
-msgid " command not found, cannot proceed"
-msgstr " komut bulunamadı, devam edilemiyor"
-
-#: ../src/liveCDSetupDialog.cpp:5
+#: ../src/view/partitionChooserGtk.cpp:23
 msgid "_use another partition: "
 msgstr "farklı disk bölümü kullan: "
 
-#: ../src/liveCDSetupDialog.cpp:6
+#: ../src/view/partitionChooserGtk.cpp:24
 msgid "Mount selected Filesystem"
 msgstr "Seçilen dosya sistemini bağla"
 
-#: ../src/liveCDSetupDialog.cpp:7
+#: ../src/view/partitionChooserGtk.cpp:25
 msgid "Unmount mounted Filesystem"
 msgstr "Seçilen dosya sistemini ayır"
 
-#: ../src/liveCDSetupDialog.cpp:10
+#: ../src/view/partitionChooserGtk.cpp:27
 msgid ""
 "These are the mountpoints of your fstab file.\n"
 "Please select every grub/boot related partition."
@@ -268,11 +257,55 @@ msgstr ""
 "Bunlar fstab dosyanızın bağlama noktaları.\n"
 "Lütfen tüm grub/boot ile alakalı bölümü seçin."
 
-#: ../src/liveCDSetupDialog.cpp:15
-msgid "You started Grub Customizer using the live CD."
-msgstr "Grub Düzenleyici'yi Çalışan CD'den çalıştırdınız."
+#: ../src/view/partitionChooserGtk.cpp:48
+msgid "partition"
+msgstr "disk bölümü"
 
-#: ../src/liveCDSetupDialog.cpp:17
+#: ../src/view/partitionChooserGtk.cpp:49
+msgid "type"
+msgstr "tip"
+
+#: ../src/view/partitionChooserGtk.cpp:50
+msgid "label"
+msgstr "etiket"
+
+#: ../src/view/partitionChooserGtk.cpp:82
+msgid "Grub Customizer: Partition chooser"
+msgstr "Grub Düzenleyici: Disk bölümü seçici"
+
+#: ../src/view/partitionChooserGtk.cpp:86
+msgid "Select and mount your root partition"
+msgstr "Kök disk bölümünüzü seçin ve bağlayın"
+
+#: ../src/view/partitionChooserGtk.cpp:88
+msgid "Select required submountpoints"
+msgstr "Gereken alt bağlama noktalarını seçin"
+
+#: ../src/view/partitionChooserGtk.cpp:94
+msgid "Partition Chooser"
+msgstr "Disk Bölümü Seçici"
+
+#: ../src/view/partitionChooserGtk.cpp:168
+msgid "Mount failed!"
+msgstr "Bağlama başarısız!"
+
+#: ../src/view/partitionChooserGtk.cpp:169
+msgid "umount failed!"
+msgstr "ayırma başarısız!"
+
+#: ../src/view/partitionChooserGtk.cpp:170
+msgid "This seems not to be a root file system (no fstab found)"
+msgstr "Bu bir kök dosya sistemi değil (fstab dosyası bulunamadı)"
+
+#: ../src/view/partitionChooserGtk.cpp:171
+msgid "Couldn't mount the selected partition"
+msgstr "Seçilen disk bölümü bağlanamıyor"
+
+#: ../src/view/partitionChooserGtk.cpp:172
+msgid "Couldn't umount the selected partition"
+msgstr "Seçilen disk bölümü ayrılamıyor"
+
+#: ../src/view/partitionChooserGtk.cpp:240
 msgid ""
 "You selected the option for choosing another partition.\n"
 "Please note: The os-prober may not find your actually running system.\n"
@@ -281,7 +314,11 @@ msgid ""
 "to get the entry back!"
 msgstr ""
 
-#: ../src/liveCDSetupDialog.cpp:19
+#: ../src/view/partitionChooserGtk.cpp:242
+msgid "You started Grub Customizer using the live CD."
+msgstr "Grub Düzenleyici'yi Çalışan CD'den çalıştırdınız."
+
+#: ../src/view/partitionChooserGtk.cpp:244
 msgid ""
 "Before you can edit your grub configuration we have to\n"
 "mount the required partitions.\n"
@@ -294,199 +331,163 @@ msgid ""
 "If not, you will get an error message when trying to load the configuration."
 msgstr ""
 
-#: ../src/liveCDSetupDialog.cpp:21
-msgid "Grub Customizer: Partition chooser"
-msgstr "Grub Düzenleyici: Disk bölümü seçici"
+#: ../src/view/scriptAddDlgGtk.cpp:23
+msgid "Script to insert:"
+msgstr "Eklenecek betik:"
 
-#: ../src/liveCDSetupDialog.cpp:25
-msgid "Select and mount your root partition"
-msgstr "Kök disk bölümünüzü seçin ve bağlayın"
+#: ../src/view/scriptAddDlgGtk.cpp:25
+msgid "Preview:"
+msgstr "Önizleme:"
 
-#: ../src/liveCDSetupDialog.cpp:43
-msgid "partition"
-msgstr "disk bölümü"
+#: ../src/view/scriptAddDlgGtk.cpp:27
+msgid "Add script"
+msgstr "Betik ekle"
 
-#: ../src/liveCDSetupDialog.cpp:44
-msgid "type"
-msgstr "tip"
+#: ../src/view/scriptAddDlgGtk.cpp:43
+msgid "Entry"
+msgstr "Giriş"
 
-#: ../src/liveCDSetupDialog.cpp:45
-msgid "label"
-msgstr "etiket"
-
-#: ../src/liveCDSetupDialog.cpp:62
-msgid "Select required submountpoints"
-msgstr "Gereken alt bağlama noktalarını seçin"
-
-#: ../src/liveCDSetupDialog.cpp:82
-msgid "Partition Chooser"
-msgstr "Disk Bölümü Seçici"
-
-#: ../src/liveCDSetupDialog.cpp:152
-msgid "Mount failed!"
-msgstr "Bağlama başarısız!"
-
-#: ../src/liveCDSetupDialog.cpp:167
-msgid "This seems not to be a root file system (no fstab found)"
-msgstr "Bu bir kök dosya sistemi değil (fstab dosyası bulunamadı)"
-
-#: ../src/liveCDSetupDialog.cpp:176
-msgid "umount failed!"
-msgstr "ayırma başarısız!"
-
-#: ../src/liveCDSetupDialog.cpp:210
-msgid "Couldn't mount the selected partition"
-msgstr "Seçilen disk bölümü bağlanamıyor"
-
-#: ../src/liveCDSetupDialog.cpp:212
-msgid "Couldn't umount the selected partition"
-msgstr "Seçilen disk bölümü ayrılamıyor"
-
-#: ../src/settings_dlg_gtk.cpp:47
+#: ../src/view/settingsDlgGtk.cpp:65
 msgid "white"
 msgstr "beyaz"
 
-#: ../src/settings_dlg_gtk.cpp:48
+#: ../src/view/settingsDlgGtk.cpp:66
 msgid "yellow"
 msgstr "sarı"
 
-#: ../src/settings_dlg_gtk.cpp:49
+#: ../src/view/settingsDlgGtk.cpp:67
 msgid "light-cyan"
 msgstr "açık-turkuaz"
 
-#: ../src/settings_dlg_gtk.cpp:50
+#: ../src/view/settingsDlgGtk.cpp:68
 msgid "cyan"
 msgstr "turkuaz"
 
-#: ../src/settings_dlg_gtk.cpp:51
+#: ../src/view/settingsDlgGtk.cpp:69
 msgid "light-blue"
 msgstr "açık-mavi"
 
-#: ../src/settings_dlg_gtk.cpp:52
+#: ../src/view/settingsDlgGtk.cpp:70
 msgid "blue"
 msgstr "mavi"
 
-#: ../src/settings_dlg_gtk.cpp:53
+#: ../src/view/settingsDlgGtk.cpp:71
 msgid "light-green"
 msgstr "açık-yeşil"
 
-#: ../src/settings_dlg_gtk.cpp:54
+#: ../src/view/settingsDlgGtk.cpp:72
 msgid "green"
 msgstr "yeşil"
 
-#: ../src/settings_dlg_gtk.cpp:55
+#: ../src/view/settingsDlgGtk.cpp:73
 msgid "light-magenta"
 msgstr "açık-eflatun"
 
-#: ../src/settings_dlg_gtk.cpp:56
+#: ../src/view/settingsDlgGtk.cpp:74
 msgid "magenta"
 msgstr "eflatun"
 
-#: ../src/settings_dlg_gtk.cpp:57
+#: ../src/view/settingsDlgGtk.cpp:75
 msgid "light-red"
 msgstr "açık-kırmızı"
 
-#: ../src/settings_dlg_gtk.cpp:58
+#: ../src/view/settingsDlgGtk.cpp:76
 msgid "red"
 msgstr "kırmızı"
 
-#: ../src/settings_dlg_gtk.cpp:59
+#: ../src/view/settingsDlgGtk.cpp:77
 msgid "brown"
 msgstr "kahverengi"
 
-#: ../src/settings_dlg_gtk.cpp:60
+#: ../src/view/settingsDlgGtk.cpp:78
 msgid "light-gray"
 msgstr "açık-gri"
 
-#: ../src/settings_dlg_gtk.cpp:61
+#: ../src/view/settingsDlgGtk.cpp:79
 msgid "dark-gray"
 msgstr "koyu-gri"
 
-#: ../src/settings_dlg_gtk.cpp:62
+#: ../src/view/settingsDlgGtk.cpp:80
 msgid "transparent"
 msgstr "şeffaf"
 
-#: ../src/settings_dlg_gtk.cpp:62
+#: ../src/view/settingsDlgGtk.cpp:80
 msgid "black"
 msgstr "siyah"
 
-#: ../src/settings_dlg_gtk.cpp:68
+#: ../src/view/settingsDlgGtk.cpp:92
 msgid "pre_defined: "
 msgstr "öntanımlı: "
 
-#: ../src/settings_dlg_gtk.cpp:68
+#: ../src/view/settingsDlgGtk.cpp:92
 msgid "previously _booted entry"
 msgstr "son yüklenen girdi"
 
-#: ../src/settings_dlg_gtk.cpp:69
+#: ../src/view/settingsDlgGtk.cpp:93
 msgid "default entry"
 msgstr "varsayılan girdi"
 
-#: ../src/settings_dlg_gtk.cpp:69
+#: ../src/view/settingsDlgGtk.cpp:93
 msgid "visibility"
 msgstr "görünürlük"
 
-#: ../src/settings_dlg_gtk.cpp:69
+#: ../src/view/settingsDlgGtk.cpp:93
 msgid "show menu"
 msgstr "menüyü göster"
 
-#: ../src/settings_dlg_gtk.cpp:70
+#: ../src/view/settingsDlgGtk.cpp:94
 msgid "Timeout"
 msgstr "Zaman aşımı"
 
-#: ../src/settings_dlg_gtk.cpp:70
+#: ../src/view/settingsDlgGtk.cpp:94
 msgid "Seconds"
 msgstr "Saniye"
 
-#: ../src/settings_dlg_gtk.cpp:70
+#: ../src/view/settingsDlgGtk.cpp:94
 msgid "kernel parameters"
 msgstr "çekirdek parametreleri"
 
-#: ../src/settings_dlg_gtk.cpp:71
+#: ../src/view/settingsDlgGtk.cpp:95
 msgid "generate recovery entries"
 msgstr "kurtarma girdilerini oluştur"
 
-#: ../src/settings_dlg_gtk.cpp:71
+#: ../src/view/settingsDlgGtk.cpp:95
 msgid "look for other operating systems"
 msgstr "diğer işletim sistemlerini ara"
 
-#: ../src/settings_dlg_gtk.cpp:72
+#: ../src/view/settingsDlgGtk.cpp:96
 msgid "custom resolution: "
 msgstr "özel çözünürlük: "
 
-#: ../src/settings_dlg_gtk.cpp:73
+#: ../src/view/settingsDlgGtk.cpp:97
 msgid "font color"
 msgstr "yazı tipi rengi"
 
-#: ../src/settings_dlg_gtk.cpp:73
+#: ../src/view/settingsDlgGtk.cpp:97
 msgid "background"
 msgstr "arkaplan"
 
-#: ../src/settings_dlg_gtk.cpp:74
+#: ../src/view/settingsDlgGtk.cpp:98
 msgid "normal:"
 msgstr "normal:"
 
-#: ../src/settings_dlg_gtk.cpp:74
+#: ../src/view/settingsDlgGtk.cpp:98
 msgid "highlight:"
 msgstr "vurgulu:"
 
-#: ../src/settings_dlg_gtk.cpp:75
+#: ../src/view/settingsDlgGtk.cpp:99
 msgid "menu colors"
 msgstr "menü renkleri"
 
-#: ../src/settings_dlg_gtk.cpp:75
+#: ../src/view/settingsDlgGtk.cpp:99
 msgid "background image"
 msgstr "arkaplan resmi"
 
-#: ../src/settings_dlg_gtk.cpp:76
-msgid "copy to grub directory"
-msgstr "grup dizinine kopyala"
-
-#: ../src/settings_dlg_gtk.cpp:76
+#: ../src/view/settingsDlgGtk.cpp:100
 msgid "remove background"
 msgstr "arkaplanı kaldır"
 
-#: ../src/settings_dlg_gtk.cpp:77
+#: ../src/view/settingsDlgGtk.cpp:101
 msgid ""
 "To get the colors above working,\n"
 "you have to select a background image!"
@@ -494,31 +495,31 @@ msgstr ""
 "Yukarıdaki renkleri çalıştırabilmek için,\n"
 "bir arkaplan resmi seçmelisiniz!"
 
-#: ../src/settings_dlg_gtk.cpp:80
+#: ../src/view/settingsDlgGtk.cpp:104
 msgid "settings"
 msgstr "ayarlar"
 
-#: ../src/settings_dlg_gtk.cpp:84
+#: ../src/view/settingsDlgGtk.cpp:108
 msgid "_General"
 msgstr "_Genel"
 
-#: ../src/settings_dlg_gtk.cpp:85
+#: ../src/view/settingsDlgGtk.cpp:109
 msgid "A_ppearance"
 msgstr "Görünüm"
 
-#: ../src/settings_dlg_gtk.cpp:86
+#: ../src/view/settingsDlgGtk.cpp:110
 msgid "_Advanced"
 msgstr "_Gelişmiş"
 
-#: ../src/settings_dlg_gtk.cpp:94
+#: ../src/view/settingsDlgGtk.cpp:125
 msgid "value"
 msgstr "değer"
 
-#: ../src/settings_dlg_gtk.cpp:129
+#: ../src/view/settingsDlgGtk.cpp:295
 msgid "Entry %1 (by position)"
 msgstr "Giriş %1 (bulunduğu yere göre)"
 
-#: ../src/settings_dlg_gtk.cpp:419
+#: ../src/view/settingsDlgGtk.cpp:520
 msgid ""
 "This option doesn't work when the \"os-prober\" script finds other operating "
 "systems. Disable \"%1\" if you don't need to boot other operating systems."
