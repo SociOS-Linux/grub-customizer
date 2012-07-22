@@ -99,11 +99,29 @@ std::list<std::string> ProxyList::generateEntryTitleList() const {
 	return result;
 }
 
+Proxy* ProxyList::getProxyByRule(Rule* rule, std::list<Rule> const& list, Proxy& parentProxy) {
+	for (std::list<Rule>::const_iterator rule_iter = list.begin(); rule_iter != list.end(); rule_iter++){
+		if (&*rule_iter == rule)
+			return &parentProxy;
+		else {
+			try {
+				return this->getProxyByRule(rule, rule_iter->subRules, parentProxy);
+			} catch (ProxyList::Exception e) {
+				if (e != NO_RELATED_PROXY_FOUND)
+					throw e;
+			}
+		}
+	}
+	throw NO_RELATED_PROXY_FOUND;
+}
+
 Proxy* ProxyList::getProxyByRule(Rule* rule) {
 	for (ProxyList::iterator proxy_iter = this->begin(); proxy_iter != this->end(); proxy_iter++){
-		for (std::list<Rule>::iterator rule_iter = proxy_iter->rules.begin(); rule_iter != proxy_iter->rules.end(); rule_iter++){
-			if (&*rule_iter == rule)
-				return &*proxy_iter;
+		try {
+			return this->getProxyByRule(rule, proxy_iter->rules, *proxy_iter);
+		} catch (ProxyList::Exception e) {
+			if (e != NO_RELATED_PROXY_FOUND)
+				throw e;
 		}
 	}
 	throw NO_RELATED_PROXY_FOUND;

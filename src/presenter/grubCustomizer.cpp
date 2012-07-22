@@ -568,6 +568,7 @@ void GrubCustomizer::syncProxyState(void* proxy){
 
 void GrubCustomizer::syncRuleState(Rule* entry){
 	entry->isVisible = this->listCfgDlg->getRuleState(entry);
+	this->listCfgDlg->setRuleState(entry, this->listCfgDlg->getRuleState(entry));
 	this->modificationsUnsaved = true;
 	this->updateScriptEntry(this->grublistCfg->proxies.getProxyByRule(entry));
 	this->updateSettingsDlg();

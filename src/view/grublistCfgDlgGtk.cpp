@@ -406,6 +406,9 @@ void GrublistCfgDlgGtk::setRuleState(void* rule, bool newState){
 	Gtk::TreeModel::iterator iter = this->getIterByRulePtr(rule);
 	this->setLockState(~0);
 	(*iter)[tvConfList.treeModel.active] = newState;
+	if ((*iter)[tvConfList.treeModel.is_sensitive]) {
+		this->setEntrySensibility(iter->children(), newState);
+	}
 	this->setLockState(0);
 }
 
@@ -418,9 +421,16 @@ void GrublistCfgDlgGtk::setProxyState(void* proxy, bool isActive){
 	Gtk::TreeModel::iterator iter = this->getIterByProxyPtr(proxy);
 	this->setLockState(~0);
 	(*iter)[tvConfList.treeModel.active] = isActive;
-	for (Gtk::TreeModel::iterator rule_iter = iter->children().begin(); rule_iter != iter->children().end(); rule_iter++)
-		(*rule_iter)[tvConfList.treeModel.is_sensitive] = isActive;
+	this->setEntrySensibility(iter->children(), isActive);
 	this->setLockState(0);
+}
+
+void GrublistCfgDlgGtk::setEntrySensibility(const Gtk::TreeNodeChildren& list, bool sensibility) {
+	for (Gtk::TreeModel::iterator rule_iter = list.begin(); rule_iter != list.end(); rule_iter++) {
+		(*rule_iter)[tvConfList.treeModel.is_sensitive] = sensibility;
+		if (!sensibility || (*rule_iter)[tvConfList.treeModel.active] == sensibility)
+			this->setEntrySensibility(rule_iter->children(), sensibility);
+	}
 }
 
 

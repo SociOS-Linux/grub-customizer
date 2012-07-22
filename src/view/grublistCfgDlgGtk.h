@@ -132,6 +132,8 @@ public:
 	bool getProxyState(void* proxy);
 	void setProxyState(void* proxy, bool isActive);
 
+protected:
+	void setEntrySensibility(const Gtk::TreeNodeChildren& list, bool sensibility);
 private:
 	//event handlers
 	void signal_show_root_selector();
