@@ -391,7 +391,7 @@ void GrubConfUIGtk::setLockState(int state){
 	this->lock_state = state;
 }
 
-	
+
 void GrubConfUIGtk::updateButtonsState(){
 	update_remove_button();
 	update_move_buttons();
@@ -665,49 +665,14 @@ void GrubConfUIGtk::update_move_buttons(){
 	}
 }
 
-void GrubConfUIGtk::signal_quit_click(){
-	if (this->signal_delete_event(NULL) == false)
-		win.hide();
-}
-
-bool GrubConfUIGtk::signal_delete_event(GdkEventAny* event){ //return value: keep window open
-	int dlgResponse = Gtk::RESPONSE_NO;
-	if (grubConfig->config_has_been_different_on_startup_but_unsaved || modificationsUnsaved){
-		Gtk::MessageDialog msgDlg("", false, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_NONE);
-		if (grubConfig->config_has_been_different_on_startup_but_unsaved){
-			msgDlg.set_message(gettext("The saved configuration is not up to date!"));
-			msgDlg.set_secondary_text(gettext("The generated configuration didn't equal to the saved configuration on startup. So what you see now may not be what you see when you restart your pc. To fix this, click update!"));
-			
-			Gtk::Button* btnQuit = msgDlg.add_button(Gtk::Stock::QUIT, Gtk::RESPONSE_NO);
-			btnQuit->set_label(gettext("_Quit without update"));
-			msgDlg.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
-			Gtk::Button* btnSave = msgDlg.add_button(Gtk::Stock::SAVE, Gtk::RESPONSE_YES);
-			btnSave->set_label(gettext("_Update & Quit"));
-		}
-		if (modificationsUnsaved && !grubConfig->config_has_been_different_on_startup_but_unsaved){
-			msgDlg.property_message_type() = Gtk::MESSAGE_QUESTION;
-			msgDlg.set_message(gettext("Do you want to save your modifications?"));
-
-			Gtk::Button* btnQuit = msgDlg.add_button(Gtk::Stock::QUIT, Gtk::RESPONSE_NO);
-			btnQuit->set_label(gettext("_Quit without saving"));
-			msgDlg.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
-			Gtk::Button* btnSave = msgDlg.add_button(Gtk::Stock::SAVE, Gtk::RESPONSE_YES);
-			btnSave->set_label(gettext("_Save & Quit"));
-		}
-		if (grubConfig->config_has_been_different_on_startup_but_unsaved && modificationsUnsaved){
-			msgDlg.set_secondary_text(msgDlg.property_secondary_text()+"\n\n"+gettext("AND: your modifications are still unsaved, update will save them too!"));
-		}
-
-		msgDlg.set_default_response(Gtk::RESPONSE_YES);
-
-		dlgResponse = msgDlg.run();
-	}
-	
-	if (dlgResponse == Gtk::RESPONSE_YES){
+//MOVE TO PRESENTER...............
+bool GrubConfUIGtk::quit(){
+	int dlgResponse = showExitConfirmDialog(grubConfig->config_has_been_different_on_startup_but_unsaved*2 + modificationsUnsaved);
+	if (dlgResponse == 1){
 		this->saveConfig(); //starts a thread that delays the application exiting
 	}
 	
-	if (dlgResponse != Gtk::RESPONSE_CANCEL){
+	if (dlgResponse != 0){
 		if (thread_active){
 			quit_requested = true;
 			grubConfig->cancelThreads();
@@ -717,6 +682,58 @@ bool GrubConfUIGtk::signal_delete_event(GdkEventAny* event){ //return value: kee
 			return false; //close the window
 	}
 	return true;
+}
+
+void GrubConfUIGtk::signal_quit_click(){
+	if (this->quit() == false)
+		win.hide();
+}
+
+/**
+ * @param type int: which type of dialog to show (1: changes unsaved, 2: conf not up to date, 3: 1 + 2)
+ * @return int: type of the answer: 0: cancel, 1: yes, 2: no
+ */
+int GrubConfUIGtk::showExitConfirmDialog(int type){
+	int dlgResponse = Gtk::RESPONSE_NO;
+	if (type & 3 != 0){
+		Gtk::MessageDialog msgDlg("", false, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_NONE);
+		if (type & 2){
+			msgDlg.set_message(gettext("The saved configuration is not up to date!"));
+			msgDlg.set_secondary_text(gettext("The generated configuration didn't equal to the saved configuration on startup. So what you see now may not be what you see when you restart your pc. To fix this, click update!"));
+			
+			Gtk::Button* btnQuit = msgDlg.add_button(Gtk::Stock::QUIT, Gtk::RESPONSE_NO);
+			btnQuit->set_label(gettext("_Quit without update"));
+			msgDlg.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
+			Gtk::Button* btnSave = msgDlg.add_button(Gtk::Stock::SAVE, Gtk::RESPONSE_YES);
+			btnSave->set_label(gettext("_Update & Quit"));
+		}
+		if (type & 1 && !(type & 2)){
+			msgDlg.property_message_type() = Gtk::MESSAGE_QUESTION;
+			msgDlg.set_message(gettext("Do you want to save your modifications?"));
+
+			Gtk::Button* btnQuit = msgDlg.add_button(Gtk::Stock::QUIT, Gtk::RESPONSE_NO);
+			btnQuit->set_label(gettext("_Quit without saving"));
+			msgDlg.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
+			Gtk::Button* btnSave = msgDlg.add_button(Gtk::Stock::SAVE, Gtk::RESPONSE_YES);
+			btnSave->set_label(gettext("_Save & Quit"));
+		}
+		if ((type & 3) == 3){
+			msgDlg.set_secondary_text(msgDlg.property_secondary_text()+"\n\n"+gettext("AND: your modifications are still unsaved, update will save them too!"));
+		}
+
+		msgDlg.set_default_response(Gtk::RESPONSE_YES);
+
+		dlgResponse = msgDlg.run();
+	}
+	switch (dlgResponse){
+		case Gtk::RESPONSE_CANCEL: return 0;
+		case Gtk::RESPONSE_YES: return 1;
+		default: return 2;
+	}
+}
+
+bool GrubConfUIGtk::signal_delete_event(GdkEventAny* event){ //return value: keep window open
+	return this->quit();
 }
 
 void GrubConfUIGtk::signal_about_dlg_response(int response_id){

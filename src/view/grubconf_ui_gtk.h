@@ -133,6 +133,9 @@ public:
 	void proxySelected(Proxy* proxy);
 	
 	void removeProxy(Proxy* p);
+	
+	int showExitConfirmDialog(int type);
+	bool quit();
 };
 
 #endif
