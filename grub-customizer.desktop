@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Grub Customizer
+Comment[de]=Grub anpassen
+Comment[en]=Customize grub
+Exec=gksu grub-customizer
+Terminal=false
+X-MultipleArgs=false
+Type=Application
+StartupNotify=false
+Categories=GNOME;GTK;System;
+Icon=grub-customizer
+

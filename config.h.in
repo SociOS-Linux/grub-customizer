@@ -1,0 +1,4 @@
+#define BINDIR "${CMAKE_INSTALL_PREFIX}/bin"
+#define LIBDIR "${CMAKE_INSTALL_PREFIX}/lib/grub-customizer"
+#define LOCALEDIR "${CMAKE_INSTALL_PREFIX}/share/locale"
+

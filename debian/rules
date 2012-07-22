@@ -1,0 +1,9 @@
+# REMOVE THIS LINE: For some reason, MoinMoin is eating shebang if it's on the first line.
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+%:
+	dh  $@
