@@ -19,7 +19,7 @@
 #include "settings_mng_ds.h"
 
 SettingsManagerDataStore::SettingsManagerDataStore(GrubEnv& env)
-	: _reloadRequired(false), env(env)
+	: _reloadRequired(false), env(env), color_helper_required(false)
 {
 }
 
@@ -60,13 +60,25 @@ fi\n";
 	FILE* outFile = fopen(this->env.settings_file.c_str(), "w");
 	if (outFile){
 		bool background_script_required = false;
+		bool isGraphical = false;
+		this->color_helper_required = false;
 		for (std::list<SettingRow>::iterator iter = this->begin(false); iter != this->end(); iter++){
-			if (iter != this->begin(false))
+			if (iter != this->begin(false)) {
 				fputs("\n", outFile);
+			}
 			fputs((iter->getOutput()).c_str(), outFile);
 
-			if (!background_script_required && (iter->name == "GRUB_MENU_PICTURE" || iter->name == "GRUB_COLOR_NORMAL" || iter->name == "GRUB_COLOR_HIGHLIGHT"))
+			if (!background_script_required && !this->env.useDirectBackgroundProps && (iter->name == "GRUB_MENU_PICTURE" || iter->name == "GRUB_COLOR_NORMAL" || iter->name == "GRUB_COLOR_HIGHLIGHT")) {
 				background_script_required = true;
+				isGraphical = true;
+			}
+			if (this->env.useDirectBackgroundProps && (iter->name == "GRUB_COLOR_NORMAL" || iter->name == "GRUB_COLOR_HIGHLIGHT")) {
+				this->color_helper_required = true;
+				isGraphical = true;
+			}
+			if (iter->name == "GRUB_BACKGROUND" && this->env.useDirectBackgroundProps) {
+				isGraphical = true;
+			}
 		}
 		fclose(outFile);
 		if (background_script_required){
@@ -76,6 +88,28 @@ fi\n";
 			fputs(background_script, bgScriptFile);
 			fclose(bgScriptFile);
 		}
+
+		if (isGraphical) {
+			FILE* fontFile = fopen((this->env.output_config_dir + "/unicode.pf2").c_str(), "r");
+			if (fontFile) {
+				this->log("font file exists", Logger::INFO);
+				fclose(fontFile);
+			} else {
+				this->log("generating the font file", Logger::EVENT);
+				FILE* mkfont_proc = popen((this->env.mkfont_cmd + " -o " + this->env.output_config_dir + "/unicode.pf2 /usr/share/fonts/dejavu/DejaVuSansMono.ttf 2>&1").c_str(), "r");
+				int c;
+				std::string row = "";
+				while ((c = fgetc(mkfont_proc)) != EOF) {
+					if (c == '\n') {
+						this->log("MKFONT: " + row, Logger::INFO);
+					} else {
+						row += char(c);
+					}
+				}
+				pclose(mkfont_proc);
+			}
+		}
+
 		this->_reloadRequired = false;
 		return true;
 	}

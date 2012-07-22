@@ -27,6 +27,7 @@ class SettingsManagerDataStore : public SettingsStore, public CommonClass {
 	bool _reloadRequired;
 	GrubEnv& env;
 public:
+	bool color_helper_required;
 	SettingsManagerDataStore(GrubEnv& env);
 	bool reloadRequired() const;
 	bool load();

@@ -128,7 +128,7 @@ void GrublistCfg::load(bool preserveConfig){
 		while (entry = readdir(hGrubCfgDir)){
 			stat((this->env.cfg_dir+"/"+entry->d_name).c_str(), &fileProperties);
 			if ((fileProperties.st_mode & S_IFMT) != S_IFDIR){ //ignore directories
-				if (entry->d_name[2] == '_' && entry->d_name[0] != '0'){ //check whether it's an script (they should be named XX_scriptname)… und block header scripts (they use a leading 0)
+				if (entry->d_name[2] == '_'){ //check whether it's an script (they should be named XX_scriptname)…
 					this->proxies.push_back(Proxy());
 					this->proxies.back().fileName = this->env.cfg_dir+"/"+entry->d_name;
 					this->proxies.back().index = (entry->d_name[0]-'0')*10 + (entry->d_name[1]-'0');
@@ -197,6 +197,13 @@ void GrublistCfg::load(bool preserveConfig){
 
 	mkconfigProc = NULL;
 	
+	this->env.useDirectBackgroundProps = this->repository.getScriptByName("debian_theme") == NULL;
+	if (this->env.useDirectBackgroundProps) {
+		this->log("using simple background image settings", Logger::INFO);
+	} else {
+		this->log("using /usr/share/desktop-base/grub_background.sh to configure colors and the background image", Logger::INFO);
+	}
+
 	
 	//restore old configuration
 	this->log("restoring grub configuration", Logger::EVENT);
@@ -310,7 +317,7 @@ void GrublistCfg::save(){
 			script_iter->moveFile(this->env.cfg_dir+"/proxifiedScripts/"+pscriptname_encode(script_iter->name, samename_counter[script_iter->name]++), 0755);
 			for (std::list<Proxy*>::iterator proxy_iter = relatedProxies.begin(); proxy_iter != relatedProxies.end(); proxy_iter++){
 				std::ostringstream nameStream;
-				nameStream << (*proxy_iter)->index << "_" << script_iter->name << "_proxy";
+				nameStream << std::setw(2) << std::setfill('0') << (*proxy_iter)->index << "_" << script_iter->name << "_proxy";
 				(*proxy_iter)->generateFile(this->env.cfg_dir+"/"+nameStream.str(), this->env.cfg_dir_prefix.length(), this->env.cfg_dir_noprefix);
 				proxyCount++;
 			}
@@ -318,7 +325,7 @@ void GrublistCfg::save(){
 		else {
 			if (relatedProxies.size() == 1){
 				std::ostringstream nameStream;
-				nameStream << relatedProxies.front()->index << "_" << script_iter->name;
+				nameStream << std::setw(2) << std::setfill('0') << relatedProxies.front()->index << "_" << script_iter->name;
 				script_iter->moveFile(this->env.cfg_dir+"/"+nameStream.str(), relatedProxies.front()->permissions);
 			}
 			else {
@@ -640,7 +647,27 @@ void GrublistCfg::cleanupCfgDir(){
 	}
 }
 
-
+void GrublistCfg::addColorHelper() {
+	Script* newScript = NULL;
+	if (this->repository.getScriptByName("grub-customizer_menu_color_helper") == NULL) {
+		Script* newScript = this->repository.createScript("grub-customizer_menu_color_helper", this->env.cfg_dir + "06_grub-customizer_menu_color_helper", "#!/bin/sh\n\
+\n\
+if [ \"x${GRUB_BACKGROUND}\" != \"x\" ] ; then\n\
+	if [ \"x${GRUB_COLOR_NORMAL}\" != \"x\" ] ; then\n\
+	echo \"set color_normal=${GRUB_COLOR_NORMAL}\"\n\
+	fi\n\
+\n\
+	if [ \"x${GRUB_COLOR_HIGHLIGHT}\" != \"x\" ] ; then\n\
+	echo \"set color_highlight=${GRUB_COLOR_HIGHLIGHT}\"\n\
+	fi\n\
+fi\n\
+");
+		assert(newScript != NULL);
+		Proxy newProxy(*newScript);
+		newProxy.index = 6;
+		this->proxies.push_back(newProxy);
+	}
+}
 
 
 

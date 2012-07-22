@@ -24,6 +24,7 @@
 #include <dirent.h>
 #include <cstdio>
 #include <sstream>
+#include <iomanip>
 #include <map>
 #include <libintl.h>
 #include <unistd.h>
@@ -104,6 +105,8 @@ public:
 	
 	void renameRule(Rule* rule, std::string const& newName);
 	std::string getGrubErrorMessage() const;
+
+	void addColorHelper();
 };
 
 #endif

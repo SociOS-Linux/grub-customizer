@@ -278,6 +278,9 @@ void GrubCustomizer::save(){
 void GrubCustomizer::save_thread(){
 	this->log("writing settings file", Logger::IMPORTANT_EVENT);
 	this->settings->save();
+	if (this->settings->color_helper_required) {
+		this->grublistCfg->addColorHelper();
+	}
 	this->log("writing grub list configuration", Logger::IMPORTANT_EVENT);
 	this->grublistCfg->save();
 	this->activeThreadCount--;
@@ -524,9 +527,11 @@ void GrubCustomizer::syncListView_load() {
 	
 		for (std::list<Proxy>::iterator iter = this->grublistCfg->proxies.begin(); iter != this->grublistCfg->proxies.end(); iter++){
 			std::string name = iter->getScriptName() + (this->grublistCfg && iter->dataSource && (progress != 1 && iter->dataSource->fileName != iter->fileName || progress == 1 && grublistCfg->proxies.proxyRequired(*iter->dataSource)) ? gettext(" (custom)") : "");
-			this->listCfgDlg->appendScript(name, iter->isExecutable(), &(*iter));
-			for (std::list<Rule>::iterator ruleIter = iter->rules.begin(); ruleIter != iter->rules.end(); ruleIter++){
-				this->_rAppendRule(*ruleIter);
+			if (name != "header" && name != "debian_theme" && name != "grub-customizer_menu_color_helper") {
+				this->listCfgDlg->appendScript(name, iter->isExecutable(), &(*iter));
+				for (std::list<Rule>::iterator ruleIter = iter->rules.begin(); ruleIter != iter->rules.end(); ruleIter++){
+					this->_rAppendRule(*ruleIter);
+				}
 			}
 		}
 		this->grublistCfg->unlock();
@@ -771,14 +776,15 @@ void GrubCustomizer::syncSettings(){
 		this->settingsDlg->getColorChooser(SettingsDlg::COLOR_CHOOSER_HIGHLIGHT_BACKGROUND).selectColor("black");
 	}
 
-	std::string menuPicturePath = this->settings->getValue("GRUB_MENU_PICTURE");
+	std::string wallpaper_key = this->env.useDirectBackgroundProps ? "GRUB_BACKGROUND" : "GRUB_MENU_PICTURE";
+	std::string menuPicturePath = this->settings->getValue(wallpaper_key);
 	bool menuPicIsInGrubDir = false;
 	if (menuPicturePath != "" && menuPicturePath[0] != '/'){
 		menuPicturePath = env.output_config_dir + "/" + menuPicturePath;
 		menuPicIsInGrubDir = true;
 	}
 
-	if (this->settings->isActive("GRUB_MENU_PICTURE") && menuPicturePath != ""){
+	if (this->settings->isActive(wallpaper_key) && menuPicturePath != ""){
 		this->settingsDlg->setBackgroundImagePreviewPath(menuPicturePath, menuPicIsInGrubDir);
 	}
 	else {
@@ -855,9 +861,14 @@ void GrubCustomizer::updateUseCustomResolution(){
 }
 
 void GrubCustomizer::updateBackgroundImage(){
-	this->settings->setValue("GRUB_MENU_PICTURE", this->settingsDlg->getBackgroundImagePath());
-	this->settings->setIsActive("GRUB_MENU_PICTURE", true);
-	this->settings->setIsExport("GRUB_MENU_PICTURE", true);
+	if (!this->env.useDirectBackgroundProps) {
+		this->settings->setValue("GRUB_MENU_PICTURE", this->settingsDlg->getBackgroundImagePath());
+		this->settings->setIsActive("GRUB_MENU_PICTURE", true);
+		this->settings->setIsExport("GRUB_MENU_PICTURE", true);
+	} else {
+		this->settings->setValue("GRUB_BACKGROUND", this->settingsDlg->getBackgroundImagePath());
+		this->settings->setIsActive("GRUB_BACKGROUND", true);
+	}
 	this->syncSettings();
 	this->modificationsUnsaved = true;
 }
@@ -878,7 +889,11 @@ void GrubCustomizer::updateColorSettings(){
 }
 
 void GrubCustomizer::removeBackgroundImage(){
-	this->settings->setIsActive("GRUB_MENU_PICTURE", false);
+	if (!this->env.useDirectBackgroundProps) {
+		this->settings->setIsActive("GRUB_MENU_PICTURE", false);
+	} else {
+		this->settings->setIsActive("GRUB_BACKGROUND", false);
+	}
 	this->syncSettings();
 	this->modificationsUnsaved = true;
 }

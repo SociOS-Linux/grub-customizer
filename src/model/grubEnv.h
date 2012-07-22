@@ -39,8 +39,9 @@ struct GrubEnv : public CommonClass {
 	bool check_dir(std::string const& dir) const;
 	std::string trim_cmd(std::string const& cmd) const;
 	std::string getRootDevice();
-	std::string cfg_dir, cfg_dir_noprefix, mkconfig_cmd, cfg_dir_prefix, update_cmd, install_cmd, output_config_file, output_config_dir, settings_file;
+	std::string cfg_dir, cfg_dir_noprefix, mkconfig_cmd, mkfont_cmd, cfg_dir_prefix, update_cmd, install_cmd, output_config_file, output_config_dir, settings_file;
 	bool burgMode;
+	bool useDirectBackgroundProps; // Whether background settings should be set directly or by creating a desktop-base script
 	std::list<GrubEnv::Mode> getAvailableModes();
 };
 
