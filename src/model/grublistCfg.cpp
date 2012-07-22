@@ -350,23 +350,13 @@ void GrublistCfg::save(){
 	
 	FILE* proxyBin = fopen((this->env.cfg_dir+"/bin/grubcfg_proxy").c_str(), "r");
 	bool proxybin_exists = proxyBin != NULL;
-	bool proxy_is_dummy = false;
 	std::string dummyproxy_code = "#!/bin/sh\ncat\n";
-	std::string proxy_code;
 	
-	if (proxyBin){
-		this->log("proxybin does already exist!", Logger::ERROR);
-		int c;
-		for (int i = 0; i < dummyproxy_code.length() && (c = fgetc(proxyBin)) != EOF; i++)
-			proxy_code += c;
-		
-		if (proxy_code == dummyproxy_code)
-			proxy_is_dummy = true;
-		fclose(proxyBin);
-	}
-
-	if (proxyCount != 0 && (!proxybin_exists || proxy_is_dummy)){
-		//copy proxy
+	/**
+	 * copy the grub customizer proxy, if required
+	 */
+	if (proxyCount != 0){
+		// create the bin subdirectory - may already exist
 		int bin_mk_success = mkdir((this->env.cfg_dir+"/bin").c_str(), 0755);
 
 		FILE* proxyBinSource = fopen((std::string(LIBDIR)+"/grubcfg-proxy").c_str(), "r");
