@@ -1,1 +1,7 @@
-/home/daniel/Dokumente/GrubCustomizer/grub-customizer/debian/changelog_lucid
+grub-customizer (1.1-0ubuntu1~maverick1) maverick; urgency=low
+
+   * burg support added
+
+ -- Daniel Richter <danielrichter2007@web.de>  Sat, 09 Oct 2010 14:43:00 +0200
+
+
