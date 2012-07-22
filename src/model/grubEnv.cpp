@@ -67,8 +67,13 @@ bool GrubEnv::check_cmd(std::string const& cmd, std::string const& cmd_prefix) c
 			output += char(c);
 		}
 	}
-	this->log("found at: " + output, Logger::INFO);
-	return pclose(proc) == 0;
+	bool result = pclose(proc) == 0;
+	if (result == true) {
+		this->log("found at: " + output, Logger::INFO);
+	} else {
+		this->log("not found", Logger::INFO);
+	}
+	return result;
 }
 
 bool GrubEnv::check_dir(std::string const& dir_str) const {
