@@ -88,20 +88,21 @@ void ProxyList::clearTrash(){
 
 std::list<EntryTitleListItem> ProxyList::generateEntryTitleList() const {
 	std::list<EntryTitleListItem> result;
+	int offset = 0;
 	for (ProxyList::const_iterator proxy_iter = this->begin(); proxy_iter != this->end(); proxy_iter++){
 		if (proxy_iter->isExecutable()){
-			std::list<EntryTitleListItem> subList = ProxyList::generateEntryTitleList(proxy_iter->rules, "", "", "");
+			std::list<EntryTitleListItem> subList = ProxyList::generateEntryTitleList(proxy_iter->rules, "", "", "", &offset);
 			result.splice(result.end(), subList);
 		}
 	}
 	return result;
 }
 
-std::list<EntryTitleListItem> ProxyList::generateEntryTitleList(std::list<Rule> const& parent, std::string const& labelPathPrefix, std::string const& numericPathPrefix, std::string const& numericPathLabelPrefix) {
+std::list<EntryTitleListItem> ProxyList::generateEntryTitleList(std::list<Rule> const& parent, std::string const& labelPathPrefix, std::string const& numericPathPrefix, std::string const& numericPathLabelPrefix, int* offset) {
 	std::list<EntryTitleListItem> result;
-	int i = 0;
+	int i = (offset != NULL ? *offset : 0);
 	for (std::list<Rule>::const_iterator rule_iter = parent.begin(); rule_iter != parent.end(); rule_iter++){
-		if (rule_iter->isVisible && rule_iter->type != Rule::OTHER_ENTRIES_PLACEHOLDER) {
+		if (rule_iter->isVisible && rule_iter->type == Rule::NORMAL) {
 			std::ostringstream currentNumPath;
 			currentNumPath << numericPathPrefix << i;
 			std::ostringstream currentLabelNumPath;
@@ -120,6 +121,9 @@ std::list<EntryTitleListItem> ProxyList::generateEntryTitleList(std::list<Rule> 
 			}
 			i++;
 		}
+	}
+	if (offset != NULL) {
+		*offset = i;
 	}
 	return result;
 }
