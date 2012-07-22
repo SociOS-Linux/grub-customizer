@@ -43,6 +43,8 @@ class GrubConfig : public std::list<ToplevelScript> {
 	bool cancelThreadsRequested;
 	FILE* mkconfigProc;
 public:
+	bool burgMode;
+	std::string mkconfig_cmd, update_cmd, cfg_dir;
 	void cancelThreads();
 	std::map<std::string, EntryList> realScripts;
 	void send_new_load_progress(double newProgress);

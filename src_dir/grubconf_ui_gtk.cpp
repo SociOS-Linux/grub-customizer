@@ -1,7 +1,7 @@
 #include "grubconf_ui_gtk.h"
 
 GrubConfUIGtk::GrubConfUIGtk(GrubConfig& grubConfig)
-	: grubConfig(&grubConfig), appName("Grub Customizer"), appVersion("1.0"),
+	: grubConfig(&grubConfig), appName("Grub Customizer"), appVersion("1.1"),
 	tbttAdd(Gtk::Stock::ADD), tbttRemove(Gtk::Stock::REMOVE), tbttUp(Gtk::Stock::GO_UP), tbttDown(Gtk::Stock::GO_DOWN),
 	tbttSave(Gtk::Stock::SAVE), tbttPreferences(Gtk::Stock::PREFERENCES),
 	miFile(gettext("_File"), true), miExit(Gtk::Stock::QUIT), tbttReload(Gtk::Stock::REFRESH),
@@ -18,7 +18,10 @@ GrubConfUIGtk::GrubConfUIGtk(GrubConfig& grubConfig)
 	disp_thread_died.connect(sigc::mem_fun(this, &GrubConfUIGtk::thread_died_handler));
 
 	authors.push_back("Daniel Richter");
-	win.set_title("Grub-Customizer");
+	if (this->grubConfig->burgMode)
+		win.set_title("Grub-Customizer (BURG Mode)");
+	else
+		win.set_title("Grub-Customizer");
 	win.set_default_size(800,600);
 	win.add(vbMainSplit);
 	
@@ -42,7 +45,7 @@ GrubConfUIGtk::GrubConfUIGtk(GrubConfig& grubConfig)
 	
 	//toolbar
 	toolbar.append(tbttSave);
-	tbttSave.set_tooltip_text(gettext("Save configuration and generate a new grub.cfg"));
+	tbttSave.set_tooltip_text(Glib::ustring(gettext("Save configuration and generate a new "))+(this->grubConfig->burgMode?"burg.cfg":"grub.cfg"));
 	
 	ti_sep1.add(vs_sep1);
 	toolbar.append(ti_sep1);
@@ -170,7 +173,7 @@ void GrubConfUIGtk::update(){
 		if (progress != 1){
 			progressBar.set_fraction(progress);
 			progressBar.show();
-			statusbar.push(gettext("loading grub configuration…"));
+			statusbar.push(gettext("loading configuration…"));
 		}
 		else {
 			thread_active = false;
