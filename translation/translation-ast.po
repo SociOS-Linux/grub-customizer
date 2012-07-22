@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-12-23 17:05+0100\n"
-"PO-Revision-Date: 2011-12-28 18:00+0000\n"
+"PO-Revision-Date: 2012-02-05 22:23+0000\n"
 "Last-Translator: ASTUR2000 <Unknown>\n"
 "Language-Team: Asturian <ast@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-01-31 23:00+0000\n"
-"X-Generator: Launchpad (build 14734)\n"
+"X-Launchpad-Export-Date: 2012-02-06 19:12+0000\n"
+"X-Generator: Launchpad (build 14747)\n"
 
 #: ../src/presenter/grubCustomizer.cpp:445
 msgid "No script found"
@@ -144,11 +144,11 @@ msgstr "Baxar pa embaxo la entrada o script esbillaos"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:81
 msgid "remove this entry from the current submenu"
-msgstr ""
+msgstr "esniciar esta entrada del somenú d'aguaño"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:84
 msgid "add this entry to a new submenu"
-msgstr ""
+msgstr "añader esta entrada al nuevu somenú"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:92
 msgid "reload configuration"

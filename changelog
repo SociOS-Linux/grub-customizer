@@ -1,3 +1,5 @@
+v 2.5.3
+	* fixed problems when there are multiple entries having the same name/path
 v 2.5.2
 	* renumeration of 00_header and 05_debian_theme nomore starting from 10 but using
 	  these fix values if possible
