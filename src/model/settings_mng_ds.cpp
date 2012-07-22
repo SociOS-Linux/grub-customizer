@@ -144,7 +144,10 @@ fi\n";
 			this->oldFontFile = "";
 		}
 
-		std::string generatedFont = this->mkFont();
+		std::string generatedFont;
+		if (this->grubFont != "") {
+			generatedFont = this->mkFont();
+		}
 		bool background_script_required = false;
 		bool isGraphical = false;
 		this->color_helper_required = false;
@@ -185,6 +188,7 @@ fi\n";
 				this->mkFont("/usr/share/fonts/dejavu/DejaVuSansMono.ttf");
 			}
 		}
+		this->removeItem("GRUB_FONT");
 
 		this->_reloadRequired = false;
 		return true;
