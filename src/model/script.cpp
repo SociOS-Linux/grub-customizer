@@ -42,6 +42,19 @@ Entry* Script::getEntryByName(std::string const& name, std::list<Entry>& parentL
 	return NULL;
 }
 
+std::list<Entry>* Script::getListByPath(std::list<std::string> const& path) {
+	if (path.size()) {
+		Entry* e = this->getEntryByPath(path);
+		if (e == NULL) {
+			return NULL;
+		} else {
+			return &e->subEntries;
+		}
+	} else {
+		return this;
+	}
+}
+
 void Script::moveToBasedir(std::string const& cfg_dir){
 	std::string newPath;
 	if (isInScriptDir(cfg_dir)){
@@ -86,5 +99,6 @@ std::list<std::string> Script::buildPath(Entry const& entry, Entry const* parent
 	}
 	throw ELEMENT_NOT_FOUND;
 }
+
 
 

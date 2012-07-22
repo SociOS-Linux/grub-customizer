@@ -33,16 +33,18 @@ struct GrubConfRow {
 };
 
 struct Entry {
+	enum EntryType {
+		MENUENTRY,
+		SUBMENU,
+		ROOT_ENTRY
+	} type;
 	bool isValid;
 	std::string name, extension, content;
 	std::list<Entry> subEntries;
-	enum EntryType {
-		MENUENTRY,
-		SUBMENU
-	} type;
 	Entry();
 	Entry(std::string name, std::string extension, std::string content = "", EntryType type = MENUENTRY);
 	Entry(FILE* sourceFile, GrubConfRow firstRow = GrubConfRow());
+	std::list<Entry>& getSubEntries();
 	operator bool() const;
 };
 

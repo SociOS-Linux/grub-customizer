@@ -25,18 +25,19 @@
 std::string str_replace(const std::string &search, const std::string &replace, std::string subject);
 
 struct Rule {
-	Entry* dataSource;
+	Entry* dataSource; //assigned when using RuleType::OTHER_ENTRIES_PLACEHOLDER
+	std::list<Entry>* dataSource_list; //assigned when using RuleType::OTHER_ENTRIES_PLACEHOLDER
 	std::string outputName;
-	std::string __idname; //should only be used by sync()! DEPRECATED!
 	std::list<std::string> __idpath; //should only be used by sync()!
 	bool isVisible;
 	std::list<Rule> subRules;
 	enum RuleType {
 		NORMAL, OTHER_ENTRIES_PLACEHOLDER
 	} type;
-	Rule(RuleType type, std::string name, bool isVisible);
+	Rule(RuleType type, std::list<std::string> path, std::string outputName, bool isVisible);
 	Rule(RuleType type, std::list<std::string> path, bool isVisible);
 	Rule(Entry& source, bool isVisible, std::list<std::list<std::string> > const& pathesToIgnore = std::list<std::list<std::string> >(), std::list<std::string> const& currentPath = std::list<std::string>()); //generate rule for given entry
+	Rule();
 	operator std::string();
 	void print() const;
 	std::string getEntryName() const;

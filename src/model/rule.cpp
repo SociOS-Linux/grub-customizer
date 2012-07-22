@@ -28,10 +28,10 @@ std::string str_replace(const std::string &search, const std::string &replace, s
 }
 
 Rule::Rule(Entry& source, bool isVisible, std::list<std::list<std::string> > const& pathesToIgnore, std::list<std::string> const& currentPath) //generate rule for given entry. __idname is only required for re-syncing (soft-reload)
-	: type(Rule::NORMAL), isVisible(isVisible), __idname(source.name), outputName(source.name), dataSource(&source)
+	: type(Rule::NORMAL), isVisible(isVisible), __idpath(currentPath), outputName(source.name), dataSource(&source)
 {
 	if (source.type == Entry::SUBMENU) {
-		this->subRules.push_front(Rule(Rule::OTHER_ENTRIES_PLACEHOLDER, "*", true));
+		this->subRules.push_front(Rule(Rule::OTHER_ENTRIES_PLACEHOLDER, currentPath, "*", true));
 	}
 	for (std::list<Entry>::iterator iter = source.subEntries.begin(); iter != source.subEntries.end(); iter++) {
 		std::list<std::string> currentPath_in_loop = currentPath;
@@ -76,8 +76,8 @@ Rule::operator std::string(){
 	return result;
 }
 
-Rule::Rule(RuleType type, std::string name, bool isVisible)
-	: type(type), isVisible(isVisible), __idname(name), outputName(name), dataSource(NULL)
+Rule::Rule(RuleType type, std::list<std::string> path, std::string outputName, bool isVisible)
+	: type(type), isVisible(isVisible), __idpath(path), outputName(outputName), dataSource(NULL)
 {}
 
 Rule::Rule(RuleType type, std::list<std::string> path, bool isVisible)

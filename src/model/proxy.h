@@ -22,6 +22,7 @@
 #include "script.h"
 #include <iostream>
 #include <sys/stat.h>
+#include <assert.h>
 
 struct Proxy {
 	enum Exception {
@@ -34,6 +35,7 @@ struct Proxy {
 	std::string fileName; //may be the same as Script::fileName
 	Script* dataSource;
 	std::list<std::list<std::string> > __idPathList; //to be used by sync();
+	std::list<std::list<std::string> > __idPathList_OtherEntriesPlaceHolders; //to be used by sync();
 	Proxy();
 	Proxy(Script& dataSource);
 	bool isExecutable() const;
@@ -43,7 +45,8 @@ struct Proxy {
 	Rule* getRuleByEntry(Entry const& entry, std::list<Rule>& list);
 	bool sync(bool deleteInvalidRules = true, bool expand = true);
 	void sync_connectExisting(Rule* parent = NULL);
-	void sync_expand(Rule* parent = NULL);
+	void sync_add_placeholders(Rule* parent = NULL);
+	void sync_expand();
 	void sync_cleanup(Rule* parent = NULL);
 	bool isModified() const;
 	bool deleteFile();
@@ -54,6 +57,7 @@ private:
 	Rule* getParentRule(Rule* child, Rule* root = NULL);
 	std::list<Rule>& getRuleList(Rule* parentElement);
 	std::list<Rule>::iterator getListIterator(Rule const& needle, std::list<Rule>& haystack);
+	Rule* getPlaceholderBySourceList(std::list<Entry> const& sourceList, std::list<Rule>& baseList);
 	static void adjustIterator(std::list<Rule>::iterator& iter, int adjustment);
 };
 

@@ -26,7 +26,7 @@ Proxy::Proxy()
 Proxy::Proxy(Script& dataSource)
 	: dataSource(&dataSource), permissions(0755), index(90)
 {
-	rules.push_back(Rule(Rule::OTHER_ENTRIES_PLACEHOLDER, "*", true));
+	rules.push_back(Rule(Rule::OTHER_ENTRIES_PLACEHOLDER, std::list<std::string>(), "*", true));
 	sync(true, true);
 }
 
@@ -59,9 +59,10 @@ std::list<Rule> Proxy::parseRuleString(const char** ruleString) {
 				name = "";
 			}
 		}
-		else if (!inString && *iter == '*')
-			rules.push_back(Rule(Rule::OTHER_ENTRIES_PLACEHOLDER, "*", visible));
-
+		else if (!inString && *iter == '*') {
+			rules.push_back(Rule(Rule::OTHER_ENTRIES_PLACEHOLDER, path, "*", visible));
+			path.clear();
+		}
 		else if (inString){
 			name += *iter;
 			if (*iter == '\'')
@@ -103,8 +104,10 @@ Rule* Proxy::getRuleByEntry(Entry const& entry, std::list<Rule>& list) {
 bool Proxy::sync(bool deleteInvalidRules, bool expand){
 	if (this->dataSource){
 		this->sync_connectExisting();
-		if (expand)
+		if (expand) {
+			this->sync_add_placeholders();
 			this->sync_expand();
+		}
 
 		if (deleteInvalidRules)
 			this->sync_cleanup();
@@ -116,42 +119,84 @@ bool Proxy::sync(bool deleteInvalidRules, bool expand){
 }
 
 void Proxy::sync_connectExisting(Rule* parent) {
+	this->__idPathList.clear();
 	std::list<Rule>& list = parent ? parent->subRules : this->rules;
 	for (std::list<Rule>::iterator iter = list.begin(); iter != list.end(); iter++) {
-		if (iter->type != Rule::OTHER_ENTRIES_PLACEHOLDER){
-			this->__idPathList.push_back(iter->__idpath);
-			iter->dataSource = this->dataSource->getEntryByPath(iter->__idpath);
-			if (iter->subRules.size()) {
-				this->sync_connectExisting(&*iter);
-			}
+		std::list<std::string> path = iter->__idpath;
+
+		if (iter->type != Rule::OTHER_ENTRIES_PLACEHOLDER) {
+			this->__idPathList.push_back(path);
+		} else {
+			this->__idPathList_OtherEntriesPlaceHolders.push_back(path);
+		}
+		iter->dataSource = this->dataSource->getEntryByPath(path);
+
+		if (iter->type == Rule::OTHER_ENTRIES_PLACEHOLDER) {
+			iter->dataSource_list = this->dataSource->getListByPath(path);
+		}
+
+
+		if (iter->subRules.size()) {
+			this->sync_connectExisting(&*iter);
 		}
 	}
 }
 
-void Proxy::sync_expand(Rule* parent) {
-	std::list<Rule>& list = parent ? parent->subRules : this->rules;
-	std::list<Entry>& entries = parent ? dynamic_cast<std::list<Entry>&>(parent->dataSource->subEntries) : dynamic_cast<std::list<Entry>&>(*this->dataSource);
+void Proxy::sync_add_placeholders(Rule* parent) {
+	assert(parent == NULL || parent->dataSource != NULL);
 
-	std::list<Rule>::iterator other_entries_iter = list.begin();
-	while (other_entries_iter != list.end() && other_entries_iter->type != Rule::OTHER_ENTRIES_PLACEHOLDER){
-		other_entries_iter++;
-	}
-	if (other_entries_iter == list.end()){
-		list.push_front(Rule(Rule::OTHER_ENTRIES_PLACEHOLDER, "*", true));
-		other_entries_iter = list.begin();
-	}
-	std::list<Rule> otherEntryRules;
-	for (Script::iterator iter = entries.begin(); iter != entries.end(); iter++){
-		Rule* relatedRule = this->getRuleByEntry(*iter, this->rules);
-//		std::cout << "related rule for " << iter->name << ": " << relatedRule << std::endl;
-		if (!relatedRule){
-			otherEntryRules.push_back(Rule(*iter, other_entries_iter->isVisible, this->__idPathList, this->dataSource->buildPath(*iter))); //generate rule for given entry
-		} else if (iter->subEntries.size()) {
-			this->sync_expand(relatedRule);
+	std::list<std::string> path = parent ? this->dataSource->buildPath(*parent->dataSource) : std::list<std::string>();
+	//find out if currentPath is on the blacklist
+	bool eop_is_blacklisted = false;
+
+	for (std::list<std::list<std::string> >::const_iterator pti_iter = this->__idPathList_OtherEntriesPlaceHolders.begin(); pti_iter != this->__idPathList_OtherEntriesPlaceHolders.end(); pti_iter++) {
+		if (*pti_iter == path) {
+			eop_is_blacklisted = true;
+			break;
 		}
 	}
-	other_entries_iter++;
-	list.splice(other_entries_iter, otherEntryRules);
+
+	std::list<Rule>& list = parent ? parent->subRules : this->rules;
+	if (!eop_is_blacklisted) {
+		Rule newRule(Rule::OTHER_ENTRIES_PLACEHOLDER, parent ? this->dataSource->buildPath(*parent->dataSource) : std::list<std::string>(), "*", true);
+		newRule.dataSource = this->dataSource->getEntryByPath(path);
+		newRule.dataSource_list = this->dataSource->getListByPath(path);
+		list.push_front(newRule);
+		this->__idPathList_OtherEntriesPlaceHolders.push_back(path);
+	}
+
+	//sub entries (recursion)
+	for (std::list<Rule>::iterator iter = list.begin(); iter != list.end(); iter++) {
+		if (iter->dataSource && iter->type == Rule::NORMAL && iter->dataSource->type == Entry::SUBMENU) {
+			this->sync_add_placeholders(&*iter);
+		}
+	}
+}
+
+
+void Proxy::sync_expand() {
+	assert(this->dataSource != NULL);
+	for (std::list<std::list<std::string> >::iterator oepPathIter = this->__idPathList_OtherEntriesPlaceHolders.begin(); oepPathIter != this->__idPathList_OtherEntriesPlaceHolders.end(); oepPathIter++) {
+		std::list<Entry>* dataSource = this->dataSource->getListByPath(*oepPathIter);
+		Rule* oep = this->getPlaceholderBySourceList(*dataSource, this->rules);
+		assert(oep != NULL);
+		Rule* parentRule = this->getParentRule(oep);
+		std::list<Rule>& dataTarget = parentRule ? parentRule->subRules : this->rules;
+
+		std::list<Rule>::iterator dataTargetIter = dataTarget.begin();
+		while (dataTargetIter != dataTarget.end() && (dataTargetIter->type != Rule::OTHER_ENTRIES_PLACEHOLDER || dataTargetIter->__idpath != *oepPathIter)){
+			dataTargetIter++;
+		}
+		std::list<Rule> newRules;
+		for (std::list<Entry>::iterator iter = dataSource->begin(); iter != dataSource->end(); iter++){
+			Rule* relatedRule = this->getRuleByEntry(*iter, this->rules);
+			if (!relatedRule){
+				newRules.push_back(Rule(*iter, dataTargetIter->isVisible, this->__idPathList, this->dataSource->buildPath(*iter))); //generate rule for given entry
+			}
+		}
+		dataTargetIter++;
+		dataTarget.splice(dataTargetIter, newRules);
+	}
 }
 
 void Proxy::sync_cleanup(Rule* parent) {
@@ -325,6 +370,20 @@ std::list<Rule>::iterator Proxy::getListIterator(Rule const& needle, std::list<R
 	}
 
 	throw RULE_NOT_FOUND;
+}
+
+Rule* Proxy::getPlaceholderBySourceList(std::list<Entry> const& sourceList, std::list<Rule>& baseList) {
+	for (std::list<Rule>::iterator iter = baseList.begin(); iter != baseList.end(); iter++) {
+		if (iter->dataSource_list == &sourceList) {
+			return &*iter;
+		} else if (iter->type == Rule::NORMAL && iter->subRules.size()) {
+			Rule* result = this->getPlaceholderBySourceList(sourceList, iter->subRules);
+			if (result) {
+				return result;
+			}
+		}
+	}
+	return NULL;
 }
 
 

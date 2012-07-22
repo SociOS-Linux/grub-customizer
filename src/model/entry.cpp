@@ -90,7 +90,12 @@ Entry::Entry(FILE* sourceFile, GrubConfRow firstRow)
 	}
 }
 
+std::list<Entry>& Entry::getSubEntries() {
+	return this->subEntries;
+}
+
 Entry::operator bool() const {
 	return isValid;
 }
+
 
