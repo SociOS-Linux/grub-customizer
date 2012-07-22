@@ -115,7 +115,6 @@ public:
 	void setProxyName(void* proxy, Glib::ustring const& name, bool isModified);
 	
 	void swapProxies(void* a, void* b);
-	void swapRules(void* a, void* b);
 	
 	void setDefaultTitleStatusText(Glib::ustring const& str);
 	
@@ -131,6 +130,8 @@ public:
 	void setRuleState(void* rule, bool newState);
 	bool getProxyState(void* proxy);
 	void setProxyState(void* proxy, bool isActive);
+
+	void selectRule(void* rule);
 
 protected:
 	void setEntrySensibility(const Gtk::TreeNodeChildren& list, bool sensibility);

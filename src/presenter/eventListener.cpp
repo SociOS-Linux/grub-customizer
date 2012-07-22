@@ -84,8 +84,8 @@ void EventListener::signal_entry_renamed(void* entry){
 	presenter.syncRuleName((Rule*)entry);
 }
 
-void EventListener::ruleSwap_requested(void* a, void* b){
-	presenter.swapRules((Rule*)a,(Rule*)b);
+void EventListener::ruleAdjustment_requested(void* rule, int direction){
+	presenter.moveRule((Rule*)rule,direction);
 }
 void EventListener::proxySwap_requested(void* a, void* b){
 	presenter.swapProxies((Proxy*)a,(Proxy*)b);

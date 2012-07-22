@@ -55,7 +55,7 @@ public:
 	void signal_entry_state_toggled(void* entry);
 	void signal_entry_renamed(void* entry);
 
-	void ruleSwap_requested(void* a, void* b);
+	void ruleAdjustment_requested(void* rule, int direction);
 	void proxySwap_requested(void* a, void* b);
 
 	void ruleSelected(void* rule);

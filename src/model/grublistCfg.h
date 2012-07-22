@@ -51,7 +51,8 @@ public:
 	
 	enum Exception {
 		GRUB_CFG_DIR_NOT_FOUND,
-		GRUB_CMD_EXEC_FAILED
+		GRUB_CMD_EXEC_FAILED,
+		NO_MOVE_TARGET_FOUND
 	};
 
 	ProxyList proxies;
@@ -82,6 +83,7 @@ public:
 	void renumerate();
 	
 	void swapRules(Rule* a, Rule* b);
+	Rule& moveRule(Rule* rule, int direction);
 	void swapProxies(Proxy* a, Proxy* b);
 	
 	bool cfgDirIsClean();

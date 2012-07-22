@@ -75,8 +75,6 @@ public:
 
 	//swap two list items which contains proxies (script instances)
 	virtual void swapProxies(void* a, void* b)=0;
-	//swap two list items which contains rules
-	virtual void swapRules(void* a, void* b)=0;
 
 	//sets the given title to be showed as default title inside the status bar
 	virtual void setDefaultTitleStatusText(Glib::ustring const& str)=0;
@@ -103,6 +101,9 @@ public:
 	virtual bool getProxyState(void* proxy)=0;
 	//set whether the given proxy is activated
 	virtual void setProxyState(void* proxy, bool isActive)=0;
+
+	//select the given rule
+	virtual void selectRule(void* rule)=0;
 };
 
 #endif

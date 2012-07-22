@@ -371,20 +371,6 @@ void GrublistCfgDlgGtk::swapProxies(void* a, void* b){
 	update_move_buttons();
 }
 
-void GrublistCfgDlgGtk::swapRules(void* a, void* b){
-	this->setLockState(~0);
-	Gtk::TreeModel::iterator iter1 = getIterByRulePtr(a);
-	Gtk::TreeModel::iterator iter2 = getIterByRulePtr(b);
-	
-	//swap the assigned pointers
-	(*iter1)[tvConfList.treeModel.relatedRule] = b;
-	(*iter2)[tvConfList.treeModel.relatedRule] = a;
-	
-	tvConfList.refTreeStore->iter_swap(iter1, iter2);
-	this->setLockState(0);
-
-	update_move_buttons();
-}
 
 
 Glib::ustring GrublistCfgDlgGtk::getRuleName(void* rule){
@@ -425,6 +411,15 @@ void GrublistCfgDlgGtk::setProxyState(void* proxy, bool isActive){
 	this->setLockState(0);
 }
 
+void GrublistCfgDlgGtk::selectRule(void* rule) {
+	try {
+		this->tvConfList.get_selection()->select(this->getIterByRulePtr(rule));
+	} catch (GrublistCfgDlgGtk::Exception e) {
+		if (e != RULE_ITER_NOT_FOUND)
+			throw e;
+	}
+}
+
 void GrublistCfgDlgGtk::setEntrySensibility(const Gtk::TreeNodeChildren& list, bool sensibility) {
 	for (Gtk::TreeModel::iterator rule_iter = list.begin(); rule_iter != list.end(); rule_iter++) {
 		(*rule_iter)[tvConfList.treeModel.is_sensitive] = sensibility;
@@ -438,23 +433,18 @@ void GrublistCfgDlgGtk::signal_move_click(int direction){
 	if (this->lock_state == 0){
 		if (direction == 1 || direction == -1){
 			Gtk::TreeModel::iterator iter = tvConfList.get_selection()->get_selected();
-			Gtk::TreeModel::iterator iter2 = iter;
-			if (direction == 1){
-				iter2++;
-			}
-			else if (direction == -1){
-				iter2--;
-			}
-		
 			//if rule swap
 			if ((void*)(*iter)[tvConfList.treeModel.relatedRule] != NULL){
-				void* a = ((void*)(*iter)[tvConfList.treeModel.relatedRule]);
-				void* b = ((void*)(*iter2)[tvConfList.treeModel.relatedRule]);
-			
-				eventListener->ruleSwap_requested(a, b);
-
-			}
-			else { //if script swap
+				eventListener->ruleAdjustment_requested((void*)(*iter)[tvConfList.treeModel.relatedRule], direction);
+			} else { //if script swap
+				Gtk::TreeModel::iterator iter2 = iter;
+				if (direction == 1){
+					iter2++;
+				}
+				else if (direction == -1){
+					iter2--;
+				}
+		
 				void* a = (*iter)[tvConfList.treeModel.relatedProxy];
 				void* b = (*iter2)[tvConfList.treeModel.relatedProxy];
 			
@@ -535,30 +525,30 @@ void GrublistCfgDlgGtk::update_move_buttons(){
 	tbttDown.set_sensitive(selectedRowsCount == 1);
 	miDown.set_sensitive(selectedRowsCount == 1);
 	
-	if (selectedRowsCount == 1){
-		Gtk::TreeModel::iterator selectedRowIter = tvConfList.get_selection()->get_selected();
-	
-		if (selectedRowIter->parent()){
-			if (selectedRowIter->parent()->children().begin() == selectedRowIter){
-				tbttUp.set_sensitive(false);
-				miUp.set_sensitive(false);
-			}
-			if (--selectedRowIter->parent()->children().end() == selectedRowIter){
-				tbttDown.set_sensitive(false);
-				miDown.set_sensitive(false);
-			}
-		}
-		else {
-			if (tvConfList.refTreeStore->children().begin() == selectedRowIter){
-				tbttUp.set_sensitive(false);
-				miUp.set_sensitive(false);
-			}
-			if (--tvConfList.refTreeStore->children().end() == selectedRowIter){
-				tbttDown.set_sensitive(false);
-				miDown.set_sensitive(false);
-			}
-		}
-	}
+//	if (selectedRowsCount == 1){
+//		Gtk::TreeModel::iterator selectedRowIter = tvConfList.get_selection()->get_selected();
+//
+//		if (selectedRowIter->parent()){
+//			if (selectedRowIter->parent()->children().begin() == selectedRowIter){
+//				tbttUp.set_sensitive(false);
+//				miUp.set_sensitive(false);
+//			}
+//			if (--selectedRowIter->parent()->children().end() == selectedRowIter){
+//				tbttDown.set_sensitive(false);
+//				miDown.set_sensitive(false);
+//			}
+//		}
+//		else {
+//			if (tvConfList.refTreeStore->children().begin() == selectedRowIter){
+//				tbttUp.set_sensitive(false);
+//				miUp.set_sensitive(false);
+//			}
+//			if (--tvConfList.refTreeStore->children().end() == selectedRowIter){
+//				tbttDown.set_sensitive(false);
+//				miDown.set_sensitive(false);
+//			}
+//		}
+//	}
 }
 
 

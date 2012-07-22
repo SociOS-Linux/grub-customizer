@@ -467,10 +467,16 @@ void GrublistCfg::renumerate(){
 	this->proxies.sort();
 }
 
-void GrublistCfg::swapRules(Rule* a, Rule* b){
-	Rule swap_helper = *a;
-	*a = *b;
-	*b = swap_helper;
+Rule& GrublistCfg::moveRule(Rule* rule, int direction){
+	try {
+		return this->proxies.getProxyByRule(rule)->moveRule(rule, direction);
+	} catch (Proxy::Exception e) {
+		if (e == Proxy::NO_MOVE_TARGET_FOUND) {
+			throw GrublistCfg::NO_MOVE_TARGET_FOUND;
+		} else {
+			throw e;
+		}
+	}
 }
 
 void GrublistCfg::swapProxies(Proxy* a, Proxy* b){

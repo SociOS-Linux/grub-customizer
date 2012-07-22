@@ -599,12 +599,22 @@ void GrubCustomizer::updateScriptEntry(Proxy* proxy){
 	}
 }
 
-void GrubCustomizer::swapRules(Rule* a, Rule* b){
+void GrubCustomizer::moveRule(void* rule, int direction){
+	Proxy* parentProxy = this->grublistCfg->proxies.getProxyByRule((Rule*)rule);
 	//swap the contents behind the pointers
-	this->grublistCfg->swapRules(a, b);
-	this->listCfgDlg->swapRules(a,b);
-	this->updateScriptEntry(this->grublistCfg->proxies.getProxyByRule(a));
-	this->modificationsUnsaved = true;
+	try {
+		Rule* newRule = &this->grublistCfg->moveRule((Rule*)rule, direction);
+
+		this->syncListView_load();
+		this->listCfgDlg->selectRule(newRule);
+		this->updateScriptEntry(parentProxy);
+		this->modificationsUnsaved = true;
+	} catch (GrublistCfg::Exception e) {
+		if (e == GrublistCfg::NO_MOVE_TARGET_FOUND)
+			this->listCfgDlg->showErrorMessage(gettext("cannot move this entry"));
+		else
+			throw e;
+	}
 }
 
 void GrubCustomizer::swapProxies(Proxy* a, Proxy* b){

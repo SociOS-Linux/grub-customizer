@@ -51,7 +51,7 @@ public:
 	virtual void signal_entry_renamed(void* entry)=0;
 
 	//user wants to swap two rules
-	virtual void ruleSwap_requested(void* a, void* b)=0;
+	virtual void ruleAdjustment_requested(void* rule, int direction)=0;
 	//user wants to swap two proxies
 	virtual void proxySwap_requested(void* a, void* b)=0;
 

@@ -238,3 +238,95 @@ std::string Proxy::getScriptName(){
 		return "?";
 }
 
+
+Rule& Proxy::moveRule(Rule* rule, int direction) {
+	std::list<Rule>& ruleList = this->getRuleList(this->getParentRule(rule));
+
+	std::list<Rule>::iterator el = this->getListIterator(*rule, ruleList);
+	std::list<Rule>::iterator next = el; adjustIterator(next, direction);
+
+	Rule* newRule = rule;
+	if (next == ruleList.end()) { //scale down
+		try {
+			std::list<Rule>& parentOfParent = this->getRuleList(this->getParentRule(this->getParentRule(rule)));
+			std::list<Rule>::iterator parentListIter = this->getListIterator(*this->getParentRule(rule), parentOfParent);
+			std::list<Rule>::iterator nextInParent = parentListIter; adjustIterator(nextInParent, direction == 1 ? 1 : 0);
+
+			newRule = &*parentOfParent.insert(nextInParent, *rule);
+		} catch (Proxy::Exception e) {
+			if (e == RULE_NOT_FOUND)
+				throw NO_MOVE_TARGET_FOUND;
+			else
+				throw e;
+		}
+	} else if (next->subRules.size()) { //scale up
+		if (direction == 1) {
+			next->subRules.push_front(*rule);
+			newRule = &next->subRules.front();
+		} else {
+			next->subRules.push_back(*rule);
+			newRule = &next->subRules.back();
+		}
+	} else { //keep on this level
+		std::list<Rule>::iterator afterNext = el;adjustIterator(afterNext, direction == 1 ? 2 : -1);
+		if (afterNext != ruleList.end()) {
+			newRule = &*ruleList.insert(afterNext, *rule);
+		} else {
+			ruleList.push_back(*rule);
+			newRule = &ruleList.back();
+		}
+	}
+	ruleList.erase(this->getListIterator(*rule, ruleList));
+	return *newRule;
+}
+
+Rule* Proxy::getParentRule(Rule* child, Rule* root) {
+	std::list<Rule>& list = root ? root->subRules : this->rules;
+	for (std::list<Rule>::iterator iter = list.begin(); iter != list.end(); iter++) {
+		if (&*iter == child)
+			return root;
+		else if (iter->subRules.size()) {
+			Rule* parentRule = NULL;
+			try {
+				parentRule = this->getParentRule(child, &*iter);
+			} catch (Proxy::Exception e) {
+				if (e != RULE_NOT_FOUND)
+					throw e;
+			}
+			if (parentRule) {
+				return parentRule;
+			}
+		}
+	}
+	throw RULE_NOT_FOUND;
+}
+
+std::list<Rule>& Proxy::getRuleList(Rule* parentElement) {
+	if (parentElement)
+		return parentElement->subRules;
+	else
+		return this->rules;
+}
+
+std::list<Rule>::iterator Proxy::getListIterator(Rule const& needle, std::list<Rule>& haystack) {
+	for (std::list<Rule>::iterator iter = haystack.begin(); iter != haystack.end(); iter++) {
+		if (&*iter == &needle)
+			return iter;
+	}
+
+	throw RULE_NOT_FOUND;
+}
+
+
+void Proxy::adjustIterator(std::list<Rule>::iterator& iter, int adjustment) {
+	if (adjustment > 0) {
+		for (int i = 0; i < adjustment; i++) {
+			iter++;
+		}
+	} else {
+		for (int i = 0; i > adjustment; i--) {
+			iter--;
+		}
+	}
+}
+

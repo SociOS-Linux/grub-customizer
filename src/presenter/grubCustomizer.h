@@ -150,7 +150,7 @@ public:
 	void syncRuleState(Rule* entry);
 	void syncRuleName(Rule* entry);
 	void updateScriptEntry(Proxy* proxy);
-	void swapRules(Rule* a, Rule* b);
+	void moveRule(void* rule, int direction);
 	void swapProxies(Proxy* a, Proxy* b);
 	
 	void showRuleInfo(Rule* rule);
