@@ -28,7 +28,7 @@ int main(int argc, char** argv){
 	FbResolutionsGetter* fbResolutionsGetter = new FbResolutionsGetter;
 
 	
-	GrubSettingsDlgGtk* settingsDlg = new GrubSettingsDlgGtk(*settings, env);
+	GrubSettingsDlgGtk* settingsDlg = new GrubSettingsDlgGtk;
 	presenter.setModelListCfg(*listcfg);
 	presenter.setViewListCfg(*listCfgView);
 	presenter.setViewSettingsDialog(*settingsDlg);

@@ -30,6 +30,23 @@ public:
 	
 	void ruleSelected(void* rule);
 	void proxySelected(void* proxy);
+
+	//settings dialog
+	void setting_row_changed(std::string const& name);
+	void default_entry_predefined_toggeled();
+	void default_entry_saved_toggeled();
+	void default_entry_changed();
+	void showMenu_toggled();
+	void osProber_toggled();
+	void timeout_changed();
+	void kernelparams_changed();
+	void generateRecovery_toggled();
+	void useCustomResolution_toggled();
+	void resolution_changed();
+	void colorChange_requested();
+	void backgroundChange_requested();
+	void backgroundCopy_requested();
+	void backgroundRemove_requested();
 };
 
 #endif

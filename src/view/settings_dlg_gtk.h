@@ -1,8 +1,6 @@
 #ifndef SETTING_DLG_GTK_INCLUDED
 #define SETTING_DLG_GTK_INCLUDED
 #include <gtkmm.h>
-#include "../model/settings_mng_ds.h"
-#include "../model/fbResolutionsGetter.h"
 #include "../interface/settings_dlg.h"
 #include <libintl.h>
 #include "../model/grubEnv.h"
@@ -45,11 +43,9 @@ class GrubSettingsDlgGtk : public Gtk::Dialog, public GrubSettingsDlg {
 	};
 	AdvancedSettingsTreeModel asTreeModel;
 	Glib::RefPtr<Gtk::ListStore> refAsListStore;
-	GrubEnv& env;
 	bool event_lock;
 	EventListenerView_iface* eventListener;
 	
-	SettingsManagerDataStore* dataStore;
 	Gtk::Notebook tabbox;
 	Gtk::ScrolledWindow scrAllEntries;
 	Gtk::TreeView tvAllEntries;
@@ -145,18 +141,15 @@ class GrubSettingsDlgGtk : public Gtk::Dialog, public GrubSettingsDlg {
 		bool isActive;
 		CustomOption(std::string name, std::string value, bool isActive);
 	};
-	GrubSettingsDlgGtk(SettingsManagerDataStore& dataStore, GrubEnv& env);
+	GrubSettingsDlgGtk();
 	void setEventListener(EventListenerView_iface& eventListener);
-	void show();
+	void show(bool burgMode);
 	ColorChooser& getColorChooser(ColorChooserType type);
 	void addEntryToDefaultEntryChooser(std::string const& entryTitle);
 	void clearDefaultEntryChooser();
 	void clearResolutionChooser();
 	void addResolution(std::string const& resolution);
-	void syncSettings();
 	Glib::ustring getSelectedDefaultGrubValue();
-	void updateDefaultSetting();
-	void updateCustomSetting(std::string const& name);
 	void addCustomOption(bool isActive, Glib::ustring const& name, Glib::ustring const& value);
 	void removeAllSettingRows();
 	CustomOption getCustomOption(Glib::ustring const& name);
@@ -168,29 +161,18 @@ class GrubSettingsDlgGtk : public Gtk::Dialog, public GrubSettingsDlg {
 	void setOsProberCheckboxState(bool isActive);
 	bool getOsProberCheckboxState();
 	void showHiddenMenuOsProberConflictMessage();
-	void updateShowMenuSetting();
-	void updateOsProberSetting();
 	void setTimeoutValue(int value);
 	int getTimeoutValue();
-	void updateTimeoutSetting();
 	void setKernelParams(Glib::ustring const& params);
 	Glib::ustring getKernelParams();
-	void updateKernalParams();
 	void setRecoveryCheckboxState(bool isActive);
 	bool getRecoveryCheckboxState();
-	void updateGenerateRecoverySetting();
 	void setResolutionCheckboxState(bool isActive);
 	bool getResolutionCheckboxState();
-	void updateUseCustomResolution();
 	void setResolution(Glib::ustring const& resolution);
 	Glib::ustring getResolution();
-	void updateCustomResolution();
 	void setBackgroundImagePreviewPath(Glib::ustring const& menuPicturePath, bool isInGrubDir);
-	void updateColorSettings();
 	Glib::ustring getBackgroundImagePath();
-	void updateBackgroundImage();
-	void copyBackgroundImageToGrubDirectory();
-	void removeBackgroundImage();
 };
 
 #endif

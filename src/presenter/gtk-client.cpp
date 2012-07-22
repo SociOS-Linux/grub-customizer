@@ -62,7 +62,8 @@ void GtkClient::showSettingsDlg(){
 		this->settingsDlg->addEntryToDefaultEntryChooser(*iter);
 
 
-	this->settingsDlg->show();
+	this->syncSettings();
+	this->settingsDlg->show(env.burgMode);
 	this->settingsDlg->run();
 	this->settingsDlg->hide();
 	
@@ -350,20 +351,17 @@ bool GtkClient::quit(){
 	return true;
 }
 
-//MOVE TO PRESENTER
 void GtkClient::syncProxyState(void* proxy){
 	((Proxy*)proxy)->set_isExecutable(this->listCfgDlg->getProxyState(proxy));
 	this->modificationsUnsaved = true;
 }
 
-//MOVE TO PRESENTER
 void GtkClient::syncRuleState(Rule* entry){
 	entry->isVisible = this->listCfgDlg->getRuleState(entry);
 	this->modificationsUnsaved = true;
 	this->updateScriptEntry(this->grublistCfg->proxies.getProxyByRule(entry));
 }
 
-//MOVE TO PRESENTER
 void GtkClient::syncRuleName(Rule* entry){
 	Glib::ustring oldName = entry->outputName;
 	Glib::ustring newName = this->listCfgDlg->getRuleName(entry);
@@ -378,7 +376,6 @@ void GtkClient::syncRuleName(Rule* entry){
 	this->modificationsUnsaved = true;
 }
 
-//MOVE TO PRESENTER
 void GtkClient::updateScriptEntry(Proxy* proxy){
 	//adding (custom) if this script is modified
 	if (proxy->dataSource){ //checking the Datasource before Accessing it
@@ -390,7 +387,6 @@ void GtkClient::updateScriptEntry(Proxy* proxy){
 	}
 }
 
-//MOVE TO PRESENTER
 void GtkClient::swapRules(Rule* a, Rule* b){
 	//swap the contents behind the pointers
 	grublistCfg->swapRules(a, b);
@@ -399,7 +395,6 @@ void GtkClient::swapRules(Rule* a, Rule* b){
 	this->modificationsUnsaved = true;
 }
 
-//MOVE TO PRESENTER
 void GtkClient::swapProxies(Proxy* a, Proxy* b){
 	grublistCfg->swapProxies(a,b);
 	this->listCfgDlg->swapProxies(a,b);
@@ -407,7 +402,6 @@ void GtkClient::swapProxies(Proxy* a, Proxy* b){
 }
 
 
-//MOVE TO EVENT_LISTENER
 void GtkClient::showRuleInfo(Rule* rule){
 	if (rule && rule->dataSource)
 		this->listCfgDlg->setDefaultTitleStatusText(rule->getEntryName());
@@ -416,7 +410,6 @@ void GtkClient::showRuleInfo(Rule* rule){
 	this->listCfgDlg->updateButtonsState();
 }
 
-//MOVE TO EVENT_LISTENER
 void GtkClient::showProxyInfo(Proxy* proxy){
 	this->listCfgDlg->setStatusText("");
 	this->listCfgDlg->updateButtonsState();
@@ -431,4 +424,172 @@ void GtkClient::updateSettingsDlgResolutionList_dispatched(){
 	this->settingsDlg->clearResolutionChooser();
 	for (std::list<std::string>::const_iterator iter = data.begin(); iter != data.end(); iter++)
 		this->settingsDlg->addResolution(*iter);
+}
+
+void GtkClient::syncSettings(){
+	this->settingsDlg->removeAllSettingRows();
+	for (std::list<SettingRow>::iterator iter = this->settings->begin(); iter != this->settings->end(); this->settings->iter_to_next_setting(iter)){
+		this->settingsDlg->addCustomOption(iter->isActive, iter->name, iter->value);
+	}
+	std::string defEntry = this->settings->getValue("GRUB_DEFAULT");
+	if (defEntry == "saved"){
+		this->settingsDlg->setActiveDefEntryOption(GrubSettingsDlgGtk::DEF_ENTRY_SAVED);
+	}
+	else {
+		this->settingsDlg->setActiveDefEntryOption(GrubSettingsDlgGtk::DEF_ENTRY_PREDEFINED);
+		this->settingsDlg->setDefEntry(defEntry);
+	}
+
+	this->settingsDlg->setShowMenuCheckboxState(!this->settings->isActive("GRUB_HIDDEN_TIMEOUT", true));
+	this->settingsDlg->setOsProberCheckboxState(!this->settings->isActive("GRUB_DISABLE_OS_PROBER", true));
+
+	std::string timeoutStr;
+	if (this->settingsDlg->getShowMenuCheckboxState())
+		timeoutStr = this->settings->getValue("GRUB_TIMEOUT");
+	else
+		timeoutStr = this->settings->getValue("GRUB_HIDDEN_TIMEOUT");
+	std::istringstream in(timeoutStr);
+	int timeout;
+	in >> timeout;
+	this->settingsDlg->setTimeoutValue(timeout);
+
+	this->settingsDlg->setKernelParams(this->settings->getValue("GRUB_CMDLINE_LINUX_DEFAULT"));
+	this->settingsDlg->setRecoveryCheckboxState(!this->settings->isActive("GRUB_DISABLE_LINUX_RECOVERY", true));
+
+	this->settingsDlg->setResolutionCheckboxState(this->settings->isActive("GRUB_GFXMODE", true));
+	this->settingsDlg->setResolution(this->settings->getValue("GRUB_GFXMODE"));
+
+	Glib::ustring nColor = this->settings->getValue("GRUB_COLOR_NORMAL");
+	Glib::ustring hColor = this->settings->getValue("GRUB_COLOR_HIGHLIGHT");
+	if (nColor != ""){
+		this->settingsDlg->getColorChooser(GrubSettingsDlgGtk::COLOR_CHOOSER_DEFAULT_FONT).selectColor(nColor.substr(0, nColor.find('/')));
+		this->settingsDlg->getColorChooser(GrubSettingsDlgGtk::COLOR_CHOOSER_DEFAULT_BACKGROUND).selectColor(nColor.substr(nColor.find('/')+1));
+	}
+	else {
+		//default grub menu colors
+		this->settingsDlg->getColorChooser(GrubSettingsDlgGtk::COLOR_CHOOSER_DEFAULT_FONT).selectColor("white");
+		this->settingsDlg->getColorChooser(GrubSettingsDlgGtk::COLOR_CHOOSER_DEFAULT_BACKGROUND).selectColor("black");
+	}
+	if (hColor != ""){
+		this->settingsDlg->getColorChooser(GrubSettingsDlgGtk::COLOR_CHOOSER_HIGHLIGHT_FONT).selectColor(hColor.substr(0, hColor.find('/')));
+		this->settingsDlg->getColorChooser(GrubSettingsDlgGtk::COLOR_CHOOSER_HIGHLIGHT_BACKGROUND).selectColor(hColor.substr(hColor.find('/')+1));
+	}
+	else {
+		//default grub menu colors
+		this->settingsDlg->getColorChooser(GrubSettingsDlgGtk::COLOR_CHOOSER_HIGHLIGHT_FONT).selectColor("black");
+		this->settingsDlg->getColorChooser(GrubSettingsDlgGtk::COLOR_CHOOSER_HIGHLIGHT_BACKGROUND).selectColor("light-gray");
+	}
+
+	std::string menuPicturePath = this->settings->getValue("GRUB_MENU_PICTURE");
+	bool menuPicIsInGrubDir = false;
+	if (menuPicturePath != "" && menuPicturePath[0] != '/'){
+		menuPicturePath = env.output_config_dir + "/" + menuPicturePath;
+		menuPicIsInGrubDir = true;
+	}
+
+	if (this->settings->isActive("GRUB_MENU_PICTURE") && menuPicturePath != ""){
+		this->settingsDlg->setBackgroundImagePreviewPath(menuPicturePath, menuPicIsInGrubDir);
+	}
+	else {
+		this->settingsDlg->setBackgroundImagePreviewPath("", menuPicIsInGrubDir);
+	}
+}
+
+void GtkClient::updateDefaultSetting(){
+	if (this->settingsDlg->getActiveDefEntryOption() == GrubSettingsDlgGtk::DEF_ENTRY_SAVED){
+		this->settings->setValue("GRUB_DEFAULT", "saved");
+		this->settings->setValue("GRUB_SAVEDEFAULT", "true");
+		this->settings->setIsActive("GRUB_SAVEDEFAULT", true);
+	}
+	else {
+		this->settings->setValue("GRUB_DEFAULT", this->settingsDlg->getSelectedDefaultGrubValue());
+		this->settings->setValue("GRUB_SAVEDEFAULT", "false");
+	}
+	this->syncSettings();
+}
+
+void GtkClient::updateCustomSetting(std::string const& name){
+	GrubSettingsDlgGtk::CustomOption c = this->settingsDlg->getCustomOption(name);
+	this->settings->setValue(c.name, c.value);
+	this->settings->setIsActive(c.name, c.isActive);
+	this->syncSettings();
+}
+
+void GtkClient::updateShowMenuSetting(){
+	this->settings->setIsActive("GRUB_HIDDEN_TIMEOUT", !this->settingsDlg->getShowMenuCheckboxState());
+	if (!this->settingsDlg->getShowMenuCheckboxState() && this->settingsDlg->getOsProberCheckboxState()){
+		this->settingsDlg->showHiddenMenuOsProberConflictMessage();
+	}
+	this->syncSettings();
+}
+
+void GtkClient::updateOsProberSetting(){
+	this->settings->setValue("GRUB_DISABLE_OS_PROBER", this->settingsDlg->getOsProberCheckboxState() ? "false" : "true");
+	this->settings->setIsActive("GRUB_DISABLE_OS_PROBER", !this->settingsDlg->getOsProberCheckboxState());
+	this->syncSettings();
+}
+
+void GtkClient::updateKernalParams(){
+	this->settings->setValue("GRUB_CMDLINE_LINUX_DEFAULT", this->settingsDlg->getKernelParams());
+	this->syncSettings();
+}
+
+void GtkClient::updateUseCustomResolution(){
+	this->settings->setIsActive("GRUB_GFXMODE", this->settingsDlg->getResolutionCheckboxState());
+	this->syncSettings();
+}
+
+void GtkClient::copyBackgroundImageToGrubDirectory(){
+	Glib::RefPtr<Gio::File> file_src = Gio::File::create_for_path(this->settingsDlg->getBackgroundImagePath());
+	Glib::RefPtr<Gio::File> file_dest = Gio::File::create_for_path(env.output_config_dir+"/"+file_src->get_basename());
+	file_src->copy(file_dest, Gio::FILE_COPY_OVERWRITE);
+
+	this->settings->setValue("GRUB_MENU_PICTURE", file_src->get_basename()); //The path isn't required when the image is in grub conf dir
+	this->syncSettings();
+}
+
+void GtkClient::updateBackgroundImage(){
+	this->settings->setValue("GRUB_MENU_PICTURE", this->settingsDlg->getBackgroundImagePath());
+	this->settings->setIsActive("GRUB_MENU_PICTURE", true);
+	this->settings->setIsExport("GRUB_MENU_PICTURE", true);
+	this->syncSettings();
+}
+
+void GtkClient::updateColorSettings(){
+	if (this->settingsDlg->getColorChooser(GrubSettingsDlgGtk::COLOR_CHOOSER_DEFAULT_FONT).getSelectedColor() != "" && this->settingsDlg->getColorChooser(GrubSettingsDlgGtk::COLOR_CHOOSER_DEFAULT_BACKGROUND).getSelectedColor() != ""){
+		this->settings->setValue("GRUB_COLOR_NORMAL", this->settingsDlg->getColorChooser(GrubSettingsDlgGtk::COLOR_CHOOSER_DEFAULT_FONT).getSelectedColor() + "/" + this->settingsDlg->getColorChooser(GrubSettingsDlgGtk::COLOR_CHOOSER_DEFAULT_BACKGROUND).getSelectedColor());
+		this->settings->setIsActive("GRUB_COLOR_NORMAL", true);
+		this->settings->setIsExport("GRUB_COLOR_NORMAL", true);
+	}
+	if (this->settingsDlg->getColorChooser(GrubSettingsDlgGtk::COLOR_CHOOSER_HIGHLIGHT_FONT).getSelectedColor() != "" && this->settingsDlg->getColorChooser(GrubSettingsDlgGtk::COLOR_CHOOSER_HIGHLIGHT_BACKGROUND).getSelectedColor() != ""){
+		this->settings->setValue("GRUB_COLOR_HIGHLIGHT", this->settingsDlg->getColorChooser(GrubSettingsDlgGtk::COLOR_CHOOSER_HIGHLIGHT_FONT).getSelectedColor() + "/" + this->settingsDlg->getColorChooser(GrubSettingsDlgGtk::COLOR_CHOOSER_HIGHLIGHT_BACKGROUND).getSelectedColor());
+		this->settings->setIsActive("GRUB_COLOR_HIGHLIGHT", true);
+		this->settings->setIsExport("GRUB_COLOR_HIGHLIGHT", true);
+	}
+	this->syncSettings();
+}
+
+void GtkClient::removeBackgroundImage(){
+	this->settings->setIsActive("GRUB_MENU_PICTURE", false);
+	this->syncSettings();
+}
+
+void GtkClient::updateTimeoutSetting(){
+	if (this->settingsDlg->getShowMenuCheckboxState()){
+		this->settings->setValue("GRUB_TIMEOUT", Glib::ustring::format(this->settingsDlg->getTimeoutValue()));
+	}
+	else {
+		this->settings->setValue("GRUB_HIDDEN_TIMEOUT", Glib::ustring::format(this->settingsDlg->getTimeoutValue()));
+	}
+	this->syncSettings();
+}
+
+void GtkClient::updateCustomResolution(){
+	this->settings->setValue("GRUB_GFXMODE", this->settingsDlg->getResolution());
+	this->syncSettings();
+}
+
+void GtkClient::updateGenerateRecoverySetting(){
+	this->settings->setIsActive("GRUB_DISABLE_LINUX_RECOVERY", !this->settingsDlg->getRecoveryCheckboxState());
+	this->syncSettings();
 }

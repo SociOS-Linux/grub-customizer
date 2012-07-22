@@ -99,8 +99,24 @@ public:
 	void showRuleInfo(Rule* rule);
 	void showProxyInfo(Proxy* proxy);
 
+	//settings dialog
 	void updateSettingsDlgResolutionList();
 	void updateSettingsDlgResolutionList_dispatched();
+
+	void syncSettings();
+	void updateDefaultSetting();
+	void updateCustomSetting(std::string const& name);
+	void updateShowMenuSetting();
+	void updateOsProberSetting();
+	void updateTimeoutSetting();
+	void updateKernalParams();
+	void updateGenerateRecoverySetting();
+	void updateCustomResolution();
+	void updateColorSettings();
+	void updateBackgroundImage();
+	void updateUseCustomResolution();
+	void copyBackgroundImageToGrubDirectory();
+	void removeBackgroundImage();
 };
 
 #endif

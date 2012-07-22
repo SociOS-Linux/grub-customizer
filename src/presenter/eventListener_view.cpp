@@ -80,3 +80,49 @@ void EventListenerView::proxySelected(void* proxy){
 	presenter.showProxyInfo((Proxy*)proxy);
 }
 
+//settings dialog
+void EventListenerView::setting_row_changed(std::string const& name){
+	presenter.updateCustomSetting(name);
+}
+void EventListenerView::default_entry_predefined_toggeled(){
+	presenter.updateDefaultSetting();
+}
+void EventListenerView::default_entry_saved_toggeled(){
+	presenter.updateDefaultSetting();
+}
+void EventListenerView::default_entry_changed(){
+	presenter.updateDefaultSetting();
+}
+void EventListenerView::showMenu_toggled(){
+	presenter.updateShowMenuSetting();
+}
+void EventListenerView::osProber_toggled(){
+	presenter.updateOsProberSetting();
+}
+void EventListenerView::timeout_changed(){
+	presenter.updateTimeoutSetting();
+}
+void EventListenerView::kernelparams_changed(){
+	presenter.updateKernalParams();
+}
+void EventListenerView::generateRecovery_toggled(){
+	presenter.updateGenerateRecoverySetting();
+}
+void EventListenerView::useCustomResolution_toggled(){
+	presenter.updateUseCustomResolution();
+}
+void EventListenerView::resolution_changed(){
+	presenter.updateCustomResolution();
+}
+void EventListenerView::colorChange_requested(){
+	presenter.updateColorSettings();
+}
+void EventListenerView::backgroundChange_requested(){
+	presenter.updateBackgroundImage();
+}
+void EventListenerView::backgroundCopy_requested(){
+	presenter.copyBackgroundImageToGrubDirectory();
+}
+void EventListenerView::backgroundRemove_requested(){
+	presenter.removeBackgroundImage();
+}
