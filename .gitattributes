@@ -1,7 +1,6 @@
 * text=auto !eol
 /CMakeLists.txt -text
 /README -text
-/cmake_install.cmake -text
 /config.h.in -text
 debian/changelog -text
 debian/changelog_lucid -text
@@ -22,7 +21,6 @@ icons/64x64.png -text svneol=unset#unset
 my_cmake_scripts/FindPkgConfig.cmake -text
 src_dir/CMakeLists.txt -text
 src_dir/Makefile -text
-src_dir/cmake_install.cmake -text
 src_dir/deviceDataList.cpp -text
 src_dir/deviceDataList.h -text
 src_dir/entry.cpp -text

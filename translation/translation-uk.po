@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-11-21 12:13+0100\n"
-"PO-Revision-Date: 2010-11-06 11:24+0000\n"
-"Last-Translator: Daniel Richter <danielrichter2007@web.de>\n"
+"PO-Revision-Date: 2010-11-22 11:56+0000\n"
+"Last-Translator: Fedik <Unknown>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-11-21 23:48+0000\n"
+"X-Launchpad-Export-Date: 2010-11-22 21:40+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../src_dir/grubconfig.cpp:203 ../src_dir/grubconfig.cpp:218
@@ -59,6 +59,9 @@ msgid ""
 "files to the bootloaders data directory\n"
 "(if they don't already exist)."
 msgstr ""
+"Встановлення завантажувача до MBR \n"
+"та переміщення деяких файлів до\n"
+"його каталогу (якщо їх ще нема)."
 
 #: ../src_dir/grubconf_ui_gtk.cpp:21
 msgid "_Device: "
@@ -91,7 +94,7 @@ msgstr "Перемістити вниз обраний пункт чи сцен�
 
 #: ../src_dir/grubconf_ui_gtk.cpp:104
 msgid "reload configuration"
-msgstr ""
+msgstr "перезавантажити конфігурацію"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:107
 msgid "Edit grub preferences"
@@ -115,7 +118,7 @@ msgstr "Встановити до MBR"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:219
 msgid "BURG Mode"
-msgstr ""
+msgstr "Режим BURG"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:240
 msgid "No Bootloader found"
@@ -216,7 +219,7 @@ msgstr "_Зберегти та Вийти"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:690
 msgid "AND: your modifications are still unsaved, update will save them too!"
-msgstr ""
+msgstr "ТАКОЖ: Ваші зміни все ще не збережені, оновлення збереже їх теж!"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:729
 msgid "installing the bootloader…"
@@ -332,103 +335,103 @@ msgstr "Неможливо відмонтувати обраний розділ"
 
 #: ../src_dir/settings_dlg_gtk.cpp:47
 msgid "white"
-msgstr ""
+msgstr "білий"
 
 #: ../src_dir/settings_dlg_gtk.cpp:48
 msgid "yellow"
-msgstr ""
+msgstr "жовтий"
 
 #: ../src_dir/settings_dlg_gtk.cpp:49
 msgid "light-cyan"
-msgstr ""
+msgstr "світло-блакитний"
 
 #: ../src_dir/settings_dlg_gtk.cpp:50
 msgid "cyan"
-msgstr ""
+msgstr "блакитний"
 
 #: ../src_dir/settings_dlg_gtk.cpp:51
 msgid "light-blue"
-msgstr ""
+msgstr "світло-синій"
 
 #: ../src_dir/settings_dlg_gtk.cpp:52
 msgid "blue"
-msgstr ""
+msgstr "синій"
 
 #: ../src_dir/settings_dlg_gtk.cpp:53
 msgid "light-green"
-msgstr ""
+msgstr "світло-зелений"
 
 #: ../src_dir/settings_dlg_gtk.cpp:54
 msgid "green"
-msgstr ""
+msgstr "зелений"
 
 #: ../src_dir/settings_dlg_gtk.cpp:55
 msgid "light-magenta"
-msgstr ""
+msgstr "світло-пурпурний"
 
 #: ../src_dir/settings_dlg_gtk.cpp:56
 msgid "magenta"
-msgstr ""
+msgstr "пурпурний"
 
 #: ../src_dir/settings_dlg_gtk.cpp:57
 msgid "light-red"
-msgstr ""
+msgstr "світло-червоний"
 
 #: ../src_dir/settings_dlg_gtk.cpp:58
 msgid "red"
-msgstr ""
+msgstr "червоний"
 
 #: ../src_dir/settings_dlg_gtk.cpp:59
 msgid "brown"
-msgstr ""
+msgstr "коричневий"
 
 #: ../src_dir/settings_dlg_gtk.cpp:60
 msgid "light-gray"
-msgstr ""
+msgstr "світло-сірий"
 
 #: ../src_dir/settings_dlg_gtk.cpp:61
 msgid "dark-gray"
-msgstr ""
+msgstr "темно-сірий"
 
 #: ../src_dir/settings_dlg_gtk.cpp:62
 msgid "black"
-msgstr ""
+msgstr "чорний"
 
 #: ../src_dir/settings_dlg_gtk.cpp:68
 msgid "pre_defined: "
-msgstr ""
+msgstr "попередньо _визначений: "
 
 #: ../src_dir/settings_dlg_gtk.cpp:68
 msgid "previously _booted entry"
-msgstr ""
+msgstr "попередній запис _завантаження"
 
 #: ../src_dir/settings_dlg_gtk.cpp:69
 msgid "default entry"
-msgstr ""
+msgstr "запис за замовчуванням"
 
 #: ../src_dir/settings_dlg_gtk.cpp:69
 msgid "visibility"
-msgstr ""
+msgstr "відображення"
 
 #: ../src_dir/settings_dlg_gtk.cpp:69
 msgid "show menu"
-msgstr ""
+msgstr "показувати меню"
 
 #: ../src_dir/settings_dlg_gtk.cpp:70
 msgid "Timeout"
-msgstr ""
+msgstr "Час затримки"
 
 #: ../src_dir/settings_dlg_gtk.cpp:70
 msgid "Seconds"
-msgstr ""
+msgstr "Секунди"
 
 #: ../src_dir/settings_dlg_gtk.cpp:70
 msgid "kernel parameters"
-msgstr ""
+msgstr "параметри ядра"
 
 #: ../src_dir/settings_dlg_gtk.cpp:71
 msgid "generate recovery entries"
-msgstr ""
+msgstr "генерувати запис відновлення системи"
 
 #: ../src_dir/settings_dlg_gtk.cpp:71
 msgid "look for other operating systems"
@@ -436,39 +439,39 @@ msgstr ""
 
 #: ../src_dir/settings_dlg_gtk.cpp:72
 msgid "custom resolution: "
-msgstr ""
+msgstr "власне розширення: "
 
 #: ../src_dir/settings_dlg_gtk.cpp:73
 msgid "font color"
-msgstr ""
+msgstr "колір шрифту"
 
 #: ../src_dir/settings_dlg_gtk.cpp:73
 msgid "background"
-msgstr ""
+msgstr "фон"
 
 #: ../src_dir/settings_dlg_gtk.cpp:74
 msgid "normal:"
-msgstr ""
+msgstr "нормально:"
 
 #: ../src_dir/settings_dlg_gtk.cpp:74
 msgid "highlight:"
-msgstr ""
+msgstr "підсвічено:"
 
 #: ../src_dir/settings_dlg_gtk.cpp:75
 msgid "menu colors"
-msgstr ""
+msgstr "кольори меню"
 
 #: ../src_dir/settings_dlg_gtk.cpp:75
 msgid "background image"
-msgstr ""
+msgstr "фонове зображення"
 
 #: ../src_dir/settings_dlg_gtk.cpp:76
 msgid "copy to grub directory"
-msgstr ""
+msgstr "копіювати до папки grub"
 
 #: ../src_dir/settings_dlg_gtk.cpp:76
 msgid "remove background"
-msgstr ""
+msgstr "видалити фон"
 
 #: ../src_dir/settings_dlg_gtk.cpp:77
 msgid ""
@@ -478,27 +481,27 @@ msgstr ""
 
 #: ../src_dir/settings_dlg_gtk.cpp:79
 msgid "settings"
-msgstr ""
+msgstr "налаштування"
 
 #: ../src_dir/settings_dlg_gtk.cpp:83
 msgid "_General"
-msgstr ""
+msgstr "_Загальне"
 
 #: ../src_dir/settings_dlg_gtk.cpp:84
 msgid "A_ppearance"
-msgstr ""
+msgstr "Зовнішній _вигляд"
 
 #: ../src_dir/settings_dlg_gtk.cpp:85
 msgid "_Advanced"
-msgstr ""
+msgstr "Д_одатково"
 
 #: ../src_dir/settings_dlg_gtk.cpp:93
 msgid "value"
-msgstr ""
+msgstr "значення"
 
 #: ../src_dir/settings_dlg_gtk.cpp:128
 msgid "Entry %1 (by position)"
-msgstr ""
+msgstr "Запис %1 (по позиції)"
 
 #: ../src_dir/settings_dlg_gtk.cpp:413
 msgid ""

@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-11-21 12:13+0100\n"
-"PO-Revision-Date: 2010-10-25 14:28+0000\n"
-"Last-Translator: Daniel Richter <danielrichter2007@web.de>\n"
+"PO-Revision-Date: 2010-11-22 11:19+0000\n"
+"Last-Translator: Michael Kotsarinis <Unknown>\n"
 "Language-Team: Greek <el@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-11-21 23:48+0000\n"
+"X-Launchpad-Export-Date: 2010-11-22 21:40+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../src_dir/grubconfig.cpp:203 ../src_dir/grubconfig.cpp:218
@@ -97,7 +97,7 @@ msgstr "Μετακινήστε κάτω την επιλεγμένη καταχώ
 
 #: ../src_dir/grubconf_ui_gtk.cpp:104
 msgid "reload configuration"
-msgstr ""
+msgstr "επαναφόρτωση διαμόρφωσης"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:107
 msgid "Edit grub preferences"
@@ -121,7 +121,7 @@ msgstr "Εγκατάσταση στο MBR"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:219
 msgid "BURG Mode"
-msgstr ""
+msgstr "Κατάσταση BURG"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:240
 msgid "No Bootloader found"
@@ -230,6 +230,8 @@ msgstr "_Αποθήκευση και έξοδος"
 #: ../src_dir/grubconf_ui_gtk.cpp:690
 msgid "AND: your modifications are still unsaved, update will save them too!"
 msgstr ""
+"AND: οι τροποποιήσεις σας δεν έχουν αποθηκευτεί ακόμη, η ενημέρωση θα "
+"αποθηκεύσει και αυτές!"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:729
 msgid "installing the bootloader…"
@@ -365,179 +367,184 @@ msgstr "Αποτυχία αποπροσάρτησης της επιλεγμέν�
 
 #: ../src_dir/settings_dlg_gtk.cpp:47
 msgid "white"
-msgstr ""
+msgstr "λευκό"
 
 #: ../src_dir/settings_dlg_gtk.cpp:48
 msgid "yellow"
-msgstr ""
+msgstr "κίτρινο"
 
 #: ../src_dir/settings_dlg_gtk.cpp:49
 msgid "light-cyan"
-msgstr ""
+msgstr "ανοιχτό κυανό"
 
 #: ../src_dir/settings_dlg_gtk.cpp:50
 msgid "cyan"
-msgstr ""
+msgstr "κυανό"
 
 #: ../src_dir/settings_dlg_gtk.cpp:51
 msgid "light-blue"
-msgstr ""
+msgstr "ανοιχτό μπλε"
 
 #: ../src_dir/settings_dlg_gtk.cpp:52
 msgid "blue"
-msgstr ""
+msgstr "μπλε"
 
 #: ../src_dir/settings_dlg_gtk.cpp:53
 msgid "light-green"
-msgstr ""
+msgstr "ανοιχτό πράσινο"
 
 #: ../src_dir/settings_dlg_gtk.cpp:54
 msgid "green"
-msgstr ""
+msgstr "πράσινο"
 
 #: ../src_dir/settings_dlg_gtk.cpp:55
 msgid "light-magenta"
-msgstr ""
+msgstr "ανοιχτό μωβ"
 
 #: ../src_dir/settings_dlg_gtk.cpp:56
 msgid "magenta"
-msgstr ""
+msgstr "μωβ"
 
 #: ../src_dir/settings_dlg_gtk.cpp:57
 msgid "light-red"
-msgstr ""
+msgstr "ανοιχτό κόκκινο"
 
 #: ../src_dir/settings_dlg_gtk.cpp:58
 msgid "red"
-msgstr ""
+msgstr "κόκκινο"
 
 #: ../src_dir/settings_dlg_gtk.cpp:59
 msgid "brown"
-msgstr ""
+msgstr "καφέ"
 
 #: ../src_dir/settings_dlg_gtk.cpp:60
 msgid "light-gray"
-msgstr ""
+msgstr "ανοιχτό γκρι"
 
 #: ../src_dir/settings_dlg_gtk.cpp:61
 msgid "dark-gray"
-msgstr ""
+msgstr "σκούρο γκρι"
 
 #: ../src_dir/settings_dlg_gtk.cpp:62
 msgid "black"
-msgstr ""
+msgstr "μαύρο"
 
 #: ../src_dir/settings_dlg_gtk.cpp:68
 msgid "pre_defined: "
-msgstr ""
+msgstr "προ_καθορισμένο: "
 
 #: ../src_dir/settings_dlg_gtk.cpp:68
 msgid "previously _booted entry"
-msgstr ""
+msgstr "καταχώρηση _προηγούμενης εκκίνησης συστήματος"
 
 #: ../src_dir/settings_dlg_gtk.cpp:69
 msgid "default entry"
-msgstr ""
+msgstr "προεπιλεγμένη καταχώρηση"
 
 #: ../src_dir/settings_dlg_gtk.cpp:69
 msgid "visibility"
-msgstr ""
+msgstr "ορατότητα"
 
 #: ../src_dir/settings_dlg_gtk.cpp:69
 msgid "show menu"
-msgstr ""
+msgstr "εμφάνιση μενού"
 
 #: ../src_dir/settings_dlg_gtk.cpp:70
 msgid "Timeout"
-msgstr ""
+msgstr "Λήξη χρονικού ορίου"
 
 #: ../src_dir/settings_dlg_gtk.cpp:70
 msgid "Seconds"
-msgstr ""
+msgstr "Δευτερόλεπτα"
 
 #: ../src_dir/settings_dlg_gtk.cpp:70
 msgid "kernel parameters"
-msgstr ""
+msgstr "παράμετροι πυρήνα"
 
 #: ../src_dir/settings_dlg_gtk.cpp:71
 msgid "generate recovery entries"
-msgstr ""
+msgstr "δημιουργία καταχωρήσεων επαναφοράς"
 
 #: ../src_dir/settings_dlg_gtk.cpp:71
 msgid "look for other operating systems"
-msgstr ""
+msgstr "έρευνα για άλλα λειτουργικά συστήματα"
 
 #: ../src_dir/settings_dlg_gtk.cpp:72
 msgid "custom resolution: "
-msgstr ""
+msgstr "προσαρμοσμένη ανάλυση: "
 
 #: ../src_dir/settings_dlg_gtk.cpp:73
 msgid "font color"
-msgstr ""
+msgstr "χρώμα γραμματοσειράς"
 
 #: ../src_dir/settings_dlg_gtk.cpp:73
 msgid "background"
-msgstr ""
+msgstr "φόντο"
 
 #: ../src_dir/settings_dlg_gtk.cpp:74
 msgid "normal:"
-msgstr ""
+msgstr "κανονικό:"
 
 #: ../src_dir/settings_dlg_gtk.cpp:74
 msgid "highlight:"
-msgstr ""
+msgstr "επισήμανση:"
 
 #: ../src_dir/settings_dlg_gtk.cpp:75
 msgid "menu colors"
-msgstr ""
+msgstr "χρώματα μενού"
 
 #: ../src_dir/settings_dlg_gtk.cpp:75
 msgid "background image"
-msgstr ""
+msgstr "εικόνα παρασκηνίου"
 
 #: ../src_dir/settings_dlg_gtk.cpp:76
 msgid "copy to grub directory"
-msgstr ""
+msgstr "αντιγραφή στον κατάλογο του grub"
 
 #: ../src_dir/settings_dlg_gtk.cpp:76
 msgid "remove background"
-msgstr ""
+msgstr "αφαίρεση παρασκηνίου"
 
 #: ../src_dir/settings_dlg_gtk.cpp:77
 msgid ""
 "To get the colors above working,\n"
 "you have to select a background image!"
 msgstr ""
+"Για να δουλέψουν τα παραπάνω χρώματα,\n"
+"πρέπει να επιλέξετε μια εικόνα παρασκηνίου!"
 
 #: ../src_dir/settings_dlg_gtk.cpp:79
 msgid "settings"
-msgstr ""
+msgstr "ρυθμίσεις"
 
 #: ../src_dir/settings_dlg_gtk.cpp:83
 msgid "_General"
-msgstr ""
+msgstr "_Γενικά"
 
 #: ../src_dir/settings_dlg_gtk.cpp:84
 msgid "A_ppearance"
-msgstr ""
+msgstr "Ε_μφάνιση"
 
 #: ../src_dir/settings_dlg_gtk.cpp:85
 msgid "_Advanced"
-msgstr ""
+msgstr "Για προ_χωρημένους"
 
 #: ../src_dir/settings_dlg_gtk.cpp:93
 msgid "value"
-msgstr ""
+msgstr "τιμή"
 
 #: ../src_dir/settings_dlg_gtk.cpp:128
 msgid "Entry %1 (by position)"
-msgstr ""
+msgstr "Καταχώρηση %1 (ως προς τη θέση)"
 
 #: ../src_dir/settings_dlg_gtk.cpp:413
 msgid ""
 "This option doesn't work when the \"os-prober\" script finds other operating "
 "systems. Disable \"%1\" if you don't need to boot other operating systems."
 msgstr ""
+"Αυτή η επιλογή δεν δουλεύει όταν το σενάριο ενεργειών (script) \"os-prober\" "
+"βρίσκει άλλα λειτουργικά συστήματα. Απενεργοποιήστε το \"%1\" αν δεν "
+"χρειάζεται να εκκινείτε με άλλα λειτουργικά συστήματα."
 
 #~ msgid "reload configuration (same effect as an application restart)"
 #~ msgstr "επαναφόρτωση διαμόρφωσης (ίδιο αποτέλεσμα με επανεκκίνηση εφαρμογής)"
