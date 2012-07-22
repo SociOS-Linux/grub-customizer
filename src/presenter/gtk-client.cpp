@@ -517,6 +517,7 @@ bool GtkClient::quit(){
 
 void GtkClient::syncProxyState(void* proxy){
 	((Proxy*)proxy)->set_isExecutable(this->listCfgDlg->getProxyState(proxy));
+	this->listCfgDlg->setProxyState(proxy, this->listCfgDlg->getProxyState(proxy));
 	this->modificationsUnsaved = true;
 }
 

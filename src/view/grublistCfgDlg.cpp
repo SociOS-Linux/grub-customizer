@@ -196,6 +196,7 @@ void GrublistCfgDlg::appendScript(Glib::ustring const& name, bool is_active, voi
 	(*row)[tvConfList.treeModel.relatedProxy] = (void*)proxyPtr;
 	(*row)[tvConfList.treeModel.is_other_entries_marker] = false;
 	(*row)[tvConfList.treeModel.is_editable] = false;
+	(*row)[tvConfList.treeModel.is_sensitive] = true;
 }
 
 void GrublistCfgDlg::appendEntry(Glib::ustring const& name, bool is_active, void* entryPtr, bool editable){
@@ -207,6 +208,7 @@ void GrublistCfgDlg::appendEntry(Glib::ustring const& name, bool is_active, void
 	(*entryRow)[tvConfList.treeModel.relatedRule] = (void*)entryPtr;
 	(*entryRow)[tvConfList.treeModel.relatedProxy] = (void*)(*lastScriptIter)[tvConfList.treeModel.relatedProxy];
 	(*entryRow)[tvConfList.treeModel.is_editable] = editable;
+	(*entryRow)[tvConfList.treeModel.is_sensitive] = (bool)(*entryRow->parent())[tvConfList.treeModel.active];
 	
 	tvConfList.expand_all();
 }
@@ -369,6 +371,15 @@ void GrublistCfgDlg::setRuleState(void* rule, bool newState){
 bool GrublistCfgDlg::getProxyState(void* proxy){
 	Gtk::TreeModel::iterator iter = this->getIterByProxyPtr(proxy);
 	return (*iter)[tvConfList.treeModel.active];
+}
+
+void GrublistCfgDlg::setProxyState(void* proxy, bool isActive){
+	Gtk::TreeModel::iterator iter = this->getIterByProxyPtr(proxy);
+	this->setLockState(~0);
+	(*iter)[tvConfList.treeModel.active] = isActive;
+	for (Gtk::TreeModel::iterator rule_iter = iter->children().begin(); rule_iter != iter->children().end(); rule_iter++)
+		(*rule_iter)[tvConfList.treeModel.is_sensitive] = isActive;
+	this->setLockState(0);
 }
 
 
@@ -581,6 +592,7 @@ GrubConfListing::GrubConfListing(){
 	Gtk::TreeViewColumn* pColumn = this->get_column(1);
 	Gtk::CellRendererText* pRenderer = static_cast<Gtk::CellRendererText*>(pColumn->get_first_cell_renderer());
 	pColumn->add_attribute(pRenderer->property_editable(), treeModel.is_editable);
+	pColumn->add_attribute(pRenderer->property_sensitive(), treeModel.is_sensitive);
 }
 
 GrubConfListing::TreeModel::TreeModel(){
@@ -590,4 +602,5 @@ GrubConfListing::TreeModel::TreeModel(){
 	this->add(relatedProxy);
 	this->add(is_other_entries_marker);
 	this->add(is_editable);
+	this->add(is_sensitive);
 }

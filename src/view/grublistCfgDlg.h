@@ -17,6 +17,7 @@ public:
 		Gtk::TreeModelColumn<void*> relatedProxy;
 		Gtk::TreeModelColumn<bool> is_other_entries_marker;
 		Gtk::TreeModelColumn<bool> is_editable;
+		Gtk::TreeModelColumn<bool> is_sensitive;
 		TreeModel();
 	};
 	TreeModel treeModel;
@@ -107,6 +108,7 @@ public:
 	bool getRuleState(void* rule);
 	void setRuleState(void* rule, bool newState);
 	bool getProxyState(void* proxy);
+	void setProxyState(void* proxy, bool isActive);
 
 private:
 	//event handlers
