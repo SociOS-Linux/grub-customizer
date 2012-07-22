@@ -1,4 +1,4 @@
-grub-customizer (1.6.4-0ubuntu1~ppa1l) lucid; urgency=low
+grub-customizer (1.6.4-0ubuntu1~ppa2l) lucid; urgency=low
 
    * bug #661304 fixed (multiple scripts using the same basename will not be overwritten anymore)
    * (new entries) will be displayed on uncustomized scripts too (the old behaviour was to fuzzy)
@@ -11,5 +11,5 @@ grub-customizer (1.6.4-0ubuntu1~ppa1l) lucid; urgency=low
    * 1.6.2: translators added to the about dialog
    * 1.6.3, 1.6.4: translations updated
 
- -- Daniel Richter <danielrichter2007@web.de>  Tue, 16 Nov 2010 20:22:00 +0200
+ -- Daniel Richter <danielrichter2007@web.de>  Tue, 16 Nov 2010 21:22:00 +0200
 

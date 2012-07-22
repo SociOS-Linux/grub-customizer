@@ -68,6 +68,7 @@ translation/translation-el.mo -text svneol=unset#unset
 translation/translation-el.po -text
 translation/translation-es.mo -text svneol=unset#unset
 translation/translation-es.po -text
+translation/translation-fr.mo -text svneol=unset#unset
 translation/translation-fr.po -text
 translation/translation-gl.mo -text svneol=unset#unset
 translation/translation-gl.po -text
