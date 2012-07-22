@@ -8,26 +8,26 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-11-22 19:34+0100\n"
-"PO-Revision-Date: 2011-12-28 09:12+0000\n"
+"POT-Creation-Date: 2011-12-23 17:05+0100\n"
+"PO-Revision-Date: 2011-12-28 21:05+0000\n"
 "Last-Translator: Timo Seppola <Unknown>\n"
 "Language-Team: Finnish <fin@ x x x x.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-28 17:08+0000\n"
-"X-Generator: Launchpad (build 14560)\n"
+"X-Launchpad-Export-Date: 2012-01-31 23:00+0000\n"
+"X-Generator: Launchpad (build 14734)\n"
 
-#: ../src/presenter/grubCustomizer.cpp:439
+#: ../src/presenter/grubCustomizer.cpp:445
 msgid "No script found"
-msgstr "Ei skriptejä löydettävissä"
+msgstr "Ei komentosarjaa löydettävissä"
 
 #: ../src/presenter/grubCustomizer.cpp:512
 msgid "loading configuration…"
 msgstr "ladataan asetukset..."
 
 #: ../src/presenter/grubCustomizer.cpp:526
-#: ../src/view/grublistCfgDlgGtk.cpp:359
+#: ../src/view/grublistCfgDlgGtk.cpp:380
 msgid " (custom)"
 msgstr " (yksilöinti)"
 
@@ -41,13 +41,15 @@ msgstr "päivitetään asetuksia"
 
 #: ../src/presenter/grubCustomizer.cpp:571
 msgid "%1 not found. Is grub2 installed?"
-msgstr ""
+msgstr "%1 ei löydy. Onko grub2 asennettu?"
 
 #: ../src/presenter/grubCustomizer.cpp:581
 msgid ""
 "%1 couldn't be executed successfully. error message:\n"
 " %2"
 msgstr ""
+"%1 ei voitu suorittaa onnistuneesti. Virheviesti:\n"
+"%2"
 
 #: ../src/presenter/grubCustomizer.cpp:638
 msgid "Name the Entry"
@@ -61,7 +63,7 @@ msgstr "En voi siirtää käynnistysriviä (entry)"
 msgid ""
 "Grub Customizer is a graphical interface to configure the grub2/burg settings"
 msgstr ""
-"Grub Customizer on graafinen liityntä, jolla ohjataan grub2/burg asetuksia"
+"Grub Customizer on graafinen liittymä, jolla säädetään grub2/burg asetuksia"
 
 #: ../src/view/grubInstallDlgGtk.cpp:22
 msgid ""
@@ -70,12 +72,12 @@ msgid ""
 "(if they don't already exist)."
 msgstr ""
 "Asenna boot-lataaja MBR:lle sekä asenna\n"
-" tiedostoja boot-lataajan data-hakemistoon\n"
+"tiedostoja boot-lataajan data-hakemistoon\n"
 "(jos ne eivät jo ole siellä)."
 
 #: ../src/view/grubInstallDlgGtk.cpp:23
 msgid "_Device: "
-msgstr "_Tallennusväline : "
+msgstr "_Laite: "
 
 #: ../src/view/grubInstallDlgGtk.cpp:33
 msgid "Install to MBR"
@@ -95,85 +97,93 @@ msgstr "asennetaan käynnistyslatainta.."
 
 #: ../src/view/grubInstallDlgGtk.cpp:76
 msgid "Please type a device string!"
-msgstr "Ole hyvä, kirjoita tallennusvälineen nimi!"
+msgstr "Ole hyvä, kirjoita laitteen nimi!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:28
+#: ../src/view/grublistCfgDlgGtk.cpp:29
 msgid "_File"
 msgstr "_Tiedosto"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:29
+#: ../src/view/grublistCfgDlgGtk.cpp:30
 msgid "_Edit"
-msgstr "_Éditoi"
-
-#: ../src/view/grublistCfgDlgGtk.cpp:29
-msgid "_View"
-msgstr "_Katso"
-
-#: ../src/view/grublistCfgDlgGtk.cpp:29
-msgid "_Help"
-msgstr "A_pua"
+msgstr "_Muokkaa"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:30
+msgid "_View"
+msgstr "_Näytä"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:30
+msgid "_Help"
+msgstr "_Ohje"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:31
 msgid "_Install to MBR …"
 msgstr "_Asenna MBR:lle"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:34
+#: ../src/view/grublistCfgDlgGtk.cpp:36
 msgid "BURG found!"
 msgstr "BURG löytyi!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:35
+#: ../src/view/grublistCfgDlgGtk.cpp:37
 msgid "No Bootloader found"
 msgstr "Käynnityslatainta ei löydy"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:63
-msgid "Add a script to your configuration"
-msgstr "Lisää käskyrivi (script) asetuksiin"
-
 #: ../src/view/grublistCfgDlgGtk.cpp:65
-msgid "Remove a script from your configuration"
-msgstr "Poista käsky (script) asetuksista"
+msgid "Add a script to your configuration"
+msgstr "Lisää komentosarja asetuksiin"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:71
-msgid "Move up the selected entry or script"
-msgstr "Siirrä ylös valittu käynnistysrivi (entry) tai käsky (script)"
+#: ../src/view/grublistCfgDlgGtk.cpp:67
+msgid "Remove a script from your configuration"
+msgstr "Poista komentosarja asetuksista"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:73
+msgid "Move up the selected entry or script"
+msgstr "Siirrä ylös valittu käynnistysrivi (entry) tai komentosarja"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:75
 msgid "Move down the selected entry or script"
-msgstr "Siirrä alas valittu käynnistysrivi (entry) tai käsky (script)"
+msgstr "Siirrä alas valittu käynnistysrivi (entry) tai komentosarja"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:81
+msgid "remove this entry from the current submenu"
+msgstr "Poista tämä käynnistysrivi (entry) nykyisestä alavalikosta"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:84
+msgid "add this entry to a new submenu"
+msgstr "Lisää tämä käynnistysrivi (entry) uudeksi alavalikoksi"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:92
 msgid "reload configuration"
 msgstr "lataa uudelleen asetukset"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:84
+#: ../src/view/grublistCfgDlgGtk.cpp:95
 msgid "Edit grub preferences"
-msgstr "Editoi grub:in esiominaisuuksia"
+msgstr "Muokkaa grub:in esiominaisuuksia"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:113
+#: ../src/view/grublistCfgDlgGtk.cpp:126
 msgid "Select _partition …"
-msgstr "Valitse _partitio (osio)..."
+msgstr "Valitse _osio..."
 
-#: ../src/view/grublistCfgDlgGtk.cpp:120
+#: ../src/view/grublistCfgDlgGtk.cpp:133
 msgid "Do you want to configure BURG instead of grub2?"
 msgstr "Haluatko tehdä asetukset BURG:iin eikä grub2:een ?"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:127
+#: ../src/view/grublistCfgDlgGtk.cpp:140
 msgid "Do you want to select another root partition?"
-msgstr "Haluatko valita toisen juuri partition (root) ?"
+msgstr "Haluatko valita toisen juuri osion?"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:168
+#: ../src/view/grublistCfgDlgGtk.cpp:185
 msgid "BURG Mode"
 msgstr "BURG tilassa"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:172
+#: ../src/view/grublistCfgDlgGtk.cpp:189
 msgid "Save configuration and generate a new "
 msgstr "Tallenna asetukset ja luo uusi "
 
-#: ../src/view/grublistCfgDlgGtk.cpp:256
+#: ../src/view/grublistCfgDlgGtk.cpp:273
 msgid "Proxy binary not found!"
-msgstr "Binaarista Proxya ei löydy !"
+msgstr "Binääristä Proxya ei löydy !"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:257
+#: ../src/view/grublistCfgDlgGtk.cpp:274
 msgid ""
 "You will see all entries (uncustomized) when you run grub. This error accurs "
 "(in most cases), when you didn't install grub gustomizer currectly."
@@ -182,27 +192,27 @@ msgstr ""
 "Tämä virhe ilmenee (useinmiten), jos et ole asentanut grub customizer:ia "
 "oikein."
 
-#: ../src/view/grublistCfgDlgGtk.cpp:263
+#: ../src/view/grublistCfgDlgGtk.cpp:280
 msgid "(new Entries of %1)"
 msgstr "(Uudet käynnistysvaihtoehdot %1)"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:265
+#: ../src/view/grublistCfgDlgGtk.cpp:282
 msgid "(new Entries)"
 msgstr "(Uudet käynnistysvaihtoehdot)"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:270
+#: ../src/view/grublistCfgDlgGtk.cpp:287
 msgid "(script code)"
-msgstr ""
+msgstr "(komentosarja koodi)"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:494
+#: ../src/view/grublistCfgDlgGtk.cpp:518
 msgid "Default title: "
-msgstr "Valittu otsikko : "
+msgstr "Valittu otsikko: "
 
-#: ../src/view/grublistCfgDlgGtk.cpp:586
+#: ../src/view/grublistCfgDlgGtk.cpp:612
 msgid "The saved configuration is not up to date!"
-msgstr "Tallennettu asetus ei ole päivitetty !"
+msgstr "Tallennettu asetus ei ole päivitetty!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:587
+#: ../src/view/grublistCfgDlgGtk.cpp:613
 msgid ""
 "The generated configuration didn't equal to the saved configuration on "
 "startup. So what you see now may not be what you see when you restart your "
@@ -210,39 +220,39 @@ msgid ""
 msgstr ""
 "Tehty asetus ei ole samanlainen kuin tallennettu asetus käynnistyksessä. "
 "Joten se mitä näet nyt, ei ehkä ole samaa kuin mitä näet, kun käynnistät "
-"PC:n uudelleen. Korjaa tämä klikkaamalla 'päivitys' !"
+"PC:n uudelleen. Korjaa tämä klikkaamalla 'päivitys'!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:590
+#: ../src/view/grublistCfgDlgGtk.cpp:616
 msgid "_Quit without update"
 msgstr "_Lopeta ilman päivittämistä"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:593
+#: ../src/view/grublistCfgDlgGtk.cpp:619
 msgid "_Update & Quit"
 msgstr "_Päivitä ja lopeta"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:597
+#: ../src/view/grublistCfgDlgGtk.cpp:623
 msgid "Do you want to save your modifications?"
 msgstr "Haluatko tallentaa tekemäsi muutokset?"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:600
+#: ../src/view/grublistCfgDlgGtk.cpp:626
 msgid "_Quit without saving"
 msgstr "_Lopeta ilman tallentamista"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:603
+#: ../src/view/grublistCfgDlgGtk.cpp:629
 msgid "_Save & Quit"
 msgstr "_Tallenna ja lopeta"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:606
+#: ../src/view/grublistCfgDlgGtk.cpp:632
 msgid "AND: your modifications are still unsaved, update will save them too!"
 msgstr ""
 "JA: Muokkauksesi ovat vielä tallentamatta,nyt päivitys tallentaa nekin "
 "samalla!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:672 ../src/view/settingsDlgGtk.cpp:123
+#: ../src/view/grublistCfgDlgGtk.cpp:708 ../src/view/settingsDlgGtk.cpp:132
 msgid "is active"
 msgstr "on aktiivinen"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:673 ../src/view/settingsDlgGtk.cpp:124
+#: ../src/view/grublistCfgDlgGtk.cpp:709 ../src/view/settingsDlgGtk.cpp:133
 msgid "name"
 msgstr "nimi"
 
@@ -276,7 +286,7 @@ msgstr "tyyppi"
 
 #: ../src/view/partitionChooserGtk.cpp:50
 msgid "label"
-msgstr "etiketti"
+msgstr "nimike"
 
 #: ../src/view/partitionChooserGtk.cpp:82
 msgid "Grub Customizer: Partition chooser"
@@ -288,7 +298,7 @@ msgstr "Valitse ja asenna juuri-osio (root partition)"
 
 #: ../src/view/partitionChooserGtk.cpp:88
 msgid "Select required submountpoints"
-msgstr "Valitse tarvittavat alikiinnityspisteet(submountpoints)"
+msgstr "Valitse tarvittavat alikiinnityspisteet (submountpoints)"
 
 #: ../src/view/partitionChooserGtk.cpp:94
 msgid "Partition Chooser"
@@ -300,7 +310,7 @@ msgstr "Kiinnitys epäonnistui!"
 
 #: ../src/view/partitionChooserGtk.cpp:169
 msgid "umount failed!"
-msgstr "irroitus epäonnistui !"
+msgstr "irroitus epäonnistui!"
 
 #: ../src/view/partitionChooserGtk.cpp:170
 msgid "This seems not to be a root file system (no fstab found)"
@@ -323,8 +333,8 @@ msgid ""
 "to get the entry back!"
 msgstr ""
 "Valitsit lisävaihtoehdon, jolla valitaan jokin toinen osio.\n"
-"Huom: Os-prober ei ehkä löydä toimivaa käyttöjärjestelmää.Tällöin käynnistä "
-"Grub Customizer kohdejärjestelmästä käsin uudelleen\n"
+"Huom: Os-prober ei ehkä löydä toimivaa käyttöjärjestelmää. \n"
+"Tällöin käynnistä uudelleen Grub Customizer kohdejärjestelmästä käsin \n"
 "ja tallenna asetukset (tai käynnistä päivitä-grub/päivitä-borg)\n"
 "(update-grub/update-burg). Näin saat käynnistysvaihtoehdon käyttöösi."
 
@@ -357,7 +367,7 @@ msgstr ""
 
 #: ../src/view/scriptAddDlgGtk.cpp:23
 msgid "Script to insert:"
-msgstr "Lisää rivi (script):"
+msgstr "Lisää komentosarja:"
 
 #: ../src/view/scriptAddDlgGtk.cpp:25
 msgid "Preview:"
@@ -365,153 +375,149 @@ msgstr "Esikatselu:"
 
 #: ../src/view/scriptAddDlgGtk.cpp:27
 msgid "Add script"
-msgstr "Lisää rivi (script):"
+msgstr "Lisää komentosarja"
 
 #: ../src/view/scriptAddDlgGtk.cpp:43
 msgid "Entry"
 msgstr "Käynnistysrivi"
 
-#: ../src/view/settingsDlgGtk.cpp:65
+#: ../src/view/settingsDlgGtk.cpp:74
 msgid "white"
 msgstr "valkoinen"
 
-#: ../src/view/settingsDlgGtk.cpp:66
+#: ../src/view/settingsDlgGtk.cpp:75
 msgid "yellow"
 msgstr "keltainen"
 
-#: ../src/view/settingsDlgGtk.cpp:67
+#: ../src/view/settingsDlgGtk.cpp:76
 msgid "light-cyan"
 msgstr "vaalea syaani"
 
-#: ../src/view/settingsDlgGtk.cpp:68
+#: ../src/view/settingsDlgGtk.cpp:77
 msgid "cyan"
 msgstr "syaani"
 
-#: ../src/view/settingsDlgGtk.cpp:69
+#: ../src/view/settingsDlgGtk.cpp:78
 msgid "light-blue"
 msgstr "vaalean sininen"
 
-#: ../src/view/settingsDlgGtk.cpp:70
+#: ../src/view/settingsDlgGtk.cpp:79
 msgid "blue"
 msgstr "sininen"
 
-#: ../src/view/settingsDlgGtk.cpp:71
+#: ../src/view/settingsDlgGtk.cpp:80
 msgid "light-green"
 msgstr "vaalean vihreä"
 
-#: ../src/view/settingsDlgGtk.cpp:72
+#: ../src/view/settingsDlgGtk.cpp:81
 msgid "green"
 msgstr "vihreä"
 
-#: ../src/view/settingsDlgGtk.cpp:73
+#: ../src/view/settingsDlgGtk.cpp:82
 msgid "light-magenta"
 msgstr "vaalea magenta"
 
-#: ../src/view/settingsDlgGtk.cpp:74
+#: ../src/view/settingsDlgGtk.cpp:83
 msgid "magenta"
 msgstr "magenta"
 
-#: ../src/view/settingsDlgGtk.cpp:75
+#: ../src/view/settingsDlgGtk.cpp:84
 msgid "light-red"
 msgstr "vaalean punainen"
 
-#: ../src/view/settingsDlgGtk.cpp:76
+#: ../src/view/settingsDlgGtk.cpp:85
 msgid "red"
 msgstr "punainen"
 
-#: ../src/view/settingsDlgGtk.cpp:77
+#: ../src/view/settingsDlgGtk.cpp:86
 msgid "brown"
 msgstr "ruskea"
 
-#: ../src/view/settingsDlgGtk.cpp:78
+#: ../src/view/settingsDlgGtk.cpp:87
 msgid "light-gray"
 msgstr "vaalean harmaa"
 
-#: ../src/view/settingsDlgGtk.cpp:79
+#: ../src/view/settingsDlgGtk.cpp:88
 msgid "dark-gray"
 msgstr "vaalean harmaa"
 
-#: ../src/view/settingsDlgGtk.cpp:80
+#: ../src/view/settingsDlgGtk.cpp:89
 msgid "transparent"
 msgstr "läpinäkyvä"
 
-#: ../src/view/settingsDlgGtk.cpp:80
+#: ../src/view/settingsDlgGtk.cpp:89
 msgid "black"
 msgstr "musta"
 
-#: ../src/view/settingsDlgGtk.cpp:92
+#: ../src/view/settingsDlgGtk.cpp:101
 msgid "pre_defined: "
 msgstr "esi_valittu: "
 
-#: ../src/view/settingsDlgGtk.cpp:92
+#: ../src/view/settingsDlgGtk.cpp:101
 msgid "previously _booted entry"
 msgstr "aiemmin valittu _käynnistysrivi"
 
-#: ../src/view/settingsDlgGtk.cpp:93
+#: ../src/view/settingsDlgGtk.cpp:102
 msgid "default entry"
 msgstr "oletus käynnistysrivi"
 
-#: ../src/view/settingsDlgGtk.cpp:93
+#: ../src/view/settingsDlgGtk.cpp:102
 msgid "visibility"
 msgstr "näkyvyys"
 
-#: ../src/view/settingsDlgGtk.cpp:93
+#: ../src/view/settingsDlgGtk.cpp:102
 msgid "show menu"
-msgstr "näytä valikko (menu)"
+msgstr "näytä valikko"
 
-#: ../src/view/settingsDlgGtk.cpp:94
+#: ../src/view/settingsDlgGtk.cpp:103
 msgid "Timeout"
-msgstr "Aika loppu"
+msgstr "Aikaraja"
 
-#: ../src/view/settingsDlgGtk.cpp:94
+#: ../src/view/settingsDlgGtk.cpp:103
 msgid "Seconds"
-msgstr "Sekuntia"
+msgstr "Sekunnit"
 
-#: ../src/view/settingsDlgGtk.cpp:94
+#: ../src/view/settingsDlgGtk.cpp:103
 msgid "kernel parameters"
-msgstr "kernel määritykset (parameters)"
+msgstr "kernel määritykset"
 
-#: ../src/view/settingsDlgGtk.cpp:95
+#: ../src/view/settingsDlgGtk.cpp:104
 msgid "generate recovery entries"
 msgstr "luo toipumiseen käskyrivi"
 
-#: ../src/view/settingsDlgGtk.cpp:95
+#: ../src/view/settingsDlgGtk.cpp:104
 msgid "look for other operating systems"
 msgstr "Etsi toista käyttöjärjestelmää"
 
-#: ../src/view/settingsDlgGtk.cpp:96
+#: ../src/view/settingsDlgGtk.cpp:105
 msgid "custom resolution: "
 msgstr "säädä resoluutio: "
 
-#: ../src/view/settingsDlgGtk.cpp:97
+#: ../src/view/settingsDlgGtk.cpp:106
 msgid "font color"
-msgstr "merkistön väri"
+msgstr "merkkien väri"
 
-#: ../src/view/settingsDlgGtk.cpp:97
+#: ../src/view/settingsDlgGtk.cpp:106
 msgid "background"
 msgstr "taustaväri"
 
-#: ../src/view/settingsDlgGtk.cpp:98
+#: ../src/view/settingsDlgGtk.cpp:107
 msgid "normal:"
 msgstr "normaali:"
 
-#: ../src/view/settingsDlgGtk.cpp:98
+#: ../src/view/settingsDlgGtk.cpp:107
 msgid "highlight:"
 msgstr "korostettu:"
 
-#: ../src/view/settingsDlgGtk.cpp:99
+#: ../src/view/settingsDlgGtk.cpp:108
 msgid "menu colors"
 msgstr "valikon värit"
 
-#: ../src/view/settingsDlgGtk.cpp:99
+#: ../src/view/settingsDlgGtk.cpp:108
 msgid "background image"
 msgstr "taustakuva"
 
-#: ../src/view/settingsDlgGtk.cpp:100
-msgid "remove background"
-msgstr "poista taustakuva"
-
-#: ../src/view/settingsDlgGtk.cpp:101
+#: ../src/view/settingsDlgGtk.cpp:110
 msgid ""
 "To get the colors above working,\n"
 "you have to select a background image!"
@@ -519,35 +525,39 @@ msgstr ""
 "Saadaksesi yllä olevat värimääritykset toimimaan,\n"
 "sinun tulee valita taustakuva !"
 
-#: ../src/view/settingsDlgGtk.cpp:104
+#: ../src/view/settingsDlgGtk.cpp:113
 msgid "settings"
 msgstr "asetukset"
 
-#: ../src/view/settingsDlgGtk.cpp:108
+#: ../src/view/settingsDlgGtk.cpp:117
 msgid "_General"
-msgstr "_Yleiset"
+msgstr "_Yleistä"
 
-#: ../src/view/settingsDlgGtk.cpp:109
+#: ../src/view/settingsDlgGtk.cpp:118
 msgid "A_ppearance"
 msgstr "_Ulkonäkö"
 
-#: ../src/view/settingsDlgGtk.cpp:110
+#: ../src/view/settingsDlgGtk.cpp:119
 msgid "_Advanced"
-msgstr "_Erityiset"
+msgstr "_Lisäasetukset"
 
-#: ../src/view/settingsDlgGtk.cpp:125
+#: ../src/view/settingsDlgGtk.cpp:134
 msgid "value"
 msgstr "arvo"
 
-#: ../src/view/settingsDlgGtk.cpp:295
+#: ../src/view/settingsDlgGtk.cpp:248
+msgid "remove background"
+msgstr "poista tausta"
+
+#: ../src/view/settingsDlgGtk.cpp:305
 msgid "Entry %1 (by position)"
 msgstr "Käynnistysvalinta %1 (sijainnin perusteella)"
 
-#: ../src/view/settingsDlgGtk.cpp:520
+#: ../src/view/settingsDlgGtk.cpp:585
 msgid ""
 "This option doesn't work when the \"os-prober\" script finds other operating "
 "systems. Disable \"%1\" if you don't need to boot other operating systems."
 msgstr ""
-"Tämä vaihtoehto ei toimi, jos \"os-prober\" käskyrivi löytää "
-"toisenkäyttöjärjestelmän. Kytke pois \"%1\" jos et tarvitse muita "
+"Tämä vaihtoehto ei toimi, jos \"os-prober\" komentosarja löytää toisen "
+"käyttöjärjestelmän. Kytke pois \"%1\", jos et tarvitse muita "
 "käyttöjärjestelmiä."
