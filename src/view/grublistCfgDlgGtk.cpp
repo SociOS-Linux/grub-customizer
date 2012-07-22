@@ -344,20 +344,25 @@ void GrublistCfgDlgGtk::signal_show_root_selector(){
 
 
 void GrublistCfgDlgGtk::swapProxies(void* a, void* b){
+	this->setLockState(~0);
 	tvConfList.refTreeStore->iter_swap(getIterByProxyPtr(a), getIterByProxyPtr(b));
+	this->setLockState(0);
 	
 	update_move_buttons();
 }
 
 void GrublistCfgDlgGtk::swapRules(void* a, void* b){
+	this->setLockState(~0);
 	Gtk::TreeModel::iterator iter1 = getIterByRulePtr(a);
 	Gtk::TreeModel::iterator iter2 = getIterByRulePtr(b);
 	
-	tvConfList.refTreeStore->iter_swap(iter1, iter2);
 	//swap the assigned pointers
 	(*iter1)[tvConfList.treeModel.relatedRule] = b;
 	(*iter2)[tvConfList.treeModel.relatedRule] = a;
 	
+	tvConfList.refTreeStore->iter_swap(iter1, iter2);
+	this->setLockState(0);
+
 	update_move_buttons();
 }
 

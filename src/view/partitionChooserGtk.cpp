@@ -1,6 +1,6 @@
 #include "partitionChooserGtk.h"
 
-PartitionChooserGtk::PartitionChooserGtk(bool isLiveCD)
+PartitionChooserGtk::PartitionChooserGtk()
 	: lvRootPartitionSelection(3),
 	chkCustomPartition(gettext("_use another partition: "), true),
 	bttMountFs(gettext("Mount selected Filesystem")),
@@ -9,13 +9,6 @@ PartitionChooserGtk::PartitionChooserGtk(bool isLiveCD)
 	lblSubmountpointDescription(gettext("These are the mountpoints of your fstab file.\nPlease select every grub/boot related partition."), Gtk::ALIGN_LEFT),
 	isMounted(false), assistant(NULL)
 {
-	Glib::ustring message;
-	if (isLiveCD)
-		message = gettext("You started Grub Customizer using the live CD.");
-	else
-		message = gettext("You selected the option for choosing another partition.\nPlease note: The os-prober may not find your actually running system.\nSo run Grub Customizer on the target system\nagain and save the configuration (or run update-grub/update-burg)\nto get the entry back!");
-	
-	lblMessage.set_text(message+"\n\n"+gettext("Before you can edit your grub configuration we have to\nmount the required partitions.\n\nThis assistant will help you doing this.\n\n\nPlease ensure the target system is based on the same cpu architecture\nas the actually running one.\nIf not, you will get an error message when trying to load the configuration."));
 	vbIntroPage.add(lblMessage);
 	vbRootSelectPage.pack_start(scrRootPartitionSelection);
 	vbRootSelectPage.pack_start(hbCustomPartition, Gtk::PACK_SHRINK);
@@ -221,6 +214,16 @@ void PartitionChooserGtk::submountpoint_toggle(Gtk::CheckButton& sender){
 void PartitionChooserGtk::setIsMounted(bool isMounted){
 	this->isMounted = isMounted;
 	this->updateSensitivity();
+}
+
+void PartitionChooserGtk::setIsStartedManually(bool val){
+	Glib::ustring message;
+	if (val)
+		message = gettext("You selected the option for choosing another partition.\nPlease note: The os-prober may not find your actually running system.\nSo run Grub Customizer on the target system\nagain and save the configuration (or run update-grub/update-burg)\nto get the entry back!");
+	else
+		message = gettext("You started Grub Customizer using the live CD.");
+
+	lblMessage.set_text(message+"\n\n"+gettext("Before you can edit your grub configuration we have to\nmount the required partitions.\n\nThis assistant will help you doing this.\n\n\nPlease ensure the target system is based on the same cpu architecture\nas the actually running one.\nIf not, you will get an error message when trying to load the configuration."));
 }
 
 void PartitionChooserGtk::signal_btt_umount_click(){

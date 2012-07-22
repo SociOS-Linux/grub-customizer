@@ -1,5 +1,25 @@
 #!/bin/sh
 cat << EOF
+grub-customizer (2.1-0ubuntu1~ppa1$1) $2; urgency=medium
+
+   * based on MVP pattern
+   * no modal windows
+   * add/remove entry buttons in settings dialog
+
+ -- Daniel Richter <danielrichter2007@web.de>  Sat, 22 Jan 2011 00:04:45 +0100
+
+grub-customizer (2.0.8-0ubuntu1~ppa1$1) $2; urgency=medium
+
+   * french and hungarian translation updated
+
+ -- Daniel Richter <danielrichter2007@web.de>  Tue, 21 Dec 2010 18:09:00 +0100
+
+grub-customizer (2.0.7-0ubuntu1~ppa1$1) $2; urgency=medium
+
+   * spanish and italian translation updated (now complete)
+
+ -- Daniel Richter <danielrichter2007@web.de>  Wed, 08 Dec 2010 20:45:42 +0100
+
 grub-customizer (2.0.6-0ubuntu1~ppa2$1) $2; urgency=medium
 
    * Brasilian translation updated (now complete)

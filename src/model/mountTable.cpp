@@ -7,8 +7,8 @@ Mountpoint::Mountpoint(std::string const& device, std::string const& mountpoint,
 {
 }
 
-bool Mountpoint::isValid(std::string const& prefix) const {
-	return device != prefix && mountpoint != prefix && mountpoint != prefix+"none" && fileSystem != prefix && options != prefix && dump != prefix && pass != prefix;
+bool Mountpoint::isValid(std::string const& prefix, bool isRoot) const {
+	return device != "" && (mountpoint != prefix || isRoot) && mountpoint != prefix+"none" && fileSystem != "" && options != "" && dump != "" && pass != "";
 }
 Mountpoint::operator bool() const {
 	return this->isValid();
@@ -33,6 +33,10 @@ void Mountpoint::umount(){
 	}
 }
 
+bool Mountpoint::isLiveCdFs(){
+	return this->fileSystem == "aufs";
+}
+
 MountTable::MountTable(FILE* source, std::string const& prefix, bool default_isMounted_flag){
 	this->loadData(source, prefix, default_isMounted_flag);
 }
@@ -54,12 +58,14 @@ void MountTable::loadData(FILE* source, std::string const& prefix, bool default_
 		if (isBeginOfRow && c == '#')
 			isComment = true;
 		else if (c == '\n'){
+			bool isRoot = newMp.mountpoint == prefix + "/";
 			if (newMp.mountpoint[newMp.mountpoint.length()-1] == '/')
 				newMp.mountpoint = newMp.mountpoint.substr(0, newMp.mountpoint.length()-1);
 
-			this->remove(newMp);
-			if (newMp.isValid(prefix))
+			if (newMp.isValid(prefix, isRoot)){
+				this->remove(newMp);
 				this->push_back(newMp);
+			}
 
 			newMp = Mountpoint(prefix, default_isMounted_flag);
 			rowEntryPos = 0;
@@ -89,9 +95,10 @@ void MountTable::loadData(FILE* source, std::string const& prefix, bool default_
 	if (newMp.mountpoint[newMp.mountpoint.length()-1] == '/')
 		newMp.mountpoint = newMp.mountpoint.substr(0, newMp.mountpoint.length()-1);
 
-	this->remove(newMp);
-	if (newMp.isValid(prefix))
+	if (newMp.isValid(prefix)){
+		this->remove(newMp);
 		this->push_back(newMp);
+	}
 
 	loaded = true;
 }

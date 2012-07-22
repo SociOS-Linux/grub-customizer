@@ -27,12 +27,12 @@ int main(int argc, char** argv){
 	GrubInstaller* installer = new GrubInstaller(env);
 	GrubInstallDlg* installDlg = new GrubInstallDlgGtk;
 	ScriptAddDlg* scriptAddDlg = new ScriptAddDlgGtk;
-	PartitionChooser* partitionChooser = new PartitionChooserGtk(GrubEnv::isLiveCD());
+	MountTable* mountTable = new MountTable;
+	PartitionChooser* partitionChooser = new PartitionChooserGtk();
 	GrublistCfg* savedListCfg = new GrublistCfg(env);
 	FbResolutionsGetter* fbResolutionsGetter = new FbResolutionsGetter;
 	SettingsDlg* settingsDlg = new GrubSettingsDlgGtk;
 	DeviceDataList* deviceDataList = new DeviceDataList;
-	MountTable* mountTable = new MountTable;
 	AboutDialog* aboutDialog = new AboutDialogGtk;
 
 	

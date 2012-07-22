@@ -107,9 +107,18 @@ void GrubCustomizer::init(){
 		pclose(blkidProc);
 	}
 
+	mountTable->loadData("");
+	mountTable->loadData(PARTCHOOSER_MOUNTPOINT);
+
+
+	//loading the framebuffer resolutions in background…
+	Glib::Thread::create(sigc::mem_fun(this->fbResolutionsGetter, &FbResolutionsGetter::load), false);
+
 	//dir_prefix may be set by partition chooser (if not, the root partition is used)
 
-	if (GrubEnv::isLiveCD() && env.cfg_dir_prefix == ""){
+	//aufs is the virtual root fileSystem used by live cds
+	if (mountTable->getEntryByMountpoint("").isLiveCdFs() && env.cfg_dir_prefix == ""){
+		partitionChooser->setIsStartedManually(false);
 		this->initRootSelector();
 		partitionChooser->show();
 	}
@@ -142,6 +151,7 @@ void GrubCustomizer::hidePartitionChooserQuestion(){
 }
 
 void GrubCustomizer::showPartitionChooser(){
+	partitionChooser->setIsStartedManually(true);
 	this->initRootSelector();
 	this->partitionChooser->show();
 }
@@ -196,16 +206,13 @@ void GrubCustomizer::load(bool preserveConfig){
 		this->settingsOnDisk->save();
 	}
 	this->activeThreadCount--;
-
-	//loading the framebuffer resolutions in background…
-	Glib::Thread::create(sigc::mem_fun(this->fbResolutionsGetter, &FbResolutionsGetter::load), false);
 }
 
 void GrubCustomizer::save(){
 	this->config_has_been_different_on_startup_but_unsaved = false;
 	this->modificationsUnsaved = false; //deprecated
 
-	this->listCfgDlg->setLockState(1|4);
+	this->listCfgDlg->setLockState(1|4|8);
 
 	this->activeThreadCount++; //not in save_thead() to be faster set
 	Glib::Thread::create(sigc::mem_fun(this, &GrubCustomizer::save_thread), false);
@@ -235,8 +242,6 @@ void GrubCustomizer::showAboutDialog(){
 
 
 void GrubCustomizer::initRootSelector(){
-	mountTable->loadData("");
-	mountTable->loadData(PARTCHOOSER_MOUNTPOINT);
 	if (mountTable->getEntryByMountpoint(PARTCHOOSER_MOUNTPOINT)){
 		partitionChooser->setIsMounted(true);
 		this->generateSubmountpointSelection(PARTCHOOSER_MOUNTPOINT);
@@ -416,6 +421,7 @@ void GrubCustomizer::updateScriptAddDlgPreview(){
 void GrubCustomizer::removeProxy(Proxy* p){
 	this->grublistCfg->proxies.deleteProxy(p);
 	this->listCfgDlg->removeProxy(p);
+	this->syncListView_load();
 	this->modificationsUnsaved = true;
 }
 
@@ -563,7 +569,7 @@ void GrubCustomizer::updateScriptEntry(Proxy* proxy){
 
 void GrubCustomizer::swapRules(Rule* a, Rule* b){
 	//swap the contents behind the pointers
-	grublistCfg->swapRules(a, b);
+	this->grublistCfg->swapRules(a, b);
 	this->listCfgDlg->swapRules(a,b);
 	this->updateScriptEntry(this->grublistCfg->proxies.getProxyByRule(a));
 	this->modificationsUnsaved = true;

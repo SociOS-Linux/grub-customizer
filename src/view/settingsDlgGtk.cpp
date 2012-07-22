@@ -222,6 +222,7 @@ GrubSettingsDlgGtk::GrubSettingsDlgGtk()
 	bttCopyBackground.set_no_show_all(true);
 	bttRemoveBackground.set_no_show_all(true);
 	imgBackgroundImage.set_no_show_all(true);
+	lblBackgroundRequiredInfo.set_no_show_all(true);
 	
 	//<signals>
 	rbDefPredefined.signal_toggled().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_default_entry_predefined_toggeled));
@@ -567,7 +568,7 @@ void GrubSettingsDlgGtk::signal_chkResolution_toggled(){
 }
 
 Glib::ustring GrubSettingsDlgGtk::getResolution(){
-	cbResolution.get_entry()->get_text();
+	return cbResolution.get_entry()->get_text();
 }
 
 

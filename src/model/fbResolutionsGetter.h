@@ -9,6 +9,7 @@
 class FbResolutionsGetter {
 	std::list<std::string> data;
 	EventListener_model* eventListener;
+	bool _isLoading;
 public:
 	FbResolutionsGetter();
 	const std::list<std::string>& getData() const;

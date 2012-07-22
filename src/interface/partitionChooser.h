@@ -40,6 +40,8 @@ public:
 	virtual void setSubmountpointSelectionState(Glib::ustring const& submountpoint, bool new_isSelected)=0;
 	//sets whether there's already a mounted root partition
 	virtual void setIsMounted(bool isMounted)=0;
+	//sets whether this dialog has been started using a live cd
+	virtual void setIsStartedManually(bool val)=0;
 };
 
 #endif

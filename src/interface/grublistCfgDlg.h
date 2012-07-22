@@ -21,11 +21,15 @@ public:
 	virtual void run()=0;
 	//hide this window and close the whole application
 	virtual void close()=0;
-
+	//show the dialog which lets the user choose burg or grub
 	virtual void showBurgSwitcher()=0;
+	//hide the dialog which lets the user choose burg or grub
 	virtual void hideBurgSwitcher()=0;
+	//show the dialog which asks the user if he wants to show the partition chooser
 	virtual void showPartitionChooserQuestion()=0;
+	//hide the dialog which asks the user if he wants to show the partition chooser
 	virtual void hidePartitionChooserQuestion()=0;
+	//returns whether the list configuration window is visible at the moment
 	virtual bool isVisible()=0;
 
 	//notifies the window about which mode is used (grub<>burg)

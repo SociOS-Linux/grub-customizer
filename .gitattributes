@@ -31,7 +31,6 @@ misc/icons/48x48.png -text svneol=unset#unset
 misc/icons/64x64.png -text svneol=unset#unset
 misc/manpage.gz -text svneol=unset#unset
 misc/upstream-changelog.gz -text svneol=unset#unset
-src/config.h -text
 src/interface/aboutDialog.h -text
 src/interface/colorChooser.h -text
 src/interface/evt_grubInstallDlg.h -text

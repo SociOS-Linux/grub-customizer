@@ -42,8 +42,13 @@ public:
 	//user has selected another proxy
 	virtual void proxySelected(void* proxy)=0;
 
+	//user has used the close button of the burg switcher window
 	virtual void burgSwitcher_cancelled()=0;
+
+	//user has chosen burg or grub from the burgSwitcher
 	virtual void burgSwitcher_response(bool burgChosen)=0;
+
+	//user has clicked the yes or no button of the partition chooser question dialog
 	virtual void partitionChooserQuestion_response(bool is_positive)=0;
 };
 

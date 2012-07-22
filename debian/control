@@ -12,8 +12,8 @@ Depends: ${shlibs:Depends}, ${misc:Depends}, menu
 Recommends: hwinfo
 Package: grub-customizer
 Description: Grub Customizer - A graphical Grub2/BURG configuration application
- Grub Customizer is a graphical interface to configure the grub2/burg settings
- with focus on the individual list order - without losing the dynamical
- behavior of grub - also usable on live cds.
+ Grub Customizer is a graphical configuration tool to modify the grub2/burg
+ settings with focus on the individual list order - without losing the
+ dynamical behavior of grub - also usable on live cds.
  Settings like the background or timeouts are also changeable using
  Grub Customizer.

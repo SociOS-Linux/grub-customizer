@@ -36,7 +36,7 @@ class PartitionChooserGtk : public PartitionChooser {
 	void init(bool useExisting = true);
 	Gtk::Assistant& getWindow();
 	public:
-	PartitionChooserGtk(bool isLiveCD);
+	PartitionChooserGtk();
 	void setEventListener(EventListener_partitionChooser& eventListener);
 	void updateSensitivity();
 	void signal_custom_partition_toggled();
@@ -59,6 +59,7 @@ class PartitionChooserGtk : public PartitionChooser {
 	Gtk::CheckButton& getSubmountpointCheckboxByLabel(Glib::ustring const& label);
 	void setSubmountpointSelectionState(Glib::ustring const& submountpoint, bool new_isSelected);
 	void setIsMounted(bool isMounted);
+	void setIsStartedManually(bool val);
 };
 #endif
 

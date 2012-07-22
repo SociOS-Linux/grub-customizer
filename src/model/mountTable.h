@@ -14,12 +14,13 @@ struct Mountpoint {
 	};
 	std::string device, mountpoint, fileSystem, options, dump, pass;
 	bool isMounted;
-	bool isValid(std::string const& prefix = "") const;
+	bool isValid(std::string const& prefix = "", bool isRoot = false) const;
 	operator bool() const;
 	Mountpoint(std::string const& mountpoint = "", bool isMounted = false);
 	Mountpoint(std::string const& device, std::string const& mountpoint, std::string const& options, bool isMounted = false);
 	void mount();
 	void umount();
+	bool isLiveCdFs();
 };
 
 class MountTable : public std::list<Mountpoint> {
