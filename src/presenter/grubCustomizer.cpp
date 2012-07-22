@@ -808,16 +808,6 @@ void GrubCustomizer::updateUseCustomResolution(){
 	this->modificationsUnsaved = true;
 }
 
-void GrubCustomizer::copyBackgroundImageToGrubDirectory(){
-	Glib::RefPtr<Gio::File> file_src = Gio::File::create_for_path(this->settingsDlg->getBackgroundImagePath());
-	Glib::RefPtr<Gio::File> file_dest = Gio::File::create_for_path(env.output_config_dir+"/"+file_src->get_basename());
-	file_src->copy(file_dest, Gio::FILE_COPY_OVERWRITE);
-
-	this->settings->setValue("GRUB_MENU_PICTURE", file_src->get_basename()); //The path isn't required when the image is in grub conf dir
-	this->syncSettings();
-	this->modificationsUnsaved = true;
-}
-
 void GrubCustomizer::updateBackgroundImage(){
 	this->settings->setValue("GRUB_MENU_PICTURE", this->settingsDlg->getBackgroundImagePath());
 	this->settings->setIsActive("GRUB_MENU_PICTURE", true);

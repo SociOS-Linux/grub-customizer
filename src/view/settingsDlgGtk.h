@@ -151,7 +151,6 @@ class GrubSettingsDlgGtk : public Gtk::Dialog, public SettingsDlg {
 	void signal_resolution_selected();
 	void signal_color_changed();
 	void signal_other_image_chosen();
-	void signal_bttCopyBackground_clicked();
 	void signal_bttRemoveBackground_clicked();
 	void on_response(int response_id);
 	public:

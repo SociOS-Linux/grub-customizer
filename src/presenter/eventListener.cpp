@@ -166,9 +166,6 @@ void EventListener::colorChange_requested(){
 void EventListener::backgroundChange_requested(){
 	presenter.updateBackgroundImage();
 }
-void EventListener::backgroundCopy_requested(){
-	presenter.copyBackgroundImageToGrubDirectory();
-}
 void EventListener::backgroundRemove_requested(){
 	presenter.removeBackgroundImage();
 }

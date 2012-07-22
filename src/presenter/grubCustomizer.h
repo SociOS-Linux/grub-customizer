@@ -176,7 +176,6 @@ public:
 	void updateColorSettings();
 	void updateBackgroundImage();
 	void updateUseCustomResolution();
-	void copyBackgroundImageToGrubDirectory();
 	void removeBackgroundImage();
 	void hideSettingsDialog();
 

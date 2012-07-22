@@ -55,8 +55,6 @@ public:
 	virtual void colorChange_requested()=0;
 	//user has selected another grub wallpaper
 	virtual void backgroundChange_requested()=0;
-	//user wants to copy the image into the grub directory
-	virtual void backgroundCopy_requested()=0;
 	//user wants to remove the selected background image
 	virtual void backgroundRemove_requested()=0;
 	//user wants to hide the settings dialog

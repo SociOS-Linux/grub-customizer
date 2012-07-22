@@ -97,7 +97,7 @@ GrubSettingsDlgGtk::GrubSettingsDlgGtk()
 	lblforegroundColor(gettext("font color")), lblBackgroundColor(gettext("background")),
 	lblNormalColor(gettext("normal:"), Gtk::ALIGN_RIGHT, Gtk::ALIGN_CENTER), lblHighlightColor(gettext("highlight:"), Gtk::ALIGN_RIGHT, Gtk::ALIGN_CENTER),
 	lblColorChooser(gettext("menu colors")), lblBackgroundImage(gettext("background image")),
-	bttCopyBackground(gettext("copy to grub directory")), bttRemoveBackground(gettext("remove background")),
+	bttRemoveBackground(gettext("remove background")),
 	lblBackgroundRequiredInfo(gettext("To get the colors above working,\nyou have to select a background image!")),
 	gccNormalBackground(true), gccHighlightBackground(true)
 {
@@ -229,7 +229,6 @@ GrubSettingsDlgGtk::GrubSettingsDlgGtk()
 	vbBackgroundImage.pack_start(hbImgBtts);
 	vbBackgroundImage.pack_start(lblBackgroundRequiredInfo);
 	hbImgBtts.pack_start(vbButtons);
-	vbButtons.add(bttCopyBackground);
 	vbButtons.add(bttRemoveBackground);
 	hbImgBtts.pack_start(imgBackgroundImage, Gtk::PACK_SHRINK);
 
@@ -237,7 +236,6 @@ GrubSettingsDlgGtk::GrubSettingsDlgGtk()
 	hbImgBtts.set_spacing(5);
 	vbButtons.set_spacing(5);
 
-	bttCopyBackground.set_no_show_all(true);
 	bttRemoveBackground.set_no_show_all(true);
 	imgBackgroundImage.set_no_show_all(true);
 	lblBackgroundRequiredInfo.set_no_show_all(true);
@@ -258,7 +256,6 @@ GrubSettingsDlgGtk::GrubSettingsDlgGtk()
 	gccHighlightForeground.signal_changed().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_color_changed));
 	gccHighlightBackground.signal_changed().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_color_changed));
 	fcBackgroundImage.signal_file_set().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_other_image_chosen));
-	bttCopyBackground.signal_clicked().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_bttCopyBackground_clicked));
 	bttRemoveBackground.signal_clicked().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_bttRemoveBackground_clicked));
 	bttAddCustomEntry.signal_clicked().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_add_row_button_clicked));
 	bttRemoveCustomEntry.signal_clicked().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_remove_row_button_clicked));
@@ -453,7 +450,6 @@ void GrubSettingsDlgGtk::setBackgroundImagePreviewPath(Glib::ustring const& menu
 			imgBackgroundImage.set(Gtk::Stock::MISSING_IMAGE, Gtk::ICON_SIZE_DIALOG);
 		}
 
-		bttCopyBackground.show();
 		bttRemoveBackground.show();
 		imgBackgroundImage.show();
 		lblBackgroundRequiredInfo.hide();
@@ -462,7 +458,6 @@ void GrubSettingsDlgGtk::setBackgroundImagePreviewPath(Glib::ustring const& menu
 	else {
 		fcBackgroundImage.unselect_all();
 		imgBackgroundImage.clear();
-		bttCopyBackground.hide();
 		bttRemoveBackground.hide();
 		imgBackgroundImage.hide();
 		lblBackgroundRequiredInfo.show();
@@ -602,13 +597,6 @@ void GrubSettingsDlgGtk::signal_color_changed(){
 
 Glib::ustring GrubSettingsDlgGtk::getBackgroundImagePath(){
 	return fcBackgroundImage.get_filename();
-}
-
-
-void GrubSettingsDlgGtk::signal_bttCopyBackground_clicked(){
-	if (!event_lock){
-		this->eventListener->backgroundCopy_requested();
-	}
 }
 
 
