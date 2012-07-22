@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-11-21 12:13+0100\n"
-"PO-Revision-Date: 2010-11-21 20:44+0000\n"
+"PO-Revision-Date: 2010-11-23 20:03+0000\n"
 "Last-Translator: Alexey Ivanov <alexey.ivanes@gmail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-11-22 21:40+0000\n"
+"X-Launchpad-Export-Date: 2010-11-23 20:48+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../src_dir/grubconfig.cpp:203 ../src_dir/grubconfig.cpp:218
@@ -23,7 +23,8 @@ msgstr " не найден. GRUB2 точно установлен?"
 
 #: ../src_dir/grubconfig.cpp:287
 msgid " couldn't be executed successfully. You must run this as root!"
-msgstr " не может быть запущен корректно. Вы должны быть root!"
+msgstr ""
+" не может быть запущен корректно. Вы должны иметь права суперпользователя!"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:11
 msgid "_File"
@@ -116,7 +117,7 @@ msgstr "Установить в MBR"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:219
 msgid "BURG Mode"
-msgstr ""
+msgstr "Режим BURG"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:240
 msgid "No Bootloader found"

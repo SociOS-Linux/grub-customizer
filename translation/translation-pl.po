@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-11-21 12:13+0100\n"
-"PO-Revision-Date: 2010-10-25 00:48+0000\n"
-"Last-Translator: Adam Czabara <kolofaza@o2.pl>\n"
+"PO-Revision-Date: 2010-11-23 19:47+0000\n"
+"Last-Translator: wilq1989 <Unknown>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-11-22 21:40+0000\n"
+"X-Launchpad-Export-Date: 2010-11-23 20:48+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../src_dir/grubconfig.cpp:203 ../src_dir/grubconfig.cpp:218
@@ -356,11 +356,11 @@ msgstr "Nie można odmontować wybranej partycji"
 
 #: ../src_dir/settings_dlg_gtk.cpp:47
 msgid "white"
-msgstr ""
+msgstr "biały"
 
 #: ../src_dir/settings_dlg_gtk.cpp:48
 msgid "yellow"
-msgstr ""
+msgstr "żółty"
 
 #: ../src_dir/settings_dlg_gtk.cpp:49
 msgid "light-cyan"
@@ -368,27 +368,27 @@ msgstr ""
 
 #: ../src_dir/settings_dlg_gtk.cpp:50
 msgid "cyan"
-msgstr ""
+msgstr "niebieskozielony"
 
 #: ../src_dir/settings_dlg_gtk.cpp:51
 msgid "light-blue"
-msgstr ""
+msgstr "jasno-niebieski"
 
 #: ../src_dir/settings_dlg_gtk.cpp:52
 msgid "blue"
-msgstr ""
+msgstr "niebieski"
 
 #: ../src_dir/settings_dlg_gtk.cpp:53
 msgid "light-green"
-msgstr ""
+msgstr "jasno-zielony"
 
 #: ../src_dir/settings_dlg_gtk.cpp:54
 msgid "green"
-msgstr ""
+msgstr "zielony"
 
 #: ../src_dir/settings_dlg_gtk.cpp:55
 msgid "light-magenta"
-msgstr ""
+msgstr "jasny-czerwony"
 
 #: ../src_dir/settings_dlg_gtk.cpp:56
 msgid "magenta"
@@ -396,27 +396,27 @@ msgstr ""
 
 #: ../src_dir/settings_dlg_gtk.cpp:57
 msgid "light-red"
-msgstr ""
+msgstr "jasno-czerwony"
 
 #: ../src_dir/settings_dlg_gtk.cpp:58
 msgid "red"
-msgstr ""
+msgstr "czerwony"
 
 #: ../src_dir/settings_dlg_gtk.cpp:59
 msgid "brown"
-msgstr ""
+msgstr "brązowy"
 
 #: ../src_dir/settings_dlg_gtk.cpp:60
 msgid "light-gray"
-msgstr ""
+msgstr "jasno-szary"
 
 #: ../src_dir/settings_dlg_gtk.cpp:61
 msgid "dark-gray"
-msgstr ""
+msgstr "ciemno-szary"
 
 #: ../src_dir/settings_dlg_gtk.cpp:62
 msgid "black"
-msgstr ""
+msgstr "czarny"
 
 #: ../src_dir/settings_dlg_gtk.cpp:68
 msgid "pre_defined: "
@@ -428,15 +428,15 @@ msgstr ""
 
 #: ../src_dir/settings_dlg_gtk.cpp:69
 msgid "default entry"
-msgstr ""
+msgstr "domyślny wpis"
 
 #: ../src_dir/settings_dlg_gtk.cpp:69
 msgid "visibility"
-msgstr ""
+msgstr "widoczność"
 
 #: ../src_dir/settings_dlg_gtk.cpp:69
 msgid "show menu"
-msgstr ""
+msgstr "pokaż menu"
 
 #: ../src_dir/settings_dlg_gtk.cpp:70
 msgid "Timeout"
@@ -444,11 +444,11 @@ msgstr ""
 
 #: ../src_dir/settings_dlg_gtk.cpp:70
 msgid "Seconds"
-msgstr ""
+msgstr "Sekund"
 
 #: ../src_dir/settings_dlg_gtk.cpp:70
 msgid "kernel parameters"
-msgstr ""
+msgstr "ustawienia kernela"
 
 #: ../src_dir/settings_dlg_gtk.cpp:71
 msgid "generate recovery entries"
@@ -456,7 +456,7 @@ msgstr ""
 
 #: ../src_dir/settings_dlg_gtk.cpp:71
 msgid "look for other operating systems"
-msgstr ""
+msgstr "szukaj innych systemów operacyjnych"
 
 #: ../src_dir/settings_dlg_gtk.cpp:72
 msgid "custom resolution: "
@@ -464,11 +464,11 @@ msgstr ""
 
 #: ../src_dir/settings_dlg_gtk.cpp:73
 msgid "font color"
-msgstr ""
+msgstr "kolor czcionki"
 
 #: ../src_dir/settings_dlg_gtk.cpp:73
 msgid "background"
-msgstr ""
+msgstr "tło"
 
 #: ../src_dir/settings_dlg_gtk.cpp:74
 msgid "normal:"
@@ -480,19 +480,19 @@ msgstr ""
 
 #: ../src_dir/settings_dlg_gtk.cpp:75
 msgid "menu colors"
-msgstr ""
+msgstr "kolory menu"
 
 #: ../src_dir/settings_dlg_gtk.cpp:75
 msgid "background image"
-msgstr ""
+msgstr "obrazek tła"
 
 #: ../src_dir/settings_dlg_gtk.cpp:76
 msgid "copy to grub directory"
-msgstr ""
+msgstr "skopij do katalogu grub'a"
 
 #: ../src_dir/settings_dlg_gtk.cpp:76
 msgid "remove background"
-msgstr ""
+msgstr "usuń tło"
 
 #: ../src_dir/settings_dlg_gtk.cpp:77
 msgid ""
@@ -502,7 +502,7 @@ msgstr ""
 
 #: ../src_dir/settings_dlg_gtk.cpp:79
 msgid "settings"
-msgstr ""
+msgstr "ustawienia"
 
 #: ../src_dir/settings_dlg_gtk.cpp:83
 msgid "_General"
