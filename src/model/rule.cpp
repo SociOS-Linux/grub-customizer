@@ -19,7 +19,7 @@
 #include "rule.h"
 
 Rule::Rule(Entry& source, bool isVisible, EntryPathFollower& pathFollower, std::list<std::list<std::string> > const& pathesToIgnore, std::list<std::string> const& currentPath) //generate rule for given entry. __idname is only required for re-syncing (soft-reload)
-	: type(source.type != Entry::PLAINTEXT ? Rule::NORMAL : Rule::PLAINTEXT), isVisible(isVisible), __idpath(currentPath), outputName(source.name), dataSource(&source)
+	: type(source.type == Entry::PLAINTEXT ? Rule::PLAINTEXT : (source.type == Entry::SUBMENU ? Rule::SUBMENU : Rule::NORMAL)), isVisible(isVisible), __idpath(currentPath), outputName(source.name), dataSource(&source)
 {
 	if (source.type == Entry::SUBMENU) {
 		Rule placeholder(Rule::OTHER_ENTRIES_PLACEHOLDER, currentPath, "*", true);
@@ -59,7 +59,7 @@ std::string Rule::toString(EntryPathBilder const& pathBuilder){
 	} else {
 		result += "???";
 	}
-	if (type == NORMAL && (dataSource && dataSource->name != outputName)) {
+	if ((type == NORMAL || type == SUBMENU) && (dataSource && dataSource->name != outputName)) {
 		result += " as '"+str_replace("'", "''", outputName)+"'";
 	}
 

@@ -103,7 +103,7 @@ std::list<std::string> ProxyList::getToplevelEntryTitles() const {
 	for (ProxyList::const_iterator proxy_iter = this->begin(); proxy_iter != this->end(); proxy_iter++){
 		if (proxy_iter->isExecutable()){
 			for (std::list<Rule>::const_iterator rule_iter = proxy_iter->rules.begin(); rule_iter != proxy_iter->rules.end(); rule_iter++) {
-				if (rule_iter->isVisible && rule_iter->type == Rule::NORMAL && rule_iter->dataSource && rule_iter->dataSource->type != Entry::SUBMENU) {
+				if (rule_iter->isVisible && rule_iter->type == Rule::NORMAL) {
 					result.push_back(rule_iter->outputName);
 				}
 			}
@@ -116,13 +116,13 @@ std::list<EntryTitleListItem> ProxyList::generateEntryTitleList(std::list<Rule> 
 	std::list<EntryTitleListItem> result;
 	int i = (offset != NULL ? *offset : 0);
 	for (std::list<Rule>::const_iterator rule_iter = parent.begin(); rule_iter != parent.end(); rule_iter++){
-		if (rule_iter->isVisible && rule_iter->type == Rule::NORMAL) {
+		if (rule_iter->isVisible && (rule_iter->type == Rule::NORMAL || rule_iter->type == Rule::SUBMENU)) {
 			std::ostringstream currentNumPath;
 			currentNumPath << numericPathPrefix << i;
 			std::ostringstream currentLabelNumPath;
 			currentLabelNumPath << numericPathLabelPrefix << (i+1);
 
-			if (rule_iter->dataSource && rule_iter->dataSource->type == Entry::SUBMENU) {
+			if (rule_iter->type == Rule::SUBMENU) {
 				std::list<EntryTitleListItem> subList = ProxyList::generateEntryTitleList(rule_iter->subRules, labelPathPrefix + rule_iter->outputName + ">", currentNumPath.str() + ">", currentLabelNumPath.str() + ">");
 				result.splice(result.end(), subList);
 			} else {

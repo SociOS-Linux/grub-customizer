@@ -461,7 +461,7 @@ bool GrublistCfg::compare(GrublistCfg const& other) const {
 std::list<Rule const*> GrublistCfg::getComparableRules(std::list<Rule> const& list) {
 	std::list<Rule const*> result;
 	for (std::list<Rule>::const_iterator riter = list.begin(); riter != list.end(); riter++){
-		if (riter->type == Rule::NORMAL && riter->dataSource && riter->isVisible){
+		if ((riter->type == Rule::NORMAL || riter->type == Rule::SUBMENU) && riter->dataSource && riter->isVisible){
 			result.push_back(&*riter);
 		}
 	}

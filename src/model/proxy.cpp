@@ -81,6 +81,7 @@ std::list<Rule> Proxy::parseRuleString(const char** ruleString) {
 		} else if (!inString && !inAlias && *iter == '{') {
 			iter++;
 			rules.back().subRules = Proxy::parseRuleString(&iter);
+			rules.back().type = Rule::SUBMENU;
 		} else if (!inString && *iter == '~') {
 			inHash = !inHash;
 			if (!inHash) {
@@ -195,7 +196,7 @@ void Proxy::sync_add_placeholders(Rule* parent) {
 
 	//sub entries (recursion)
 	for (std::list<Rule>::iterator iter = list.begin(); iter != list.end(); iter++) {
-		if (iter->dataSource && iter->type == Rule::NORMAL && iter->dataSource->type == Entry::SUBMENU) {
+		if (iter->dataSource && iter->type == Rule::SUBMENU) {
 			this->sync_add_placeholders(&*iter);
 		}
 	}
@@ -219,8 +220,9 @@ void Proxy::sync_expand() {
 			std::list<Rule> newRules;
 			for (std::list<Entry>::iterator iter = dataSource->begin(); iter != dataSource->end(); iter++){
 				Rule* relatedRule = this->getRuleByEntry(*iter, this->rules, Rule::NORMAL);
+				Rule* relatedRuleSm = this->getRuleByEntry(*iter, this->rules, Rule::SUBMENU);
 				Rule* relatedRulePt = this->getRuleByEntry(*iter, this->rules, Rule::PLAINTEXT);
-				if (!relatedRule && !relatedRulePt){
+				if (!relatedRule && !relatedRuleSm && !relatedRulePt){
 					newRules.push_back(Rule(*iter, dataTargetIter->isVisible, *this->dataSource, this->__idPathList, this->dataSource->buildPath(*iter))); //generate rule for given entry
 				}
 			}
@@ -237,7 +239,7 @@ void Proxy::sync_cleanup(Rule* parent) {
 	do {
 		bool listModified = false;
 		for (std::list<Rule>::iterator iter = list.begin(); !listModified && iter != list.end(); iter++) {
-			if (!(iter->type == Rule::NORMAL && iter->dataSource ||
+			if (!((iter->type == Rule::NORMAL || iter->type == Rule::SUBMENU) && iter->dataSource ||
 				  iter->type == Rule::OTHER_ENTRIES_PLACEHOLDER && iter->dataSource_list ||
 				  iter->type == Rule::PLAINTEXT && iter->dataSource)) {
 				list.erase(iter);
@@ -352,7 +354,7 @@ Rule& Proxy::moveRule(Rule* rule, int direction) {
 			else
 				throw e;
 		}
-	} else if (next->dataSource && next->type == Rule::NORMAL && next->dataSource->type == Entry::SUBMENU) { //scale up
+	} else if (next->dataSource && next->type == Rule::SUBMENU) { //scale up
 		if (direction == 1) {
 			next->subRules.push_front(*rule);
 			newRule = &next->subRules.front();
@@ -414,7 +416,7 @@ Rule* Proxy::getPlaceholderBySourceList(std::list<Entry> const& sourceList, std:
 	for (std::list<Rule>::iterator iter = baseList.begin(); iter != baseList.end(); iter++) {
 		if (iter->dataSource_list == &sourceList) {
 			return &*iter;
-		} else if (iter->type == Rule::NORMAL && iter->subRules.size()) {
+		} else if (iter->type == Rule::SUBMENU && iter->subRules.size()) {
 			Rule* result = this->getPlaceholderBySourceList(sourceList, iter->subRules);
 			if (result) {
 				return result;
