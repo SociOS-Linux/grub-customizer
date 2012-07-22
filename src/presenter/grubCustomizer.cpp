@@ -712,6 +712,7 @@ void GrubCustomizer::showProxyInfo(Proxy* proxy){
 void GrubCustomizer::updateSettingsDlgResolutionList_dispatched(){
 	const std::list<std::string>& data = this->fbResolutionsGetter->getData();
 	this->settingsDlg->clearResolutionChooser();
+	this->settingsDlg->addResolution("saved");
 	for (std::list<std::string>::const_iterator iter = data.begin(); iter != data.end(); iter++)
 		this->settingsDlg->addResolution(*iter);
 }

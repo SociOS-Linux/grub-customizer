@@ -108,7 +108,7 @@ GrubSettingsDlgGtk::GrubSettingsDlgGtk()
 	lblColorChooser(gettext("menu colors")), lblBackgroundImage(gettext("background image")),
 	imgRemoveBackground(Gtk::Stock::REMOVE, Gtk::ICON_SIZE_BUTTON), imgRemoveFont(Gtk::Stock::REMOVE, Gtk::ICON_SIZE_BUTTON),
 	lblBackgroundRequiredInfo(gettext("To get the colors above working,\nyou have to select a background image!")),
-	gccNormalBackground(true), gccHighlightBackground(true), lblFont("_Font", true)
+	gccNormalBackground(true), gccHighlightBackground(true), lblFont(gettext("_Font"), true)
 {
 	this->set_title("Grub Customizer - "+Glib::ustring(gettext("settings")));
 	this->set_icon_name("grub-customizer");
@@ -206,7 +206,7 @@ GrubSettingsDlgGtk::GrubSettingsDlgGtk()
 	alignResolution.set_padding(10, 0, 6, 0);
 	hbResolution.pack_start(chkResolution, Gtk::PACK_SHRINK);
 	hbResolution.pack_start(cbResolution);
-	cbResolution.append_text("saved");
+	cbResolution.append_text(gettext("saved"));
 	
 	//color chooser
 	vbAppearanceSettings.pack_start(groupColorChooser, Gtk::PACK_SHRINK);
@@ -341,7 +341,11 @@ void GrubSettingsDlgGtk::clearResolutionChooser(){
 	this->cbResolution.clear_items();
 }
 void GrubSettingsDlgGtk::addResolution(std::string const& resolution){
-	this->cbResolution.append_text(resolution);
+	if (resolution == "saved") {
+		this->cbResolution.append_text(gettext("saved"));
+	} else {
+		this->cbResolution.append_text(resolution);
+	}
 }
 
 GrubSettingsDlgGtk::AdvancedSettingsTreeModel::AdvancedSettingsTreeModel(){
@@ -685,7 +689,11 @@ void GrubSettingsDlgGtk::signal_chkResolution_toggled(){
 }
 
 std::string GrubSettingsDlgGtk::getResolution(){
-	return cbResolution.get_entry()->get_text();
+	Glib::ustring str = cbResolution.get_entry()->get_text();
+	if (str == gettext("saved")) { // it's important to return to untranslated value
+		str = "saved";
+	}
+	return str;
 }
 
 

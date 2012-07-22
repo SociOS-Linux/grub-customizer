@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-23 17:05+0100\n"
+"POT-Creation-Date: 2012-06-20 00:16+0200\n"
 "PO-Revision-Date: 2011-01-22 15:00+0000\n"
 "Last-Translator: Daniel Richter <danielrichter2007@web.de>\n"
 "Language-Team: German\n"
@@ -18,32 +18,32 @@ msgstr ""
 "X-Launchpad-Export-Date: 2011-03-26 14:24+0000\n"
 "X-Generator: Launchpad (build 12661)\n"
 
-#: ../src/presenter/grubCustomizer.cpp:445
+#: ../src/presenter/grubCustomizer.cpp:448
 msgid "No script found"
 msgstr "Keine Skripte gefunden"
 
-#: ../src/presenter/grubCustomizer.cpp:512
+#: ../src/presenter/grubCustomizer.cpp:515
 msgid "loading configuration…"
 msgstr "Konfiguration wird geladen…"
 
-#: ../src/presenter/grubCustomizer.cpp:526
+#: ../src/presenter/grubCustomizer.cpp:529
 #: ../src/view/grublistCfgDlgGtk.cpp:380
 msgid " (custom)"
 msgstr " (angepasst)"
 
-#: ../src/presenter/grubCustomizer.cpp:556
+#: ../src/presenter/grubCustomizer.cpp:561
 msgid "Configuration has been saved"
 msgstr "Konfiguration gespeichert"
 
-#: ../src/presenter/grubCustomizer.cpp:559
+#: ../src/presenter/grubCustomizer.cpp:564
 msgid "updating configuration"
 msgstr "Konfiguration wird aktualisiert"
 
-#: ../src/presenter/grubCustomizer.cpp:571
+#: ../src/presenter/grubCustomizer.cpp:576
 msgid "%1 not found. Is grub2 installed?"
 msgstr "%1 nicht gefinden. Ist Grub2/BURG installiert?"
 
-#: ../src/presenter/grubCustomizer.cpp:581
+#: ../src/presenter/grubCustomizer.cpp:586
 msgid ""
 "%1 couldn't be executed successfully. error message:\n"
 " %2"
@@ -51,11 +51,11 @@ msgstr ""
 "%1 konnte nicht erfolgreich ausgeführt werden. Fehlermeldung:\n"
 " %2"
 
-#: ../src/presenter/grubCustomizer.cpp:638
+#: ../src/presenter/grubCustomizer.cpp:643
 msgid "Name the Entry"
 msgstr "Geben Sie eine Bezeichnung ein!"
 
-#: ../src/presenter/grubCustomizer.cpp:671
+#: ../src/presenter/grubCustomizer.cpp:676
 msgid "cannot move this entry"
 msgstr "Dieses Element kann nicht wie gewünscht verschoben werden."
 
@@ -528,6 +528,10 @@ msgstr ""
 "Damit die ausgewählen Farben verwendet werden,\n"
 "muss ein Hintergrundbild ausgewählt werden!"
 
+#: ../src/view/settingsDlgGtk.cpp:111
+msgid "_Font"
+msgstr "_Schriftart"
+
 #: ../src/view/settingsDlgGtk.cpp:113
 msgid "settings"
 msgstr "Einstellungen"
@@ -548,15 +552,24 @@ msgstr "_Erweitert"
 msgid "value"
 msgstr "Wert"
 
-#: ../src/view/settingsDlgGtk.cpp:248
+#: ../src/view/settingsDlgGtk.cpp:209 ../src/view/settingsDlgGtk.cpp:345
+#: ../src/view/settingsDlgGtk.cpp:693
+msgid "saved"
+msgstr "Gespeicherte"
+
+#: ../src/view/settingsDlgGtk.cpp:239
+msgid "remove font"
+msgstr "Schrift entfernen"
+
+#: ../src/view/settingsDlgGtk.cpp:263
 msgid "remove background"
 msgstr "Hintergrund entfernen"
 
-#: ../src/view/settingsDlgGtk.cpp:305
+#: ../src/view/settingsDlgGtk.cpp:323
 msgid "Entry %1 (by position)"
 msgstr "Eintrag %1 (nach Position)"
 
-#: ../src/view/settingsDlgGtk.cpp:585
+#: ../src/view/settingsDlgGtk.cpp:627
 msgid ""
 "This option doesn't work when the \"os-prober\" script finds other operating "
 "systems. Disable \"%1\" if you don't need to boot other operating systems."
@@ -571,5 +584,5 @@ msgstr ""
 #~ msgid "copy to grub directory"
 #~ msgstr "In das Grub-Verzeichnis kopieren"
 
-msgid "Customize the bootloader (GRUB2 or BURG)"
-msgstr "Den Bootloader anpassen (GRUB2 oder BURG)"
+#~ msgid "Customize the bootloader (GRUB2 or BURG)"
+#~ msgstr "Den Bootloader anpassen (GRUB2 oder BURG)"
