@@ -1,11 +1,17 @@
-#ifndef GRUB_CFG_LIBPROXYSCRIPT_PARSER_INCLUDED
-#define GRUB_CFG_LIBPROXYSCRIPT_PARSER_INCLUDED
+#ifndef GRUB_CFG_LIBProxyScriptData_PARSER_INCLUDED
+#define GRUB_CFG_LIBProxyScriptData_PARSER_INCLUDED
 #include <cstdio>
 #include <string>
+#include <iostream>
 
-struct ProxyscriptData {
+struct ProxyScriptData {
 	std::string scriptCmd, proxyCmd, ruleString;
+	bool is_valid;
+	ProxyScriptData(FILE* fpProxyScript);
+	bool load(FILE* fpProxyScript);
+	static bool is_proxyscript(FILE* fpProxyScript);
+	static bool is_proxyscript(std::string const& filePath);
+	operator bool();
 };
 
-ProxyscriptData parseProxyScript(FILE* fpProxyScript);
 #endif

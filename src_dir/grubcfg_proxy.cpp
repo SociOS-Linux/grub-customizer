@@ -1,25 +1,23 @@
-#include <iostream>
-#include <cstdlib>
-#include <cstdio>
-#include <string>
-#include <list>
-#include "libproxy.h"
+#include "script.h"
+#include "proxy.h"
+#include "entry.h"
+#include "rule.h"
 
-int main(int argc, char** argv){ //TODO: Funktionalität teilweise auslagern
+int main(int argc, char** argv){
 	if (argc == 2){
-		EntryList oldList(stdin); //reading the script output
-	
-		//reading the config
-		std::list<ListRule> listRules = readRuleString(argv[1]);
-	
+		Script script("noname", "");
+		Entry newEntry;
+		while (newEntry = Entry(stdin)){
+			script.push_back(newEntry);
+		}
 		
-		EntryList newList = executeListRules(oldList, listRules);
+		Proxy proxy;
+		proxy.importRuleString(argv[1]);
+		proxy.dataSource = &script;
+		proxy.sync(true, true);
 		
-		
-		//printing the new configuration
-		for (std::list<Entry>::iterator iter = newList.begin(); iter != newList.end(); iter++){
-			if (!iter->disabled)
-				std::cout << "menuentry \""+iter->outputName+"\""+iter->extension+"{\n"+iter->content+"}\n";
+		for (std::list<Rule>::iterator iter = proxy.rules.begin(); iter != proxy.rules.end(); iter++){
+			iter->print();
 		}
 		return 0;
 	}
@@ -28,12 +26,3 @@ int main(int argc, char** argv){ //TODO: Funktionalität teilweise auslagern
 		return 1;
 	}
 }
-
-
-
-
-
-
-
-
-

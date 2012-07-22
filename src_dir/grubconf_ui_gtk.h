@@ -3,6 +3,7 @@
 #include <gtkmm.h>
 #include "grubconf_ui.h"
 #include "grubconfig.h"
+#include "liveCDSetupDialog.h"
 #include <iostream>
 
 #include <libintl.h>
@@ -13,8 +14,8 @@ public:
 	struct TreeModel : public Gtk::TreeModelColumnRecord {
 		Gtk::TreeModelColumn<bool> active;
 		Gtk::TreeModelColumn<Glib::ustring> name;
-		Gtk::TreeModelColumn<Entry*> relatedEntry;
-		Gtk::TreeModelColumn<ToplevelScript*> relatedScript;
+		Gtk::TreeModelColumn<Rule*> relatedRule;
+		Gtk::TreeModelColumn<Proxy*> relatedProxy;
 		Gtk::TreeModelColumn<bool> is_other_entries_marker;
 		Gtk::TreeModelColumn<bool> is_editable;
 		TreeModel();
@@ -22,6 +23,11 @@ public:
 	TreeModel treeModel;
 	Glib::RefPtr<Gtk::TreeStore> refTreeStore;
 	GrubConfListing();
+};
+
+class ImageMenuItemOwnKey : public Gtk::ImageMenuItem {
+	public:
+	ImageMenuItemOwnKey(const Gtk::StockID& id, const Gtk::AccelKey& accel_key);
 };
 
 class GrubConfUIGtk : public GrubConfUI {
@@ -50,7 +56,8 @@ class GrubConfUIGtk : public GrubConfUI {
 	Gtk::VSeparator vs_sep3;
 	
 	Gtk::MenuItem miFile, miEdit, miView, miHelp, miInstallGrub;
-	Gtk::ImageMenuItem miExit, miAdd, miRemove, miUp, miDown, miSave, miPreferences, miReload, miAbout;
+	Gtk::ImageMenuItem miExit, miSave, miPreferences, miAbout, miStartRootSelector;
+	ImageMenuItemOwnKey miReload, miAdd, miRemove, miUp, miDown;
 	Gtk::Menu subFile, subEdit, subView, subHelp;
 	Gtk::AboutDialog dlgAbout;
 	
@@ -85,7 +92,12 @@ public:
 	void event_save_progress_changed();
 	void event_thread_died();
 	void event_grub_install_ready();
+	bool bootloader_not_found_requestForRootSelection();
+	std::string show_root_selector();
+	bool requestForBurgMode();
+	
 	void func_disp_grub_install_ready();
+	void signal_show_root_selector();
 	void signal_row_changed(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter);
 	void signal_move_click(int direction); //direction: -1: one position up, 1: one p. down
 	void signal_add_click();

@@ -5,21 +5,28 @@ include_directories(
     ${GTKMM_INCLUDE_DIRS}  )
 
 add_executable(../grub-customizer
-	confparser.cpp
+	entry.cpp
 	grubconfig.cpp
 	grubconf_ui_gtk.cpp
 	gtk-client.cpp
-	libproxy.cpp
 	libproxyscript_parser.cpp
-	deviceDataList.cpp
-	mountTable.cpp
 	liveCDSetupDialog.cpp
+	mountTable.cpp
+	proxy.cpp
+	proxylist.cpp
+	pscriptname_translator.cpp
+	repository.cpp
+	rule.cpp
+	script.cpp
+	deviceDataList.cpp
+	umount_all.cpp
 )
 
 add_executable(../grubcfg-proxy
-	confparser.cpp
-	libproxy.cpp
-	libproxyscript_parser.cpp
+	entry.cpp
+	rule.cpp
+	script.cpp
+	proxy.cpp
 	grubcfg_proxy.cpp
 )
 

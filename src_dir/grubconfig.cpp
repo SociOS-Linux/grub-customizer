@@ -1,80 +1,532 @@
 #include "grubconfig.h"
 
-std::string getProxifiedScriptName(std::string const& proxyScriptPath){ //return value: name of proxy or emtpy string if it isn't a proxy
-	FILE* proxy_fp = fopen(proxyScriptPath.c_str(), "r");
-	int c;
-	//skip first line
-	while ((c = fgetc(proxy_fp)) != EOF){
-		if (c == '\n')
-			break;
-	}
-	//compare the line start
-	std::string textBefore = "#THIS IS A GRUB PROXY SCRIPT FOR ";
-	bool match_error = false;
-	for (int i = 0; i < textBefore.length() && (c = fgetc(proxy_fp)) != EOF; i++){
-		if (c != textBefore[i]){
-			match_error = true; //It's not a proxy.
-			break;
-		}
+GrubConfEnvironment::GrubConfEnvironment() : burgMode(false) {}
+
+bool GrubConfEnvironment::init(GrubConfEnvironment::Mode mode, std::string const& dir_prefix){
+	std::string cmd_prefix = dir_prefix != "" ? "chroot '"+dir_prefix+"' " : "";
+	this->cfg_dir_prefix = dir_prefix;
+	switch (mode){
+	case BURG_MODE:
+		this->burgMode = true;
+		this->mkconfig_cmd = "burg-mkconfig";
+		this->update_cmd = "update-burg";
+		this->install_cmd = "burg-install";
+		this->cfg_dir = dir_prefix+"/etc/burg.d";
+		this->cfg_dir_noprefix = "/etc/burg.d";
+		this->output_config_dir =  dir_prefix+"/boot/burg";
+		this->output_config_file = dir_prefix+"/boot/burg/burg.cfg";
+		break;
+	case GRUB_MODE:
+		this->burgMode = false;
+		this->mkconfig_cmd = "grub-mkconfig";
+		this->update_cmd = "update-grub";
+		this->install_cmd = "grub-install";
+		this->cfg_dir = dir_prefix+"/etc/grub.d";
+		this->cfg_dir_noprefix = "/etc/grub.d";
+		this->output_config_dir =  dir_prefix+"/boot/grub";
+		this->output_config_file = dir_prefix+"/boot/grub/grub.cfg";
+		break;
 	}
 	
-	std::string proxyfied_script = "";
-	if (!match_error){
-		//read the script name (ends by line break)
-		while ((c = fgetc(proxy_fp)) != EOF){
-			if (c == '\n')
-				break;
-			else
-				proxyfied_script += c;
-		}
-	}
+	bool is_valid = check_cmd(mkconfig_cmd, cmd_prefix) && check_cmd(update_cmd, cmd_prefix) && check_cmd(install_cmd, cmd_prefix) && check_dir(cfg_dir);
 	
-	fclose(proxy_fp);
-	return proxyfied_script;
+	this->mkconfig_cmd = cmd_prefix+this->mkconfig_cmd;
+	this->update_cmd = cmd_prefix+this->update_cmd;
+	this->install_cmd = cmd_prefix+this->install_cmd;
+	
+	return is_valid;
 }
 
-ToplevelScript::ToplevelScript(std::string name, std::string proxyfiedScriptName, int permissions)
-	: name(name), proxyfiedScriptName(proxyfiedScriptName), permissions(permissions)
-{
-	this->isProxy = proxyfiedScriptName != "";
-	std::string strpart_index = name.substr(0,2);
-	this->index = ((strpart_index[0] - '0') * 10) + (strpart_index[1] - '0'); //converting the index to int
+bool GrubConfEnvironment::check_cmd(std::string const& cmd, std::string const& cmd_prefix){
+	std::cout << "checking for the " << cmd << " command… " << std::endl;
+	int res = system((cmd_prefix+" which "+cmd).c_str());
+	return res == 0;
 }
 
-std::string ToplevelScript::getBasename(){
-	if (this->proxyfiedScriptName != "")
-		return this->proxyfiedScriptName;
-	else
-		return this->name.substr(3);
+bool GrubConfEnvironment::check_dir(std::string const& dir_str){
+	DIR* dir = opendir(dir_str.c_str());
+	if (dir){
+		closedir(dir);
+		return true;
+	}
+	return false;
 }
 
-ToplevelScript::ToplevelScript(){}
-
-bool ToplevelScript::isExecutable() const {
-	return permissions & 0111;
+bool GrubConfEnvironment::isLiveCD(){
+	FILE* mtabFile = fopen("/etc/mtab", "r");
+	MountTable mtab;
+	if (mtabFile){
+		mtab.loadData(mtabFile);
+		fclose(mtabFile);
+	}
+	return mtab && mtab.getEntryByMountpoint("/").fileSystem == "aufs";
 }
 
-void ToplevelScript::set_executable(bool is_executable){
-	if (is_executable)
-		permissions |= 0111;
-	else
-		permissions &= ~0111;
-}
-
-bool compare_scripts(ToplevelScript const& a, ToplevelScript const& b){
-	return a.index < b.index;
+std::string GrubConfEnvironment::getRootDevice(){
+	FILE* mtabFile = fopen("/etc/mtab", "r");
+	MountTable mtab;
+	if (mtabFile){
+		mtab.loadData(mtabFile);
+		fclose(mtabFile);
+	}
+	return mtab.getEntryByMountpoint(cfg_dir_prefix == "" ? "/" : cfg_dir_prefix).device;
 }
 
 GrubConfig::GrubConfig()
-	: connectedUI(NULL), progress(0), cancelThreadsRequested(false), mkconfigProc(NULL), burgMode(false), config_has_been_different_on_startup_but_unsaved(false), error_proxy_not_found(false)
+ : read_lock(false), write_lock(false), connectedUI(NULL), error_proxy_not_found(false),
+ progress(0), config_has_been_different_on_startup_but_unsaved(false),
+ cancelThreadsRequested(false), verbose(true)
 {}
+
+
+bool GrubConfig::umountSwitchedRootPartition(){
+	if (env.cfg_dir_prefix != ""){
+		bool res = umount_all(env.cfg_dir_prefix);
+		if (!res)
+			return false;
+		env.cfg_dir_prefix = "";
+		return true;
+	}
+	else
+		return true;
+}
+
+bool GrubConfig::prepare(bool forceRootSelection){
+	if (!connectedUI){
+		std::cerr << "GrubConfig::prepare requires a connected ui!" << std::endl;
+		return false;
+	}
+
+	bool exit = true;
+	bool firstRun = true;
+	std::string root = env.cfg_dir_prefix;
+	do {
+		exit = true;
+		
+		bool burg_found = env.init(GrubConfEnvironment::BURG_MODE, root);
+		bool grub_found = env.init(GrubConfEnvironment::GRUB_MODE, root);
+		bool isLiveCD = GrubConfEnvironment::isLiveCD();
+		if (forceRootSelection || isLiveCD && firstRun || !burg_found && !grub_found){
+			if (!forceRootSelection && !burg_found && !grub_found && (!isLiveCD || !firstRun)){
+				bool selectRoot = connectedUI->bootloader_not_found_requestForRootSelection();
+				if (!selectRoot)
+					return false;
+			}
+			root = connectedUI->show_root_selector();
+			if (root == "")
+				return false;
+			else {
+				forceRootSelection = false;
+				exit = false;
+			}
+		}
+		else if (grub_found || burg_found){
+			GrubConfEnvironment::Mode mode = GrubConfEnvironment::GRUB_MODE;
+			if (grub_found && burg_found){
+				if (connectedUI->requestForBurgMode())
+					mode = GrubConfEnvironment::BURG_MODE;
+			}
+			else if (burg_found)
+				mode = GrubConfEnvironment::BURG_MODE;
+			
+			env.init(mode, root);
+			
+			if (this->cfgDirIsClean() == false)
+				this->cleanupCfgDir();
+		}
+		
+		firstRun = false;
+	}
+	while (!exit);
+	return true;
+}
+
+bool GrubConfig::createScriptForwarder(std::string const& scriptName) const {
+	//replace: $cfg_dir/proxifiedScripts/ -> $cfg_dir/LS_
+	std::string scriptNameNoPath = scriptName.substr((this->env.cfg_dir+"/proxifiedScripts/").length());
+	std::string outputFilePath = this->env.cfg_dir+"/LS_"+scriptNameNoPath;
+	FILE* existingScript = fopen(outputFilePath.c_str(), "r");
+	if (existingScript == NULL){
+		FILE* fwdScript = fopen(outputFilePath.c_str(), "w");
+		if (fwdScript){
+			fputs("#!/bin/sh\n", fwdScript);
+			fputs(("'"+scriptName.substr(env.cfg_dir_prefix.length())+"'").c_str(), fwdScript);
+			fclose(fwdScript);
+			chmod(outputFilePath.c_str(), 0755);
+			return true;
+		}
+		else
+			return false;
+	}
+	else {
+		fclose(existingScript);
+		return false;
+	}
+}
+
+bool GrubConfig::removeScriptForwarder(std::string const& scriptName) const {
+	std::string scriptNameNoPath = scriptName.substr((this->env.cfg_dir+"/proxifiedScripts/").length());
+	std::string filePath = this->env.cfg_dir+"/LS_"+scriptNameNoPath;
+	return unlink(filePath.c_str()) == 0;
+}
+
+std::string GrubConfig::readScriptForwarder(std::string const& scriptForwarderFilePath) const {
+	std::string result;
+	FILE* scriptForwarderFile = fopen(scriptForwarderFilePath.c_str(), "r");
+	if (scriptForwarderFile){
+		int c;
+		while ((c = fgetc(scriptForwarderFile)) != EOF && c != '\n'){} //skip first line
+		if (c != EOF)
+			while ((c = fgetc(scriptForwarderFile)) != EOF && c != '\n'){result += char(c);} //read second line (=path)
+		fclose(scriptForwarderFile);
+	}
+	return result.substr(1, result.length()-2);
+}
+
+void GrubConfig::load(){
+	send_new_load_progress(0);
+	{ //check the existence of cfg_dir
+		DIR* cfg_dir = opendir(this->env.cfg_dir.c_str());
+		if (cfg_dir)
+			closedir(cfg_dir);
+		else {
+			if (connectedUI){
+				this->message = this->env.cfg_dir+gettext(" not found. Is grub2 installed?");
+				connectedUI->event_thread_died();
+			}
+			return; //dir doesn't exist, cancel!
+		}
+	}
+	//load scripts
+	repository.load(this->env.cfg_dir, false);
+	repository.load(this->env.cfg_dir+"/proxifiedScripts", true);
+	send_new_load_progress(0.05);
+	
+	DIR* hGrubCfgDir = opendir(this->env.cfg_dir.c_str());
+
+	if (!hGrubCfgDir){
+		if (connectedUI){
+			this->message = this->env.cfg_dir+gettext(" not found. Is grub2 installed?");
+			connectedUI->event_thread_died();
+		}
+		return; //cancel this thread
+	}
+	
+	//load proxies
+	struct dirent *entry;
+	struct stat fileProperties;
+	while (entry = readdir(hGrubCfgDir)){
+		stat((this->env.cfg_dir+"/"+entry->d_name).c_str(), &fileProperties);
+		if ((fileProperties.st_mode & S_IFMT) != S_IFDIR){ //ignore directories
+			if (entry->d_name[2] == '_' && entry->d_name[0] != '0'){ //check whether it's an script (they should be named XX_scriptname)… und block header scripts (they use a leading 0)
+				this->proxies.push_back(Proxy());
+				this->proxies.back().fileName = this->env.cfg_dir+"/"+entry->d_name;
+				this->proxies.back().index = (entry->d_name[0]-'0')*10 + (entry->d_name[1]-'0');
+				this->proxies.back().permissions = fileProperties.st_mode & ~S_IFMT;
+				
+				FILE* proxyFile = fopen((this->env.cfg_dir+"/"+entry->d_name).c_str(), "r");
+				ProxyScriptData data(proxyFile);
+				fclose(proxyFile);
+				if (data){
+					this->proxies.back().dataSource = repository.getScriptByFilename(this->env.cfg_dir_prefix+data.scriptCmd);
+					this->proxies.back().importRuleString(data.ruleString.c_str());
+				}
+				else {
+					this->proxies.back().dataSource = repository.getScriptByFilename(this->env.cfg_dir+"/"+entry->d_name);
+					this->proxies.back().importRuleString("+*"); //it's no proxy, so accept all
+				}
+				
+			}
+		}
+	}
+	closedir(hGrubCfgDir);
+	this->proxies.sort();
+	//create proxifiedScript links & chmod other files
+
+	for (Repository::iterator iter = this->repository.begin(); iter != this->repository.end(); iter++){
+		if (iter->isInScriptDir(env.cfg_dir)){
+			//createScriptForwarder & disable proxies
+			createScriptForwarder(iter->fileName);
+			std::list<Proxy*> relatedProxies = proxies.getProxiesByScript(*iter);
+			for (std::list<Proxy*>::iterator piter = relatedProxies.begin(); piter != relatedProxies.end(); piter++){
+				int res = chmod((*piter)->fileName.c_str(), 0644);
+			}
+		}
+		else {
+			//enable scripts (unproxified), in this case, Proxy::fileName == Script::fileName
+			chmod(iter->fileName.c_str(), 0755);
+		}
+	}
+	send_new_load_progress(0.1);
+	
+	//run mkconfig
+	std::cout << "running " << this->env.mkconfig_cmd << std::endl;
+	FILE* mkconfigProc = popen(this->env.mkconfig_cmd.c_str(), "r");
+	readGeneratedFile(mkconfigProc);
+	
+	int success = pclose(mkconfigProc);
+	if (success != 0 && !cancelThreadsRequested){
+		if (connectedUI){
+			this->message = env.mkconfig_cmd + gettext(" couldn't be executed successfully. You must run this as root!");
+			connectedUI->event_thread_died();
+		}
+		return; //cancel this thread
+	}
+
+	this->send_new_load_progress(0.9);
+
+	mkconfigProc = NULL;
+
+	
+	//restore old configuration
+	while (write_lock) usleep(1000); //wait until the other thread is ready
+	this->read_lock = true;
+	for (Repository::iterator iter = this->repository.begin(); iter != this->repository.end(); iter++){
+		if (iter->isInScriptDir(env.cfg_dir)){
+			//removeScriptForwarder & reset proxy permissions
+			bool result = removeScriptForwarder(iter->fileName);
+			if (!result)
+				std::cout << "remove not successful!" << std::endl;
+		}
+		std::list<Proxy*> relatedProxies = proxies.getProxiesByScript(*iter);
+		for (std::list<Proxy*>::iterator piter = relatedProxies.begin(); piter != relatedProxies.end(); piter++){
+			chmod((*piter)->fileName.c_str(), (*piter)->permissions);
+		}
+	}
+	this->read_lock = false;
+	
+	//compare config
+	FILE* oldConfigFile = fopen(env.output_config_file.c_str(), "r");
+	if (oldConfigFile){
+		GrubConfig oldConfig;
+		oldConfig.verbose = false;
+		oldConfig.env = this->env;
+		oldConfig.readGeneratedFile(oldConfigFile, true);
+		config_has_been_different_on_startup_but_unsaved = !this->compare(oldConfig);
+		fclose(oldConfigFile);
+	}
+	else
+		config_has_been_different_on_startup_but_unsaved = false;
+	
+	send_new_load_progress(1);
+}
+
+
+void GrubConfig::readGeneratedFile(FILE* source, bool createScriptIfNotFound){
+	GrubConfRow row;
+	Script* script;
+	int i = 0;
+	while (!cancelThreadsRequested && (row = GrubConfRow(source))){
+		if (row.text.substr(0,10) == ("### BEGIN ") && row.text.substr(row.text.length()-4,4) == " ###"){
+			while (write_lock) usleep(1000); //wait until the other thread is ready
+			this->read_lock = true;
+			if (script)
+				this->proxies.sync_all(true, true, script);
+			std::string scriptName = row.text.substr(10, row.text.length()-14);
+			std::string prefix = this->env.cfg_dir_prefix;
+			std::string realScriptName = prefix+scriptName;
+			if (realScriptName.substr(0, (this->env.cfg_dir+"/LS_").length()) == this->env.cfg_dir+"/LS_"){
+				realScriptName = prefix+readScriptForwarder(realScriptName);
+			}
+			script = repository.getScriptByFilename(realScriptName, createScriptIfNotFound);
+			if (createScriptIfNotFound) //for the compare-configuration
+				this->proxies.push_back(Proxy(*script));
+			this->read_lock = false;
+			if (script){
+				this->send_new_load_progress(0.1 + (0.7 / this->repository.size() * ++i));
+			}
+		}
+		else if (script != NULL && row.text.substr(0, 10) == "menuentry ") {
+			while (write_lock) usleep(1000); //wait until the other thread is ready
+			this->read_lock = true;
+			script->push_back(Entry(source, row));
+			this->proxies.sync_all(false, false, script);
+			this->read_lock = false;
+			this->send_new_load_progress(0.1 + (0.7 / this->repository.size() * i));
+		}
+	}
+	while (write_lock) usleep(1000); //wait until the other thread is readyg
+	this->read_lock = true;
+	if (script)
+		this->proxies.sync_all(true, true, script);
+	this->read_lock = false;
+}
+
+void GrubConfig::save(){
+	send_new_save_progress(0);
+	std::map<std::string, int> samename_counter;
+	proxies.deleteAllProxyscriptFiles();  //delete all proxies to get a clean file system
+	proxies.clearTrash(); //delete all files of removed proxies
+	for (Repository::iterator script_iter = repository.begin(); script_iter != repository.end(); script_iter++)
+		script_iter->moveToBasedir(this->env.cfg_dir);
+	
+	send_new_save_progress(0.1);
+
+	int mkdir_result = mkdir((this->env.cfg_dir+"/proxifiedScripts").c_str(), 0755); //create this directory if it doesn't allready exist
+
+	int proxyCount = 0;
+	for (Repository::iterator script_iter = repository.begin(); script_iter != repository.end(); script_iter++){
+		std::list<Proxy*> relatedProxies = proxies.getProxiesByScript(*script_iter);
+		if (proxies.proxyRequired(*script_iter)){
+			script_iter->moveFile(this->env.cfg_dir+"/proxifiedScripts/"+pscriptname_encode(script_iter->name, samename_counter[script_iter->name]++), 0755);
+			for (std::list<Proxy*>::iterator proxy_iter = relatedProxies.begin(); proxy_iter != relatedProxies.end(); proxy_iter++){
+				std::ostringstream nameStream;
+				nameStream << (*proxy_iter)->index << "_" << script_iter->name << "_proxy";
+				(*proxy_iter)->generateFile(this->env.cfg_dir+"/"+nameStream.str(), this->env.cfg_dir_prefix.length(), this->env.cfg_dir_noprefix);
+				proxyCount++;
+			}
+		}
+		else {
+			if (relatedProxies.size() == 1){
+				std::ostringstream nameStream;
+				nameStream << relatedProxies.front()->index << "_" << script_iter->name;
+				script_iter->moveFile(this->env.cfg_dir+"/"+nameStream.str(), relatedProxies.front()->permissions);
+			}
+			else
+				std::cerr << "GrubConfig::save: cannot move proxy… only one expected!" << std::endl;
+		}	
+	}
+	send_new_save_progress(0.2);
+
+
+	//remove "proxifiedScripts" dir, if empty
+	
+	{
+		int proxifiedScriptCount = 0;
+		struct dirent *entry;
+		struct stat fileProperties;
+		DIR* hScriptDir = opendir((this->env.cfg_dir+"/proxifiedScripts").c_str());
+		while (entry = readdir(hScriptDir)){
+			if (std::string(entry->d_name) != "." && std::string(entry->d_name) != ".."){
+				proxifiedScriptCount++;
+			}
+		}
+		closedir(hScriptDir);
+		
+		if (proxifiedScriptCount == 0)
+			rmdir((this->env.cfg_dir+"/proxifiedScripts").c_str());
+	}
+	
+	//add or remove proxy binary
+	
+	FILE* proxyBin = fopen((this->env.cfg_dir+"/bin/grubcfg_proxy").c_str(), "r");
+	bool proxybin_exists = proxyBin != NULL;
+	bool proxy_is_dummy = false;
+	std::string dummyproxy_code = "#!/bin/sh\ncat\n";
+	std::string proxy_code;
+	
+	if (proxyBin){
+		std::cerr << "proxybin does already exist!" << std::endl;
+		int c;
+		for (int i = 0; i < dummyproxy_code.length() && (c = fgetc(proxyBin)) != EOF; i++)
+			proxy_code += c;
+		
+		if (proxy_code == dummyproxy_code)
+			proxy_is_dummy = true;
+		fclose(proxyBin);
+	}
+	
+	if (proxyCount != 0 && (!proxybin_exists || proxy_is_dummy)){
+		//copy proxy
+		int bin_mk_success = mkdir((this->env.cfg_dir+"/bin").c_str(), 0755);
+
+		FILE* proxyBinSource = fopen((std::string(LIBDIR)+"/grubcfg-proxy").c_str(), "r");
+		
+		if (proxyBinSource){
+			FILE* proxyBinTarget = fopen((this->env.cfg_dir+"/bin/grubcfg_proxy").c_str(), "w");
+			if (proxyBinTarget){
+				int c;
+				while ((c = fgetc(proxyBinSource)) != EOF){
+					fputc(c, proxyBinTarget);
+				}
+				fclose(proxyBinTarget);
+				chmod((this->env.cfg_dir+"/bin/grubcfg_proxy").c_str(), 0755);
+			}
+			else
+				std::cerr << "could not open proxy output file!" << std::endl;
+			fclose(proxyBinSource);
+		}
+		else {
+			std::cerr << "proxy could not be copied, generating dummy!" << std::endl;
+			FILE* proxyBinTarget = fopen((this->env.cfg_dir+"/bin/grubcfg_proxy").c_str(), "w");
+			if (proxyBinTarget){
+				fputs(dummyproxy_code.c_str(), proxyBinTarget);
+				error_proxy_not_found = true;
+				fclose(proxyBinTarget);
+				chmod((this->env.cfg_dir+"/bin/grubcfg_proxy").c_str(), 0755);
+			}
+			else
+				std::cerr << "coundn't create proxy!" << std::endl;
+		}
+	}
+	else if (proxyCount == 0 && proxybin_exists){
+		//the following commands are only cleanup… no problem, when they fail
+		unlink((this->env.cfg_dir+"/bin/grubcfg_proxy").c_str());
+		rmdir((this->env.cfg_dir+"/bin").c_str());
+	}
+
+
+	//run update-grub
+	FILE* saveProc = popen((env.update_cmd+" 2>&1").c_str(), "r");
+	if (saveProc){
+		int c;
+		std::string row = "";
+		while ((c = fgetc(saveProc)) != EOF){
+			if (c == '\n'){
+				send_new_save_progress(0.5); //a gui should use pulse() instead of set_fraction
+				row = "";
+			}
+			else
+				row += char(c);
+			std::cerr << char(c); //print messages (for debugging purposes)
+		}
+		pclose(saveProc);
+	}
+	config_has_been_different_on_startup_but_unsaved = false;
+	send_new_save_progress(1);
+}
+
+
+bool GrubConfig::compare(GrubConfig const& other) const {
+	std::list<const Rule*> rlist[2];
+	for (int i = 0; i < 2; i++){
+		const GrubConfig* gc = i == 0 ? this : &other;
+		for (ProxyList::const_iterator piter = gc->proxies.begin(); piter != gc->proxies.end(); piter++){
+			if (piter->isExecutable() && piter->dataSource){
+				std::string fname = piter->dataSource->fileName.substr(other.env.cfg_dir.length()+1);
+				if (i == 0 || fname[0] >= '1' && fname[0] <= '9' && fname[1] >= '0' && fname[1] <= '9' && fname[2] == '_'){
+					for (std::list<Rule>::const_iterator riter = piter->rules.begin(); riter != piter->rules.end(); riter++){
+						if (riter->type == Rule::NORMAL && riter->dataSource && riter->isVisible){
+							rlist[i].push_back(&*riter);
+						}
+					}
+				}
+			}
+		}
+	}
+	if (rlist[0].size() != rlist[1].size())
+		return false;
+	
+	std::list<const Rule*>::iterator self_iter = rlist[0].begin(), other_iter = rlist[1].begin();
+	while (self_iter != rlist[0].end() && other_iter != rlist[1].end()){
+		if ((*self_iter)->outputName != (*other_iter)->outputName || (*self_iter)->dataSource->extension != (*other_iter)->dataSource->extension || (*self_iter)->dataSource->content != (*other_iter)->dataSource->content)
+			return false;
+		self_iter++;
+		other_iter++;
+	}
+	return true;
+}
+
+void GrubConfig::connectUI(GrubConfUI& ui){
+	connectedUI = &ui;
+}
 
 void GrubConfig::send_new_load_progress(double newProgress){
 	if (connectedUI != NULL){
 		this->progress = newProgress;
 		connectedUI->event_load_progress_changed();
 	}
-	else {
+	else if (this->verbose) {
 		std::cerr << "Error: cannot show updated load progress - no UI connected!" << std::endl;
 	}
 }
@@ -84,253 +536,13 @@ void GrubConfig::send_new_save_progress(double newProgress){
 		this->progress = newProgress;
 		connectedUI->event_save_progress_changed();
 	}
-	else {
+	else if (this->verbose) {
 		std::cerr << "Error: cannot show updated save progress - no UI connected!" << std::endl;
 	}
 }
 
 void GrubConfig::cancelThreads(){
 	cancelThreadsRequested = true;
-}
-
-void GrubConfig::load(){
-	this->send_new_load_progress(0);
-	int toplevelScriptCount = 0; //does equal with this->size() in some cases (disabled scripts will be counted too)
-	
-	//reading the current configuration
-	DIR* hGrubCfgDir = opendir(this->cfg_dir.c_str());
-	
-	if (!hGrubCfgDir){
-		if (connectedUI){
-			this->message = this->cfg_dir+gettext(" not found. Is grub2 installed?");
-			connectedUI->event_thread_died();
-		}
-		return; //cancel this thread
-	}
-
-	struct dirent *entry;
-	struct stat fileProperties;
-	while (entry = readdir(hGrubCfgDir)){
-		stat((this->cfg_dir+"/"+entry->d_name).c_str(), &fileProperties);
-		if ((fileProperties.st_mode & S_IFMT) != S_IFDIR){ //ignore directories
-			if (entry->d_name[2] == '_' && entry->d_name[0] != '0'){ //check whether it's an script (they should be named XX_scriptname)… und block header scripts (they use a leading 0)
-				this->push_back(ToplevelScript(entry->d_name, getProxifiedScriptName((this->cfg_dir+"/"+entry->d_name).c_str()), fileProperties.st_mode & ~S_IFMT));
-				toplevelScriptCount++;
-			}
-		}
-	}
-	closedir(hGrubCfgDir);
-
-	this->sort(compare_scripts); //sorting by name … as the update-grub script would do too
-
-	//std::cout << "Anzahl der Skripte: " << this->realScripts.size() << std::endl;
-
-	this->send_new_load_progress(0.05);
-
-	//link proxified scripts and make them all executable
-	DIR* hPsScriptDir = opendir((this->cfg_dir+"/proxifiedScripts").c_str());
-
-	for (std::list<ToplevelScript>::iterator iter = this->begin(); iter != this->end(); iter++){
-		if (iter->proxyfiedScriptName == ""){
-			if (!iter->isExecutable()){
-				std::cout << "setting executable bit for " << iter->name << std::endl;
-				int success = chmod((this->cfg_dir+"/"+iter->name).c_str(), 0755);
-				if (success != 0)
-					std::cerr << "couln't manipulate script permissions!" << std::endl;
-			}
-		}
-		else {
-			int success = chmod((this->cfg_dir+"/"+iter->name).c_str(), 0644);
-			if (success != 0)
-				std::cerr << "couln't manipulate proxy permissions!" << std::endl;
-		
-			std::cout << "adding link for " << iter->proxyfiedScriptName << std::endl;
-			if (hPsScriptDir)
-				bool link_successful_created = createScriptForwarder(iter->proxyfiedScriptName);
-		}
-	}
-	
-	//link all remaining (unused) scripts from proxifiedScripts
-	if (hPsScriptDir){
-		while (entry = readdir(hPsScriptDir)){
-			stat((this->cfg_dir+"/proxifiedScripts/"+entry->d_name).c_str(), &fileProperties);
-			if ((fileProperties.st_mode & S_IFMT) != S_IFDIR){ //ignore directories
-				bool success = createScriptForwarder(entry->d_name);
-				if (success)
-					toplevelScriptCount++;
-			}
-		}
-		closedir(hPsScriptDir);
-	}
-
-	this->send_new_load_progress(0.1);
-
-	//execute scripts
-	mkconfigProc = popen(this->mkconfig_cmd.c_str(), "r");
-	readGeneratedFile(mkconfigProc, toplevelScriptCount);
-
-	int success = pclose(mkconfigProc);
-	if (success != 0 && !cancelThreadsRequested){
-		if (connectedUI){
-			this->message = mkconfig_cmd + gettext(" couldn't be executed successfully. You must run this as root!");
-			connectedUI->event_thread_died();
-		}
-		return; //cancel this thread
-	}
-
-	this->send_new_load_progress(0.9);
-	
-	mkconfigProc = NULL;
-	
-	//restore configuration
-	for (std::list<ToplevelScript>::iterator iter = this->begin(); iter != this->end(); iter++){
-		if (iter->proxyfiedScriptName == ""){
-			int success = chmod((this->cfg_dir+"/"+iter->name).c_str(), iter->permissions);
-			if (success != 0)
-				std::cerr << "couln't manipulate script permissions!" << std::endl;
-		}
-		else {
-			int success = chmod((this->cfg_dir+"/"+iter->name).c_str(), iter->permissions);
-			if (success != 0)
-				std::cerr << "couln't manipulate proxy permissions!" << std::endl;
-		
-			unlink((this->cfg_dir+"/LS_"+iter->proxyfiedScriptName).c_str());
-		}
-	}
-
-	//remove all links of remaining (unused) proxifiedScripts
-	hPsScriptDir = opendir((this->cfg_dir+"/proxifiedScripts").c_str());
-	if (hPsScriptDir){
-		while (entry = readdir(hPsScriptDir)){
-			stat((std::string(this->cfg_dir+"/proxifiedScripts/")+entry->d_name).c_str(), &fileProperties);
-			if ((fileProperties.st_mode & S_IFMT) != S_IFDIR){ //ignore directories
-				unlink((std::string(this->cfg_dir+"/LS_")+entry->d_name).c_str()); //should not be successfull in every case
-			}
-		}
-		closedir(hPsScriptDir);
-	}
-
-	this->send_new_load_progress(0.97);
-
-	//execute proxies
-
-	for (std::list<ToplevelScript>::iterator iter = this->begin(); iter != this->end(); iter++){
-		if (iter->proxyfiedScriptName != ""){
-			FILE* proxyFile = fopen((this->cfg_dir+"/"+iter->name).c_str(), "r");
-			ProxyscriptData proxyData = parseProxyScript(proxyFile);
-			fclose(proxyFile);
-			if (proxyData.ruleString != ""){
-				iter->entries = executeListRules(iter->entries, readRuleString(proxyData.ruleString.c_str()));
-			}
-		}
-	}
-	
-	//compare to generated file
-	FILE* oldConfigFile = fopen(output_config_file.c_str(), "r");
-	if (oldConfigFile){
-		GrubConfig oldConfig;
-		oldConfig.readGeneratedFile(oldConfigFile);
-		config_has_been_different_on_startup_but_unsaved = !this->compare(oldConfig);
-		fclose(oldConfigFile);
-	}
-	this->send_new_load_progress(1);
-}
-
-void GrubConfig::readGeneratedFile(FILE* source, int toplevelScriptCount){
-	GrubConfRow row;
-	std::string scriptName;
-	int i = 0;
-	while (!cancelThreadsRequested && (row = readGrubConfRow(source))){
-		if (row.text.substr(0,10) == ("### BEGIN ") && row.text.substr(row.text.length()-4,4) == " ###"){
-			scriptName = row.text.substr(22, row.text.length()-26);
-			if (scriptName[0] != '0'){ //ignore header scripts (00_header, 05_debian_theme)
-				if (toplevelScriptCount != -1)
-					this->send_new_load_progress(0.1 + (0.7 / toplevelScriptCount * ++i));
-				this->realScripts[scriptName.substr(3)]; //make sure that empty scripts will be added to realScripts
-			}
-		}
-		else if (row.text.substr(0, 10) == "menuentry ") {
-			Entry grubEntry = readGrubEntry(source, row);
-			if (scriptName.substr(0,3) == "LS_"){
-				std::string proxyfiedScriptName = scriptName.substr(3);
-				for (std::list<ToplevelScript>::iterator confIter = this->begin(); confIter != this->end(); confIter++){
-					if (confIter->proxyfiedScriptName == proxyfiedScriptName){
-						confIter->entries.push_back(grubEntry);
-					}
-				}
-			}
-			else {
-				bool scriptFound = false;
-				for (std::list<ToplevelScript>::iterator confIter = this->begin(); confIter != this->end(); confIter++){
-					if (confIter->name == scriptName){
-						confIter->entries.push_back(grubEntry);
-						scriptFound = true;
-						break;
-					}
-				}
-				if (!scriptFound){ //if the config isn't read before, script will not be found
-					this->push_back(ToplevelScript(scriptName, "", 0755));
-					this->back().entries.push_back(grubEntry);
-				}
-			}
-			this->realScripts[scriptName.substr(3)].push_back(grubEntry);
-			
-			if (toplevelScriptCount != -1)
-				this->send_new_load_progress(0.1 + (0.7 / toplevelScriptCount * i));
-		}
-	}
-}
-
-bool GrubConfig::compare(GrubConfig const& other) const {
-	GrubConfig::const_iterator self_tls_iter = this->begin();
-	GrubConfig::const_iterator other_tls_iter = other.begin();
-	
-	bool differenceFound = false;
-	while (!differenceFound && self_tls_iter != this->end() && other_tls_iter != other.end()){
-		if (self_tls_iter->name == other_tls_iter->name){
-			EntryList::const_iterator self_entry_iter = self_tls_iter->entries.begin();
-			EntryList::const_iterator other_entry_iter = other_tls_iter->entries.begin();
-			while (!differenceFound && self_entry_iter != self_tls_iter->entries.end() && other_entry_iter != other_tls_iter->entries.end()){
-				if (!self_entry_iter->disabled && !other_entry_iter->disabled){
-					if (self_entry_iter->outputName != other_entry_iter->outputName || self_entry_iter->extension != other_entry_iter->extension || self_entry_iter->content != other_entry_iter->content)
-						differenceFound = true;
-					
-					self_entry_iter++;
-					other_entry_iter++;
-				}
-				else { //ignore disabled entries
-					if (self_entry_iter->disabled)
-						self_entry_iter++;
-					if (other_entry_iter->disabled)
-						other_entry_iter++;
-				}
-			}
-		}
-		else {
-			differenceFound = true;
-		}
-		
-		self_tls_iter++;
-		other_tls_iter++;
-	}
-	return !differenceFound;
-}
-
-bool GrubConfig::createScriptForwarder(std::string scriptName){
-	std::string outputFilePath = this->cfg_dir+"/LS_"+scriptName;
-	FILE* existingScript = fopen(outputFilePath.c_str(), "r");
-	if (existingScript == NULL){
-		FILE* fwdScript = fopen(outputFilePath.c_str(), "w");
-		fputs("#!/bin/sh\n", fwdScript);
-		fputs((cfg_dir_noprefix+"/proxifiedScripts/"+scriptName).c_str(), fwdScript);
-		fclose(fwdScript);
-		chmod(outputFilePath.c_str(), 0755);
-		return true;
-	}
-	else {
-		fclose(existingScript);
-		return false;
-	}
 }
 
 void GrubConfig::threadable_install(std::string device){
@@ -340,7 +552,7 @@ void GrubConfig::threadable_install(std::string device){
 }
 
 std::string GrubConfig::install(std::string device){
-	FILE* install_proc = popen((this->install_cmd+" '"+device+"' 2>&1").c_str(), "r");
+	FILE* install_proc = popen((this->env.install_cmd+" '"+device+"' 2>&1").c_str(), "r");
 	std::string output;
 	int c;
 	while ((c = fgetc(install_proc)) != EOF){
@@ -357,283 +569,81 @@ std::string GrubConfig::getMessage() const {
 	return message;
 }
 
-GrubConfig::iterator GrubConfig::getIterByPointer(ToplevelScript* ptr){
-	GrubConfig::iterator iter = this->begin();
-	while (iter != this->end() && &*iter != ptr){
-		iter++;
-	}
-	return iter;
-}
-
-void GrubConfig::generateProxy(FILE* proxyFile, ToplevelScript* script){
-	fputs("#!/bin/sh\n#THIS IS A GRUB PROXY SCRIPT FOR ", proxyFile);
-	fputs(script->proxyfiedScriptName.c_str(), proxyFile);
-	fputs("\n", proxyFile);
-	fputs(this->cfg_dir_noprefix.c_str(), proxyFile);
-	fputs("/proxifiedScripts/", proxyFile);
-	fputs(script->proxyfiedScriptName.c_str(), proxyFile);
-	fputs((" | "+this->cfg_dir_noprefix+"/bin/grubcfg_proxy \"").c_str(), proxyFile);
-	int i = 0;
-	for (std::list<Entry>::iterator entryIter = script->entries.begin(); entryIter != script->entries.end(); entryIter++){
-		if (i == script->entries.other_entries_pos){
-			fputs(script->entries.other_entries_visible ? "+*\n" : "-*\n", proxyFile);
-		}
-		fputs(entryIter->disabled ? "-'" : "+'", proxyFile);
-		fputs(entryIter->name.c_str(), proxyFile);
-		fputs("'", proxyFile);
-		if (entryIter->outputName != entryIter->name){
-			fputs(" as '", proxyFile);
-			fputs(entryIter->outputName.c_str(), proxyFile);
-			fputs("'", proxyFile);
-		}
-		fputs("\n", proxyFile);
-		i++;
-	}
-	fputs("\"", proxyFile);
-}
-
-void GrubConfig::save(){
-	send_new_save_progress(0);
-	
-	std::list<std::string> unmodifiedScripts;
-	
-	{
-		struct dirent *entry;
-		struct stat fileProperties;
-		DIR* hScriptDir = opendir(this->cfg_dir.c_str());
-		while (entry = readdir(hScriptDir)){
-			if (entry->d_name[2] == '_' && entry->d_name[0] != '0'){ //only script, without ignore header scripts
-				stat((this->cfg_dir+"/"+entry->d_name).c_str(), &fileProperties);
-				if ((fileProperties.st_mode & S_IFMT) != S_IFDIR){ //ignore directories
-					unmodifiedScripts.push_back(entry->d_name);
-				}
-			}
-		}
-		closedir(hScriptDir);
-	}
-	
-	int mkdir_result = mkdir((this->cfg_dir+"/proxifiedScripts").c_str(), 0755); //create this directory if it doesn't allready exist
-	
-	int proxyCount = 0;
-	for (std::list<ToplevelScript>::iterator iter = this->begin(); iter != this->end(); iter++){
-		unmodifiedScripts.remove(iter->name);
-		std::ostringstream newName;
-		newName << iter->index << "_" << iter->getBasename();
-		if (iter->isProxy)
-			newName << "_proxy";
-		
-		bool file_exists = false;
-		FILE* f = fopen((this->cfg_dir+"/"+iter->name).c_str(), "r");
-		if (f){
-			file_exists = true;
-			fclose(f);
-		}
-		else
-			std::cout << "file doesn't exist: " << iter->name << std::endl;
-		
-		std::cout << "new name: " << newName.str() << std::endl;
-		if (iter->isProxy && iter->proxyfiedScriptName == ""){
-			iter->proxyfiedScriptName = iter->getBasename();
-			int res = 0;
-			if (file_exists){
-				chmod((this->cfg_dir+"/"+iter->name).c_str(), 0755);
-				res = rename((this->cfg_dir+"/"+iter->name).c_str(), (this->cfg_dir+"/proxifiedScripts/"+iter->proxyfiedScriptName).c_str());
-			}
-			if (res == 0){
-				iter->name = newName.str();
-				FILE* proxyFile = fopen((this->cfg_dir+"/"+iter->name).c_str(), "w");
-				generateProxy(proxyFile, &*iter);
-				proxyCount++;
-				fclose(proxyFile);
-			}
-			else
-				std::cerr << "could not move the script file!" << std::endl;
-		}
-		else {
-			if (iter->name != newName.str()){
-				if (file_exists){
-					rename((this->cfg_dir+"/"+iter->name).c_str(), (this->cfg_dir+"/"+newName.str()).c_str());
-					std::cout << "renaming " << iter->name << " to " << newName.str() << std::endl;
-				}
-				else {
-					rename((this->cfg_dir+"/proxifiedScripts/"+iter->getBasename()).c_str(), (this->cfg_dir+"/"+newName.str()).c_str());
-				}
-				iter->name = newName.str();
-			}
-			if (iter->isProxy && iter->proxyfiedScriptName != ""){
-				FILE* proxyFile = fopen((this->cfg_dir+"/"+iter->name).c_str(), "w");
-				generateProxy(proxyFile, &*iter);
-				proxyCount++;
-				fclose(proxyFile);
-			}
-		}
-		std::cout << "setting permisssions for " << iter->name << ": " << iter->permissions << std::endl;
-		chmod((this->cfg_dir+"/"+iter->name).c_str(), iter->permissions);
-	}
-	send_new_save_progress(0.2);
-	
-	for (std::list<std::string>::iterator iter = unmodifiedScripts.begin(); iter != unmodifiedScripts.end(); iter++){
-		if (getProxifiedScriptName(this->cfg_dir+"/"+(*iter)) == ""){
-			chmod((this->cfg_dir+"/"+(*iter)).c_str(), 0755);
-			rename((this->cfg_dir+"/"+(*iter)).c_str(), (this->cfg_dir+"/proxifiedScripts/"+iter->substr(3)).c_str());
-		}
-		else
-			unlink((this->cfg_dir+"/"+(*iter)).c_str());
-	}
-	
-	//remove "proxifiedScripts" dir, if empty
-	
-	{
-		int proxifiedScriptCount = 0;
-		struct dirent *entry;
-		struct stat fileProperties;
-		DIR* hScriptDir = opendir((this->cfg_dir+"/proxifiedScripts").c_str());
-		while (entry = readdir(hScriptDir)){
-			if (std::string(entry->d_name) != "." && std::string(entry->d_name) != ".."){
-				proxifiedScriptCount++;
-			}
-		}
-		closedir(hScriptDir);
-		
-		if (proxifiedScriptCount == 0)
-			rmdir((this->cfg_dir+"/proxifiedScripts").c_str());
-	}
-	
-	//add or remove proxy binary
-	
-	FILE* proxyBin = fopen((this->cfg_dir+"/bin/grubcfg_proxy").c_str(), "r");
-	bool proxybin_exists = proxyBin != NULL;
-	bool proxy_is_dummy = false;
-	std::string dummyproxy_code = "#!/bin/sh\ncat\n";
-	std::string proxy_code;
-	
-	if (proxyBin){
-		std::cerr << "proxybin does already exist!" << std::endl;
-		int c;
-		for (int i = 0; i < dummyproxy_code.length() && (c = fgetc(proxyBin)) != EOF; i++)
-			proxy_code += c;
-		
-		if (proxy_code == dummyproxy_code)
-			proxy_is_dummy = true;
-		else
-			std::cerr << proxy_code << " : " << dummyproxy_code << std::endl;
-		fclose(proxyBin);
-	}
-	
-	if (proxyCount != 0 && (!proxybin_exists || proxy_is_dummy)){
-		std::cout << "proxyCount: " << proxyCount << std::endl;
-		//copy proxy
-		int bin_mk_success = mkdir((this->cfg_dir+"/bin").c_str(), 0755);
-
-		FILE* proxyBinSource = fopen((std::string(LIBDIR)+"/grubcfg-proxy").c_str(), "r");
-		
-		if (proxyBinSource){
-			FILE* proxyBinTarget = fopen((this->cfg_dir+"/bin/grubcfg_proxy").c_str(), "w");
-			if (proxyBinTarget){
-				int c;
-				while ((c = fgetc(proxyBinSource)) != EOF){
-					fputc(c, proxyBinTarget);
-				}
-				fclose(proxyBinTarget);
-				chmod((this->cfg_dir+"/bin/grubcfg_proxy").c_str(), 0755);
-			}
-			else
-				std::cerr << "could not open proxy output file!" << std::endl;
-			fclose(proxyBinSource);
-		}
-		else {
-			std::cerr << "proxy could not be copied, generating dummy!" << std::endl;
-			FILE* proxyBinTarget = fopen((this->cfg_dir+"/bin/grubcfg_proxy").c_str(), "w");
-			if (proxyBinTarget){
-				fputs(dummyproxy_code.c_str(), proxyBinTarget);
-				error_proxy_not_found = true;
-				fclose(proxyBinTarget);
-				chmod((this->cfg_dir+"/bin/grubcfg_proxy").c_str(), 0755);
-			}
-			else
-				std::cerr << "coundn't create proxy!" << std::endl;
-		}
-	}
-	else if (proxyCount == 0 && proxybin_exists){
-		//the following commands are only cleanup… no problem, when they fail
-		unlink((this->cfg_dir+"/bin/grubcfg_proxy").c_str());
-		rmdir((this->cfg_dir+"/bin").c_str());
-	}
-	
-	//run update-grub
-	FILE* saveProc = popen((update_cmd+" 2>&1").c_str(), "r");
-	int c;
-	std::string row = "";
-	while ((c = fgetc(saveProc)) != EOF){
-		if (c == '\n'){
-			send_new_save_progress(0.5); //a gui should use pulse() instead of set_fraction
-			row = "";
-		}
-		else
-			row += char(c);
-		std::cerr << char(c); //print messages (for debugging purposes)
-	}
-	pclose(saveProc);
-	config_has_been_different_on_startup_but_unsaved = false;
-	send_new_save_progress(1);
-}
-
-void GrubConfig::increaseScriptPos(ToplevelScript* script){
-	short int i = 10;
-	bool scriptToMove_found = false;
-	for (std::list<ToplevelScript>::iterator iter = this->begin(); iter != this->end(); iter++){
-		if (&*iter != script){
-			iter->index = i++;
-			if (scriptToMove_found){
-				script->index = i++;
-				scriptToMove_found = false;
-			}
-		}
-		else
-			scriptToMove_found = true;
-	}
-	this->sort(compare_scripts);
-}
-
-void GrubConfig::renumerate(){
-	increaseScriptPos(NULL);
-}
-
 void GrubConfig::reset(){
-	this->clear();
-	this->realScripts.clear();
-}
-
-void GrubConfig::connectUI(GrubConfUI& ui){
-	connectedUI = &ui;
+	this->repository.clear();
+	this->proxies.clear();
 }
 
 double GrubConfig::getProgress() const {
 	return progress;
 }
 
-void GrubConfig::copyScriptFromRepository(std::string const& name){
-	EntryList selectedList = this->realScripts[name];
-	bool sameScriptFound = false;
-	for (GrubConfig::iterator iter = this->begin(); iter != this->end(); iter++){
-		if (iter->getBasename() == name){
-			if (!iter->isProxy){
-				iter->isProxy = true;
-				iter->entries.other_entries_pos = 0;
-				iter->entries.other_entries_visible = true;
+void GrubConfig::increaseProxyPos(Proxy* proxy){
+	short int i = 10;
+	bool proxyToMove_found = false;
+	for (ProxyList::iterator iter = this->proxies.begin(); iter != this->proxies.end(); iter++){
+		if (&*iter != proxy){
+			iter->index = i++;
+			if (proxyToMove_found){
+				proxy->index = i++;
+				proxyToMove_found = false;
 			}
-			sameScriptFound = true;
+		}
+		else
+			proxyToMove_found = true;
+	}
+	this->proxies.sort();
+}
+
+void GrubConfig::renumerate(){
+	increaseProxyPos(NULL);
+}
+
+bool GrubConfig::cfgDirIsClean(){
+	DIR* hGrubCfgDir = opendir(this->env.cfg_dir.c_str());
+	if (hGrubCfgDir){
+		struct dirent *entry;
+		struct stat fileProperties;
+		while (entry = readdir(hGrubCfgDir)){
+			std::string fname = entry->d_name;
+			if (fname.length() >= 4 && fname.substr(0,3) == "LS_")
+				return false;
+		}
+		closedir(hGrubCfgDir);
+	}
+	return true;
+}
+void GrubConfig::cleanupCfgDir(){
+	std::cout << "cleaning up cfg dir!" << std::endl;
+	
+	DIR* hGrubCfgDir = opendir(this->env.cfg_dir.c_str());
+	if (hGrubCfgDir){
+		struct dirent *entry;
+		struct stat fileProperties;
+		std::list<std::string> lsfiles;
+		std::list<std::string> proxyscripts;
+		while (entry = readdir(hGrubCfgDir)){
+			std::string fname = entry->d_name;
+			if (fname.length() >= 4 && fname.substr(0,3) == "LS_")
+				lsfiles.push_back(fname);
+			if (fname.length() >= 4 && fname[0] >= '1' && fname[0] <= '9' && fname[1] >= '0' && fname[1] <= '9' && fname[2] == '_')
+				proxyscripts.push_back(fname);
+		}
+		closedir(hGrubCfgDir);
+		
+		for (std::list<std::string>::iterator iter = lsfiles.begin(); iter != lsfiles.end(); iter++){
+			std::cout << "deleting " << *iter << std::endl;
+			unlink((this->env.cfg_dir+"/"+(*iter)).c_str());
+		}
+		//proxyscripts will be disabled before loading the config. While the provious mode will only be saved on the objects, every script should be made executable
+		for (std::list<std::string>::iterator iter = proxyscripts.begin(); iter != proxyscripts.end(); iter++){
+			std::cout << "re-activating " << *iter << std::endl;
+			chmod((this->env.cfg_dir+"/"+(*iter)).c_str(), 0755);
 		}
 	}
-	this->push_back(ToplevelScript("99_"+name, "", 99));
-	this->back().entries = selectedList;
-	this->back().permissions = 0755;
-
-	if (sameScriptFound){
-		this->back().isProxy = true;
-		this->back().entries.other_entries_pos = 0;
-		this->back().entries.other_entries_visible = true;
-	}
-	
-	this->renumerate();
 }
+
+
+
+
+
