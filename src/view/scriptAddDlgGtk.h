@@ -2,10 +2,10 @@
 #define SCRIPT_ADD_DLG_INCLUDED
 #include <gtkmm.h>
 #include "../interface/evt_scriptAddDlg.h"
-
+#include "../interface/scriptAddDlg.h"
 #include <libintl.h>
 
-class ScriptAddDlg : public Gtk::Dialog {
+class ScriptAddDlgGtk : public Gtk::Dialog, public ScriptAddDlg {
 	Gtk::Dialog scriptAddDlg;
 	Gtk::VBox vbScriptPreview;
 	Gtk::HBox hbScriptSelection;
@@ -16,7 +16,7 @@ class ScriptAddDlg : public Gtk::Dialog {
 	Gtk::Label lblScriptPreview;
 	EventListener_scriptAddDlg* eventListener;
 public:
-	ScriptAddDlg();
+	ScriptAddDlgGtk();
 	void setEventListener(EventListener_scriptAddDlg& eventListener);
 	void signal_scriptAddDlg_response(int response_id);
 	void clear();

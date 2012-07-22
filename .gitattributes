@@ -32,6 +32,7 @@ misc/icons/64x64.png -text svneol=unset#unset
 misc/manpage.gz -text svneol=unset#unset
 misc/upstream-changelog.gz -text svneol=unset#unset
 src/config.h -text
+src/interface/aboutDialog.h -text
 src/interface/colorChooser.h -text
 src/interface/evt_grubInstallDlg.h -text
 src/interface/evt_listCfgDlg.h -text
@@ -39,8 +40,11 @@ src/interface/evt_model.h -text
 src/interface/evt_partitionChooser.h -text
 src/interface/evt_scriptAddDlg.h -text
 src/interface/evt_settings.h -text
-src/interface/grubconf_ui.h -text
-src/interface/settings_dlg.h -text
+src/interface/grubInstallDlg.h -text
+src/interface/grublistCfgDlg.h -text
+src/interface/partitionChooser.h -text
+src/interface/scriptAddDlg.h -text
+src/interface/settingsDlg.h -text
 src/model/deviceDataList.cpp -text
 src/model/deviceDataList.h -text
 src/model/entry.cpp -text
@@ -73,22 +77,22 @@ src/model/settings_mng_ds.cpp -text
 src/model/settings_mng_ds.h -text
 src/presenter/eventListener.cpp -text
 src/presenter/eventListener.h -text
+src/presenter/grubCustomizer.cpp -text
+src/presenter/grubCustomizer.h -text
 src/presenter/grubcfg_proxy_main.cpp -text
-src/presenter/gtk-client.cpp -text
-src/presenter/gtk-client.h -text
 src/presenter/gtk-client_main.cpp -text
-src/view/aboutDialog.cpp -text
-src/view/aboutDialog.h -text
-src/view/grubInstallDlg.cpp -text
-src/view/grubInstallDlg.h -text
-src/view/grublistCfgDlg.cpp -text
-src/view/grublistCfgDlg.h -text
-src/view/partitionChooser.cpp -text
-src/view/partitionChooser.h -text
-src/view/scriptAddDlg.cpp -text
-src/view/scriptAddDlg.h -text
-src/view/settings_dlg_gtk.cpp -text
-src/view/settings_dlg_gtk.h -text
+src/view/aboutDialogGtk.cpp -text
+src/view/aboutDialogGtk.h -text
+src/view/grubInstallDlgGtk.cpp -text
+src/view/grubInstallDlgGtk.h -text
+src/view/grublistCfgDlgGtk.cpp -text
+src/view/grublistCfgDlgGtk.h -text
+src/view/partitionChooserGtk.cpp -text
+src/view/partitionChooserGtk.h -text
+src/view/scriptAddDlgGtk.cpp -text
+src/view/scriptAddDlgGtk.h -text
+src/view/settingsDlgGtk.cpp -text
+src/view/settingsDlgGtk.h -text
 translation/complile_all.sh -text
 translation/messages.pot -text
 translation/translation-bg.mo -text svneol=unset#unset

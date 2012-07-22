@@ -1,11 +1,11 @@
-#ifndef GRUBLIST_CFG_DLG_INCLUDED
-#define GRUBLIST_CFG_DLG_INCLUDED
+#ifndef GRUBLIST_CFG_DLG_GTK_INCLUDED
+#define GRUBLIST_CFG_DLG_GTK_INCLUDED
 #include <gtkmm.h>
-#include "../interface/grubconf_ui.h"
 #include "../interface/evt_listCfgDlg.h"
 #include <iostream>
 #include <libintl.h>
 #include "../config.h"
+#include "../interface/grublistCfgDlg.h"
 
 
 class GrubConfListing : public Gtk::TreeView {
@@ -30,7 +30,7 @@ class ImageMenuItemOwnKey : public Gtk::ImageMenuItem {
 	ImageMenuItemOwnKey(const Gtk::StockID& id, const Gtk::AccelKey& accel_key);
 };
 
-class GrublistCfgDlg : public GrubConfUI {
+class GrublistCfgDlgGtk : public GrublistCfgDlg {
 	EventListener_listCfgDlg* eventListener;
 	Gtk::Window win;
 	Gtk::VBox vbMainSplit;
@@ -63,11 +63,7 @@ class GrublistCfgDlg : public GrubConfUI {
 	Gtk::TreeModel::iterator getIterByProxyPtr(void* proxyPtr) const;
 	Gtk::TreeModel::iterator getIterByRulePtr(void* rulePtr) const;
 public:
-	enum Exception {
-		PROXY_ITER_NOT_FOUND,
-		RULE_ITER_NOT_FOUND
-	};
-	GrublistCfgDlg();
+	GrublistCfgDlgGtk();
 	void setEventListener(EventListener_listCfgDlg& eventListener);
 	void run();
 	void close();

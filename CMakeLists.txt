@@ -17,13 +17,13 @@ include_directories(
 add_executable(grub-customizer
 	src/model/entry.cpp
 	src/model/grublistCfg.cpp
-	src/view/grublistCfgDlg.cpp
-	src/view/grubInstallDlg.cpp
+	src/view/grublistCfgDlgGtk.cpp
+	src/view/grubInstallDlgGtk.cpp
 	src/presenter/gtk-client_main.cpp
-	src/presenter/gtk-client.cpp
+	src/presenter/grubCustomizer.cpp
 	src/presenter/eventListener.cpp
 	src/model/libproxyscript_parser.cpp
-	src/view/partitionChooser.cpp
+	src/view/partitionChooserGtk.cpp
 	src/model/mountTable.cpp
 	src/model/proxy.cpp
 	src/model/proxylist.cpp
@@ -33,12 +33,12 @@ add_executable(grub-customizer
 	src/model/script.cpp
 	src/model/deviceDataList.cpp
 	src/model/grubEnv.cpp
-	src/view/settings_dlg_gtk.cpp
+	src/view/settingsDlgGtk.cpp
 	src/model/settings_mng_ds.cpp
 	src/model/fbResolutionsGetter.cpp
 	src/model/grubInstaller.cpp
-	src/view/scriptAddDlg.cpp
-	src/view/aboutDialog.cpp
+	src/view/scriptAddDlgGtk.cpp
+	src/view/aboutDialogGtk.cpp
 )
 
 

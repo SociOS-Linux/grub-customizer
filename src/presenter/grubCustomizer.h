@@ -2,7 +2,7 @@
 #define GTK_CLIENT_INCLUDED
 
 #include "../model/grublistCfg.h"
-#include "../view/grublistCfgDlg.h"
+#include "../interface/grublistCfgDlg.h"
 #include <glibmm/thread.h>
 #include <glibmm/dispatcher.h>
 #include <libintl.h>
@@ -12,27 +12,30 @@
 #include "../model/grubEnv.h"
 
 #include "../model/mountTable.h"
-#include "../view/partitionChooser.h"
+#include "../interface/partitionChooser.h"
 
 #include "../model/grubInstaller.h"
-#include "../view/grubInstallDlg.h"
+#include "../interface/grubInstallDlg.h"
 
-#include "../view/scriptAddDlg.h"
+#include "../interface/scriptAddDlg.h"
 
 #include "../model/grublistCfg.h"
-#include "../view/partitionChooser.h"
-#include "../view/settings_dlg_gtk.h"
+#include "../interface/partitionChooser.h"
+#include "../interface/settingsDlg.h"
 #include "../model/fbResolutionsGetter.h"
-#include "../view/aboutDialog.h"
+#include "../interface/aboutDialog.h"
+#include "../model/deviceDataList.h"
+
+#include <giomm/file.h>
 
 //TODO: sometimes gc crashes at startup - why? … some possible problems fixed. But is env the reason?
-//TODO: remove gtk-dependencies in this class
 //TODO: allow settings manager startup after loading the settings - don't wait until everything is loaded
-class GtkClient {
+
+class GrubCustomizer {
 	GrubEnv& env;
 	GrublistCfg* grublistCfg;
 	GrublistCfgDlg* listCfgDlg;
-	GrubSettingsDlgGtk* settingsDlg;
+	SettingsDlg* settingsDlg;
 	SettingsManagerDataStore* settings;
 	SettingsManagerDataStore* settingsOnDisk; //buffer for the existing settings
 	GrubInstaller* installer;
@@ -55,10 +58,10 @@ public:
 	enum Exception {
 		INCOMPLETE
 	};
-	void setModelListCfg(GrublistCfg& grublistCfg);
-	void setViewListCfg(GrublistCfgDlg& listCfgDlg);
-	void setViewSettingsDialog(GrubSettingsDlgGtk& settingsDlg);
-	void setModelSettingsManager(SettingsManagerDataStore& settings);
+	void setListCfg(GrublistCfg& grublistCfg);
+	void setListCfgDlg(GrublistCfgDlg& listCfgDlg);
+	void setSettingsDialog(SettingsDlg& settingsDlg);
+	void setSettingsManager(SettingsManagerDataStore& settings);
 	void setSettingsBuffer(SettingsManagerDataStore& settings);
 	void setInstaller(GrubInstaller& installer);
 	void setInstallDlg(GrubInstallDlg& installDlg);
@@ -74,7 +77,7 @@ public:
 	void load(bool preserveConfig = false);
 	void save();
 	void save_thread();
-	GtkClient(GrubEnv& env);
+	GrubCustomizer(GrubEnv& env);
 	
 	void run();
 	void renameEntry(Rule* rule, std::string const& newName);

@@ -1,4 +1,4 @@
-#include "settings_dlg_gtk.h"
+#include "settingsDlgGtk.h"
 
 ColorChooserGtk::Columns::Columns(){
 	this->add(this->idName);
@@ -247,6 +247,10 @@ void GrubSettingsDlgGtk::show(bool burgMode) {
 		groupColorChooser.show();
 		groupBackgroundImage.show();
 	}
+}
+
+void GrubSettingsDlgGtk::hide(){
+	Gtk::Dialog::hide();
 }
 
 

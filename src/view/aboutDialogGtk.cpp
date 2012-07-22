@@ -1,11 +1,11 @@
-#include "aboutDialog.h"
+#include "aboutDialogGtk.h"
 
-void AboutDialog::signal_about_dlg_response(int response_id){
+void AboutDialogGtk::signal_about_dlg_response(int response_id){
 	if (Gtk::RESPONSE_CLOSE)
 		this->hide();
 }
 
-AboutDialog::AboutDialog()
+AboutDialogGtk::AboutDialogGtk()
 	: appName("Grub Customizer"), appVersion(GC_VERSION)
 {
 	this->set_name(appName);
@@ -41,5 +41,9 @@ Svetoslav Stefanov https://launchpad.net/~svetlisashkov\n\
 TheMengzor https://launchpad.net/~the-mengzor\n\
 zeugma https://launchpad.net/~sunder67\
 ");
-	this->signal_response().connect(sigc::mem_fun(this, &AboutDialog::signal_about_dlg_response));
+	this->signal_response().connect(sigc::mem_fun(this, &AboutDialogGtk::signal_about_dlg_response));
+}
+
+void AboutDialogGtk::show(){
+	Gtk::AboutDialog::show();
 }

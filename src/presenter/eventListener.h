@@ -1,6 +1,6 @@
 #ifndef EVENTLISTENER_INCLUDED
 #define EVENTLISTENER_INCLUDED
-#include "gtk-client.h"
+#include "grubCustomizer.h"
 
 #include "../interface/evt_grubInstallDlg.h"
 #include "../interface/evt_model.h"
@@ -17,9 +17,9 @@ class EventListener :
 	public EventListener_model,
 	public EventListener_scriptAddDlg
 {
-	GtkClient& presenter;
+	GrubCustomizer& presenter;
 public:
-	EventListener(GtkClient& presenter);
+	EventListener(GrubCustomizer& presenter);
 	void settings_dialog_request();
 	void reload_request();
 	void save_request();

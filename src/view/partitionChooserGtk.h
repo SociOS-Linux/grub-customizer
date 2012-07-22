@@ -1,5 +1,5 @@
-#ifndef SELECT_ROOT_DLG_INCLUDED
-#define SELECT_ROOT_DLG_INCLUDED
+#ifndef SELECT_ROOT_DLG_GTK_INCLUDED
+#define SELECT_ROOT_DLG_GTK_INCLUDED
 #include <gtkmm.h>
 #include "../model/deviceDataList.h"
 #include "../model/mountTable.h"
@@ -8,6 +8,7 @@
 #include <locale.h>
 #include <iostream>
 #include "../config.h"
+#include "../interface/partitionChooser.h"
 
 /**
  * Gtk::Assistant seem to be buggy: after applying the assistant, a call of show() brings a broken (empty)
@@ -17,7 +18,7 @@
  */
 
 //TODO: don't use run() to start this (only if standalone)
-class PartitionChooser {
+class PartitionChooserGtk : public PartitionChooser {
 	Gtk::Assistant* assistant;
 	Gtk::Label lblMessage, lblSubmountpointDescription;
 	Gtk::ListViewText lvRootPartitionSelection;
@@ -36,18 +37,7 @@ class PartitionChooser {
 	void init(bool useExisting = true);
 	Gtk::Assistant& getWindow();
 	public:
-	enum Exception {
-		ERR_CHKBUTTON_NOT_FOUND
-	};
-	enum MountExceptionType {
-		MOUNT_FAILED,
-		UMOUNT_FAILED,
-		MOUNT_ERR_NO_FSTAB,
-		SUB_MOUNT_FAILED,
-		SUB_UMOUNT_FAILED
-	};
-	bool is_cancelled;
-	PartitionChooser(bool isLiveCD);
+	PartitionChooserGtk(bool isLiveCD);
 	void setEventListener(EventListener_partitionChooser& eventListener);
 	void updateSensitivity();
 	void signal_custom_partition_toggled();

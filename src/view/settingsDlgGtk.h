@@ -1,7 +1,7 @@
 #ifndef SETTING_DLG_GTK_INCLUDED
 #define SETTING_DLG_GTK_INCLUDED
 #include <gtkmm.h>
-#include "../interface/settings_dlg.h"
+#include "../interface/settingsDlg.h"
 #include <libintl.h>
 #include "../model/grubEnv.h"
 #include "../interface/colorChooser.h"
@@ -34,7 +34,7 @@ public:
 };
 
 //TODO: when starting the settings manager, disable the reload button and the partition chooser!
-class GrubSettingsDlgGtk : public Gtk::Dialog, public GrubSettingsDlg {
+class GrubSettingsDlgGtk : public Gtk::Dialog, public SettingsDlg {
 	struct AdvancedSettingsTreeModel : public Gtk::TreeModelColumnRecord {
 		Gtk::TreeModelColumn<bool> active;
 		Gtk::TreeModelColumn<Glib::ustring> name;
@@ -127,27 +127,10 @@ class GrubSettingsDlgGtk : public Gtk::Dialog, public GrubSettingsDlg {
 	void signal_bttRemoveBackground_clicked();
 	void on_response(int response_id);
 	public:
-	enum DefEntryType {
-		DEF_ENTRY_PREDEFINED,
-		DEF_ENTRY_SAVED
-	};
-	enum ColorChooserType {
-		COLOR_CHOOSER_DEFAULT_FONT,
-		COLOR_CHOOSER_DEFAULT_BACKGROUND,
-		COLOR_CHOOSER_HIGHLIGHT_FONT,
-		COLOR_CHOOSER_HIGHLIGHT_BACKGROUND
-	};
-	enum Exception {
-		REQUESTED_CUSTOM_OPTION_NOT_FOUND
-	};
-	struct CustomOption {
-		std::string name, value;
-		bool isActive;
-		CustomOption(std::string name, std::string value, bool isActive);
-	};
 	GrubSettingsDlgGtk();
 	void setEventListener(EventListener_settings& eventListener);
 	void show(bool burgMode);
+	void hide();
 	ColorChooser& getColorChooser(ColorChooserType type);
 	void addEntryToDefaultEntryChooser(std::string const& entryTitle);
 	void clearDefaultEntryChooser();

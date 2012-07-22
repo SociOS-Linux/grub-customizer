@@ -1,9 +1,10 @@
-#ifndef GRUB_INSTALL_DLG_INCLUDED
-#define GRUB_INSTALL_DLG_INCLUDED
+#ifndef GRUB_INSTALL_DLG_GTK_INCLUDED
+#define GRUB_INSTALL_DLG_GTK_INCLUDED
 #include <gtkmm.h>
 #include "../interface/evt_grubInstallDlg.h"
 #include <libintl.h>
-class GrubInstallDlg : public Gtk::Dialog {
+#include "../interface/grubInstallDlg.h"
+class GrubInstallDlgGtk : public Gtk::Dialog, public GrubInstallDlg {
 	Gtk::Label lblDescription;
 	Gtk::HBox hbDevice;
 	Gtk::Label lblDevice, lblInstallInfo;
@@ -14,7 +15,7 @@ class GrubInstallDlg : public Gtk::Dialog {
 	void signal_grub_install_dialog_response(int response_id);
 	Glib::ustring install_result;
 	public:
-	GrubInstallDlg();
+	GrubInstallDlgGtk();
 	void show();
 	void showMessageGrubInstallCompleted(std::string const& msg);
 	void setEventListener(EventListener_grubInstallDlg& eventListener);

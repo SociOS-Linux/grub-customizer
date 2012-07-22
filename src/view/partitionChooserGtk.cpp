@@ -1,12 +1,11 @@
-#include "partitionChooser.h"
+#include "partitionChooserGtk.h"
 
-PartitionChooser::PartitionChooser(bool isLiveCD)
+PartitionChooserGtk::PartitionChooserGtk(bool isLiveCD)
 	: lvRootPartitionSelection(3),
 	chkCustomPartition(gettext("_use another partition: "), true),
 	bttMountFs(gettext("Mount selected Filesystem")),
 	bttUmountFs(gettext("Unmount mounted Filesystem")),
 	submountpoint_toggle_run_event(true),
-	is_cancelled(false),
 	lblSubmountpointDescription(gettext("These are the mountpoints of your fstab file.\nPlease select every grub/boot related partition."), Gtk::ALIGN_LEFT),
 	isMounted(false), assistant(NULL)
 {
@@ -46,21 +45,21 @@ PartitionChooser::PartitionChooser(bool isLiveCD)
 	scrAdditionalMountSelectionPage.add(vbAdditionalMountSelectionPageList);
 	scrAdditionalMountSelectionPage.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
 	
-	chkCustomPartition.signal_toggled().connect(sigc::mem_fun(this, &PartitionChooser::signal_custom_partition_toggled));
-	txtCustomPartition.signal_changed().connect(sigc::mem_fun(this, &PartitionChooser::signal_custom_partition_typing));
-	bttMountFs.signal_clicked().connect(sigc::mem_fun(this, &PartitionChooser::signal_btt_mount_click));
-	bttUmountFs.signal_clicked().connect(sigc::mem_fun(this, &PartitionChooser::signal_btt_umount_click));
+	chkCustomPartition.signal_toggled().connect(sigc::mem_fun(this, &PartitionChooserGtk::signal_custom_partition_toggled));
+	txtCustomPartition.signal_changed().connect(sigc::mem_fun(this, &PartitionChooserGtk::signal_custom_partition_typing));
+	bttMountFs.signal_clicked().connect(sigc::mem_fun(this, &PartitionChooserGtk::signal_btt_mount_click));
+	bttUmountFs.signal_clicked().connect(sigc::mem_fun(this, &PartitionChooserGtk::signal_btt_umount_click));
 	
-	lvRootPartitionSelection.get_selection()->signal_changed().connect(sigc::mem_fun(this, &PartitionChooser::signal_lvRootPartitionSelection_changed));
+	lvRootPartitionSelection.get_selection()->signal_changed().connect(sigc::mem_fun(this, &PartitionChooserGtk::signal_lvRootPartitionSelection_changed));
 
 	vbAdditionalMountSelectionPageList.set_border_width(10);
 }
 
-void PartitionChooser::setEventListener(EventListener_partitionChooser& eventListener){
+void PartitionChooserGtk::setEventListener(EventListener_partitionChooser& eventListener){
 	this->eventListener = &eventListener;
 }
 
-void PartitionChooser::init(bool useExisting){
+void PartitionChooserGtk::init(bool useExisting){
 	if (this->assistant && !this->assistant->is_visible() && !useExisting){
 		delete this->assistant;
 		this->assistant = NULL;
@@ -78,8 +77,8 @@ void PartitionChooser::init(bool useExisting){
 		this->assistant->set_page_title(vbAdditionalMountSelectionPage, gettext("Select required submountpoints"));
 		this->assistant->set_page_type(vbAdditionalMountSelectionPage, Gtk::ASSISTANT_PAGE_CONFIRM);
 
-		this->assistant->signal_cancel().connect(sigc::mem_fun(this, &PartitionChooser::on_cancel));
-		this->assistant->signal_apply().connect(sigc::mem_fun(this, &PartitionChooser::on_apply));
+		this->assistant->signal_cancel().connect(sigc::mem_fun(this, &PartitionChooserGtk::on_cancel));
+		this->assistant->signal_apply().connect(sigc::mem_fun(this, &PartitionChooserGtk::on_apply));
 
 		this->assistant->set_title(Glib::ustring("Grub Customizer: ")+gettext("Partition Chooser"));
 		this->assistant->set_icon_name("grub-customizer");
@@ -87,44 +86,44 @@ void PartitionChooser::init(bool useExisting){
 	}
 }
 
-Gtk::Assistant& PartitionChooser::getWindow(){
+Gtk::Assistant& PartitionChooserGtk::getWindow(){
 	this->init();
 	return *this->assistant;
 }
 
-void PartitionChooser::addPartitionSelectorItem(Glib::ustring const& device, Glib::ustring const& type, Glib::ustring const& label){
+void PartitionChooserGtk::addPartitionSelectorItem(Glib::ustring const& device, Glib::ustring const& type, Glib::ustring const& label){
 	guint index = lvRootPartitionSelection.append_text(device);
 	lvRootPartitionSelection.set_text(index, 1, type);
 	lvRootPartitionSelection.set_text(index, 2, label);
 }
 
-void PartitionChooser::clearPartitionSelector(){
+void PartitionChooserGtk::clearPartitionSelector(){
 	lvRootPartitionSelection.clear_items();
 }
 
-void PartitionChooser::hide(){
+void PartitionChooserGtk::hide(){
 	this->getWindow().hide();
 }
-void PartitionChooser::show(){
+void PartitionChooserGtk::show(){
 	this->getWindow().show_all();
 }
 
 
-void PartitionChooser::signal_custom_partition_toggled(){
+void PartitionChooserGtk::signal_custom_partition_toggled(){
 	updateSensitivity();
 }
 
-void PartitionChooser::signal_lvRootPartitionSelection_changed(){
+void PartitionChooserGtk::signal_lvRootPartitionSelection_changed(){
 	updateSensitivity();
 }
 
-void PartitionChooser::signal_custom_partition_typing(){
+void PartitionChooserGtk::signal_custom_partition_typing(){
 	updateSensitivity();
 }
 
 
 
-void PartitionChooser::removeAllSubmountpoints(){
+void PartitionChooserGtk::removeAllSubmountpoints(){
 	//delete all existing submountpoint checkbuttons
 	Glib::ListHandle< Gtk::Widget* > allChilds = vbAdditionalMountSelectionPageList.get_children();
 	for (Glib::ListHandle<Gtk::Widget*>::iterator iter = allChilds.begin(); iter != allChilds.end(); iter++){
@@ -134,10 +133,10 @@ void PartitionChooser::removeAllSubmountpoints(){
 	this->getWindow().set_page_type(vbRootSelectPage, Gtk::ASSISTANT_PAGE_CONFIRM);
 }
 
-void PartitionChooser::addSubmountpoint(std::string const& mountpoint, bool isMounted){
+void PartitionChooserGtk::addSubmountpoint(std::string const& mountpoint, bool isMounted){
 	Gtk::CheckButton* cb = new Gtk::CheckButton(mountpoint);
 	cb->set_active(isMounted);
-	cb->signal_toggled().connect(sigc::bind<Gtk::CheckButton&>(sigc::mem_fun(this, &PartitionChooser::submountpoint_toggle), *cb));
+	cb->signal_toggled().connect(sigc::bind<Gtk::CheckButton&>(sigc::mem_fun(this, &PartitionChooserGtk::submountpoint_toggle), *cb));
 
 	vbAdditionalMountSelectionPageList.pack_start(*cb, Gtk::PACK_SHRINK);
 	vbAdditionalMountSelectionPageList.hide(); //is required to see the checkboxes… I don't know why (rendering problem of gtk)
@@ -145,11 +144,11 @@ void PartitionChooser::addSubmountpoint(std::string const& mountpoint, bool isMo
 	this->getWindow().set_page_type(vbRootSelectPage, Gtk::ASSISTANT_PAGE_CONTENT);
 }
 
-std::string PartitionChooser::getSelectedDevice(){
+std::string PartitionChooserGtk::getSelectedDevice(){
 	return chkCustomPartition.get_active() ? txtCustomPartition.get_text() : lvRootPartitionSelection.get_text(lvRootPartitionSelection.get_selected()[0],0);
 }
 
-void PartitionChooser::showErrorMessage(MountExceptionType type){
+void PartitionChooserGtk::showErrorMessage(MountExceptionType type){
 	switch (type){
 		case MOUNT_FAILED:       Gtk::MessageDialog(gettext("Mount failed!")).run(); break;
 		case UMOUNT_FAILED:      Gtk::MessageDialog(gettext("umount failed!")).run(); break;
@@ -161,12 +160,12 @@ void PartitionChooser::showErrorMessage(MountExceptionType type){
 
 
 
-void PartitionChooser::signal_btt_mount_click(){
+void PartitionChooserGtk::signal_btt_mount_click(){
 	this->eventListener->rootFsMount_request();
 }
 
 
-void PartitionChooser::updateSensitivity(){
+void PartitionChooserGtk::updateSensitivity(){
 	this->getWindow().set_page_complete(vbIntroPage, true);
 	this->getWindow().set_page_complete(vbAdditionalMountSelectionPage, true);
 	bttUmountFs.set_sensitive(isMounted);
@@ -178,16 +177,16 @@ void PartitionChooser::updateSensitivity(){
 }
 
 
-void PartitionChooser::on_cancel(){
+void PartitionChooserGtk::on_cancel(){
 	this->eventListener->partitionChooser_cancelled();
 }
 
 
-void PartitionChooser::on_apply(){
+void PartitionChooserGtk::on_apply(){
 	this->eventListener->partitionChooser_applied();
 }
 
-Gtk::CheckButton& PartitionChooser::getSubmountpointCheckboxByLabel(Glib::ustring const& label){
+Gtk::CheckButton& PartitionChooserGtk::getSubmountpointCheckboxByLabel(Glib::ustring const& label){
 	Glib::ListHandle< Gtk::Widget* > allChilds = vbAdditionalMountSelectionPageList.get_children();
 	for (Glib::ListHandle<Gtk::Widget*>::iterator iter = allChilds.begin(); iter != allChilds.end(); iter++){
 		if (((Gtk::CheckButton*)*iter)->get_label() == label)
@@ -196,7 +195,7 @@ Gtk::CheckButton& PartitionChooser::getSubmountpointCheckboxByLabel(Glib::ustrin
 	throw ERR_CHKBUTTON_NOT_FOUND;
 }
 
-void PartitionChooser::setSubmountpointSelectionState(Glib::ustring const& submountpoint, bool new_isSelected){
+void PartitionChooserGtk::setSubmountpointSelectionState(Glib::ustring const& submountpoint, bool new_isSelected){
 	Gtk::CheckButton& target = this->getSubmountpointCheckboxByLabel(submountpoint);
 	submountpoint_toggle_run_event = false;
 	target.set_active(new_isSelected);
@@ -205,7 +204,7 @@ void PartitionChooser::setSubmountpointSelectionState(Glib::ustring const& submo
 
 
 
-void PartitionChooser::submountpoint_toggle(Gtk::CheckButton& sender){
+void PartitionChooserGtk::submountpoint_toggle(Gtk::CheckButton& sender){
 	if (submountpoint_toggle_run_event){
 		if (sender.get_active())
 			this->eventListener->submountpoint_mount_request(sender.get_label());
@@ -215,17 +214,17 @@ void PartitionChooser::submountpoint_toggle(Gtk::CheckButton& sender){
 }
 
 
-void PartitionChooser::run(){
+void PartitionChooserGtk::run(){
 	this->init(false);
 	this->updateSensitivity();
 	this->show();
 	Gtk::Main::run(*assistant);
 }
 
-void PartitionChooser::setIsMounted(bool isMounted){
+void PartitionChooserGtk::setIsMounted(bool isMounted){
 	this->isMounted = isMounted;
 }
 
-void PartitionChooser::signal_btt_umount_click(){
+void PartitionChooserGtk::signal_btt_umount_click(){
 	this->eventListener->rootFsUmount_request();
 }

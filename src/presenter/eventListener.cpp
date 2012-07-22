@@ -1,6 +1,6 @@
 #include "eventListener.h"
 
-EventListener::EventListener(GtkClient& presenter)
+EventListener::EventListener(GrubCustomizer& presenter)
 	: presenter(presenter)
 {
 }
@@ -10,7 +10,7 @@ void EventListener::settings_dialog_request(){
 }
 
 void EventListener::reload_request(){
-	Glib::Thread::create(sigc::bind(sigc::mem_fun(&presenter, &GtkClient::load), true), false);
+	Glib::Thread::create(sigc::bind(sigc::mem_fun(&presenter, &GrubCustomizer::load), true), false);
 }
 
 void EventListener::save_request(){
@@ -18,7 +18,7 @@ void EventListener::save_request(){
 }
 
 void EventListener::rootSelectorCompleted(){
-	Glib::Thread::create(sigc::bind(sigc::mem_fun(&presenter, &GtkClient::load), false), false);
+	Glib::Thread::create(sigc::bind(sigc::mem_fun(&presenter, &GrubCustomizer::load), false), false);
 }
 
 
@@ -31,7 +31,7 @@ void EventListener::installDialogRequest(){
 }
 
 void EventListener::installGrub_request(std::string const& device){
-	Glib::Thread::create(sigc::bind<std::string>(sigc::mem_fun(&presenter, &GtkClient::installGrub), device), false);
+	Glib::Thread::create(sigc::bind<std::string>(sigc::mem_fun(&presenter, &GrubCustomizer::installGrub), device), false);
 }
 
 void EventListener::scriptAddDlg_applied(){

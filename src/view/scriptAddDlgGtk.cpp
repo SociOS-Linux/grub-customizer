@@ -1,6 +1,6 @@
-#include "scriptAddDlg.h"
+#include "scriptAddDlgGtk.h"
 
-ScriptAddDlg::ScriptAddDlg()
+ScriptAddDlgGtk::ScriptAddDlgGtk()
 	: lvScriptPreview(1)
 	, lblScriptSelection(gettext("Script to insert:")
 	, Gtk::ALIGN_LEFT)
@@ -28,47 +28,47 @@ ScriptAddDlg::ScriptAddDlg()
 	this->add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
 	this->add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
 
-	this->signal_response().connect(sigc::mem_fun(this, &ScriptAddDlg::signal_scriptAddDlg_response));
-	cbScriptSelection.signal_changed().connect(sigc::mem_fun(this, &ScriptAddDlg::signal_script_selection_changed));
+	this->signal_response().connect(sigc::mem_fun(this, &ScriptAddDlgGtk::signal_scriptAddDlg_response));
+	cbScriptSelection.signal_changed().connect(sigc::mem_fun(this, &ScriptAddDlgGtk::signal_script_selection_changed));
 }
 
-void ScriptAddDlg::setEventListener(EventListener_scriptAddDlg& eventListener){
+void ScriptAddDlgGtk::setEventListener(EventListener_scriptAddDlg& eventListener){
 	this->eventListener = &eventListener;
 }
 
-void ScriptAddDlg::clear(){
+void ScriptAddDlgGtk::clear(){
 	cbScriptSelection.clear_items();
 }
-void ScriptAddDlg::addItem(Glib::ustring const& text){
+void ScriptAddDlgGtk::addItem(Glib::ustring const& text){
 	cbScriptSelection.append_text(text);
 	cbScriptSelection.set_active(0);
 }
 
-void ScriptAddDlg::signal_scriptAddDlg_response(int response_id){
+void ScriptAddDlgGtk::signal_scriptAddDlg_response(int response_id){
 	if (response_id == Gtk::RESPONSE_OK){
 		eventListener->scriptAddDlg_applied();
 	}
 	this->hide();
 }
 
-int ScriptAddDlg::getSelectedEntryIndex(){
+int ScriptAddDlgGtk::getSelectedEntryIndex(){
 	return cbScriptSelection.get_active_row_number();
 }
 
-void ScriptAddDlg::signal_script_selection_changed(){
+void ScriptAddDlgGtk::signal_script_selection_changed(){
 	eventListener->scriptSelected();
 }
 
-void ScriptAddDlg::clearPreview(){
+void ScriptAddDlgGtk::clearPreview(){
 	lvScriptPreview.clear_items();
 }
 
-void ScriptAddDlg::addToPreview(Glib::ustring const& name){
+void ScriptAddDlgGtk::addToPreview(Glib::ustring const& name){
 	lvScriptPreview.append_text(name);
 	lvScriptPreview.columns_autosize();
 }
 
-void ScriptAddDlg::show(){
+void ScriptAddDlgGtk::show(){
 	this->show_all();
 }
 
