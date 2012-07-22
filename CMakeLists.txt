@@ -56,10 +56,13 @@ add_executable(grubcfg-proxy
 )
 
 target_link_libraries(grub-customizer 
-    ${GTKMM_LIBRARIES} ${GTHREAD_LIBRARIES}  )
+    ${GTKMM_LIBRARIES} ${GTHREAD_LIBRARIES}  ${GPOLKIT_LIBRARIES})
 
 configure_file ("config.h.in" "${CMAKE_CURRENT_SOURCE_DIR}/src/config.h")
 
+configure_file ("misc/pkexec_policy.in" "${CMAKE_CURRENT_BINARY_DIR}/net.launchpad.danielrichter2007.pkexec.grub-customizer")
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/net.launchpad.danielrichter2007.pkexec.grub-customizer
+    DESTINATION /usr/share/polkit-1/actions)
 
 install(TARGETS grubcfg-proxy
 	DESTINATION lib/grub-customizer)
