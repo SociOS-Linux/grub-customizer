@@ -94,7 +94,11 @@ std::string GrublistCfg::readScriptForwarder(std::string const& scriptForwarderF
 			while ((c = fgetc(scriptForwarderFile)) != EOF && c != '\n'){result += char(c);} //read second line (=path)
 		fclose(scriptForwarderFile);
 	}
-	return result.substr(1, result.length()-2);
+	if (result.length() >= 3) {
+		return result.substr(1, result.length()-2);
+	} else {
+		return "";
+	}
 }
 
 void GrublistCfg::load(bool preserveConfig){
@@ -272,8 +276,16 @@ void GrublistCfg::readGeneratedFile(FILE* source, bool createScriptIfNotFound){
 		}
 	}
 	this->lock();
-	if (script)
+	if (script) {
+		if (plaintextBuffer != "") {
+			Entry newEntry("#text", "", plaintextBuffer, Entry::PLAINTEXT);
+			if (this->hasLogger()) {
+				newEntry.setLogger(this->getLogger());
+			}
+			script->push_front(newEntry);
+		}
 		this->proxies.sync_all(true, true, script);
+	}
 
 	this->unlock();
 }
@@ -442,6 +454,9 @@ bool GrublistCfg::compare(GrublistCfg const& other) const {
 		const GrublistCfg* gc = i == 0 ? this : &other;
 		for (ProxyList::const_iterator piter = gc->proxies.begin(); piter != gc->proxies.end(); piter++){
 			if (piter->isExecutable() && piter->dataSource){
+				if (piter->dataSource->fileName == "") { // if the associated file isn't found
+					return false;
+				}
 				std::string fname = piter->dataSource->fileName.substr(other.env.cfg_dir.length()+1);
 				if (i == 0 || fname[0] >= '1' && fname[0] <= '9' && fname[1] >= '0' && fname[1] <= '9' && fname[2] == '_'){
 					std::list<Rule const*> comparableRules = this->getComparableRules(piter->rules);
