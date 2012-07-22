@@ -27,7 +27,7 @@
 class GtkClient {
 	GrubEnv& env;
 	GrublistCfg* grublistCfg;
-	GrubConfUIGtk* listCfgDlg;
+	GrublistCfgDlg* listCfgDlg;
 	GrubSettingsDlgGtk* settingsDlg;
 	SettingsManagerDataStore* settings;
 	SettingsManagerDataStore* settingsOnDisk; //buffer for the existing settings
@@ -46,7 +46,7 @@ class GtkClient {
 public:
 
 	void setModelListCfg(GrublistCfg& grublistCfg);
-	void setViewListCfg(GrubConfUIGtk& listCfgDlg);
+	void setViewListCfg(GrublistCfgDlg& listCfgDlg);
 	void setViewSettingsDialog(GrubSettingsDlgGtk& settingsDlg);
 	void setModelSettingsManager(SettingsManagerDataStore& settings);
 	void setSettingsBuffer(SettingsManagerDataStore& settings);

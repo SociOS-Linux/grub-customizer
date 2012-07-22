@@ -24,8 +24,6 @@ class EventListenerView_iface {
 	virtual void ruleSwap_requested(void* a, void* b)=0;
 	virtual void proxySwap_requested(void* a, void* b)=0;
 	
-	virtual void rootSelector_requested()=0;
-	
 	virtual void ruleSelected(void* rule)=0;
 	virtual void proxySelected(void* proxy)=0;
 

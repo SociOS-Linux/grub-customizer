@@ -28,8 +28,6 @@ public:
 	void ruleSwap_requested(void* a, void* b);
 	void proxySwap_requested(void* a, void* b);
 	
-	void rootSelector_requested();
-	
 	void ruleSelected(void* rule);
 	void proxySelected(void* proxy);
 

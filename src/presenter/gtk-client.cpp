@@ -17,7 +17,7 @@ GtkClient::GtkClient(GrubEnv& env)
 void GtkClient::setModelListCfg(GrublistCfg& grublistCfg){
 	this->grublistCfg = &grublistCfg;
 }
-void GtkClient::setViewListCfg(GrubConfUIGtk& listCfgDlg){
+void GtkClient::setViewListCfg(GrublistCfgDlg& listCfgDlg){
 	this->listCfgDlg = &listCfgDlg;
 }
 

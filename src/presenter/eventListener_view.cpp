@@ -34,10 +34,6 @@ void EventListenerView::installGrub_request(std::string const& device){
 	Glib::Thread::create(sigc::bind<std::string>(sigc::mem_fun(&presenter, &GtkClient::installGrub), device), false);
 }
 
-void EventListenerView::scriptAddDlg_requested(){
-	presenter.showScriptAddDlg();
-}
-
 void EventListenerView::scriptAddDlg_applied(){
 	presenter.addScriptFromScriptAddDlg();
 }
@@ -71,10 +67,6 @@ void EventListenerView::ruleSwap_requested(void* a, void* b){
 }
 void EventListenerView::proxySwap_requested(void* a, void* b){
 	presenter.swapProxies((Proxy*)a,(Proxy*)b);
-}
-
-void EventListenerView::rootSelector_requested(){
-	presenter.startRootSelector();
 }
 
 void EventListenerView::ruleSelected(void* rule){

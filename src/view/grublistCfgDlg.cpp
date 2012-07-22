@@ -4,7 +4,7 @@ ImageMenuItemOwnKey::ImageMenuItemOwnKey(const Gtk::StockID& id, const Gtk::Acce
 	set_accel_key(accel_key);
 }
 
-GrubConfUIGtk::GrubConfUIGtk()
+GrublistCfgDlg::GrublistCfgDlg()
 	: appName("Grub Customizer"), appVersion("2.0.6"),
 	tbttAdd(Gtk::Stock::ADD), tbttRemove(Gtk::Stock::REMOVE), tbttUp(Gtk::Stock::GO_UP), tbttDown(Gtk::Stock::GO_DOWN),
 	tbttSave(Gtk::Stock::SAVE), tbttPreferences(Gtk::Stock::PREFERENCES),
@@ -128,42 +128,42 @@ zeugma https://launchpad.net/~sunder67\
 	miStartRootSelector.set_label(gettext("Select _partition …"));
 	miStartRootSelector.set_use_underline(true);
 	
-	miExit.signal_activate().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_quit_click));
+	miExit.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlg::signal_quit_click));
 	miAbout.signal_activate().connect(sigc::mem_fun(&dlgAbout, &Gtk::AboutDialog::show_all));
 
 
 	//signals
 	
-	tvConfList.refTreeStore->signal_row_changed().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_row_changed));
-	tbttUp.signal_clicked().connect(sigc::bind<int>(sigc::mem_fun(this, &GrubConfUIGtk::signal_move_click),-1));
-	tbttDown.signal_clicked().connect(sigc::bind<int>(sigc::mem_fun(this, &GrubConfUIGtk::signal_move_click),1));
-	tvConfList.get_selection()->signal_changed().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_treeview_selection_changed));
-	tbttSave.signal_clicked().connect(sigc::mem_fun(this, &GrubConfUIGtk::saveConfig));
-	tbttAdd.signal_clicked().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_add_click));
-	tbttRemove.signal_clicked().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_remove_click));
-	tbttReload.signal_clicked().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_reload_click));
-	tbttPreferences.signal_clicked().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_preference_click));
+	tvConfList.refTreeStore->signal_row_changed().connect(sigc::mem_fun(this, &GrublistCfgDlg::signal_row_changed));
+	tbttUp.signal_clicked().connect(sigc::bind<int>(sigc::mem_fun(this, &GrublistCfgDlg::signal_move_click),-1));
+	tbttDown.signal_clicked().connect(sigc::bind<int>(sigc::mem_fun(this, &GrublistCfgDlg::signal_move_click),1));
+	tvConfList.get_selection()->signal_changed().connect(sigc::mem_fun(this, &GrublistCfgDlg::signal_treeview_selection_changed));
+	tbttSave.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlg::saveConfig));
+	tbttAdd.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlg::signal_add_click));
+	tbttRemove.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlg::signal_remove_click));
+	tbttReload.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlg::signal_reload_click));
+	tbttPreferences.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlg::signal_preference_click));
 	
-	miUp.signal_activate().connect(sigc::bind<int>(sigc::mem_fun(this, &GrubConfUIGtk::signal_move_click),-1));
-	miDown.signal_activate().connect(sigc::bind<int>(sigc::mem_fun(this, &GrubConfUIGtk::signal_move_click),1));
-	miSave.signal_activate().connect(sigc::mem_fun(this, &GrubConfUIGtk::saveConfig));
-	miAdd.signal_activate().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_add_click));
-	miRemove.signal_activate().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_remove_click));
-	miReload.signal_activate().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_reload_click));
-	miInstallGrub.signal_activate().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_show_grub_install_dialog_click));
-	miStartRootSelector.signal_activate().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_show_root_selector));
-	miPreferences.signal_activate().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_preference_click));
+	miUp.signal_activate().connect(sigc::bind<int>(sigc::mem_fun(this, &GrublistCfgDlg::signal_move_click),-1));
+	miDown.signal_activate().connect(sigc::bind<int>(sigc::mem_fun(this, &GrublistCfgDlg::signal_move_click),1));
+	miSave.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlg::saveConfig));
+	miAdd.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlg::signal_add_click));
+	miRemove.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlg::signal_remove_click));
+	miReload.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlg::signal_reload_click));
+	miInstallGrub.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlg::signal_show_grub_install_dialog_click));
+	miStartRootSelector.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlg::signal_show_root_selector));
+	miPreferences.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlg::signal_preference_click));
 	
-	win.signal_delete_event().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_delete_event));
+	win.signal_delete_event().connect(sigc::mem_fun(this, &GrublistCfgDlg::signal_delete_event));
 
-	dlgAbout.signal_response().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_about_dlg_response));
+	dlgAbout.signal_response().connect(sigc::mem_fun(this, &GrublistCfgDlg::signal_about_dlg_response));
 }
 
-void GrubConfUIGtk::setEventListener(EventListenerView_iface& eventListener) {
+void GrublistCfgDlg::setEventListener(EventListenerView_iface& eventListener) {
 	this->eventListener = &eventListener;
 }
 
-void GrubConfUIGtk::setIsBurgMode(bool isBurgMode){
+void GrublistCfgDlg::setIsBurgMode(bool isBurgMode){
 	if (isBurgMode)
 		win.set_title("Grub Customizer (" + Glib::ustring(gettext("BURG Mode")) + ")");
 	else
@@ -173,7 +173,7 @@ void GrubConfUIGtk::setIsBurgMode(bool isBurgMode){
 }
 
 
-bool GrubConfUIGtk::requestForRootSelection(){
+bool GrublistCfgDlg::requestForRootSelection(){
 	Gtk::MessageDialog dlg(gettext("No Bootloader found"), false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO);
 	dlg.set_skip_taskbar_hint(false);
 	dlg.set_secondary_text(gettext("Do you want to select another root partition?"));
@@ -182,7 +182,7 @@ bool GrubConfUIGtk::requestForRootSelection(){
 	return result == Gtk::RESPONSE_YES;
 }
 
-bool GrubConfUIGtk::requestForBurgMode(){
+bool GrublistCfgDlg::requestForBurgMode(){
 	Gtk::MessageDialog dlg(gettext("BURG found!"), false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO);
 	dlg.set_skip_taskbar_hint(false);
 	dlg.set_secondary_text(gettext("Do you want to configure BURG instead of grub2?"));
@@ -191,36 +191,31 @@ bool GrubConfUIGtk::requestForBurgMode(){
 	return result == Gtk::RESPONSE_YES;
 }
 
-//TODO: Partition chooser should be a member!
-std::string GrubConfUIGtk::show_root_selector(){
-	eventListener->rootSelector_requested();
-}
 
-
-void GrubConfUIGtk::run(){
+void GrublistCfgDlg::run(){
 	win.show_all();
 	Gtk::Main::run(win);
 }
 
-void GrubConfUIGtk::setProgress(double progress){
+void GrublistCfgDlg::setProgress(double progress){
 	progressBar.set_fraction(progress);
 	progressBar.show();
 }
 
-void GrubConfUIGtk::progress_pulse(){
+void GrublistCfgDlg::progress_pulse(){
 	progressBar.pulse();
 	progressBar.show();
 }
 
-void GrubConfUIGtk::hideProgressBar(){
+void GrublistCfgDlg::hideProgressBar(){
 	progressBar.hide();
 }
 
-void GrubConfUIGtk::setStatusText(Glib::ustring const& new_status_text){
+void GrublistCfgDlg::setStatusText(Glib::ustring const& new_status_text){
 	statusbar.push(new_status_text);
 }
 
-void GrubConfUIGtk::appendScript(Glib::ustring const& name, bool is_active, void* proxyPtr){
+void GrublistCfgDlg::appendScript(Glib::ustring const& name, bool is_active, void* proxyPtr){
 	Gtk::TreeIter row = tvConfList.refTreeStore->append();
 	(*row)[tvConfList.treeModel.active] = is_active;
 
@@ -233,7 +228,7 @@ void GrubConfUIGtk::appendScript(Glib::ustring const& name, bool is_active, void
 	(*row)[tvConfList.treeModel.is_editable] = false;
 }
 
-void GrubConfUIGtk::appendEntry(Glib::ustring const& name, bool is_active, void* entryPtr, bool editable){
+void GrublistCfgDlg::appendEntry(Glib::ustring const& name, bool is_active, void* entryPtr, bool editable){
 	Gtk::TreeIter lastScriptIter = *tvConfList.refTreeStore->children().rbegin();
 	
 	Gtk::TreeIter entryRow = tvConfList.refTreeStore->append(lastScriptIter->children());
@@ -248,18 +243,18 @@ void GrubConfUIGtk::appendEntry(Glib::ustring const& name, bool is_active, void*
 
 
 
-void GrubConfUIGtk::showProxyNotFoundMessage(){
+void GrublistCfgDlg::showProxyNotFoundMessage(){
 	Gtk::MessageDialog msg(gettext("Proxy binary not found!"), false, Gtk::MESSAGE_WARNING);
 	msg.set_secondary_text(gettext("You will see all entries (uncustomized) when you run grub. This error accurs (in most cases), when you didn't install grub gustomizer currectly."));
 	msg.run();
 }
 
-void GrubConfUIGtk::saveConfig(){
+void GrublistCfgDlg::saveConfig(){
 	eventListener->save_request();
 }
 
 
-void GrubConfUIGtk::setLockState(int state){
+void GrublistCfgDlg::setLockState(int state){
 	//state(bin):
 	//	0: lock nothing
 	//	1: lock normal items/buttons
@@ -297,18 +292,18 @@ void GrubConfUIGtk::setLockState(int state){
 }
 
 
-void GrubConfUIGtk::updateButtonsState(){
+void GrublistCfgDlg::updateButtonsState(){
 	update_remove_button();
 	update_move_buttons();
 }
 
-void GrubConfUIGtk::signal_reload_click(){
+void GrublistCfgDlg::signal_reload_click(){
 	eventListener->reload_request();
 }
 
 //MAKE PRIVATE
-Gtk::TreeModel::iterator GrubConfUIGtk::getIterByScriptPtr(void* scriptPtr){
-	Gtk::TreeModel::iterator iter = tvConfList.refTreeStore->children().begin();
+Gtk::TreeModel::iterator GrublistCfgDlg::getIterByScriptPtr(void* scriptPtr) const {
+	Gtk::TreeModel::const_iterator iter = tvConfList.refTreeStore->children().begin();
 	while (iter != tvConfList.refTreeStore->children().end()){
 		if (!iter->parent() && (*iter)[tvConfList.treeModel.relatedProxy] == scriptPtr)
 			break;
@@ -320,10 +315,10 @@ Gtk::TreeModel::iterator GrubConfUIGtk::getIterByScriptPtr(void* scriptPtr){
 }
 
 //MAKE PRIVATE
-Gtk::TreeModel::iterator GrubConfUIGtk::getIterByEntryPtr(void* entryPtr){
-	Gtk::TreeModel::iterator iter = tvConfList.refTreeStore->children().begin();
+Gtk::TreeModel::iterator GrublistCfgDlg::getIterByEntryPtr(void* entryPtr) const {
+	Gtk::TreeModel::const_iterator iter = tvConfList.refTreeStore->children().begin();
 	while (iter != tvConfList.refTreeStore->children().end()){
-		for (Gtk::TreeModel::iterator iter2 = iter->children().begin(); iter2 != iter->children().end(); iter2++){
+		for (Gtk::TreeModel::const_iterator iter2 = iter->children().begin(); iter2 != iter->children().end(); iter2++){
 			if (iter2->parent() && (*iter2)[tvConfList.treeModel.relatedRule] == entryPtr)
 				return iter2;
 		}
@@ -334,7 +329,7 @@ Gtk::TreeModel::iterator GrubConfUIGtk::getIterByEntryPtr(void* entryPtr){
 	return iter;
 }
 
-void GrubConfUIGtk::setProxyName(void* proxy, Glib::ustring const& name, bool isModified){
+void GrublistCfgDlg::setProxyName(void* proxy, Glib::ustring const& name, bool isModified){
 	Gtk::TreeModel::iterator iter = getIterByScriptPtr(proxy);
 	
 	//adding (custom) if this script is modified
@@ -343,7 +338,7 @@ void GrubConfUIGtk::setProxyName(void* proxy, Glib::ustring const& name, bool is
 	this->setLockState(0);
 }
 
-void GrubConfUIGtk::signal_row_changed(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter){
+void GrublistCfgDlg::signal_row_changed(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter){
 	if (this->lock_state == 0){
 		if (iter->parent()){ //if it's a rule row (no proxy)
 			eventListener->signal_entry_renamed((void*)(*iter)[tvConfList.treeModel.relatedRule]);
@@ -355,20 +350,20 @@ void GrubConfUIGtk::signal_row_changed(const Gtk::TreeModel::Path& path, const G
 	}
 }
 
-void GrubConfUIGtk::signal_show_root_selector(){
+void GrublistCfgDlg::signal_show_root_selector(){
 	eventListener->rootSelector_request();
 }
 
 
 
 
-void GrubConfUIGtk::swapProxies(void* a, void* b){
+void GrublistCfgDlg::swapProxies(void* a, void* b){
 	tvConfList.refTreeStore->iter_swap(getIterByScriptPtr(a), getIterByScriptPtr(b));
 	
 	update_move_buttons();
 }
 
-void GrubConfUIGtk::swapRules(void* a, void* b){
+void GrublistCfgDlg::swapRules(void* a, void* b){
 	Gtk::TreeModel::iterator iter1 = getIterByEntryPtr(a);
 	Gtk::TreeModel::iterator iter2 = getIterByEntryPtr(b);
 	
@@ -381,35 +376,35 @@ void GrubConfUIGtk::swapRules(void* a, void* b){
 }
 
 
-Glib::ustring GrubConfUIGtk::getRuleName(void* rule){
+Glib::ustring GrublistCfgDlg::getRuleName(void* rule){
 	Gtk::TreeModel::iterator iter = this->getIterByEntryPtr(rule);
 	return (*iter)[tvConfList.treeModel.name];
 }
-void GrubConfUIGtk::setRuleName(void* rule, Glib::ustring const& newName){
+void GrublistCfgDlg::setRuleName(void* rule, Glib::ustring const& newName){
 	Gtk::TreeModel::iterator iter = this->getIterByEntryPtr(rule);
 	this->setLockState(~0);
 	(*iter)[tvConfList.treeModel.name] = newName;
 	this->setLockState(0);
 }
 
-bool GrubConfUIGtk::getRuleState(void* rule){
+bool GrublistCfgDlg::getRuleState(void* rule){
 	Gtk::TreeModel::iterator iter = this->getIterByEntryPtr(rule);
 	return (*iter)[tvConfList.treeModel.active];
 }
-void GrubConfUIGtk::setRuleState(void* rule, bool newState){
+void GrublistCfgDlg::setRuleState(void* rule, bool newState){
 	Gtk::TreeModel::iterator iter = this->getIterByEntryPtr(rule);
 	this->setLockState(~0);
 	(*iter)[tvConfList.treeModel.active] = newState;
 	this->setLockState(0);
 }
 
-bool GrubConfUIGtk::getProxyState(void* proxy){
+bool GrublistCfgDlg::getProxyState(void* proxy){
 	Gtk::TreeModel::iterator iter = this->getIterByScriptPtr(proxy);
 	return (*iter)[tvConfList.treeModel.active];
 }
 
 
-void GrubConfUIGtk::signal_move_click(int direction){
+void GrublistCfgDlg::signal_move_click(int direction){
 	if (this->lock_state == 0){
 		if (direction == 1 || direction == -1){
 			Gtk::TreeModel::iterator iter = tvConfList.get_selection()->get_selected();
@@ -441,7 +436,7 @@ void GrubConfUIGtk::signal_move_click(int direction){
 	}
 }
 
-void GrubConfUIGtk::update_remove_button(){
+void GrublistCfgDlg::update_remove_button(){
 	if (tvConfList.get_selection()->count_selected_rows() == 1){
 		if (tvConfList.get_selection()->get_selected()->parent() == false){ //wenn Script markiert
 			tbttRemove.set_sensitive(true);
@@ -458,11 +453,11 @@ void GrubConfUIGtk::update_remove_button(){
 	}
 }
 
-void GrubConfUIGtk::setDefaultTitleStatusText(Glib::ustring const& str){
+void GrublistCfgDlg::setDefaultTitleStatusText(Glib::ustring const& str){
 	this->setStatusText(gettext("Default title: ")+str);
 }
 
-void GrubConfUIGtk::signal_treeview_selection_changed(){
+void GrublistCfgDlg::signal_treeview_selection_changed(){
 	if (this->lock_state == 0){
 		bool rule_ev_executed = false;
 		if (tvConfList.get_selection()->count_selected_rows() == 1){
@@ -477,11 +472,11 @@ void GrubConfUIGtk::signal_treeview_selection_changed(){
 	}
 }
 
-void GrubConfUIGtk::signal_add_click(){
+void GrublistCfgDlg::signal_add_click(){
 	eventListener->scriptAddDlg_requested();
 }
 
-void GrubConfUIGtk::removeProxy(void* p){
+void GrublistCfgDlg::removeProxy(void* p){
 	//Parameter is not really required
 	this->setLockState(~0);
 	Gtk::TreeModel::iterator iter = getIterByScriptPtr(p);
@@ -491,16 +486,16 @@ void GrubConfUIGtk::removeProxy(void* p){
 	update_remove_button();
 }
 
-void GrubConfUIGtk::signal_remove_click(){
+void GrublistCfgDlg::signal_remove_click(){
 	void* proxyPointer = (void*)(*(tvConfList.get_selection()->get_selected()))[tvConfList.treeModel.relatedProxy];
 	eventListener->removeProxy_requested(proxyPointer);
 }
 
-void GrubConfUIGtk::signal_preference_click(){
+void GrublistCfgDlg::signal_preference_click(){
 	eventListener->settings_dialog_request();
 }
 
-void GrubConfUIGtk::update_move_buttons(){
+void GrublistCfgDlg::update_move_buttons(){
 	int selectedRowsCount = tvConfList.get_selection()->count_selected_rows();
 
 	tbttUp.set_sensitive(selectedRowsCount == 1);
@@ -535,7 +530,7 @@ void GrubConfUIGtk::update_move_buttons(){
 }
 
 
-void GrubConfUIGtk::close(){
+void GrublistCfgDlg::close(){
 	win.hide();
 }
 
@@ -543,7 +538,7 @@ void GrubConfUIGtk::close(){
  * @param type int: which type of dialog to show (1: changes unsaved, 2: conf not up to date, 3: 1 + 2)
  * @return int: type of the answer: 0: cancel, 1: yes, 2: no
  */
-int GrubConfUIGtk::showExitConfirmDialog(int type){
+int GrublistCfgDlg::showExitConfirmDialog(int type){
 	int dlgResponse = Gtk::RESPONSE_NO;
 	if (type != 0){
 		Gtk::MessageDialog msgDlg("", false, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_NONE);
@@ -582,29 +577,29 @@ int GrubConfUIGtk::showExitConfirmDialog(int type){
 	}
 }
 
-bool GrubConfUIGtk::signal_delete_event(GdkEventAny* event){ //return value: keep window open
+bool GrublistCfgDlg::signal_delete_event(GdkEventAny* event){ //return value: keep window open
 	return eventListener->exitRequest();
 }
 
-void GrubConfUIGtk::signal_quit_click(){
+void GrublistCfgDlg::signal_quit_click(){
 	if (eventListener->exitRequest() == false)
 		this->close();
 }
 
-void GrubConfUIGtk::signal_about_dlg_response(int response_id){
+void GrublistCfgDlg::signal_about_dlg_response(int response_id){
 	if (Gtk::RESPONSE_CLOSE)
 		dlgAbout.hide();
 }
 
-void GrubConfUIGtk::signal_show_grub_install_dialog_click(){
+void GrublistCfgDlg::signal_show_grub_install_dialog_click(){
 	eventListener->installDialogRequest();
 }
 
-void GrubConfUIGtk::showErrorMessage(Glib::ustring const& msg){
+void GrublistCfgDlg::showErrorMessage(Glib::ustring const& msg){
 	Gtk::MessageDialog(msg, false, Gtk::MESSAGE_ERROR).run();
 }
 
-void GrubConfUIGtk::clear(){
+void GrublistCfgDlg::clear(){
 	tvConfList.refTreeStore->clear();
 }
 
