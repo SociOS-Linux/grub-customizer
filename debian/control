@@ -8,7 +8,7 @@ Homepage: https://launchpad.net/grub-customizer
 
 Package: grub-customizer
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, menu
+Depends: ${shlibs:Depends}, ${misc:Depends}, policykit-1
 Recommends: hwinfo
 Description: Grub Customizer - A graphical Grub2/BURG configuration application
  Grub Customizer is a graphical configuration tool to modify the grub2/burg
