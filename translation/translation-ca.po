@@ -1,0 +1,530 @@
+# Catalan translation for grub-customizer
+# Copyright (c) 2011 Innocent De Marchi
+# This file is distributed under the same license as the grub-customizer package.
+# Innocent De Marchi <tangram.peces@gmail.com>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: grub-customizer\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2010-11-28 22:09+0100\n"
+"PO-Revision-Date: 2011-03-28 20:00+0100\n"
+"Last-Translator: Innocent De Marchi <tangram.peces@gmail.com>\n"
+"Language-Team: Catalan\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2011-02-02 22:40+0000\n"
+"X-Generator: Launchpad (build 12274)\n"
+"X-Poedit-Country: SPAIN\n"
+"X-Poedit-Language: Catalan\n"
+
+#: ../src/grubconfig.cpp:203
+#: ../src/grubconfig.cpp:218
+msgid " not found. Is grub2 installed?"
+msgstr " no es troba. Teniu instal·lat el grub2?"
+
+#: ../src/grubconfig.cpp:287
+msgid " couldn't be executed successfully. You must run this as root!"
+msgstr " no es pot executar. Heu d'executar-ho amb l'usuari root (administrador)."
+
+#: ../src/grubconf_ui_gtk.cpp:11
+msgid "_File"
+msgstr "_Arxiu"
+
+#: ../src/grubconf_ui_gtk.cpp:12
+msgid "_Edit"
+msgstr "_Edita"
+
+#: ../src/grubconf_ui_gtk.cpp:12
+msgid "_View"
+msgstr "_Veure"
+
+#: ../src/grubconf_ui_gtk.cpp:12
+msgid "_Help"
+msgstr "Aj_uda"
+
+#: ../src/grubconf_ui_gtk.cpp:13
+msgid "_Install to MBR …"
+msgstr "_Instal·la en el MBR..."
+
+#: ../src/grubconf_ui_gtk.cpp:18
+msgid "Script to insert:"
+msgstr "Guió a inserir:"
+
+#: ../src/grubconf_ui_gtk.cpp:18
+msgid "Preview:"
+msgstr "Vista prèvia:"
+
+#: ../src/grubconf_ui_gtk.cpp:20
+msgid ""
+"Install the bootloader to MBR and put some\n"
+"files to the bootloaders data directory\n"
+"(if they don't already exist)."
+msgstr ""
+"Instal·la el gestor d'engegada en el MBR i posa alguns\n"
+"arxius en el directori de dades del gestor d'engegada\n"
+"(si no existeixen)."
+
+#: ../src/grubconf_ui_gtk.cpp:21
+msgid "_Device: "
+msgstr "_Dispositiu: "
+
+#: ../src/grubconf_ui_gtk.cpp:54
+msgid "Grub Customizer is a graphical interface to configure the grub2/burg settings"
+msgstr "Grub Customizer es una interfície gràfica per configurar les preferències de GRUB2/BURG"
+
+#: ../src/grubconf_ui_gtk.cpp:82
+msgid "Save configuration and generate a new "
+msgstr "Desa la configuració i generar-ne una nova "
+
+#: ../src/grubconf_ui_gtk.cpp:89
+msgid "Add a script to your configuration"
+msgstr "Afegir un guió a la configuració personalitzada"
+
+#: ../src/grubconf_ui_gtk.cpp:91
+msgid "Remove a script from your configuration"
+msgstr "Elimina un guió de la seva configuració"
+
+#: ../src/grubconf_ui_gtk.cpp:97
+msgid "Move up the selected entry or script"
+msgstr "Puja l'element seleccionat"
+
+#: ../src/grubconf_ui_gtk.cpp:99
+msgid "Move down the selected entry or script"
+msgstr "Baixa l'element seleccionat"
+
+#: ../src/grubconf_ui_gtk.cpp:107
+msgid "reload configuration"
+msgstr "carregada altra vegada la configuració"
+
+#: ../src/grubconf_ui_gtk.cpp:110
+msgid "Edit grub preferences"
+msgstr "Edita les preferències de GRUB"
+
+#: ../src/grubconf_ui_gtk.cpp:139
+msgid "Select _partition …"
+msgstr "Selecciona la partició ..."
+
+#: ../src/grubconf_ui_gtk.cpp:146
+msgid "Add script"
+msgstr "Afegeix guió"
+
+#: ../src/grubconf_ui_gtk.cpp:162
+msgid "Entry"
+msgstr "Entrada"
+
+#: ../src/grubconf_ui_gtk.cpp:177
+msgid "Install to MBR"
+msgstr "Instal·la en el MBR"
+
+#: ../src/grubconf_ui_gtk.cpp:222
+msgid "BURG Mode"
+msgstr "Mode BURG"
+
+#: ../src/grubconf_ui_gtk.cpp:243
+msgid "No Bootloader found"
+msgstr "No s'ha trobat cap gestor d'engeda"
+
+#: ../src/grubconf_ui_gtk.cpp:244
+msgid "Do you want to select another root partition?"
+msgstr "Voleu seleccionar una altra partició arrel?"
+
+#: ../src/grubconf_ui_gtk.cpp:251
+msgid "BURG found!"
+msgstr "s'ha trobat BURG!"
+
+#: ../src/grubconf_ui_gtk.cpp:252
+msgid "Do you want to configure BURG instead of grub2?"
+msgstr "Voleu configurar BURG enlloc de grub2?"
+
+#: ../src/grubconf_ui_gtk.cpp:272
+msgid "The bootloader has been installed successfully"
+msgstr "El gestor d'engegada s'ha instal·lat correctament"
+
+#: ../src/grubconf_ui_gtk.cpp:277
+msgid "Error while installing the bootloader"
+msgstr "Error en la instal·lació del gestor d'engegada"
+
+#: ../src/grubconf_ui_gtk.cpp:299
+msgid "loading configuration…"
+msgstr "carregant la configuració..."
+
+#: ../src/grubconf_ui_gtk.cpp:330
+msgid " (custom)"
+msgstr " (personalitzat)"
+
+#: ../src/grubconf_ui_gtk.cpp:342
+msgid "(new Entries)"
+msgstr "(noves entrades)"
+
+#: ../src/grubconf_ui_gtk.cpp:363
+msgid "Proxy binary not found!"
+msgstr "No s'ha trobat el binari Proxy!"
+
+#: ../src/grubconf_ui_gtk.cpp:364
+msgid "You will see all entries (uncustomized) when you run grub. This error accurs (in most cases), when you didn't install grub gustomizer currectly."
+msgstr "Veurà totes les entrades (sense personalitzar) en engegar grub. Aquest error es produeix (en la majoria dels casos) si no s'ha instal·lat Grub Customizer correctament."
+
+#: ../src/grubconf_ui_gtk.cpp:382
+msgid "Configuration has been saved"
+msgstr "La configuració s'ha desat correctament"
+
+#: ../src/grubconf_ui_gtk.cpp:385
+msgid "updating configuration"
+msgstr "actualitzant la configuració"
+
+#: ../src/grubconf_ui_gtk.cpp:442
+msgid "Name the Entry"
+msgstr "Nom de l'entrada"
+
+#: ../src/grubconf_ui_gtk.cpp:558
+msgid "Default title: "
+msgstr "Títol predeterminat: "
+
+#: ../src/grubconf_ui_gtk.cpp:578
+msgid "No script found"
+msgstr "No s'ha trobat cap guió"
+
+#: ../src/grubconf_ui_gtk.cpp:673
+msgid "The saved configuration is not up to date!"
+msgstr "La configuració desada no està actualitzada"
+
+#: ../src/grubconf_ui_gtk.cpp:674
+msgid "The generated configuration didn't equal to the saved configuration on startup. So what you see now may not be what you see when you restart your pc. To fix this, click update!"
+msgstr "La configuració generada no és igual a la configuració desada en l'inici. La configuració que vegeu ara pot ésser distinta a la que veureu en tornar a engegar PC. Per solucionar aquest problema, premeu Actualitza."
+
+#: ../src/grubconf_ui_gtk.cpp:677
+msgid "_Quit without update"
+msgstr "_Sortir sense actualitza"
+
+#: ../src/grubconf_ui_gtk.cpp:680
+msgid "_Update & Quit"
+msgstr "_Actualitza i surt"
+
+#: ../src/grubconf_ui_gtk.cpp:684
+msgid "Do you want to save your modifications?"
+msgstr "Voleu desar les modificacions?"
+
+#: ../src/grubconf_ui_gtk.cpp:687
+msgid "_Quit without saving"
+msgstr "_Surt sense desar"
+
+#: ../src/grubconf_ui_gtk.cpp:690
+msgid "_Save & Quit"
+msgstr "_Desa i surt"
+
+#: ../src/grubconf_ui_gtk.cpp:693
+msgid "AND: your modifications are still unsaved, update will save them too!"
+msgstr "i les modificacions no s'han desat, si actualitzau també es desaran."
+
+#: ../src/grubconf_ui_gtk.cpp:732
+msgid "installing the bootloader…"
+msgstr "instal·lant el gestor d'engegada..."
+
+#: ../src/grubconf_ui_gtk.cpp:737
+msgid "Please type a device string!"
+msgstr "Escriviu el nom del dispositiu."
+
+#: ../src/grubconf_ui_gtk.cpp:747
+#: ../src/settings_dlg_gtk.cpp:92
+msgid "is active"
+msgstr "activat"
+
+#: ../src/grubconf_ui_gtk.cpp:748
+#: ../src/settings_dlg_gtk.cpp:93
+msgid "name"
+msgstr "nom"
+
+#: ../src/gtk-client.cpp:14
+msgid " command not found, cannot proceed"
+msgstr " no s'ha trobat l'ordre, no és possible continuar"
+
+#: ../src/liveCDSetupDialog.cpp:5
+msgid "_use another partition: "
+msgstr "_feu servir una altra partició: "
+
+#: ../src/liveCDSetupDialog.cpp:6
+msgid "Mount selected Filesystem"
+msgstr "Munta el sistema d'arxius seleccionat"
+
+#: ../src/liveCDSetupDialog.cpp:7
+msgid "Unmount mounted Filesystem"
+msgstr "Desmunta el sistema d'arxius muntat"
+
+#: ../src/liveCDSetupDialog.cpp:10
+msgid ""
+"These are the mountpoints of your fstab file.\n"
+"Please select every grub/boot related partition."
+msgstr ""
+"Aquests son els punts de muntatge del seu arxiu fstab.\n"
+"Seleccioneu cada partició llistada al grub/boot."
+
+#: ../src/liveCDSetupDialog.cpp:15
+msgid "You started Grub Customizer using the live CD."
+msgstr "Heu iniciat Grub Customizer fent servir un CD viu (Live CD).."
+
+#: ../src/liveCDSetupDialog.cpp:17
+msgid ""
+"You selected the option for choosing another partition.\n"
+"Please note: The os-prober may not find your actually running system.\n"
+"So run Grub Customizer on the target system\n"
+"again and save the configuration (or run update-grub/update-burg)\n"
+"to get the entry back!"
+msgstr ""
+"Heu seleccionat l'opció per elegir una altra partició.\n"
+"Atenció: és possible que «os-prober» no trobi el sistema que s'està executant actualment.\n"
+"Reinicieu Grub Customizer en el sistema objectiu\n"
+"i desau la configuració (o executeu «update-grub»/«update-burg»)\n"
+"per obtenir l'entrada de bell nou."
+
+#: ../src/liveCDSetupDialog.cpp:19
+msgid ""
+"Before you can edit your grub configuration we have to\n"
+"mount the required partitions.\n"
+"\n"
+"This assistant will help you doing this.\n"
+"\n"
+"\n"
+"Please ensure the target system is based on the same cpu architecture\n"
+"as the actually running one.\n"
+"If not, you will get an error message when trying to load the configuration."
+msgstr ""
+"Abans de modificar la configuració del grub és necesari\n"
+"muntar la partició requerida.\n"
+"\n"
+"Aquest assistent vos ajudarà a fer-ho.\n"
+"\n"
+"\n"
+"Assegureu-vos de que el sistema està basat en la mateixa arquitectura de CPU\n"
+"que el que s'està executant ara.\n"
+"Si no es així, veureu un missatge d'error en provar de carregar la configuració."
+
+#: ../src/liveCDSetupDialog.cpp:21
+msgid "Grub Customizer: Partition chooser"
+msgstr "Grub Customizer: Seleccionar partició"
+
+#: ../src/liveCDSetupDialog.cpp:25
+msgid "Select and mount your root partition"
+msgstr "Seleccioneu i y munteu la partició arrel"
+
+#: ../src/liveCDSetupDialog.cpp:43
+msgid "partition"
+msgstr "partició"
+
+#: ../src/liveCDSetupDialog.cpp:44
+msgid "type"
+msgstr "tipus"
+
+#: ../src/liveCDSetupDialog.cpp:45
+msgid "label"
+msgstr "etiqueta"
+
+#: ../src/liveCDSetupDialog.cpp:62
+msgid "Select required submountpoints"
+msgstr "Seleccioneu els subpunts de muntatge requerits"
+
+#: ../src/liveCDSetupDialog.cpp:82
+msgid "Partition Chooser"
+msgstr "Elegir la partició"
+
+#: ../src/liveCDSetupDialog.cpp:152
+msgid "Mount failed!"
+msgstr "Ha fallat el muntatge!"
+
+#: ../src/liveCDSetupDialog.cpp:167
+msgid "This seems not to be a root file system (no fstab found)"
+msgstr "No pareix sigui un sistema d'arxius arrel (no s'ha trobat l'arxiu «fstab»)"
+
+#: ../src/liveCDSetupDialog.cpp:176
+msgid "umount failed!"
+msgstr "ha fallat el desmuntatge!"
+
+#: ../src/liveCDSetupDialog.cpp:210
+msgid "Couldn't mount the selected partition"
+msgstr "No s'ha pogut muntar la partició seleccionada"
+
+#: ../src/liveCDSetupDialog.cpp:212
+msgid "Couldn't umount the selected partition"
+msgstr "No s'ha pogut desmuntar la partició seleccionada"
+
+#: ../src/settings_dlg_gtk.cpp:47
+msgid "white"
+msgstr "blanc"
+
+#: ../src/settings_dlg_gtk.cpp:48
+msgid "yellow"
+msgstr "groc"
+
+#: ../src/settings_dlg_gtk.cpp:49
+msgid "light-cyan"
+msgstr "cian-clar"
+
+#: ../src/settings_dlg_gtk.cpp:50
+msgid "cyan"
+msgstr "cian"
+
+#: ../src/settings_dlg_gtk.cpp:51
+msgid "light-blue"
+msgstr "blau clar"
+
+#: ../src/settings_dlg_gtk.cpp:52
+msgid "blue"
+msgstr "blau"
+
+#: ../src/settings_dlg_gtk.cpp:53
+msgid "light-green"
+msgstr "verd clar"
+
+#: ../src/settings_dlg_gtk.cpp:54
+msgid "green"
+msgstr "verd"
+
+#: ../src/settings_dlg_gtk.cpp:55
+msgid "light-magenta"
+msgstr "magenta clar"
+
+#: ../src/settings_dlg_gtk.cpp:56
+msgid "magenta"
+msgstr "magenta"
+
+#: ../src/settings_dlg_gtk.cpp:57
+msgid "light-red"
+msgstr "vermell clar"
+
+#: ../src/settings_dlg_gtk.cpp:58
+msgid "red"
+msgstr "vermell"
+
+#: ../src/settings_dlg_gtk.cpp:59
+msgid "brown"
+msgstr "marró"
+
+#: ../src/settings_dlg_gtk.cpp:60
+msgid "light-gray"
+msgstr "gris clar"
+
+#: ../src/settings_dlg_gtk.cpp:61
+msgid "dark-gray"
+msgstr "gris fosc"
+
+#: ../src/settings_dlg_gtk.cpp:62
+msgid "transparent"
+msgstr "transparent"
+
+#: ../src/settings_dlg_gtk.cpp:62
+msgid "black"
+msgstr "negre"
+
+#: ../src/settings_dlg_gtk.cpp:68
+msgid "pre_defined: "
+msgstr "pre_determinat "
+
+#: ../src/settings_dlg_gtk.cpp:68
+msgid "previously _booted entry"
+msgstr "entrada _engegada prèviament"
+
+#: ../src/settings_dlg_gtk.cpp:69
+msgid "default entry"
+msgstr "entrada predeterminada"
+
+#: ../src/settings_dlg_gtk.cpp:69
+msgid "visibility"
+msgstr "visibilitat"
+
+#: ../src/settings_dlg_gtk.cpp:69
+msgid "show menu"
+msgstr "mostra menú"
+
+#: ../src/settings_dlg_gtk.cpp:70
+msgid "Timeout"
+msgstr "Temps d'espera"
+
+#: ../src/settings_dlg_gtk.cpp:70
+msgid "Seconds"
+msgstr "Segons"
+
+#: ../src/settings_dlg_gtk.cpp:70
+msgid "kernel parameters"
+msgstr "Paràmetres del nucli («kernel»)"
+
+#: ../src/settings_dlg_gtk.cpp:71
+msgid "generate recovery entries"
+msgstr "generar les entrades de recuperació"
+
+#: ../src/settings_dlg_gtk.cpp:71
+msgid "look for other operating systems"
+msgstr "buscar altres sistemes operatius"
+
+#: ../src/settings_dlg_gtk.cpp:72
+msgid "custom resolution: "
+msgstr "resolució personalitzada "
+
+#: ../src/settings_dlg_gtk.cpp:73
+msgid "font color"
+msgstr "color de la lletra"
+
+#: ../src/settings_dlg_gtk.cpp:73
+msgid "background"
+msgstr "fons"
+
+#: ../src/settings_dlg_gtk.cpp:74
+msgid "normal:"
+msgstr "normal:"
+
+#: ../src/settings_dlg_gtk.cpp:74
+msgid "highlight:"
+msgstr "ressaltat:"
+
+#: ../src/settings_dlg_gtk.cpp:75
+msgid "menu colors"
+msgstr "colors del menú"
+
+#: ../src/settings_dlg_gtk.cpp:75
+msgid "background image"
+msgstr "imatge de fons"
+
+#: ../src/settings_dlg_gtk.cpp:76
+msgid "copy to grub directory"
+msgstr "copia en el directori de grub"
+
+#: ../src/settings_dlg_gtk.cpp:76
+msgid "remove background"
+msgstr "elimina el fons"
+
+#: ../src/settings_dlg_gtk.cpp:77
+msgid ""
+"To get the colors above working,\n"
+"you have to select a background image!"
+msgstr ""
+"Per obtenir els colors elegits dalt,\n"
+"heu de seleccionar una imatge de fons."
+
+#: ../src/settings_dlg_gtk.cpp:80
+msgid "settings"
+msgstr "configuració"
+
+#: ../src/settings_dlg_gtk.cpp:84
+msgid "_General"
+msgstr "_General"
+
+#: ../src/settings_dlg_gtk.cpp:85
+msgid "A_ppearance"
+msgstr "A_parença"
+
+#: ../src/settings_dlg_gtk.cpp:86
+msgid "_Advanced"
+msgstr "_Avanzat"
+
+#: ../src/settings_dlg_gtk.cpp:94
+msgid "value"
+msgstr "valor"
+
+#: ../src/settings_dlg_gtk.cpp:129
+msgid "Entry %1 (by position)"
+msgstr "Entrada %1 (per la posició)"
+
+#: ../src/settings_dlg_gtk.cpp:419
+msgid "This option doesn't work when the \"os-prober\" script finds other operating systems. Disable \"%1\" if you don't need to boot other operating systems."
+msgstr "Aquesta opció no funciona quan el guió «os-prober» troba altres sistemes operatius. Deshabiliteu «% 1» si no heu d'engegar altres sistemes operatius."
+

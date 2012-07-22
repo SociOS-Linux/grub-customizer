@@ -1,16 +1,15 @@
+Source: grub-customizer
 Section: admin
 Priority: optional
-Source: grub-customizer
-Homepage: https://launchpad.net/grub-customizer
-Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
-XBCS-Original-Maintainer: Daniel Richter <danielrichter2007@web.de>
+Maintainer: Daniel Richter <danielrichter2007@web.de>
 Build-Depends: debhelper (>= 7.3), libgtkmm-2.4-dev (>= 2.20.0), cmake (>=2.6.2), gettext (>=0.17)
-Standards-Version: 3.9.1.0
+Standards-Version: 3.9.2
+Homepage: https://launchpad.net/grub-customizer
 
+Package: grub-customizer
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, menu
 Recommends: hwinfo
-Package: grub-customizer
 Description: Grub Customizer - A graphical Grub2/BURG configuration application
  Grub Customizer is a graphical configuration tool to modify the grub2/burg
  settings with focus on the individual list order - without losing the

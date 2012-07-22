@@ -1,21 +1,22 @@
-This work was packaged for Debian by:
+Format-Specification: http://svn.debian.org/wsvn/dep/web/deps/
+   dep5.mdwn?op=file&rev=135
 
-    Daniel Richter <danielrichter2007@web.de> on Tue, 07 Dec 2010 18:39:04 +0100
+Name: grub-customizer
+Maintainer: Daniel Richter <danielrichter2007@web.de>
+Source: https://launchpad.net/grub-customizer
 
-It was downloaded from:
+Copyright: 2010-2011 Daniel Richter <danielrichter2007@web.de>
+License: GPL-3+
 
-    https://launchpad.net/grub-customizer
+Files: debian/*
+Copyright: 2010-2011 Daniel Richter <danielrichter2007@web.de>
+License: GPL-3+
 
-Upstream Author(s):
+Files: translations/*
+Copyright (c) 2010 Rosetta Contributors and Canonical Ltd 2010
+License: GPL-3+
 
-    Daniel Richter <danielrichter2007@web.de>
-
-Copyright:
-
-    <Copyright (C) 2010 Daniel Richter>
-
-License:
-
+License: GPL-3+
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
@@ -32,9 +33,5 @@ License:
 On Debian systems, the complete text of the GNU General
 Public License version 3 can be found in `/usr/share/common-licenses/GPL-3'.
 
-The Debian packaging is:
-
-    Copyright (C) 2010 Daniel Richter <danielrichter2007@web.de>
-
-and is licensed under the GPL version 3, see above.
-
+It is important to realize that this software comes
+without ANY form of warranty.

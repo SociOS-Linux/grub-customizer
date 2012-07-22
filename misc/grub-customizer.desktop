@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Grub Customizer
-Comment[de]=Grub anpassen
-Comment[en]=Customize grub
+Comment[de]=Grub2 anpassen
+Comment[en]=Customize grub2
 Exec=su-to-root -X -c grub-customizer
 Terminal=false
 X-MultipleArgs=false

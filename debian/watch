@@ -1,2 +1,2 @@
 version=3
-http://launchpad.net/grub-customizer/2.1/(.+)/+download/grub-customizer_(.+).tar.gz
+https://launchpad.net/grub-customizer/+download http://launchpad.net/grub-customizer/.*/grub-customizer_(.+).tar.gz

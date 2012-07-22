@@ -66,12 +66,8 @@ install(FILES misc/manpage.gz
 	DESTINATION share/man/man1
 	RENAME grub-customizer.1.gz)
 
-install(FILES misc/copyright
-	DESTINATION share/doc/grub-customizer)
-
-install(FILES misc/upstream-changelog.gz
-	DESTINATION share/doc/grub-customizer
-	RENAME changelog.gz)
+#install(FILES misc/copyright
+#	DESTINATION share/doc/grub-customizer)
 
 install(FILES translation/translation-de.mo
 	DESTINATION share/locale/de/LC_MESSAGES/
@@ -155,6 +151,10 @@ install(FILES translation/translation-kk.mo
 
 install(FILES translation/translation-nl.mo
 	DESTINATION share/locale/nl/LC_MESSAGES/
+	RENAME grub-customizer.mo)
+
+install(FILES translation/translation-ca.mo
+	DESTINATION share/locale/ca/LC_MESSAGES/
 	RENAME grub-customizer.mo)
 
 install(FILES misc/grub-customizer.desktop

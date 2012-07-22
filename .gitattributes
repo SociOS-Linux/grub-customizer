@@ -6,6 +6,7 @@
 /CMakeLists.txt -text
 /COPYING -text
 /README -text
+/changelog -text
 /cmake_uninstall.cmake.in -text
 /config.h.in -text
 debian/changelog -text
@@ -14,11 +15,9 @@ debian/changelog.natty_repo -text
 debian/compat -text
 debian/control -text
 debian/copyright -text
-debian/debhelper.log -text
 debian/rules -text
 debian/source/format -text
 debian/watch -text
-misc/copyright -text
 misc/grub-customizer.desktop -text
 misc/icons/128x128.png -text svneol=unset#unset
 misc/icons/14x14.png -text svneol=unset#unset
@@ -30,7 +29,6 @@ misc/icons/32x32.png -text svneol=unset#unset
 misc/icons/48x48.png -text svneol=unset#unset
 misc/icons/64x64.png -text svneol=unset#unset
 misc/manpage.gz -text svneol=unset#unset
-misc/upstream-changelog.gz -text svneol=unset#unset
 src/interface/aboutDialog.h -text
 src/interface/colorChooser.h -text
 src/interface/evt_grubInstallDlg.h -text
@@ -97,6 +95,8 @@ translation/translation-ast.mo -text svneol=unset#unset
 translation/translation-ast.po -text
 translation/translation-bg.mo -text svneol=unset#unset
 translation/translation-bg.po -text
+translation/translation-ca.mo -text svneol=unset#unset
+translation/translation-ca.po -text
 translation/translation-cs.mo -text svneol=unset#unset
 translation/translation-cs.po -text
 translation/translation-cy.mo -text svneol=unset#unset

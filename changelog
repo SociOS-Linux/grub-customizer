@@ -1,0 +1,81 @@
+v. 2.1.2
+	* menu colors fixed
+	* multiple loads (results in a chash) prevented
+	* empty setting names won't simply be saved anymore
+	* settings dialog now better handles the case when entries doesn't exist
+	* translation updates
+
+v. 2.1.1
+   * better conf corruption detection/fix functionality.
+   * improved view of disabled script entries.
+   * translation updates.
+
+v. 2.1
+   * based on MVP pattern.
+   * no modal windows.
+   * add/remove entry buttons in settings dialog.
+
+v. 2.0.8
+   * french and hungarian translation updated.
+
+v 2.0.7
+   * spanish and italian translation updated (now complete).
+
+v. 2.0.6
+   * lintian and compiler warnings removed.
+   * manpage created.
+   * using su-to-root instead of gksu in the menu entry.
+
+v. 2.0.5
+   * translations updated.
+
+v. 2.0.4
+   * chineese translation added, frensh and turkish 
+     translation updated.
+   * fixed: timeout not settable when "show menu" not selected.
+   * renamed "black" to "transparent" in background selection.
+
+v. 2.0.3
+   * fixed: crash when choosing an img which can not
+     be displayed by gtk.
+   * polish translation updated.
+
+v. 2.0.2
+   * translations (Greek and Ukrainian) updated.
+
+v. 2.0.1
+   * Bulgarian and Turkish translation updated.
+   * some partition chooser bugfixes.
+
+v. 2.0
+   * settings manager included.
+
+v. 1.6.4
+   * translations updated.
+
+v. 1.6.3
+   * translations updated.
+
+v. 1.6.2
+   * greek translation updated.
+   * translators added to the about dialog.
+
+v. 1.6.1
+   * fixed burg mode indentfier (has not been updated).
+   * translations included.
+
+v. 1.6 
+   * bug #661304 fixed (multiple scripts using the same 
+     basename will not be overwritten anymore).
+   * (new entries) will be displayed on uncustomized 
+     scripts too (the old behaviour was to fuzzy).
+   * the test, if a script requires a proxy, is now solved
+     dynamically (the previous behaviour was: when it's
+     modified, set proxy_required).
+   * the live cd setup assistant is now (renamed to
+     partition chooser) accessible after loading 
+    (by menubutton click) or if no bootloader found too.
+   * the toolbar button for saving the configuration is 
+     now marked as is_important (will be displayed 
+     larger in most cases).
+
