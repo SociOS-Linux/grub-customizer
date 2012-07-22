@@ -1,4 +1,4 @@
-# Bulgarian translation for grub-customizer
+# French translation for grub-customizer
 # Copyright (c) 2010 Rosetta Contributors and Canonical Ltd 2010
 # This file is distributed under the same license as the grub-customizer package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-10-22 20:01+0200\n"
-"PO-Revision-Date: 2010-11-06 11:27+0000\n"
-"Last-Translator: Svetoslav Stefanov <svetlisashkov@yahoo.com>\n"
-"Language-Team: Bulgarian <bg@li.org>\n"
+"PO-Revision-Date: 2010-11-13 23:31+0000\n"
+"Last-Translator: Maxime Gentils <Unknown>\n"
+"Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -19,40 +19,40 @@ msgstr ""
 
 #: ../src_dir/grubconfig.cpp:194 ../src_dir/grubconfig.cpp:209
 msgid " not found. Is grub2 installed?"
-msgstr " не е открит. Инсталиран ли е grub2?"
+msgstr " non trouvé. Est-ce que grub2 est installé ?"
 
 #: ../src_dir/grubconfig.cpp:270
 msgid " couldn't be executed successfully. You must run this as root!"
 msgstr ""
-" не можа да се изпълни успешно Това трябва да се пусне като администратор!"
+" n'a pu être exécuté avec succès. Vous devez le lancer en tant que root !"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:11
 msgid "_File"
-msgstr "_Файл"
+msgstr "_Fichier"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:12
 msgid "_Edit"
-msgstr "_Редактиране"
+msgstr "_Éditer"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:12
 msgid "_View"
-msgstr "_Изглед"
+msgstr ""
 
 #: ../src_dir/grubconf_ui_gtk.cpp:12
 msgid "_Help"
-msgstr "_Помощ"
+msgstr "_Aide"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:13
 msgid "_Install to MBR …"
-msgstr "_Инсталиране в MBR …"
+msgstr ""
 
 #: ../src_dir/grubconf_ui_gtk.cpp:18
 msgid "Script to insert:"
-msgstr "Скрипт за вмъкване:"
+msgstr "Script à insérer :"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:18
 msgid "Preview:"
-msgstr "Преглед:"
+msgstr "Prévisualiser :"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:20
 msgid ""
@@ -60,138 +60,135 @@ msgid ""
 "files to the bootloaders data directory\n"
 "(if they don't already exist)."
 msgstr ""
-"Инсталиране на програмата за начално зареждане в MBR\n"
-"и поставяне на някои файлове в папката и с данни\n"
-"(ако те вече не съществуват)."
 
 #: ../src_dir/grubconf_ui_gtk.cpp:21
 msgid "_Device: "
-msgstr "_Устройство: "
+msgstr "_Périphérique : "
 
 #: ../src_dir/grubconf_ui_gtk.cpp:58
 msgid ""
 "Grub Customizer is a graphical interface to configure the grub2/burg settings"
 msgstr ""
-"Grub Customizer е графичен интерфейс за конфигуриране настройките на "
-"grub2/burg"
+"Grub Customizer est une interface graphique de configuration des paramètres "
+"de grub2/burg"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:62
 msgid "Save configuration and generate a new "
-msgstr "Запазване на конфигурацията и генериране на нов "
+msgstr "Enregistrer la configuration et en générer une nouvelle "
 
 #: ../src_dir/grubconf_ui_gtk.cpp:69
 msgid "Add a script to your configuration"
-msgstr "Добавяне на скрипт към вашата конфигурация"
+msgstr "Ajouter un script à votre configuration"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:71
 msgid "Remove a script from your configuration"
-msgstr "Премахване на скрипт от вашата конфигурация"
+msgstr "Supprimer un script à partir de votre configuration"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:77
 msgid "Move up the selected entry or script"
-msgstr "Преместване нагоре на избрания запис или скрипт"
+msgstr "Déplacer vers le haut l'entrée ou le script sélectionné"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:79
 msgid "Move down the selected entry or script"
-msgstr "Преместване надолу на избрания запис или скрипт"
+msgstr "Déplacer vers le bas l'entrée ou le script sélectionné"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:85
 msgid "reload configuration (same effect as an application restart)"
 msgstr ""
-"презареждане на конфигурацията (същото като рестартиране на приложението)"
+"recharger la configuration (même effet que le redémarrage d'une application)"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:87
 msgid "Edit grub preferences"
-msgstr "Редактиране на настройките на grub"
+msgstr "Éditer les préférences de grub"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:116
 msgid "Select _partition …"
-msgstr "Избор на _дял …"
+msgstr "Sélectionner une _partition"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:123
 msgid "Add script"
-msgstr "Добавяне на скрипт"
+msgstr "Ajouter un script"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:139
 msgid "Entry"
-msgstr "Запис"
+msgstr "Entrée"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:154
 msgid "Install to MBR"
-msgstr "Инсталиране в MBR"
+msgstr "Installer sur le MBR"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:211
 msgid "No Bootloader found"
-msgstr "Не е открита програма за начално зареждане"
+msgstr ""
 
 #: ../src_dir/grubconf_ui_gtk.cpp:212
 msgid "Do you want to select another root partition?"
-msgstr "Желаете ли да изберете друг главен дял?"
+msgstr "Voulez-vous sélectionner une autre partition root ?"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:219
 msgid "BURG found!"
-msgstr "Открита е програмата BURG!"
+msgstr "BURG trouvé !"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:220
 msgid "Do you want to configure BURG instead of grub2?"
-msgstr "Желаете ли да настроите BURG вместо grub2?"
+msgstr "Voulez-vous configurer BURG à la place de grub2 ?"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:240
 msgid "The bootloader has been installed successfully"
-msgstr "Програмата за начално зареждане беше инсталирана успешно"
+msgstr ""
 
 #: ../src_dir/grubconf_ui_gtk.cpp:245
 msgid "Error while installing the bootloader"
-msgstr "Грешка при инсталиране на програмата за начално зареждане"
+msgstr ""
 
 #: ../src_dir/grubconf_ui_gtk.cpp:267
 msgid "loading configuration…"
-msgstr "зареждане на конфигурацията..."
+msgstr "chargement de la configuration..."
 
 #: ../src_dir/grubconf_ui_gtk.cpp:296
 msgid " (custom)"
-msgstr " (потребителски)"
+msgstr " (personnalisé)"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:308
 msgid "(new Entries)"
-msgstr "(нови записи)"
+msgstr "(nouvelles entrées)"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:329
 msgid "Proxy binary not found!"
-msgstr "Двоичния файл на посредника не е открит!"
+msgstr ""
 
 #: ../src_dir/grubconf_ui_gtk.cpp:330
 msgid ""
 "You will see all entries (uncustomized) when you run grub. This error accurs "
 "(in most cases), when you didn't install grub gustomizer currectly."
 msgstr ""
-"Когато пуснете grub ще видите всички записи (непроменени). Тази грешка се "
-"получава (в повечето случаи), когато не сте инсталирали правилно grub "
-"gustomizer."
+"Vous verrez toutes les entrées (non personnalisées) quand vous lancerez "
+"grub. Cette erreur apparaît (dans la plupart des cas), lorsque vous n'avez "
+"pas installé grub customizer correctement."
 
 #: ../src_dir/grubconf_ui_gtk.cpp:346
 msgid "Configuration has been saved"
-msgstr "Конфигурацията беше запазена"
+msgstr "La configuration a été enregistrée"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:349
 msgid "updating configuration"
-msgstr "обновяване на конфигурацията"
+msgstr "mise à jour de la configuration"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:404
 msgid "Name the Entry"
-msgstr "Име на записа"
+msgstr "Nommer l'entrée"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:519
 msgid "Default title: "
-msgstr "Стандартно заглавие: "
+msgstr "Titre par défaut : "
 
 #: ../src_dir/grubconf_ui_gtk.cpp:539
 msgid "No script found"
-msgstr "Не е открит скрипт"
+msgstr "Aucun script trouvé"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:623
 msgid "The saved configuration is not up to date!"
-msgstr "Запазената конфигурация не е актуална!"
+msgstr "La configuration enregistrée n'est pas à jour !"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:624
 msgid ""
@@ -199,33 +196,34 @@ msgid ""
 "startup. So what you see now may not be what you see when you restart your "
 "pc. To fix this, click update!"
 msgstr ""
-"Генерираната конфигурация не е еднаква със запазената при пускане на "
-"програмата. Това, което виждате тук не е това, което ще видите при "
-"рестартиране на компютъра. За да оправите това натиснете обновяване!"
+"La configuration générée n'est pas identique à la configuration enregistrée "
+"au démarrage. Ainsi ce que vous voyez maintenant peut ne pas être ce que "
+"vous verrez lorsque vous redémarrerez votre ordinateur. Pour corrigez ceci, "
+"cliquez sur mettre à jour !"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:627
 msgid "_Quit without update"
-msgstr "_Изход без обновяване"
+msgstr "_Quitter sans mettre à jour"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:630
 msgid "_Update & Quit"
-msgstr "_Обновяване и изход"
+msgstr "_Mettre à jour & Quitter"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:634
 msgid "Do you want to save your modifications?"
-msgstr "Желаете ли да запазите промените?"
+msgstr "Voulez-vous enregistrer vos modifications ?"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:637
 msgid "_Quit without saving"
-msgstr "_Изход без запазване"
+msgstr "_Quitter sans enregistrer"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:640
 msgid "_Save & Quit"
-msgstr "_Запис и изход"
+msgstr "_Enregistrer & Quitter"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:682
 msgid "installing the bootloader…"
-msgstr "Инсталиране на програмата за начално зареждане..."
+msgstr ""
 
 #: ../src_dir/grubconf_ui_gtk.cpp:687
 msgid "Please type a device string!"
@@ -233,39 +231,37 @@ msgstr ""
 
 #: ../src_dir/grubconf_ui_gtk.cpp:697
 msgid "is active"
-msgstr "е активен"
+msgstr ""
 
 #: ../src_dir/grubconf_ui_gtk.cpp:698
 msgid "name"
-msgstr "име"
+msgstr "nom"
 
 #: ../src_dir/gtk-client.cpp:14
 msgid " command not found, cannot proceed"
-msgstr " командата не е открита, не може да се продължи"
+msgstr ""
 
 #: ../src_dir/liveCDSetupDialog.cpp:5
 msgid "_use another partition: "
-msgstr "_използване на друг дял: "
+msgstr "_utiliser une autre partition : "
 
 #: ../src_dir/liveCDSetupDialog.cpp:6
 msgid "Mount selected Filesystem"
-msgstr "Монтиране на избраната файлова система"
+msgstr ""
 
 #: ../src_dir/liveCDSetupDialog.cpp:7
 msgid "Unmount mounted Filesystem"
-msgstr "Демонтиране на монтираната файлова система"
+msgstr ""
 
 #: ../src_dir/liveCDSetupDialog.cpp:10
 msgid ""
 "These are the mountpoints of your fstab file.\n"
 "Please select every grub/boot related partition."
 msgstr ""
-"Това са точките за монтиране на вашия файл fstab.\n"
-"Моля изберете всеки дял, свързан с grub/начално зареждане."
 
 #: ../src_dir/liveCDSetupDialog.cpp:15
 msgid "You started Grub Customizer using the live CD."
-msgstr "Вие стартирахте Grub Customizer от жив диск."
+msgstr "Vous avez démmaré Grub Customizer à l'aide du live CD."
 
 #: ../src_dir/liveCDSetupDialog.cpp:17
 msgid ""
@@ -275,11 +271,6 @@ msgid ""
 "again and save the configuration (or run update-grub/update-burg)\n"
 "to get the entry back!"
 msgstr ""
-"Вие решихте да изберете друг дял.\n"
-"Моля забележете: os-prober може да не открие вашата реално пусната система.\n"
-"Затова отново пуснете Grub Customizer на целевата система\n"
-"и запазете конфигурацията (или изпълнете update-grub/update-burg)\n"
-"за да върнете записа отново!"
 
 #: ../src_dir/liveCDSetupDialog.cpp:19
 msgid ""
@@ -293,61 +284,62 @@ msgid ""
 "as the actually running one.\n"
 "If not, you will get an error message when trying to load the configuration."
 msgstr ""
-"Преди да можете да редактирате вашата grub конфигурация, ние трябва да\n"
-"монтираме необходимите дялове.\n"
+"Avant de pouvoir éditer votre configuration de grub, nous devons\n"
+"monter les partitions nécessaires.\n"
 "\n"
-"Този помощник ще ви помогне за това.\n"
+"Cet assistant va vous aider à faire ceci.\n"
 "\n"
 "\n"
-"Моля уверете се, че целевата система е със същата процесорна архитектура\n"
-"като тази на текущо пусната.\n"
-"В противен случай при опит за зареждане на конфигурацията ще получите "
-"съобщение за грешка."
+"Veuillez vous assurer que le système cible est basé sur la même architecture "
+"cpu\n"
+"que celle actuellement démarrée.\n"
+"Si non, vous obtiendrez un message d'erreur lorsque vous essayerez de "
+"charger la configuration."
 
 #: ../src_dir/liveCDSetupDialog.cpp:21
 msgid "Grub Customizer: Partition chooser"
-msgstr "Grub Customizer: Избор на дял"
+msgstr "Grub Customizer : Sélecteur de partition"
 
 #: ../src_dir/liveCDSetupDialog.cpp:25
 msgid "Select and mount your root partition"
-msgstr "Изберете и монтирайте вашия главен дял"
+msgstr ""
 
 #: ../src_dir/liveCDSetupDialog.cpp:43
 msgid "partition"
-msgstr "дял"
+msgstr "partition"
 
 #: ../src_dir/liveCDSetupDialog.cpp:44
 msgid "type"
-msgstr "тип"
+msgstr ""
 
 #: ../src_dir/liveCDSetupDialog.cpp:45
 msgid "label"
-msgstr "етикет"
+msgstr ""
 
 #: ../src_dir/liveCDSetupDialog.cpp:62
 msgid "Select required submountpoints"
-msgstr "Изберете необходимите подточки за монтиране"
+msgstr ""
 
 #: ../src_dir/liveCDSetupDialog.cpp:82
 msgid "Partition Chooser"
-msgstr "Избор на дял"
+msgstr "Sélecteur de partition"
 
 #: ../src_dir/liveCDSetupDialog.cpp:152
 msgid "Mount failed!"
-msgstr "Монтирането се провали!"
+msgstr "Le montage a échoué !"
 
 #: ../src_dir/liveCDSetupDialog.cpp:167
 msgid "This seems not to be a root file system (no fstab found)"
-msgstr "Изглежда, че това не е главен дял (не открит файл fstab)"
+msgstr "Cela ne semble pas être un fichier système root (fstab non trouvé)"
 
 #: ../src_dir/liveCDSetupDialog.cpp:176
 msgid "umount failed!"
-msgstr "Демонтирането се провали!"
+msgstr "Le démontage a échoué !"
 
 #: ../src_dir/liveCDSetupDialog.cpp:210
 msgid "Couldn't mount the selected partition"
-msgstr "Избраният дял не може да бъде монтиран"
+msgstr "Impossible de monter la partition sélectionnée"
 
 #: ../src_dir/liveCDSetupDialog.cpp:212
 msgid "Couldn't umount the selected partition"
-msgstr "Избраният дял не може да бъде демонтиран"
+msgstr "Impossible de démonter la partition sélectionnée"

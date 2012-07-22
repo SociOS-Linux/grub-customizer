@@ -64,6 +64,7 @@ Fedik https://launchpad.net/~fedikw\n\
 GamePad64 https://launchpad.net/~gamepad64\n\
 José Humberto Melo https://launchpad.net/~josehumberto-melo\n\
 Manuel Xosé Lemos https://launchpad.net/~mxlemos\n\
+Maxime Gentils https://launchpad.net/~maxime.gentils\n\
 Michael Kotsarinis https://launchpad.net/~mk73628\n\
 Miguel Anxo Bouzada https://launchpad.net/~mbouzada\n\
 nafterburner https://launchpad.net/~nafterburner\n\

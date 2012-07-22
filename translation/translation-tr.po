@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-10-22 20:01+0200\n"
-"PO-Revision-Date: 2010-10-25 00:58+0000\n"
-"Last-Translator: Daniel Richter <danielrichter2007@web.de>\n"
+"PO-Revision-Date: 2010-11-11 14:44+0000\n"
+"Last-Translator: Erkin Batu Altunbaş <erkinbatu@gmail.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-11-06 08:32+0000\n"
+"X-Launchpad-Export-Date: 2010-11-16 19:12+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../src_dir/grubconfig.cpp:194 ../src_dir/grubconfig.cpp:209
@@ -23,7 +23,7 @@ msgstr " bulunamadı. grub2 yüklü mü?"
 
 #: ../src_dir/grubconfig.cpp:270
 msgid " couldn't be executed successfully. You must run this as root!"
-msgstr ""
+msgstr " başarıyla başlatılamadı. Bunu root olarak çalıştırmalısınız!"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:11
 msgid "_File"
@@ -47,7 +47,7 @@ msgstr ""
 
 #: ../src_dir/grubconf_ui_gtk.cpp:18
 msgid "Script to insert:"
-msgstr ""
+msgstr "Eklenecek betik:"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:18
 msgid "Preview:"
@@ -65,7 +65,7 @@ msgstr ""
 
 #: ../src_dir/grubconf_ui_gtk.cpp:21
 msgid "_Device: "
-msgstr ""
+msgstr "_Cihaz: "
 
 #: ../src_dir/grubconf_ui_gtk.cpp:58
 msgid ""
@@ -74,15 +74,15 @@ msgstr ""
 
 #: ../src_dir/grubconf_ui_gtk.cpp:62
 msgid "Save configuration and generate a new "
-msgstr ""
+msgstr "Yapılandırmayı kaydet ve   oluştur "
 
 #: ../src_dir/grubconf_ui_gtk.cpp:69
 msgid "Add a script to your configuration"
-msgstr ""
+msgstr "Yapılandırmanıza bir betik ekleyin"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:71
 msgid "Remove a script from your configuration"
-msgstr ""
+msgstr "Yapılandırmanızdan bir betik çıkarın"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:77
 msgid "Move up the selected entry or script"
@@ -103,7 +103,7 @@ msgstr "grub tercihlerini düzenle"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:116
 msgid "Select _partition …"
-msgstr ""
+msgstr "_Bölüm seç ..."
 
 #: ../src_dir/grubconf_ui_gtk.cpp:123
 msgid "Add script"
@@ -111,7 +111,7 @@ msgstr "Betik ekle"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:139
 msgid "Entry"
-msgstr ""
+msgstr "Giriş"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:154
 msgid "Install to MBR"
@@ -119,15 +119,15 @@ msgstr "MBR'ye yükle"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:211
 msgid "No Bootloader found"
-msgstr ""
+msgstr "Hiçbir Önyükleyici bulunamadı"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:212
 msgid "Do you want to select another root partition?"
-msgstr ""
+msgstr "Başka bir root bölümü seçmek istiyor musunuz?"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:219
 msgid "BURG found!"
-msgstr ""
+msgstr "BURG bulundu!"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:220
 msgid "Do you want to configure BURG instead of grub2?"
