@@ -127,6 +127,10 @@ class GrubSettingsDlgGtk : public Gtk::Dialog, public GrubSettingsDlg {
 	void signal_bttCopyBackground_clicked();
 	void signal_bttRemoveBackground_clicked();
 	public:
+	enum DefEntryType {
+		DEF_ENTRY_PREDEFINED,
+		DEF_ENTRY_SAVED
+	};
 	GrubSettingsDlgGtk(SettingsManagerDataStore& dataStore, GrubEnv& env);
 	void show();
 	void addEntryToDefaultEntryChooser(std::string const& entryTitle);
@@ -134,6 +138,17 @@ class GrubSettingsDlgGtk : public Gtk::Dialog, public GrubSettingsDlg {
 	void clearResolutionChooser();
 	void addResolution(std::string const& resolution);
 	void loadData();
+	void addSettingRow(bool isActive, Glib::ustring const& name, Glib::ustring const& value);
+	void removeAllSettingRows();
+	void setActiveDefEntryOption(DefEntryType option);
+	void setDefEntry(Glib::ustring const& defEntry);
+	void setShowMenuCheckboxState(bool isActive);
+	void setOsProberCheckboxState(bool isActive);
+	void setTimeoutValue(int value);
+	void setKernelParams(Glib::ustring const& params);
+	void setRecoveryCheckboxState(bool isActive);
+	void setResolutionCheckboxState(bool isActive);
+	void setResolution(Glib::ustring const& resolution);
 };
 
 #endif

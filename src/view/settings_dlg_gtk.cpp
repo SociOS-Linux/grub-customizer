@@ -266,36 +266,87 @@ GrubSettingsDlgGtk::AdvancedSettingsTreeModel::AdvancedSettingsTreeModel(){
 	this->add(value);
 }
 
+void GrubSettingsDlgGtk::addSettingRow(bool isActive, Glib::ustring const& name, Glib::ustring const& value){
+	Gtk::TreeModel::iterator newItemIter = refAsListStore->append();
+	(*newItemIter)[asTreeModel.active] = isActive;
+	(*newItemIter)[asTreeModel.name] = name;
+	(*newItemIter)[asTreeModel.value] = value;
+}
+
+void GrubSettingsDlgGtk::removeAllSettingRows(){
+	this->refAsListStore->clear();
+}
+
+void GrubSettingsDlgGtk::setActiveDefEntryOption(DefEntryType option){
+	if (option == this->DEF_ENTRY_SAVED) {
+		rbDefSaved.set_active(true);
+		cbDefEntry.set_sensitive(false);
+	}
+	else if (option == this->DEF_ENTRY_PREDEFINED) {
+		rbDefPredefined.set_active(true);
+		cbDefEntry.set_sensitive(true);
+	}
+}
+
+void GrubSettingsDlgGtk::setDefEntry(Glib::ustring const& defEntry){
+	if (defEntry.find_first_not_of("0123456789") == std::string::npos){
+		std::istringstream in(defEntry);
+		int defEntryNum;
+		in >> defEntryNum;
+
+		cbDefEntry.set_active(defEntryNum*2); //set active element by index, "*2" is required because there are two columns
+	}
+	else
+		cbDefEntry.set_active_text(defEntry);
+}
+
+void GrubSettingsDlgGtk::setShowMenuCheckboxState(bool isActive){
+	chkShowMenu.set_active(isActive);
+}
+
+void GrubSettingsDlgGtk::setOsProberCheckboxState(bool isActive){
+	chkOsProber.set_active(isActive);
+}
+
+void GrubSettingsDlgGtk::setTimeoutValue(int value){
+	spTimeout.set_value(value);
+}
+
+void GrubSettingsDlgGtk::setKernelParams(Glib::ustring const& params){
+	txtKernelParams.set_text(params);
+}
+
+void GrubSettingsDlgGtk::setRecoveryCheckboxState(bool isActive){
+	chkGenerateRecovery.set_active(isActive);
+}
+
+void GrubSettingsDlgGtk::setResolutionCheckboxState(bool isActive){
+	chkResolution.set_active(isActive);
+	cbResolution.set_sensitive(isActive);
+}
+
+void GrubSettingsDlgGtk::setResolution(Glib::ustring const& resolution){
+	cbResolution.get_entry()->set_text(resolution);
+}
+
 void GrubSettingsDlgGtk::loadData(){
 	if (!event_lock){
 		event_lock = true;
-		refAsListStore->clear();
+		this->removeAllSettingRows();
 		for (std::list<SettingRow>::iterator iter = dataStore->begin(); iter != dataStore->end(); dataStore->iter_to_next_setting(iter)){
-			Gtk::TreeModel::iterator newItemIter = refAsListStore->append();
-			(*newItemIter)[asTreeModel.active] = iter->isActive;
-			(*newItemIter)[asTreeModel.name] = iter->name;
-			(*newItemIter)[asTreeModel.value] = iter->value;
+			this->addSettingRow(iter->isActive, iter->name, iter->value);
 		}
 		std::string defEntry = dataStore->getValue("GRUB_DEFAULT");
 		if (defEntry == "saved"){
-			rbDefSaved.set_active(true);
-			cbDefEntry.set_sensitive(false);
+			this->setActiveDefEntryOption(DEF_ENTRY_SAVED);
 		}
 		else {
-			if (defEntry.find_first_not_of("0123456789") == std::string::npos){
-				std::istringstream in(defEntry);
-				int defEntryNum;
-				in >> defEntryNum;
-				
-				cbDefEntry.set_active(defEntryNum*2); //set active element by index, "*2" is required because there are two columns
-			}
-			else
-				cbDefEntry.set_active_text(defEntry);
-			rbDefPredefined.set_active(true);
+			this->setActiveDefEntryOption(DEF_ENTRY_PREDEFINED);
+			this->setDefEntry(defEntry);
 		}
 		
-		chkShowMenu.set_active(!dataStore->isActive("GRUB_HIDDEN_TIMEOUT", true));
-		chkOsProber.set_active(!dataStore->isActive("GRUB_DISABLE_OS_PROBER", true));
+		this->setShowMenuCheckboxState(!dataStore->isActive("GRUB_HIDDEN_TIMEOUT", true));
+		this->setOsProberCheckboxState(!dataStore->isActive("GRUB_DISABLE_OS_PROBER", true));
 		
 		std::string timeoutStr;
 		if (chkShowMenu.get_active())
@@ -305,14 +356,13 @@ void GrubSettingsDlgGtk::loadData(){
 		std::istringstream in(timeoutStr);
 		int timeout;
 		in >> timeout;
-		spTimeout.set_value(timeout);
+		this->setTimeoutValue(timeout);
 		
-		txtKernelParams.set_text(dataStore->getValue("GRUB_CMDLINE_LINUX_DEFAULT"));
-		chkGenerateRecovery.set_active(!dataStore->isActive("GRUB_DISABLE_LINUX_RECOVERY", true));
+		this->setKernelParams(dataStore->getValue("GRUB_CMDLINE_LINUX_DEFAULT"));
+		this->setRecoveryCheckboxState(!dataStore->isActive("GRUB_DISABLE_LINUX_RECOVERY", true));
 		
-		cbResolution.set_sensitive(dataStore->isActive("GRUB_GFXMODE", true));
-		chkResolution.set_active(dataStore->isActive("GRUB_GFXMODE", true));
-		cbResolution.get_entry()->set_text(dataStore->getValue("GRUB_GFXMODE"));
+		this->setResolutionCheckboxState(dataStore->isActive("GRUB_GFXMODE", true));
+		this->setResolution(dataStore->getValue("GRUB_GFXMODE"));
 
 		Glib::ustring nColor = dataStore->getValue("GRUB_COLOR_NORMAL");
 		Glib::ustring hColor = dataStore->getValue("GRUB_COLOR_HIGHLIGHT");

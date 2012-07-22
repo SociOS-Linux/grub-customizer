@@ -38,6 +38,10 @@ void EventListenerView::scriptAddDlg_applied(){
 	presenter.addScriptFromScriptAddDlg();
 }
 
+void EventListenerView::scriptAddDlg_requested(){
+	presenter.showScriptAddDlg();
+}
+
 void EventListenerView::scriptSelected(){
 	presenter.updateScriptAddDlgPreview();
 }
