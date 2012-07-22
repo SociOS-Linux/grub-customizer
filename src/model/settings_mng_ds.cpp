@@ -26,10 +26,15 @@ void SettingRow::validate(){
 }
 
 std::string SettingRow::getOutput(){
-	if (isSetting)
-		return (isActive ? "" : "#")+std::string(hasExportPrefix ? "export " : "")+name+"=\""+value+"\""+(comment != "" ? " #"+comment : "");
-	else
+	if (isSetting) {
+		if (name != "") {
+			return (isActive ? "" : "#")+std::string(hasExportPrefix ? "export " : "")+name+"=\""+value+"\""+(comment != "" ? " #"+comment : "");
+		} else {
+			return "#UNNAMED_OPTION=\""+value+"\""; //unnamed options would destroy the grub confuguration
+		}
+	} else {
 		return plaintext;
+	}
 }
 
 SettingsManagerDataStore::SettingsManagerDataStore(GrubEnv& env)
