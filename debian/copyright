@@ -1,12 +1,18 @@
-This package was debianized by Daniel Richter <danielrichter2007@web.de>
-Thu, 07 Oct 2010 22:08:00 +0200
+This work was packaged for Debian by:
 
-It was downloaded from: https://launchpad.net/grub-customizer
+    Daniel Richter <danielrichter2007@web.de> on Tue, 07 Dec 2010 18:39:04 +0100
 
-Upstream Author(s): Daniel Richter
+It was downloaded from:
+
+    https://launchpad.net/grub-customizer
+
+Upstream Author(s):
+
+    Daniel Richter <danielrichter2007@web.de>
 
 Copyright:
-        Copyright (C) 2010 by Daniel Richter <danielrichter2007@web.de>
+
+    <Copyright (C) 2010 Daniel Richter>
 
 License:
 
@@ -15,17 +21,20 @@ License:
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
+    This package is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-    
-    /usr/share/common-licenses/GPL-3
 
+On Debian systems, the complete text of the GNU General
+Public License version 3 can be found in `/usr/share/common-licenses/GPL-3'.
 
-Packaging:
-        Copyright (C) 2010 by Daniel Richter <danielrichter2007@web.de>
-        released under GPLv3
+The Debian packaging is:
+
+    Copyright (C) 2010 Daniel Richter <danielrichter2007@web.de>
+
+and is licensed under the GPL version 3, see above.
+

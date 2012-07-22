@@ -1,20 +1,19 @@
 * text=auto !eol
 /CMakeLists.txt -text
+/COPYING -text
 /README -text
 /config.h.in -text
 debian/changelog -text
 debian/changelog.d -text
+debian/changelog.natty_repo -text
 debian/compat -text
 debian/control -text
 debian/copyright -text
 debian/debhelper.log -text
-debian/files -text
-debian/grub-customizer.debhelper.log -text
-debian/grub-customizer.substvars -text
 debian/rules -text
 debian/source/format -text
-debian/substvars -text
 debian/watch -text
+misc/copyright -text
 misc/grub-customizer.desktop -text
 misc/icons/128x128.png -text svneol=unset#unset
 misc/icons/14x14.png -text svneol=unset#unset

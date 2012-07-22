@@ -60,6 +60,9 @@ install(FILES misc/manpage.gz
 	DESTINATION share/man/man1
 	RENAME grub-customizer.1.gz)
 
+install(FILES misc/copyright
+	DESTINATION share/doc/grub-customizer)
+
 install(FILES misc/upstream-changelog.gz
 	DESTINATION share/doc/grub-customizer
 	RENAME changelog.gz)
