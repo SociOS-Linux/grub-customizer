@@ -72,7 +72,7 @@ public:
 	void submountpoint_umount_request(std::string const& mountpoint);
 
 	//model
-	void entryListUpdate();
+	void loadProgressChanged();
 	void saveProgressChanged();
 	void grubInstallCompleted(std::string const& msg);
 	void fb_resolutions_loaded();

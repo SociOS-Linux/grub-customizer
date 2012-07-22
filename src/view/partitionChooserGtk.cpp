@@ -95,16 +95,20 @@ void PartitionChooserGtk::addPartitionSelectorItem(Glib::ustring const& device, 
 	guint index = lvRootPartitionSelection.append_text(device);
 	lvRootPartitionSelection.set_text(index, 1, type);
 	lvRootPartitionSelection.set_text(index, 2, label);
+	this->updateSensitivity();
 }
 
 void PartitionChooserGtk::clearPartitionSelector(){
 	lvRootPartitionSelection.clear_items();
+	this->updateSensitivity();
 }
 
 void PartitionChooserGtk::hide(){
 	this->getWindow().hide();
 }
 void PartitionChooserGtk::show(){
+	this->init(false);
+	this->updateSensitivity();
 	this->getWindow().show_all();
 }
 
@@ -215,14 +219,13 @@ void PartitionChooserGtk::submountpoint_toggle(Gtk::CheckButton& sender){
 
 
 void PartitionChooserGtk::run(){
-	this->init(false);
-	this->updateSensitivity();
 	this->show();
 	Gtk::Main::run(*assistant);
 }
 
 void PartitionChooserGtk::setIsMounted(bool isMounted){
 	this->isMounted = isMounted;
+	this->updateSensitivity();
 }
 
 void PartitionChooserGtk::signal_btt_umount_click(){

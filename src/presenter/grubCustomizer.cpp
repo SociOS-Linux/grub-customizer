@@ -12,6 +12,7 @@ GrubCustomizer::GrubCustomizer(GrubEnv& env)
 	disp_sync_load.connect(sigc::mem_fun(this, &GrubCustomizer::syncListView_load));
 	disp_sync_save.connect(sigc::mem_fun(this, &GrubCustomizer::syncListView_save));
 	disp_thread_died.connect(sigc::mem_fun(this, &GrubCustomizer::die));
+	disp_settings_loaded.connect(sigc::mem_fun(this, &GrubCustomizer::activateSettingsBtn));
 	disp_updateSettingsDlgResolutionList.connect(sigc::mem_fun(this, &GrubCustomizer::updateSettingsDlgResolutionList_dispatched));
 }
 
@@ -69,7 +70,7 @@ void GrubCustomizer::setAboutDialog(AboutDialog& aboutDialog){
 	this->aboutDialog = &aboutDialog;
 }
 
-void GrubCustomizer::showSettingsDlg(){
+void GrubCustomizer::updateSettingsDlg(){
 	std::list<std::string> entryTitles = this->grublistCfg->proxies.generateEntryTitleList();
 	this->settingsDlg->clearDefaultEntryChooser();
 	for (std::list<std::string>::iterator iter = entryTitles.begin(); iter != entryTitles.end(); iter++)
@@ -77,6 +78,9 @@ void GrubCustomizer::showSettingsDlg(){
 
 
 	this->syncSettings();
+}
+
+void GrubCustomizer::showSettingsDlg(){
 	this->settingsDlg->show(env.burgMode);
 	
 }
@@ -110,6 +114,7 @@ void GrubCustomizer::run(){
 
 	bool do_continue = this->prepare();
 	if (do_continue){
+		this->listCfgDlg->setLockState(1|4|8);
 		Glib::Thread::create(sigc::bind(sigc::mem_fun(this, &GrubCustomizer::load), false), false);
 		this->listCfgDlg->run();
 	}
@@ -118,14 +123,15 @@ void GrubCustomizer::run(){
 		this->mountTable->umountAll(PARTCHOOSER_MOUNTPOINT);
 }
 
+//threaded!
 void GrubCustomizer::load(bool preserveConfig){
 	this->activeThreadCount++;
-	this->listCfgDlg->setLockState(5);
 	
 	if (!preserveConfig){
 		this->grublistCfg->reset();
 		//load the burg/grub settings file
 		this->settings->load();
+		disp_settings_loaded();
 	}
 	else {
 		this->settingsOnDisk->load();
@@ -160,7 +166,7 @@ void GrubCustomizer::save(){
 	this->config_has_been_different_on_startup_but_unsaved = false;
 	this->modificationsUnsaved = false; //deprecated
 
-	this->listCfgDlg->setLockState(5);
+	this->listCfgDlg->setLockState(1|4);
 
 	this->activeThreadCount++; //not in save_thead() to be faster set
 	Glib::Thread::create(sigc::mem_fun(this, &GrubCustomizer::save_thread), false);
@@ -250,7 +256,6 @@ void GrubCustomizer::initRootSelector(){
 	else
 		partitionChooser->setIsMounted(false);
 	this->readPartitionInfo();
-	this->partitionChooser->updateSensitivity();
 }
 
 void GrubCustomizer::readPartitionInfo(){
@@ -297,7 +302,6 @@ void GrubCustomizer::mountRootFs(){
 			partitionChooser->setIsMounted(false);
 		}
 	}
-	partitionChooser->updateSensitivity();
 }
 
 
@@ -311,7 +315,6 @@ void GrubCustomizer::umountRootFs(){
 		if (e == Mountpoint::UMOUNT_FAILED)
 			this->partitionChooser->showErrorMessage(PartitionChooser::UMOUNT_FAILED);
 	}
-	partitionChooser->updateSensitivity();
 
 	//clear list cfg dialog
 	this->reset();
@@ -328,7 +331,7 @@ void GrubCustomizer::cancelPartitionChooser(){
 void GrubCustomizer::applyPartitionChooser(){
 	this->partitionChooser->hide();
 	Glib::Thread::create(sigc::bind(sigc::mem_fun(this, &GrubCustomizer::load), false), false);
-	listCfgDlg->setLockState(5);
+	listCfgDlg->setLockState(1|4|8);
 }
 
 void GrubCustomizer::mountSubmountpoint(Glib::ustring const& submountpoint){
@@ -423,7 +426,7 @@ void GrubCustomizer::removeProxy(Proxy* p){
 }
 
 void GrubCustomizer::syncListView_load(){
-	this->listCfgDlg->setLockState(5);
+	this->listCfgDlg->setLockState(1|4);
 	double progress = this->grublistCfg->getProgress();
 	if (progress != 1){
 		this->listCfgDlg->setProgress(progress);
@@ -455,6 +458,7 @@ void GrubCustomizer::syncListView_load(){
 	}
 
 	if (progress == 1){
+		this->updateSettingsDlg();
 		this->listCfgDlg->setLockState(0);
 	}
 }
@@ -493,6 +497,11 @@ void GrubCustomizer::die(){
 			break;
 	}
 	this->listCfgDlg->close(); //exit
+}
+
+void GrubCustomizer::activateSettingsBtn(){
+	this->syncSettings();
+	this->listCfgDlg->setLockState(1);
 }
 
 bool GrubCustomizer::quit(){
@@ -571,12 +580,10 @@ void GrubCustomizer::showRuleInfo(Rule* rule){
 		this->listCfgDlg->setDefaultTitleStatusText(rule->getEntryName());
 	else
 		this->listCfgDlg->setStatusText("");
-	this->listCfgDlg->updateButtonsState();
 }
 
 void GrubCustomizer::showProxyInfo(Proxy* proxy){
 	this->listCfgDlg->setStatusText("");
-	this->listCfgDlg->updateButtonsState();
 }
 
 void GrubCustomizer::updateSettingsDlgResolutionList(){

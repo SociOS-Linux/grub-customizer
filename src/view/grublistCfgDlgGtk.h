@@ -7,7 +7,9 @@
 #include "../config.h"
 #include "../interface/grublistCfgDlg.h"
 
-
+//TODO: Edit -> Rename
+//TODO: Edit -> activate/unactivate
+//TODO: Script descriptions (to avoid two custom entries)
 class GrubConfListing : public Gtk::TreeView {
 public:
 	struct TreeModel : public Gtk::TreeModelColumnRecord {
@@ -62,6 +64,10 @@ class GrublistCfgDlgGtk : public GrublistCfgDlg {
 
 	Gtk::TreeModel::iterator getIterByProxyPtr(void* proxyPtr) const;
 	Gtk::TreeModel::iterator getIterByRulePtr(void* rulePtr) const;
+	void update_move_buttons();
+	void update_remove_button();
+	void saveConfig();
+	void updateButtonsState();
 public:
 	GrublistCfgDlgGtk();
 	void setEventListener(EventListener_listCfgDlg& eventListener);
@@ -72,11 +78,7 @@ public:
 	
 	void setIsBurgMode(bool isBurgMode);
 	
-	void update_move_buttons();
-	void update_remove_button();
-	void saveConfig();
 	void setLockState(int state);
-	void updateButtonsState();
 	
 	void setProgress(double progress);
 	void progress_pulse();

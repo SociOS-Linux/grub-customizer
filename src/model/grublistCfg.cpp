@@ -402,7 +402,7 @@ bool GrublistCfg::compare(GrublistCfg const& other) const {
 void GrublistCfg::send_new_load_progress(double newProgress){
 	if (this->eventListener != NULL){
 		this->progress = newProgress;
-		this->eventListener->entryListUpdate();
+		this->eventListener->loadProgressChanged();
 	}
 	else if (this->verbose) {
 		std::cerr << "Error: cannot show updated load progress - no UI connected!" << std::endl;

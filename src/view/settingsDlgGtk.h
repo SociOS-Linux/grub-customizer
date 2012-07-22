@@ -34,6 +34,8 @@ public:
 };
 
 //TODO: when starting the settings manager, disable the reload button and the partition chooser!
+//TODO: allow adding/removing of generic settings
+//TODO: hide generic settings (advanced-Tab) behind a button at the bottom of the dialog (toggles to generic mode)
 class GrubSettingsDlgGtk : public Gtk::Dialog, public SettingsDlg {
 	struct AdvancedSettingsTreeModel : public Gtk::TreeModelColumnRecord {
 		Gtk::TreeModelColumn<bool> active;

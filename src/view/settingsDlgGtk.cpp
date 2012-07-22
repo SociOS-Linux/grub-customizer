@@ -102,6 +102,7 @@ GrubSettingsDlgGtk::GrubSettingsDlgGtk()
 	//default entry group
 	vbCommonSettings.pack_start(groupDefaultEntry, Gtk::PACK_SHRINK);
 	groupDefaultEntry.add(alignDefaultEntry);
+	groupDefaultEntry.set_sensitive(false);
 	groupDefaultEntry.set_label_widget(lblDefaultEntry);
 	lblDefaultEntry.set_attributes(attrDefaultEntry);
 	aDefaultEntry = Pango::Attribute::create_attr_weight(Pango::WEIGHT_BOLD);
@@ -263,6 +264,7 @@ void GrubSettingsDlgGtk::addEntryToDefaultEntryChooser(std::string const& entryT
 	cbDefEntry.append_text(Glib::ustring::compose(gettext("Entry %1 (by position)"), ++defEntry_item_count));
 	cbDefEntry.append_text(entryTitle);
 	cbDefEntry.set_active(0);
+	this->groupDefaultEntry.set_sensitive(true);
 	event_lock = false;
 }
 
@@ -270,6 +272,7 @@ void GrubSettingsDlgGtk::clearDefaultEntryChooser(){
 	event_lock = true;
 	cbDefEntry.clear_items();
 	this->defEntry_item_count = 0;
+	this->groupDefaultEntry.set_sensitive(false); //if there's no entry to select, disable this area
 	event_lock = false;
 }
 

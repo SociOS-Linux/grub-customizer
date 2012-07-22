@@ -183,6 +183,7 @@ void GrublistCfgDlgGtk::hideProgressBar(){
 
 void GrublistCfgDlgGtk::setStatusText(Glib::ustring const& new_status_text){
 	statusbar.push(new_status_text);
+	this->updateButtonsState();
 }
 
 void GrublistCfgDlgGtk::appendScript(Glib::ustring const& name, bool is_active, void* proxyPtr){
@@ -232,6 +233,7 @@ void GrublistCfgDlgGtk::setLockState(int state){
 	//	1: lock normal items/buttons
 	//	2: lock grub-install
 	//	4: lock partition chooser
+	//  8: lock settings dialog
 	tbttSave.set_sensitive((state & 1) == 0);
 	miSave.set_sensitive((state & 1) == 0);
 
@@ -248,8 +250,8 @@ void GrublistCfgDlgGtk::setLockState(int state){
 	tbttReload.set_sensitive((state & 1) == 0);
 	miReload.set_sensitive((state & 1) == 0);
 	miStartRootSelector.set_sensitive((state & 4) == 0);
-	tbttPreferences.set_sensitive((state & 1) == 0);
-	miPreferences.set_sensitive((state & 1) == 0);
+	tbttPreferences.set_sensitive((state & 8) == 0);
+	miPreferences.set_sensitive((state & 8) == 0);
 
 	tvConfList.set_sensitive((state & 1) == 0);
 	

@@ -161,7 +161,7 @@ void EventListener::submountpoint_umount_request(std::string const& mountpoint){
 }
 
 
-void EventListener::entryListUpdate(){
+void EventListener::loadProgressChanged(){
 	presenter.syncEntryList();
 }
 

@@ -28,9 +28,19 @@
 
 #include <giomm/file.h>
 
-//TODO: sometimes gc crashes at startup - why? … some possible problems fixed. But is env the reason?
 //TODO: allow settings manager startup after loading the settings - don't wait until everything is loaded
 
+/**
+ * master class of Grub Customizer.
+ * Coordinates all the windows (views) and data objects.
+ *
+ * This application is based on one presenter (this object) and multiple views and models which are
+ * controlled by the presenter (MVP). To be independent of the concrete implementation of model and view
+ * this class doesn't create any of these objects. They must be set from outside using the set-Methods.
+ * This allows to simply change the view class simply by providing other implementations of the given
+ * interfaces. The model doesn't use interfaces yet, but it's set from outside too. So it should be
+ * not too much work to change this.
+ */
 class GrubCustomizer {
 	GrubEnv& env;
 	GrublistCfg* grublistCfg;
@@ -48,7 +58,7 @@ class GrubCustomizer {
 	MountTable* mountTable;
 	AboutDialog* aboutDialog;
 	
-	Glib::Dispatcher disp_sync_load, disp_sync_save, disp_thread_died, disp_updateSettingsDlgResolutionList;
+	Glib::Dispatcher disp_sync_load, disp_sync_save, disp_thread_died, disp_updateSettingsDlgResolutionList, disp_settings_loaded;
 	bool config_has_been_different_on_startup_but_unsaved;
 	bool modificationsUnsaved;
 	bool quit_requested;
@@ -100,9 +110,12 @@ public:
 	
 	void removeProxy(Proxy* p);
 	
+	//dispatchers
 	void syncListView_load();
 	void syncListView_save();
 	void die();
+	void activateSettingsBtn();
+	void updateSettingsDlg();
 	
 	bool quit();
 	
