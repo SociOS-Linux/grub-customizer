@@ -322,7 +322,7 @@ Rule& Proxy::moveRule(Rule* rule, int direction) {
 			else
 				throw e;
 		}
-	} else if (next->dataSource && next->dataSource->type == Entry::SUBMENU) { //scale up
+	} else if (next->dataSource && next->type == Rule::NORMAL && next->dataSource->type == Entry::SUBMENU) { //scale up
 		if (direction == 1) {
 			next->subRules.push_front(*rule);
 			newRule = &next->subRules.front();
