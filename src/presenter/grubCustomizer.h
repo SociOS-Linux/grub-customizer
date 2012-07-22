@@ -174,6 +174,7 @@ public:
 	void updateGenerateRecoverySetting();
 	void updateCustomResolution();
 	void updateColorSettings();
+	void updateFontSettings(bool removeFont);
 	void updateBackgroundImage();
 	void updateUseCustomResolution();
 	void removeBackgroundImage();

@@ -22,14 +22,22 @@
 #include "grubEnv.h"
 #include "../presenter/commonClass.h"
 #include "settingsStore.h"
+#include <sstream>
+#include "../lib/str_replace.h"
+#include <map>
 
 class SettingsManagerDataStore : public SettingsStore, public CommonClass {
 	bool _reloadRequired;
 	GrubEnv& env;
 public:
 	bool color_helper_required;
+	std::string grubFont, oldFontFile;
+	int grubFontSize;
 	SettingsManagerDataStore(GrubEnv& env);
 	bool reloadRequired() const;
+	static std::map<std::string, std::string> parsePf2(std::string const& fileName);
+	static std::string getFontFileByName(std::string const& name);
+	std::string mkFont(std::string fontFile = "");
 	bool load();
 	bool save();
 	bool setValue(std::string const& name, std::string const& value);

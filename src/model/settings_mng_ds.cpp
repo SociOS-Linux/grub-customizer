@@ -19,12 +19,84 @@
 #include "settings_mng_ds.h"
 
 SettingsManagerDataStore::SettingsManagerDataStore(GrubEnv& env)
-	: _reloadRequired(false), env(env), color_helper_required(false)
+	: _reloadRequired(false), env(env), color_helper_required(false), grubFontSize(-1)
 {
 }
 
 bool SettingsManagerDataStore::reloadRequired() const {
 	return this->_reloadRequired;
+}
+
+std::map<std::string, std::string> SettingsManagerDataStore::parsePf2(std::string const& fileName) {
+	std::map<std::string, std::string> result;
+	FILE* file = fopen(fileName.c_str(), "rb");
+	if (file) {
+		while (true) {
+			char nameBuf [5]; // stores 4 bytes of data (possible \0 at pos 5)
+			if (fgets(nameBuf, 5, file) == NULL || nameBuf == std::string("CHIX") || nameBuf == std::string("DATA")) {
+				break;
+			}
+
+			char sizeBuf [5];
+			fgets(sizeBuf, 5, file);
+			unsigned int size = sizeBuf[3] + (sizeBuf[2] << 8) + (sizeBuf[1] << 16) + (sizeBuf[0] << 24);
+
+			char* contentBuf = new char[size + 1];
+
+			fgets(contentBuf, size + 1, file);
+
+			result[nameBuf] = contentBuf;
+		}
+		fclose(file);
+	}
+	return result;
+}
+
+std::string SettingsManagerDataStore::getFontFileByName(std::string const& name) {
+	std::string result;
+	FILE* proc = popen(("fc-match -f '%{file[0]}' '" + str_replace(" ", ":", name) + "'").c_str(), "r");
+	int c;
+	while ((c = getc(proc)) != EOF) {
+		result += char(c);
+	}
+	pclose(proc);
+	return result;
+}
+
+std::string SettingsManagerDataStore::mkFont(std::string fontFile) {
+	int fontSize = -1;
+	if (fontFile == "") {
+		fontFile = SettingsManagerDataStore::getFontFileByName(this->grubFont);
+		fontSize = this->grubFontSize;
+	}
+	std::string sizeParam;
+	if (fontSize != -1) {
+		std::ostringstream stream;
+		stream << fontSize;
+		sizeParam = " --size='" + stream.str() + "'";
+		if (fontSize > 72) {
+			this->log("Error: font too large: " + stream.str() + "!", Logger::ERROR);
+			return ""; // fehler
+		}
+	}
+	std::string output = this->env.output_config_dir + "/unicode.pf2";
+	FILE* mkfont_proc = popen((this->env.mkfont_cmd + " --output='" + str_replace("'", "\\'", output) + "'" + sizeParam + " '" + str_replace("'", "\\'", fontFile) + "' 2>&1").c_str(), "r");
+	int c;
+//	std::string row = "";
+	while ((c = fgetc(mkfont_proc)) != EOF) {
+//		if (c == '\n') {
+//			this->log("MKFONT: " + row, Logger::INFO);
+//		} else {
+//			row += char(c);
+//		}
+	}
+	int result = pclose(mkfont_proc);
+	if (result != 0) {
+		this->log("error running " + this->env.mkfont_cmd, Logger::ERROR);
+		return "";
+	}
+	this->setValue("GRUB_FONT", output);
+	return output;
 }
 
 bool SettingsManagerDataStore::load(){
@@ -33,6 +105,14 @@ bool SettingsManagerDataStore::load(){
 	FILE* file = fopen(this->env.settings_file.c_str(), "r");
 	if (file){
 		SettingsStore::load(file);
+		this->grubFontSize = -1;
+		if (this->getValue("GRUB_FONT") != "") {
+			this->oldFontFile = this->getValue("GRUB_FONT");
+			this->log("parsing " + this->getValue("GRUB_FONT"), Logger::INFO);
+			this->grubFont = SettingsManagerDataStore::parsePf2(this->getValue("GRUB_FONT"))["NAME"];
+			this->log("result " + this->grubFont, Logger::INFO);
+			this->removeItem("GRUB_FONT");
+		}
 
 		fclose(file);
 		return true;
@@ -59,6 +139,12 @@ fi\n";
 
 	FILE* outFile = fopen(this->env.settings_file.c_str(), "w");
 	if (outFile){
+		if (this->oldFontFile != "") {
+			remove(this->oldFontFile.c_str());
+			this->oldFontFile = "";
+		}
+
+		std::string generatedFont = this->mkFont();
 		bool background_script_required = false;
 		bool isGraphical = false;
 		this->color_helper_required = false;
@@ -89,24 +175,14 @@ fi\n";
 			fclose(bgScriptFile);
 		}
 
-		if (isGraphical) {
+		if (isGraphical && generatedFont == "") {
 			FILE* fontFile = fopen((this->env.output_config_dir + "/unicode.pf2").c_str(), "r");
 			if (fontFile) {
 				this->log("font file exists", Logger::INFO);
 				fclose(fontFile);
 			} else {
 				this->log("generating the font file", Logger::EVENT);
-				FILE* mkfont_proc = popen((this->env.mkfont_cmd + " -o " + this->env.output_config_dir + "/unicode.pf2 /usr/share/fonts/dejavu/DejaVuSansMono.ttf 2>&1").c_str(), "r");
-				int c;
-				std::string row = "";
-				while ((c = fgetc(mkfont_proc)) != EOF) {
-					if (c == '\n') {
-						this->log("MKFONT: " + row, Logger::INFO);
-					} else {
-						row += char(c);
-					}
-				}
-				pclose(mkfont_proc);
+				this->mkFont("/usr/share/fonts/dejavu/DejaVuSansMono.ttf");
 			}
 		}
 

@@ -62,6 +62,8 @@ src/interface/settingsDlg.h -text
 src/interface/threadController.h -text
 src/lib/md5.cpp -text
 src/lib/md5.h -text
+src/lib/str_replace.cpp -text
+src/lib/str_replace.h -text
 src/model/deviceDataList.cpp -text
 src/model/deviceDataList.h -text
 src/model/entry.cpp -text

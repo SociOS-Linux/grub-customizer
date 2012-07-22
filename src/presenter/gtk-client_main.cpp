@@ -30,7 +30,13 @@
 #include "streamLogger.h"
 #include <iostream>
 
+
 int main(int argc, char** argv){
+//	std::map<std::string, std::string> res = parsePf2("/boot/grub/DejaVuSansMono.pf2");
+//	for (std::map<std::string, std::string>::iterator iter = res.begin(); iter != res.end(); iter++) {
+//		std::cout << iter->first << " = " << iter->second << std::endl;
+//	}
+
 	if (getuid() != 0 && (argc == 1 || argv[1] != std::string("no-fork"))) {
 		return system((std::string("pkexec ") + argv[0] + " no-fork").c_str());
 	}
@@ -39,6 +45,20 @@ int main(int argc, char** argv){
 	textdomain( "grub-customizer" );
 
 	Gtk::Main app(argc, argv);
+
+
+//	Gtk::FontSelectionDialog fontChooser;
+//	fontChooser.set_font_name(res["NAME"]);
+//
+//
+//	fontChooser.run();
+//
+//	Pango::FontDescription desc(fontChooser.get_font_name());
+//	std::cout << "selected font: " << fontChooser.get_font_name() << std::endl;
+//	std::cout << "file name: " << getFontFileByName(str_replace(" ", ":", fontChooser.get_font_name())) << std::endl;
+//	return 0;
+
+
 	Glib::thread_init();
 
 	GrubEnv env;

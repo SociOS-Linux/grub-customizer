@@ -84,6 +84,8 @@ public:
 	void useCustomResolution_toggled();
 	void resolution_changed();
 	void colorChange_requested();
+	void fontChange_requested();
+	void fontRemove_requested();
 	void backgroundChange_requested();
 	void backgroundRemove_requested();
 	void settings_dialog_hide_request();

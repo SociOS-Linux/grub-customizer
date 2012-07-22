@@ -71,6 +71,7 @@ add_executable(grub-customizer
 	src/presenter/commonClass.cpp
 	src/presenter/streamLogger.cpp
 	src/lib/md5.cpp
+	src/lib/str_replace.cpp
 )
 
 
@@ -82,6 +83,7 @@ add_executable(grubcfg-proxy
 	src/presenter/grubcfg_proxy_main.cpp
 	src/presenter/commonClass.cpp
 	src/lib/md5.cpp
+	src/lib/str_replace.cpp
 )
 
 target_link_libraries(grub-customizer 

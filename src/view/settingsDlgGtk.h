@@ -126,7 +126,16 @@ class GrubSettingsDlgGtk : public Gtk::Dialog, public SettingsDlg, public Common
 	Gtk::Table tblColorChooser;
 	Gtk::Label lblforegroundColor, lblBackgroundColor, lblNormalColor, lblHighlightColor;
 	GrubColorChooser gccNormalForeground, gccNormalBackground, gccHighlightForeground, gccHighlightBackground;
-	
+
+	//font selection
+	Gtk::Frame groupFont;
+	Gtk::Label lblFont;
+	Gtk::Alignment alignFont;
+	Gtk::FontButton bttFont;
+	Gtk::HBox hbFont;
+	Gtk::Button bttRemoveFont;
+	Gtk::Image imgRemoveFont;
+
 	//background image
 	Gtk::Frame groupBackgroundImage;
 	Gtk::Alignment alignBackgroundImage;
@@ -141,6 +150,7 @@ class GrubSettingsDlgGtk : public Gtk::Dialog, public SettingsDlg, public Common
 	Gtk::HBox hbImgBtts;
 	Gtk::VBox vbButtons;
 	Gtk::Button bttCopyBackground, bttRemoveBackground;
+	Gtk::Image imgRemoveBackground;
 	
 	void signal_setting_row_changed(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter);
 	void signal_add_row_button_clicked();
@@ -156,6 +166,8 @@ class GrubSettingsDlgGtk : public Gtk::Dialog, public SettingsDlg, public Common
 	void signal_chkResolution_toggled();
 	void signal_resolution_selected();
 	void signal_color_changed();
+	void signal_font_changed();
+	void signal_font_removed();
 	void signal_other_image_chosen();
 	void signal_bttRemoveBackground_clicked();
 	bool signal_redraw_preview(GdkEventExpose* event);
@@ -166,6 +178,9 @@ class GrubSettingsDlgGtk : public Gtk::Dialog, public SettingsDlg, public Common
 	void show(bool burgMode);
 	void hide();
 	ColorChooser& getColorChooser(ColorChooserType type);
+	std::string getFontName();
+	int getFontSize();
+	void setFontName(std::string const& value);
 	void addEntryToDefaultEntryChooser(std::string const& labelPathValue, std::string const& labelPathLabel, std::string const& numericPathValue, std::string const& numericPathLabel);
 	void clearDefaultEntryChooser();
 	void clearResolutionChooser();
@@ -195,7 +210,7 @@ class GrubSettingsDlgGtk : public Gtk::Dialog, public SettingsDlg, public Common
 	bool getResolutionCheckboxState();
 	void setResolution(std::string const& resolution);
 	std::string getResolution();
-	Glib::RefPtr<Pango::Layout> createFormattedText(Cairo::RefPtr<Cairo::Context>& context, Glib::ustring const& text, int r, int g, int b, int r_b, int g_b, int b_b, bool black_bg_is_transparent = true);
+	Glib::RefPtr<Pango::Layout> createFormattedText(Cairo::RefPtr<Cairo::Context>& context, Glib::ustring const& text, std::string const& format, int r, int g, int b, int r_b, int g_b, int b_b, bool black_bg_is_transparent = true);
 	void setBackgroundImagePreviewPath(std::string const& menuPicturePath, bool isInGrubDir);
 	std::string getBackgroundImagePath();
 	void setPreviewEntryTitles(std::list<std::string> const& entries);

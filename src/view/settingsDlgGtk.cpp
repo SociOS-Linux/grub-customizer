@@ -106,9 +106,9 @@ GrubSettingsDlgGtk::GrubSettingsDlgGtk()
 	lblforegroundColor(gettext("font color")), lblBackgroundColor(gettext("background")),
 	lblNormalColor(gettext("normal:"), Gtk::ALIGN_RIGHT, Gtk::ALIGN_CENTER), lblHighlightColor(gettext("highlight:"), Gtk::ALIGN_RIGHT, Gtk::ALIGN_CENTER),
 	lblColorChooser(gettext("menu colors")), lblBackgroundImage(gettext("background image")),
-	bttRemoveBackground("x"),
+	imgRemoveBackground(Gtk::Stock::REMOVE, Gtk::ICON_SIZE_BUTTON), imgRemoveFont(Gtk::Stock::REMOVE, Gtk::ICON_SIZE_BUTTON),
 	lblBackgroundRequiredInfo(gettext("To get the colors above working,\nyou have to select a background image!")),
-	gccNormalBackground(true), gccHighlightBackground(true)
+	gccNormalBackground(true), gccHighlightBackground(true), lblFont("_Font", true)
 {
 	this->set_title("Grub Customizer - "+Glib::ustring(gettext("settings")));
 	this->set_icon_name("grub-customizer");
@@ -225,6 +225,21 @@ GrubSettingsDlgGtk::GrubSettingsDlgGtk()
 	tblColorChooser.attach(gccHighlightBackground, 2,3,2,3);
 	tblColorChooser.set_spacings(10);
 
+	//font selection
+	vbAppearanceSettings.pack_start(groupFont, Gtk::PACK_SHRINK);
+	groupFont.add(alignFont);
+	groupFont.set_label_widget(lblFont);
+	groupFont.set_shadow_type(Gtk::SHADOW_NONE);
+	lblFont.set_attributes(attrDefaultEntry);
+	lblFont.set_mnemonic_widget(bttFont);
+	alignFont.add(hbFont);
+	hbFont.pack_start(bttFont);
+	hbFont.pack_start(bttRemoveFont, Gtk::PACK_SHRINK);
+	bttRemoveFont.add(imgRemoveFont);
+	bttRemoveFont.set_tooltip_text(gettext("remove font"));
+	bttRemoveFont.set_no_show_all(true);
+
+
 	//background image
 	vbAppearanceSettings.pack_start(groupBackgroundImage);
 	groupBackgroundImage.set_shadow_type(Gtk::SHADOW_NONE);
@@ -246,6 +261,7 @@ GrubSettingsDlgGtk::GrubSettingsDlgGtk()
 	vbButtons.set_spacing(5);
 
 	bttRemoveBackground.set_tooltip_text(gettext("remove background"));
+	bttRemoveBackground.add(imgRemoveBackground);
 	bttRemoveBackground.set_no_show_all(true);
 	lblBackgroundRequiredInfo.set_no_show_all(true);
 	
@@ -264,6 +280,8 @@ GrubSettingsDlgGtk::GrubSettingsDlgGtk()
 	gccNormalBackground.signal_changed().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_color_changed));
 	gccHighlightForeground.signal_changed().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_color_changed));
 	gccHighlightBackground.signal_changed().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_color_changed));
+	bttFont.signal_font_set().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_font_changed));
+	bttRemoveFont.signal_clicked().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_font_removed));
 	fcBackgroundImage.signal_file_set().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_other_image_chosen));
 	bttRemoveBackground.signal_clicked().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_bttRemoveBackground_clicked));
 	bttAddCustomEntry.signal_clicked().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_add_row_button_clicked));
@@ -448,11 +466,24 @@ ColorChooser& GrubSettingsDlgGtk::getColorChooser(ColorChooserType type){
 	this->event_lock = false;
 }
 
-Glib::RefPtr<Pango::Layout> GrubSettingsDlgGtk::createFormattedText(Cairo::RefPtr<Cairo::Context>& context, Glib::ustring const& text, int r, int g, int b, int r_b, int g_b, int b_b, bool black_bg_is_transparent) {
+std::string GrubSettingsDlgGtk::getFontName() {
+	return bttFont.get_font_name();
+}
+
+int GrubSettingsDlgGtk::getFontSize() {
+	Pango::FontDescription desc(bttFont.get_font_name());
+	return desc.get_size() / 1024;
+}
+
+void GrubSettingsDlgGtk::setFontName(std::string const& value) {
+	bttFont.set_font_name(value);
+	bttRemoveFont.set_visible(value != "");
+	imgRemoveFont.set_visible(value != "");
+}
+
+Glib::RefPtr<Pango::Layout> GrubSettingsDlgGtk::createFormattedText(Cairo::RefPtr<Cairo::Context>& context, Glib::ustring const& text, std::string const& format, int r, int g, int b, int r_b, int g_b, int b_b, bool black_bg_is_transparent) {
 	Glib::RefPtr<Pango::Layout> layout = Pango::Layout::create(context);
-	this->log("layout object created", Logger::INFO);
 	layout->set_text(text);
-	this->log("text added", Logger::INFO);
 	Pango::AttrList attrList;
 	if (!black_bg_is_transparent || r_b != 0 || g_b != 0 || b_b != 0) {
 		Pango::AttrColor bColor = Pango::Attribute::create_attr_background(r_b*255, g_b*255, b_b*255);
@@ -461,7 +492,11 @@ Glib::RefPtr<Pango::Layout> GrubSettingsDlgGtk::createFormattedText(Cairo::RefPt
 	Pango::AttrColor fColor = Pango::Attribute::create_attr_foreground(r*255, g*255, b*255);
 	attrList.insert(fColor);
 	Pango::AttrString font = Pango::Attribute::create_attr_family("monospace");
-	attrList.insert(font);
+	if (format == "") {
+		attrList.insert(font);
+	} else {
+		layout->set_font_description(Pango::FontDescription(format));
+	}
 	layout->set_attributes(attrList);
 	return layout;
 }
@@ -487,12 +522,13 @@ void GrubSettingsDlgGtk::setBackgroundImagePreviewPath(std::string const& menuPi
 				Pango::Color bg_n = this->gccNormalBackground.getSelectedColorAsPangoObject();
 				Pango::Color fg_s = this->gccHighlightForeground.getSelectedColorAsPangoObject();
 				Pango::Color bg_s = this->gccHighlightBackground.getSelectedColorAsPangoObject();
+				std::string fontName = bttFont.get_font_name();
 				this->previewEntryTitles_mutex.lock();
 				for (std::list<std::string>::iterator iter = this->previewEntryTitles.begin(); iter != this->previewEntryTitles.end(); iter++) {
 					if (iter == this->previewEntryTitles.begin()) {
-						exampleTexts.push_back(GrubSettingsDlgGtk::createFormattedText(context, *iter, fg_s.get_red() / 255, fg_s.get_green() / 255, fg_s.get_blue() / 255, bg_s.get_red() / 255, bg_s.get_green() / 255, bg_s.get_blue() / 255));
+						exampleTexts.push_back(GrubSettingsDlgGtk::createFormattedText(context, *iter, fontName, fg_s.get_red() / 255, fg_s.get_green() / 255, fg_s.get_blue() / 255, bg_s.get_red() / 255, bg_s.get_green() / 255, bg_s.get_blue() / 255));
 					} else {
-						exampleTexts.push_back(GrubSettingsDlgGtk::createFormattedText(context, *iter, fg_n.get_red() / 255, fg_n.get_green() / 255, fg_n.get_blue() / 255, bg_n.get_red() / 255, bg_n.get_green() / 255, bg_n.get_blue() / 255));
+						exampleTexts.push_back(GrubSettingsDlgGtk::createFormattedText(context, *iter, fontName, fg_n.get_red() / 255, fg_n.get_green() / 255, fg_n.get_blue() / 255, bg_n.get_red() / 255, bg_n.get_green() / 255, bg_n.get_blue() / 255));
 					}
 				}
 				this->previewEntryTitles_mutex.unlock();
@@ -518,12 +554,14 @@ void GrubSettingsDlgGtk::setBackgroundImagePreviewPath(std::string const& menuPi
 		}
 
 		bttRemoveBackground.show();
+		imgRemoveBackground.show();
 		lblBackgroundRequiredInfo.hide();
 		fcBackgroundImage.set_filename(menuPicturePath);
 	}
 	else {
 		fcBackgroundImage.unselect_all();
 		bttRemoveBackground.hide();
+		imgRemoveBackground.hide();
 		drwBackgroundPreview.hide();
 		lblBackgroundRequiredInfo.show();
 	}
@@ -661,6 +699,18 @@ void GrubSettingsDlgGtk::signal_resolution_selected(){
 void GrubSettingsDlgGtk::signal_color_changed(){
 	if (!event_lock){
 		this->eventListener->colorChange_requested();
+	}
+}
+
+void GrubSettingsDlgGtk::signal_font_changed() {
+	if (!event_lock) {
+		this->eventListener->fontChange_requested();
+	}
+}
+
+void GrubSettingsDlgGtk::signal_font_removed() {
+	if (!event_lock) {
+		this->eventListener->fontRemove_requested();
 	}
 }
 

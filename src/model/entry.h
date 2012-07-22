@@ -22,6 +22,7 @@
 #include <string>
 #include <list>
 #include "../presenter/commonClass.h"
+#include "../lib/str_replace.h"
 
 struct GrubConfRow {
 	GrubConfRow(FILE* sourceFile);
@@ -31,8 +32,6 @@ struct GrubConfRow {
 	bool is_loaded;
 	operator bool();
 };
-
-std::string str_replace(const std::string &search, const std::string &replace, std::string subject);
 
 struct Entry : public CommonClass {
 	enum EntryType {

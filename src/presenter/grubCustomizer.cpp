@@ -784,6 +784,8 @@ void GrubCustomizer::syncSettings(){
 		menuPicIsInGrubDir = true;
 	}
 
+	this->settingsDlg->setFontName(this->settings->grubFont);
+
 	if (this->settings->isActive(wallpaper_key) && menuPicturePath != ""){
 		this->settingsDlg->setBackgroundImagePreviewPath(menuPicturePath, menuPicIsInGrubDir);
 	}
@@ -884,6 +886,19 @@ void GrubCustomizer::updateColorSettings(){
 		this->settings->setIsActive("GRUB_COLOR_HIGHLIGHT", true);
 		this->settings->setIsExport("GRUB_COLOR_HIGHLIGHT", true);
 	}
+	this->syncSettings();
+	this->modificationsUnsaved = true;
+}
+
+void GrubCustomizer::updateFontSettings(bool removeFont) {
+	std::string fontName;
+	int fontSize = -1;
+	if (!removeFont) {
+		fontName = this->settingsDlg->getFontName();
+		fontSize = this->settingsDlg->getFontSize();;
+	}
+	this->settings->grubFont = fontName;
+	this->settings->grubFontSize = fontSize;
 	this->syncSettings();
 	this->modificationsUnsaved = true;
 }
