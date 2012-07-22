@@ -45,6 +45,16 @@ Rule::operator std::string(){
 		result += "???";
 	if (type == NORMAL && (dataSource && dataSource->name != outputName))
 		result += " as '"+str_replace("'", "''", outputName)+"'";
+
+	if (this->subRules.size() > 0) {
+		result += "{";
+		for (std::list<Rule>::iterator iter = this->subRules.begin(); iter != this->subRules.end(); iter++) {
+			if (iter != this->subRules.begin())
+				result += ", ";
+			result += std::string(*iter);
+		}
+		result += "}";
+	}
 	return result;
 }
 

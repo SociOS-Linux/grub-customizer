@@ -33,6 +33,7 @@ struct Proxy {
 	Proxy(Script& dataSource);
 	bool isExecutable() const;
 	void set_isExecutable(bool value);
+	static std::list<Rule> parseRuleString(const char** ruleString);
 	void importRuleString(const char* ruleString);
 	bool sync(bool deleteInvalidRules = true, bool expand = true);
 	bool isModified() const;

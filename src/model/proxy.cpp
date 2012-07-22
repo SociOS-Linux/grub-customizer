@@ -30,13 +30,14 @@ Proxy::Proxy(Script& dataSource)
 	sync(true, true);
 }
 
-void Proxy::importRuleString(const char* ruleString){
-	rules.clear();
+std::list<Rule> Proxy::parseRuleString(const char** ruleString) {
+	std::list<Rule> rules;
 
 	bool inString = false, inAlias = false;
 	std::string name;
 	bool visible = false;
-	for (const char* iter = ruleString; *iter; iter++) {
+	const char* iter = NULL;
+	for (iter = *ruleString; *iter && (*iter != '}' || inString || inAlias); iter++) {
 		if (!inString && *iter == '+')
 			visible = true;
 		else if (!inString && *iter == '-')
@@ -62,8 +63,23 @@ void Proxy::importRuleString(const char* ruleString){
 		}
 		else if (!inString && *iter == 'a' && *++iter == 's')
 			inAlias = true;
+		else if (!inString && !inAlias && *iter == '{'){
+			iter++;
+			rules.back().subRules = Proxy::parseRuleString(&iter);
+			iter--;
+		}
+	}
+	*ruleString = iter;
+	return rules;
+}
+
+void Proxy::importRuleString(const char* ruleString){
+	rules = Proxy::parseRuleString(&ruleString);
+	for (std::list<Rule>::iterator iter = rules.begin(); iter != rules.end(); iter++) {
+		std::cout << std::string(*iter) << std::endl;
 	}
 }
+
 bool Proxy::sync(bool deleteInvalidRules, bool expand){
 	if (this->dataSource){
 		std::list<Rule> result;
