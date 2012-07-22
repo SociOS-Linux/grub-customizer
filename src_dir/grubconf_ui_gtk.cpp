@@ -5,7 +5,7 @@ ImageMenuItemOwnKey::ImageMenuItemOwnKey(const Gtk::StockID& id, const Gtk::Acce
 }
 
 GrubConfUIGtk::GrubConfUIGtk(GrubConfig& grubConfig)
-	: grubConfig(&grubConfig), appName("Grub Customizer"), appVersion("1.6.1"),
+	: grubConfig(&grubConfig), appName("Grub Customizer"), appVersion("1.6.2"),
 	tbttAdd(Gtk::Stock::ADD), tbttRemove(Gtk::Stock::REMOVE), tbttUp(Gtk::Stock::GO_UP), tbttDown(Gtk::Stock::GO_DOWN),
 	tbttSave(Gtk::Stock::SAVE), tbttPreferences(Gtk::Stock::PREFERENCES),
 	miFile(gettext("_File"), true), miExit(Gtk::Stock::QUIT), tbttReload(Gtk::Stock::REFRESH),
@@ -27,7 +27,7 @@ GrubConfUIGtk::GrubConfUIGtk(GrubConfig& grubConfig)
 
 	win.set_icon_name("grub-customizer");
 
-	authors.push_back("Daniel Richter");
+	authors.push_back("Daniel Richter https://launchpad.net/~danielrichter2007");
 	win.set_default_size(800,600);
 	win.add(vbMainSplit);
 	
@@ -52,6 +52,24 @@ GrubConfUIGtk::GrubConfUIGtk(GrubConfig& grubConfig)
 	dlgAbout.set_icon_name("grub-customizer");
 	dlgAbout.set_logo_icon_name("grub-customizer");
 	dlgAbout.set_comments(gettext("Grub Customizer is a graphical interface to configure the grub2/burg settings"));
+	
+	dlgAbout.set_translator_credits(
+"Adam Czabara https://launchpad.net/~adam-czabara\n\
+Alexey Ivanov https://launchpad.net/~alexey.ivanes\n\
+Daniel Richter https://launchpad.net/~danielrichter2007\n\
+Emre AYTAÇ https://launchpad.net/~eaytac\n\
+Eugênio F https://launchpad.net/~eugf\n\
+Fedik https://launchpad.net/~fedikw\n\
+GamePad64 https://launchpad.net/~gamepad64\n\
+José Humberto Melo https://launchpad.net/~josehumberto-melo\n\
+Manuel Xosé Lemos https://launchpad.net/~mxlemos\n\
+Michael Kotsarinis https://launchpad.net/~mk73628\n\
+Miguel Anxo Bouzada https://launchpad.net/~mbouzada\n\
+nafterburner https://launchpad.net/~nafterburner\n\
+Svetoslav Stefanov https://launchpad.net/~svetlisashkov\n\
+TheMengzor https://launchpad.net/~the-mengzor\n\
+zeugma https://launchpad.net/~sunder67\
+");
 	
 	//toolbar
 	toolbar.append(tbttSave);

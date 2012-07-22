@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-10-22 20:01+0200\n"
-"PO-Revision-Date: 2010-10-19 21:15+0000\n"
+"PO-Revision-Date: 2010-10-25 09:26+0000\n"
 "Last-Translator: Michael Kotsarinis <Unknown>\n"
 "Language-Team: Greek <el@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-10-24 13:36+0000\n"
+"X-Launchpad-Export-Date: 2010-10-25 11:24+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../src_dir/grubconfig.cpp:194 ../src_dir/grubconfig.cpp:209
@@ -44,7 +44,7 @@ msgstr "_Βοήθεια"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:13
 msgid "_Install to MBR …"
-msgstr ""
+msgstr "Ε_γκατάσταση στο MBR …"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:18
 msgid "Script to insert:"
@@ -66,7 +66,7 @@ msgstr ""
 
 #: ../src_dir/grubconf_ui_gtk.cpp:21
 msgid "_Device: "
-msgstr ""
+msgstr "_Συσκευή: "
 
 #: ../src_dir/grubconf_ui_gtk.cpp:58
 msgid ""
@@ -105,7 +105,7 @@ msgstr "Επεξεργασία προτιμήσεων του grub"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:116
 msgid "Select _partition …"
-msgstr ""
+msgstr "Επιλογή _κατάτμησης …"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:123
 msgid "Add script"
@@ -121,11 +121,11 @@ msgstr "Εγκατάσταση στο MBR"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:211
 msgid "No Bootloader found"
-msgstr ""
+msgstr "Δεν βρέθηκε Bootloader"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:212
 msgid "Do you want to select another root partition?"
-msgstr ""
+msgstr "Θέλετε να επιλέξετε άλλη ριζική (root) κατάτμηση;"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:219
 msgid "BURG found!"
@@ -265,7 +265,7 @@ msgstr ""
 
 #: ../src_dir/liveCDSetupDialog.cpp:15
 msgid "You started Grub Customizer using the live CD."
-msgstr ""
+msgstr "Εκκινήσατε το Διαμορφωτή του Grub χρησιμοποιώντας το live CD."
 
 #: ../src_dir/liveCDSetupDialog.cpp:17
 msgid ""
@@ -275,6 +275,12 @@ msgid ""
 "again and save the configuration (or run update-grub/update-burg)\n"
 "to get the entry back!"
 msgstr ""
+"Επιλέξατε να χρησιμοποιήσετε άλλη κατάτμηση.\n"
+"Παρακαλώ σημειώστε: Το os-prober (ανίχνευση λειτουργικού) μπορεί να μη βρει "
+"το λειτουργικό που εκτελείτε.\n"
+"Έτσι εκτελέστε τον Διαμορφωτή του Grub στο σύστημα στόχο\n"
+"ξανά και αποθηκεύστε τη διαμόρφωση (ή εκτελέστε update-grub/update-burg)\n"
+"για να ξαναβάλετε την καταχώρηση!"
 
 #: ../src_dir/liveCDSetupDialog.cpp:19
 msgid ""
@@ -288,10 +294,21 @@ msgid ""
 "as the actually running one.\n"
 "If not, you will get an error message when trying to load the configuration."
 msgstr ""
+"Πριν μπορέσετε να επεξεργασθείτε την διαμόρφωση του grub σας πρέπει να\n"
+"προσαρτήσετε τις απαραίτητες κατατμήσεις.\n"
+"\n"
+"Αυτός ο βοηθός θα σας βοηθήσει σε αυτό.\n"
+"\n"
+"\n"
+"Παρακαλώ βεβαιωθείτε ότι το σύστημα στόχος βασίζεται στην ίδια αρχιτεκτονική "
+"επεξεργαστή\n"
+"με αυτό που πραγματικά εκτελείται αυτή τη στιγμή.\n"
+"Αν όχι, θα εμφανιστεί ένα μήνυμα λάθους κατά την προσπάθεια φόρτωσης της "
+"διαμόρφωσης."
 
 #: ../src_dir/liveCDSetupDialog.cpp:21
 msgid "Grub Customizer: Partition chooser"
-msgstr ""
+msgstr "Διαμορφωτής του Grub: Επιλογέας κατατμήσεων"
 
 #: ../src_dir/liveCDSetupDialog.cpp:25
 msgid "Select and mount your root partition"
@@ -315,7 +332,7 @@ msgstr "Επιλέξτε τα απαιτούμενα υποσημεία προσ
 
 #: ../src_dir/liveCDSetupDialog.cpp:82
 msgid "Partition Chooser"
-msgstr ""
+msgstr "Επιλογέας κατατμήσεων"
 
 #: ../src_dir/liveCDSetupDialog.cpp:152
 msgid "Mount failed!"

@@ -1,0 +1,14 @@
+Package: grub-customizer
+Version: 1.6.2-0ubuntu1~ppa1m
+Architecture: i386
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Installed-Size: 446
+Depends: libatk1.0-0 (>= 1.29.3), libc6 (>= 2.3.6-6~), libcairo2 (>= 1.2.4), libcairomm-1.0-1 (>= 1.6.4), libfontconfig1 (>= 2.8.0), libfreetype6 (>= 2.2.1), libgcc1 (>= 1:4.1.1), libglib2.0-0 (>= 2.16.0), libglibmm-2.4-1c2a (>= 2.24.0), libgtk2.0-0 (>= 2.8.0), libgtkmm-2.4-1c2a (>= 1:2.20.0), libpango1.0-0 (>= 1.14.0), libpangomm-1.4-1 (>= 2.26.0), libsigc++-2.0-0c2a (>= 2.0.2), libstdc++6 (>= 4.4.0)
+Section: admin
+Priority: optional
+Homepage: https://launchpad.net/grub-customizer
+Description: Grub Customizer is a graphical interface to configure the grub2/burg settings
+ with focus on the individual list order - without losing the dynamical behavior
+ of grub.
+ You can also use it to repair grub using a linux live cd.
+Original-Maintainer: Daniel Richter <danielrichter2007@web.de>
