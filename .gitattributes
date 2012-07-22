@@ -9,7 +9,10 @@ debian/changelog_lucid -text
 debian/changelog_maverick -text
 debian/control -text
 debian/copyright -text
+debian/debhelper.log -text
+debian/files -text
 debian/rules -text
+debian/substvars -text
 /debuild.log -text
 /grub-customizer.desktop -text
 icons/128x128.png -text svneol=unset#unset
@@ -25,7 +28,6 @@ my_cmake_scripts/FindPkgConfig.cmake -text
 src_dir/CMakeLists.txt -text
 src_dir/Makefile -text
 src_dir/cmake_install.cmake -text
-src_dir/config.h -text
 src_dir/deviceDataList.cpp -text
 src_dir/deviceDataList.h -text
 src_dir/entry.cpp -text
@@ -66,6 +68,8 @@ translation/translation-de.mo -text svneol=unset#unset
 translation/translation-de.po -text
 translation/translation-el.mo -text svneol=unset#unset
 translation/translation-el.po -text
+translation/translation-es.mo -text svneol=unset#unset
+translation/translation-es.po -text
 translation/translation-gl.mo -text svneol=unset#unset
 translation/translation-gl.po -text
 translation/translation-hr.mo -text svneol=unset#unset
