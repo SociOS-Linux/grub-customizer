@@ -1,6 +1,8 @@
-grub-customizer (2.0-0ubuntu1~ppa3m) maverick; urgency=medium
+grub-customizer (2.0.1-0ubuntu1~ppa1m) maverick; urgency=medium
 
    * settings manager included
+   * 2.0.1: Bulgarian and Turkish translation updated
+   * 2.0.1: some partition chooser bugfixes
 
- -- Daniel Richter <danielrichter2007@web.de>  Sun, 21 Nov 2010 18:27:00 +0200
+ -- Daniel Richter <danielrichter2007@web.de>  Mon, 22 Nov 2010 01:00:00 +0200
 
