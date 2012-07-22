@@ -9,10 +9,7 @@ debian/changelog_lucid -text
 debian/changelog_maverick -text
 debian/control -text
 debian/copyright -text
-debian/debhelper.log -text
-debian/files -text
 debian/rules -text
-debian/substvars -text
 /debuild.log -text
 /grub-customizer.desktop -text
 icons/128x128.png -text svneol=unset#unset
