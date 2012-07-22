@@ -1,3 +1,6 @@
+v. 2.4.1
+	* fixed: preview rendering crashes on startup
+
 v. 2.4
 	* preview rendering (settings dialog)
 
