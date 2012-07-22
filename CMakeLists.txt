@@ -6,10 +6,10 @@ find_package(PkgConfig)
 
 pkg_check_modules(GTKMM gtkmm-2.4)
 pkg_check_modules(GTHREAD gthread-2.0)
-
+pkg_check_modules(OPENSSL openssl)
 
 link_directories(
-    ${GTKMM_LIBRARY_DIRS}  )
+    ${GTKMM_LIBRARY_DIRS} ${OPENSSL_LIBRARY_DIRS} )
 
 include_directories(
     ${GTKMM_INCLUDE_DIRS}  )
@@ -43,6 +43,7 @@ add_executable(grub-customizer
 	src/presenter/glibThreadController.cpp
 	src/presenter/commonClass.cpp
 	src/presenter/streamLogger.cpp
+	src/lib/md5.cpp
 )
 
 
@@ -53,10 +54,14 @@ add_executable(grubcfg-proxy
 	src/model/proxy.cpp
 	src/presenter/grubcfg_proxy_main.cpp
 	src/presenter/commonClass.cpp
+	src/lib/md5.cpp
 )
 
 target_link_libraries(grub-customizer 
-    ${GTKMM_LIBRARIES} ${GTHREAD_LIBRARIES}  ${GPOLKIT_LIBRARIES})
+    ${GTKMM_LIBRARIES} ${GTHREAD_LIBRARIES} ${OPENSSL_LIBRARIES})
+
+target_link_libraries(grubcfg-proxy 
+    ${OPENSSL_LIBRARIES})
 
 configure_file ("config.h.in" "${CMAKE_CURRENT_SOURCE_DIR}/src/config.h")
 

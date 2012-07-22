@@ -48,6 +48,8 @@ src/interface/partitionChooser.h -text
 src/interface/scriptAddDlg.h -text
 src/interface/settingsDlg.h -text
 src/interface/threadController.h -text
+src/lib/md5.cpp -text
+src/lib/md5.h -text
 src/model/deviceDataList.cpp -text
 src/model/deviceDataList.h -text
 src/model/entry.cpp -text
