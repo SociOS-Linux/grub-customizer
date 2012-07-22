@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-09-14 00:10+0200\n"
-"PO-Revision-Date: 2011-09-21 17:40+0000\n"
+"PO-Revision-Date: 2011-10-06 11:11+0000\n"
 "Last-Translator: ASTUR2000 <Unknown>\n"
 "Language-Team: Asturian <ast@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-09-27 19:28+0000\n"
-"X-Generator: Launchpad (build 14041)\n"
+"X-Launchpad-Export-Date: 2011-10-22 22:16+0000\n"
+"X-Generator: Launchpad (build 14170)\n"
 
 #: ../src/presenter/grubCustomizer.cpp:417
 msgid "No script found"
@@ -32,7 +32,7 @@ msgstr " (personalizao)"
 
 #: ../src/presenter/grubCustomizer.cpp:528
 msgid "Configuration has been saved"
-msgstr "Los axustes foron atoldaos"
+msgstr "Los axustes foron atroxaos"
 
 #: ../src/presenter/grubCustomizer.cpp:531
 msgid "updating configuration"
@@ -40,11 +40,11 @@ msgstr "Anovando axustes"
 
 #: ../src/presenter/grubCustomizer.cpp:539
 msgid " not found. Is grub2 installed?"
-msgstr " nun atopáu. ¿Ta Grub allugáu?"
+msgstr " non alcontráu. ¿Ta Grub allugáu?"
 
 #: ../src/presenter/grubCustomizer.cpp:544
 msgid " couldn't be executed successfully. You must run this as root!"
-msgstr " Nun pudo executase. ¡Ties qu'aniciar como alministrador!"
+msgstr " Nun pudo executase. ¡Tienes d'aniciar como alministrador!"
 
 #: ../src/presenter/grubCustomizer.cpp:599
 msgid "Name the Entry"
@@ -58,7 +58,7 @@ msgstr "Nun pue ximelgase esta entrada"
 msgid ""
 "Grub Customizer is a graphical interface to configure the grub2/burg settings"
 msgstr ""
-"Grub Customizer ye una interfaz gráfica pa configurar axustes de Grub2/burg"
+"Grub Customizer ye una interfaz gráfica pa remanar axustes de Grub2/burg"
 
 #: ../src/view/grubInstallDlgGtk.cpp:22
 msgid ""
@@ -66,8 +66,8 @@ msgid ""
 "files to the bootloaders data directory\n"
 "(if they don't already exist)."
 msgstr ""
-"Allugar el bootloader a MBR y poner dalgunos\n"
-"archivos a los direutorios de los bootloaders\n"
+"Allugar el bootloader a MBR ya poner dalgunos\n"
+"archivos a los cartafueyos los bootloaders\n"
 "(si nun esisten yá)."
 
 #: ../src/view/grubInstallDlgGtk.cpp:23
@@ -80,11 +80,11 @@ msgstr "Allugar a MBR"
 
 #: ../src/view/grubInstallDlgGtk.cpp:50
 msgid "The bootloader has been installed successfully"
-msgstr "El bootloader foi esbilláu"
+msgstr "El bootloader foi allugáu"
 
 #: ../src/view/grubInstallDlgGtk.cpp:55
 msgid "Error while installing the bootloader"
-msgstr "Erru mentanto s'allugaba'l bootloader"
+msgstr "Erru entrín s'allugaba'l bootloader"
 
 #: ../src/view/grubInstallDlgGtk.cpp:71
 msgid "installing the bootloader…"
@@ -92,7 +92,7 @@ msgstr "allugando'l bootloader"
 
 #: ../src/view/grubInstallDlgGtk.cpp:76
 msgid "Please type a device string!"
-msgstr "¡Por favor escribi una cadena de preseos!"
+msgstr "¡Por favor escribi una cadena preseos!"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:28
 msgid "_File"
@@ -128,15 +128,15 @@ msgstr "Añader un script a los tos axustes"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:65
 msgid "Remove a script from your configuration"
-msgstr "Esborrar un script dende los tos axustes"
+msgstr "Esniciar un script dende los tos axustes"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:71
 msgid "Move up the selected entry or script"
-msgstr "Xubir p'arriba la entrada o script esbillaos"
+msgstr "Xubir pa enriba la entrada o script esbillaos"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:73
 msgid "Move down the selected entry or script"
-msgstr "Baxar p'abaxo la entrada o script esbillaos"
+msgstr "Baxar pa embaxo la entrada o script esbillaos"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:81
 msgid "reload configuration"
@@ -152,7 +152,7 @@ msgstr "Esbillar _partición ..."
 
 #: ../src/view/grublistCfgDlgGtk.cpp:120
 msgid "Do you want to configure BURG instead of grub2?"
-msgstr "¿Quiés configurar BURG?"
+msgstr "¿Quiés configurar BURG en cuentes de grub2?"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:127
 msgid "Do you want to select another root partition?"
@@ -164,11 +164,11 @@ msgstr "Mou BURG"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:172
 msgid "Save configuration and generate a new "
-msgstr "Atoldar axustes y xenerar unu nuevu "
+msgstr "Atroxar axustes ya xenerar unu nuevu "
 
 #: ../src/view/grublistCfgDlgGtk.cpp:256
 msgid "Proxy binary not found!"
-msgstr "¡Binariu proxy nun atopáu!"
+msgstr "¡Proxy binariu nun atopáu!"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:257
 msgid ""
@@ -176,7 +176,7 @@ msgid ""
 "(in most cases), when you didn't install grub gustomizer currectly."
 msgstr ""
 "Güeyarás toles entraes (non customizaes) cuando anicies Grub. Esti erru sal "
-"(na meyoría de casos), cuando nun allugasti Grub Customizer correutamente"
+"(na meyoría casos), cuando nun allugasti Grub Customizer correutamente"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:263
 msgid "(new Entries of %1)"
@@ -192,7 +192,7 @@ msgstr "Títulu per defeutu: "
 
 #: ../src/view/grublistCfgDlgGtk.cpp:581
 msgid "The saved configuration is not up to date!"
-msgstr "¡La configuración atoldada nun ta anovada!"
+msgstr "¡La configuración atroxada nun ta anovada!"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:582
 msgid ""
@@ -200,7 +200,7 @@ msgid ""
 "startup. So what you see now may not be what you see when you restart your "
 "pc. To fix this, click update!"
 msgstr ""
-"Los axustes xeneraos nun tan iguaos a los atoldaos nel aniciu. Asina que lo "
+"Los axustes xeneraos nun tan iguaos a los atroxaos nel aniciu. Asina que lo "
 "que güeyes agora nun sedrá lo mesmo cuando reanicies el PC. Pa esclariar "
 "esti problema, ¡Primi n'anovar!"
 
@@ -210,24 +210,24 @@ msgstr "_Colar ensín anovar"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:588
 msgid "_Update & Quit"
-msgstr "_Anovar y Colar"
+msgstr "_Anovar ya Colar"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:592
 msgid "Do you want to save your modifications?"
-msgstr "¿Quiés atoldar los tos cambeos?"
+msgstr "¿Quiés atroxar los tos cambeos?"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:595
 msgid "_Quit without saving"
-msgstr "_Colar ensín atoldar"
+msgstr "_Colar ensín atroxar"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:598
 msgid "_Save & Quit"
-msgstr "_Atoldar y Colar"
+msgstr "_Atoldar a Colar"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:601
 msgid "AND: your modifications are still unsaved, update will save them too!"
 msgstr ""
-"Y: Los tos cambeos nun tan atoldaos enaina, ¡anovar atoldaralos tamién!"
+"YA: Les tos camudancies nun tan atoldaes enaina, ¡anovar atroxaralos tamién!"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:655 ../src/view/settingsDlgGtk.cpp:123
 msgid "is active"
@@ -235,7 +235,7 @@ msgstr "Ta activu"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:656 ../src/view/settingsDlgGtk.cpp:124
 msgid "name"
-msgstr "nome"
+msgstr "viesu"
 
 #: ../src/view/partitionChooserGtk.cpp:23
 msgid "_use another partition: "
@@ -255,7 +255,7 @@ msgid ""
 "Please select every grub/boot related partition."
 msgstr ""
 "Estos son los puntos de montax del fstab.\n"
-"Por favor esbilla caunes de les partciones Grub/boot."
+"Por favor esbilla caunes les partciones Grub/boot."
 
 #: ../src/view/partitionChooserGtk.cpp:48
 msgid "partition"
@@ -275,7 +275,7 @@ msgstr "Grub Customizer: Esbillador de partición"
 
 #: ../src/view/partitionChooserGtk.cpp:86
 msgid "Select and mount your root partition"
-msgstr "Esbillar y montar partición root"
+msgstr "Esbillar ya montar partición root"
 
 #: ../src/view/partitionChooserGtk.cpp:88
 msgid "Select required submountpoints"
@@ -283,7 +283,7 @@ msgstr "Esbillar los puntos montax antemanaos requerios"
 
 #: ../src/view/partitionChooserGtk.cpp:94
 msgid "Partition Chooser"
-msgstr "Esbillador de partición"
+msgstr "Esbillador partición"
 
 #: ../src/view/partitionChooserGtk.cpp:168
 msgid "Mount failed!"
@@ -295,7 +295,7 @@ msgstr "¡Desmotax fallicu!"
 
 #: ../src/view/partitionChooserGtk.cpp:170
 msgid "This seems not to be a root file system (no fstab found)"
-msgstr "Esto nun parez ser un sistema d'archivos (fstab nun atopáu"
+msgstr "Esto nun paez ser un sistema d'archivos (fstab nun atopáu)"
 
 #: ../src/view/partitionChooserGtk.cpp:171
 msgid "Couldn't mount the selected partition"
@@ -315,8 +315,8 @@ msgid ""
 msgstr ""
 "Esbillasti la opción pa esbillar otra partición.\n"
 "Nota: El os-prober nun pue alcontrar anguaño'l sistema.\n"
-"¡Asina qu'anicia Grub Customizer nel sistema de destín\n"
-"otra vegada ya atolda los axustes (o anicia update-grub/update-burg)\n"
+"¡Asina qu'anicia Grub Customizer nel sistema destín\n"
+"otra vegada ya atroxa los axustes (o anicia update-grub/update-burg)\n"
 "pa consiguir la entrada!"
 
 #: ../src/view/partitionChooserGtk.cpp:242
@@ -335,15 +335,15 @@ msgid ""
 "as the actually running one.\n"
 "If not, you will get an error message when trying to load the configuration."
 msgstr ""
-"Enantes de cambear axustes de Grub tenemos que\n"
+"Enantes camudar axustes de Grub tenemos que\n"
 "montar le particiones precises.\n"
 "\n"
 "Esti asistente aidarate faciendo esto.\n"
 "\n"
 "\n"
-"Afítate de la arquitectura del sistema de destín\n"
+"Afítate de la arquitectura del sistema destín\n"
 "na qu'anguaño furrula.\n"
-"Si non, consiguirás un mensax d'erru mentato preves a cargar los axustes."
+"Si non, consiguirás un mensax d'erru entrín pruebes cargar los axustes."
 
 #: ../src/view/scriptAddDlgGtk.cpp:23
 msgid "Script to insert:"
@@ -435,7 +435,7 @@ msgstr "pre_definío "
 
 #: ../src/view/settingsDlgGtk.cpp:92
 msgid "previously _booted entry"
-msgstr "Entrada aniciada _anterior"
+msgstr "Entrada aniciada _postreramente"
 
 #: ../src/view/settingsDlgGtk.cpp:93
 msgid "default entry"
@@ -467,7 +467,7 @@ msgstr "xenerar entraes recuperaes"
 
 #: ../src/view/settingsDlgGtk.cpp:95
 msgid "look for other operating systems"
-msgstr "restolar por otros sistemas"
+msgstr "restolar per otros sistemas"
 
 #: ../src/view/settingsDlgGtk.cpp:96
 msgid "custom resolution: "
@@ -491,7 +491,7 @@ msgstr "señalar:"
 
 #: ../src/view/settingsDlgGtk.cpp:99
 msgid "menu colors"
-msgstr "menú colores"
+msgstr "colores menú"
 
 #: ../src/view/settingsDlgGtk.cpp:99
 msgid "background image"
@@ -499,7 +499,7 @@ msgstr "semeya de fondu"
 
 #: ../src/view/settingsDlgGtk.cpp:100
 msgid "remove background"
-msgstr "esborrar fondu"
+msgstr "esniciar fondu"
 
 #: ../src/view/settingsDlgGtk.cpp:101
 msgid ""
@@ -507,7 +507,7 @@ msgid ""
 "you have to select a background image!"
 msgstr ""
 "¡Pa consiguir colores enriba que trabayen\n"
-"ties que esbillar una semeya de fondu!"
+"tienes qu'esbillar una semeya de fondu!"
 
 #: ../src/view/settingsDlgGtk.cpp:104
 msgid "settings"
@@ -531,7 +531,7 @@ msgstr "Valor"
 
 #: ../src/view/settingsDlgGtk.cpp:295
 msgid "Entry %1 (by position)"
-msgstr "Entrada %1 (per allugamientu)"
+msgstr "Entrada %1 (per posición)"
 
 #: ../src/view/settingsDlgGtk.cpp:520
 msgid ""

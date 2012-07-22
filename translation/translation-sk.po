@@ -2,28 +2,29 @@
 # Copyright (c) 2011 Rosetta Contributors and Canonical Ltd 2011
 # This file is distributed under the same license as the grub-customizer package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2011.
+# Ondrej Mosnáček <omosnacek@gmail.com>, 2011.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-09-14 00:10+0200\n"
-"PO-Revision-Date: 2011-09-14 19:50+0000\n"
-"Last-Translator: DAG Software <Unknown>\n"
+"PO-Revision-Date: 2011-09-29 17:03+0000\n"
+"Last-Translator: Ondrej Mosnáček <Unknown>\n"
 "Language-Team: Slovak <sk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-09-27 19:28+0000\n"
-"X-Generator: Launchpad (build 14041)\n"
+"X-Launchpad-Export-Date: 2011-10-22 22:16+0000\n"
+"X-Generator: Launchpad (build 14170)\n"
 
 #: ../src/presenter/grubCustomizer.cpp:417
 msgid "No script found"
-msgstr "Žiadny nájdený script"
+msgstr "Žiadny skript nebol nájdený"
 
 #: ../src/presenter/grubCustomizer.cpp:486
 msgid "loading configuration…"
-msgstr "načítavanie konfigurácie ..."
+msgstr "načítava sa konfigurácia..."
 
 #: ../src/presenter/grubCustomizer.cpp:500
 #: ../src/view/grublistCfgDlgGtk.cpp:355
@@ -32,33 +33,34 @@ msgstr " (vlastné)"
 
 #: ../src/presenter/grubCustomizer.cpp:528
 msgid "Configuration has been saved"
-msgstr "Konfikurácia bola uložená"
+msgstr "Konfigurácia bola uložená"
 
 #: ../src/presenter/grubCustomizer.cpp:531
 msgid "updating configuration"
-msgstr "aktualizovanie konfigurácie"
+msgstr "aktualizuje sa konfigurácia"
 
 #: ../src/presenter/grubCustomizer.cpp:539
 msgid " not found. Is grub2 installed?"
-msgstr " nenájdené. Je grub2 nainštalovaný?"
+msgstr " nebolo nájdené. Je Grub2 nainštalovaný?"
 
 #: ../src/presenter/grubCustomizer.cpp:544
 msgid " couldn't be executed successfully. You must run this as root!"
-msgstr " nemôžem vykonať operáciu. Musíš ju spustiť ako root!"
+msgstr ""
+" nebolo možné vykonať úpešne. Túto aplikáciu musíte spustiť ako root!"
 
 #: ../src/presenter/grubCustomizer.cpp:599
 msgid "Name the Entry"
-msgstr "Názov položky"
+msgstr "Pomenovať položku"
 
 #: ../src/presenter/grubCustomizer.cpp:632
 msgid "cannot move this entry"
-msgstr ""
+msgstr "nebolo možné presunúť túto položku"
 
 #: ../src/view/aboutDialogGtk.cpp:36
 msgid ""
 "Grub Customizer is a graphical interface to configure the grub2/burg settings"
 msgstr ""
-"Grub Customizer je grafické rozhranie na konfiguráciu nastavení grub2/burg"
+"Grub Customizer je grafické rozhranie na konfiguráciu nastavení Grub2/Burg"
 
 #: ../src/view/grubInstallDlgGtk.cpp:22
 msgid ""
@@ -66,9 +68,9 @@ msgid ""
 "files to the bootloaders data directory\n"
 "(if they don't already exist)."
 msgstr ""
-"Nainštalovať zavádzač do MBR a vložiť nejaké\n"
-"súbory do adresára zavádzača\n"
-"(ak už neexistujú)."
+"Nainštaluje zavádzač do MBR a vloží niekoľko\n"
+"súborov do adresára zavádzača\n"
+"(ak ešte neexistujú)."
 
 #: ../src/view/grubInstallDlgGtk.cpp:23
 msgid "_Device: "
@@ -76,7 +78,7 @@ msgstr "_Zariadenie: "
 
 #: ../src/view/grubInstallDlgGtk.cpp:33
 msgid "Install to MBR"
-msgstr "Inštalovať do MBR"
+msgstr "Nainštalovať do MBR"
 
 #: ../src/view/grubInstallDlgGtk.cpp:50
 msgid "The bootloader has been installed successfully"
@@ -84,11 +86,11 @@ msgstr "Zavádzač bol úspešne naištalovaný"
 
 #: ../src/view/grubInstallDlgGtk.cpp:55
 msgid "Error while installing the bootloader"
-msgstr "Chyba pri inštalácii zavádzača"
+msgstr "Chyba počas inštalácie zavádzača"
 
 #: ../src/view/grubInstallDlgGtk.cpp:71
 msgid "installing the bootloader…"
-msgstr "inštalujem zavádzač..."
+msgstr "inštaluje sa zavádzač..."
 
 #: ../src/view/grubInstallDlgGtk.cpp:76
 msgid "Please type a device string!"
@@ -100,11 +102,11 @@ msgstr "_Súbor"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:29
 msgid "_Edit"
-msgstr "Upraviť"
+msgstr "_Upraviť"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:29
 msgid "_View"
-msgstr "Zobraziť"
+msgstr "_Zobraziť"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:29
 msgid "_Help"
@@ -112,76 +114,76 @@ msgstr "_Pomocník"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:30
 msgid "_Install to MBR …"
-msgstr "_Inštalujem do MBR..."
+msgstr "_Nainštalovať do MBR..."
 
 #: ../src/view/grublistCfgDlgGtk.cpp:34
 msgid "BURG found!"
-msgstr "BURG nájdený!"
+msgstr "Bol nájdený Burg!"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:35
 msgid "No Bootloader found"
-msgstr "Bootloader nenájdený"
+msgstr "Žiadny zavádzač nebol nájdený"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:63
 msgid "Add a script to your configuration"
-msgstr "Pridať skript pre konfiguráciu"
+msgstr "Pridá skript do konfigurácie"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:65
 msgid "Remove a script from your configuration"
-msgstr "Odobrať skript z konfigurácie"
+msgstr "Odoberie skript z konfigurácie"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:71
 msgid "Move up the selected entry or script"
-msgstr "Zaradiť vyššie vybranú položku alebo skript"
+msgstr "Posunie vybranú položku alebo skript hore"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:73
 msgid "Move down the selected entry or script"
-msgstr "Posunúť nadol vybranú položku alebo skript"
+msgstr "Posunie vybranú položku alebo skript dole"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:81
 msgid "reload configuration"
-msgstr "znovu načítať konfiguráciu"
+msgstr "Znova načíta konfiguráciu"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:84
 msgid "Edit grub preferences"
-msgstr "Editovať grub nastavenia"
+msgstr "Upraví nastavenia Grub"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:113
 msgid "Select _partition …"
-msgstr "Vyberte _partíciu ..."
+msgstr "Vybrať _oddiel..."
 
 #: ../src/view/grublistCfgDlgGtk.cpp:120
 msgid "Do you want to configure BURG instead of grub2?"
-msgstr "Do you want to configure BURG instead of grub2?"
+msgstr "Želáte si nakonfigurovať Burg namiesto Grub2?"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:127
 msgid "Do you want to select another root partition?"
-msgstr "Chcete si vybrať iný koreňový adresár?"
+msgstr "Želáte si vybrať iný koreňový adresár?"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:168
 msgid "BURG Mode"
-msgstr "mód BURG"
+msgstr "Režim Burg"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:172
 msgid "Save configuration and generate a new "
-msgstr "Uložiť konfiguráciu a vytvoriť novú "
+msgstr "Uloží konfiguráciu a vygeneruje nový súbor "
 
 #: ../src/view/grublistCfgDlgGtk.cpp:256
 msgid "Proxy binary not found!"
-msgstr "Proxy binárky nenájdené!"
+msgstr "Binárny súbor proxy nebol nájdený!"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:257
 msgid ""
 "You will see all entries (uncustomized) when you run grub. This error accurs "
 "(in most cases), when you didn't install grub gustomizer currectly."
 msgstr ""
-"Uvidíte všetky položky (neprispôsobené) keď spustíte grub. Táto chyba sa "
-"vyskytuje (vo väčšine prípadov), keď ste nenainštalovali \"grub customizer\" "
-"korektne."
+"Uvidíte všetky položky (neprispôsobené) keď spúšťate Grub. Táto chyba sa "
+"vyskytuje (vo väčšine prípadov), keď sa Grub Customizer nenainštaloval "
+"správne."
 
 #: ../src/view/grublistCfgDlgGtk.cpp:263
 msgid "(new Entries of %1)"
-msgstr ""
+msgstr "(nové položky %1)"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:265
 msgid "(new Entries)"
@@ -201,22 +203,21 @@ msgid ""
 "startup. So what you see now may not be what you see when you restart your "
 "pc. To fix this, click update!"
 msgstr ""
-"Vygenerovaná konfigurácia nebola totožná uloženej konfigurácii pri štarte. "
-"Takže to, čo vidíte teraz nemusí byť to, čo uvidíte, pri reštartovaní Vášho "
-"počítača. Ak chcete tento problém odstrániť, kliknite na tlačidlo "
-"Aktualizovať!"
+"Vygenerovaná konfigurácia nebola totožná s konfiguráciou uloženou pri "
+"štarte. Takže to, čo vidíte teraz, nemusí byť to, čo uvidíte po reštartovaní "
+"počítača. Na odstránenie tohoto problému kliknite na Aktualizovať!"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:585
 msgid "_Quit without update"
-msgstr "_Ukončiť bez aktualázie"
+msgstr "_Ukončiť bez aktualizácie"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:588
 msgid "_Update & Quit"
-msgstr "_Aktualizovať a Ukončiť"
+msgstr "_Aktualizovať a ukončiť"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:592
 msgid "Do you want to save your modifications?"
-msgstr "Prajete si uložiť zmeny?"
+msgstr "Želáte si uložiť zmeny?"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:595
 msgid "_Quit without saving"
@@ -224,39 +225,39 @@ msgstr "_Ukončiť bez uloženia"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:598
 msgid "_Save & Quit"
-msgstr "_Uložiť a Ukončiť"
+msgstr "U_ložiť a ukončiť"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:601
 msgid "AND: your modifications are still unsaved, update will save them too!"
-msgstr "A: Vaše úpravy sú stále neuložené, uložia sa spolu s aktualizáciou!"
+msgstr "A: vaše úpravy stále nie sú uložené, uložia sa až pri aktualizácii!"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:655 ../src/view/settingsDlgGtk.cpp:123
 msgid "is active"
-msgstr "je aktívne"
+msgstr "aktívne"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:656 ../src/view/settingsDlgGtk.cpp:124
 msgid "name"
-msgstr "názov"
+msgstr "meno"
 
 #: ../src/view/partitionChooserGtk.cpp:23
 msgid "_use another partition: "
-msgstr "_použiť inú partíciu: "
+msgstr "_použiť iný oddiel: "
 
 #: ../src/view/partitionChooserGtk.cpp:24
 msgid "Mount selected Filesystem"
-msgstr "Namontovať vybraný súborový systém"
+msgstr "Pripojiť vybraný súborový systém"
 
 #: ../src/view/partitionChooserGtk.cpp:25
 msgid "Unmount mounted Filesystem"
-msgstr "Odmontovať namontovaný súborový systém"
+msgstr "Odpojiť pripojený súborový systém"
 
 #: ../src/view/partitionChooserGtk.cpp:27
 msgid ""
 "These are the mountpoints of your fstab file.\n"
 "Please select every grub/boot related partition."
 msgstr ""
-"Toto sú Vaše prípojné body Vášho fstab súboru.\n"
-"Prosím, vyberte každú grub/zavádzajúcu súvisiacu oblasť."
+"Toto sú prípojné body vášho súboru fstab.\n"
+"Prosím, vyberte všetky oddiely súvisiace so zavádzačom."
 
 #: ../src/view/partitionChooserGtk.cpp:48
 msgid "partition"
@@ -268,7 +269,7 @@ msgstr "typ"
 
 #: ../src/view/partitionChooserGtk.cpp:50
 msgid "label"
-msgstr "označenie"
+msgstr "menovka"
 
 #: ../src/view/partitionChooserGtk.cpp:82
 msgid "Grub Customizer: Partition chooser"
@@ -280,7 +281,7 @@ msgstr "Vyberte a pripojte váš koreňový oddiel"
 
 #: ../src/view/partitionChooserGtk.cpp:88
 msgid "Select required submountpoints"
-msgstr "Vyberte požadované podbody pripojenia"
+msgstr "Vyberte ďalšie požadované body pripojenia"
 
 #: ../src/view/partitionChooserGtk.cpp:94
 msgid "Partition Chooser"
@@ -288,25 +289,25 @@ msgstr "Výber diskových oddielov"
 
 #: ../src/view/partitionChooserGtk.cpp:168
 msgid "Mount failed!"
-msgstr "Namontovanie zlyhalo!"
+msgstr "Pripojenie zlyhalo!"
 
 #: ../src/view/partitionChooserGtk.cpp:169
 msgid "umount failed!"
-msgstr "odmontovanie zlyhalo!"
+msgstr "Odpojenie zlyhalo!"
 
 #: ../src/view/partitionChooserGtk.cpp:170
 msgid "This seems not to be a root file system (no fstab found)"
 msgstr ""
-"Zdá sa, že toto nie je koreňový súborový systém (žiadny \"fstab\" sa "
-"nenašiel)"
+"Zdá sa, že toto nie je koreňový súborový systém (žiadny súbor fstab nebol "
+"nájdený)"
 
 #: ../src/view/partitionChooserGtk.cpp:171
 msgid "Couldn't mount the selected partition"
-msgstr "Nemôžem namontovať vybraný diskový oddiel"
+msgstr "Nebolo možné pripojiť vybraný diskový oddiel"
 
 #: ../src/view/partitionChooserGtk.cpp:172
 msgid "Couldn't umount the selected partition"
-msgstr "Nemôžem odmontovať vybraný diskový oddiel"
+msgstr "Nebolo možné odpojiť vybraný diskový oddiel"
 
 #: ../src/view/partitionChooserGtk.cpp:240
 msgid ""
@@ -317,10 +318,10 @@ msgid ""
 "to get the entry back!"
 msgstr ""
 "Vybrali ste možnosť výberu iného diskového oddielu.\n"
-"Vezmite prosím na vedomie: \"os-prober\" nemusí nájsť Váš aktuláne spustení "
-"systém.\n"
-"Takže spustite \"Grub Customizer\" na cieľovom systéme\n"
-"znova a uložte konfiguráciu (alebo spustite \"update-grub/update-burg\"),\n"
+"Nezabudnite: os-prober nemusí nájsť aktuálne spustený systém.\n"
+"Preto spustite Grub Customizer na cieľovom systéme\n"
+"znova a uložte konfiguráciu (alebo spustite \"update-grub\"/\"update-"
+"Burg\"),\n"
 "aby ste získali položku späť!"
 
 #: ../src/view/partitionChooserGtk.cpp:242
@@ -339,20 +340,20 @@ msgid ""
 "as the actually running one.\n"
 "If not, you will get an error message when trying to load the configuration."
 msgstr ""
-"Než budete môcť upravovať svoju grub konfiguráciu musíme\n"
+"Než budete môcť upravovať vašu konfiguráciu Grub, je potrebné\n"
 "pripojiť požadované diskové oddiely.\n"
 "\n"
-"Tento pomocník vám pomôže ako to urobiť.\n"
+"Tento pomocník vám s tým pomôže.\n"
 "\n"
 "\n"
-"Uistite sa prosím, cieľový systém je založený na rovnakej CPU architektúre\n"
-"ako na práve bežiacom systéme.\n"
-"Ak sa tak nestane, dostanete chybové hlásenie pri pokuse o načítanie "
-"konfigurácie."
+"Uistite sa prosím, že cieľový systém je založený na rovnakej CPU "
+"architektúre\n"
+"ako práve bežiaci systém.\n"
+"Ak nebude, dostanete chybové hlásenie pri pokuse o načítanie konfigurácie."
 
 #: ../src/view/scriptAddDlgGtk.cpp:23
 msgid "Script to insert:"
-msgstr "Skript pre vloženie:"
+msgstr "Skript, ktorý sa má vložiť:"
 
 #: ../src/view/scriptAddDlgGtk.cpp:25
 msgid "Preview:"
@@ -360,7 +361,7 @@ msgstr "Náhľad:"
 
 #: ../src/view/scriptAddDlgGtk.cpp:27
 msgid "Add script"
-msgstr "Pridať script"
+msgstr "Pridať skript"
 
 #: ../src/view/scriptAddDlgGtk.cpp:43
 msgid "Entry"
@@ -436,19 +437,19 @@ msgstr "čierna"
 
 #: ../src/view/settingsDlgGtk.cpp:92
 msgid "pre_defined: "
-msgstr "pred_definované "
+msgstr "pred_definovaná: "
 
 #: ../src/view/settingsDlgGtk.cpp:92
 msgid "previously _booted entry"
-msgstr "skôr _zavädená položka"
+msgstr "predtým _použitá položka"
 
 #: ../src/view/settingsDlgGtk.cpp:93
 msgid "default entry"
-msgstr "predvolená položka"
+msgstr "Predvolená položka"
 
 #: ../src/view/settingsDlgGtk.cpp:93
 msgid "visibility"
-msgstr "viditeľnosť"
+msgstr "Viditeľnosť"
 
 #: ../src/view/settingsDlgGtk.cpp:93
 msgid "show menu"
@@ -456,15 +457,15 @@ msgstr "zobraziť menu"
 
 #: ../src/view/settingsDlgGtk.cpp:94
 msgid "Timeout"
-msgstr "Čas vypršal"
+msgstr "Časový limit:"
 
 #: ../src/view/settingsDlgGtk.cpp:94
 msgid "Seconds"
-msgstr "sekundy"
+msgstr "sekúnd"
 
 #: ../src/view/settingsDlgGtk.cpp:94
 msgid "kernel parameters"
-msgstr "parametre jadra"
+msgstr "Parametre jadra"
 
 #: ../src/view/settingsDlgGtk.cpp:95
 msgid "generate recovery entries"
@@ -476,7 +477,7 @@ msgstr "hľadať iné operačné systémy"
 
 #: ../src/view/settingsDlgGtk.cpp:96
 msgid "custom resolution: "
-msgstr "vlastné rozlíšenie "
+msgstr "vlastné rozlíšenie: "
 
 #: ../src/view/settingsDlgGtk.cpp:97
 msgid "font color"
@@ -484,7 +485,7 @@ msgstr "farba písma"
 
 #: ../src/view/settingsDlgGtk.cpp:97
 msgid "background"
-msgstr "pozadie"
+msgstr "farba pozadia"
 
 #: ../src/view/settingsDlgGtk.cpp:98
 msgid "normal:"
@@ -492,15 +493,15 @@ msgstr "normálne:"
 
 #: ../src/view/settingsDlgGtk.cpp:98
 msgid "highlight:"
-msgstr "zvýrazniť:"
+msgstr "zvýraznené:"
 
 #: ../src/view/settingsDlgGtk.cpp:99
 msgid "menu colors"
-msgstr "ponuka farieb"
+msgstr "Farby ponuky"
 
 #: ../src/view/settingsDlgGtk.cpp:99
 msgid "background image"
-msgstr "obrázok pozadia"
+msgstr "Obrázok pozadia"
 
 #: ../src/view/settingsDlgGtk.cpp:100
 msgid "remove background"
@@ -511,12 +512,12 @@ msgid ""
 "To get the colors above working,\n"
 "you have to select a background image!"
 msgstr ""
-"Ak chcete aby vyššie vybrané farby sa zobrazili,\n"
+"Aby sa použili vyššie vybrané farby,\n"
 "musíte vybrať obrázok pozadia!"
 
 #: ../src/view/settingsDlgGtk.cpp:104
 msgid "settings"
-msgstr "nastavenia"
+msgstr "Nastavenia"
 
 #: ../src/view/settingsDlgGtk.cpp:108
 msgid "_General"
@@ -524,7 +525,7 @@ msgstr "_Hlavné"
 
 #: ../src/view/settingsDlgGtk.cpp:109
 msgid "A_ppearance"
-msgstr "V_zhľad"
+msgstr "_Vzhľad"
 
 #: ../src/view/settingsDlgGtk.cpp:110
 msgid "_Advanced"
@@ -543,5 +544,5 @@ msgid ""
 "This option doesn't work when the \"os-prober\" script finds other operating "
 "systems. Disable \"%1\" if you don't need to boot other operating systems."
 msgstr ""
-"Táto voľba nefunguje ak \"os-preber\" skript nájde iné operačné systémy. "
-"Zakážte \"% 1\", ak nepotrebujete zavádzať iné operačné systémy."
+"Táto voľba nefunguje, ak skript \"os-prober\" nájde iné operačné systémy. "
+"Zakážte \"%1\", ak nepotrebujete zavádzať iné operačné systémy."

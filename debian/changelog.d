@@ -1,5 +1,12 @@
 #!/bin/sh
 cat << EOF
+grub-customizer (2.2.2-0ubuntu1~ppa1$1) $2; urgency=medium
+
+   * no printing of empty submenus
+   * modification detection fixed
+
+ -- Daniel Richter <danielrichter2007@web.de>  Sun, 23 Oct 2011 00:23:57 +0200
+
 grub-customizer (2.2.1-0ubuntu1~ppa1$1) $2; urgency=high
 
    * crash fixed (Bug #860820)
