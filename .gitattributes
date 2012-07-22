@@ -2,6 +2,7 @@
 /CMakeLists.txt -text
 /COPYING -text
 /README -text
+/cmake_uninstall.cmake.in -text
 /config.h.in -text
 debian/changelog -text
 debian/changelog.d -text

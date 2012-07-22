@@ -14,9 +14,8 @@ GrubConfUIGtk::GrubConfUIGtk(GrublistCfg& grubConfig)
 	miAdd(Gtk::Stock::ADD, Gtk::AccelKey('+', Gdk::CONTROL_MASK)), miRemove(Gtk::Stock::REMOVE, Gtk::AccelKey('-', Gdk::CONTROL_MASK)), miUp(Gtk::Stock::GO_UP, Gtk::AccelKey('u', Gdk::CONTROL_MASK)), miDown(Gtk::Stock::GO_DOWN, Gtk::AccelKey('d', Gdk::CONTROL_MASK)),
 	miPreferences(Gtk::Stock::PREFERENCES), miReload(Gtk::Stock::REFRESH, Gtk::AccelKey("F5")), miSave(Gtk::Stock::SAVE),
 	miAbout(Gtk::Stock::ABOUT), miStartRootSelector(Gtk::Stock::OPEN),
-	completelyLoaded(false),
 	lvScriptPreview(1), lblScriptSelection(gettext("Script to insert:"), Gtk::ALIGN_LEFT), lblScriptPreview(gettext("Preview:"),Gtk::ALIGN_LEFT),
-	thread_active(false), quit_requested(false), modificationsUnsaved(false)
+	thread_active(false), quit_requested(false), modificationsUnsaved(false), lock_state(~0)
 {
 	disp_update_load.connect(sigc::mem_fun(this, &GrubConfUIGtk::update));
 	disp_update_save.connect(sigc::mem_fun(this, &GrubConfUIGtk::update_save));
@@ -200,25 +199,34 @@ void GrubConfUIGtk::setEventListener(EventListenerView_iface& eventListener) {
 	this->eventListener = &eventListener;
 }
 
-void GrubConfUIGtk::event_mode_changed(){
-	if (this->grubConfig->env.burgMode)
+void GrubConfUIGtk::setIsBurgMode(bool isBurgMode){
+	if (isBurgMode)
 		win.set_title("Grub Customizer (" + Glib::ustring(gettext("BURG Mode")) + ")");
 	else
 		win.set_title("Grub Customizer");
 }
 
+//PRESENTER
+void GrubConfUIGtk::event_mode_changed(){
+	this->setIsBurgMode(this->grubConfig->env.burgMode);
+}
+
+//REMOVE
 void GrubConfUIGtk::event_load_progress_changed(){
 	disp_update_load();
 }
+
+//REMOVE
 void GrubConfUIGtk::event_save_progress_changed(){
 	disp_update_save();
 }
 
+//REMOVE
 void GrubConfUIGtk::event_thread_died(){
 	disp_thread_died();
 }
 
-
+//RENAME TO requestForRootSelection
 bool GrubConfUIGtk::bootloader_not_found_requestForRootSelection(){
 	Gtk::MessageDialog dlg(gettext("No Bootloader found"), false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO);
 	dlg.set_secondary_text(gettext("Do you want to select another root partition?"));
@@ -235,6 +243,7 @@ bool GrubConfUIGtk::requestForBurgMode(){
 	return result == Gtk::RESPONSE_YES;
 }
 
+//TODO: Partition chooser should be a member!
 std::string GrubConfUIGtk::show_root_selector(){
 	PartitionChooser setupDialog(GrubEnv::isLiveCD());
 	setupDialog.readPartitionInfo();
@@ -247,92 +256,122 @@ std::string GrubConfUIGtk::show_root_selector(){
 }
 
 
-
 void GrubConfUIGtk::run(){
 	win.show_all();
 	Gtk::Main::run(win);
 }
 
+void GrubConfUIGtk::setProgress(double progress){
+	progressBar.set_fraction(progress);
+	progressBar.show();
+}
+
+void GrubConfUIGtk::progress_pulse(){
+	progressBar.pulse();
+	progressBar.show();
+}
+
+void GrubConfUIGtk::hideProgressBar(){
+	progressBar.hide();
+}
+
+void GrubConfUIGtk::setStatusText(Glib::ustring const& new_status_text){
+	statusbar.push(new_status_text);
+}
+
+void GrubConfUIGtk::appendScript(Glib::ustring const& name, bool is_active, void* proxyPtr){
+	Gtk::TreeIter row = tvConfList.refTreeStore->append();
+	(*row)[tvConfList.treeModel.active] = is_active;
+
+	//if the config is loading, only compare the files… else call the more complex proxyRequired method
+	(*row)[tvConfList.treeModel.name] = name;
+	
+	(*row)[tvConfList.treeModel.relatedRule] = NULL;
+	(*row)[tvConfList.treeModel.relatedProxy] = (Proxy*)proxyPtr;
+	(*row)[tvConfList.treeModel.is_other_entries_marker] = false;
+	(*row)[tvConfList.treeModel.is_editable] = false;
+}
+
+void GrubConfUIGtk::appendEntry(Glib::ustring const& name, bool is_active, void* entryPtr, bool editable){
+	Gtk::TreeIter lastScriptIter = *tvConfList.refTreeStore->children().rbegin();
+	
+	Gtk::TreeIter entryRow = tvConfList.refTreeStore->append(lastScriptIter->children());
+	(*entryRow)[tvConfList.treeModel.active] = is_active;
+	(*entryRow)[tvConfList.treeModel.name] = name;
+	(*entryRow)[tvConfList.treeModel.relatedRule] = (Rule*)entryPtr;
+	(*entryRow)[tvConfList.treeModel.relatedProxy] = (Proxy*)(*lastScriptIter)[tvConfList.treeModel.relatedProxy];
+	(*entryRow)[tvConfList.treeModel.is_editable] = editable;
+	
+	tvConfList.expand_all();
+}
+
+//TODO: MOVE TO PRESENTER
 void GrubConfUIGtk::update(){
-	completelyLoaded = false;
 	double progress = grubConfig->getProgress();
 	if (progress != 1){
-		progressBar.set_fraction(progress);
-		progressBar.show();
-		statusbar.push(gettext("loading configuration…"));
+		this->setProgress(progress);
+		this->setStatusText(gettext("loading configuration…"));
 	}
 	else {
-		thread_active = false;
-		if (quit_requested)
+		thread_active = false; //deprecated
+		if (quit_requested) //deprecated
 			win.hide();
-		progressBar.hide();
-		statusbar.push("");
-		
-		this->setLockState(0);
+		this->hideProgressBar();
+		this->setStatusText("");
 	}
 	
 	//if grubConfig is locked, it will be cancelled as early as possible
-	if (!grubConfig->read_lock){
-		grubConfig->write_lock = true;
+	if (grubConfig->lock_if_free()){
 		tvConfList.refTreeStore->clear();
 	
-		for (std::list<Proxy>::iterator iter = grubConfig->proxies.begin(); !grubConfig->read_lock && iter != grubConfig->proxies.end(); iter++){
-			Gtk::TreeIter row = tvConfList.refTreeStore->append();
-			(*row)[tvConfList.treeModel.active] = iter->isExecutable();
-		
-			//if the config is loading, only compare the files… else call the more complex proxyRequired method
-			(*row)[tvConfList.treeModel.name] = iter->getScriptName() + (grubConfig && iter->dataSource && (progress != 1 && iter->dataSource->fileName != iter->fileName || progress == 1 && grubConfig->proxies.proxyRequired(*iter->dataSource)) ? gettext(" (custom)") : "");
-			
-			(*row)[tvConfList.treeModel.relatedRule] = NULL;
-			(*row)[tvConfList.treeModel.relatedProxy] = &(*iter);
-			(*row)[tvConfList.treeModel.is_other_entries_marker] = false;
-			(*row)[tvConfList.treeModel.is_editable] = false;
-			int i = 0;
-			for (std::list<Rule>::iterator ruleIter = iter->rules.begin(); !grubConfig->read_lock && ruleIter != iter->rules.end(); ruleIter++){
+		for (std::list<Proxy>::iterator iter = grubConfig->proxies.begin(); iter != grubConfig->proxies.end(); iter++){
+			Glib::ustring name = iter->getScriptName() + (grubConfig && iter->dataSource && (progress != 1 && iter->dataSource->fileName != iter->fileName || progress == 1 && grubConfig->proxies.proxyRequired(*iter->dataSource)) ? gettext(" (custom)") : "");
+			this->appendScript(name, iter->isExecutable(), &(*iter));
+			for (std::list<Rule>::iterator ruleIter = iter->rules.begin(); ruleIter != iter->rules.end(); ruleIter++){
 				bool is_other_entries_ph = ruleIter->type == Rule::OTHER_ENTRIES_PLACEHOLDER;
 				if (ruleIter->dataSource || is_other_entries_ph){
-					Gtk::TreeIter entryRow = tvConfList.refTreeStore->append(row->children());
-					(*entryRow)[tvConfList.treeModel.active] = ruleIter->isVisible;
-					(*entryRow)[tvConfList.treeModel.name] = is_other_entries_ph ? gettext("(new Entries)") : ruleIter->outputName;
-					(*entryRow)[tvConfList.treeModel.relatedRule] = &(*ruleIter);
-					(*entryRow)[tvConfList.treeModel.relatedProxy] = &(*iter);
-					(*entryRow)[tvConfList.treeModel.is_editable] = !is_other_entries_ph;
+					Glib::ustring name = is_other_entries_ph ? gettext("(new Entries)") : ruleIter->outputName;
+					this->appendEntry(name, ruleIter->isVisible, &(*ruleIter), !is_other_entries_ph);
 				}
 			}
 		}
-		grubConfig->write_lock = false;
-		tvConfList.expand_all();
+		grubConfig->unlock();
 	}
 
 	if (progress == 1){
-		completelyLoaded = true;
+		this->setLockState(0);
 	}
 }
 
+void GrubConfUIGtk::showProxyNotFoundMessage(){
+	Gtk::MessageDialog msg(gettext("Proxy binary not found!"), false, Gtk::MESSAGE_WARNING);
+	msg.set_secondary_text(gettext("You will see all entries (uncustomized) when you run grub. This error accurs (in most cases), when you didn't install grub gustomizer currectly."));
+	msg.run();
+}
+
+//TODO: MOVE TO PRESENTER
 void GrubConfUIGtk::update_save(){
-	progressBar.pulse();
+	this->progress_pulse();
 	if (grubConfig->getProgress() == 1){
 		if (grubConfig->error_proxy_not_found){
-			Gtk::MessageDialog msg(gettext("Proxy binary not found!"), false, Gtk::MESSAGE_WARNING);
-			msg.set_secondary_text(gettext("You will see all entries (uncustomized) when you run grub. This error accurs (in most cases), when you didn't install grub gustomizer currectly."));
-			msg.run();
+			this->showProxyNotFoundMessage();
 			grubConfig->error_proxy_not_found = false;
 		}
 		thread_active = false;
-		if (quit_requested)
+		if (quit_requested) //deprecated
 			win.hide();
 		
 		this->setLockState(0);
 		
-		progressBar.hide();
-		statusbar.push(gettext("Configuration has been saved"));
+		this->hideProgressBar();
+		this->setStatusText(gettext("Configuration has been saved"));
 	}
 	else {
-		statusbar.push(gettext("updating configuration"));
-		progressBar.show();
+		this->setStatusText(gettext("updating configuration"));
 	}
 }
 
+//TODO: rename
 void GrubConfUIGtk::thread_died_handler(){
 	Gtk::MessageDialog(grubConfig->getMessage(), false, Gtk::MESSAGE_ERROR).run();
 	win.hide(); //exit
@@ -377,6 +416,8 @@ void GrubConfUIGtk::setLockState(int state){
 	if ((state & 1) == 0) {
 		this->updateButtonsState();
 	}
+	
+	this->lock_state = state;
 }
 
 	
@@ -389,8 +430,9 @@ void GrubConfUIGtk::signal_reload_click(){
 	eventListener->reload_request();
 }
 
+//TODO split
 void GrubConfUIGtk::signal_row_changed(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter){
-	if (completelyLoaded){
+	if (this->lock_state == 0){
 		if (iter->parent()){ //if it's a rule row (no proxy)
 			Glib::ustring oldName = ((Rule*)(*iter)[tvConfList.treeModel.relatedRule])->outputName;
 			Glib::ustring newName = (*iter)[tvConfList.treeModel.name];
@@ -407,13 +449,14 @@ void GrubConfUIGtk::signal_row_changed(const Gtk::TreeModel::Path& path, const G
 			
 			Proxy* relatedProxy = ((Proxy*)(*iter)[tvConfList.treeModel.relatedProxy]);
 			
+			//adding (custom) if this script is modified
 			if (((Proxy*)(*iter->parent())[tvConfList.treeModel.relatedProxy])->dataSource){ //checking the Datasource before Accessing it
-				completelyLoaded = false;
+				this->setLockState(~0);
 				(*iter->parent())[tvConfList.treeModel.name] = ((Proxy*)(*iter->parent())[tvConfList.treeModel.relatedProxy])->dataSource->name;
 				if (grubConfig->proxies.proxyRequired((*((Proxy*)(*iter->parent())[tvConfList.treeModel.relatedProxy])->dataSource))){
-					(*iter->parent())[tvConfList.treeModel.name] = (*iter->parent())[tvConfList.treeModel.name] + " (angepasst)";
+					(*iter->parent())[tvConfList.treeModel.name] = (*iter->parent())[tvConfList.treeModel.name] + gettext(" (custom)");
 				}
-				completelyLoaded = true;
+				this->setLockState(0);
 			}
 		}
 		else {
@@ -484,7 +527,7 @@ void GrubConfUIGtk::update_remove_button(){
 }
 
 void GrubConfUIGtk::signal_treeview_selection_changed(){
-	if (completelyLoaded){
+	if (this->lock_state == 0){
 		update_move_buttons();
 		update_remove_button();
 		
@@ -532,9 +575,9 @@ void GrubConfUIGtk::signal_scriptAddDlg_response(int response_id){
 		grubConfig->proxies.push_back(Proxy(*script));
 		grubConfig->renumerate();
 		
-		completelyLoaded = false;
+		this->setLockState(~0);
 		update();
-		completelyLoaded = true;
+		this->setLockState(0);
 		
 		modificationsUnsaved = true;
 	}
@@ -545,9 +588,9 @@ void GrubConfUIGtk::signal_remove_click(){
 	Proxy* proxyPointer = (Proxy*)(*(tvConfList.get_selection()->get_selected()))[tvConfList.treeModel.relatedProxy];
 	this->grubConfig->proxies.deleteProxy(proxyPointer);
 	
-	completelyLoaded = false;
+	this->setLockState(~0);
 	update();
-	completelyLoaded = true;
+	this->setLockState(0);
 	
 	update_remove_button();
 	modificationsUnsaved = true;

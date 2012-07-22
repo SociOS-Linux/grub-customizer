@@ -79,6 +79,11 @@ void GtkClient::save(){
 	this->listCfgDlg->modificationsUnsaved = false; //deprecated
 
 	this->listCfgDlg->setLockState(5);
+	
+	Glib::Thread::create(sigc::mem_fun(this, &GtkClient::save_thread), false);
+}
+
+void GtkClient::save_thread(){
 	this->settings->save();
 	this->grublistCfg->save();
 }

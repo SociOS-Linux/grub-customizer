@@ -1,11 +1,10 @@
 #include "grublistCfg.h"
 
-//TODO: auskommentierte this->settings ersetzen
-
 GrublistCfg::GrublistCfg(GrubEnv& env)
- : read_lock(false), write_lock(false), connectedUI(NULL), error_proxy_not_found(false),
+ : error_proxy_not_found(false),
  progress(0), config_has_been_different_on_startup_but_unsaved(false),
- cancelThreadsRequested(false), verbose(true), env(env), eventListener(NULL)
+ cancelThreadsRequested(false), verbose(true), env(env), eventListener(NULL),
+ locked(false)
 {}
 
 void GrublistCfg::setEventListener(EventListenerModel_iface& eventListener) {
@@ -25,6 +24,22 @@ bool GrublistCfg::umountSwitchedRootPartition(){
 		return true;
 }
 
+
+void GrublistCfg::lock(){
+	while (this->locked) usleep(1000); //wait until another thread is has unlocked this object
+	this->locked = true;
+}
+bool GrublistCfg::lock_if_free(){
+	if (this->locked)
+		return false;
+	else {
+		this->locked = true;
+		return true;
+	}
+}
+void GrublistCfg::unlock(){
+	this->locked = false;
+}
 
 bool GrublistCfg::createScriptForwarder(std::string const& scriptName) const {
 	//replace: $cfg_dir/proxifiedScripts/ -> $cfg_dir/LS_
@@ -170,8 +185,7 @@ void GrublistCfg::load(bool keepConfig){
 	
 	
 	//restore old configuration
-	while (write_lock) usleep(1000); //wait until the other thread is ready
-	this->read_lock = true;
+	this->lock();
 	for (Repository::iterator iter = this->repository.begin(); iter != this->repository.end(); iter++){
 		if (iter->isInScriptDir(env.cfg_dir)){
 			//removeScriptForwarder & reset proxy permissions
@@ -184,7 +198,7 @@ void GrublistCfg::load(bool keepConfig){
 			chmod((*piter)->fileName.c_str(), (*piter)->permissions);
 		}
 	}
-	this->read_lock = false;
+	this->unlock();
 	
 	//compare config
 	if (!keepConfig){
@@ -211,8 +225,7 @@ void GrublistCfg::readGeneratedFile(FILE* source, bool createScriptIfNotFound){
 	int i = 0;
 	while (!cancelThreadsRequested && (row = GrubConfRow(source))){
 		if (row.text.substr(0,10) == ("### BEGIN ") && row.text.substr(row.text.length()-4,4) == " ###"){
-			while (write_lock) usleep(1000); //wait until the other thread is ready
-			this->read_lock = true;
+			this->lock();
 			if (script)
 				this->proxies.sync_all(true, true, script);
 			std::string scriptName = row.text.substr(10, row.text.length()-14);
@@ -225,31 +238,26 @@ void GrublistCfg::readGeneratedFile(FILE* source, bool createScriptIfNotFound){
 			if (createScriptIfNotFound){ //for the compare-configuration
 				this->proxies.push_back(Proxy(*script));
 			}
-			this->read_lock = false;
+			this->unlock();
 			if (script){
 				this->send_new_load_progress(0.1 + (0.7 / this->repository.size() * ++i));
 			}
 		}
 		else if (script != NULL && row.text.substr(0, 10) == "menuentry ") {
-			while (write_lock) usleep(1000); //wait until the other thread is ready
-			this->read_lock = true;
+			this->lock();
 			script->push_back(Entry(source, row));
 			this->proxies.sync_all(false, false, script);
-			this->read_lock = false;
+			this->unlock();
 			this->send_new_load_progress(0.1 + (0.7 / this->repository.size() * i));
 		}
 	}
-	while (write_lock) usleep(1000); //wait until the other thread is ready
-	this->read_lock = true;
+	this->lock();
 	if (script)
 		this->proxies.sync_all(true, true, script);
-	this->read_lock = false;
+	this->unlock();
 }
 
 void GrublistCfg::save(){
-	//write the burg/grub settings file
-	//this->settings.save(env.cfg_dir_prefix);
-
 	send_new_save_progress(0);
 	std::map<std::string, int> samename_counter;
 	proxies.deleteAllProxyscriptFiles();  //delete all proxies to get a clean file system
@@ -303,7 +311,7 @@ void GrublistCfg::save(){
 		if (proxifiedScriptCount == 0)
 			rmdir((this->env.cfg_dir+"/proxifiedScripts").c_str());
 	}
-	
+
 	//add or remove proxy binary
 	
 	FILE* proxyBin = fopen((this->env.cfg_dir+"/bin/grubcfg_proxy").c_str(), "r");
@@ -322,7 +330,7 @@ void GrublistCfg::save(){
 			proxy_is_dummy = true;
 		fclose(proxyBin);
 	}
-	
+
 	if (proxyCount != 0 && (!proxybin_exists || proxy_is_dummy)){
 		//copy proxy
 		int bin_mk_success = mkdir((this->env.cfg_dir+"/bin").c_str(), 0755);
@@ -417,9 +425,6 @@ bool GrublistCfg::compare(GrublistCfg const& other) const {
 	return true;
 }
 
-void GrublistCfg::connectUI(GrubConfUI& ui){
-	connectedUI = &ui;
-}
 
 void GrublistCfg::send_new_load_progress(double newProgress){
 	if (this->eventListener != NULL){

@@ -37,6 +37,7 @@ public:
 	void showSettingsDlg();
 	void load(bool keepConfig = false);
 	void save();
+	void save_thread();
 	GtkClient(GrubEnv& env);
 	
 	void run();

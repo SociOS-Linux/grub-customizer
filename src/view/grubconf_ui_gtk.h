@@ -66,8 +66,8 @@ class GrubConfUIGtk : public GrubConfUI {
 	Gtk::Menu subFile, subEdit, subView, subHelp;
 	Gtk::AboutDialog dlgAbout;
 	
-	bool completelyLoaded;
 	bool quit_requested;
+	bool lock_state;
 	public: bool modificationsUnsaved, thread_active; //TODO: move to presenter!
 	private:
 	//Script/Proxy-add-Window
@@ -95,6 +95,8 @@ public:
 	std::string show_root_selector();
 	bool requestForBurgMode();
 	
+	void setIsBurgMode(bool isBurgMode);
+	
 	void reload(bool keepConfig);
 	void signal_show_root_selector();
 	void signal_row_changed(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter);
@@ -117,6 +119,14 @@ public:
 	void saveConfig();
 	void setLockState(int state);
 	void updateButtonsState();
+	
+	void setProgress(double progress);
+	void progress_pulse();
+	void hideProgressBar();
+	void setStatusText(Glib::ustring const& new_status_text);
+	void appendScript(Glib::ustring const& name, bool is_active, void* proxyPtr);
+	void appendEntry(Glib::ustring const& name, bool is_active, void* entryPtr, bool editable);
+	void showProxyNotFoundMessage();
 };
 
 #endif

@@ -14,7 +14,7 @@ void EventListenerView::reload_request(){
 }
 
 void EventListenerView::save_request(){
-	Glib::Thread::create(sigc::mem_fun(&presenter, &GtkClient::save), false);
+	presenter.save();
 }
 
 void EventListenerView::rootSelectorCompleted(){

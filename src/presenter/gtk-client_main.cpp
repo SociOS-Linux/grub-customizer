@@ -30,8 +30,6 @@ int main(int argc, char** argv){
 	presenter.setSettingsBuffer(*settingsOnDisk);
 	presenter.setInstaller(*installer);
 	presenter.setInstallDlg(*installDlg);
-
-	listcfg->connectUI(*listCfgView);
 	
 	EventListenerView evt_view(presenter);
 	listCfgView->setEventListener(evt_view);
