@@ -26,6 +26,7 @@
 #include "../view/scriptAddDlgGtk.h"
 #include "../view/settingsDlgGtk.h"
 #include "glibMutex.h"
+#include "glibThreadController.h"
 
 int main(int argc, char** argv){
 	setlocale( LC_ALL, "");
@@ -55,6 +56,7 @@ int main(int argc, char** argv){
 	AboutDialog* aboutDialog = new AboutDialogGtk;
 	GlibMutex* listCfgMutex1 = new GlibMutex;
 	GlibMutex* listCfgMutex2 = new GlibMutex;
+	GlibThreadController* threadC = new GlibThreadController(presenter);
 
 	
 	presenter.setListCfg(*listcfg);
@@ -71,7 +73,8 @@ int main(int argc, char** argv){
 	presenter.setDeviceDataList(*deviceDataList);
 	presenter.setMountTable(*mountTable);
 	presenter.setAboutDialog(*aboutDialog);
-	
+	presenter.setThreadController(*threadC);
+
 	EventListener evt(presenter);
 	listCfgView->setEventListener(evt);
 	installDlg->setEventListener(evt);

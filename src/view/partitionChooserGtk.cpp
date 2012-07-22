@@ -102,7 +102,7 @@ Gtk::Assistant& PartitionChooserGtk::getWindow(){
 	return *this->assistant;
 }
 
-void PartitionChooserGtk::addPartitionSelectorItem(Glib::ustring const& device, Glib::ustring const& type, Glib::ustring const& label){
+void PartitionChooserGtk::addPartitionSelectorItem(std::string const& device, std::string const& type, std::string const& label){
 	guint index = lvRootPartitionSelection.append_text(device);
 	lvRootPartitionSelection.set_text(index, 1, type);
 	lvRootPartitionSelection.set_text(index, 2, label);
@@ -210,7 +210,7 @@ Gtk::CheckButton& PartitionChooserGtk::getSubmountpointCheckboxByLabel(Glib::ust
 	throw ERR_CHKBUTTON_NOT_FOUND;
 }
 
-void PartitionChooserGtk::setSubmountpointSelectionState(Glib::ustring const& submountpoint, bool new_isSelected){
+void PartitionChooserGtk::setSubmountpointSelectionState(std::string const& submountpoint, bool new_isSelected){
 	Gtk::CheckButton& target = this->getSubmountpointCheckboxByLabel(submountpoint);
 	submountpoint_toggle_run_event = false;
 	target.set_active(new_isSelected);

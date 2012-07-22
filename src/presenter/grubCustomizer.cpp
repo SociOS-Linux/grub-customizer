@@ -28,11 +28,6 @@ GrubCustomizer::GrubCustomizer(GrubEnv& env)
 	 modificationsUnsaved(false), quit_requested(false), activeThreadCount(0),
 	 is_loading(false)
 {
-	disp_sync_load.connect(sigc::mem_fun(this, &GrubCustomizer::syncListView_load));
-	disp_sync_save.connect(sigc::mem_fun(this, &GrubCustomizer::syncListView_save));
-	disp_thread_died.connect(sigc::mem_fun(this, &GrubCustomizer::die));
-	disp_settings_loaded.connect(sigc::mem_fun(this, &GrubCustomizer::activateSettingsBtn));
-	disp_updateSettingsDlgResolutionList.connect(sigc::mem_fun(this, &GrubCustomizer::updateSettingsDlgResolutionList_dispatched));
 }
 
 
@@ -89,6 +84,21 @@ void GrubCustomizer::setAboutDialog(AboutDialog& aboutDialog){
 	this->aboutDialog = &aboutDialog;
 }
 
+void GrubCustomizer::setThreadController(ThreadController& threadController) {
+	this->threadController = &threadController;
+}
+
+ThreadController& GrubCustomizer::getThreadController() {
+	if (this->threadController == NULL) {
+		throw INCOMPLETE;
+	}
+	return *this->threadController;
+}
+
+FbResolutionsGetter& GrubCustomizer::getFbResolutionsGetter() {
+	return *this->fbResolutionsGetter;
+}
+
 void GrubCustomizer::updateSettingsDlg(){
 	std::list<EntryTitleListItem> entryTitles = this->grublistCfg->proxies.generateEntryTitleList();
 	this->settingsDlg->clearDefaultEntryChooser();
@@ -131,7 +141,7 @@ void GrubCustomizer::init(){
 
 
 	//loading the framebuffer resolutions in background…
-	Glib::Thread::create(sigc::mem_fun(this->fbResolutionsGetter, &FbResolutionsGetter::load), false);
+	this->getThreadController().startFramebufferResolutionLoader();
 
 	//dir_prefix may be set by partition chooser (if not, the root partition is used)
 
@@ -162,7 +172,7 @@ void GrubCustomizer::init(GrubEnv::Mode mode){
 	if (this->grublistCfg->cfgDirIsClean() == false)
 		this->grublistCfg->cleanupCfgDir();
 
-	Glib::Thread::create(sigc::bind(sigc::mem_fun(this, &GrubCustomizer::load), false), false);
+	this->getThreadController().startLoadThread(false);
 }
 
 void GrubCustomizer::hidePartitionChooserQuestion(){
@@ -177,7 +187,7 @@ void GrubCustomizer::showPartitionChooser(){
 
 void GrubCustomizer::handleCancelResponse(){
 	if (!listCfgDlg->isVisible())
-		Gtk::Main::quit();
+		this->getThreadController().stopApplication();
 }
 
 void GrubCustomizer::showSettingsDlg(){
@@ -187,7 +197,7 @@ void GrubCustomizer::showSettingsDlg(){
 void GrubCustomizer::reload(){
 	this->syncSettings();
 	this->listCfgDlg->setLockState(1|4|8);
-	Glib::Thread::create(sigc::bind(sigc::mem_fun(this, &GrubCustomizer::load), true), false);
+	this->getThreadController().startLoadThread(true);
 }
 
 //threaded!
@@ -201,7 +211,7 @@ void GrubCustomizer::load(bool preserveConfig){
 			this->savedListCfg->reset();
 			//load the burg/grub settings file
 			this->settings->load();
-			disp_settings_loaded();
+			this->getThreadController().enableSettings();
 		}
 		else {
 			this->settingsOnDisk->load();
@@ -213,7 +223,7 @@ void GrubCustomizer::load(bool preserveConfig){
 		}
 		catch (GrublistCfg::Exception e){
 			this->thrownException = e;
-			this->disp_thread_died();
+			this->getThreadController().showThreadDiedError();
 			return; //cancel
 		}
 	
@@ -238,7 +248,7 @@ void GrubCustomizer::save(){
 	this->listCfgDlg->setLockState(1|4|8);
 
 	this->activeThreadCount++; //not in save_thead() to be faster set
-	Glib::Thread::create(sigc::mem_fun(this, &GrubCustomizer::save_thread), false);
+	this->getThreadController().startSaveThread();
 }
 
 void GrubCustomizer::save_thread(){
@@ -356,7 +366,7 @@ void GrubCustomizer::applyPartitionChooser(){
 	this->init();
 }
 
-void GrubCustomizer::mountSubmountpoint(Glib::ustring const& submountpoint){
+void GrubCustomizer::mountSubmountpoint(std::string const& submountpoint){
 	try {
 		this->mountTable->getEntryRefByMountpoint(PARTCHOOSER_MOUNTPOINT + submountpoint).mount();
 	}
@@ -368,7 +378,7 @@ void GrubCustomizer::mountSubmountpoint(Glib::ustring const& submountpoint){
 	}
 }
 
-void GrubCustomizer::umountSubmountpoint(Glib::ustring const& submountpoint){
+void GrubCustomizer::umountSubmountpoint(std::string const& submountpoint){
 	try {
 		this->mountTable->getEntryRefByMountpoint(PARTCHOOSER_MOUNTPOINT + submountpoint).umount();
 	}
@@ -378,18 +388,6 @@ void GrubCustomizer::umountSubmountpoint(Glib::ustring const& submountpoint){
 		}
 		this->partitionChooser->setSubmountpointSelectionState(submountpoint, true); //reset checkbox
 	}
-}
-
-void GrubCustomizer::syncEntryList(){
-	this->disp_sync_load();
-}
-
-void GrubCustomizer::updateSaveProgress(){
-	this->disp_sync_save();
-}
-
-void GrubCustomizer::showErrorThreadDied(){
-	this->disp_thread_died();
 }
 
 void GrubCustomizer::showInstallDialog(){
@@ -451,7 +449,7 @@ void GrubCustomizer::removeProxy(Proxy* p){
 void GrubCustomizer::_rAppendRule(Rule& rule, Rule* parentRule){
 	bool is_other_entries_ph = rule.type == Rule::OTHER_ENTRIES_PLACEHOLDER;
 	if (rule.dataSource || is_other_entries_ph){
-		Glib::ustring name;
+		std::string name;
 		if (is_other_entries_ph) {
 			try {
 				if (rule.dataSource == NULL) {
@@ -460,12 +458,12 @@ void GrubCustomizer::_rAppendRule(Rule& rule, Rule* parentRule){
 				Proxy* proxy = this->grublistCfg->proxies.getProxyByRule(&rule);
 				Rule* parentRule = proxy->getRuleByEntry(*rule.dataSource, proxy->rules);
 				if (parentRule) {
-					name = Glib::ustring::compose(gettext("(new Entries of %1)"), parentRule->outputName);
+					name = this->listCfgDlg->createNewEntriesPlaceholderString(parentRule->outputName);
 				} else {
 					throw 1;
 				}
 			} catch (...) {
-				name = gettext("(new Entries)");
+				name = this->listCfgDlg->createNewEntriesPlaceholderString();
 			}
 		} else {
 			name = rule.outputName;
@@ -498,7 +496,7 @@ void GrubCustomizer::syncListView_load(){
 		this->listCfgDlg->clear();
 	
 		for (std::list<Proxy>::iterator iter = this->grublistCfg->proxies.begin(); iter != this->grublistCfg->proxies.end(); iter++){
-			Glib::ustring name = iter->getScriptName() + (this->grublistCfg && iter->dataSource && (progress != 1 && iter->dataSource->fileName != iter->fileName || progress == 1 && grublistCfg->proxies.proxyRequired(*iter->dataSource)) ? gettext(" (custom)") : "");
+			std::string name = iter->getScriptName() + (this->grublistCfg && iter->dataSource && (progress != 1 && iter->dataSource->fileName != iter->fileName || progress == 1 && grublistCfg->proxies.proxyRequired(*iter->dataSource)) ? gettext(" (custom)") : "");
 			this->listCfgDlg->appendScript(name, iter->isExecutable(), &(*iter));
 			for (std::list<Rule>::iterator ruleIter = iter->rules.begin(); ruleIter != iter->rules.end(); ruleIter++){
 				this->_rAppendRule(*ruleIter);
@@ -558,7 +556,7 @@ void GrubCustomizer::quit(bool force){
 	if (force){
 		if (this->mountTable->getEntryByMountpoint(PARTCHOOSER_MOUNTPOINT))
 			this->mountTable->umountAll(PARTCHOOSER_MOUNTPOINT);
-		Gtk::Main::quit();
+		this->getThreadController().stopApplication();
 	}
 	else {
 		int dlgResponse = this->listCfgDlg->showExitConfirmDialog(this->config_has_been_different_on_startup_but_unsaved*2 + this->modificationsUnsaved);
@@ -594,8 +592,8 @@ void GrubCustomizer::syncRuleState(Rule* entry){
 }
 
 void GrubCustomizer::syncRuleName(Rule* entry){
-	Glib::ustring oldName = entry->outputName;
-	Glib::ustring newName = this->listCfgDlg->getRuleName(entry);
+	std::string oldName = entry->outputName;
+	std::string newName = this->listCfgDlg->getRuleName(entry);
 	if (newName == ""){
 		this->listCfgDlg->showErrorMessage(gettext("Name the Entry"));
 		this->listCfgDlg->setRuleName(entry, oldName);
@@ -610,7 +608,7 @@ void GrubCustomizer::syncRuleName(Rule* entry){
 void GrubCustomizer::updateScriptEntry(Proxy* proxy){
 	//adding (custom) if this script is modified
 	if (proxy->dataSource){ //checking the Datasource before Accessing it
-		Glib::ustring name = proxy->dataSource->name;
+		std::string name = proxy->dataSource->name;
 		this->listCfgDlg->setProxyName(proxy, name, false);
 		if (this->grublistCfg->proxies.proxyRequired(*proxy->dataSource)){
 			this->listCfgDlg->setProxyName(proxy, name, true);
@@ -652,10 +650,6 @@ void GrubCustomizer::showRuleInfo(Rule* rule){
 
 void GrubCustomizer::showProxyInfo(Proxy* proxy){
 	this->listCfgDlg->setStatusText("");
-}
-
-void GrubCustomizer::updateSettingsDlgResolutionList(){
-	this->disp_updateSettingsDlgResolutionList();
 }
 
 void GrubCustomizer::updateSettingsDlgResolutionList_dispatched(){
@@ -704,8 +698,8 @@ void GrubCustomizer::syncSettings(){
 	this->settingsDlg->setResolutionCheckboxState(this->settings->isActive("GRUB_GFXMODE", true));
 	this->settingsDlg->setResolution(this->settings->getValue("GRUB_GFXMODE"));
 
-	Glib::ustring nColor = this->settings->getValue("GRUB_COLOR_NORMAL");
-	Glib::ustring hColor = this->settings->getValue("GRUB_COLOR_HIGHLIGHT");
+	std::string nColor = this->settings->getValue("GRUB_COLOR_NORMAL");
+	std::string hColor = this->settings->getValue("GRUB_COLOR_HIGHLIGHT");
 	if (nColor != ""){
 		this->settingsDlg->getColorChooser(SettingsDlg::COLOR_CHOOSER_DEFAULT_FONT).selectColor(nColor.substr(0, nColor.find('/')));
 		this->settingsDlg->getColorChooser(SettingsDlg::COLOR_CHOOSER_DEFAULT_BACKGROUND).selectColor(nColor.substr(nColor.find('/')+1));
@@ -840,16 +834,16 @@ void GrubCustomizer::removeBackgroundImage(){
 void GrubCustomizer::hideSettingsDialog(){
 	this->settingsDlg->hide();
 	if (this->settings->reloadRequired()){
-		Glib::Thread::create(sigc::bind(sigc::mem_fun(this, &GrubCustomizer::load), true), false);
+		this->getThreadController().startLoadThread(true);
 	}
 }
 
 void GrubCustomizer::updateTimeoutSetting(){
 	if (this->settingsDlg->getShowMenuCheckboxState()){
-		this->settings->setValue("GRUB_TIMEOUT", Glib::ustring::format(this->settingsDlg->getTimeoutValue()));
+		this->settings->setValue("GRUB_TIMEOUT", this->settingsDlg->getTimeoutValueString());
 	}
 	else {
-		this->settings->setValue("GRUB_HIDDEN_TIMEOUT", Glib::ustring::format(this->settingsDlg->getTimeoutValue()));
+		this->settings->setValue("GRUB_HIDDEN_TIMEOUT", this->settingsDlg->getTimeoutValueString());
 	}
 	this->syncSettings();
 	this->modificationsUnsaved = true;

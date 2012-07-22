@@ -62,21 +62,21 @@ public:
 	//adds an item to the end of the resolution chooser
 	virtual void addResolution(std::string const& resolution)=0;
 	//gets the name of the default menu entry
-	virtual Glib::ustring getSelectedDefaultGrubValue()=0;
+	virtual std::string getSelectedDefaultGrubValue()=0;
 	//adds an option the the generic setting list
-	virtual void addCustomOption(bool isActive, Glib::ustring const& name, Glib::ustring const& value)=0;
+	virtual void addCustomOption(bool isActive, std::string const& name, std::string const& value)=0;
 	//select the specified custom option entry
 	virtual void selectCustomOption(std::string const& name)=0;
 	//removes all generic setting rows
 	virtual void removeAllSettingRows()=0;
 	//reads the given generic option
-	virtual CustomOption getCustomOption(Glib::ustring const& name)=0;
+	virtual CustomOption getCustomOption(std::string const& name)=0;
 	//sets which type of default entry to use
 	virtual void setActiveDefEntryOption(DefEntryType option)=0;
 	//determines which type of default entry should be used
 	virtual DefEntryType getActiveDefEntryOption()=0;
 	//sets the default entry
-	virtual void setDefEntry(Glib::ustring const& defEntry)=0;
+	virtual void setDefEntry(std::string const& defEntry)=0;
 	//sets whether the show menu checkbox should be active or not
 	virtual void setShowMenuCheckboxState(bool isActive)=0;
 	//determines whether the show menu checkbox is active or not
@@ -91,10 +91,12 @@ public:
 	virtual void setTimeoutValue(int value)=0;
 	//reads the grub menu timeout
 	virtual int getTimeoutValue()=0;
+	//reads the grub menu timeout as string
+	virtual std::string getTimeoutValueString()=0;
 	//sets kernel params
-	virtual void setKernelParams(Glib::ustring const& params)=0;
+	virtual void setKernelParams(std::string const& params)=0;
 	//reads kernel params
-	virtual Glib::ustring getKernelParams()=0;
+	virtual std::string getKernelParams()=0;
 	//sets whether the recovery checkbox should be active or not
 	virtual void setRecoveryCheckboxState(bool isActive)=0;
 	//determines whether the recovery checkbox is active or not
@@ -104,13 +106,13 @@ public:
 	//determines whether the resolution is active or not
 	virtual bool getResolutionCheckboxState()=0;
 	//sets the selected resolution
-	virtual void setResolution(Glib::ustring const& resolution)=0;
+	virtual void setResolution(std::string const& resolution)=0;
 	//reads the selected resolution
-	virtual Glib::ustring getResolution()=0;
+	virtual std::string getResolution()=0;
 	//sets the background image, remove it, if empty string is given
-	virtual void setBackgroundImagePreviewPath(Glib::ustring const& menuPicturePath, bool isInGrubDir)=0;
+	virtual void setBackgroundImagePreviewPath(std::string const& menuPicturePath, bool isInGrubDir)=0;
 	//reads the selected background image path
-	virtual Glib::ustring getBackgroundImagePath()=0;
+	virtual std::string getBackgroundImagePath()=0;
 };
 
 #endif

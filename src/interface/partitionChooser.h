@@ -41,7 +41,7 @@ public:
 	//reads the selected root device
 	virtual std::string getSelectedDevice()=0;
 	//add item to the end of the partition selector
-	virtual void addPartitionSelectorItem(Glib::ustring const& device, Glib::ustring const& type, Glib::ustring const& label)=0;
+	virtual void addPartitionSelectorItem(std::string const& device, std::string const& type, std::string const& label)=0;
 	//remove all items from the partition selector
 	virtual void clearPartitionSelector()=0;
 	//add submountpoint to the end of the existing list
@@ -55,7 +55,7 @@ public:
 	//show the dialog, but don't wail until it has been closed/hidden
 	virtual void show()=0;
 	//sets whether a submountpoint is activated (mounted)
-	virtual void setSubmountpointSelectionState(Glib::ustring const& submountpoint, bool new_isSelected)=0;
+	virtual void setSubmountpointSelectionState(std::string const& submountpoint, bool new_isSelected)=0;
 	//sets whether there's already a mounted root partition
 	virtual void setIsMounted(bool isMounted)=0;
 	//sets whether this dialog has been started using a live cd

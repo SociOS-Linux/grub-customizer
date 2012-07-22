@@ -36,7 +36,7 @@ void EventListener::save_request(){
 }
 
 void EventListener::rootSelectorCompleted(){
-	Glib::Thread::create(sigc::bind(sigc::mem_fun(&presenter, &GrubCustomizer::load), false), false);
+	this->presenter.getThreadController().startLoadThread(false);
 }
 
 
@@ -49,7 +49,7 @@ void EventListener::installDialogRequest(){
 }
 
 void EventListener::installGrub_request(std::string const& device){
-	Glib::Thread::create(sigc::bind<std::string>(sigc::mem_fun(&presenter, &GrubCustomizer::installGrub), device), false);
+	this->presenter.getThreadController().startGrubInstallThread(device);
 }
 
 void EventListener::scriptAddDlg_applied(){
@@ -201,11 +201,11 @@ void EventListener::submountpoint_umount_request(std::string const& mountpoint){
 
 
 void EventListener::loadProgressChanged(){
-	presenter.syncEntryList();
+	presenter.getThreadController().syncEntryList();
 }
 
 void EventListener::saveProgressChanged(){
-	presenter.updateSaveProgress();
+	presenter.getThreadController().updateSaveProgress();
 }
 
 void EventListener::grubInstallCompleted(std::string const& msg){
@@ -214,5 +214,5 @@ void EventListener::grubInstallCompleted(std::string const& msg){
 
 
 void EventListener::fb_resolutions_loaded(){
-	presenter.updateSettingsDlgResolutionList();
+	presenter.getThreadController().updateSettingsDlgResolutionList();
 }

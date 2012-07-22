@@ -45,6 +45,7 @@ src/interface/mutex.h -text
 src/interface/partitionChooser.h -text
 src/interface/scriptAddDlg.h -text
 src/interface/settingsDlg.h -text
+src/interface/threadController.h -text
 src/model/deviceDataList.cpp -text
 src/model/deviceDataList.h -text
 src/model/entry.cpp -text
@@ -79,6 +80,8 @@ src/presenter/eventListener.cpp -text
 src/presenter/eventListener.h -text
 src/presenter/glibMutex.cpp -text
 src/presenter/glibMutex.h -text
+src/presenter/glibThreadController.cpp -text
+src/presenter/glibThreadController.h -text
 src/presenter/grubCustomizer.cpp -text
 src/presenter/grubCustomizer.h -text
 src/presenter/grubcfg_proxy_main.cpp -text

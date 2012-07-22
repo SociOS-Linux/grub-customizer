@@ -21,11 +21,9 @@
 
 #include "../model/grublistCfg.h"
 #include "../interface/grublistCfgDlg.h"
-#include <glibmm/thread.h>
-#include <glibmm/dispatcher.h>
-#include <gtkmm/main.h>
 #include <libintl.h>
 #include <locale.h>
+#include <sstream>
 #include "../config.h"
 
 #include "../model/grubEnv.h"
@@ -44,8 +42,7 @@
 #include "../model/fbResolutionsGetter.h"
 #include "../interface/aboutDialog.h"
 #include "../model/deviceDataList.h"
-
-#include <giomm/file.h>
+#include "../interface/threadController.h"
 
 /**
  * master class of Grub Customizer.
@@ -75,8 +72,8 @@ class GrubCustomizer {
 	DeviceDataList* deviceDataList;
 	MountTable* mountTable;
 	AboutDialog* aboutDialog;
-	
-	Glib::Dispatcher disp_sync_load, disp_sync_save, disp_thread_died, disp_updateSettingsDlgResolutionList, disp_settings_loaded;
+	ThreadController* threadController;
+
 	bool config_has_been_different_on_startup_but_unsaved;
 	bool modificationsUnsaved;
 	bool quit_requested;
@@ -104,6 +101,10 @@ public:
 	void setDeviceDataList(DeviceDataList& deviceDataList);
 	void setMountTable(MountTable& mountTable);
 	void setAboutDialog(AboutDialog& aboutDialog);
+	void setThreadController(ThreadController& threadController);
+
+	ThreadController& getThreadController();
+	FbResolutionsGetter& getFbResolutionsGetter();
 
 	//init functions
 	void init();
@@ -122,10 +123,6 @@ public:
 	void renameEntry(Rule* rule, std::string const& newName);
 	void reset();
 	void initRootSelector();
-	
-	void syncEntryList();
-	void updateSaveProgress();
-	void showErrorThreadDied();
 	
 	void showInstallDialog();
 	void installGrub(std::string device);
@@ -159,7 +156,6 @@ public:
 	void showAboutDialog();
 
 	//settings dialog
-	void updateSettingsDlgResolutionList();
 	void updateSettingsDlgResolutionList_dispatched();
 
 	void syncSettings();
@@ -184,8 +180,8 @@ public:
 	void umountRootFs();
 	void cancelPartitionChooser();
 	void applyPartitionChooser();
-	void mountSubmountpoint(Glib::ustring const& submountpoint);
-	void umountSubmountpoint(Glib::ustring const& submountpoint);
+	void mountSubmountpoint(std::string const& submountpoint);
+	void umountSubmountpoint(std::string const& submountpoint);
 	void readPartitionInfo();
 	void generateSubmountpointSelection(std::string const& prefix);
 };

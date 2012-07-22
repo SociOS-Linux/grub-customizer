@@ -323,7 +323,7 @@ GrubSettingsDlgGtk::AdvancedSettingsTreeModel::AdvancedSettingsTreeModel(){
 	this->add(value);
 }
 
-void GrubSettingsDlgGtk::addCustomOption(bool isActive, Glib::ustring const& name, Glib::ustring const& value){
+void GrubSettingsDlgGtk::addCustomOption(bool isActive, std::string const& name, std::string const& value){
 	this->event_lock = true;
 	Gtk::TreeModel::iterator newItemIter = refAsListStore->append();
 	(*newItemIter)[asTreeModel.active] = isActive;
@@ -369,7 +369,7 @@ void GrubSettingsDlgGtk::setActiveDefEntryOption(DefEntryType option){
 	this->event_lock = false;
 }
 
-void GrubSettingsDlgGtk::setDefEntry(Glib::ustring const& defEntry){
+void GrubSettingsDlgGtk::setDefEntry(std::string const& defEntry){
 	this->event_lock = true;
 
 	int pos = 0;
@@ -402,7 +402,7 @@ void GrubSettingsDlgGtk::setTimeoutValue(int value){
 	this->event_lock = false;
 }
 
-void GrubSettingsDlgGtk::setKernelParams(Glib::ustring const& params){
+void GrubSettingsDlgGtk::setKernelParams(std::string const& params){
 	this->event_lock = true;
 	txtKernelParams.set_text(params);
 	this->event_lock = false;
@@ -421,7 +421,7 @@ void GrubSettingsDlgGtk::setResolutionCheckboxState(bool isActive){
 	this->event_lock = false;
 }
 
-void GrubSettingsDlgGtk::setResolution(Glib::ustring const& resolution){
+void GrubSettingsDlgGtk::setResolution(std::string const& resolution){
 	this->event_lock = true;
 	cbResolution.get_entry()->set_text(resolution);
 	this->event_lock = false;
@@ -438,7 +438,7 @@ ColorChooser& GrubSettingsDlgGtk::getColorChooser(ColorChooserType type){
 	this->event_lock = false;
 }
 
-void GrubSettingsDlgGtk::setBackgroundImagePreviewPath(Glib::ustring const& menuPicturePath, bool isInGrubDir){
+void GrubSettingsDlgGtk::setBackgroundImagePreviewPath(std::string const& menuPicturePath, bool isInGrubDir){
 	this->event_lock = true;
 	if (menuPicturePath != ""){
 		try {
@@ -468,11 +468,11 @@ void GrubSettingsDlgGtk::setBackgroundImagePreviewPath(Glib::ustring const& menu
 }
 
 
-Glib::ustring GrubSettingsDlgGtk::getSelectedDefaultGrubValue(){
+std::string GrubSettingsDlgGtk::getSelectedDefaultGrubValue(){
 	return this->defEntryValueMapping[cbDefEntry.get_active_row_number()];
 }
 
-GrubSettingsDlgGtk::CustomOption GrubSettingsDlgGtk::getCustomOption(Glib::ustring const& name){
+GrubSettingsDlgGtk::CustomOption GrubSettingsDlgGtk::getCustomOption(std::string const& name){
 	for (Gtk::TreeModel::iterator iter = this->refAsListStore->children().begin(); iter != this->refAsListStore->children().end(); iter++){
 		if ((*iter)[asTreeModel.old_name] == name)
 			return CustomOption_obj(Glib::ustring((*iter)[asTreeModel.name]), Glib::ustring((*iter)[asTreeModel.old_name]), Glib::ustring((*iter)[asTreeModel.value]), (*iter)[asTreeModel.active]);
@@ -538,13 +538,17 @@ int GrubSettingsDlgGtk::getTimeoutValue(){
 	return spTimeout.get_value_as_int();
 }
 
+std::string GrubSettingsDlgGtk::getTimeoutValueString() {
+	return Glib::ustring::format(this->getTimeoutValue());
+}
+
 void GrubSettingsDlgGtk::signal_timeout_changed(){
 	if (!event_lock){
 		this->eventListener->timeout_changed();
 	}
 }
 
-Glib::ustring GrubSettingsDlgGtk::getKernelParams(){
+std::string GrubSettingsDlgGtk::getKernelParams(){
 	return txtKernelParams.get_text();
 }
 
@@ -577,7 +581,7 @@ void GrubSettingsDlgGtk::signal_chkResolution_toggled(){
 	}
 }
 
-Glib::ustring GrubSettingsDlgGtk::getResolution(){
+std::string GrubSettingsDlgGtk::getResolution(){
 	return cbResolution.get_entry()->get_text();
 }
 
@@ -595,7 +599,7 @@ void GrubSettingsDlgGtk::signal_color_changed(){
 	}
 }
 
-Glib::ustring GrubSettingsDlgGtk::getBackgroundImagePath(){
+std::string GrubSettingsDlgGtk::getBackgroundImagePath(){
 	return fcBackgroundImage.get_filename();
 }
 

@@ -66,7 +66,7 @@ class PartitionChooserGtk : public PartitionChooser {
 	void on_apply();
 
 	std::string getSelectedDevice();
-	void addPartitionSelectorItem(Glib::ustring const& device, Glib::ustring const& type, Glib::ustring const& label);
+	void addPartitionSelectorItem(std::string const& device, std::string const& type, std::string const& label);
 	void clearPartitionSelector();
 	void addSubmountpoint(std::string const& mountpoint, bool isMounted);
 	void removeAllSubmountpoints();
@@ -75,7 +75,7 @@ class PartitionChooserGtk : public PartitionChooser {
 	void hide();
 	void show();
 	Gtk::CheckButton& getSubmountpointCheckboxByLabel(Glib::ustring const& label);
-	void setSubmountpointSelectionState(Glib::ustring const& submountpoint, bool new_isSelected);
+	void setSubmountpointSelectionState(std::string const& submountpoint, bool new_isSelected);
 	void setIsMounted(bool isMounted);
 	void setIsStartedManually(bool val);
 };

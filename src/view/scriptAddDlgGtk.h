@@ -38,11 +38,11 @@ public:
 	void setEventListener(EventListener_scriptAddDlg& eventListener);
 	void signal_scriptAddDlg_response(int response_id);
 	void clear();
-	void addItem(Glib::ustring const& text);
+	void addItem(std::string const& text);
 	int getSelectedEntryIndex();
 	void signal_script_selection_changed();
 	void clearPreview();
-	void addToPreview(Glib::ustring const& name);
+	void addToPreview(std::string const& name);
 	void show();
 	void hide();
 };

@@ -163,15 +163,15 @@ class GrubSettingsDlgGtk : public Gtk::Dialog, public SettingsDlg {
 	void clearDefaultEntryChooser();
 	void clearResolutionChooser();
 	void addResolution(std::string const& resolution);
-	Glib::ustring getSelectedDefaultGrubValue();
-	void addCustomOption(bool isActive, Glib::ustring const& name, Glib::ustring const& value);
+	std::string getSelectedDefaultGrubValue();
+	void addCustomOption(bool isActive, std::string const& name, std::string const& value);
 	void selectCustomOption(std::string const& name);
 	std::string getSelectedCustomOption();
 	void removeAllSettingRows();
-	CustomOption getCustomOption(Glib::ustring const& name);
+	CustomOption getCustomOption(std::string const& name);
 	void setActiveDefEntryOption(DefEntryType option);
 	DefEntryType getActiveDefEntryOption();
-	void setDefEntry(Glib::ustring const& defEntry);
+	void setDefEntry(std::string const& defEntry);
 	void setShowMenuCheckboxState(bool isActive);
 	bool getShowMenuCheckboxState();
 	void setOsProberCheckboxState(bool isActive);
@@ -179,16 +179,17 @@ class GrubSettingsDlgGtk : public Gtk::Dialog, public SettingsDlg {
 	void showHiddenMenuOsProberConflictMessage();
 	void setTimeoutValue(int value);
 	int getTimeoutValue();
-	void setKernelParams(Glib::ustring const& params);
-	Glib::ustring getKernelParams();
+	std::string getTimeoutValueString();
+	void setKernelParams(std::string const& params);
+	std::string getKernelParams();
 	void setRecoveryCheckboxState(bool isActive);
 	bool getRecoveryCheckboxState();
 	void setResolutionCheckboxState(bool isActive);
 	bool getResolutionCheckboxState();
-	void setResolution(Glib::ustring const& resolution);
-	Glib::ustring getResolution();
-	void setBackgroundImagePreviewPath(Glib::ustring const& menuPicturePath, bool isInGrubDir);
-	Glib::ustring getBackgroundImagePath();
+	void setResolution(std::string const& resolution);
+	std::string getResolution();
+	void setBackgroundImagePreviewPath(std::string const& menuPicturePath, bool isInGrubDir);
+	std::string getBackgroundImagePath();
 };
 
 #endif

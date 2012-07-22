@@ -20,7 +20,7 @@
 #define GRUBLISTCFGDLG_H_
 
 #include "evt_listCfgDlg.h"
-#include "glibmm/ustring.h"
+#include <string>
 
 /**
  * Interface for dialogs which lets the user control the grub list
@@ -62,22 +62,24 @@ public:
 	//hide the progress bar, will be executed after loading has been completed
 	virtual void hideProgressBar()=0;
 	//sets the text to be showed inside the status bar
-	virtual void setStatusText(Glib::ustring const& new_status_text)=0;
+	virtual void setStatusText(std::string const& new_status_text)=0;
 	//add script to the end of the list
-	virtual void appendScript(Glib::ustring const& name, bool is_active, void* proxyPtr)=0;
+	virtual void appendScript(std::string const& name, bool is_active, void* proxyPtr)=0;
 	//add entry to the end of the last script of the list
-	virtual void appendEntry(Glib::ustring const& name, bool is_active, void* entryPtr, bool editable, bool is_submenu, void* parentEntry = NULL)=0;
+	virtual void appendEntry(std::string const& name, bool is_active, void* entryPtr, bool editable, bool is_submenu, void* parentEntry = NULL)=0;
 	//notifies the user about the problem that no grublistcfg_proxy has been found
 	virtual void showProxyNotFoundMessage()=0;
+	//creates a string for an other entry placeholder
+	virtual std::string createNewEntriesPlaceholderString(std::string const& parentMenu = "")=0;
 
 	//sets a new name the list item which points to the given script
-	virtual void setProxyName(void* proxy, Glib::ustring const& name, bool isModified)=0;
+	virtual void setProxyName(void* proxy, std::string const& name, bool isModified)=0;
 
 	//swap two list items which contains proxies (script instances)
 	virtual void swapProxies(void* a, void* b)=0;
 
 	//sets the given title to be showed as default title inside the status bar
-	virtual void setDefaultTitleStatusText(Glib::ustring const& str)=0;
+	virtual void setDefaultTitleStatusText(std::string const& str)=0;
 
 	//remove proxy from the list
 	virtual void removeProxy(void* p)=0;
@@ -85,14 +87,14 @@ public:
 	//asks the user if he wants to exit the whole application
 	virtual int showExitConfirmDialog(int type)=0;
 	//show the given error message
-	virtual void showErrorMessage(Glib::ustring const& msg)=0;
+	virtual void showErrorMessage(std::string const& msg)=0;
 	//remove everything from the list
 	virtual void clear()=0;
 
 	//reads the name of a rule item
-	virtual Glib::ustring getRuleName(void* rule)=0;
+	virtual std::string getRuleName(void* rule)=0;
 	//assigns a new name to the rule item
-	virtual void setRuleName(void* rule, Glib::ustring const& newName)=0;
+	virtual void setRuleName(void* rule, std::string const& newName)=0;
 	//reads whether the given rule is activated
 	virtual bool getRuleState(void* rule)=0;
 	//set whether the given rule is activated

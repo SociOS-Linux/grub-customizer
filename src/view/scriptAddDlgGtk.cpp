@@ -57,7 +57,7 @@ void ScriptAddDlgGtk::setEventListener(EventListener_scriptAddDlg& eventListener
 void ScriptAddDlgGtk::clear(){
 	cbScriptSelection.clear_items();
 }
-void ScriptAddDlgGtk::addItem(Glib::ustring const& text){
+void ScriptAddDlgGtk::addItem(std::string const& text){
 	cbScriptSelection.append_text(text);
 	cbScriptSelection.set_active(0);
 }
@@ -81,7 +81,7 @@ void ScriptAddDlgGtk::clearPreview(){
 	lvScriptPreview.clear_items();
 }
 
-void ScriptAddDlgGtk::addToPreview(Glib::ustring const& name){
+void ScriptAddDlgGtk::addToPreview(std::string const& name){
 	lvScriptPreview.append_text(name);
 	lvScriptPreview.columns_autosize();
 }

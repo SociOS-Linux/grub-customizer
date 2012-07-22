@@ -214,11 +214,11 @@ void GrublistCfgDlgGtk::hideProgressBar(){
 	progressBar.hide();
 }
 
-void GrublistCfgDlgGtk::setStatusText(Glib::ustring const& new_status_text){
+void GrublistCfgDlgGtk::setStatusText(std::string const& new_status_text){
 	statusbar.push(new_status_text);
 }
 
-void GrublistCfgDlgGtk::appendScript(Glib::ustring const& name, bool is_active, void* proxyPtr){
+void GrublistCfgDlgGtk::appendScript(std::string const& name, bool is_active, void* proxyPtr){
 	Gtk::TreeIter row = tvConfList.refTreeStore->append();
 	(*row)[tvConfList.treeModel.active] = is_active;
 
@@ -234,7 +234,7 @@ void GrublistCfgDlgGtk::appendScript(Glib::ustring const& name, bool is_active, 
 	(*row)[tvConfList.treeModel.fontStyle] = Pango::STYLE_OBLIQUE;
 }
 
-void GrublistCfgDlgGtk::appendEntry(Glib::ustring const& name, bool is_active, void* entryPtr, bool editable, bool is_submenu, void* parentEntry){
+void GrublistCfgDlgGtk::appendEntry(std::string const& name, bool is_active, void* entryPtr, bool editable, bool is_submenu, void* parentEntry){
 	Gtk::TreeIter lastScriptIter = parentEntry ? this->getIterByRulePtr(parentEntry) : Gtk::TreeIter(*tvConfList.refTreeStore->children().rbegin());
 
 	Gtk::TreeIter entryRow = tvConfList.refTreeStore->append(lastScriptIter->children());
@@ -256,6 +256,14 @@ void GrublistCfgDlgGtk::showProxyNotFoundMessage(){
 	Gtk::MessageDialog msg(gettext("Proxy binary not found!"), false, Gtk::MESSAGE_WARNING);
 	msg.set_secondary_text(gettext("You will see all entries (uncustomized) when you run grub. This error accurs (in most cases), when you didn't install grub gustomizer currectly."));
 	msg.run();
+}
+
+std::string GrublistCfgDlgGtk::createNewEntriesPlaceholderString(std::string const& parentMenu) {
+	if (parentMenu != "") {
+		return Glib::ustring::compose(gettext("(new Entries of %1)"), parentMenu);
+	} else {
+		return gettext("(new Entries)");
+	}
 }
 
 void GrublistCfgDlgGtk::saveConfig(){
@@ -339,7 +347,7 @@ Gtk::TreeModel::iterator GrublistCfgDlgGtk::getIterByRulePtr(void* rulePtr, cons
 	throw RULE_ITER_NOT_FOUND;
 }
 
-void GrublistCfgDlgGtk::setProxyName(void* proxy, Glib::ustring const& name, bool isModified){
+void GrublistCfgDlgGtk::setProxyName(void* proxy, std::string const& name, bool isModified){
 	Gtk::TreeModel::iterator iter = getIterByProxyPtr(proxy);
 	
 	//adding (custom) if this script is modified
@@ -377,11 +385,11 @@ void GrublistCfgDlgGtk::swapProxies(void* a, void* b){
 
 
 
-Glib::ustring GrublistCfgDlgGtk::getRuleName(void* rule){
+std::string GrublistCfgDlgGtk::getRuleName(void* rule){
 	Gtk::TreeModel::iterator iter = this->getIterByRulePtr(rule);
-	return (*iter)[tvConfList.treeModel.name];
+	return (Glib::ustring)(*iter)[tvConfList.treeModel.name];
 }
-void GrublistCfgDlgGtk::setRuleName(void* rule, Glib::ustring const& newName){
+void GrublistCfgDlgGtk::setRuleName(void* rule, std::string const& newName){
 	Gtk::TreeModel::iterator iter = this->getIterByRulePtr(rule);
 	this->setLockState(~0);
 	(*iter)[tvConfList.treeModel.name] = newName;
@@ -477,7 +485,7 @@ void GrublistCfgDlgGtk::update_remove_button(){
 	}
 }
 
-void GrublistCfgDlgGtk::setDefaultTitleStatusText(Glib::ustring const& str){
+void GrublistCfgDlgGtk::setDefaultTitleStatusText(std::string const& str){
 	this->setStatusText(gettext("Default title: ")+str);
 }
 
@@ -618,7 +626,7 @@ void GrublistCfgDlgGtk::signal_show_grub_install_dialog_click(){
 	eventListener->installDialogRequest();
 }
 
-void GrublistCfgDlgGtk::showErrorMessage(Glib::ustring const& msg){
+void GrublistCfgDlgGtk::showErrorMessage(std::string const& msg){
 	Gtk::MessageDialog(msg, false, Gtk::MESSAGE_ERROR).run();
 }
 

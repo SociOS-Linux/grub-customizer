@@ -109,25 +109,26 @@ public:
 	void setProgress(double progress);
 	void progress_pulse();
 	void hideProgressBar();
-	void setStatusText(Glib::ustring const& new_status_text);
-	void appendScript(Glib::ustring const& name, bool is_active, void* proxyPtr);
-	void appendEntry(Glib::ustring const& name, bool is_active, void* entryPtr, bool editable, bool is_submenu, void* parentEntry = NULL);
+	void setStatusText(std::string const& new_status_text);
+	void appendScript(std::string const& name, bool is_active, void* proxyPtr);
+	void appendEntry(std::string const& name, bool is_active, void* entryPtr, bool editable, bool is_submenu, void* parentEntry = NULL);
 	void showProxyNotFoundMessage();
+	std::string createNewEntriesPlaceholderString(std::string const& parentMenu = "");
 	
-	void setProxyName(void* proxy, Glib::ustring const& name, bool isModified);
+	void setProxyName(void* proxy, std::string const& name, bool isModified);
 	
 	void swapProxies(void* a, void* b);
 	
-	void setDefaultTitleStatusText(Glib::ustring const& str);
+	void setDefaultTitleStatusText(std::string const& str);
 	
 	void removeProxy(void* p);
 	
 	int showExitConfirmDialog(int type);
-	void showErrorMessage(Glib::ustring const& msg);
+	void showErrorMessage(std::string const& msg);
 	void clear();
 	
-	Glib::ustring getRuleName(void* rule);
-	void setRuleName(void* rule, Glib::ustring const& newName);
+	std::string getRuleName(void* rule);
+	void setRuleName(void* rule, std::string const& newName);
 	bool getRuleState(void* rule);
 	void setRuleState(void* rule, bool newState);
 	bool getProxyState(void* proxy);

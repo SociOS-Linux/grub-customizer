@@ -40,6 +40,7 @@ add_executable(grub-customizer
 	src/view/scriptAddDlgGtk.cpp
 	src/view/aboutDialogGtk.cpp
 	src/presenter/glibMutex.cpp
+	src/presenter/glibThreadController.cpp
 )
 
 
