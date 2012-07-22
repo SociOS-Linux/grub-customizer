@@ -5,7 +5,7 @@ ImageMenuItemOwnKey::ImageMenuItemOwnKey(const Gtk::StockID& id, const Gtk::Acce
 }
 
 GrubConfUIGtk::GrubConfUIGtk(GrubConfig& grubConfig)
-	: grubConfig(&grubConfig), appName("Grub Customizer"), appVersion("1.6"),
+	: grubConfig(&grubConfig), appName("Grub Customizer"), appVersion("1.6.1"),
 	tbttAdd(Gtk::Stock::ADD), tbttRemove(Gtk::Stock::REMOVE), tbttUp(Gtk::Stock::GO_UP), tbttDown(Gtk::Stock::GO_DOWN),
 	tbttSave(Gtk::Stock::SAVE), tbttPreferences(Gtk::Stock::PREFERENCES),
 	miFile(gettext("_File"), true), miExit(Gtk::Stock::QUIT), tbttReload(Gtk::Stock::REFRESH),
@@ -28,10 +28,6 @@ GrubConfUIGtk::GrubConfUIGtk(GrubConfig& grubConfig)
 	win.set_icon_name("grub-customizer");
 
 	authors.push_back("Daniel Richter");
-	if (this->grubConfig->env.burgMode)
-		win.set_title("Grub Customizer (BURG Mode)");
-	else
-		win.set_title("Grub Customizer");
 	win.set_default_size(800,600);
 	win.add(vbMainSplit);
 	
@@ -190,6 +186,13 @@ GrubConfUIGtk::GrubConfUIGtk(GrubConfig& grubConfig)
 	dlgAbout.signal_response().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_about_dlg_response));
 
 	thread_active = true;
+}
+
+void GrubConfUIGtk::event_mode_changed(){
+	if (this->grubConfig->env.burgMode)
+		win.set_title("Grub Customizer (BURG Mode)");
+	else
+		win.set_title("Grub Customizer");
 }
 
 void GrubConfUIGtk::event_load_progress_changed(){

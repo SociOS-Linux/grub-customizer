@@ -19,7 +19,7 @@ install(FILES grub-customizer.desktop
 	DESTINATION /usr/share/applications
 )
 
-configure_file ("config.h.in" "src_dir/config.h")
+configure_file ("config.h.in" "${CMAKE_CURRENT_SOURCE_DIR}/src_dir/config.h")
 
 #install icons
 install(FILES icons/16x16.png DESTINATION /usr/share/icons/hicolor/16x16/apps RENAME grub-customizer.png)

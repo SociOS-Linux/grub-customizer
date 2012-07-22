@@ -92,6 +92,7 @@ public:
 	void event_save_progress_changed();
 	void event_thread_died();
 	void event_grub_install_ready();
+	void event_mode_changed();
 	bool bootloader_not_found_requestForRootSelection();
 	std::string show_root_selector();
 	bool requestForBurgMode();

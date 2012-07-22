@@ -130,6 +130,7 @@ bool GrubConfig::prepare(bool forceRootSelection){
 				mode = GrubConfEnvironment::BURG_MODE;
 			
 			env.init(mode, root);
+			connectedUI->event_mode_changed();
 			
 			if (this->cfgDirIsClean() == false)
 				this->cleanupCfgDir();
