@@ -222,19 +222,24 @@ void Proxy::sync_cleanup(Rule* parent) {
 	} while (!done);
 }
 
-bool Proxy::isModified() const {
+bool Proxy::isModified(Rule const* parent) const {
 	bool result = false;
-	if (this->dataSource){
-		if (this->rules.size()-1 == this->dataSource->size()){ //rules contains the other entries placeholder, so there is one more entry
-			std::list<Rule>::const_iterator ruleIter = this->rules.begin();
-			Script::iterator entryIter = this->dataSource->begin();
+	if (!parent && this->dataSource || parent && parent->dataSource){
+		std::list<Rule> const& rlist = parent ? parent->subRules : this->rules;
+		std::list<Entry> const& elist = parent ? parent->dataSource->subEntries : *this->dataSource;
+		if (rlist.size()-1 == elist.size()){ //rules contains the other entries placeholder, so there is one more entry
+			std::list<Rule>::const_iterator ruleIter = rlist.begin();
+			std::list<Entry>::const_iterator entryIter = elist.begin();
 			if (ruleIter->type == Rule::OTHER_ENTRIES_PLACEHOLDER){ //the first element is the OTHER_ENTRIES_PLACEHOLDER by default.
 				result = !ruleIter->isVisible; //If not visible, it's modified…
 				ruleIter++;
 			}
-			while (!result && ruleIter != this->rules.end() && entryIter != this->dataSource->end()){
+			while (!result && ruleIter != rlist.end() && entryIter != elist.end()){
 				if (ruleIter->outputName != entryIter->name || !ruleIter->isVisible)
 					result = true;
+				if (ruleIter->dataSource->type == Entry::SUBMENU) {
+					result = this->isModified(&*ruleIter);
+				}
 
 				ruleIter++;
 				entryIter++;

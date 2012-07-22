@@ -48,7 +48,7 @@ struct Proxy {
 	void sync_add_placeholders(Rule* parent = NULL);
 	void sync_expand();
 	void sync_cleanup(Rule* parent = NULL);
-	bool isModified() const;
+	bool isModified(Rule const* parent = NULL) const;
 	bool deleteFile();
 	bool generateFile(std::string const& path, int cfg_dir_prefix_length, std::string const& cfg_dir_noprefix); //before running this function, the realted script file must be saved!
 	std::string getScriptName();
