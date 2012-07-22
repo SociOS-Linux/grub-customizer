@@ -1,15 +1,60 @@
 project(GrubCustomizer)
-cmake_minimum_required(VERSION 2.8) # may be lower
+cmake_minimum_required(VERSION 2.6.2) # may be lower
 
 
 find_package(PkgConfig)
 
-pkg_check_modules(GTKMM gtkmm-2.4) # look into FindPkgConfig.cmake, 
-                                                                # it contains documentation
-# Now the variables GTKMM_INCLUDE_DIRS, GTKMM_LIBRARY_DIRS and GTKMM_LIBRARIES 
-# contain what you expect 
+pkg_check_modules(GTKMM gtkmm-2.4)
+pkg_check_modules(GTHREAD gthread-2.0)
 
-add_subdirectory(src_dir)
+
+link_directories(
+    ${GTKMM_LIBRARY_DIRS}  )
+
+include_directories(
+    ${GTKMM_INCLUDE_DIRS}  )
+
+add_executable(grub-customizer
+	src/entry.cpp
+	src/grubconfig.cpp
+	src/grubconf_ui_gtk.cpp
+	src/gtk-client.cpp
+	src/libproxyscript_parser.cpp
+	src/liveCDSetupDialog.cpp
+	src/mountTable.cpp
+	src/proxy.cpp
+	src/proxylist.cpp
+	src/pscriptname_translator.cpp
+	src/repository.cpp
+	src/rule.cpp
+	src/script.cpp
+	src/deviceDataList.cpp
+	src/umount_all.cpp
+	src/settings_dlg_gtk.cpp
+	src/settings_mng_ds.cpp
+	src/fbResolutionsGetter.cpp
+)
+
+
+add_executable(grubcfg-proxy
+	src/entry.cpp
+	src/rule.cpp
+	src/script.cpp
+	src/proxy.cpp
+	src/grubcfg_proxy.cpp
+)
+
+target_link_libraries(grub-customizer 
+    ${GTKMM_LIBRARIES} ${GTHREAD_LIBRARIES}  )
+
+
+
+install(TARGETS grubcfg-proxy
+	DESTINATION lib/grub-customizer)
+
+install(TARGETS grub-customizer 
+	DESTINATION bin)
+
 
 
 install(FILES translation/translation-de.mo
@@ -64,12 +109,16 @@ install(FILES translation/translation-fr.mo
 	DESTINATION share/locale/fr/LC_MESSAGES/
 	RENAME grub-customizer.mo)
 
+install(FILES translation/translation-zh_CN.mo
+	DESTINATION share/locale/zh_CN/LC_MESSAGES/
+	RENAME grub-customizer.mo)
+
 
 install(FILES grub-customizer.desktop
 	DESTINATION /usr/share/applications
 )
 
-configure_file ("config.h.in" "${CMAKE_CURRENT_SOURCE_DIR}/src_dir/config.h")
+configure_file ("config.h.in" "${CMAKE_CURRENT_SOURCE_DIR}/src/config.h")
 
 #install icons
 install(FILES icons/16x16.png DESTINATION /usr/share/icons/hicolor/16x16/apps RENAME grub-customizer.png)

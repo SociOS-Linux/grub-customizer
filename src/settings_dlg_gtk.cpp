@@ -43,7 +43,7 @@ Glib::ustring ColorChooser::getSelectedColor() const {
 		return "";
 }
 
-GrubColorChooser::GrubColorChooser() : ColorChooser() {
+GrubColorChooser::GrubColorChooser(bool blackIsTransparent) : ColorChooser() {
 	this->addColor("white",          gettext("white"),         "#ffffff", "#000000");
 	this->addColor("yellow",         gettext("yellow"),        "#fefe54", "#000000");
 	this->addColor("light-cyan",     gettext("light-cyan"),    "#54fefe", "#000000");
@@ -59,7 +59,7 @@ GrubColorChooser::GrubColorChooser() : ColorChooser() {
 	this->addColor("brown",          gettext("brown"),         "#a85400", "#000000");
 	this->addColor("light-gray",     gettext("light-gray"),    "#a8a8a8", "#000000");
 	this->addColor("dark-gray",      gettext("dark-gray"),     "#545454", "#000000");
-	this->addColor("black",          gettext("black"),         "#000000", "#ffffff");
+	this->addColor("black", blackIsTransparent ? gettext("transparent") : gettext("black"), "#000000", "#ffffff");
 }
 
 
@@ -74,7 +74,8 @@ GrubSettingsDlgGtk::GrubSettingsDlgGtk(SettingsManagerDataStore& dataStore, std:
 	lblNormalColor(gettext("normal:"), Gtk::ALIGN_RIGHT, Gtk::ALIGN_CENTER), lblHighlightColor(gettext("highlight:"), Gtk::ALIGN_RIGHT, Gtk::ALIGN_CENTER),
 	lblColorChooser(gettext("menu colors")), lblBackgroundImage(gettext("background image")),
 	bttCopyBackground(gettext("copy to grub directory")), bttRemoveBackground(gettext("remove background")),
-	lblBackgroundRequiredInfo(gettext("To get the colors above working,\nyou have to select a background image!"))
+	lblBackgroundRequiredInfo(gettext("To get the colors above working,\nyou have to select a background image!")),
+	gccNormalBackground(true), gccHighlightBackground(true)
 {
 	this->set_title("Grub Customizer - "+Glib::ustring(gettext("settings")));
 	this->set_icon_name("grub-customizer");
@@ -264,13 +265,8 @@ void GrubSettingsDlgGtk::loadData(){
 		std::string defEntry = dataStore->getValue("GRUB_DEFAULT");
 		if (defEntry == "saved"){
 			rbDefSaved.set_active(true);
-		} /*else if (defEntry.find_first_not_of("0123456789") == std::string::npos){ //test if every character is numeric…
-			rbDefByPosition.set_active(true);
-			std::istringstream in(defEntry);
-			int defEntryNum;
-			in >> defEntryNum;
-			spDefPosition.set_value(defEntryNum);
-		} */else {
+		}
+		else {
 			if (defEntry.find_first_not_of("0123456789") == std::string::npos){
 				std::istringstream in(defEntry);
 				int defEntryNum;
@@ -286,7 +282,11 @@ void GrubSettingsDlgGtk::loadData(){
 		chkShowMenu.set_active(!dataStore->isActive("GRUB_HIDDEN_TIMEOUT", true));
 		chkOsProber.set_active(!dataStore->isActive("GRUB_DISABLE_OS_PROBER", true));
 		
-		std::string timeoutStr = dataStore->getValue("GRUB_TIMEOUT");
+		std::string timeoutStr;
+		if (chkShowMenu.get_active())
+			timeoutStr = dataStore->getValue("GRUB_TIMEOUT");
+		else
+			timeoutStr = dataStore->getValue("GRUB_HIDDEN_TIMEOUT");
 		std::istringstream in(timeoutStr);
 		int timeout;
 		in >> timeout;
@@ -415,7 +415,6 @@ void GrubSettingsDlgGtk::signal_default_entry_changed(){
 void GrubSettingsDlgGtk::signal_showMenu_toggled(){
 	if (!event_lock){
 		dataStore->setIsActive("GRUB_HIDDEN_TIMEOUT", !chkShowMenu.get_active());
-		signal_timeout_changed();
 		if (!chkShowMenu.get_active() && chkOsProber.get_active()){
 			Gtk::MessageDialog(Glib::ustring::compose(gettext("This option doesn't work when the \"os-prober\" script finds other operating systems. Disable \"%1\" if you don't need to boot other operating systems."), chkOsProber.get_label())).run();
 		}

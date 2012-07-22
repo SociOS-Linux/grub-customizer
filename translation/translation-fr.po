@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-11-21 12:13+0100\n"
-"PO-Revision-Date: 2010-11-16 21:27+0000\n"
-"Last-Translator: Daniel Richter <danielrichter2007@web.de>\n"
+"PO-Revision-Date: 2010-11-25 12:45+0000\n"
+"Last-Translator: Loic Treyvaud <loictreyvaud@hispeed.ch>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-11-23 20:48+0000\n"
+"X-Launchpad-Export-Date: 2010-11-28 20:24+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../src_dir/grubconfig.cpp:203 ../src_dir/grubconfig.cpp:218
@@ -44,7 +44,7 @@ msgstr "_Aide"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:13
 msgid "_Install to MBR …"
-msgstr ""
+msgstr "_Installation dans le MBR"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:18
 msgid "Script to insert:"
@@ -60,6 +60,9 @@ msgid ""
 "files to the bootloaders data directory\n"
 "(if they don't already exist)."
 msgstr ""
+"Installe le programme de démarrage dans le MBR et copie quelques\n"
+"fichiers dans son répertoire de données\n"
+"(si ils ne sont pas présents)"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:21
 msgid "_Device: "
@@ -94,7 +97,7 @@ msgstr "Déplacer vers le bas l'entrée ou le script sélectionné"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:104
 msgid "reload configuration"
-msgstr ""
+msgstr "Recharger la configuration"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:107
 msgid "Edit grub preferences"
@@ -122,7 +125,7 @@ msgstr ""
 
 #: ../src_dir/grubconf_ui_gtk.cpp:240
 msgid "No Bootloader found"
-msgstr ""
+msgstr "Aucun programme de démarrage trouvé"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:241
 msgid "Do you want to select another root partition?"
@@ -138,11 +141,11 @@ msgstr "Voulez-vous configurer BURG à la place de grub2 ?"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:269
 msgid "The bootloader has been installed successfully"
-msgstr ""
+msgstr "Le programme de démarrage c'est installé avec succès"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:274
 msgid "Error while installing the bootloader"
-msgstr ""
+msgstr "Erreur durant l'installation du programme de démarrage"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:296
 msgid "loading configuration…"
@@ -227,10 +230,12 @@ msgstr "_Enregistrer & Quitter"
 #: ../src_dir/grubconf_ui_gtk.cpp:690
 msgid "AND: your modifications are still unsaved, update will save them too!"
 msgstr ""
+"AND: Vos modifications ne sont pas enregistrées, la mise à jour le fera "
+"automatiquement!"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:729
 msgid "installing the bootloader…"
-msgstr ""
+msgstr "Installation du programme de démarrage..."
 
 #: ../src_dir/grubconf_ui_gtk.cpp:734
 msgid "Please type a device string!"
@@ -254,11 +259,11 @@ msgstr "_utiliser une autre partition : "
 
 #: ../src_dir/liveCDSetupDialog.cpp:6
 msgid "Mount selected Filesystem"
-msgstr ""
+msgstr "Monte le système de fichiers séléctionné"
 
 #: ../src_dir/liveCDSetupDialog.cpp:7
 msgid "Unmount mounted Filesystem"
-msgstr ""
+msgstr "Démonte le système de fichiers séléctionné"
 
 #: ../src_dir/liveCDSetupDialog.cpp:10
 msgid ""
@@ -309,7 +314,7 @@ msgstr "Grub Customizer : Sélecteur de partition"
 
 #: ../src_dir/liveCDSetupDialog.cpp:25
 msgid "Select and mount your root partition"
-msgstr ""
+msgstr "Sélectionne et monde votre partition root"
 
 #: ../src_dir/liveCDSetupDialog.cpp:43
 msgid "partition"
@@ -353,11 +358,11 @@ msgstr "Impossible de démonter la partition sélectionnée"
 
 #: ../src_dir/settings_dlg_gtk.cpp:47
 msgid "white"
-msgstr ""
+msgstr "blanc"
 
 #: ../src_dir/settings_dlg_gtk.cpp:48
 msgid "yellow"
-msgstr ""
+msgstr "jaune"
 
 #: ../src_dir/settings_dlg_gtk.cpp:49
 msgid "light-cyan"
@@ -365,7 +370,7 @@ msgstr ""
 
 #: ../src_dir/settings_dlg_gtk.cpp:50
 msgid "cyan"
-msgstr ""
+msgstr "cyan"
 
 #: ../src_dir/settings_dlg_gtk.cpp:51
 msgid "light-blue"
@@ -373,7 +378,7 @@ msgstr ""
 
 #: ../src_dir/settings_dlg_gtk.cpp:52
 msgid "blue"
-msgstr ""
+msgstr "bleu"
 
 #: ../src_dir/settings_dlg_gtk.cpp:53
 msgid "light-green"
@@ -381,7 +386,7 @@ msgstr ""
 
 #: ../src_dir/settings_dlg_gtk.cpp:54
 msgid "green"
-msgstr ""
+msgstr "vert"
 
 #: ../src_dir/settings_dlg_gtk.cpp:55
 msgid "light-magenta"
@@ -389,7 +394,7 @@ msgstr ""
 
 #: ../src_dir/settings_dlg_gtk.cpp:56
 msgid "magenta"
-msgstr ""
+msgstr "magenta"
 
 #: ../src_dir/settings_dlg_gtk.cpp:57
 msgid "light-red"
@@ -397,11 +402,11 @@ msgstr ""
 
 #: ../src_dir/settings_dlg_gtk.cpp:58
 msgid "red"
-msgstr ""
+msgstr "rouge"
 
 #: ../src_dir/settings_dlg_gtk.cpp:59
 msgid "brown"
-msgstr ""
+msgstr "brun"
 
 #: ../src_dir/settings_dlg_gtk.cpp:60
 msgid "light-gray"
@@ -413,7 +418,7 @@ msgstr ""
 
 #: ../src_dir/settings_dlg_gtk.cpp:62
 msgid "black"
-msgstr ""
+msgstr "noir"
 
 #: ../src_dir/settings_dlg_gtk.cpp:68
 msgid "pre_defined: "
@@ -425,15 +430,15 @@ msgstr ""
 
 #: ../src_dir/settings_dlg_gtk.cpp:69
 msgid "default entry"
-msgstr ""
+msgstr "entrée par défaut"
 
 #: ../src_dir/settings_dlg_gtk.cpp:69
 msgid "visibility"
-msgstr ""
+msgstr "visibilité"
 
 #: ../src_dir/settings_dlg_gtk.cpp:69
 msgid "show menu"
-msgstr ""
+msgstr "afficher le menu"
 
 #: ../src_dir/settings_dlg_gtk.cpp:70
 msgid "Timeout"
@@ -441,19 +446,19 @@ msgstr ""
 
 #: ../src_dir/settings_dlg_gtk.cpp:70
 msgid "Seconds"
-msgstr ""
+msgstr "Secondes"
 
 #: ../src_dir/settings_dlg_gtk.cpp:70
 msgid "kernel parameters"
-msgstr ""
+msgstr "paramètres du noyau"
 
 #: ../src_dir/settings_dlg_gtk.cpp:71
 msgid "generate recovery entries"
-msgstr ""
+msgstr "génère les entrées de récupération"
 
 #: ../src_dir/settings_dlg_gtk.cpp:71
 msgid "look for other operating systems"
-msgstr ""
+msgstr "recherche d'autres systèmes d'éxploitation"
 
 #: ../src_dir/settings_dlg_gtk.cpp:72
 msgid "custom resolution: "
@@ -461,35 +466,35 @@ msgstr ""
 
 #: ../src_dir/settings_dlg_gtk.cpp:73
 msgid "font color"
-msgstr ""
+msgstr "couleur de la police"
 
 #: ../src_dir/settings_dlg_gtk.cpp:73
 msgid "background"
-msgstr ""
+msgstr "arrière-plan"
 
 #: ../src_dir/settings_dlg_gtk.cpp:74
 msgid "normal:"
-msgstr ""
+msgstr "normal:"
 
 #: ../src_dir/settings_dlg_gtk.cpp:74
 msgid "highlight:"
-msgstr ""
+msgstr "éclairé:"
 
 #: ../src_dir/settings_dlg_gtk.cpp:75
 msgid "menu colors"
-msgstr ""
+msgstr "couleur des menus"
 
 #: ../src_dir/settings_dlg_gtk.cpp:75
 msgid "background image"
-msgstr ""
+msgstr "Image de fond"
 
 #: ../src_dir/settings_dlg_gtk.cpp:76
 msgid "copy to grub directory"
-msgstr ""
+msgstr "copier dans le répertoire grub"
 
 #: ../src_dir/settings_dlg_gtk.cpp:76
 msgid "remove background"
-msgstr ""
+msgstr "supprime l'image de fond"
 
 #: ../src_dir/settings_dlg_gtk.cpp:77
 msgid ""
@@ -499,7 +504,7 @@ msgstr ""
 
 #: ../src_dir/settings_dlg_gtk.cpp:79
 msgid "settings"
-msgstr ""
+msgstr "paramètres"
 
 #: ../src_dir/settings_dlg_gtk.cpp:83
 msgid "_General"

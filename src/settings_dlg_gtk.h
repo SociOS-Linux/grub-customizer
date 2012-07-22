@@ -28,7 +28,7 @@ class ColorChooser : public Gtk::ComboBox {
 //a color chooser with predifined colors for grub
 class GrubColorChooser : public ColorChooser {
 public:
-	GrubColorChooser();
+	GrubColorChooser(bool blackIsTransparent = false);
 };
 
 

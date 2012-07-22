@@ -5,7 +5,7 @@ ImageMenuItemOwnKey::ImageMenuItemOwnKey(const Gtk::StockID& id, const Gtk::Acce
 }
 
 GrubConfUIGtk::GrubConfUIGtk(GrubConfig& grubConfig)
-	: grubConfig(&grubConfig), appName("Grub Customizer"), appVersion("2.0.3"),
+	: grubConfig(&grubConfig), appName("Grub Customizer"), appVersion("2.0.4"),
 	tbttAdd(Gtk::Stock::ADD), tbttRemove(Gtk::Stock::REMOVE), tbttUp(Gtk::Stock::GO_UP), tbttDown(Gtk::Stock::GO_DOWN),
 	tbttSave(Gtk::Stock::SAVE), tbttPreferences(Gtk::Stock::PREFERENCES),
 	miFile(gettext("_File"), true), miExit(Gtk::Stock::QUIT), tbttReload(Gtk::Stock::REFRESH),
@@ -57,12 +57,14 @@ GrubConfUIGtk::GrubConfUIGtk(GrubConfig& grubConfig)
 "Adam Czabara https://launchpad.net/~adam-czabara\n\
 Alexey Ivanov https://launchpad.net/~alexey.ivanes\n\
 Bernardo Miguel Savone https://launchpad.net/~bersil\n\
+Careone https://launchpad.net/~zzbusagain\n\
 Daniel Richter https://launchpad.net/~danielrichter2007\n\
 Emre AYTAÇ https://launchpad.net/~eaytac\n\
 Erkin Batu Altunbaş https://launchpad.net/~erkin\n\
 Eugênio F https://launchpad.net/~eugf\n\
 Fedik https://launchpad.net/~fedikw\n\
 GamePad64 https://launchpad.net/~gamepad64\n\
+GoJoMo https://launchpad.net/~tolbkni\n\
 José Humberto Melo https://launchpad.net/~josehumberto-melo\n\
 Manuel Xosé Lemos https://launchpad.net/~mxlemos\n\
 Maxime Gentils https://launchpad.net/~maxime.gentils\n\
@@ -75,7 +77,6 @@ Svetoslav Stefanov https://launchpad.net/~svetlisashkov\n\
 TheMengzor https://launchpad.net/~the-mengzor\n\
 zeugma https://launchpad.net/~sunder67\
 ");
-	
 	//toolbar
 	toolbar.append(tbttSave);
 	tbttSave.set_tooltip_text(Glib::ustring(gettext("Save configuration and generate a new "))+(this->grubConfig->env.burgMode?"burg.cfg":"grub.cfg"));
