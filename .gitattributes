@@ -19,9 +19,9 @@
 /changelog -text
 /cmake_uninstall.cmake.in -text
 /config.h.in -text
-debian/changelog -text
 debian/changelog.d -text
-debian/changelog.natty_repo -text
+debian/changelog.mentors.d -text
+debian/changelog.revu.d -text
 debian/compat -text
 debian/control -text
 debian/copyright -text
