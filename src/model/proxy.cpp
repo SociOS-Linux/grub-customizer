@@ -151,7 +151,7 @@ void Proxy::sync_cleanup(Rule* parent) {
 	do {
 		bool listModified = false;
 		for (std::list<Rule>::iterator iter = list.begin(); !listModified && iter != list.end(); iter++) {
-			if (!iter->dataSource) {
+			if (!iter->dataSource && iter->type != Rule::OTHER_ENTRIES_PLACEHOLDER) {
 				list.erase(iter);
 				listModified = true; //after ereasing something we have to create a new iterator
 			} else { //check contents
@@ -177,7 +177,7 @@ bool Proxy::isModified() const {
 			while (!result && ruleIter != this->rules.end() && entryIter != this->dataSource->end()){
 				if (ruleIter->outputName != entryIter->name || !ruleIter->isVisible)
 					result = true;
-			
+
 				ruleIter++;
 				entryIter++;
 			}
