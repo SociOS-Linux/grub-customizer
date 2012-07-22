@@ -633,6 +633,10 @@ void GrubCustomizer::syncSettings(){
 		timeoutStr = this->settings->getValue("GRUB_TIMEOUT");
 	else
 		timeoutStr = this->settings->getValue("GRUB_HIDDEN_TIMEOUT");
+
+	if (timeoutStr == "" || timeoutStr.find_first_not_of("0123456789") != -1) {
+		timeoutStr = "10"; //default value
+	}
 	std::istringstream in(timeoutStr);
 	int timeout;
 	in >> timeout;
@@ -714,6 +718,10 @@ void GrubCustomizer::removeCustomSettingRow(std::string const& name){
 }
 
 void GrubCustomizer::updateShowMenuSetting(){
+	std::string val = this->settings->getValue("GRUB_HIDDEN_TIMEOUT");
+	if (val == "" || val.find_first_not_of("0123456789") != -1) {
+		this->settings->setValue("GRUB_HIDDEN_TIMEOUT", "0"); //create this entry - if it has an invalid value
+	}
 	this->settings->setIsActive("GRUB_HIDDEN_TIMEOUT", !this->settingsDlg->getShowMenuCheckboxState());
 	if (!this->settingsDlg->getShowMenuCheckboxState() && this->settingsDlg->getOsProberCheckboxState()){
 		this->settingsDlg->showHiddenMenuOsProberConflictMessage();
@@ -736,6 +744,9 @@ void GrubCustomizer::updateKernalParams(){
 }
 
 void GrubCustomizer::updateUseCustomResolution(){
+	if (this->settings->getValue("GRUB_GFXMODE") == "") {
+		this->settings->setValue("GRUB_GFXMODE", "saved"); //use saved as default value (if empty)
+	}
 	this->settings->setIsActive("GRUB_GFXMODE", this->settingsDlg->getResolutionCheckboxState());
 	this->syncSettings();
 	this->modificationsUnsaved = true;
@@ -805,6 +816,9 @@ void GrubCustomizer::updateCustomResolution(){
 }
 
 void GrubCustomizer::updateGenerateRecoverySetting(){
+	if (this->settings->getValue("GRUB_DISABLE_LINUX_RECOVERY") != "true") {
+		this->settings->setValue("GRUB_DISABLE_LINUX_RECOVERY", "true");
+	}
 	this->settings->setIsActive("GRUB_DISABLE_LINUX_RECOVERY", !this->settingsDlg->getRecoveryCheckboxState());
 	this->syncSettings();
 	this->modificationsUnsaved = true;
