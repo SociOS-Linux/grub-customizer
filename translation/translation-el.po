@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-12-23 17:05+0100\n"
-"PO-Revision-Date: 2011-12-28 18:00+0000\n"
-"Last-Translator: Daniel Richter <danielrichter2007@web.de>\n"
+"PO-Revision-Date: 2012-04-09 16:19+0000\n"
+"Last-Translator: Stavros K. Filippidis <Unknown>\n"
 "Language-Team: Greek <el@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-03-22 07:12+0000\n"
-"X-Generator: Launchpad (build 14981)\n"
+"X-Launchpad-Export-Date: 2012-05-07 21:56+0000\n"
+"X-Generator: Launchpad (build 15195)\n"
 
 #: ../src/presenter/grubCustomizer.cpp:445
 msgid "No script found"
@@ -40,13 +40,15 @@ msgstr "ενημέρωση διαμόρφωσης"
 
 #: ../src/presenter/grubCustomizer.cpp:571
 msgid "%1 not found. Is grub2 installed?"
-msgstr ""
+msgstr "%1 δεν βρέθηκε. Έχει εγκατασταθεί το grub2;"
 
 #: ../src/presenter/grubCustomizer.cpp:581
 msgid ""
 "%1 couldn't be executed successfully. error message:\n"
 " %2"
 msgstr ""
+"%1 δεν μπόρεσε να εκτελεσθεί επιτυχώς. Μήνυμα λάθους:\n"
+" %2"
 
 #: ../src/presenter/grubCustomizer.cpp:638
 msgid "Name the Entry"
@@ -54,7 +56,7 @@ msgstr "Ονομάστε την καταχώρηση"
 
 #: ../src/presenter/grubCustomizer.cpp:671
 msgid "cannot move this entry"
-msgstr ""
+msgstr "δεν γίνεται να μετακινηθεί η συγκεκριμένη καταχώριση"
 
 #: ../src/view/aboutDialogGtk.cpp:36
 msgid ""
@@ -143,11 +145,11 @@ msgstr "Μετακινήστε κάτω την επιλεγμένη καταχώ
 
 #: ../src/view/grublistCfgDlgGtk.cpp:81
 msgid "remove this entry from the current submenu"
-msgstr ""
+msgstr "αφαίρεση αυτής της καταχώρισης από το τρέχον υπομενού"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:84
 msgid "add this entry to a new submenu"
-msgstr ""
+msgstr "προσθήκη αυτής της καταχώρισης από το τρέχον υπομενού"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:92
 msgid "reload configuration"
@@ -192,7 +194,7 @@ msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:280
 msgid "(new Entries of %1)"
-msgstr ""
+msgstr "(νέες Είσοδοι από %1)"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:282
 msgid "(new Entries)"
@@ -200,7 +202,7 @@ msgstr "(νέες καταχωρήσεις)"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:287
 msgid "(script code)"
-msgstr ""
+msgstr "(script κώδικας)"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:518
 msgid "Default title: "

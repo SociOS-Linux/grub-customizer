@@ -1,3 +1,9 @@
+v 2.5.5
+	* improved kde menu compatibility
+	* translation updates
+	* preserving quote char (os-prober relates on them…)
+	* replaced update-grub by grub-mkconfig + output_file
+
 v 2.5.4
 	* added a missing include directive
 	* translation updates

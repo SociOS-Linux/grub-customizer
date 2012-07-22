@@ -127,6 +127,8 @@ translation/translation-ast.mo -text svneol=unset#unset
 translation/translation-ast.po -text
 translation/translation-bg.mo -text svneol=unset#unset
 translation/translation-bg.po -text
+translation/translation-bs.mo -text svneol=unset#unset
+translation/translation-bs.po -text
 translation/translation-ca.mo -text svneol=unset#unset
 translation/translation-ca.po -text
 translation/translation-cs.mo -text svneol=unset#unset
@@ -139,6 +141,8 @@ translation/translation-el.mo -text svneol=unset#unset
 translation/translation-el.po -text
 translation/translation-es.mo -text svneol=unset#unset
 translation/translation-es.po -text
+translation/translation-et.mo -text svneol=unset#unset
+translation/translation-et.po -text
 translation/translation-eu.mo -text svneol=unset#unset
 translation/translation-eu.po -text
 translation/translation-fi.mo -text svneol=unset#unset
