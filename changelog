@@ -1,3 +1,6 @@
+v. 2.3.2
+	* fixed: crash if the saved config contains "LS_" files that doesn't exist in /etc/grub.d
+	* whitespace from the last script wont be saved
 v. 2.3.1
 	* fixed crash issue (https://bugs.launchpad.net/grub-customizer/+bug/892261)
 v. 2.3
