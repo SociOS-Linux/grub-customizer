@@ -564,15 +564,25 @@ void GrubCustomizer::syncListView_save(){
 void GrubCustomizer::die(){
 	switch (this->thrownException){
 		case GrublistCfg::GRUB_CFG_DIR_NOT_FOUND:
+		{
+			std::vector<std::string> data;
+			data.push_back(this->env.cfg_dir);
 			this->listCfgDlg->showErrorMessage(
-					this->env.cfg_dir+gettext(" not found. Is grub2 installed?")
+					gettext("%1 not found. Is grub2 installed?"),
+					data
 			);
 			break;
-		case GrublistCfg::GRUB_CMD_EXEC_FAILED:
+		}
+		case GrublistCfg::GRUB_CMD_EXEC_FAILED: {
+			std::vector<std::string> data;
+			data.push_back(this->env.mkconfig_cmd);
+			data.push_back(this->grublistCfg->getGrubErrorMessage());
 			this->listCfgDlg->showErrorMessage(
-					this->env.mkconfig_cmd + gettext(" couldn't be executed successfully. You must run this as root!")
+					gettext("%1 couldn't be executed successfully. error message:\n %2"),
+					data
 			);
 			break;
+		}
 	}
 	this->quit(true); //exit
 }

@@ -22,7 +22,7 @@ GrublistCfg::GrublistCfg(GrubEnv& env)
  : error_proxy_not_found(false),
  progress(0),
  cancelThreadsRequested(false), verbose(true), env(env), eventListener(NULL),
- mutex(NULL)
+ mutex(NULL), errorLogFile(ERROR_LOG_FILE)
 {}
 
 void GrublistCfg::setEventListener(EventListener_model& eventListener) {
@@ -177,12 +177,14 @@ void GrublistCfg::load(bool preserveConfig){
 	
 	//run mkconfig
 	this->log("running " + this->env.mkconfig_cmd, Logger::EVENT);
-	FILE* mkconfigProc = popen(this->env.mkconfig_cmd.c_str(), "r");
+	FILE* mkconfigProc = popen((this->env.mkconfig_cmd + " 2> " + this->errorLogFile).c_str(), "r");
 	readGeneratedFile(mkconfigProc);
 	
 	int success = pclose(mkconfigProc);
 	if (success != 0 && !cancelThreadsRequested){
 		throw GRUB_CMD_EXEC_FAILED;
+	} else {
+		remove(errorLogFile.c_str()); //remove file, if everything was ok
 	}
 	this->log("mkconfig successfull completed", Logger::INFO);
 
@@ -435,6 +437,17 @@ bool GrublistCfg::loadStaticCfg(){
 
 void GrublistCfg::renameRule(Rule* rule, std::string const& newName){
 	rule->outputName = newName;
+}
+
+std::string GrublistCfg::getGrubErrorMessage() const {
+	FILE* errorLogFile = fopen(this->errorLogFile.c_str(), "r");
+	std::string errorMessage;
+	int c;
+	while ((c = fgetc(errorLogFile)) != EOF) {
+		errorMessage += char(c);
+	}
+	fclose(errorLogFile);
+	return errorMessage;
 }
 
 bool GrublistCfg::compare(GrublistCfg const& other) const {

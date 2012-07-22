@@ -47,6 +47,7 @@ class GrublistCfg : public CommonClass {
 	
 	double progress;
 	Mutex* mutex;
+	std::string errorLogFile;
 public:
 	GrublistCfg(GrubEnv& env);
 	void setEventListener(EventListener_model& eventListener);
@@ -99,6 +100,7 @@ public:
 	static bool compareLists(std::list<Rule const*> a, std::list<Rule const*> b);
 	
 	void renameRule(Rule* rule, std::string const& newName);
+	std::string getGrubErrorMessage() const;
 };
 
 #endif

@@ -631,8 +631,21 @@ void GrublistCfgDlgGtk::signal_show_grub_install_dialog_click(){
 	eventListener->installDialogRequest();
 }
 
-void GrublistCfgDlgGtk::showErrorMessage(std::string const& msg){
-	Gtk::MessageDialog(msg, false, Gtk::MESSAGE_ERROR).run();
+void GrublistCfgDlgGtk::showErrorMessage(std::string const& msg, std::vector<std::string> const& values = std::vector<std::string>()){
+	Glib::ustring msg2 = msg;
+	this->log("values.size(): " + Glib::ustring::format(values.size()), Logger::INFO);
+	switch (values.size()) {
+	case 1:	msg2 = Glib::ustring::compose(msg, values[0]); break;
+	case 2:	msg2 = Glib::ustring::compose(msg, values[0], values[1]); break;
+	case 3:	msg2 = Glib::ustring::compose(msg, values[0], values[1], values[2]); break;
+	case 4:	msg2 = Glib::ustring::compose(msg, values[0], values[1], values[2], values[3]); break;
+	case 5:	msg2 = Glib::ustring::compose(msg, values[0], values[1], values[2], values[3], values[4]); break;
+	case 6:	msg2 = Glib::ustring::compose(msg, values[0], values[1], values[2], values[3], values[4], values[5]); break;
+	case 7:	msg2 = Glib::ustring::compose(msg, values[0], values[1], values[2], values[3], values[4], values[5], values[6]); break;
+	case 8:	msg2 = Glib::ustring::compose(msg, values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7]); break;
+	case 9: msg2 = Glib::ustring::compose(msg, values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7], values[8]); break;
+	}
+	Gtk::MessageDialog(msg2, false, Gtk::MESSAGE_ERROR).run();
 }
 
 void GrublistCfgDlgGtk::clear(){

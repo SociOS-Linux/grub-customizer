@@ -125,7 +125,7 @@ public:
 	void removeProxy(void* p);
 	
 	int showExitConfirmDialog(int type);
-	void showErrorMessage(std::string const& msg);
+	void showErrorMessage(std::string const& msg, std::vector<std::string> const& values);
 	void clear();
 	
 	std::string getRuleName(void* rule);

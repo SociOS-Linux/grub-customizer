@@ -21,6 +21,7 @@
 
 #include "evt_listCfgDlg.h"
 #include <string>
+#include <vector>
 
 /**
  * Interface for dialogs which lets the user control the grub list
@@ -89,7 +90,7 @@ public:
 	//asks the user if he wants to exit the whole application
 	virtual int showExitConfirmDialog(int type)=0;
 	//show the given error message
-	virtual void showErrorMessage(std::string const& msg)=0;
+	virtual void showErrorMessage(std::string const& msg, std::vector<std::string> const& values = std::vector<std::string>())=0;
 	//remove everything from the list
 	virtual void clear()=0;
 
