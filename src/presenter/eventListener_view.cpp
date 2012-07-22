@@ -52,3 +52,7 @@ void EventListenerView::scriptSelected(){
 void EventListenerView::removeProxy_requested(Proxy* p){
 	presenter.removeProxy(p);
 }
+
+bool EventListenerView::exitRequest(){
+	return presenter.quit();
+}

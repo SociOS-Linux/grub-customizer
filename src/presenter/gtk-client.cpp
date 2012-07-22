@@ -5,6 +5,9 @@ GtkClient::GtkClient(GrubEnv& env)
 	  installer(NULL), installDlg(NULL),
 	 env(env)
 {
+	disp_sync_load.connect(sigc::mem_fun(this, &GtkClient::syncListView_load));
+	disp_sync_save.connect(sigc::mem_fun(this, &GtkClient::syncListView_save));
+	disp_thread_died.connect(sigc::mem_fun(this, &GtkClient::thread_died_handler));
 }
 
 
@@ -114,7 +117,7 @@ bool GtkClient::prepare(bool forceRootSelection){
 		bool isLiveCD = GrubEnv::isLiveCD();
 		if (forceRootSelection || isLiveCD && firstRun || !burg_found && !grub_found){
 			if (!forceRootSelection && !burg_found && !grub_found && (!isLiveCD || !firstRun)){
-				bool selectRoot = listCfgDlg->bootloader_not_found_requestForRootSelection();
+				bool selectRoot = listCfgDlg->requestForRootSelection();
 				if (!selectRoot)
 					return false;
 			}
@@ -136,7 +139,7 @@ bool GtkClient::prepare(bool forceRootSelection){
 				mode = GrubEnv::BURG_MODE;
 			
 			env.init(mode, root);
-			listCfgDlg->event_mode_changed();
+			listCfgDlg->setIsBurgMode(mode == GrubEnv::BURG_MODE);
 			
 			if (this->grublistCfg->cfgDirIsClean() == false)
 				this->grublistCfg->cleanupCfgDir();
@@ -159,22 +162,22 @@ void GtkClient::startRootSelector(){
 	}
 	else if (new_partition == ""){ //this happens, when a previously selected partition has been umounted
 		this->reset();
-		listCfgDlg->update();
+		this->syncListView_load();
 
 		listCfgDlg->setLockState(3);
 	}
 }
 
 void GtkClient::syncEntryList(){
-	listCfgDlg->event_load_progress_changed();
+	this->disp_sync_load();
 }
 
 void GtkClient::updateSaveProgress(){
-	listCfgDlg->event_save_progress_changed();
+	this->disp_sync_save();
 }
 
 void GtkClient::showErrorThreadDied(){
-	listCfgDlg->event_thread_died();
+	this->disp_thread_died();
 }
 
 void GtkClient::showInstallDialog(){
@@ -209,7 +212,7 @@ void GtkClient::addScriptFromScriptAddDlg(){
 	grublistCfg->renumerate();
 	
 	this->listCfgDlg->setLockState(~0);
-	this->listCfgDlg->update();
+	this->syncListView_load();
 	this->listCfgDlg->setLockState(0);
 	
 	this->listCfgDlg->modificationsUnsaved = true;
@@ -228,3 +231,86 @@ void GtkClient::removeProxy(Proxy* p){
 	this->grublistCfg->proxies.deleteProxy(p);
 	this->listCfgDlg->removeProxy(p);
 }
+
+void GtkClient::syncListView_load(){
+	double progress = this->grublistCfg->getProgress();
+	if (progress != 1){
+		this->listCfgDlg->setProgress(progress);
+		this->listCfgDlg->setStatusText(gettext("loading configuration…"));
+	}
+	else {
+		this->listCfgDlg->thread_active = false; //deprecated
+		if (this->listCfgDlg->quit_requested) //deprecated
+			this->listCfgDlg->close();
+		this->listCfgDlg->hideProgressBar();
+		this->listCfgDlg->setStatusText("");
+	}
+	
+	//if grubConfig is locked, it will be cancelled as early as possible
+	if (this->grublistCfg->lock_if_free()){
+		this->listCfgDlg->clear();
+	
+		for (std::list<Proxy>::iterator iter = this->grublistCfg->proxies.begin(); iter != this->grublistCfg->proxies.end(); iter++){
+			Glib::ustring name = iter->getScriptName() + (this->grublistCfg && iter->dataSource && (progress != 1 && iter->dataSource->fileName != iter->fileName || progress == 1 && grublistCfg->proxies.proxyRequired(*iter->dataSource)) ? gettext(" (custom)") : "");
+			this->listCfgDlg->appendScript(name, iter->isExecutable(), &(*iter));
+			for (std::list<Rule>::iterator ruleIter = iter->rules.begin(); ruleIter != iter->rules.end(); ruleIter++){
+				bool is_other_entries_ph = ruleIter->type == Rule::OTHER_ENTRIES_PLACEHOLDER;
+				if (ruleIter->dataSource || is_other_entries_ph){
+					Glib::ustring name = is_other_entries_ph ? gettext("(new Entries)") : ruleIter->outputName;
+					this->listCfgDlg->appendEntry(name, ruleIter->isVisible, &(*ruleIter), !is_other_entries_ph);
+				}
+			}
+		}
+		this->grublistCfg->unlock();
+	}
+
+	if (progress == 1){
+		this->listCfgDlg->setLockState(0);
+	}
+}
+
+void GtkClient::syncListView_save(){
+	this->listCfgDlg->progress_pulse();
+	if (this->grublistCfg->getProgress() == 1){
+		if (this->grublistCfg->error_proxy_not_found){
+			this->listCfgDlg->showProxyNotFoundMessage();
+			this->grublistCfg->error_proxy_not_found = false;
+		}
+		listCfgDlg->thread_active = false;
+		if (this->listCfgDlg->quit_requested) //deprecated
+			listCfgDlg->close();
+		
+		this->listCfgDlg->setLockState(0);
+		
+		this->listCfgDlg->hideProgressBar();
+		this->listCfgDlg->setStatusText(gettext("Configuration has been saved"));
+	}
+	else {
+		this->listCfgDlg->setStatusText(gettext("updating configuration"));
+	}
+}
+
+//TODO: rename
+void GtkClient::thread_died_handler(){
+	this->listCfgDlg->showErrorMessage(this->grublistCfg->getMessage());
+	this->listCfgDlg->close(); //exit
+}
+
+bool GtkClient::quit(){
+	int dlgResponse = this->listCfgDlg->showExitConfirmDialog(this->grublistCfg->config_has_been_different_on_startup_but_unsaved*2 + this->listCfgDlg->modificationsUnsaved);
+	if (dlgResponse == 1){
+		this->save(); //starts a thread that delays the application exiting
+	}
+	
+	if (dlgResponse != 0){
+		if (this->listCfgDlg->thread_active){
+			this->listCfgDlg->quit_requested = true;
+			this->grublistCfg->cancelThreads();
+			return true;
+		}
+		else
+			return false; //close the window
+	}
+	return true;
+}
+

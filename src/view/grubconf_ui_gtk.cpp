@@ -16,10 +16,6 @@ GrubConfUIGtk::GrubConfUIGtk(GrublistCfg& grubConfig)
 	miAbout(Gtk::Stock::ABOUT), miStartRootSelector(Gtk::Stock::OPEN),
 	thread_active(false), quit_requested(false), modificationsUnsaved(false), lock_state(~0)
 {
-	disp_update_load.connect(sigc::mem_fun(this, &GrubConfUIGtk::update));
-	disp_update_save.connect(sigc::mem_fun(this, &GrubConfUIGtk::update_save));
-	disp_thread_died.connect(sigc::mem_fun(this, &GrubConfUIGtk::thread_died_handler));
-
 	win.set_icon_name("grub-customizer");
 
 	authors.push_back("Daniel Richter https://launchpad.net/~danielrichter2007");
@@ -73,7 +69,6 @@ zeugma https://launchpad.net/~sunder67\
 ");
 	//toolbar
 	toolbar.append(tbttSave);
-	tbttSave.set_tooltip_text(Glib::ustring(gettext("Save configuration and generate a new "))+(this->grubConfig->env.burgMode?"burg.cfg":"grub.cfg"));
 	tbttSave.set_is_important(true);
 	
 	ti_sep1.add(vs_sep1);
@@ -175,30 +170,12 @@ void GrubConfUIGtk::setIsBurgMode(bool isBurgMode){
 		win.set_title("Grub Customizer (" + Glib::ustring(gettext("BURG Mode")) + ")");
 	else
 		win.set_title("Grub Customizer");
+
+	tbttSave.set_tooltip_text(Glib::ustring(gettext("Save configuration and generate a new "))+(isBurgMode?"burg.cfg":"grub.cfg"));
 }
 
-//PRESENTER
-void GrubConfUIGtk::event_mode_changed(){
-	this->setIsBurgMode(this->grubConfig->env.burgMode);
-}
 
-//REMOVE
-void GrubConfUIGtk::event_load_progress_changed(){
-	disp_update_load();
-}
-
-//REMOVE
-void GrubConfUIGtk::event_save_progress_changed(){
-	disp_update_save();
-}
-
-//REMOVE
-void GrubConfUIGtk::event_thread_died(){
-	disp_thread_died();
-}
-
-//RENAME TO requestForRootSelection
-bool GrubConfUIGtk::bootloader_not_found_requestForRootSelection(){
+bool GrubConfUIGtk::requestForRootSelection(){
 	Gtk::MessageDialog dlg(gettext("No Bootloader found"), false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO);
 	dlg.set_secondary_text(gettext("Do you want to select another root partition?"));
 	dlg.set_default_response(Gtk::RESPONSE_YES);
@@ -276,78 +253,13 @@ void GrubConfUIGtk::appendEntry(Glib::ustring const& name, bool is_active, void*
 	tvConfList.expand_all();
 }
 
-//TODO: MOVE TO PRESENTER
-void GrubConfUIGtk::update(){
-	double progress = grubConfig->getProgress();
-	if (progress != 1){
-		this->setProgress(progress);
-		this->setStatusText(gettext("loading configuration…"));
-	}
-	else {
-		thread_active = false; //deprecated
-		if (quit_requested) //deprecated
-			win.hide();
-		this->hideProgressBar();
-		this->setStatusText("");
-	}
-	
-	//if grubConfig is locked, it will be cancelled as early as possible
-	if (grubConfig->lock_if_free()){
-		tvConfList.refTreeStore->clear();
-	
-		for (std::list<Proxy>::iterator iter = grubConfig->proxies.begin(); iter != grubConfig->proxies.end(); iter++){
-			Glib::ustring name = iter->getScriptName() + (grubConfig && iter->dataSource && (progress != 1 && iter->dataSource->fileName != iter->fileName || progress == 1 && grubConfig->proxies.proxyRequired(*iter->dataSource)) ? gettext(" (custom)") : "");
-			this->appendScript(name, iter->isExecutable(), &(*iter));
-			for (std::list<Rule>::iterator ruleIter = iter->rules.begin(); ruleIter != iter->rules.end(); ruleIter++){
-				bool is_other_entries_ph = ruleIter->type == Rule::OTHER_ENTRIES_PLACEHOLDER;
-				if (ruleIter->dataSource || is_other_entries_ph){
-					Glib::ustring name = is_other_entries_ph ? gettext("(new Entries)") : ruleIter->outputName;
-					this->appendEntry(name, ruleIter->isVisible, &(*ruleIter), !is_other_entries_ph);
-				}
-			}
-		}
-		grubConfig->unlock();
-	}
 
-	if (progress == 1){
-		this->setLockState(0);
-	}
-}
 
 void GrubConfUIGtk::showProxyNotFoundMessage(){
 	Gtk::MessageDialog msg(gettext("Proxy binary not found!"), false, Gtk::MESSAGE_WARNING);
 	msg.set_secondary_text(gettext("You will see all entries (uncustomized) when you run grub. This error accurs (in most cases), when you didn't install grub gustomizer currectly."));
 	msg.run();
 }
-
-//TODO: MOVE TO PRESENTER
-void GrubConfUIGtk::update_save(){
-	this->progress_pulse();
-	if (grubConfig->getProgress() == 1){
-		if (grubConfig->error_proxy_not_found){
-			this->showProxyNotFoundMessage();
-			grubConfig->error_proxy_not_found = false;
-		}
-		thread_active = false;
-		if (quit_requested) //deprecated
-			win.hide();
-		
-		this->setLockState(0);
-		
-		this->hideProgressBar();
-		this->setStatusText(gettext("Configuration has been saved"));
-	}
-	else {
-		this->setStatusText(gettext("updating configuration"));
-	}
-}
-
-//TODO: rename
-void GrubConfUIGtk::thread_died_handler(){
-	Gtk::MessageDialog(grubConfig->getMessage(), false, Gtk::MESSAGE_ERROR).run();
-	win.hide(); //exit
-}
-
 
 void GrubConfUIGtk::saveConfig(){
 	eventListener->save_request();
@@ -615,7 +527,8 @@ void GrubConfUIGtk::signal_add_click(){
 void GrubConfUIGtk::removeProxy(Proxy* p){
 	//Parameter is not really required
 	this->setLockState(~0);
-	update();
+	Gtk::TreeModel::iterator iter = getIterByScriptPtr(p);
+	tvConfList.refTreeStore->erase(iter);
 	this->setLockState(0);
 	
 	update_remove_button();
@@ -665,28 +578,9 @@ void GrubConfUIGtk::update_move_buttons(){
 	}
 }
 
-//MOVE TO PRESENTER...............
-bool GrubConfUIGtk::quit(){
-	int dlgResponse = showExitConfirmDialog(grubConfig->config_has_been_different_on_startup_but_unsaved*2 + modificationsUnsaved);
-	if (dlgResponse == 1){
-		this->saveConfig(); //starts a thread that delays the application exiting
-	}
-	
-	if (dlgResponse != 0){
-		if (thread_active){
-			quit_requested = true;
-			grubConfig->cancelThreads();
-			return true;
-		}
-		else
-			return false; //close the window
-	}
-	return true;
-}
 
-void GrubConfUIGtk::signal_quit_click(){
-	if (this->quit() == false)
-		win.hide();
+void GrubConfUIGtk::close(){
+	win.hide();
 }
 
 /**
@@ -733,7 +627,12 @@ int GrubConfUIGtk::showExitConfirmDialog(int type){
 }
 
 bool GrubConfUIGtk::signal_delete_event(GdkEventAny* event){ //return value: keep window open
-	return this->quit();
+	return eventListener->exitRequest();
+}
+
+void GrubConfUIGtk::signal_quit_click(){
+	if (eventListener->exitRequest() == false)
+		this->close();
 }
 
 void GrubConfUIGtk::signal_about_dlg_response(int response_id){
@@ -745,7 +644,13 @@ void GrubConfUIGtk::signal_show_grub_install_dialog_click(){
 	eventListener->installDialogRequest();
 }
 
+void GrubConfUIGtk::showErrorMessage(Glib::ustring const& msg){
+	Gtk::MessageDialog(msg, false, Gtk::MESSAGE_ERROR).run();
+}
 
+void GrubConfUIGtk::clear(){
+	tvConfList.refTreeStore->clear();
+}
 
 GrubConfListing::GrubConfListing(){
 	refTreeStore = Gtk::TreeStore::create(treeModel);

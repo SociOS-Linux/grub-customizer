@@ -45,7 +45,6 @@ class GrubConfUIGtk : public GrubConfUI {
 	
 	GrubConfListing tvConfList;
 	Gtk::ProgressBar progressBar;
-	Glib::Dispatcher disp_update_load, disp_update_save, disp_thread_died;
 
 	Glib::ustring appName, appVersion;
 	std::vector<Glib::ustring> authors;
@@ -66,22 +65,19 @@ class GrubConfUIGtk : public GrubConfUI {
 	Gtk::Menu subFile, subEdit, subView, subHelp;
 	Gtk::AboutDialog dlgAbout;
 	
-	bool quit_requested;
+	
 	bool lock_state;
-	public: bool modificationsUnsaved, thread_active; //TODO: move to presenter!
+	public: bool quit_requested, modificationsUnsaved, thread_active; //TODO: move to presenter!
 	
 public:
 	GrubConfUIGtk(GrublistCfg& grubConfig);
 	void setEventListener(EventListenerView_iface& eventListener);
 	void run();
-	void update();
-	void update_save();
-	void thread_died_handler();
+	void close();
 	void event_load_progress_changed();
 	void event_save_progress_changed();
 	void event_thread_died();
-	void event_mode_changed();
-	bool bootloader_not_found_requestForRootSelection();
+	bool requestForRootSelection();
 	std::string show_root_selector();
 	bool requestForBurgMode();
 	
@@ -135,7 +131,8 @@ public:
 	void removeProxy(Proxy* p);
 	
 	int showExitConfirmDialog(int type);
-	bool quit();
+	void showErrorMessage(Glib::ustring const& msg);
+	void clear();
 };
 
 #endif

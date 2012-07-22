@@ -20,6 +20,7 @@ public:
 	void scriptAddDlg_applied();
 	void scriptSelected();
 	void removeProxy_requested(Proxy* p);
+	bool exitRequest();
 };
 
 #endif

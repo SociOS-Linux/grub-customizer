@@ -4,6 +4,7 @@
 #include "../model/grublistCfg.h"
 #include "../view/grubconf_ui_gtk.h"
 #include <glibmm/thread.h>
+#include <glibmm/dispatcher.h>
 #include <libintl.h>
 #include <locale.h>
 #include "../config.h"
@@ -28,6 +29,8 @@ class GtkClient {
 	GrubInstaller* installer;
 	GrubInstallDlg* installDlg;
 	ScriptAddDlg* scriptAddDlg;
+	
+	Glib::Dispatcher disp_sync_load, disp_sync_save, disp_thread_died;
 public:
 	void setModelListCfg(GrublistCfg& grublistCfg);
 	void setViewListCfg(GrubConfUIGtk& listCfgDlg);
@@ -63,6 +66,12 @@ public:
 	void updateScriptAddDlgPreview();
 	
 	void removeProxy(Proxy* p);
+	
+	void syncListView_load();
+	void syncListView_save();
+	void thread_died_handler();
+	
+	bool quit();
 };
 
 #endif
