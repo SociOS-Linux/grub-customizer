@@ -1,6 +1,7 @@
 #ifndef EVENTLISTENER_VIEW_IFACE
 #define EVENTLISTENER_VIEW_IFACE
 #include "../model/rule.h"
+#include "../model/proxy.h"
 #include <string>
 
 class EventListenerView_iface {
@@ -16,6 +17,7 @@ class EventListenerView_iface {
 	virtual void scriptAddDlg_requested()=0;
 	virtual void scriptAddDlg_applied()=0;
 	virtual void scriptSelected()=0;
+	virtual void removeProxy_requested(Proxy* p)=0;
 };
 
 #endif

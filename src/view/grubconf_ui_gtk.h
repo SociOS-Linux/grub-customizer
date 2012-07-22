@@ -131,6 +131,8 @@ public:
 	void setDefaultTitleStatusText(Glib::ustring const& str);
 	void ruleSelected(Rule* rule);
 	void proxySelected(Proxy* proxy);
+	
+	void removeProxy(Proxy* p);
 };
 
 #endif

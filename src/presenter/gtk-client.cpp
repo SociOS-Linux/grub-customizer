@@ -223,3 +223,8 @@ void GtkClient::updateScriptAddDlgPreview(){
 			scriptAddDlg->addToPreview(iter->name);
 	}
 }
+
+void GtkClient::removeProxy(Proxy* p){
+	this->grublistCfg->proxies.deleteProxy(p);
+	this->listCfgDlg->removeProxy(p);
+}

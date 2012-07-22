@@ -48,3 +48,7 @@ void EventListenerView::scriptAddDlg_applied(){
 void EventListenerView::scriptSelected(){
 	presenter.updateScriptAddDlgPreview();
 }
+
+void EventListenerView::removeProxy_requested(Proxy* p){
+	presenter.removeProxy(p);
+}

@@ -19,6 +19,7 @@ public:
 	void scriptAddDlg_requested();
 	void scriptAddDlg_applied();
 	void scriptSelected();
+	void removeProxy_requested(Proxy* p);
 };
 
 #endif

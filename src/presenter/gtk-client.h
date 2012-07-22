@@ -61,6 +61,8 @@ public:
 	void showScriptAddDlg();
 	void addScriptFromScriptAddDlg();
 	void updateScriptAddDlgPreview();
+	
+	void removeProxy(Proxy* p);
 };
 
 #endif

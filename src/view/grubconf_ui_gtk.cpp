@@ -612,17 +612,19 @@ void GrubConfUIGtk::signal_add_click(){
 	eventListener->scriptAddDlg_requested();
 }
 
-
-void GrubConfUIGtk::signal_remove_click(){
-	Proxy* proxyPointer = (Proxy*)(*(tvConfList.get_selection()->get_selected()))[tvConfList.treeModel.relatedProxy];
-	this->grubConfig->proxies.deleteProxy(proxyPointer);
-	
+void GrubConfUIGtk::removeProxy(Proxy* p){
+	//Parameter is not really required
 	this->setLockState(~0);
 	update();
 	this->setLockState(0);
 	
 	update_remove_button();
 	modificationsUnsaved = true;
+}
+
+void GrubConfUIGtk::signal_remove_click(){
+	Proxy* proxyPointer = (Proxy*)(*(tvConfList.get_selection()->get_selected()))[tvConfList.treeModel.relatedProxy];
+	eventListener->removeProxy_requested(proxyPointer);
 }
 
 void GrubConfUIGtk::signal_preference_click(){
