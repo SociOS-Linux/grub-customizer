@@ -8,22 +8,14 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-11-28 22:09+0100\n"
-"PO-Revision-Date: 2010-12-08 22:29+0000\n"
+"PO-Revision-Date: 2011-01-22 15:00+0000\n"
 "Last-Translator: Daniel Richter <danielrichter2007@web.de>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-01-22 12:20+0000\n"
-"X-Generator: Launchpad (build 12214)\n"
-
-#: ../src/settings_dlg_gtk.cpp:68
-msgid "previously _booted entry"
-msgstr "entrada previamente utilizada: _booted"
-
-#: ../src/settings_dlg_gtk.cpp:85
-msgid "A_ppearance"
-msgstr "A_parência"
+"X-Launchpad-Export-Date: 2011-03-26 14:24+0000\n"
+"X-Generator: Launchpad (build 12661)\n"
 
 #: ../src/grubconfig.cpp:203 ../src/grubconfig.cpp:218
 msgid " not found. Is grub2 installed?"
@@ -441,6 +433,10 @@ msgstr "preto"
 msgid "pre_defined: "
 msgstr "pré_definido: "
 
+#: ../src/settings_dlg_gtk.cpp:68
+msgid "previously _booted entry"
+msgstr "entrada previamente utilizada: _booted"
+
 #: ../src/settings_dlg_gtk.cpp:69
 msgid "default entry"
 msgstr "entrada padrão"
@@ -524,6 +520,10 @@ msgstr "configurações"
 #: ../src/settings_dlg_gtk.cpp:84
 msgid "_General"
 msgstr "_Geral"
+
+#: ../src/settings_dlg_gtk.cpp:85
+msgid "A_ppearance"
+msgstr "A_parência"
 
 #: ../src/settings_dlg_gtk.cpp:86
 msgid "_Advanced"

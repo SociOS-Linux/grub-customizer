@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-11-28 22:09+0100\n"
-"PO-Revision-Date: 2010-12-18 15:21+0000\n"
+"PO-Revision-Date: 2011-01-22 15:00+0000\n"
 "Last-Translator: Papp Bence <papp.bence89@gmail.com>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-01-22 12:20+0000\n"
-"X-Generator: Launchpad (build 12214)\n"
+"X-Launchpad-Export-Date: 2011-03-26 14:24+0000\n"
+"X-Generator: Launchpad (build 12661)\n"
 
 #: ../src/grubconfig.cpp:203 ../src/grubconfig.cpp:218
 msgid " not found. Is grub2 installed?"
@@ -234,7 +234,7 @@ msgstr "boottöltő telepítése..."
 
 #: ../src/grubconf_ui_gtk.cpp:737
 msgid "Please type a device string!"
-msgstr ""
+msgstr "Kérem gépeljen be egy eszköz stringet!"
 
 #: ../src/grubconf_ui_gtk.cpp:747 ../src/settings_dlg_gtk.cpp:92
 msgid "is active"
@@ -299,6 +299,16 @@ msgid ""
 "as the actually running one.\n"
 "If not, you will get an error message when trying to load the configuration."
 msgstr ""
+"Mielőtt szerkeszteni tudja a grub konfigurációját\n"
+"fel kell csatolnia a szükséges partíciókat.\n"
+"\n"
+"Ez a varázsló fogja segíteni önt ebben.\n"
+"\n"
+"\n"
+"Kérem bizonyosodjon meg arról, hogy a cél rendszer ugyan olyan\n"
+"cpu architektúrán fut, mint amit éppen futtat.\n"
+"Ha nem, akkor hibaüzenetet fog kapni, mikor megpróbálja betölteni a "
+"konfigurációt."
 
 #: ../src/liveCDSetupDialog.cpp:21
 msgid "Grub Customizer: Partition chooser"

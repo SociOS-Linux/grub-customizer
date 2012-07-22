@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-11-28 22:09+0100\n"
-"PO-Revision-Date: 2011-01-15 17:20+0000\n"
-"Last-Translator: Jan Bažant aka Brbla <brbla@brbla.net>\n"
+"PO-Revision-Date: 2011-02-13 17:55+0000\n"
+"Last-Translator: Zbyněk Schwarz <Unknown>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-01-22 12:20+0000\n"
-"X-Generator: Launchpad (build 12214)\n"
+"X-Launchpad-Export-Date: 2011-03-26 14:24+0000\n"
+"X-Generator: Launchpad (build 12661)\n"
 
 #: ../src/grubconfig.cpp:203 ../src/grubconfig.cpp:218
 msgid " not found. Is grub2 installed?"
@@ -59,6 +59,9 @@ msgid ""
 "files to the bootloaders data directory\n"
 "(if they don't already exist)."
 msgstr ""
+"Nainstalujte zavaděč do MBR a vložte nějaké\n"
+"soubory do datového adresáře zavaděče\n"
+"(pokud ještě neexistují)."
 
 #: ../src/grubconf_ui_gtk.cpp:21
 msgid "_Device: "
@@ -156,13 +159,15 @@ msgstr "(nové položky)"
 
 #: ../src/grubconf_ui_gtk.cpp:363
 msgid "Proxy binary not found!"
-msgstr ""
+msgstr "Spustitelný soubor proxy nenalezen!"
 
 #: ../src/grubconf_ui_gtk.cpp:364
 msgid ""
 "You will see all entries (uncustomized) when you run grub. This error accurs "
 "(in most cases), when you didn't install grub gustomizer currectly."
 msgstr ""
+"Když spustíte grub, uvidíte všechny záznamy (nepřizpůsobené). Tato chyba se "
+"(většinou) objeví, když jste správně nenainstalovali grub přizpůsobovač."
 
 #: ../src/grubconf_ui_gtk.cpp:382
 msgid "Configuration has been saved"
@@ -174,7 +179,7 @@ msgstr "aktualizace konfigurace"
 
 #: ../src/grubconf_ui_gtk.cpp:442
 msgid "Name the Entry"
-msgstr ""
+msgstr "Název vstupu"
 
 #: ../src/grubconf_ui_gtk.cpp:558
 msgid "Default title: "
@@ -324,7 +329,7 @@ msgstr "popisek"
 
 #: ../src/liveCDSetupDialog.cpp:62
 msgid "Select required submountpoints"
-msgstr ""
+msgstr "Vyberte požadované podbody připojení"
 
 #: ../src/liveCDSetupDialog.cpp:82
 msgid "Partition Chooser"
@@ -425,11 +430,11 @@ msgstr "před_definované: "
 
 #: ../src/settings_dlg_gtk.cpp:68
 msgid "previously _booted entry"
-msgstr ""
+msgstr "dříve _zavedený záznam"
 
 #: ../src/settings_dlg_gtk.cpp:69
 msgid "default entry"
-msgstr ""
+msgstr "výchozí vstup"
 
 #: ../src/settings_dlg_gtk.cpp:69
 msgid "visibility"
@@ -453,7 +458,7 @@ msgstr "parametry jádra"
 
 #: ../src/settings_dlg_gtk.cpp:71
 msgid "generate recovery entries"
-msgstr ""
+msgstr "vytvořit záznamy k obnově"
 
 #: ../src/settings_dlg_gtk.cpp:71
 msgid "look for other operating systems"
@@ -525,10 +530,12 @@ msgstr "hodnota"
 
 #: ../src/settings_dlg_gtk.cpp:129
 msgid "Entry %1 (by position)"
-msgstr ""
+msgstr "Vstup% 1 (dle pozice)"
 
 #: ../src/settings_dlg_gtk.cpp:419
 msgid ""
 "This option doesn't work when the \"os-prober\" script finds other operating "
 "systems. Disable \"%1\" if you don't need to boot other operating systems."
 msgstr ""
+"Tato volba nefunguje, když skript \"os-prober\" nalezne jíné operační "
+"systémy. Vypněte \"%1\", pokud nepotřebujete zavádět jiné operační systémy"

@@ -20,6 +20,7 @@ AboutDialogGtk::AboutDialogGtk()
 	this->set_translator_credits(
 "Adam Czabara https://launchpad.net/~adam-czabara\n\
 Alexey Ivanov https://launchpad.net/~alexey.ivanes\n\
+ASTUR2000 https://launchpad.net/~enolsp94\n\
 Bernardo Miguel Savone https://launchpad.net/~bersil\n\
 Careone https://launchpad.net/~zzbusagain\n\
 Daniel Richter https://launchpad.net/~danielrichter2007\n\
@@ -33,6 +34,7 @@ gilles chaon https://launchpad.net/~g-chaon\n\
 GoJoMo https://launchpad.net/~tolbkni\n\
 Jan Bažant aka Brbla https://launchpad.net/~brbla\n\
 Jarosław Ogrodnik https://launchpad.net/~goz\n\
+jmb_kz https://launchpad.net/~jmb-kz\n\
 Jörg BUCHMANN https://launchpad.net/~jorg-buchmann\n\
 José Humberto Melo https://launchpad.net/~josehumberto-melo\n\
 Manuel Xosé Lemos https://launchpad.net/~mxlemos\n\
@@ -42,6 +44,7 @@ Miguel Anxo Bouzada https://launchpad.net/~mbouzada\n\
 nafterburner https://launchpad.net/~nafterburner\n\
 Octaiver Matt https://launchpad.net/~octaivermatt\n\
 patel https://launchpad.net/~patel\n\
+rob https://launchpad.net/~rvdb\n\
 shishimaru https://launchpad.net/~salvi-uchiha\n\
 Svetoslav Stefanov https://launchpad.net/~svetlisashkov\n\
 TheMengzor https://launchpad.net/~the-mengzor\n\

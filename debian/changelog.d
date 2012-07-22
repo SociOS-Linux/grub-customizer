@@ -1,5 +1,15 @@
 #!/bin/sh
 cat << EOF
+grub-customizer (2.1.2-0ubuntu1~ppa1$1) $2; urgency=medium
+
+   * menu colors fixed
+   * multiple loads (results in a chash) prevented
+   * empty setting names won't simply be saved anymore
+   * settings dialog now better handles the case when entries doesn't exist
+   * translation updates
+
+ -- Daniel Richter <danielrichter2007@web.de>  Sat, 26 Mar 2011 17:26:38 +0100
+
 grub-customizer (2.1.1-0ubuntu1~ppa1$1) $2; urgency=medium
 
    * better conf corruption detection/fix functionality

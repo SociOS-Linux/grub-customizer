@@ -1,16 +1,16 @@
-# French translation for grub-customizer
-# Copyright (c) 2010 Rosetta Contributors and Canonical Ltd 2010
+# Asturian translation for grub-customizer
+# Copyright (c) 2011 Rosetta Contributors and Canonical Ltd 2011
 # This file is distributed under the same license as the grub-customizer package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2011.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-11-28 22:09+0100\n"
-"PO-Revision-Date: 2011-02-13 18:14+0000\n"
-"Last-Translator: Draky <Unknown>\n"
-"Language-Team: French <fr@li.org>\n"
+"PO-Revision-Date: 2011-03-05 15:11+0000\n"
+"Last-Translator: ASTUR2000 <Unknown>\n"
+"Language-Team: Asturian <ast@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -19,40 +19,39 @@ msgstr ""
 
 #: ../src/grubconfig.cpp:203 ../src/grubconfig.cpp:218
 msgid " not found. Is grub2 installed?"
-msgstr " non trouvé. Est-ce que grub2 est installé ?"
+msgstr " nun atopáu. ¿Ta Grub allugáu?"
 
 #: ../src/grubconfig.cpp:287
 msgid " couldn't be executed successfully. You must run this as root!"
-msgstr ""
-" n'a pu être exécuté avec succès. Vous devez le lancer en tant que root !"
+msgstr " Nun pudo executase. ¡Ties qu'aniciar como alministrador!"
 
 #: ../src/grubconf_ui_gtk.cpp:11
 msgid "_File"
-msgstr "_Fichier"
+msgstr "_Ficheru"
 
 #: ../src/grubconf_ui_gtk.cpp:12
 msgid "_Edit"
-msgstr "_Éditer"
+msgstr "_Remanar"
 
 #: ../src/grubconf_ui_gtk.cpp:12
 msgid "_View"
-msgstr "_Affichage"
+msgstr "_Güeyar"
 
 #: ../src/grubconf_ui_gtk.cpp:12
 msgid "_Help"
-msgstr "_Aide"
+msgstr "_Aida"
 
 #: ../src/grubconf_ui_gtk.cpp:13
 msgid "_Install to MBR …"
-msgstr "_Installation dans le MBR"
+msgstr "_Allugar a MBR..."
 
 #: ../src/grubconf_ui_gtk.cpp:18
 msgid "Script to insert:"
-msgstr "Script à insérer :"
+msgstr "Script a enxertar"
 
 #: ../src/grubconf_ui_gtk.cpp:18
 msgid "Preview:"
-msgstr "Prévisualiser :"
+msgstr "Previsualizar:"
 
 #: ../src/grubconf_ui_gtk.cpp:20
 msgid ""
@@ -60,141 +59,139 @@ msgid ""
 "files to the bootloaders data directory\n"
 "(if they don't already exist)."
 msgstr ""
-"Installe le programme de démarrage dans le MBR et copie quelques\n"
-"fichiers dans son répertoire de données\n"
-"(s'ils ne sont pas présents)."
+"Allugar el bootloader a MBR y poner dalgunos\n"
+"archivos a los direutorios de los bootloaders\n"
+"(si nun esisten yá)."
 
 #: ../src/grubconf_ui_gtk.cpp:21
 msgid "_Device: "
-msgstr "_Périphérique : "
+msgstr "_Preséu: "
 
 #: ../src/grubconf_ui_gtk.cpp:54
 msgid ""
 "Grub Customizer is a graphical interface to configure the grub2/burg settings"
 msgstr ""
-"Grub Customizer est une interface graphique de configuration des paramètres "
-"de grub2/burg"
+"Grub Customizer ye una interfaz gráfica pa configurar axustes de Grub2/burg"
 
 #: ../src/grubconf_ui_gtk.cpp:82
 msgid "Save configuration and generate a new "
-msgstr "Enregistrer la configuration et en générer une nouvelle "
+msgstr "Atoldar axustes y xenerar unu nuevu "
 
 #: ../src/grubconf_ui_gtk.cpp:89
 msgid "Add a script to your configuration"
-msgstr "Ajouter un script à votre configuration"
+msgstr "Añader un script a los tos axustes"
 
 #: ../src/grubconf_ui_gtk.cpp:91
 msgid "Remove a script from your configuration"
-msgstr "Supprimer un script de votre configuration"
+msgstr "Esborrar un script dende los tos axustes"
 
 #: ../src/grubconf_ui_gtk.cpp:97
 msgid "Move up the selected entry or script"
-msgstr "Déplacer vers le haut l'entrée ou le script sélectionné"
+msgstr "Xubir p'arriba la entrada o script esbillaos"
 
 #: ../src/grubconf_ui_gtk.cpp:99
 msgid "Move down the selected entry or script"
-msgstr "Déplacer vers le bas l'entrée ou le script sélectionné"
+msgstr "Baxar p'abaxo la entrada o script esbillaos"
 
 #: ../src/grubconf_ui_gtk.cpp:107
 msgid "reload configuration"
-msgstr "Recharger la configuration"
+msgstr "recargar axustes"
 
 #: ../src/grubconf_ui_gtk.cpp:110
 msgid "Edit grub preferences"
-msgstr "Éditer les préférences de grub"
+msgstr "Editar axustes Grub"
 
 #: ../src/grubconf_ui_gtk.cpp:139
 msgid "Select _partition …"
-msgstr "Sélectionner une _partition..."
+msgstr "Esbillar _partición ..."
 
 #: ../src/grubconf_ui_gtk.cpp:146
 msgid "Add script"
-msgstr "Ajouter un script"
+msgstr "Añader script"
 
 #: ../src/grubconf_ui_gtk.cpp:162
 msgid "Entry"
-msgstr "Entrée"
+msgstr "Entrada"
 
 #: ../src/grubconf_ui_gtk.cpp:177
 msgid "Install to MBR"
-msgstr "Installer sur le MBR"
+msgstr "Allugar a MBR"
 
 #: ../src/grubconf_ui_gtk.cpp:222
 msgid "BURG Mode"
-msgstr "mode BURG"
+msgstr "Mou BURG"
 
 #: ../src/grubconf_ui_gtk.cpp:243
 msgid "No Bootloader found"
-msgstr "Aucun programme de démarrage trouvé"
+msgstr "Bootloader nun atopáu"
 
 #: ../src/grubconf_ui_gtk.cpp:244
 msgid "Do you want to select another root partition?"
-msgstr "Voulez-vous sélectionner une autre partition root ?"
+msgstr "¿Quiés esbillar otra partición?"
 
 #: ../src/grubconf_ui_gtk.cpp:251
 msgid "BURG found!"
-msgstr "BURG trouvé !"
+msgstr "¡BURG atopáu!"
 
 #: ../src/grubconf_ui_gtk.cpp:252
 msgid "Do you want to configure BURG instead of grub2?"
-msgstr "Voulez-vous configurer BURG à la place de grub2 ?"
+msgstr "¿Quiés configurar BURG?"
 
 #: ../src/grubconf_ui_gtk.cpp:272
 msgid "The bootloader has been installed successfully"
-msgstr "Le programme de démarrage a été installé avec succès"
+msgstr "El bootloader foi esbilláu"
 
 #: ../src/grubconf_ui_gtk.cpp:277
 msgid "Error while installing the bootloader"
-msgstr "Erreur durant l'installation du programme de démarrage"
+msgstr "Erru mentanto s'allugaba'l bootloader"
 
 #: ../src/grubconf_ui_gtk.cpp:299
 msgid "loading configuration…"
-msgstr "chargement de la configuration..."
+msgstr "cargando configuración..."
 
 #: ../src/grubconf_ui_gtk.cpp:330
 msgid " (custom)"
-msgstr " (personnalisé)"
+msgstr " (personalizao)"
 
 #: ../src/grubconf_ui_gtk.cpp:342
 msgid "(new Entries)"
-msgstr "(nouvelles entrées)"
+msgstr "(nueves Entraes)"
 
 #: ../src/grubconf_ui_gtk.cpp:363
 msgid "Proxy binary not found!"
-msgstr "Binaire du proxy non trouvé !"
+msgstr "¡Binariu proxy nun atopáu!"
 
 #: ../src/grubconf_ui_gtk.cpp:364
 msgid ""
 "You will see all entries (uncustomized) when you run grub. This error accurs "
 "(in most cases), when you didn't install grub gustomizer currectly."
 msgstr ""
-"Vous verrez toutes les entrées (non personnalisées) quand vous lancerez "
-"grub. Cette erreur apparaît (dans la plupart des cas), lorsque vous n'avez "
-"pas installé grub customizer correctement."
+"Güeyarás toles entraes (non customizaes) cuando anicies Grub. Esti erru sal "
+"(na meyoría de casos), cuando nun allugasti Grub Customizer correutamente"
 
 #: ../src/grubconf_ui_gtk.cpp:382
 msgid "Configuration has been saved"
-msgstr "La configuration a été enregistrée"
+msgstr "Los axustes foron atoldaos"
 
 #: ../src/grubconf_ui_gtk.cpp:385
 msgid "updating configuration"
-msgstr "mise à jour de la configuration"
+msgstr "Anovando axustes"
 
 #: ../src/grubconf_ui_gtk.cpp:442
 msgid "Name the Entry"
-msgstr "Nommer l'entrée"
+msgstr "Nome d'Entrada"
 
 #: ../src/grubconf_ui_gtk.cpp:558
 msgid "Default title: "
-msgstr "Titre par défaut : "
+msgstr "Títulu per defeutu: "
 
 #: ../src/grubconf_ui_gtk.cpp:578
 msgid "No script found"
-msgstr "Aucun script trouvé"
+msgstr "Script nun atopáu"
 
 #: ../src/grubconf_ui_gtk.cpp:673
 msgid "The saved configuration is not up to date!"
-msgstr "La configuration enregistrée n'est pas à jour !"
+msgstr "¡La configuración atoldada nun ta anovada!"
 
 #: ../src/grubconf_ui_gtk.cpp:674
 msgid ""
@@ -202,80 +199,78 @@ msgid ""
 "startup. So what you see now may not be what you see when you restart your "
 "pc. To fix this, click update!"
 msgstr ""
-"La configuration générée n'est pas identique à la configuration enregistrée "
-"au démarrage. Ainsi ce que vous voyez maintenant peut ne pas être ce que "
-"vous verrez lorsque vous redémarrerez votre ordinateur. Pour corrigez ceci, "
-"cliquez sur mettre à jour !"
+"Los axustes xeneraos nun tan iguaos a los atoldaos nel aniciu. Asina que lo "
+"que güeyes agora nun sedrá lo mesmo cuando reanicies el PC. Pa esclariar "
+"esti problema, ¡Primi n'anovar!"
 
 #: ../src/grubconf_ui_gtk.cpp:677
 msgid "_Quit without update"
-msgstr "_Quitter sans mettre à jour"
+msgstr "_Colar ensín anovar"
 
 #: ../src/grubconf_ui_gtk.cpp:680
 msgid "_Update & Quit"
-msgstr "_Mettre à jour & Quitter"
+msgstr "_Anovar y Colar"
 
 #: ../src/grubconf_ui_gtk.cpp:684
 msgid "Do you want to save your modifications?"
-msgstr "Voulez-vous enregistrer vos modifications ?"
+msgstr "¿Quiés atoldar los tos cambeos?"
 
 #: ../src/grubconf_ui_gtk.cpp:687
 msgid "_Quit without saving"
-msgstr "_Quitter sans enregistrer"
+msgstr "_Colar ensín atoldar"
 
 #: ../src/grubconf_ui_gtk.cpp:690
 msgid "_Save & Quit"
-msgstr "_Enregistrer & Quitter"
+msgstr "_Atoldar y Colar"
 
 #: ../src/grubconf_ui_gtk.cpp:693
 msgid "AND: your modifications are still unsaved, update will save them too!"
 msgstr ""
-"AND: Vos modifications ne sont pas enregistrées, la mise à jour le fera "
-"automatiquement!"
+"Y: Los tos cambeos nun tan atoldaos enaina, ¡anovar atoldaralos tamién!"
 
 #: ../src/grubconf_ui_gtk.cpp:732
 msgid "installing the bootloader…"
-msgstr "Installation du programme de démarrage..."
+msgstr "allugando'l bootloader"
 
 #: ../src/grubconf_ui_gtk.cpp:737
 msgid "Please type a device string!"
-msgstr ""
+msgstr "¡Por favor escribi una cadena de preseos!"
 
 #: ../src/grubconf_ui_gtk.cpp:747 ../src/settings_dlg_gtk.cpp:92
 msgid "is active"
-msgstr "est actif"
+msgstr "Ta activu"
 
 #: ../src/grubconf_ui_gtk.cpp:748 ../src/settings_dlg_gtk.cpp:93
 msgid "name"
-msgstr "nom"
+msgstr "nome"
 
 #: ../src/gtk-client.cpp:14
 msgid " command not found, cannot proceed"
-msgstr " commande non trouvée, ne peut pas continuer"
+msgstr " comandu nun atopáu, nun pue siguise"
 
 #: ../src/liveCDSetupDialog.cpp:5
 msgid "_use another partition: "
-msgstr "_utiliser une autre partition : "
+msgstr "_Usar otra partición "
 
 #: ../src/liveCDSetupDialog.cpp:6
 msgid "Mount selected Filesystem"
-msgstr "Monter le système de fichiers sélectionné"
+msgstr "Montar el Filesystem esbilláu"
 
 #: ../src/liveCDSetupDialog.cpp:7
 msgid "Unmount mounted Filesystem"
-msgstr "Démonter le système de fichiers sélectionné"
+msgstr "Desmontar el Filesystem esbilláu"
 
 #: ../src/liveCDSetupDialog.cpp:10
 msgid ""
 "These are the mountpoints of your fstab file.\n"
 "Please select every grub/boot related partition."
 msgstr ""
-"Ce sont les points de montage de votre fichier fstab.\n"
-"Veuillez choisir chaque partition liée à grub/boot."
+"Estos son los puntos de montax del fstab.\n"
+"Por favor esbilla caunes de les partciones Grub/boot."
 
 #: ../src/liveCDSetupDialog.cpp:15
 msgid "You started Grub Customizer using the live CD."
-msgstr "Vous avez lancé Grub Customizer à l'aide du live CD."
+msgstr "Entamasti Grub Customizer pel live CD."
 
 #: ../src/liveCDSetupDialog.cpp:17
 msgid ""
@@ -285,12 +280,11 @@ msgid ""
 "again and save the configuration (or run update-grub/update-burg)\n"
 "to get the entry back!"
 msgstr ""
-"Vous avez choisi l'option pour choisir une autre partition.\n"
-"Notez : Le'xplorateur de système d'exploitation pourrait ne pas trouver "
-"votre système actuellement en cours d'utilisation.\n"
-"En conséquence, lancez à nouveau le logiciel de personnalisation de Grub sur "
-"le système de destination et enregistrez la configuration (ou lancez update-"
-"grub/update-burg) pour retrouver l'entrée !"
+"Esbillasti la opción pa esbillar otra partición.\n"
+"Nota: El os-prober nun pue alcontrar anguaño'l sistema.\n"
+"¡Asina qu'anicia Grub Customizer nel sistema de destín\n"
+"otra vegada ya atolda los axustes (o anicia update-grub/update-burg)\n"
+"pa consiguir la entrada!"
 
 #: ../src/liveCDSetupDialog.cpp:19
 msgid ""
@@ -304,247 +298,244 @@ msgid ""
 "as the actually running one.\n"
 "If not, you will get an error message when trying to load the configuration."
 msgstr ""
-"Avant de pouvoir éditer votre configuration de grub, nous devons\n"
-"monter les partitions nécessaires.\n"
+"Enantes de cambear axustes de Grub tenemos que\n"
+"montar le particiones precises.\n"
 "\n"
-"Cet assistant va vous aider à faire ceci.\n"
+"Esti asistente aidarate faciendo esto.\n"
 "\n"
 "\n"
-"Veuillez vous assurer que le système cible est basé sur la même architecture "
-"cpu\n"
-"que celle actuellement démarrée.\n"
-"Sinon, vous obtiendrez un message d'erreur lorsque vous essayerez de charger "
-"la configuration."
+"Afítate de la arquitectura del sistema de destín\n"
+"na qu'anguaño furrula.\n"
+"Si non, consiguirás un mensax d'erru mentato preves a cargar los axustes."
 
 #: ../src/liveCDSetupDialog.cpp:21
 msgid "Grub Customizer: Partition chooser"
-msgstr "Grub Customizer : Sélecteur de partition"
+msgstr "Grub Customizer: Esbillador de partición"
 
 #: ../src/liveCDSetupDialog.cpp:25
 msgid "Select and mount your root partition"
-msgstr "Sélectionne et monte votre partition root"
+msgstr "Esbillar y montar partición root"
 
 #: ../src/liveCDSetupDialog.cpp:43
 msgid "partition"
-msgstr "partition"
+msgstr "partición"
 
 #: ../src/liveCDSetupDialog.cpp:44
 msgid "type"
-msgstr "type"
+msgstr "triba"
 
 #: ../src/liveCDSetupDialog.cpp:45
 msgid "label"
-msgstr "étiquette"
+msgstr "etiqueta"
 
 #: ../src/liveCDSetupDialog.cpp:62
 msgid "Select required submountpoints"
-msgstr "Choisissez les sous-points de montage nécessaires"
+msgstr "Esbillar los puntos montax antemanaos requerios"
 
 #: ../src/liveCDSetupDialog.cpp:82
 msgid "Partition Chooser"
-msgstr "Sélecteur de partition"
+msgstr "Esbillador de partición"
 
 #: ../src/liveCDSetupDialog.cpp:152
 msgid "Mount failed!"
-msgstr "Le montage a échoué !"
+msgstr "¡Montax fallicu!"
 
 #: ../src/liveCDSetupDialog.cpp:167
 msgid "This seems not to be a root file system (no fstab found)"
-msgstr "Cela ne semble pas être un fichier système root (fstab non trouvé)"
+msgstr "Esto nun parez ser un sistema d'archivos (fstab nun atopáu"
 
 #: ../src/liveCDSetupDialog.cpp:176
 msgid "umount failed!"
-msgstr "Le démontage a échoué !"
+msgstr "¡Desmotax fallicu!"
 
 #: ../src/liveCDSetupDialog.cpp:210
 msgid "Couldn't mount the selected partition"
-msgstr "Impossible de monter la partition sélectionnée"
+msgstr "Nun pue montase la partición esbillada"
 
 #: ../src/liveCDSetupDialog.cpp:212
 msgid "Couldn't umount the selected partition"
-msgstr "Impossible de démonter la partition sélectionnée"
+msgstr "Nun pue desmontase la partición esbillada"
 
 #: ../src/settings_dlg_gtk.cpp:47
 msgid "white"
-msgstr "blanc"
+msgstr "blancu"
 
 #: ../src/settings_dlg_gtk.cpp:48
 msgid "yellow"
-msgstr "jaune"
+msgstr "mariellu"
 
 #: ../src/settings_dlg_gtk.cpp:49
 msgid "light-cyan"
-msgstr "cyan clair"
+msgstr "cian claro"
 
 #: ../src/settings_dlg_gtk.cpp:50
 msgid "cyan"
-msgstr "cyan"
+msgstr "cian"
 
 #: ../src/settings_dlg_gtk.cpp:51
 msgid "light-blue"
-msgstr "bleu clair"
+msgstr "azul claro"
 
 #: ../src/settings_dlg_gtk.cpp:52
 msgid "blue"
-msgstr "bleu"
+msgstr "azul"
 
 #: ../src/settings_dlg_gtk.cpp:53
 msgid "light-green"
-msgstr "vert clair"
+msgstr "verde claro"
 
 #: ../src/settings_dlg_gtk.cpp:54
 msgid "green"
-msgstr "vert"
+msgstr "verde"
 
 #: ../src/settings_dlg_gtk.cpp:55
 msgid "light-magenta"
-msgstr "magenta clair"
+msgstr "maxenta claro"
 
 #: ../src/settings_dlg_gtk.cpp:56
 msgid "magenta"
-msgstr "magenta"
+msgstr "maxenta"
 
 #: ../src/settings_dlg_gtk.cpp:57
 msgid "light-red"
-msgstr "rouge clair"
+msgstr "bermeyu claro"
 
 #: ../src/settings_dlg_gtk.cpp:58
 msgid "red"
-msgstr "rouge"
+msgstr "bermeyu"
 
 #: ../src/settings_dlg_gtk.cpp:59
 msgid "brown"
-msgstr "marron"
+msgstr "castañu"
 
 #: ../src/settings_dlg_gtk.cpp:60
 msgid "light-gray"
-msgstr "gris clair"
+msgstr "grai claro"
 
 #: ../src/settings_dlg_gtk.cpp:61
 msgid "dark-gray"
-msgstr "gris foncé"
+msgstr "grai escuro"
 
 #: ../src/settings_dlg_gtk.cpp:62
 msgid "transparent"
-msgstr "transparent"
+msgstr "tresparente"
 
 #: ../src/settings_dlg_gtk.cpp:62
 msgid "black"
-msgstr "noir"
+msgstr "prietu"
 
 #: ../src/settings_dlg_gtk.cpp:68
 msgid "pre_defined: "
-msgstr "pré_défini : "
+msgstr "pre_definío "
 
 #: ../src/settings_dlg_gtk.cpp:68
 msgid "previously _booted entry"
-msgstr "entrée précédemment _amorcée"
+msgstr "Entrada aniciada _anterior"
 
 #: ../src/settings_dlg_gtk.cpp:69
 msgid "default entry"
-msgstr "entrée par défaut"
+msgstr "entrada per defeutu"
 
 #: ../src/settings_dlg_gtk.cpp:69
 msgid "visibility"
-msgstr "visibilité"
+msgstr "visibilidá"
 
 #: ../src/settings_dlg_gtk.cpp:69
 msgid "show menu"
-msgstr "afficher le menu"
+msgstr "amosar menú"
 
 #: ../src/settings_dlg_gtk.cpp:70
 msgid "Timeout"
-msgstr "Délai d'expiration"
+msgstr "Tiempu llímite"
 
 #: ../src/settings_dlg_gtk.cpp:70
 msgid "Seconds"
-msgstr "Secondes"
+msgstr "Segundos"
 
 #: ../src/settings_dlg_gtk.cpp:70
 msgid "kernel parameters"
-msgstr "paramètres du noyau"
+msgstr "Parametros kernel"
 
 #: ../src/settings_dlg_gtk.cpp:71
 msgid "generate recovery entries"
-msgstr "génère les entrées de récupération"
+msgstr "xenerar entraes recuperaes"
 
 #: ../src/settings_dlg_gtk.cpp:71
 msgid "look for other operating systems"
-msgstr "recherche d'autres systèmes d'exploitation"
+msgstr "restolar por otros sistemas"
 
 #: ../src/settings_dlg_gtk.cpp:72
 msgid "custom resolution: "
-msgstr "résolution personnalisée : "
+msgstr "otra resolución: "
 
 #: ../src/settings_dlg_gtk.cpp:73
 msgid "font color"
-msgstr "couleur de la police"
+msgstr "color fonte"
 
 #: ../src/settings_dlg_gtk.cpp:73
 msgid "background"
-msgstr "arrière-plan"
+msgstr "fondu"
 
 #: ../src/settings_dlg_gtk.cpp:74
 msgid "normal:"
-msgstr "normal :"
+msgstr "normal:"
 
 #: ../src/settings_dlg_gtk.cpp:74
 msgid "highlight:"
-msgstr "éclairé:"
+msgstr "señalar:"
 
 #: ../src/settings_dlg_gtk.cpp:75
 msgid "menu colors"
-msgstr "couleur des menus"
+msgstr "menú colores"
 
 #: ../src/settings_dlg_gtk.cpp:75
 msgid "background image"
-msgstr "Image de fond"
+msgstr "semeya de fondu"
 
 #: ../src/settings_dlg_gtk.cpp:76
 msgid "copy to grub directory"
-msgstr "copier dans le répertoire grub"
+msgstr "copiar al direutoriu Grub"
 
 #: ../src/settings_dlg_gtk.cpp:76
 msgid "remove background"
-msgstr "supprime l'image de fond"
+msgstr "esborrar fondu"
 
 #: ../src/settings_dlg_gtk.cpp:77
 msgid ""
 "To get the colors above working,\n"
 "you have to select a background image!"
 msgstr ""
-"Pour que les couleurs ci-dessus fonctionnent,\n"
-"vous devez sélectionner une image de fond !"
+"¡Pa consiguir colores enriba que trabayen\n"
+"ties que esbillar una semeya de fondu!"
 
 #: ../src/settings_dlg_gtk.cpp:80
 msgid "settings"
-msgstr "paramètres"
+msgstr "axustes"
 
 #: ../src/settings_dlg_gtk.cpp:84
 msgid "_General"
-msgstr "_Général"
+msgstr "_Xeneral"
 
 #: ../src/settings_dlg_gtk.cpp:85
 msgid "A_ppearance"
-msgstr "A_pparence"
+msgstr "_Aspeutu"
 
 #: ../src/settings_dlg_gtk.cpp:86
 msgid "_Advanced"
-msgstr "_Avancé"
+msgstr "_Avanzao"
 
 #: ../src/settings_dlg_gtk.cpp:94
 msgid "value"
-msgstr "valeur"
+msgstr "Valor"
 
 #: ../src/settings_dlg_gtk.cpp:129
 msgid "Entry %1 (by position)"
-msgstr "Entrée %1 (par emplacement)"
+msgstr "Entrada %1 (per allugamientu)"
 
 #: ../src/settings_dlg_gtk.cpp:419
 msgid ""
 "This option doesn't work when the \"os-prober\" script finds other operating "
 "systems. Disable \"%1\" if you don't need to boot other operating systems."
 msgstr ""
-"Cette option ne fonctionne pas lorsque le script de \"détection de système\" "
-"trouve d'autres systèmes d'exploitation. Désactiver \"%1\" si vous n'avez "
-"pas besoin de démarrer d'autres systèmes d'exploitation."
+"Esta opción nun furrula cuando'l script \"os-prober\" atopa otros sistemes. "
+"Desanicia \"%1\" si necesites aniciar otros sistemes."
