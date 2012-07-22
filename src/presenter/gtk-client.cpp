@@ -83,19 +83,22 @@ void GtkClient::showSettingsDlg(){
 }
 
 void GtkClient::run(){
-	bool do_continue = this->prepare();
-	if (do_continue){
-		Glib::Thread::create(sigc::bind(sigc::mem_fun(this, &GtkClient::load), false), false);
-		this->listCfgDlg->run();
-	}
-	this->grublistCfg->umountSwitchedRootPartition(); //cleanup… only if another partition has been mounted
-
 	savedListCfg->verbose = false;
+
 	FILE* blkidProc = popen("blkid", "r");
 	if (blkidProc){
 		deviceDataList->loadData(blkidProc);
 		pclose(blkidProc);
 	}
+
+	bool do_continue = this->prepare();
+	if (do_continue){
+		Glib::Thread::create(sigc::bind(sigc::mem_fun(this, &GtkClient::load), false), false);
+		this->listCfgDlg->run();
+	}
+
+	if (this->mountTable->getEntryByMountpoint(PARTCHOOSER_MOUNTPOINT))
+		this->mountTable->umountAll(PARTCHOOSER_MOUNTPOINT);
 }
 
 void GtkClient::load(bool preserveConfig){
@@ -171,9 +174,10 @@ bool GtkClient::prepare(bool forceRootSelection){
 					return false;
 			}
 
-			root = partitionChooser->run();
+			this->initRootSelector();
+			partitionChooser->run();
 
-			if (root == "")
+			if (env.cfg_dir_prefix == "")
 				return false;
 			else {
 				forceRootSelection = false;
@@ -203,19 +207,7 @@ bool GtkClient::prepare(bool forceRootSelection){
 }
 
 void GtkClient::startRootSelector(){
-	std::string old_partition = this->env.getRootDevice();
 	bool done = this->prepare(true);
-	std::string new_partition = this->env.getRootDevice();
-	
-	if (done || old_partition != new_partition && new_partition != ""){
-		Glib::Thread::create(sigc::bind(sigc::mem_fun(this, &GtkClient::load), false), false);
-		listCfgDlg->setLockState(5);
-	}
-	else if (new_partition == ""){ //this happens, when a previously selected partition has been umounted
-		this->reset();
-		this->syncListView_load();
-		listCfgDlg->setLockState(3);
-	}
 }
 
 void GtkClient::initRootSelector(){
@@ -231,14 +223,13 @@ void GtkClient::initRootSelector(){
 	this->partitionChooser->updateSensitivity();
 }
 
-//TODO: MOVE TO PRESENTER
 void GtkClient::readPartitionInfo(){
+	this->partitionChooser->clearPartitionSelector();
 	for (DeviceDataList::iterator iter = deviceDataList->begin(); iter != deviceDataList->end(); iter++){
 		this->partitionChooser->addPartitionSelectorItem(iter->first, iter->second["TYPE"], iter->second["LABEL"]);
 	}
 }
 
-//TODO: MOVE TO PRESENTER
 void GtkClient::generateSubmountpointSelection(std::string const& prefix){
 	this->partitionChooser->removeAllSubmountpoints();
 
@@ -254,7 +245,6 @@ void GtkClient::generateSubmountpointSelection(std::string const& prefix){
 	}
 }
 
-//TODO: MOVE TO PRESENTER
 void GtkClient::mountRootFs(){
 	std::string selectedDevice = this->partitionChooser->getSelectedDevice();
 	partitionChooser->setIsMounted(true);
@@ -279,7 +269,6 @@ void GtkClient::mountRootFs(){
 }
 
 
-//TODO: MOVE TO PRESENTER
 void GtkClient::umountRootFs(){
 	try {
 		this->mountTable->umountAll(PARTCHOOSER_MOUNTPOINT);
@@ -291,22 +280,26 @@ void GtkClient::umountRootFs(){
 			Gtk::MessageDialog(gettext("umount failed!")).run();
 	}
 	partitionChooser->updateSensitivity();
+
+	//clear list cfg dialog
+	this->reset();
+	this->syncListView_load();
+	listCfgDlg->setLockState(3);
 }
 
 
-//TODO: MOVE TO PRESENTER
 void GtkClient::cancelPartitionChooser(){
 	this->partitionChooser->is_cancelled = true;
 	this->partitionChooser->hide();
 }
 
 
-//TODO: MOVE TO PRESENTER
 void GtkClient::applyPartitionChooser(){
 	this->partitionChooser->hide();
+	Glib::Thread::create(sigc::bind(sigc::mem_fun(this, &GtkClient::load), false), false);
+	listCfgDlg->setLockState(5);
 }
 
-//TODO: MOVE to presenter
 void GtkClient::mountSubmountpoint(Glib::ustring const& submountpoint){
 	try {
 		this->mountTable->getEntryRefByMountpoint(PARTCHOOSER_MOUNTPOINT + submountpoint).mount();
@@ -319,7 +312,6 @@ void GtkClient::mountSubmountpoint(Glib::ustring const& submountpoint){
 	}
 }
 
-//TODO: move to presenter
 void GtkClient::umountSubmountpoint(Glib::ustring const& submountpoint){
 	try {
 		this->mountTable->getEntryRefByMountpoint(PARTCHOOSER_MOUNTPOINT + submountpoint).umount();

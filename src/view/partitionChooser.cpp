@@ -60,9 +60,9 @@ PartitionChooser::PartitionChooser(bool isLiveCD)
 	lvRootPartitionSelection.get_selection()->signal_changed().connect(sigc::mem_fun(this, &PartitionChooser::signal_lvRootPartitionSelection_changed));
 	
 	this->append_page(vbAdditionalMountSelectionPage);
-	set_page_title(vbAdditionalMountSelectionPage, gettext("Select required submountpoints"));
+	this->set_page_title(vbAdditionalMountSelectionPage, gettext("Select required submountpoints"));
 	vbAdditionalMountSelectionPageList.set_border_width(10);
-	set_page_type(vbAdditionalMountSelectionPage, Gtk::ASSISTANT_PAGE_CONFIRM);
+	this->set_page_type(vbAdditionalMountSelectionPage, Gtk::ASSISTANT_PAGE_CONFIRM);
 
 	this->set_title(Glib::ustring("Grub Customizer: ")+gettext("Partition Chooser"));
 	this->set_icon_name("grub-customizer");
@@ -186,21 +186,11 @@ void PartitionChooser::submountpoint_toggle(Gtk::CheckButton& sender){
 	}
 }
 
-std::string PartitionChooser::getRootMountpoint() const {
-	return isMounted ? PARTCHOOSER_MOUNTPOINT : "";
-}
 
-bool PartitionChooser::isCancelled() const {
-	return is_cancelled;
-}
-
-Glib::ustring PartitionChooser::run(){
+void PartitionChooser::run(){
+	this->updateSensitivity();
 	this->show_all();
 	Gtk::Main::run(*this);
-	if (this->isCancelled())
-		return "";
-	else
-		return this->getRootMountpoint();
 }
 
 void PartitionChooser::setIsMounted(bool isMounted){

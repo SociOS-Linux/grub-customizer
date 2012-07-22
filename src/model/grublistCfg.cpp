@@ -12,19 +12,6 @@ void GrublistCfg::setEventListener(EventListenerModel_iface& eventListener) {
 }
 
 
-bool GrublistCfg::umountSwitchedRootPartition(){
-	if (env.cfg_dir_prefix != ""){
-		/*TODO: use MountTable::uMountAll() instead
-		bool res = umount_all(env.cfg_dir_prefix);
-		if (!res)
-			return false;
-		env.cfg_dir_prefix = "";*/
-		return true;
-	}
-	else
-		return true;
-}
-
 
 void GrublistCfg::lock(){
 	while (this->locked) usleep(1000); //wait until another thread is has unlocked this object

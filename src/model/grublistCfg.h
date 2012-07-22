@@ -38,7 +38,6 @@ public:
 	bool verbose;
 	bool error_proxy_not_found;
 	GrubEnv& env;
-	bool umountSwitchedRootPartition();
 	void lock();
 	bool lock_if_free();
 	void unlock();

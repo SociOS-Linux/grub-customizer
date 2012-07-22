@@ -8,6 +8,7 @@
 #include <locale.h>
 #include <iostream>
 #include "../config.h"
+//TODO: fix blank window when Gtk::Assistant will be reopened
 class PartitionChooser : public Gtk::Assistant {
 	Gtk::Label lblMessage, lblSubmountpointDescription;
 	Gtk::ListViewText lvRootPartitionSelection;
@@ -43,9 +44,7 @@ class PartitionChooser : public Gtk::Assistant {
 	void removeAllSubmountpoints();
 	void submountpoint_toggle(Gtk::CheckButton& sender);
 	void showErrorMessage(MountException::Type type);
-	std::string getRootMountpoint() const; //TODO: remove
-	bool isCancelled() const; //TODO: remove
-	Glib::ustring run();
+	void run();
 	Gtk::CheckButton& getSubmountpointCheckboxByLabel(Glib::ustring const& label);
 	void setSubmountpointSelectionState(Glib::ustring const& submountpoint, bool new_isSelected);
 	void setIsMounted(bool isMounted);
