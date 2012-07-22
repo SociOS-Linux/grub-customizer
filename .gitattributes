@@ -66,8 +66,6 @@ src/model/script.cpp -text
 src/model/script.h -text
 src/model/settings_mng_ds.cpp -text
 src/model/settings_mng_ds.h -text
-src/model/umount_all.cpp -text
-src/model/umount_all.h -text
 src/presenter/eventListener_abstract.cpp -text
 src/presenter/eventListener_abstract.h -text
 src/presenter/eventListener_model.cpp -text

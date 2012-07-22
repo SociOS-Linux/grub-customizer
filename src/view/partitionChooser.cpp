@@ -62,26 +62,14 @@ PartitionChooser::PartitionChooser(bool isLiveCD)
 	set_page_title(vbAdditionalMountSelectionPage, gettext("Select required submountpoints"));
 	vbAdditionalMountSelectionPageList.set_border_width(10);
 	set_page_type(vbAdditionalMountSelectionPage, Gtk::ASSISTANT_PAGE_CONFIRM);
-	
-	
-	FILE* mtabfile = fopen("/etc/mtab", "r");
-	if (mtabfile){
-		MountTable mtab(mtabfile);
-		fclose(mtabfile);
-		if (mtab.getEntryByMountpoint("/media/grub-customizer_recovery_root_mountpoint")){
-			mountpoint = "/media/grub-customizer_recovery_root_mountpoint";
-			FILE* fstab = fopen((mountpoint+"/etc/fstab").c_str(), "r");
-			if (fstab){
-				generateSubmountpointSelection(fstab);
-				fclose(fstab);
-			}
-		}
-	}
-	
-	this->updateSensitivity();
+
 	this->set_title(Glib::ustring("Grub Customizer: ")+gettext("Partition Chooser"));
 	this->set_icon_name("grub-customizer");
 	this->set_default_size(640, 480);
+}
+
+void PartitionChooser::setEventListener(EventListenerView_iface& eventListener){
+	this->eventListener = &eventListener;
 }
 
 void PartitionChooser::readPartitionInfo(){
@@ -107,76 +95,79 @@ void PartitionChooser::signal_custom_partition_typing(){
 	updateSensitivity();
 }
 
-void PartitionChooser::generateSubmountpointSelection(FILE* fstabFile){
+//TODO: MOVE TO PRESENTER
+void PartitionChooser::generateSubmountpointSelection(std::string const& prefix){
+	this->removeAllSubmountpoints();
+
+	//create new submountpoint checkbuttons
+	for (MountTable::const_iterator iter = rootFstab.begin(); iter != rootFstab.end(); iter++){
+		if (iter->mountpoint.length() > prefix.length()
+		 && iter->mountpoint != prefix + "/dev"
+		 && iter->mountpoint != prefix + "/proc"
+		 && iter->mountpoint != prefix + "/sys"
+		) {
+			this->addSubmountpoint(iter->mountpoint.substr(prefix.length()), iter->isMounted);
+		}
+	}
+}
+
+void PartitionChooser::removeAllSubmountpoints(){
 	//delete all existing submountpoint checkbuttons
 	Glib::ListHandle< Widget* > allChilds = vbAdditionalMountSelectionPageList.get_children();
 	for (Glib::ListHandle<Widget*>::iterator iter = allChilds.begin(); iter != allChilds.end(); iter++){
 		vbAdditionalMountSelectionPageList.remove(**iter);
 		delete &**iter;
 	}
-	
-	MountTable fstab(fstabFile);
-	MountTable mtab;
-	FILE* mtabfile = fopen((mountpoint+"/etc/mtab").c_str(), "r");
-	if (mtabfile){
-		mtab = MountTable(mtabfile);
-		fclose(mtabfile);
-	}
-	//create new submountpoint checkbuttons
-	int mpointCount = 0;
-	for (MountTable::iterator iter = fstab.begin(); iter != fstab.end(); iter++){
-		if (iter->mountpoint[0] == '/' && iter->mountpoint.length() > 1 && iter->mountpoint != "/proc"){
-			Gtk::CheckButton* cb = new Gtk::CheckButton(iter->mountpoint);
-			cb->set_active(mtab.getEntryByMountpoint(iter->mountpoint));
-			cb->signal_toggled().connect(sigc::bind<Gtk::CheckButton&>(sigc::mem_fun(this, &PartitionChooser::submountpoint_toggle), *cb));
-		
-			vbAdditionalMountSelectionPageList.pack_start(*cb, Gtk::PACK_SHRINK);
-			mpointCount++;
-		}
-	}
+	this->set_page_type(vbRootSelectPage, Gtk::ASSISTANT_PAGE_CONFIRM);
+}
 
+void PartitionChooser::addSubmountpoint(std::string const& mountpoint, bool isMounted){
+	Gtk::CheckButton* cb = new Gtk::CheckButton(mountpoint);
+	cb->set_active(isMounted);
+	cb->signal_toggled().connect(sigc::bind<Gtk::CheckButton&>(sigc::mem_fun(this, &PartitionChooser::submountpoint_toggle), *cb));
+
+	vbAdditionalMountSelectionPageList.pack_start(*cb, Gtk::PACK_SHRINK);
 	vbAdditionalMountSelectionPageList.hide(); //is required to see the checkboxes… I don't know why (rendering problem of gtk)
 	vbAdditionalMountSelectionPageList.show_all();
-	if (mpointCount == 0){
-		set_page_type(vbRootSelectPage, Gtk::ASSISTANT_PAGE_CONFIRM);
-	}
+	this->set_page_type(vbRootSelectPage, Gtk::ASSISTANT_PAGE_CONTENT);
+}
+
+std::string PartitionChooser::getSelectedDevice(){
+	return chkCustomPartition.get_active() ? txtCustomPartition.get_text() : lvRootPartitionSelection.get_text(lvRootPartitionSelection.get_selected()[0],0);
 }
 
 void PartitionChooser::signal_btt_mount_click(){
-	std::string selectedDevice = chkCustomPartition.get_active() ? txtCustomPartition.get_text() : lvRootPartitionSelection.get_text(lvRootPartitionSelection.get_selected()[0],0);
-	mountpoint = "/media/grub-customizer_recovery_root_mountpoint";
+	std::string selectedDevice = this->getSelectedDevice();
+	mountpoint = PARTCHOOSER_MOUNTPOINT;
 	mkdir(mountpoint.c_str(), 0755);
-	int result = system(("mount "+selectedDevice+" "+mountpoint).c_str());
-	if (result != 0){
-		Gtk::MessageDialog(gettext("Mount failed!")).run();
-		mountpoint = "";
+	try {
+		rootFstab.clear(mountpoint);
+		rootFstab.mountRootFs(selectedDevice, mountpoint);
+		this->generateSubmountpointSelection(mountpoint);
 	}
-	else {
-		FILE* fstabFile = fopen((mountpoint+"/etc/fstab").c_str(), "r");
-		int umountErrs = 0; //no used - only to use the return values of system in any way
-		if (fstabFile != NULL){
-			this->generateSubmountpointSelection(fstabFile);
-			fclose(fstabFile);
-			
-			//binding system mountpoints - should work. If not, this may be no problem…
-			system(("mount -o bind /proc '"+mountpoint+"/proc'").c_str()) || umountErrs++;
-			system(("mount -o bind /dev '"+mountpoint+"/dev'").c_str()) || umountErrs++;
-			system(("mount -o bind /sys '"+mountpoint+"/sys'").c_str()) || umountErrs++;
+	catch (MountException e) {
+		if (e.type == MountException::MOUNT_FAILED){
+			Gtk::MessageDialog(gettext("Mount failed!")).run();
+			mountpoint = "";
 		}
-		else {
+		else if (e.type == MountException::MOUNT_ERR_NO_FSTAB){
 			Gtk::MessageDialog(gettext("This seems not to be a root file system (no fstab found)")).run();
-			system(("umount "+mountpoint).c_str()) || umountErrs++;
+			rootFstab.getEntryByMountpoint(mountpoint).umount();
 			mountpoint = "";
 		}
 	}
 	updateSensitivity();
 }
+
 void PartitionChooser::signal_btt_umount_click(){
-	if (!umount_all(mountpoint)){
-		Gtk::MessageDialog(gettext("umount failed!")).run();
-	}
-	else {
+	try {
+		this->rootFstab.umountAll(mountpoint);
+		this->rootFstab.clear(mountpoint);
 		mountpoint = "";
+	}
+	catch (MountException e){
+		if (e.type == MountException::MOUNT_FAILED)
+			Gtk::MessageDialog(gettext("umount failed!")).run();
 	}
 	updateSensitivity();
 }
@@ -204,12 +195,20 @@ void PartitionChooser::on_apply(){
 
 void PartitionChooser::submountpoint_toggle(Gtk::CheckButton& sender){
 	if (submountpoint_toggle_run_event){
-		int mountSuccess = system(("chroot '"+mountpoint+"' "+(sender.get_active() ? "mount" : "umount")+" '"+sender.get_label()+"'").c_str());
-		if (mountSuccess != 0){
+		try {
+			Mountpoint& m = this->rootFstab.getEntryRefByMountpoint(mountpoint + sender.get_label());
 			if (sender.get_active())
-				Gtk::MessageDialog(gettext("Couldn't mount the selected partition")).run();
+				m.mount();
 			else
-				Gtk::MessageDialog(gettext("Couldn't umount the selected partition")).run();
+				m.umount();
+		}
+		catch (MountException e){
+			if (e.type == MountException::MOUNT_FAILED){
+				if (sender.get_active())
+					Gtk::MessageDialog(gettext("Couldn't mount the selected partition")).run();
+				else
+					Gtk::MessageDialog(gettext("Couldn't umount the selected partition")).run();
+			}
 			submountpoint_toggle_run_event = false;
 			sender.set_active(!sender.get_active()); //reset checkbox
 			submountpoint_toggle_run_event = true;
@@ -226,7 +225,14 @@ bool PartitionChooser::isCancelled() const {
 }
 
 Glib::ustring PartitionChooser::run(){
+	rootFstab.loadData("");
+	rootFstab.loadData(PARTCHOOSER_MOUNTPOINT);
+	if (rootFstab.getEntryByMountpoint(PARTCHOOSER_MOUNTPOINT)){
+		mountpoint = PARTCHOOSER_MOUNTPOINT;
+		this->generateSubmountpointSelection(mountpoint);
+	}
 	this->readPartitionInfo();
+	this->updateSensitivity();
 	this->show_all();
 	Gtk::Main::run(*this);
 	if (this->isCancelled())
@@ -234,4 +240,6 @@ Glib::ustring PartitionChooser::run(){
 	else
 		return this->getRootMountpoint();
 }
+
+
 

@@ -21,7 +21,7 @@
 <folderInfo id="0.1415292818." name="/" resourcePath="">
 <toolChain id="org.eclipse.cdt.build.core.prefbase.toolchain.1444339418" name="No ToolChain" resourceTypeBasedDiscovery="false" superClass="org.eclipse.cdt.build.core.prefbase.toolchain">
 <targetPlatform id="org.eclipse.cdt.build.core.prefbase.toolchain.1444339418.1103566747" name=""/>
-<builder arguments="-c 'cd build &amp;&amp; cmake .. &amp;&amp; make'" command="bash" id="org.eclipse.cdt.build.core.settings.default.builder.495570154" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" superClass="org.eclipse.cdt.build.core.settings.default.builder"/>
+<builder arguments="-c 'cmake .. -DCMAKE_BUILD_TYPE=Debug &amp;&amp; make'" buildPath="/home/daniel/Dokumente/GrubCustomizer/MVP2/2.1/build" command="bash" id="org.eclipse.cdt.build.core.settings.default.builder.495570154" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" superClass="org.eclipse.cdt.build.core.settings.default.builder"/>
 <tool id="org.eclipse.cdt.build.core.settings.holder.libs.2057152307" name="holder for library settings" superClass="org.eclipse.cdt.build.core.settings.holder.libs"/>
 <tool id="org.eclipse.cdt.build.core.settings.holder.675120191" name="Assembly" superClass="org.eclipse.cdt.build.core.settings.holder">
 <option id="org.eclipse.cdt.build.core.settings.holder.incpaths.703233735" name="Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths" valueType="includePath">
@@ -59,7 +59,7 @@
 <inputType id="org.eclipse.cdt.build.core.settings.holder.inType.1953731366" languageId="org.eclipse.cdt.core.parser.upc.upc" languageName="UPC" sourceContentType="org.eclipse.cdt.core.parser.upc.upcSource" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 </tool>
 <tool id="org.eclipse.cdt.build.core.settings.holder.1423269240" name="GNU C++" superClass="org.eclipse.cdt.build.core.settings.holder">
-<option id="org.eclipse.cdt.build.core.settings.holder.incpaths.96255070" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths" valueType="includePath">
+<option id="org.eclipse.cdt.build.core.settings.holder.incpaths.96255070" name="Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths" valueType="includePath">
 <listOptionValue builtIn="false" value="/usr/include/gtkmm-2.4"/>
 <listOptionValue builtIn="false" value="/usr/lib/gtkmm-2.4/include"/>
 <listOptionValue builtIn="false" value="/usr/include/giomm-2.4"/>

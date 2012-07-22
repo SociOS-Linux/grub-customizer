@@ -3,10 +3,11 @@
 #include <gtkmm.h>
 #include "../model/deviceDataList.h"
 #include "../model/mountTable.h"
-#include "../model/umount_all.h"
+#include "../interface/eventListener_view_iface.h"
 #include <libintl.h>
 #include <locale.h>
 #include <iostream>
+#include "../config.h"
 class PartitionChooser : public Gtk::Assistant {
 	Gtk::Label lblMessage, lblSubmountpointDescription;
 	Gtk::ListViewText lvRootPartitionSelection;
@@ -22,11 +23,14 @@ class PartitionChooser : public Gtk::Assistant {
 	Gtk::Button bttMountFs, bttUmountFs;
 	bool submountpoint_toggle_run_event;
 	bool is_cancelled;
+	EventListenerView_iface* eventListener;
+	MountTable rootFstab;
 	public:
 	PartitionChooser(bool isLiveCD);
+	void setEventListener(EventListenerView_iface& eventListener);
 	void updateSensitivity();
 	void readPartitionInfo();
-	void generateSubmountpointSelection(FILE* fstabFile);
+	void generateSubmountpointSelection(std::string const& prefix);
 	void signal_custom_partition_toggled();
 	void signal_lvRootPartitionSelection_changed();
 	void signal_custom_partition_typing();
@@ -34,6 +38,10 @@ class PartitionChooser : public Gtk::Assistant {
 	void signal_btt_umount_click();
 	void on_cancel();
 	void on_apply();
+
+	std::string getSelectedDevice();
+	void addSubmountpoint(std::string const& mountpoint, bool isMounted);
+	void removeAllSubmountpoints();
 	void submountpoint_toggle(Gtk::CheckButton& sender);
 	std::string getRootMountpoint() const;
 	bool isCancelled() const;

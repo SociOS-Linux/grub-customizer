@@ -14,10 +14,11 @@ void GrublistCfg::setEventListener(EventListenerModel_iface& eventListener) {
 
 bool GrublistCfg::umountSwitchedRootPartition(){
 	if (env.cfg_dir_prefix != ""){
+		/*TODO: use MountTable::uMountAll() instead
 		bool res = umount_all(env.cfg_dir_prefix);
 		if (!res)
 			return false;
-		env.cfg_dir_prefix = "";
+		env.cfg_dir_prefix = "";*/
 		return true;
 	}
 	else

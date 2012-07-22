@@ -16,7 +16,6 @@
 #include "libproxyscript_parser.h"
 #include "../config.h"
 #include "mountTable.h"
-#include "umount_all.h"
 #include "settings_mng_ds.h"
 #include "grubEnv.h"
 #include "../interface/eventListener_model_iface.h"
@@ -48,6 +47,7 @@ public:
 	bool createScriptForwarder(std::string const& scriptName) const;
 	bool removeScriptForwarder(std::string const& scriptName) const;
 	std::string readScriptForwarder(std::string const& scriptForwarderFilePath) const;
+	//TODO: CRASH when loading my /dev/sda8!
 	void load(bool keepConfig = false);
 	void save();
 	void readGeneratedFile(FILE* source, bool createScriptIfNotFound = false);

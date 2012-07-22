@@ -26,9 +26,9 @@ int main(int argc, char** argv){
 	GrublistCfg* savedListCfg = new GrublistCfg(env);
 	savedListCfg->verbose = false;
 	FbResolutionsGetter* fbResolutionsGetter = new FbResolutionsGetter;
+	GrubSettingsDlgGtk* settingsDlg = new GrubSettingsDlgGtk;
 
 	
-	GrubSettingsDlgGtk* settingsDlg = new GrubSettingsDlgGtk;
 	presenter.setModelListCfg(*listcfg);
 	presenter.setViewListCfg(*listCfgView);
 	presenter.setViewSettingsDialog(*settingsDlg);
@@ -46,6 +46,7 @@ int main(int argc, char** argv){
 	installDlg->setEventListener(evt_view);
 	scriptAddDlg->setEventListener(evt_view);
 	settingsDlg->setEventListener(evt_view);
+	partitionChooser->setEventListener(evt_view);
 	
 	EventListenerModel evt_model(presenter);
 	listcfg->setEventListener(evt_model);

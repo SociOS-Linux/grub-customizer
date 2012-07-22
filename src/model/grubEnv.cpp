@@ -58,7 +58,7 @@ bool GrubEnv::isLiveCD(){
 	FILE* mtabFile = fopen("/etc/mtab", "r");
 	MountTable mtab;
 	if (mtabFile){
-		mtab.loadData(mtabFile);
+		mtab.loadData(mtabFile, "");
 		fclose(mtabFile);
 	}
 	return mtab && mtab.getEntryByMountpoint("/").fileSystem == "aufs";
@@ -68,7 +68,7 @@ std::string GrubEnv::getRootDevice(){
 	FILE* mtabFile = fopen("/etc/mtab", "r");
 	MountTable mtab;
 	if (mtabFile){
-		mtab.loadData(mtabFile);
+		mtab.loadData(mtabFile, "");
 		fclose(mtabFile);
 	}
 	return mtab.getEntryByMountpoint(cfg_dir_prefix == "" ? "/" : cfg_dir_prefix).device;

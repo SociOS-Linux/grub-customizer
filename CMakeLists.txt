@@ -34,7 +34,6 @@ add_executable(grub-customizer
 	src/model/rule.cpp
 	src/model/script.cpp
 	src/model/deviceDataList.cpp
-	src/model/umount_all.cpp
 	src/model/grubEnv.cpp
 	src/view/settings_dlg_gtk.cpp
 	src/model/settings_mng_ds.cpp
