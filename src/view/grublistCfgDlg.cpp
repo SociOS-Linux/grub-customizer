@@ -5,7 +5,7 @@ ImageMenuItemOwnKey::ImageMenuItemOwnKey(const Gtk::StockID& id, const Gtk::Acce
 }
 
 GrublistCfgDlg::GrublistCfgDlg()
-	: appName("Grub Customizer"), appVersion("2.0.6"), //TODO: MOVE NAME AND VERSION TO config.h.in
+	: appName("Grub Customizer"), appVersion(GC_VERSION), //TODO: MOVE NAME AND VERSION TO config.h.in
 	tbttAdd(Gtk::Stock::ADD), tbttRemove(Gtk::Stock::REMOVE), tbttUp(Gtk::Stock::GO_UP), tbttDown(Gtk::Stock::GO_DOWN),
 	tbttSave(Gtk::Stock::SAVE), tbttPreferences(Gtk::Stock::PREFERENCES),
 	miFile(gettext("_File"), true), miExit(Gtk::Stock::QUIT), tbttReload(Gtk::Stock::REFRESH),

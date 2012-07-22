@@ -5,6 +5,7 @@
 #include "../interface/eventListener_view_iface.h"
 #include <iostream>
 #include <libintl.h>
+#include "../config.h"
 
 
 class GrubConfListing : public Gtk::TreeView {
