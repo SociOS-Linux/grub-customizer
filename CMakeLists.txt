@@ -60,8 +60,8 @@ target_link_libraries(grub-customizer
 
 configure_file ("config.h.in" "${CMAKE_CURRENT_SOURCE_DIR}/src/config.h")
 
-configure_file ("misc/pkexec_policy.in" "${CMAKE_CURRENT_BINARY_DIR}/net.launchpad.danielrichter2007.pkexec.grub-customizer")
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/net.launchpad.danielrichter2007.pkexec.grub-customizer
+configure_file ("misc/pkexec_policy.in" "${CMAKE_CURRENT_BINARY_DIR}/net.launchpad.danielrichter2007.pkexec.grub-customizer.policy")
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/net.launchpad.danielrichter2007.pkexec.grub-customizer.policy
     DESTINATION /usr/share/polkit-1/actions)
 
 install(TARGETS grubcfg-proxy
