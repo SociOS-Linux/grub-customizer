@@ -72,6 +72,13 @@ public:
 	void thread_died_handler();
 	
 	bool quit();
+	
+	void syncProxyState(void* proxy);
+	void syncRuleState(Rule* entry);
+	void syncRuleName(Rule* entry);
+	void updateScriptEntry(Proxy* proxy);
+	void swapRules(Rule* a, Rule* b);
+	void swapProxies(Proxy* a, Proxy* b);
 };
 
 #endif

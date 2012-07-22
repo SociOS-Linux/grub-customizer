@@ -114,13 +114,8 @@ public:
 	
 	Gtk::TreeModel::iterator getIterByScriptPtr(void* scriptPtr);
 	Gtk::TreeModel::iterator getIterByEntryPtr(void* entryPtr);
-	void signal_script_state_toggled(void* script);
-	void signal_entry_state_toggled(void* entry);
-	void signal_entry_renamed(void* entry);
-	void updateScriptEntry(void* entry);
+	void setProxyName(void* proxy, Glib::ustring const& name, bool isModified);
 	
-	void ruleSwap_requested(Rule* a, Rule* b);
-	void proxySwap_requested(Proxy* a, Proxy* b);
 	void swapProxies(Proxy* a, Proxy* b);
 	void swapRules(Rule* a, Rule* b);
 	
@@ -133,6 +128,12 @@ public:
 	int showExitConfirmDialog(int type);
 	void showErrorMessage(Glib::ustring const& msg);
 	void clear();
+	
+	Glib::ustring getRuleName(void* rule);
+	void setRuleName(void* rule, Glib::ustring const& newName);
+	bool getRuleState(void* rule);
+	void setRuleState(void* rule, bool newState);
+	bool getProxyState(void* proxy);
 };
 
 #endif

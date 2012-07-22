@@ -314,3 +314,56 @@ bool GtkClient::quit(){
 	return true;
 }
 
+//MOVE TO PRESENTER
+void GtkClient::syncProxyState(void* proxy){
+	((Proxy*)proxy)->set_isExecutable(this->listCfgDlg->getRuleState(proxy));
+	this->listCfgDlg->modificationsUnsaved = true;
+}
+
+//MOVE TO PRESENTER
+void GtkClient::syncRuleState(Rule* entry){
+	entry->isVisible = this->listCfgDlg->getRuleState(entry);
+	this->listCfgDlg->modificationsUnsaved = true;
+	this->updateScriptEntry(this->grublistCfg->proxies.getProxyByRule(entry));
+}
+
+//MOVE TO PRESENTER
+void GtkClient::syncRuleName(Rule* entry){
+	Glib::ustring oldName = entry->outputName;
+	Glib::ustring newName = this->listCfgDlg->getRuleName(entry);
+	if (newName == ""){
+		Gtk::MessageDialog(gettext("Name the Entry")).run();
+		this->listCfgDlg->setRuleName(entry, oldName);
+		this->updateScriptEntry(this->grublistCfg->proxies.getProxyByRule(entry));
+	}
+	else {
+		this->renameEntry(entry, newName);
+	}
+	this->listCfgDlg->modificationsUnsaved = true;
+}
+
+//MOVE TO PRESENTER
+void GtkClient::updateScriptEntry(Proxy* proxy){
+	//adding (custom) if this script is modified
+	if (proxy->dataSource){ //checking the Datasource before Accessing it
+		Glib::ustring name = proxy->dataSource->name;
+		this->listCfgDlg->setProxyName(proxy, name, false);
+		if (this->grublistCfg->proxies.proxyRequired(*proxy->dataSource)){
+			this->listCfgDlg->setProxyName(proxy, name, true);
+		}
+	}
+}
+
+//MOVE TO PRESENTER
+void GtkClient::swapRules(Rule* a, Rule* b){
+	//swap the contents behind the pointers
+	grublistCfg->swapRules(a, b);
+	this->swapRules(a,b);
+	this->updateScriptEntry(this->grublistCfg->proxies.getProxyByRule(a));
+}
+
+//MOVE TO PRESENTER
+void GtkClient::swapProxies(Proxy* a, Proxy* b){
+	grublistCfg->swapProxies(a,b);
+	this->swapProxies(a,b);
+}

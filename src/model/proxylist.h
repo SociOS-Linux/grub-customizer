@@ -14,6 +14,7 @@ struct ProxyList : public std::list<Proxy> {
 	void deleteProxy(Proxy* proxyPointer);
 	void clearTrash();
 	std::list<std::string> generateEntryTitleList() const;
+	Proxy* getProxyByRule(Rule* rule);
 };
 
 #endif

@@ -21,9 +21,6 @@ void EventListenerView::rootSelectorCompleted(){
 	Glib::Thread::create(sigc::bind(sigc::mem_fun(&presenter, &GtkClient::load), false), false);
 }
 
-void EventListenerView::entry_rename_request(Rule* rule, std::string const& newName){
-	presenter.renameEntry(rule, newName);
-}
 
 void EventListenerView::rootSelector_request(){
 	presenter.startRootSelector();
@@ -55,4 +52,23 @@ void EventListenerView::removeProxy_requested(Proxy* p){
 
 bool EventListenerView::exitRequest(){
 	return presenter.quit();
+}
+
+void EventListenerView::signal_script_state_toggled(void* script){
+	presenter.syncProxyState(script);
+}
+
+void EventListenerView::signal_entry_state_toggled(Rule* entry){
+	presenter.syncRuleState(entry);
+}
+
+void EventListenerView::signal_entry_renamed(Rule* entry){
+	presenter.syncRuleName(entry);
+}
+
+void EventListenerView::ruleSwap_requested(Rule* a, Rule* b){
+	presenter.swapRules(a,b);
+}
+void EventListenerView::proxySwap_requested(Proxy* a, Proxy* b){
+	presenter.swapProxies(a,b);
 }

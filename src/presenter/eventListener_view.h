@@ -12,7 +12,6 @@ public:
 	void reload_request();
 	void save_request();
 	void rootSelectorCompleted();
-	void entry_rename_request(Rule* rule, std::string const& newName);
 	void rootSelector_request();
 	void installDialogRequest();
 	void installGrub_request(std::string const& device);
@@ -21,6 +20,13 @@ public:
 	void scriptSelected();
 	void removeProxy_requested(Proxy* p);
 	bool exitRequest();
+	
+	void signal_script_state_toggled(void* script);
+	void signal_entry_state_toggled(Rule* entry);
+	void signal_entry_renamed(Rule* entry);
+	
+	void ruleSwap_requested(Rule* a, Rule* b);
+	void proxySwap_requested(Proxy* a, Proxy* b);
 };
 
 #endif

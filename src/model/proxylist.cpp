@@ -81,4 +81,13 @@ std::list<std::string> ProxyList::generateEntryTitleList() const {
 	return result;
 }
 
+Proxy* ProxyList::getProxyByRule(Rule* rule) {
+	for (ProxyList::iterator proxy_iter = this->begin(); proxy_iter != this->end(); proxy_iter++){
+		for (std::list<Rule>::iterator rule_iter = proxy_iter->rules.begin(); rule_iter != proxy_iter->rules.end(); rule_iter++){
+			if (&*rule_iter == rule)
+				return &*proxy_iter;
+		}
+	}
+	return NULL;
+}
 
