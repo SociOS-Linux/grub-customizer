@@ -39,6 +39,7 @@ struct Rule {
 	Rule(Entry& source, bool isVisible, EntryPathFollower& pathFollower, std::list<std::list<std::string> > const& pathesToIgnore = std::list<std::list<std::string> >(), std::list<std::string> const& currentPath = std::list<std::string>()); //generate rule for given entry
 	Rule();
 	std::string toString(EntryPathBilder const& pathBuilder);
+	bool hasRealSubrules() const;
 	void print() const;
 	std::string getEntryName() const;
 };

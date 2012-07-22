@@ -85,9 +85,18 @@ std::string Rule::getEntryName() const {
 		return "?";
 }
 
+bool Rule::hasRealSubrules() const {
+	for (std::list<Rule>::const_iterator iter = this->subRules.begin(); iter != this->subRules.end(); iter++) {
+		if (iter->isVisible && iter->dataSource && iter->type != Rule::OTHER_ENTRIES_PLACEHOLDER && (iter->dataSource->type != Entry::SUBMENU || iter->hasRealSubrules())) {
+			return true;
+		}
+	}
+	return false;
+}
+
 
 void Rule::print() const {
-	if (this->isVisible && this->dataSource && this->type != Rule::OTHER_ENTRIES_PLACEHOLDER){
+	if (this->isVisible && this->dataSource && this->type != Rule::OTHER_ENTRIES_PLACEHOLDER && (this->dataSource->type != Entry::SUBMENU || this->hasRealSubrules())){
 		std::cout << (this->dataSource->type == Entry::SUBMENU ? "submenu" : "menuentry");
 		std::cout << " \""+this->outputName+"\""+this->dataSource->extension+"{\n";
 		if (this->subRules.size() == 0) {
