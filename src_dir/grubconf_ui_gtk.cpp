@@ -5,7 +5,7 @@ ImageMenuItemOwnKey::ImageMenuItemOwnKey(const Gtk::StockID& id, const Gtk::Acce
 }
 
 GrubConfUIGtk::GrubConfUIGtk(GrubConfig& grubConfig)
-	: grubConfig(&grubConfig), appName("Grub Customizer"), appVersion("1.6.2"),
+	: grubConfig(&grubConfig), appName("Grub Customizer"), appVersion("1.6.3"),
 	tbttAdd(Gtk::Stock::ADD), tbttRemove(Gtk::Stock::REMOVE), tbttUp(Gtk::Stock::GO_UP), tbttDown(Gtk::Stock::GO_DOWN),
 	tbttSave(Gtk::Stock::SAVE), tbttPreferences(Gtk::Stock::PREFERENCES),
 	miFile(gettext("_File"), true), miExit(Gtk::Stock::QUIT), tbttReload(Gtk::Stock::REFRESH),
@@ -56,6 +56,7 @@ GrubConfUIGtk::GrubConfUIGtk(GrubConfig& grubConfig)
 	dlgAbout.set_translator_credits(
 "Adam Czabara https://launchpad.net/~adam-czabara\n\
 Alexey Ivanov https://launchpad.net/~alexey.ivanes\n\
+Bernardo Miguel Savone https://launchpad.net/~bersil\n\
 Daniel Richter https://launchpad.net/~danielrichter2007\n\
 Emre AYTAÇ https://launchpad.net/~eaytac\n\
 Eugênio F https://launchpad.net/~eugf\n\

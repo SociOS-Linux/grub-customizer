@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-10-22 20:01+0200\n"
-"PO-Revision-Date: 2010-10-25 00:44+0000\n"
+"PO-Revision-Date: 2010-10-30 20:51+0000\n"
 "Last-Translator: Svetoslav Stefanov <svetlisashkov@yahoo.com>\n"
 "Language-Team: Bulgarian <bg@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-10-29 09:52+0000\n"
+"X-Launchpad-Export-Date: 2010-11-06 08:32+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../src_dir/grubconfig.cpp:194 ../src_dir/grubconfig.cpp:209
@@ -44,7 +44,7 @@ msgstr "_Помощ"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:13
 msgid "_Install to MBR …"
-msgstr ""
+msgstr "_Инсталиране в MBR …"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:18
 msgid "Script to insert:"
@@ -60,13 +60,13 @@ msgid ""
 "files to the bootloaders data directory\n"
 "(if they don't already exist)."
 msgstr ""
-"Инсталиране на програмата за начално зареждане в MBR and put some\n"
+"Инсталиране на програмата за начално зареждане в MBR\n"
 "и поставяне на някои файлове в папката и с данни\n"
 "(ако те вече не съществуват)."
 
 #: ../src_dir/grubconf_ui_gtk.cpp:21
 msgid "_Device: "
-msgstr ""
+msgstr "_Устройство: "
 
 #: ../src_dir/grubconf_ui_gtk.cpp:58
 msgid ""
@@ -106,7 +106,7 @@ msgstr "Редактиране на настройките на grub"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:116
 msgid "Select _partition …"
-msgstr ""
+msgstr "Избор на _дял …"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:123
 msgid "Add script"
@@ -122,11 +122,11 @@ msgstr "Инсталиране в MBR"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:211
 msgid "No Bootloader found"
-msgstr ""
+msgstr "Не е открита програма за начално зареждане"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:212
 msgid "Do you want to select another root partition?"
-msgstr ""
+msgstr "Желаете ли да изберете друг главен дял?"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:219
 msgid "BURG found!"
@@ -265,7 +265,7 @@ msgstr ""
 
 #: ../src_dir/liveCDSetupDialog.cpp:15
 msgid "You started Grub Customizer using the live CD."
-msgstr ""
+msgstr "Вие стартирахте Grub Customizer от жив диск."
 
 #: ../src_dir/liveCDSetupDialog.cpp:17
 msgid ""
@@ -275,6 +275,11 @@ msgid ""
 "again and save the configuration (or run update-grub/update-burg)\n"
 "to get the entry back!"
 msgstr ""
+"Вие решихте да изберете друг дял.\n"
+"Моля забележете: os-prober може да не открие вашата реално пусната система.\n"
+"Затова отново пуснете Grub Customizer на целевата система\n"
+"и запазете конфигурацията (или изпълнете update-grub/update-burg)\n"
+"за да върнете записа отново!"
 
 #: ../src_dir/liveCDSetupDialog.cpp:19
 msgid ""
@@ -288,10 +293,20 @@ msgid ""
 "as the actually running one.\n"
 "If not, you will get an error message when trying to load the configuration."
 msgstr ""
+"Преди да можете да редактирате вашата grub конфигурация, ние трябва да\n"
+"монтираме необходимите дялове.\n"
+"\n"
+"Този помощник ще ви помогне за това.\n"
+"\n"
+"\n"
+"Моля уверете се, че целевата система е със същата процесорна архитектура\n"
+"като тази на текущо пусната.\n"
+"В противен случай при опит за зареждане на конфигурацията ще получите "
+"съобщение за грешка."
 
 #: ../src_dir/liveCDSetupDialog.cpp:21
 msgid "Grub Customizer: Partition chooser"
-msgstr ""
+msgstr "Grub Customizer: Избор на дял"
 
 #: ../src_dir/liveCDSetupDialog.cpp:25
 msgid "Select and mount your root partition"
@@ -315,7 +330,7 @@ msgstr "Изберете необходимите подточки за монт
 
 #: ../src_dir/liveCDSetupDialog.cpp:82
 msgid "Partition Chooser"
-msgstr ""
+msgstr "Избор на дял"
 
 #: ../src_dir/liveCDSetupDialog.cpp:152
 msgid "Mount failed!"

@@ -302,7 +302,7 @@ msgstr ""
 "Dieser Assistent wird Sie dabei unterstützen.\n"
 "\n"
 "\n"
-"Beachten Sie, dass das nur System bearbeitet werden können,\n"
+"Beachten Sie, dass nur Systeme bearbeitet werden können,\n"
 "welche die gleiche CPU-Architektur benutzen, wie das aktuell\n"
 "Laufende."
 
