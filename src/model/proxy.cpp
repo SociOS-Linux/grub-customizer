@@ -111,6 +111,17 @@ Rule* Proxy::getRuleByEntry(Entry const& entry, std::list<Rule>& list, Rule::Rul
 	return NULL;
 }
 
+void Proxy::unsync(Rule* parent) {
+	std::list<Rule>& list = parent ? parent->subRules : this->rules;
+	for (std::list<Rule>::iterator iter = list.begin(); iter != list.end(); iter++) {
+		iter->dataSource = NULL;
+		iter->dataSource_list = NULL;
+		if (iter->subRules.size()) {
+			this->unsync(&*iter);
+		}
+	}
+}
+
 bool Proxy::sync(bool deleteInvalidRules, bool expand){
 	if (this->dataSource){
 		this->sync_connectExisting();

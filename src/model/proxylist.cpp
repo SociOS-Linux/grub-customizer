@@ -41,6 +41,12 @@ void ProxyList::sync_all(bool deleteInvalidRules, bool expand, Script* relatedSc
 	}	
 }
 
+void ProxyList::unsync_all() {
+	for (ProxyList::iterator proxy_iter = this->begin(); proxy_iter != this->end(); proxy_iter++){
+		proxy_iter->unsync();
+	}
+}
+
 bool ProxyList::proxyRequired(Script const& script) const {
 	std::list<const Proxy*> plist = this->getProxiesByScript(script);
 	if (plist.size() == 1){

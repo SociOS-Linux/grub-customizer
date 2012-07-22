@@ -42,6 +42,7 @@ struct Proxy {
 	static std::list<Rule> parseRuleString(const char** ruleString);
 	void importRuleString(const char* ruleString);
 	Rule* getRuleByEntry(Entry const& entry, std::list<Rule>& list, Rule::RuleType ruletype);
+	void unsync(Rule* parent = NULL);
 	bool sync(bool deleteInvalidRules = true, bool expand = true);
 	void sync_connectExisting(Rule* parent = NULL);
 	void sync_connectExistingByHash(Rule* parent = NULL);

@@ -155,6 +155,7 @@ void GrublistCfg::load(bool preserveConfig){
 	}
 	else {
 		this->lock();
+		proxies.unsync_all();
 		repository.deleteAllEntries();
 		this->unlock();
 	}
