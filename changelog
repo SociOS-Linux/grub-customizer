@@ -1,3 +1,12 @@
+v. 2.5
+	* using policykit instead of su-to-root (there's an patch for older distibutions)
+	* custom submenus (users are able to add/remove submenus)
+	* indentification of the source entries by its content (additional to name and position)
+	* made live cd detection ubuntu 11.10 capable
+	* moved menu entry to system section
+	* fixed crash (when doing reload)
+	* custom grub pathes (/etc/grub-customizer/grub.cfg and /etc/grub-customizer/burg.cfg)
+
 v. 2.4.1
 	* fixed: preview rendering crashes on startup
 

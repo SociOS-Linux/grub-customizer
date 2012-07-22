@@ -1,0 +1,553 @@
+# Finnish translation for grub-customizer
+#  made with the help of english/french translation (27.12.2011)
+# Copyright (c) 2010 Rosetta Contributors and Canonical Ltd 2010
+# This file is distributed under the same license as the grub-customizer package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: grub-customizer\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2011-11-22 19:34+0100\n"
+"PO-Revision-Date: 2011-12-28 09:12+0000\n"
+"Last-Translator: Timo Seppola <Unknown>\n"
+"Language-Team: Finnish <fin@ x x x x.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2011-12-28 17:08+0000\n"
+"X-Generator: Launchpad (build 14560)\n"
+
+#: ../src/presenter/grubCustomizer.cpp:439
+msgid "No script found"
+msgstr "Ei skriptejä löydettävissä"
+
+#: ../src/presenter/grubCustomizer.cpp:512
+msgid "loading configuration…"
+msgstr "ladataan asetukset..."
+
+#: ../src/presenter/grubCustomizer.cpp:526
+#: ../src/view/grublistCfgDlgGtk.cpp:359
+msgid " (custom)"
+msgstr " (yksilöinti)"
+
+#: ../src/presenter/grubCustomizer.cpp:556
+msgid "Configuration has been saved"
+msgstr "Asetukset on tallennettu"
+
+#: ../src/presenter/grubCustomizer.cpp:559
+msgid "updating configuration"
+msgstr "päivitetään asetuksia"
+
+#: ../src/presenter/grubCustomizer.cpp:571
+msgid "%1 not found. Is grub2 installed?"
+msgstr ""
+
+#: ../src/presenter/grubCustomizer.cpp:581
+msgid ""
+"%1 couldn't be executed successfully. error message:\n"
+" %2"
+msgstr ""
+
+#: ../src/presenter/grubCustomizer.cpp:638
+msgid "Name the Entry"
+msgstr "Nimeä käynnistysrivi (entry)"
+
+#: ../src/presenter/grubCustomizer.cpp:671
+msgid "cannot move this entry"
+msgstr "En voi siirtää käynnistysriviä (entry)"
+
+#: ../src/view/aboutDialogGtk.cpp:36
+msgid ""
+"Grub Customizer is a graphical interface to configure the grub2/burg settings"
+msgstr ""
+"Grub Customizer on graafinen liityntä, jolla ohjataan grub2/burg asetuksia"
+
+#: ../src/view/grubInstallDlgGtk.cpp:22
+msgid ""
+"Install the bootloader to MBR and put some\n"
+"files to the bootloaders data directory\n"
+"(if they don't already exist)."
+msgstr ""
+"Asenna boot-lataaja MBR:lle sekä asenna\n"
+" tiedostoja boot-lataajan data-hakemistoon\n"
+"(jos ne eivät jo ole siellä)."
+
+#: ../src/view/grubInstallDlgGtk.cpp:23
+msgid "_Device: "
+msgstr "_Tallennusväline : "
+
+#: ../src/view/grubInstallDlgGtk.cpp:33
+msgid "Install to MBR"
+msgstr "Asenna MBR:lle"
+
+#: ../src/view/grubInstallDlgGtk.cpp:50
+msgid "The bootloader has been installed successfully"
+msgstr "Käynnistyslatain on asennettu onnistuneesti"
+
+#: ../src/view/grubInstallDlgGtk.cpp:55
+msgid "Error while installing the bootloader"
+msgstr "Virhe kesken käynnistyslataimen asennusta."
+
+#: ../src/view/grubInstallDlgGtk.cpp:71
+msgid "installing the bootloader…"
+msgstr "asennetaan käynnistyslatainta.."
+
+#: ../src/view/grubInstallDlgGtk.cpp:76
+msgid "Please type a device string!"
+msgstr "Ole hyvä, kirjoita tallennusvälineen nimi!"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:28
+msgid "_File"
+msgstr "_Tiedosto"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:29
+msgid "_Edit"
+msgstr "_Éditoi"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:29
+msgid "_View"
+msgstr "_Katso"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:29
+msgid "_Help"
+msgstr "A_pua"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:30
+msgid "_Install to MBR …"
+msgstr "_Asenna MBR:lle"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:34
+msgid "BURG found!"
+msgstr "BURG löytyi!"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:35
+msgid "No Bootloader found"
+msgstr "Käynnityslatainta ei löydy"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:63
+msgid "Add a script to your configuration"
+msgstr "Lisää käskyrivi (script) asetuksiin"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:65
+msgid "Remove a script from your configuration"
+msgstr "Poista käsky (script) asetuksista"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:71
+msgid "Move up the selected entry or script"
+msgstr "Siirrä ylös valittu käynnistysrivi (entry) tai käsky (script)"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:73
+msgid "Move down the selected entry or script"
+msgstr "Siirrä alas valittu käynnistysrivi (entry) tai käsky (script)"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:81
+msgid "reload configuration"
+msgstr "lataa uudelleen asetukset"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:84
+msgid "Edit grub preferences"
+msgstr "Editoi grub:in esiominaisuuksia"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:113
+msgid "Select _partition …"
+msgstr "Valitse _partitio (osio)..."
+
+#: ../src/view/grublistCfgDlgGtk.cpp:120
+msgid "Do you want to configure BURG instead of grub2?"
+msgstr "Haluatko tehdä asetukset BURG:iin eikä grub2:een ?"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:127
+msgid "Do you want to select another root partition?"
+msgstr "Haluatko valita toisen juuri partition (root) ?"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:168
+msgid "BURG Mode"
+msgstr "BURG tilassa"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:172
+msgid "Save configuration and generate a new "
+msgstr "Tallenna asetukset ja luo uusi "
+
+#: ../src/view/grublistCfgDlgGtk.cpp:256
+msgid "Proxy binary not found!"
+msgstr "Binaarista Proxya ei löydy !"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:257
+msgid ""
+"You will see all entries (uncustomized) when you run grub. This error accurs "
+"(in most cases), when you didn't install grub gustomizer currectly."
+msgstr ""
+"Näet kaikki käynnistysvaihtoehdot (muokkaamattomat), kun suoritat grubia. "
+"Tämä virhe ilmenee (useinmiten), jos et ole asentanut grub customizer:ia "
+"oikein."
+
+#: ../src/view/grublistCfgDlgGtk.cpp:263
+msgid "(new Entries of %1)"
+msgstr "(Uudet käynnistysvaihtoehdot %1)"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:265
+msgid "(new Entries)"
+msgstr "(Uudet käynnistysvaihtoehdot)"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:270
+msgid "(script code)"
+msgstr ""
+
+#: ../src/view/grublistCfgDlgGtk.cpp:494
+msgid "Default title: "
+msgstr "Valittu otsikko : "
+
+#: ../src/view/grublistCfgDlgGtk.cpp:586
+msgid "The saved configuration is not up to date!"
+msgstr "Tallennettu asetus ei ole päivitetty !"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:587
+msgid ""
+"The generated configuration didn't equal to the saved configuration on "
+"startup. So what you see now may not be what you see when you restart your "
+"pc. To fix this, click update!"
+msgstr ""
+"Tehty asetus ei ole samanlainen kuin tallennettu asetus käynnistyksessä. "
+"Joten se mitä näet nyt, ei ehkä ole samaa kuin mitä näet, kun käynnistät "
+"PC:n uudelleen. Korjaa tämä klikkaamalla 'päivitys' !"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:590
+msgid "_Quit without update"
+msgstr "_Lopeta ilman päivittämistä"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:593
+msgid "_Update & Quit"
+msgstr "_Päivitä ja lopeta"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:597
+msgid "Do you want to save your modifications?"
+msgstr "Haluatko tallentaa tekemäsi muutokset?"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:600
+msgid "_Quit without saving"
+msgstr "_Lopeta ilman tallentamista"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:603
+msgid "_Save & Quit"
+msgstr "_Tallenna ja lopeta"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:606
+msgid "AND: your modifications are still unsaved, update will save them too!"
+msgstr ""
+"JA: Muokkauksesi ovat vielä tallentamatta,nyt päivitys tallentaa nekin "
+"samalla!"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:672 ../src/view/settingsDlgGtk.cpp:123
+msgid "is active"
+msgstr "on aktiivinen"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:673 ../src/view/settingsDlgGtk.cpp:124
+msgid "name"
+msgstr "nimi"
+
+#: ../src/view/partitionChooserGtk.cpp:23
+msgid "_use another partition: "
+msgstr "_käytä jotakin toista osiota: "
+
+#: ../src/view/partitionChooserGtk.cpp:24
+msgid "Mount selected Filesystem"
+msgstr "Kiinnitä (mount) valittu tiedostojärjestelmä"
+
+#: ../src/view/partitionChooserGtk.cpp:25
+msgid "Unmount mounted Filesystem"
+msgstr "Irroita kiinnitetty tiedostojärjestelmä"
+
+#: ../src/view/partitionChooserGtk.cpp:27
+msgid ""
+"These are the mountpoints of your fstab file.\n"
+"Please select every grub/boot related partition."
+msgstr ""
+"Nämä ovat kiinnityskohdat fstab -tiedostossasi.\n"
+"Ole hyvä, välitse jokainen grub/boot:iin liittyvä osio."
+
+#: ../src/view/partitionChooserGtk.cpp:48
+msgid "partition"
+msgstr "osio"
+
+#: ../src/view/partitionChooserGtk.cpp:49
+msgid "type"
+msgstr "tyyppi"
+
+#: ../src/view/partitionChooserGtk.cpp:50
+msgid "label"
+msgstr "etiketti"
+
+#: ../src/view/partitionChooserGtk.cpp:82
+msgid "Grub Customizer: Partition chooser"
+msgstr "Grub Customizer: Osioiden valitsin"
+
+#: ../src/view/partitionChooserGtk.cpp:86
+msgid "Select and mount your root partition"
+msgstr "Valitse ja asenna juuri-osio (root partition)"
+
+#: ../src/view/partitionChooserGtk.cpp:88
+msgid "Select required submountpoints"
+msgstr "Valitse tarvittavat alikiinnityspisteet(submountpoints)"
+
+#: ../src/view/partitionChooserGtk.cpp:94
+msgid "Partition Chooser"
+msgstr "Osioiden valitsin"
+
+#: ../src/view/partitionChooserGtk.cpp:168
+msgid "Mount failed!"
+msgstr "Kiinnitys epäonnistui!"
+
+#: ../src/view/partitionChooserGtk.cpp:169
+msgid "umount failed!"
+msgstr "irroitus epäonnistui !"
+
+#: ../src/view/partitionChooserGtk.cpp:170
+msgid "This seems not to be a root file system (no fstab found)"
+msgstr "Tämä ei näytä olevan juuri tiedostojärjestelmä (fstab ei löydy)"
+
+#: ../src/view/partitionChooserGtk.cpp:171
+msgid "Couldn't mount the selected partition"
+msgstr "Ei voitu liittää valittua osiota"
+
+#: ../src/view/partitionChooserGtk.cpp:172
+msgid "Couldn't umount the selected partition"
+msgstr "Ei voitu irroittaa valittua osiota"
+
+#: ../src/view/partitionChooserGtk.cpp:240
+msgid ""
+"You selected the option for choosing another partition.\n"
+"Please note: The os-prober may not find your actually running system.\n"
+"So run Grub Customizer on the target system\n"
+"again and save the configuration (or run update-grub/update-burg)\n"
+"to get the entry back!"
+msgstr ""
+"Valitsit lisävaihtoehdon, jolla valitaan jokin toinen osio.\n"
+"Huom: Os-prober ei ehkä löydä toimivaa käyttöjärjestelmää.Tällöin käynnistä "
+"Grub Customizer kohdejärjestelmästä käsin uudelleen\n"
+"ja tallenna asetukset (tai käynnistä päivitä-grub/päivitä-borg)\n"
+"(update-grub/update-burg). Näin saat käynnistysvaihtoehdon käyttöösi."
+
+#: ../src/view/partitionChooserGtk.cpp:242
+msgid "You started Grub Customizer using the live CD."
+msgstr "käynnistit Grub Customizer:in live CD:ltä käsin."
+
+#: ../src/view/partitionChooserGtk.cpp:244
+msgid ""
+"Before you can edit your grub configuration we have to\n"
+"mount the required partitions.\n"
+"\n"
+"This assistant will help you doing this.\n"
+"\n"
+"\n"
+"Please ensure the target system is based on the same cpu architecture\n"
+"as the actually running one.\n"
+"If not, you will get an error message when trying to load the configuration."
+msgstr ""
+"Ennenkuin voit editoida grub asetuksia meidän täytyy liittää\n"
+"tarvittavat osiot.\n"
+"\n"
+"Tämä avustaja auttaa tekemään liitokset.\n"
+"\n"
+"\n"
+"Ole hyvä ja varmista, että kohdejärjestelmä perustuu samaan CPU-"
+"arkkitehtuuriin\n"
+"kuin mikä nyt on käytössä.\n"
+"Jos näin ei ole, saat virheilmoituksen kun yrität ladata asetuksia."
+
+#: ../src/view/scriptAddDlgGtk.cpp:23
+msgid "Script to insert:"
+msgstr "Lisää rivi (script):"
+
+#: ../src/view/scriptAddDlgGtk.cpp:25
+msgid "Preview:"
+msgstr "Esikatselu:"
+
+#: ../src/view/scriptAddDlgGtk.cpp:27
+msgid "Add script"
+msgstr "Lisää rivi (script):"
+
+#: ../src/view/scriptAddDlgGtk.cpp:43
+msgid "Entry"
+msgstr "Käynnistysrivi"
+
+#: ../src/view/settingsDlgGtk.cpp:65
+msgid "white"
+msgstr "valkoinen"
+
+#: ../src/view/settingsDlgGtk.cpp:66
+msgid "yellow"
+msgstr "keltainen"
+
+#: ../src/view/settingsDlgGtk.cpp:67
+msgid "light-cyan"
+msgstr "vaalea syaani"
+
+#: ../src/view/settingsDlgGtk.cpp:68
+msgid "cyan"
+msgstr "syaani"
+
+#: ../src/view/settingsDlgGtk.cpp:69
+msgid "light-blue"
+msgstr "vaalean sininen"
+
+#: ../src/view/settingsDlgGtk.cpp:70
+msgid "blue"
+msgstr "sininen"
+
+#: ../src/view/settingsDlgGtk.cpp:71
+msgid "light-green"
+msgstr "vaalean vihreä"
+
+#: ../src/view/settingsDlgGtk.cpp:72
+msgid "green"
+msgstr "vihreä"
+
+#: ../src/view/settingsDlgGtk.cpp:73
+msgid "light-magenta"
+msgstr "vaalea magenta"
+
+#: ../src/view/settingsDlgGtk.cpp:74
+msgid "magenta"
+msgstr "magenta"
+
+#: ../src/view/settingsDlgGtk.cpp:75
+msgid "light-red"
+msgstr "vaalean punainen"
+
+#: ../src/view/settingsDlgGtk.cpp:76
+msgid "red"
+msgstr "punainen"
+
+#: ../src/view/settingsDlgGtk.cpp:77
+msgid "brown"
+msgstr "ruskea"
+
+#: ../src/view/settingsDlgGtk.cpp:78
+msgid "light-gray"
+msgstr "vaalean harmaa"
+
+#: ../src/view/settingsDlgGtk.cpp:79
+msgid "dark-gray"
+msgstr "vaalean harmaa"
+
+#: ../src/view/settingsDlgGtk.cpp:80
+msgid "transparent"
+msgstr "läpinäkyvä"
+
+#: ../src/view/settingsDlgGtk.cpp:80
+msgid "black"
+msgstr "musta"
+
+#: ../src/view/settingsDlgGtk.cpp:92
+msgid "pre_defined: "
+msgstr "esi_valittu: "
+
+#: ../src/view/settingsDlgGtk.cpp:92
+msgid "previously _booted entry"
+msgstr "aiemmin valittu _käynnistysrivi"
+
+#: ../src/view/settingsDlgGtk.cpp:93
+msgid "default entry"
+msgstr "oletus käynnistysrivi"
+
+#: ../src/view/settingsDlgGtk.cpp:93
+msgid "visibility"
+msgstr "näkyvyys"
+
+#: ../src/view/settingsDlgGtk.cpp:93
+msgid "show menu"
+msgstr "näytä valikko (menu)"
+
+#: ../src/view/settingsDlgGtk.cpp:94
+msgid "Timeout"
+msgstr "Aika loppu"
+
+#: ../src/view/settingsDlgGtk.cpp:94
+msgid "Seconds"
+msgstr "Sekuntia"
+
+#: ../src/view/settingsDlgGtk.cpp:94
+msgid "kernel parameters"
+msgstr "kernel määritykset (parameters)"
+
+#: ../src/view/settingsDlgGtk.cpp:95
+msgid "generate recovery entries"
+msgstr "luo toipumiseen käskyrivi"
+
+#: ../src/view/settingsDlgGtk.cpp:95
+msgid "look for other operating systems"
+msgstr "Etsi toista käyttöjärjestelmää"
+
+#: ../src/view/settingsDlgGtk.cpp:96
+msgid "custom resolution: "
+msgstr "säädä resoluutio: "
+
+#: ../src/view/settingsDlgGtk.cpp:97
+msgid "font color"
+msgstr "merkistön väri"
+
+#: ../src/view/settingsDlgGtk.cpp:97
+msgid "background"
+msgstr "taustaväri"
+
+#: ../src/view/settingsDlgGtk.cpp:98
+msgid "normal:"
+msgstr "normaali:"
+
+#: ../src/view/settingsDlgGtk.cpp:98
+msgid "highlight:"
+msgstr "korostettu:"
+
+#: ../src/view/settingsDlgGtk.cpp:99
+msgid "menu colors"
+msgstr "valikon värit"
+
+#: ../src/view/settingsDlgGtk.cpp:99
+msgid "background image"
+msgstr "taustakuva"
+
+#: ../src/view/settingsDlgGtk.cpp:100
+msgid "remove background"
+msgstr "poista taustakuva"
+
+#: ../src/view/settingsDlgGtk.cpp:101
+msgid ""
+"To get the colors above working,\n"
+"you have to select a background image!"
+msgstr ""
+"Saadaksesi yllä olevat värimääritykset toimimaan,\n"
+"sinun tulee valita taustakuva !"
+
+#: ../src/view/settingsDlgGtk.cpp:104
+msgid "settings"
+msgstr "asetukset"
+
+#: ../src/view/settingsDlgGtk.cpp:108
+msgid "_General"
+msgstr "_Yleiset"
+
+#: ../src/view/settingsDlgGtk.cpp:109
+msgid "A_ppearance"
+msgstr "_Ulkonäkö"
+
+#: ../src/view/settingsDlgGtk.cpp:110
+msgid "_Advanced"
+msgstr "_Erityiset"
+
+#: ../src/view/settingsDlgGtk.cpp:125
+msgid "value"
+msgstr "arvo"
+
+#: ../src/view/settingsDlgGtk.cpp:295
+msgid "Entry %1 (by position)"
+msgstr "Käynnistysvalinta %1 (sijainnin perusteella)"
+
+#: ../src/view/settingsDlgGtk.cpp:520
+msgid ""
+"This option doesn't work when the \"os-prober\" script finds other operating "
+"systems. Disable \"%1\" if you don't need to boot other operating systems."
+msgstr ""
+"Tämä vaihtoehto ei toimi, jos \"os-prober\" käskyrivi löytää "
+"toisenkäyttöjärjestelmän. Kytke pois \"%1\" jos et tarvitse muita "
+"käyttöjärjestelmiä."

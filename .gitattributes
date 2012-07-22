@@ -1,5 +1,15 @@
 * text=auto !eol
 /.cproject -text
+.pc/.quilt_patches -text
+.pc/.quilt_series -text
+.pc/.version -text
+.pc/applied-patches -text
+.pc/debian-changes-2.4.1-0ubuntu1~ppa1k/.project -text
+.pc/debian-changes-2.4.1-0ubuntu1~ppa1l/src/config.h -text
+.pc/debian-changes-2.4.1-0ubuntu1~ppa1o/.cproject -text
+.pc/debian-changes-2.4.1-0ubuntu1~ppa1o/.project -text
+.pc/debian-changes-2.4.1-0ubuntu1~ppa1o/.settings/org.eclipse.cdt.ui.prefs -text
+.pc/debian-changes-2.4.1-0ubuntu1~ppa1o/.settings/org.eclipse.ltk.core.refactoring.prefs -text
 /.project -text
 .settings/org.eclipse.cdt.ui.prefs -text
 .settings/org.eclipse.ltk.core.refactoring.prefs -text
@@ -129,6 +139,8 @@ translation/translation-el.mo -text svneol=unset#unset
 translation/translation-el.po -text
 translation/translation-es.mo -text svneol=unset#unset
 translation/translation-es.po -text
+translation/translation-fi.mo -text svneol=unset#unset
+translation/translation-fi.po -text
 translation/translation-fr.mo -text svneol=unset#unset
 translation/translation-fr.po -text
 translation/translation-gl.mo -text svneol=unset#unset
@@ -141,6 +153,8 @@ translation/translation-it.mo -text svneol=unset#unset
 translation/translation-it.po -text
 translation/translation-kk.mo -text svneol=unset#unset
 translation/translation-kk.po -text
+translation/translation-lt.mo -text svneol=unset#unset
+translation/translation-lt.po -text
 translation/translation-nl.mo -text svneol=unset#unset
 translation/translation-nl.po -text
 translation/translation-pl.mo -text svneol=unset#unset

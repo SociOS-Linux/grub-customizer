@@ -7,50 +7,54 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-09-14 00:10+0200\n"
-"PO-Revision-Date: 2011-09-17 07:38+0000\n"
+"POT-Creation-Date: 2011-11-22 19:34+0100\n"
+"PO-Revision-Date: 2011-11-29 18:30+0000\n"
 "Last-Translator: rob <linuxned@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-11-17 22:40+0000\n"
-"X-Generator: Launchpad (build 14291)\n"
+"X-Launchpad-Export-Date: 2011-12-28 17:08+0000\n"
+"X-Generator: Launchpad (build 14560)\n"
 
-#: ../src/presenter/grubCustomizer.cpp:417
+#: ../src/presenter/grubCustomizer.cpp:439
 msgid "No script found"
 msgstr "Geen script gevonden"
 
-#: ../src/presenter/grubCustomizer.cpp:486
+#: ../src/presenter/grubCustomizer.cpp:512
 msgid "loading configuration…"
 msgstr "configuratie wordt geladen…"
 
-#: ../src/presenter/grubCustomizer.cpp:500
-#: ../src/view/grublistCfgDlgGtk.cpp:355
+#: ../src/presenter/grubCustomizer.cpp:526
+#: ../src/view/grublistCfgDlgGtk.cpp:359
 msgid " (custom)"
 msgstr " (aangepast)"
 
-#: ../src/presenter/grubCustomizer.cpp:528
+#: ../src/presenter/grubCustomizer.cpp:556
 msgid "Configuration has been saved"
 msgstr "Configuratie is opgeslagen"
 
-#: ../src/presenter/grubCustomizer.cpp:531
+#: ../src/presenter/grubCustomizer.cpp:559
 msgid "updating configuration"
 msgstr "configuratie bijwerken"
 
-#: ../src/presenter/grubCustomizer.cpp:539
-msgid " not found. Is grub2 installed?"
-msgstr " niet gevonden. Is grub2 geïnstalleerd?"
+#: ../src/presenter/grubCustomizer.cpp:571
+msgid "%1 not found. Is grub2 installed?"
+msgstr "%1 werd niet gevonden. Is grub2 geïnstalleerd?"
 
-#: ../src/presenter/grubCustomizer.cpp:544
-msgid " couldn't be executed successfully. You must run this as root!"
-msgstr " kon niet uitgevoerd worden. Kan alleen als root uitgevoerd worden!"
+#: ../src/presenter/grubCustomizer.cpp:581
+msgid ""
+"%1 couldn't be executed successfully. error message:\n"
+" %2"
+msgstr ""
+"%1 kon niet uitgevoerd worden. foutmelding:\n"
+" %2"
 
-#: ../src/presenter/grubCustomizer.cpp:599
+#: ../src/presenter/grubCustomizer.cpp:638
 msgid "Name the Entry"
 msgstr "Geef de invoer een naam"
 
-#: ../src/presenter/grubCustomizer.cpp:632
+#: ../src/presenter/grubCustomizer.cpp:671
 msgid "cannot move this entry"
 msgstr "kan deze invoer niet verplaatsen"
 
@@ -188,15 +192,19 @@ msgstr "(nieuwe invoeren van %1)"
 msgid "(new Entries)"
 msgstr "(nieuwe invoeren)"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:489
+#: ../src/view/grublistCfgDlgGtk.cpp:270
+msgid "(script code)"
+msgstr "(scriptcode)"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:494
 msgid "Default title: "
 msgstr "Standaardtitel: "
 
-#: ../src/view/grublistCfgDlgGtk.cpp:581
+#: ../src/view/grublistCfgDlgGtk.cpp:586
 msgid "The saved configuration is not up to date!"
 msgstr "De opgeslagen configuratie is niet up-to-date!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:582
+#: ../src/view/grublistCfgDlgGtk.cpp:587
 msgid ""
 "The generated configuration didn't equal to the saved configuration on "
 "startup. So what you see now may not be what you see when you restart your "
@@ -206,37 +214,37 @@ msgstr ""
 "bij het opstarten. Dus wat u nu ziet hoeft niet noodzakelijkerwijs hetzelfde "
 "te zijn wanneer u uw pc herstart. Om dit te herstellen, klikt u op bijwerken!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:585
+#: ../src/view/grublistCfgDlgGtk.cpp:590
 msgid "_Quit without update"
 msgstr "A_fsluiten zonder bij te werken"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:588
+#: ../src/view/grublistCfgDlgGtk.cpp:593
 msgid "_Update & Quit"
 msgstr "_Bijwerken & afsluiten"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:592
+#: ../src/view/grublistCfgDlgGtk.cpp:597
 msgid "Do you want to save your modifications?"
 msgstr "Wilt u uw wijzigingen opslaan?"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:595
+#: ../src/view/grublistCfgDlgGtk.cpp:600
 msgid "_Quit without saving"
 msgstr "A_fsluiten zonder op te slaan"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:598
+#: ../src/view/grublistCfgDlgGtk.cpp:603
 msgid "_Save & Quit"
 msgstr "Op_slaan & afsluiten"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:601
+#: ../src/view/grublistCfgDlgGtk.cpp:606
 msgid "AND: your modifications are still unsaved, update will save them too!"
 msgstr ""
 "EN: uw wijzigingen zijn niet opgeslagen, door bij te werken zullen de "
 "wijzigingen ook opgeslagen worden!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:655 ../src/view/settingsDlgGtk.cpp:123
+#: ../src/view/grublistCfgDlgGtk.cpp:672 ../src/view/settingsDlgGtk.cpp:123
 msgid "is active"
 msgstr "is actief"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:656 ../src/view/settingsDlgGtk.cpp:124
+#: ../src/view/grublistCfgDlgGtk.cpp:673 ../src/view/settingsDlgGtk.cpp:124
 msgid "name"
 msgstr "naam"
 

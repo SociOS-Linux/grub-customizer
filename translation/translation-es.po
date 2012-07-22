@@ -7,54 +7,58 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-09-14 00:10+0200\n"
-"PO-Revision-Date: 2011-10-18 16:10+0000\n"
+"POT-Creation-Date: 2011-11-22 19:34+0100\n"
+"PO-Revision-Date: 2011-11-29 18:30+0000\n"
 "Last-Translator: Miguel Anxo Bouzada <mbouzada@gmail.com>\n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-11-17 22:40+0000\n"
-"X-Generator: Launchpad (build 14291)\n"
+"X-Launchpad-Export-Date: 2011-12-28 17:08+0000\n"
+"X-Generator: Launchpad (build 14560)\n"
 "X-Poedit-Country: SPAIN\n"
 "X-Poedit-Language: Spanish\n"
 
-#: ../src/presenter/grubCustomizer.cpp:417
+#: ../src/presenter/grubCustomizer.cpp:439
 msgid "No script found"
 msgstr "Ningún script encontrado"
 
-#: ../src/presenter/grubCustomizer.cpp:486
+#: ../src/presenter/grubCustomizer.cpp:512
 msgid "loading configuration…"
 msgstr "cargando configuración..."
 
-#: ../src/presenter/grubCustomizer.cpp:500
-#: ../src/view/grublistCfgDlgGtk.cpp:355
+#: ../src/presenter/grubCustomizer.cpp:526
+#: ../src/view/grublistCfgDlgGtk.cpp:359
 msgid " (custom)"
 msgstr " (personalizado)"
 
-#: ../src/presenter/grubCustomizer.cpp:528
+#: ../src/presenter/grubCustomizer.cpp:556
 msgid "Configuration has been saved"
 msgstr "La configuración ha sido guardada"
 
-#: ../src/presenter/grubCustomizer.cpp:531
+#: ../src/presenter/grubCustomizer.cpp:559
 msgid "updating configuration"
 msgstr "actualizando la configuración"
 
-#: ../src/presenter/grubCustomizer.cpp:539
-msgid " not found. Is grub2 installed?"
-msgstr " no encontrado. ¿Tiene grub2 instalado?"
+#: ../src/presenter/grubCustomizer.cpp:571
+msgid "%1 not found. Is grub2 installed?"
+msgstr "%1 no encontrado. Está instalado grub2 ?"
 
-#: ../src/presenter/grubCustomizer.cpp:544
-msgid " couldn't be executed successfully. You must run this as root!"
-msgstr " no se puede ejecutar con éxito. Debe ejecutar esto como root."
+#: ../src/presenter/grubCustomizer.cpp:581
+msgid ""
+"%1 couldn't be executed successfully. error message:\n"
+" %2"
+msgstr ""
+"%1 no se pudo ejecutar satisfactoriamente. mensaje de error:\n"
+" %2"
 
-#: ../src/presenter/grubCustomizer.cpp:599
+#: ../src/presenter/grubCustomizer.cpp:638
 msgid "Name the Entry"
 msgstr "Nombre la entrada"
 
-#: ../src/presenter/grubCustomizer.cpp:632
+#: ../src/presenter/grubCustomizer.cpp:671
 msgid "cannot move this entry"
-msgstr ""
+msgstr "no se puede mover esta entrada"
 
 #: ../src/view/aboutDialogGtk.cpp:36
 msgid ""
@@ -184,21 +188,25 @@ msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:263
 msgid "(new Entries of %1)"
-msgstr ""
+msgstr "(entradas nuevas de %1)"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:265
 msgid "(new Entries)"
 msgstr "(nuevas entradas)"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:489
+#: ../src/view/grublistCfgDlgGtk.cpp:270
+msgid "(script code)"
+msgstr ""
+
+#: ../src/view/grublistCfgDlgGtk.cpp:494
 msgid "Default title: "
 msgstr "Título predeterminado: "
 
-#: ../src/view/grublistCfgDlgGtk.cpp:581
+#: ../src/view/grublistCfgDlgGtk.cpp:586
 msgid "The saved configuration is not up to date!"
 msgstr "La configuración guardada no está actualizada"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:582
+#: ../src/view/grublistCfgDlgGtk.cpp:587
 msgid ""
 "The generated configuration didn't equal to the saved configuration on "
 "startup. So what you see now may not be what you see when you restart your "
@@ -208,37 +216,37 @@ msgstr ""
 "inicio. Así que lo que ve ahora puede no ser lo que se verá cuando reinicie "
 "el PC. Para solucionar este problema, pulse Actualizar."
 
-#: ../src/view/grublistCfgDlgGtk.cpp:585
+#: ../src/view/grublistCfgDlgGtk.cpp:590
 msgid "_Quit without update"
 msgstr "_Salir sin actualizar"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:588
+#: ../src/view/grublistCfgDlgGtk.cpp:593
 msgid "_Update & Quit"
 msgstr "_Actualizar y salir"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:592
+#: ../src/view/grublistCfgDlgGtk.cpp:597
 msgid "Do you want to save your modifications?"
 msgstr "¿Quiere guardar las modificaciones?"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:595
+#: ../src/view/grublistCfgDlgGtk.cpp:600
 msgid "_Quit without saving"
 msgstr "_Salir sin guardar"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:598
+#: ../src/view/grublistCfgDlgGtk.cpp:603
 msgid "_Save & Quit"
 msgstr "_Guardar y salir"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:601
+#: ../src/view/grublistCfgDlgGtk.cpp:606
 msgid "AND: your modifications are still unsaved, update will save them too!"
 msgstr ""
 "Y: las modificaciones no han sido guardadas aún, actualizar salvará éstas "
 "también."
 
-#: ../src/view/grublistCfgDlgGtk.cpp:655 ../src/view/settingsDlgGtk.cpp:123
+#: ../src/view/grublistCfgDlgGtk.cpp:672 ../src/view/settingsDlgGtk.cpp:123
 msgid "is active"
 msgstr "activa"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:656 ../src/view/settingsDlgGtk.cpp:124
+#: ../src/view/grublistCfgDlgGtk.cpp:673 ../src/view/settingsDlgGtk.cpp:124
 msgid "name"
 msgstr "nombre"
 

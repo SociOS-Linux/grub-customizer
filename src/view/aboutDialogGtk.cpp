@@ -35,7 +35,7 @@ AboutDialogGtk::AboutDialogGtk()
 	this->set_logo_icon_name("grub-customizer");
 	this->set_comments(gettext("Grub Customizer is a graphical interface to configure the grub2/burg settings"));
 
-	this->artists.push_back("zelo");
+	this->artists.push_back("Zelozelos");
 	this->set_artists(artists);
 
 	this->set_translator_credits(
@@ -67,6 +67,7 @@ jmb_kz https://launchpad.net/~jmb-kz\n\
 Jörg BUCHMANN https://launchpad.net/~jorg-buchmann\n\
 José Humberto Melo https://launchpad.net/~josehumberto-melo\n\
 Lê Trường An. https://launchpad.net/~truongan\n\
+Mantas Kriaučiūnas https://launchpad.net/~mantas\n\
 Manuel Xosé Lemos https://launchpad.net/~mxlemos\n\
 Maks Lyashuk aka Ma)(imuM https://launchpad.net/~probel\n\
 Maxime Gentils https://launchpad.net/~maxime.gentils\n\
@@ -81,6 +82,7 @@ Svetoslav Stefanov https://launchpad.net/~svetlisashkov\n\
 TheMengzor https://launchpad.net/~the-mengzor\n\
 Thibaut Panis https://launchpad.net/~thibaut-panis\n\
 Tielhalter https://launchpad.net/~tielhalter\n\
+Timo Seppola https://launchpad.net/~timo-seppola\n\
 Tomas Hasko https://launchpad.net/~thasko\n\
 Tubuntu https://launchpad.net/~t-ubuntu\n\
 Zbyněk Schwarz https://launchpad.net/~tsbook\n\
