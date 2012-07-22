@@ -21,8 +21,7 @@
 #include <string>
 #include "entry.h"
 #include <iostream>
-
-std::string str_replace(const std::string &search, const std::string &replace, std::string subject);
+#include "../interface/entryPathBuilder.h"
 
 struct Rule {
 	Entry* dataSource; //assigned when using RuleType::OTHER_ENTRIES_PLACEHOLDER
@@ -38,7 +37,7 @@ struct Rule {
 	Rule(RuleType type, std::list<std::string> path, bool isVisible);
 	Rule(Entry& source, bool isVisible, std::list<std::list<std::string> > const& pathesToIgnore = std::list<std::list<std::string> >(), std::list<std::string> const& currentPath = std::list<std::string>()); //generate rule for given entry
 	Rule();
-	operator std::string();
+	std::string toString(EntryPathBilder const& pathBuilder);
 	void print() const;
 	std::string getEntryName() const;
 };

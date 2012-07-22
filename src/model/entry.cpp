@@ -40,6 +40,15 @@ GrubConfRow::operator bool(){
 	return !eof && is_loaded;
 }
 
+std::string str_replace(const std::string &search, const std::string &replace, std::string subject) {
+	size_t pos = 0;
+	while (pos < subject.length() && (pos = subject.find(search, pos)) != -1){
+		subject.replace(pos, search.length(), replace);
+		pos += replace.length();
+	}
+	return subject;
+}
+
 Entry::Entry()
 	: isValid(false)
 {}
@@ -84,7 +93,7 @@ Entry::Entry(FILE* sourceFile, GrubConfRow firstRow)
 			*this = Entry(entryName, "", "", SUBMENU);
 			inEntry = true;
 		} else {
-			std::cout << row << std::endl;
+			std::cout << row.text << std::endl;
 		}
 		firstRow.eof = true; //disable firstRow to read the following config from file
 	}

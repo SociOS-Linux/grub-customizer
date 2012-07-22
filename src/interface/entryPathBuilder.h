@@ -16,38 +16,16 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef GRUB_CUSTOMIZER_ENTRY_INCLUDED
-#define GRUB_CUSTOMIZER_ENTRY_INCLUDED
-#include <cstdio>
+#ifndef ENTRY_PATH_BUILDER_INCLUDED
+#define ENTRY_PATH_BUILDER_INCLUDED
 #include <string>
 #include <list>
-#include <iostream>
+#include "../model/entry.h"
 
-struct GrubConfRow {
-	GrubConfRow(FILE* sourceFile);
-	GrubConfRow();
-	std::string text;
-	bool eof;
-	bool is_loaded;
-	operator bool();
-};
-
-std::string str_replace(const std::string &search, const std::string &replace, std::string subject);
-
-struct Entry {
-	enum EntryType {
-		MENUENTRY,
-		SUBMENU,
-		ROOT_ENTRY
-	} type;
-	bool isValid;
-	std::string name, extension, content;
-	std::list<Entry> subEntries;
-	Entry();
-	Entry(std::string name, std::string extension, std::string content = "", EntryType type = MENUENTRY);
-	Entry(FILE* sourceFile, GrubConfRow firstRow = GrubConfRow());
-	std::list<Entry>& getSubEntries();
-	operator bool() const;
+class EntryPathBilder {
+public:
+	virtual std::list<std::string> buildPath(Entry const& entry) const =0;
+	virtual std::string buildPathString(Entry const& entry, bool withOtherEntriesPlaceholder = false) const =0;
 };
 
 #endif

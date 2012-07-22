@@ -24,8 +24,9 @@
 #include <iostream>
 #include <sys/stat.h>
 #include "entry.h"
+#include "../interface/entryPathBuilder.h"
 
-struct Script : public std::list<Entry> {
+struct Script : public EntryPathBilder, std::list<Entry> {
 	enum Exception {
 		ELEMENT_NOT_FOUND
 	};
@@ -37,7 +38,9 @@ struct Script : public std::list<Entry> {
 	std::list<Entry>* getListByPath(std::list<std::string> const& path);
 	void moveToBasedir(std::string const& cfg_dir); //moves the file from any location to grub.d and adds the prefix PS_ (proxified Script) or DS_ (default script)
 	bool moveFile(std::string const& newPath, short int permissions = -1);
-	std::list<std::string> buildPath(Entry const& entry, Entry const* parent = NULL);
+	std::list<std::string> buildPath(Entry const& entry, Entry const* parent) const;
+	std::list<std::string> buildPath(Entry const& entry) const;
+	std::string buildPathString(Entry const& entry, bool withOtherEntriesPlaceholder = false) const;
 };
 
 #endif

@@ -79,7 +79,7 @@ bool Script::moveFile(std::string const& newPath, short int permissions){
 	return false;
 }
 
-std::list<std::string> Script::buildPath(Entry const& entry, Entry const* parent) {
+std::list<std::string> Script::buildPath(Entry const& entry, Entry const* parent) const {
 	std::list<Entry> const& list = parent ? parent->subEntries : *this;
 	for (std::list<Entry>::const_iterator iter = list.begin(); iter != list.end(); iter++) {
 		if (&*iter == &entry) {
@@ -100,5 +100,25 @@ std::list<std::string> Script::buildPath(Entry const& entry, Entry const* parent
 	throw ELEMENT_NOT_FOUND;
 }
 
+
+std::list<std::string> Script::buildPath(Entry const& entry) const {
+	return this->buildPath(entry, NULL);
+}
+
+std::string Script::buildPathString(Entry const& entry, bool withOtherEntriesPlaceholder) const {
+	std::string result;
+	std::list<std::string> list = this->buildPath(entry, NULL);
+	for (std::list<std::string>::iterator iter = list.begin(); iter != list.end(); iter++) {
+		if (result != "") {
+			result += "/";
+		}
+		result += "'"+str_replace("'", "''", *iter)+"'";
+	}
+
+	if (withOtherEntriesPlaceholder) {
+		result += "/*";
+	}
+	return result;
+}
 
 

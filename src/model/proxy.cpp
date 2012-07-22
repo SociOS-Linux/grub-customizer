@@ -261,9 +261,9 @@ bool Proxy::generateFile(std::string const& path, int cfg_dir_prefix_length, std
 			fputs("#!/bin/sh\n#THIS IS A GRUB PROXY SCRIPT\n", proxyFile);
 			fputs(("'"+this->dataSource->fileName.substr(cfg_dir_prefix_length)+"'").c_str(), proxyFile);
 			fputs((" | "+cfg_dir_noprefix+"/bin/grubcfg_proxy \"").c_str(), proxyFile);
-			int i = 0;
 			for (std::list<Rule>::iterator ruleIter = this->rules.begin(); ruleIter != this->rules.end(); ruleIter++){
-				fputs((std::string(*ruleIter)+"\n").c_str(), proxyFile); //write rule
+				assert(this->dataSource != NULL);
+				fputs((ruleIter->toString(*this->dataSource)+"\n").c_str(), proxyFile); //write rule
 			}
 			fputs("\"", proxyFile);
 			fclose(proxyFile);
