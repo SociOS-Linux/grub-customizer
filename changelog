@@ -1,3 +1,8 @@
+v 2.5.7
+	* font chooser
+	* reordering bug fixed (occured when same prefix on both proxies)
+	* translation updates
+
 v 2.5.6
 	* made install- and tempfilepathes editable by custom cmake directives
 

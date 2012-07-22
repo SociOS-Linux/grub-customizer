@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-12-23 17:05+0100\n"
-"PO-Revision-Date: 2012-02-07 08:23+0000\n"
-"Last-Translator: Max_ym <kontact.cat@gmail.com>\n"
+"PO-Revision-Date: 2012-06-09 20:02+0000\n"
+"Last-Translator: Yuriy Oleksiychuk <Unknown>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-05-07 21:56+0000\n"
-"X-Generator: Launchpad (build 15195)\n"
+"X-Launchpad-Export-Date: 2012-06-11 21:08+0000\n"
+"X-Generator: Launchpad (build 15376)\n"
 
 #: ../src/presenter/grubCustomizer.cpp:445
 msgid "No script found"
@@ -56,7 +56,7 @@ msgstr "Назва Пункту"
 
 #: ../src/presenter/grubCustomizer.cpp:671
 msgid "cannot move this entry"
-msgstr ""
+msgstr "не вдається перемістити цей запис"
 
 #: ../src/view/aboutDialogGtk.cpp:36
 msgid ""
@@ -143,11 +143,11 @@ msgstr "Перемістити вниз обраний пункт чи сцен�
 
 #: ../src/view/grublistCfgDlgGtk.cpp:81
 msgid "remove this entry from the current submenu"
-msgstr ""
+msgstr "видалити цей запис із поточного підменю"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:84
 msgid "add this entry to a new submenu"
-msgstr ""
+msgstr "додати цей запис до нового підменю"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:92
 msgid "reload configuration"
@@ -179,17 +179,20 @@ msgstr "Зберегти конфігурацію та створити нову
 
 #: ../src/view/grublistCfgDlgGtk.cpp:273
 msgid "Proxy binary not found!"
-msgstr ""
+msgstr "Бінарний код проксі-сервера не знайдено!"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:274
 msgid ""
 "You will see all entries (uncustomized) when you run grub. This error accurs "
 "(in most cases), when you didn't install grub gustomizer currectly."
 msgstr ""
+"Вам будуть видимі всі записи (неналаштовані) під час виконання grub. Ця "
+"помилка виникає (у більшості випадків), якщо grub gustomizer не було "
+"встановлено належним чином."
 
 #: ../src/view/grublistCfgDlgGtk.cpp:280
 msgid "(new Entries of %1)"
-msgstr ""
+msgstr "(нових записів із %1)"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:282
 msgid "(new Entries)"
@@ -213,6 +216,9 @@ msgid ""
 "startup. So what you see now may not be what you see when you restart your "
 "pc. To fix this, click update!"
 msgstr ""
+"Створена конфігурація не збігається зі збереженою конфігурацією при запуску. "
+"Тому те, що ви бачите зараз, може відрізнятися від того, що буде при "
+"перезавантаженні вашого ПК. Щоб виправити це, натисніть \"Оновити\"!"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:616
 msgid "_Quit without update"
@@ -288,7 +294,7 @@ msgstr "Обрати та монтувати ваш основний (root) ро
 
 #: ../src/view/partitionChooserGtk.cpp:88
 msgid "Select required submountpoints"
-msgstr ""
+msgstr "Виберіть необхідні точки монтування нижчого рівня"
 
 #: ../src/view/partitionChooserGtk.cpp:94
 msgid "Partition Chooser"

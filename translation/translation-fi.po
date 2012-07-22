@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-05-07 21:56+0000\n"
-"X-Generator: Launchpad (build 15195)\n"
+"X-Launchpad-Export-Date: 2012-06-11 21:08+0000\n"
+"X-Generator: Launchpad (build 15376)\n"
 
 #: ../src/presenter/grubCustomizer.cpp:445
 msgid "No script found"
@@ -49,7 +49,7 @@ msgid ""
 " %2"
 msgstr ""
 "%1 ei voitu suorittaa onnistuneesti. Virheviesti:\n"
-"%2"
+" %2"
 
 #: ../src/presenter/grubCustomizer.cpp:638
 msgid "Name the Entry"
@@ -57,7 +57,7 @@ msgstr "Nimeä käynnistysrivi (entry)"
 
 #: ../src/presenter/grubCustomizer.cpp:671
 msgid "cannot move this entry"
-msgstr "En voi siirtää käynnistysriviä (entry)"
+msgstr "en voi siirtää käynnistysriviä (entry)"
 
 #: ../src/view/aboutDialogGtk.cpp:36
 msgid ""
