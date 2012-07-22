@@ -34,12 +34,21 @@ Entry* Script::getEntryByPath(std::list<std::string> const& path){
 	return result;
 }
 
+/**
+ * find an entry by its name. If there are zero or multiple entries having the specified name,
+ * NULL is returned
+ */
 Entry* Script::getEntryByName(std::string const& name, std::list<Entry>& parentList) {
+	Entry* result = NULL;
 	for (Script::iterator iter = parentList.begin(); iter != parentList.end(); iter++){
-		if (iter->name == name)
-			return &*iter;
+		if (iter->name == name) {
+			if (result != NULL) {
+				return NULL; // entry name not unique!
+			}
+			result = &*iter;
+		}
 	}
-	return NULL;
+	return result;
 }
 
 Entry* Script::getEntryByHash(std::string const& hash, std::list<Entry>& parentList) {
