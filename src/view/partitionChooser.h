@@ -3,7 +3,7 @@
 #include <gtkmm.h>
 #include "../model/deviceDataList.h"
 #include "../model/mountTable.h"
-#include "../interface/eventListener_view_iface.h"
+#include "../interface/evt_partitionChooser.h"
 #include <libintl.h>
 #include <locale.h>
 #include <iostream>
@@ -31,7 +31,7 @@ class PartitionChooser {
 	Gtk::HBox hbMountButtons;
 	Gtk::Button bttMountFs, bttUmountFs;
 	bool submountpoint_toggle_run_event;
-	EventListenerView_iface* eventListener;
+	EventListener_partitionChooser* eventListener;
 	void init(bool useExisting = true);
 	Gtk::Assistant& getWindow();
 	public:
@@ -47,7 +47,7 @@ class PartitionChooser {
 	};
 	bool is_cancelled;
 	PartitionChooser(bool isLiveCD);
-	void setEventListener(EventListenerView_iface& eventListener);
+	void setEventListener(EventListener_partitionChooser& eventListener);
 	void updateSensitivity();
 	void signal_custom_partition_toggled();
 	void signal_lvRootPartitionSelection_changed();

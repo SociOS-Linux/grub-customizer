@@ -25,6 +25,6 @@ std::string GrubInstaller::install(std::string const& device){
 		return output;
 }
 
-void GrubInstaller::setEventListener(EventListenerModel_iface& eventListener) {
+void GrubInstaller::setEventListener(EventListener_model& eventListener) {
 	this->eventListener = &eventListener;
 }

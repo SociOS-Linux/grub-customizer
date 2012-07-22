@@ -18,18 +18,18 @@
 #include "mountTable.h"
 #include "settings_mng_ds.h"
 #include "grubEnv.h"
-#include "../interface/eventListener_model_iface.h"
+#include "../interface/evt_model.h"
 
 
 
 class GrublistCfg {
-	EventListenerModel_iface* eventListener;
+	EventListener_model* eventListener;
 	
 	double progress;
 	bool locked;
 public:
 	GrublistCfg(GrubEnv& env);
-	void setEventListener(EventListenerModel_iface& eventListener);
+	void setEventListener(EventListener_model& eventListener);
 	
 	ProxyList proxies;
 	Repository repository;

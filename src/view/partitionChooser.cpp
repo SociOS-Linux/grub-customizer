@@ -56,7 +56,7 @@ PartitionChooser::PartitionChooser(bool isLiveCD)
 	vbAdditionalMountSelectionPageList.set_border_width(10);
 }
 
-void PartitionChooser::setEventListener(EventListenerView_iface& eventListener){
+void PartitionChooser::setEventListener(EventListener_partitionChooser& eventListener){
 	this->eventListener = &eventListener;
 }
 

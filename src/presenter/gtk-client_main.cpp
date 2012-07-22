@@ -1,6 +1,5 @@
 #include "gtk-client.h"
-#include "eventListener_view.h"
-#include "eventListener_model.h"
+#include "eventListener.h"
 #include "../model/grubEnv.h"
 
 int main(int argc, char** argv){
@@ -46,17 +45,16 @@ int main(int argc, char** argv){
 	presenter.setMountTable(*mountTable);
 	presenter.setAboutDialog(*aboutDialog);
 	
-	EventListenerView evt_view(presenter);
-	listCfgView->setEventListener(evt_view);
-	installDlg->setEventListener(evt_view);
-	scriptAddDlg->setEventListener(evt_view);
-	settingsDlg->setEventListener(evt_view);
-	partitionChooser->setEventListener(evt_view);
+	EventListener evt(presenter);
+	listCfgView->setEventListener(evt);
+	installDlg->setEventListener(evt);
+	scriptAddDlg->setEventListener(evt);
+	settingsDlg->setEventListener(evt);
+	partitionChooser->setEventListener(evt);
 	
-	EventListenerModel evt_model(presenter);
-	listcfg->setEventListener(evt_model);
-	installer->setEventListener(evt_model);
-	fbResolutionsGetter->setEventListener(evt_model);
+	listcfg->setEventListener(evt);
+	installer->setEventListener(evt);
+	fbResolutionsGetter->setEventListener(evt);
 	
 	presenter.run();
 }

@@ -33,8 +33,12 @@ misc/manpage.gz -text svneol=unset#unset
 misc/upstream-changelog.gz -text svneol=unset#unset
 src/config.h -text
 src/interface/colorChooser.h -text
-src/interface/eventListener_model_iface.h -text
-src/interface/eventListener_view_iface.h -text
+src/interface/evt_grubInstallDlg.h -text
+src/interface/evt_listCfgDlg.h -text
+src/interface/evt_model.h -text
+src/interface/evt_partitionChooser.h -text
+src/interface/evt_scriptAddDlg.h -text
+src/interface/evt_settings.h -text
 src/interface/grubconf_ui.h -text
 src/interface/settings_dlg.h -text
 src/model/deviceDataList.cpp -text
@@ -67,12 +71,8 @@ src/model/script.cpp -text
 src/model/script.h -text
 src/model/settings_mng_ds.cpp -text
 src/model/settings_mng_ds.h -text
-src/presenter/eventListener_abstract.cpp -text
-src/presenter/eventListener_abstract.h -text
-src/presenter/eventListener_model.cpp -text
-src/presenter/eventListener_model.h -text
-src/presenter/eventListener_view.cpp -text
-src/presenter/eventListener_view.h -text
+src/presenter/eventListener.cpp -text
+src/presenter/eventListener.h -text
 src/presenter/grubcfg_proxy_main.cpp -text
 src/presenter/gtk-client.cpp -text
 src/presenter/gtk-client.h -text

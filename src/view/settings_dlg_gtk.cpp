@@ -233,7 +233,7 @@ GrubSettingsDlgGtk::GrubSettingsDlgGtk()
 	this->set_default_size(300, 400);
 }
 
-void GrubSettingsDlgGtk::setEventListener(EventListenerView_iface& eventListener){
+void GrubSettingsDlgGtk::setEventListener(EventListener_settings& eventListener){
 	this->eventListener = &eventListener;
 }
 

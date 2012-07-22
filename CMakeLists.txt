@@ -21,9 +21,7 @@ add_executable(grub-customizer
 	src/view/grubInstallDlg.cpp
 	src/presenter/gtk-client_main.cpp
 	src/presenter/gtk-client.cpp
-	src/presenter/eventListener_view.cpp
-	src/presenter/eventListener_model.cpp
-	src/presenter/eventListener_abstract.cpp
+	src/presenter/eventListener.cpp
 	src/model/libproxyscript_parser.cpp
 	src/view/partitionChooser.cpp
 	src/model/mountTable.cpp

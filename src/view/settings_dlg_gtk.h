@@ -5,7 +5,7 @@
 #include <libintl.h>
 #include "../model/grubEnv.h"
 #include "../interface/colorChooser.h"
-#include "../interface/eventListener_view_iface.h"
+#include "../interface/evt_settings.h"
 #include <string>
 
 
@@ -44,7 +44,7 @@ class GrubSettingsDlgGtk : public Gtk::Dialog, public GrubSettingsDlg {
 	AdvancedSettingsTreeModel asTreeModel;
 	Glib::RefPtr<Gtk::ListStore> refAsListStore;
 	bool event_lock;
-	EventListenerView_iface* eventListener;
+	EventListener_settings* eventListener;
 	
 	Gtk::Notebook tabbox;
 	Gtk::ScrolledWindow scrAllEntries;
@@ -146,7 +146,7 @@ class GrubSettingsDlgGtk : public Gtk::Dialog, public GrubSettingsDlg {
 		CustomOption(std::string name, std::string value, bool isActive);
 	};
 	GrubSettingsDlgGtk();
-	void setEventListener(EventListenerView_iface& eventListener);
+	void setEventListener(EventListener_settings& eventListener);
 	void show(bool burgMode);
 	ColorChooser& getColorChooser(ColorChooserType type);
 	void addEntryToDefaultEntryChooser(std::string const& entryTitle);

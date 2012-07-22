@@ -7,7 +7,7 @@ GrublistCfg::GrublistCfg(GrubEnv& env)
  locked(false)
 {}
 
-void GrublistCfg::setEventListener(EventListenerModel_iface& eventListener) {
+void GrublistCfg::setEventListener(EventListener_model& eventListener) {
 	this->eventListener = &eventListener;
 }
 

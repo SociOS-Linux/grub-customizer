@@ -66,7 +66,7 @@ void GrubInstallDlg::showMessageGrubInstallCompleted(std::string const& msg){
 	disp_grub_install_ready();
 }
 
-void GrubInstallDlg::setEventListener(EventListenerView_iface& eventListener) {
+void GrubInstallDlg::setEventListener(EventListener_grubInstallDlg& eventListener) {
 	this->eventListener = &eventListener;
 }
 

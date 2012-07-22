@@ -32,7 +32,7 @@ ScriptAddDlg::ScriptAddDlg()
 	cbScriptSelection.signal_changed().connect(sigc::mem_fun(this, &ScriptAddDlg::signal_script_selection_changed));
 }
 
-void ScriptAddDlg::setEventListener(EventListenerView_iface& eventListener){
+void ScriptAddDlg::setEventListener(EventListener_scriptAddDlg& eventListener){
 	this->eventListener = &eventListener;
 }
 

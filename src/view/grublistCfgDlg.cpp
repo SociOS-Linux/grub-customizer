@@ -125,7 +125,7 @@ GrublistCfgDlg::GrublistCfgDlg()
 
 }
 
-void GrublistCfgDlg::setEventListener(EventListenerView_iface& eventListener) {
+void GrublistCfgDlg::setEventListener(EventListener_listCfgDlg& eventListener) {
 	this->eventListener = &eventListener;
 }
 

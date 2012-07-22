@@ -1,13 +1,25 @@
-#ifndef EVENTLISTENER_VIEW_INCLUDED
-#define EVENTLISTENER_VIEW_INCLUDED
-
+#ifndef EVENTLISTENER_INCLUDED
+#define EVENTLISTENER_INCLUDED
 #include "gtk-client.h"
-#include "../interface/eventListener_view_iface.h"
-#include "eventListener_abstract.h"
 
-class EventListenerView : public EventListener_abstract, public EventListenerView_iface {
+#include "../interface/evt_grubInstallDlg.h"
+#include "../interface/evt_model.h"
+#include "../interface/evt_listCfgDlg.h"
+#include "../interface/evt_partitionChooser.h"
+#include "../interface/evt_scriptAddDlg.h"
+#include "../interface/evt_settings.h"
+
+class EventListener :
+	public EventListener_settings,
+	public EventListener_partitionChooser,
+	public EventListener_grubInstallDlg,
+	public EventListener_listCfgDlg,
+	public EventListener_model,
+	public EventListener_scriptAddDlg
+{
+	GtkClient& presenter;
 public:
-	EventListenerView(GtkClient& presenter);
+	EventListener(GtkClient& presenter);
 	void settings_dialog_request();
 	void reload_request();
 	void save_request();
@@ -20,14 +32,14 @@ public:
 	void scriptSelected();
 	void removeProxy_requested(void* p);
 	bool exitRequest();
-	
+
 	void signal_script_state_toggled(void* script);
 	void signal_entry_state_toggled(void* entry);
 	void signal_entry_renamed(void* entry);
-	
+
 	void ruleSwap_requested(void* a, void* b);
 	void proxySwap_requested(void* a, void* b);
-	
+
 	void ruleSelected(void* rule);
 	void proxySelected(void* proxy);
 
@@ -58,7 +70,12 @@ public:
 	void rootFsUmount_request();
 	void submountpoint_mount_request(std::string const& mountpoint);
 	void submountpoint_umount_request(std::string const& mountpoint);
+
+	//model
+	void entryListUpdate();
+	void saveProgressChanged();
+	void threadDied();
+	void grubInstallCompleted(std::string const& msg);
+	void fb_resolutions_loaded();
 };
-
 #endif
-

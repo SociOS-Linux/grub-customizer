@@ -2,7 +2,7 @@
 #define GRUBLIST_CFG_DLG_INCLUDED
 #include <gtkmm.h>
 #include "../interface/grubconf_ui.h"
-#include "../interface/eventListener_view_iface.h"
+#include "../interface/evt_listCfgDlg.h"
 #include <iostream>
 #include <libintl.h>
 #include "../config.h"
@@ -30,7 +30,7 @@ class ImageMenuItemOwnKey : public Gtk::ImageMenuItem {
 };
 
 class GrublistCfgDlg : public GrubConfUI {
-	EventListenerView_iface* eventListener;
+	EventListener_listCfgDlg* eventListener;
 	Gtk::Window win;
 	Gtk::VBox vbMainSplit;
 	
@@ -67,7 +67,7 @@ public:
 		RULE_ITER_NOT_FOUND
 	};
 	GrublistCfgDlg();
-	void setEventListener(EventListenerView_iface& eventListener);
+	void setEventListener(EventListener_listCfgDlg& eventListener);
 	void run();
 	void close();
 	bool requestForRootSelection();

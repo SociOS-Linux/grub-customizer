@@ -1,7 +1,9 @@
-#ifndef EVENTLISTENER_MODEL_IFACE
-#define EVENTLISTENER_MODEL_IFACE
-class EventListenerModel_iface {
-	public:
+#ifndef EVENTLISTENER_MODEL_INCLUDED
+#define EVENTLISTENER_MODEL_INCLUDED
+
+#include <string>
+class EventListener_model {
+public:
 	virtual void entryListUpdate()=0;
 	virtual void saveProgressChanged()=0;
 	virtual void threadDied()=0;
@@ -9,4 +11,5 @@ class EventListenerModel_iface {
 
 	virtual void fb_resolutions_loaded()=0;
 };
+
 #endif
