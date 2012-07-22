@@ -19,8 +19,6 @@
 #include "md5.h"
 
 std::string md5(std::string const& input) {
-	unsigned char cresult[16];
-
 	unsigned char buf[16];
 	unsigned char* cStr = new unsigned char[input.length() + 1];
 	for (int i = 0; i < input.length(); i++) {
@@ -43,5 +41,6 @@ std::string md5(std::string const& input) {
 			result += 'a' + b - 10;
 		}
 	}
+	assert(result.length() == 32);
 	return result;
 }

@@ -33,8 +33,9 @@ Proxy::Proxy(Script& dataSource)
 std::list<Rule> Proxy::parseRuleString(const char** ruleString) {
 	std::list<Rule> rules;
 
-	bool inString = false, inAlias = false;
+	bool inString = false, inAlias = false, inHash = false;
 	std::string name;
+	std::string hash;
 	std::list<std::string> path;
 	bool visible = false;
 	const char* iter = NULL;
@@ -70,6 +71,8 @@ std::list<Rule> Proxy::parseRuleString(const char** ruleString) {
 			name += *iter;
 			if (*iter == '\'')
 				iter++;
+		} else if (inHash && *iter != '~') {
+			hash += *iter;
 		} else if (!inString && *iter == 'a' && *++iter == 's') {
 			inAlias = true;
 		} else if (!inString && !inAlias && *iter == '/') {
@@ -78,6 +81,12 @@ std::list<Rule> Proxy::parseRuleString(const char** ruleString) {
 		} else if (!inString && !inAlias && *iter == '{') {
 			iter++;
 			rules.back().subRules = Proxy::parseRuleString(&iter);
+		} else if (!inString && *iter == '~') {
+			inHash = !inHash;
+			if (!inHash) {
+				rules.back().__idHash = hash;
+				hash = "";
+			}
 		}
 	}
 	*ruleString = iter;
@@ -104,6 +113,7 @@ Rule* Proxy::getRuleByEntry(Entry const& entry, std::list<Rule>& list, Rule::Rul
 bool Proxy::sync(bool deleteInvalidRules, bool expand){
 	if (this->dataSource){
 		this->sync_connectExisting();
+		this->sync_connectExistingByHash();
 		if (expand) {
 			this->sync_add_placeholders();
 			this->sync_expand();
@@ -119,6 +129,7 @@ bool Proxy::sync(bool deleteInvalidRules, bool expand){
 }
 
 void Proxy::sync_connectExisting(Rule* parent) {
+	assert(this->dataSource != NULL);
 	this->__idPathList.clear();
 	std::list<Rule>& list = parent ? parent->subRules : this->rules;
 	for (std::list<Rule>::iterator iter = list.begin(); iter != list.end(); iter++) {
@@ -139,6 +150,22 @@ void Proxy::sync_connectExisting(Rule* parent) {
 
 		if (iter->subRules.size()) {
 			this->sync_connectExisting(&*iter);
+		}
+	}
+}
+
+void Proxy::sync_connectExistingByHash(Rule* parent) {
+	assert(this->dataSource != NULL);
+	std::list<Rule>& list = parent ? parent->subRules : this->rules;
+	for (std::list<Rule>::iterator iter = list.begin(); iter != list.end(); iter++) {
+		if (iter->dataSource == NULL && iter->__idHash != "") {
+			iter->dataSource = this->dataSource->getEntryByHash(iter->__idHash, *this->dataSource);
+			if (iter->dataSource) {
+				this->__idPathList.push_back(this->dataSource->buildPath(*iter->dataSource));
+			}
+		}
+		if (iter->subRules.size()) {
+			this->sync_connectExistingByHash(&*iter);
 		}
 	}
 }

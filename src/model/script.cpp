@@ -42,6 +42,20 @@ Entry* Script::getEntryByName(std::string const& name, std::list<Entry>& parentL
 	return NULL;
 }
 
+Entry* Script::getEntryByHash(std::string const& hash, std::list<Entry>& parentList) {
+	for (Script::iterator iter = parentList.begin(); iter != parentList.end(); iter++){
+		if (iter->type == Entry::MENUENTRY && iter->content != "" && md5(iter->content) == hash) {
+			return &*iter;
+		} else if (iter->type == Entry::SUBMENU) {
+			Entry* result = this->getEntryByHash(hash, iter->subEntries);
+			if (result != NULL) {
+				return result;
+			}
+		}
+	}
+	return NULL;
+}
+
 std::list<Entry>* Script::getListByPath(std::list<std::string> const& path) {
 	if (path.size()) {
 		Entry* e = this->getEntryByPath(path);

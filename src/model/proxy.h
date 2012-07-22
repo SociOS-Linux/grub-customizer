@@ -44,6 +44,7 @@ struct Proxy {
 	Rule* getRuleByEntry(Entry const& entry, std::list<Rule>& list, Rule::RuleType ruletype);
 	bool sync(bool deleteInvalidRules = true, bool expand = true);
 	void sync_connectExisting(Rule* parent = NULL);
+	void sync_connectExistingByHash(Rule* parent = NULL);
 	void sync_add_placeholders(Rule* parent = NULL);
 	void sync_expand();
 	void sync_cleanup(Rule* parent = NULL);

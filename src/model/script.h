@@ -26,6 +26,7 @@
 #include "../interface/entryPathBuilder.h"
 #include "../interface/entryPathFollower.h"
 #include "../presenter/commonClass.h"
+#include "../lib/md5.h"
 
 struct Script : public EntryPathBilder, EntryPathFollower, std::list<Entry>, public CommonClass {
 	enum Exception {
@@ -36,6 +37,7 @@ struct Script : public EntryPathBilder, EntryPathFollower, std::list<Entry>, pub
 	bool isInScriptDir(std::string const& cfg_dir) const;
 	Entry* getEntryByPath(std::list<std::string> const& path);
 	Entry* getEntryByName(std::string const& name, std::list<Entry>& parentList);
+	Entry* getEntryByHash(std::string const& hash, std::list<Entry>& parentList);
 	std::list<Entry>* getListByPath(std::list<std::string> const& path);
 	void moveToBasedir(std::string const& cfg_dir); //moves the file from any location to grub.d and adds the prefix PS_ (proxified Script) or DS_ (default script)
 	bool moveFile(std::string const& newPath, short int permissions = -1);

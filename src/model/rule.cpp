@@ -53,6 +53,7 @@ std::string Rule::toString(EntryPathBilder const& pathBuilder){
 		result += "#text";
 	} else if (dataSource) {
 		result += pathBuilder.buildPathString(*dataSource, this->type == OTHER_ENTRIES_PLACEHOLDER);
+		result += "~" + md5(this->dataSource->content) + "~";
 	} else if (type == OTHER_ENTRIES_PLACEHOLDER) {
 		result += "*"; //root level placeholders
 	} else {
