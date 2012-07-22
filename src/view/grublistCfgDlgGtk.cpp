@@ -633,7 +633,6 @@ void GrublistCfgDlgGtk::signal_show_grub_install_dialog_click(){
 
 void GrublistCfgDlgGtk::showErrorMessage(std::string const& msg, std::vector<std::string> const& values = std::vector<std::string>()){
 	Glib::ustring msg2 = msg;
-	this->log("values.size(): " + Glib::ustring::format(values.size()), Logger::INFO);
 	switch (values.size()) {
 	case 1:	msg2 = Glib::ustring::compose(msg, values[0]); break;
 	case 2:	msg2 = Glib::ustring::compose(msg, values[0], values[1]); break;

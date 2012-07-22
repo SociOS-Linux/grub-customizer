@@ -274,21 +274,6 @@ void GrublistCfg::readGeneratedFile(FILE* source, bool createScriptIfNotFound){
 	if (script)
 		this->proxies.sync_all(true, true, script);
 
-//	for (ProxyList::iterator iter = this->proxies.begin(); iter != this->proxies.end(); iter++) {
-//		this->log("+++++++++" + iter->fileName, Logger::INFO);
-//		for (std::list<Rule>::iterator iter2 = iter->rules.begin(); iter2 != iter->rules.end(); iter2++) {
-//			if (iter2->type == Rule::PLAINTEXT) {
-//				this->log("+++" + iter2->dataSource->content, Logger::INFO);
-//			}
-//		}
-//	}
-
-	for (Repository::iterator iter = this->repository.begin(); iter != this->repository.end(); iter++) {
-		this->log("S+++++++++" + iter->name, Logger::INFO);
-		for (Script::iterator iter2 = iter->begin(); iter2 != iter->end(); iter2++) {
-			this->log("+++" + iter2->name, Logger::INFO);
-		}
-	}
 	this->unlock();
 }
 
