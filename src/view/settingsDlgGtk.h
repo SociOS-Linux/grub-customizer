@@ -90,7 +90,7 @@ class GrubSettingsDlgGtk : public Gtk::Dialog, public SettingsDlg {
 	Gtk::HBox hbDefPredefined;
 	//Gtk::SpinButton spDefPosition;
 	Gtk::ComboBoxText cbDefEntry;
-	int defEntry_item_count;
+	std::map<int, std::string> defEntryValueMapping;
 	
 	//view group
 	Gtk::Frame groupView;
@@ -160,7 +160,7 @@ class GrubSettingsDlgGtk : public Gtk::Dialog, public SettingsDlg {
 	void show(bool burgMode);
 	void hide();
 	ColorChooser& getColorChooser(ColorChooserType type);
-	void addEntryToDefaultEntryChooser(std::string const& entryTitle);
+	void addEntryToDefaultEntryChooser(std::string const& labelPathValue, std::string const& labelPathLabel, std::string const& numericPathValue, std::string const& numericPathLabel);
 	void clearDefaultEntryChooser();
 	void clearResolutionChooser();
 	void addResolution(std::string const& resolution);

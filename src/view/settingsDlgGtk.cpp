@@ -99,7 +99,7 @@ GrubSettingsDlgGtk::GrubSettingsDlgGtk()
 	lblColorChooser(gettext("menu colors")), lblBackgroundImage(gettext("background image")),
 	bttCopyBackground(gettext("copy to grub directory")), bttRemoveBackground(gettext("remove background")),
 	lblBackgroundRequiredInfo(gettext("To get the colors above working,\nyou have to select a background image!")),
-	gccNormalBackground(true), gccHighlightBackground(true), defEntry_item_count(0)
+	gccNormalBackground(true), gccHighlightBackground(true)
 {
 	this->set_title("Grub Customizer - "+Glib::ustring(gettext("settings")));
 	this->set_icon_name("grub-customizer");
@@ -292,10 +292,12 @@ void GrubSettingsDlgGtk::on_response(int response_id) {
 	this->eventListener->settings_dialog_hide_request();
 }
 
-void GrubSettingsDlgGtk::addEntryToDefaultEntryChooser(std::string const& entryTitle){
+void GrubSettingsDlgGtk::addEntryToDefaultEntryChooser(std::string const& labelPathValue, std::string const& labelPathLabel, std::string const& numericPathValue, std::string const& numericPathLabel){
 	event_lock = true;
-	cbDefEntry.append_text(Glib::ustring::compose(gettext("Entry %1 (by position)"), ++defEntry_item_count));
-	cbDefEntry.append_text(entryTitle);
+	this->defEntryValueMapping[this->defEntryValueMapping.size()] = numericPathValue;
+	cbDefEntry.append_text(Glib::ustring::compose(gettext("Entry %1 (by position)"), numericPathLabel));
+	this->defEntryValueMapping[this->defEntryValueMapping.size()] = labelPathValue;
+	cbDefEntry.append_text(labelPathLabel);
 	cbDefEntry.set_active(0);
 	this->groupDefaultEntry.set_sensitive(true);
 	event_lock = false;
@@ -304,7 +306,7 @@ void GrubSettingsDlgGtk::addEntryToDefaultEntryChooser(std::string const& entryT
 void GrubSettingsDlgGtk::clearDefaultEntryChooser(){
 	event_lock = true;
 	cbDefEntry.clear_items();
-	this->defEntry_item_count = 0;
+	this->defEntryValueMapping.clear();
 	this->groupDefaultEntry.set_sensitive(false); //if there's no entry to select, disable this area
 	event_lock = false;
 }
@@ -372,16 +374,16 @@ void GrubSettingsDlgGtk::setActiveDefEntryOption(DefEntryType option){
 
 void GrubSettingsDlgGtk::setDefEntry(Glib::ustring const& defEntry){
 	this->event_lock = true;
-	if (defEntry.find_first_not_of("0123456789") == std::string::npos){
-		std::istringstream in(defEntry);
-		int defEntryNum;
-		in >> defEntryNum;
 
-		cbDefEntry.set_active(defEntryNum*2); //set active element by index, "*2" is required because there are two columns
+	int pos = 0;
+	for (std::map<int, std::string>::iterator iter = this->defEntryValueMapping.begin(); iter != this->defEntryValueMapping.end(); iter++) {
+		if (iter->second == defEntry) {
+			pos = iter->first;
+			break;
+		}
 	}
-	else {
-		cbDefEntry.set_active_text(defEntry);
-	}
+
+	cbDefEntry.set_active(pos);
 	this->event_lock = false;
 }
 
@@ -472,12 +474,7 @@ void GrubSettingsDlgGtk::setBackgroundImagePreviewPath(Glib::ustring const& menu
 
 
 Glib::ustring GrubSettingsDlgGtk::getSelectedDefaultGrubValue(){
-	Glib::ustring val;
-	if ((cbDefEntry.get_active_row_number() % 2) == 0) //index selected
-		val = Glib::ustring::format(cbDefEntry.get_active_row_number() / 2);
-	else //name selected
-		val = cbDefEntry.get_active_text();
-	return val;
+	return this->defEntryValueMapping[cbDefEntry.get_active_row_number()];
 }
 
 GrubSettingsDlgGtk::CustomOption GrubSettingsDlgGtk::getCustomOption(Glib::ustring const& name){

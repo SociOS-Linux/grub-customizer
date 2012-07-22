@@ -90,10 +90,10 @@ void GrubCustomizer::setAboutDialog(AboutDialog& aboutDialog){
 }
 
 void GrubCustomizer::updateSettingsDlg(){
-	std::list<std::string> entryTitles = this->grublistCfg->proxies.generateEntryTitleList();
+	std::list<EntryTitleListItem> entryTitles = this->grublistCfg->proxies.generateEntryTitleList();
 	this->settingsDlg->clearDefaultEntryChooser();
-	for (std::list<std::string>::iterator iter = entryTitles.begin(); iter != entryTitles.end(); iter++)
-		this->settingsDlg->addEntryToDefaultEntryChooser(*iter);
+	for (std::list<EntryTitleListItem>::iterator iter = entryTitles.begin(); iter != entryTitles.end(); iter++)
+		this->settingsDlg->addEntryToDefaultEntryChooser(iter->labelPathValue, iter->labelPathLabel, iter->numericPathValue, iter->numericPathLabel);
 
 
 	this->syncSettings();

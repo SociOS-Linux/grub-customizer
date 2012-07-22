@@ -19,7 +19,14 @@
 #ifndef GRUB_CUSTOMIZER_PROXYLIST_INCLUDED
 #define GRUB_CUSTOMIZER_PROXYLIST_INCLUDED
 #include <list>
+#include <sstream>
 #include "proxy.h"
+struct EntryTitleListItem {
+	std::string labelPathValue;
+	std::string labelPathLabel;
+	std::string numericPathValue;
+	std::string numericPathLabel;
+};
 struct ProxyList : public std::list<Proxy> {
 	enum Exception {
 		NO_RELATED_PROXY_FOUND
@@ -34,7 +41,8 @@ struct ProxyList : public std::list<Proxy> {
 	void sort();
 	void deleteProxy(Proxy* proxyPointer);
 	void clearTrash();
-	std::list<std::string> generateEntryTitleList() const;
+	std::list<EntryTitleListItem> generateEntryTitleList() const;
+	static std::list<EntryTitleListItem> generateEntryTitleList(std::list<Rule> const& parent, std::string const& labelPathPrefix, std::string const& numericPathPrefix, std::string const& numericPathLabelPrefix);
 	Proxy* getProxyByRule(Rule* rule, std::list<Rule> const& list, Proxy& parentProxy);
 	Proxy* getProxyByRule(Rule* rule);
 };
