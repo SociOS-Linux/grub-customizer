@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-01 18:20+0200\n"
+"POT-Creation-Date: 2010-10-07 21:30+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,103 +16,102 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: grubconfig.cpp:105
-msgid "/etc/grub.d not found. Is grub2 installed?"
-msgstr ""
-
-#: grubconfig.cpp:208
-msgid ""
-"grub-mkconfig couldn't be executed successfully. You must run this as root!"
-msgstr ""
-
-#: grubconf_ui_gtk.cpp:7
+#: src_dir/grubconf_ui_gtk.cpp:7
 msgid "_File"
 msgstr ""
 
-#: grubconf_ui_gtk.cpp:9
+#: src_dir/grubconf_ui_gtk.cpp:8
+msgid "_Edit"
+msgstr ""
+
+#: src_dir/grubconf_ui_gtk.cpp:8
+msgid "_View"
+msgstr ""
+
+#: src_dir/grubconf_ui_gtk.cpp:8
+msgid "_Help"
+msgstr ""
+
+#: src_dir/grubconf_ui_gtk.cpp:13
 msgid "Script to insert:"
 msgstr ""
 
-#: grubconf_ui_gtk.cpp:9
+#: src_dir/grubconf_ui_gtk.cpp:13
 msgid "Preview:"
 msgstr ""
 
-#: grubconf_ui_gtk.cpp:36
+#: src_dir/grubconf_ui_gtk.cpp:45
 msgid "Save configuration and generate a new grub.cfg"
 msgstr ""
 
-#: grubconf_ui_gtk.cpp:42
+#: src_dir/grubconf_ui_gtk.cpp:51
 msgid "Add a script to your configuration"
 msgstr ""
 
-#: grubconf_ui_gtk.cpp:44
+#: src_dir/grubconf_ui_gtk.cpp:53
 msgid "Remove a script from your configuration"
 msgstr ""
 
-#: grubconf_ui_gtk.cpp:50
+#: src_dir/grubconf_ui_gtk.cpp:59
 msgid "Move up the selected entry or script"
 msgstr ""
 
-#: grubconf_ui_gtk.cpp:52
+#: src_dir/grubconf_ui_gtk.cpp:61
 msgid "Move down the selected entry or script"
 msgstr ""
 
-#: grubconf_ui_gtk.cpp:58
+#: src_dir/grubconf_ui_gtk.cpp:67
 msgid "reload configuration (same effect as an application restart)"
 msgstr ""
 
-#: grubconf_ui_gtk.cpp:60
+#: src_dir/grubconf_ui_gtk.cpp:69
 msgid "Edit grub preferences"
 msgstr ""
 
-#: grubconf_ui_gtk.cpp:71
+#: src_dir/grubconf_ui_gtk.cpp:100
 msgid "Add script"
 msgstr ""
 
-#: grubconf_ui_gtk.cpp:86
+#: src_dir/grubconf_ui_gtk.cpp:115
 msgid "Entry"
 msgstr ""
 
-#: grubconf_ui_gtk.cpp:136
+#: src_dir/grubconf_ui_gtk.cpp:173
 msgid "loading grub configuration…"
 msgstr ""
 
-#: grubconf_ui_gtk.cpp:156
+#: src_dir/grubconf_ui_gtk.cpp:196
 msgid " (custom)"
 msgstr ""
 
-#: grubconf_ui_gtk.cpp:196
+#: src_dir/grubconf_ui_gtk.cpp:239
 msgid "Configuration has been saved"
 msgstr ""
 
-#: grubconf_ui_gtk.cpp:199
+#: src_dir/grubconf_ui_gtk.cpp:242
 msgid "updating configuration"
 msgstr ""
 
-#: grubconf_ui_gtk.cpp:232
+#: src_dir/grubconf_ui_gtk.cpp:282
 msgid "(new Entries)"
 msgstr ""
 
-#: grubconf_ui_gtk.cpp:254
+#: src_dir/grubconf_ui_gtk.cpp:304
 msgid "Name the Entry"
 msgstr ""
 
-#: grubconf_ui_gtk.cpp:345
+#: src_dir/grubconf_ui_gtk.cpp:401
 msgid "Default title: "
 msgstr ""
 
-#: grubconf_ui_gtk.cpp:365
+#: src_dir/grubconf_ui_gtk.cpp:421
 msgid "No script found"
 msgstr ""
 
-#: grubconf_ui_gtk.cpp:443
+#: src_dir/grubconf_ui_gtk.cpp:523
 msgid "is active"
 msgstr ""
 
-#: grubconf_ui_gtk.cpp:444
+#: src_dir/grubconf_ui_gtk.cpp:524
 msgid "name"
-msgstr ""
-
-#: gtk-client.cpp:11
-msgid "This is Argument 0: "
 msgstr ""

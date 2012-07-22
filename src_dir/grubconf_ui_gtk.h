@@ -36,7 +36,10 @@ class GrubConfUIGtk : public GrubConfUI {
 	GrubConfListing tvConfList;
 	Gtk::ProgressBar progressBar;
 	Glib::Dispatcher disp_update_load, disp_update_save, disp_thread_died;
-	
+
+	Glib::ustring appName, appVersion;
+	std::vector<Glib::ustring> authors;
+
 	Gtk::ToolButton tbttAdd, tbttRemove, tbttUp, tbttDown, tbttSave, tbttPreferences, tbttReload;
 	Gtk::ToolItem ti_sep1;
 	Gtk::VSeparator vs_sep1;
@@ -45,9 +48,10 @@ class GrubConfUIGtk : public GrubConfUI {
 	Gtk::ToolItem ti_sep3;
 	Gtk::VSeparator vs_sep3;
 	
-	Gtk::MenuItem miFile;
-	Gtk::ImageMenuItem miExit;
-	Gtk::Menu subFile;
+	Gtk::MenuItem miFile, miEdit, miView, miHelp;
+	Gtk::ImageMenuItem miExit, miAdd, miRemove, miUp, miDown, miSave, miPreferences, miReload, miAbout;
+	Gtk::Menu subFile, subEdit, subView, subHelp;
+	Gtk::AboutDialog dlgAbout;
 	
 	bool completelyLoaded;
 	bool thread_active, quit_requested;
@@ -80,6 +84,8 @@ public:
 	void signal_scriptAddDlg_response(int response_id);
 	void signal_treeview_selection_changed();
 	bool signal_delete_event(GdkEventAny* event);
+	void signal_about_dlg_response(int response_id);
+	void signal_quit_click();
 	void update_move_buttons();
 	void update_remove_button();
 	void configureOtherEntriesMarker(Gtk::TreeIter otherEntriesMarker);

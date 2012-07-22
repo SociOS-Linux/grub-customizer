@@ -1,10 +1,14 @@
 #include "grubconf_ui_gtk.h"
 
 GrubConfUIGtk::GrubConfUIGtk(GrubConfig& grubConfig)
-	: grubConfig(&grubConfig),
+	: grubConfig(&grubConfig), appName("Grub Customizer"), appVersion("1.0"),
 	tbttAdd(Gtk::Stock::ADD), tbttRemove(Gtk::Stock::REMOVE), tbttUp(Gtk::Stock::GO_UP), tbttDown(Gtk::Stock::GO_DOWN),
 	tbttSave(Gtk::Stock::SAVE), tbttPreferences(Gtk::Stock::PREFERENCES),
 	miFile(gettext("_File"), true), miExit(Gtk::Stock::QUIT), tbttReload(Gtk::Stock::REFRESH),
+	miEdit(gettext("_Edit"), true), miView(gettext("_View"), true), miHelp(gettext("_Help"), true),
+	miAdd(Gtk::Stock::ADD), miRemove(Gtk::Stock::REMOVE), miUp(Gtk::Stock::GO_UP), miDown(Gtk::Stock::GO_DOWN),
+	miPreferences(Gtk::Stock::PREFERENCES), miReload(Gtk::Stock::REFRESH), miSave(Gtk::Stock::SAVE),
+	miAbout(Gtk::Stock::ABOUT),
 	completelyLoaded(false),
 	lvScriptPreview(1), lblScriptSelection(gettext("Script to insert:"), Gtk::ALIGN_LEFT), lblScriptPreview(gettext("Preview:"),Gtk::ALIGN_LEFT),
 	thread_active(false), quit_requested(false)
@@ -13,11 +17,12 @@ GrubConfUIGtk::GrubConfUIGtk(GrubConfig& grubConfig)
 	disp_update_save.connect(sigc::mem_fun(this, &GrubConfUIGtk::update_save));
 	disp_thread_died.connect(sigc::mem_fun(this, &GrubConfUIGtk::thread_died_handler));
 
+	authors.push_back("Daniel Richter");
 	win.set_title("Grub-Customizer");
 	win.set_default_size(800,600);
 	win.add(vbMainSplit);
 	
-	//vbMainSplit.pack_start(menu, Gtk::PACK_SHRINK);
+	vbMainSplit.pack_start(menu, Gtk::PACK_SHRINK);
 	vbMainSplit.pack_start(toolbar, Gtk::PACK_SHRINK);
 	vbMainSplit.pack_start(scrEntryList);
 	vbMainSplit.pack_start(statusbar, Gtk::PACK_SHRINK);
@@ -30,6 +35,10 @@ GrubConfUIGtk::GrubConfUIGtk(GrubConfig& grubConfig)
 	scrEntryList.set_shadow_type(Gtk::SHADOW_IN);
 	
 	progressBar.set_pulse_step(0.1);
+	
+	dlgAbout.set_name(appName);
+	dlgAbout.set_version(appVersion);
+	dlgAbout.set_authors(authors);
 	
 	//toolbar
 	toolbar.append(tbttSave);
@@ -62,10 +71,30 @@ GrubConfUIGtk::GrubConfUIGtk(GrubConfig& grubConfig)
 	disableButtons();
 	//menu
 	menu.append(miFile);
-	miFile.set_submenu(subFile);
-	subFile.attach(miExit,0,1,0,1);
+	menu.append(miEdit);
+	menu.append(miView);
+	menu.append(miHelp);
 	
-	miExit.signal_activate().connect(sigc::mem_fun(&win, &Gtk::Window::hide));
+	miFile.set_submenu(subFile);
+	miEdit.set_submenu(subEdit);
+	miView.set_submenu(subView);
+	miHelp.set_submenu(subHelp);
+	
+	subFile.attach(miSave, 0,1,0,1);
+	subFile.attach(miExit, 0,1,1,2);
+	
+	subEdit.attach(miAdd, 0,1,0,1);
+	subEdit.attach(miRemove, 0,1,1,2);
+	subEdit.attach(miUp, 0,1,2,3);
+	subEdit.attach(miDown, 0,1,3,4);
+	subEdit.attach(miPreferences, 0,1,4,5);
+	
+	subView.attach(miReload, 0,1,0,1);
+	
+	subHelp.attach(miAbout, 0,1,0,1);
+	
+	miExit.signal_activate().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_quit_click));
+	miAbout.signal_activate().connect(sigc::mem_fun(&dlgAbout, &Gtk::AboutDialog::show_all));
 
 	//Script/Proxy-add-Window
 	scriptAddDlg.set_title(gettext("Add script"));
@@ -100,12 +129,20 @@ GrubConfUIGtk::GrubConfUIGtk(GrubConfig& grubConfig)
 	tbttRemove.signal_clicked().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_remove_click));
 	tbttReload.signal_clicked().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_reload_click));
 	
+	miUp.signal_activate().connect(sigc::bind<int>(sigc::mem_fun(this, &GrubConfUIGtk::signal_move_click),-1));
+	miDown.signal_activate().connect(sigc::bind<int>(sigc::mem_fun(this, &GrubConfUIGtk::signal_move_click),1));
+	miSave.signal_activate().connect(sigc::mem_fun(this, &GrubConfUIGtk::saveConfig));
+	miAdd.signal_activate().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_add_click));
+	miRemove.signal_activate().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_remove_click));
+	miReload.signal_activate().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_reload_click));
+	
 	cbScriptSelection.signal_changed().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_script_selection_changed));
 	
 	scriptAddDlg.signal_response().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_scriptAddDlg_response));
 	
 	win.signal_delete_event().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_delete_event));
 
+	dlgAbout.signal_response().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_about_dlg_response));
 
 	thread_active = true;
 	Glib::Thread::create(sigc::mem_fun(grubConfig, &GrubConfig::load), false);
@@ -143,8 +180,11 @@ void GrubConfUIGtk::update(){
 			progressBar.hide();
 			statusbar.push("");
 			tbttSave.set_sensitive(true);
+			miSave.set_sensitive(true);
 			tbttAdd.set_sensitive(true);
+			miAdd.set_sensitive(true);
 			tbttReload.set_sensitive(true);
+			miReload.set_sensitive(true);
 		}
 		
 	
@@ -189,8 +229,11 @@ void GrubConfUIGtk::update_save(){
 		if (quit_requested)
 			win.hide();
 		tbttSave.set_sensitive(true);
+		miSave.set_sensitive(true);
 		tbttReload.set_sensitive(true);
+		miReload.set_sensitive(true);
 		tbttAdd.set_sensitive(true);
+		miAdd.set_sensitive(true);
 		tvConfList.set_sensitive(true);
 		progressBar.hide();
 		statusbar.push(gettext("Configuration has been saved"));
@@ -208,15 +251,22 @@ void GrubConfUIGtk::thread_died_handler(){
 
 void GrubConfUIGtk::disableButtons(){
 	tbttSave.set_sensitive(false);
+	miSave.set_sensitive(false);
 
 	tbttUp.set_sensitive(false);
+	miUp.set_sensitive(false);
 	tbttDown.set_sensitive(false);
+	miDown.set_sensitive(false);
 
 	tbttAdd.set_sensitive(false);
+	miAdd.set_sensitive(false);
 	tbttRemove.set_sensitive(false);
+	miRemove.set_sensitive(false);
 	
 	tbttReload.set_sensitive(false);
+	miReload.set_sensitive(false);
 	tbttPreferences.set_sensitive(false);
+	miPreferences.set_sensitive(false);
 }
 
 void GrubConfUIGtk::saveConfig(){
@@ -323,13 +373,19 @@ void GrubConfUIGtk::signal_move_click(int direction){
 
 void GrubConfUIGtk::update_remove_button(){
 	if (tvConfList.get_selection()->count_selected_rows() == 1){
-		if (tvConfList.get_selection()->get_selected()->parent() == false) //wenn Script markiert
+		if (tvConfList.get_selection()->get_selected()->parent() == false){ //wenn Script markiert
 			tbttRemove.set_sensitive(true);
-		else
+			miRemove.set_sensitive(true);
+		}
+		else {
 			tbttRemove.set_sensitive(false);
+			miRemove.set_sensitive(false);
+		}
 	}
-	else
+	else {
 		tbttRemove.set_sensitive(false);
+		miRemove.set_sensitive(false);
+	}
 }
 
 void GrubConfUIGtk::signal_treeview_selection_changed(){
@@ -407,24 +463,43 @@ void GrubConfUIGtk::update_move_buttons(){
 	int selectedRowsCount = tvConfList.get_selection()->count_selected_rows();
 
 	tbttUp.set_sensitive(selectedRowsCount == 1);
+	miUp.set_sensitive(selectedRowsCount == 1);
 	tbttDown.set_sensitive(selectedRowsCount == 1);
+	miDown.set_sensitive(selectedRowsCount == 1);
 	
 	if (selectedRowsCount == 1){
 		Gtk::TreeModel::iterator selectedRowIter = tvConfList.get_selection()->get_selected();
 	
 		if (selectedRowIter->parent()){
-			if (selectedRowIter->parent()->children().begin() == selectedRowIter)
+			if (selectedRowIter->parent()->children().begin() == selectedRowIter){
 				tbttUp.set_sensitive(false);
-			if (--selectedRowIter->parent()->children().end() == selectedRowIter)
+				miUp.set_sensitive(false);
+			}
+			if (--selectedRowIter->parent()->children().end() == selectedRowIter){
 				tbttDown.set_sensitive(false);
+				miDown.set_sensitive(false);
+			}
 		}
 		else {
-			if (tvConfList.refTreeStore->children().begin() == selectedRowIter)
+			if (tvConfList.refTreeStore->children().begin() == selectedRowIter){
 				tbttUp.set_sensitive(false);
-			if (--tvConfList.refTreeStore->children().end() == selectedRowIter)
+				miUp.set_sensitive(false);
+			}
+			if (--tvConfList.refTreeStore->children().end() == selectedRowIter){
 				tbttDown.set_sensitive(false);
+				miDown.set_sensitive(false);
+			}
 		}
 	}
+}
+
+void GrubConfUIGtk::signal_quit_click(){
+	if (thread_active){
+		quit_requested = true;
+		grubConfig->cancelThreads();
+	}
+	else
+		win.hide();
 }
 
 bool GrubConfUIGtk::signal_delete_event(GdkEventAny* event){
@@ -435,6 +510,11 @@ bool GrubConfUIGtk::signal_delete_event(GdkEventAny* event){
 	}
 	else
 		return false; //close the window
+}
+
+void GrubConfUIGtk::signal_about_dlg_response(int response_id){
+	if (Gtk::RESPONSE_CLOSE)
+		dlgAbout.hide();
 }
 
 GrubConfListing::GrubConfListing(){

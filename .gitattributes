@@ -22,5 +22,4 @@ src_dir/libproxyscript_parser.cpp -text
 src_dir/libproxyscript_parser.h -text
 src_dir/proxyscript_parser.cpp -text
 translation/german.mo -text svneol=unset#unset
-translation/message.po -text
 translation/messages.pot -text
