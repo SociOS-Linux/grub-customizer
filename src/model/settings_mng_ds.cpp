@@ -200,7 +200,7 @@ bool SettingsManagerDataStore::save(){
 # Name of this script: 'grub_background.sh'\n\
 \n\
    WALLPAPER=\"/usr/share/images/desktop-base/background\"\n\
-   COLOR_NORMAL=\"gray/black\"\n\
+   COLOR_NORMAL=\"light-gray/black\"\n\
    COLOR_HIGHLIGHT=\"magenta/black\"\n\
 \n\
 if [ \"${GRUB_MENU_PICTURE}\" ] ; then\n\
