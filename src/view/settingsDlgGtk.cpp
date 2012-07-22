@@ -61,6 +61,15 @@ std::string ColorChooserGtk::getSelectedColor() const {
 		return "";
 }
 
+Pango::Color ColorChooserGtk::getSelectedColorAsPangoObject() const {
+	Pango::Color color;
+	Gtk::TreeModel::iterator iter = this->get_active();
+	if (iter) {
+		color.parse((Glib::ustring)(*iter)[columns.colorCode_background]);
+	}
+	return color;
+}
+
 GrubColorChooser::GrubColorChooser(bool blackIsTransparent) : ColorChooserGtk() {
 	this->addColor("white",          gettext("white"),         "#ffffff", "#000000");
 	this->addColor("yellow",         gettext("yellow"),        "#fefe54", "#000000");
@@ -97,7 +106,7 @@ GrubSettingsDlgGtk::GrubSettingsDlgGtk()
 	lblforegroundColor(gettext("font color")), lblBackgroundColor(gettext("background")),
 	lblNormalColor(gettext("normal:"), Gtk::ALIGN_RIGHT, Gtk::ALIGN_CENTER), lblHighlightColor(gettext("highlight:"), Gtk::ALIGN_RIGHT, Gtk::ALIGN_CENTER),
 	lblColorChooser(gettext("menu colors")), lblBackgroundImage(gettext("background image")),
-	bttRemoveBackground(gettext("remove background")),
+	bttRemoveBackground("x"),
 	lblBackgroundRequiredInfo(gettext("To get the colors above working,\nyou have to select a background image!")),
 	gccNormalBackground(true), gccHighlightBackground(true)
 {
@@ -223,21 +232,21 @@ GrubSettingsDlgGtk::GrubSettingsDlgGtk()
 	groupBackgroundImage.set_label_widget(lblBackgroundImage);
 	lblBackgroundImage.set_attributes(attrDefaultEntry);
 	alignBackgroundImage.add(vbBackgroundImage);
-	vbBackgroundImage.pack_start(fcBackgroundImage, Gtk::PACK_SHRINK);
+	vbBackgroundImage.pack_start(hbBackgroundImage, Gtk::PACK_SHRINK);
+	hbBackgroundImage.pack_start(fcBackgroundImage);
+	hbBackgroundImage.pack_start(bttRemoveBackground, Gtk::PACK_SHRINK);
 	fcBackgroundImage.set_action(Gtk::FILE_CHOOSER_ACTION_OPEN);
 
 	vbBackgroundImage.pack_start(hbImgBtts);
 	vbBackgroundImage.pack_start(lblBackgroundRequiredInfo);
-	hbImgBtts.pack_start(vbButtons);
-	vbButtons.add(bttRemoveBackground);
-	hbImgBtts.pack_start(imgBackgroundImage, Gtk::PACK_SHRINK);
+	hbImgBtts.pack_start(drwBackgroundPreview);
 
 	vbBackgroundImage.set_spacing(5);
 	hbImgBtts.set_spacing(5);
 	vbButtons.set_spacing(5);
 
+	bttRemoveBackground.set_tooltip_text(gettext("remove background"));
 	bttRemoveBackground.set_no_show_all(true);
-	imgBackgroundImage.set_no_show_all(true);
 	lblBackgroundRequiredInfo.set_no_show_all(true);
 	
 	//<signals>
@@ -259,6 +268,7 @@ GrubSettingsDlgGtk::GrubSettingsDlgGtk()
 	bttRemoveBackground.signal_clicked().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_bttRemoveBackground_clicked));
 	bttAddCustomEntry.signal_clicked().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_add_row_button_clicked));
 	bttRemoveCustomEntry.signal_clicked().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_remove_row_button_clicked));
+	drwBackgroundPreview.signal_expose_event().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_redraw_preview));
 
 	this->add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
 	this->set_default_size(300, 400);
@@ -438,28 +448,83 @@ ColorChooser& GrubSettingsDlgGtk::getColorChooser(ColorChooserType type){
 	this->event_lock = false;
 }
 
+Glib::RefPtr<Pango::Layout> GrubSettingsDlgGtk::createFormattedText(Cairo::RefPtr<Cairo::Context>& context, Glib::ustring const& text, int r, int g, int b, int r_b, int g_b, int b_b, bool black_bg_is_transparent) {
+	Glib::RefPtr<Pango::Layout> layout = Pango::Layout::create(context);
+	this->log("layout object created", Logger::INFO);
+	layout->set_text(text);
+	this->log("text added", Logger::INFO);
+	Pango::AttrList attrList;
+	if (!black_bg_is_transparent || r_b != 0 || g_b != 0 || b_b != 0) {
+		Pango::AttrColor bColor = Pango::Attribute::create_attr_background(r_b*255, g_b*255, b_b*255);
+		attrList.insert(bColor);
+	}
+	Pango::AttrColor fColor = Pango::Attribute::create_attr_foreground(r*255, g*255, b*255);
+	attrList.insert(fColor);
+	Pango::AttrString font = Pango::Attribute::create_attr_family("monospace");
+	attrList.insert(font);
+	layout->set_attributes(attrList);
+	return layout;
+}
+
 void GrubSettingsDlgGtk::setBackgroundImagePreviewPath(std::string const& menuPicturePath, bool isInGrubDir){
 	this->event_lock = true;
+	this->backgroundImagePath = menuPicturePath;
+
+
 	if (menuPicturePath != ""){
-		try {
-			Glib::RefPtr<Gdk::Pixbuf> buf = Gdk::Pixbuf::create_from_file(menuPicturePath, 150, 100, true);
-			if (buf)
-				imgBackgroundImage.set(buf);
+		if (!drwBackgroundPreview.is_visible()) {
+			drwBackgroundPreview.show();
 		}
-		catch (Glib::Error e){
-			imgBackgroundImage.set(Gtk::Stock::MISSING_IMAGE, Gtk::ICON_SIZE_DIALOG);
+		try {
+			Glib::RefPtr<Gdk::Pixbuf> buf = Gdk::Pixbuf::create_from_file(menuPicturePath, drwBackgroundPreview.get_width(), -1, true);
+			if (buf) {
+				Cairo::RefPtr<Cairo::Context> context = drwBackgroundPreview.get_window()->create_cairo_context();
+				context->clip();
+				buf->render_to_drawable(drwBackgroundPreview.get_window(), drwBackgroundPreview.get_style()->get_black_gc(), 0, 0, 0, 0, buf->get_width(), buf->get_height(), Gdk::RGB_DITHER_NONE, 0, 0);
+
+				std::list<Glib::RefPtr<Pango::Layout> > exampleTexts;
+				Pango::Color fg_n = this->gccNormalForeground.getSelectedColorAsPangoObject();
+				Pango::Color bg_n = this->gccNormalBackground.getSelectedColorAsPangoObject();
+				Pango::Color fg_s = this->gccHighlightForeground.getSelectedColorAsPangoObject();
+				Pango::Color bg_s = this->gccHighlightBackground.getSelectedColorAsPangoObject();
+				this->previewEntryTitles_mutex.lock();
+				for (std::list<std::string>::iterator iter = this->previewEntryTitles.begin(); iter != this->previewEntryTitles.end(); iter++) {
+					if (iter == this->previewEntryTitles.begin()) {
+						exampleTexts.push_back(GrubSettingsDlgGtk::createFormattedText(context, *iter, fg_s.get_red() / 255, fg_s.get_green() / 255, fg_s.get_blue() / 255, bg_s.get_red() / 255, bg_s.get_green() / 255, bg_s.get_blue() / 255));
+					} else {
+						exampleTexts.push_back(GrubSettingsDlgGtk::createFormattedText(context, *iter, fg_n.get_red() / 255, fg_n.get_green() / 255, fg_n.get_blue() / 255, bg_n.get_red() / 255, bg_n.get_green() / 255, bg_n.get_blue() / 255));
+					}
+				}
+				this->previewEntryTitles_mutex.unlock();
+
+				int vpos = 0;
+				for (std::list<Glib::RefPtr<Pango::Layout> >::iterator iter = exampleTexts.begin(); iter != exampleTexts.end(); iter++) {
+					drwBackgroundPreview.get_window()->draw_layout(drwBackgroundPreview.get_style()->get_black_gc(), 0,vpos, *iter);
+					vpos += (*iter)->get_height();
+					int x,y;
+					(*iter)->get_pixel_size(x,y);
+					vpos += y;
+				}
+			} else {
+				throw Glib::Error();
+			}
+		}
+		catch (Glib::Error const& e){
+			drwBackgroundPreview.get_window()->clear();
+			Cairo::RefPtr<Cairo::Context> context = drwBackgroundPreview.get_window()->create_cairo_context();
+			context->reset_clip();
+			Glib::RefPtr<Gdk::Pixbuf> buf = drwBackgroundPreview.render_icon(Gtk::Stock::MISSING_IMAGE, Gtk::ICON_SIZE_DIALOG);
+			buf->render_to_drawable(drwBackgroundPreview.get_window(), drwBackgroundPreview.get_style()->get_black_gc(), 0, 0, 0, 0, buf->get_width(), buf->get_height(), Gdk::RGB_DITHER_NONE, 0, 0);
 		}
 
 		bttRemoveBackground.show();
-		imgBackgroundImage.show();
 		lblBackgroundRequiredInfo.hide();
 		fcBackgroundImage.set_filename(menuPicturePath);
 	}
 	else {
 		fcBackgroundImage.unselect_all();
-		imgBackgroundImage.clear();
 		bttRemoveBackground.hide();
-		imgBackgroundImage.hide();
+		drwBackgroundPreview.hide();
 		lblBackgroundRequiredInfo.show();
 	}
 
@@ -624,6 +689,19 @@ void GrubSettingsDlgGtk::signal_add_row_button_clicked(){
 void GrubSettingsDlgGtk::signal_remove_row_button_clicked(){
 	if (!event_lock)
 		this->eventListener->customRow_remove_requested((Glib::ustring)(*tvAllEntries.get_selection()->get_selected())[asTreeModel.name]);
+}
+
+bool GrubSettingsDlgGtk::signal_redraw_preview(GdkEventExpose* event) {
+	if (!event_lock) {
+		this->setBackgroundImagePreviewPath(this->backgroundImagePath, false);
+	}
+	return false;
+}
+
+void GrubSettingsDlgGtk::setPreviewEntryTitles(std::list<std::string> const& entries) {
+	this->previewEntryTitles_mutex.lock();
+	this->previewEntryTitles = entries;
+	this->previewEntryTitles_mutex.unlock();
 }
 
 

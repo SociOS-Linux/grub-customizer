@@ -55,6 +55,8 @@ public:
 	virtual std::string getSelectedCustomOption()=0;
 	//adds an entry to the end of the default entry chooser
 	virtual void addEntryToDefaultEntryChooser(std::string const& labelPathValue, std::string const& labelPathLabel, std::string const& numericPathValue, std::string const& numericPathLabel)=0;
+	//set the entry titles to be viewed in the preview image
+	virtual void setPreviewEntryTitles(std::list<std::string> const& entries)=0;
 	//removes all items from the default entry chooser
 	virtual void clearDefaultEntryChooser()=0;
 	//removes all item from the resolution chooser

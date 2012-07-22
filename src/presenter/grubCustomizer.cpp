@@ -101,10 +101,14 @@ FbResolutionsGetter& GrubCustomizer::getFbResolutionsGetter() {
 
 void GrubCustomizer::updateSettingsDlg(){
 	std::list<EntryTitleListItem> entryTitles = this->grublistCfg->proxies.generateEntryTitleList();
-	this->settingsDlg->clearDefaultEntryChooser();
-	for (std::list<EntryTitleListItem>::iterator iter = entryTitles.begin(); iter != entryTitles.end(); iter++)
-		this->settingsDlg->addEntryToDefaultEntryChooser(iter->labelPathValue, iter->labelPathLabel, iter->numericPathValue, iter->numericPathLabel);
+	std::list<std::string> labelListToplevel  = this->grublistCfg->proxies.getToplevelEntryTitles();
 
+	this->settingsDlg->clearDefaultEntryChooser();
+	for (std::list<EntryTitleListItem>::iterator iter = entryTitles.begin(); iter != entryTitles.end(); iter++) {
+		this->settingsDlg->addEntryToDefaultEntryChooser(iter->labelPathValue, iter->labelPathLabel, iter->numericPathValue, iter->numericPathLabel);
+	}
+
+	this->settingsDlg->setPreviewEntryTitles(labelListToplevel);
 
 	this->syncSettings();
 }

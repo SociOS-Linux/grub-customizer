@@ -44,6 +44,7 @@ class ColorChooserGtk : public Gtk::ComboBox, public ColorChooser {
 	void addColor(std::string const& codeName, std::string const& outputName, std::string const& cell_background, std::string const& cell_foreground);
 	void selectColor(std::string const& codeName);
 	std::string getSelectedColor() const;
+	Pango::Color getSelectedColorAsPangoObject() const;
 };
 
 //a color chooser with predefined colors for grub
@@ -131,8 +132,12 @@ class GrubSettingsDlgGtk : public Gtk::Dialog, public SettingsDlg, public Common
 	Gtk::Alignment alignBackgroundImage;
 	Gtk::Label lblBackgroundImage, lblBackgroundRequiredInfo;
 	Gtk::VBox vbBackgroundImage;
+	Gtk::HBox hbBackgroundImage;
 	Gtk::FileChooserButton fcBackgroundImage;
-	Gtk::Image imgBackgroundImage;
+	Gtk::DrawingArea drwBackgroundPreview;
+	Glib::ustring backgroundImagePath;
+	std::list<std::string> previewEntryTitles;
+	Glib::Mutex previewEntryTitles_mutex;
 	Gtk::HBox hbImgBtts;
 	Gtk::VBox vbButtons;
 	Gtk::Button bttCopyBackground, bttRemoveBackground;
@@ -153,6 +158,7 @@ class GrubSettingsDlgGtk : public Gtk::Dialog, public SettingsDlg, public Common
 	void signal_color_changed();
 	void signal_other_image_chosen();
 	void signal_bttRemoveBackground_clicked();
+	bool signal_redraw_preview(GdkEventExpose* event);
 	void on_response(int response_id);
 	public:
 	GrubSettingsDlgGtk();
@@ -189,8 +195,10 @@ class GrubSettingsDlgGtk : public Gtk::Dialog, public SettingsDlg, public Common
 	bool getResolutionCheckboxState();
 	void setResolution(std::string const& resolution);
 	std::string getResolution();
+	Glib::RefPtr<Pango::Layout> createFormattedText(Cairo::RefPtr<Cairo::Context>& context, Glib::ustring const& text, int r, int g, int b, int r_b, int g_b, int b_b, bool black_bg_is_transparent = true);
 	void setBackgroundImagePreviewPath(std::string const& menuPicturePath, bool isInGrubDir);
 	std::string getBackgroundImagePath();
+	void setPreviewEntryTitles(std::list<std::string> const& entries);
 };
 
 #endif

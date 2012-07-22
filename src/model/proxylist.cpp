@@ -98,6 +98,20 @@ std::list<EntryTitleListItem> ProxyList::generateEntryTitleList() const {
 	return result;
 }
 
+std::list<std::string> ProxyList::getToplevelEntryTitles() const {
+	std::list<std::string> result;
+	for (ProxyList::const_iterator proxy_iter = this->begin(); proxy_iter != this->end(); proxy_iter++){
+		if (proxy_iter->isExecutable()){
+			for (std::list<Rule>::const_iterator rule_iter = proxy_iter->rules.begin(); rule_iter != proxy_iter->rules.end(); rule_iter++) {
+				if (rule_iter->isVisible && rule_iter->type == Rule::NORMAL && rule_iter->dataSource && rule_iter->dataSource->type != Entry::SUBMENU) {
+					result.push_back(rule_iter->outputName);
+				}
+			}
+		}
+	}
+	return result;
+}
+
 std::list<EntryTitleListItem> ProxyList::generateEntryTitleList(std::list<Rule> const& parent, std::string const& labelPathPrefix, std::string const& numericPathPrefix, std::string const& numericPathLabelPrefix, int* offset) {
 	std::list<EntryTitleListItem> result;
 	int i = (offset != NULL ? *offset : 0);
