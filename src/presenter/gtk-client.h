@@ -34,8 +34,11 @@ class GtkClient {
 	GrubInstallDlg* installDlg;
 	ScriptAddDlg* scriptAddDlg;
 	PartitionChooser* partitionChooser;
+	GrublistCfg* savedListCfg;
 	
 	Glib::Dispatcher disp_sync_load, disp_sync_save, disp_thread_died;
+	bool config_has_been_different_on_startup_but_unsaved;
+	bool modificationsUnsaved;
 public:
 	void setModelListCfg(GrublistCfg& grublistCfg);
 	void setViewListCfg(GrubConfUIGtk& listCfgDlg);
@@ -46,6 +49,7 @@ public:
 	void setInstallDlg(GrubInstallDlg& installDlg);
 	void setScriptAddDlg(ScriptAddDlg& scriptAddDlg);
 	void setPartitionChooser(PartitionChooser& partitionChooser);
+	void setSavedListCfg(GrublistCfg& savedListCfg);
 
 	void showSettingsDlg();
 	void load(bool keepConfig = false);

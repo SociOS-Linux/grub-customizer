@@ -2,7 +2,7 @@
 
 GrublistCfg::GrublistCfg(GrubEnv& env)
  : error_proxy_not_found(false),
- progress(0), config_has_been_different_on_startup_but_unsaved(false),
+ progress(0),
  cancelThreadsRequested(false), verbose(true), env(env), eventListener(NULL),
  locked(false)
 {}
@@ -200,20 +200,6 @@ void GrublistCfg::load(bool keepConfig){
 	}
 	this->unlock();
 	
-	//compare config
-	if (!keepConfig){
-		FILE* oldConfigFile = fopen(env.output_config_file.c_str(), "r");
-		if (oldConfigFile){
-			GrublistCfg oldConfig(env);
-			oldConfig.verbose = false;
-			oldConfig.env = this->env;
-			oldConfig.readGeneratedFile(oldConfigFile, true);
-			config_has_been_different_on_startup_but_unsaved = !this->compare(oldConfig);
-			fclose(oldConfigFile);
-		}
-		else
-			config_has_been_different_on_startup_but_unsaved = false;
-	}
 	send_new_load_progress(1);
 	
 }
@@ -387,8 +373,17 @@ void GrublistCfg::save(){
 		}
 		pclose(saveProc);
 	}
-	config_has_been_different_on_startup_but_unsaved = false;
 	send_new_save_progress(1);
+}
+
+bool GrublistCfg::loadStaticCfg(){
+	FILE* oldConfigFile = fopen(env.output_config_file.c_str(), "r");
+	if (oldConfigFile){
+		this->readGeneratedFile(oldConfigFile, true);
+		fclose(oldConfigFile);
+		return true;
+	}
+	return false;
 }
 
 void GrublistCfg::renameRule(Rule* rule, std::string const& newName){

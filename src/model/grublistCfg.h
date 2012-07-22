@@ -36,7 +36,6 @@ public:
 	Repository repository;
 	
 	std::string message;
-	bool config_has_been_different_on_startup_but_unsaved;
 	bool verbose;
 	bool error_proxy_not_found;
 	GrubEnv& env;
@@ -52,6 +51,7 @@ public:
 	void load(bool keepConfig = false);
 	void save();
 	void readGeneratedFile(FILE* source, bool createScriptIfNotFound = false);
+	bool loadStaticCfg();
 
 	void send_new_load_progress(double newProgress);
 	void send_new_save_progress(double newProgress);

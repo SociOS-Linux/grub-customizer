@@ -14,7 +14,7 @@ GrubConfUIGtk::GrubConfUIGtk()
 	miAdd(Gtk::Stock::ADD, Gtk::AccelKey('+', Gdk::CONTROL_MASK)), miRemove(Gtk::Stock::REMOVE, Gtk::AccelKey('-', Gdk::CONTROL_MASK)), miUp(Gtk::Stock::GO_UP, Gtk::AccelKey('u', Gdk::CONTROL_MASK)), miDown(Gtk::Stock::GO_DOWN, Gtk::AccelKey('d', Gdk::CONTROL_MASK)),
 	miPreferences(Gtk::Stock::PREFERENCES), miReload(Gtk::Stock::REFRESH, Gtk::AccelKey("F5")), miSave(Gtk::Stock::SAVE),
 	miAbout(Gtk::Stock::ABOUT), miStartRootSelector(Gtk::Stock::OPEN),
-	thread_active(false), quit_requested(false), modificationsUnsaved(false), lock_state(~0)
+	thread_active(false), quit_requested(false), lock_state(~0)
 {
 	win.set_icon_name("grub-customizer");
 
@@ -368,7 +368,6 @@ void GrubConfUIGtk::swapProxies(void* a, void* b){
 	tvConfList.refTreeStore->iter_swap(getIterByScriptPtr(a), getIterByScriptPtr(b));
 	
 	update_move_buttons();
-	modificationsUnsaved = true;
 }
 
 void GrubConfUIGtk::swapRules(void* a, void* b){
@@ -381,7 +380,6 @@ void GrubConfUIGtk::swapRules(void* a, void* b){
 	(*iter2)[tvConfList.treeModel.relatedRule] = a;
 	
 	update_move_buttons();
-	modificationsUnsaved = true;
 }
 
 
@@ -493,7 +491,6 @@ void GrubConfUIGtk::removeProxy(void* p){
 	this->setLockState(0);
 	
 	update_remove_button();
-	modificationsUnsaved = true;
 }
 
 void GrubConfUIGtk::signal_remove_click(){
@@ -550,7 +547,7 @@ void GrubConfUIGtk::close(){
  */
 int GrubConfUIGtk::showExitConfirmDialog(int type){
 	int dlgResponse = Gtk::RESPONSE_NO;
-	if (type & 3 != 0){
+	if (type != 0){
 		Gtk::MessageDialog msgDlg("", false, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_NONE);
 		if (type & 2){
 			msgDlg.set_message(gettext("The saved configuration is not up to date!"));

@@ -2,8 +2,10 @@
 
 GtkClient::GtkClient(GrubEnv& env)
 	: grublistCfg(NULL), listCfgDlg(NULL), settingsDlg(NULL), settings(NULL),
-	  installer(NULL), installDlg(NULL),
-	 env(env)
+	  installer(NULL), installDlg(NULL), settingsOnDisk(NULL), scriptAddDlg(NULL),
+	  partitionChooser(NULL), savedListCfg(NULL),
+	 env(env), config_has_been_different_on_startup_but_unsaved(false),
+	 modificationsUnsaved(false)
 {
 	disp_sync_load.connect(sigc::mem_fun(this, &GtkClient::syncListView_load));
 	disp_sync_save.connect(sigc::mem_fun(this, &GtkClient::syncListView_save));
@@ -40,6 +42,10 @@ void GtkClient::setScriptAddDlg(ScriptAddDlg& scriptAddDlg){
 	this->scriptAddDlg = &scriptAddDlg;
 }
 
+void GtkClient::setSavedListCfg(GrublistCfg& savedListCfg){
+	this->savedListCfg = &savedListCfg;
+}
+
 void GtkClient::setPartitionChooser(PartitionChooser& partitionChooser){
 	this->partitionChooser = &partitionChooser;
 }
@@ -49,8 +55,8 @@ void GtkClient::showSettingsDlg(){
 	this->settingsDlg->run();
 	this->settingsDlg->hide();
 	
-	if (!this->listCfgDlg->modificationsUnsaved)
-		this->listCfgDlg->modificationsUnsaved = settings->getIsModified();
+	if (!this->modificationsUnsaved)
+		this->modificationsUnsaved = settings->getIsModified();
 	if (this->settings->reloadRequired()){
 		Glib::Thread::create(sigc::bind(sigc::mem_fun(this, &GtkClient::load), true), false);
 	}
@@ -78,6 +84,10 @@ void GtkClient::load(bool keepConfig){
 		this->settings->save();
 	}
 	this->grublistCfg->load(keepConfig);
+	if (this->savedListCfg->loadStaticCfg())
+		this->config_has_been_different_on_startup_but_unsaved = !this->grublistCfg->compare(*this->savedListCfg);
+	else
+		this->config_has_been_different_on_startup_but_unsaved = false;
 
 	if (keepConfig){
 		this->settingsOnDisk->save();
@@ -85,8 +95,9 @@ void GtkClient::load(bool keepConfig){
 }
 
 void GtkClient::save(){
+	this->config_has_been_different_on_startup_but_unsaved = false;
 	this->listCfgDlg->thread_active = true; //deprecated
-	this->listCfgDlg->modificationsUnsaved = false; //deprecated
+	this->modificationsUnsaved = false; //deprecated
 
 	this->listCfgDlg->setLockState(5);
 	
@@ -169,7 +180,6 @@ void GtkClient::startRootSelector(){
 	else if (new_partition == ""){ //this happens, when a previously selected partition has been umounted
 		this->reset();
 		this->syncListView_load();
-
 		listCfgDlg->setLockState(3);
 	}
 }
@@ -217,11 +227,9 @@ void GtkClient::addScriptFromScriptAddDlg(){
 	grublistCfg->proxies.push_back(Proxy(*script));
 	grublistCfg->renumerate();
 	
-	this->listCfgDlg->setLockState(~0);
 	this->syncListView_load();
-	this->listCfgDlg->setLockState(0);
 	
-	this->listCfgDlg->modificationsUnsaved = true;
+	this->modificationsUnsaved = true;
 }
 
 void GtkClient::updateScriptAddDlgPreview(){
@@ -236,9 +244,11 @@ void GtkClient::updateScriptAddDlgPreview(){
 void GtkClient::removeProxy(Proxy* p){
 	this->grublistCfg->proxies.deleteProxy(p);
 	this->listCfgDlg->removeProxy(p);
+	this->modificationsUnsaved = true;
 }
 
 void GtkClient::syncListView_load(){
+	this->listCfgDlg->setLockState(5);
 	double progress = this->grublistCfg->getProgress();
 	if (progress != 1){
 		this->listCfgDlg->setProgress(progress);
@@ -303,7 +313,7 @@ void GtkClient::thread_died_handler(){
 }
 
 bool GtkClient::quit(){
-	int dlgResponse = this->listCfgDlg->showExitConfirmDialog(this->grublistCfg->config_has_been_different_on_startup_but_unsaved*2 + this->listCfgDlg->modificationsUnsaved);
+	int dlgResponse = this->listCfgDlg->showExitConfirmDialog(this->config_has_been_different_on_startup_but_unsaved*2 + this->modificationsUnsaved);
 	if (dlgResponse == 1){
 		this->save(); //starts a thread that delays the application exiting
 	}
@@ -323,13 +333,13 @@ bool GtkClient::quit(){
 //MOVE TO PRESENTER
 void GtkClient::syncProxyState(void* proxy){
 	((Proxy*)proxy)->set_isExecutable(this->listCfgDlg->getRuleState(proxy));
-	this->listCfgDlg->modificationsUnsaved = true;
+	this->modificationsUnsaved = true;
 }
 
 //MOVE TO PRESENTER
 void GtkClient::syncRuleState(Rule* entry){
 	entry->isVisible = this->listCfgDlg->getRuleState(entry);
-	this->listCfgDlg->modificationsUnsaved = true;
+	this->modificationsUnsaved = true;
 	this->updateScriptEntry(this->grublistCfg->proxies.getProxyByRule(entry));
 }
 
@@ -345,7 +355,7 @@ void GtkClient::syncRuleName(Rule* entry){
 	else {
 		this->renameEntry(entry, newName);
 	}
-	this->listCfgDlg->modificationsUnsaved = true;
+	this->modificationsUnsaved = true;
 }
 
 //MOVE TO PRESENTER
@@ -366,12 +376,14 @@ void GtkClient::swapRules(Rule* a, Rule* b){
 	grublistCfg->swapRules(a, b);
 	this->listCfgDlg->swapRules(a,b);
 	this->updateScriptEntry(this->grublistCfg->proxies.getProxyByRule(a));
+	this->modificationsUnsaved = true;
 }
 
 //MOVE TO PRESENTER
 void GtkClient::swapProxies(Proxy* a, Proxy* b){
 	grublistCfg->swapProxies(a,b);
 	this->listCfgDlg->swapProxies(a,b);
+	this->modificationsUnsaved = true;
 }
 
 

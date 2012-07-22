@@ -62,7 +62,7 @@ class GrubConfUIGtk : public GrubConfUI {
 	
 	
 	bool lock_state;
-	public: bool quit_requested, modificationsUnsaved, thread_active; //TODO: move to presenter!
+	public: bool quit_requested, thread_active; //TODO: move to presenter!
 	
 public:
 	GrubConfUIGtk();
