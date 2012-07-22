@@ -28,6 +28,8 @@ class EventListenerView_iface {
 	
 	virtual void ruleSelected(void* rule)=0;
 	virtual void proxySelected(void* proxy)=0;
+
+	virtual void fb_resolutions_loaded()=0;
 };
 
 #endif

@@ -32,6 +32,8 @@ public:
 	
 	void ruleSelected(void* rule);
 	void proxySelected(void* proxy);
+
+	void fb_resolutions_loaded();
 };
 
 #endif

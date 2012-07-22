@@ -44,9 +44,9 @@ class GrubSettingsDlgGtk : public Gtk::Dialog, public GrubSettingsDlg {
 	Glib::RefPtr<Gtk::ListStore> refAsListStore;
 	//std::string output_config_dir;
 	GrubEnv& env;
+	bool event_lock;
 	
 	SettingsManagerDataStore* dataStore;
-	FbResolutionsGetter fbResolutions;
 	Gtk::Notebook tabbox;
 	Gtk::ScrolledWindow scrAllEntries;
 	Gtk::TreeView tvAllEntries;
@@ -65,6 +65,7 @@ class GrubSettingsDlgGtk : public Gtk::Dialog, public GrubSettingsDlg {
 	Gtk::HBox hbDefPredefined;
 	//Gtk::SpinButton spDefPosition;
 	Gtk::ComboBoxText cbDefEntry;
+	int defEntry_item_count;
 	
 	//view group
 	Gtk::Frame groupView;
@@ -110,9 +111,7 @@ class GrubSettingsDlgGtk : public Gtk::Dialog, public GrubSettingsDlg {
 	Gtk::VBox vbButtons;
 	Gtk::Button bttCopyBackground, bttRemoveBackground;
 	
-	Glib::Dispatcher disp_fb_resolutions_loaded;
 	void signal_setting_row_changed(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter);
-	bool event_lock;
 	void signal_default_entry_predefined_toggeled();
 	void signal_default_entry_saved_toggeled();
 	void signal_default_entry_changed();
@@ -127,11 +126,13 @@ class GrubSettingsDlgGtk : public Gtk::Dialog, public GrubSettingsDlg {
 	void signal_other_image_chosen();
 	void signal_bttCopyBackground_clicked();
 	void signal_bttRemoveBackground_clicked();
-	void disp_func_fb_resolutions_loaded();
 	public:
 	GrubSettingsDlgGtk(SettingsManagerDataStore& dataStore, GrubEnv& env);
-	void show(std::list<std::string> const& entryList);
-	void event_fb_resolutions_loaded();
+	void show();
+	void addEntryToDefaultEntryChooser(std::string const& entryTitle);
+	void clearDefaultEntryChooser();
+	void clearResolutionChooser();
+	void addResolution(std::string const& resolution);
 	void loadData();
 };
 

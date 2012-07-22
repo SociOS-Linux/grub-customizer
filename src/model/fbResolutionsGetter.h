@@ -4,16 +4,16 @@
 #include <list>
 #include <iostream>
 #include <cstdio>
-#include "../interface/settings_dlg.h"
+#include "../interface/eventListener_view_iface.h"
 
 class FbResolutionsGetter {
 	std::list<std::string> data;
-	GrubSettingsDlg* outputUI;
+	EventListenerView_iface* eventListener;
 public:
 	FbResolutionsGetter();
 	const std::list<std::string>& getData() const;
 	void load();
-	void connectUI(GrubSettingsDlg& ui);
+	void setEventListener(EventListenerView_iface& eventListener);
 };
 
 #endif

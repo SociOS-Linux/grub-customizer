@@ -22,6 +22,7 @@
 #include "../model/grublistCfg.h"
 #include "../view/partitionChooser.h"
 #include "../view/settings_dlg_gtk.h"
+#include "../model/fbResolutionsGetter.h"
 
 class GtkClient {
 	GrubEnv& env;
@@ -35,8 +36,9 @@ class GtkClient {
 	ScriptAddDlg* scriptAddDlg;
 	PartitionChooser* partitionChooser;
 	GrublistCfg* savedListCfg;
+	FbResolutionsGetter* fbResolutionsGetter;
 	
-	Glib::Dispatcher disp_sync_load, disp_sync_save, disp_thread_died;
+	Glib::Dispatcher disp_sync_load, disp_sync_save, disp_thread_died, disp_updateSettingsDlgResolutionList;
 	bool config_has_been_different_on_startup_but_unsaved;
 	bool modificationsUnsaved;
 	bool quit_requested;
@@ -53,9 +55,10 @@ public:
 	void setScriptAddDlg(ScriptAddDlg& scriptAddDlg);
 	void setPartitionChooser(PartitionChooser& partitionChooser);
 	void setSavedListCfg(GrublistCfg& savedListCfg);
+	void setFbResolutionsGetter(FbResolutionsGetter& fbResolutionsGetter);
 
 	void showSettingsDlg();
-	void load(bool keepConfig = false);
+	void load(bool preserveConfig = false);
 	void save();
 	void save_thread();
 	GtkClient(GrubEnv& env);
@@ -95,6 +98,9 @@ public:
 	
 	void showRuleInfo(Rule* rule);
 	void showProxyInfo(Proxy* proxy);
+
+	void updateSettingsDlgResolutionList();
+	void updateSettingsDlgResolutionList_dispatched();
 };
 
 #endif

@@ -1,11 +1,11 @@
 #include "fbResolutionsGetter.h"
 
 FbResolutionsGetter::FbResolutionsGetter()
-	: outputUI(NULL)
+	: eventListener(NULL)
 {}
 
-void FbResolutionsGetter::connectUI(GrubSettingsDlg& ui){
-	outputUI = &ui;
+void FbResolutionsGetter::setEventListener(EventListenerView_iface& eventListener){
+	this->eventListener = &eventListener;
 }
 
 const std::list<std::string>& FbResolutionsGetter::getData() const {
@@ -38,6 +38,6 @@ void FbResolutionsGetter::load(){
 		}
 	}
 	pclose(hwinfo_proc);
-	if (outputUI)
-		outputUI->event_fb_resolutions_loaded();
+	if (this->eventListener)
+		this->eventListener->fb_resolutions_loaded();
 }

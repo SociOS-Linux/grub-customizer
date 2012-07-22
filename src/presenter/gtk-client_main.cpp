@@ -25,6 +25,7 @@ int main(int argc, char** argv){
 	PartitionChooser* partitionChooser = new PartitionChooser(GrubEnv::isLiveCD());
 	GrublistCfg* savedListCfg = new GrublistCfg(env);
 	savedListCfg->verbose = false;
+	FbResolutionsGetter* fbResolutionsGetter = new FbResolutionsGetter;
 
 	
 	GrubSettingsDlgGtk* settingsDlg = new GrubSettingsDlgGtk(*settings, env);
@@ -38,11 +39,13 @@ int main(int argc, char** argv){
 	presenter.setScriptAddDlg(*scriptAddDlg);
 	presenter.setPartitionChooser(*partitionChooser);
 	presenter.setSavedListCfg(*savedListCfg);
+	presenter.setFbResolutionsGetter(*fbResolutionsGetter);
 	
 	EventListenerView evt_view(presenter);
 	listCfgView->setEventListener(evt_view);
 	installDlg->setEventListener(evt_view);
 	scriptAddDlg->setEventListener(evt_view);
+	fbResolutionsGetter->setEventListener(evt_view);
 	
 	EventListenerModel evt_model(presenter);
 	listcfg->setEventListener(evt_model);

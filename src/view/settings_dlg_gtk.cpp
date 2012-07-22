@@ -75,7 +75,7 @@ GrubSettingsDlgGtk::GrubSettingsDlgGtk(SettingsManagerDataStore& dataStore, Grub
 	lblColorChooser(gettext("menu colors")), lblBackgroundImage(gettext("background image")),
 	bttCopyBackground(gettext("copy to grub directory")), bttRemoveBackground(gettext("remove background")),
 	lblBackgroundRequiredInfo(gettext("To get the colors above working,\nyou have to select a background image!")),
-	gccNormalBackground(true), gccHighlightBackground(true)
+	gccNormalBackground(true), gccHighlightBackground(true), defEntry_item_count(0)
 {
 	this->set_title("Grub Customizer - "+Glib::ustring(gettext("settings")));
 	this->set_icon_name("grub-customizer");
@@ -228,33 +228,36 @@ GrubSettingsDlgGtk::GrubSettingsDlgGtk(SettingsManagerDataStore& dataStore, Grub
 	bttCopyBackground.signal_clicked().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_bttCopyBackground_clicked));
 	bttRemoveBackground.signal_clicked().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_bttRemoveBackground_clicked));
 	
-	//get framebuffer resolutions - threaded
-	disp_fb_resolutions_loaded.connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::disp_func_fb_resolutions_loaded));
-	fbResolutions.connectUI(*this);
-	Glib::Thread::create(sigc::mem_fun(&fbResolutions, &FbResolutionsGetter::load), false);
-	
 	this->add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
 	this->set_default_size(300, 400);
 }
 
-void GrubSettingsDlgGtk::show(std::list<std::string> const& entryList) {
-	//Gtk::MessageDialog(dataStore->getValue("GRUB_DEFAULT")).run();
+void GrubSettingsDlgGtk::show() {
+	this->loadData();
+	this->show_all();
+}
+
+void GrubSettingsDlgGtk::addEntryToDefaultEntryChooser(std::string const& entryTitle){
+	event_lock = true;
+	cbDefEntry.append_text(Glib::ustring::compose(gettext("Entry %1 (by position)"), ++defEntry_item_count));
+	cbDefEntry.append_text(entryTitle);
+	cbDefEntry.set_active(0);
+	event_lock = false;
+}
+
+void GrubSettingsDlgGtk::clearDefaultEntryChooser(){
 	event_lock = true;
 	cbDefEntry.clear_items();
-	guint index = 0;
-	for (std::list<std::string>::const_iterator iter = entryList.begin(); iter != entryList.end(); iter++){
-		//cbDefEntry.append_text(iter->length() > 25 ? iter->substr(0,22)+"…" : *iter);
-		cbDefEntry.append_text(Glib::ustring::compose(gettext("Entry %1 (by position)"), ++index));
-		cbDefEntry.append_text(*iter);
-	}
-	if (entryList.size() > 0)
-		cbDefEntry.set_active(0);
+	this->defEntry_item_count = 0;
 	event_lock = false;
+}
 
-	//Gtk::MessageDialog(dataStore->getValue("GRUB_DEFAULT")).run();
-	this->loadData();
-	//Gtk::MessageDialog(dataStore->getValue("GRUB_DEFAULT")).run();
-	this->show_all();
+
+void GrubSettingsDlgGtk::clearResolutionChooser(){
+	this->cbResolution.clear_items();
+}
+void GrubSettingsDlgGtk::addResolution(std::string const& resolution){
+	this->cbResolution.append_text(resolution);
 }
 
 GrubSettingsDlgGtk::AdvancedSettingsTreeModel::AdvancedSettingsTreeModel(){
@@ -378,15 +381,6 @@ void GrubSettingsDlgGtk::loadData(){
 	}
 }
 
-void GrubSettingsDlgGtk::event_fb_resolutions_loaded(){
-	disp_fb_resolutions_loaded();
-}
-
-void GrubSettingsDlgGtk::disp_func_fb_resolutions_loaded(){
-	const std::list<std::string>& resolutions = fbResolutions.getData();
-	for (std::list<std::string>::const_iterator iter = resolutions.begin(); iter != resolutions.end(); iter++)
-		cbResolution.append_text(*iter);
-}
 
 void GrubSettingsDlgGtk::signal_setting_row_changed(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter){
 	if (!event_lock){

@@ -10,6 +10,7 @@ GtkClient::GtkClient(GrubEnv& env)
 	disp_sync_load.connect(sigc::mem_fun(this, &GtkClient::syncListView_load));
 	disp_sync_save.connect(sigc::mem_fun(this, &GtkClient::syncListView_save));
 	disp_thread_died.connect(sigc::mem_fun(this, &GtkClient::thread_died_handler));
+	disp_updateSettingsDlgResolutionList.connect(sigc::mem_fun(this, &GtkClient::updateSettingsDlgResolutionList_dispatched));
 }
 
 
@@ -50,8 +51,18 @@ void GtkClient::setPartitionChooser(PartitionChooser& partitionChooser){
 	this->partitionChooser = &partitionChooser;
 }
 
+void GtkClient::setFbResolutionsGetter(FbResolutionsGetter& fbResolutionsGetter){
+	this->fbResolutionsGetter = &fbResolutionsGetter;
+}
+
 void GtkClient::showSettingsDlg(){
-	this->settingsDlg->show(this->grublistCfg->proxies.generateEntryTitleList());
+	this->settingsDlg->show();
+
+	std::list<std::string> entryTitles = this->grublistCfg->proxies.generateEntryTitleList();
+	this->settingsDlg->clearDefaultEntryChooser();
+	for (std::list<std::string>::iterator iter = entryTitles.begin(); iter != entryTitles.end(); iter++)
+		this->settingsDlg->addEntryToDefaultEntryChooser(*iter);
+
 	this->settingsDlg->run();
 	this->settingsDlg->hide();
 	
@@ -71,11 +82,11 @@ void GtkClient::run(){
 	this->grublistCfg->umountSwitchedRootPartition(); //cleanup… only if another partition has been mounted
 }
 
-void GtkClient::load(bool keepConfig){
+void GtkClient::load(bool preserveConfig){
 	this->activeThreadCount++;
 	this->listCfgDlg->setLockState(5);
 	
-	if (!keepConfig){
+	if (!preserveConfig){
 		this->grublistCfg->reset();
 		//load the burg/grub settings file
 		this->settings->load();
@@ -84,16 +95,20 @@ void GtkClient::load(bool keepConfig){
 		this->settingsOnDisk->load();
 		this->settings->save();
 	}
-	this->grublistCfg->load(keepConfig);
-	if (this->savedListCfg->loadStaticCfg())
-		this->config_has_been_different_on_startup_but_unsaved = !this->grublistCfg->compare(*this->savedListCfg);
-	else
-		this->config_has_been_different_on_startup_but_unsaved = false;
-
-	if (keepConfig){
+	this->grublistCfg->load(preserveConfig);
+	if (!preserveConfig){
+		if (this->savedListCfg->loadStaticCfg())
+			this->config_has_been_different_on_startup_but_unsaved = !this->grublistCfg->compare(*this->savedListCfg);
+		else
+			this->config_has_been_different_on_startup_but_unsaved = false;
+	}
+	if (preserveConfig){
 		this->settingsOnDisk->save();
 	}
 	this->activeThreadCount--;
+
+	//loading the framebuffer resolutions in background…
+	Glib::Thread::create(sigc::mem_fun(this->fbResolutionsGetter, &FbResolutionsGetter::load), false);
 }
 
 void GtkClient::save(){
@@ -337,7 +352,7 @@ bool GtkClient::quit(){
 
 //MOVE TO PRESENTER
 void GtkClient::syncProxyState(void* proxy){
-	((Proxy*)proxy)->set_isExecutable(this->listCfgDlg->getRuleState(proxy));
+	((Proxy*)proxy)->set_isExecutable(this->listCfgDlg->getProxyState(proxy));
 	this->modificationsUnsaved = true;
 }
 
@@ -407,3 +422,13 @@ void GtkClient::showProxyInfo(Proxy* proxy){
 	this->listCfgDlg->updateButtonsState();
 }
 
+void GtkClient::updateSettingsDlgResolutionList(){
+	this->disp_updateSettingsDlgResolutionList();
+}
+
+void GtkClient::updateSettingsDlgResolutionList_dispatched(){
+	const std::list<std::string>& data = this->fbResolutionsGetter->getData();
+	this->settingsDlg->clearResolutionChooser();
+	for (std::list<std::string>::const_iterator iter = data.begin(); iter != data.end(); iter++)
+		this->settingsDlg->addResolution(*iter);
+}
