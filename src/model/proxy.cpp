@@ -233,20 +233,18 @@ bool Proxy::isModified(Rule const* parent) const {
 				ruleIter++;
 			}
 			while (!result && ruleIter != rlist.end() && entryIter != elist.end()){
-				if (ruleIter->outputName != entryIter->name || !ruleIter->isVisible)
+				if (ruleIter->outputName != entryIter->name || !ruleIter->isVisible) {
 					result = true;
-				if (ruleIter->dataSource && ruleIter->dataSource->type == Entry::SUBMENU) {
+				} else if (ruleIter->dataSource && ruleIter->dataSource->type == Entry::SUBMENU) {
 					result = this->isModified(&*ruleIter);
-				} else {
-					result = true;
 				}
 
 				ruleIter++;
 				entryIter++;
 			}
-		}
-		else
+		} else {
 			result = true;
+		}
 	}
 	return result;
 }
