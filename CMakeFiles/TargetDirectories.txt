@@ -1,0 +1,2 @@
+/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE/src_dir/CMakeFiles/../grub-customizer.dir
+/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE/src_dir/CMakeFiles/../grubcfg-proxy.dir

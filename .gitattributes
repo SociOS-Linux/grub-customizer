@@ -1,0 +1,84 @@
+* text=auto !eol
+/CMakeCache.txt -text
+CMakeFiles/CMakeCCompiler.cmake -text
+CMakeFiles/CMakeCXXCompiler.cmake -text
+CMakeFiles/CMakeDetermineCompilerABI_C.bin -text svneol=unset#unset
+CMakeFiles/CMakeDetermineCompilerABI_CXX.bin -text svneol=unset#unset
+CMakeFiles/CMakeDirectoryInformation.cmake -text
+CMakeFiles/CMakeOutput.log -text
+CMakeFiles/CMakeSystem.cmake -text
+CMakeFiles/CompilerIdC/CMakeCCompilerId.c -text
+CMakeFiles/CompilerIdC/a.out -text svneol=unset#unset
+CMakeFiles/CompilerIdCXX/CMakeCXXCompilerId.cpp -text
+CMakeFiles/CompilerIdCXX/a.out -text svneol=unset#unset
+CMakeFiles/Makefile.cmake -text
+CMakeFiles/Makefile2 -text
+CMakeFiles/TargetDirectories.txt -text
+CMakeFiles/cmake.check_cache -text
+CMakeFiles/progress.marks -text
+/CMakeLists.txt -text
+/Makefile -text
+/README -text
+/cmake_install.cmake -text
+/compile[!!-~]and[!!-~]install.sh -text
+/grub-customizer -text svneol=unset#unset
+/grubcfg-proxy -text svneol=unset#unset
+my_cmake_scripts/FindPkgConfig.cmake -text
+src_dir/CMakeFiles/CMakeDirectoryInformation.cmake -text
+src_dir/CMakeFiles/grub-customizer.dir/CXX.includecache -text
+src_dir/CMakeFiles/grub-customizer.dir/DependInfo.cmake -text
+src_dir/CMakeFiles/grub-customizer.dir/build.make -text
+src_dir/CMakeFiles/grub-customizer.dir/cmake_clean.cmake -text
+src_dir/CMakeFiles/grub-customizer.dir/depend.internal -text
+src_dir/CMakeFiles/grub-customizer.dir/depend.make -text
+src_dir/CMakeFiles/grub-customizer.dir/flags.make -text
+src_dir/CMakeFiles/grub-customizer.dir/link.txt -text
+src_dir/CMakeFiles/grub-customizer.dir/progress.make -text
+src_dir/CMakeFiles/grubcfg-proxy.dir/CXX.includecache -text
+src_dir/CMakeFiles/grubcfg-proxy.dir/DependInfo.cmake -text
+src_dir/CMakeFiles/grubcfg-proxy.dir/build.make -text
+src_dir/CMakeFiles/grubcfg-proxy.dir/cmake_clean.cmake -text
+src_dir/CMakeFiles/grubcfg-proxy.dir/depend.internal -text
+src_dir/CMakeFiles/grubcfg-proxy.dir/depend.make -text
+src_dir/CMakeFiles/grubcfg-proxy.dir/flags.make -text
+src_dir/CMakeFiles/grubcfg-proxy.dir/link.txt -text
+src_dir/CMakeFiles/grubcfg-proxy.dir/progress.make -text
+src_dir/CMakeFiles/progress.marks -text
+src_dir/CMakeLists.txt -text
+src_dir/Makefile -text
+src_dir/cmake_install.cmake -text
+src_dir/confparser.cpp -text
+src_dir/confparser.h -text
+src_dir/grub-customizer.dir/CXX.includecache -text
+src_dir/grub-customizer.dir/DependInfo.cmake -text
+src_dir/grub-customizer.dir/build.make -text
+src_dir/grub-customizer.dir/cmake_clean.cmake -text
+src_dir/grub-customizer.dir/depend.internal -text
+src_dir/grub-customizer.dir/depend.make -text
+src_dir/grub-customizer.dir/flags.make -text
+src_dir/grub-customizer.dir/link.txt -text
+src_dir/grub-customizer.dir/progress.make -text
+src_dir/grubcfg-proxy.dir/CXX.includecache -text
+src_dir/grubcfg-proxy.dir/DependInfo.cmake -text
+src_dir/grubcfg-proxy.dir/build.make -text
+src_dir/grubcfg-proxy.dir/cmake_clean.cmake -text
+src_dir/grubcfg-proxy.dir/depend.internal -text
+src_dir/grubcfg-proxy.dir/depend.make -text
+src_dir/grubcfg-proxy.dir/flags.make -text
+src_dir/grubcfg-proxy.dir/link.txt -text
+src_dir/grubcfg-proxy.dir/progress.make -text
+src_dir/grubcfg_proxy.cpp -text
+src_dir/grubconf_ui.h -text
+src_dir/grubconf_ui_gtk.cpp -text
+src_dir/grubconf_ui_gtk.h -text
+src_dir/grubconfig.cpp -text
+src_dir/grubconfig.h -text
+src_dir/gtk-client.cpp -text
+src_dir/libproxy.cpp -text
+src_dir/libproxy.h -text
+src_dir/libproxyscript_parser.cpp -text
+src_dir/libproxyscript_parser.h -text
+src_dir/proxyscript_parser.cpp -text
+translation/german.mo -text svneol=unset#unset
+translation/message.po -text
+translation/messages.pot -text

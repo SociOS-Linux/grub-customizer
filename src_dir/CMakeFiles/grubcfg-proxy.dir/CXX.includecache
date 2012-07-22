@@ -1,0 +1,58 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE/src_dir/confparser.cpp
+confparser.h
+/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE/src_dir/confparser.h
+
+/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE/src_dir/confparser.h
+string
+-
+cstdio
+-
+list
+-
+iostream
+-
+
+/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE/src_dir/grubcfg_proxy.cpp
+iostream
+-
+cstdlib
+-
+cstdio
+-
+string
+-
+list
+-
+libproxy.h
+/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE/src_dir/libproxy.h
+
+/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE/src_dir/libproxy.cpp
+libproxy.h
+/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE/src_dir/libproxy.h
+
+/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE/src_dir/libproxy.h
+string
+-
+list
+-
+confparser.h
+/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE/src_dir/confparser.h
+
+/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE/src_dir/libproxyscript_parser.cpp
+libproxyscript_parser.h
+/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE/src_dir/libproxyscript_parser.h
+
+/home/daniel/Dokumente/Grubconfig/2. Versuch/CMAKE/src_dir/libproxyscript_parser.h
+cstdio
+-
+string
+-
+

@@ -1,0 +1,1 @@
+/usr/bin/c++      CMakeFiles/grubcfg-proxy.dir/confparser.o CMakeFiles/grubcfg-proxy.dir/libproxy.o CMakeFiles/grubcfg-proxy.dir/libproxyscript_parser.o CMakeFiles/grubcfg-proxy.dir/grubcfg_proxy.o  -o grubcfg-proxy -rdynamic 

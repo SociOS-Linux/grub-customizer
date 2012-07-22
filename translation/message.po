@@ -1,0 +1,118 @@
+# German translations for PACKAGE package.
+# Copyright (C) 2010 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Daniel Richter <danielrichter2007@web.de>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-10-01 18:20+0200\n"
+"PO-Revision-Date: 2010-10-01 18:20+0200\n"
+"Last-Translator: Daniel Richter <danielrichter2007@web.de>\n"
+"Language-Team: German\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: grubconfig.cpp:105
+msgid "/etc/grub.d not found. Is grub2 installed?"
+msgstr "Das Verzeichnis /etc/grub.d wurde nicht gefunden. Ist Grub2 installiert?"
+
+#: grubconfig.cpp:208
+msgid ""
+"grub-mkconfig couldn't be executed successfully. You must run this as root!"
+msgstr "grub-mkconfig konnte nicht erfolgreich ausgeführt werden. Sie müssen das Programm mit Admin-Rechten starten!"
+
+#: grubconf_ui_gtk.cpp:7
+msgid "_File"
+msgstr "_Datei"
+
+#: grubconf_ui_gtk.cpp:9
+msgid "Script to insert:"
+msgstr "Einzufügendes Script:"
+
+#: grubconf_ui_gtk.cpp:9
+msgid "Preview:"
+msgstr "Vorschau:"
+
+#: grubconf_ui_gtk.cpp:36
+msgid "Save configuration and generate a new grub.cfg"
+msgstr "Konfiguration speichern und neue grub.cfg generieren"
+
+#: grubconf_ui_gtk.cpp:42
+msgid "Add a script to your configuration"
+msgstr "Script zur Konfiguration hinzufügen"
+
+#: grubconf_ui_gtk.cpp:44
+msgid "Remove a script from your configuration"
+msgstr "Script aus der Konfiguration entfernen"
+
+#: grubconf_ui_gtk.cpp:50
+msgid "Move up the selected entry or script"
+msgstr "Aktuellen Eintrag / aktuelles Script eine Position nach oben schieben"
+
+#: grubconf_ui_gtk.cpp:52
+msgid "Move down the selected entry or script"
+msgstr "Aktuellen Eintrag / aktuelles Script eine Position nach unten schieben"
+
+#: grubconf_ui_gtk.cpp:58
+msgid "reload configuration (same effect as an application restart)"
+msgstr "Konfiguration erneut laden (gleicher Effekt wie bei Neustart des Programms)"
+
+#: grubconf_ui_gtk.cpp:60
+msgid "Edit grub preferences"
+msgstr "Grub-Einstellungen bearbeiten"
+
+#: grubconf_ui_gtk.cpp:71
+msgid "Add script"
+msgstr "Script hinzufügen"
+
+#: grubconf_ui_gtk.cpp:86
+msgid "Entry"
+msgstr "Eintrag"
+
+#: grubconf_ui_gtk.cpp:136
+msgid "loading grub configuration…"
+msgstr "Grub-Konfiguration wird geladen…"
+
+#: grubconf_ui_gtk.cpp:156
+msgid " (custom)"
+msgstr " (angepasst)"
+
+#: grubconf_ui_gtk.cpp:196
+msgid "Configuration has been saved"
+msgstr "Konfiguration gespeichert"
+
+#: grubconf_ui_gtk.cpp:199
+msgid "updating configuration"
+msgstr "Konfiguration wird aktualisiert"
+
+#: grubconf_ui_gtk.cpp:232
+msgid "(new Entries)"
+msgstr "(neue Einträge)"
+
+#: grubconf_ui_gtk.cpp:254
+msgid "Name the Entry"
+msgstr "Geben Sie eine Bezeichnung ein!"
+
+#: grubconf_ui_gtk.cpp:345
+msgid "Default title: "
+msgstr "Vorgabetitel: "
+
+#: grubconf_ui_gtk.cpp:365
+msgid "No script found"
+msgstr "Keine Scripts gefunden"
+
+#: grubconf_ui_gtk.cpp:443
+msgid "is active"
+msgstr "Aktiv"
+
+#: grubconf_ui_gtk.cpp:444
+msgid "name"
+msgstr "Bezeichnung"
+
+#: gtk-client.cpp:11
+msgid "This is Argument 0: "
+msgstr "Das ist Argument 0: "
