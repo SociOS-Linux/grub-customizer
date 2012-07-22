@@ -322,7 +322,7 @@ void GrubSettingsDlgGtk::loadData(){
 
 		std::string menuPicturePath = this->dataStore->getValue("GRUB_MENU_PICTURE");
 		bool menuPicIsInGrubDir = false;
-		if (menuPicturePath != "" && menuPicturePath[0] != "/"){
+		if (menuPicturePath != "" && menuPicturePath[0] != '/'){
 			menuPicturePath = output_config_dir + "/" + menuPicturePath;
 			menuPicIsInGrubDir = true;
 		}

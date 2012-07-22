@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-10-22 20:01+0200\n"
-"PO-Revision-Date: 2010-11-21 04:43+0000\n"
+"POT-Creation-Date: 2010-11-21 12:13+0100\n"
+"PO-Revision-Date: 2010-11-21 20:44+0000\n"
 "Last-Translator: Alexey Ivanov <alexey.ivanes@gmail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-11-21 17:36+0000\n"
+"X-Launchpad-Export-Date: 2010-11-21 23:48+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ../src_dir/grubconfig.cpp:203 ../src_dir/grubconfig.cpp:218
@@ -90,9 +90,9 @@ msgstr "Поднять на строчку выше"
 msgid "Move down the selected entry or script"
 msgstr "Опустить на строчку ниже"
 
-msgid "reload configuration (same effect as an application restart)"
+#: ../src_dir/grubconf_ui_gtk.cpp:104
+msgid "reload configuration"
 msgstr ""
-"перечитать конфигурацию (тот же эффект, что и при перезапуске приложения)"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:107
 msgid "Edit grub preferences"
@@ -113,6 +113,10 @@ msgstr "Запись"
 #: ../src_dir/grubconf_ui_gtk.cpp:174
 msgid "Install to MBR"
 msgstr "Установить в MBR"
+
+#: ../src_dir/grubconf_ui_gtk.cpp:219
+msgid "BURG Mode"
+msgstr ""
 
 #: ../src_dir/grubconf_ui_gtk.cpp:240
 msgid "No Bootloader found"
@@ -210,6 +214,10 @@ msgstr "Вы_ход без обновления"
 #: ../src_dir/grubconf_ui_gtk.cpp:687
 msgid "_Save & Quit"
 msgstr "_Сохранить и выйти"
+
+#: ../src_dir/grubconf_ui_gtk.cpp:690
+msgid "AND: your modifications are still unsaved, update will save them too!"
+msgstr ""
 
 #: ../src_dir/grubconf_ui_gtk.cpp:729
 msgid "installing the bootloader…"
@@ -322,3 +330,183 @@ msgstr "Не возможно подключить выбранный разде
 #: ../src_dir/liveCDSetupDialog.cpp:212
 msgid "Couldn't umount the selected partition"
 msgstr "Не возможно отключить выбранный раздел"
+
+#: ../src_dir/settings_dlg_gtk.cpp:47
+msgid "white"
+msgstr ""
+
+#: ../src_dir/settings_dlg_gtk.cpp:48
+msgid "yellow"
+msgstr ""
+
+#: ../src_dir/settings_dlg_gtk.cpp:49
+msgid "light-cyan"
+msgstr ""
+
+#: ../src_dir/settings_dlg_gtk.cpp:50
+msgid "cyan"
+msgstr ""
+
+#: ../src_dir/settings_dlg_gtk.cpp:51
+msgid "light-blue"
+msgstr ""
+
+#: ../src_dir/settings_dlg_gtk.cpp:52
+msgid "blue"
+msgstr ""
+
+#: ../src_dir/settings_dlg_gtk.cpp:53
+msgid "light-green"
+msgstr ""
+
+#: ../src_dir/settings_dlg_gtk.cpp:54
+msgid "green"
+msgstr ""
+
+#: ../src_dir/settings_dlg_gtk.cpp:55
+msgid "light-magenta"
+msgstr ""
+
+#: ../src_dir/settings_dlg_gtk.cpp:56
+msgid "magenta"
+msgstr ""
+
+#: ../src_dir/settings_dlg_gtk.cpp:57
+msgid "light-red"
+msgstr ""
+
+#: ../src_dir/settings_dlg_gtk.cpp:58
+msgid "red"
+msgstr ""
+
+#: ../src_dir/settings_dlg_gtk.cpp:59
+msgid "brown"
+msgstr ""
+
+#: ../src_dir/settings_dlg_gtk.cpp:60
+msgid "light-gray"
+msgstr ""
+
+#: ../src_dir/settings_dlg_gtk.cpp:61
+msgid "dark-gray"
+msgstr ""
+
+#: ../src_dir/settings_dlg_gtk.cpp:62
+msgid "black"
+msgstr ""
+
+#: ../src_dir/settings_dlg_gtk.cpp:68
+msgid "pre_defined: "
+msgstr ""
+
+#: ../src_dir/settings_dlg_gtk.cpp:68
+msgid "previously _booted entry"
+msgstr ""
+
+#: ../src_dir/settings_dlg_gtk.cpp:69
+msgid "default entry"
+msgstr ""
+
+#: ../src_dir/settings_dlg_gtk.cpp:69
+msgid "visibility"
+msgstr ""
+
+#: ../src_dir/settings_dlg_gtk.cpp:69
+msgid "show menu"
+msgstr ""
+
+#: ../src_dir/settings_dlg_gtk.cpp:70
+msgid "Timeout"
+msgstr ""
+
+#: ../src_dir/settings_dlg_gtk.cpp:70
+msgid "Seconds"
+msgstr ""
+
+#: ../src_dir/settings_dlg_gtk.cpp:70
+msgid "kernel parameters"
+msgstr ""
+
+#: ../src_dir/settings_dlg_gtk.cpp:71
+msgid "generate recovery entries"
+msgstr ""
+
+#: ../src_dir/settings_dlg_gtk.cpp:71
+msgid "look for other operating systems"
+msgstr ""
+
+#: ../src_dir/settings_dlg_gtk.cpp:72
+msgid "custom resolution: "
+msgstr ""
+
+#: ../src_dir/settings_dlg_gtk.cpp:73
+msgid "font color"
+msgstr ""
+
+#: ../src_dir/settings_dlg_gtk.cpp:73
+msgid "background"
+msgstr ""
+
+#: ../src_dir/settings_dlg_gtk.cpp:74
+msgid "normal:"
+msgstr ""
+
+#: ../src_dir/settings_dlg_gtk.cpp:74
+msgid "highlight:"
+msgstr ""
+
+#: ../src_dir/settings_dlg_gtk.cpp:75
+msgid "menu colors"
+msgstr ""
+
+#: ../src_dir/settings_dlg_gtk.cpp:75
+msgid "background image"
+msgstr ""
+
+#: ../src_dir/settings_dlg_gtk.cpp:76
+msgid "copy to grub directory"
+msgstr ""
+
+#: ../src_dir/settings_dlg_gtk.cpp:76
+msgid "remove background"
+msgstr ""
+
+#: ../src_dir/settings_dlg_gtk.cpp:77
+msgid ""
+"To get the colors above working,\n"
+"you have to select a background image!"
+msgstr ""
+
+#: ../src_dir/settings_dlg_gtk.cpp:79
+msgid "settings"
+msgstr ""
+
+#: ../src_dir/settings_dlg_gtk.cpp:83
+msgid "_General"
+msgstr ""
+
+#: ../src_dir/settings_dlg_gtk.cpp:84
+msgid "A_ppearance"
+msgstr ""
+
+#: ../src_dir/settings_dlg_gtk.cpp:85
+msgid "_Advanced"
+msgstr ""
+
+#: ../src_dir/settings_dlg_gtk.cpp:93
+msgid "value"
+msgstr ""
+
+#: ../src_dir/settings_dlg_gtk.cpp:128
+msgid "Entry %1 (by position)"
+msgstr ""
+
+#: ../src_dir/settings_dlg_gtk.cpp:413
+msgid ""
+"This option doesn't work when the \"os-prober\" script finds other operating "
+"systems. Disable \"%1\" if you don't need to boot other operating systems."
+msgstr ""
+
+#~ msgid "reload configuration (same effect as an application restart)"
+#~ msgstr ""
+#~ "перечитать конфигурацию (тот же эффект, что и при перезапуске приложения)"

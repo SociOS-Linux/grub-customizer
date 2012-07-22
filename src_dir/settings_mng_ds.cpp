@@ -168,6 +168,7 @@ bool SettingsManagerDataStore::load(std::string const& filePath){
 		if (settings.size() > 0)
 			settings.back().validate();
 		
+		fclose(file);
 		return true;
 	}
 	else
@@ -190,7 +191,7 @@ if [ \"${GRUB_MENU_PICTURE}\" ] ; then\n\
    WALLPAPER=\"${GRUB_MENU_PICTURE}\"\n\
 fi\n";
 
-	FILE* outFile = fopen((dir_prefix+filePath).c_str(), "w");
+	FILE* outFile = fopen(filePath.c_str(), "w");
 	if (outFile){
 		bool background_script_required = false;
 		for (std::list<SettingRow>::iterator iter = this->begin(false); iter != this->end(); iter++){

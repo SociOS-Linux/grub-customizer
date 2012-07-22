@@ -205,7 +205,7 @@ msgstr ""
 "Die generierte Konfiguration entsprach nicht der gespeicherten "
 "Konfiguration, als Sie dieses Programm gestartet haben. Dies kann dazu "
 "führen, dass die Anzeige im Bootloader nicht der Anzeige dieses Programms "
-"entspricht Um dieses Problem zu beheben, klicken Sie auf Aktualisieren!"
+"entspricht. Um dieses Problem zu beheben, klicken Sie auf Aktualisieren!"
 
 #: ../src_dir/grubconf_ui_gtk.cpp:674
 msgid "_Quit without update"
@@ -541,7 +541,7 @@ msgid ""
 "systems. Disable \"%1\" if you don't need to boot other operating systems."
 msgstr ""
 "Diese option funktioniert nur, wenn der \"os-prober\" keine anderen Betriebssysteme"
-"findet. Deaktivieren Sie \"%1\" wenn Sie generell keien anderen Betriebssysteme starten möchten."
+"findet. Deaktivieren Sie \"%1\" wenn Sie generell keine anderen Betriebssysteme starten möchten."
 
 #~ msgid "reload configuration (same effect as an application restart)"
 #~ msgstr ""

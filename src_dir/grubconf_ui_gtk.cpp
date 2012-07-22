@@ -473,7 +473,7 @@ void GrubConfUIGtk::signal_show_root_selector(){
 	std::string new_partition = grubConfig->env.getRootDevice();
 	
 	if (done || old_partition != new_partition && new_partition != ""){
-		signal_reload_click();
+		reload(false);
 		miInstallGrub.set_sensitive(true);
 	}
 	else if (new_partition == ""){ //this happens, when a previously selected partition has been umounted
