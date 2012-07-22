@@ -1,12 +1,11 @@
 [Desktop Entry]
 Name=Grub Customizer
-Comment[de]=Grub2 anpassen
-Comment[en]=Customize grub2
+Comment=Customize the bootloader (GRUB2 or BURG)
 Exec=grub-customizer
 Terminal=false
 X-MultipleArgs=false
 Type=Application
 StartupNotify=false
-Categories=GNOME;GTK;System;
+Categories=System;Settings;
 Icon=grub-customizer
-
+X-Ubuntu-Gettext-Domain=grub-customizer
