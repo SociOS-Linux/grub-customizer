@@ -71,22 +71,10 @@ std::string GrublistCfg::readScriptForwarder(std::string const& scriptForwarderF
 	return result.substr(1, result.length()-2);
 }
 
-void GrublistCfg::load(bool keepConfig){
-	if (!keepConfig){
+void GrublistCfg::load(bool preserveConfig){
+	if (!preserveConfig){
 		send_new_load_progress(0);
-		{ //check the existence of cfg_dir
-			DIR* cfg_dir = opendir(this->env.cfg_dir.c_str());
-			if (cfg_dir)
-				closedir(cfg_dir);
-			else {
-				throw GRUB_CFG_DIR_NOT_FOUND;
-				/*if (this->eventListener){
-					this->message = this->env.cfg_dir+gettext(" not found. Is grub2 installed?");
-					this->eventListener->threadDied();
-				}
-				return; //dir doesn't exist, cancel!*/
-			}
-		}
+
 		DIR* hGrubCfgDir = opendir(this->env.cfg_dir.c_str());
 
 		if (!hGrubCfgDir){
@@ -94,12 +82,15 @@ void GrublistCfg::load(bool keepConfig){
 		}
 
 		//load scripts
+		this->lock();
 		repository.load(this->env.cfg_dir, false);
 		repository.load(this->env.cfg_dir+"/proxifiedScripts", true);
+		this->unlock();
 		send_new_load_progress(0.05);
 	
 	
 		//load proxies
+		this->lock();
 		struct dirent *entry;
 		struct stat fileProperties;
 		while (entry = readdir(hGrubCfgDir)){
@@ -128,13 +119,17 @@ void GrublistCfg::load(bool keepConfig){
 		}
 		closedir(hGrubCfgDir);
 		this->proxies.sort();
+		this->unlock();
 	}
 	else {
+		this->lock();
 		repository.deleteAllEntries();
+		this->unlock();
 	}
 	
 	//create proxifiedScript links & chmod other files
 
+	this->lock();
 	for (Repository::iterator iter = this->repository.begin(); iter != this->repository.end(); iter++){
 		if (iter->isInScriptDir(env.cfg_dir)){
 			//createScriptForwarder & disable proxies
@@ -149,6 +144,7 @@ void GrublistCfg::load(bool keepConfig){
 			chmod(iter->fileName.c_str(), 0755);
 		}
 	}
+	this->unlock();
 	send_new_load_progress(0.1);
 	
 	//run mkconfig
@@ -429,8 +425,10 @@ void GrublistCfg::cancelThreads(){
 
 
 void GrublistCfg::reset(){
+	this->lock();
 	this->repository.clear();
 	this->proxies.clear();
+	this->unlock();
 }
 
 double GrublistCfg::getProgress() const {

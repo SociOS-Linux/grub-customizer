@@ -50,7 +50,7 @@ public:
 	bool createScriptForwarder(std::string const& scriptName) const;
 	bool removeScriptForwarder(std::string const& scriptName) const;
 	std::string readScriptForwarder(std::string const& scriptForwarderFilePath) const;
-	void load(bool keepConfig = false);
+	void load(bool preserveConfig = false);
 	void save();
 	void readGeneratedFile(FILE* source, bool createScriptIfNotFound = false);
 	bool loadStaticCfg();

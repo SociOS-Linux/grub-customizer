@@ -25,7 +25,7 @@
 #include "../model/fbResolutionsGetter.h"
 #include "../view/aboutDialog.h"
 
-//TODO: sometimes gc crashes at startup - why?
+//TODO: sometimes gc crashes at startup - why? … some possible problems fixed. But is env the reason?
 //TODO: remove gtk-dependencies in this class
 //TODO: allow settings manager startup after loading the settings - don't wait until everything is loaded
 class GtkClient {
@@ -52,7 +52,9 @@ class GtkClient {
 	int activeThreadCount;
 	GrublistCfg::Exception thrownException; //to be used from the die() function
 public:
-
+	enum Exception {
+		INCOMPLETE
+	};
 	void setModelListCfg(GrublistCfg& grublistCfg);
 	void setViewListCfg(GrublistCfgDlg& listCfgDlg);
 	void setViewSettingsDialog(GrubSettingsDlgGtk& settingsDlg);

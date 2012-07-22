@@ -4,6 +4,8 @@ GtkClient::GtkClient(GrubEnv& env)
 	: grublistCfg(NULL), listCfgDlg(NULL), settingsDlg(NULL), settings(NULL),
 	  installer(NULL), installDlg(NULL), settingsOnDisk(NULL), scriptAddDlg(NULL),
 	  partitionChooser(NULL), savedListCfg(NULL),
+	  fbResolutionsGetter(NULL), deviceDataList(NULL),
+	  mountTable(NULL), aboutDialog(NULL),
 	 env(env), config_has_been_different_on_startup_but_unsaved(false),
 	 modificationsUnsaved(false), quit_requested(false), activeThreadCount(0)
 {
@@ -80,6 +82,24 @@ void GtkClient::showSettingsDlg(){
 }
 
 void GtkClient::run(){
+	if   ( !grublistCfg
+		or !listCfgDlg
+		or !settingsDlg
+		or !settings
+		or !settingsOnDisk
+		or !installer
+		or !installDlg
+		or !scriptAddDlg
+		or !partitionChooser
+		or !savedListCfg
+		or !fbResolutionsGetter
+		or !deviceDataList
+		or !mountTable
+		or !aboutDialog
+	) {
+		throw INCOMPLETE;
+	}
+
 	savedListCfg->verbose = false;
 
 	FILE* blkidProc = popen("blkid", "r");
@@ -489,7 +509,6 @@ bool GtkClient::quit(){
 			return false;
 		}
 		else {
-			std::cout << "TRUE!" << std::endl;
 			return true; //close the window
 		}
 	}
