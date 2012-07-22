@@ -1,9 +1,15 @@
+v 2.5.4
+	* added a missing include directive
+	* translation updates
+
 v 2.5.3
 	* fixed problems when there are multiple entries having the same name/path
+
 v 2.5.2
 	* renumeration of 00_header and 05_debian_theme nomore starting from 10 but using
 	  these fix values if possible
 	* translation updates
+
 v 2.5.1
 	* some changes to make the background image and colors working on fedora
 	* minor improvements...

@@ -1,16 +1,16 @@
-# Dutch translation for grub-customizer
-# Copyright (c) 2011 Rosetta Contributors and Canonical Ltd 2011
+# Basque translation for grub-customizer
+# Copyright (c) 2012 Rosetta Contributors and Canonical Ltd 2012
 # This file is distributed under the same license as the grub-customizer package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2011.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2012.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2011-12-23 17:05+0100\n"
-"PO-Revision-Date: 2011-12-28 18:20+0000\n"
-"Last-Translator: rob <linuxned@gmail.com>\n"
-"Language-Team: Dutch <nl@li.org>\n"
+"PO-Revision-Date: 2012-03-10 21:19+0000\n"
+"Last-Translator: Asier Iturralde Sarasola <Unknown>\n"
+"Language-Team: Basque <eu@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -19,51 +19,51 @@ msgstr ""
 
 #: ../src/presenter/grubCustomizer.cpp:445
 msgid "No script found"
-msgstr "Geen script gevonden"
+msgstr "Ez da script-ik aurkitu"
 
 #: ../src/presenter/grubCustomizer.cpp:512
 msgid "loading configuration…"
-msgstr "configuratie wordt geladen…"
+msgstr "konfigurazioa kargatzen..."
 
 #: ../src/presenter/grubCustomizer.cpp:526
 #: ../src/view/grublistCfgDlgGtk.cpp:380
 msgid " (custom)"
-msgstr " (aangepast)"
+msgstr " (pertsonalizatua)"
 
 #: ../src/presenter/grubCustomizer.cpp:556
 msgid "Configuration has been saved"
-msgstr "Configuratie is opgeslagen"
+msgstr "Konfigurazioa gorde da"
 
 #: ../src/presenter/grubCustomizer.cpp:559
 msgid "updating configuration"
-msgstr "configuratie bijwerken"
+msgstr "konfigurazioa eguneratzen"
 
 #: ../src/presenter/grubCustomizer.cpp:571
 msgid "%1 not found. Is grub2 installed?"
-msgstr "%1 werd niet gevonden. Is grub2 geïnstalleerd?"
+msgstr "%1 ez da aurkitu. grub2 instalatuta dago?"
 
 #: ../src/presenter/grubCustomizer.cpp:581
 msgid ""
 "%1 couldn't be executed successfully. error message:\n"
 " %2"
 msgstr ""
-"%1 kon niet uitgevoerd worden. foutmelding:\n"
+"Ezin izan da %1 behar bezala exekutatu. errore mezua:\n"
 " %2"
 
 #: ../src/presenter/grubCustomizer.cpp:638
 msgid "Name the Entry"
-msgstr "Geef de invoer een naam"
+msgstr "Izendatu sarrera"
 
 #: ../src/presenter/grubCustomizer.cpp:671
 msgid "cannot move this entry"
-msgstr "kan deze invoer niet verplaatsen"
+msgstr "ezin da sarrera hau mugitu"
 
 #: ../src/view/aboutDialogGtk.cpp:36
 msgid ""
 "Grub Customizer is a graphical interface to configure the grub2/burg settings"
 msgstr ""
-"Grub Customizer is een grafische gebruikersinterface om de grub2/burg-"
-"instellingen te configureren"
+"Grub Customizer grub2/burg-en ezarpenak konfiguratzeko interfaze grafiko bat "
+"da"
 
 #: ../src/view/grubInstallDlgGtk.cpp:22
 msgid ""
@@ -71,146 +71,146 @@ msgid ""
 "files to the bootloaders data directory\n"
 "(if they don't already exist)."
 msgstr ""
-"Installeer de opstartlader in MBR en voeg enkele\n"
-"bestanden toe aan de opstartladerdatamap\n"
-"(als deze niet reeds aanwezig zijn)."
+"Instalatu abioko kargatzailea MBR-n eta jarri zenbait\n"
+"fitxategi abioko kargatzailearen datu direktorioan\n"
+"(dagoeneko existitzen ez badira)."
 
 #: ../src/view/grubInstallDlgGtk.cpp:23
 msgid "_Device: "
-msgstr "A_pparaat: "
+msgstr "_Gailua: "
 
 #: ../src/view/grubInstallDlgGtk.cpp:33
 msgid "Install to MBR"
-msgstr "Installeren in MBR"
+msgstr "Instalatu MBR-n"
 
 #: ../src/view/grubInstallDlgGtk.cpp:50
 msgid "The bootloader has been installed successfully"
-msgstr "De opstartlader is succesvol geïnstalleerd"
+msgstr "Abioko kargatzailea behar bezala instalatu da"
 
 #: ../src/view/grubInstallDlgGtk.cpp:55
 msgid "Error while installing the bootloader"
-msgstr "Fout bij het installeren van de opstartlader"
+msgstr "Errorea abioko kargatzailea instalatzean"
 
 #: ../src/view/grubInstallDlgGtk.cpp:71
 msgid "installing the bootloader…"
-msgstr "De opstartader wordt geïnstalleerd…"
+msgstr "abioko kargatzailea instalatzen..."
 
 #: ../src/view/grubInstallDlgGtk.cpp:76
 msgid "Please type a device string!"
-msgstr "Voer een apparaat in!"
+msgstr "Mesedez, idatzi gailuaren izena!"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:29
 msgid "_File"
-msgstr "_Bestand"
+msgstr "_Fitxategia"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:30
 msgid "_Edit"
-msgstr "Be_werken"
+msgstr "_Editatu"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:30
 msgid "_View"
-msgstr "Beel_d"
+msgstr "_Ikusi"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:30
 msgid "_Help"
-msgstr "_Hulp"
+msgstr "_Laguntza"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:31
 msgid "_Install to MBR …"
-msgstr "_Installeren in MBR …"
+msgstr "_Instalatu MBR-n"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:36
 msgid "BURG found!"
-msgstr "BURG gevonden!"
+msgstr "BURG aurkitu da!"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:37
 msgid "No Bootloader found"
-msgstr "Geen opstartlader gevonden"
+msgstr "Ez da abioko kargatzailerik aurkitu"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:65
 msgid "Add a script to your configuration"
-msgstr "Een script toevoegen aan uw configuratie"
+msgstr "Gehitu script bat zure konfigurazioari"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:67
 msgid "Remove a script from your configuration"
-msgstr "Een script verwijderen uit uw configuratie"
+msgstr "Kendu script bat zure konfiguraziotik"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:73
 msgid "Move up the selected entry or script"
-msgstr "Invoer of script omhoog verplaatsen"
+msgstr "Mugitu gorantz hautatutako sarrera edo script-a"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:75
 msgid "Move down the selected entry or script"
-msgstr "Invoer of script omlaag verplaatsen"
+msgstr "Mugitu beherantz hautatutako sarrera edo script-a"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:81
 msgid "remove this entry from the current submenu"
-msgstr "deze invoer uit het huidige submenu verwijderen"
+msgstr "kendu sarrera hau uneko azpimenutik"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:84
 msgid "add this entry to a new submenu"
-msgstr "deze invoer aan een nieuw submenu toevoegen"
+msgstr "gehitu sarrera hau azpimenu berri bati"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:92
 msgid "reload configuration"
-msgstr "configuratie herladen"
+msgstr "birkargatu konfigurazioa"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:95
 msgid "Edit grub preferences"
-msgstr "Grub-voorkeuren bewerken"
+msgstr "Editatu grub hobespenak"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:126
 msgid "Select _partition …"
-msgstr "_Partitie selecteren …"
+msgstr "Hautatu _partizioa..."
 
 #: ../src/view/grublistCfgDlgGtk.cpp:133
 msgid "Do you want to configure BURG instead of grub2?"
-msgstr "Wilt u BURG configureren in plaats van grub2?"
+msgstr "BURG konfiguratu nahi duzu grub2-ren ordez?"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:140
 msgid "Do you want to select another root partition?"
-msgstr "Wilt u een andere root-partitie selecteren?"
+msgstr "Beste root partizio bat hautatu nahi duzu?"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:185
 msgid "BURG Mode"
-msgstr "BURG-modus"
+msgstr "BURG modua"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:189
 msgid "Save configuration and generate a new "
-msgstr "Sla configuratie op en genereer nieuwe "
+msgstr "Gorde konfigurazioa eta sortu horrelako berri bat: "
 
 #: ../src/view/grublistCfgDlgGtk.cpp:273
 msgid "Proxy binary not found!"
-msgstr "Proxy binary niet gevonden!"
+msgstr "Ez da proxy binariorik aurkitu!"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:274
 msgid ""
 "You will see all entries (uncustomized) when you run grub. This error accurs "
 "(in most cases), when you didn't install grub gustomizer currectly."
 msgstr ""
-"Wanneer u grub start zult u alle invoeren (onaangepast) zien. Deze fout doet "
-"zich (in de meeste gevallen) voor, wanneer grub customizer onjuist is "
-"geïnstalleerd."
+"Sarrera guztiak ikusiko dituzu (pertsonalizatu gabe) grub abiatzean. Errore "
+"hau gertatzen da (kasu gehienetan) Grub Customizer behar bezala instalatzen "
+"ez denean."
 
 #: ../src/view/grublistCfgDlgGtk.cpp:280
 msgid "(new Entries of %1)"
-msgstr "(nieuwe invoeren van %1)"
+msgstr "(%1-en sarrera berriak)"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:282
 msgid "(new Entries)"
-msgstr "(nieuwe invoeren)"
+msgstr "(sarrera berriak)"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:287
 msgid "(script code)"
-msgstr "(scriptcode)"
+msgstr "(script kodea)"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:518
 msgid "Default title: "
-msgstr "Standaardtitel: "
+msgstr "Izenburu lehenetsia: "
 
 #: ../src/view/grublistCfgDlgGtk.cpp:612
 msgid "The saved configuration is not up to date!"
-msgstr "De opgeslagen configuratie is niet up-to-date!"
+msgstr "Gordetako konfigurazioa ez dago eguneratuta!"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:613
 msgid ""
@@ -218,111 +218,111 @@ msgid ""
 "startup. So what you see now may not be what you see when you restart your "
 "pc. To fix this, click update!"
 msgstr ""
-"De gegenereerde configuratie is niet gelijk aan de opgeslagen configuratie "
-"bij het opstarten. Dus wat u nu ziet hoeft niet noodzakelijkerwijs hetzelfde "
-"te zijn wanneer u uw pc herstart. Om dit te herstellen, klikt u op bijwerken!"
+"Sortutako konfigurazioa ez da abioan gordetako konfigurazioaren berdina. "
+"Ondorioz, baliteke orain ikusten duzuna eta ordenagailua berrabiaraztean "
+"ikusiko duzuna bat ez etortzea. Hau konpontzeko, sakatu eguneratu!"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:616
 msgid "_Quit without update"
-msgstr "A_fsluiten zonder bij te werken"
+msgstr "_Irten eguneratu gabe"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:619
 msgid "_Update & Quit"
-msgstr "_Bijwerken & afsluiten"
+msgstr "_Eguneratu eta irten"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:623
 msgid "Do you want to save your modifications?"
-msgstr "Wilt u uw wijzigingen opslaan?"
+msgstr "Egindako aldaketak gorde nahi dituzu?"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:626
 msgid "_Quit without saving"
-msgstr "A_fsluiten zonder op te slaan"
+msgstr "_Irten gorde gabe"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:629
 msgid "_Save & Quit"
-msgstr "Op_slaan & afsluiten"
+msgstr "_Gorde eta irten"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:632
 msgid "AND: your modifications are still unsaved, update will save them too!"
 msgstr ""
-"EN: uw wijzigingen zijn niet opgeslagen, door bij te werken zullen de "
-"wijzigingen ook opgeslagen worden!"
+"ETA: zure aldaketak oraindik gorde gabe daude, eguneraketak gordeko ditu "
+"hauek ere!"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:708 ../src/view/settingsDlgGtk.cpp:132
 msgid "is active"
-msgstr "is actief"
+msgstr "aktibo dago"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:709 ../src/view/settingsDlgGtk.cpp:133
 msgid "name"
-msgstr "naam"
+msgstr "izena"
 
 #: ../src/view/partitionChooserGtk.cpp:23
 msgid "_use another partition: "
-msgstr "gebr_uik een andere partitie: "
+msgstr "_erabili beste partizio bat: "
 
 #: ../src/view/partitionChooserGtk.cpp:24
 msgid "Mount selected Filesystem"
-msgstr "Geselecteerd bestandssysteem aankoppelen"
+msgstr "Muntatu hautatutako fitxategi-sistema"
 
 #: ../src/view/partitionChooserGtk.cpp:25
 msgid "Unmount mounted Filesystem"
-msgstr "Aangekoppeld bestandssysteem afkoppelen"
+msgstr "Desmuntatu muntatutako fitxategi-sistema"
 
 #: ../src/view/partitionChooserGtk.cpp:27
 msgid ""
 "These are the mountpoints of your fstab file.\n"
 "Please select every grub/boot related partition."
 msgstr ""
-"Dit zijn de koppelpunten van uw fstab-bestand.\n"
-"Selecteer elke gerelateerde grub/boot-partitie."
+"Hauek dira zure fstab fitxategiko muntaketa-puntuak.\n"
+"Mesedez, hautatu grub/boot-arekin erlazionatutako partizio guztiak."
 
 #: ../src/view/partitionChooserGtk.cpp:48
 msgid "partition"
-msgstr "partitie"
+msgstr "partizioa"
 
 #: ../src/view/partitionChooserGtk.cpp:49
 msgid "type"
-msgstr "type"
+msgstr "mota"
 
 #: ../src/view/partitionChooserGtk.cpp:50
 msgid "label"
-msgstr "label"
+msgstr "etiketa"
 
 #: ../src/view/partitionChooserGtk.cpp:82
 msgid "Grub Customizer: Partition chooser"
-msgstr "Grub Customizer: Partitie selecteren"
+msgstr "Grub Customizer: Partizio hautatzailea"
 
 #: ../src/view/partitionChooserGtk.cpp:86
 msgid "Select and mount your root partition"
-msgstr "Selecteer en koppel uw root-partitie aan"
+msgstr "Hautatu eta muntatu zure root partizioa"
 
 #: ../src/view/partitionChooserGtk.cpp:88
 msgid "Select required submountpoints"
-msgstr "Selecteer vereiste sub-koppelpunten"
+msgstr "Hautatu beharrezko muntaketa azpi-puntuak"
 
 #: ../src/view/partitionChooserGtk.cpp:94
 msgid "Partition Chooser"
-msgstr "Partitie selecteren"
+msgstr "Partizio hautatzailea"
 
 #: ../src/view/partitionChooserGtk.cpp:168
 msgid "Mount failed!"
-msgstr "Aankoppelen mislukt!"
+msgstr "Muntaketak huts egin du!"
 
 #: ../src/view/partitionChooserGtk.cpp:169
 msgid "umount failed!"
-msgstr "afkoppelen mislukt!"
+msgstr "desmuntaketak huts egin du!"
 
 #: ../src/view/partitionChooserGtk.cpp:170
 msgid "This seems not to be a root file system (no fstab found)"
-msgstr "Dit lijkt geen root-bestandssysteem te zijn (geen fstab gevonden)"
+msgstr "Hau root fitxategi-sistema bat dela dirudi (ez da fstab-ik aurkitu)"
 
 #: ../src/view/partitionChooserGtk.cpp:171
 msgid "Couldn't mount the selected partition"
-msgstr "Kon de geselecteerde partitie niet aankoppelen"
+msgstr "Ezin izan da muntatu hautatutako partizioa"
 
 #: ../src/view/partitionChooserGtk.cpp:172
 msgid "Couldn't umount the selected partition"
-msgstr "Kon de geselecteerde partitie niet afkoppelen"
+msgstr "Ezin izan da desmuntatu hautatutako partizioa"
 
 #: ../src/view/partitionChooserGtk.cpp:240
 msgid ""
@@ -332,15 +332,16 @@ msgid ""
 "again and save the configuration (or run update-grub/update-burg)\n"
 "to get the entry back!"
 msgstr ""
-"U heeft de optie geselecteerd om een andere partitie te selecteren.\n"
-"Let op: Mogelijk vindt os-prober het momenteel actieve systeem niet.\n"
-"Voer Grub Customizer opnieuw uit op het doelsysteem\n"
-"en sla de configuratie op (of voer update-grub/update-burg uit)\n"
-"om de invoer weer terug te krijgen!"
+"Beste partizio bat aukeratzeko aukera hautatu duzu.\n"
+"Kontutan izan os-prober-ek behar bada ez duela aurkituko unean martxan duzun "
+"sistema.\n"
+"Beraz, exekutatu berriz Grub Customizer helburuko sisteman\n"
+"eta gorde konfigurazioa (edo exekutatu update-grub/update-burg)\n"
+"sarrera berriz ere agertu dadin!"
 
 #: ../src/view/partitionChooserGtk.cpp:242
 msgid "You started Grub Customizer using the live CD."
-msgstr "U heeft Grub Customizer gestart met de live-cd."
+msgstr "Live CD-a erabiliz abiarazi duzu Grub Customizer."
 
 #: ../src/view/partitionChooserGtk.cpp:244
 msgid ""
@@ -354,68 +355,66 @@ msgid ""
 "as the actually running one.\n"
 "If not, you will get an error message when trying to load the configuration."
 msgstr ""
-"Voordat u uw grub-configuratie kunt bewerken, moeten we\n"
-"de vereiste partities aankoppelen.\n"
+"Grub konfigurazioa editatu ahal izateko lehenik\n"
+"beharrezko partizioak muntatu behar dira.\n"
 "\n"
-"Deze assistent zal u daarbij helpen\n"
+"Laguntzaile honek lagunduko dizu.\n"
 "\n"
-"\n"
-"Controleer of het doelsysteem dezelfde cpu-architectuur heeft\n"
-"als het momenteel actieve systeem.\n"
-"Indien dit niet zo is, zal u een foutmelding ontvangen bij het laden van de "
-"configuratie."
+"Mesedez, ziurtatu helburuko sistemaren cpu arkitektura\n"
+"unean martxan dagoenaren berdina dela. Horrela ez bada,\n"
+"errore mezu bat jasoko duzu konfigurazioa kargatzen saiatzean."
 
 #: ../src/view/scriptAddDlgGtk.cpp:23
 msgid "Script to insert:"
-msgstr "Script om in te voegen:"
+msgstr "Txertatu beharreko script-a:"
 
 #: ../src/view/scriptAddDlgGtk.cpp:25
 msgid "Preview:"
-msgstr "Voorbeeld:"
+msgstr "Aurrebista:"
 
 #: ../src/view/scriptAddDlgGtk.cpp:27
 msgid "Add script"
-msgstr "Script toevoegen"
+msgstr "Gehitu script-a"
 
 #: ../src/view/scriptAddDlgGtk.cpp:43
 msgid "Entry"
-msgstr "Invoer"
+msgstr "Sarrera"
 
 #: ../src/view/settingsDlgGtk.cpp:74
 msgid "white"
-msgstr "wit"
+msgstr "zuria"
 
 #: ../src/view/settingsDlgGtk.cpp:75
 msgid "yellow"
-msgstr "geel"
+msgstr "horia"
 
 #: ../src/view/settingsDlgGtk.cpp:76
 msgid "light-cyan"
-msgstr "lichtcyaan"
+msgstr "zian argia"
 
 #: ../src/view/settingsDlgGtk.cpp:77
 msgid "cyan"
-msgstr "cyaan"
+msgstr "ziana"
 
 #: ../src/view/settingsDlgGtk.cpp:78
 msgid "light-blue"
-msgstr "lichtblauw"
+msgstr "urdin argia"
 
 #: ../src/view/settingsDlgGtk.cpp:79
 msgid "blue"
-msgstr "blauw"
+msgstr "urdina"
 
 #: ../src/view/settingsDlgGtk.cpp:80
 msgid "light-green"
-msgstr "lichtgroen"
+msgstr "berde argia"
 
 #: ../src/view/settingsDlgGtk.cpp:81
 msgid "green"
-msgstr "groen"
+msgstr "berdea"
 
 #: ../src/view/settingsDlgGtk.cpp:82
 msgid "light-magenta"
-msgstr "lichtmagenta"
+msgstr "magenta argia"
 
 #: ../src/view/settingsDlgGtk.cpp:83
 msgid "magenta"
@@ -423,141 +422,141 @@ msgstr "magenta"
 
 #: ../src/view/settingsDlgGtk.cpp:84
 msgid "light-red"
-msgstr "lichtrood"
+msgstr "gorri argia"
 
 #: ../src/view/settingsDlgGtk.cpp:85
 msgid "red"
-msgstr "rood"
+msgstr "gorria"
 
 #: ../src/view/settingsDlgGtk.cpp:86
 msgid "brown"
-msgstr "bruin"
+msgstr "marroia"
 
 #: ../src/view/settingsDlgGtk.cpp:87
 msgid "light-gray"
-msgstr "lichtgrijs"
+msgstr "gris argia"
 
 #: ../src/view/settingsDlgGtk.cpp:88
 msgid "dark-gray"
-msgstr "donkergrijs"
+msgstr "gris iluna"
 
 #: ../src/view/settingsDlgGtk.cpp:89
 msgid "transparent"
-msgstr "doorzichtig"
+msgstr "gardena"
 
 #: ../src/view/settingsDlgGtk.cpp:89
 msgid "black"
-msgstr "zwart"
+msgstr "beltza"
 
 #: ../src/view/settingsDlgGtk.cpp:101
 msgid "pre_defined: "
-msgstr "vooringestel_d: "
+msgstr "aurre_definitua: "
 
 #: ../src/view/settingsDlgGtk.cpp:101
 msgid "previously _booted entry"
-msgstr "vorige opge_starte invoer"
+msgstr "aurretik _kargatutako sarrera"
 
 #: ../src/view/settingsDlgGtk.cpp:102
 msgid "default entry"
-msgstr "standaardinvoer"
+msgstr "sarrera lehenetsia"
 
 #: ../src/view/settingsDlgGtk.cpp:102
 msgid "visibility"
-msgstr "zichtbaarheid"
+msgstr "ikusgarritasuna"
 
 #: ../src/view/settingsDlgGtk.cpp:102
 msgid "show menu"
-msgstr "menu tonen"
+msgstr "erakutsi menua"
 
 #: ../src/view/settingsDlgGtk.cpp:103
 msgid "Timeout"
-msgstr "Time-out"
+msgstr "Denbora-muga"
 
 #: ../src/view/settingsDlgGtk.cpp:103
 msgid "Seconds"
-msgstr "Seconden"
+msgstr "Segundoak"
 
 #: ../src/view/settingsDlgGtk.cpp:103
 msgid "kernel parameters"
-msgstr "kernel-parameters"
+msgstr "nukleoaren parametroak"
 
 #: ../src/view/settingsDlgGtk.cpp:104
 msgid "generate recovery entries"
-msgstr "herstelinvoeren genereren"
+msgstr "sortu berreskuratze sarrerak"
 
 #: ../src/view/settingsDlgGtk.cpp:104
 msgid "look for other operating systems"
-msgstr "zoek naar andere besturingssystemen"
+msgstr "bilatu beste sistema eragileak"
 
 #: ../src/view/settingsDlgGtk.cpp:105
 msgid "custom resolution: "
-msgstr "aangepaste resolutie: "
+msgstr "bereizmen pertsonalizatua: "
 
 #: ../src/view/settingsDlgGtk.cpp:106
 msgid "font color"
-msgstr "letterkleur"
+msgstr "letra-tipoaren kolorea"
 
 #: ../src/view/settingsDlgGtk.cpp:106
 msgid "background"
-msgstr "achtergrond"
+msgstr "atzeko planoa"
 
 #: ../src/view/settingsDlgGtk.cpp:107
 msgid "normal:"
-msgstr "normaal:"
+msgstr "normala:"
 
 #: ../src/view/settingsDlgGtk.cpp:107
 msgid "highlight:"
-msgstr "geaccentueerd:"
+msgstr "nabarmendua:"
 
 #: ../src/view/settingsDlgGtk.cpp:108
 msgid "menu colors"
-msgstr "menukleuren"
+msgstr "menuaren koloreak"
 
 #: ../src/view/settingsDlgGtk.cpp:108
 msgid "background image"
-msgstr "achtergrondafbeelding"
+msgstr "atzeko planoko irudia"
 
 #: ../src/view/settingsDlgGtk.cpp:110
 msgid ""
 "To get the colors above working,\n"
 "you have to select a background image!"
 msgstr ""
-"Om de kleuren hierboven te kunnen gebruiken,\n"
-"moet u eerst een achtergrondafbeelding selecteren!"
+"Goiko koloreak erabiltzeko atzeko\n"
+"planoko irudia hautatu behar duzu!"
 
 #: ../src/view/settingsDlgGtk.cpp:113
 msgid "settings"
-msgstr "instellingen"
+msgstr "ezarpenak"
 
 #: ../src/view/settingsDlgGtk.cpp:117
 msgid "_General"
-msgstr "Al_gemeen"
+msgstr "_Orokorra"
 
 #: ../src/view/settingsDlgGtk.cpp:118
 msgid "A_ppearance"
-msgstr "Wee_rgave"
+msgstr "_Itxura"
 
 #: ../src/view/settingsDlgGtk.cpp:119
 msgid "_Advanced"
-msgstr "Ge_avanceerd"
+msgstr "_Aurreratua"
 
 #: ../src/view/settingsDlgGtk.cpp:134
 msgid "value"
-msgstr "waarde"
+msgstr "balioa"
 
 #: ../src/view/settingsDlgGtk.cpp:248
 msgid "remove background"
-msgstr "achtergrond verwijderen"
+msgstr "kendu atzeko planoa"
 
 #: ../src/view/settingsDlgGtk.cpp:305
 msgid "Entry %1 (by position)"
-msgstr "Invoer %1 (naar positie)"
+msgstr "%1 sarrera (posizioaren arabera)"
 
 #: ../src/view/settingsDlgGtk.cpp:585
 msgid ""
 "This option doesn't work when the \"os-prober\" script finds other operating "
 "systems. Disable \"%1\" if you don't need to boot other operating systems."
 msgstr ""
-"Deze optie werkt niet wanneer het script \"os-prober\" andere "
-"besturingssytemen vindt. Schakel \"%1\" uit wanneer u geen andere "
-"besturingssytemen gaat gebruiken."
+"Aukera honek ez du funtzionatzen \"os-prober\" script-ak beste sistema "
+"eragileak aurkitzen dituenean. Desgaitu \"%1\" beste sistema eragilerik "
+"erabili behar ez baduzu."
