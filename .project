@@ -27,7 +27,7 @@
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.buildArguments</key>
-					<value>-c &quot;cmake -DCMAKE_BUILD_TYPE=Debug .. &amp;&amp; make&quot;</value>
+					<value>-c &quot;cmake .. &amp;&amp; make&quot;</value>
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.buildCommand</key>
