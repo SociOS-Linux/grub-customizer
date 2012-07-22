@@ -111,7 +111,16 @@ void GtkClient::load(bool preserveConfig){
 		this->settingsOnDisk->load();
 		this->settings->save();
 	}
-	this->grublistCfg->load(preserveConfig);
+
+	try {
+		this->grublistCfg->load(preserveConfig);
+	}
+	catch (GrublistCfg::Exception e){
+		this->thrownException = e;
+		this->disp_thread_died();
+		return; //cancel
+	}
+
 	if (!preserveConfig){
 		if (this->savedListCfg->loadStaticCfg())
 			this->config_has_been_different_on_startup_but_unsaved = !this->grublistCfg->compare(*this->savedListCfg);
@@ -132,12 +141,12 @@ void GtkClient::save(){
 	this->modificationsUnsaved = false; //deprecated
 
 	this->listCfgDlg->setLockState(5);
-	
+
+	this->activeThreadCount++; //not in save_thead() to be faster set
 	Glib::Thread::create(sigc::mem_fun(this, &GtkClient::save_thread), false);
 }
 
 void GtkClient::save_thread(){
-	this->activeThreadCount++;
 	this->settings->save();
 	this->grublistCfg->save();
 	this->activeThreadCount--;
@@ -452,7 +461,18 @@ void GtkClient::syncListView_save(){
 }
 
 void GtkClient::die(){
-	this->listCfgDlg->showErrorMessage(this->grublistCfg->getMessage());
+	switch (this->thrownException){
+		case GrublistCfg::GRUB_CFG_DIR_NOT_FOUND:
+			this->listCfgDlg->showErrorMessage(
+					this->env.cfg_dir+gettext(" not found. Is grub2 installed?")
+			);
+			break;
+		case GrublistCfg::GRUB_CMD_EXEC_FAILED:
+			this->listCfgDlg->showErrorMessage(
+					this->env.mkconfig_cmd + gettext(" couldn't be executed successfully. You must run this as root!")
+			);
+			break;
+	}
 	this->listCfgDlg->close(); //exit
 }
 
@@ -466,12 +486,14 @@ bool GtkClient::quit(){
 		if (this->activeThreadCount != 0){
 			this->quit_requested = true;
 			this->grublistCfg->cancelThreads();
-			return true;
+			return false;
 		}
-		else
-			return false; //close the window
+		else {
+			std::cout << "TRUE!" << std::endl;
+			return true; //close the window
+		}
 	}
-	return true;
+	return false;
 }
 
 void GtkClient::syncProxyState(void* proxy){

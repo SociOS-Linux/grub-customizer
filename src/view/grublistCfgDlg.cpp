@@ -546,11 +546,12 @@ int GrublistCfgDlg::showExitConfirmDialog(int type){
 }
 
 bool GrublistCfgDlg::signal_delete_event(GdkEventAny* event){ //return value: keep window open
-	return eventListener->exitRequest();
+	bool val = eventListener->exitRequest();
+	return !val;
 }
 
 void GrublistCfgDlg::signal_quit_click(){
-	if (eventListener->exitRequest() == false)
+	if (eventListener->exitRequest())
 		this->close();
 }
 

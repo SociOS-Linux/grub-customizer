@@ -169,10 +169,6 @@ void EventListener::saveProgressChanged(){
 	presenter.updateSaveProgress();
 }
 
-void EventListener::threadDied(){
-	presenter.showErrorThreadDied();
-}
-
 void EventListener::grubInstallCompleted(std::string const& msg){
 	presenter.showMessageGrubInstallCompleted(msg);
 }

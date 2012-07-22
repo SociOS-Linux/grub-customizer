@@ -25,6 +25,9 @@
 #include "../model/fbResolutionsGetter.h"
 #include "../view/aboutDialog.h"
 
+//TODO: sometimes gc crashes at startup - why?
+//TODO: remove gtk-dependencies in this class
+//TODO: allow settings manager startup after loading the settings - don't wait until everything is loaded
 class GtkClient {
 	GrubEnv& env;
 	GrublistCfg* grublistCfg;
@@ -47,6 +50,7 @@ class GtkClient {
 	bool modificationsUnsaved;
 	bool quit_requested;
 	int activeThreadCount;
+	GrublistCfg::Exception thrownException; //to be used from the die() function
 public:
 
 	void setModelListCfg(GrublistCfg& grublistCfg);

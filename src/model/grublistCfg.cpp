@@ -79,27 +79,25 @@ void GrublistCfg::load(bool keepConfig){
 			if (cfg_dir)
 				closedir(cfg_dir);
 			else {
-				if (this->eventListener){
+				throw GRUB_CFG_DIR_NOT_FOUND;
+				/*if (this->eventListener){
 					this->message = this->env.cfg_dir+gettext(" not found. Is grub2 installed?");
 					this->eventListener->threadDied();
 				}
-				return; //dir doesn't exist, cancel!
+				return; //dir doesn't exist, cancel!*/
 			}
 		}
+		DIR* hGrubCfgDir = opendir(this->env.cfg_dir.c_str());
+
+		if (!hGrubCfgDir){
+			throw GRUB_CFG_DIR_NOT_FOUND;
+		}
+
 		//load scripts
 		repository.load(this->env.cfg_dir, false);
 		repository.load(this->env.cfg_dir+"/proxifiedScripts", true);
 		send_new_load_progress(0.05);
 	
-		DIR* hGrubCfgDir = opendir(this->env.cfg_dir.c_str());
-
-		if (!hGrubCfgDir){
-			if (this->eventListener){
-				this->message = this->env.cfg_dir+gettext(" not found. Is grub2 installed?");
-				this->eventListener->threadDied();
-			}
-			return; //cancel this thread
-		}
 	
 		//load proxies
 		struct dirent *entry;
@@ -160,11 +158,7 @@ void GrublistCfg::load(bool keepConfig){
 	
 	int success = pclose(mkconfigProc);
 	if (success != 0 && !cancelThreadsRequested){
-		if (this->eventListener){
-			this->message = env.mkconfig_cmd + gettext(" couldn't be executed successfully. You must run this as root!");
-			this->eventListener->threadDied();
-		}
-		return; //cancel this thread
+		throw GRUB_CMD_EXEC_FAILED;
 	}
 
 	this->send_new_load_progress(0.9);
@@ -434,10 +428,6 @@ void GrublistCfg::cancelThreads(){
 }
 
 
-std::string GrublistCfg::getMessage() const {
-	return message;
-}
-
 void GrublistCfg::reset(){
 	this->repository.clear();
 	this->proxies.clear();
@@ -446,24 +436,6 @@ void GrublistCfg::reset(){
 double GrublistCfg::getProgress() const {
 	return progress;
 }
-
-//DEPRECATED… I don't know why didn't use the easier function earlier
-/*void GrublistCfg::increaseProxyPos(Proxy* proxy){
-	short int i = 10;
-	bool proxyToMove_found = false;
-	for (ProxyList::iterator iter = this->proxies.begin(); iter != this->proxies.end(); iter++){
-		if (&*iter != proxy){
-			iter->index = i++;
-			if (proxyToMove_found){
-				proxy->index = i++;
-				proxyToMove_found = false;
-			}
-		}
-		else
-			proxyToMove_found = true;
-	}
-	this->proxies.sort();
-}*/
 
 void GrublistCfg::renumerate(){
 	short int i = 10;

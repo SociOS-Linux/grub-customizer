@@ -27,13 +27,13 @@ class ColorChooserGtk : public Gtk::ComboBox, public ColorChooser {
 	std::string getSelectedColor() const;
 };
 
-//a color chooser with predifined colors for grub
+//a color chooser with predefined colors for grub
 class GrubColorChooser : public ColorChooserGtk {
 public:
 	GrubColorChooser(bool blackIsTransparent = false);
 };
 
-
+//TODO: when starting the settings manager, disable the reload button and the partition chooser!
 class GrubSettingsDlgGtk : public Gtk::Dialog, public GrubSettingsDlg {
 	struct AdvancedSettingsTreeModel : public Gtk::TreeModelColumnRecord {
 		Gtk::TreeModelColumn<bool> active;

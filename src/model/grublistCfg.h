@@ -31,10 +31,14 @@ public:
 	GrublistCfg(GrubEnv& env);
 	void setEventListener(EventListener_model& eventListener);
 	
+	enum Exception {
+		GRUB_CFG_DIR_NOT_FOUND,
+		GRUB_CMD_EXEC_FAILED
+	};
+
 	ProxyList proxies;
 	Repository repository;
 	
-	std::string message;
 	bool verbose;
 	bool error_proxy_not_found;
 	GrubEnv& env;
@@ -54,7 +58,6 @@ public:
 	void send_new_load_progress(double newProgress);
 	void send_new_save_progress(double newProgress);
 	void cancelThreads();
-	std::string getMessage() const;
 	void reset();
 	double getProgress() const;
 	void increaseProxyPos(Proxy* proxy);

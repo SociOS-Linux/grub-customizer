@@ -16,6 +16,7 @@
  * create a new instance while the presenter simply needs to call show() or hide() on the PartitionChooser.
  */
 
+//TODO: don't use run() to start this (only if standalone)
 class PartitionChooser {
 	Gtk::Assistant* assistant;
 	Gtk::Label lblMessage, lblSubmountpointDescription;
