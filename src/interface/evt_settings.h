@@ -9,6 +9,10 @@ class EventListener_settings {
 public:
 	//generic changes (name, value, is_active)
 	virtual void setting_row_changed(std::string const& name)=0;
+	//user wants to insert a new generic setting row
+	virtual void customRow_insert_requested()=0;
+	//user wants to remove a generic setting row
+	virtual void customRow_remove_requested(std::string const& name)=0;
 	//user wants to set a fix default entry
 	virtual void default_entry_predefined_toggeled()=0;
 	//user wants to use the entries which has been booted before

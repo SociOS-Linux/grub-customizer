@@ -62,12 +62,15 @@ GrubColorChooser::GrubColorChooser(bool blackIsTransparent) : ColorChooserGtk() 
 	this->addColor("black", blackIsTransparent ? gettext("transparent") : gettext("black"), "#000000", "#ffffff");
 }
 
-GrubSettingsDlgGtk::CustomOption::CustomOption(std::string name, std::string value, bool isActive)
-	: name(name), value(value), isActive(isActive)
-{}
+GrubSettingsDlgGtk::CustomOption_obj::CustomOption_obj(std::string name, std::string old_name, std::string value, bool isActive){
+	this->name = name;
+	this->old_name = old_name;
+	this->value = value;
+	this->isActive = isActive;
+}
 
 GrubSettingsDlgGtk::GrubSettingsDlgGtk()
-	: event_lock(false),
+	: event_lock(false), bttAddCustomEntry(Gtk::Stock::ADD), bttRemoveCustomEntry(Gtk::Stock::REMOVE),
 	rbDefPredefined(gettext("pre_defined: "), true), rbDefSaved(gettext("previously _booted entry"), true),
 	lblDefaultEntry(gettext("default entry")), lblView(gettext("visibility")), chkShowMenu(gettext("show menu")),
 	lblTimeout(gettext("Timeout")), lblTimeout2(gettext("Seconds")), lblKernelParams(gettext("kernel parameters")),
@@ -86,14 +89,21 @@ GrubSettingsDlgGtk::GrubSettingsDlgGtk()
 	winBox->add(tabbox);
 	tabbox.append_page(vbCommonSettings, gettext("_General"), true);
 	tabbox.append_page(vbAppearanceSettings, gettext("A_ppearance"), true);
-	tabbox.append_page(scrAllEntries, gettext("_Advanced"), true);
+	tabbox.append_page(vbAllEntries, gettext("_Advanced"), true);
 	
+	vbAllEntries.pack_start(hbAllEntriesControl, Gtk::PACK_SHRINK);
+	vbAllEntries.pack_start(scrAllEntries);
+	hbAllEntriesControl.add(bttAddCustomEntry);
+	hbAllEntriesControl.add(bttRemoveCustomEntry);
+	hbAllEntriesControl.set_border_width(5);
+	hbAllEntriesControl.set_spacing(5);
 	scrAllEntries.add(tvAllEntries);
+	scrAllEntries.set_border_width(5);
 	scrAllEntries.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
 	refAsListStore = Gtk::ListStore::create(asTreeModel);
 	tvAllEntries.set_model(refAsListStore);
 	tvAllEntries.append_column_editable(gettext("is active"), asTreeModel.active);
-	tvAllEntries.append_column(gettext("name"), asTreeModel.name);
+	tvAllEntries.append_column_editable(gettext("name"), asTreeModel.name);
 	tvAllEntries.append_column_editable(gettext("value"), asTreeModel.value);
 	refAsListStore->signal_row_changed().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_setting_row_changed));
 	vbCommonSettings.set_spacing(15);
@@ -229,7 +239,9 @@ GrubSettingsDlgGtk::GrubSettingsDlgGtk()
 	fcBackgroundImage.signal_file_set().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_other_image_chosen));
 	bttCopyBackground.signal_clicked().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_bttCopyBackground_clicked));
 	bttRemoveBackground.signal_clicked().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_bttRemoveBackground_clicked));
-	
+	bttAddCustomEntry.signal_clicked().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_add_row_button_clicked));
+	bttRemoveCustomEntry.signal_clicked().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_remove_row_button_clicked));
+
 	this->add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
 	this->set_default_size(300, 400);
 }
@@ -287,6 +299,7 @@ void GrubSettingsDlgGtk::addResolution(std::string const& resolution){
 GrubSettingsDlgGtk::AdvancedSettingsTreeModel::AdvancedSettingsTreeModel(){
 	this->add(active);
 	this->add(name);
+	this->add(old_name);
 	this->add(value);
 }
 
@@ -295,8 +308,26 @@ void GrubSettingsDlgGtk::addCustomOption(bool isActive, Glib::ustring const& nam
 	Gtk::TreeModel::iterator newItemIter = refAsListStore->append();
 	(*newItemIter)[asTreeModel.active] = isActive;
 	(*newItemIter)[asTreeModel.name] = name;
+	(*newItemIter)[asTreeModel.old_name] = name;
 	(*newItemIter)[asTreeModel.value] = value;
 	this->event_lock = false;
+}
+
+void GrubSettingsDlgGtk::selectCustomOption(std::string const& name){
+	for (Gtk::TreeModel::iterator iter = refAsListStore->children().begin(); iter != refAsListStore->children().end(); iter++){
+		if ((*iter)[asTreeModel.old_name] == name){
+			tvAllEntries.set_cursor(refAsListStore->get_path(iter), *tvAllEntries.get_column(name == "" ? 1 : 2), name == "");
+			break;
+		}
+	}
+}
+
+std::string GrubSettingsDlgGtk::getSelectedCustomOption(){
+	std::list<Gtk::TreeModel::Path> p = tvAllEntries.get_selection()->get_selected_rows();
+	if (p.size() == 1)
+		return (Glib::ustring)(*refAsListStore->get_iter(p.front()))[asTreeModel.old_name];
+	else
+		return "";
 }
 
 void GrubSettingsDlgGtk::removeAllSettingRows(){
@@ -430,15 +461,15 @@ Glib::ustring GrubSettingsDlgGtk::getSelectedDefaultGrubValue(){
 
 GrubSettingsDlgGtk::CustomOption GrubSettingsDlgGtk::getCustomOption(Glib::ustring const& name){
 	for (Gtk::TreeModel::iterator iter = this->refAsListStore->children().begin(); iter != this->refAsListStore->children().end(); iter++){
-		if ((*iter)[asTreeModel.name] == name)
-			return CustomOption(name, Glib::ustring((*iter)[asTreeModel.value]), (*iter)[asTreeModel.active]);
+		if ((*iter)[asTreeModel.old_name] == name)
+			return CustomOption_obj(Glib::ustring((*iter)[asTreeModel.name]), Glib::ustring((*iter)[asTreeModel.old_name]), Glib::ustring((*iter)[asTreeModel.value]), (*iter)[asTreeModel.active]);
 	}
 	throw REQUESTED_CUSTOM_OPTION_NOT_FOUND;
 }
 
 void GrubSettingsDlgGtk::signal_setting_row_changed(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter){
 	if (!event_lock){
-		this->eventListener->setting_row_changed((Glib::ustring)(*iter)[asTreeModel.name]);
+		this->eventListener->setting_row_changed((Glib::ustring)(*iter)[asTreeModel.old_name]);
 	}
 }
 
@@ -575,4 +606,14 @@ void GrubSettingsDlgGtk::signal_other_image_chosen(){
 		this->eventListener->backgroundChange_requested();
 	}
 }
+
+void GrubSettingsDlgGtk::signal_add_row_button_clicked(){
+	if (!event_lock)
+		this->eventListener->customRow_insert_requested();
+}
+void GrubSettingsDlgGtk::signal_remove_row_button_clicked(){
+	if (!event_lock)
+		this->eventListener->customRow_remove_requested((Glib::ustring)(*tvAllEntries.get_selection()->get_selected())[asTreeModel.name]);
+}
+
 

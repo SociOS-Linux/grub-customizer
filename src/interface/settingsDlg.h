@@ -22,9 +22,8 @@ public:
 		REQUESTED_CUSTOM_OPTION_NOT_FOUND
 	};
 	struct CustomOption {
-		std::string name, value;
+		std::string name, old_name, value;
 		bool isActive;
-		CustomOption(std::string name, std::string value, bool isActive);
 	};
 	//assigns the event listener
 	virtual void setEventListener(EventListener_settings& eventListener)=0;
@@ -34,6 +33,8 @@ public:
 	virtual void hide()=0;
 	//returns an interface to the given color chooser
 	virtual ColorChooser& getColorChooser(ColorChooserType type)=0;
+	//reads the selection row from the custom options list
+	virtual std::string getSelectedCustomOption()=0;
 	//adds an entry to the end of the default entry chooser
 	virtual void addEntryToDefaultEntryChooser(std::string const& entryTitle)=0;
 	//removes all items from the default entry chooser
@@ -46,6 +47,8 @@ public:
 	virtual Glib::ustring getSelectedDefaultGrubValue()=0;
 	//adds an option the the generic setting list
 	virtual void addCustomOption(bool isActive, Glib::ustring const& name, Glib::ustring const& value)=0;
+	//select the specified custom option entry
+	virtual void selectCustomOption(std::string const& name)=0;
 	//removes all generic setting rows
 	virtual void removeAllSettingRows()=0;
 	//reads the given generic option

@@ -88,6 +88,15 @@ void EventListener::aboutDialog_requested(){
 void EventListener::setting_row_changed(std::string const& name){
 	presenter.updateCustomSetting(name);
 }
+
+void EventListener::customRow_insert_requested(){
+	presenter.addNewCustomSettingRow();
+}
+void EventListener::customRow_remove_requested(std::string const& name){
+	presenter.removeCustomSettingRow(name);
+
+}
+
 void EventListener::default_entry_predefined_toggeled(){
 	presenter.updateDefaultSetting();
 }

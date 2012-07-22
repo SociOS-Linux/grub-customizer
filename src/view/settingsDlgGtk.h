@@ -34,14 +34,19 @@ public:
 };
 
 //TODO: when starting the settings manager, disable the reload button and the partition chooser!
-//TODO: allow adding/removing of generic settings
-//TODO: hide generic settings (advanced-Tab) behind a button at the bottom of the dialog (toggles to generic mode)
+//TODO: allow adding/removing of generic settings?
+//TODO: advanced: hide mapped values by default
+//TODO: add space below the first tab button
 class GrubSettingsDlgGtk : public Gtk::Dialog, public SettingsDlg {
 	struct AdvancedSettingsTreeModel : public Gtk::TreeModelColumnRecord {
 		Gtk::TreeModelColumn<bool> active;
 		Gtk::TreeModelColumn<Glib::ustring> name;
+		Gtk::TreeModelColumn<Glib::ustring> old_name;
 		Gtk::TreeModelColumn<Glib::ustring> value;
 		AdvancedSettingsTreeModel();
+	};
+	struct CustomOption_obj : public CustomOption {
+		CustomOption_obj(std::string name, std::string old_name, std::string value, bool isActive);
 	};
 	AdvancedSettingsTreeModel asTreeModel;
 	Glib::RefPtr<Gtk::ListStore> refAsListStore;
@@ -51,6 +56,10 @@ class GrubSettingsDlgGtk : public Gtk::Dialog, public SettingsDlg {
 	Gtk::Notebook tabbox;
 	Gtk::ScrolledWindow scrAllEntries;
 	Gtk::TreeView tvAllEntries;
+	Gtk::VBox vbAllEntries;
+	Gtk::HBox hbAllEntriesControl;
+	Gtk::Button bttAddCustomEntry, bttRemoveCustomEntry;
+
 	Gtk::VBox vbCommonSettings, vbAppearanceSettings;
 	
 	Pango::AttrList attrDefaultEntry;
@@ -113,6 +122,8 @@ class GrubSettingsDlgGtk : public Gtk::Dialog, public SettingsDlg {
 	Gtk::Button bttCopyBackground, bttRemoveBackground;
 	
 	void signal_setting_row_changed(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter);
+	void signal_add_row_button_clicked();
+	void signal_remove_row_button_clicked();
 	void signal_default_entry_predefined_toggeled();
 	void signal_default_entry_saved_toggeled();
 	void signal_default_entry_changed();
@@ -140,6 +151,8 @@ class GrubSettingsDlgGtk : public Gtk::Dialog, public SettingsDlg {
 	void addResolution(std::string const& resolution);
 	Glib::ustring getSelectedDefaultGrubValue();
 	void addCustomOption(bool isActive, Glib::ustring const& name, Glib::ustring const& value);
+	void selectCustomOption(std::string const& name);
+	std::string getSelectedCustomOption();
 	void removeAllSettingRows();
 	CustomOption getCustomOption(Glib::ustring const& name);
 	void setActiveDefEntryOption(DefEntryType option);

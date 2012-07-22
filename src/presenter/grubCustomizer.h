@@ -138,6 +138,8 @@ public:
 	void syncSettings();
 	void updateDefaultSetting();
 	void updateCustomSetting(std::string const& name);
+	void addNewCustomSettingRow();
+	void removeCustomSettingRow(std::string const& name);
 	void updateShowMenuSetting();
 	void updateOsProberSetting();
 	void updateTimeoutSetting();

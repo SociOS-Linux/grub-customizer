@@ -47,6 +47,8 @@ public:
 
 	//settings dialog
 	void setting_row_changed(std::string const& name);
+	void customRow_insert_requested();
+	void customRow_remove_requested(std::string const& name);
 	void default_entry_predefined_toggeled();
 	void default_entry_saved_toggeled();
 	void default_entry_changed();

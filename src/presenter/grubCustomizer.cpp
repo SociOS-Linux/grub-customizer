@@ -527,12 +527,14 @@ void GrubCustomizer::syncProxyState(void* proxy){
 	((Proxy*)proxy)->set_isExecutable(this->listCfgDlg->getProxyState(proxy));
 	this->listCfgDlg->setProxyState(proxy, this->listCfgDlg->getProxyState(proxy));
 	this->modificationsUnsaved = true;
+	this->updateSettingsDlg();
 }
 
 void GrubCustomizer::syncRuleState(Rule* entry){
 	entry->isVisible = this->listCfgDlg->getRuleState(entry);
 	this->modificationsUnsaved = true;
 	this->updateScriptEntry(this->grublistCfg->proxies.getProxyByRule(entry));
+	this->updateSettingsDlg();
 }
 
 void GrubCustomizer::syncRuleName(Rule* entry){
@@ -598,10 +600,12 @@ void GrubCustomizer::updateSettingsDlgResolutionList_dispatched(){
 }
 
 void GrubCustomizer::syncSettings(){
+	std::string sel = this->settingsDlg->getSelectedCustomOption();
 	this->settingsDlg->removeAllSettingRows();
 	for (std::list<SettingRow>::iterator iter = this->settings->begin(); iter != this->settings->end(); this->settings->iter_to_next_setting(iter)){
 		this->settingsDlg->addCustomOption(iter->isActive, iter->name, iter->value);
 	}
+	this->settingsDlg->selectCustomOption(sel);
 	std::string defEntry = this->settings->getValue("GRUB_DEFAULT");
 	if (defEntry == "saved"){
 		this->settingsDlg->setActiveDefEntryOption(SettingsDlg::DEF_ENTRY_SAVED);
@@ -677,13 +681,26 @@ void GrubCustomizer::updateDefaultSetting(){
 		this->settings->setValue("GRUB_SAVEDEFAULT", "false");
 	}
 	this->syncSettings();
+	this->modificationsUnsaved = true;
 }
 
 void GrubCustomizer::updateCustomSetting(std::string const& name){
 	SettingsDlg::CustomOption c = this->settingsDlg->getCustomOption(name);
+	this->settings->renameItem(c.old_name, c.name);
 	this->settings->setValue(c.name, c.value);
 	this->settings->setIsActive(c.name, c.isActive);
 	this->syncSettings();
+	this->modificationsUnsaved = true;
+}
+
+void GrubCustomizer::addNewCustomSettingRow(){
+	std::string newSettingName = this->settings->addNewItem();
+	this->syncSettings();
+}
+void GrubCustomizer::removeCustomSettingRow(std::string const& name){
+	this->settings->removeItem(name);
+	this->syncSettings();
+	this->modificationsUnsaved = true;
 }
 
 void GrubCustomizer::updateShowMenuSetting(){
@@ -692,22 +709,26 @@ void GrubCustomizer::updateShowMenuSetting(){
 		this->settingsDlg->showHiddenMenuOsProberConflictMessage();
 	}
 	this->syncSettings();
+	this->modificationsUnsaved = true;
 }
 
 void GrubCustomizer::updateOsProberSetting(){
 	this->settings->setValue("GRUB_DISABLE_OS_PROBER", this->settingsDlg->getOsProberCheckboxState() ? "false" : "true");
 	this->settings->setIsActive("GRUB_DISABLE_OS_PROBER", !this->settingsDlg->getOsProberCheckboxState());
 	this->syncSettings();
+	this->modificationsUnsaved = true;
 }
 
 void GrubCustomizer::updateKernalParams(){
 	this->settings->setValue("GRUB_CMDLINE_LINUX_DEFAULT", this->settingsDlg->getKernelParams());
 	this->syncSettings();
+	this->modificationsUnsaved = true;
 }
 
 void GrubCustomizer::updateUseCustomResolution(){
 	this->settings->setIsActive("GRUB_GFXMODE", this->settingsDlg->getResolutionCheckboxState());
 	this->syncSettings();
+	this->modificationsUnsaved = true;
 }
 
 void GrubCustomizer::copyBackgroundImageToGrubDirectory(){
@@ -717,6 +738,7 @@ void GrubCustomizer::copyBackgroundImageToGrubDirectory(){
 
 	this->settings->setValue("GRUB_MENU_PICTURE", file_src->get_basename()); //The path isn't required when the image is in grub conf dir
 	this->syncSettings();
+	this->modificationsUnsaved = true;
 }
 
 void GrubCustomizer::updateBackgroundImage(){
@@ -724,6 +746,7 @@ void GrubCustomizer::updateBackgroundImage(){
 	this->settings->setIsActive("GRUB_MENU_PICTURE", true);
 	this->settings->setIsExport("GRUB_MENU_PICTURE", true);
 	this->syncSettings();
+	this->modificationsUnsaved = true;
 }
 
 void GrubCustomizer::updateColorSettings(){
@@ -738,17 +761,17 @@ void GrubCustomizer::updateColorSettings(){
 		this->settings->setIsExport("GRUB_COLOR_HIGHLIGHT", true);
 	}
 	this->syncSettings();
+	this->modificationsUnsaved = true;
 }
 
 void GrubCustomizer::removeBackgroundImage(){
 	this->settings->setIsActive("GRUB_MENU_PICTURE", false);
 	this->syncSettings();
+	this->modificationsUnsaved = true;
 }
 
 void GrubCustomizer::hideSettingsDialog(){
 	this->settingsDlg->hide();
-	if (!this->modificationsUnsaved)
-		this->modificationsUnsaved = settings->getIsModified();
 	if (this->settings->reloadRequired()){
 		Glib::Thread::create(sigc::bind(sigc::mem_fun(this, &GrubCustomizer::load), true), false);
 	}
@@ -762,14 +785,17 @@ void GrubCustomizer::updateTimeoutSetting(){
 		this->settings->setValue("GRUB_HIDDEN_TIMEOUT", Glib::ustring::format(this->settingsDlg->getTimeoutValue()));
 	}
 	this->syncSettings();
+	this->modificationsUnsaved = true;
 }
 
 void GrubCustomizer::updateCustomResolution(){
 	this->settings->setValue("GRUB_GFXMODE", this->settingsDlg->getResolution());
 	this->syncSettings();
+	this->modificationsUnsaved = true;
 }
 
 void GrubCustomizer::updateGenerateRecoverySetting(){
 	this->settings->setIsActive("GRUB_DISABLE_LINUX_RECOVERY", !this->settingsDlg->getRecoveryCheckboxState());
 	this->syncSettings();
+	this->modificationsUnsaved = true;
 }
