@@ -11,6 +11,9 @@ add_executable(../grub-customizer
 	gtk-client.cpp
 	libproxy.cpp
 	libproxyscript_parser.cpp
+	deviceDataList.cpp
+	mountTable.cpp
+	liveCDSetupDialog.cpp
 )
 
 add_executable(../grubcfg-proxy

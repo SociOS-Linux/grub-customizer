@@ -1,21 +1,27 @@
 #include "grubconf_ui_gtk.h"
 
 GrubConfUIGtk::GrubConfUIGtk(GrubConfig& grubConfig)
-	: grubConfig(&grubConfig), appName("Grub Customizer"), appVersion("1.1"),
+	: grubConfig(&grubConfig), appName("Grub Customizer"), appVersion("1.5"),
 	tbttAdd(Gtk::Stock::ADD), tbttRemove(Gtk::Stock::REMOVE), tbttUp(Gtk::Stock::GO_UP), tbttDown(Gtk::Stock::GO_DOWN),
 	tbttSave(Gtk::Stock::SAVE), tbttPreferences(Gtk::Stock::PREFERENCES),
 	miFile(gettext("_File"), true), miExit(Gtk::Stock::QUIT), tbttReload(Gtk::Stock::REFRESH),
 	miEdit(gettext("_Edit"), true), miView(gettext("_View"), true), miHelp(gettext("_Help"), true),
+	miInstallGrub(gettext("Install to MBR")),
 	miAdd(Gtk::Stock::ADD), miRemove(Gtk::Stock::REMOVE), miUp(Gtk::Stock::GO_UP), miDown(Gtk::Stock::GO_DOWN),
 	miPreferences(Gtk::Stock::PREFERENCES), miReload(Gtk::Stock::REFRESH), miSave(Gtk::Stock::SAVE),
 	miAbout(Gtk::Stock::ABOUT),
 	completelyLoaded(false),
 	lvScriptPreview(1), lblScriptSelection(gettext("Script to insert:"), Gtk::ALIGN_LEFT), lblScriptPreview(gettext("Preview:"),Gtk::ALIGN_LEFT),
-	thread_active(false), quit_requested(false)
+	thread_active(false), quit_requested(false), modificationsUnsaved(false),
+	lblGrubInstallDescription(gettext("Install the bootloader to MBR and put some\nfiles to the bootloaders data directory\n(if they don't already exist)."), Gtk::ALIGN_LEFT),
+	lblGrubInstallDevice(gettext("Device: "), Gtk::ALIGN_LEFT)
 {
 	disp_update_load.connect(sigc::mem_fun(this, &GrubConfUIGtk::update));
 	disp_update_save.connect(sigc::mem_fun(this, &GrubConfUIGtk::update_save));
 	disp_thread_died.connect(sigc::mem_fun(this, &GrubConfUIGtk::thread_died_handler));
+	disp_grub_install_ready.connect(sigc::mem_fun(this, &GrubConfUIGtk::func_disp_grub_install_ready));
+
+	win.set_icon_name("grub-customizer");
 
 	authors.push_back("Daniel Richter");
 	if (this->grubConfig->burgMode)
@@ -42,6 +48,10 @@ GrubConfUIGtk::GrubConfUIGtk(GrubConfig& grubConfig)
 	dlgAbout.set_name(appName);
 	dlgAbout.set_version(appVersion);
 	dlgAbout.set_authors(authors);
+	
+	dlgAbout.set_icon_name("grub-customizer");
+	dlgAbout.set_logo_icon_name("grub-customizer");
+	dlgAbout.set_comments(gettext("Grub Customizer is a graphical interface to configure the grub2/burg settings"));
 	
 	//toolbar
 	toolbar.append(tbttSave);
@@ -84,7 +94,8 @@ GrubConfUIGtk::GrubConfUIGtk(GrubConfig& grubConfig)
 	miHelp.set_submenu(subHelp);
 	
 	subFile.attach(miSave, 0,1,0,1);
-	subFile.attach(miExit, 0,1,1,2);
+	subFile.attach(miInstallGrub, 0,1,1,2);
+	subFile.attach(miExit, 0,1,2,3);
 	
 	subEdit.attach(miAdd, 0,1,0,1);
 	subEdit.attach(miRemove, 0,1,1,2);
@@ -101,6 +112,7 @@ GrubConfUIGtk::GrubConfUIGtk(GrubConfig& grubConfig)
 
 	//Script/Proxy-add-Window
 	scriptAddDlg.set_title(gettext("Add script"));
+	scriptAddDlg.set_icon_name("grub-customizer");
 	scriptAddDlg.set_default_size(400, 300);
 	Gtk::VBox* vbScriptAddDlg = scriptAddDlg.get_vbox();
 	vbScriptAddDlg->set_spacing(10);
@@ -121,6 +133,20 @@ GrubConfUIGtk::GrubConfUIGtk(GrubConfig& grubConfig)
 	scriptAddDlg.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
 	scriptAddDlg.add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
 	
+	//grub-install-dialog
+	Gtk::VBox* vbGrubInstallDialog = grubInstallDialog.get_vbox();
+	grubInstallDialog.set_icon_name("grub-customizer");
+	vbGrubInstallDialog->pack_start(lblGrubInstallDescription, Gtk::PACK_SHRINK);
+	vbGrubInstallDialog->pack_start(hbGrubInstallDevice);
+	vbGrubInstallDialog->pack_start(lblInstallInfo);
+	hbGrubInstallDevice.pack_start(lblGrubInstallDevice, Gtk::PACK_SHRINK);
+	hbGrubInstallDevice.pack_start(txtGrubInstallDevice);
+	txtGrubInstallDevice.set_text("/dev/sda");
+	grubInstallDialog.set_title(gettext("Install to MBR"));
+	vbGrubInstallDialog->set_spacing(5);
+	grubInstallDialog.set_border_width(5);
+	grubInstallDialog.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
+	grubInstallDialog.add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
 	//signals
 	
 	tvConfList.refTreeStore->signal_row_changed().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_row_changed));
@@ -138,10 +164,12 @@ GrubConfUIGtk::GrubConfUIGtk(GrubConfig& grubConfig)
 	miAdd.signal_activate().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_add_click));
 	miRemove.signal_activate().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_remove_click));
 	miReload.signal_activate().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_reload_click));
+	miInstallGrub.signal_activate().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_show_grub_install_dialog_click));
 	
 	cbScriptSelection.signal_changed().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_script_selection_changed));
 	
 	scriptAddDlg.signal_response().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_scriptAddDlg_response));
+	grubInstallDialog.signal_response().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_grub_install_dialog_response));
 	
 	win.signal_delete_event().connect(sigc::mem_fun(this, &GrubConfUIGtk::signal_delete_event));
 
@@ -160,6 +188,28 @@ void GrubConfUIGtk::event_save_progress_changed(){
 
 void GrubConfUIGtk::event_thread_died(){
 	disp_thread_died();
+}
+
+void GrubConfUIGtk::event_grub_install_ready(){
+	disp_grub_install_ready();
+}
+
+void GrubConfUIGtk::func_disp_grub_install_ready(){
+	std::string output = grubConfig->install_result;
+	if (output == ""){
+		Gtk::MessageDialog msg(gettext("The bootloader has been installed successfully"));
+		msg.run();
+		grubInstallDialog.hide();
+	}
+	else {
+		Gtk::MessageDialog msg(gettext("Error while installing the bootloader"), false, Gtk::MESSAGE_ERROR);
+		msg.set_secondary_text(output);
+		msg.run();
+	}
+	grubInstallDialog.set_response_sensitive(Gtk::RESPONSE_OK, true);
+	grubInstallDialog.set_response_sensitive(Gtk::RESPONSE_CANCEL, true);
+	txtGrubInstallDevice.set_sensitive(true);
+	lblInstallInfo.set_text("");
 }
 
 void GrubConfUIGtk::run(){
@@ -228,6 +278,12 @@ void GrubConfUIGtk::update_save(){
 	//progressBar.set_fraction(grubConfig->getProgress());
 	progressBar.pulse();
 	if (grubConfig->getProgress() == 1){
+		if (grubConfig->error_proxy_not_found){
+			Gtk::MessageDialog msg(gettext("Proxy binary not found!"), false, Gtk::MESSAGE_WARNING);
+			msg.set_secondary_text(gettext("You will see all entries (uncustomized) when you run grub. This error accurs (in most cases), when you didn't install grub gustomizer currectly."));
+			msg.run();
+			grubConfig->error_proxy_not_found = false;
+		}
 		thread_active = false;
 		if (quit_requested)
 			win.hide();
@@ -277,6 +333,7 @@ void GrubConfUIGtk::saveConfig(){
 	disableButtons();
 	thread_active = true;
 	Glib::Thread::create(sigc::mem_fun(grubConfig, &GrubConfig::save), false);
+	modificationsUnsaved = false;
 }
 
 void GrubConfUIGtk::configureOtherEntriesMarker(Gtk::TreeIter otherEntriesMarker){
@@ -332,6 +389,7 @@ void GrubConfUIGtk::signal_row_changed(const Gtk::TreeModel::Path& path, const G
 		else {
 			((ToplevelScript*)(*iter)[tvConfList.treeModel.relatedScript])->set_executable((*iter)[tvConfList.treeModel.active]);
 		}
+		modificationsUnsaved = true;
 	}
 }
 
@@ -372,6 +430,8 @@ void GrubConfUIGtk::signal_move_click(int direction){
 	}
 	else
 		std::cerr << "the only supported directions for moving are 1 or -1" << std::endl;
+	
+	modificationsUnsaved = true;
 }
 
 void GrubConfUIGtk::update_remove_button(){
@@ -442,6 +502,8 @@ void GrubConfUIGtk::signal_scriptAddDlg_response(int response_id){
 		completelyLoaded = false;
 		update();
 		completelyLoaded = true;
+		
+		modificationsUnsaved = true;
 	}
 	scriptAddDlg.hide();
 }
@@ -460,6 +522,7 @@ void GrubConfUIGtk::signal_remove_click(){
 	completelyLoaded = true;
 	
 	update_remove_button();
+	modificationsUnsaved = true;
 }
 
 void GrubConfUIGtk::update_move_buttons(){
@@ -497,28 +560,85 @@ void GrubConfUIGtk::update_move_buttons(){
 }
 
 void GrubConfUIGtk::signal_quit_click(){
-	if (thread_active){
-		quit_requested = true;
-		grubConfig->cancelThreads();
-	}
-	else
+	if (this->signal_delete_event(NULL) == false)
 		win.hide();
 }
 
-bool GrubConfUIGtk::signal_delete_event(GdkEventAny* event){
-	if (thread_active){
-		quit_requested = true;
-		grubConfig->cancelThreads();
-		return true;
+bool GrubConfUIGtk::signal_delete_event(GdkEventAny* event){ //return value: keep window open
+	int dlgResponse = Gtk::RESPONSE_NO;
+	if (grubConfig->config_has_been_different_on_startup_but_unsaved || modificationsUnsaved){
+		Gtk::MessageDialog msgDlg("", false, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_NONE);
+		if (grubConfig->config_has_been_different_on_startup_but_unsaved){
+			msgDlg.set_message(gettext("The saved configuration is not up to date!"));
+			msgDlg.set_secondary_text(gettext("The generated configuration didn't equal to the saved configuration on startup. So what you see now may not be what you see when you restart your pc. To fix this, click update!"));
+			
+			Gtk::Button* btnQuit = msgDlg.add_button(Gtk::Stock::QUIT, Gtk::RESPONSE_NO);
+			btnQuit->set_label(gettext("_Quit without update"));
+			msgDlg.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
+			Gtk::Button* btnSave = msgDlg.add_button(Gtk::Stock::SAVE, Gtk::RESPONSE_YES);
+			btnSave->set_label(gettext("_Update & Quit"));
+		}
+		if (modificationsUnsaved && !grubConfig->config_has_been_different_on_startup_but_unsaved){
+			msgDlg.property_message_type() = Gtk::MESSAGE_QUESTION;
+			msgDlg.set_message(gettext("Do you want to save your modifications?"));
+
+			Gtk::Button* btnQuit = msgDlg.add_button(Gtk::Stock::QUIT, Gtk::RESPONSE_NO);
+			btnQuit->set_label(gettext("_Quit without saving"));
+			msgDlg.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
+			Gtk::Button* btnSave = msgDlg.add_button(Gtk::Stock::SAVE, Gtk::RESPONSE_YES);
+			btnSave->set_label(gettext("_Save & Quit"));
+		}
+		if (grubConfig->config_has_been_different_on_startup_but_unsaved && modificationsUnsaved){
+			msgDlg.set_secondary_text(msgDlg.property_secondary_text()+"\n\nAND: your modifications are still unsaved, update will save them too!");
+		}
+
+		msgDlg.set_default_response(Gtk::RESPONSE_YES);
+
+		dlgResponse = msgDlg.run();
 	}
-	else
-		return false; //close the window
+	
+	if (dlgResponse == Gtk::RESPONSE_YES){
+		this->saveConfig(); //starts a thread that delays the application exiting
+	}
+	
+	if (dlgResponse != Gtk::RESPONSE_CANCEL){
+		if (thread_active){
+			quit_requested = true;
+			grubConfig->cancelThreads();
+			return true;
+		}
+		else
+			return false; //close the window
+	}
+	return true;
 }
 
 void GrubConfUIGtk::signal_about_dlg_response(int response_id){
 	if (Gtk::RESPONSE_CLOSE)
 		dlgAbout.hide();
 }
+
+void GrubConfUIGtk::signal_show_grub_install_dialog_click(){
+	grubInstallDialog.show_all();
+}
+
+void GrubConfUIGtk::signal_grub_install_dialog_response(int response_id){
+	if (response_id == Gtk::RESPONSE_OK){
+		if (txtGrubInstallDevice.get_text().length()){
+			grubInstallDialog.set_response_sensitive(Gtk::RESPONSE_OK, false);
+			grubInstallDialog.set_response_sensitive(Gtk::RESPONSE_CANCEL, false);
+			txtGrubInstallDevice.set_sensitive(false);
+			lblInstallInfo.set_text(gettext("installing the bootloader…"));
+			
+			Glib::Thread::create(sigc::bind<std::string>(sigc::mem_fun(grubConfig, &GrubConfig::threadable_install), txtGrubInstallDevice.get_text()), false);
+		}
+		else
+			Gtk::MessageDialog(gettext("Please type a device string!")).run();
+	}
+	else
+		grubInstallDialog.hide();
+}
+
 
 GrubConfListing::GrubConfListing(){
 	refTreeStore = Gtk::TreeStore::create(treeModel);

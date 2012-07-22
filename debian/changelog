@@ -1,6 +1,9 @@
-grub-customizer (1.1-0ubuntu1~maverick1) maverick; urgency=low
+grub-customizer (1.5-0ubuntu1~ppa1m) maverick; urgency=medium
 
-   * burg support added
+   * live cd setup assistant added
+   * grub install functionality included
+   * icon added
+   * close confirmation added
 
  -- Daniel Richter <danielrichter2007@web.de>  Sat, 09 Oct 2010 14:43:00 +0200
 

@@ -194,6 +194,30 @@ confparser.cpp.s:
 	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f src_dir/CMakeFiles/../grubcfg-proxy.dir/build.make src_dir/CMakeFiles/../grubcfg-proxy.dir/confparser.cpp.s
 .PHONY : confparser.cpp.s
 
+deviceDataList.o: deviceDataList.cpp.o
+.PHONY : deviceDataList.o
+
+# target to build an object file
+deviceDataList.cpp.o:
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/deviceDataList.cpp.o
+.PHONY : deviceDataList.cpp.o
+
+deviceDataList.i: deviceDataList.cpp.i
+.PHONY : deviceDataList.i
+
+# target to preprocess a source file
+deviceDataList.cpp.i:
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/deviceDataList.cpp.i
+.PHONY : deviceDataList.cpp.i
+
+deviceDataList.s: deviceDataList.cpp.s
+.PHONY : deviceDataList.s
+
+# target to generate assembly for a file
+deviceDataList.cpp.s:
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/deviceDataList.cpp.s
+.PHONY : deviceDataList.cpp.s
+
 grubcfg_proxy.o: grubcfg_proxy.cpp.o
 .PHONY : grubcfg_proxy.o
 
@@ -344,6 +368,54 @@ libproxyscript_parser.cpp.s:
 	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f src_dir/CMakeFiles/../grubcfg-proxy.dir/build.make src_dir/CMakeFiles/../grubcfg-proxy.dir/libproxyscript_parser.cpp.s
 .PHONY : libproxyscript_parser.cpp.s
 
+liveCDSetupDialog.o: liveCDSetupDialog.cpp.o
+.PHONY : liveCDSetupDialog.o
+
+# target to build an object file
+liveCDSetupDialog.cpp.o:
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/liveCDSetupDialog.cpp.o
+.PHONY : liveCDSetupDialog.cpp.o
+
+liveCDSetupDialog.i: liveCDSetupDialog.cpp.i
+.PHONY : liveCDSetupDialog.i
+
+# target to preprocess a source file
+liveCDSetupDialog.cpp.i:
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/liveCDSetupDialog.cpp.i
+.PHONY : liveCDSetupDialog.cpp.i
+
+liveCDSetupDialog.s: liveCDSetupDialog.cpp.s
+.PHONY : liveCDSetupDialog.s
+
+# target to generate assembly for a file
+liveCDSetupDialog.cpp.s:
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/liveCDSetupDialog.cpp.s
+.PHONY : liveCDSetupDialog.cpp.s
+
+mountTable.o: mountTable.cpp.o
+.PHONY : mountTable.o
+
+# target to build an object file
+mountTable.cpp.o:
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/mountTable.cpp.o
+.PHONY : mountTable.cpp.o
+
+mountTable.i: mountTable.cpp.i
+.PHONY : mountTable.i
+
+# target to preprocess a source file
+mountTable.cpp.i:
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/mountTable.cpp.i
+.PHONY : mountTable.cpp.i
+
+mountTable.s: mountTable.cpp.s
+.PHONY : mountTable.s
+
+# target to generate assembly for a file
+mountTable.cpp.s:
+	cd /home/daniel/Dokumente/GrubCustomizer/grub-customizer && $(MAKE) -f src_dir/CMakeFiles/../grub-customizer.dir/build.make src_dir/CMakeFiles/../grub-customizer.dir/mountTable.cpp.s
+.PHONY : mountTable.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -361,6 +433,9 @@ help:
 	@echo "... confparser.o"
 	@echo "... confparser.i"
 	@echo "... confparser.s"
+	@echo "... deviceDataList.o"
+	@echo "... deviceDataList.i"
+	@echo "... deviceDataList.s"
 	@echo "... grubcfg_proxy.o"
 	@echo "... grubcfg_proxy.i"
 	@echo "... grubcfg_proxy.s"
@@ -379,6 +454,12 @@ help:
 	@echo "... libproxyscript_parser.o"
 	@echo "... libproxyscript_parser.i"
 	@echo "... libproxyscript_parser.s"
+	@echo "... liveCDSetupDialog.o"
+	@echo "... liveCDSetupDialog.i"
+	@echo "... liveCDSetupDialog.s"
+	@echo "... mountTable.o"
+	@echo "... mountTable.i"
+	@echo "... mountTable.s"
 .PHONY : help
 
 
