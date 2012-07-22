@@ -1,0 +1,58 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 01_su-to-root.dpatch by  <daniel@daniel-laptop>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: No description.
+
+@DPATCH@
+diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' release~/CMakeLists.txt release/CMakeLists.txt
+--- release~/CMakeLists.txt	2011-12-28 10:14:42.330207000 +0100
++++ release/CMakeLists.txt	2011-12-28 10:56:14.186347127 +0100
+@@ -66,10 +66,6 @@
+ 
+ configure_file ("config.h.in" "${CMAKE_CURRENT_SOURCE_DIR}/src/config.h")
+ 
+-configure_file ("misc/pkexec_policy.in" "${CMAKE_CURRENT_BINARY_DIR}/net.launchpad.danielrichter2007.pkexec.grub-customizer.policy")
+-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/net.launchpad.danielrichter2007.pkexec.grub-customizer.policy
+-    DESTINATION /usr/share/polkit-1/actions)
+-
+ install(TARGETS grubcfg-proxy
+ 	DESTINATION lib/grub-customizer)
+ 
+diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' release~/debian/control release/debian/control
+--- release~/debian/control	2011-12-28 10:14:42.861828000 +0100
++++ release/debian/control	2011-12-28 10:51:21.212894346 +0100
+@@ -8,7 +8,7 @@
+ 
+ Package: grub-customizer
+ Architecture: any
+-Depends: ${shlibs:Depends}, ${misc:Depends}, policykit-1
++Depends: ${shlibs:Depends}, ${misc:Depends}, menu
+ Recommends: hwinfo
+ Description: Grub Customizer - A graphical Grub2/BURG configuration application
+  Grub Customizer is a graphical configuration tool to modify the grub2/burg
+diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' release~/misc/grub-customizer.desktop release/misc/grub-customizer.desktop
+--- release~/misc/grub-customizer.desktop	2011-12-28 10:14:42.866427000 +0100
++++ release/misc/grub-customizer.desktop	2011-12-28 10:52:30.477237799 +0100
+@@ -1,7 +1,7 @@
+ [Desktop Entry]
+ Name=Grub Customizer
+ Comment=Customize the bootloader (GRUB2 or BURG)
+-Exec=grub-customizer
++Exec=su-to-root -X -c grub-customizer
+ Terminal=false
+ X-MultipleArgs=false
+ Type=Application
+diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' release~/src/presenter/gtk-client_main.cpp release/src/presenter/gtk-client_main.cpp
+--- release~/src/presenter/gtk-client_main.cpp	2011-12-28 10:14:42.936906000 +0100
++++ release/src/presenter/gtk-client_main.cpp	2011-12-28 10:51:59.869086094 +0100
+@@ -31,9 +31,6 @@
+ #include <iostream>
+ 
+ int main(int argc, char** argv){
+-	if (getuid() != 0 && (argc == 1 || argv[1] != std::string("no-fork"))) {
+-		return system((std::string("pkexec ") + argv[0] + " no-fork").c_str());
+-	}
+ 	setlocale( LC_ALL, "");
+ 	bindtextdomain( "grub-customizer", LOCALEDIR);
+ 	textdomain( "grub-customizer" );

@@ -15,6 +15,8 @@ debian/changelog.natty_repo -text
 debian/compat -text
 debian/control -text
 debian/copyright -text
+debian/patches/00list -text
+debian/patches/01su-to-root.dpatch -text
 debian/rules -text
 debian/source/format -text
 debian/watch -text

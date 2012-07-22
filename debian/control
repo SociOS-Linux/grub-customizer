@@ -2,7 +2,7 @@ Source: grub-customizer
 Section: admin
 Priority: optional
 Maintainer: Daniel Richter <danielrichter2007@web.de>
-Build-Depends: debhelper (>= 7.3), libgtkmm-2.4-dev (>= 2.20.0), cmake (>=2.6.2), gettext (>=0.17)
+Build-Depends: debhelper (>= 7.3), libgtkmm-2.4-dev (>= 2.20.0), cmake (>=2.6.2), gettext (>=0.17), dpatch
 Standards-Version: 3.9.2
 Homepage: https://launchpad.net/grub-customizer
 
