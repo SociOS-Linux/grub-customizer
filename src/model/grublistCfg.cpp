@@ -231,6 +231,12 @@ void GrublistCfg::readGeneratedFile(FILE* source, bool createScriptIfNotFound){
 			this->proxies.sync_all(false, false, script);
 			this->unlock();
 			this->send_new_load_progress(0.1 + (0.7 / this->repository.size() * i));
+		} else if (script != NULL && row.text.substr(0, 8) == "submenu ") {
+			this->lock();
+			script->push_back(Entry(source, row));
+			this->proxies.sync_all(false, false, script);
+			this->unlock();
+			this->send_new_load_progress(0.1 + (0.7 / this->repository.size() * i));
 		}
 	}
 	this->lock();

@@ -44,11 +44,11 @@ Entry::Entry()
 	: isValid(false)
 {}
 
-Entry::Entry(std::string name, std::string extension, std::string content)
-	: name(name), extension(extension), content(content), isValid(true)
+Entry::Entry(std::string name, std::string extension, std::string content, EntryType type)
+	: name(name), extension(extension), content(content), isValid(true), type(type)
 {}
 Entry::Entry(FILE* sourceFile, GrubConfRow firstRow)
-	: isValid(false)
+	: isValid(false), type(MENUENTRY)
 {
 	//int c;
 	//std::string row;
@@ -56,27 +56,35 @@ Entry::Entry(FILE* sourceFile, GrubConfRow firstRow)
 	GrubConfRow row;
 	bool inEntry = false;
 	while ((row = firstRow) || (row = GrubConfRow(sourceFile))){
-		if (inEntry && row.text != "}"){
+		if (inEntry && (row.text.substr(0, 10) == "menuentry " || row.text.substr(0, 8) == "submenu ")){
+			this->subEntries.push_back(Entry(sourceFile, row));
+		} else if (inEntry && row.text != "}") {
 			this->content += row.text+"\n";
-		}
-		else if (inEntry && row.text == "}"){
+		} else if (inEntry && row.text == "}") {
 			//std::cout << "end of entry!" << std::endl;
 			isValid = true;
 			inEntry = false;
 			break; //nur einen Eintrag lesen!
-		}
-		else if (!inEntry && row.text.substr(0, 10) == "menuentry "){
+		} else if (!inEntry && row.text.substr(0, 10) == "menuentry "){
 			int endOfEntryName = row.text.find('"', 12);
 			if (endOfEntryName == -1)
 				endOfEntryName = row.text.find('\'', 12);
 			std::string entryName = row.text.substr(11, endOfEntryName-11);
-			//std::cout << "entry: " << entryName << std::endl;
-			//data[activeScript].push_back(BootEntry(entryName, ""));
-	
+
 			std::string extension = row.text.substr(endOfEntryName+1, row.text.length()-(endOfEntryName+1)-1);
-	
+
 			*this = Entry(entryName, extension);
 			inEntry = true;
+		} else if (!inEntry && row.text.substr(0, 8) == "submenu ") {
+			int endOfEntryName = row.text.find('"', 10);
+			if (endOfEntryName == -1)
+				endOfEntryName = row.text.find('\'', 10);
+			std::string entryName = row.text.substr(9, endOfEntryName-9);
+
+			*this = Entry(entryName, "", "", SUBMENU);
+			inEntry = true;
+		} else {
+			std::cout << row << std::endl;
 		}
 		firstRow.eof = true; //disable firstRow to read the following config from file
 	}

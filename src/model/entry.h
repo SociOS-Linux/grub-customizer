@@ -20,6 +20,8 @@
 #define GRUB_CUSTOMIZER_ENTRY_INCLUDED
 #include <cstdio>
 #include <string>
+#include <list>
+#include <iostream>
 
 struct GrubConfRow {
 	GrubConfRow(FILE* sourceFile);
@@ -33,8 +35,13 @@ struct GrubConfRow {
 struct Entry {
 	bool isValid;
 	std::string name, extension, content;
+	std::list<Entry> subEntries;
+	enum EntryType {
+		MENUENTRY,
+		SUBMENU
+	} type;
 	Entry();
-	Entry(std::string name, std::string extension, std::string content = "");
+	Entry(std::string name, std::string extension, std::string content = "", EntryType type = MENUENTRY);
 	Entry(FILE* sourceFile, GrubConfRow firstRow = GrubConfRow());
 	operator bool() const;
 };
