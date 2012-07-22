@@ -142,6 +142,8 @@ void GrublistCfgDlg::setIsBurgMode(bool isBurgMode){
 bool GrublistCfgDlg::requestForRootSelection(){
 	Gtk::MessageDialog dlg(gettext("No Bootloader found"), false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO);
 	dlg.set_skip_taskbar_hint(false);
+	dlg.set_title("Grub Customizer");
+	dlg.set_icon_name("grub-customizer");
 	dlg.set_secondary_text(gettext("Do you want to select another root partition?"));
 	dlg.set_default_response(Gtk::RESPONSE_YES);
 	int result = dlg.run();
@@ -151,6 +153,8 @@ bool GrublistCfgDlg::requestForRootSelection(){
 bool GrublistCfgDlg::requestForBurgMode(){
 	Gtk::MessageDialog dlg(gettext("BURG found!"), false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO);
 	dlg.set_skip_taskbar_hint(false);
+	dlg.set_title("Grub Customizer");
+	dlg.set_icon_name("grub-customizer");
 	dlg.set_secondary_text(gettext("Do you want to configure BURG instead of grub2?"));
 	dlg.set_default_response(Gtk::RESPONSE_YES);
 	int result = dlg.run();
