@@ -470,11 +470,11 @@ void GrubSettingsDlgGtk::setBackgroundImagePreviewPath(std::string const& menuPi
 	this->event_lock = true;
 	this->backgroundImagePath = menuPicturePath;
 
+	if (menuPicturePath != "" && !drwBackgroundPreview.is_visible()) {
+		drwBackgroundPreview.show();
+	}
 
-	if (menuPicturePath != ""){
-		if (!drwBackgroundPreview.is_visible()) {
-			drwBackgroundPreview.show();
-		}
+	if (menuPicturePath != "" && drwBackgroundPreview.get_window()){ //it's important to check whether there's a gdk window, if not, Gdk::Pixbuf::create_from_file produces a crash!
 		try {
 			Glib::RefPtr<Gdk::Pixbuf> buf = Gdk::Pixbuf::create_from_file(menuPicturePath, drwBackgroundPreview.get_width(), -1, true);
 			if (buf) {
@@ -703,5 +703,6 @@ void GrubSettingsDlgGtk::setPreviewEntryTitles(std::list<std::string> const& ent
 	this->previewEntryTitles = entries;
 	this->previewEntryTitles_mutex.unlock();
 }
+
 
 
