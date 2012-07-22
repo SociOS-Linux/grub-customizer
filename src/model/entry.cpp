@@ -50,14 +50,14 @@ std::string str_replace(const std::string &search, const std::string &replace, s
 }
 
 Entry::Entry()
-	: isValid(false)
+	: isValid(false), quote('\'')
 {}
 
 Entry::Entry(std::string name, std::string extension, std::string content, EntryType type)
-	: name(name), extension(extension), content(content), isValid(true), type(type)
+	: name(name), extension(extension), content(content), isValid(true), type(type), quote('\'')
 {}
 Entry::Entry(FILE* sourceFile, GrubConfRow firstRow, Logger* logger, std::string* plaintextBuffer)
-	: isValid(false), type(MENUENTRY)
+	: isValid(false), type(MENUENTRY), quote('\'')
 {
 	//int c;
 	//std::string row;
@@ -75,14 +75,18 @@ Entry::Entry(FILE* sourceFile, GrubConfRow firstRow, Logger* logger, std::string
 			inEntry = false;
 			break; //nur einen Eintrag lesen!
 		} else if (!inEntry && row.text.substr(0, 10) == "menuentry "){
+			char quote = '"';
 			int endOfEntryName = row.text.find('"', 12);
-			if (endOfEntryName == -1)
+			if (endOfEntryName == -1) {
 				endOfEntryName = row.text.find('\'', 12);
+				quote = '\'';
+			}
 			std::string entryName = row.text.substr(11, endOfEntryName-11);
 
 			std::string extension = row.text.substr(endOfEntryName+1, row.text.length()-(endOfEntryName+1)-1);
 
 			*this = Entry(entryName, extension);
+			this->quote = quote;
 			inEntry = true;
 		} else if (!inEntry && row.text.substr(0, 8) == "submenu ") {
 			int endOfEntryName = row.text.find('"', 10);

@@ -108,7 +108,7 @@ void Rule::print() const {
 			std::cout << this->dataSource->content;
 		} else if (this->type == Rule::NORMAL && this->dataSource) {
 			std::cout << "menuentry";
-			std::cout << " \"" << this->outputName << "\"" << this->dataSource->extension << "{\n";
+			std::cout << " " << this->dataSource->quote << this->outputName << this->dataSource->quote << this->dataSource->extension << "{\n";
 			std::cout << this->dataSource->content;
 			std::cout << "}\n";
 		} else if (this->type == Rule::SUBMENU && this->hasRealSubrules()) {
