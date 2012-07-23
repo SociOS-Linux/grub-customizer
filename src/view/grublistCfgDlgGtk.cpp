@@ -303,7 +303,11 @@ void GrublistCfgDlgGtk::appendEntry(std::string const& name, void* entryPtr, boo
 	}
 
 	Glib::RefPtr<Gdk::Pixbuf> icon;
-	std::string outputName = "<b>" + escapeXml(name) + "</b>\n<small>";
+	std::string outputName = escapeXml(name);
+	if (!is_placeholder) {
+		outputName = "<b>" + outputName + "</b>";
+	}
+	outputName += "\n<small>";
 	if (is_submenu) {
 		outputName += gettext("submenu");
 		icon = this->win.render_icon(Gtk::Stock::DIRECTORY, Gtk::ICON_SIZE_LARGE_TOOLBAR);
