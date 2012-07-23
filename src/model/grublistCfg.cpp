@@ -613,7 +613,7 @@ Rule& GrublistCfg::moveRule(Rule* rule, int direction){
 				std::list<Rule>::iterator nextRule = this->proxies.getNextVisibleRule(proxy->getListIterator(*rule, proxy->getRuleList(parent)), direction);
 				Rule* parentRule = this->proxies.getProxyByRule(&*nextRule)->getParentRule(&*nextRule);
 
-				if (parentRule != NULL) { // create new proxy
+				if (parentRule == NULL) { // create new proxy
 					std::list<Rule>::iterator targetRule = this->proxies.getNextVisibleRule(nextRule, direction);
 					std::list<Rule>::iterator previousRule = this->proxies.getNextVisibleRule(proxy->getListIterator(*rule, proxy->getRuleList(parent)), -direction);
 
@@ -649,7 +649,7 @@ Rule& GrublistCfg::moveRule(Rule* rule, int direction){
 						}
 
 						return *newRule;
-					} else { // convert existing proxy to multiproxy
+					} else {
 						std::list<Rule>::iterator movedRule = this->proxies.moveRuleToNewProxy(*rule, direction);
 
 						Proxy* currentProxy = this->proxies.getProxyByRule(&*movedRule);
@@ -684,14 +684,14 @@ Rule& GrublistCfg::moveRule(Rule* rule, int direction){
 
 						return *movedRule;
 					}
-				} else {
+				} else { // convert existing proxy to multiproxy
 					std::list<Proxy>::iterator proxyIter = this->proxies.getIter(proxy);
 
 					Rule* movedRule = NULL;
 					if (direction == -1 && proxyIter != this->proxies.begin()) {
 						proxyIter--;
 						proxyIter->removeEquivalentRules(*rule);
-						proxyIter->rules.back().subRules.push_back(*rule);
+						parentRule->subRules.push_back(*rule);
 						if (rule->type == Rule::SUBMENU) {
 							proxy->removeForeignChildRules(*rule);
 						}
@@ -700,11 +700,11 @@ Rule& GrublistCfg::moveRule(Rule* rule, int direction){
 						} else {
 							proxy->rules.pop_front();
 						}
-						movedRule = &proxyIter->rules.back().subRules.back();
+						movedRule = &parentRule->subRules.back();
 					} else if (direction == 1 && proxyIter != this->proxies.end() && &*proxyIter != &this->proxies.back()) {
 						proxyIter++;
 						proxyIter->removeEquivalentRules(*rule);
-						proxyIter->rules.front().subRules.push_front(*rule);
+						parentRule->subRules.push_front(*rule);
 						if (rule->type == Rule::SUBMENU) {
 							proxy->removeForeignChildRules(*rule);
 						}
@@ -713,7 +713,7 @@ Rule& GrublistCfg::moveRule(Rule* rule, int direction){
 						} else {
 							proxy->rules.pop_back();
 						}
-						movedRule = &proxyIter->rules.front().subRules.front();
+						movedRule = &parentRule->subRules.front();
 					} else {
 						throw GrublistCfg::NO_MOVE_TARGET_FOUND;
 					}
