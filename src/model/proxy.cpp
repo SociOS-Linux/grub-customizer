@@ -33,13 +33,13 @@ Proxy::Proxy(Script& dataSource)
 std::list<Rule> Proxy::parseRuleString(const char** ruleString) {
 	std::list<Rule> rules;
 
-	bool inString = false, inAlias = false, inHash = false;
+	bool inString = false, inAlias = false, inHash = false, inFromClause = false;
 	std::string name;
 	std::string hash;
 	std::list<std::string> path;
 	bool visible = false;
 	const char* iter = NULL;
-	for (iter = *ruleString; *iter && (*iter != '}' || inString || inAlias); iter++) {
+	for (iter = *ruleString; *iter && (*iter != '}' || inString || inAlias || inFromClause); iter++) {
 		if (!inString && *iter == '+') {
 			visible = true;
 		} else if (!inString && *iter == '-') {
@@ -48,14 +48,17 @@ std::list<Rule> Proxy::parseRuleString(const char** ruleString) {
 			inString = !inString;
 			if (iter[1] != '/') {
 				if (!inString){
-					if (inAlias)
+					if (inAlias) {
 						rules.back().outputName = name;
-					else {
+					} else if (inFromClause) {
+						rules.back().__sourceScriptPath = name;
+					} else {
 						path.push_back(name);
 						rules.push_back(Rule(Rule::NORMAL, path, visible));
 						path.clear();
 					}
 					inAlias = false;
+					inFromClause = false;
 				}
 				name = "";
 			}
@@ -73,12 +76,14 @@ std::list<Rule> Proxy::parseRuleString(const char** ruleString) {
 				iter++;
 		} else if (inHash && *iter != '~') {
 			hash += *iter;
-		} else if (!inString && *iter == 'a' && *++iter == 's') {
+		} else if (!inString && !inAlias && !inFromClause && *iter == 'a' && *++iter == 's') {
 			inAlias = true;
-		} else if (!inString && !inAlias && *iter == '/') {
+		} else if (!inString && !inAlias && !inFromClause && *iter == 'f' && *++iter == 'r' && *++iter == 'o' && *++iter == 'm') {
+			inFromClause = true;
+		} else if (!inString && !inAlias && !inFromClause && *iter == '/') {
 			path.push_back(name);
 			name = "";
-		} else if (!inString && !inAlias && *iter == '{') {
+		} else if (!inString && !inAlias && !inFromClause && *iter == '{') {
 			iter++;
 			rules.back().subRules = Proxy::parseRuleString(&iter);
 			rules.back().type = Rule::SUBMENU;

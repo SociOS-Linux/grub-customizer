@@ -31,6 +31,7 @@ struct Rule {
 	std::string outputName;
 	std::string __idHash; //should only be used by sync()!
 	std::list<std::string> __idpath; //should only be used by sync()!
+	std::string __sourceScriptPath; //should only be used by sync()!
 	bool isVisible;
 	std::list<Rule> subRules;
 	enum RuleType {
