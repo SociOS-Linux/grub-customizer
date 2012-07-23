@@ -366,6 +366,8 @@ void GrubCustomizer::applyEntryEditorModifications() {
 	rulePtr->dataSource->content = newCode;
 	rulePtr->dataSource->isModified = true;
 
+	this->modificationsUnsaved = true;
+
 	this->syncListView_load();
 
 	this->listCfgDlg->selectRule(rulePtr);
