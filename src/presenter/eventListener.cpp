@@ -65,6 +65,10 @@ void EventListener::entryAddDlg_applied(){
 	presenter.addEntryFromEntryAddDlg();
 }
 
+void EventListener::entryEditDlg_applied() {
+	presenter.applyEntryEditorModifications();
+}
+
 void EventListener::entryAddDlg_requested(){
 	presenter.showEntryAddDlg();
 }

@@ -158,6 +158,8 @@ public:
 
 	void showAboutDialog();
 
+	void applyEntryEditorModifications();
+
 	//settings dialog
 	void updateSettingsDlgResolutionList_dispatched();
 

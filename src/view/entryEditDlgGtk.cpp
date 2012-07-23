@@ -18,7 +18,9 @@
 
 #include "entryEditDlgGtk.h"
 
-EntryEditDlgGtk::EntryEditDlgGtk() {
+EntryEditDlgGtk::EntryEditDlgGtk()
+	: rulePtr(NULL)
+{
 	this->add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
 	this->add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
 
@@ -31,12 +33,30 @@ EntryEditDlgGtk::EntryEditDlgGtk() {
 	this->signal_response().connect(sigc::mem_fun(this, &EntryEditDlgGtk::signal_response_action));
 }
 
+void EntryEditDlgGtk::setEventListener(EventListener_entryEditDlg& eventListener) {
+	this->eventListener = &eventListener;
+}
+
 void EntryEditDlgGtk::setSourcecode(std::string const& source) {
 	std::string optimizedSource = str_replace("\n\t", "\n", source);
 	if (optimizedSource[0] == '\t') {
 		optimizedSource = optimizedSource.substr(1);
 	}
 	this->tvSource.get_buffer()->set_text(optimizedSource);
+}
+
+std::string EntryEditDlgGtk::getSourcecode() {
+	std::string optimizedSourcecode = this->tvSource.get_buffer()->get_text();
+	std::string withIndent = str_replace("\n", "\n\t", optimizedSourcecode);
+	return "\t" + withIndent;
+}
+
+void EntryEditDlgGtk::setRulePtr(void* rulePtr) {
+	this->rulePtr = rulePtr;
+}
+
+void* EntryEditDlgGtk::getRulePtr() {
+	return this->rulePtr;
 }
 
 void EntryEditDlgGtk::show() {
@@ -49,7 +69,7 @@ void EntryEditDlgGtk::hide() {
 
 void EntryEditDlgGtk::signal_response_action(int response_id) {
 	if (response_id == Gtk::RESPONSE_OK){
-//		eventListener->entryAddDlg_applied();
+		eventListener->entryEditDlg_applied();
 	}
 	this->hide();
 }

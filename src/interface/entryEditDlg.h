@@ -24,6 +24,10 @@ class EntryEditDlg {
 public:
 	virtual void show() = 0;
 	virtual void setSourcecode(std::string const& source) = 0;
+	virtual std::string getSourcecode() = 0;
+	virtual void setRulePtr(void* rulePtr) = 0;
+	virtual void* getRulePtr() = 0;
+
 	virtual void hide() = 0;
 };
 

@@ -26,6 +26,7 @@
 #include "../interface/evt_partitionChooser.h"
 #include "../interface/evt_entryAddDlg.h"
 #include "../interface/evt_settings.h"
+#include "../interface/evt_entryEditDlg.h"
 
 class EventListener :
 	public EventListener_settings,
@@ -33,7 +34,8 @@ class EventListener :
 	public EventListener_grubInstallDlg,
 	public EventListener_listCfgDlg,
 	public EventListener_model,
-	public EventListener_entryAddDlg
+	public EventListener_entryAddDlg,
+	public EventListener_entryEditDlg
 {
 	GrubCustomizer& presenter;
 public:
@@ -50,6 +52,7 @@ public:
 	void entryAddDlg_requested();
 	void entryEditDlg_requested(void* rule);
 	void entryAddDlg_applied();
+	void entryEditDlg_applied();
 	void exitRequest();
 
 	void signal_entry_remove_requested(std::list<void*> entries);

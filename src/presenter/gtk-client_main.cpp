@@ -90,6 +90,7 @@ int main(int argc, char** argv){
 	listCfgView.setEventListener(evt);
 	installDlg.setEventListener(evt);
 	scriptAddDlg.setEventListener(evt);
+	entryEditDlg.setEventListener(evt);
 	settingsDlg.setEventListener(evt);
 	partitionChooser.setEventListener(evt);
 	listcfg.setEventListener(evt);

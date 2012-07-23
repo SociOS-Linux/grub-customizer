@@ -49,6 +49,7 @@ src/interface/entryEditDlg.h -text
 src/interface/entryPathBuilder.h -text
 src/interface/entryPathFollower.h -text
 src/interface/evt_entryAddDlg.h -text
+src/interface/evt_entryEditDlg.h -text
 src/interface/evt_grubInstallDlg.h -text
 src/interface/evt_listCfgDlg.h -text
 src/interface/evt_model.h -text

@@ -19,8 +19,18 @@
 #include "script.h"
 
 Script::Script(std::string const& name, std::string const& fileName)
-	: name(name), fileName(fileName), root("DUMMY", "DUMMY", "DUMMY", Entry::SCRIPT_ROOT)
-{}
+	: name(name), fileName(fileName), root("DUMMY", "DUMMY", "DUMMY", Entry::SCRIPT_ROOT), isCustomScript(false)
+{
+	FILE* script = fopen(fileName.c_str(), "r");
+	if (script) {
+		GrubConfRow row1(script), row2(script);
+		if (row2.text.substr(0, 15) == "exec tail -n +3") {
+			isCustomScript = true;
+		}
+		fclose(script);
+	}
+}
+
 std::list<Entry>& Script::entries() {
 	return this->root.subEntries;
 }

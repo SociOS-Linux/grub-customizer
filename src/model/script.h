@@ -32,6 +32,7 @@ struct Script : public EntryPathFollower, public CommonClass {
 		ELEMENT_NOT_FOUND
 	};
 	std::string name, fileName;
+	bool isCustomScript;
 	Entry root;
 	Script(std::string const& name, std::string const& fileName);
 	std::list<Entry>& entries();

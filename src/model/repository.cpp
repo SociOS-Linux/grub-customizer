@@ -87,6 +87,14 @@ Script const* Repository::getScriptByEntry(Entry const& entry) const {
 	return NULL;
 }
 
+Script* Repository::getCustomScript() {
+	for (std::list<Script>::iterator iter = this->begin(); iter != this->end(); iter++) {
+		if (iter->isCustomScript) {
+			return &*iter;
+		}
+	}
+}
+
 Script* Repository::getNthScript(int pos){
 	Script* result = NULL;
 	int i = 0;

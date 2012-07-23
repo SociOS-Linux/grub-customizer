@@ -16,32 +16,16 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef ENTRYEDITDLGGTK_H_
-#define ENTRYEDITDLGGTK_H_
-#include "../interface/entryEditDlg.h"
-#include "../presenter/commonClass.h"
-#include "../lib/str_replace.h"
-#include <libintl.h>
-#include <gtkmm.h>
-#include "../interface/evt_entryEditDlg.h"
+#ifndef EVT_ENTRYEDITDLG_H_
+#define EVT_ENTRYEDITDLG_H_
 
-class EntryEditDlgGtk : public EntryEditDlg, public Gtk::Dialog, public CommonClass {
-	Gtk::Notebook tabbox;
-	Gtk::TextView tvSource;
-	Gtk::ScrolledWindow scrSource;
-	EventListener_entryEditDlg* eventListener;
-
-	void* rulePtr;
+/**
+ * base class to be implemented by event listeners for entry edit dialogs
+ */
+class EventListener_entryEditDlg {
 public:
-	EntryEditDlgGtk();
-	void setEventListener(EventListener_entryEditDlg& eventListener);
-	void setSourcecode(std::string const& source);
-	std::string getSourcecode();
-	void setRulePtr(void* rulePtr);
-	void* getRulePtr();
-	void show();
-	void hide();
-	void signal_response_action(int response_id);
+	//user wants to apply his changes
+	virtual void entryEditDlg_applied()=0;
 };
 
-#endif /* ENTRYEDITDLGGTK_H_ */
+#endif /* EVT_ENTRYEDITDLG_H_ */

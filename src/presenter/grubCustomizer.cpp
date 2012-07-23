@@ -313,6 +313,39 @@ void GrubCustomizer::showAboutDialog(){
 	this->aboutDialog->show();
 }
 
+void GrubCustomizer::applyEntryEditorModifications() {
+	Rule* rulePtr = static_cast<Rule*>(this->entryEditDlg->getRulePtr());
+	assert(rulePtr != NULL);
+	Script* script = this->grublistCfg->repository.getScriptByEntry(*rulePtr->dataSource);
+	assert(script != NULL);
+
+	if (!script->isCustomScript) {
+		script = this->grublistCfg->repository.getCustomScript();
+		script->entries().push_back(*rulePtr->dataSource);
+
+
+		Rule ruleCopy = *rulePtr;
+		rulePtr->setVisibility(false);
+		ruleCopy.dataSource = &script->entries().back();
+		Proxy* proxy = this->grublistCfg->proxies.getProxyByRule(rulePtr);
+		std::list<Rule>& ruleList = proxy->getRuleList(proxy->getParentRule(rulePtr));
+
+		Rule dummySubmenu(Rule::SUBMENU, std::list<std::string>(), "DUMMY", true);
+		dummySubmenu.subRules.push_back(ruleCopy);
+		std::list<Rule>::iterator iter = ruleList.insert(proxy->getListIterator(*rulePtr, ruleList), dummySubmenu);
+
+		Rule& insertedRule = iter->subRules.back();
+		rulePtr = &this->grublistCfg->moveRule(&insertedRule, -1);
+	}
+
+	std::string newCode = this->entryEditDlg->getSourcecode();
+	rulePtr->dataSource->content = newCode;
+
+	this->syncListView_load();
+
+	this->listCfgDlg->selectRule(rulePtr);
+}
+
 
 void GrubCustomizer::initRootSelector(){
 	if (mountTable->getEntryByMountpoint(PARTCHOOSER_MOUNTPOINT)){
@@ -463,6 +496,7 @@ void GrubCustomizer::showEntryAddDlg(){
 }
 
 void GrubCustomizer::showEntryEditDlg(void* rule) {
+	this->entryEditDlg->setRulePtr(rule);
 	this->entryEditDlg->setSourcecode(((Rule*)rule)->dataSource->content);
 	this->entryEditDlg->show();
 }

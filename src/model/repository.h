@@ -32,6 +32,7 @@ struct Repository : public std::list<Script>, public CommonClass {
 	Script* getScriptByName(std::string const& name);
 	Script* getScriptByEntry(Entry const& entry);
 	Script const* getScriptByEntry(Entry const& entry) const;
+	Script* getCustomScript();
 	Script* getNthScript(int pos);
 	void deleteAllEntries();
 	Script* createScript(std::string const& name, std::string const& fileName, std::string const& content);
