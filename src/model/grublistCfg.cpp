@@ -612,9 +612,19 @@ Rule& GrublistCfg::moveRule(Rule* rule, int direction){
 			try {
 				std::list<Rule>::iterator nextRule = this->proxies.getNextVisibleRule(proxy->getListIterator(*rule, proxy->getRuleList(parent)), direction);
 				if (nextRule->type != Rule::SUBMENU) { // create new proxy
-					std::list<Rule>::iterator targetRule = this->proxies.getNextVisibleRule(nextRule, direction);
+					std::list<Rule>::iterator targetRule = proxy->rules.end();
+					bool targetRuleFound = false;
+					try {
+						targetRule = this->proxies.getNextVisibleRule(nextRule, direction);
+						targetRuleFound = true;
+					} catch (ProxyList::Exception e) {
+						if (e != ProxyList::NO_MOVE_TARGET_FOUND) {
+							throw e;
+						}
+						// ignore GrublistCfg::NO_MOVE_TARGET_FOUND - occurs when previousRule is not found. But this isn't a problem
+					}
 
-					if (this->proxies.getProxyByRule(&*targetRule)->dataSource == this->proxies.getProxyByRule(&*rule)->dataSource) {
+					if (targetRuleFound && this->proxies.getProxyByRule(&*targetRule)->dataSource == this->proxies.getProxyByRule(&*rule)->dataSource) {
 						Proxy* targetProxy = this->proxies.getProxyByRule(&*targetRule);
 						targetProxy->removeEquivalentRules(*rule);
 						Rule* newRule = NULL;
