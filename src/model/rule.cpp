@@ -24,7 +24,6 @@ Rule::Rule(Entry& source, bool isVisible, EntryPathFollower& pathFollower, std::
 	if (source.type == Entry::SUBMENU) {
 		Rule placeholder(Rule::OTHER_ENTRIES_PLACEHOLDER, currentPath, "*", true);
 		placeholder.dataSource = pathFollower.getEntryByPath(currentPath);
-		placeholder.dataSource_list = pathFollower.getListByPath(currentPath);
 		this->subRules.push_front(placeholder);
 	}
 	for (std::list<Entry>::iterator iter = source.subEntries.begin(); iter != source.subEntries.end(); iter++) {
@@ -53,9 +52,9 @@ std::string Rule::toString(EntryPathBilder const& pathBuilder){
 		result += "#text";
 	} else if (dataSource) {
 		result += pathBuilder.buildPathString(*dataSource, this->type == OTHER_ENTRIES_PLACEHOLDER);
-		result += "~" + md5(this->dataSource->content) + "~";
-	} else if (type == Rule::OTHER_ENTRIES_PLACEHOLDER) {
-		result += "*"; //root level placeholders
+		if (this->dataSource->content.size() && this->type != Rule::OTHER_ENTRIES_PLACEHOLDER) {
+			result += "~" + md5(this->dataSource->content) + "~";
+		}
 	} else if (type == Rule::SUBMENU) {
 		result += "'SUBMENU'"; // dummy data source
 	} else {
@@ -65,9 +64,11 @@ std::string Rule::toString(EntryPathBilder const& pathBuilder){
 		result += " as '"+str_replace("'", "''", outputName)+"'";
 	}
 
-	std::string sourceScriptPath = pathBuilder.buildScriptPath(*dataSource);
-	if (sourceScriptPath != "") {
-		result += " from '" + sourceScriptPath + "'";
+	if (this->dataSource) {
+		std::string sourceScriptPath = pathBuilder.buildScriptPath(*this->dataSource);
+		if (sourceScriptPath != "") {
+			result += " from '" + sourceScriptPath + "'";
+		}
 	}
 
 	if (type == Rule::SUBMENU && this->subRules.size() > 0) {

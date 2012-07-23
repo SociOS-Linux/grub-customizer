@@ -485,7 +485,7 @@ void GrubCustomizer::_rAppendRule(Rule& rule, Rule* parentRule){
 		std::string name;
 		if (is_other_entries_ph) {
 			try {
-				if (rule.dataSource == NULL) {
+				if (rule.dataSource == NULL || rule.dataSource->type == Entry::SCRIPT_ROOT) {
 					throw 1;
 				}
 				name = this->listCfgDlg->createNewEntriesPlaceholderString(rule.dataSource->name);

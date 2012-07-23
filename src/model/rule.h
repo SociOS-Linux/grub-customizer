@@ -27,7 +27,6 @@
 
 struct Rule {
 	Entry* dataSource; //assigned when using RuleType::OTHER_ENTRIES_PLACEHOLDER
-	std::list<Entry>* dataSource_list; //assigned when using RuleType::OTHER_ENTRIES_PLACEHOLDER
 	std::string outputName;
 	std::string __idHash; //should only be used by sync()!
 	std::list<std::string> __idpath; //should only be used by sync()!

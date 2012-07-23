@@ -64,7 +64,6 @@ private:
 	Rule* getParentRule(Rule* child, Rule* root = NULL);
 	std::list<Rule>& getRuleList(Rule* parentElement);
 	std::list<Rule>::iterator getListIterator(Rule const& needle, std::list<Rule>& haystack);
-	Rule* getPlaceholderBySourceList(std::list<Entry> const& sourceList, std::list<Rule>& baseList);
 	static void adjustIterator(std::list<Rule>::iterator& iter, int adjustment);
 };
 

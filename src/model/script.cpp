@@ -34,10 +34,14 @@ bool Script::isInScriptDir(std::string const& cfg_dir) const {
 }
 Entry* Script::getEntryByPath(std::list<std::string> const& path){
 	Entry* result = NULL;
-	for (std::list<std::string>::const_iterator iter = path.begin(); iter != path.end(); iter++) {
-		result = this->getEntryByName(*iter, result != NULL ? result->subEntries : this->entries());
-		if (result == NULL)
-			return NULL;
+	if (path.size() == 0) { // top level oep
+		result = &this->root;
+	} else {
+		for (std::list<std::string>::const_iterator iter = path.begin(); iter != path.end(); iter++) {
+			result = this->getEntryByName(*iter, result != NULL ? result->subEntries : this->entries());
+			if (result == NULL)
+				return NULL;
+		}
 	}
 	return result;
 }
@@ -64,18 +68,6 @@ Entry* Script::getEntryByHash(std::string const& hash, std::list<Entry>& parentL
 	return NULL;
 }
 
-std::list<Entry>* Script::getListByPath(std::list<std::string> const& path) {
-	if (path.size()) {
-		Entry* e = this->getEntryByPath(path);
-		if (e == NULL) {
-			return NULL;
-		} else {
-			return &e->subEntries;
-		}
-	} else {
-		return &this->entries();
-	}
-}
 
 void Script::moveToBasedir(std::string const& cfg_dir){
 	std::string newPath;
@@ -102,6 +94,9 @@ bool Script::moveFile(std::string const& newPath, short int permissions){
 }
 
 std::list<std::string> Script::buildPath(Entry const& entry, Entry const* parent) const {
+	if (&entry == &this->root) { // return an empty list if it's the root entry!
+		return std::list<std::string>();
+	}
 	std::list<Entry> const& list = parent ? parent->subEntries : this->entries();
 	for (std::list<Entry>::const_iterator iter = list.begin(); iter != list.end(); iter++) {
 		if (&*iter == &entry) {
@@ -138,7 +133,7 @@ std::string Script::buildPathString(Entry const& entry, bool withOtherEntriesPla
 	}
 
 	if (withOtherEntriesPlaceholder) {
-		result += "/*";
+		result += result.size() ? "/*" : "*";
 	}
 	return result;
 }

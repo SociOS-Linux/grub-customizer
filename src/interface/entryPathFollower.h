@@ -25,7 +25,6 @@
 class EntryPathFollower {
 public:
 	virtual Entry* getEntryByPath(std::list<std::string> const& path)=0;
-	virtual std::list<Entry>* getListByPath(std::list<std::string> const& path)=0;
 };
 
 #endif
