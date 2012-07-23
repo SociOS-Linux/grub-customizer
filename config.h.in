@@ -3,4 +3,5 @@
 #define LOCALEDIR "${CMAKE_INSTALL_PREFIX}/share/locale"
 #define PARTCHOOSER_MOUNTPOINT "/media/grub-customizer_recovery_root_mountpoint"
 #define ERROR_LOG_FILE "/tmp/grub-customizer_mkconfig_output.log"
+#define CUSTOM_SCRIPT_PREFIX "exec tail -n +3"
 #define GC_VERSION "2.99"

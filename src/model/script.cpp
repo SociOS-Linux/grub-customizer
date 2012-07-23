@@ -24,7 +24,7 @@ Script::Script(std::string const& name, std::string const& fileName)
 	FILE* script = fopen(fileName.c_str(), "r");
 	if (script) {
 		GrubConfRow row1(script), row2(script);
-		if (row2.text.substr(0, 15) == "exec tail -n +3") {
+		if (row2.text.substr(0, 15) == CUSTOM_SCRIPT_PREFIX) {
 			isCustomScript = true;
 		}
 		fclose(script);

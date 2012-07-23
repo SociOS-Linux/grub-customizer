@@ -26,6 +26,7 @@
 #include "../interface/entryPathFollower.h"
 #include "../presenter/commonClass.h"
 #include "../lib/md5.h"
+#include "../config.h"
 
 struct Script : public EntryPathFollower, public CommonClass {
 	enum Exception {
