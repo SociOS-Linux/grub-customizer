@@ -25,6 +25,9 @@ EntryEditDlgGtk::EntryEditDlgGtk()
 	this->add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
 
 	this->set_default_size(400, 300);
+	this->set_title(Glib::ustring() + gettext("Entry editor") + " - Grub Customizer");
+	this->set_icon_name("grub-customizer");
+
 	Gtk::VBox& vbMain = *this->get_vbox();
 	vbMain.add(this->tabbox);
 	tabbox.append_page(this->scrSource, gettext("Source"));
