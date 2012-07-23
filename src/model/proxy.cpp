@@ -412,21 +412,26 @@ Rule& Proxy::moveRule(Rule* rule, int direction) {
 
 	Rule* parent = NULL;
 	try {
+		parent = this->getParentRule(rule);
+	} catch (Proxy::Exception e) {} // leave parent in NULL state
+	std::list<Rule>& sourceList = this->getRuleList(parent);
+
+	try {
 		parent = this->getParentRule(&*next);
 	} catch (Proxy::Exception e) {} // leave parent in NULL state
-	std::list<Rule>& list = this->getRuleList(parent);
+	std::list<Rule>& targetList = this->getRuleList(parent);
 
 	Rule* newRule = rule;
 
 	std::list<Rule>::iterator afterNext = next;
 
-	if (direction == 1 && &*next != &list.front()) {
+	if (direction == 1 && (next->type == Rule::SUBMENU || &sourceList == &targetList)) {
 		afterNext++;
-	} else if (direction == -1 && &*next == &list.back()) {
+	} else if (direction == -1 && &*next == &targetList.back() && next->type != Rule::SUBMENU) {
 		afterNext++;
 	}
 
-	newRule = &*list.insert(afterNext, *rule);
+	newRule = &*targetList.insert(afterNext, *rule);
 
 	if (ruleList.size() == 1) {
 		// delete parent list if empty
