@@ -574,5 +574,27 @@ void Proxy::adjustIterator(std::list<Rule>::iterator& iter, int adjustment) {
 	}
 }
 
+void Proxy::removeForeignChildRules(Rule& parent) {
+	bool loopRestartRequired = false;
+	do { // required to restart the loop after an entry has been removed
+		loopRestartRequired = false;
+		for (std::list<Rule>::iterator iter = parent.subRules.begin(); iter != parent.subRules.end(); iter++) {
+			if (iter->dataSource) {
+				if (!this->ruleIsFromOwnScript(*iter)) {
+					parent.subRules.erase(iter);
+					loopRestartRequired = true;
+					break;
+				}
+			} else if (iter->subRules.size()) {
+				this->removeForeignChildRules(*iter);
+				if (iter->subRules.size() == 0) { // if this submenu is empty now, remove it
+					parent.subRules.erase(iter);
+					loopRestartRequired = true;
+					break;
+				}
+			}
+		}
+	} while (loopRestartRequired);
+}
 
 

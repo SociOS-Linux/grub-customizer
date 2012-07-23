@@ -610,7 +610,10 @@ Rule& GrublistCfg::moveRule(Rule* rule, int direction){
 			if (direction == -1 && proxyIter != this->proxies.begin()) {
 				proxyIter--;
 				proxyIter->rules.push_back(*rule);
-				if (rule->type == Rule::SUBMENU || currentProxy->ruleIsFromOwnScript(*rule)) {
+				if (rule->type == Rule::SUBMENU) {
+					currentProxy->removeForeignChildRules(*rule);
+				}
+				if (rule->type == Rule::SUBMENU && rule->subRules.size() != 0 || rule->type != Rule::SUBMENU && currentProxy->ruleIsFromOwnScript(*rule)) {
 					rule->isVisible = false;
 				} else {
 					currentProxy->rules.pop_front();
@@ -619,7 +622,10 @@ Rule& GrublistCfg::moveRule(Rule* rule, int direction){
 			} else if (direction == 1 && proxyIter != this->proxies.end() && &*proxyIter != &this->proxies.back()) {
 				proxyIter++;
 				proxyIter->rules.push_front(*rule);
-				if (rule->type == Rule::SUBMENU || currentProxy->ruleIsFromOwnScript(*rule)) {
+				if (rule->type == Rule::SUBMENU) {
+					currentProxy->removeForeignChildRules(*rule);
+				}
+				if (rule->type == Rule::SUBMENU && rule->subRules.size() != 0 || rule->type != Rule::SUBMENU && currentProxy->ruleIsFromOwnScript(*rule)) {
 					rule->isVisible = false;
 				} else {
 					currentProxy->rules.pop_back();
