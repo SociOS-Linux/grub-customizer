@@ -632,6 +632,8 @@ GrubConfListing::GrubConfListing(){
 	this->mainColumn.add_attribute(this->textRenderer.property_text(), treeModel.text);
 	this->mainColumn.add_attribute(this->textRenderer.property_editable(), treeModel.is_editable);
 	this->mainColumn.set_spacing(10);
+
+	this->set_headers_visible(false);
 }
 
 GrubConfListing::TreeModel::TreeModel(){
