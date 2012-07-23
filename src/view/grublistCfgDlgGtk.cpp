@@ -50,7 +50,7 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	vbMainSplit.pack_start(notebook);
 	vbMainSplit.pack_start(statusbar, Gtk::PACK_SHRINK);
 
-	notebook.append_page(scrEntryList, gettext("_list configuration"), true);
+	notebook.append_page(scrEntryList, gettext("_List configuration"), true);
 	scrEntryList.add(tvConfList);
 	statusbar.add(progressBar);
 	
@@ -217,12 +217,12 @@ void GrublistCfgDlgGtk::setEventListener(EventListener_listCfgDlg& eventListener
 void GrublistCfgDlgGtk::putSettingsDialog(Gtk::VBox& commonSettingsPane, Gtk::VBox& appearanceSettingsPane) {
 //	notebook.append_page(this->settingsHBox, "_settings", true);
 	commonSettingsPane.set_border_width(20);
-	notebook.append_page(commonSettingsPane, gettext("_common settings"), true);
+	notebook.append_page(commonSettingsPane, gettext("_General settings"), true);
 	commonSettingsPane.pack_end(bbxAdvancedSettings1, false, false);
 	bbxAdvancedSettings1.pack_end(bttAdvancedSettings1);
 
 	appearanceSettingsPane.set_border_width(20);
-	notebook.append_page(appearanceSettingsPane, gettext("_appearance settings"), true);
+	notebook.append_page(appearanceSettingsPane, gettext("_Appearance settings"), true);
 	appearanceSettingsPane.pack_end(bbxAdvancedSettings2, false, false);
 	bbxAdvancedSettings2.pack_end(bttAdvancedSettings2);
 }
