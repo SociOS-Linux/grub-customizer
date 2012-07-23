@@ -638,6 +638,10 @@ void GrubCustomizer::quit(bool force){
 
 void GrubCustomizer::removeRule(Rule* entry){
 	entry->setVisibility(false);
+	if (!this->grublistCfg->proxies.getProxyByRule(entry)->hasVisibleRules()) {
+		this->grublistCfg->proxies.deleteProxy(this->grublistCfg->proxies.getProxyByRule(entry));
+		this->log("proxy removed", Logger::INFO);
+	}
 	this->syncListView_load();
 	this->modificationsUnsaved = true;
 	this->updateSettingsDlg();
