@@ -79,10 +79,11 @@ class GrublistCfgDlgGtk : public GrublistCfgDlg, public CommonClass {
 	Gtk::ToolItem ti_sep4;
 	Gtk::VSeparator vs_sep4;
 	
-	Gtk::MenuItem miFile, miEdit, miView, miHelp, miInstallGrub;
+	Gtk::MenuItem miFile, miEdit, miView, miHelp, miInstallGrub, miContext;
 	Gtk::ImageMenuItem miExit, miSave, miAbout, miStartRootSelector;
 	ImageMenuItemOwnKey miReload, miAdd, miRemove, miUp, miDown, miLeft, miRight;
-	Gtk::Menu subFile, subEdit, subView, subHelp;
+	Gtk::ImageMenuItem miCRemove, miCUp, miCDown, miCLeft, miCRight, miCRename;
+	Gtk::Menu subFile, subEdit, subView, subHelp, contextMenu;
 	
 	Gtk::VBox settingsHBox;
 
@@ -148,6 +149,7 @@ private:
 	void signal_move_click(int direction); //direction: -1: one position up, 1: one p. down
 	void signal_add_click();
 	void signal_remove_click();
+	void signal_rename_click();
 	void signal_reload_click();
 	void signal_show_grub_install_dialog_click();
 	void signal_move_left_click();
@@ -160,6 +162,8 @@ private:
 	void signal_burg_switcher_response(int response_id);
 	void signal_partition_chooser_question_response(int response_id);
 	void signal_edit_name(Gtk::CellEditable* editable, const Glib::ustring& path);
+	void signal_button_press(GdkEventButton *event);
+	bool signal_popup();
 };
 
 #endif
