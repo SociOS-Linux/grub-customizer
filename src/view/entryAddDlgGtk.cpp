@@ -34,6 +34,8 @@ EntryAddDlgGtk::EntryAddDlgGtk() {
 	this->iconBox.set_tooltip_column(2);
 	this->iconBox.set_item_width(200);
 
+	this->iconBox.set_selection_mode(Gtk::SELECTION_MULTIPLE);
+
 	this->add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
 	this->add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
 
