@@ -237,9 +237,9 @@ void Proxy::sync_add_placeholders(Rule* parent, std::map<std::string, Script*> s
 
 void Proxy::sync_expand(std::map<std::string, Script*> scriptMap) {
 	assert(this->dataSource != NULL);
-	for (std::map<std::string, Script*>::iterator scriptIter = scriptMap.begin(); scriptIter != scriptMap.end(); scriptIter++) {
-		for (std::list<std::list<std::string> >::iterator oepPathIter = this->__idPathList_OtherEntriesPlaceHolders[scriptIter->second].begin(); oepPathIter != this->__idPathList_OtherEntriesPlaceHolders[scriptIter->second].end(); oepPathIter++) {
-			std::list<Entry>* dataSource = scriptIter->second->getListByPath(*oepPathIter);
+	for (std::map<Script*, std::list<std::list<std::string> > >::iterator scriptIter = this->__idPathList_OtherEntriesPlaceHolders.begin(); scriptIter != this->__idPathList_OtherEntriesPlaceHolders.end(); scriptIter++) {
+		for (std::list<std::list<std::string> >::iterator oepPathIter = this->__idPathList_OtherEntriesPlaceHolders[scriptIter->first].begin(); oepPathIter != this->__idPathList_OtherEntriesPlaceHolders[scriptIter->first].end(); oepPathIter++) {
+			std::list<Entry>* dataSource = scriptIter->first->getListByPath(*oepPathIter);
 			if (dataSource) {
 				Rule* oep = this->getPlaceholderBySourceList(*dataSource, this->rules);
 				assert(oep != NULL);
@@ -247,7 +247,7 @@ void Proxy::sync_expand(std::map<std::string, Script*> scriptMap) {
 				std::list<Rule>& dataTarget = parentRule ? parentRule->subRules : this->rules;
 
 				std::list<Rule>::iterator dataTargetIter = dataTarget.begin();
-				while (dataTargetIter != dataTarget.end() && (dataTargetIter->type != Rule::OTHER_ENTRIES_PLACEHOLDER || dataTargetIter->__idpath != *oepPathIter || dataTargetIter->__sourceScriptPath != scriptIter->first)){
+				while (dataTargetIter != dataTarget.end() && !(dataTargetIter->type == Rule::OTHER_ENTRIES_PLACEHOLDER && dataTargetIter->__idpath == *oepPathIter && (dataTargetIter->__sourceScriptPath != "" && scriptMap[dataTargetIter->__sourceScriptPath] == scriptIter->first || dataTargetIter->__sourceScriptPath == "" && scriptIter->first == this->dataSource))){
 					dataTargetIter++;
 				}
 				std::list<Rule> newRules;
@@ -256,7 +256,7 @@ void Proxy::sync_expand(std::map<std::string, Script*> scriptMap) {
 					Rule* relatedRulePt = this->getRuleByEntry(*iter, this->rules, Rule::PLAINTEXT);
 					Rule* relatedRuleOep = this->getRuleByEntry(*iter, this->rules, Rule::OTHER_ENTRIES_PLACEHOLDER);
 					if (!relatedRule && !relatedRuleOep && !relatedRulePt){
-						newRules.push_back(Rule(*iter, dataTargetIter->isVisible, *scriptIter->second, this->__idPathList[scriptIter->second], scriptIter->second->buildPath(*iter))); //generate rule for given entry
+						newRules.push_back(Rule(*iter, dataTargetIter->isVisible, *scriptIter->first, this->__idPathList[scriptIter->first], scriptIter->first->buildPath(*iter))); //generate rule for given entry
 					}
 				}
 				dataTargetIter++;
