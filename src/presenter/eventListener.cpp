@@ -69,6 +69,14 @@ void EventListener::entryEditDlg_applied() {
 	presenter.applyEntryEditorModifications();
 }
 
+void EventListener::entryEditDlg_sourceModified() {
+	presenter.syncEntryEditDlg(false);
+}
+
+void EventListener::entryEditDlg_optionsModified() {
+	presenter.syncEntryEditDlg(true);
+}
+
 void EventListener::entryAddDlg_requested(){
 	presenter.showEntryAddDlg();
 }

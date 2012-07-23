@@ -79,6 +79,7 @@ class GrubCustomizer : public CommonClass {
 	AboutDialog* aboutDialog;
 	ThreadController* threadController;
 	ContentParserFactory* contentParserFactory;
+	ContentParser* currentContentParser;
 
 	bool config_has_been_different_on_startup_but_unsaved;
 	bool modificationsUnsaved;
@@ -139,6 +140,7 @@ public:
 	
 	void showEntryAddDlg();
 	void showEntryEditDlg(void* rule);
+	void syncEntryEditDlg(bool useOptionsAsSource);
 	void addEntryFromEntryAddDlg();
 	
 	//dispatchers

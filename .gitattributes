@@ -64,10 +64,18 @@ src/interface/mutex.h -text
 src/interface/partitionChooser.h -text
 src/interface/settingsDlg.h -text
 src/interface/threadController.h -text
+src/lib/contentParser/Abstract.cpp -text
+src/lib/contentParser/Abstract.h -text
+src/lib/contentParser/Chainloader.cpp -text
+src/lib/contentParser/Chainloader.h -text
 src/lib/contentParser/FactoryImpl.cpp -text
 src/lib/contentParser/FactoryImpl.h -text
 src/lib/contentParser/Linux.cpp -text
 src/lib/contentParser/Linux.h -text
+src/lib/contentParser/LinuxIso.cpp -text
+src/lib/contentParser/LinuxIso.h -text
+src/lib/contentParser/Memtest.cpp -text
+src/lib/contentParser/Memtest.h -text
 src/lib/md5.cpp -text
 src/lib/md5.h -text
 src/lib/regex.cpp -text
@@ -82,6 +90,8 @@ src/model/entryPathBuilderImpl.cpp -text
 src/model/entryPathBuilderImpl.h -text
 src/model/fbResolutionsGetter.cpp -text
 src/model/fbResolutionsGetter.h -text
+src/model/grubDeviceMap.cpp -text
+src/model/grubDeviceMap.h -text
 src/model/grubEnv.cpp -text
 src/model/grubEnv.h -text
 src/model/grubInstaller.cpp -text
@@ -108,6 +118,8 @@ src/model/settingsStore.cpp -text
 src/model/settingsStore.h -text
 src/model/settings_mng_ds.cpp -text
 src/model/settings_mng_ds.h -text
+src/model/smartFileHandle.cpp -text
+src/model/smartFileHandle.h -text
 src/presenter/commonClass.cpp -text
 src/presenter/commonClass.h -text
 src/presenter/eventListener.cpp -text

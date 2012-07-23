@@ -37,11 +37,13 @@ bool GrubEnv::init(GrubEnv::Mode mode, std::string const& dir_prefix){
 			this->update_cmd = "update-burg";
 			this->install_cmd = "burg-install";
 			this->mkfont_cmd = "burg-mkfont";
+			this->mkdevicemap_cmd = "burg-mkdevicemap";
 			this->cfg_dir = dir_prefix+"/etc/burg.d";
 			this->cfg_dir_noprefix = "/etc/burg.d";
 			this->output_config_dir =  dir_prefix+"/boot/burg";
 			this->output_config_file = dir_prefix+"/boot/burg/burg.cfg";
 			this->settings_file = dir_prefix+"/etc/default/burg";
+			this->devicemap_file = dir_prefix+"/boot/burg/device.map";
 		}
 		} break;
 	case GRUB_MODE: {
@@ -56,11 +58,13 @@ bool GrubEnv::init(GrubEnv::Mode mode, std::string const& dir_prefix){
 			this->update_cmd = "update-grub";
 			this->install_cmd = "grub-install";
 			this->mkfont_cmd = "grub-mkfont";
+			this->mkdevicemap_cmd = "grub-mkdevicemap";
 			this->cfg_dir = dir_prefix+"/etc/grub.d";
 			this->cfg_dir_noprefix = "/etc/grub.d";
 			this->output_config_dir =  dir_prefix+"/boot/grub";
 			this->output_config_file = dir_prefix+"/boot/grub/grub.cfg";
 			this->settings_file = dir_prefix+"/etc/default/grub";
+			this->devicemap_file = dir_prefix+"/boot/grub/device.map";
 		}
 		} break;
 	}
@@ -71,6 +75,7 @@ bool GrubEnv::init(GrubEnv::Mode mode, std::string const& dir_prefix){
 	this->update_cmd = cmd_prefix+this->update_cmd;
 	this->install_cmd = cmd_prefix+this->install_cmd;
 	this->mkfont_cmd = cmd_prefix+this->mkfont_cmd;
+	this->devicemap_file = cmd_prefix+this->devicemap_file;
 	
 	return is_valid;
 }
@@ -86,6 +91,8 @@ void GrubEnv::loadFromFile(FILE* cfg_file, std::string const& dir_prefix) {
 	this->output_config_dir =  dir_prefix + ds.getValue("OUTPUT_DIR");
 	this->output_config_file = dir_prefix + ds.getValue("OUTPUT_FILE");
 	this->settings_file = dir_prefix + ds.getValue("SETTINGS_FILE");
+	this->devicemap_file = dir_prefix + ds.getValue("DEVICEMAP_FILE");
+	this->mkdevicemap_cmd = dir_prefix + ds.getValue("MKDEVICEMAP_CMD");
 }
 
 bool GrubEnv::check_cmd(std::string const& cmd, std::string const& cmd_prefix) const {

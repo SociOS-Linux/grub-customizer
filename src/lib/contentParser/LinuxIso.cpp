@@ -15,61 +15,65 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+#include "LinuxIso.h"
 
-#include "Linux.h"
-
-const char* ContentParserLinux::_regex = "\
+const char* ContentParserLinuxIso::_regex = "\
 [ \t]*set root='\\(hd([0-9]+)[^0-9]+([0-9]+)\\)'\\n\
-[ \t]*search[ \t]+--no-floppy[ \t]+--fs-uuid[ \t]+--set(?:=root)? ([-0-9a-fA-F]+)\\n\
-([ \t]*echo[ \t]+.*\n)?\
-[ \t]*linux[ \t]+([^ \t]+)[ \t]+root=UUID=([-0-9a-fA-F]+) .*\\n\
-([ \t]*echo[ \t]+.*\n)?\
-[ \t]*initrd[ \t]+([^ \\n]+)[ \\n\t]*$\
+[ \t]*search[ \\t]+--no-floppy[ \\t]+--fs-uuid[ \\t]+--set(?:=root)? ([-0-9a-fA-F]+)\\n\
+[ \t]*loopback[ \\t]+loop[ \t]+([^ \\t]+)\\n\
+[ \t]*linux[ \\t]+\\(loop\\)([^ \\t]+)[ \\t]+boot=casper iso-scan/filename=([^ \\t]+) quiet splash locale=([^ \\t]+) (.*)\\n\
+[ \t]*initrd[ \\t]+\\(loop\\)([^ \\t]+)\\n\
 ";
 
-ContentParserLinux::ContentParserLinux(GrubDeviceMap& deviceMap)
+ContentParserLinuxIso::ContentParserLinuxIso(GrubDeviceMap& deviceMap)
 	: deviceMap(deviceMap)
 {}
 
-void ContentParserLinux::parse(std::string const& sourceCode) {
+void ContentParserLinuxIso::parse(std::string const& sourceCode) {
 	this->sourceCode = sourceCode;
 	try {
-		std::vector<std::string> result = Regex::match(ContentParserLinux::_regex, sourceCode);
+		std::vector<std::string> result = Regex::match(ContentParserLinuxIso::_regex, this->sourceCode);
 
 		//check partition indices by uuid
-		GrubPartitionIndex pIndex = deviceMap.getHarddriveIndexByPartitionUuid(result[6]);
+		GrubPartitionIndex pIndex = deviceMap.getHarddriveIndexByPartitionUuid(result[3]);
 		if (pIndex.hddNum != result[1] || pIndex.partNum != result[2]){
 			throw ContentParser::PARSING_FAILED;
 		}
 
-		//check if the uuids (Kernel <-> search command) are the same
-		if (result[3] != result[6])
+		//check if the iso filepaths are the same
+		if (result[4] != result[6])
 			throw ContentParser::PARSING_FAILED;
 
 		//assign data
-		this->options["partition_uuid"] = result[6];
+		this->options["partition_uuid"] = result[3];
 		this->options["linux_image"] = result[5];
-		this->options["initramfs"] = result[8];
+		this->options["initramfs"] = result[9];
+		this->options["iso_path"] = result[4];
+		this->options["locale"] = result[7];
+		this->options["other_params"] = result[8];
 	} catch (Regex::Exception e) {
 		throw ContentParser::PARSING_FAILED;
 	}
 }
 
-std::string ContentParserLinux::buildSource() const {
+std::string ContentParserLinuxIso::buildSource() const {
 	GrubPartitionIndex pIndex = deviceMap.getHarddriveIndexByPartitionUuid(this->options.at("partition_uuid"));
 	std::map<int, std::string> newValues;
 	newValues[1] = pIndex.hddNum;
 	newValues[2] = pIndex.partNum;
 	newValues[3] = this->options.at("partition_uuid");
+	newValues[4] = this->options.at("iso_path");
 	newValues[5] = this->options.at("linux_image");
-	newValues[6] = this->options.at("partition_uuid");
-	newValues[8] = this->options.at("initramfs");
+	newValues[6] = this->options.at("iso_path");
+	newValues[7] = this->options.at("locale");
+	newValues[8] = this->options.at("other_params");
+	newValues[9] = this->options.at("initramfs");
 
-	std::string newSourceCode = Regex::replace(ContentParserLinux::_regex, this->sourceCode, newValues);
+	std::string newSourceCode = Regex::replace(ContentParserLinuxIso::_regex, this->sourceCode, newValues);
 
 	//check the new string. If they aren't matchable anymore (evil input), do a rollback
 	try {
-		Regex::match(ContentParserLinux::_regex, newSourceCode);
+		Regex::match(ContentParserLinuxIso::_regex, newSourceCode);
 		return newSourceCode;
 	} catch (Regex::Exception e) {
 		this->log("Ignoring data - doesn't match", Logger::ERROR);

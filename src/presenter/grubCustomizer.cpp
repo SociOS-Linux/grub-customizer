@@ -27,7 +27,7 @@ GrubCustomizer::GrubCustomizer(GrubEnv& env)
 	  mountTable(NULL), aboutDialog(NULL),
 	 env(env), config_has_been_different_on_startup_but_unsaved(false),
 	 modificationsUnsaved(false), quit_requested(false), activeThreadCount(0),
-	 is_loading(false)
+	 is_loading(false), contentParserFactory(NULL), currentContentParser(NULL)
 {
 }
 
@@ -138,6 +138,7 @@ void GrubCustomizer::init(){
 		or !mountTable
 		or !aboutDialog
 		or !entryEditDlg
+		or !contentParserFactory
 	) {
 		throw INCOMPLETE;
 	}
@@ -355,6 +356,8 @@ void GrubCustomizer::applyEntryEditorModifications() {
 	this->syncListView_load();
 
 	this->listCfgDlg->selectRule(rulePtr);
+
+	this->currentContentParser = NULL;
 }
 
 
@@ -509,14 +512,24 @@ void GrubCustomizer::showEntryAddDlg(){
 void GrubCustomizer::showEntryEditDlg(void* rule) {
 	this->entryEditDlg->setRulePtr(rule);
 	this->entryEditDlg->setSourcecode(((Rule*)rule)->dataSource->content);
+	this->syncEntryEditDlg(false);
+	this->entryEditDlg->show();
+}
+
+void GrubCustomizer::syncEntryEditDlg(bool useOptionsAsSource) {
 	try {
-		ContentParser* parser = this->contentParserFactory->create(((Rule*)rule)->dataSource->content);
-		this->entryEditDlg->setOptions(parser->getOptions());
+		if (useOptionsAsSource) {
+			assert(this->currentContentParser != NULL);
+			this->currentContentParser->setOptions(this->entryEditDlg->getOptions());
+			this->entryEditDlg->setSourcecode(this->currentContentParser->buildSource());
+		} else {
+			this->currentContentParser = this->contentParserFactory->create(this->entryEditDlg->getSourcecode());
+			this->entryEditDlg->setOptions(this->currentContentParser->getOptions());
+		}
 		this->entryEditDlg->showOptions();
 	} catch (ContentParserFactory::Exception e) {
 		this->entryEditDlg->hideOptions();
 	}
-	this->entryEditDlg->show();
 }
 
 void GrubCustomizer::addEntryFromEntryAddDlg(){

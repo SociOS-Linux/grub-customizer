@@ -16,20 +16,20 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CONTENT_PARSER_LINUX_H_
-#define CONTENT_PARSER_LINUX_H_
+#ifndef CONTENT_PARSER_MEMTEST_H_
+#define CONTENT_PARSER_MEMTEST_H_
+
 #include "../regex.h"
 #include "../../model/grubDeviceMap.h"
 #include "Abstract.h"
 
-class ContentParserLinux : public ContentParserAbstract {
+class ContentParserMemtest : public ContentParserAbstract {
 	static const char* _regex;
 	GrubDeviceMap& deviceMap;
 	std::string sourceCode;
 public:
-	ContentParserLinux(GrubDeviceMap& deviceMap);
+	ContentParserMemtest(GrubDeviceMap& deviceMap);
 	void parse(std::string const& sourceCode);
 	std::string buildSource() const;
 };
-
-#endif /* CONTENT_PARSER_LINUX_H_ */
+#endif /* CONTENT_PARSER_MEMTEST_H_ */

@@ -32,6 +32,9 @@
 #include <iostream>
 #include "../lib/contentParser/FactoryImpl.h"
 #include "../lib/contentParser/Linux.h"
+#include "../lib/contentParser/LinuxIso.h"
+#include "../lib/contentParser/Chainloader.h"
+#include "../lib/contentParser/Memtest.h"
 
 int main(int argc, char** argv){
 	if (getuid() != 0 && (argc == 1 || argv[1] != std::string("no-fork"))) {
@@ -125,9 +128,17 @@ int main(int argc, char** argv){
 	env.setLogger(logger);
 
 	//configure contentParser factory
-	ContentParserLinux linuxParser;
+	GrubDeviceMap deviceMap(env);
+	ContentParserLinux linuxParser(deviceMap);
+	ContentParserLinuxIso linuxIsoParser(deviceMap);
+	ContentParserChainloader chainloadParser(deviceMap);
+	ContentParserMemtest memtestParser(deviceMap);
+
 	contentParserFactory.registerParser(linuxParser);
-	
+	contentParserFactory.registerParser(linuxIsoParser);
+	contentParserFactory.registerParser(chainloadParser);
+	contentParserFactory.registerParser(memtestParser);
+
 	listcfg.setMutex(listCfgMutex1);
 	savedListCfg.setMutex(listCfgMutex2);
 

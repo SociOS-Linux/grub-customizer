@@ -34,6 +34,8 @@ EntryEditDlgGtk::EntryEditDlgGtk()
 	scrSource.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
 
 	this->signal_response().connect(sigc::mem_fun(this, &EntryEditDlgGtk::signal_response_action));
+
+	this->tvSource.signal_key_release_event().connect(sigc::mem_fun(this, &EntryEditDlgGtk::signal_sourceModified));
 }
 
 void EntryEditDlgGtk::setEventListener(EventListener_entryEditDlg& eventListener) {
@@ -68,9 +70,13 @@ void EntryEditDlgGtk::addOption(std::string const& name, std::string const& valu
 
 	Gtk::Entry* entry = Gtk::manage(new Gtk::Entry());
 	entry->set_text(value);
+	entry->signal_changed().connect(sigc::mem_fun(this, &EntryEditDlgGtk::signal_optionsModified));
 	this->tblOptions.attach(*entry, 1, 2, pos, pos+1, Gtk::EXPAND | Gtk::FILL, Gtk::SHRINK, 5, 5);
 
 	this->optionMap[name] = entry;
+	if (this->is_visible()) {
+		this->tblOptions.show_all();
+	}
 }
 
 void EntryEditDlgGtk::setOptions(std::map<std::string, std::string> options) {
@@ -133,4 +139,13 @@ void EntryEditDlgGtk::signal_response_action(int response_id) {
 		eventListener->entryEditDlg_applied();
 	}
 	this->hide();
+}
+
+bool EntryEditDlgGtk::signal_sourceModified(GdkEventKey* event) {
+	this->eventListener->entryEditDlg_sourceModified();
+	return true;
+}
+
+void EntryEditDlgGtk::signal_optionsModified() {
+	this->eventListener->entryEditDlg_optionsModified();
 }

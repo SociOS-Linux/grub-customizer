@@ -52,6 +52,9 @@ public:
 	void show();
 	void hide();
 	void signal_response_action(int response_id);
+
+	bool signal_sourceModified(GdkEventKey* event);
+	void signal_optionsModified();
 };
 
 #endif /* ENTRYEDITDLGGTK_H_ */

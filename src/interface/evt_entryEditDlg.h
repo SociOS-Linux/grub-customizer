@@ -26,6 +26,10 @@ class EventListener_entryEditDlg {
 public:
 	//user wants to apply his changes
 	virtual void entryEditDlg_applied()=0;
+	//user has modified the source
+	virtual void entryEditDlg_sourceModified()=0;
+	//user has modified the options
+	virtual void entryEditDlg_optionsModified()=0;
 };
 
 #endif /* EVT_ENTRYEDITDLG_H_ */

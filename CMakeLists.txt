@@ -50,7 +50,13 @@ add_executable(grub-customizer
 	src/lib/str_replace.cpp
 	src/lib/contentParser/FactoryImpl.cpp
 	src/lib/contentParser/Linux.cpp
+	src/lib/contentParser/Chainloader.cpp
+	src/lib/contentParser/LinuxIso.cpp
+	src/lib/contentParser/Memtest.cpp
+	src/lib/contentParser/Abstract.cpp
 	src/lib/regex.cpp
+	src/model/grubDeviceMap.cpp
+	src/model/smartFileHandle.cpp
 )
 
 

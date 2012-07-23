@@ -16,20 +16,21 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CONTENT_PARSER_LINUX_H_
-#define CONTENT_PARSER_LINUX_H_
-#include "../regex.h"
-#include "../../model/grubDeviceMap.h"
-#include "Abstract.h"
+#ifndef CONTENT_PARSER_ABSTRACT_H_
+#define CONTENT_PARSER_ABSTRACT_H_
+#include <map>
+#include <string>
+#include "../../interface/contentParser.h"
+#include "../../presenter/commonClass.h"
 
-class ContentParserLinux : public ContentParserAbstract {
-	static const char* _regex;
-	GrubDeviceMap& deviceMap;
-	std::string sourceCode;
+class ContentParserAbstract : public ContentParser, public CommonClass {
+protected:
+	std::map<std::string, std::string> options;
 public:
-	ContentParserLinux(GrubDeviceMap& deviceMap);
-	void parse(std::string const& sourceCode);
-	std::string buildSource() const;
+	std::map<std::string, std::string> getOptions() const;
+	std::string getOption(std::string const& name) const;
+	void setOption(std::string const& name, std::string const& value);
+	void setOptions(std::map<std::string, std::string> const& options);
 };
 
-#endif /* CONTENT_PARSER_LINUX_H_ */
+#endif /* CONTENT_PARSER_ABSTRACT_H_ */

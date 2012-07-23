@@ -53,6 +53,8 @@ public:
 	void entryEditDlg_requested(void* rule);
 	void entryAddDlg_applied();
 	void entryEditDlg_applied();
+	void entryEditDlg_sourceModified();
+	void entryEditDlg_optionsModified();
 	void exitRequest();
 
 	void signal_entry_remove_requested(std::list<void*> entries);

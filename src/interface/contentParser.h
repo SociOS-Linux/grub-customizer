@@ -30,6 +30,7 @@ public:
 	virtual std::map<std::string, std::string> getOptions() const = 0;
 	virtual std::string getOption(std::string const& name) const = 0;
 	virtual void setOption(std::string const& name, std::string const& value) = 0;
+	virtual void setOptions(std::map<std::string, std::string> const& options) = 0;
 	virtual std::string buildSource() const = 0;
 };
 
