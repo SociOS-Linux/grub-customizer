@@ -171,6 +171,7 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	tvConfList.textRenderer.signal_edited().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_edit_name_finished));
 	tvConfList.signal_button_press_event().connect_notify(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_button_press));
 	tvConfList.signal_popup_menu().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_popup));
+	tvConfList.signal_key_press_event().connect_notify(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_key_press));
 	tbttSave.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::saveConfig));
 	tbttAdd.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_add_click));
 	tbttRemove.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_remove_click));
@@ -250,6 +251,12 @@ void GrublistCfgDlgGtk::signal_button_press(GdkEventButton *event) {
 bool GrublistCfgDlgGtk::signal_popup() {
 	contextMenu.popup(0, gdk_event_get_time(NULL));
 	return true;
+}
+
+void GrublistCfgDlgGtk::signal_key_press(GdkEventKey* key) {
+	if (key->keyval == GDK_Delete) {
+		this->eventListener->signal_entry_remove_requested(this->getSelectedRules());
+	}
 }
 
 

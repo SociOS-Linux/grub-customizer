@@ -166,6 +166,7 @@ private:
 	void signal_edit_name(Gtk::CellEditable* editable, const Glib::ustring& path);
 	void signal_button_press(GdkEventButton *event);
 	bool signal_popup();
+	void signal_key_press(GdkEventKey* key);
 };
 
 #endif
