@@ -71,6 +71,8 @@ int main(int argc, char** argv){
 	GlibThreadController threadC(presenter);
 	ContentParserFactoryImpl contentParserFactory;
 
+	entryEditDlg.setDeviceDataList(deviceDataList);
+
 	//assign objects to presenter
 	presenter.setListCfg(listcfg);
 	presenter.setListCfgDlg(listCfgView);

@@ -21,9 +21,10 @@
 #include <map>
 #include <cstdio>
 #include <string>
+#include "../interface/deviceDataList_Iface.h"
 #include "../presenter/commonClass.h"
 
-class DeviceDataList : public std::map<std::string, std::map<std::string, std::string> >, public CommonClass {
+class DeviceDataList : public DeviceDataList_Iface, public CommonClass {
 public:
 	DeviceDataList(FILE* blkidOutput);
 	DeviceDataList();

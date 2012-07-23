@@ -57,6 +57,7 @@ add_executable(grub-customizer
 	src/lib/regex.cpp
 	src/model/grubDeviceMap.cpp
 	src/model/smartFileHandle.cpp
+	src/view/partitionChooser_DropDown.cpp
 )
 
 

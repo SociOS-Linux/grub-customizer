@@ -24,21 +24,28 @@
 #include <libintl.h>
 #include <gtkmm.h>
 #include "../interface/evt_entryEditDlg.h"
+#include "entryEditDlgGtk.h"
+#include "../interface/deviceDataList_Iface.h"
+#include "partitionChooser_DropDown.h"
 
 class EntryEditDlgGtk : public EntryEditDlg, public Gtk::Dialog, public CommonClass {
 	Gtk::Notebook tabbox;
 	Gtk::TextView tvSource;
 	Gtk::ScrolledWindow scrSource;
 	EventListener_entryEditDlg* eventListener;
+	DeviceDataList_Iface* deviceDataList;
 	Gtk::ScrolledWindow scrOptions;
 	Gtk::Table tblOptions;
 	std::map<std::string, Gtk::Widget*> optionMap;
 	std::map<std::string, Gtk::Label*> labelMap;
 
 	void* rulePtr;
+protected:
+	virtual std::string mapOptionName(std::string const& name);
 public:
 	EntryEditDlgGtk();
 	void setEventListener(EventListener_entryEditDlg& eventListener);
+	void setDeviceDataList(DeviceDataList_Iface& deviceDataList);
 	void setSourcecode(std::string const& source);
 	std::string getSourcecode();
 	void addOption(std::string const& name, std::string const& value);

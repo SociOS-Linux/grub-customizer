@@ -42,6 +42,29 @@ void EntryEditDlgGtk::setEventListener(EventListener_entryEditDlg& eventListener
 	this->eventListener = &eventListener;
 }
 
+void EntryEditDlgGtk::setDeviceDataList(DeviceDataList_Iface& deviceDataList) {
+	this->deviceDataList = &deviceDataList;
+}
+
+std::string EntryEditDlgGtk::mapOptionName(std::string const& name) {
+	if (name == "partition_uuid")
+		return gettext("_Partition");
+	else if (name == "initramfs")
+		return gettext("_Initial ramdisk");
+	else if (name == "linux_image")
+		return gettext("_Linux image");
+	else if (name == "memtest_image")
+		return gettext("_Memtest image");
+	else if (name == "iso_path")
+		return gettext("Path to iso file");
+	else if (name == "locale")
+		return gettext("Locale");
+	else if (name == "other_params")
+		return gettext("Kernel params");
+	else
+		return name;
+}
+
 void EntryEditDlgGtk::setSourcecode(std::string const& source) {
 	std::string optimizedSource = str_replace("\n\t", "\n", source);
 	if (optimizedSource[0] == '\t') {
@@ -62,18 +85,28 @@ std::string EntryEditDlgGtk::getSourcecode() {
 }
 
 void EntryEditDlgGtk::addOption(std::string const& name, std::string const& value) {
-	int pos = this->optionMap.size();
-	Gtk::Label* label = Gtk::manage(new Gtk::Label(name + ":"));
+	int pos = name == "partition_uuid" ? 0 : this->optionMap.size() + 1; // partition should be the first option
+	Gtk::Label* label = Gtk::manage(new Gtk::Label(this->mapOptionName(name) + ":", true));
 	label->set_alignment(Gtk::ALIGN_RIGHT);
 	this->tblOptions.attach(*label, 0, 1, pos, pos+1, Gtk::SHRINK | Gtk::FILL, Gtk::SHRINK, 5, 5);
 	this->labelMap[name] = label;
 
-	Gtk::Entry* entry = Gtk::manage(new Gtk::Entry());
-	entry->set_text(value);
-	entry->signal_changed().connect(sigc::mem_fun(this, &EntryEditDlgGtk::signal_optionsModified));
-	this->tblOptions.attach(*entry, 1, 2, pos, pos+1, Gtk::EXPAND | Gtk::FILL, Gtk::SHRINK, 5, 5);
+	Gtk::Widget* addedWidget = NULL;
+	if (name != "partition_uuid" || this->deviceDataList == NULL) {
+		Gtk::Entry* entry = Gtk::manage(new Gtk::Entry());
+		entry->set_text(value);
+		entry->signal_changed().connect(sigc::mem_fun(this, &EntryEditDlgGtk::signal_optionsModified));
+		addedWidget = entry;
+	} else {
+		PartitionChooser_DropDown* pChooserDD = Gtk::manage(new PartitionChooser_DropDown(value, *this->deviceDataList));
+		pChooserDD->signal_changed().connect(sigc::mem_fun(this, &EntryEditDlgGtk::signal_optionsModified));
+		addedWidget = pChooserDD;
+	}
 
-	this->optionMap[name] = entry;
+	this->tblOptions.attach(*addedWidget, 1, 2, pos, pos+1, Gtk::EXPAND | Gtk::FILL, Gtk::SHRINK, 5, 5);
+	label->set_mnemonic_widget(*addedWidget);
+
+	this->optionMap[name] = addedWidget;
 	if (this->is_visible()) {
 		this->tblOptions.show_all();
 	}
@@ -89,7 +122,11 @@ void EntryEditDlgGtk::setOptions(std::map<std::string, std::string> options) {
 std::map<std::string, std::string> EntryEditDlgGtk::getOptions() const {
 	std::map<std::string, std::string> result;
 	for (std::map<std::string, Gtk::Widget*>::const_iterator iter = this->optionMap.begin(); iter != this->optionMap.end(); iter++) {
-		result[iter->first] = dynamic_cast<Gtk::Entry&>(*iter->second).get_text();
+		try {
+			result[iter->first] = dynamic_cast<PartitionChooser_DropDown&>(*iter->second).getSelectedUuid();
+		} catch (std::bad_cast e) {
+			result[iter->first] = dynamic_cast<Gtk::Entry&>(*iter->second).get_text();
+		}
 	}
 	return result;
 }

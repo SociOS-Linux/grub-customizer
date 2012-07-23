@@ -46,6 +46,7 @@ src/interface/aboutDialog.h -text
 src/interface/colorChooser.h -text
 src/interface/contentParser.h -text
 src/interface/contentParserFactory.h -text
+src/interface/deviceDataList_Iface.h -text
 src/interface/entryAddDlg.h -text
 src/interface/entryEditDlg.h -text
 src/interface/entryPathBuilder.h -text
@@ -146,6 +147,8 @@ src/view/grublistCfgDlgGtk.cpp -text
 src/view/grublistCfgDlgGtk.h -text
 src/view/partitionChooserGtk.cpp -text
 src/view/partitionChooserGtk.h -text
+src/view/partitionChooser_DropDown.cpp -text
+src/view/partitionChooser_DropDown.h -text
 src/view/settingsDlgGtk.cpp -text
 src/view/settingsDlgGtk.h -text
 translation/complile_all.sh -text
