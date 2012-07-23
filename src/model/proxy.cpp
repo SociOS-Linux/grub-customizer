@@ -408,34 +408,56 @@ Rule& Proxy::moveRule(Rule* rule, int direction) {
 	std::list<Rule>& ruleList = this->getRuleList(this->getParentRule(rule));
 
 	std::list<Rule>::iterator el = this->getListIterator(*rule, ruleList);
-	std::list<Rule>::iterator next = this->getNextVisibleRule(el, direction);
-
 	Rule* parent = NULL;
 	try {
 		parent = this->getParentRule(rule);
 	} catch (Proxy::Exception e) {} // leave parent in NULL state
 	std::list<Rule>& sourceList = this->getRuleList(parent);
 
+
+	std::list<Rule>::iterator next = this->rules.end();
+
+	bool needToGoUp = false;
+	try {
+		next = this->getNextVisibleRule(el, direction);
+	} catch (Proxy::Exception e) {
+		if (e == Proxy::NO_MOVE_TARGET_FOUND && &sourceList != &this->rules) {
+			needToGoUp = true;
+		} else {
+			throw e;
+		}
+	}
+
 	try {
 		parent = this->getParentRule(&*next);
 	} catch (Proxy::Exception e) {} // leave parent in NULL state
-	std::list<Rule>& targetList = this->getRuleList(parent);
+	std::list<Rule>* targetList = &this->getRuleList(parent);
 
-	if (&targetList == &this->rules && rule->dataSource && !this->ruleIsFromOwnScript(*rule)) {
+	if (targetList == &this->rules && rule->dataSource && !this->ruleIsFromOwnScript(*rule)) {
 		throw Proxy::SHOULD_BE_A_NEW_INSTANCE;
 	}
 
 	Rule* newRule = rule;
 
-	std::list<Rule>::iterator afterNext = next;
+	std::list<Rule>::iterator insertPos = next;
 
-	if (direction == 1 && (next->type == Rule::SUBMENU || &sourceList == &targetList)) {
-		afterNext++;
-	} else if (direction == -1 && &*next == &targetList.back() && next->type != Rule::SUBMENU) {
-		afterNext++;
+	if (needToGoUp) {
+		Rule* parentSubmenu = this->getParentRule(rule);
+		targetList = &this->getRuleList(this->getParentRule(parentSubmenu));
+		insertPos = this->getListIterator(*parentSubmenu, *targetList);
+		if (direction == 1) {
+			insertPos++;
+		}
+	} else if (next->type == Rule::SUBMENU) {
+		targetList = &next->subRules;
+		insertPos = direction == -1 ? targetList->end() : targetList->begin();
+	} else {
+		if (direction == 1) {
+			insertPos++;
+		}
 	}
 
-	newRule = &*targetList.insert(afterNext, *rule);
+	newRule = &*targetList->insert(insertPos, *rule);
 
 	if (ruleList.size() == 1) {
 		// delete parent list if empty
@@ -481,26 +503,6 @@ std::list<Rule>::iterator Proxy::getNextVisibleRule(std::list<Rule>::iterator ba
 			base++;
 		} else {
 			base--;
-		}
-		if (base == list->end()) { // go one step up
-			if (parent == NULL) { // already top level
-				throw Proxy::NO_MOVE_TARGET_FOUND;
-			}
-			Rule* currentElement = parent;
-			try {
-				parent = this->getParentRule(currentElement); //may throw Proxy::RULE_NOT_FOUND
-			} catch (Proxy::Exception e) {} // leave parent in NULL state
-			list = &this->getRuleList(parent);
-			base = this->getListIterator(*currentElement, *list);
-		} else if (base->type == Rule::SUBMENU) {
-			parent = &*base;
-			list = &parent->subRules;
-			if (direction == -1) {
-				base = list->end();
-				base--;
-			} else {
-				base = list->begin();
-			}
 		}
 	} while (!base->isVisible && base != list->end());
 	if (base == list->end()) {
