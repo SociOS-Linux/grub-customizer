@@ -634,6 +634,12 @@ void GrubCustomizer::quit(bool force){
 	}
 }
 
+void GrubCustomizer::removeRule(Rule* entry){
+	entry->setVisibility(false);
+	this->syncListView_load();
+	this->modificationsUnsaved = true;
+	this->updateSettingsDlg();
+}
 
 void GrubCustomizer::syncRuleState(Rule* entry){
 	entry->isVisible = this->listCfgDlg->getRuleState(entry);

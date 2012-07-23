@@ -23,13 +23,13 @@ ImageMenuItemOwnKey::ImageMenuItemOwnKey(const Gtk::StockID& id, const Gtk::Acce
 }
 
 GrublistCfgDlgGtk::GrublistCfgDlgGtk()
-	: tbttAdd(Gtk::Stock::ADD), tbttRemove(Gtk::Stock::REMOVE), tbttUp(Gtk::Stock::GO_UP), tbttDown(Gtk::Stock::GO_DOWN),
+	: tbttAdd(Gtk::Stock::UNDELETE), tbttRemove(Gtk::Stock::DELETE), tbttUp(Gtk::Stock::GO_UP), tbttDown(Gtk::Stock::GO_DOWN),
 	tbttLeft(Gtk::Stock::GO_BACK), tbttRight(Gtk::Stock::GO_FORWARD),
 	tbttSave(Gtk::Stock::SAVE),
 	miFile(gettext("_File"), true), miExit(Gtk::Stock::QUIT), tbttReload(Gtk::Stock::REFRESH),
 	miEdit(gettext("_Edit"), true), miView(gettext("_View"), true), miHelp(gettext("_Help"), true),
 	miInstallGrub(gettext("_Install to MBR …"), true),
-	miAdd(Gtk::Stock::ADD, Gtk::AccelKey('+', Gdk::CONTROL_MASK)), miRemove(Gtk::Stock::REMOVE, Gtk::AccelKey('-', Gdk::CONTROL_MASK)), miUp(Gtk::Stock::GO_UP, Gtk::AccelKey('u', Gdk::CONTROL_MASK)), miDown(Gtk::Stock::GO_DOWN, Gtk::AccelKey('d', Gdk::CONTROL_MASK)),
+	miAdd(Gtk::Stock::UNDELETE, Gtk::AccelKey('+', Gdk::CONTROL_MASK)), miRemove(Gtk::Stock::DELETE, Gtk::AccelKey('-', Gdk::CONTROL_MASK)), miUp(Gtk::Stock::GO_UP, Gtk::AccelKey('u', Gdk::CONTROL_MASK)), miDown(Gtk::Stock::GO_DOWN, Gtk::AccelKey('d', Gdk::CONTROL_MASK)),
 	miLeft(Gtk::Stock::GO_BACK, Gtk::AccelKey('l', Gdk::CONTROL_MASK)), miRight(Gtk::Stock::GO_FORWARD, Gtk::AccelKey('r', Gdk::CONTROL_MASK)),
 	miReload(Gtk::Stock::REFRESH, Gtk::AccelKey("F5")), miSave(Gtk::Stock::SAVE),
 	miAbout(Gtk::Stock::ABOUT), miStartRootSelector(Gtk::Stock::OPEN),
@@ -64,10 +64,10 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	ti_sep1.add(vs_sep1);
 	toolbar.append(ti_sep1);
 
-	toolbar.append(tbttAdd);
-	tbttAdd.set_tooltip_text(gettext("Add a script to your configuration"));
 	toolbar.append(tbttRemove);
-	tbttRemove.set_tooltip_text(gettext("Remove a script from your configuration"));
+	tbttRemove.set_tooltip_text(gettext("Remove selected entries"));
+	toolbar.append(tbttAdd);
+	tbttAdd.set_tooltip_text(gettext("restore entries from trash"));
 	
 	ti_sep2.add(vs_sep2);
 	toolbar.append(ti_sep2);
@@ -147,6 +147,7 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	tvConfList.textRenderer.signal_edited().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_edit_name_finished));
 	tbttSave.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::saveConfig));
 	tbttAdd.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_add_click));
+	tbttRemove.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_remove_click));
 	tbttLeft.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_move_left_click));
 	tbttRight.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_move_right_click));
 	tbttReload.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_reload_click));
@@ -159,6 +160,7 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	miRight.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_move_right_click));
 	miSave.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::saveConfig));
 	miAdd.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_add_click));
+	miRemove.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_remove_click));
 	miReload.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_reload_click));
 	miInstallGrub.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_show_grub_install_dialog_click));
 	miStartRootSelector.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_show_root_selector));
@@ -466,16 +468,9 @@ void GrublistCfgDlgGtk::signal_move_click(int direction){
 
 void GrublistCfgDlgGtk::update_remove_button(){
 	if (tvConfList.get_selection()->count_selected_rows() == 1){
-		if (tvConfList.get_selection()->get_selected()->parent() == false){ //wenn Script markiert
-			tbttRemove.set_sensitive(true);
-			miRemove.set_sensitive(true);
-		}
-		else {
-			tbttRemove.set_sensitive(false);
-			miRemove.set_sensitive(false);
-		}
-	}
-	else {
+		tbttRemove.set_sensitive(true);
+		miRemove.set_sensitive(true);
+	} else {
 		tbttRemove.set_sensitive(false);
 		miRemove.set_sensitive(false);
 	}
@@ -500,6 +495,11 @@ void GrublistCfgDlgGtk::signal_treeview_selection_changed(){
 
 void GrublistCfgDlgGtk::signal_add_click(){
 	eventListener->scriptAddDlg_requested();
+}
+
+void GrublistCfgDlgGtk::signal_remove_click() {
+	void* rptr = (*tvConfList.get_selection()->get_selected())[tvConfList.treeModel.relatedRule];
+	eventListener->signal_entry_remove_requested(rptr);
 }
 
 void GrublistCfgDlgGtk::signal_preference_click(){

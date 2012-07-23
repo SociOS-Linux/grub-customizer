@@ -126,3 +126,10 @@ void Rule::print() const {
 		}
 	}
 }
+
+void Rule::setVisibility(bool isVisible) {
+	this->isVisible = isVisible;
+	for (std::list<Rule>::iterator iter = this->subRules.begin(); iter != this->subRules.end(); iter++) {
+		iter->setVisibility(isVisible);
+	}
+}

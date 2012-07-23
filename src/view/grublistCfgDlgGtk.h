@@ -146,6 +146,7 @@ private:
 	void signal_edit_name_finished(const Glib::ustring& path, const Glib::ustring& new_text);
 	void signal_move_click(int direction); //direction: -1: one position up, 1: one p. down
 	void signal_add_click();
+	void signal_remove_click();
 	void signal_reload_click();
 	void signal_show_grub_install_dialog_click();
 	void signal_move_left_click();

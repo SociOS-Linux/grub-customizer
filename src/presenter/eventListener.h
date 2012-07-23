@@ -52,7 +52,7 @@ public:
 	void scriptSelected();
 	void exitRequest();
 
-	void signal_entry_state_toggled(void* entry);
+	void signal_entry_remove_requested(void* entry);
 	void signal_entry_renamed(void* entry, std::string const& newText);
 
 	void ruleAdjustment_requested(void* rule, int direction);

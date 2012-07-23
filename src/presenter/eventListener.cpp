@@ -78,8 +78,8 @@ void EventListener::exitRequest(){
 }
 
 
-void EventListener::signal_entry_state_toggled(void* entry){
-	presenter.syncRuleState((Rule*)entry);
+void EventListener::signal_entry_remove_requested(void* entry){
+	presenter.removeRule((Rule*)entry);
 }
 
 void EventListener::signal_entry_renamed(void* entry, std::string const& newText){

@@ -44,6 +44,7 @@ struct Rule {
 	bool hasRealSubrules() const;
 	void print() const;
 	std::string getEntryName() const;
+	void setVisibility(bool isVisible);
 };
 
 #endif
