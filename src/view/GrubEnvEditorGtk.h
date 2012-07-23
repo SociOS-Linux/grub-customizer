@@ -43,11 +43,13 @@ class GrubEnvEditorGtk : public Gtk::Dialog, public GrubEnvEditor, public Common
 	std::string rootDeviceName;
 public:
 	GrubEnvEditorGtk();
+	~GrubEnvEditorGtk();
 	void setEventListener(EventListener_grubEnvEditor& eventListener);
 	void setDeviceDataList(DeviceDataList_Iface& deviceDataList);
 	void setRootDeviceName(std::string const& rootDeviceName);
 	void setEnvSettings(std::map<std::string, std::string> const& props, std::list<std::string> const& requiredProps, std::list<std::string> const& validProps);
 	std::map<std::string, std::string> getEnvSettings();
+	int getBootloaderType() const;
 	void show(bool resetPartitionChooser = false);
 	void hide();
 private:

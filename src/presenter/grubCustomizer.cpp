@@ -204,9 +204,11 @@ void GrubCustomizer::init(){
 	}
 }
 
-void GrubCustomizer::init(GrubEnv::Mode mode){
+void GrubCustomizer::init(GrubEnv::Mode mode, bool initEnv){
 	this->log("initializing (w/ specified bootloader type)…", Logger::IMPORTANT_EVENT);
-	this->env.init(mode, env.cfg_dir_prefix);
+	if (initEnv) {
+		this->env.init(mode, env.cfg_dir_prefix);
+	}
 	this->listCfgDlg->setLockState(1|4|8);
 	this->listCfgDlg->setIsBurgMode(mode == GrubEnv::BURG_MODE);
 	this->listCfgDlg->show();
@@ -457,6 +459,17 @@ void GrubCustomizer::updateGrubEnvOptions() {
 	this->env.setProperties(this->grubEnvEditor->getEnvSettings());
 	this->showEnvEditor();
 }
+
+void GrubCustomizer::applyEnvEditor(){
+	listCfgDlg->setLockState(1|2|8);
+	this->syncSettings();
+	settingsDlg->hide();
+	entryAddDlg->hide();
+	GrubEnv::Mode mode = this->grubEnvEditor->getBootloaderType() == 0 ? GrubEnv::GRUB_MODE : GrubEnv::BURG_MODE;
+	grubEnvEditor->hide();
+	this->init(mode, false);
+}
+
 
 void GrubCustomizer::mountRootFs(){
 	std::string selectedDevice = this->partitionChooser->getSelectedDevice();

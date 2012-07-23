@@ -54,6 +54,12 @@ GrubEnvEditorGtk::GrubEnvEditorGtk()
 	this->eventLock = false;
 }
 
+GrubEnvEditorGtk::~GrubEnvEditorGtk() {
+	this->tblLayout.remove(*this->pChooser);
+	delete this->pChooser;
+	this->pChooser = NULL;
+}
+
 void GrubEnvEditorGtk::setEventListener(EventListener_grubEnvEditor& eventListener) {
 	this->eventListener = &eventListener;
 }
@@ -133,6 +139,10 @@ std::map<std::string, std::string> GrubEnvEditorGtk::getEnvSettings() {
 	return result;
 }
 
+int GrubEnvEditorGtk::getBootloaderType() const {
+	return this->cbType.get_active_row_number();
+}
+
 void GrubEnvEditorGtk::show(bool resetPartitionChooser) {
 	this->eventLock = true;
 	if (this->pChooser != NULL) {
@@ -154,9 +164,7 @@ void GrubEnvEditorGtk::show(bool resetPartitionChooser) {
 	this->eventLock = false;
 }
 void GrubEnvEditorGtk::hide() {
-	this->hide();
-	delete this->pChooser;
-	this->pChooser = NULL;
+	Gtk::Dialog::hide();
 }
 
 void GrubEnvEditorGtk::signal_partitionChanged() {
@@ -184,6 +192,8 @@ void GrubEnvEditorGtk::signal_optionModified() {
 void GrubEnvEditorGtk::signal_response_action(int response_id) {
 	if (response_id == Gtk::RESPONSE_CLOSE) {
 		this->eventListener->grubEnvEditor_cancellationRequested();
+	} else if (response_id = Gtk::RESPONSE_APPLY) {
+		this->eventListener->grubEnvEditor_applyRequested();
 	}
 }
 

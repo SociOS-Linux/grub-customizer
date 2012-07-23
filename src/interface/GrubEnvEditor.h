@@ -27,6 +27,7 @@ public:
 	virtual void setEnvSettings(std::map<std::string, std::string> const& props, std::list<std::string> const& requiredProps, std::list<std::string> const& validProps) = 0;
 	virtual std::map<std::string, std::string> getEnvSettings() = 0;
 	virtual void setRootDeviceName(std::string const& rootDeviceName) = 0;
+	virtual int getBootloaderType() const = 0;
 };
 
 #endif /* GRUBENVEDITOR_H_ */

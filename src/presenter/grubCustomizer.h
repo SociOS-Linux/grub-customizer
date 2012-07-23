@@ -121,7 +121,7 @@ public:
 
 	//init functions
 	void init();
-	void init(GrubEnv::Mode mode);
+	void init(GrubEnv::Mode mode, bool initEnv = true);
 	void showPartitionChooser();
 	void showEnvEditor(bool resetPartitionChooser = false);
 	void handleCancelResponse();
@@ -203,6 +203,7 @@ public:
 	void switchPartition(std::string const& newPartition);
 	void switchBootloaderType(int newTypeIndex);
 	void updateGrubEnvOptions();
+	void applyEnvEditor();
 };
 
 #endif
