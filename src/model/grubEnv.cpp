@@ -37,7 +37,7 @@ bool GrubEnv::init(GrubEnv::Mode mode, std::string const& dir_prefix){
 			this->update_cmd = "update-burg";
 			this->install_cmd = "burg-install";
 			this->mkfont_cmd = "burg-mkfont";
-			this->mkdevicemap_cmd = "burg-mkdevicemap";
+			this->mkdevicemap_cmd = "burg-mkdevicemap --device-map=/dev/stdout";
 			this->cfg_dir = dir_prefix+"/etc/burg.d";
 			this->cfg_dir_noprefix = "/etc/burg.d";
 			this->output_config_dir =  dir_prefix+"/boot/burg";
@@ -58,7 +58,7 @@ bool GrubEnv::init(GrubEnv::Mode mode, std::string const& dir_prefix){
 			this->update_cmd = "update-grub";
 			this->install_cmd = "grub-install";
 			this->mkfont_cmd = "grub-mkfont";
-			this->mkdevicemap_cmd = "grub-mkdevicemap";
+			this->mkdevicemap_cmd = "grub-mkdevicemap --device-map=/dev/stdout";
 			this->cfg_dir = dir_prefix+"/etc/grub.d";
 			this->cfg_dir_noprefix = "/etc/grub.d";
 			this->output_config_dir =  dir_prefix+"/boot/grub";

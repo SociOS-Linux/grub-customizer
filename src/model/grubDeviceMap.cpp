@@ -38,9 +38,15 @@ GrubPartitionIndex GrubDeviceMap::getHarddriveIndexByPartitionUuid(std::string p
 	try {
 		while (result.hddNum == "") {
 			std::string row = handle.getRow();
+			std::vector<std::string> rowMatch = Regex::match("^\\(hd([0-9]+)\\)\t(.*)$", row);
 			if (row.find(diskDevice) != -1) {
-				result.hddNum = Regex::match("^\\(hd([0-9]+)\\).*$", row)[1];
+				result.hddNum = rowMatch[1];
 				break;
+			} else { // the files contains a path to a symlink
+				int size = readlink(rowMatch[2].c_str(), deviceBuf, 100); // if this is a link, follow it
+				if (size != -1) {
+					result.hddNum = rowMatch[1];
+				}
 			}
 		}
 	} catch (SmartFileHandle::Exception e) {
