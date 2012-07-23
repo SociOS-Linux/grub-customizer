@@ -476,6 +476,9 @@ std::list<Rule>::iterator Proxy::getNextVisibleRule(std::list<Rule>::iterator ba
 			}
 		}
 	} while (!base->isVisible && base != list->end());
+	if (base == list->end()) {
+		throw Proxy::NO_MOVE_TARGET_FOUND;
+	}
 	return base;
 }
 
@@ -652,5 +655,19 @@ void Proxy::removeEquivalentRules(Rule const& base) {
 	}
 }
 
-
+bool Proxy::hasVisibleRules(Rule const* parent) const {
+	std::list<Rule> const& list = parent ? parent->subRules : this->rules;
+	for (std::list<Rule>::const_iterator iter = list.begin(); iter != list.end(); iter++) {
+		if (iter->isVisible) {
+			return true;
+		}
+		if (iter->type == Rule::SUBMENU) {
+			bool has = this->hasVisibleRules(&*iter);
+			if (has) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
 

@@ -603,23 +603,91 @@ Rule& GrublistCfg::moveRule(Rule* rule, int direction){
 		return this->proxies.getProxyByRule(rule)->moveRule(rule, direction);
 	} catch (Proxy::Exception e) {
 		if (e == Proxy::NO_MOVE_TARGET_FOUND) {
-			std::list<Rule>::iterator movedRule = this->proxies.moveRuleToNewProxy(*rule, direction);
+			try {
+				Proxy* proxy = this->proxies.getProxyByRule(rule);
+				Rule* parent = NULL;
+				try {
+					proxy->getParentRule(rule);
+				} catch (Proxy::Exception e) {if (e != Proxy::RULE_NOT_FOUND) throw e;}
 
-			Proxy* currentProxy = this->proxies.getProxyByRule(&*movedRule);
-			std::list<Proxy>::iterator proxyIter = this->proxies.begin();
-			for (;proxyIter != this->proxies.end() && &*proxyIter != currentProxy; proxyIter++) {}
+				std::list<Rule>::iterator nextRule = this->proxies.getNextVisibleRule(proxy->getListIterator(*rule, proxy->getRuleList(parent)), direction);
+				std::list<Rule>::iterator targetRule = this->proxies.getNextVisibleRule(nextRule, direction);
+				std::list<Rule>::iterator previousRule = this->proxies.getNextVisibleRule(proxy->getListIterator(*rule, proxy->getRuleList(parent)), -direction);
 
-			if (direction == -1) {
-				proxyIter--;
-			} else if (direction == 1) {
-				proxyIter++;
+				if (this->proxies.getProxyByRule(&*targetRule)->dataSource == this->proxies.getProxyByRule(&*rule)->dataSource) {
+					Proxy* targetProxy = this->proxies.getProxyByRule(&*targetRule);
+					targetProxy->removeEquivalentRules(*rule);
+					Rule* newRule = NULL;
+					if (direction == -1) {
+						targetProxy->rules.push_back(*rule);
+						newRule = &targetProxy->rules.back();
+					} else {
+						targetProxy->rules.push_front(*rule);
+						newRule = &targetProxy->rules.front();
+					}
+					rule->isVisible = false;
+
+					// cleanup
+					if (!proxy->hasVisibleRules()) {
+						this->proxies.deleteProxy(proxy);
+					}
+
+					if (this->proxies.getProxyByRule(&*nextRule)->dataSource == this->proxies.getProxyByRule(&*previousRule)->dataSource) {
+						this->proxies.getProxyByRule(&*previousRule)->removeEquivalentRules(*nextRule);
+						if (direction == 1) {
+							this->proxies.getProxyByRule(&*previousRule)->rules.push_back(*nextRule);
+						} else {
+							this->proxies.getProxyByRule(&*previousRule)->rules.push_front(*nextRule);
+						}
+						nextRule->isVisible = false;
+						if (!this->proxies.getProxyByRule(&*nextRule)->hasVisibleRules()) {
+							this->proxies.deleteProxy(this->proxies.getProxyByRule(&*nextRule));
+						}
+					}
+
+					return *newRule;
+				} else {
+					std::list<Rule>::iterator movedRule = this->proxies.moveRuleToNewProxy(*rule, direction);
+
+					Proxy* currentProxy = this->proxies.getProxyByRule(&*movedRule);
+					std::list<Proxy>::iterator proxyIter = this->proxies.begin();
+					for (;proxyIter != this->proxies.end() && &*proxyIter != currentProxy; proxyIter++) {}
+
+					if (direction == -1) {
+						proxyIter--;
+					} else if (direction == 1) {
+						proxyIter++;
+					}
+
+					std::list<Rule>::iterator movedRule2 = this->proxies.moveRuleToNewProxy(*nextRule, -direction);
+					this->renumerate();
+					this->swapProxies(currentProxy, this->proxies.getProxyByRule(&*movedRule2));
+
+					std::list<Rule>::iterator prevPrevRule = this->proxies.getNextVisibleRule(movedRule2, -direction);
+
+					if (this->proxies.getProxyByRule(&*prevPrevRule)->dataSource == this->proxies.getProxyByRule(&*movedRule2)->dataSource) {
+						Proxy* prevprev = this->proxies.getProxyByRule(&*prevPrevRule);
+						prevprev->removeEquivalentRules(*movedRule2);
+						if (direction == 1) {
+							prevprev->rules.push_back(*movedRule2);
+						} else {
+							prevprev->rules.push_front(*movedRule2);
+						}
+						movedRule2->isVisible = false;
+						if (!this->proxies.getProxyByRule(&*movedRule2)->hasVisibleRules()) {
+							this->proxies.deleteProxy(this->proxies.getProxyByRule(&*movedRule2));
+						}
+					}
+
+					return *movedRule;
+				}
+			} catch (ProxyList::Exception e) {
+				if (e == ProxyList::NO_MOVE_TARGET_FOUND) {
+					throw GrublistCfg::NO_MOVE_TARGET_FOUND;
+				} else {
+					throw e;
+				}
 			}
-
-			std::list<Rule>::iterator movedRule2 = this->proxies.moveRuleToNewProxy(direction == -1 ? proxyIter->rules.back() : proxyIter->rules.front(), -direction);
-			this->renumerate();
-			this->swapProxies(currentProxy, this->proxies.getProxyByRule(&*movedRule2));
-
-			return *movedRule;
 
 
 //

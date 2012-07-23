@@ -187,5 +187,53 @@ std::list<Rule>::iterator ProxyList::moveRuleToNewProxy(Rule& rule, int directio
 	newProxy->removeEquivalentRules(rule);
 	std::list<Rule>::iterator movedRule = newProxy->rules.insert(direction == -1 ? newProxy->rules.end() : newProxy->rules.begin(), rule);
 	rule.isVisible = false;
+
+	if (!currentProxy->hasVisibleRules()) {
+		this->deleteProxy(currentProxy);
+	}
 	return movedRule;
 }
+
+std::list<Rule>::iterator ProxyList::getNextVisibleRule(std::list<Rule>::iterator base, int direction) {
+	std::list<Proxy>::iterator proxyIter = this->begin();
+	{
+		Proxy* proxy = this->getProxyByRule(&*base);
+		for (;proxyIter != this->end() && &*proxyIter != proxy; proxyIter++) {}
+	}
+
+	while (proxyIter != this->end()) {
+		try {
+			return proxyIter->getNextVisibleRule(base, direction);
+		} catch (Proxy::Exception e) {
+			if (e == Proxy::NO_MOVE_TARGET_FOUND) {
+				if (direction == 1) {
+					proxyIter++;
+					if (proxyIter == this->end()) {
+						throw ProxyList::NO_MOVE_TARGET_FOUND;
+					}
+					base = proxyIter->rules.begin();
+				} else {
+					proxyIter--;
+					if (proxyIter == this->end()) {
+						throw ProxyList::NO_MOVE_TARGET_FOUND;
+					}
+					base = proxyIter->rules.end();
+					base--;
+				}
+				if (base->isVisible) {
+					return base;
+				}
+			} else {
+				throw e;
+			}
+		}
+	}
+	throw ProxyList::NO_MOVE_TARGET_FOUND;
+}
+
+
+
+
+
+
+

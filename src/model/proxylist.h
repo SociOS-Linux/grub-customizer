@@ -31,7 +31,8 @@ struct EntryTitleListItem {
 };
 struct ProxyList : public std::list<Proxy>, public CommonClass {
 	enum Exception {
-		NO_RELATED_PROXY_FOUND
+		NO_RELATED_PROXY_FOUND,
+		NO_MOVE_TARGET_FOUND
 	};
 	std::list<Proxy> trash; //removed proxies
 	std::list<Proxy*> getProxiesByScript(Script const& script);
@@ -50,6 +51,7 @@ struct ProxyList : public std::list<Proxy>, public CommonClass {
 	Proxy* getProxyByRule(Rule* rule, std::list<Rule> const& list, Proxy& parentProxy);
 	Proxy* getProxyByRule(Rule* rule);
 	std::list<Rule>::iterator moveRuleToNewProxy(Rule& rule, int direction);
+	std::list<Rule>::iterator getNextVisibleRule(std::list<Rule>::iterator base, int direction);
 };
 
 #endif

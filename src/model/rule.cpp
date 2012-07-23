@@ -22,7 +22,7 @@ Rule::Rule(Entry& source, bool isVisible, EntryPathFollower& pathFollower, std::
 	: type(source.type == Entry::PLAINTEXT ? Rule::PLAINTEXT : (source.type == Entry::SUBMENU ? Rule::SUBMENU : Rule::NORMAL)), isVisible(isVisible), __idpath(currentPath), outputName(source.name), dataSource(source.type == Entry::SUBMENU ? NULL : &source)
 {
 	if (source.type == Entry::SUBMENU) {
-		Rule placeholder(Rule::OTHER_ENTRIES_PLACEHOLDER, currentPath, "*", true);
+		Rule placeholder(Rule::OTHER_ENTRIES_PLACEHOLDER, currentPath, "*", this->isVisible);
 		placeholder.dataSource = pathFollower.getEntryByPath(currentPath);
 		this->subRules.push_front(placeholder);
 	}

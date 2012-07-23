@@ -63,10 +63,11 @@ struct Proxy {
 	bool ruleIsFromOwnScript(Rule const& rule) const;
 	void removeForeignChildRules(Rule& parent);
 	void removeEquivalentRules(Rule const& base);
-private:
+	std::list<Rule>::iterator getListIterator(Rule const& needle, std::list<Rule>& haystack);
 	Rule* getParentRule(Rule* child, Rule* root = NULL);
 	std::list<Rule>& getRuleList(Rule* parentElement);
-	std::list<Rule>::iterator getListIterator(Rule const& needle, std::list<Rule>& haystack);
+	bool hasVisibleRules(Rule const* parent = NULL) const;
+private:
 	static void adjustIterator(std::list<Rule>::iterator& iter, int adjustment);
 };
 
