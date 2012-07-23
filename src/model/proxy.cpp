@@ -597,4 +597,36 @@ void Proxy::removeForeignChildRules(Rule& parent) {
 	} while (loopRestartRequired);
 }
 
+void Proxy::removeEquivalentRules(Rule const& base) {
+	if (base.dataSource) {
+		Rule* eqRule = this->getRuleByEntry(*base.dataSource, this->rules, base.type);
+		if (eqRule) {
+			Rule* parent = NULL;
+			int rlist_size = 0;
+			do {
+				try {
+					parent = this->getParentRule(eqRule);
+				} catch (Proxy::Exception e) {
+					if (e == Proxy::RULE_NOT_FOUND) {
+						parent = NULL;
+					} else {
+						throw e;
+					}
+				}
+				std::list<Rule>& rlist = this->getRuleList(parent);
+				std::list<Rule>::iterator iter = this->getListIterator(*eqRule, rlist);
+				rlist.erase(iter);
+
+				eqRule = parent; // go one step up to remove this rule if empty
+				rlist_size = rlist.size();
+			} while (rlist_size == 0 && parent != NULL); // delete all the empty submenus above
+		}
+	} else if (base.subRules.size()) {
+		for (std::list<Rule>::const_iterator iter = base.subRules.begin(); iter != base.subRules.end(); iter++) {
+			this->removeEquivalentRules(*iter);
+		}
+	}
+}
+
+
 

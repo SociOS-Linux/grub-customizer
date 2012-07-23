@@ -609,6 +609,7 @@ Rule& GrublistCfg::moveRule(Rule* rule, int direction){
 
 			if (direction == -1 && proxyIter != this->proxies.begin()) {
 				proxyIter--;
+				proxyIter->removeEquivalentRules(*rule);
 				proxyIter->rules.push_back(*rule);
 				if (rule->type == Rule::SUBMENU) {
 					currentProxy->removeForeignChildRules(*rule);
@@ -621,6 +622,7 @@ Rule& GrublistCfg::moveRule(Rule* rule, int direction){
 				return proxyIter->rules.back();
 			} else if (direction == 1 && proxyIter != this->proxies.end() && &*proxyIter != &this->proxies.back()) {
 				proxyIter++;
+				proxyIter->removeEquivalentRules(*rule);
 				proxyIter->rules.push_front(*rule);
 				if (rule->type == Rule::SUBMENU) {
 					currentProxy->removeForeignChildRules(*rule);

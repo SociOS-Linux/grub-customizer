@@ -61,6 +61,7 @@ struct Proxy {
 	Rule* createSubmenu(Rule* childItem);
 	bool ruleIsFromOwnScript(Rule const& rule) const;
 	void removeForeignChildRules(Rule& parent);
+	void removeEquivalentRules(Rule const& base);
 private:
 	Rule* getParentRule(Rule* child, Rule* root = NULL);
 	std::list<Rule>& getRuleList(Rule* parentElement);
