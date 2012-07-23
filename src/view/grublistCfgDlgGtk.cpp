@@ -34,7 +34,8 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	miPreferences(Gtk::Stock::PREFERENCES), miReload(Gtk::Stock::REFRESH, Gtk::AccelKey("F5")), miSave(Gtk::Stock::SAVE),
 	miAbout(Gtk::Stock::ABOUT), miStartRootSelector(Gtk::Stock::OPEN),
 	lock_state(~0), burgSwitcher(gettext("BURG found!"), false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO),
-	pchooserQuestionDlg(gettext("No Bootloader found"), false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO)
+	pchooserQuestionDlg(gettext("No Bootloader found"), false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO),
+	previouslyAddedProxy(NULL)
 {
 	win.set_icon_name("grub-customizer");
 
@@ -236,35 +237,28 @@ void GrublistCfgDlgGtk::setStatusText(std::string const& new_status_text){
 }
 
 void GrublistCfgDlgGtk::appendScript(std::string const& name, bool is_active, void* proxyPtr){
-	Gtk::TreeIter row = tvConfList.refTreeStore->append();
-	(*row)[tvConfList.treeModel.active] = is_active;
-
-	//if the config is loading, only compare the files… else call the more complex proxyRequired method
-	(*row)[tvConfList.treeModel.name] = name;
-	
-	(*row)[tvConfList.treeModel.relatedRule] = NULL;
-	(*row)[tvConfList.treeModel.relatedProxy] = (void*)proxyPtr;
-	(*row)[tvConfList.treeModel.is_other_entries_marker] = false;
-	(*row)[tvConfList.treeModel.is_editable] = false;
-	(*row)[tvConfList.treeModel.is_sensitive] = true;
-	(*row)[tvConfList.treeModel.font_weight] = Pango::WEIGHT_BOLD;
-	(*row)[tvConfList.treeModel.fontStyle] = Pango::STYLE_OBLIQUE;
+	this->previouslyAddedProxy = proxyPtr;
 }
 
 void GrublistCfgDlgGtk::appendEntry(std::string const& name, bool is_active, void* entryPtr, bool editable, bool is_submenu, void* parentEntry){
-	Gtk::TreeIter lastScriptIter = parentEntry ? this->getIterByRulePtr(parentEntry) : Gtk::TreeIter(*tvConfList.refTreeStore->children().rbegin());
+	if (is_active) {
+		Gtk::TreeIter entryRow;
+		if (parentEntry) {
+			entryRow = tvConfList.refTreeStore->append(this->getIterByRulePtr(parentEntry)->children());
+		} else {
+			entryRow = tvConfList.refTreeStore->append();
+		}
+		(*entryRow)[tvConfList.treeModel.active] = is_active;
+		(*entryRow)[tvConfList.treeModel.name] = name;
+		(*entryRow)[tvConfList.treeModel.relatedRule] = (void*)entryPtr;
+		(*entryRow)[tvConfList.treeModel.relatedProxy] = this->previouslyAddedProxy;
+		(*entryRow)[tvConfList.treeModel.is_editable] = editable;
+		(*entryRow)[tvConfList.treeModel.is_sensitive] = true;
+		(*entryRow)[tvConfList.treeModel.font_weight] = is_submenu ? PANGO_WEIGHT_BOLD : PANGO_WEIGHT_NORMAL;
+		(*entryRow)[tvConfList.treeModel.fontStyle] = Pango::STYLE_NORMAL;
 
-	Gtk::TreeIter entryRow = tvConfList.refTreeStore->append(lastScriptIter->children());
-	(*entryRow)[tvConfList.treeModel.active] = is_active;
-	(*entryRow)[tvConfList.treeModel.name] = name;
-	(*entryRow)[tvConfList.treeModel.relatedRule] = (void*)entryPtr;
-	(*entryRow)[tvConfList.treeModel.relatedProxy] = (void*)(*lastScriptIter)[tvConfList.treeModel.relatedProxy];
-	(*entryRow)[tvConfList.treeModel.is_editable] = editable;
-	(*entryRow)[tvConfList.treeModel.is_sensitive] = (bool)(*entryRow->parent())[tvConfList.treeModel.active];
-	(*entryRow)[tvConfList.treeModel.font_weight] = is_submenu ? PANGO_WEIGHT_BOLD : PANGO_WEIGHT_NORMAL;
-	(*entryRow)[tvConfList.treeModel.fontStyle] = Pango::STYLE_NORMAL;
-	
-	tvConfList.expand_all();
+		tvConfList.expand_all();
+	}
 }
 
 
@@ -709,11 +703,10 @@ void GrublistCfgDlgGtk::signal_partition_chooser_question_response(int response_
 GrubConfListing::GrubConfListing(){
 	refTreeStore = Gtk::TreeStore::create(treeModel);
 	this->set_model(refTreeStore);
-	this->append_column_editable(gettext("is active"), treeModel.active);
 	this->append_column_editable(gettext("name"), treeModel.name); //rows with is_editable==true will be made editable by cell renderer option
 	
 	{
-		Gtk::TreeViewColumn* pColumn = this->get_column(1);
+		Gtk::TreeViewColumn* pColumn = this->get_column(0);
 		Gtk::CellRendererText* pRenderer = static_cast<Gtk::CellRendererText*>(pColumn->get_first_cell_renderer());
 		pColumn->add_attribute(pRenderer->property_editable(), treeModel.is_editable);
 		pColumn->add_attribute(pRenderer->property_sensitive(), treeModel.is_sensitive);
@@ -722,16 +715,10 @@ GrubConfListing::GrubConfListing(){
 	{
 		Gtk::TreeViewColumn* pColumn = this->get_column(0);
 		Gtk::CellRendererText* pRenderer = static_cast<Gtk::CellRendererText*>(pColumn->get_first_cell_renderer());
-		pColumn->add_attribute(pRenderer->property_sensitive(), treeModel.is_sensitive);
-	}
-
-	{
-		Gtk::TreeViewColumn* pColumn = this->get_column(1);
-		Gtk::CellRendererText* pRenderer = static_cast<Gtk::CellRendererText*>(pColumn->get_first_cell_renderer());
 		pColumn->add_attribute(pRenderer->property_weight(), treeModel.font_weight);
 	}
 	{
-		Gtk::TreeViewColumn* pColumn = this->get_column(1);
+		Gtk::TreeViewColumn* pColumn = this->get_column(0);
 		Gtk::CellRendererText* pRenderer = static_cast<Gtk::CellRendererText*>(pColumn->get_first_cell_renderer());
 		pColumn->add_attribute(pRenderer->property_style(), treeModel.fontStyle);
 	}

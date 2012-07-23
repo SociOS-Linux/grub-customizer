@@ -86,6 +86,8 @@ class GrublistCfgDlgGtk : public GrublistCfgDlg, public CommonClass {
 
 	Gtk::MessageDialog burgSwitcher, pchooserQuestionDlg;
 
+	void* previouslyAddedProxy;
+
 	Gtk::TreeModel::iterator getIterByProxyPtr(void* proxyPtr) const;
 	Gtk::TreeModel::iterator getIterByRulePtr(void* rulePtr, const Gtk::TreeRow* parentRow = NULL) const;
 	void update_move_buttons();
