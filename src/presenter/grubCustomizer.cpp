@@ -470,12 +470,6 @@ void GrubCustomizer::updateScriptAddDlgPreview(){
 	}
 }
 
-void GrubCustomizer::removeProxy(Proxy* p){
-	this->grublistCfg->proxies.deleteProxy(p);
-	this->listCfgDlg->removeProxy(p);
-	this->syncListView_load();
-	this->modificationsUnsaved = true;
-}
 
 void GrubCustomizer::_rAppendRule(Rule& rule, Rule* parentRule){
 	bool is_other_entries_ph = rule.type == Rule::OTHER_ENTRIES_PLACEHOLDER;
@@ -538,7 +532,6 @@ void GrubCustomizer::syncListView_load() {
 		for (std::list<Proxy>::iterator iter = this->grublistCfg->proxies.begin(); iter != this->grublistCfg->proxies.end(); iter++){
 			std::string name = iter->getScriptName() + (this->grublistCfg && iter->dataSource && (progress != 1 && iter->dataSource->fileName != iter->fileName || progress == 1 && grublistCfg->proxies.proxyRequired(*iter->dataSource)) ? gettext(" (custom)") : "");
 			if (name != "header" && name != "debian_theme" && name != "grub-customizer_menu_color_helper" || iter->isModified()) {
-				this->listCfgDlg->appendScript(name, iter->isExecutable(), &(*iter));
 				for (std::list<Rule>::iterator ruleIter = iter->rules.begin(); ruleIter != iter->rules.end(); ruleIter++){
 					this->_rAppendRule(*ruleIter);
 				}
@@ -631,18 +624,11 @@ void GrubCustomizer::quit(bool force){
 	}
 }
 
-void GrubCustomizer::syncProxyState(void* proxy){
-	((Proxy*)proxy)->set_isExecutable(this->listCfgDlg->getProxyState(proxy));
-	this->listCfgDlg->setProxyState(proxy, this->listCfgDlg->getProxyState(proxy));
-	this->modificationsUnsaved = true;
-	this->updateSettingsDlg();
-}
 
 void GrubCustomizer::syncRuleState(Rule* entry){
 	entry->isVisible = this->listCfgDlg->getRuleState(entry);
 	this->listCfgDlg->setRuleState(entry, this->listCfgDlg->getRuleState(entry));
 	this->modificationsUnsaved = true;
-	this->updateScriptEntry(this->grublistCfg->proxies.getProxyByRule(entry));
 	this->updateSettingsDlg();
 }
 
@@ -652,7 +638,6 @@ void GrubCustomizer::syncRuleName(Rule* entry){
 	if (newName == ""){
 		this->listCfgDlg->showErrorMessage(gettext("Name the Entry"));
 		this->listCfgDlg->setRuleName(entry, oldName);
-		this->updateScriptEntry(this->grublistCfg->proxies.getProxyByRule(entry));
 	}
 	else {
 		this->renameEntry(entry, newName);
@@ -660,16 +645,6 @@ void GrubCustomizer::syncRuleName(Rule* entry){
 	this->modificationsUnsaved = true;
 }
 
-void GrubCustomizer::updateScriptEntry(Proxy* proxy){
-	//adding (custom) if this script is modified
-	if (proxy->dataSource){ //checking the Datasource before Accessing it
-		std::string name = proxy->dataSource->name;
-		this->listCfgDlg->setProxyName(proxy, name, false);
-		if (this->grublistCfg->proxies.proxyRequired(*proxy->dataSource)){
-			this->listCfgDlg->setProxyName(proxy, name, true);
-		}
-	}
-}
 
 void GrubCustomizer::moveRule(void* rule, int direction){
 	try {
@@ -684,12 +659,6 @@ void GrubCustomizer::moveRule(void* rule, int direction){
 		else
 			throw e;
 	}
-}
-
-void GrubCustomizer::swapProxies(Proxy* a, Proxy* b){
-	grublistCfg->swapProxies(a,b);
-	this->listCfgDlg->swapProxies(a,b);
-	this->modificationsUnsaved = true;
 }
 
 

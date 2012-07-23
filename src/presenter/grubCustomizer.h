@@ -134,8 +134,6 @@ public:
 	void addScriptFromScriptAddDlg();
 	void updateScriptAddDlgPreview();
 	
-	void removeProxy(Proxy* p);
-	
 	//dispatchers
 	void syncListView_load();
 	void syncListView_save();
@@ -145,12 +143,9 @@ public:
 	
 	void quit(bool force = false);
 	
-	void syncProxyState(void* proxy);
 	void syncRuleState(Rule* entry);
 	void syncRuleName(Rule* entry);
-	void updateScriptEntry(Proxy* proxy);
 	void moveRule(void* rule, int direction);
-	void swapProxies(Proxy* a, Proxy* b);
 	void createSubmenu(Rule* childItem);
 	void removeSubmenu(Rule* childItem);
 	

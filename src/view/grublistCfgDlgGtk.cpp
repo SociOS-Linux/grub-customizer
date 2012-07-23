@@ -34,8 +34,7 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	miPreferences(Gtk::Stock::PREFERENCES), miReload(Gtk::Stock::REFRESH, Gtk::AccelKey("F5")), miSave(Gtk::Stock::SAVE),
 	miAbout(Gtk::Stock::ABOUT), miStartRootSelector(Gtk::Stock::OPEN),
 	lock_state(~0), burgSwitcher(gettext("BURG found!"), false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO),
-	pchooserQuestionDlg(gettext("No Bootloader found"), false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO),
-	previouslyAddedProxy(NULL)
+	pchooserQuestionDlg(gettext("No Bootloader found"), false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO)
 {
 	win.set_icon_name("grub-customizer");
 
@@ -149,7 +148,6 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	tvConfList.get_selection()->signal_changed().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_treeview_selection_changed));
 	tbttSave.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::saveConfig));
 	tbttAdd.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_add_click));
-	tbttRemove.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_remove_click));
 	tbttLeft.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_move_left_click));
 	tbttRight.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_move_right_click));
 	tbttReload.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_reload_click));
@@ -161,7 +159,6 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	miRight.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_move_right_click));
 	miSave.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::saveConfig));
 	miAdd.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_add_click));
-	miRemove.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_remove_click));
 	miReload.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_reload_click));
 	miInstallGrub.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_show_grub_install_dialog_click));
 	miStartRootSelector.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_show_root_selector));
@@ -236,10 +233,6 @@ void GrublistCfgDlgGtk::setStatusText(std::string const& new_status_text){
 	statusbar.push(new_status_text);
 }
 
-void GrublistCfgDlgGtk::appendScript(std::string const& name, bool is_active, void* proxyPtr){
-	this->previouslyAddedProxy = proxyPtr;
-}
-
 void GrublistCfgDlgGtk::appendEntry(std::string const& name, bool is_active, void* entryPtr, bool editable, bool is_submenu, void* parentEntry){
 	if (is_active) {
 		Gtk::TreeIter entryRow;
@@ -251,7 +244,6 @@ void GrublistCfgDlgGtk::appendEntry(std::string const& name, bool is_active, voi
 		(*entryRow)[tvConfList.treeModel.active] = is_active;
 		(*entryRow)[tvConfList.treeModel.name] = name;
 		(*entryRow)[tvConfList.treeModel.relatedRule] = (void*)entryPtr;
-		(*entryRow)[tvConfList.treeModel.relatedProxy] = this->previouslyAddedProxy;
 		(*entryRow)[tvConfList.treeModel.is_editable] = editable;
 		(*entryRow)[tvConfList.treeModel.is_sensitive] = true;
 		(*entryRow)[tvConfList.treeModel.font_weight] = is_submenu ? PANGO_WEIGHT_BOLD : PANGO_WEIGHT_NORMAL;
@@ -342,18 +334,6 @@ void GrublistCfgDlgGtk::signal_reload_click(){
 	eventListener->reload_request();
 }
 
-Gtk::TreeModel::iterator GrublistCfgDlgGtk::getIterByProxyPtr(void* proxyPtr) const {
-	Gtk::TreeModel::const_iterator iter = tvConfList.refTreeStore->children().begin();
-	while (iter != tvConfList.refTreeStore->children().end()){
-		if (!iter->parent() && (*iter)[tvConfList.treeModel.relatedProxy] == proxyPtr)
-			break;
-		iter++;
-	}
-	if (iter == tvConfList.refTreeStore->children().end())
-		throw PROXY_ITER_NOT_FOUND;
-	return iter;
-}
-
 Gtk::TreeModel::iterator GrublistCfgDlgGtk::getIterByRulePtr(void* rulePtr, const Gtk::TreeRow* parentRow) const {
 	const Gtk::TreeNodeChildren children = parentRow ? parentRow->children() : tvConfList.refTreeStore->children();
 	for (Gtk::TreeModel::const_iterator iter = children.begin(); iter != children.end(); iter++) {
@@ -370,40 +350,15 @@ Gtk::TreeModel::iterator GrublistCfgDlgGtk::getIterByRulePtr(void* rulePtr, cons
 	throw RULE_ITER_NOT_FOUND;
 }
 
-void GrublistCfgDlgGtk::setProxyName(void* proxy, std::string const& name, bool isModified){
-	Gtk::TreeModel::iterator iter = getIterByProxyPtr(proxy);
-	
-	//adding (custom) if this script is modified
-	this->setLockState(~0);
-	(*iter)[tvConfList.treeModel.name] = name + (isModified ? gettext(" (custom)") : "");
-	this->setLockState(0);
-}
-
 void GrublistCfgDlgGtk::signal_row_changed(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter){
 	if (this->lock_state == 0){
-		if (iter->parent()){ //if it's a rule row (no proxy)
-			eventListener->signal_entry_renamed((void*)(*iter)[tvConfList.treeModel.relatedRule]);
-			eventListener->signal_entry_state_toggled((void*)(*iter)[tvConfList.treeModel.relatedRule]);
-		}
-		else {
-			eventListener->signal_script_state_toggled((void*)(*iter)[tvConfList.treeModel.relatedProxy]);
-		}
+		eventListener->signal_entry_renamed((void*)(*iter)[tvConfList.treeModel.relatedRule]);
+		eventListener->signal_entry_state_toggled((void*)(*iter)[tvConfList.treeModel.relatedRule]);
 	}
 }
 
 void GrublistCfgDlgGtk::signal_show_root_selector(){
 	eventListener->rootSelector_request();
-}
-
-
-
-
-void GrublistCfgDlgGtk::swapProxies(void* a, void* b){
-	this->setLockState(~0);
-	tvConfList.refTreeStore->iter_swap(getIterByProxyPtr(a), getIterByProxyPtr(b));
-	this->setLockState(0);
-	
-	update_move_buttons();
 }
 
 
@@ -433,19 +388,6 @@ void GrublistCfgDlgGtk::setRuleState(void* rule, bool newState){
 	this->setLockState(0);
 }
 
-bool GrublistCfgDlgGtk::getProxyState(void* proxy){
-	Gtk::TreeModel::iterator iter = this->getIterByProxyPtr(proxy);
-	return (*iter)[tvConfList.treeModel.active];
-}
-
-void GrublistCfgDlgGtk::setProxyState(void* proxy, bool isActive){
-	Gtk::TreeModel::iterator iter = this->getIterByProxyPtr(proxy);
-	this->setLockState(~0);
-	(*iter)[tvConfList.treeModel.active] = isActive;
-	this->setEntrySensibility(iter->children(), isActive);
-	this->setLockState(0);
-}
-
 void GrublistCfgDlgGtk::selectRule(void* rule, bool startEdit) {
 	try {
 		this->tvConfList.get_selection()->select(this->getIterByRulePtr(rule));
@@ -472,22 +414,7 @@ void GrublistCfgDlgGtk::signal_move_click(int direction){
 		if (direction == 1 || direction == -1){
 			Gtk::TreeModel::iterator iter = tvConfList.get_selection()->get_selected();
 			//if rule swap
-			if ((void*)(*iter)[tvConfList.treeModel.relatedRule] != NULL){
-				eventListener->ruleAdjustment_requested((void*)(*iter)[tvConfList.treeModel.relatedRule], direction);
-			} else { //if script swap
-				Gtk::TreeModel::iterator iter2 = iter;
-				if (direction == 1){
-					iter2++;
-				}
-				else if (direction == -1){
-					iter2--;
-				}
-		
-				void* a = (*iter)[tvConfList.treeModel.relatedProxy];
-				void* b = (*iter2)[tvConfList.treeModel.relatedProxy];
-			
-				eventListener->proxySwap_requested(a, b);
-			}
+			eventListener->ruleAdjustment_requested((void*)(*iter)[tvConfList.treeModel.relatedRule], direction);
 		}
 		else {
 			this->log("the only supported directions for moving are 1 or -1", Logger::ERROR);
@@ -518,16 +445,12 @@ void GrublistCfgDlgGtk::setDefaultTitleStatusText(std::string const& str){
 
 void GrublistCfgDlgGtk::signal_treeview_selection_changed(){
 	if (this->lock_state == 0){
-		bool rule_ev_executed = false;
 		if (tvConfList.get_selection()->count_selected_rows() == 1){
 			if (tvConfList.get_selection()->get_selected()->parent()){
 				void* rptr = (*tvConfList.get_selection()->get_selected())[tvConfList.treeModel.relatedRule];
 				this->eventListener->ruleSelected(rptr);
-				rule_ev_executed = true;
 			}
 		}
-		if (!rule_ev_executed)
-			this->eventListener->proxySelected((*tvConfList.get_selection()->get_selected())[tvConfList.treeModel.relatedProxy]);
 
 		this->updateButtonsState();
 	}
@@ -535,21 +458,6 @@ void GrublistCfgDlgGtk::signal_treeview_selection_changed(){
 
 void GrublistCfgDlgGtk::signal_add_click(){
 	eventListener->scriptAddDlg_requested();
-}
-
-void GrublistCfgDlgGtk::removeProxy(void* p){
-	//Parameter is not really required
-	this->setLockState(~0);
-	Gtk::TreeModel::iterator iter = getIterByProxyPtr(p);
-	tvConfList.refTreeStore->erase(iter);
-	this->setLockState(0);
-	
-	update_remove_button();
-}
-
-void GrublistCfgDlgGtk::signal_remove_click(){
-	void* proxyPointer = (void*)(*(tvConfList.get_selection()->get_selected()))[tvConfList.treeModel.relatedProxy];
-	eventListener->removeProxy_requested(proxyPointer);
 }
 
 void GrublistCfgDlgGtk::signal_preference_click(){
@@ -728,7 +636,6 @@ GrubConfListing::TreeModel::TreeModel(){
 	this->add(active);
 	this->add(name);
 	this->add(relatedRule);
-	this->add(relatedProxy);
 	this->add(is_other_entries_marker);
 	this->add(is_editable);
 	this->add(is_sensitive);

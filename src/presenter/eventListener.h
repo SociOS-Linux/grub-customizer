@@ -50,15 +50,12 @@ public:
 	void scriptAddDlg_requested();
 	void scriptAddDlg_applied();
 	void scriptSelected();
-	void removeProxy_requested(void* p);
 	void exitRequest();
 
-	void signal_script_state_toggled(void* script);
 	void signal_entry_state_toggled(void* entry);
 	void signal_entry_renamed(void* entry);
 
 	void ruleAdjustment_requested(void* rule, int direction);
-	void proxySwap_requested(void* a, void* b);
 
 	void ruleSelected(void* rule);
 	void proxySelected(void* proxy);

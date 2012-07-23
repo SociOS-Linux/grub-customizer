@@ -64,8 +64,6 @@ public:
 	virtual void hideProgressBar()=0;
 	//sets the text to be showed inside the status bar
 	virtual void setStatusText(std::string const& new_status_text)=0;
-	//add script to the end of the list
-	virtual void appendScript(std::string const& name, bool is_active, void* proxyPtr)=0;
 	//add entry to the end of the last script of the list
 	virtual void appendEntry(std::string const& name, bool is_active, void* entryPtr, bool editable, bool is_submenu, void* parentEntry = NULL)=0;
 	//notifies the user about the problem that no grublistcfg_proxy has been found
@@ -75,17 +73,8 @@ public:
 	//creates the string for plaintexts
 	virtual std::string createPlaintextString() const=0;
 
-	//sets a new name the list item which points to the given script
-	virtual void setProxyName(void* proxy, std::string const& name, bool isModified)=0;
-
-	//swap two list items which contains proxies (script instances)
-	virtual void swapProxies(void* a, void* b)=0;
-
 	//sets the given title to be showed as default title inside the status bar
 	virtual void setDefaultTitleStatusText(std::string const& str)=0;
-
-	//remove proxy from the list
-	virtual void removeProxy(void* p)=0;
 
 	//asks the user if he wants to exit the whole application
 	virtual int showExitConfirmDialog(int type)=0;
@@ -102,10 +91,6 @@ public:
 	virtual bool getRuleState(void* rule)=0;
 	//set whether the given rule is activated
 	virtual void setRuleState(void* rule, bool newState)=0;
-	//reads whether the given proxy is activated
-	virtual bool getProxyState(void* proxy)=0;
-	//set whether the given proxy is activated
-	virtual void setProxyState(void* proxy, bool isActive)=0;
 
 	//select the given rule
 	virtual void selectRule(void* rule, bool startEdit = false)=0;

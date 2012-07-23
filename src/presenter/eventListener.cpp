@@ -73,17 +73,10 @@ void EventListener::scriptSelected(){
 	presenter.updateScriptAddDlgPreview();
 }
 
-void EventListener::removeProxy_requested(void* p){
-	presenter.removeProxy((Proxy*)p);
-}
-
 void EventListener::exitRequest(){
 	return presenter.quit();
 }
 
-void EventListener::signal_script_state_toggled(void* script){
-	presenter.syncProxyState((Proxy*)script);
-}
 
 void EventListener::signal_entry_state_toggled(void* entry){
 	presenter.syncRuleState((Rule*)entry);
@@ -95,9 +88,6 @@ void EventListener::signal_entry_renamed(void* entry){
 
 void EventListener::ruleAdjustment_requested(void* rule, int direction){
 	presenter.moveRule((Rule*)rule,direction);
-}
-void EventListener::proxySwap_requested(void* a, void* b){
-	presenter.swapProxies((Proxy*)a,(Proxy*)b);
 }
 
 void EventListener::ruleSelected(void* rule){

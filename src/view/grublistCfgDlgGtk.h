@@ -34,7 +34,6 @@ public:
 		Gtk::TreeModelColumn<bool> active;
 		Gtk::TreeModelColumn<Glib::ustring> name;
 		Gtk::TreeModelColumn<void*> relatedRule;
-		Gtk::TreeModelColumn<void*> relatedProxy;
 		Gtk::TreeModelColumn<bool> is_other_entries_marker;
 		Gtk::TreeModelColumn<bool> is_editable;
 		Gtk::TreeModelColumn<bool> is_sensitive;
@@ -86,9 +85,6 @@ class GrublistCfgDlgGtk : public GrublistCfgDlg, public CommonClass {
 
 	Gtk::MessageDialog burgSwitcher, pchooserQuestionDlg;
 
-	void* previouslyAddedProxy;
-
-	Gtk::TreeModel::iterator getIterByProxyPtr(void* proxyPtr) const;
 	Gtk::TreeModel::iterator getIterByRulePtr(void* rulePtr, const Gtk::TreeRow* parentRow = NULL) const;
 	void update_move_buttons();
 	void update_remove_button();
@@ -114,19 +110,12 @@ public:
 	void progress_pulse();
 	void hideProgressBar();
 	void setStatusText(std::string const& new_status_text);
-	void appendScript(std::string const& name, bool is_active, void* proxyPtr);
 	void appendEntry(std::string const& name, bool is_active, void* entryPtr, bool editable, bool is_submenu, void* parentEntry = NULL);
 	void showProxyNotFoundMessage();
 	std::string createNewEntriesPlaceholderString(std::string const& parentMenu = "", std::string const& sourceScriptName = "");
 	std::string createPlaintextString() const;
 	
-	void setProxyName(void* proxy, std::string const& name, bool isModified);
-	
-	void swapProxies(void* a, void* b);
-	
 	void setDefaultTitleStatusText(std::string const& str);
-	
-	void removeProxy(void* p);
 	
 	int showExitConfirmDialog(int type);
 	void showErrorMessage(std::string const& msg, std::vector<std::string> const& values);
@@ -136,8 +125,6 @@ public:
 	void setRuleName(void* rule, std::string const& newName);
 	bool getRuleState(void* rule);
 	void setRuleState(void* rule, bool newState);
-	bool getProxyState(void* proxy);
-	void setProxyState(void* proxy, bool isActive);
 
 	void selectRule(void* rule, bool startEdit = false);
 
@@ -149,7 +136,6 @@ private:
 	void signal_row_changed(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter);
 	void signal_move_click(int direction); //direction: -1: one position up, 1: one p. down
 	void signal_add_click();
-	void signal_remove_click();
 	void signal_reload_click();
 	void signal_show_grub_install_dialog_click();
 	void signal_move_left_click();
