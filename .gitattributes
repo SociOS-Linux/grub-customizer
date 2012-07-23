@@ -45,6 +45,7 @@ misc/pkexec_policy.in -text
 src/interface/aboutDialog.h -text
 src/interface/colorChooser.h -text
 src/interface/entryAddDlg.h -text
+src/interface/entryEditDlg.h -text
 src/interface/entryPathBuilder.h -text
 src/interface/entryPathFollower.h -text
 src/interface/evt_entryAddDlg.h -text
@@ -62,6 +63,8 @@ src/interface/settingsDlg.h -text
 src/interface/threadController.h -text
 src/lib/md5.cpp -text
 src/lib/md5.h -text
+src/lib/str_replace.cpp -text
+src/lib/str_replace.h -text
 src/model/deviceDataList.cpp -text
 src/model/deviceDataList.h -text
 src/model/entry.cpp -text
@@ -114,6 +117,8 @@ src/view/aboutDialogGtk.cpp -text
 src/view/aboutDialogGtk.h -text
 src/view/entryAddDlgGtk.cpp -text
 src/view/entryAddDlgGtk.h -text
+src/view/entryEditDlgGtk.cpp -text
+src/view/entryEditDlgGtk.h -text
 src/view/grubInstallDlgGtk.cpp -text
 src/view/grubInstallDlgGtk.h -text
 src/view/grublistCfgDlgGtk.cpp -text

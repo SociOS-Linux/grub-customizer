@@ -35,6 +35,7 @@
 #include "../interface/grubInstallDlg.h"
 
 #include "../interface/entryAddDlg.h"
+#include "../interface/entryEditDlg.h"
 
 #include "../model/grublistCfg.h"
 #include "../interface/partitionChooser.h"
@@ -68,6 +69,7 @@ class GrubCustomizer : public CommonClass {
 	GrubInstaller* installer;
 	GrubInstallDlg* installDlg;
 	EntryAddDlg* entryAddDlg;
+	EntryEditDlg* entryEditDlg;
 	PartitionChooser* partitionChooser;
 	GrublistCfg* savedListCfg;
 	FbResolutionsGetter* fbResolutionsGetter;
@@ -98,6 +100,7 @@ public:
 	void setInstaller(GrubInstaller& installer);
 	void setInstallDlg(GrubInstallDlg& installDlg);
 	void setScriptAddDlg(EntryAddDlg& scriptAddDlg);
+	void setEntryEditDlg(EntryEditDlg& entryEditDlg);
 	void setPartitionChooser(PartitionChooser& partitionChooser);
 	void setSavedListCfg(GrublistCfg& savedListCfg);
 	void setFbResolutionsGetter(FbResolutionsGetter& fbResolutionsGetter);
@@ -132,6 +135,7 @@ public:
 	void showMessageGrubInstallCompleted(std::string const& msg);
 	
 	void showEntryAddDlg();
+	void showEntryEditDlg(void* rule);
 	void addEntryFromEntryAddDlg();
 	
 	//dispatchers

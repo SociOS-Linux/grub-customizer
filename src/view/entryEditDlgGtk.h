@@ -16,38 +16,24 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef GRUB_CUSTOMIZER_ENTRY_INCLUDED
-#define GRUB_CUSTOMIZER_ENTRY_INCLUDED
-#include <cstdio>
-#include <string>
-#include <list>
+#ifndef ENTRYEDITDLGGTK_H_
+#define ENTRYEDITDLGGTK_H_
+#include "../interface/entryEditDlg.h"
 #include "../presenter/commonClass.h"
 #include "../lib/str_replace.h"
+#include <libintl.h>
+#include <gtkmm.h>
 
-struct GrubConfRow {
-	GrubConfRow(FILE* sourceFile);
-	GrubConfRow();
-	std::string text;
-	bool eof;
-	bool is_loaded;
-	operator bool();
+class EntryEditDlgGtk : public EntryEditDlg, public Gtk::Dialog, public CommonClass {
+	Gtk::Notebook tabbox;
+	Gtk::TextView tvSource;
+	Gtk::ScrolledWindow scrSource;
+public:
+	EntryEditDlgGtk();
+	void setSourcecode(std::string const& source);
+	void show();
+	void hide();
+	void signal_response_action(int response_id);
 };
 
-struct Entry : public CommonClass {
-	enum EntryType {
-		MENUENTRY,
-		SUBMENU,
-		SCRIPT_ROOT,
-		PLAINTEXT
-	} type;
-	bool isValid;
-	std::string name, extension, content;
-	std::list<Entry> subEntries;
-	Entry();
-	Entry(std::string name, std::string extension, std::string content = "", EntryType type = MENUENTRY);
-	Entry(FILE* sourceFile, GrubConfRow firstRow = GrubConfRow(), Logger* logger = NULL, std::string* plaintextBuffer = NULL);
-	std::list<Entry>& getSubEntries();
-	operator bool() const;
-};
-
-#endif
+#endif /* ENTRYEDITDLGGTK_H_ */

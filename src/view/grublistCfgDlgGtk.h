@@ -69,7 +69,7 @@ class GrublistCfgDlgGtk : public GrublistCfgDlg, public CommonClass {
 	GrubConfListing tvConfList;
 	Gtk::ProgressBar progressBar;
 
-	Gtk::ToolButton tbttAdd, tbttRemove, tbttUp, tbttDown, tbttSave, tbttReload, tbttLeft, tbttRight;
+	Gtk::ToolButton tbttAdd, tbttRemove, tbttUp, tbttDown, tbttSave, tbttReload, tbttLeft, tbttRight, tbttEditEntry;
 	Gtk::ToolItem ti_sep1;
 	Gtk::VSeparator vs_sep1;
 	Gtk::ToolItem ti_sep2;
@@ -81,8 +81,8 @@ class GrublistCfgDlgGtk : public GrublistCfgDlg, public CommonClass {
 	
 	Gtk::MenuItem miFile, miEdit, miView, miHelp, miInstallGrub, miContext;
 	Gtk::ImageMenuItem miExit, miSave, miAbout, miStartRootSelector;
-	ImageMenuItemOwnKey miReload, miAdd, miRemove, miUp, miDown, miLeft, miRight;
-	Gtk::ImageMenuItem miCRemove, miCUp, miCDown, miCLeft, miCRight, miCRename;
+	ImageMenuItemOwnKey miReload, miAdd, miRemove, miUp, miDown, miLeft, miRight, miEditEntry;
+	Gtk::ImageMenuItem miCRemove, miCUp, miCDown, miCLeft, miCRight, miCRename, miCEditEntry;
 	Gtk::Menu subFile, subEdit, subView, subHelp, contextMenu;
 	
 	Gtk::VBox settingsHBox;
@@ -155,6 +155,7 @@ private:
 	void signal_move_left_click();
 	void signal_move_right_click();
 	void signal_treeview_selection_changed();
+	void signal_entry_edit_click();
 	bool signal_delete_event(GdkEventAny* event);
 	void signal_quit_click();
 	void signal_preference_click();

@@ -24,6 +24,7 @@
 #include "../view/grubInstallDlgGtk.h"
 #include "../view/partitionChooserGtk.h"
 #include "../view/entryAddDlgGtk.h"
+#include "../view/entryEditDlgGtk.h"
 #include "../view/settingsDlgGtk.h"
 #include "glibMutex.h"
 #include "glibThreadController.h"
@@ -52,6 +53,7 @@ int main(int argc, char** argv){
 	GrubInstaller installer(env);
 	GrubInstallDlgGtk installDlg;
 	EntryAddDlgGtk scriptAddDlg;
+	EntryEditDlgGtk entryEditDlg;
 	MountTable mountTable;
 	PartitionChooserGtk partitionChooser;
 	GrublistCfg savedListCfg(env);
@@ -72,6 +74,7 @@ int main(int argc, char** argv){
 	presenter.setInstaller(installer);
 	presenter.setInstallDlg(installDlg);
 	presenter.setScriptAddDlg(scriptAddDlg);
+	presenter.setEntryEditDlg(entryEditDlg);
 	presenter.setPartitionChooser(partitionChooser);
 	presenter.setSavedListCfg(savedListCfg);
 	presenter.setFbResolutionsGetter(fbResolutionsGetter);
@@ -103,6 +106,7 @@ int main(int argc, char** argv){
 	installer.setLogger(logger);
 	installDlg.setLogger(logger);
 	scriptAddDlg.setLogger(logger);
+	entryEditDlg.setLogger(logger);
 	mountTable.setLogger(logger);
 	partitionChooser.setLogger(logger);
 	savedListCfg.setLogger(logger);

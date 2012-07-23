@@ -69,6 +69,10 @@ void EventListener::entryAddDlg_requested(){
 	presenter.showEntryAddDlg();
 }
 
+void EventListener::entryEditDlg_requested(void* rule) {
+	presenter.showEntryEditDlg(rule);
+}
+
 void EventListener::exitRequest(){
 	return presenter.quit();
 }

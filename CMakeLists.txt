@@ -40,12 +40,14 @@ add_executable(grub-customizer
 	src/model/grubInstaller.cpp
 	src/model/entryPathBuilderImpl.cpp
 	src/view/entryAddDlgGtk.cpp
+	src/view/entryEditDlgGtk.cpp
 	src/view/aboutDialogGtk.cpp
 	src/presenter/glibMutex.cpp
 	src/presenter/glibThreadController.cpp
 	src/presenter/commonClass.cpp
 	src/presenter/streamLogger.cpp
 	src/lib/md5.cpp
+	src/lib/str_replace.cpp
 )
 
 
@@ -57,6 +59,7 @@ add_executable(grubcfg-proxy
 	src/presenter/grubcfg_proxy_main.cpp
 	src/presenter/commonClass.cpp
 	src/lib/md5.cpp
+	src/lib/str_replace.cpp
 	# multi:
 	src/model/grublistCfg.cpp
 	src/model/grubEnv.cpp

@@ -21,6 +21,7 @@
 GrubCustomizer::GrubCustomizer(GrubEnv& env)
 	: grublistCfg(NULL), listCfgDlg(NULL), settingsDlg(NULL), settings(NULL),
 	  installer(NULL), installDlg(NULL), settingsOnDisk(NULL), entryAddDlg(NULL),
+	  entryEditDlg(NULL),
 	  partitionChooser(NULL), savedListCfg(NULL),
 	  fbResolutionsGetter(NULL), deviceDataList(NULL),
 	  mountTable(NULL), aboutDialog(NULL),
@@ -58,6 +59,10 @@ void GrubCustomizer::setInstallDlg(GrubInstallDlg& installDlg){
 }
 void GrubCustomizer::setScriptAddDlg(EntryAddDlg& scriptAddDlg){
 	this->entryAddDlg = &scriptAddDlg;
+}
+
+void GrubCustomizer::setEntryEditDlg(EntryEditDlg& entryEditDlg) {
+	this->entryEditDlg = &entryEditDlg;
 }
 
 void GrubCustomizer::setSavedListCfg(GrublistCfg& savedListCfg){
@@ -128,6 +133,7 @@ void GrubCustomizer::init(){
 		or !deviceDataList
 		or !mountTable
 		or !aboutDialog
+		or !entryEditDlg
 	) {
 		throw INCOMPLETE;
 	}
@@ -454,6 +460,11 @@ void GrubCustomizer::showEntryAddDlg(){
 	}
 
 	entryAddDlg->show();
+}
+
+void GrubCustomizer::showEntryEditDlg(void* rule) {
+	this->entryEditDlg->setSourcecode(((Rule*)rule)->dataSource->content);
+	this->entryEditDlg->show();
 }
 
 void GrubCustomizer::addEntryFromEntryAddDlg(){

@@ -25,14 +25,15 @@ ImageMenuItemOwnKey::ImageMenuItemOwnKey(const Gtk::StockID& id, const Gtk::Acce
 GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	: tbttAdd(Gtk::Stock::UNDELETE), tbttRemove(Gtk::Stock::DELETE), tbttUp(Gtk::Stock::GO_UP), tbttDown(Gtk::Stock::GO_DOWN),
 	tbttLeft(Gtk::Stock::GO_BACK), tbttRight(Gtk::Stock::GO_FORWARD),
-	tbttSave(Gtk::Stock::SAVE),
+	tbttSave(Gtk::Stock::SAVE), tbttEditEntry(Gtk::Stock::EDIT),
 	miFile(gettext("_File"), true), miExit(Gtk::Stock::QUIT), tbttReload(Gtk::Stock::REFRESH),
 	miEdit(gettext("_Edit"), true), miView(gettext("_View"), true), miHelp(gettext("_Help"), true),
 	miInstallGrub(gettext("_Install to MBR …"), true),
 	miAdd(Gtk::Stock::UNDELETE, Gtk::AccelKey('+', Gdk::CONTROL_MASK)), miRemove(Gtk::Stock::DELETE, Gtk::AccelKey('-', Gdk::CONTROL_MASK)), miUp(Gtk::Stock::GO_UP, Gtk::AccelKey('u', Gdk::CONTROL_MASK)), miDown(Gtk::Stock::GO_DOWN, Gtk::AccelKey('d', Gdk::CONTROL_MASK)),
 	miLeft(Gtk::Stock::GO_BACK, Gtk::AccelKey('l', Gdk::CONTROL_MASK)), miRight(Gtk::Stock::GO_FORWARD, Gtk::AccelKey('r', Gdk::CONTROL_MASK)),
+	miEditEntry(Gtk::Stock::EDIT, Gtk::AccelKey('e', Gdk::CONTROL_MASK)),
 	miCRemove(Gtk::Stock::DELETE), miCUp(Gtk::Stock::GO_UP), miCDown(Gtk::Stock::GO_DOWN),
-	miCLeft(Gtk::Stock::GO_BACK), miCRight(Gtk::Stock::GO_FORWARD), miCRename(Gtk::Stock::EDIT),
+	miCLeft(Gtk::Stock::GO_BACK), miCRight(Gtk::Stock::GO_FORWARD), miCRename(Gtk::Stock::EDIT), miCEditEntry(Gtk::Stock::EDIT),
 	miReload(Gtk::Stock::REFRESH, Gtk::AccelKey("F5")), miSave(Gtk::Stock::SAVE),
 	miAbout(Gtk::Stock::ABOUT), miStartRootSelector(Gtk::Stock::OPEN),
 	lock_state(~0), burgSwitcher(gettext("BURG found!"), false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO),
@@ -74,6 +75,8 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	tbttAdd.set_is_important(true);
 	tbttAdd.set_label(gettext("Trash"));
 	
+	toolbar.append(tbttEditEntry);
+
 	ti_sep2.add(vs_sep2);
 	toolbar.append(ti_sep2);
 	
@@ -123,14 +126,16 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	subEdit.attach(miDown, 0,1,3,4);
 	subEdit.attach(miLeft, 0,1,4,5);
 	subEdit.attach(miRight, 0,1,5,6);
+	subEdit.attach(miEditEntry, 0,1,6,7);
 	
 
 	contextMenu.attach(miCRename, 0,1,0,1);
-	contextMenu.attach(miCRemove, 0,1,1,2);
-	contextMenu.attach(miCUp, 0,1,2,3);
-	contextMenu.attach(miCDown, 0,1,3,4);
-	contextMenu.attach(miCLeft, 0,1,4,5);
-	contextMenu.attach(miCRight, 0,1,5,6);
+	contextMenu.attach(miCEditEntry, 0,1,1,2);
+	contextMenu.attach(miCRemove, 0,1,2,3);
+	contextMenu.attach(miCUp, 0,1,3,4);
+	contextMenu.attach(miCDown, 0,1,4,5);
+	contextMenu.attach(miCLeft, 0,1,5,6);
+	contextMenu.attach(miCRight, 0,1,6,7);
 
 	miAdd.set_label(gettext("Restore entry"));
 	miCRename.set_label(gettext("Rename"));
@@ -180,6 +185,7 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	tbttLeft.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_move_left_click));
 	tbttRight.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_move_right_click));
 	tbttReload.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_reload_click));
+	tbttEditEntry.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_entry_edit_click));
 	bttAdvancedSettings1.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_preference_click));
 	bttAdvancedSettings2.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_preference_click));
 	
@@ -193,6 +199,8 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	miCRight.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_move_right_click));
 	miSave.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::saveConfig));
 	miAdd.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_add_click));
+	miEditEntry.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_entry_edit_click));
+	miCEditEntry.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_entry_edit_click));
 	miRemove.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_remove_click));
 	miCRemove.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_remove_click));
 	miCRename.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_rename_click));
@@ -391,6 +399,9 @@ void GrublistCfgDlgGtk::setLockState(int state){
 	tbttRight.set_sensitive((state & 1) == 0);
 	miRight.set_sensitive((state & 1) == 0);
 	miCRight.set_sensitive((state & 1) == 0);
+	tbttEditEntry.set_sensitive((state & 1) == 0);
+	miEditEntry.set_sensitive((state & 1) == 0);
+	miCEditEntry.set_sensitive((state & 1) == 0);
 
 	tbttAdd.set_sensitive((state & 1) == 0);
 	miAdd.set_sensitive((state & 1) == 0);
@@ -423,7 +434,11 @@ void GrublistCfgDlgGtk::updateButtonsState(){
 	update_move_buttons();
 
 	std::vector<Gtk::TreeModel::Path> selectedElementents = this->tvConfList.get_selection()->get_selected_rows();
-	miCRename.set_sensitive(selectedElementents.size() == 1 && (*this->tvConfList.refTreeStore->get_iter(selectedElementents[0]))[this->tvConfList.treeModel.is_editable]);
+	bool editableEntrySelected = selectedElementents.size() == 1 && (*this->tvConfList.refTreeStore->get_iter(selectedElementents[0]))[this->tvConfList.treeModel.is_editable];
+	miCRename.set_sensitive(editableEntrySelected);
+	tbttEditEntry.set_sensitive(editableEntrySelected);
+	miEditEntry.set_sensitive(editableEntrySelected);
+	miCEditEntry.set_sensitive(editableEntrySelected);
 }
 
 bool GrublistCfgDlgGtk::selectedEntriesAreOnSameLevel() {
@@ -587,6 +602,12 @@ void GrublistCfgDlgGtk::signal_treeview_selection_changed(){
 
 		this->updateButtonsState();
 	}
+}
+
+void GrublistCfgDlgGtk::signal_entry_edit_click() {
+	std::list<void*> rules = this->getSelectedRules();
+	assert(rules.size() == 1);
+	eventListener->entryEditDlg_requested(rules.front());
 }
 
 void GrublistCfgDlgGtk::signal_add_click(){
