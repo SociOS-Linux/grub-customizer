@@ -608,15 +608,15 @@ Rule& GrublistCfg::moveRule(Rule* rule, int direction){
 			parent = proxy->getParentRule(rule);
 		} catch (Proxy::Exception e) {if (e != Proxy::RULE_NOT_FOUND) throw e;}
 
-		std::list<Rule>::iterator nextRule = this->proxies.getNextVisibleRule(proxy->getListIterator(*rule, proxy->getRuleList(parent)), direction);
-
 		if (e == Proxy::NO_MOVE_TARGET_FOUND) {
+
+			std::list<Rule>::iterator nextRule = this->proxies.getNextVisibleRule(proxy->getListIterator(*rule, proxy->getRuleList(parent)), direction);
 			try {
 				if (nextRule->type != Rule::SUBMENU) { // create new proxy
 					std::list<Rule>::iterator targetRule = this->proxies.getNextVisibleRule(nextRule, direction);
 					std::list<Rule>::iterator previousRule = this->proxies.getNextVisibleRule(proxy->getListIterator(*rule, proxy->getRuleList(parent)), -direction);
 
-					if (this->proxies.getProxyByRule(&*targetRule)->dataSource == this->proxies.getProxyByRule(&*rule)->dataSource && false) {
+					if (this->proxies.getProxyByRule(&*targetRule)->dataSource == this->proxies.getProxyByRule(&*rule)->dataSource) {
 						Proxy* targetProxy = this->proxies.getProxyByRule(&*targetRule);
 						targetProxy->removeEquivalentRules(*rule);
 						Rule* newRule = NULL;
@@ -742,7 +742,8 @@ Rule& GrublistCfg::moveRule(Rule* rule, int direction){
 				}
 			}
 		} else if (e == Proxy::SHOULD_BE_A_NEW_INSTANCE) {
-			nextRule = this->proxies.getNextVisibleRule(nextRule, direction); // go forward
+			Rule* parentSubmenu = parent;
+			std::list<Rule>::iterator nextRule = this->proxies.getNextVisibleRule(proxy->getListIterator(*parent, proxy->rules), direction); // go forward
 
 			if (this->proxies.getProxyByRule(&*nextRule) == this->proxies.getProxyByRule(&*rule)) {
 				this->proxies.splitProxy(proxy, &*nextRule, direction);
@@ -765,10 +766,10 @@ Rule& GrublistCfg::moveRule(Rule* rule, int direction){
 					nextProxy->rules.push_back(*rule);
 					movedRule = &nextProxy->rules.back();
 				}
-				proxy->removeEquivalentRules(*rule);
 			} else {
 				movedRule = &*this->proxies.moveRuleToNewProxy(*rule, direction, this->repository.getScriptByEntry(*rule->dataSource));
 			}
+			proxy->removeEquivalentRules(*rule);
 			return *movedRule;
 		} else {
 			throw e;

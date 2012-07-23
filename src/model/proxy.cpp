@@ -433,10 +433,6 @@ Rule& Proxy::moveRule(Rule* rule, int direction) {
 	} catch (Proxy::Exception e) {} // leave parent in NULL state
 	std::list<Rule>* targetList = &this->getRuleList(parent);
 
-	if (targetList == &this->rules && rule->dataSource && !this->ruleIsFromOwnScript(*rule)) {
-		throw Proxy::SHOULD_BE_A_NEW_INSTANCE;
-	}
-
 	Rule* newRule = rule;
 
 	std::list<Rule>::iterator insertPos = next;
@@ -455,6 +451,10 @@ Rule& Proxy::moveRule(Rule* rule, int direction) {
 		if (direction == 1) {
 			insertPos++;
 		}
+	}
+
+	if (targetList == &this->rules && rule->dataSource && !this->ruleIsFromOwnScript(*rule)) {
+		throw Proxy::SHOULD_BE_A_NEW_INSTANCE;
 	}
 
 	newRule = &*targetList->insert(insertPos, *rule);
