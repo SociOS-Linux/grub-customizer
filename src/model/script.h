@@ -27,12 +27,15 @@
 #include "../presenter/commonClass.h"
 #include "../lib/md5.h"
 
-struct Script : public EntryPathFollower, public std::list<Entry>, public CommonClass {
+struct Script : public EntryPathFollower, public CommonClass {
 	enum Exception {
 		ELEMENT_NOT_FOUND
 	};
 	std::string name, fileName;
+	Entry root;
 	Script(std::string const& name, std::string const& fileName);
+	std::list<Entry>& entries();
+	std::list<Entry> const& entries() const;
 	bool isInScriptDir(std::string const& cfg_dir) const;
 	Entry* getEntryByPath(std::list<std::string> const& path);
 	Entry* getEntryByName(std::string const& name, std::list<Entry>& parentList);

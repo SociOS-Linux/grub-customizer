@@ -196,7 +196,7 @@ void Proxy::sync_connectExistingByHash(Rule* parent, std::map<std::string, Scrip
 			} else {
 				continue; // don't sync foreign entries if scriptMap is empty
 			}
-			iter->dataSource = script->getEntryByHash(iter->__idHash, *script);
+			iter->dataSource = script->getEntryByHash(iter->__idHash, script->entries());
 			if (iter->dataSource) {
 				this->__idPathList[script].push_back(script->buildPath(*iter->dataSource));
 			}
@@ -300,7 +300,7 @@ bool Proxy::isModified(Rule const* parentRule, Entry const* parentEntry) const {
 	bool result = false;
 
 	std::list<Rule> const& rlist = parentRule ? parentRule->subRules : this->rules;
-	std::list<Entry> const& elist = parentEntry ? parentEntry->subEntries : *this->dataSource;
+	std::list<Entry> const& elist = parentEntry ? parentEntry->subEntries : this->dataSource->entries();
 	if (rlist.size()-1 == elist.size()){ //rules contains the other entries placeholder, so there is one more entry
 		std::list<Rule>::const_iterator ruleIter = rlist.begin();
 		std::list<Entry>::const_iterator entryIter = elist.begin();

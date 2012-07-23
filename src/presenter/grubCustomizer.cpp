@@ -465,7 +465,7 @@ void GrubCustomizer::updateScriptAddDlgPreview(){
 	scriptAddDlg->clearPreview();
 	Script* selectedScript = grublistCfg->repository.getNthScript(scriptAddDlg->getSelectedEntryIndex());
 	if (selectedScript){
-		for (Script::iterator iter = selectedScript->begin(); iter != selectedScript->end(); iter++)
+		for (std::list<Entry>::iterator iter = selectedScript->entries().begin(); iter != selectedScript->entries().end(); iter++)
 			scriptAddDlg->addToPreview(iter->name);
 	}
 }

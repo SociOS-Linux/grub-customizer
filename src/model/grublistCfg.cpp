@@ -249,7 +249,7 @@ void GrublistCfg::readGeneratedFile(FILE* source, bool createScriptIfNotFound, b
 					if (this->hasLogger()) {
 						newEntry.setLogger(this->getLogger());
 					}
-					script->push_front(newEntry);
+					script->entries().push_front(newEntry);
 				}
 				this->proxies.sync_all(true, true, script);
 			}
@@ -274,14 +274,14 @@ void GrublistCfg::readGeneratedFile(FILE* source, bool createScriptIfNotFound, b
 		} else if (script != NULL && row.text.substr(0, 10) == "menuentry ") {
 			this->lock();
 			Entry newEntry(source, row, this->getLoggerPtr());
-			script->push_back(newEntry);
+			script->entries().push_back(newEntry);
 			this->proxies.sync_all(false, false, script);
 			this->unlock();
 			this->send_new_load_progress(0.1 + (0.7 / this->repository.size() * i));
 		} else if (script != NULL && row.text.substr(0, 8) == "submenu ") {
 			this->lock();
 			Entry newEntry(source, row, this->getLoggerPtr());
-			script->push_back(newEntry);
+			script->entries().push_back(newEntry);
 			this->proxies.sync_all(false, false, script);
 			this->unlock();
 			this->send_new_load_progress(0.1 + (0.7 / this->repository.size() * i));
@@ -296,7 +296,7 @@ void GrublistCfg::readGeneratedFile(FILE* source, bool createScriptIfNotFound, b
 			if (this->hasLogger()) {
 				newEntry.setLogger(this->getLogger());
 			}
-			script->push_front(newEntry);
+			script->entries().push_front(newEntry);
 		}
 		this->proxies.sync_all(true, true, script);
 	}

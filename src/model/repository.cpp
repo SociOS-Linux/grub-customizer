@@ -91,7 +91,7 @@ Script* Repository::getNthScript(int pos){
 
 void Repository::deleteAllEntries(){
 	for (Repository::iterator iter = this->begin(); iter != this->end(); iter++){
-		iter->clear();
+		iter->entries().clear();
 	}
 }
 

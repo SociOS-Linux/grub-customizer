@@ -28,10 +28,10 @@ int main(int argc, char** argv){
 		Entry newEntry;
 		std::string plaintextBuffer;
 		while (newEntry = Entry(stdin, GrubConfRow(), NULL, &plaintextBuffer)) {
-			script.push_back(newEntry);
+			script.entries().push_back(newEntry);
 		}
 		if (plaintextBuffer.size()) {
-			script.push_front(Entry("#text", "", plaintextBuffer, Entry::PLAINTEXT));
+			script.entries().push_front(Entry("#text", "", plaintextBuffer, Entry::PLAINTEXT));
 		}
 		
 		Proxy proxy;

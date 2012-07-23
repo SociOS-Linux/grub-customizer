@@ -38,7 +38,7 @@ struct Entry : public CommonClass {
 	enum EntryType {
 		MENUENTRY,
 		SUBMENU,
-		ROOT_ENTRY,
+		SCRIPT_ROOT,
 		PLAINTEXT
 	} type;
 	bool isValid;
