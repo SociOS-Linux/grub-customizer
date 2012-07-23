@@ -27,7 +27,7 @@
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.buildArguments</key>
-					<value>-c &quot;cmake -DCMAKE_BUILD_TYPE=Debug .. &amp;&amp; make&quot;</value>
+					<value>-c &quot;cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=/home/daniel/Dokumente/GrubCustomizer/3x/build .. &amp;&amp; make install&quot;</value>
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.buildCommand</key>
@@ -35,7 +35,7 @@
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.buildLocation</key>
-					<value>/home/daniel/Dokumente/GrubCustomizer/2.2/build</value>
+					<value>/home/daniel/Dokumente/GrubCustomizer/3x/build</value>
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.cleanBuildTarget</key>

@@ -21,7 +21,7 @@
 <folderInfo id="cdt.managedbuild.config.gnu.exe.debug.1391342174." name="/" resourcePath="">
 <toolChain id="cdt.managedbuild.toolchain.gnu.exe.debug.1006984769" name="Linux GCC" superClass="cdt.managedbuild.toolchain.gnu.exe.debug">
 <targetPlatform id="cdt.managedbuild.target.gnu.platform.exe.debug.1562644013" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.exe.debug"/>
-<builder arguments="-c &quot;cmake -DCMAKE_BUILD_TYPE=Debug .. &amp;&amp; make&quot;" autoBuildTarget="all" buildPath="/home/daniel/Dokumente/GrubCustomizer/2.2/build" cleanBuildTarget="clean" command="bash" enableAutoBuild="false" enableCleanBuild="true" enabledIncrementalBuild="true" id="cdt.managedbuild.target.gnu.builder.exe.debug.10798967" incrementalBuildTarget="all" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" parallelizationNumber="1" superClass="cdt.managedbuild.target.gnu.builder.exe.debug">
+<builder arguments="-c &quot;cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=/home/daniel/Dokumente/GrubCustomizer/3x/build .. &amp;&amp; make install&quot;" autoBuildTarget="all" buildPath="/home/daniel/Dokumente/GrubCustomizer/3x/build" cleanBuildTarget="clean" command="bash" enableAutoBuild="false" enableCleanBuild="true" enabledIncrementalBuild="true" id="cdt.managedbuild.target.gnu.builder.exe.debug.10798967" incrementalBuildTarget="all" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" parallelizationNumber="1" superClass="cdt.managedbuild.target.gnu.builder.exe.debug">
 <outputEntries>
 <entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name="build"/>
 </outputEntries>
