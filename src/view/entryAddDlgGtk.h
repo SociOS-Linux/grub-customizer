@@ -20,7 +20,7 @@
 #define ENTRY_ADD_DLG_INCLUDED
 #include <gtkmm.h>
 #include "../interface/evt_entryAddDlg.h"
-#include "../interface/scriptAddDlg.h"
+#include "../interface/entryAddDlg.h"
 #include <libintl.h>
 #include "../presenter/commonClass.h"
 
@@ -44,8 +44,6 @@ public:
 	void signal_entryAddDlg_response(int response_id);
 	void clear();
 	std::list<void*> getSelectedEntries();
-	void signal_script_selection_changed();
-	void clearPreview();
 	void addItem(std::string const& name, bool isPlaceholder, std::string const& scriptName,void* relatedRule);
 	void show();
 	void hide();

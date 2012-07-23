@@ -31,8 +31,6 @@ public:
 	virtual void clear()=0;
 	//gets the index of the selected script item
 	virtual std::list<void*> getSelectedEntries()=0;
-	//removes all preview items
-	virtual void clearPreview()=0;
 	//adds a new item
 	virtual void addItem(std::string const& name, bool isPlaceholder, std::string const& scriptName, void* relatedEntry)=0;
 	//show this dialog

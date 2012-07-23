@@ -34,7 +34,7 @@
 #include "../model/grubInstaller.h"
 #include "../interface/grubInstallDlg.h"
 
-#include "../interface/scriptAddDlg.h"
+#include "../interface/entryAddDlg.h"
 
 #include "../model/grublistCfg.h"
 #include "../interface/partitionChooser.h"

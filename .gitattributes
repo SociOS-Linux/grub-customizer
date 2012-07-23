@@ -44,6 +44,7 @@ misc/manpage.gz -text svneol=unset#unset
 misc/pkexec_policy.in -text
 src/interface/aboutDialog.h -text
 src/interface/colorChooser.h -text
+src/interface/entryAddDlg.h -text
 src/interface/entryPathBuilder.h -text
 src/interface/entryPathFollower.h -text
 src/interface/evt_entryAddDlg.h -text
@@ -57,7 +58,6 @@ src/interface/grublistCfgDlg.h -text
 src/interface/logger.h -text
 src/interface/mutex.h -text
 src/interface/partitionChooser.h -text
-src/interface/scriptAddDlg.h -text
 src/interface/settingsDlg.h -text
 src/interface/threadController.h -text
 src/lib/md5.cpp -text

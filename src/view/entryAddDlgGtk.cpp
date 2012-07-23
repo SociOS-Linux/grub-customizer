@@ -67,14 +67,6 @@ std::list<void*> EntryAddDlgGtk::getSelectedEntries(){
 	return result;
 }
 
-void EntryAddDlgGtk::signal_script_selection_changed(){
-//	eventListener->scriptSelected();
-}
-
-void EntryAddDlgGtk::clearPreview(){
-//	lvScriptPreview.clear_items();
-}
-
 void EntryAddDlgGtk::addItem(std::string const& name, bool isPlaceholder, std::string const& scriptName, void* relatedEntry){
 	Gtk::TreeModel::iterator iter = this->listStore->append();
 	(*iter)[iconModel.name] = name;
