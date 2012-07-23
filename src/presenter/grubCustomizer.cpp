@@ -491,7 +491,7 @@ void GrubCustomizer::_rAppendRule(Rule& rule, Rule* parentRule){
 		}
 	}
 
-	if (rule.dataSource || is_other_entries_ph || is_submenu){
+	if (rule.dataSource || is_submenu){
 		std::string name;
 		if (is_other_entries_ph) {
 			try {
