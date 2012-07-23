@@ -19,12 +19,12 @@
 #include "script.h"
 
 Script::Script(std::string const& name, std::string const& fileName)
-	: name(name), fileName(fileName), root("DUMMY", "DUMMY", "DUMMY", Entry::SCRIPT_ROOT), isCustomScript(false)
+	: name(name), fileName(fileName), root("DUMMY", "DUMMY", "DUMMY", Entry::SCRIPT_ROOT), isCustomScript(false), isModified(false)
 {
 	FILE* script = fopen(fileName.c_str(), "r");
 	if (script) {
 		GrubConfRow row1(script), row2(script);
-		if (row2.text.substr(0, 15) == CUSTOM_SCRIPT_PREFIX) {
+		if (row1.text == CUSTOM_SCRIPT_SHEBANG && row2.text == CUSTOM_SCRIPT_PREFIX) {
 			isCustomScript = true;
 		}
 		fclose(script);

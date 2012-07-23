@@ -424,6 +424,21 @@ void GrublistCfg::save(){
 		rmdir((this->env.cfg_dir+"/bin").c_str());
 	}
 
+	//update modified "custom" scripts
+	for (std::list<Script>::iterator scriptIter = this->repository.begin(); scriptIter != this->repository.end(); scriptIter++) {
+		if (scriptIter->isCustomScript && scriptIter->isModified) {
+			this->log("modifying script \"" + scriptIter->name + "\"", Logger::INFO);
+			assert(scriptIter->fileName != "");
+			Proxy dummyProxy(*scriptIter);
+			std::ofstream scriptStream(scriptIter->fileName.c_str());
+			scriptStream << CUSTOM_SCRIPT_SHEBANG << "\n" << CUSTOM_SCRIPT_PREFIX << "\n";
+			for (std::list<Rule>::iterator ruleIter = dummyProxy.rules.begin(); ruleIter != dummyProxy.rules.end(); ruleIter++) {
+				ruleIter->print(scriptStream);
+			}
+			scriptIter->isModified = false;
+		}
+	}
+
 
 	//run update-grub
 	FILE* saveProc = popen((env.update_cmd+" 2>&1").c_str(), "r");

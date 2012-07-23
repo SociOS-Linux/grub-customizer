@@ -48,6 +48,11 @@ void EntryEditDlgGtk::setSourcecode(std::string const& source) {
 std::string EntryEditDlgGtk::getSourcecode() {
 	std::string optimizedSourcecode = this->tvSource.get_buffer()->get_text();
 	std::string withIndent = str_replace("\n", "\n\t", optimizedSourcecode);
+	if (withIndent.substr(withIndent.size() - 2) == "\n\t") {
+		withIndent.replace(withIndent.size() - 2, 2, "\n");
+	} else if (withIndent[withIndent.size() - 1] != '\n') {
+		withIndent += '\n'; // add trailing slash
+	}
 	return "\t" + withIndent;
 }
 

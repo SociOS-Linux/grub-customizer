@@ -346,6 +346,7 @@ void GrubCustomizer::applyEntryEditorModifications() {
 
 	std::string newCode = this->entryEditDlg->getSourcecode();
 	rulePtr->dataSource->content = newCode;
+	script->isModified = true;
 
 	this->syncListView_load();
 

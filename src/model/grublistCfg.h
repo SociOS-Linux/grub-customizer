@@ -28,6 +28,7 @@
 #include <map>
 #include <libintl.h>
 #include <unistd.h>
+#include <fstream>
 
 #include "proxylist.h"
 #include "repository.h"
