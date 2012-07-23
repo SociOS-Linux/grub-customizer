@@ -323,7 +323,6 @@ void GrubCustomizer::applyEntryEditorModifications() {
 		script = this->grublistCfg->repository.getCustomScript();
 		script->entries().push_back(*rulePtr->dataSource);
 
-
 		Rule ruleCopy = *rulePtr;
 		rulePtr->setVisibility(false);
 		ruleCopy.dataSource = &script->entries().back();
@@ -336,6 +335,13 @@ void GrubCustomizer::applyEntryEditorModifications() {
 
 		Rule& insertedRule = iter->subRules.back();
 		rulePtr = &this->grublistCfg->moveRule(&insertedRule, -1);
+
+		std::list<Proxy*> proxies = this->grublistCfg->proxies.getProxiesByScript(*script);
+		for (std::list<Proxy*>::iterator proxyIter = proxies.begin(); proxyIter != proxies.end(); proxyIter++) {
+			if (!(*proxyIter)->getRuleByEntry(*rulePtr->dataSource, (*proxyIter)->rules, rulePtr->type)) {
+				(*proxyIter)->rules.push_back(Rule(*rulePtr->dataSource, false, *script));
+			}
+		}
 	}
 
 	std::string newCode = this->entryEditDlg->getSourcecode();
