@@ -222,6 +222,18 @@ void EventListener::fb_resolutions_loaded(){
 	presenter.getThreadController().updateSettingsDlgResolutionList();
 }
 
+void EventListener::grubEnvEditor_partitionChanged(std::string const& newPartition) {
+	presenter.switchPartition(newPartition);
+}
+
 void EventListener::grubEnvEditor_typeChanged(int newTypeIndex) {
 	presenter.switchBootloaderType(newTypeIndex);
+}
+
+void EventListener::grubEnvEditor_optionModified() {
+	presenter.updateGrubEnvOptions();
+}
+
+void EventListener::grubEnvEditor_cancellationRequested() {
+	presenter.quit();
 }

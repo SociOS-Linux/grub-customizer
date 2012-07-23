@@ -123,7 +123,7 @@ public:
 	void init();
 	void init(GrubEnv::Mode mode);
 	void showPartitionChooser();
-	void showEnvEditor();
+	void showEnvEditor(bool resetPartitionChooser = false);
 	void handleCancelResponse();
 
 	void showSettingsDlg();
@@ -200,7 +200,9 @@ public:
 	void generateSubmountpointSelection(std::string const& prefix);
 
 	// env editor
+	void switchPartition(std::string const& newPartition);
 	void switchBootloaderType(int newTypeIndex);
+	void updateGrubEnvOptions();
 };
 
 #endif

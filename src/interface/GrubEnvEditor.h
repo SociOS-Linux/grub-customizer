@@ -18,12 +18,15 @@
 
 #ifndef GRUBENVEDITOR_H_
 #define GRUBENVEDITOR_H_
+#include <map>
 
 class GrubEnvEditor {
 public:
-	virtual void show() = 0;
+	virtual void show(bool resetPartitionChooser = false) = 0;
 	virtual void hide() = 0;
 	virtual void setEnvSettings(std::map<std::string, std::string> const& props, std::list<std::string> const& requiredProps, std::list<std::string> const& validProps) = 0;
+	virtual std::map<std::string, std::string> getEnvSettings() = 0;
+	virtual void setRootDeviceName(std::string const& rootDeviceName) = 0;
 };
 
 #endif /* GRUBENVEDITOR_H_ */

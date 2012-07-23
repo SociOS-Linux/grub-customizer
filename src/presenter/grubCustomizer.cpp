@@ -176,6 +176,9 @@ void GrubCustomizer::init(){
 	mountTable->loadData(PARTCHOOSER_MOUNTPOINT);
 
 
+	grubEnvEditor->setRootDeviceName(mountTable->getEntryByMountpoint("").device);
+
+
 	this->log("Loading Framebuffer resolutions (background process)", Logger::EVENT);
 	//loading the framebuffer resolutions in background…
 	this->getThreadController().startFramebufferResolutionLoader();
@@ -225,9 +228,9 @@ void GrubCustomizer::showPartitionChooser(){
 	this->partitionChooser->show();
 }
 
-void GrubCustomizer::showEnvEditor() {
+void GrubCustomizer::showEnvEditor(bool resetPartitionChooser) {
 	this->grubEnvEditor->setEnvSettings(this->env.getProperties(), this->env.getRequiredProperties(), this->env.getValidProperties());
-	this->grubEnvEditor->show();
+	this->grubEnvEditor->show(resetPartitionChooser);
 }
 
 void GrubCustomizer::handleCancelResponse(){
@@ -413,8 +416,42 @@ void GrubCustomizer::generateSubmountpointSelection(std::string const& prefix){
 	}
 }
 
+void GrubCustomizer::switchPartition(std::string const& newPartition) {
+	std::string selectedDevice = newPartition;
+	if (newPartition != "") {
+		mkdir(PARTCHOOSER_MOUNTPOINT, 0755);
+		try {
+			mountTable->clear(PARTCHOOSER_MOUNTPOINT);
+			mountTable->mountRootFs(selectedDevice, PARTCHOOSER_MOUNTPOINT);
+			this->env.init(env.burgMode ? GrubEnv::BURG_MODE : GrubEnv::GRUB_MODE, PARTCHOOSER_MOUNTPOINT);
+			this->showEnvEditor();
+		}
+		catch (Mountpoint::Exception e) {
+			if (e == Mountpoint::MOUNT_FAILED){
+				this->partitionChooser->showErrorMessage(PartitionChooser::MOUNT_FAILED);
+				this->switchPartition("");
+			}
+		}
+		catch (MountTable::Exception e) {
+			if (e == MountTable::MOUNT_ERR_NO_FSTAB){
+				this->partitionChooser->showErrorMessage(PartitionChooser::MOUNT_ERR_NO_FSTAB);
+				mountTable->getEntryByMountpoint(PARTCHOOSER_MOUNTPOINT).umount();
+				this->switchPartition("");
+			}
+		}
+	} else {
+		this->env.init(env.burgMode ? GrubEnv::BURG_MODE : GrubEnv::GRUB_MODE, selectedDevice);
+		this->showEnvEditor(true);
+	}
+}
+
 void GrubCustomizer::switchBootloaderType(int newTypeIndex) {
-	this->env.init(newTypeIndex == 0 ? GrubEnv::GRUB_MODE : GrubEnv::BURG_MODE, "");
+	this->env.init(newTypeIndex == 0 ? GrubEnv::GRUB_MODE : GrubEnv::BURG_MODE, this->env.cfg_dir_prefix);
+	this->showEnvEditor();
+}
+
+void GrubCustomizer::updateGrubEnvOptions() {
+	this->env.setProperties(this->grubEnvEditor->getEnvSettings());
 	this->showEnvEditor();
 }
 

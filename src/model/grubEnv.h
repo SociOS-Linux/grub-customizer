@@ -38,6 +38,7 @@ public:
 	bool init(GrubEnv::Mode mode, std::string const& dir_prefix);
 	void loadFromFile(FILE* cfg_file, std::string const& dir_prefix);
 	std::map<std::string, std::string> getProperties();
+	void setProperties(std::map<std::string, std::string> const& props);
 	std::list<std::string> getRequiredProperties();
 	std::list<std::string> getValidProperties();
 	bool check_cmd(std::string const& cmd, std::string const& cmd_prefix = "") const;

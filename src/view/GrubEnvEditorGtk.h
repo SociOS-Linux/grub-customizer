@@ -35,19 +35,26 @@ class GrubEnvEditorGtk : public Gtk::Dialog, public GrubEnvEditor, public Common
 	Gtk::HSeparator separator;
 	PartitionChooser_DropDown* pChooser;
 	DeviceDataList_Iface* deviceDataList;
-	std::map<std::string, Gtk::Widget*> optionMap;
+	std::map<std::string, Gtk::Entry*> optionMap;
 	std::map<std::string, Gtk::Label*> labelMap;
 	std::map<std::string, Gtk::Image*> imageMap;
+	bool eventLock;
+
+	std::string rootDeviceName;
 public:
 	GrubEnvEditorGtk();
 	void setEventListener(EventListener_grubEnvEditor& eventListener);
 	void setDeviceDataList(DeviceDataList_Iface& deviceDataList);
+	void setRootDeviceName(std::string const& rootDeviceName);
 	void setEnvSettings(std::map<std::string, std::string> const& props, std::list<std::string> const& requiredProps, std::list<std::string> const& validProps);
-	void clear();
-	void show();
+	std::map<std::string, std::string> getEnvSettings();
+	void show(bool resetPartitionChooser = false);
 	void hide();
 private:
+	void signal_partitionChanged();
 	void signal_bootloaderType_changed();
+	void signal_optionModified();
+	void signal_response_action(int response_id);
 };
 
 #endif /* GRUBENVEDITOR_H_ */

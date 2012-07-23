@@ -75,7 +75,6 @@ bool GrubEnv::init(GrubEnv::Mode mode, std::string const& dir_prefix){
 	this->update_cmd = cmd_prefix+this->update_cmd;
 	this->install_cmd = cmd_prefix+this->install_cmd;
 	this->mkfont_cmd = cmd_prefix+this->mkfont_cmd;
-	this->devicemap_file = cmd_prefix+this->devicemap_file;
 	this->mkdevicemap_cmd = cmd_prefix+this->mkdevicemap_cmd;
 	
 	return is_valid;
@@ -112,6 +111,20 @@ std::map<std::string, std::string> GrubEnv::getProperties() {
 	return result;
 }
 
+void GrubEnv::setProperties(std::map<std::string, std::string> const& props) {
+	this->mkconfig_cmd = this->cmd_prefix + props.at("MKCONFIG_CMD");
+	this->update_cmd = this->cmd_prefix + props.at("UPDATE_CMD");
+	this->install_cmd = this->cmd_prefix + props.at("INSTALL_CMD");
+	this->mkfont_cmd = this->cmd_prefix + props.at("MKFONT_CMD");
+	this->mkdevicemap_cmd = this->cmd_prefix + props.at("MKDEVICEMAP_CMD");
+	this->cfg_dir_noprefix = props.at("CFG_DIR");
+	this->cfg_dir = this->cfg_dir_prefix + props.at("CFG_DIR");
+	this->output_config_dir = this->cfg_dir_prefix + props.at("OUTPUT_DIR");
+	this->output_config_file = this->cfg_dir_prefix + props.at("OUTPUT_FILE");
+	this->settings_file = this->cfg_dir_prefix + props.at("SETTINGS_FILE");
+	this->devicemap_file = this->cfg_dir_prefix + props.at("DEVICEMAP_FILE");
+}
+
 std::list<std::string> GrubEnv::getRequiredProperties() {
 	std::list<std::string> result;
 	result.push_back("MKCONFIG_CMD");
@@ -139,7 +152,7 @@ std::list<std::string> GrubEnv::getValidProperties() {
 		result.push_back("MKDEVICEMAP_CMD");
 	}
 	if (this->check_dir(this->cfg_dir)) {
-		result.push_back("MKDEVICEMAP_CMD");
+		result.push_back("CFG_DIR");
 	}
 	if (this->check_dir(this->output_config_dir)) {
 		result.push_back("OUTPUT_DIR");

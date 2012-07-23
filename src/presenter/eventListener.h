@@ -106,6 +106,9 @@ public:
 	void fb_resolutions_loaded();
 
 	// env editor
+	void grubEnvEditor_partitionChanged(std::string const& newPartition);
 	void grubEnvEditor_typeChanged(int newTypeIndex);
+	void grubEnvEditor_optionModified();
+	void grubEnvEditor_cancellationRequested();
 };
 #endif
