@@ -225,15 +225,17 @@ void GrublistCfgDlgGtk::run(){
 void GrublistCfgDlgGtk::setProgress(double progress){
 	progressBar.set_fraction(progress);
 	progressBar.show();
+	statusbar.show();
 }
 
 void GrublistCfgDlgGtk::progress_pulse(){
 	progressBar.pulse();
 	progressBar.show();
+	statusbar.show();
 }
 
 void GrublistCfgDlgGtk::hideProgressBar(){
-	progressBar.hide();
+	statusbar.hide();
 }
 
 void GrublistCfgDlgGtk::setStatusText(std::string const& new_status_text){
