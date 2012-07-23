@@ -24,10 +24,13 @@ class GrubEnvEditor {
 public:
 	virtual void show(bool resetPartitionChooser = false) = 0;
 	virtual void hide() = 0;
+	virtual void removeAllSubmountpoints() = 0;
+	virtual void addSubmountpoint(std::string const& name, bool isActive) = 0;
 	virtual void setEnvSettings(std::map<std::string, std::string> const& props, std::list<std::string> const& requiredProps, std::list<std::string> const& validProps) = 0;
 	virtual std::map<std::string, std::string> getEnvSettings() = 0;
 	virtual void setRootDeviceName(std::string const& rootDeviceName) = 0;
 	virtual int getBootloaderType() const = 0;
+	virtual void setSubmountpointSelectionState(std::string const& submountpoint, bool new_isSelected) = 0;
 };
 
 #endif /* GRUBENVEDITOR_H_ */

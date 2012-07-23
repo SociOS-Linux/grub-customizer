@@ -20,7 +20,7 @@
 
 GrubEnvEditorGtk::GrubEnvEditorGtk()
 	: eventListener(NULL), pChooser(NULL), lblPartition(gettext("_Partition:"), true), deviceDataList(NULL),
-	  lblType(gettext("_Type:"), true), eventLock(true)
+	  lblType(gettext("_Type:"), true), eventLock(true), lblSubmountpoints(gettext("Submountpoints:"))
 {
 	this->set_title("Grub Customizer environment setup");
 	this->set_icon_name("grub-customizer");
@@ -30,10 +30,20 @@ GrubEnvEditorGtk::GrubEnvEditorGtk()
 
 	this->tblLayout.attach(this->lblPartition, 0, 1, 0, 1, Gtk::SHRINK | Gtk::FILL, Gtk::SHRINK);
 
-	this->tblLayout.attach(this->lblType, 0, 1, 1, 2, Gtk::SHRINK | Gtk::FILL, Gtk::SHRINK);
-	this->tblLayout.attach(this->cbType, 1, 2, 1, 2, Gtk::EXPAND | Gtk::FILL, Gtk::SHRINK);
+	this->tblLayout.attach(this->lblSubmountpoints, 0, 1, 1, 2);
+	this->tblLayout.attach(this->scrSubmountpoints, 1, 2, 1, 2);
 
-	this->tblLayout.attach(this->separator, 0, 2, 2, 3, Gtk::EXPAND | Gtk::FILL, Gtk::SHRINK);
+	this->tblLayout.attach(this->lblType, 0, 1, 2, 3, Gtk::SHRINK | Gtk::FILL, Gtk::SHRINK);
+	this->tblLayout.attach(this->cbType, 1, 2, 2, 3, Gtk::EXPAND | Gtk::FILL, Gtk::SHRINK);
+
+	this->tblLayout.attach(this->separator, 0, 2, 3, 4, Gtk::EXPAND | Gtk::FILL, Gtk::SHRINK);
+
+	this->scrSubmountpoints.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
+	this->scrSubmountpoints.add(this->vbSubmountpoints);
+	this->scrSubmountpoints.set_size_request(-1, 50);
+
+	this->lblSubmountpoints.set_no_show_all(true);
+	this->scrSubmountpoints.set_no_show_all(true);
 
 	this->cbType.append(gettext("Grub 2"));
 	this->cbType.append(gettext("BURG"));
@@ -42,6 +52,7 @@ GrubEnvEditorGtk::GrubEnvEditorGtk()
 
 	lblPartition.set_alignment(Gtk::ALIGN_RIGHT);
 	lblType.set_alignment(Gtk::ALIGN_RIGHT);
+	lblSubmountpoints.set_alignment(Gtk::ALIGN_RIGHT);
 
 	this->tblLayout.set_spacings(10);
 	this->tblLayout.set_border_width(10);
@@ -74,7 +85,7 @@ void GrubEnvEditorGtk::setRootDeviceName(std::string const& rootDeviceName) {
 
 void GrubEnvEditorGtk::setEnvSettings(std::map<std::string, std::string> const& props, std::list<std::string> const& requiredProps, std::list<std::string> const& validProps) {
 	this->eventLock = true;
-	int pos = 3;
+	int pos = 4;
 	for (std::map<std::string, std::string>::const_iterator iter = props.begin(); iter != props.end(); iter++) {
 		Gtk::Label* label = NULL;
 		if (this->labelMap.find(iter->first) == this->labelMap.end()) {
@@ -161,10 +172,38 @@ void GrubEnvEditorGtk::show(bool resetPartitionChooser) {
 	this->lblPartition.set_mnemonic_widget(*pChooser);
 
 	this->show_all();
+
 	this->eventLock = false;
 }
 void GrubEnvEditorGtk::hide() {
 	Gtk::Dialog::hide();
+}
+
+void GrubEnvEditorGtk::removeAllSubmountpoints() {
+	for (std::map<std::string, Gtk::CheckButton*>::iterator iter = this->subMountpoints.begin(); iter != this->subMountpoints.end(); iter++) {
+		this->vbSubmountpoints.remove(*iter->second);
+		delete iter->second;
+	}
+	this->subMountpoints.clear();
+
+	this->scrSubmountpoints.hide();
+	this->lblSubmountpoints.hide();
+}
+
+void GrubEnvEditorGtk::addSubmountpoint(std::string const& name, bool isActive) {
+	Gtk::CheckButton* cb = new Gtk::CheckButton(name);
+	cb->set_active(isActive);
+	cb->signal_toggled().connect(sigc::bind<Gtk::CheckButton&>(sigc::mem_fun(this, &GrubEnvEditorGtk::signal_submountpointToggled), *cb));
+	this->vbSubmountpoints.pack_start(*cb, Gtk::PACK_SHRINK);
+	this->subMountpoints[name] = cb;
+
+	this->scrSubmountpoints.show();
+	vbSubmountpoints.show_all();
+	this->lblSubmountpoints.show();
+}
+
+void GrubEnvEditorGtk::setSubmountpointSelectionState(std::string const& submountpoint, bool new_isSelected) {
+	this->subMountpoints[submountpoint]->set_active(new_isSelected);
 }
 
 void GrubEnvEditorGtk::signal_partitionChanged() {
@@ -197,3 +236,12 @@ void GrubEnvEditorGtk::signal_response_action(int response_id) {
 	}
 }
 
+void GrubEnvEditorGtk::signal_submountpointToggled(Gtk::CheckButton& sender) {
+	if (!eventLock) {
+		if (sender.get_active()) {
+			this->eventListener->submountpoint_mount_request(sender.get_label());
+		} else {
+			this->eventListener->submountpoint_umount_request(sender.get_label());
+		}
+	}
+}

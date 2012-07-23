@@ -139,7 +139,7 @@ void MountTable::loadData(std::string const& rootDirectory){
 void MountTable::clear(std::string const& prefix){
 	MountTable::iterator iter = this->begin();
 	while (iter != this->end()){
-		if (iter->mountpoint.substr(0, iter->mountpoint.length()) == prefix){
+		if (iter->mountpoint.substr(0, prefix.length()) == prefix){
 			this->erase(iter);
 			iter = this->begin();
 		}
@@ -196,10 +196,12 @@ void MountTable::remove(Mountpoint const& mountpoint){
 
 void MountTable::umountAll(std::string const& prefix){
 	for (MountTable::reverse_iterator iter = this->rbegin(); iter != this->rend(); iter++){
-		if (iter->mountpoint.substr(0, prefix.length()) == prefix && iter->isMounted){
+		if (iter->mountpoint.substr(0, prefix.length()) == prefix && iter->mountpoint != prefix && iter->isMounted){
 			iter->umount();
 		}
 	}
+
+	this->getEntryRefByMountpoint(prefix).umount();
 }
 
 void MountTable::mountRootFs(std::string const& device, std::string const& mountpoint){

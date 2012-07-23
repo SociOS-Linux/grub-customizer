@@ -33,11 +33,15 @@ class GrubEnvEditorGtk : public Gtk::Dialog, public GrubEnvEditor, public Common
 	Gtk::Label lblType;
 	Gtk::ComboBoxText cbType;
 	Gtk::HSeparator separator;
+	Gtk::ScrolledWindow scrSubmountpoints;
+	Gtk::VBox vbSubmountpoints;
+	Gtk::Label lblSubmountpoints;
 	PartitionChooser_DropDown* pChooser;
 	DeviceDataList_Iface* deviceDataList;
 	std::map<std::string, Gtk::Entry*> optionMap;
 	std::map<std::string, Gtk::Label*> labelMap;
 	std::map<std::string, Gtk::Image*> imageMap;
+	std::map<std::string, Gtk::CheckButton*> subMountpoints;
 	bool eventLock;
 
 	std::string rootDeviceName;
@@ -52,11 +56,15 @@ public:
 	int getBootloaderType() const;
 	void show(bool resetPartitionChooser = false);
 	void hide();
+	void removeAllSubmountpoints();
+	void addSubmountpoint(std::string const& name, bool isActive);
+	void setSubmountpointSelectionState(std::string const& submountpoint, bool new_isSelected);
 private:
 	void signal_partitionChanged();
 	void signal_bootloaderType_changed();
 	void signal_optionModified();
 	void signal_response_action(int response_id);
+	void signal_submountpointToggled(Gtk::CheckButton& sender);
 };
 
 #endif /* GRUBENVEDITOR_H_ */

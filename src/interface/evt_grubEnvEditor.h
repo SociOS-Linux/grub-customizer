@@ -26,6 +26,8 @@ public:
 	virtual void grubEnvEditor_optionModified() = 0;
 	virtual void grubEnvEditor_cancellationRequested() = 0;
 	virtual void grubEnvEditor_applyRequested() = 0;
+	virtual void submountpoint_mount_request(std::string const& mountpoint) = 0;
+	virtual void submountpoint_umount_request(std::string const& mountpoint) = 0;
 };
 
 #endif /* EVT_GRUBENVEDITOR_H_ */

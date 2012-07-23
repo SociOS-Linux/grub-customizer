@@ -405,23 +405,27 @@ void GrubCustomizer::readPartitionInfo(){
 
 void GrubCustomizer::generateSubmountpointSelection(std::string const& prefix){
 	this->partitionChooser->removeAllSubmountpoints();
+	this->grubEnvEditor->removeAllSubmountpoints();
 
 	//create new submountpoint checkbuttons
 	for (MountTable::const_iterator iter = mountTable->begin(); iter != mountTable->end(); iter++){
-		if (iter->mountpoint.length() > prefix.length()
+		if (iter->mountpoint.length() > prefix.length() && iter->mountpoint.substr(0, prefix.length()) == prefix
 		 && iter->mountpoint != prefix + "/dev"
 		 && iter->mountpoint != prefix + "/proc"
 		 && iter->mountpoint != prefix + "/sys"
 		) {
 			this->partitionChooser->addSubmountpoint(iter->mountpoint.substr(prefix.length()), iter->isMounted);
+			this->grubEnvEditor->addSubmountpoint(iter->mountpoint.substr(prefix.length()), iter->isMounted);
 		}
 	}
 }
 
 void GrubCustomizer::switchPartition(std::string const& newPartition) {
-	if (mountTable->getEntryByMountpoint(PARTCHOOSER_MOUNTPOINT).isMounted) {
-		mountTable->umountAll(PARTCHOOSER_MOUNTPOINT);
+	if (this->mountTable->getEntryByMountpoint(PARTCHOOSER_MOUNTPOINT).isMounted) {
+		this->mountTable->umountAll(PARTCHOOSER_MOUNTPOINT);
+		this->mountTable->clear(PARTCHOOSER_MOUNTPOINT);
 	}
+	this->grubEnvEditor->removeAllSubmountpoints();
 	std::string selectedDevice = newPartition;
 	if (newPartition != "") {
 		mkdir(PARTCHOOSER_MOUNTPOINT, 0755);
@@ -429,6 +433,7 @@ void GrubCustomizer::switchPartition(std::string const& newPartition) {
 			mountTable->clear(PARTCHOOSER_MOUNTPOINT);
 			mountTable->mountRootFs(selectedDevice, PARTCHOOSER_MOUNTPOINT);
 			this->env.init(env.burgMode ? GrubEnv::BURG_MODE : GrubEnv::GRUB_MODE, PARTCHOOSER_MOUNTPOINT);
+			this->generateSubmountpointSelection(PARTCHOOSER_MOUNTPOINT);
 			this->showEnvEditor();
 		}
 		catch (Mountpoint::Exception e) {
@@ -540,6 +545,8 @@ void GrubCustomizer::mountSubmountpoint(std::string const& submountpoint){
 			this->partitionChooser->showErrorMessage(PartitionChooser::SUB_MOUNT_FAILED);
 		}
 		this->partitionChooser->setSubmountpointSelectionState(submountpoint, false); //reset checkbox
+		this->grubEnvEditor->setSubmountpointSelectionState(submountpoint, false);
+		this->grubEnvEditor->show();
 	}
 }
 
@@ -552,6 +559,8 @@ void GrubCustomizer::umountSubmountpoint(std::string const& submountpoint){
 			this->partitionChooser->showErrorMessage(PartitionChooser::SUB_UMOUNT_FAILED);
 		}
 		this->partitionChooser->setSubmountpointSelectionState(submountpoint, true); //reset checkbox
+		this->grubEnvEditor->setSubmountpointSelectionState(submountpoint, true);
+		this->grubEnvEditor->show();
 	}
 }
 
