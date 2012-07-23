@@ -432,14 +432,13 @@ void GrublistCfgDlgGtk::selectRule(void* rule, bool startEdit) {
 
 void GrublistCfgDlgGtk::signal_move_click(int direction){
 	if (this->lock_state == 0){
-		if (direction == 1 || direction == -1){
-			Gtk::TreeModel::iterator iter = tvConfList.get_selection()->get_selected();
-			//if rule swap
-			eventListener->ruleAdjustment_requested((void*)(*iter)[tvConfList.treeModel.relatedRule], direction);
-		}
-		else {
-			this->log("the only supported directions for moving are 1 or -1", Logger::ERROR);
-		}
+		assert(direction == 1 || direction == -1);
+		assert(tvConfList.get_selection()->count_selected_rows() == 1);
+
+		std::vector<Gtk::TreeModel::Path> pathes = tvConfList.get_selection()->get_selected_rows();
+		Gtk::TreeModel::iterator iter = this->tvConfList.refTreeStore->get_iter(pathes[0]);
+		//if rule swap
+		eventListener->ruleAdjustment_requested((void*)(*iter)[tvConfList.treeModel.relatedRule], direction);
 	}
 }
 
@@ -459,11 +458,14 @@ void GrublistCfgDlgGtk::setDefaultTitleStatusText(std::string const& str){
 
 void GrublistCfgDlgGtk::signal_treeview_selection_changed(){
 	if (this->lock_state == 0){
-		if (tvConfList.get_selection()->count_selected_rows() == 1){
-			if (tvConfList.get_selection()->get_selected()->parent()){
-				void* rptr = (*tvConfList.get_selection()->get_selected())[tvConfList.treeModel.relatedRule];
-				this->eventListener->ruleSelected(rptr);
-			}
+		if (tvConfList.get_selection()->count_selected_rows()) {
+			std::vector<Gtk::TreeModel::Path> selectedRows = tvConfList.get_selection()->get_selected_rows();
+			Gtk::TreeModel::iterator iter = this->tvConfList.refTreeStore->get_iter(selectedRows[0]);
+
+			void* rptr = (*iter)[tvConfList.treeModel.relatedRule];
+			this->eventListener->ruleSelected(rptr);
+		} else {
+			this->eventListener->ruleSelected(NULL);
 		}
 
 		this->updateButtonsState();
@@ -475,7 +477,9 @@ void GrublistCfgDlgGtk::signal_add_click(){
 }
 
 void GrublistCfgDlgGtk::signal_remove_click() {
-	void* rptr = (*tvConfList.get_selection()->get_selected())[tvConfList.treeModel.relatedRule];
+	assert(tvConfList.get_selection()->count_selected_rows() == 1);
+	std::vector<Gtk::TreeModel::Path> pathes = tvConfList.get_selection()->get_selected_rows();
+	void* rptr = (*tvConfList.refTreeStore->get_iter(pathes[0]))[tvConfList.treeModel.relatedRule];
 	eventListener->signal_entry_remove_requested(rptr);
 }
 
@@ -487,8 +491,10 @@ void GrublistCfgDlgGtk::update_move_buttons(){
 	int selectedRowsCount = tvConfList.get_selection()->count_selected_rows();
 	bool is_toplevel = false;
 	bool is_secondLevel = false;
-	if (selectedRowsCount > 0) {
-		is_toplevel = tvConfList.get_selection()->get_selected()->parent() ? false : true;
+	if (selectedRowsCount == 1) {
+		std::vector<Gtk::TreeModel::Path> pathes = tvConfList.get_selection()->get_selected_rows();
+		Gtk::TreeModel::iterator iter = this->tvConfList.refTreeStore->get_iter(pathes[0]);
+		is_toplevel = iter->parent() ? false : true;
 	}
 
 	tbttUp.set_sensitive(selectedRowsCount == 1);
@@ -565,12 +571,16 @@ void GrublistCfgDlgGtk::signal_show_grub_install_dialog_click(){
 }
 
 void GrublistCfgDlgGtk::signal_move_left_click() {
-	Gtk::TreeModel::iterator iter = tvConfList.get_selection()->get_selected();
+	assert(tvConfList.get_selection()->count_selected_rows() == 1);
+	std::vector<Gtk::TreeModel::Path> pathes = tvConfList.get_selection()->get_selected_rows();
+	Gtk::TreeModel::iterator iter = tvConfList.refTreeStore->get_iter(pathes[0]);
 	eventListener->removeSubmenuRequest((void*)(*iter)[tvConfList.treeModel.relatedRule]);
 }
 
 void GrublistCfgDlgGtk::signal_move_right_click() {
-	Gtk::TreeModel::iterator iter = tvConfList.get_selection()->get_selected();
+	assert(tvConfList.get_selection()->count_selected_rows() == 1);
+	std::vector<Gtk::TreeModel::Path> pathes = tvConfList.get_selection()->get_selected_rows();
+	Gtk::TreeModel::iterator iter = tvConfList.refTreeStore->get_iter(pathes[0]);
 	eventListener->createSubmenuRequest((void*)(*iter)[tvConfList.treeModel.relatedRule]);
 }
 
@@ -622,6 +632,8 @@ GrubConfListing::GrubConfListing(){
 	this->mainColumn.set_spacing(10);
 
 	this->set_headers_visible(false);
+	this->get_selection()->set_mode(Gtk::SELECTION_MULTIPLE);
+	this->set_rubber_banding(true);
 }
 
 GrubConfListing::TreeModel::TreeModel(){

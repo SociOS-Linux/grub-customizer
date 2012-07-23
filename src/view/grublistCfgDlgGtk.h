@@ -25,6 +25,7 @@
 #include "../interface/grublistCfgDlg.h"
 #include "../presenter/commonClass.h"
 #include "settingsDlgGtk.h"
+#include <cassert>
 
 //TODO: Edit -> Rename [v3]
 //TODO: Edit -> activate/unactivate [v3]

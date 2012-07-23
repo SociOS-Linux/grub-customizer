@@ -87,7 +87,9 @@ void EventListener::ruleAdjustment_requested(void* rule, int direction){
 }
 
 void EventListener::ruleSelected(void* rule){
-	presenter.showRuleInfo((Rule*)rule);
+	if (rule) {
+		presenter.showRuleInfo((Rule*)rule);
+	}
 }
 void EventListener::proxySelected(void* proxy){
 	presenter.showProxyInfo((Proxy*)proxy);
