@@ -61,8 +61,8 @@ struct Proxy {
 	Rule& moveRule(Rule* rule, int direction);
 	void merge(Proxy const& foreignProxy, int direction);
 	std::list<Rule>::iterator getNextVisibleRule(std::list<Rule>::iterator base, int direction);
-	Rule* removeSubmenu(Rule* childItem);
-	Rule* createSubmenu(Rule* childItem);
+	Rule* splitSubmenu(Rule* position);
+	Rule* createSubmenu(Rule* position);
 	bool ruleIsFromOwnScript(Rule const& rule) const;
 	void removeForeignChildRules(Rule& parent);
 	void removeEquivalentRules(Rule const& base);

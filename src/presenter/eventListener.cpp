@@ -45,12 +45,12 @@ void EventListener::rootSelector_request(){
 }
 
 
-void EventListener::createSubmenuRequest(void* childItem) {
-	presenter.createSubmenu((Rule*)childItem);
+void EventListener::createSubmenuRequest(std::list<void*> childItems) {
+	presenter.createSubmenu(childItems);
 }
 
-void EventListener::removeSubmenuRequest(void* childItem) {
-	presenter.removeSubmenu((Rule*)childItem);
+void EventListener::removeSubmenuRequest(std::list<void*> childItems) {
+	presenter.removeSubmenu(childItems);
 }
 
 void EventListener::installDialogRequest(){

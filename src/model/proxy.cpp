@@ -511,64 +511,64 @@ std::list<Rule>::iterator Proxy::getNextVisibleRule(std::list<Rule>::iterator ba
 	return base;
 }
 
-Rule* Proxy::removeSubmenu(Rule* childItem) {
-	Rule* parent = this->getParentRule(childItem);
+Rule* Proxy::splitSubmenu(Rule* position) {
+	Rule* parent = this->getParentRule(position);
 
 	// search items before and after the submenu
 	std::list<Rule> rulesBefore;
 	std::list<Rule> rulesAfter;
+
 	bool isBehindChildtem = false;
 	for (std::list<Rule>::iterator iter = parent->subRules.begin(); iter != parent->subRules.end(); iter++) {
-		if (&*iter != childItem) {
+		if (&*iter != position) {
 			if (!isBehindChildtem) {
 				rulesBefore.push_back(*iter);
 			} else {
 				rulesAfter.push_back(*iter);
 			}
 		} else {
+			rulesAfter.push_back(*iter);
 			isBehindChildtem = true;
 		}
 	}
 	Rule oldSubmenu = *parent;
 	oldSubmenu.subRules.clear();
 
-	// replace the submenu
-	*parent = *childItem;
-
+	std::list<Rule>* list = NULL;
+	Rule* parentRule = this->getParentRule(parent);
+	if (parentRule) {
+		list = &parentRule->subRules;
+	} else {
+		list = &this->rules;
+	}
+	assert(list != NULL);
 	// add the rules before and/or after to new submenus
-	if (rulesBefore.size() || rulesAfter.size()) {
-		std::list<Rule>* list = NULL;
-		Rule* parentRule = this->getParentRule(parent);
-		if (parentRule) {
-			list = &parentRule->subRules;
-		} else {
-			list = &this->rules;
-		}
-		assert(list != NULL);
-
-		if (rulesBefore.size()) {
-			Rule newSubmenu = oldSubmenu;
-			newSubmenu.subRules = rulesBefore;
-			list->insert(this->getListIterator(*parent, *list), newSubmenu);
-		}
-
-		if (rulesAfter.size()) {
-			Rule newSubmenu = oldSubmenu;
-			newSubmenu.subRules = rulesAfter;
-			std::list<Rule>::iterator iter = this->getListIterator(*parent, *list);
-			iter++;
-			list->insert(iter, newSubmenu);
-		}
+	if (rulesBefore.size()) {
+		Rule newSubmenu = oldSubmenu;
+		newSubmenu.subRules = rulesBefore;
+		list->insert(this->getListIterator(*parent, *list), newSubmenu);
 	}
 
-	return parent;
+
+	Rule newSubmenu = oldSubmenu;
+	newSubmenu.subRules = rulesAfter;
+	std::list<Rule>::iterator iter = this->getListIterator(*parent, *list);
+	iter++;
+	std::list<Rule>::iterator insertPos = list->insert(iter, newSubmenu);
+
+	// remove the submenu
+	list->erase(this->getListIterator(*parent, *list));
+
+	return &insertPos->subRules.front();
 }
 
-Rule* Proxy::createSubmenu(Rule* childItem) {
-	Rule childCopy = *childItem;
-	*childItem = Rule(Rule::SUBMENU, std::list<std::string>(), "", true);
-	childItem->subRules.push_back(childCopy);
-	return childItem;
+Rule* Proxy::createSubmenu(Rule* position) {
+	std::list<Rule>& list = this->getRuleList(this->getParentRule(position));
+	std::list<Rule>::iterator posIter = this->getListIterator(*position, list);
+
+	std::list<Rule>::iterator insertPos = list.insert(posIter, Rule(Rule::SUBMENU, std::list<std::string>(), "", true));
+
+	return &*insertPos;
 }
 
 bool Proxy::ruleIsFromOwnScript(Rule const& rule) const {

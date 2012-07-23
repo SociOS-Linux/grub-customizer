@@ -36,9 +36,9 @@ public:
 	//user wants to show the grub install dialog
 	virtual void installDialogRequest()=0;
 	//user wants to create a new submenu
-	virtual void createSubmenuRequest(void* childItem)=0;
+	virtual void createSubmenuRequest(std::list<void*> childItems)=0;
 	//user wants to remove a submenu
-	virtual void removeSubmenuRequest(void* childItem)=0;
+	virtual void removeSubmenuRequest(std::list<void*> childItems)=0;
 	//user wants to show the dialog which lets him add new entries
 	virtual void entryAddDlg_requested()=0;
 	//user wants to show the about dialog

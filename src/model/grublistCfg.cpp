@@ -799,12 +799,12 @@ void GrublistCfg::swapProxies(Proxy* a, Proxy* b){
 	this->proxies.sort();
 }
 
-Rule* GrublistCfg::createSubmenu(Rule* child) {
-	return this->proxies.getProxyByRule(child)->createSubmenu(child);
+Rule* GrublistCfg::createSubmenu(Rule* position) {
+	return this->proxies.getProxyByRule(position)->createSubmenu(position);
 }
 
-Rule* GrublistCfg::removeSubmenu(Rule* child) {
-	return this->proxies.getProxyByRule(child)->removeSubmenu(child);
+Rule* GrublistCfg::splitSubmenu(Rule* child) {
+	return this->proxies.getProxyByRule(child)->splitSubmenu(child);
 }
 
 bool GrublistCfg::cfgDirIsClean(){

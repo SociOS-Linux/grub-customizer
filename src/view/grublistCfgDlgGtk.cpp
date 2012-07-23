@@ -549,15 +549,9 @@ void GrublistCfgDlgGtk::signal_preference_click(){
 void GrublistCfgDlgGtk::update_move_buttons(){
 	int selectedRowsCount = tvConfList.get_selection()->count_selected_rows();
 	bool is_toplevel = false;
-	bool is_secondLevel = false;
-	if (selectedRowsCount == 1) {
-		std::vector<Gtk::TreeModel::Path> pathes = tvConfList.get_selection()->get_selected_rows();
-		Gtk::TreeModel::iterator iter = this->tvConfList.refTreeStore->get_iter(pathes[0]);
-		is_toplevel = iter->parent() ? false : true;
-	}
-
 	bool sameLevel = false;
 	bool subsequent = false;
+
 	if (selectedRowsCount >= 1) {
 		sameLevel = this->selectedEntriesAreOnSameLevel();
 		if (sameLevel) {
@@ -565,14 +559,20 @@ void GrublistCfgDlgGtk::update_move_buttons(){
 		}
 	}
 
+	if (selectedRowsCount >= 1 && sameLevel) {
+		std::vector<Gtk::TreeModel::Path> pathes = tvConfList.get_selection()->get_selected_rows();
+		Gtk::TreeModel::iterator iter = this->tvConfList.refTreeStore->get_iter(pathes[0]);
+		is_toplevel = iter->parent() ? false : true;
+	}
+
 	tbttUp.set_sensitive(selectedRowsCount >= 1 && sameLevel && subsequent);
 	miUp.set_sensitive(selectedRowsCount >= 1 && sameLevel && subsequent);
 	tbttDown.set_sensitive(selectedRowsCount >= 1 && sameLevel && subsequent);
 	miDown.set_sensitive(selectedRowsCount >= 1 && sameLevel && subsequent);
-	tbttLeft.set_sensitive(selectedRowsCount == 1 && !is_toplevel); //selected entry must be inside a submenu
-	miLeft.set_sensitive(selectedRowsCount == 1 && !is_toplevel); //selected entry must be inside a submenu
-	tbttRight.set_sensitive(selectedRowsCount == 1);
-	miRight.set_sensitive(selectedRowsCount == 1);
+	tbttLeft.set_sensitive(selectedRowsCount >= 1 && sameLevel && subsequent && !is_toplevel); //selected entry must be inside a submenu
+	miLeft.set_sensitive(selectedRowsCount >= 1 && sameLevel && subsequent && !is_toplevel); //selected entry must be inside a submenu
+	tbttRight.set_sensitive(selectedRowsCount >= 1 && sameLevel && subsequent);
+	miRight.set_sensitive(selectedRowsCount >= 1 && sameLevel && subsequent);
 }
 
 
@@ -639,17 +639,11 @@ void GrublistCfgDlgGtk::signal_show_grub_install_dialog_click(){
 }
 
 void GrublistCfgDlgGtk::signal_move_left_click() {
-	assert(tvConfList.get_selection()->count_selected_rows() == 1);
-	std::vector<Gtk::TreeModel::Path> pathes = tvConfList.get_selection()->get_selected_rows();
-	Gtk::TreeModel::iterator iter = tvConfList.refTreeStore->get_iter(pathes[0]);
-	eventListener->removeSubmenuRequest((void*)(*iter)[tvConfList.treeModel.relatedRule]);
+	eventListener->removeSubmenuRequest(this->getSelectedRules());
 }
 
 void GrublistCfgDlgGtk::signal_move_right_click() {
-	assert(tvConfList.get_selection()->count_selected_rows() == 1);
-	std::vector<Gtk::TreeModel::Path> pathes = tvConfList.get_selection()->get_selected_rows();
-	Gtk::TreeModel::iterator iter = tvConfList.refTreeStore->get_iter(pathes[0]);
-	eventListener->createSubmenuRequest((void*)(*iter)[tvConfList.treeModel.relatedRule]);
+	eventListener->createSubmenuRequest(this->getSelectedRules());
 }
 
 void GrublistCfgDlgGtk::showErrorMessage(std::string const& msg, std::vector<std::string> const& values = std::vector<std::string>()){

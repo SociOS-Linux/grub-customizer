@@ -724,16 +724,23 @@ void GrubCustomizer::moveRules(std::list<void*> rules, int direction){
 }
 
 
-void GrubCustomizer::createSubmenu(Rule* childItem) {
-	Rule* newItem = this->grublistCfg->createSubmenu(childItem);
+void GrubCustomizer::createSubmenu(std::list<void*> childItems) {
+	Rule* firstRule = static_cast<Rule*>(childItems.front());
+	Rule* newItem = this->grublistCfg->createSubmenu(firstRule);
 	this->syncListView_load();
+	this->moveRules(childItems, -1);
 	this->listCfgDlg->selectRule(newItem, true);
 }
 
-void GrubCustomizer::removeSubmenu(Rule* childItem) {
-	Rule* newItem = this->grublistCfg->removeSubmenu(childItem);
-	this->syncListView_load();
-	this->listCfgDlg->selectRule(newItem);
+void GrubCustomizer::removeSubmenu(std::list<void*> childItems) {
+	Rule* firstItem = this->grublistCfg->splitSubmenu(static_cast<Rule*>(childItems.front()));
+	std::list<void*> movedRules;
+	movedRules.push_back(firstItem);
+	for (int i = 1; i < childItems.size(); i++) {
+		movedRules.push_back(&*this->grublistCfg->proxies.getNextVisibleRule(static_cast<Rule*>(movedRules.back()), 1));
+	}
+
+	this->moveRules(movedRules, -1);
 }
 
 void GrubCustomizer::showRuleInfo(Rule* rule){

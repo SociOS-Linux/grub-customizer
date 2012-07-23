@@ -146,8 +146,8 @@ public:
 	void removeRules(std::list<void*> entries);
 	void updateRuleName(Rule* entry, std::string const& newText);
 	void moveRules(std::list<void*> rules, int direction);
-	void createSubmenu(Rule* childItem);
-	void removeSubmenu(Rule* childItem);
+	void createSubmenu(std::list<void*> childItems);
+	void removeSubmenu(std::list<void*> childItems);
 	
 	void showRuleInfo(Rule* rule);
 	void showProxyInfo(Proxy* proxy);

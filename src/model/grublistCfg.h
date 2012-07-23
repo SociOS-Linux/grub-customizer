@@ -95,8 +95,8 @@ public:
 	Rule& moveRule(Rule* rule, int direction);
 	void swapProxies(Proxy* a, Proxy* b);
 	
-	Rule* createSubmenu(Rule* child);
-	Rule* removeSubmenu(Rule* child);
+	Rule* createSubmenu(Rule* position);
+	Rule* splitSubmenu(Rule* child);
 
 	bool cfgDirIsClean();
 	void cleanupCfgDir();
