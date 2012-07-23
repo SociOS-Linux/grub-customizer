@@ -87,7 +87,7 @@ class GrubCustomizer : public CommonClass {
 	int activeThreadCount;
 	GrublistCfg::Exception thrownException; //to be used from the die() function
 
-	std::string _mapEntryName(Entry const* entry, std::string const& defaultName, std::string const& scriptName);
+	std::string _mapEntryName(Entry const* entry, std::string const& defaultName, std::string const& scriptName = "");
 	void _rAppendRule(Rule& rule, Rule* parentRule = NULL);
 
 public:

@@ -559,7 +559,7 @@ std::string GrubCustomizer::_mapEntryName(Entry const* sourceEntry, std::string 
 			name = this->listCfgDlg->createNewEntriesPlaceholderString("", scriptName);
 		}
 	} else if (is_plaintext) {
-		name = this->listCfgDlg->createPlaintextString();
+		name = this->listCfgDlg->createPlaintextString(scriptName);
 	} else {
 		name = defaultName;
 	}
@@ -571,17 +571,8 @@ void GrubCustomizer::_rAppendRule(Rule& rule, Rule* parentRule){
 	bool is_plaintext = rule.dataSource && rule.dataSource->type == Entry::PLAINTEXT;
 	bool is_submenu = rule.type == Rule::SUBMENU;
 
-	std::string scriptName = "";
-	Proxy* proxy = this->grublistCfg->proxies.getProxyByRule(&rule);
-	if (proxy) {
-		Script const* script = this->grublistCfg->repository.getScriptByEntry(*rule.dataSource);
-		if (rule.dataSource && !proxy->ruleIsFromOwnScript(rule) && script) {
-			scriptName = script->name;
-		}
-	}
-
 	if (rule.dataSource || is_submenu){
-		std::string name = this->_mapEntryName(rule.dataSource, rule.outputName, scriptName);
+		std::string name = this->_mapEntryName(rule.dataSource, rule.outputName);
 
 		bool isSubmenu = rule.type == Rule::SUBMENU;
 		std::string scriptName = "", defaultName = "";

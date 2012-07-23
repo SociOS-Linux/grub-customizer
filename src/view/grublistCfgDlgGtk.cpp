@@ -358,18 +358,22 @@ void GrublistCfgDlgGtk::showProxyNotFoundMessage(){
 
 std::string GrublistCfgDlgGtk::createNewEntriesPlaceholderString(std::string const& parentMenu, std::string const& sourceScriptName) {
 	if (sourceScriptName != "" && parentMenu != "") {
-		return Glib::ustring::compose(gettext("(new Entries of %1, Script: %2)"), parentMenu, sourceScriptName);
+		return Glib::ustring::compose(gettext("(incoming Entries of %1, Script: %2)"), parentMenu, sourceScriptName);
 	} else if (parentMenu != "") {
-		return Glib::ustring::compose(gettext("(new Entries of %1)"), parentMenu);
+		return Glib::ustring::compose(gettext("(incoming Entries of %1)"), parentMenu);
 	} else if (sourceScriptName != "") {
-		return Glib::ustring::compose(gettext("(new Entries of Script: %1)"), sourceScriptName);
+		return Glib::ustring::compose(gettext("(incoming Entries of Script: %1)"), sourceScriptName);
 	} else {
-		return gettext("(new Entries)");
+		return gettext("(incoming Entries)");
 	}
 }
 
-std::string GrublistCfgDlgGtk::createPlaintextString() const {
-	return gettext("(script code)");
+std::string GrublistCfgDlgGtk::createPlaintextString(std::string const& scriptName) const {
+	if (scriptName == "") {
+		return gettext("(script code)");
+	} else {
+		return Glib::ustring::compose(gettext("(script code of %1)"), scriptName);
+	}
 }
 
 void GrublistCfgDlgGtk::saveConfig(){

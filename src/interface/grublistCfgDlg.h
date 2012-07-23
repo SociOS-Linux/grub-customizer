@@ -70,7 +70,7 @@ public:
 	//creates a string for an other entry placeholder
 	virtual std::string createNewEntriesPlaceholderString(std::string const& parentMenu = "", std::string const& sourceScriptName = "")=0;
 	//creates the string for plaintexts
-	virtual std::string createPlaintextString() const=0;
+	virtual std::string createPlaintextString(std::string const& scriptName) const=0;
 
 	//sets the given title to be showed as default title inside the status bar
 	virtual void setDefaultTitleStatusText(std::string const& str)=0;
