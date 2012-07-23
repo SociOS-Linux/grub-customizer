@@ -23,7 +23,6 @@ add_executable(grub-customizer
 	src/presenter/grubCustomizer.cpp
 	src/presenter/eventListener.cpp
 	src/model/libproxyscript_parser.cpp
-	src/view/partitionChooserGtk.cpp
 	src/model/mountTable.cpp
 	src/model/proxy.cpp
 	src/model/proxylist.cpp

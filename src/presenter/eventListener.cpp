@@ -180,22 +180,6 @@ void EventListener::settings_dialog_hide_request(){
 }
 
 //partition chooser
-void EventListener::partitionChooser_applied(){
-	presenter.applyPartitionChooser();
-}
-
-void EventListener::partitionChooser_cancelled(){
-	presenter.cancelPartitionChooser();
-}
-
-void EventListener::rootFsMount_request(){
-	presenter.mountRootFs();
-}
-
-void EventListener::rootFsUmount_request(){
-	presenter.umountRootFs();
-}
-
 void EventListener::submountpoint_mount_request(std::string const& mountpoint){
 	presenter.mountSubmountpoint(mountpoint);
 }

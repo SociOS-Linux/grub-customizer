@@ -29,7 +29,6 @@
 #include "../model/grubEnv.h"
 
 #include "../model/mountTable.h"
-#include "../interface/partitionChooser.h"
 
 #include "../model/grubInstaller.h"
 #include "../interface/grubInstallDlg.h"
@@ -38,7 +37,6 @@
 #include "../interface/entryEditDlg.h"
 
 #include "../model/grublistCfg.h"
-#include "../interface/partitionChooser.h"
 #include "../interface/settingsDlg.h"
 #include "../model/fbResolutionsGetter.h"
 #include "../interface/aboutDialog.h"
@@ -72,7 +70,6 @@ class GrubCustomizer : public CommonClass {
 	GrubInstallDlg* installDlg;
 	EntryAddDlg* entryAddDlg;
 	EntryEditDlg* entryEditDlg;
-	PartitionChooser* partitionChooser;
 	GrublistCfg* savedListCfg;
 	FbResolutionsGetter* fbResolutionsGetter;
 	DeviceDataList* deviceDataList;
@@ -106,7 +103,6 @@ public:
 	void setInstallDlg(GrubInstallDlg& installDlg);
 	void setScriptAddDlg(EntryAddDlg& scriptAddDlg);
 	void setEntryEditDlg(EntryEditDlg& entryEditDlg);
-	void setPartitionChooser(PartitionChooser& partitionChooser);
 	void setSavedListCfg(GrublistCfg& savedListCfg);
 	void setFbResolutionsGetter(FbResolutionsGetter& fbResolutionsGetter);
 	void setDeviceDataList(DeviceDataList& deviceDataList);
@@ -122,7 +118,6 @@ public:
 	//init functions
 	void init();
 	void init(GrubEnv::Mode mode, bool initEnv = true);
-	void showPartitionChooser();
 	void showEnvEditor(bool resetPartitionChooser = false);
 	void handleCancelResponse();
 
@@ -135,7 +130,6 @@ public:
 	
 	void renameEntry(Rule* rule, std::string const& newName);
 	void reset();
-	void initRootSelector();
 	
 	void showInstallDialog();
 	void installGrub(std::string device);
@@ -190,13 +184,8 @@ public:
 	void hideSettingsDialog();
 
 	//partition chooser
-	void mountRootFs();
-	void umountRootFs();
-	void cancelPartitionChooser();
-	void applyPartitionChooser();
 	void mountSubmountpoint(std::string const& submountpoint);
 	void umountSubmountpoint(std::string const& submountpoint);
-	void readPartitionInfo();
 	void generateSubmountpointSelection(std::string const& prefix);
 
 	// env editor

@@ -23,7 +23,6 @@
 #include "../interface/evt_grubInstallDlg.h"
 #include "../interface/evt_model.h"
 #include "../interface/evt_listCfgDlg.h"
-#include "../interface/evt_partitionChooser.h"
 #include "../interface/evt_entryAddDlg.h"
 #include "../interface/evt_settings.h"
 #include "../interface/evt_entryEditDlg.h"
@@ -31,7 +30,6 @@
 
 class EventListener :
 	public EventListener_settings,
-	public EventListener_partitionChooser,
 	public EventListener_grubInstallDlg,
 	public EventListener_listCfgDlg,
 	public EventListener_model,
@@ -92,10 +90,6 @@ public:
 	void settings_dialog_hide_request();
 
 	//root selector
-	void partitionChooser_applied();
-	void partitionChooser_cancelled();
-	void rootFsMount_request();
-	void rootFsUmount_request();
 	void submountpoint_mount_request(std::string const& mountpoint);
 	void submountpoint_umount_request(std::string const& mountpoint);
 

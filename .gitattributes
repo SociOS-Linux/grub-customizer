@@ -58,13 +58,11 @@ src/interface/evt_grubEnvEditor.h -text
 src/interface/evt_grubInstallDlg.h -text
 src/interface/evt_listCfgDlg.h -text
 src/interface/evt_model.h -text
-src/interface/evt_partitionChooser.h -text
 src/interface/evt_settings.h -text
 src/interface/grubInstallDlg.h -text
 src/interface/grublistCfgDlg.h -text
 src/interface/logger.h -text
 src/interface/mutex.h -text
-src/interface/partitionChooser.h -text
 src/interface/settingsDlg.h -text
 src/interface/threadController.h -text
 src/lib/contentParser/Abstract.cpp -text
@@ -149,8 +147,6 @@ src/view/grubInstallDlgGtk.cpp -text
 src/view/grubInstallDlgGtk.h -text
 src/view/grublistCfgDlgGtk.cpp -text
 src/view/grublistCfgDlgGtk.h -text
-src/view/partitionChooserGtk.cpp -text
-src/view/partitionChooserGtk.h -text
 src/view/partitionChooser_DropDown.cpp -text
 src/view/partitionChooser_DropDown.h -text
 src/view/settingsDlgGtk.cpp -text

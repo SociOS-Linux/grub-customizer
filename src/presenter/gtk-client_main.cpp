@@ -22,7 +22,6 @@
 #include "../view/grublistCfgDlgGtk.h"
 #include "../view/aboutDialogGtk.h"
 #include "../view/grubInstallDlgGtk.h"
-#include "../view/partitionChooserGtk.h"
 #include "../view/entryAddDlgGtk.h"
 #include "../view/entryEditDlgGtk.h"
 #include "../view/settingsDlgGtk.h"
@@ -61,7 +60,6 @@ int main(int argc, char** argv){
 	EntryAddDlgGtk scriptAddDlg;
 	EntryEditDlgGtk entryEditDlg;
 	MountTable mountTable;
-	PartitionChooserGtk partitionChooser;
 	GrublistCfg savedListCfg(env);
 	FbResolutionsGetter fbResolutionsGetter;
 	GrubSettingsDlgGtk settingsDlg;
@@ -86,7 +84,6 @@ int main(int argc, char** argv){
 	presenter.setInstallDlg(installDlg);
 	presenter.setScriptAddDlg(scriptAddDlg);
 	presenter.setEntryEditDlg(entryEditDlg);
-	presenter.setPartitionChooser(partitionChooser);
 	presenter.setSavedListCfg(savedListCfg);
 	presenter.setFbResolutionsGetter(fbResolutionsGetter);
 	presenter.setDeviceDataList(deviceDataList);
@@ -105,7 +102,6 @@ int main(int argc, char** argv){
 	scriptAddDlg.setEventListener(evt);
 	entryEditDlg.setEventListener(evt);
 	settingsDlg.setEventListener(evt);
-	partitionChooser.setEventListener(evt);
 	listcfg.setEventListener(evt);
 	installer.setEventListener(evt);
 	fbResolutionsGetter.setEventListener(evt);
@@ -123,7 +119,6 @@ int main(int argc, char** argv){
 	scriptAddDlg.setLogger(logger);
 	entryEditDlg.setLogger(logger);
 	mountTable.setLogger(logger);
-	partitionChooser.setLogger(logger);
 	savedListCfg.setLogger(logger);
 	fbResolutionsGetter.setLogger(logger);
 	settingsDlg.setLogger(logger);

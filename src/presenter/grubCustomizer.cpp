@@ -22,7 +22,7 @@ GrubCustomizer::GrubCustomizer(GrubEnv& env)
 	: grublistCfg(NULL), listCfgDlg(NULL), settingsDlg(NULL), settings(NULL),
 	  installer(NULL), installDlg(NULL), settingsOnDisk(NULL), entryAddDlg(NULL),
 	  entryEditDlg(NULL),
-	  partitionChooser(NULL), savedListCfg(NULL),
+	  savedListCfg(NULL),
 	  fbResolutionsGetter(NULL), deviceDataList(NULL),
 	  mountTable(NULL), aboutDialog(NULL),
 	 env(env), config_has_been_different_on_startup_but_unsaved(false),
@@ -68,10 +68,6 @@ void GrubCustomizer::setEntryEditDlg(EntryEditDlg& entryEditDlg) {
 
 void GrubCustomizer::setSavedListCfg(GrublistCfg& savedListCfg){
 	this->savedListCfg = &savedListCfg;
-}
-
-void GrubCustomizer::setPartitionChooser(PartitionChooser& partitionChooser){
-	this->partitionChooser = &partitionChooser;
 }
 
 void GrubCustomizer::setFbResolutionsGetter(FbResolutionsGetter& fbResolutionsGetter){
@@ -149,7 +145,6 @@ void GrubCustomizer::init(){
 		or !installer
 		or !installDlg
 		or !entryAddDlg
-		or !partitionChooser
 		or !savedListCfg
 		or !fbResolutionsGetter
 		or !deviceDataList
@@ -189,9 +184,7 @@ void GrubCustomizer::init(){
 	//aufs is the virtual root fileSystem used by live cds
 	if (mountTable->getEntryByMountpoint("").isLiveCdFs() && env.cfg_dir_prefix == ""){
 		this->log("is live CD", Logger::INFO);
-		partitionChooser->setIsStartedManually(false);
-		this->initRootSelector();
-		partitionChooser->show();
+		this->showEnvEditor();
 	} else {
 		this->log("running on an installed system", Logger::INFO);
 		std::list<GrubEnv::Mode> modes = this->env.getAvailableModes();
@@ -222,12 +215,6 @@ void GrubCustomizer::init(GrubEnv::Mode mode, bool initEnv){
 
 	this->log("loading configuration", Logger::IMPORTANT_EVENT);
 	this->getThreadController().startLoadThread(false);
-}
-
-void GrubCustomizer::showPartitionChooser(){
-	partitionChooser->setIsStartedManually(true);
-	this->initRootSelector();
-	this->partitionChooser->show();
 }
 
 void GrubCustomizer::showEnvEditor(bool resetPartitionChooser) {
@@ -386,25 +373,7 @@ void GrubCustomizer::applyEntryEditorModifications() {
 }
 
 
-void GrubCustomizer::initRootSelector(){
-	if (mountTable->getEntryByMountpoint(PARTCHOOSER_MOUNTPOINT)){
-		partitionChooser->setIsMounted(true);
-		this->generateSubmountpointSelection(PARTCHOOSER_MOUNTPOINT);
-	}
-	else
-		partitionChooser->setIsMounted(false);
-	this->readPartitionInfo();
-}
-
-void GrubCustomizer::readPartitionInfo(){
-	this->partitionChooser->clearPartitionSelector();
-	for (DeviceDataList::iterator iter = deviceDataList->begin(); iter != deviceDataList->end(); iter++){
-		this->partitionChooser->addPartitionSelectorItem(iter->first, iter->second["TYPE"], iter->second["LABEL"]);
-	}
-}
-
 void GrubCustomizer::generateSubmountpointSelection(std::string const& prefix){
-	this->partitionChooser->removeAllSubmountpoints();
 	this->grubEnvEditor->removeAllSubmountpoints();
 
 	//create new submountpoint checkbuttons
@@ -414,7 +383,6 @@ void GrubCustomizer::generateSubmountpointSelection(std::string const& prefix){
 		 && iter->mountpoint != prefix + "/proc"
 		 && iter->mountpoint != prefix + "/sys"
 		) {
-			this->partitionChooser->addSubmountpoint(iter->mountpoint.substr(prefix.length()), iter->isMounted);
 			this->grubEnvEditor->addSubmountpoint(iter->mountpoint.substr(prefix.length()), iter->isMounted);
 		}
 	}
@@ -476,66 +444,6 @@ void GrubCustomizer::applyEnvEditor(){
 }
 
 
-void GrubCustomizer::mountRootFs(){
-	std::string selectedDevice = this->partitionChooser->getSelectedDevice();
-	partitionChooser->setIsMounted(true);
-	mkdir(PARTCHOOSER_MOUNTPOINT, 0755);
-	try {
-		mountTable->clear(PARTCHOOSER_MOUNTPOINT);
-		mountTable->mountRootFs(selectedDevice, PARTCHOOSER_MOUNTPOINT);
-		this->generateSubmountpointSelection(PARTCHOOSER_MOUNTPOINT);
-	}
-	catch (Mountpoint::Exception e) {
-		if (e == Mountpoint::MOUNT_FAILED){
-			this->grubEnvEditor->showErrorMessage(GrubEnvEditor::MOUNT_FAILED);
-			partitionChooser->setIsMounted(false);
-		}
-	}
-	catch (MountTable::Exception e) {
-		if (e == MountTable::MOUNT_ERR_NO_FSTAB){
-			this->grubEnvEditor->showErrorMessage(GrubEnvEditor::MOUNT_ERR_NO_FSTAB);
-			mountTable->getEntryByMountpoint(PARTCHOOSER_MOUNTPOINT).umount();
-			partitionChooser->setIsMounted(false);
-		}
-	}
-}
-
-
-void GrubCustomizer::umountRootFs(){
-	try {
-		this->mountTable->umountAll(PARTCHOOSER_MOUNTPOINT);
-		this->mountTable->clear(PARTCHOOSER_MOUNTPOINT);
-		partitionChooser->setIsMounted(false);
-	}
-	catch (Mountpoint::Exception e){
-		if (e == Mountpoint::UMOUNT_FAILED)
-			this->grubEnvEditor->showErrorMessage(GrubEnvEditor::UMOUNT_FAILED);
-	}
-
-	//clear list cfg dialog
-	this->reset();
-	this->syncListView_load();
-	listCfgDlg->setLockState(1|2|8);
-	this->syncSettings();
-}
-
-
-void GrubCustomizer::cancelPartitionChooser(){
-	this->partitionChooser->hide();
-	this->handleCancelResponse();
-}
-
-
-void GrubCustomizer::applyPartitionChooser(){
-	this->partitionChooser->hide();
-	listCfgDlg->setLockState(1|2|8);
-	this->syncSettings();
-	settingsDlg->hide();
-	entryAddDlg->hide();
-	this->env.cfg_dir_prefix = PARTCHOOSER_MOUNTPOINT;
-	this->init();
-}
-
 void GrubCustomizer::mountSubmountpoint(std::string const& submountpoint){
 	try {
 		this->mountTable->getEntryRefByMountpoint(PARTCHOOSER_MOUNTPOINT + submountpoint).mount();
@@ -544,7 +452,6 @@ void GrubCustomizer::mountSubmountpoint(std::string const& submountpoint){
 		if (e == Mountpoint::MOUNT_FAILED){
 			this->grubEnvEditor->showErrorMessage(GrubEnvEditor::SUB_MOUNT_FAILED);
 		}
-		this->partitionChooser->setSubmountpointSelectionState(submountpoint, false); //reset checkbox
 		this->grubEnvEditor->setSubmountpointSelectionState(submountpoint, false);
 		this->grubEnvEditor->show();
 	}
@@ -558,7 +465,6 @@ void GrubCustomizer::umountSubmountpoint(std::string const& submountpoint){
 		if (e == Mountpoint::UMOUNT_FAILED){
 			this->grubEnvEditor->showErrorMessage(GrubEnvEditor::SUB_UMOUNT_FAILED);
 		}
-		this->partitionChooser->setSubmountpointSelectionState(submountpoint, true); //reset checkbox
 		this->grubEnvEditor->setSubmountpointSelectionState(submountpoint, true);
 		this->grubEnvEditor->show();
 	}
