@@ -231,7 +231,16 @@ std::list<Rule>::iterator ProxyList::getNextVisibleRule(std::list<Rule>::iterato
 	throw ProxyList::NO_MOVE_TARGET_FOUND;
 }
 
-
+std::list<Proxy>::iterator ProxyList::getIter(Proxy* proxy) {
+	std::list<Proxy>::iterator iter = this->begin();
+	while (iter != this->end()) {
+		if (&*iter == proxy) {
+			break;
+		}
+		iter++;
+	}
+	return iter;
+}
 
 
 

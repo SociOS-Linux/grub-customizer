@@ -52,6 +52,7 @@ struct ProxyList : public std::list<Proxy>, public CommonClass {
 	Proxy* getProxyByRule(Rule* rule);
 	std::list<Rule>::iterator moveRuleToNewProxy(Rule& rule, int direction);
 	std::list<Rule>::iterator getNextVisibleRule(std::list<Rule>::iterator base, int direction);
+	std::list<Proxy>::iterator getIter(Proxy* proxy);
 };
 
 #endif

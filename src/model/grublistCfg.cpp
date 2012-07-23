@@ -611,74 +611,115 @@ Rule& GrublistCfg::moveRule(Rule* rule, int direction){
 				} catch (Proxy::Exception e) {if (e != Proxy::RULE_NOT_FOUND) throw e;}
 
 				std::list<Rule>::iterator nextRule = this->proxies.getNextVisibleRule(proxy->getListIterator(*rule, proxy->getRuleList(parent)), direction);
-				std::list<Rule>::iterator targetRule = this->proxies.getNextVisibleRule(nextRule, direction);
-				std::list<Rule>::iterator previousRule = this->proxies.getNextVisibleRule(proxy->getListIterator(*rule, proxy->getRuleList(parent)), -direction);
+				Rule* parentRule = this->proxies.getProxyByRule(&*nextRule)->getParentRule(&*nextRule);
 
-				if (this->proxies.getProxyByRule(&*targetRule)->dataSource == this->proxies.getProxyByRule(&*rule)->dataSource) {
-					Proxy* targetProxy = this->proxies.getProxyByRule(&*targetRule);
-					targetProxy->removeEquivalentRules(*rule);
-					Rule* newRule = NULL;
-					if (direction == -1) {
-						targetProxy->rules.push_back(*rule);
-						newRule = &targetProxy->rules.back();
-					} else {
-						targetProxy->rules.push_front(*rule);
-						newRule = &targetProxy->rules.front();
+				if (parentRule != NULL) { // create new proxy
+					std::list<Rule>::iterator targetRule = this->proxies.getNextVisibleRule(nextRule, direction);
+					std::list<Rule>::iterator previousRule = this->proxies.getNextVisibleRule(proxy->getListIterator(*rule, proxy->getRuleList(parent)), -direction);
+
+					if (this->proxies.getProxyByRule(&*targetRule)->dataSource == this->proxies.getProxyByRule(&*rule)->dataSource) {
+						Proxy* targetProxy = this->proxies.getProxyByRule(&*targetRule);
+						targetProxy->removeEquivalentRules(*rule);
+						Rule* newRule = NULL;
+						if (direction == -1) {
+							targetProxy->rules.push_back(*rule);
+							newRule = &targetProxy->rules.back();
+						} else {
+							targetProxy->rules.push_front(*rule);
+							newRule = &targetProxy->rules.front();
+						}
+						rule->isVisible = false;
+
+						// cleanup
+						if (!proxy->hasVisibleRules()) {
+							this->proxies.deleteProxy(proxy);
+						}
+
+						if (this->proxies.getProxyByRule(&*nextRule)->dataSource == this->proxies.getProxyByRule(&*previousRule)->dataSource) {
+							this->proxies.getProxyByRule(&*previousRule)->removeEquivalentRules(*nextRule);
+							if (direction == 1) {
+								this->proxies.getProxyByRule(&*previousRule)->rules.push_back(*nextRule);
+							} else {
+								this->proxies.getProxyByRule(&*previousRule)->rules.push_front(*nextRule);
+							}
+							nextRule->isVisible = false;
+							if (!this->proxies.getProxyByRule(&*nextRule)->hasVisibleRules()) {
+								this->proxies.deleteProxy(this->proxies.getProxyByRule(&*nextRule));
+							}
+						}
+
+						return *newRule;
+					} else { // convert existing proxy to multiproxy
+						std::list<Rule>::iterator movedRule = this->proxies.moveRuleToNewProxy(*rule, direction);
+
+						Proxy* currentProxy = this->proxies.getProxyByRule(&*movedRule);
+						std::list<Proxy>::iterator proxyIter = this->proxies.begin();
+						for (;proxyIter != this->proxies.end() && &*proxyIter != currentProxy; proxyIter++) {}
+
+						if (direction == -1) {
+							proxyIter--;
+						} else if (direction == 1) {
+							proxyIter++;
+						}
+
+						std::list<Rule>::iterator movedRule2 = this->proxies.moveRuleToNewProxy(*nextRule, -direction);
+						this->renumerate();
+						this->swapProxies(currentProxy, this->proxies.getProxyByRule(&*movedRule2));
+
+						std::list<Rule>::iterator prevPrevRule = this->proxies.getNextVisibleRule(movedRule2, -direction);
+
+						if (this->proxies.getProxyByRule(&*prevPrevRule)->dataSource == this->proxies.getProxyByRule(&*movedRule2)->dataSource) {
+							Proxy* prevprev = this->proxies.getProxyByRule(&*prevPrevRule);
+							prevprev->removeEquivalentRules(*movedRule2);
+							if (direction == 1) {
+								prevprev->rules.push_back(*movedRule2);
+							} else {
+								prevprev->rules.push_front(*movedRule2);
+							}
+							movedRule2->isVisible = false;
+							if (!this->proxies.getProxyByRule(&*movedRule2)->hasVisibleRules()) {
+								this->proxies.deleteProxy(this->proxies.getProxyByRule(&*movedRule2));
+							}
+						}
+
+						return *movedRule;
 					}
-					rule->isVisible = false;
+				} else {
+					std::list<Proxy>::iterator proxyIter = this->proxies.getIter(proxy);
 
-					// cleanup
+					Rule* movedRule = NULL;
+					if (direction == -1 && proxyIter != this->proxies.begin()) {
+						proxyIter--;
+						proxyIter->removeEquivalentRules(*rule);
+						proxyIter->rules.back().subRules.push_back(*rule);
+						if (rule->type == Rule::SUBMENU) {
+							proxy->removeForeignChildRules(*rule);
+						}
+						if (rule->type == Rule::SUBMENU && rule->subRules.size() != 0 || rule->type != Rule::SUBMENU && proxy->ruleIsFromOwnScript(*rule)) {
+							rule->isVisible = false;
+						} else {
+							proxy->rules.pop_front();
+						}
+						movedRule = &proxyIter->rules.back().subRules.back();
+					} else if (direction == 1 && proxyIter != this->proxies.end() && &*proxyIter != &this->proxies.back()) {
+						proxyIter++;
+						proxyIter->removeEquivalentRules(*rule);
+						proxyIter->rules.front().subRules.push_front(*rule);
+						if (rule->type == Rule::SUBMENU) {
+							proxy->removeForeignChildRules(*rule);
+						}
+						if (rule->type == Rule::SUBMENU && rule->subRules.size() != 0 || rule->type != Rule::SUBMENU && proxy->ruleIsFromOwnScript(*rule)) {
+							rule->isVisible = false;
+						} else {
+							proxy->rules.pop_back();
+						}
+						movedRule = &proxyIter->rules.front().subRules.front();
+					} else {
+						throw GrublistCfg::NO_MOVE_TARGET_FOUND;
+					}
 					if (!proxy->hasVisibleRules()) {
 						this->proxies.deleteProxy(proxy);
 					}
-
-					if (this->proxies.getProxyByRule(&*nextRule)->dataSource == this->proxies.getProxyByRule(&*previousRule)->dataSource) {
-						this->proxies.getProxyByRule(&*previousRule)->removeEquivalentRules(*nextRule);
-						if (direction == 1) {
-							this->proxies.getProxyByRule(&*previousRule)->rules.push_back(*nextRule);
-						} else {
-							this->proxies.getProxyByRule(&*previousRule)->rules.push_front(*nextRule);
-						}
-						nextRule->isVisible = false;
-						if (!this->proxies.getProxyByRule(&*nextRule)->hasVisibleRules()) {
-							this->proxies.deleteProxy(this->proxies.getProxyByRule(&*nextRule));
-						}
-					}
-
-					return *newRule;
-				} else {
-					std::list<Rule>::iterator movedRule = this->proxies.moveRuleToNewProxy(*rule, direction);
-
-					Proxy* currentProxy = this->proxies.getProxyByRule(&*movedRule);
-					std::list<Proxy>::iterator proxyIter = this->proxies.begin();
-					for (;proxyIter != this->proxies.end() && &*proxyIter != currentProxy; proxyIter++) {}
-
-					if (direction == -1) {
-						proxyIter--;
-					} else if (direction == 1) {
-						proxyIter++;
-					}
-
-					std::list<Rule>::iterator movedRule2 = this->proxies.moveRuleToNewProxy(*nextRule, -direction);
-					this->renumerate();
-					this->swapProxies(currentProxy, this->proxies.getProxyByRule(&*movedRule2));
-
-					std::list<Rule>::iterator prevPrevRule = this->proxies.getNextVisibleRule(movedRule2, -direction);
-
-					if (this->proxies.getProxyByRule(&*prevPrevRule)->dataSource == this->proxies.getProxyByRule(&*movedRule2)->dataSource) {
-						Proxy* prevprev = this->proxies.getProxyByRule(&*prevPrevRule);
-						prevprev->removeEquivalentRules(*movedRule2);
-						if (direction == 1) {
-							prevprev->rules.push_back(*movedRule2);
-						} else {
-							prevprev->rules.push_front(*movedRule2);
-						}
-						movedRule2->isVisible = false;
-						if (!this->proxies.getProxyByRule(&*movedRule2)->hasVisibleRules()) {
-							this->proxies.deleteProxy(this->proxies.getProxyByRule(&*movedRule2));
-						}
-					}
-
 					return *movedRule;
 				}
 			} catch (ProxyList::Exception e) {
@@ -688,38 +729,6 @@ Rule& GrublistCfg::moveRule(Rule* rule, int direction){
 					throw e;
 				}
 			}
-
-
-//
-//			if (direction == -1 && proxyIter != this->proxies.begin()) {
-//				proxyIter--;
-//				proxyIter->removeEquivalentRules(*rule);
-//				proxyIter->rules.push_back(*rule);
-//				if (rule->type == Rule::SUBMENU) {
-//					currentProxy->removeForeignChildRules(*rule);
-//				}
-//				if (rule->type == Rule::SUBMENU && rule->subRules.size() != 0 || rule->type != Rule::SUBMENU && currentProxy->ruleIsFromOwnScript(*rule)) {
-//					rule->isVisible = false;
-//				} else {
-//					currentProxy->rules.pop_front();
-//				}
-//				return proxyIter->rules.back();
-//			} else if (direction == 1 && proxyIter != this->proxies.end() && &*proxyIter != &this->proxies.back()) {
-//				proxyIter++;
-//				proxyIter->removeEquivalentRules(*rule);
-//				proxyIter->rules.push_front(*rule);
-//				if (rule->type == Rule::SUBMENU) {
-//					currentProxy->removeForeignChildRules(*rule);
-//				}
-//				if (rule->type == Rule::SUBMENU && rule->subRules.size() != 0 || rule->type != Rule::SUBMENU && currentProxy->ruleIsFromOwnScript(*rule)) {
-//					rule->isVisible = false;
-//				} else {
-//					currentProxy->rules.pop_back();
-//				}
-//				return proxyIter->rules.front();
-//			} else {
-//				throw GrublistCfg::NO_MOVE_TARGET_FOUND;
-//			}
 		} else {
 			throw e;
 		}
