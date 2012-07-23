@@ -563,6 +563,10 @@ void GrublistCfgDlgGtk::selectRules(std::list<void*> rules) {
 	}
 }
 
+void GrublistCfgDlgGtk::setTrashCounter(int count) {
+	this->tbttAdd.set_label(Glib::ustring::compose(gettext("Trash (%1)"), count));
+}
+
 
 
 void GrublistCfgDlgGtk::signal_move_click(int direction){

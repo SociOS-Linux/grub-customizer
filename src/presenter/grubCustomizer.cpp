@@ -636,6 +636,7 @@ void GrubCustomizer::syncListView_load() {
 
 	if (progress == 1){
 		this->updateSettingsDlg();
+		this->listCfgDlg->setTrashCounter(this->grublistCfg->getRemovedEntries().size());
 		this->listCfgDlg->setLockState(0);
 	}
 	this->log("GrubCustomizer::syncListView_load completed", Logger::INFO);

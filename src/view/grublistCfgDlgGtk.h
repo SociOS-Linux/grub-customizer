@@ -143,6 +143,8 @@ public:
 
 	void selectRules(std::list<void*> rules);
 
+	void setTrashCounter(int count);
+
 private:
 	//event handlers
 	void signal_show_root_selector();

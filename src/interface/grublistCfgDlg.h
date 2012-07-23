@@ -94,6 +94,9 @@ public:
 
 	// select multiple rules
 	virtual void selectRules(std::list<void*> rules)=0;
+
+	// set the number of removed rules
+	virtual void setTrashCounter(int count) = 0;
 };
 
 #endif
