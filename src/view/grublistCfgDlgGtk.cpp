@@ -233,7 +233,7 @@ void GrublistCfgDlgGtk::setStatusText(std::string const& new_status_text){
 	statusbar.push(new_status_text);
 }
 
-void GrublistCfgDlgGtk::appendEntry(std::string const& name, bool is_active, void* entryPtr, bool editable, bool is_submenu, void* parentEntry){
+void GrublistCfgDlgGtk::appendEntry(std::string const& name, bool is_active, void* entryPtr, bool is_placeholder, bool is_submenu, std::string const& scriptName, std::string const& defaultName, void* parentEntry){
 	if (is_active) {
 		Gtk::TreeIter entryRow;
 		if (parentEntry) {
@@ -241,10 +241,27 @@ void GrublistCfgDlgGtk::appendEntry(std::string const& name, bool is_active, voi
 		} else {
 			entryRow = tvConfList.refTreeStore->append();
 		}
+
+		std::string outputName = name + "\n";
+		if (is_submenu) {
+			outputName += gettext("submenu");
+		} else if (is_placeholder) {
+			outputName += gettext("placeholder");
+		} else {
+			outputName += gettext("menuentry");
+		}
+		if (scriptName != "") {
+			outputName += std::string(" / ") + gettext("script: ") + scriptName;
+		}
+
+		if (defaultName != "" && name != defaultName) {
+			outputName += std::string(" / ") + gettext("default name: ") + defaultName;
+		}
+
 		(*entryRow)[tvConfList.treeModel.active] = is_active;
-		(*entryRow)[tvConfList.treeModel.name] = name;
+		(*entryRow)[tvConfList.treeModel.name] = outputName;
 		(*entryRow)[tvConfList.treeModel.relatedRule] = (void*)entryPtr;
-		(*entryRow)[tvConfList.treeModel.is_editable] = editable;
+		(*entryRow)[tvConfList.treeModel.is_editable] = is_placeholder;
 		(*entryRow)[tvConfList.treeModel.is_sensitive] = true;
 		(*entryRow)[tvConfList.treeModel.font_weight] = is_submenu ? PANGO_WEIGHT_BOLD : PANGO_WEIGHT_NORMAL;
 		(*entryRow)[tvConfList.treeModel.fontStyle] = Pango::STYLE_NORMAL;
