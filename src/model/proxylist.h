@@ -51,6 +51,7 @@ struct ProxyList : public std::list<Proxy>, public CommonClass {
 	Proxy* getProxyByRule(Rule* rule, std::list<Rule> const& list, Proxy& parentProxy);
 	Proxy* getProxyByRule(Rule* rule);
 	std::list<Rule>::iterator moveRuleToNewProxy(Rule& rule, int direction, Script* dataSource = NULL);
+	std::list<Rule>::iterator getNextVisibleRule(Rule* base, int direction);
 	std::list<Rule>::iterator getNextVisibleRule(std::list<Rule>::iterator base, int direction);
 	std::list<Proxy>::iterator getIter(Proxy const* proxy);
 	void splitProxy(Proxy const* proxyToSplit, Rule const* firstRuleOfPart2, int direction);

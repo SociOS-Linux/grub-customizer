@@ -82,8 +82,8 @@ void EventListener::signal_entry_renamed(void* entry, std::string const& newText
 	presenter.updateRuleName((Rule*)entry, newText);
 }
 
-void EventListener::ruleAdjustment_requested(void* rule, int direction){
-	presenter.moveRule((Rule*)rule,direction);
+void EventListener::ruleAdjustment_requested(std::list<void*> rules, int direction){
+	presenter.moveRules(rules,direction);
 }
 
 void EventListener::ruleSelected(void* rule){

@@ -676,12 +676,44 @@ void GrubCustomizer::updateRuleName(Rule* entry, std::string const& newText){
 }
 
 
-void GrubCustomizer::moveRule(void* rule, int direction){
+void GrubCustomizer::moveRules(std::list<void*> rules, int direction){
 	try {
-		Rule* newRule = &this->grublistCfg->moveRule((Rule*)rule, direction);
+		assert(direction == -1 || direction == 1);
+
+		int ruleCount = rules.size();
+		Rule* rulePtr = static_cast<Rule*>(direction == -1 ? rules.front() : rules.back());
+		for (int i = 0; i < ruleCount; i++) {
+			rulePtr = &this->grublistCfg->moveRule(rulePtr, direction);
+			if (i < ruleCount - 1) {
+				bool isEndOfList = false;
+				bool targetFound = false;
+				try {
+					rulePtr = &*this->grublistCfg->proxies.getNextVisibleRule(rulePtr, -direction);
+				} catch (ProxyList::Exception e) {
+					isEndOfList = true;
+					rulePtr = this->grublistCfg->proxies.getProxyByRule(rulePtr)->getParentRule(rulePtr);
+				}
+				if (!isEndOfList && rulePtr->type == Rule::SUBMENU) {
+					rulePtr = direction == -1 ? &rulePtr->subRules.front() : &rulePtr->subRules.back();
+					if (rulePtr->isVisible) {
+						targetFound = true;
+					}
+				}
+
+				if (!targetFound) {
+					rulePtr = &*this->grublistCfg->proxies.getNextVisibleRule(rulePtr, -direction);
+				}
+			}
+		}
+
+		std::list<void*> movedRules;
+		movedRules.push_back(rulePtr);
+		for (int i = 1; i < ruleCount; i++) {
+			movedRules.push_back(&*this->grublistCfg->proxies.getNextVisibleRule(static_cast<Rule*>(movedRules.back()), direction));
+		}
 
 		this->syncListView_load();
-		this->listCfgDlg->selectRule(newRule);
+		this->listCfgDlg->selectRules(movedRules);
 		this->modificationsUnsaved = true;
 	} catch (GrublistCfg::Exception e) {
 		if (e == GrublistCfg::NO_MOVE_TARGET_FOUND)

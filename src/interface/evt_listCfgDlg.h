@@ -52,7 +52,7 @@ public:
 	virtual void signal_entry_renamed(void* entry, std::string const& newText)=0;
 
 	//user wants to swap two rules
-	virtual void ruleAdjustment_requested(void* rule, int direction)=0;
+	virtual void ruleAdjustment_requested(std::list<void*> rules, int direction)=0;
 
 	//user has selected another rule
 	virtual void ruleSelected(void* rule)=0;

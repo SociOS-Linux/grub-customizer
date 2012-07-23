@@ -54,7 +54,7 @@ public:
 	void signal_entry_remove_requested(std::list<void*> entries);
 	void signal_entry_renamed(void* entry, std::string const& newText);
 
-	void ruleAdjustment_requested(void* rule, int direction);
+	void ruleAdjustment_requested(std::list<void*> rules, int direction);
 
 	void ruleSelected(void* rule);
 	void proxySelected(void* proxy);

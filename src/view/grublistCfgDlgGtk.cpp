@@ -373,6 +373,62 @@ void GrublistCfgDlgGtk::updateButtonsState(){
 	update_move_buttons();
 }
 
+bool GrublistCfgDlgGtk::selectedEntriesAreOnSameLevel() {
+	assert(this->tvConfList.get_selection()->count_selected_rows() >= 1);
+
+	std::vector<Gtk::TreeModel::Path> pathes = this->tvConfList.get_selection()->get_selected_rows();
+	bool result = true;
+	if (!this->tvConfList.refTreeStore->get_iter(pathes[0])->parent()) { // first entry is on toplevel, so all entries should be there
+		for (std::vector<Gtk::TreeModel::Path>::iterator pathIter = pathes.begin(); pathIter != pathes.end(); pathIter++) {
+			if (this->tvConfList.refTreeStore->get_iter(*pathIter)->parent()) {
+				result = false;
+				break;
+			}
+		}
+	} else {
+		Gtk::TreeModel::Path parent = this->tvConfList.refTreeStore->get_path(this->tvConfList.refTreeStore->get_iter(pathes[0])->parent());
+		for (std::vector<Gtk::TreeModel::Path>::iterator pathIter = pathes.begin(); pathIter != pathes.end(); pathIter++) {
+			Gtk::TreeModel::iterator treeIter = this->tvConfList.refTreeStore->get_iter(*pathIter);
+			if (!treeIter->parent() || parent != this->tvConfList.refTreeStore->get_path(treeIter->parent())) {
+				result = false;
+				break;
+			}
+		}
+	}
+	return result;
+}
+
+bool GrublistCfgDlgGtk::selectedEntriesAreSubsequent() {
+	assert(this->selectedEntriesAreOnSameLevel());
+	if (this->tvConfList.get_selection()->count_selected_rows() == 1) {
+		return true;
+	}
+	std::vector<Gtk::TreeModel::Path> pathes = this->tvConfList.get_selection()->get_selected_rows();
+
+	Gtk::TreeModel::iterator iter = this->tvConfList.refTreeStore->get_iter(pathes[0]);
+
+	std::vector<Gtk::TreeModel::Path>::iterator pathIter = pathes.begin();
+	pathIter++;
+	for (; pathIter != pathes.end(); pathIter++) {
+		iter++;
+		if (iter != this->tvConfList.refTreeStore->get_iter(*pathIter)) {
+			return false;
+		}
+	}
+	return true;
+}
+
+std::list<void*> GrublistCfgDlgGtk::getSelectedRules() {
+	std::list<void*> rules;
+	std::vector<Gtk::TreeModel::Path> pathes = tvConfList.get_selection()->get_selected_rows();
+	for (std::vector<Gtk::TreeModel::Path>::iterator iter = pathes.begin(); iter != pathes.end(); iter++) {
+		void* rptr = (*tvConfList.refTreeStore->get_iter(*iter))[tvConfList.treeModel.relatedRule];
+		rules.push_back(rptr);
+	}
+
+	return rules;
+}
+
 
 void GrublistCfgDlgGtk::signal_reload_click(){
 	eventListener->reload_request();
@@ -442,12 +498,9 @@ void GrublistCfgDlgGtk::selectRules(std::list<void*> rules) {
 void GrublistCfgDlgGtk::signal_move_click(int direction){
 	if (this->lock_state == 0){
 		assert(direction == 1 || direction == -1);
-		assert(tvConfList.get_selection()->count_selected_rows() == 1);
 
-		std::vector<Gtk::TreeModel::Path> pathes = tvConfList.get_selection()->get_selected_rows();
-		Gtk::TreeModel::iterator iter = this->tvConfList.refTreeStore->get_iter(pathes[0]);
 		//if rule swap
-		eventListener->ruleAdjustment_requested((void*)(*iter)[tvConfList.treeModel.relatedRule], direction);
+		eventListener->ruleAdjustment_requested(this->getSelectedRules(), direction);
 	}
 }
 
@@ -486,14 +539,7 @@ void GrublistCfgDlgGtk::signal_add_click(){
 }
 
 void GrublistCfgDlgGtk::signal_remove_click() {
-	std::list<void*> rules;
-	std::vector<Gtk::TreeModel::Path> pathes = tvConfList.get_selection()->get_selected_rows();
-	for (std::vector<Gtk::TreeModel::Path>::iterator iter = pathes.begin(); iter != pathes.end(); iter++) {
-		void* rptr = (*tvConfList.refTreeStore->get_iter(*iter))[tvConfList.treeModel.relatedRule];
-		rules.push_back(rptr);
-	}
-
-	eventListener->signal_entry_remove_requested(rules);
+	eventListener->signal_entry_remove_requested(this->getSelectedRules());
 }
 
 void GrublistCfgDlgGtk::signal_preference_click(){
@@ -510,10 +556,19 @@ void GrublistCfgDlgGtk::update_move_buttons(){
 		is_toplevel = iter->parent() ? false : true;
 	}
 
-	tbttUp.set_sensitive(selectedRowsCount == 1);
-	miUp.set_sensitive(selectedRowsCount == 1);
-	tbttDown.set_sensitive(selectedRowsCount == 1);
-	miDown.set_sensitive(selectedRowsCount == 1);
+	bool sameLevel = false;
+	bool subsequent = false;
+	if (selectedRowsCount >= 1) {
+		sameLevel = this->selectedEntriesAreOnSameLevel();
+		if (sameLevel) {
+			subsequent = this->selectedEntriesAreSubsequent();
+		}
+	}
+
+	tbttUp.set_sensitive(selectedRowsCount >= 1 && sameLevel && subsequent);
+	miUp.set_sensitive(selectedRowsCount >= 1 && sameLevel && subsequent);
+	tbttDown.set_sensitive(selectedRowsCount >= 1 && sameLevel && subsequent);
+	miDown.set_sensitive(selectedRowsCount >= 1 && sameLevel && subsequent);
 	tbttLeft.set_sensitive(selectedRowsCount == 1 && !is_toplevel); //selected entry must be inside a submenu
 	miLeft.set_sensitive(selectedRowsCount == 1 && !is_toplevel); //selected entry must be inside a submenu
 	tbttRight.set_sensitive(selectedRowsCount == 1);

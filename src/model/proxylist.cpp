@@ -197,6 +197,15 @@ std::list<Rule>::iterator ProxyList::moveRuleToNewProxy(Rule& rule, int directio
 	return movedRule;
 }
 
+/**
+ * convenience function - to be used if only a pointer is given
+ */
+std::list<Rule>::iterator ProxyList::getNextVisibleRule(Rule* base, int direction) {
+	Proxy* proxy = this->getProxyByRule(base);
+	std::list<Rule>::iterator iter = proxy->getListIterator(*base, proxy->getRuleList(proxy->getParentRule(base, NULL)));
+	return this->getNextVisibleRule(iter, direction);
+}
+
 std::list<Rule>::iterator ProxyList::getNextVisibleRule(std::list<Rule>::iterator base, int direction) {
 	std::list<Proxy>::iterator proxyIter = this->begin();
 	{
@@ -204,10 +213,20 @@ std::list<Rule>::iterator ProxyList::getNextVisibleRule(std::list<Rule>::iterato
 		for (;proxyIter != this->end() && &*proxyIter != proxy; proxyIter++) {}
 	}
 
+	bool hasParent = false;
+	if (proxyIter->getParentRule(&*base)) {
+		hasParent = true;
+	}
+
 	while (proxyIter != this->end()) {
 		try {
 			return proxyIter->getNextVisibleRule(base, direction);
 		} catch (Proxy::Exception e) {
+
+			if (hasParent) {
+				throw ProxyList::NO_MOVE_TARGET_FOUND;
+			}
+
 			if (e == Proxy::NO_MOVE_TARGET_FOUND) {
 				if (direction == 1) {
 					proxyIter++;

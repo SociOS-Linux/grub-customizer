@@ -99,6 +99,9 @@ class GrublistCfgDlgGtk : public GrublistCfgDlg, public CommonClass {
 	void update_remove_button();
 	void saveConfig();
 	void updateButtonsState();
+	bool selectedEntriesAreOnSameLevel();
+	bool selectedEntriesAreSubsequent();
+	std::list<void*> getSelectedRules();
 public:
 	GrublistCfgDlgGtk();
 	void setEventListener(EventListener_listCfgDlg& eventListener);
