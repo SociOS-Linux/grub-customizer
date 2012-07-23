@@ -135,4 +135,23 @@ std::string Script::buildPathString(Entry const& entry, bool withOtherEntriesPla
 	return result;
 }
 
+bool Script::hasEntry(Entry const& entry, Entry const * parent) const {
+	std::list<Entry> const& list = parent ? parent->subEntries : *this;
+
+	for (std::list<Entry>::const_iterator iter = list.begin(); iter != list.end(); iter++) {
+		if (iter->type == Entry::SUBMENU) {
+			bool has = this->hasEntry(entry, &*iter);
+			if (has) {
+				return true;
+			}
+		} else if (&*iter == &entry) {
+			return true;
+		}
+	}
+	return false;
+}
+
+
+
+
 

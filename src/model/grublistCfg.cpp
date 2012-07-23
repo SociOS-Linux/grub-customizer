@@ -564,7 +564,31 @@ Rule& GrublistCfg::moveRule(Rule* rule, int direction){
 		return this->proxies.getProxyByRule(rule)->moveRule(rule, direction);
 	} catch (Proxy::Exception e) {
 		if (e == Proxy::NO_MOVE_TARGET_FOUND) {
-			throw GrublistCfg::NO_MOVE_TARGET_FOUND;
+			Proxy* currentProxy = this->proxies.getProxyByRule(rule);
+			std::list<Proxy>::iterator proxyIter = this->proxies.begin();
+			for (;proxyIter != this->proxies.end() && &*proxyIter != currentProxy; proxyIter++) {}
+
+			if (direction == -1 && proxyIter != this->proxies.begin()) {
+				proxyIter--;
+				proxyIter->rules.push_back(*rule);
+				if (currentProxy->ruleIsFromOwnScript(*rule)) {
+					rule->isVisible = false;
+				} else {
+					currentProxy->rules.pop_front();
+				}
+				return proxyIter->rules.back();
+			} else if (direction == 1 && proxyIter != this->proxies.end() && &*proxyIter != &this->proxies.back()) {
+				proxyIter++;
+				proxyIter->rules.push_front(*rule);
+				if (currentProxy->ruleIsFromOwnScript(*rule)) {
+					rule->isVisible = false;
+				} else {
+					currentProxy->rules.pop_back();
+				}
+				return proxyIter->rules.front();
+			} else {
+				throw GrublistCfg::NO_MOVE_TARGET_FOUND;
+			}
 		} else {
 			throw e;
 		}

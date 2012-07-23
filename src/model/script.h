@@ -44,6 +44,7 @@ struct Script : public EntryPathBilder, EntryPathFollower, std::list<Entry>, pub
 	std::list<std::string> buildPath(Entry const& entry, Entry const* parent) const;
 	std::list<std::string> buildPath(Entry const& entry) const;
 	std::string buildPathString(Entry const& entry, bool withOtherEntriesPlaceholder = false) const;
+	bool hasEntry(Entry const& entry, Entry const * parent = NULL) const;
 };
 
 #endif

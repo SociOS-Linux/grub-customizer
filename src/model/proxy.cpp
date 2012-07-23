@@ -480,6 +480,16 @@ Rule* Proxy::createSubmenu(Rule* childItem) {
 	return childItem;
 }
 
+bool Proxy::ruleIsFromOwnScript(Rule const& rule) {
+	assert(this->dataSource != NULL);
+	assert(rule.dataSource != NULL);
+	if (this->dataSource->hasEntry(*rule.dataSource)) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
 Rule* Proxy::getParentRule(Rule* child, Rule* root) {
 	std::list<Rule>& list = root ? root->subRules : this->rules;
 	for (std::list<Rule>::iterator iter = list.begin(); iter != list.end(); iter++) {

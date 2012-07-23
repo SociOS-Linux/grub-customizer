@@ -50,7 +50,6 @@ void ProxyList::unsync_all() {
 bool ProxyList::proxyRequired(Script const& script) const {
 	std::list<const Proxy*> plist = this->getProxiesByScript(script);
 	if (plist.size() == 1){
-		bool res = plist.front()->isModified();
 		return plist.front()->isModified();
 	}
 	else

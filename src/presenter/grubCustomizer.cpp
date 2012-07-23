@@ -527,7 +527,7 @@ void GrubCustomizer::syncListView_load() {
 	
 		for (std::list<Proxy>::iterator iter = this->grublistCfg->proxies.begin(); iter != this->grublistCfg->proxies.end(); iter++){
 			std::string name = iter->getScriptName() + (this->grublistCfg && iter->dataSource && (progress != 1 && iter->dataSource->fileName != iter->fileName || progress == 1 && grublistCfg->proxies.proxyRequired(*iter->dataSource)) ? gettext(" (custom)") : "");
-			if (name != "header" && name != "debian_theme" && name != "grub-customizer_menu_color_helper") {
+			if (name != "header" && name != "debian_theme" && name != "grub-customizer_menu_color_helper" || iter->isModified()) {
 				this->listCfgDlg->appendScript(name, iter->isExecutable(), &(*iter));
 				for (std::list<Rule>::iterator ruleIter = iter->rules.begin(); ruleIter != iter->rules.end(); ruleIter++){
 					this->_rAppendRule(*ruleIter);
@@ -662,14 +662,11 @@ void GrubCustomizer::updateScriptEntry(Proxy* proxy){
 }
 
 void GrubCustomizer::moveRule(void* rule, int direction){
-	Proxy* parentProxy = this->grublistCfg->proxies.getProxyByRule((Rule*)rule);
-	//swap the contents behind the pointers
 	try {
 		Rule* newRule = &this->grublistCfg->moveRule((Rule*)rule, direction);
 
 		this->syncListView_load();
 		this->listCfgDlg->selectRule(newRule);
-		this->updateScriptEntry(parentProxy);
 		this->modificationsUnsaved = true;
 	} catch (GrublistCfg::Exception e) {
 		if (e == GrublistCfg::NO_MOVE_TARGET_FOUND)

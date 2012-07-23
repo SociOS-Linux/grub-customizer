@@ -57,6 +57,7 @@ struct Proxy {
 	Rule& moveRule(Rule* rule, int direction);
 	Rule* removeSubmenu(Rule* childItem);
 	Rule* createSubmenu(Rule* childItem);
+	bool ruleIsFromOwnScript(Rule const& rule);
 private:
 	Rule* getParentRule(Rule* child, Rule* root = NULL);
 	std::list<Rule>& getRuleList(Rule* parentElement);
