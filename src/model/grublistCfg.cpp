@@ -426,7 +426,7 @@ void GrublistCfg::save(){
 
 	//update modified "custom" scripts
 	for (std::list<Script>::iterator scriptIter = this->repository.begin(); scriptIter != this->repository.end(); scriptIter++) {
-		if (scriptIter->isCustomScript && scriptIter->isModified) {
+		if (scriptIter->isCustomScript && scriptIter->isModified()) {
 			this->log("modifying script \"" + scriptIter->name + "\"", Logger::INFO);
 			assert(scriptIter->fileName != "");
 			Proxy dummyProxy(*scriptIter);
@@ -434,8 +434,10 @@ void GrublistCfg::save(){
 			scriptStream << CUSTOM_SCRIPT_SHEBANG << "\n" << CUSTOM_SCRIPT_PREFIX << "\n";
 			for (std::list<Rule>::iterator ruleIter = dummyProxy.rules.begin(); ruleIter != dummyProxy.rules.end(); ruleIter++) {
 				ruleIter->print(scriptStream);
+				if (ruleIter->dataSource) {
+					ruleIter->dataSource->isModified = false;
+				}
 			}
-			scriptIter->isModified = false;
 		}
 	}
 

@@ -108,6 +108,19 @@ FbResolutionsGetter& GrubCustomizer::getFbResolutionsGetter() {
 	return *this->fbResolutionsGetter;
 }
 
+void GrubCustomizer::updateList() {
+	this->listCfgDlg->clear();
+
+	for (std::list<Proxy>::iterator iter = this->grublistCfg->proxies.begin(); iter != this->grublistCfg->proxies.end(); iter++){
+		std::string name = iter->getScriptName();
+		if (name != "header" && name != "debian_theme" && name != "grub-customizer_menu_color_helper" || iter->isModified()) {
+			for (std::list<Rule>::iterator ruleIter = iter->rules.begin(); ruleIter != iter->rules.end(); ruleIter++){
+				this->_rAppendRule(*ruleIter);
+			}
+		}
+	}
+}
+
 void GrubCustomizer::updateSettingsDlg(){
 	std::list<EntryTitleListItem> entryTitles = this->grublistCfg->proxies.generateEntryTitleList();
 	std::list<std::string> labelListToplevel  = this->grublistCfg->proxies.getToplevelEntryTitles();
@@ -351,7 +364,7 @@ void GrubCustomizer::applyEntryEditorModifications() {
 
 	std::string newCode = this->entryEditDlg->getSourcecode();
 	rulePtr->dataSource->content = newCode;
-	script->isModified = true;
+	rulePtr->dataSource->isModified = true;
 
 	this->syncListView_load();
 
@@ -594,8 +607,9 @@ void GrubCustomizer::_rAppendRule(Rule& rule, Rule* parentRule){
 			}
 		}
 		bool isEditable = rule.type == Rule::NORMAL || rule.type == Rule::PLAINTEXT;
+		bool isModified = rule.dataSource && rule.dataSource->isModified;
 		if (rule.isVisible) {
-			this->listCfgDlg->appendEntry(name, &rule, is_other_entries_ph || is_plaintext, isSubmenu, scriptName, defaultName, isEditable, parentRule);
+			this->listCfgDlg->appendEntry(name, &rule, is_other_entries_ph || is_plaintext, isSubmenu, scriptName, defaultName, isEditable, isModified, parentRule);
 
 			for (std::list<Rule>::iterator subruleIter = rule.subRules.begin(); subruleIter != rule.subRules.end(); subruleIter++) {
 				this->_rAppendRule(*subruleIter, &rule);
@@ -621,16 +635,7 @@ void GrubCustomizer::syncListView_load() {
 	
 	//if grubConfig is locked, it will be cancelled as early as possible
 	if (this->grublistCfg->lock_if_free()) {
-		this->listCfgDlg->clear();
-	
-		for (std::list<Proxy>::iterator iter = this->grublistCfg->proxies.begin(); iter != this->grublistCfg->proxies.end(); iter++){
-			std::string name = iter->getScriptName() + (this->grublistCfg && iter->dataSource && (progress != 1 && iter->dataSource->fileName != iter->fileName || progress == 1 && grublistCfg->proxies.proxyRequired(*iter->dataSource)) ? gettext(" (custom)") : "");
-			if (name != "header" && name != "debian_theme" && name != "grub-customizer_menu_color_helper" || iter->isModified()) {
-				for (std::list<Rule>::iterator ruleIter = iter->rules.begin(); ruleIter != iter->rules.end(); ruleIter++){
-					this->_rAppendRule(*ruleIter);
-				}
-			}
-		}
+		this->updateList();
 		this->grublistCfg->unlock();
 	}
 
@@ -657,6 +662,8 @@ void GrubCustomizer::syncListView_save(){
 		
 		this->listCfgDlg->hideProgressBar();
 		this->listCfgDlg->setStatusText(gettext("Configuration has been saved"));
+
+		this->updateList();
 	}
 	else {
 		this->listCfgDlg->setStatusText(gettext("updating configuration"));

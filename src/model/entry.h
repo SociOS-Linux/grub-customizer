@@ -40,7 +40,7 @@ struct Entry : public CommonClass {
 		SCRIPT_ROOT,
 		PLAINTEXT
 	} type;
-	bool isValid;
+	bool isValid, isModified;
 	std::string name, extension, content;
 	std::list<Entry> subEntries;
 	Entry();

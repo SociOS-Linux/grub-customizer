@@ -19,7 +19,7 @@
 #include "script.h"
 
 Script::Script(std::string const& name, std::string const& fileName)
-	: name(name), fileName(fileName), root("DUMMY", "DUMMY", "DUMMY", Entry::SCRIPT_ROOT), isCustomScript(false), isModified(false)
+	: name(name), fileName(fileName), root("DUMMY", "DUMMY", "DUMMY", Entry::SCRIPT_ROOT), isCustomScript(false)
 {
 	FILE* script = fopen(fileName.c_str(), "r");
 	if (script) {
@@ -29,6 +29,23 @@ Script::Script(std::string const& name, std::string const& fileName)
 		}
 		fclose(script);
 	}
+}
+
+bool Script::isModified(Entry* parent) {
+	if (!parent) {
+		parent = &this->root;
+	}
+	for (std::list<Entry>::iterator iter = parent->subEntries.begin(); iter != parent->subEntries.end(); iter++) {
+		if (iter->isModified) {
+			return true;
+		} else if (iter->type == Entry::SUBMENU) {
+			bool modified = this->isModified(&*iter);
+			if (modified) {
+				return true;
+			}
+		}
+	}
+	return false;
 }
 
 std::list<Entry>& Script::entries() {

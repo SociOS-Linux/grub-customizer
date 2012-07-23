@@ -309,7 +309,7 @@ void GrublistCfgDlgGtk::setStatusText(std::string const& new_status_text){
 	statusbar.push(new_status_text);
 }
 
-void GrublistCfgDlgGtk::appendEntry(std::string const& name, void* entryPtr, bool is_placeholder, bool is_submenu, std::string const& scriptName, std::string const& defaultName, bool isEditable, void* parentEntry){
+void GrublistCfgDlgGtk::appendEntry(std::string const& name, void* entryPtr, bool is_placeholder, bool is_submenu, std::string const& scriptName, std::string const& defaultName, bool isEditable, bool isModified, void* parentEntry){
 	Gtk::TreeIter entryRow;
 	if (parentEntry) {
 		entryRow = tvConfList.refTreeStore->append(this->getIterByRulePtr(parentEntry)->children());
@@ -343,6 +343,7 @@ void GrublistCfgDlgGtk::appendEntry(std::string const& name, void* entryPtr, boo
 	(*entryRow)[tvConfList.treeModel.is_renamable] = !is_placeholder;
 	(*entryRow)[tvConfList.treeModel.is_editable] = isEditable;
 	(*entryRow)[tvConfList.treeModel.is_sensitive] = !is_placeholder;
+	(*entryRow)[tvConfList.treeModel.fontWeight] = isModified ? Pango::WEIGHT_BOLD : Pango::WEIGHT_NORMAL;
 	(*entryRow)[tvConfList.treeModel.icon] = icon;
 
 
@@ -781,6 +782,7 @@ GrubConfListing::GrubConfListing(){
 	this->mainColumn.pack_start(this->textRenderer, true);
 	this->mainColumn.add_attribute(this->textRenderer.property_text(), treeModel.text);
 	this->mainColumn.add_attribute(this->textRenderer.property_editable(), treeModel.is_renamable);
+	this->mainColumn.add_attribute(this->textRenderer.property_weight(), treeModel.fontWeight);
 	this->mainColumn.set_spacing(10);
 
 	this->set_headers_visible(false);
@@ -796,5 +798,6 @@ GrubConfListing::TreeModel::TreeModel(){
 	this->add(is_renamable);
 	this->add(is_editable);
 	this->add(is_sensitive);
+	this->add(fontWeight);
 	this->add(icon);
 }

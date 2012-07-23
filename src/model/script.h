@@ -34,9 +34,9 @@ struct Script : public EntryPathFollower, public CommonClass {
 	};
 	std::string name, fileName;
 	bool isCustomScript;
-	bool isModified;
 	Entry root;
 	Script(std::string const& name, std::string const& fileName);
+	bool isModified(Entry* parent = NULL);
 	std::list<Entry>& entries();
 	std::list<Entry> const& entries() const;
 	bool isInScriptDir(std::string const& cfg_dir) const;

@@ -149,6 +149,7 @@ public:
 	void die();
 	void activateSettingsBtn();
 	void updateSettingsDlg();
+	void updateList();
 	
 	void quit(bool force = false);
 	

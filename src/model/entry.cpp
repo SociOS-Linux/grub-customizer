@@ -41,14 +41,14 @@ GrubConfRow::operator bool(){
 }
 
 Entry::Entry()
-	: isValid(false)
+	: isValid(false), isModified(false)
 {}
 
 Entry::Entry(std::string name, std::string extension, std::string content, EntryType type)
-	: name(name), extension(extension), content(content), isValid(true), type(type)
+	: name(name), extension(extension), content(content), isValid(true), type(type), isModified(false)
 {}
 Entry::Entry(FILE* sourceFile, GrubConfRow firstRow, Logger* logger, std::string* plaintextBuffer)
-	: isValid(false), type(MENUENTRY)
+	: isValid(false), type(MENUENTRY), isModified(false)
 {
 	//int c;
 	//std::string row;
