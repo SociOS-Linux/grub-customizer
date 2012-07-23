@@ -261,8 +261,8 @@ void GrublistCfgDlgGtk::appendEntry(std::string const& name, bool is_active, voi
 		(*entryRow)[tvConfList.treeModel.active] = is_active;
 		(*entryRow)[tvConfList.treeModel.name] = outputName;
 		(*entryRow)[tvConfList.treeModel.relatedRule] = (void*)entryPtr;
-		(*entryRow)[tvConfList.treeModel.is_editable] = is_placeholder;
-		(*entryRow)[tvConfList.treeModel.is_sensitive] = true;
+		(*entryRow)[tvConfList.treeModel.is_editable] = !is_placeholder && !is_submenu;
+		(*entryRow)[tvConfList.treeModel.is_sensitive] = !is_placeholder;
 		(*entryRow)[tvConfList.treeModel.font_weight] = is_submenu ? PANGO_WEIGHT_BOLD : PANGO_WEIGHT_NORMAL;
 		(*entryRow)[tvConfList.treeModel.fontStyle] = Pango::STYLE_NORMAL;
 
