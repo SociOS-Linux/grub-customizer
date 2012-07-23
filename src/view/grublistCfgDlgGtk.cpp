@@ -142,10 +142,11 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 
 	//signals
 	
-	tvConfList.refTreeStore->signal_row_changed().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_row_changed));
 	tbttUp.signal_clicked().connect(sigc::bind<int>(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_move_click),-1));
 	tbttDown.signal_clicked().connect(sigc::bind<int>(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_move_click),1));
 	tvConfList.get_selection()->signal_changed().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_treeview_selection_changed));
+	static_cast<Gtk::CellRendererText*>(tvConfList.get_column(0)->get_first_cell_renderer())->signal_editing_started().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_edit_name));
+	static_cast<Gtk::CellRendererText*>(tvConfList.get_column(0)->get_first_cell_renderer())->signal_edited().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_edit_name_finished));
 	tbttSave.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::saveConfig));
 	tbttAdd.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_add_click));
 	tbttLeft.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_move_left_click));
@@ -176,6 +177,12 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 
 void GrublistCfgDlgGtk::setEventListener(EventListener_listCfgDlg& eventListener) {
 	this->eventListener = &eventListener;
+}
+
+void GrublistCfgDlgGtk::signal_edit_name(Gtk::CellEditable* editable, const Glib::ustring& path) {
+	Gtk::TreeModel::iterator iter = this->tvConfList.refTreeStore->get_iter(path);
+	Glib::ustring name = (*iter)[this->tvConfList.treeModel.name];
+	editable->set_property<Glib::ustring>("text", name);
 }
 
 void GrublistCfgDlgGtk::setIsBurgMode(bool isBurgMode){
@@ -259,7 +266,8 @@ void GrublistCfgDlgGtk::appendEntry(std::string const& name, bool is_active, voi
 		}
 
 		(*entryRow)[tvConfList.treeModel.active] = is_active;
-		(*entryRow)[tvConfList.treeModel.name] = outputName;
+		(*entryRow)[tvConfList.treeModel.name] = name;
+		(*entryRow)[tvConfList.treeModel.text] = outputName;
 		(*entryRow)[tvConfList.treeModel.relatedRule] = (void*)entryPtr;
 		(*entryRow)[tvConfList.treeModel.is_editable] = !is_placeholder;
 		(*entryRow)[tvConfList.treeModel.is_sensitive] = !is_placeholder;
@@ -367,10 +375,10 @@ Gtk::TreeModel::iterator GrublistCfgDlgGtk::getIterByRulePtr(void* rulePtr, cons
 	throw RULE_ITER_NOT_FOUND;
 }
 
-void GrublistCfgDlgGtk::signal_row_changed(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter){
+void GrublistCfgDlgGtk::signal_edit_name_finished(const Glib::ustring& path, const Glib::ustring& new_text){
 	if (this->lock_state == 0){
+		Gtk::TreeModel::iterator iter = this->tvConfList.refTreeStore->get_iter(path);
 		eventListener->signal_entry_renamed((void*)(*iter)[tvConfList.treeModel.relatedRule]);
-		eventListener->signal_entry_state_toggled((void*)(*iter)[tvConfList.treeModel.relatedRule]);
 	}
 }
 
@@ -382,7 +390,7 @@ void GrublistCfgDlgGtk::signal_show_root_selector(){
 
 std::string GrublistCfgDlgGtk::getRuleName(void* rule){
 	Gtk::TreeModel::iterator iter = this->getIterByRulePtr(rule);
-	return (Glib::ustring)(*iter)[tvConfList.treeModel.name];
+	return (Glib::ustring)(*iter)[tvConfList.treeModel.text];
 }
 void GrublistCfgDlgGtk::setRuleName(void* rule, std::string const& newName){
 	Gtk::TreeModel::iterator iter = this->getIterByRulePtr(rule);
@@ -610,7 +618,7 @@ void GrublistCfgDlgGtk::signal_partition_chooser_question_response(int response_
 GrubConfListing::GrubConfListing(){
 	refTreeStore = Gtk::TreeStore::create(treeModel);
 	this->set_model(refTreeStore);
-	this->append_column_editable(gettext("name"), treeModel.name); //rows with is_editable==true will be made editable by cell renderer option
+	this->append_column_editable(gettext("name"), treeModel.text); //rows with is_editable==true will be made editable by cell renderer option
 	
 	{
 		Gtk::TreeViewColumn* pColumn = this->get_column(0);
@@ -634,6 +642,7 @@ GrubConfListing::GrubConfListing(){
 GrubConfListing::TreeModel::TreeModel(){
 	this->add(active);
 	this->add(name);
+	this->add(text);
 	this->add(relatedRule);
 	this->add(is_other_entries_marker);
 	this->add(is_editable);

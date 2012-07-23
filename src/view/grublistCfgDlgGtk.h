@@ -33,6 +33,7 @@ public:
 	struct TreeModel : public Gtk::TreeModelColumnRecord {
 		Gtk::TreeModelColumn<bool> active;
 		Gtk::TreeModelColumn<Glib::ustring> name;
+		Gtk::TreeModelColumn<Glib::ustring> text;
 		Gtk::TreeModelColumn<void*> relatedRule;
 		Gtk::TreeModelColumn<bool> is_other_entries_marker;
 		Gtk::TreeModelColumn<bool> is_editable;
@@ -133,7 +134,7 @@ protected:
 private:
 	//event handlers
 	void signal_show_root_selector();
-	void signal_row_changed(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter);
+	void signal_edit_name_finished(const Glib::ustring& path, const Glib::ustring& new_text);
 	void signal_move_click(int direction); //direction: -1: one position up, 1: one p. down
 	void signal_add_click();
 	void signal_reload_click();
@@ -147,6 +148,7 @@ private:
 	void signal_info_click();
 	void signal_burg_switcher_response(int response_id);
 	void signal_partition_chooser_question_response(int response_id);
+	void signal_edit_name(Gtk::CellEditable* editable, const Glib::ustring& path);
 };
 
 #endif

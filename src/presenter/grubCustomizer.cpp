@@ -291,6 +291,9 @@ void GrubCustomizer::renameEntry(Rule* rule, std::string const& newName){
 		if (this->settings->getValue("GRUB_DEFAULT") == rule->outputName)
 			this->settings->setValue("GRUB_DEFAULT", newName);
 		this->grublistCfg->renameRule(rule, newName);
+
+		this->syncListView_load();
+		this->listCfgDlg->selectRule(rule);
 	}
 }
 
