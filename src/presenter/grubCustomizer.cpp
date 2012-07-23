@@ -456,11 +456,13 @@ void GrubCustomizer::showEntryAddDlg(){
 	entryAddDlg->show();
 }
 
-void GrubCustomizer::addScriptFromScriptAddDlg(){
-	Script* script = grublistCfg->repository.getNthScript(entryAddDlg->getSelectedEntryIndex());
-	grublistCfg->proxies.push_back(Proxy(*script));
-	grublistCfg->renumerate();
-	
+void GrubCustomizer::addEntryFromEntryAddDlg(){
+	std::list<void*> entries = entryAddDlg->getSelectedEntries();
+	for (std::list<void*>::iterator iter = entries.begin(); iter != entries.end(); iter++) {
+		Entry* entry = static_cast<Entry*>(*iter);
+		Rule* addedRule = this->grublistCfg->addEntry(*entry);
+	}
+
 	this->syncListView_load();
 	
 	this->modificationsUnsaved = true;

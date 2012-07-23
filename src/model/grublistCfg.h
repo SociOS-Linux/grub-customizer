@@ -111,6 +111,7 @@ public:
 	void addColorHelper();
 
 	std::list<Entry*> getRemovedEntries(Entry* parent = NULL);
+	Rule* addEntry(Entry& entry);
 };
 
 #endif

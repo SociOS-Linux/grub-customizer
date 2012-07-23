@@ -132,7 +132,7 @@ public:
 	void showMessageGrubInstallCompleted(std::string const& msg);
 	
 	void showEntryAddDlg();
-	void addScriptFromScriptAddDlg();
+	void addEntryFromEntryAddDlg();
 	
 	//dispatchers
 	void syncListView_load();

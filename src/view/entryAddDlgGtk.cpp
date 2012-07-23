@@ -39,10 +39,10 @@ EntryAddDlgGtk::EntryAddDlgGtk() {
 	this->add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
 	this->add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
 
-	this->signal_response().connect(sigc::mem_fun(this, &EntryAddDlgGtk::signal_scriptAddDlg_response));
+	this->signal_response().connect(sigc::mem_fun(this, &EntryAddDlgGtk::signal_entryAddDlg_response));
 }
 
-void EntryAddDlgGtk::setEventListener(EventListener_scriptAddDlg& eventListener){
+void EntryAddDlgGtk::setEventListener(EventListener_entryAddDlg& eventListener){
 	this->eventListener = &eventListener;
 }
 
@@ -50,16 +50,21 @@ void EntryAddDlgGtk::clear(){
 	listStore->clear();
 }
 
-void EntryAddDlgGtk::signal_scriptAddDlg_response(int response_id){
-//	if (response_id == Gtk::RESPONSE_OK){
-//		eventListener->scriptAddDlg_applied();
-//	}
-//	this->hide();
+void EntryAddDlgGtk::signal_entryAddDlg_response(int response_id){
+	if (response_id == Gtk::RESPONSE_OK){
+		eventListener->entryAddDlg_applied();
+	}
+	this->hide();
 }
 
-int EntryAddDlgGtk::getSelectedEntryIndex(){
-//	return cbScriptSelection.get_active_row_number();
-	return 0;
+std::list<void*> EntryAddDlgGtk::getSelectedEntries(){
+	std::list<void*> result;
+	std::vector<Gtk::TreePath> pathes = iconBox.get_selected_items();
+	for (std::vector<Gtk::TreePath>::iterator pathIter = pathes.begin(); pathIter != pathes.end(); pathIter++) {
+		Gtk::TreeModel::iterator elementIter = listStore->get_iter(*pathIter);
+		result.push_back((*elementIter)[iconModel.relatedRule]);
+	}
+	return result;
 }
 
 void EntryAddDlgGtk::signal_script_selection_changed(){

@@ -16,21 +16,21 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef SCRIPTADDDLG_H_
-#define SCRIPTADDDLG_H_
+#ifndef ENTRYADDDLG_H_
+#define ENTRYADDDLG_H_
 
-#include "evt_scriptAddDlg.h"
+#include "evt_entryAddDlg.h"
 /**
  * Interface to be implemented by dialogs which lets the user adding scripts
  */
 class EntryAddDlg {
 public:
 	//assigns the event listener
-	virtual void setEventListener(EventListener_scriptAddDlg& eventListener)=0;
+	virtual void setEventListener(EventListener_entryAddDlg& eventListener)=0;
 	//clear the script menu
 	virtual void clear()=0;
 	//gets the index of the selected script item
-	virtual int getSelectedEntryIndex()=0;
+	virtual std::list<void*> getSelectedEntries()=0;
 	//removes all preview items
 	virtual void clearPreview()=0;
 	//adds a new item

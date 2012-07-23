@@ -16,10 +16,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef SCRIPT_ADD_DLG_INCLUDED
-#define SCRIPT_ADD_DLG_INCLUDED
+#ifndef ENTRY_ADD_DLG_INCLUDED
+#define ENTRY_ADD_DLG_INCLUDED
 #include <gtkmm.h>
-#include "../interface/evt_scriptAddDlg.h"
+#include "../interface/evt_entryAddDlg.h"
 #include "../interface/scriptAddDlg.h"
 #include <libintl.h>
 #include "../presenter/commonClass.h"
@@ -29,7 +29,7 @@ class EntryAddDlgGtk : public Gtk::Dialog, public EntryAddDlg, public CommonClas
 	Gtk::ScrolledWindow scrEntryBox;
 	Gtk::IconView iconBox;
 
-	EventListener_scriptAddDlg* eventListener;
+	EventListener_entryAddDlg* eventListener;
 public:
 	struct IconModel : public Gtk::TreeModelColumnRecord {
 		Gtk::TreeModelColumn<Glib::ustring> name;
@@ -40,10 +40,10 @@ public:
 	} iconModel;
 	Glib::RefPtr<Gtk::ListStore> listStore;
 	EntryAddDlgGtk();
-	void setEventListener(EventListener_scriptAddDlg& eventListener);
-	void signal_scriptAddDlg_response(int response_id);
+	void setEventListener(EventListener_entryAddDlg& eventListener);
+	void signal_entryAddDlg_response(int response_id);
 	void clear();
-	int getSelectedEntryIndex();
+	std::list<void*> getSelectedEntries();
 	void signal_script_selection_changed();
 	void clearPreview();
 	void addItem(std::string const& name, bool isPlaceholder, std::string const& scriptName,void* relatedRule);

@@ -471,7 +471,7 @@ void GrublistCfgDlgGtk::signal_treeview_selection_changed(){
 }
 
 void GrublistCfgDlgGtk::signal_add_click(){
-	eventListener->scriptAddDlg_requested();
+	eventListener->entryAddDlg_requested();
 }
 
 void GrublistCfgDlgGtk::signal_remove_click() {

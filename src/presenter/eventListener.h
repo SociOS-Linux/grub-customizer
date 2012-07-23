@@ -24,7 +24,7 @@
 #include "../interface/evt_model.h"
 #include "../interface/evt_listCfgDlg.h"
 #include "../interface/evt_partitionChooser.h"
-#include "../interface/evt_scriptAddDlg.h"
+#include "../interface/evt_entryAddDlg.h"
 #include "../interface/evt_settings.h"
 
 class EventListener :
@@ -33,7 +33,7 @@ class EventListener :
 	public EventListener_grubInstallDlg,
 	public EventListener_listCfgDlg,
 	public EventListener_model,
-	public EventListener_scriptAddDlg
+	public EventListener_entryAddDlg
 {
 	GrubCustomizer& presenter;
 public:
@@ -47,8 +47,8 @@ public:
 	void removeSubmenuRequest(void* childItem);
 	void installDialogRequest();
 	void installGrub_request(std::string const& device);
-	void scriptAddDlg_requested();
-	void scriptAddDlg_applied();
+	void entryAddDlg_requested();
+	void entryAddDlg_applied();
 	void exitRequest();
 
 	void signal_entry_remove_requested(void* entry);

@@ -46,11 +46,11 @@ src/interface/aboutDialog.h -text
 src/interface/colorChooser.h -text
 src/interface/entryPathBuilder.h -text
 src/interface/entryPathFollower.h -text
+src/interface/evt_entryAddDlg.h -text
 src/interface/evt_grubInstallDlg.h -text
 src/interface/evt_listCfgDlg.h -text
 src/interface/evt_model.h -text
 src/interface/evt_partitionChooser.h -text
-src/interface/evt_scriptAddDlg.h -text
 src/interface/evt_settings.h -text
 src/interface/grubInstallDlg.h -text
 src/interface/grublistCfgDlg.h -text

@@ -38,8 +38,8 @@ public:
 	virtual void createSubmenuRequest(void* childItem)=0;
 	//user wants to remove a submenu
 	virtual void removeSubmenuRequest(void* childItem)=0;
-	//user wants to show the dialog which lets him add new scripts
-	virtual void scriptAddDlg_requested()=0;
+	//user wants to show the dialog which lets him add new entries
+	virtual void entryAddDlg_requested()=0;
 	//user wants to show the about dialog
 	virtual void aboutDialog_requested()=0;
 	//user wants to quit -> application asks if it should be closed (return values: true = close, false = stay opened)

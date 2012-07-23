@@ -22,10 +22,10 @@
 /**
  * base class to be implemented by event listeners for script add dialogs
  */
-class EventListener_scriptAddDlg {
+class EventListener_entryAddDlg {
 public:
 	//user wants to add the selected script instance
-	virtual void scriptAddDlg_applied()=0;
+	virtual void entryAddDlg_applied()=0;
 };
 
 #endif

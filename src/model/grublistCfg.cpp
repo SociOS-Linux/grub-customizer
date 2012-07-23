@@ -915,3 +915,32 @@ std::list<Entry*> GrublistCfg::getRemovedEntries(Entry* parent) {
 	return result;
 }
 
+Rule* GrublistCfg::addEntry(Entry& entry) {
+	Script* sourceScript = this->repository.getScriptByEntry(entry);
+	assert(sourceScript != NULL);
+
+	Proxy* targetProxy = NULL;
+	if (this->proxies.size() && this->proxies.back().dataSource == sourceScript) {
+		targetProxy = &this->proxies.back();
+		targetProxy->set_isExecutable(true);
+	} else {
+		this->proxies.push_back(Proxy(*sourceScript, false));
+		targetProxy = &this->proxies.back();
+		this->renumerate();
+	}
+
+	Rule::RuleType type = Rule::NORMAL;
+	if (entry.type == Entry::SUBMENU || entry.type == Entry::SCRIPT_ROOT) {
+		type = Rule::OTHER_ENTRIES_PLACEHOLDER;
+	} else if (entry.type == Entry::PLAINTEXT) {
+		type = Rule::PLAINTEXT;
+	}
+
+	Rule* rule = targetProxy->getRuleByEntry(entry, targetProxy->rules, type);
+	Rule ruleCopy = *rule;
+	ruleCopy.isVisible = true;
+	targetProxy->removeEquivalentRules(*rule);
+	targetProxy->rules.push_back(ruleCopy);
+	return &targetProxy->rules.back();
+}
+

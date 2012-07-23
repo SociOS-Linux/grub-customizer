@@ -61,11 +61,11 @@ void EventListener::installGrub_request(std::string const& device){
 	this->presenter.getThreadController().startGrubInstallThread(device);
 }
 
-void EventListener::scriptAddDlg_applied(){
-	presenter.addScriptFromScriptAddDlg();
+void EventListener::entryAddDlg_applied(){
+	presenter.addEntryFromEntryAddDlg();
 }
 
-void EventListener::scriptAddDlg_requested(){
+void EventListener::entryAddDlg_requested(){
 	presenter.showEntryAddDlg();
 }
 
