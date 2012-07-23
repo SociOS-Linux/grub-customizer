@@ -71,7 +71,7 @@ public:
 	//notifies the user about the problem that no grublistcfg_proxy has been found
 	virtual void showProxyNotFoundMessage()=0;
 	//creates a string for an other entry placeholder
-	virtual std::string createNewEntriesPlaceholderString(std::string const& parentMenu = "")=0;
+	virtual std::string createNewEntriesPlaceholderString(std::string const& parentMenu = "", std::string const& sourceScriptName = "")=0;
 	//creates the string for plaintexts
 	virtual std::string createPlaintextString() const=0;
 

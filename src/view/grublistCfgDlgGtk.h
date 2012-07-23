@@ -115,7 +115,7 @@ public:
 	void appendScript(std::string const& name, bool is_active, void* proxyPtr);
 	void appendEntry(std::string const& name, bool is_active, void* entryPtr, bool editable, bool is_submenu, void* parentEntry = NULL);
 	void showProxyNotFoundMessage();
-	std::string createNewEntriesPlaceholderString(std::string const& parentMenu = "");
+	std::string createNewEntriesPlaceholderString(std::string const& parentMenu = "", std::string const& sourceScriptName = "");
 	std::string createPlaintextString() const;
 	
 	void setProxyName(void* proxy, std::string const& name, bool isModified);

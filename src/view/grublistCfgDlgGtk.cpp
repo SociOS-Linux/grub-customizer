@@ -275,9 +275,13 @@ void GrublistCfgDlgGtk::showProxyNotFoundMessage(){
 	msg.run();
 }
 
-std::string GrublistCfgDlgGtk::createNewEntriesPlaceholderString(std::string const& parentMenu) {
-	if (parentMenu != "") {
+std::string GrublistCfgDlgGtk::createNewEntriesPlaceholderString(std::string const& parentMenu, std::string const& sourceScriptName) {
+	if (sourceScriptName != "" && parentMenu != "") {
+		return Glib::ustring::compose(gettext("(new Entries of %1, Script: %2)"), parentMenu, sourceScriptName);
+	} else if (parentMenu != "") {
 		return Glib::ustring::compose(gettext("(new Entries of %1)"), parentMenu);
+	} else if (sourceScriptName != "") {
+		return Glib::ustring::compose(gettext("(new Entries of Script: %1)"), sourceScriptName);
 	} else {
 		return gettext("(new Entries)");
 	}

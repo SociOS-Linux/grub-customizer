@@ -481,6 +481,16 @@ void GrubCustomizer::_rAppendRule(Rule& rule, Rule* parentRule){
 	bool is_other_entries_ph = rule.type == Rule::OTHER_ENTRIES_PLACEHOLDER;
 	bool is_plaintext = rule.dataSource && rule.dataSource->type == Entry::PLAINTEXT;
 	bool is_submenu = rule.type == Rule::SUBMENU;
+
+	std::string scriptName = "";
+	Proxy* proxy = this->grublistCfg->proxies.getProxyByRule(&rule);
+	if (proxy) {
+		Script const* script = this->grublistCfg->repository.getScriptByEntry(*rule.dataSource);
+		if (rule.dataSource && !proxy->ruleIsFromOwnScript(rule) && script) {
+			scriptName = script->name;
+		}
+	}
+
 	if (rule.dataSource || is_other_entries_ph || is_submenu){
 		std::string name;
 		if (is_other_entries_ph) {
@@ -488,9 +498,9 @@ void GrubCustomizer::_rAppendRule(Rule& rule, Rule* parentRule){
 				if (rule.dataSource == NULL || rule.dataSource->type == Entry::SCRIPT_ROOT) {
 					throw 1;
 				}
-				name = this->listCfgDlg->createNewEntriesPlaceholderString(rule.dataSource->name);
+				name = this->listCfgDlg->createNewEntriesPlaceholderString(rule.dataSource->name, scriptName);
 			} catch (...) {
-				name = this->listCfgDlg->createNewEntriesPlaceholderString();
+				name = this->listCfgDlg->createNewEntriesPlaceholderString("", scriptName);
 			}
 		} else if (is_plaintext) {
 			name = this->listCfgDlg->createPlaintextString();

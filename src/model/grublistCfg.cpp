@@ -453,6 +453,8 @@ std::map<Entry const*, Script const*> GrublistCfg::getEntrySources(Proxy const& 
 			Script const* script = this->repository.getScriptByEntry(*iter->dataSource);
 			if (script != NULL) {
 				result[iter->dataSource] = script;
+			} else {
+				this->log("error finding the associated script! (" + iter->outputName + ")", Logger::WARNING);
 			}
 		} else if (iter->type == Rule::SUBMENU) {
 			std::map<Entry const*, Script const*> subResult = this->getEntrySources(proxy, &*iter);
