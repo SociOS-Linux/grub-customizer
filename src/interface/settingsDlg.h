@@ -51,6 +51,12 @@ public:
 	virtual void hide()=0;
 	//returns an interface to the given color chooser
 	virtual ColorChooser& getColorChooser(ColorChooserType type)=0;
+	//get the name of the selected font
+	virtual std::string getFontName()=0;
+	//get the font size
+	virtual int getFontSize()=0;
+	//set the name of the selected font
+	virtual void setFontName(std::string const& value)=0;
 	//reads the selection row from the custom options list
 	virtual std::string getSelectedCustomOption()=0;
 	//adds an entry to the end of the default entry chooser

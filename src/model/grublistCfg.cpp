@@ -825,6 +825,9 @@ Rule& GrublistCfg::moveRule(Rule* rule, int direction){
 }
 
 void GrublistCfg::swapProxies(Proxy* a, Proxy* b){
+	if (a->index == b->index) { // swapping has no effect if the indexes are identical
+		this->renumerate();
+	}
 	int index1 = a->index;
 	a->index = b->index;
 	b->index = index1;

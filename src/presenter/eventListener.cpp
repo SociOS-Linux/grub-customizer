@@ -172,6 +172,12 @@ void EventListener::resolution_changed(){
 void EventListener::colorChange_requested(){
 	presenter.updateColorSettings();
 }
+void EventListener::fontChange_requested() {
+	presenter.updateFontSettings(false);
+}
+void EventListener::fontRemove_requested() {
+	presenter.updateFontSettings(true);
+}
 void EventListener::backgroundChange_requested(){
 	presenter.updateBackgroundImage();
 }

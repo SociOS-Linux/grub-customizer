@@ -53,6 +53,10 @@ public:
 	virtual void resolution_changed()=0;
 	//user has changed one of the menu colors
 	virtual void colorChange_requested()=0;
+	//user has changed the font
+	virtual void fontChange_requested()=0;
+	//user has removed the font
+	virtual void fontRemove_requested()=0;
 	//user has selected another grub wallpaper
 	virtual void backgroundChange_requested()=0;
 	//user wants to remove the selected background image

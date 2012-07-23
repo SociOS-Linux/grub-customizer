@@ -8,6 +8,32 @@ pkg_check_modules(GTKMM gtkmm-2.4)
 pkg_check_modules(GTHREAD gthread-2.0)
 pkg_check_modules(OPENSSL openssl)
 
+if ( LIB_INSTALL_DIR )
+else()
+set ( LIB_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/lib/grub-customizer )
+endif()
+
+if ( BINARY_INSTALL_DIR )
+else()
+set ( BINARY_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/bin )
+endif()
+
+if ( LOCALE_INSTALL_DIR )
+else()
+set ( LOCALE_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/share/locale )
+endif()
+
+if ( PARTCHOOSER_MOUNTPOINT_DIR )
+else()
+set ( PARTCHOOSER_MOUNTPOINT_DIR /media/grub-customizer_recovery_root_mountpoint )
+endif()
+
+if ( ERROR_LOG_FILE )
+else()
+set ( ERROR_LOG_FILE /tmp/grub-customizer_mkconfig_output.log )
+endif()
+
+
 link_directories(
     ${GTKMM_LIBRARY_DIRS} ${OPENSSL_LIBRARY_DIRS} )
 
@@ -94,8 +120,9 @@ configure_file ("misc/pkexec_policy.in" "${CMAKE_CURRENT_BINARY_DIR}/net.launchp
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/net.launchpad.danielrichter2007.pkexec.grub-customizer.policy
     DESTINATION /usr/share/polkit-1/actions)
 
-install(TARGETS grubcfg-proxy
-	DESTINATION lib/grub-customizer)
+
+install(TARGETS grubcfg-proxy 
+	DESTINATION ${LIB_INSTALL_DIR} )
 
 install(TARGETS grub-customizer 
 	DESTINATION bin)

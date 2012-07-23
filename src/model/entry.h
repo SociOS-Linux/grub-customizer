@@ -42,6 +42,7 @@ struct Entry : public CommonClass {
 	} type;
 	bool isValid, isModified;
 	std::string name, extension, content;
+	char quote;
 	std::list<Entry> subEntries;
 	Entry();
 	Entry(std::string name, std::string extension, std::string content = "", EntryType type = MENUENTRY);
