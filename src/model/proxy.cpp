@@ -446,6 +446,24 @@ Rule& Proxy::moveRule(Rule* rule, int direction) {
 	return *newRule;
 }
 
+void Proxy::merge(Proxy const& foreignProxy, int direction) {
+	if (direction == -1) {
+		for (std::list<Rule>::const_iterator iter = foreignProxy.rules.begin(); iter != foreignProxy.rules.end(); iter++) {
+			if (iter->isVisible) {
+				this->removeEquivalentRules(*iter);
+				this->rules.push_back(*iter);
+			}
+		}
+	} else {
+		for (std::list<Rule>::const_reverse_iterator iter = foreignProxy.rules.rbegin(); iter != foreignProxy.rules.rend(); iter++) {
+			if (iter->isVisible) {
+				this->removeEquivalentRules(*iter);
+				this->rules.push_front(*iter);
+			}
+		}
+	}
+}
+
 std::list<Rule>::iterator Proxy::getNextVisibleRule(std::list<Rule>::iterator base, int direction) {
 	assert(direction == -1 || direction == 1);
 	Rule* parent = NULL;

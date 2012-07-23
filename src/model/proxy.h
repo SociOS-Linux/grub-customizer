@@ -57,6 +57,7 @@ struct Proxy {
 	bool generateFile(std::string const& path, int cfg_dir_prefix_length, std::string const& cfg_dir_noprefix, std::map<Entry const*, Script const*> ruleSourceMap, std::map<Script const*, std::string> const& scriptTargetMap); //before running this function, the realted script file must be saved!
 	std::string getScriptName();
 	Rule& moveRule(Rule* rule, int direction);
+	void merge(Proxy const& foreignProxy, int direction);
 	std::list<Rule>::iterator getNextVisibleRule(std::list<Rule>::iterator base, int direction);
 	Rule* removeSubmenu(Rule* childItem);
 	Rule* createSubmenu(Rule* childItem);
