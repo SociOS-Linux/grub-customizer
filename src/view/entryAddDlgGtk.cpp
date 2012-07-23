@@ -36,6 +36,8 @@ EntryAddDlgGtk::EntryAddDlgGtk() {
 
 	this->iconBox.set_selection_mode(Gtk::SELECTION_MULTIPLE);
 
+	this->iconBox.signal_item_activated().connect(sigc::mem_fun(this, &EntryAddDlgGtk::signal_icon_dblClick));
+
 	this->add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
 	this->add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
 
@@ -54,6 +56,12 @@ void EntryAddDlgGtk::signal_entryAddDlg_response(int response_id){
 	if (response_id == Gtk::RESPONSE_OK){
 		eventListener->entryAddDlg_applied();
 	}
+	this->hide();
+}
+
+void EntryAddDlgGtk::signal_icon_dblClick(Gtk::TreeModel::Path path) {
+	this->iconBox.select_path(path);
+	eventListener->entryAddDlg_applied();
 	this->hide();
 }
 

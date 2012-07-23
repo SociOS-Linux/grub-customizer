@@ -42,6 +42,7 @@ public:
 	EntryAddDlgGtk();
 	void setEventListener(EventListener_entryAddDlg& eventListener);
 	void signal_entryAddDlg_response(int response_id);
+	void signal_icon_dblClick(Gtk::TreeModel::Path path);
 	void clear();
 	std::list<void*> getSelectedEntries();
 	void addItem(std::string const& name, bool isPlaceholder, std::string const& scriptName,void* relatedRule);
