@@ -20,6 +20,7 @@
 #define GRUBLISTCFGDLG_H_
 
 #include "evt_listCfgDlg.h"
+#include "settingsDlg.h"
 #include <string>
 #include <vector>
 

@@ -24,6 +24,7 @@
 #include "../config.h"
 #include "../interface/grublistCfgDlg.h"
 #include "../presenter/commonClass.h"
+#include "settingsDlgGtk.h"
 
 //TODO: Edit -> Rename [v3]
 //TODO: Edit -> activate/unactivate [v3]
@@ -58,6 +59,7 @@ class GrublistCfgDlgGtk : public GrublistCfgDlg, public CommonClass {
 	EventListener_listCfgDlg* eventListener;
 	Gtk::Window win;
 	Gtk::VBox vbMainSplit;
+	Gtk::Notebook notebook;
 	
 	Gtk::MenuBar menu;
 	Gtk::Toolbar toolbar;
@@ -67,7 +69,7 @@ class GrublistCfgDlgGtk : public GrublistCfgDlg, public CommonClass {
 	GrubConfListing tvConfList;
 	Gtk::ProgressBar progressBar;
 
-	Gtk::ToolButton tbttAdd, tbttRemove, tbttUp, tbttDown, tbttSave, tbttPreferences, tbttReload, tbttLeft, tbttRight;
+	Gtk::ToolButton tbttAdd, tbttRemove, tbttUp, tbttDown, tbttSave, tbttReload, tbttLeft, tbttRight;
 	Gtk::ToolItem ti_sep1;
 	Gtk::VSeparator vs_sep1;
 	Gtk::ToolItem ti_sep2;
@@ -76,17 +78,21 @@ class GrublistCfgDlgGtk : public GrublistCfgDlg, public CommonClass {
 	Gtk::VSeparator vs_sep3;
 	Gtk::ToolItem ti_sep4;
 	Gtk::VSeparator vs_sep4;
-	Gtk::ToolItem ti_sep5;
-	Gtk::VSeparator vs_sep5;
 	
 	Gtk::MenuItem miFile, miEdit, miView, miHelp, miInstallGrub;
-	Gtk::ImageMenuItem miExit, miSave, miPreferences, miAbout, miStartRootSelector;
+	Gtk::ImageMenuItem miExit, miSave, miAbout, miStartRootSelector;
 	ImageMenuItemOwnKey miReload, miAdd, miRemove, miUp, miDown, miLeft, miRight;
 	Gtk::Menu subFile, subEdit, subView, subHelp;
 	
+	Gtk::VBox settingsHBox;
+
 	bool lock_state;
 
 	Gtk::MessageDialog burgSwitcher, pchooserQuestionDlg;
+
+	Gtk::Button bttAdvancedSettings1, bttAdvancedSettings2;
+	Gtk::HButtonBox bbxAdvancedSettings1, bbxAdvancedSettings2;
+
 
 	Gtk::TreeModel::iterator getIterByRulePtr(void* rulePtr, const Gtk::TreeRow* parentRow = NULL) const;
 	void update_move_buttons();
@@ -96,6 +102,7 @@ class GrublistCfgDlgGtk : public GrublistCfgDlg, public CommonClass {
 public:
 	GrublistCfgDlgGtk();
 	void setEventListener(EventListener_listCfgDlg& eventListener);
+	void putSettingsDialog(Gtk::VBox& commonSettingsPane, Gtk::VBox& appearanceSettingsPane);
 	void show();
 	void run();
 	void close();

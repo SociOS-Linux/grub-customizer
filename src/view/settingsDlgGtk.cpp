@@ -271,11 +271,22 @@ GrubSettingsDlgGtk::GrubSettingsDlgGtk()
 	drwBackgroundPreview.signal_expose_event().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_redraw_preview));
 
 	this->add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
-	this->set_default_size(300, 400);
+	this->set_default_size(500, 600);
 }
 
 void GrubSettingsDlgGtk::setEventListener(EventListener_settings& eventListener){
 	this->eventListener = &eventListener;
+}
+
+Gtk::VBox& GrubSettingsDlgGtk::getCommonSettingsPane() {
+	tabbox.remove(alignCommonSettings);
+	alignCommonSettings.remove();
+	return vbCommonSettings;
+}
+
+Gtk::VBox& GrubSettingsDlgGtk::getAppearanceSettingsPane() {
+	tabbox.remove(vbAppearanceSettings);
+	return vbAppearanceSettings;
 }
 
 void GrubSettingsDlgGtk::show(bool burgMode) {

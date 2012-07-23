@@ -80,6 +80,8 @@ int main(int argc, char** argv){
 	presenter.setAboutDialog(aboutDialog);
 	presenter.setThreadController(threadC);
 
+	listCfgView.putSettingsDialog(settingsDlg.getCommonSettingsPane(), settingsDlg.getAppearanceSettingsPane());
+
 	//assign event listener
 	EventListener evt(presenter);
 	listCfgView.setEventListener(evt);

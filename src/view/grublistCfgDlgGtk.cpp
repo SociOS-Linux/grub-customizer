@@ -25,16 +25,18 @@ ImageMenuItemOwnKey::ImageMenuItemOwnKey(const Gtk::StockID& id, const Gtk::Acce
 GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	: tbttAdd(Gtk::Stock::ADD), tbttRemove(Gtk::Stock::REMOVE), tbttUp(Gtk::Stock::GO_UP), tbttDown(Gtk::Stock::GO_DOWN),
 	tbttLeft(Gtk::Stock::GO_BACK), tbttRight(Gtk::Stock::GO_FORWARD),
-	tbttSave(Gtk::Stock::SAVE), tbttPreferences(Gtk::Stock::PREFERENCES),
+	tbttSave(Gtk::Stock::SAVE),
 	miFile(gettext("_File"), true), miExit(Gtk::Stock::QUIT), tbttReload(Gtk::Stock::REFRESH),
 	miEdit(gettext("_Edit"), true), miView(gettext("_View"), true), miHelp(gettext("_Help"), true),
 	miInstallGrub(gettext("_Install to MBR …"), true),
 	miAdd(Gtk::Stock::ADD, Gtk::AccelKey('+', Gdk::CONTROL_MASK)), miRemove(Gtk::Stock::REMOVE, Gtk::AccelKey('-', Gdk::CONTROL_MASK)), miUp(Gtk::Stock::GO_UP, Gtk::AccelKey('u', Gdk::CONTROL_MASK)), miDown(Gtk::Stock::GO_DOWN, Gtk::AccelKey('d', Gdk::CONTROL_MASK)),
 	miLeft(Gtk::Stock::GO_BACK, Gtk::AccelKey('l', Gdk::CONTROL_MASK)), miRight(Gtk::Stock::GO_FORWARD, Gtk::AccelKey('r', Gdk::CONTROL_MASK)),
-	miPreferences(Gtk::Stock::PREFERENCES), miReload(Gtk::Stock::REFRESH, Gtk::AccelKey("F5")), miSave(Gtk::Stock::SAVE),
+	miReload(Gtk::Stock::REFRESH, Gtk::AccelKey("F5")), miSave(Gtk::Stock::SAVE),
 	miAbout(Gtk::Stock::ABOUT), miStartRootSelector(Gtk::Stock::OPEN),
 	lock_state(~0), burgSwitcher(gettext("BURG found!"), false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO),
-	pchooserQuestionDlg(gettext("No Bootloader found"), false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO)
+	pchooserQuestionDlg(gettext("No Bootloader found"), false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO),
+	bttAdvancedSettings1(gettext("advanced settings")), bttAdvancedSettings2(gettext("advanced settings")),
+	bbxAdvancedSettings1(Gtk::BUTTONBOX_END), bbxAdvancedSettings2(Gtk::BUTTONBOX_END)
 {
 	win.set_icon_name("grub-customizer");
 
@@ -43,9 +45,10 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	
 	vbMainSplit.pack_start(menu, Gtk::PACK_SHRINK);
 	vbMainSplit.pack_start(toolbar, Gtk::PACK_SHRINK);
-	vbMainSplit.pack_start(scrEntryList);
+	vbMainSplit.pack_start(notebook);
 	vbMainSplit.pack_start(statusbar, Gtk::PACK_SHRINK);
 
+	notebook.append_page(scrEntryList, gettext("_list configuration"), true);
 	scrEntryList.add(tvConfList);
 	statusbar.add(progressBar);
 	
@@ -73,9 +76,9 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	tbttUp.set_tooltip_text(gettext("Move up the selected entry or script"));
 	toolbar.append(tbttDown);
 	tbttDown.set_tooltip_text(gettext("Move down the selected entry or script"));
-	
-	ti_sep5.add(vs_sep5);
-	toolbar.append(ti_sep5);
+
+	ti_sep3.add(vs_sep3);
+	toolbar.append(ti_sep3);
 
 	toolbar.append(tbttLeft);
 	tbttLeft.set_tooltip_text(gettext("remove this entry from the current submenu"));
@@ -83,16 +86,12 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	toolbar.append(tbttRight);
 	tbttRight.set_tooltip_text(gettext("add this entry to a new submenu"));
 
-	ti_sep3.add(vs_sep3);
-	toolbar.append(ti_sep3);
-	
-	toolbar.append(tbttReload);
 	ti_sep4.add(vs_sep4);
 	toolbar.append(ti_sep4);
+	
+	toolbar.append(tbttReload);
+
 	tbttReload.set_tooltip_text(gettext("reload configuration"));
-	toolbar.append(tbttPreferences);
-	tbttPreferences.set_is_important(true);
-	tbttPreferences.set_tooltip_text(gettext("Edit grub preferences"));
 	
 	this->setLockState(3);
 	//menu
@@ -117,7 +116,6 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	subEdit.attach(miDown, 0,1,3,4);
 	subEdit.attach(miLeft, 0,1,4,5);
 	subEdit.attach(miRight, 0,1,5,6);
-	subEdit.attach(miPreferences, 0,1,6,7);
 	
 	subView.attach(miReload, 0,1,0,1);
 	
@@ -152,7 +150,8 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	tbttLeft.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_move_left_click));
 	tbttRight.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_move_right_click));
 	tbttReload.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_reload_click));
-	tbttPreferences.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_preference_click));
+	bttAdvancedSettings1.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_preference_click));
+	bttAdvancedSettings2.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_preference_click));
 	
 	miUp.signal_activate().connect(sigc::bind<int>(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_move_click),-1));
 	miDown.signal_activate().connect(sigc::bind<int>(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_move_click),1));
@@ -163,7 +162,6 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	miReload.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_reload_click));
 	miInstallGrub.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_show_grub_install_dialog_click));
 	miStartRootSelector.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_show_root_selector));
-	miPreferences.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_preference_click));
 
 	miExit.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_quit_click));
 	miAbout.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_info_click));
@@ -177,6 +175,19 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 
 void GrublistCfgDlgGtk::setEventListener(EventListener_listCfgDlg& eventListener) {
 	this->eventListener = &eventListener;
+}
+
+void GrublistCfgDlgGtk::putSettingsDialog(Gtk::VBox& commonSettingsPane, Gtk::VBox& appearanceSettingsPane) {
+//	notebook.append_page(this->settingsHBox, "_settings", true);
+	commonSettingsPane.set_border_width(20);
+	notebook.append_page(commonSettingsPane, gettext("_common settings"), true);
+	commonSettingsPane.pack_end(bbxAdvancedSettings1, false, false);
+	bbxAdvancedSettings1.pack_end(bttAdvancedSettings1);
+
+	appearanceSettingsPane.set_border_width(20);
+	notebook.append_page(appearanceSettingsPane, gettext("_appearance settings"), true);
+	appearanceSettingsPane.pack_end(bbxAdvancedSettings2, false, false);
+	bbxAdvancedSettings2.pack_end(bttAdvancedSettings2);
 }
 
 void GrublistCfgDlgGtk::signal_edit_name(Gtk::CellEditable* editable, const Glib::ustring& path) {
@@ -340,8 +351,8 @@ void GrublistCfgDlgGtk::setLockState(int state){
 	tbttReload.set_sensitive((state & 1) == 0);
 	miReload.set_sensitive((state & 1) == 0);
 	miStartRootSelector.set_sensitive((state & 4) == 0);
-	tbttPreferences.set_sensitive((state & 8) == 0);
-	miPreferences.set_sensitive((state & 8) == 0);
+	bttAdvancedSettings1.set_sensitive((state & 8) == 0);
+	bttAdvancedSettings1.set_sensitive((state & 8) == 0);
 
 	tvConfList.set_sensitive((state & 1) == 0);
 	

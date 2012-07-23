@@ -141,7 +141,9 @@ class GrubSettingsDlgGtk : public Gtk::Dialog, public SettingsDlg, public Common
 	Gtk::HBox hbImgBtts;
 	Gtk::VBox vbButtons;
 	Gtk::Button bttCopyBackground, bttRemoveBackground;
-	
+
+
+
 	void signal_setting_row_changed(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter);
 	void signal_add_row_button_clicked();
 	void signal_remove_row_button_clicked();
@@ -163,6 +165,8 @@ class GrubSettingsDlgGtk : public Gtk::Dialog, public SettingsDlg, public Common
 	public:
 	GrubSettingsDlgGtk();
 	void setEventListener(EventListener_settings& eventListener);
+	Gtk::VBox& getCommonSettingsPane();
+	Gtk::VBox& getAppearanceSettingsPane();
 	void show(bool burgMode);
 	void hide();
 	ColorChooser& getColorChooser(ColorChooserType type);
