@@ -16,29 +16,21 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef ENTRYEDITDLG_H_
-#define ENTRYEDITDLG_H_
-#include <string>
-#include <map>
+#ifndef CONTENT_PARSER_LINUX_H_
+#define CONTENT_PARSER_LINUX_H_
+#include "../../interface/contentParser.h"
+#include "../regex.h"
+#include <list>
 
-class EntryEditDlg {
+class ContentParserLinux : public ContentParser {
+	static const char* _regex;
+	std::map<std::string, std::string> options;
 public:
-	virtual void show() = 0;
-	virtual void setSourcecode(std::string const& source) = 0;
-	virtual std::string getSourcecode() = 0;
-
-	virtual void addOption(std::string const& name, std::string const& value) = 0;
-	virtual void setOptions(std::map<std::string, std::string> options) = 0;
-	virtual std::map<std::string, std::string> getOptions() const = 0;
-	virtual void removeOptions() = 0;
-
-	virtual void showOptions() = 0;
-	virtual void hideOptions() = 0;
-
-	virtual void setRulePtr(void* rulePtr) = 0;
-	virtual void* getRulePtr() = 0;
-
-	virtual void hide() = 0;
+	void parse(std::string const& sourceCode);
+	std::map<std::string, std::string> getOptions() const;
+	std::string getOption(std::string const& name) const;
+	void setOption(std::string const& name, std::string const& value);
+	std::string buildSource() const;
 };
 
-#endif /* ENTRYEDITDLG_H_ */
+#endif /* CONTENT_PARSER_LINUX_H_ */

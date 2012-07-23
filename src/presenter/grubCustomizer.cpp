@@ -93,6 +93,10 @@ void GrubCustomizer::setThreadController(ThreadController& threadController) {
 	this->threadController = &threadController;
 }
 
+void GrubCustomizer::setContentParserFactory(ContentParserFactory& contentParserFactory) {
+	this->contentParserFactory = &contentParserFactory;
+}
+
 ThreadController& GrubCustomizer::getThreadController() {
 	if (this->threadController == NULL) {
 		throw INCOMPLETE;
@@ -505,6 +509,13 @@ void GrubCustomizer::showEntryAddDlg(){
 void GrubCustomizer::showEntryEditDlg(void* rule) {
 	this->entryEditDlg->setRulePtr(rule);
 	this->entryEditDlg->setSourcecode(((Rule*)rule)->dataSource->content);
+	try {
+		ContentParser* parser = this->contentParserFactory->create(((Rule*)rule)->dataSource->content);
+		this->entryEditDlg->setOptions(parser->getOptions());
+		this->entryEditDlg->showOptions();
+	} catch (ContentParserFactory::Exception e) {
+		this->entryEditDlg->hideOptions();
+	}
 	this->entryEditDlg->show();
 }
 

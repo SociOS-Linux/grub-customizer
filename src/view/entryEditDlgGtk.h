@@ -30,6 +30,10 @@ class EntryEditDlgGtk : public EntryEditDlg, public Gtk::Dialog, public CommonCl
 	Gtk::TextView tvSource;
 	Gtk::ScrolledWindow scrSource;
 	EventListener_entryEditDlg* eventListener;
+	Gtk::ScrolledWindow scrOptions;
+	Gtk::Table tblOptions;
+	std::map<std::string, Gtk::Widget*> optionMap;
+	std::map<std::string, Gtk::Label*> labelMap;
 
 	void* rulePtr;
 public:
@@ -37,6 +41,12 @@ public:
 	void setEventListener(EventListener_entryEditDlg& eventListener);
 	void setSourcecode(std::string const& source);
 	std::string getSourcecode();
+	void addOption(std::string const& name, std::string const& value);
+	void setOptions(std::map<std::string, std::string> options);
+	std::map<std::string, std::string> getOptions() const;
+	void removeOptions();
+	void showOptions();
+	void hideOptions();
 	void setRulePtr(void* rulePtr);
 	void* getRulePtr();
 	void show();

@@ -28,7 +28,10 @@ EntryEditDlgGtk::EntryEditDlgGtk()
 	Gtk::VBox& vbMain = *this->get_vbox();
 	vbMain.add(this->tabbox);
 	tabbox.append_page(this->scrSource, gettext("Source"));
+	scrOptions.add(this->tblOptions);
+	scrOptions.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
 	scrSource.add(this->tvSource);
+	scrSource.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
 
 	this->signal_response().connect(sigc::mem_fun(this, &EntryEditDlgGtk::signal_response_action));
 }
@@ -54,6 +57,59 @@ std::string EntryEditDlgGtk::getSourcecode() {
 		withIndent += '\n'; // add trailing slash
 	}
 	return "\t" + withIndent;
+}
+
+void EntryEditDlgGtk::addOption(std::string const& name, std::string const& value) {
+	int pos = this->optionMap.size();
+	Gtk::Label* label = Gtk::manage(new Gtk::Label(name + ":"));
+	label->set_alignment(Gtk::ALIGN_RIGHT);
+	this->tblOptions.attach(*label, 0, 1, pos, pos+1, Gtk::SHRINK | Gtk::FILL, Gtk::SHRINK, 5, 5);
+	this->labelMap[name] = label;
+
+	Gtk::Entry* entry = Gtk::manage(new Gtk::Entry());
+	entry->set_text(value);
+	this->tblOptions.attach(*entry, 1, 2, pos, pos+1, Gtk::EXPAND | Gtk::FILL, Gtk::SHRINK, 5, 5);
+
+	this->optionMap[name] = entry;
+}
+
+void EntryEditDlgGtk::setOptions(std::map<std::string, std::string> options) {
+	this->removeOptions();
+	for (std::map<std::string, std::string>::iterator iter = options.begin(); iter != options.end(); iter++) {
+		this->addOption(iter->first, iter->second);
+	}
+}
+
+std::map<std::string, std::string> EntryEditDlgGtk::getOptions() const {
+	std::map<std::string, std::string> result;
+	for (std::map<std::string, Gtk::Widget*>::const_iterator iter = this->optionMap.begin(); iter != this->optionMap.end(); iter++) {
+		result[iter->first] = dynamic_cast<Gtk::Entry&>(*iter->second).get_text();
+	}
+	return result;
+}
+
+void EntryEditDlgGtk::removeOptions() {
+	for (std::map<std::string, Gtk::Label*>::iterator iter = this->labelMap.begin(); iter != this->labelMap.end(); iter++) {
+		this->tblOptions.remove(*iter->second);
+	}
+	this->labelMap.clear();
+	for (std::map<std::string, Gtk::Widget*>::iterator iter = this->optionMap.begin(); iter != this->optionMap.end(); iter++) {
+		this->tblOptions.remove(*iter->second);
+	}
+	this->optionMap.clear();
+}
+
+void EntryEditDlgGtk::showOptions() {
+	if (!this->tabbox.pages().find(this->scrOptions)) {
+		this->tabbox.prepend_page(this->scrOptions, gettext("Options"));
+		this->tabbox.set_current_page(0);
+	}
+}
+
+void EntryEditDlgGtk::hideOptions() {
+	if (this->tabbox.pages().find(this->scrOptions)) {
+		this->tabbox.remove_page(this->scrOptions);
+	}
 }
 
 void EntryEditDlgGtk::setRulePtr(void* rulePtr) {

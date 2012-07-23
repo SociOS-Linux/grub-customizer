@@ -48,6 +48,9 @@ add_executable(grub-customizer
 	src/presenter/streamLogger.cpp
 	src/lib/md5.cpp
 	src/lib/str_replace.cpp
+	src/lib/contentParser/FactoryImpl.cpp
+	src/lib/contentParser/Linux.cpp
+	src/lib/regex.cpp
 )
 
 

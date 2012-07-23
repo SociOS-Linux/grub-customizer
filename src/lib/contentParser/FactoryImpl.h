@@ -16,29 +16,17 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef ENTRYEDITDLG_H_
-#define ENTRYEDITDLG_H_
-#include <string>
-#include <map>
+#ifndef CONTENTPARSERFACTORYIMPL_H_
+#define CONTENTPARSERFACTORYIMPL_H_
+#include "../../interface/contentParserFactory.h"
+#include "../../interface/contentParser.h"
+#include <list>
 
-class EntryEditDlg {
+class ContentParserFactoryImpl : public ContentParserFactory {
+	std::list<ContentParser*> parsers;
 public:
-	virtual void show() = 0;
-	virtual void setSourcecode(std::string const& source) = 0;
-	virtual std::string getSourcecode() = 0;
-
-	virtual void addOption(std::string const& name, std::string const& value) = 0;
-	virtual void setOptions(std::map<std::string, std::string> options) = 0;
-	virtual std::map<std::string, std::string> getOptions() const = 0;
-	virtual void removeOptions() = 0;
-
-	virtual void showOptions() = 0;
-	virtual void hideOptions() = 0;
-
-	virtual void setRulePtr(void* rulePtr) = 0;
-	virtual void* getRulePtr() = 0;
-
-	virtual void hide() = 0;
+	void registerParser(ContentParser& parser);
+	ContentParser* create(std::string const& sourceCode);
 };
 
-#endif /* ENTRYEDITDLG_H_ */
+#endif /* CONTENTPARSERFACTORYIMPL_H_ */

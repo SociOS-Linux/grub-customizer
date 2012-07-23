@@ -30,6 +30,8 @@
 #include "glibThreadController.h"
 #include "streamLogger.h"
 #include <iostream>
+#include "../lib/contentParser/FactoryImpl.h"
+#include "../lib/contentParser/Linux.h"
 
 int main(int argc, char** argv){
 	if (getuid() != 0 && (argc == 1 || argv[1] != std::string("no-fork"))) {
@@ -64,6 +66,7 @@ int main(int argc, char** argv){
 	GlibMutex listCfgMutex1;
 	GlibMutex listCfgMutex2;
 	GlibThreadController threadC(presenter);
+	ContentParserFactoryImpl contentParserFactory;
 
 	//assign objects to presenter
 	presenter.setListCfg(listcfg);
@@ -82,6 +85,7 @@ int main(int argc, char** argv){
 	presenter.setMountTable(mountTable);
 	presenter.setAboutDialog(aboutDialog);
 	presenter.setThreadController(threadC);
+	presenter.setContentParserFactory(contentParserFactory);
 
 	listCfgView.putSettingsDialog(settingsDlg.getCommonSettingsPane(), settingsDlg.getAppearanceSettingsPane());
 
@@ -120,7 +124,9 @@ int main(int argc, char** argv){
 	threadC.setLogger(logger);
 	env.setLogger(logger);
 
-
+	//configure contentParser factory
+	ContentParserLinux linuxParser;
+	contentParserFactory.registerParser(linuxParser);
 	
 	listcfg.setMutex(listCfgMutex1);
 	savedListCfg.setMutex(listCfgMutex2);

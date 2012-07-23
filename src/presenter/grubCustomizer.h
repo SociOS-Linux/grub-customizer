@@ -44,6 +44,7 @@
 #include "../interface/aboutDialog.h"
 #include "../model/deviceDataList.h"
 #include "../interface/threadController.h"
+#include "../interface/contentParserFactory.h"
 
 #include "commonClass.h"
 
@@ -77,6 +78,7 @@ class GrubCustomizer : public CommonClass {
 	MountTable* mountTable;
 	AboutDialog* aboutDialog;
 	ThreadController* threadController;
+	ContentParserFactory* contentParserFactory;
 
 	bool config_has_been_different_on_startup_but_unsaved;
 	bool modificationsUnsaved;
@@ -108,6 +110,7 @@ public:
 	void setMountTable(MountTable& mountTable);
 	void setAboutDialog(AboutDialog& aboutDialog);
 	void setThreadController(ThreadController& threadController);
+	void setContentParserFactory(ContentParserFactory& contentParserFactory);
 
 	ThreadController& getThreadController();
 	FbResolutionsGetter& getFbResolutionsGetter();
