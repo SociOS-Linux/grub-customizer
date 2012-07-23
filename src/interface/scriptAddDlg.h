@@ -23,20 +23,18 @@
 /**
  * Interface to be implemented by dialogs which lets the user adding scripts
  */
-class ScriptAddDlg {
+class EntryAddDlg {
 public:
 	//assigns the event listener
 	virtual void setEventListener(EventListener_scriptAddDlg& eventListener)=0;
 	//clear the script menu
 	virtual void clear()=0;
-	//add item to the end of the script menu
-	virtual void addItem(std::string const& text)=0;
 	//gets the index of the selected script item
 	virtual int getSelectedEntryIndex()=0;
 	//removes all preview items
 	virtual void clearPreview()=0;
-	//adds a new item to the end of the preview
-	virtual void addToPreview(std::string const& name)=0;
+	//adds a new item
+	virtual void addItem(std::string const& name, bool isPlaceholder, std::string const& scriptName, void* relatedEntry)=0;
 	//show this dialog
 	virtual void show()=0;
 	//thise this dialog

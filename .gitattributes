@@ -112,14 +112,14 @@ src/presenter/streamLogger.cpp -text
 src/presenter/streamLogger.h -text
 src/view/aboutDialogGtk.cpp -text
 src/view/aboutDialogGtk.h -text
+src/view/entryAddDlgGtk.cpp -text
+src/view/entryAddDlgGtk.h -text
 src/view/grubInstallDlgGtk.cpp -text
 src/view/grubInstallDlgGtk.h -text
 src/view/grublistCfgDlgGtk.cpp -text
 src/view/grublistCfgDlgGtk.h -text
 src/view/partitionChooserGtk.cpp -text
 src/view/partitionChooserGtk.h -text
-src/view/scriptAddDlgGtk.cpp -text
-src/view/scriptAddDlgGtk.h -text
 src/view/settingsDlgGtk.cpp -text
 src/view/settingsDlgGtk.h -text
 translation/complile_all.sh -text

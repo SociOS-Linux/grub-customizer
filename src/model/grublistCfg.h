@@ -109,6 +109,8 @@ public:
 	std::string getGrubErrorMessage() const;
 
 	void addColorHelper();
+
+	std::list<Entry*> getRemovedEntries(Entry* parent = NULL);
 };
 
 #endif

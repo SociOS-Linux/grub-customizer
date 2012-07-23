@@ -24,26 +24,29 @@
 #include <libintl.h>
 #include "../presenter/commonClass.h"
 
-class ScriptAddDlgGtk : public Gtk::Dialog, public ScriptAddDlg, public CommonClass {
+class EntryAddDlgGtk : public Gtk::Dialog, public EntryAddDlg, public CommonClass {
 	Gtk::Dialog scriptAddDlg;
-	Gtk::VBox vbScriptPreview;
-	Gtk::HBox hbScriptSelection;
-	Gtk::ComboBoxText cbScriptSelection;
-	Gtk::ListViewText lvScriptPreview;
-	Gtk::ScrolledWindow scrScriptPreview;
-	Gtk::Label lblScriptSelection;
-	Gtk::Label lblScriptPreview;
+	Gtk::ScrolledWindow scrEntryBox;
+	Gtk::IconView iconBox;
+
 	EventListener_scriptAddDlg* eventListener;
 public:
-	ScriptAddDlgGtk();
+	struct IconModel : public Gtk::TreeModelColumnRecord {
+		Gtk::TreeModelColumn<Glib::ustring> name;
+		Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > icon;
+		Gtk::TreeModelColumn<Glib::ustring> description;
+		Gtk::TreeModelColumn<void*> relatedRule;
+		IconModel();
+	} iconModel;
+	Glib::RefPtr<Gtk::ListStore> listStore;
+	EntryAddDlgGtk();
 	void setEventListener(EventListener_scriptAddDlg& eventListener);
 	void signal_scriptAddDlg_response(int response_id);
 	void clear();
-	void addItem(std::string const& text);
 	int getSelectedEntryIndex();
 	void signal_script_selection_changed();
 	void clearPreview();
-	void addToPreview(std::string const& name);
+	void addItem(std::string const& name, bool isPlaceholder, std::string const& scriptName,void* relatedRule);
 	void show();
 	void hide();
 };

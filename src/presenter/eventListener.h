@@ -49,7 +49,6 @@ public:
 	void installGrub_request(std::string const& device);
 	void scriptAddDlg_requested();
 	void scriptAddDlg_applied();
-	void scriptSelected();
 	void exitRequest();
 
 	void signal_entry_remove_requested(void* entry);

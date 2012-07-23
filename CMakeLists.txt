@@ -39,7 +39,7 @@ add_executable(grub-customizer
 	src/model/fbResolutionsGetter.cpp
 	src/model/grubInstaller.cpp
 	src/model/entryPathBuilderImpl.cpp
-	src/view/scriptAddDlgGtk.cpp
+	src/view/entryAddDlgGtk.cpp
 	src/view/aboutDialogGtk.cpp
 	src/presenter/glibMutex.cpp
 	src/presenter/glibThreadController.cpp

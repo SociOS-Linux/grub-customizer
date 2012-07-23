@@ -700,3 +700,17 @@ bool Proxy::hasVisibleRules(Rule const* parent) const {
 	return false;
 }
 
+Rule* Proxy::getVisibleRuleForEntry(Entry const& entry, Rule* parent) {
+	std::list<Rule>& list = parent ? parent->subRules : this->rules;
+	for (std::list<Rule>::iterator iter = list.begin(); iter != list.end(); iter++) {
+		if (iter->isVisible && iter->dataSource == &entry) {
+			return &*iter;
+		}
+		Rule* subResult = this->getVisibleRuleForEntry(entry, &*iter);
+		if (subResult) {
+			return subResult;
+		}
+	}
+	return NULL;
+}
+

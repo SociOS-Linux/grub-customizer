@@ -70,6 +70,7 @@ struct Proxy {
 	Rule* getParentRule(Rule* child, Rule* root = NULL);
 	std::list<Rule>& getRuleList(Rule* parentElement);
 	bool hasVisibleRules(Rule const* parent = NULL) const;
+	Rule* getVisibleRuleForEntry(Entry const& entry, Rule* parent = NULL);
 private:
 	static void adjustIterator(std::list<Rule>::iterator& iter, int adjustment);
 };

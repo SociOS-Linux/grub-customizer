@@ -23,7 +23,7 @@
 #include "../view/aboutDialogGtk.h"
 #include "../view/grubInstallDlgGtk.h"
 #include "../view/partitionChooserGtk.h"
-#include "../view/scriptAddDlgGtk.h"
+#include "../view/entryAddDlgGtk.h"
 #include "../view/settingsDlgGtk.h"
 #include "glibMutex.h"
 #include "glibThreadController.h"
@@ -51,7 +51,7 @@ int main(int argc, char** argv){
 	SettingsManagerDataStore settingsOnDisk(env);
 	GrubInstaller installer(env);
 	GrubInstallDlgGtk installDlg;
-	ScriptAddDlgGtk scriptAddDlg;
+	EntryAddDlgGtk scriptAddDlg;
 	MountTable mountTable;
 	PartitionChooserGtk partitionChooser;
 	GrublistCfg savedListCfg(env);

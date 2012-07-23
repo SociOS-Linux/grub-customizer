@@ -20,7 +20,7 @@
 
 GrubCustomizer::GrubCustomizer(GrubEnv& env)
 	: grublistCfg(NULL), listCfgDlg(NULL), settingsDlg(NULL), settings(NULL),
-	  installer(NULL), installDlg(NULL), settingsOnDisk(NULL), scriptAddDlg(NULL),
+	  installer(NULL), installDlg(NULL), settingsOnDisk(NULL), entryAddDlg(NULL),
 	  partitionChooser(NULL), savedListCfg(NULL),
 	  fbResolutionsGetter(NULL), deviceDataList(NULL),
 	  mountTable(NULL), aboutDialog(NULL),
@@ -56,8 +56,8 @@ void GrubCustomizer::setInstaller(GrubInstaller& installer){
 void GrubCustomizer::setInstallDlg(GrubInstallDlg& installDlg){
 	this->installDlg = &installDlg;
 }
-void GrubCustomizer::setScriptAddDlg(ScriptAddDlg& scriptAddDlg){
-	this->scriptAddDlg = &scriptAddDlg;
+void GrubCustomizer::setScriptAddDlg(EntryAddDlg& scriptAddDlg){
+	this->entryAddDlg = &scriptAddDlg;
 }
 
 void GrubCustomizer::setSavedListCfg(GrublistCfg& savedListCfg){
@@ -121,7 +121,7 @@ void GrubCustomizer::init(){
 		or !settingsOnDisk
 		or !installer
 		or !installDlg
-		or !scriptAddDlg
+		or !entryAddDlg
 		or !partitionChooser
 		or !savedListCfg
 		or !fbResolutionsGetter
@@ -395,7 +395,7 @@ void GrubCustomizer::applyPartitionChooser(){
 	listCfgDlg->setLockState(1|2|8);
 	this->syncSettings();
 	settingsDlg->hide();
-	scriptAddDlg->hide();
+	entryAddDlg->hide();
 	this->env.cfg_dir_prefix = PARTCHOOSER_MOUNTPOINT;
 	this->init();
 }
@@ -440,22 +440,24 @@ void GrubCustomizer::showMessageGrubInstallCompleted(std::string const& msg){
 	installDlg->showMessageGrubInstallCompleted(msg);
 }
 
-void GrubCustomizer::showScriptAddDlg(){
-	if (grublistCfg->repository.size() > 0){
-		scriptAddDlg->clear();
-		for (Repository::iterator iter = grublistCfg->repository.begin(); iter != grublistCfg->repository.end(); iter++){
-			scriptAddDlg->addItem(iter->name);
-		}
+void GrubCustomizer::showEntryAddDlg(){
+	entryAddDlg->clear();
+
+	std::list<Entry*> removedEntries = this->grublistCfg->getRemovedEntries();
+	for (std::list<Entry*>::iterator iter = removedEntries.begin(); iter != removedEntries.end(); iter++) {
+		Script* script = this->grublistCfg->repository.getScriptByEntry(**iter);
+
+		std::string name = (*iter)->name;
+		name = this->_mapEntryName(&**iter, name, script->name);
+
+		entryAddDlg->addItem(name, (*iter)->type != Entry::MENUENTRY, script->name, *iter);
 	}
-	else
-		this->listCfgDlg->showErrorMessage(gettext("No script found"));
-	
-	
-	scriptAddDlg->show();
+
+	entryAddDlg->show();
 }
 
 void GrubCustomizer::addScriptFromScriptAddDlg(){
-	Script* script = grublistCfg->repository.getNthScript(scriptAddDlg->getSelectedEntryIndex());
+	Script* script = grublistCfg->repository.getNthScript(entryAddDlg->getSelectedEntryIndex());
 	grublistCfg->proxies.push_back(Proxy(*script));
 	grublistCfg->renumerate();
 	
@@ -464,15 +466,26 @@ void GrubCustomizer::addScriptFromScriptAddDlg(){
 	this->modificationsUnsaved = true;
 }
 
-void GrubCustomizer::updateScriptAddDlgPreview(){
-	scriptAddDlg->clearPreview();
-	Script* selectedScript = grublistCfg->repository.getNthScript(scriptAddDlg->getSelectedEntryIndex());
-	if (selectedScript){
-		for (std::list<Entry>::iterator iter = selectedScript->entries().begin(); iter != selectedScript->entries().end(); iter++)
-			scriptAddDlg->addToPreview(iter->name);
+std::string GrubCustomizer::_mapEntryName(Entry const* sourceEntry, std::string const& defaultName, std::string const& scriptName) {
+	std::string name;
+	bool is_other_entries_ph = sourceEntry ? sourceEntry->type == Entry::SUBMENU || sourceEntry->type == Entry::SCRIPT_ROOT : false;
+	bool is_plaintext = sourceEntry ? sourceEntry->type == Entry::PLAINTEXT : false;
+	if (is_other_entries_ph) {
+		try {
+			if (sourceEntry->type == Entry::SCRIPT_ROOT) {
+				throw 1;
+			}
+			name = this->listCfgDlg->createNewEntriesPlaceholderString(sourceEntry->name, scriptName);
+		} catch (...) {
+			name = this->listCfgDlg->createNewEntriesPlaceholderString("", scriptName);
+		}
+	} else if (is_plaintext) {
+		name = this->listCfgDlg->createPlaintextString();
+	} else {
+		name = defaultName;
 	}
+	return name;
 }
-
 
 void GrubCustomizer::_rAppendRule(Rule& rule, Rule* parentRule){
 	bool is_other_entries_ph = rule.type == Rule::OTHER_ENTRIES_PLACEHOLDER;
@@ -489,21 +502,8 @@ void GrubCustomizer::_rAppendRule(Rule& rule, Rule* parentRule){
 	}
 
 	if (rule.dataSource || is_submenu){
-		std::string name;
-		if (is_other_entries_ph) {
-			try {
-				if (rule.dataSource == NULL || rule.dataSource->type == Entry::SCRIPT_ROOT) {
-					throw 1;
-				}
-				name = this->listCfgDlg->createNewEntriesPlaceholderString(rule.dataSource->name, scriptName);
-			} catch (...) {
-				name = this->listCfgDlg->createNewEntriesPlaceholderString("", scriptName);
-			}
-		} else if (is_plaintext) {
-			name = this->listCfgDlg->createPlaintextString();
-		} else {
-			name = rule.outputName;
-		}
+		std::string name = this->_mapEntryName(rule.dataSource, rule.outputName, scriptName);
+
 		bool isSubmenu = rule.type == Rule::SUBMENU;
 		std::string scriptName = "", defaultName = "";
 		if (rule.dataSource) {

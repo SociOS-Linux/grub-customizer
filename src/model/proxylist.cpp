@@ -279,5 +279,15 @@ void ProxyList::splitProxy(Proxy const* proxyToSplit, Rule const* firstRuleOfPar
 	}
 }
 
-
+Rule* ProxyList::getVisibleRuleForEntry(Entry const& entry) {
+	for (std::list<Proxy>::iterator proxyIter = this->begin(); proxyIter != this->end(); proxyIter++) {
+		if (proxyIter->isExecutable()) {
+			Rule* result = proxyIter->getVisibleRuleForEntry(entry);
+			if (result) {
+				return result;
+			}
+		}
+	}
+	return NULL;
+}
 

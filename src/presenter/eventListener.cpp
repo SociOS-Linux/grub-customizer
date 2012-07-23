@@ -66,11 +66,7 @@ void EventListener::scriptAddDlg_applied(){
 }
 
 void EventListener::scriptAddDlg_requested(){
-	presenter.showScriptAddDlg();
-}
-
-void EventListener::scriptSelected(){
-	presenter.updateScriptAddDlgPreview();
+	presenter.showEntryAddDlg();
 }
 
 void EventListener::exitRequest(){

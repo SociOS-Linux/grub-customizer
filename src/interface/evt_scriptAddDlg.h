@@ -26,8 +26,6 @@ class EventListener_scriptAddDlg {
 public:
 	//user wants to add the selected script instance
 	virtual void scriptAddDlg_applied()=0;
-	//user has chosen a script
-	virtual void scriptSelected()=0;
 };
 
 #endif

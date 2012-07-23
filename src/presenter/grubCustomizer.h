@@ -67,7 +67,7 @@ class GrubCustomizer : public CommonClass {
 	SettingsManagerDataStore* settingsOnDisk; //buffer for the existing settings
 	GrubInstaller* installer;
 	GrubInstallDlg* installDlg;
-	ScriptAddDlg* scriptAddDlg;
+	EntryAddDlg* entryAddDlg;
 	PartitionChooser* partitionChooser;
 	GrublistCfg* savedListCfg;
 	FbResolutionsGetter* fbResolutionsGetter;
@@ -83,6 +83,7 @@ class GrubCustomizer : public CommonClass {
 	int activeThreadCount;
 	GrublistCfg::Exception thrownException; //to be used from the die() function
 
+	std::string _mapEntryName(Entry const* entry, std::string const& defaultName, std::string const& scriptName);
 	void _rAppendRule(Rule& rule, Rule* parentRule = NULL);
 
 public:
@@ -96,7 +97,7 @@ public:
 	void setSettingsBuffer(SettingsManagerDataStore& settings);
 	void setInstaller(GrubInstaller& installer);
 	void setInstallDlg(GrubInstallDlg& installDlg);
-	void setScriptAddDlg(ScriptAddDlg& scriptAddDlg);
+	void setScriptAddDlg(EntryAddDlg& scriptAddDlg);
 	void setPartitionChooser(PartitionChooser& partitionChooser);
 	void setSavedListCfg(GrublistCfg& savedListCfg);
 	void setFbResolutionsGetter(FbResolutionsGetter& fbResolutionsGetter);
@@ -130,9 +131,8 @@ public:
 	void installGrub(std::string device);
 	void showMessageGrubInstallCompleted(std::string const& msg);
 	
-	void showScriptAddDlg();
+	void showEntryAddDlg();
 	void addScriptFromScriptAddDlg();
-	void updateScriptAddDlgPreview();
 	
 	//dispatchers
 	void syncListView_load();

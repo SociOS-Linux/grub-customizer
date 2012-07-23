@@ -896,5 +896,22 @@ fi\n\
 	}
 }
 
-
+std::list<Entry*> GrublistCfg::getRemovedEntries(Entry* parent) {
+	std::list<Entry*> result;
+	if (parent == NULL) {
+		for (std::list<Script>::iterator iter = this->repository.begin(); iter != this->repository.end(); iter++) {
+			std::list<Entry*> subResult = this->getRemovedEntries(&iter->root);
+			result.insert(result.end(), subResult.begin(), subResult.end());
+		}
+	} else {
+		if (!this->proxies.getVisibleRuleForEntry(*parent)) {
+			result.push_back(parent);
+		}
+		for (std::list<Entry>::iterator entryIter = parent->subEntries.begin(); entryIter != parent->subEntries.end(); entryIter++) {
+			std::list<Entry*> subResult = this->getRemovedEntries(&*entryIter);
+			result.insert(result.end(), subResult.begin(), subResult.end());
+		}
+	}
+	return result;
+}
 

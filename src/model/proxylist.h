@@ -54,6 +54,7 @@ struct ProxyList : public std::list<Proxy>, public CommonClass {
 	std::list<Rule>::iterator getNextVisibleRule(std::list<Rule>::iterator base, int direction);
 	std::list<Proxy>::iterator getIter(Proxy const* proxy);
 	void splitProxy(Proxy const* proxyToSplit, Rule const* firstRuleOfPart2, int direction);
+	Rule* getVisibleRuleForEntry(Entry const& entry);
 };
 
 #endif
