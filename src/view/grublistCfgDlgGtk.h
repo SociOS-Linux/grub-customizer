@@ -79,7 +79,7 @@ class GrublistCfgDlgGtk : public GrublistCfgDlg, public CommonClass {
 	Gtk::VSeparator vs_sep4;
 	
 	Gtk::MenuItem miFile, miEdit, miView, miHelp, miInstallGrub, miContext;
-	Gtk::ImageMenuItem miExit, miSave, miAbout, miStartRootSelector;
+	Gtk::ImageMenuItem miExit, miSave, miAbout, miModifyEnvironment;
 	ImageMenuItemOwnKey miReload, miAdd, miRemove, miUp, miDown, miLeft, miRight, miEditEntry;
 	Gtk::ImageMenuItem miCRemove, miCUp, miCDown, miCLeft, miCRight, miCRename, miCEditEntry;
 	Gtk::Menu subFile, subEdit, subView, subHelp, contextMenu;
@@ -143,7 +143,7 @@ public:
 
 private:
 	//event handlers
-	void signal_show_root_selector();
+	void signal_show_envEditor();
 	void signal_edit_name_finished(const Glib::ustring& path, const Glib::ustring& new_text);
 	void signal_move_click(int direction); //direction: -1: one position up, 1: one p. down
 	void signal_add_click();

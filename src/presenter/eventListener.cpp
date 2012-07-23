@@ -40,8 +40,8 @@ void EventListener::rootSelectorCompleted(){
 }
 
 
-void EventListener::rootSelector_request(){
-	presenter.showPartitionChooser();
+void EventListener::envEditor_request(){
+	presenter.showEnvEditor();
 }
 
 

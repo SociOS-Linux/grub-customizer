@@ -32,7 +32,7 @@ public:
 	//user wants to save all his changes
 	virtual void save_request()=0;
 	//user wants to show the partition chooser
-	virtual void rootSelector_request()=0;
+	virtual void envEditor_request()=0;
 	//user wants to show the grub install dialog
 	virtual void installDialogRequest()=0;
 	//user wants to create a new submenu

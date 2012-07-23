@@ -46,7 +46,7 @@ public:
 	void reload_request();
 	void save_request();
 	void rootSelectorCompleted();
-	void rootSelector_request();
+	void envEditor_request();
 	void createSubmenuRequest(std::list<void*> childItems);
 	void removeSubmenuRequest(std::list<void*> childItems);
 	void installDialogRequest();

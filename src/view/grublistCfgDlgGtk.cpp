@@ -35,7 +35,7 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	miCRemove(Gtk::Stock::DELETE), miCUp(Gtk::Stock::GO_UP), miCDown(Gtk::Stock::GO_DOWN),
 	miCLeft(Gtk::Stock::GO_BACK), miCRight(Gtk::Stock::GO_FORWARD), miCRename(Gtk::Stock::EDIT), miCEditEntry(Gtk::Stock::EDIT),
 	miReload(Gtk::Stock::REFRESH, Gtk::AccelKey("F5")), miSave(Gtk::Stock::SAVE),
-	miAbout(Gtk::Stock::ABOUT), miStartRootSelector(Gtk::Stock::OPEN),
+	miAbout(Gtk::Stock::ABOUT), miModifyEnvironment(Gtk::Stock::OPEN),
 	lock_state(~0), burgSwitcher(gettext("BURG found!"), false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO),
 	bttAdvancedSettings1(gettext("advanced settings")), bttAdvancedSettings2(gettext("advanced settings")),
 	bbxAdvancedSettings1(Gtk::BUTTONBOX_END), bbxAdvancedSettings2(Gtk::BUTTONBOX_END)
@@ -114,7 +114,7 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	miHelp.set_submenu(subHelp);
 	miContext.set_submenu(contextMenu);
 
-	subFile.attach(miStartRootSelector, 0,1,0,1);
+	subFile.attach(miModifyEnvironment, 0,1,0,1);
 	subFile.attach(miSave, 0,1,1,2);
 	subFile.attach(miInstallGrub, 0,1,2,3);
 	subFile.attach(miExit, 0,1,3,4);
@@ -152,8 +152,8 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	
 	subHelp.attach(miAbout, 0,1,0,1);
 	
-	miStartRootSelector.set_label(gettext("Select _partition …"));
-	miStartRootSelector.set_use_underline(true);
+	miModifyEnvironment.set_label(gettext("_Environment options …"));
+	miModifyEnvironment.set_use_underline(true);
 	
 	//burg switcher
 	burgSwitcher.set_skip_taskbar_hint(false);
@@ -198,7 +198,7 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	miCRename.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_rename_click));
 	miReload.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_reload_click));
 	miInstallGrub.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_show_grub_install_dialog_click));
-	miStartRootSelector.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_show_root_selector));
+	miModifyEnvironment.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_show_envEditor));
 
 	miExit.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_quit_click));
 	miAbout.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_info_click));
@@ -409,7 +409,7 @@ void GrublistCfgDlgGtk::setLockState(int state){
 	
 	tbttReload.set_sensitive((state & 1) == 0);
 	miReload.set_sensitive((state & 1) == 0);
-	miStartRootSelector.set_sensitive((state & 4) == 0);
+	miModifyEnvironment.set_sensitive((state & 4) == 0);
 	bttAdvancedSettings1.set_sensitive((state & 8) == 0);
 	bttAdvancedSettings1.set_sensitive((state & 8) == 0);
 
@@ -522,8 +522,8 @@ void GrublistCfgDlgGtk::signal_edit_name_finished(const Glib::ustring& path, con
 	}
 }
 
-void GrublistCfgDlgGtk::signal_show_root_selector(){
-	eventListener->rootSelector_request();
+void GrublistCfgDlgGtk::signal_show_envEditor(){
+	eventListener->envEditor_request();
 }
 
 
