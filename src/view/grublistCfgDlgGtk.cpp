@@ -309,7 +309,7 @@ void GrublistCfgDlgGtk::setStatusText(std::string const& new_status_text){
 	statusbar.push(new_status_text);
 }
 
-void GrublistCfgDlgGtk::appendEntry(std::string const& name, void* entryPtr, bool is_placeholder, bool is_submenu, std::string const& scriptName, std::string const& defaultName, void* parentEntry){
+void GrublistCfgDlgGtk::appendEntry(std::string const& name, void* entryPtr, bool is_placeholder, bool is_submenu, std::string const& scriptName, std::string const& defaultName, bool isEditable, void* parentEntry){
 	Gtk::TreeIter entryRow;
 	if (parentEntry) {
 		entryRow = tvConfList.refTreeStore->append(this->getIterByRulePtr(parentEntry)->children());
@@ -340,7 +340,8 @@ void GrublistCfgDlgGtk::appendEntry(std::string const& name, void* entryPtr, boo
 	(*entryRow)[tvConfList.treeModel.name] = name;
 	(*entryRow)[tvConfList.treeModel.text] = outputName;
 	(*entryRow)[tvConfList.treeModel.relatedRule] = (void*)entryPtr;
-	(*entryRow)[tvConfList.treeModel.is_editable] = !is_placeholder;
+	(*entryRow)[tvConfList.treeModel.is_renamable] = !is_placeholder;
+	(*entryRow)[tvConfList.treeModel.is_editable] = isEditable;
 	(*entryRow)[tvConfList.treeModel.is_sensitive] = !is_placeholder;
 	(*entryRow)[tvConfList.treeModel.icon] = icon;
 
@@ -434,8 +435,9 @@ void GrublistCfgDlgGtk::updateButtonsState(){
 	update_move_buttons();
 
 	std::vector<Gtk::TreeModel::Path> selectedElementents = this->tvConfList.get_selection()->get_selected_rows();
+	bool renamableEntrySelected = selectedElementents.size() == 1 && (*this->tvConfList.refTreeStore->get_iter(selectedElementents[0]))[this->tvConfList.treeModel.is_renamable];
 	bool editableEntrySelected = selectedElementents.size() == 1 && (*this->tvConfList.refTreeStore->get_iter(selectedElementents[0]))[this->tvConfList.treeModel.is_editable];
-	miCRename.set_sensitive(editableEntrySelected);
+	miCRename.set_sensitive(renamableEntrySelected);
 	tbttEditEntry.set_sensitive(editableEntrySelected);
 	miEditEntry.set_sensitive(editableEntrySelected);
 	miCEditEntry.set_sensitive(editableEntrySelected);
@@ -774,7 +776,7 @@ GrubConfListing::GrubConfListing(){
 	this->mainColumn.add_attribute(pixbufRenderer.property_pixbuf(), treeModel.icon);
 	this->mainColumn.pack_start(this->textRenderer, true);
 	this->mainColumn.add_attribute(this->textRenderer.property_text(), treeModel.text);
-	this->mainColumn.add_attribute(this->textRenderer.property_editable(), treeModel.is_editable);
+	this->mainColumn.add_attribute(this->textRenderer.property_editable(), treeModel.is_renamable);
 	this->mainColumn.set_spacing(10);
 
 	this->set_headers_visible(false);
@@ -787,6 +789,7 @@ GrubConfListing::TreeModel::TreeModel(){
 	this->add(text);
 	this->add(relatedRule);
 	this->add(is_other_entries_marker);
+	this->add(is_renamable);
 	this->add(is_editable);
 	this->add(is_sensitive);
 	this->add(icon);

@@ -66,7 +66,7 @@ public:
 	//sets the text to be showed inside the status bar
 	virtual void setStatusText(std::string const& new_status_text)=0;
 	//add entry to the end of the last script of the list
-	virtual void appendEntry(std::string const& name, void* entryPtr, bool is_placeholder, bool is_submenu, std::string const& scriptName, std::string const& defaultName, void* parentEntry = NULL)=0;
+	virtual void appendEntry(std::string const& name, void* entryPtr, bool is_placeholder, bool is_submenu, std::string const& scriptName, std::string const& defaultName, bool isEditable, void* parentEntry = NULL)=0;
 	//notifies the user about the problem that no grublistcfg_proxy has been found
 	virtual void showProxyNotFoundMessage()=0;
 	//creates a string for an other entry placeholder

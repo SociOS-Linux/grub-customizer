@@ -568,8 +568,9 @@ void GrubCustomizer::_rAppendRule(Rule& rule, Rule* parentRule){
 				defaultName = rule.dataSource->name;
 			}
 		}
+		bool isEditable = rule.type == Rule::NORMAL || rule.type == Rule::PLAINTEXT;
 		if (rule.isVisible) {
-			this->listCfgDlg->appendEntry(name, &rule, is_other_entries_ph || is_plaintext, isSubmenu, scriptName, defaultName, parentRule);
+			this->listCfgDlg->appendEntry(name, &rule, is_other_entries_ph || is_plaintext, isSubmenu, scriptName, defaultName, isEditable, parentRule);
 
 			for (std::list<Rule>::iterator subruleIter = rule.subRules.begin(); subruleIter != rule.subRules.end(); subruleIter++) {
 				this->_rAppendRule(*subruleIter, &rule);
