@@ -91,6 +91,9 @@ public:
 
 	//select the given rule
 	virtual void selectRule(void* rule, bool startEdit = false)=0;
+
+	// select multiple rules
+	virtual void selectRules(std::list<void*> rules)=0;
 };
 
 #endif

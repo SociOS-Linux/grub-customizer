@@ -458,12 +458,15 @@ void GrubCustomizer::showEntryAddDlg(){
 
 void GrubCustomizer::addEntryFromEntryAddDlg(){
 	std::list<void*> entries = entryAddDlg->getSelectedEntries();
+	std::list<void*> addedRules;
 	for (std::list<void*>::iterator iter = entries.begin(); iter != entries.end(); iter++) {
 		Entry* entry = static_cast<Entry*>(*iter);
-		Rule* addedRule = this->grublistCfg->addEntry(*entry);
+		addedRules.push_back(this->grublistCfg->addEntry(*entry));
 	}
 
 	this->syncListView_load();
+
+	this->listCfgDlg->selectRules(addedRules);
 	
 	this->modificationsUnsaved = true;
 }

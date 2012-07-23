@@ -136,6 +136,8 @@ public:
 
 	void selectRule(void* rule, bool startEdit = false);
 
+	void selectRules(std::list<void*> rules);
+
 private:
 	//event handlers
 	void signal_show_root_selector();

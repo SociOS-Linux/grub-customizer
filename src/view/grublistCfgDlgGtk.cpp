@@ -431,6 +431,12 @@ void GrublistCfgDlgGtk::selectRule(void* rule, bool startEdit) {
 	}
 }
 
+void GrublistCfgDlgGtk::selectRules(std::list<void*> rules) {
+	for (std::list<void*>::iterator iter = rules.begin(); iter != rules.end(); iter++) {
+		this->tvConfList.get_selection()->select(this->getIterByRulePtr(*iter));
+	}
+}
+
 
 
 void GrublistCfgDlgGtk::signal_move_click(int direction){
