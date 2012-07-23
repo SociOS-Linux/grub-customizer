@@ -66,8 +66,11 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 
 	toolbar.append(tbttRemove);
 	tbttRemove.set_tooltip_text(gettext("Remove selected entries"));
+	tbttRemove.set_is_important(true);
 	toolbar.append(tbttAdd);
 	tbttAdd.set_tooltip_text(gettext("restore entries from trash"));
+	tbttAdd.set_is_important(true);
+	tbttAdd.set_label(gettext("Trash"));
 	
 	ti_sep2.add(vs_sep2);
 	toolbar.append(ti_sep2);
