@@ -261,7 +261,7 @@ void GrublistCfgDlgGtk::appendEntry(std::string const& name, bool is_active, voi
 		(*entryRow)[tvConfList.treeModel.active] = is_active;
 		(*entryRow)[tvConfList.treeModel.name] = outputName;
 		(*entryRow)[tvConfList.treeModel.relatedRule] = (void*)entryPtr;
-		(*entryRow)[tvConfList.treeModel.is_editable] = !is_placeholder && !is_submenu;
+		(*entryRow)[tvConfList.treeModel.is_editable] = !is_placeholder;
 		(*entryRow)[tvConfList.treeModel.is_sensitive] = !is_placeholder;
 		(*entryRow)[tvConfList.treeModel.font_weight] = is_submenu ? PANGO_WEIGHT_BOLD : PANGO_WEIGHT_NORMAL;
 		(*entryRow)[tvConfList.treeModel.fontStyle] = Pango::STYLE_NORMAL;
@@ -409,7 +409,7 @@ void GrublistCfgDlgGtk::selectRule(void* rule, bool startEdit) {
 	try {
 		this->tvConfList.get_selection()->select(this->getIterByRulePtr(rule));
 		if (startEdit) {
-			this->tvConfList.set_cursor(this->tvConfList.refTreeStore->get_path(this->getIterByRulePtr(rule)), *this->tvConfList.get_column(1), true);
+			this->tvConfList.set_cursor(this->tvConfList.refTreeStore->get_path(this->getIterByRulePtr(rule)), *this->tvConfList.get_column(0), true);
 		}
 	} catch (GrublistCfgDlg::Exception e) {
 		if (e != RULE_ITER_NOT_FOUND)
@@ -487,34 +487,16 @@ void GrublistCfgDlgGtk::update_move_buttons(){
 	bool is_secondLevel = false;
 	if (selectedRowsCount > 0) {
 		is_toplevel = tvConfList.get_selection()->get_selected()->parent() ? false : true;
-		if (!is_toplevel) {
-			is_secondLevel = tvConfList.get_selection()->get_selected()->parent()->parent() ? false : true;
-		}
-	}
-	bool isFirstProxy = false;
-	bool isLastProxy = false;
-	if (tvConfList.get_selection()->get_selected()) {
-		if (is_toplevel && tvConfList.get_selection()->get_selected() == tvConfList.refTreeStore->children().begin()) {
-			isFirstProxy = true;
-		}
-		Gtk::TreeModel::iterator iter = tvConfList.get_selection()->get_selected();
-		iter++;
-		if (is_toplevel && iter == tvConfList.refTreeStore->children().end()) {
-			isLastProxy = true;
-		}
-	} else {
-		isFirstProxy = true;
-		isLastProxy = true;
 	}
 
-	tbttUp.set_sensitive(selectedRowsCount == 1 && !isFirstProxy);
-	miUp.set_sensitive(selectedRowsCount == 1 && !isFirstProxy);
-	tbttDown.set_sensitive(selectedRowsCount == 1 && !isLastProxy);
-	miDown.set_sensitive(selectedRowsCount == 1 && !isLastProxy);
-	tbttLeft.set_sensitive(selectedRowsCount == 1 && !is_toplevel && !is_secondLevel); //selected entry must be inside a submenu
-	miLeft.set_sensitive(selectedRowsCount == 1 && !is_toplevel && !is_secondLevel); //selected entry must be inside a submenu
-	tbttRight.set_sensitive(selectedRowsCount == 1 && !is_toplevel);
-	miRight.set_sensitive(selectedRowsCount == 1 && !is_toplevel);
+	tbttUp.set_sensitive(selectedRowsCount == 1);
+	miUp.set_sensitive(selectedRowsCount == 1);
+	tbttDown.set_sensitive(selectedRowsCount == 1);
+	miDown.set_sensitive(selectedRowsCount == 1);
+	tbttLeft.set_sensitive(selectedRowsCount == 1 && !is_toplevel); //selected entry must be inside a submenu
+	miLeft.set_sensitive(selectedRowsCount == 1 && !is_toplevel); //selected entry must be inside a submenu
+	tbttRight.set_sensitive(selectedRowsCount == 1);
+	miRight.set_sensitive(selectedRowsCount == 1);
 }
 
 
