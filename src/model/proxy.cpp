@@ -148,6 +148,7 @@ void Proxy::sync_connectExisting(Rule* parent, std::map<std::string, Script*> sc
 	assert(this->dataSource != NULL);
 	if (parent == NULL) {
 		this->__idPathList.clear();
+		this->__idPathList_OtherEntriesPlaceHolders.clear();
 	}
 	std::list<Rule>& list = parent ? parent->subRules : this->rules;
 	for (std::list<Rule>::iterator iter = list.begin(); iter != list.end(); iter++) {
