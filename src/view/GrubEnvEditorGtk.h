@@ -42,6 +42,8 @@ class GrubEnvEditorGtk : public Gtk::Dialog, public GrubEnvEditor, public Common
 	std::map<std::string, Gtk::Label*> labelMap;
 	std::map<std::string, Gtk::Image*> imageMap;
 	std::map<std::string, Gtk::CheckButton*> subMountpoints;
+	Gtk::CheckButton cbSaveConfig;
+	Gtk::HButtonBox bbxSaveConfig;
 	bool eventLock;
 
 	std::string rootDeviceName;

@@ -210,3 +210,12 @@ void SettingsStore::load(FILE* source) {
 	if (settings.size() > 0)
 		settings.back().validate();
 }
+
+void SettingsStore::save(FILE* target) {
+	for (std::list<SettingRow>::iterator iter = this->begin(false); iter != this->end(); iter++){
+		if (iter != this->begin(false)) {
+			fputs("\n", target);
+		}
+		fputs((iter->getOutput()).c_str(), target);
+	}
+}

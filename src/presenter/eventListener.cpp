@@ -222,6 +222,6 @@ void EventListener::grubEnvEditor_cancellationRequested() {
 	presenter.quit();
 }
 
-void EventListener::grubEnvEditor_applyRequested() {
-	presenter.applyEnvEditor();
+void EventListener::grubEnvEditor_applyRequested(bool saveConfig) {
+	presenter.applyEnvEditor(saveConfig);
 }

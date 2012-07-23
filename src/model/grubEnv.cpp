@@ -95,6 +95,34 @@ void GrubEnv::loadFromFile(FILE* cfg_file, std::string const& dir_prefix) {
 	this->devicemap_file = dir_prefix + ds.getValue("DEVICEMAP_FILE");
 }
 
+void GrubEnv::save() {
+	FILE* cfg_file = NULL;
+	DIR* dir = opendir((cfg_dir_prefix + "/etc/grub-customizer").c_str());
+	if (dir) {
+		closedir(dir);
+	} else {
+		int res = mkdir((cfg_dir_prefix + "/etc/grub-customizer").c_str(), 0755);
+		if (res != 0) {
+			throw FILE_SAVE_FAILED;
+		}
+	}
+	if (this->burgMode) {
+		cfg_file = fopen((cfg_dir_prefix + "/etc/grub-customizer/burg.cfg").c_str(), "w");
+	} else {
+		cfg_file = fopen((cfg_dir_prefix + "/etc/grub-customizer/grub.cfg").c_str(), "w");
+	}
+	if (!cfg_file) {
+		throw FILE_SAVE_FAILED;
+	}
+	SettingsStore ds;
+	std::map<std::string, std::string> props = this->getProperties();
+	for (std::map<std::string, std::string>::iterator iter = props.begin(); iter != props.end(); iter++) {
+		ds.setValue(iter->first, iter->second);
+	}
+	ds.save(cfg_file);
+	fclose(cfg_file);
+}
+
 std::map<std::string, std::string> GrubEnv::getProperties() {
 	std::map<std::string, std::string> result;
 	result["MKCONFIG_CMD"] = this->mkconfig_cmd.substr(this->cmd_prefix.size());

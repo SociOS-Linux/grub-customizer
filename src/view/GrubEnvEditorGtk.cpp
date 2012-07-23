@@ -20,13 +20,17 @@
 
 GrubEnvEditorGtk::GrubEnvEditorGtk()
 	: eventListener(NULL), pChooser(NULL), lblPartition(gettext("_Partition:"), true), deviceDataList(NULL),
-	  lblType(gettext("_Type:"), true), eventLock(true), lblSubmountpoints(gettext("Submountpoints:"))
+	  lblType(gettext("_Type:"), true), eventLock(true), lblSubmountpoints(gettext("Submountpoints:")),
+	  cbSaveConfig(gettext("save this configuration"))
 {
 	this->set_title("Grub Customizer environment setup");
 	this->set_icon_name("grub-customizer");
 
 	Gtk::VBox& box = *this->get_vbox();
 	box.add(this->tblLayout);
+	box.add(this->bbxSaveConfig);
+
+	bbxSaveConfig.pack_start(this->cbSaveConfig);
 
 	this->tblLayout.attach(this->lblPartition, 0, 1, 0, 1, Gtk::SHRINK | Gtk::FILL, Gtk::SHRINK);
 
@@ -242,7 +246,7 @@ void GrubEnvEditorGtk::signal_response_action(int response_id) {
 	if (response_id == Gtk::RESPONSE_CLOSE) {
 		this->eventListener->grubEnvEditor_cancellationRequested();
 	} else if (response_id = Gtk::RESPONSE_APPLY) {
-		this->eventListener->grubEnvEditor_applyRequested();
+		this->eventListener->grubEnvEditor_applyRequested(this->cbSaveConfig.get_active());
 	}
 }
 

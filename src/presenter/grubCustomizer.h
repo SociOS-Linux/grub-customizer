@@ -192,7 +192,7 @@ public:
 	void switchPartition(std::string const& newPartition);
 	void switchBootloaderType(int newTypeIndex);
 	void updateGrubEnvOptions();
-	void applyEnvEditor();
+	void applyEnvEditor(bool saveConfig);
 };
 
 #endif

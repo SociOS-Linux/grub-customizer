@@ -104,6 +104,6 @@ public:
 	void grubEnvEditor_typeChanged(int newTypeIndex);
 	void grubEnvEditor_optionModified();
 	void grubEnvEditor_cancellationRequested();
-	void grubEnvEditor_applyRequested();
+	void grubEnvEditor_applyRequested(bool saveConfig);
 };
 #endif

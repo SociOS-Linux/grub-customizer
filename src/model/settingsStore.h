@@ -49,6 +49,7 @@ public:
 	bool setIsActive(std::string const& name, bool value);
 	bool setIsExport(std::string const& name, bool isExport);
 	void load(FILE* source);
+	void save(FILE* target);
 	void clear();
 };
 

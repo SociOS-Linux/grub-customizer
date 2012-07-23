@@ -433,13 +433,17 @@ void GrubCustomizer::updateGrubEnvOptions() {
 	this->showEnvEditor();
 }
 
-void GrubCustomizer::applyEnvEditor(){
+void GrubCustomizer::applyEnvEditor(bool saveConfig){
 	listCfgDlg->setLockState(1|2|8);
 	this->syncSettings();
 	settingsDlg->hide();
 	entryAddDlg->hide();
 	GrubEnv::Mode mode = this->grubEnvEditor->getBootloaderType() == 0 ? GrubEnv::GRUB_MODE : GrubEnv::BURG_MODE;
 	grubEnvEditor->hide();
+
+	if (saveConfig) {
+		this->env.save();
+	}
 	this->init(mode, false);
 }
 

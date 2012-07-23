@@ -25,6 +25,7 @@
 #include <cstdlib>
 #include <dirent.h>
 #include <map>
+#include <sys/stat.h>
 #include "../presenter/commonClass.h"
 #include "settingsStore.h"
 
@@ -34,9 +35,13 @@ public:
 		GRUB_MODE,
 		BURG_MODE
 	};
+	enum Exception {
+		FILE_SAVE_FAILED
+	};
 	GrubEnv();
 	bool init(GrubEnv::Mode mode, std::string const& dir_prefix);
 	void loadFromFile(FILE* cfg_file, std::string const& dir_prefix);
+	void save();
 	std::map<std::string, std::string> getProperties();
 	void setProperties(std::map<std::string, std::string> const& props);
 	std::list<std::string> getRequiredProperties();
