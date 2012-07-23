@@ -49,7 +49,7 @@ struct Proxy {
 	void sync_connectExistingByHash(Rule* parent = NULL, std::map<std::string, Script*> scriptMap = std::map<std::string, Script*>());
 	void sync_add_placeholders(Rule* parent = NULL, std::map<std::string, Script*> scriptMap = std::map<std::string, Script*>());
 	void sync_expand(std::map<std::string, Script*> scriptMap = std::map<std::string, Script*>());
-	void sync_cleanup(Rule* parent = NULL);
+	void sync_cleanup(Rule* parent = NULL, std::map<std::string, Script*> scriptMap = std::map<std::string, Script*>());
 	bool isModified(Rule const* parentRule = NULL, Entry const* parentEntry = NULL) const;
 	bool deleteFile();
 	bool generateFile(std::string const& path, int cfg_dir_prefix_length, std::string const& cfg_dir_noprefix); //before running this function, the realted script file must be saved!

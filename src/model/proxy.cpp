@@ -137,7 +137,7 @@ bool Proxy::sync(bool deleteInvalidRules, bool expand, std::map<std::string, Scr
 		}
 
 		if (deleteInvalidRules)
-			this->sync_cleanup();
+			this->sync_cleanup(NULL, scriptMap);
 
 		return true;
 	}
@@ -158,9 +158,11 @@ void Proxy::sync_connectExisting(Rule* parent, std::map<std::string, Script*> sc
 			Script* script = NULL;
 			if (iter->__sourceScriptPath == "") { // main dataSource
 				script = this->dataSource;
-			} else {
+			} else if (scriptMap.size()) {
 				assert(scriptMap.find(iter->__sourceScriptPath) != scriptMap.end()); // expecting that the script exists on the map
 				script = scriptMap[iter->__sourceScriptPath];
+			} else {
+				continue; // don't sync foreign entries if scriptMap is empty
 			}
 
 			if (iter->type != Rule::OTHER_ENTRIES_PLACEHOLDER) {
@@ -188,9 +190,11 @@ void Proxy::sync_connectExistingByHash(Rule* parent, std::map<std::string, Scrip
 			Script* script = NULL;
 			if (iter->__sourceScriptPath == "") {
 				script = this->dataSource;
-			} else {
+			} else if (scriptMap.size()) {
 				assert(scriptMap.find(iter->__sourceScriptPath) != scriptMap.end()); // expecting that the script exists on the map
 				script = scriptMap[iter->__sourceScriptPath];
+			} else {
+				continue; // don't sync foreign entries if scriptMap is empty
 			}
 			iter->dataSource = script->getEntryByHash(iter->__idHash, *script);
 			if (iter->dataSource) {
@@ -247,7 +251,7 @@ void Proxy::sync_expand(std::map<std::string, Script*> scriptMap) {
 				std::list<Rule>& dataTarget = parentRule ? parentRule->subRules : this->rules;
 
 				std::list<Rule>::iterator dataTargetIter = dataTarget.begin();
-				while (dataTargetIter != dataTarget.end() && !(dataTargetIter->type == Rule::OTHER_ENTRIES_PLACEHOLDER && dataTargetIter->__idpath == *oepPathIter && (dataTargetIter->__sourceScriptPath != "" && scriptMap[dataTargetIter->__sourceScriptPath] == scriptIter->first || dataTargetIter->__sourceScriptPath == "" && scriptIter->first == this->dataSource))){
+				while (dataTargetIter != dataTarget.end() && !(dataTargetIter->type == Rule::OTHER_ENTRIES_PLACEHOLDER && dataTargetIter->__idpath == *oepPathIter && (dataTargetIter->__sourceScriptPath != "" && scriptMap.size() && scriptMap[dataTargetIter->__sourceScriptPath] == scriptIter->first || dataTargetIter->__sourceScriptPath == "" && scriptIter->first == this->dataSource))){
 					dataTargetIter++;
 				}
 				std::list<Rule> newRules;
@@ -266,7 +270,7 @@ void Proxy::sync_expand(std::map<std::string, Script*> scriptMap) {
 	}
 }
 
-void Proxy::sync_cleanup(Rule* parent) {
+void Proxy::sync_cleanup(Rule* parent, std::map<std::string, Script*> scriptMap) {
 	std::list<Rule>& list = parent ? parent->subRules : this->rules;
 
 	bool done = false;
@@ -277,8 +281,10 @@ void Proxy::sync_cleanup(Rule* parent) {
 				  iter->type == Rule::SUBMENU && iter->subRules.size() ||
 				  iter->type == Rule::OTHER_ENTRIES_PLACEHOLDER && iter->dataSource_list ||
 				  iter->type == Rule::PLAINTEXT && iter->dataSource)) {
-				list.erase(iter);
-				listModified = true; //after ereasing something we have to create a new iterator
+				if (iter->__sourceScriptPath == "" || scriptMap.size()) {
+					list.erase(iter);
+					listModified = true; //after ereasing something we have to create a new iterator
+				}
 			} else { //check contents
 				this->sync_cleanup(&*iter);
 			}

@@ -34,10 +34,10 @@ std::list<const Proxy*> ProxyList::getProxiesByScript(Script const& script) cons
 	}
 	return result;
 }
-void ProxyList::sync_all(bool deleteInvalidRules, bool expand, Script* relatedScript){ //relatedScript = NULL: sync all proxies, otherwise only sync proxies wich target the given Script
+void ProxyList::sync_all(bool deleteInvalidRules, bool expand, Script* relatedScript, std::map<std::string, Script*> scriptMap){ //relatedScript = NULL: sync all proxies, otherwise only sync proxies wich target the given Script
 	for (ProxyList::iterator proxy_iter = this->begin(); proxy_iter != this->end(); proxy_iter++){
 		if (relatedScript == NULL || proxy_iter->dataSource == relatedScript)
-			proxy_iter->sync(deleteInvalidRules, expand);
+			proxy_iter->sync(deleteInvalidRules, expand, scriptMap);
 	}	
 }
 

@@ -185,7 +185,7 @@ void GrublistCfg::load(bool preserveConfig){
 	}
 	this->unlock();
 	send_new_load_progress(0.1);
-	
+
 	//run mkconfig
 	this->log("running " + this->env.mkconfig_cmd, Logger::EVENT);
 	FILE* mkconfigProc = popen((this->env.mkconfig_cmd + " 2> " + this->errorLogFile).c_str(), "r");
@@ -300,6 +300,9 @@ void GrublistCfg::readGeneratedFile(FILE* source, bool createScriptIfNotFound, b
 		}
 		this->proxies.sync_all(true, true, script);
 	}
+
+	// sync all (including foreign entries)
+	this->proxies.sync_all(true, true, NULL, this->repository.getScriptPathMap());
 
 	this->unlock();
 }

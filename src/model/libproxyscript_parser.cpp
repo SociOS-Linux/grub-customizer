@@ -70,8 +70,8 @@ bool ProxyScriptData::load(FILE* fpProxyScript){
 	
 	if (ProxyScriptData::is_proxyscript(fpProxyScript)){
 		int c;
-		bool is_begin_of_row = true, is_comment = false;
-		int parseStep = 0;
+		bool is_begin_of_row = true, is_comment = false, readingScriptRow = false;
+		int parseStep = -2;
 		bool inQuotes = false;
 		bool success = false;
 		while ((c = fgetc(fpProxyScript)) != EOF && !success){
@@ -83,6 +83,27 @@ bool ProxyScriptData::load(FILE* fpProxyScript){
 				is_comment = false;
 			}
 			else if (!is_comment) { //the following code will only parse shell commands (comments are filtered out!)
+				if (parseStep == -2) { //decide whether it's a multi or a single script
+					if (c == '\'') { // quoted = script path
+						parseStep = 0; // forward to single script parser
+					} else if (c != '\'') { // not quoted = shell call -> multi script
+						parseStep = -1;
+					}
+				}
+				if (parseStep == -1) {
+					if (c == '|') {
+						parseStep = 1;
+						readingScriptRow = false;
+					} else if (readingScriptRow && c == '"') {
+						readingScriptRow = false;
+					}
+					if (readingScriptRow) {
+						this->scriptCmd += c;
+					}
+					if (is_begin_of_row && c == '"' && this->scriptCmd == "") {
+						readingScriptRow = true;
+					}
+				}
 				if (parseStep == 0){
 					if (this->scriptCmd.length() == 0 && inQuotes == false && c == '\''){
 						inQuotes = true;
@@ -114,7 +135,7 @@ bool ProxyScriptData::load(FILE* fpProxyScript){
 							success = true;
 						}
 						else
-							parseStep = 0;
+							parseStep = -2;
 					}
 					else {
 						this->ruleString += char(c);

@@ -36,7 +36,7 @@ struct ProxyList : public std::list<Proxy>, public CommonClass {
 	std::list<Proxy> trash; //removed proxies
 	std::list<Proxy*> getProxiesByScript(Script const& script);
 	std::list<const Proxy*> getProxiesByScript(Script const& script) const;
-	void sync_all(bool deleteInvalidRules = true, bool expand = true, Script* relatedScript = NULL); //relatedScript = NULL: sync all proxies, otherwise only sync proxies wich target the given Script
+	void sync_all(bool deleteInvalidRules = true, bool expand = true, Script* relatedScript = NULL, std::map<std::string, Script*> scriptMap = std::map<std::string, Script*>()); //relatedScript = NULL: sync all proxies, otherwise only sync proxies wich target the given Script
 	void unsync_all();
 	bool proxyRequired(Script const& script) const;
 	void deleteAllProxyscriptFiles();
