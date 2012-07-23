@@ -642,15 +642,15 @@ void GrubCustomizer::syncRuleState(Rule* entry){
 	this->updateSettingsDlg();
 }
 
-void GrubCustomizer::syncRuleName(Rule* entry){
+void GrubCustomizer::updateRuleName(Rule* entry, std::string const& newText){
 	std::string oldName = entry->outputName;
-	std::string newName = this->listCfgDlg->getRuleName(entry);
-	if (newName == ""){
+//	std::string newName = this->listCfgDlg->getRuleName(entry);
+	if (newText == ""){
 		this->listCfgDlg->showErrorMessage(gettext("Name the Entry"));
 		this->listCfgDlg->setRuleName(entry, oldName);
 	}
 	else {
-		this->renameEntry(entry, newName);
+		this->renameEntry(entry, newText);
 	}
 	this->modificationsUnsaved = true;
 }

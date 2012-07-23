@@ -82,8 +82,8 @@ void EventListener::signal_entry_state_toggled(void* entry){
 	presenter.syncRuleState((Rule*)entry);
 }
 
-void EventListener::signal_entry_renamed(void* entry){
-	presenter.syncRuleName((Rule*)entry);
+void EventListener::signal_entry_renamed(void* entry, std::string const& newText){
+	presenter.updateRuleName((Rule*)entry, newText);
 }
 
 void EventListener::ruleAdjustment_requested(void* rule, int direction){

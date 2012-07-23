@@ -48,7 +48,7 @@ public:
 	//user has activated or disabled one of the entries
 	virtual void signal_entry_state_toggled(void* entry)=0;
 	//user has renamed one of the entries
-	virtual void signal_entry_renamed(void* entry)=0;
+	virtual void signal_entry_renamed(void* entry, std::string const& newText)=0;
 
 	//user wants to swap two rules
 	virtual void ruleAdjustment_requested(void* rule, int direction)=0;

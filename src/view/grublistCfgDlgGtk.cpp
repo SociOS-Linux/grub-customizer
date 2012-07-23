@@ -145,8 +145,8 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	tbttUp.signal_clicked().connect(sigc::bind<int>(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_move_click),-1));
 	tbttDown.signal_clicked().connect(sigc::bind<int>(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_move_click),1));
 	tvConfList.get_selection()->signal_changed().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_treeview_selection_changed));
-	static_cast<Gtk::CellRendererText*>(tvConfList.get_column(0)->get_first_cell_renderer())->signal_editing_started().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_edit_name));
-	static_cast<Gtk::CellRendererText*>(tvConfList.get_column(0)->get_first_cell_renderer())->signal_edited().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_edit_name_finished));
+	tvConfList.textRenderer.signal_editing_started().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_edit_name));
+	tvConfList.textRenderer.signal_edited().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_edit_name_finished));
 	tbttSave.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::saveConfig));
 	tbttAdd.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_add_click));
 	tbttLeft.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_move_left_click));
@@ -249,13 +249,17 @@ void GrublistCfgDlgGtk::appendEntry(std::string const& name, bool is_active, voi
 			entryRow = tvConfList.refTreeStore->append();
 		}
 
+		Glib::RefPtr<Gdk::Pixbuf> icon;
 		std::string outputName = name + "\n";
 		if (is_submenu) {
 			outputName += gettext("submenu");
+			icon = this->win.render_icon(Gtk::Stock::DIRECTORY, Gtk::ICON_SIZE_LARGE_TOOLBAR);
 		} else if (is_placeholder) {
 			outputName += gettext("placeholder");
+			icon = this->win.render_icon(Gtk::Stock::FIND, Gtk::ICON_SIZE_LARGE_TOOLBAR);
 		} else {
 			outputName += gettext("menuentry");
+			icon = this->win.render_icon(Gtk::Stock::EXECUTE, Gtk::ICON_SIZE_LARGE_TOOLBAR);
 		}
 		if (scriptName != "") {
 			outputName += std::string(" / ") + gettext("script: ") + scriptName;
@@ -271,8 +275,8 @@ void GrublistCfgDlgGtk::appendEntry(std::string const& name, bool is_active, voi
 		(*entryRow)[tvConfList.treeModel.relatedRule] = (void*)entryPtr;
 		(*entryRow)[tvConfList.treeModel.is_editable] = !is_placeholder;
 		(*entryRow)[tvConfList.treeModel.is_sensitive] = !is_placeholder;
-		(*entryRow)[tvConfList.treeModel.font_weight] = is_submenu ? PANGO_WEIGHT_BOLD : PANGO_WEIGHT_NORMAL;
-		(*entryRow)[tvConfList.treeModel.fontStyle] = Pango::STYLE_NORMAL;
+		(*entryRow)[tvConfList.treeModel.icon] = icon;
+
 
 		tvConfList.expand_all();
 	}
@@ -378,7 +382,7 @@ Gtk::TreeModel::iterator GrublistCfgDlgGtk::getIterByRulePtr(void* rulePtr, cons
 void GrublistCfgDlgGtk::signal_edit_name_finished(const Glib::ustring& path, const Glib::ustring& new_text){
 	if (this->lock_state == 0){
 		Gtk::TreeModel::iterator iter = this->tvConfList.refTreeStore->get_iter(path);
-		eventListener->signal_entry_renamed((void*)(*iter)[tvConfList.treeModel.relatedRule]);
+		eventListener->signal_entry_renamed((void*)(*iter)[tvConfList.treeModel.relatedRule], new_text);
 	}
 }
 
@@ -618,25 +622,14 @@ void GrublistCfgDlgGtk::signal_partition_chooser_question_response(int response_
 GrubConfListing::GrubConfListing(){
 	refTreeStore = Gtk::TreeStore::create(treeModel);
 	this->set_model(refTreeStore);
-	this->append_column_editable(gettext("name"), treeModel.text); //rows with is_editable==true will be made editable by cell renderer option
-	
-	{
-		Gtk::TreeViewColumn* pColumn = this->get_column(0);
-		Gtk::CellRendererText* pRenderer = static_cast<Gtk::CellRendererText*>(pColumn->get_first_cell_renderer());
-		pColumn->add_attribute(pRenderer->property_editable(), treeModel.is_editable);
-		pColumn->add_attribute(pRenderer->property_sensitive(), treeModel.is_sensitive);
-	}
 
-	{
-		Gtk::TreeViewColumn* pColumn = this->get_column(0);
-		Gtk::CellRendererText* pRenderer = static_cast<Gtk::CellRendererText*>(pColumn->get_first_cell_renderer());
-		pColumn->add_attribute(pRenderer->property_weight(), treeModel.font_weight);
-	}
-	{
-		Gtk::TreeViewColumn* pColumn = this->get_column(0);
-		Gtk::CellRendererText* pRenderer = static_cast<Gtk::CellRendererText*>(pColumn->get_first_cell_renderer());
-		pColumn->add_attribute(pRenderer->property_style(), treeModel.fontStyle);
-	}
+	this->append_column(this->mainColumn);
+	this->mainColumn.pack_start(pixbufRenderer, false);
+	this->mainColumn.add_attribute(pixbufRenderer.property_pixbuf(), treeModel.icon);
+	this->mainColumn.pack_start(this->textRenderer, true);
+	this->mainColumn.add_attribute(this->textRenderer.property_text(), treeModel.text);
+	this->mainColumn.add_attribute(this->textRenderer.property_editable(), treeModel.is_editable);
+	this->mainColumn.set_spacing(10);
 }
 
 GrubConfListing::TreeModel::TreeModel(){
@@ -647,6 +640,5 @@ GrubConfListing::TreeModel::TreeModel(){
 	this->add(is_other_entries_marker);
 	this->add(is_editable);
 	this->add(is_sensitive);
-	this->add(font_weight);
-	this->add(fontStyle);
+	this->add(icon);
 }

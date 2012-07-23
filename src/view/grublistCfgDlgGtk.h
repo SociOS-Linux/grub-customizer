@@ -38,12 +38,14 @@ public:
 		Gtk::TreeModelColumn<bool> is_other_entries_marker;
 		Gtk::TreeModelColumn<bool> is_editable;
 		Gtk::TreeModelColumn<bool> is_sensitive;
-		Gtk::TreeModelColumn<int> font_weight;
-		Gtk::TreeModelColumn<Pango::Style> fontStyle;
+		Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > icon;
 		TreeModel();
 	};
 	TreeModel treeModel;
 	Glib::RefPtr<Gtk::TreeStore> refTreeStore;
+	Gtk::CellRendererPixbuf pixbufRenderer;
+	Gtk::CellRendererText textRenderer;
+	Gtk::TreeViewColumn mainColumn;
 	GrubConfListing();
 };
 

@@ -144,7 +144,7 @@ public:
 	void quit(bool force = false);
 	
 	void syncRuleState(Rule* entry);
-	void syncRuleName(Rule* entry);
+	void updateRuleName(Rule* entry, std::string const& newText);
 	void moveRule(void* rule, int direction);
 	void createSubmenu(Rule* childItem);
 	void removeSubmenu(Rule* childItem);
