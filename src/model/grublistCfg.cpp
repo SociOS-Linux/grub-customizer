@@ -764,11 +764,12 @@ Rule& GrublistCfg::moveRule(Rule* rule, int direction){
 						throw GrublistCfg::NO_MOVE_TARGET_FOUND;
 					}
 
-					if (proxyIter != this->proxies.end()) {
-						target->merge(*proxyIter, direction);
-						this->proxies.deleteProxy(&*proxyIter);
-					}
 					if (!proxy->hasVisibleRules()) {
+						if (proxyIter != this->proxies.end()) {
+							target->merge(*proxyIter, direction);
+							this->proxies.deleteProxy(&*proxyIter);
+						}
+
 						this->proxies.deleteProxy(proxy);
 					}
 					return *movedRule;
