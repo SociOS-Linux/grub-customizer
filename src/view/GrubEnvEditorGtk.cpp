@@ -27,10 +27,11 @@ GrubEnvEditorGtk::GrubEnvEditorGtk()
 	this->set_icon_name("grub-customizer");
 
 	Gtk::VBox& box = *this->get_vbox();
-	box.add(this->tblLayout);
-	box.add(this->bbxSaveConfig);
+	box.add(this->vbContent);
+	this->vbContent.add(this->tblLayout);
+	this->vbContent.add(this->bbxSaveConfig);
 
-	bbxSaveConfig.pack_start(this->cbSaveConfig);
+	this->bbxSaveConfig.pack_start(this->cbSaveConfig);
 
 	this->tblLayout.attach(this->lblPartition, 0, 1, 0, 1, Gtk::SHRINK | Gtk::FILL, Gtk::SHRINK);
 
@@ -220,6 +221,11 @@ void GrubEnvEditorGtk::showErrorMessage(MountExceptionType type){
 	}
 }
 
+Gtk::Widget& GrubEnvEditorGtk::getContentBox() {
+	this->get_vbox()->remove(this->vbContent);
+	return this->vbContent;
+}
+
 void GrubEnvEditorGtk::signal_partitionChanged() {
 	if (!this->eventLock) {
 		std::string selectedUuid = this->pChooser->getSelectedUuid();
@@ -243,9 +249,9 @@ void GrubEnvEditorGtk::signal_optionModified() {
 }
 
 void GrubEnvEditorGtk::signal_response_action(int response_id) {
-	if (response_id == Gtk::RESPONSE_CLOSE) {
+	if (response_id == Gtk::RESPONSE_CLOSE || response_id == Gtk::RESPONSE_DELETE_EVENT) {
 		this->eventListener->grubEnvEditor_cancellationRequested();
-	} else if (response_id = Gtk::RESPONSE_APPLY) {
+	} else if (response_id == Gtk::RESPONSE_APPLY) {
 		this->eventListener->grubEnvEditor_applyRequested(this->cbSaveConfig.get_active());
 	}
 }

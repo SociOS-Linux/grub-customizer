@@ -106,7 +106,9 @@ public:
 	GrublistCfgDlgGtk();
 	void setEventListener(EventListener_listCfgDlg& eventListener);
 	void putSettingsDialog(Gtk::VBox& commonSettingsPane, Gtk::VBox& appearanceSettingsPane);
+	void putEnvEditor(Gtk::Widget& envEditor);
 	void show();
+	void hide();
 	void run();
 	void close();
 	void showBurgSwitcher();
@@ -130,6 +132,7 @@ public:
 	
 	int showExitConfirmDialog(int type);
 	void showErrorMessage(std::string const& msg, std::vector<std::string> const& values);
+	bool askForEnvironmentSettings(std::string const& failedCmd, std::string const& errorMessage);
 	void clear();
 	
 	std::string getRuleName(void* rule);

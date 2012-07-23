@@ -37,6 +37,8 @@ public:
 	virtual void setEventListener(EventListener_listCfgDlg& eventListener)=0;
 	//show this dialog without waiting
 	virtual void show()=0;
+	//hide this dialog
+	virtual void hide() = 0;
 	//show this dialog and wait until the window has been closed
 	virtual void run()=0;
 	//hide this window and close the whole application
@@ -77,6 +79,9 @@ public:
 	virtual int showExitConfirmDialog(int type)=0;
 	//show the given error message
 	virtual void showErrorMessage(std::string const& msg, std::vector<std::string> const& values = std::vector<std::string>())=0;
+
+	//shows an error message including an option for changing the environment
+	virtual bool askForEnvironmentSettings(std::string const& failedCmd, std::string const& errorMessage) = 0;
 	//remove everything from the list
 	virtual void clear()=0;
 

@@ -219,7 +219,7 @@ void EventListener::grubEnvEditor_optionModified() {
 }
 
 void EventListener::grubEnvEditor_cancellationRequested() {
-	presenter.quit();
+	presenter.quit(true);
 }
 
 void EventListener::grubEnvEditor_applyRequested(bool saveConfig) {

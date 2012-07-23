@@ -94,6 +94,7 @@ int main(int argc, char** argv){
 	presenter.setGrubEnvEditor(envEditor);
 
 	listCfgView.putSettingsDialog(settingsDlg.getCommonSettingsPane(), settingsDlg.getAppearanceSettingsPane());
+//	listCfgView.putEnvEditor(envEditor.);
 
 	//assign event listener
 	EventListener evt(presenter);

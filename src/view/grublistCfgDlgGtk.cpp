@@ -269,6 +269,10 @@ void GrublistCfgDlgGtk::show(){
 	win.show_all();
 }
 
+void GrublistCfgDlgGtk::hide() {
+	win.hide();
+}
+
 void GrublistCfgDlgGtk::run(){
 	this->show();
 	Gtk::Main::run(win);
@@ -745,6 +749,16 @@ void GrublistCfgDlgGtk::showErrorMessage(std::string const& msg, std::vector<std
 	case 9: msg2 = Glib::ustring::compose(msg, values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7], values[8]); break;
 	}
 	Gtk::MessageDialog(msg2, false, Gtk::MESSAGE_ERROR).run();
+}
+
+bool GrublistCfgDlgGtk::askForEnvironmentSettings(std::string const& failedCmd, std::string const& errorMessage) {
+	Glib::ustring msg = Glib::ustring::compose(gettext("%1 couldn't be executed successfully. error message:\n %2"), failedCmd, errorMessage);
+	Gtk::MessageDialog dlg(msg, false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_NONE);
+	dlg.add_button(gettext("Environment settings"), Gtk::RESPONSE_YES);
+	dlg.add_button(Gtk::Stock::QUIT, Gtk::RESPONSE_CLOSE);
+	dlg.set_default_response(Gtk::RESPONSE_CLOSE);
+	int response = dlg.run();
+	return response == Gtk::RESPONSE_YES;
 }
 
 void GrublistCfgDlgGtk::clear(){

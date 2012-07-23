@@ -219,6 +219,7 @@ void GrubCustomizer::init(GrubEnv::Mode mode, bool initEnv){
 
 void GrubCustomizer::showEnvEditor(bool resetPartitionChooser) {
 	this->grubEnvEditor->setEnvSettings(this->env.getProperties(), this->env.getRequiredProperties(), this->env.getValidProperties());
+	this->listCfgDlg->hide();
 	this->grubEnvEditor->show(resetPartitionChooser);
 }
 
@@ -656,29 +657,17 @@ void GrubCustomizer::syncListView_save(){
 }
 
 void GrubCustomizer::die(){
-	switch (this->thrownException){
-		case GrublistCfg::GRUB_CFG_DIR_NOT_FOUND:
-		{
-			std::vector<std::string> data;
-			data.push_back(this->env.cfg_dir);
-			this->listCfgDlg->showErrorMessage(
-					gettext("%1 not found. Is grub2 installed?"),
-					data
-			);
-			break;
-		}
-		case GrublistCfg::GRUB_CMD_EXEC_FAILED: {
-			std::vector<std::string> data;
-			data.push_back(this->env.mkconfig_cmd);
-			data.push_back(this->grublistCfg->getGrubErrorMessage());
-			this->listCfgDlg->showErrorMessage(
-					gettext("%1 couldn't be executed successfully. error message:\n %2"),
-					data
-			);
-			break;
-		}
+	this->is_loading = false;
+	this->activeThreadCount = 0;
+	bool showEnvSettings = false;
+	if (this->thrownException == GrublistCfg::GRUB_CMD_EXEC_FAILED){
+		showEnvSettings = this->listCfgDlg->askForEnvironmentSettings(this->env.mkconfig_cmd, this->grublistCfg->getGrubErrorMessage());
 	}
-	this->quit(true); //exit
+	if (showEnvSettings) {
+		this->showEnvEditor();
+	} else {
+		this->quit(true); //exit
+	}
 }
 
 void GrubCustomizer::activateSettingsBtn(){

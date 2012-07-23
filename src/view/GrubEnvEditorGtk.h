@@ -28,6 +28,7 @@
 
 class GrubEnvEditorGtk : public Gtk::Dialog, public GrubEnvEditor, public CommonClass {
 	EventListener_grubEnvEditor* eventListener;
+	Gtk::VBox vbContent;
 	Gtk::Table tblLayout;
 	Gtk::Label lblPartition;
 	Gtk::Label lblType;
@@ -62,6 +63,7 @@ public:
 	void addSubmountpoint(std::string const& name, bool isActive);
 	void setSubmountpointSelectionState(std::string const& submountpoint, bool new_isSelected);
 	void showErrorMessage(MountExceptionType type);
+	Gtk::Widget& getContentBox();
 private:
 	void signal_partitionChanged();
 	void signal_bootloaderType_changed();
