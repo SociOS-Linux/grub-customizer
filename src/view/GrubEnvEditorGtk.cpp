@@ -206,6 +206,16 @@ void GrubEnvEditorGtk::setSubmountpointSelectionState(std::string const& submoun
 	this->subMountpoints[submountpoint]->set_active(new_isSelected);
 }
 
+void GrubEnvEditorGtk::showErrorMessage(MountExceptionType type){
+	switch (type){
+		case MOUNT_FAILED:       Gtk::MessageDialog(gettext("Mount failed!")).run(); break;
+		case UMOUNT_FAILED:      Gtk::MessageDialog(gettext("umount failed!")).run(); break;
+		case MOUNT_ERR_NO_FSTAB: Gtk::MessageDialog(gettext("This seems not to be a root file system (no fstab found)")).run(); break;
+		case SUB_MOUNT_FAILED:   Gtk::MessageDialog(gettext("Couldn't mount the selected partition")).run(); break;
+		case SUB_UMOUNT_FAILED:  Gtk::MessageDialog(gettext("Couldn't umount the selected partition")).run(); break;
+	}
+}
+
 void GrubEnvEditorGtk::signal_partitionChanged() {
 	if (!this->eventLock) {
 		std::string selectedUuid = this->pChooser->getSelectedUuid();

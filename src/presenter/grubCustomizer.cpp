@@ -438,13 +438,13 @@ void GrubCustomizer::switchPartition(std::string const& newPartition) {
 		}
 		catch (Mountpoint::Exception e) {
 			if (e == Mountpoint::MOUNT_FAILED){
-				this->partitionChooser->showErrorMessage(PartitionChooser::MOUNT_FAILED);
+				this->grubEnvEditor->showErrorMessage(GrubEnvEditor::MOUNT_FAILED);
 				this->switchPartition("");
 			}
 		}
 		catch (MountTable::Exception e) {
 			if (e == MountTable::MOUNT_ERR_NO_FSTAB){
-				this->partitionChooser->showErrorMessage(PartitionChooser::MOUNT_ERR_NO_FSTAB);
+				this->grubEnvEditor->showErrorMessage(GrubEnvEditor::MOUNT_ERR_NO_FSTAB);
 				mountTable->getEntryRefByMountpoint(PARTCHOOSER_MOUNTPOINT).umount();
 				this->switchPartition("");
 			}
@@ -487,13 +487,13 @@ void GrubCustomizer::mountRootFs(){
 	}
 	catch (Mountpoint::Exception e) {
 		if (e == Mountpoint::MOUNT_FAILED){
-			this->partitionChooser->showErrorMessage(PartitionChooser::MOUNT_FAILED);
+			this->grubEnvEditor->showErrorMessage(GrubEnvEditor::MOUNT_FAILED);
 			partitionChooser->setIsMounted(false);
 		}
 	}
 	catch (MountTable::Exception e) {
 		if (e == MountTable::MOUNT_ERR_NO_FSTAB){
-			this->partitionChooser->showErrorMessage(PartitionChooser::MOUNT_ERR_NO_FSTAB);
+			this->grubEnvEditor->showErrorMessage(GrubEnvEditor::MOUNT_ERR_NO_FSTAB);
 			mountTable->getEntryByMountpoint(PARTCHOOSER_MOUNTPOINT).umount();
 			partitionChooser->setIsMounted(false);
 		}
@@ -509,7 +509,7 @@ void GrubCustomizer::umountRootFs(){
 	}
 	catch (Mountpoint::Exception e){
 		if (e == Mountpoint::UMOUNT_FAILED)
-			this->partitionChooser->showErrorMessage(PartitionChooser::UMOUNT_FAILED);
+			this->grubEnvEditor->showErrorMessage(GrubEnvEditor::UMOUNT_FAILED);
 	}
 
 	//clear list cfg dialog
@@ -542,7 +542,7 @@ void GrubCustomizer::mountSubmountpoint(std::string const& submountpoint){
 	}
 	catch (Mountpoint::Exception e){
 		if (e == Mountpoint::MOUNT_FAILED){
-			this->partitionChooser->showErrorMessage(PartitionChooser::SUB_MOUNT_FAILED);
+			this->grubEnvEditor->showErrorMessage(GrubEnvEditor::SUB_MOUNT_FAILED);
 		}
 		this->partitionChooser->setSubmountpointSelectionState(submountpoint, false); //reset checkbox
 		this->grubEnvEditor->setSubmountpointSelectionState(submountpoint, false);
@@ -556,7 +556,7 @@ void GrubCustomizer::umountSubmountpoint(std::string const& submountpoint){
 	}
 	catch (Mountpoint::Exception e){
 		if (e == Mountpoint::UMOUNT_FAILED){
-			this->partitionChooser->showErrorMessage(PartitionChooser::SUB_UMOUNT_FAILED);
+			this->grubEnvEditor->showErrorMessage(GrubEnvEditor::SUB_UMOUNT_FAILED);
 		}
 		this->partitionChooser->setSubmountpointSelectionState(submountpoint, true); //reset checkbox
 		this->grubEnvEditor->setSubmountpointSelectionState(submountpoint, true);

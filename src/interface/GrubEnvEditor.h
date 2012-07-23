@@ -22,6 +22,13 @@
 
 class GrubEnvEditor {
 public:
+	enum MountExceptionType {
+		MOUNT_FAILED,
+		UMOUNT_FAILED,
+		MOUNT_ERR_NO_FSTAB,
+		SUB_MOUNT_FAILED,
+		SUB_UMOUNT_FAILED
+	};
 	virtual void show(bool resetPartitionChooser = false) = 0;
 	virtual void hide() = 0;
 	virtual void removeAllSubmountpoints() = 0;
@@ -31,6 +38,7 @@ public:
 	virtual void setRootDeviceName(std::string const& rootDeviceName) = 0;
 	virtual int getBootloaderType() const = 0;
 	virtual void setSubmountpointSelectionState(std::string const& submountpoint, bool new_isSelected) = 0;
+	virtual void showErrorMessage(MountExceptionType type)=0;
 };
 
 #endif /* GRUBENVEDITOR_H_ */

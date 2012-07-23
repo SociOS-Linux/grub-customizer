@@ -59,6 +59,7 @@ public:
 	void removeAllSubmountpoints();
 	void addSubmountpoint(std::string const& name, bool isActive);
 	void setSubmountpointSelectionState(std::string const& submountpoint, bool new_isSelected);
+	void showErrorMessage(MountExceptionType type);
 private:
 	void signal_partitionChanged();
 	void signal_bootloaderType_changed();
