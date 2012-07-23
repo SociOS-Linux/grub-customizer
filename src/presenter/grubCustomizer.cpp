@@ -638,12 +638,21 @@ void GrubCustomizer::quit(bool force){
 	}
 }
 
-void GrubCustomizer::removeRule(Rule* entry){
-	entry->setVisibility(false);
-	if (!this->grublistCfg->proxies.getProxyByRule(entry)->hasVisibleRules()) {
-		this->grublistCfg->proxies.deleteProxy(this->grublistCfg->proxies.getProxyByRule(entry));
+void GrubCustomizer::removeRules(std::list<void*> entries){
+	std::map<Proxy*, void*> emptyProxies;
+	for (std::list<void*>::iterator iter = entries.begin(); iter != entries.end(); iter++) {
+		Rule* rule = static_cast<Rule*>(*iter);
+		rule->setVisibility(false);
+		if (!this->grublistCfg->proxies.getProxyByRule(rule)->hasVisibleRules()) {
+			emptyProxies[this->grublistCfg->proxies.getProxyByRule(rule)] = NULL;
+		}
+	}
+
+	for (std::map<Proxy*, void*>::iterator iter = emptyProxies.begin(); iter != emptyProxies.end(); iter++) {
+		this->grublistCfg->proxies.deleteProxy(iter->first);
 		this->log("proxy removed", Logger::INFO);
 	}
+
 	this->syncListView_load();
 	this->modificationsUnsaved = true;
 	this->updateSettingsDlg();

@@ -19,6 +19,7 @@
 #ifndef EVENTLISTENER_LISTCFGDLG_INCLUDED
 #define EVENTLISTENER_LISTCFGDLG_INCLUDED
 
+#include <list>
 /**
  * base class to be implemented by grublistconfig event listeners
  */
@@ -46,7 +47,7 @@ public:
 	virtual void exitRequest()=0;
 
 	//user has activated or disabled one of the entries
-	virtual void signal_entry_remove_requested(void* entry)=0;
+	virtual void signal_entry_remove_requested(std::list<void*> entries)=0;
 	//user has renamed one of the entries
 	virtual void signal_entry_renamed(void* entry, std::string const& newText)=0;
 

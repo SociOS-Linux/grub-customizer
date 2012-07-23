@@ -51,7 +51,7 @@ public:
 	void entryAddDlg_applied();
 	void exitRequest();
 
-	void signal_entry_remove_requested(void* entry);
+	void signal_entry_remove_requested(std::list<void*> entries);
 	void signal_entry_renamed(void* entry, std::string const& newText);
 
 	void ruleAdjustment_requested(void* rule, int direction);

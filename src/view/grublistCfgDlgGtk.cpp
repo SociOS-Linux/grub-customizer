@@ -443,7 +443,7 @@ void GrublistCfgDlgGtk::signal_move_click(int direction){
 }
 
 void GrublistCfgDlgGtk::update_remove_button(){
-	if (tvConfList.get_selection()->count_selected_rows() == 1){
+	if (tvConfList.get_selection()->count_selected_rows() >= 1){
 		tbttRemove.set_sensitive(true);
 		miRemove.set_sensitive(true);
 	} else {
@@ -477,10 +477,14 @@ void GrublistCfgDlgGtk::signal_add_click(){
 }
 
 void GrublistCfgDlgGtk::signal_remove_click() {
-	assert(tvConfList.get_selection()->count_selected_rows() == 1);
+	std::list<void*> rules;
 	std::vector<Gtk::TreeModel::Path> pathes = tvConfList.get_selection()->get_selected_rows();
-	void* rptr = (*tvConfList.refTreeStore->get_iter(pathes[0]))[tvConfList.treeModel.relatedRule];
-	eventListener->signal_entry_remove_requested(rptr);
+	for (std::vector<Gtk::TreeModel::Path>::iterator iter = pathes.begin(); iter != pathes.end(); iter++) {
+		void* rptr = (*tvConfList.refTreeStore->get_iter(*iter))[tvConfList.treeModel.relatedRule];
+		rules.push_back(rptr);
+	}
+
+	eventListener->signal_entry_remove_requested(rules);
 }
 
 void GrublistCfgDlgGtk::signal_preference_click(){

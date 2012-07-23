@@ -143,7 +143,7 @@ public:
 	
 	void quit(bool force = false);
 	
-	void removeRule(Rule* entry);
+	void removeRules(std::list<void*> entries);
 	void updateRuleName(Rule* entry, std::string const& newText);
 	void moveRule(void* rule, int direction);
 	void createSubmenu(Rule* childItem);

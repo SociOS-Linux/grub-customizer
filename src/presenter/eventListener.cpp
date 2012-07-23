@@ -74,8 +74,8 @@ void EventListener::exitRequest(){
 }
 
 
-void EventListener::signal_entry_remove_requested(void* entry){
-	presenter.removeRule((Rule*)entry);
+void EventListener::signal_entry_remove_requested(std::list<void*> entries){
+	presenter.removeRules(entries);
 }
 
 void EventListener::signal_entry_renamed(void* entry, std::string const& newText){
