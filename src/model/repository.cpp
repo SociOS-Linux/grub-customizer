@@ -93,6 +93,7 @@ Script* Repository::getCustomScript() {
 			return &*iter;
 		}
 	}
+	return NULL;
 }
 
 Script* Repository::getNthScript(int pos){
