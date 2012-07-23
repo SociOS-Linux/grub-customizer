@@ -255,46 +255,43 @@ void GrublistCfgDlgGtk::setStatusText(std::string const& new_status_text){
 	statusbar.push(new_status_text);
 }
 
-void GrublistCfgDlgGtk::appendEntry(std::string const& name, bool is_active, void* entryPtr, bool is_placeholder, bool is_submenu, std::string const& scriptName, std::string const& defaultName, void* parentEntry){
-	if (is_active) {
-		Gtk::TreeIter entryRow;
-		if (parentEntry) {
-			entryRow = tvConfList.refTreeStore->append(this->getIterByRulePtr(parentEntry)->children());
-		} else {
-			entryRow = tvConfList.refTreeStore->append();
-		}
-
-		Glib::RefPtr<Gdk::Pixbuf> icon;
-		std::string outputName = name + "\n";
-		if (is_submenu) {
-			outputName += gettext("submenu");
-			icon = this->win.render_icon(Gtk::Stock::DIRECTORY, Gtk::ICON_SIZE_LARGE_TOOLBAR);
-		} else if (is_placeholder) {
-			outputName += gettext("placeholder");
-			icon = this->win.render_icon(Gtk::Stock::FIND, Gtk::ICON_SIZE_LARGE_TOOLBAR);
-		} else {
-			outputName += gettext("menuentry");
-			icon = this->win.render_icon(Gtk::Stock::EXECUTE, Gtk::ICON_SIZE_LARGE_TOOLBAR);
-		}
-		if (scriptName != "") {
-			outputName += std::string(" / ") + gettext("script: ") + scriptName;
-		}
-
-		if (defaultName != "" && name != defaultName) {
-			outputName += std::string(" / ") + gettext("default name: ") + defaultName;
-		}
-
-		(*entryRow)[tvConfList.treeModel.active] = is_active;
-		(*entryRow)[tvConfList.treeModel.name] = name;
-		(*entryRow)[tvConfList.treeModel.text] = outputName;
-		(*entryRow)[tvConfList.treeModel.relatedRule] = (void*)entryPtr;
-		(*entryRow)[tvConfList.treeModel.is_editable] = !is_placeholder;
-		(*entryRow)[tvConfList.treeModel.is_sensitive] = !is_placeholder;
-		(*entryRow)[tvConfList.treeModel.icon] = icon;
-
-
-		tvConfList.expand_all();
+void GrublistCfgDlgGtk::appendEntry(std::string const& name, void* entryPtr, bool is_placeholder, bool is_submenu, std::string const& scriptName, std::string const& defaultName, void* parentEntry){
+	Gtk::TreeIter entryRow;
+	if (parentEntry) {
+		entryRow = tvConfList.refTreeStore->append(this->getIterByRulePtr(parentEntry)->children());
+	} else {
+		entryRow = tvConfList.refTreeStore->append();
 	}
+
+	Glib::RefPtr<Gdk::Pixbuf> icon;
+	std::string outputName = name + "\n";
+	if (is_submenu) {
+		outputName += gettext("submenu");
+		icon = this->win.render_icon(Gtk::Stock::DIRECTORY, Gtk::ICON_SIZE_LARGE_TOOLBAR);
+	} else if (is_placeholder) {
+		outputName += gettext("placeholder");
+		icon = this->win.render_icon(Gtk::Stock::FIND, Gtk::ICON_SIZE_LARGE_TOOLBAR);
+	} else {
+		outputName += gettext("menuentry");
+		icon = this->win.render_icon(Gtk::Stock::EXECUTE, Gtk::ICON_SIZE_LARGE_TOOLBAR);
+	}
+	if (scriptName != "") {
+		outputName += std::string(" / ") + gettext("script: ") + scriptName;
+	}
+
+	if (defaultName != "" && name != defaultName) {
+		outputName += std::string(" / ") + gettext("default name: ") + defaultName;
+	}
+
+	(*entryRow)[tvConfList.treeModel.name] = name;
+	(*entryRow)[tvConfList.treeModel.text] = outputName;
+	(*entryRow)[tvConfList.treeModel.relatedRule] = (void*)entryPtr;
+	(*entryRow)[tvConfList.treeModel.is_editable] = !is_placeholder;
+	(*entryRow)[tvConfList.treeModel.is_sensitive] = !is_placeholder;
+	(*entryRow)[tvConfList.treeModel.icon] = icon;
+
+
+	tvConfList.expand_all();
 }
 
 
@@ -418,19 +415,6 @@ void GrublistCfgDlgGtk::setRuleName(void* rule, std::string const& newName){
 	this->setLockState(0);
 }
 
-bool GrublistCfgDlgGtk::getRuleState(void* rule){
-	Gtk::TreeModel::iterator iter = this->getIterByRulePtr(rule);
-	return (*iter)[tvConfList.treeModel.active];
-}
-void GrublistCfgDlgGtk::setRuleState(void* rule, bool newState){
-	Gtk::TreeModel::iterator iter = this->getIterByRulePtr(rule);
-	this->setLockState(~0);
-	(*iter)[tvConfList.treeModel.active] = newState;
-	if ((*iter)[tvConfList.treeModel.is_sensitive]) {
-		this->setEntrySensibility(iter->children(), newState);
-	}
-	this->setLockState(0);
-}
 
 void GrublistCfgDlgGtk::selectRule(void* rule, bool startEdit) {
 	try {
@@ -444,13 +428,6 @@ void GrublistCfgDlgGtk::selectRule(void* rule, bool startEdit) {
 	}
 }
 
-void GrublistCfgDlgGtk::setEntrySensibility(const Gtk::TreeNodeChildren& list, bool sensibility) {
-	for (Gtk::TreeModel::iterator rule_iter = list.begin(); rule_iter != list.end(); rule_iter++) {
-		(*rule_iter)[tvConfList.treeModel.is_sensitive] = sensibility;
-		if (!sensibility || (*rule_iter)[tvConfList.treeModel.active] == sensibility)
-			this->setEntrySensibility(rule_iter->children(), sensibility);
-	}
-}
 
 
 void GrublistCfgDlgGtk::signal_move_click(int direction){
@@ -648,7 +625,6 @@ GrubConfListing::GrubConfListing(){
 }
 
 GrubConfListing::TreeModel::TreeModel(){
-	this->add(active);
 	this->add(name);
 	this->add(text);
 	this->add(relatedRule);

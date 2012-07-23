@@ -32,7 +32,6 @@
 class GrubConfListing : public Gtk::TreeView {
 public:
 	struct TreeModel : public Gtk::TreeModelColumnRecord {
-		Gtk::TreeModelColumn<bool> active;
 		Gtk::TreeModelColumn<Glib::ustring> name;
 		Gtk::TreeModelColumn<Glib::ustring> text;
 		Gtk::TreeModelColumn<void*> relatedRule;
@@ -120,7 +119,7 @@ public:
 	void progress_pulse();
 	void hideProgressBar();
 	void setStatusText(std::string const& new_status_text);
-	void appendEntry(std::string const& name, bool is_active, void* entryPtr, bool is_placeholder, bool is_submenu, std::string const& scriptName, std::string const& defaultName, void* parentEntry = NULL);
+	void appendEntry(std::string const& name, void* entryPtr, bool is_placeholder, bool is_submenu, std::string const& scriptName, std::string const& defaultName, void* parentEntry = NULL);
 	void showProxyNotFoundMessage();
 	std::string createNewEntriesPlaceholderString(std::string const& parentMenu = "", std::string const& sourceScriptName = "");
 	std::string createPlaintextString() const;
@@ -133,13 +132,9 @@ public:
 	
 	std::string getRuleName(void* rule);
 	void setRuleName(void* rule, std::string const& newName);
-	bool getRuleState(void* rule);
-	void setRuleState(void* rule, bool newState);
 
 	void selectRule(void* rule, bool startEdit = false);
 
-protected:
-	void setEntrySensibility(const Gtk::TreeNodeChildren& list, bool sensibility);
 private:
 	//event handlers
 	void signal_show_root_selector();

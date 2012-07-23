@@ -512,10 +512,12 @@ void GrubCustomizer::_rAppendRule(Rule& rule, Rule* parentRule){
 				defaultName = rule.dataSource->name;
 			}
 		}
-		this->listCfgDlg->appendEntry(name, rule.isVisible, &rule, is_other_entries_ph || is_plaintext, isSubmenu, scriptName, defaultName, parentRule);
+		if (rule.isVisible) {
+			this->listCfgDlg->appendEntry(name, &rule, is_other_entries_ph || is_plaintext, isSubmenu, scriptName, defaultName, parentRule);
 
-		for (std::list<Rule>::iterator subruleIter = rule.subRules.begin(); subruleIter != rule.subRules.end(); subruleIter++) {
-			this->_rAppendRule(*subruleIter, &rule);
+			for (std::list<Rule>::iterator subruleIter = rule.subRules.begin(); subruleIter != rule.subRules.end(); subruleIter++) {
+				this->_rAppendRule(*subruleIter, &rule);
+			}
 		}
 	}
 }
@@ -641,12 +643,6 @@ void GrubCustomizer::removeRule(Rule* entry){
 	this->updateSettingsDlg();
 }
 
-void GrubCustomizer::syncRuleState(Rule* entry){
-	entry->isVisible = this->listCfgDlg->getRuleState(entry);
-	this->listCfgDlg->setRuleState(entry, this->listCfgDlg->getRuleState(entry));
-	this->modificationsUnsaved = true;
-	this->updateSettingsDlg();
-}
 
 void GrubCustomizer::updateRuleName(Rule* entry, std::string const& newText){
 	std::string oldName = entry->outputName;
