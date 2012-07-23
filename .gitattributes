@@ -42,6 +42,7 @@ misc/icons/48x48.png -text svneol=unset#unset
 misc/icons/64x64.png -text svneol=unset#unset
 misc/manpage.gz -text svneol=unset#unset
 misc/pkexec_policy.in -text
+src/interface/GrubEnvEditor.h -text
 src/interface/aboutDialog.h -text
 src/interface/colorChooser.h -text
 src/interface/contentParser.h -text
@@ -53,6 +54,7 @@ src/interface/entryPathBuilder.h -text
 src/interface/entryPathFollower.h -text
 src/interface/evt_entryAddDlg.h -text
 src/interface/evt_entryEditDlg.h -text
+src/interface/evt_grubEnvEditor.h -text
 src/interface/evt_grubInstallDlg.h -text
 src/interface/evt_listCfgDlg.h -text
 src/interface/evt_model.h -text
@@ -135,6 +137,8 @@ src/presenter/grubcfg_proxy_main.cpp -text
 src/presenter/gtk-client_main.cpp -text
 src/presenter/streamLogger.cpp -text
 src/presenter/streamLogger.h -text
+src/view/GrubEnvEditorGtk.cpp -text
+src/view/GrubEnvEditorGtk.h -text
 src/view/aboutDialogGtk.cpp -text
 src/view/aboutDialogGtk.h -text
 src/view/entryAddDlgGtk.cpp -text

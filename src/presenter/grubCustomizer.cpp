@@ -27,7 +27,8 @@ GrubCustomizer::GrubCustomizer(GrubEnv& env)
 	  mountTable(NULL), aboutDialog(NULL),
 	 env(env), config_has_been_different_on_startup_but_unsaved(false),
 	 modificationsUnsaved(false), quit_requested(false), activeThreadCount(0),
-	 is_loading(false), contentParserFactory(NULL), currentContentParser(NULL)
+	 is_loading(false), contentParserFactory(NULL), currentContentParser(NULL),
+	 grubEnvEditor(NULL)
 {
 }
 
@@ -97,6 +98,10 @@ void GrubCustomizer::setContentParserFactory(ContentParserFactory& contentParser
 	this->contentParserFactory = &contentParserFactory;
 }
 
+void GrubCustomizer::setGrubEnvEditor(GrubEnvEditor& envEditor) {
+	this->grubEnvEditor = &envEditor;
+}
+
 ThreadController& GrubCustomizer::getThreadController() {
 	if (this->threadController == NULL) {
 		throw INCOMPLETE;
@@ -152,6 +157,7 @@ void GrubCustomizer::init(){
 		or !aboutDialog
 		or !entryEditDlg
 		or !contentParserFactory
+		or !grubEnvEditor
 	) {
 		throw INCOMPLETE;
 	}
@@ -191,7 +197,7 @@ void GrubCustomizer::init(){
 		else if (modes.size() == 1)
 			this->init(modes.front());
 		else if (modes.size() == 0)
-			this->listCfgDlg->showPartitionChooserQuestion();
+			this->showEnvEditor();
 	}
 }
 
@@ -213,14 +219,15 @@ void GrubCustomizer::init(GrubEnv::Mode mode){
 	this->getThreadController().startLoadThread(false);
 }
 
-void GrubCustomizer::hidePartitionChooserQuestion(){
-	this->listCfgDlg->hidePartitionChooserQuestion();
-}
-
 void GrubCustomizer::showPartitionChooser(){
 	partitionChooser->setIsStartedManually(true);
 	this->initRootSelector();
 	this->partitionChooser->show();
+}
+
+void GrubCustomizer::showEnvEditor() {
+	this->grubEnvEditor->setEnvSettings(this->env.getProperties(), this->env.getRequiredProperties(), this->env.getValidProperties());
+	this->grubEnvEditor->show();
 }
 
 void GrubCustomizer::handleCancelResponse(){
@@ -404,6 +411,11 @@ void GrubCustomizer::generateSubmountpointSelection(std::string const& prefix){
 			this->partitionChooser->addSubmountpoint(iter->mountpoint.substr(prefix.length()), iter->isMounted);
 		}
 	}
+}
+
+void GrubCustomizer::switchBootloaderType(int newTypeIndex) {
+	this->env.init(newTypeIndex == 0 ? GrubEnv::GRUB_MODE : GrubEnv::BURG_MODE, "");
+	this->showEnvEditor();
 }
 
 void GrubCustomizer::mountRootFs(){

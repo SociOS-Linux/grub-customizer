@@ -24,10 +24,12 @@
 #include "mountTable.h"
 #include <cstdlib>
 #include <dirent.h>
+#include <map>
 #include "../presenter/commonClass.h"
 #include "settingsStore.h"
 
 struct GrubEnv : public CommonClass {
+public:
 	enum Mode {
 		GRUB_MODE,
 		BURG_MODE
@@ -35,11 +37,15 @@ struct GrubEnv : public CommonClass {
 	GrubEnv();
 	bool init(GrubEnv::Mode mode, std::string const& dir_prefix);
 	void loadFromFile(FILE* cfg_file, std::string const& dir_prefix);
+	std::map<std::string, std::string> getProperties();
+	std::list<std::string> getRequiredProperties();
+	std::list<std::string> getValidProperties();
 	bool check_cmd(std::string const& cmd, std::string const& cmd_prefix = "") const;
 	bool check_dir(std::string const& dir) const;
+	bool check_file(std::string const& file) const;
 	std::string trim_cmd(std::string const& cmd) const;
 	std::string getRootDevice();
-	std::string cfg_dir, cfg_dir_noprefix, mkconfig_cmd, mkfont_cmd, cfg_dir_prefix, update_cmd, install_cmd, output_config_file, output_config_dir, settings_file, devicemap_file, mkdevicemap_cmd;
+	std::string cfg_dir, cfg_dir_noprefix, mkconfig_cmd, mkfont_cmd, cfg_dir_prefix, update_cmd, install_cmd, output_config_file, output_config_dir, settings_file, devicemap_file, mkdevicemap_cmd, cmd_prefix;
 	bool burgMode;
 	bool useDirectBackgroundProps; // Whether background settings should be set directly or by creating a desktop-base script
 	std::list<GrubEnv::Mode> getAvailableModes();

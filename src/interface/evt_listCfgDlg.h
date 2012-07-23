@@ -64,9 +64,6 @@ public:
 
 	//user has chosen burg or grub from the burgSwitcher
 	virtual void burgSwitcher_response(bool burgChosen)=0;
-
-	//user has clicked the yes or no button of the partition chooser question dialog
-	virtual void partitionChooserQuestion_response(bool is_positive)=0;
 };
 
 #endif

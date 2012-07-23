@@ -91,7 +91,7 @@ class GrublistCfgDlgGtk : public GrublistCfgDlg, public CommonClass {
 
 	bool lock_state;
 
-	Gtk::MessageDialog burgSwitcher, pchooserQuestionDlg;
+	Gtk::MessageDialog burgSwitcher;
 
 	Gtk::Button bttAdvancedSettings1, bttAdvancedSettings2;
 	Gtk::HButtonBox bbxAdvancedSettings1, bbxAdvancedSettings2;
@@ -114,8 +114,6 @@ public:
 	void close();
 	void showBurgSwitcher();
 	void hideBurgSwitcher();
-	void showPartitionChooserQuestion();
-	void hidePartitionChooserQuestion();
 	bool isVisible();
 	
 	void setIsBurgMode(bool isBurgMode);
@@ -165,7 +163,6 @@ private:
 	void signal_preference_click();
 	void signal_info_click();
 	void signal_burg_switcher_response(int response_id);
-	void signal_partition_chooser_question_response(int response_id);
 	void signal_edit_name(Gtk::CellEditable* editable, const Glib::ustring& path);
 	void signal_button_press(GdkEventButton *event);
 	bool signal_popup();

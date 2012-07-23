@@ -1,0 +1,53 @@
+/*
+ * Copyright (C) 2010-2011 Daniel Richter <danielrichter2007@web.de>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
+#ifndef GRUBENVEDITORGTK_H_
+#define GRUBENVEDITORGTK_H_
+#include <gtkmm.h>
+#include <libintl.h>
+#include "../presenter/commonClass.h"
+#include "../interface/GrubEnvEditor.h"
+#include "../interface/evt_grubEnvEditor.h"
+#include "../view/partitionChooser_DropDown.h"
+#include "../interface/deviceDataList_Iface.h"
+
+class GrubEnvEditorGtk : public Gtk::Dialog, public GrubEnvEditor, public CommonClass {
+	EventListener_grubEnvEditor* eventListener;
+	Gtk::Table tblLayout;
+	Gtk::Label lblPartition;
+	Gtk::Label lblType;
+	Gtk::ComboBoxText cbType;
+	Gtk::HSeparator separator;
+	PartitionChooser_DropDown* pChooser;
+	DeviceDataList_Iface* deviceDataList;
+	std::map<std::string, Gtk::Widget*> optionMap;
+	std::map<std::string, Gtk::Label*> labelMap;
+	std::map<std::string, Gtk::Image*> imageMap;
+public:
+	GrubEnvEditorGtk();
+	void setEventListener(EventListener_grubEnvEditor& eventListener);
+	void setDeviceDataList(DeviceDataList_Iface& deviceDataList);
+	void setEnvSettings(std::map<std::string, std::string> const& props, std::list<std::string> const& requiredProps, std::list<std::string> const& validProps);
+	void clear();
+	void show();
+	void hide();
+private:
+	void signal_bootloaderType_changed();
+};
+
+#endif /* GRUBENVEDITOR_H_ */

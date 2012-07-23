@@ -22,7 +22,7 @@ GrubEnv::GrubEnv() : burgMode(false), useDirectBackgroundProps(false) {}
 
 bool GrubEnv::init(GrubEnv::Mode mode, std::string const& dir_prefix){
 	useDirectBackgroundProps = false;
-	std::string cmd_prefix = dir_prefix != "" ? "chroot '"+dir_prefix+"' " : "";
+	this->cmd_prefix = dir_prefix != "" ? "chroot '"+dir_prefix+"' " : "";
 	this->cfg_dir_prefix = dir_prefix;
 	switch (mode){
 	case BURG_MODE: {
@@ -76,6 +76,7 @@ bool GrubEnv::init(GrubEnv::Mode mode, std::string const& dir_prefix){
 	this->install_cmd = cmd_prefix+this->install_cmd;
 	this->mkfont_cmd = cmd_prefix+this->mkfont_cmd;
 	this->devicemap_file = cmd_prefix+this->devicemap_file;
+	this->mkdevicemap_cmd = cmd_prefix+this->mkdevicemap_cmd;
 	
 	return is_valid;
 }
@@ -86,13 +87,73 @@ void GrubEnv::loadFromFile(FILE* cfg_file, std::string const& dir_prefix) {
 	this->update_cmd = ds.getValue("UPDATE_CMD");
 	this->install_cmd = ds.getValue("INSTALL_CMD");
 	this->mkfont_cmd = ds.getValue("MKFONT_CMD");
+	this->mkdevicemap_cmd = ds.getValue("MKDEVICEMAP_CMD");
 	this->cfg_dir = dir_prefix + ds.getValue("CFG_DIR");
 	this->cfg_dir_noprefix = ds.getValue("CFG_DIR");
 	this->output_config_dir =  dir_prefix + ds.getValue("OUTPUT_DIR");
 	this->output_config_file = dir_prefix + ds.getValue("OUTPUT_FILE");
 	this->settings_file = dir_prefix + ds.getValue("SETTINGS_FILE");
 	this->devicemap_file = dir_prefix + ds.getValue("DEVICEMAP_FILE");
-	this->mkdevicemap_cmd = dir_prefix + ds.getValue("MKDEVICEMAP_CMD");
+}
+
+std::map<std::string, std::string> GrubEnv::getProperties() {
+	std::map<std::string, std::string> result;
+	result["MKCONFIG_CMD"] = this->mkconfig_cmd.substr(this->cmd_prefix.size());
+	result["UPDATE_CMD"] = this->update_cmd.substr(this->cmd_prefix.size());
+	result["INSTALL_CMD"] = this->install_cmd.substr(this->cmd_prefix.size());
+	result["MKFONT_CMD"] = this->mkfont_cmd.substr(this->cmd_prefix.size());
+	result["MKDEVICEMAP_CMD"] = this->mkdevicemap_cmd.substr(this->cmd_prefix.size());
+	result["CFG_DIR"] = this->cfg_dir_noprefix;
+	result["OUTPUT_DIR"] = this->output_config_dir.substr(this->cfg_dir_prefix.size());
+	result["OUTPUT_FILE"] = this->output_config_file.substr(this->cfg_dir_prefix.size());
+	result["SETTINGS_FILE"] = this->settings_file.substr(this->cfg_dir_prefix.size());
+	result["DEVICEMAP_FILE"] = this->devicemap_file.substr(this->cfg_dir_prefix.size());
+
+	return result;
+}
+
+std::list<std::string> GrubEnv::getRequiredProperties() {
+	std::list<std::string> result;
+	result.push_back("MKCONFIG_CMD");
+	result.push_back("UPDATE_CMD");
+	result.push_back("INSTALL_CMD");
+	result.push_back("CFG_DIR");
+	return result;
+}
+
+std::list<std::string> GrubEnv::getValidProperties() {
+	std::list<std::string> result;
+	if (this->check_cmd(this->mkconfig_cmd.substr(this->cmd_prefix.size()), this->cmd_prefix)) {
+		result.push_back("MKCONFIG_CMD");
+	}
+	if (this->check_cmd(this->update_cmd.substr(this->cmd_prefix.size()), this->cmd_prefix)) {
+		result.push_back("UPDATE_CMD");
+	}
+	if (this->check_cmd(this->install_cmd.substr(this->cmd_prefix.size()), this->cmd_prefix)) {
+		result.push_back("INSTALL_CMD");
+	}
+	if (this->check_cmd(this->mkfont_cmd.substr(this->cmd_prefix.size()), this->cmd_prefix)) {
+		result.push_back("MKFONT_CMD");
+	}
+	if (this->check_cmd(this->mkdevicemap_cmd.substr(this->cmd_prefix.size()), this->cmd_prefix)) {
+		result.push_back("MKDEVICEMAP_CMD");
+	}
+	if (this->check_dir(this->cfg_dir)) {
+		result.push_back("MKDEVICEMAP_CMD");
+	}
+	if (this->check_dir(this->output_config_dir)) {
+		result.push_back("OUTPUT_DIR");
+	}
+	if (this->check_file(this->output_config_file)) {
+		result.push_back("OUTPUT_FILE");
+	}
+	if (this->check_file(this->settings_file)) {
+		result.push_back("SETTINGS_FILE");
+	}
+	if (this->check_file(this->devicemap_file)) {
+		result.push_back("DEVICEMAP_FILE");
+	}
+	return result;
 }
 
 bool GrubEnv::check_cmd(std::string const& cmd, std::string const& cmd_prefix) const {
@@ -118,6 +179,15 @@ bool GrubEnv::check_dir(std::string const& dir_str) const {
 	DIR* dir = opendir(dir_str.c_str());
 	if (dir){
 		closedir(dir);
+		return true;
+	}
+	return false;
+}
+
+bool GrubEnv::check_file(std::string const& file_str) const {
+	FILE* file = fopen(file_str.c_str(), "r");
+	if (file){
+		fclose(file);
 		return true;
 	}
 	return false;
@@ -150,6 +220,4 @@ std::list<GrubEnv::Mode> GrubEnv::getAvailableModes(){
 		result.push_back(GrubEnv::GRUB_MODE);
 	return result;
 }
-
-
 

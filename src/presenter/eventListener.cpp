@@ -118,14 +118,6 @@ void EventListener::burgSwitcher_response(bool burgChosen){
 	presenter.init(burgChosen ? GrubEnv::BURG_MODE : GrubEnv::GRUB_MODE);
 }
 
-void EventListener::partitionChooserQuestion_response(bool is_positive){
-	presenter.hidePartitionChooserQuestion();
-	if (is_positive)
-		presenter.showPartitionChooser();
-	else
-		presenter.handleCancelResponse();
-}
-
 void EventListener::aboutDialog_requested(){
 	presenter.showAboutDialog();
 }
@@ -228,4 +220,8 @@ void EventListener::grubInstallCompleted(std::string const& msg){
 
 void EventListener::fb_resolutions_loaded(){
 	presenter.getThreadController().updateSettingsDlgResolutionList();
+}
+
+void EventListener::grubEnvEditor_typeChanged(int newTypeIndex) {
+	presenter.switchBootloaderType(newTypeIndex);
 }

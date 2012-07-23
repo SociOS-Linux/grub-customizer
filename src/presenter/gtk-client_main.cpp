@@ -26,6 +26,7 @@
 #include "../view/entryAddDlgGtk.h"
 #include "../view/entryEditDlgGtk.h"
 #include "../view/settingsDlgGtk.h"
+#include "../view/GrubEnvEditorGtk.h"
 #include "glibMutex.h"
 #include "glibThreadController.h"
 #include "streamLogger.h"
@@ -70,8 +71,10 @@ int main(int argc, char** argv){
 	GlibMutex listCfgMutex2;
 	GlibThreadController threadC(presenter);
 	ContentParserFactoryImpl contentParserFactory;
+	GrubEnvEditorGtk envEditor;
 
 	entryEditDlg.setDeviceDataList(deviceDataList);
+	envEditor.setDeviceDataList(deviceDataList);
 
 	//assign objects to presenter
 	presenter.setListCfg(listcfg);
@@ -91,6 +94,7 @@ int main(int argc, char** argv){
 	presenter.setAboutDialog(aboutDialog);
 	presenter.setThreadController(threadC);
 	presenter.setContentParserFactory(contentParserFactory);
+	presenter.setGrubEnvEditor(envEditor);
 
 	listCfgView.putSettingsDialog(settingsDlg.getCommonSettingsPane(), settingsDlg.getAppearanceSettingsPane());
 
@@ -105,6 +109,7 @@ int main(int argc, char** argv){
 	listcfg.setEventListener(evt);
 	installer.setEventListener(evt);
 	fbResolutionsGetter.setEventListener(evt);
+	envEditor.setEventListener(evt);
 	
 	//assign logger
 	StreamLogger logger(std::cout);
@@ -128,6 +133,7 @@ int main(int argc, char** argv){
 	listCfgMutex2.setLogger(logger);
 	threadC.setLogger(logger);
 	env.setLogger(logger);
+	envEditor.setLogger(logger);
 
 	// configure logger
 	logger.setLogLevel(StreamLogger::LOG_EVENT);

@@ -27,6 +27,7 @@
 #include "../interface/evt_entryAddDlg.h"
 #include "../interface/evt_settings.h"
 #include "../interface/evt_entryEditDlg.h"
+#include "../interface/evt_grubEnvEditor.h"
 
 class EventListener :
 	public EventListener_settings,
@@ -35,7 +36,8 @@ class EventListener :
 	public EventListener_listCfgDlg,
 	public EventListener_model,
 	public EventListener_entryAddDlg,
-	public EventListener_entryEditDlg
+	public EventListener_entryEditDlg,
+	public EventListener_grubEnvEditor
 {
 	GrubCustomizer& presenter;
 public:
@@ -67,7 +69,6 @@ public:
 
 	void burgSwitcher_cancelled();
 	void burgSwitcher_response(bool burgChosen);
-	void partitionChooserQuestion_response(bool is_positive);
 
 	void aboutDialog_requested();
 
@@ -103,5 +104,8 @@ public:
 	void saveProgressChanged();
 	void grubInstallCompleted(std::string const& msg);
 	void fb_resolutions_loaded();
+
+	// env editor
+	void grubEnvEditor_typeChanged(int newTypeIndex);
 };
 #endif

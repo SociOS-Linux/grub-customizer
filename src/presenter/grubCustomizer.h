@@ -45,6 +45,7 @@
 #include "../model/deviceDataList.h"
 #include "../interface/threadController.h"
 #include "../interface/contentParserFactory.h"
+#include "../interface/GrubEnvEditor.h"
 
 #include "commonClass.h"
 
@@ -80,6 +81,7 @@ class GrubCustomizer : public CommonClass {
 	ThreadController* threadController;
 	ContentParserFactory* contentParserFactory;
 	ContentParser* currentContentParser;
+	GrubEnvEditor* grubEnvEditor;
 
 	bool config_has_been_different_on_startup_but_unsaved;
 	bool modificationsUnsaved;
@@ -112,6 +114,7 @@ public:
 	void setAboutDialog(AboutDialog& aboutDialog);
 	void setThreadController(ThreadController& threadController);
 	void setContentParserFactory(ContentParserFactory& contentParserFactory);
+	void setGrubEnvEditor(GrubEnvEditor& envEditor);
 
 	ThreadController& getThreadController();
 	FbResolutionsGetter& getFbResolutionsGetter();
@@ -119,8 +122,8 @@ public:
 	//init functions
 	void init();
 	void init(GrubEnv::Mode mode);
-	void hidePartitionChooserQuestion();
 	void showPartitionChooser();
+	void showEnvEditor();
 	void handleCancelResponse();
 
 	void showSettingsDlg();
@@ -195,6 +198,9 @@ public:
 	void umountSubmountpoint(std::string const& submountpoint);
 	void readPartitionInfo();
 	void generateSubmountpointSelection(std::string const& prefix);
+
+	// env editor
+	void switchBootloaderType(int newTypeIndex);
 };
 
 #endif

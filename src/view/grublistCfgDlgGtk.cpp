@@ -37,7 +37,6 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	miReload(Gtk::Stock::REFRESH, Gtk::AccelKey("F5")), miSave(Gtk::Stock::SAVE),
 	miAbout(Gtk::Stock::ABOUT), miStartRootSelector(Gtk::Stock::OPEN),
 	lock_state(~0), burgSwitcher(gettext("BURG found!"), false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO),
-	pchooserQuestionDlg(gettext("No Bootloader found"), false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO),
 	bttAdvancedSettings1(gettext("advanced settings")), bttAdvancedSettings2(gettext("advanced settings")),
 	bbxAdvancedSettings1(Gtk::BUTTONBOX_END), bbxAdvancedSettings2(Gtk::BUTTONBOX_END)
 {
@@ -163,13 +162,6 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	burgSwitcher.set_secondary_text(gettext("Do you want to configure BURG instead of grub2?"));
 	burgSwitcher.set_default_response(Gtk::RESPONSE_YES);
 
-	//partition chooser question
-	pchooserQuestionDlg.set_skip_taskbar_hint(false);
-	pchooserQuestionDlg.set_title("Grub Customizer");
-	pchooserQuestionDlg.set_icon_name("grub-customizer");
-	pchooserQuestionDlg.set_secondary_text(gettext("Do you want to select another root partition?"));
-	pchooserQuestionDlg.set_default_response(Gtk::RESPONSE_YES);
-
 	//signals
 	
 	tbttUp.signal_clicked().connect(sigc::bind<int>(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_move_click),-1));
@@ -212,7 +204,6 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	miAbout.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_info_click));
 	
 	burgSwitcher.signal_response().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_burg_switcher_response));
-	pchooserQuestionDlg.signal_response().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_partition_chooser_question_response));
 
 	win.signal_delete_event().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_delete_event));
 
@@ -270,12 +261,6 @@ void GrublistCfgDlgGtk::hideBurgSwitcher(){
 	burgSwitcher.hide();
 }
 
-void GrublistCfgDlgGtk::showPartitionChooserQuestion(){
-	pchooserQuestionDlg.show();
-}
-void GrublistCfgDlgGtk::hidePartitionChooserQuestion(){
-	pchooserQuestionDlg.hide();
-}
 bool GrublistCfgDlgGtk::isVisible(){
 	return win.is_visible();
 }
@@ -766,10 +751,6 @@ void GrublistCfgDlgGtk::signal_burg_switcher_response(int response_id){
 		eventListener->burgSwitcher_cancelled();
 	else
 		eventListener->burgSwitcher_response(response_id == Gtk::RESPONSE_YES);
-}
-
-void GrublistCfgDlgGtk::signal_partition_chooser_question_response(int response_id){
-	eventListener->partitionChooserQuestion_response(response_id == Gtk::RESPONSE_YES);
 }
 
 GrubConfListing::GrubConfListing(){
