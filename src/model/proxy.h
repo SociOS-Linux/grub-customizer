@@ -23,6 +23,7 @@
 #include <sys/stat.h>
 #include <assert.h>
 #include <map>
+#include "entryPathBuilderImpl.h"
 
 struct Proxy {
 	enum Exception {
@@ -52,12 +53,13 @@ struct Proxy {
 	void sync_cleanup(Rule* parent = NULL, std::map<std::string, Script*> scriptMap = std::map<std::string, Script*>());
 	bool isModified(Rule const* parentRule = NULL, Entry const* parentEntry = NULL) const;
 	bool deleteFile();
-	bool generateFile(std::string const& path, int cfg_dir_prefix_length, std::string const& cfg_dir_noprefix); //before running this function, the realted script file must be saved!
+	std::list<std::string> getScriptList(std::map<Entry const*, Script const*> const& entrySourceMap, std::map<Script const*, std::string> const& scriptTargetMap) const;
+	bool generateFile(std::string const& path, int cfg_dir_prefix_length, std::string const& cfg_dir_noprefix, std::map<Entry const*, Script const*> ruleSourceMap, std::map<Script const*, std::string> const& scriptTargetMap); //before running this function, the realted script file must be saved!
 	std::string getScriptName();
 	Rule& moveRule(Rule* rule, int direction);
 	Rule* removeSubmenu(Rule* childItem);
 	Rule* createSubmenu(Rule* childItem);
-	bool ruleIsFromOwnScript(Rule const& rule);
+	bool ruleIsFromOwnScript(Rule const& rule) const;
 private:
 	Rule* getParentRule(Rule* child, Rule* root = NULL);
 	std::list<Rule>& getRuleList(Rule* parentElement);

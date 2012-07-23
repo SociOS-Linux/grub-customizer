@@ -65,6 +65,11 @@ std::string Rule::toString(EntryPathBilder const& pathBuilder){
 		result += " as '"+str_replace("'", "''", outputName)+"'";
 	}
 
+	std::string sourceScriptPath = pathBuilder.buildScriptPath(*dataSource);
+	if (sourceScriptPath != "") {
+		result += " from '" + sourceScriptPath + "'";
+	}
+
 	if (type == Rule::SUBMENU && this->subRules.size() > 0) {
 		result += "{";
 		for (std::list<Rule>::iterator iter = this->subRules.begin(); iter != this->subRules.end(); iter++) {

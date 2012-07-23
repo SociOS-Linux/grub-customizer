@@ -38,6 +38,7 @@ add_executable(grub-customizer
 	src/model/settingsStore.cpp
 	src/model/fbResolutionsGetter.cpp
 	src/model/grubInstaller.cpp
+	src/model/entryPathBuilderImpl.cpp
 	src/view/scriptAddDlgGtk.cpp
 	src/view/aboutDialogGtk.cpp
 	src/presenter/glibMutex.cpp
@@ -65,6 +66,7 @@ add_executable(grubcfg-proxy
 	src/model/repository.cpp
 	src/model/pscriptname_translator.cpp
 	src/model/libproxyscript_parser.cpp
+	src/model/entryPathBuilderImpl.cpp
 )
 
 target_link_libraries(grub-customizer 

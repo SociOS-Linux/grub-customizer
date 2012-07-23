@@ -319,23 +319,37 @@ void GrublistCfg::save(){
 
 	int mkdir_result = mkdir((this->env.cfg_dir+"/proxifiedScripts").c_str(), 0755); //create this directory if it doesn't allready exist
 
+	// get new script locations
+	std::map<Script const*, std::string> scriptTargetMap; // scripts and their target directories
+	for (Repository::iterator script_iter = repository.begin(); script_iter != repository.end(); script_iter++) {
+		std::list<Proxy*> relatedProxies = proxies.getProxiesByScript(*script_iter);
+		if (proxies.proxyRequired(*script_iter)){
+			scriptTargetMap[&*script_iter] = this->env.cfg_dir+"/proxifiedScripts/"+pscriptname_encode(script_iter->name, samename_counter[script_iter->name]++);
+		} else {
+			std::ostringstream nameStream;
+			nameStream << std::setw(2) << std::setfill('0') << relatedProxies.front()->index << "_" << script_iter->name;
+			std::list<Proxy*> relatedProxies = proxies.getProxiesByScript(*script_iter);
+			scriptTargetMap[&*script_iter] = this->env.cfg_dir+"/"+nameStream.str();
+		}
+	}
+
+	// move scripts and create proxies
 	int proxyCount = 0;
 	for (Repository::iterator script_iter = repository.begin(); script_iter != repository.end(); script_iter++){
 		std::list<Proxy*> relatedProxies = proxies.getProxiesByScript(*script_iter);
 		if (proxies.proxyRequired(*script_iter)){
-			script_iter->moveFile(this->env.cfg_dir+"/proxifiedScripts/"+pscriptname_encode(script_iter->name, samename_counter[script_iter->name]++), 0755);
+			script_iter->moveFile(scriptTargetMap[&*script_iter], 0755);
 			for (std::list<Proxy*>::iterator proxy_iter = relatedProxies.begin(); proxy_iter != relatedProxies.end(); proxy_iter++){
+				std::map<Entry const*, Script const*> entrySourceMap = this->getEntrySources(**proxy_iter);
 				std::ostringstream nameStream;
 				nameStream << std::setw(2) << std::setfill('0') << (*proxy_iter)->index << "_" << script_iter->name << "_proxy";
-				(*proxy_iter)->generateFile(this->env.cfg_dir+"/"+nameStream.str(), this->env.cfg_dir_prefix.length(), this->env.cfg_dir_noprefix);
+				(*proxy_iter)->generateFile(this->env.cfg_dir+"/"+nameStream.str(), this->env.cfg_dir_prefix.length(), this->env.cfg_dir_noprefix, entrySourceMap, scriptTargetMap);
 				proxyCount++;
 			}
 		}
 		else {
 			if (relatedProxies.size() == 1){
-				std::ostringstream nameStream;
-				nameStream << std::setw(2) << std::setfill('0') << relatedProxies.front()->index << "_" << script_iter->name;
-				script_iter->moveFile(this->env.cfg_dir+"/"+nameStream.str(), relatedProxies.front()->permissions);
+				script_iter->moveFile(scriptTargetMap[&*script_iter], relatedProxies.front()->permissions);
 			}
 			else {
 				this->log("GrublistCfg::save: cannot move proxy… only one expected!", Logger::ERROR);
@@ -428,6 +442,26 @@ void GrublistCfg::save(){
 		pclose(saveProc);
 	}
 	send_new_save_progress(1);
+}
+
+std::map<Entry const*, Script const*> GrublistCfg::getEntrySources(Proxy const& proxy, Rule const* parent) const {
+	std::list<Rule> const& list = parent ? parent->subRules : proxy.rules;
+	std::map<Entry const*, Script const*> result;
+	assert(proxy.dataSource != NULL);
+	for (std::list<Rule>::const_iterator iter = list.begin(); iter != list.end(); iter++) {
+		if (iter->dataSource && !proxy.ruleIsFromOwnScript(*iter)) {
+			Script const* script = this->repository.getScriptByEntry(*iter->dataSource);
+			if (script != NULL) {
+				result[iter->dataSource] = script;
+			}
+		} else if (iter->type == Rule::SUBMENU) {
+			std::map<Entry const*, Script const*> subResult = this->getEntrySources(proxy, &*iter);
+			if (subResult.size()) {
+				result.insert(subResult.begin(), subResult.end());
+			}
+		}
+	}
+	return result;
 }
 
 bool GrublistCfg::loadStaticCfg(){

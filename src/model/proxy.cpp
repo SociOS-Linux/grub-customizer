@@ -334,19 +334,52 @@ bool Proxy::deleteFile(){
 		return false;
 }
 
-bool Proxy::generateFile(std::string const& path, int cfg_dir_prefix_length, std::string const& cfg_dir_noprefix){
+std::list<std::string> Proxy::getScriptList(std::map<Entry const*, Script const*> const& entrySourceMap, std::map<Script const*, std::string> const& scriptTargetMap) const {
+	std::map<std::string, void*> uniqueList; // the pointer (value) is just a dummy
+	for (std::map<Entry const*, Script const*>::const_iterator iter = entrySourceMap.begin(); iter != entrySourceMap.end(); iter++) {
+		uniqueList[scriptTargetMap.find(iter->second)->second] = NULL;
+	}
+	std::list<std::string> result;
+	result.push_back(scriptTargetMap.find(this->dataSource)->second); // the own script must be the first entry
+	for (std::map<std::string, void*>::iterator iter = uniqueList.begin(); iter != uniqueList.end(); iter++) {
+		result.push_back(iter->first);
+	}
+	return result;
+}
+
+bool Proxy::generateFile(std::string const& path, int cfg_dir_prefix_length, std::string const& cfg_dir_noprefix, std::map<Entry const*, Script const*> entrySourceMap, std::map<Script const*, std::string> const& scriptTargetMap){
 	if (this->dataSource){
 		FILE* proxyFile = fopen(path.c_str(), "w");
 		if (proxyFile){
 			this->fileName = path;
 			fputs("#!/bin/sh\n#THIS IS A GRUB PROXY SCRIPT\n", proxyFile);
-			fputs(("'"+this->dataSource->fileName.substr(cfg_dir_prefix_length)+"'").c_str(), proxyFile);
+			std::list<std::string> scripts = this->getScriptList(entrySourceMap, scriptTargetMap);
+			if (scripts.size() == 1) { // single script
+				fputs(("'"+this->dataSource->fileName.substr(cfg_dir_prefix_length)+"'").c_str(), proxyFile);
+			} else { // multi script
+				fputs("sh -c '", proxyFile);
+				for (std::list<std::string>::iterator scriptIter = scripts.begin(); scriptIter != scripts.end(); scriptIter++) {
+					fputs(("echo \"### BEGIN "+(*scriptIter).substr(cfg_dir_prefix_length)+" ###\";\n").c_str(), proxyFile);
+					fputs(("\""+(*scriptIter).substr(cfg_dir_prefix_length)+"\";\n").c_str(), proxyFile);
+					fputs(("echo \"### END "+(*scriptIter).substr(cfg_dir_prefix_length)+" ###\";").c_str(), proxyFile);
+					if (&*scriptIter != &scripts.back()) {
+						fputs("\n", proxyFile);
+					}
+				}
+				fputs("'", proxyFile);
+			}
 			fputs((" | "+cfg_dir_noprefix+"/bin/grubcfg_proxy \"").c_str(), proxyFile);
 			for (std::list<Rule>::iterator ruleIter = this->rules.begin(); ruleIter != this->rules.end(); ruleIter++){
 				assert(this->dataSource != NULL);
-				fputs((ruleIter->toString(*this->dataSource)+"\n").c_str(), proxyFile); //write rule
+				EntryPathBuilderImpl entryPathBuilder(*this->dataSource);
+				entryPathBuilder.setScriptTargetMap(scriptTargetMap);
+				entryPathBuilder.setEntrySourceMap(entrySourceMap);
+				fputs((ruleIter->toString(entryPathBuilder)+"\n").c_str(), proxyFile); //write rule
 			}
 			fputs("\"", proxyFile);
+			if (scripts.size() > 1) {
+				fputs(" multi", proxyFile);
+			}
 			fclose(proxyFile);
 			chmod(path.c_str(), this->permissions);
 			return true;
@@ -486,7 +519,7 @@ Rule* Proxy::createSubmenu(Rule* childItem) {
 	return childItem;
 }
 
-bool Proxy::ruleIsFromOwnScript(Rule const& rule) {
+bool Proxy::ruleIsFromOwnScript(Rule const& rule) const {
 	assert(this->dataSource != NULL);
 	assert(rule.dataSource != NULL);
 	if (this->dataSource->hasEntry(*rule.dataSource)) {

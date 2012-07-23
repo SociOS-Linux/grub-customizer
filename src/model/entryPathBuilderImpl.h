@@ -16,25 +16,25 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef GRUB_CUSTOMIZER_REPOSITORY_INCLUDED
-#define GRUB_CUSTOMIZER_REPOSITORY_INCLUDED
-#include "script.h"
-#include "libproxyscript_parser.h"
-#include "pscriptname_translator.h"
-#include <sys/stat.h>
-#include <dirent.h>
-#include <map>
-#include "../presenter/commonClass.h"
 
-struct Repository : public std::list<Script>, public CommonClass {
-	void load(std::string const& directory, bool is_proxifiedScript_dir);
-	Script* getScriptByFilename(std::string const& fileName, bool createScriptIfNotFound = false);
-	Script* getScriptByName(std::string const& name);
-	Script const* getScriptByEntry(Entry const& entry) const;
-	Script* getNthScript(int pos);
-	void deleteAllEntries();
-	Script* createScript(std::string const& name, std::string const& fileName, std::string const& content);
-	std::map<std::string, Script*> getScriptPathMap();
+#ifndef ENTRYPATHBUILDERIMPL_H_
+#define ENTRYPATHBUILDERIMPL_H_
+#include "../interface/entryPathBuilder.h"
+#include "script.h"
+#include <map>
+
+class EntryPathBuilderImpl : public EntryPathBilder {
+	Script const* mainScript;
+	std::map<Entry const*, Script const*> entrySourceMap;
+	std::map<Script const*, std::string> scriptTargetMap;
+public:
+	EntryPathBuilderImpl(Script const& mainScript);
+	void setMainScript(Script const& mainScript);
+	void setEntrySourceMap(std::map<Entry const*, Script const*> const& entrySourceMap);
+	void setScriptTargetMap(std::map<Script const*, std::string> const& scriptTargetMap);
+	std::list<std::string> buildPath(Entry const& entry) const;
+	std::string buildPathString(Entry const& entry, bool withOtherEntriesPlaceholder = false) const;
+	std::string buildScriptPath(Entry const& entry) const;
 };
 
 #endif

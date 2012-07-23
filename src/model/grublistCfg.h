@@ -80,6 +80,7 @@ public:
 	void load(bool preserveConfig = false);
 	void save();
 	void readGeneratedFile(FILE* source, bool createScriptIfNotFound = false, bool createProxyIfNotFound = false);
+	std::map<Entry const*, Script const*> getEntrySources(Proxy const& proxy, Rule const* parent = NULL) const;
 	bool loadStaticCfg();
 
 	void send_new_load_progress(double newProgress);

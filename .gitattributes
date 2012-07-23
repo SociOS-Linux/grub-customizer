@@ -66,6 +66,8 @@ src/model/deviceDataList.cpp -text
 src/model/deviceDataList.h -text
 src/model/entry.cpp -text
 src/model/entry.h -text
+src/model/entryPathBuilderImpl.cpp -text
+src/model/entryPathBuilderImpl.h -text
 src/model/fbResolutionsGetter.cpp -text
 src/model/fbResolutionsGetter.h -text
 src/model/grubEnv.cpp -text

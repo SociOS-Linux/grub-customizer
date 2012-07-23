@@ -23,12 +23,11 @@
 #include <cstdlib>
 #include <sys/stat.h>
 #include "entry.h"
-#include "../interface/entryPathBuilder.h"
 #include "../interface/entryPathFollower.h"
 #include "../presenter/commonClass.h"
 #include "../lib/md5.h"
 
-struct Script : public EntryPathBilder, EntryPathFollower, std::list<Entry>, public CommonClass {
+struct Script : public EntryPathFollower, public std::list<Entry>, public CommonClass {
 	enum Exception {
 		ELEMENT_NOT_FOUND
 	};
