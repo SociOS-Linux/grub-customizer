@@ -22,6 +22,7 @@
 #include "script.h"
 #include <sys/stat.h>
 #include <assert.h>
+#include <map>
 
 struct Proxy {
 	enum Exception {
@@ -33,8 +34,8 @@ struct Proxy {
 	short int permissions;
 	std::string fileName; //may be the same as Script::fileName
 	Script* dataSource;
-	std::list<std::list<std::string> > __idPathList; //to be used by sync();
-	std::list<std::list<std::string> > __idPathList_OtherEntriesPlaceHolders; //to be used by sync();
+	std::map<Script*, std::list<std::list<std::string> > > __idPathList; //to be used by sync();
+	std::map<Script*, std::list<std::list<std::string> > > __idPathList_OtherEntriesPlaceHolders; //to be used by sync();
 	Proxy();
 	Proxy(Script& dataSource);
 	bool isExecutable() const;
@@ -43,11 +44,11 @@ struct Proxy {
 	void importRuleString(const char* ruleString);
 	Rule* getRuleByEntry(Entry const& entry, std::list<Rule>& list, Rule::RuleType ruletype);
 	void unsync(Rule* parent = NULL);
-	bool sync(bool deleteInvalidRules = true, bool expand = true);
-	void sync_connectExisting(Rule* parent = NULL);
-	void sync_connectExistingByHash(Rule* parent = NULL);
-	void sync_add_placeholders(Rule* parent = NULL);
-	void sync_expand();
+	bool sync(bool deleteInvalidRules = true, bool expand = true, std::map<std::string, Script*> scriptMap = std::map<std::string, Script*>());
+	void sync_connectExisting(Rule* parent = NULL, std::map<std::string, Script*> scriptMap = std::map<std::string, Script*>());
+	void sync_connectExistingByHash(Rule* parent = NULL, std::map<std::string, Script*> scriptMap = std::map<std::string, Script*>());
+	void sync_add_placeholders(Rule* parent = NULL, std::map<std::string, Script*> scriptMap = std::map<std::string, Script*>());
+	void sync_expand(std::map<std::string, Script*> scriptMap = std::map<std::string, Script*>());
 	void sync_cleanup(Rule* parent = NULL);
 	bool isModified(Rule const* parentRule = NULL, Entry const* parentEntry = NULL) const;
 	bool deleteFile();

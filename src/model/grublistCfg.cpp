@@ -22,7 +22,7 @@ GrublistCfg::GrublistCfg(GrubEnv& env)
  : error_proxy_not_found(false),
  progress(0),
  cancelThreadsRequested(false), verbose(true), env(env), eventListener(NULL),
- mutex(NULL), errorLogFile(ERROR_LOG_FILE)
+ mutex(NULL), errorLogFile(ERROR_LOG_FILE), ignoreLock(false)
 {}
 
 void GrublistCfg::setEventListener(EventListener_model& eventListener) {
@@ -40,16 +40,22 @@ void GrublistCfg::setLogger(Logger& logger) {
 }
 
 void GrublistCfg::lock(){
+	if (this->ignoreLock)
+		return;
 	if (this->mutex == NULL)
 		throw MISSING_MUTEX;
 	this->mutex->lock();
 }
 bool GrublistCfg::lock_if_free(){
+	if (this->ignoreLock)
+		return true;
 	if (this->mutex == NULL)
 		throw MISSING_MUTEX;
 	return this->mutex->trylock();
 }
 void GrublistCfg::unlock(){
+	if (this->ignoreLock)
+		return;
 	if (this->mutex == NULL)
 		throw MISSING_MUTEX;
 	this->mutex->unlock();
@@ -228,7 +234,7 @@ void GrublistCfg::load(bool preserveConfig){
 }
 
 
-void GrublistCfg::readGeneratedFile(FILE* source, bool createScriptIfNotFound){
+void GrublistCfg::readGeneratedFile(FILE* source, bool createScriptIfNotFound, bool createProxyIfNotFound){
 	GrubConfRow row;
 	Script* script;
 	int i = 0;
@@ -255,7 +261,7 @@ void GrublistCfg::readGeneratedFile(FILE* source, bool createScriptIfNotFound){
 				realScriptName = prefix+readScriptForwarder(realScriptName);
 			}
 			script = repository.getScriptByFilename(realScriptName, createScriptIfNotFound);
-			if (createScriptIfNotFound){ //for the compare-configuration
+			if (createScriptIfNotFound && createProxyIfNotFound){ //for the compare-configuration
 				this->proxies.push_back(Proxy(*script));
 			}
 			this->unlock();
@@ -424,7 +430,7 @@ void GrublistCfg::save(){
 bool GrublistCfg::loadStaticCfg(){
 	FILE* oldConfigFile = fopen(env.output_config_file.c_str(), "r");
 	if (oldConfigFile){
-		this->readGeneratedFile(oldConfigFile, true);
+		this->readGeneratedFile(oldConfigFile, true, true);
 		fclose(oldConfigFile);
 		return true;
 	}

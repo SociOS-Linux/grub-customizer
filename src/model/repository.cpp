@@ -99,3 +99,14 @@ Script* Repository::createScript(std::string const& name, std::string const& fil
 	return NULL;
 }
 
+/**
+ * returns a list of all scripts associated by its fileNames
+ */
+std::map<std::string, Script*> Repository::getScriptPathMap() {
+	std::map<std::string, Script*> map;
+	for (Repository::iterator iter = this->begin(); iter != this->end(); iter++){
+		map[iter->fileName] = &*iter;
+	}
+	return map;
+}
+

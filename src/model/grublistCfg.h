@@ -71,6 +71,7 @@ public:
 	void lock();
 	bool lock_if_free();
 	void unlock();
+	bool ignoreLock;
 	
 	bool cancelThreadsRequested;
 	bool createScriptForwarder(std::string const& scriptName) const;
@@ -78,7 +79,7 @@ public:
 	std::string readScriptForwarder(std::string const& scriptForwarderFilePath) const;
 	void load(bool preserveConfig = false);
 	void save();
-	void readGeneratedFile(FILE* source, bool createScriptIfNotFound = false);
+	void readGeneratedFile(FILE* source, bool createScriptIfNotFound = false, bool createProxyIfNotFound = false);
 	bool loadStaticCfg();
 
 	void send_new_load_progress(double newProgress);

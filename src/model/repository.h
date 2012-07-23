@@ -23,6 +23,7 @@
 #include "pscriptname_translator.h"
 #include <sys/stat.h>
 #include <dirent.h>
+#include <map>
 #include "../presenter/commonClass.h"
 
 struct Repository : public std::list<Script>, public CommonClass {
@@ -32,6 +33,7 @@ struct Repository : public std::list<Script>, public CommonClass {
 	Script* getNthScript(int pos);
 	void deleteAllEntries();
 	Script* createScript(std::string const& name, std::string const& fileName, std::string const& content);
+	std::map<std::string, Script*> getScriptPathMap();
 };
 
 #endif

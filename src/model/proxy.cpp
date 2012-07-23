@@ -127,13 +127,13 @@ void Proxy::unsync(Rule* parent) {
 	}
 }
 
-bool Proxy::sync(bool deleteInvalidRules, bool expand){
+bool Proxy::sync(bool deleteInvalidRules, bool expand, std::map<std::string, Script*> scriptMap){
 	if (this->dataSource){
-		this->sync_connectExisting();
-		this->sync_connectExistingByHash();
+		this->sync_connectExisting(NULL, scriptMap);
+		this->sync_connectExistingByHash(NULL, scriptMap);
 		if (expand) {
-			this->sync_add_placeholders();
-			this->sync_expand();
+			this->sync_add_placeholders(NULL, scriptMap);
+			this->sync_expand(scriptMap);
 		}
 
 		if (deleteInvalidRules)
@@ -145,7 +145,7 @@ bool Proxy::sync(bool deleteInvalidRules, bool expand){
 		return false;
 }
 
-void Proxy::sync_connectExisting(Rule* parent) {
+void Proxy::sync_connectExisting(Rule* parent, std::map<std::string, Script*> scriptMap) {
 	assert(this->dataSource != NULL);
 	if (parent == NULL) {
 		this->__idPathList.clear();
@@ -155,47 +155,62 @@ void Proxy::sync_connectExisting(Rule* parent) {
 		if (iter->type != Rule::SUBMENU) { // don't sync submenu entries
 			std::list<std::string> path = iter->__idpath;
 
-			if (iter->type != Rule::OTHER_ENTRIES_PLACEHOLDER) {
-				this->__idPathList.push_back(path);
+			Script* script = NULL;
+			if (iter->__sourceScriptPath == "") { // main dataSource
+				script = this->dataSource;
 			} else {
-				this->__idPathList_OtherEntriesPlaceHolders.push_back(path);
+				assert(scriptMap.find(iter->__sourceScriptPath) != scriptMap.end()); // expecting that the script exists on the map
+				script = scriptMap[iter->__sourceScriptPath];
 			}
 
-			iter->dataSource = this->dataSource->getEntryByPath(path);
+			if (iter->type != Rule::OTHER_ENTRIES_PLACEHOLDER) {
+				this->__idPathList[script].push_back(path);
+			} else {
+				this->__idPathList_OtherEntriesPlaceHolders[script].push_back(path);
+			}
+
+			iter->dataSource = script->getEntryByPath(path);
 
 			if (iter->type == Rule::OTHER_ENTRIES_PLACEHOLDER) {
-				iter->dataSource_list = this->dataSource->getListByPath(path);
+				iter->dataSource_list = script->getListByPath(path);
 			}
 		} else if (iter->subRules.size()) {
-			this->sync_connectExisting(&*iter);
+			this->sync_connectExisting(&*iter, scriptMap);
 		}
 	}
 }
 
-void Proxy::sync_connectExistingByHash(Rule* parent) {
+void Proxy::sync_connectExistingByHash(Rule* parent, std::map<std::string, Script*> scriptMap) {
 	assert(this->dataSource != NULL);
 	std::list<Rule>& list = parent ? parent->subRules : this->rules;
 	for (std::list<Rule>::iterator iter = list.begin(); iter != list.end(); iter++) {
 		if (iter->dataSource == NULL && iter->__idHash != "") {
-			iter->dataSource = this->dataSource->getEntryByHash(iter->__idHash, *this->dataSource);
+			Script* script = NULL;
+			if (iter->__sourceScriptPath == "") {
+				script = this->dataSource;
+			} else {
+				assert(scriptMap.find(iter->__sourceScriptPath) != scriptMap.end()); // expecting that the script exists on the map
+				script = scriptMap[iter->__sourceScriptPath];
+			}
+			iter->dataSource = script->getEntryByHash(iter->__idHash, *script);
 			if (iter->dataSource) {
-				this->__idPathList.push_back(this->dataSource->buildPath(*iter->dataSource));
+				this->__idPathList[script].push_back(script->buildPath(*iter->dataSource));
 			}
 		}
 		if (iter->subRules.size()) {
-			this->sync_connectExistingByHash(&*iter);
+			this->sync_connectExistingByHash(&*iter, scriptMap);
 		}
 	}
 }
 
-void Proxy::sync_add_placeholders(Rule* parent) {
+void Proxy::sync_add_placeholders(Rule* parent, std::map<std::string, Script*> scriptMap) {
 	assert(parent == NULL || parent->dataSource != NULL);
 
 	std::list<std::string> path = parent ? this->dataSource->buildPath(*parent->dataSource) : std::list<std::string>();
 	//find out if currentPath is on the blacklist
 	bool eop_is_blacklisted = false;
 
-	for (std::list<std::list<std::string> >::const_iterator pti_iter = this->__idPathList_OtherEntriesPlaceHolders.begin(); pti_iter != this->__idPathList_OtherEntriesPlaceHolders.end(); pti_iter++) {
+	for (std::list<std::list<std::string> >::const_iterator pti_iter = this->__idPathList_OtherEntriesPlaceHolders[this->dataSource].begin(); pti_iter != this->__idPathList_OtherEntriesPlaceHolders[this->dataSource].end(); pti_iter++) {
 		if (*pti_iter == path) {
 			eop_is_blacklisted = true;
 			break;
@@ -208,7 +223,7 @@ void Proxy::sync_add_placeholders(Rule* parent) {
 		newRule.dataSource = this->dataSource->getEntryByPath(path);
 		newRule.dataSource_list = this->dataSource->getListByPath(path);
 		list.push_front(newRule);
-		this->__idPathList_OtherEntriesPlaceHolders.push_back(path);
+		this->__idPathList_OtherEntriesPlaceHolders[this->dataSource].push_back(path);
 	}
 
 	//sub entries (recursion)
@@ -220,31 +235,33 @@ void Proxy::sync_add_placeholders(Rule* parent) {
 }
 
 
-void Proxy::sync_expand() {
+void Proxy::sync_expand(std::map<std::string, Script*> scriptMap) {
 	assert(this->dataSource != NULL);
-	for (std::list<std::list<std::string> >::iterator oepPathIter = this->__idPathList_OtherEntriesPlaceHolders.begin(); oepPathIter != this->__idPathList_OtherEntriesPlaceHolders.end(); oepPathIter++) {
-		std::list<Entry>* dataSource = this->dataSource->getListByPath(*oepPathIter);
-		if (dataSource) {
-			Rule* oep = this->getPlaceholderBySourceList(*dataSource, this->rules);
-			assert(oep != NULL);
-			Rule* parentRule = this->getParentRule(oep);
-			std::list<Rule>& dataTarget = parentRule ? parentRule->subRules : this->rules;
+	for (std::map<std::string, Script*>::iterator scriptIter = scriptMap.begin(); scriptIter != scriptMap.end(); scriptIter++) {
+		for (std::list<std::list<std::string> >::iterator oepPathIter = this->__idPathList_OtherEntriesPlaceHolders[scriptIter->second].begin(); oepPathIter != this->__idPathList_OtherEntriesPlaceHolders[scriptIter->second].end(); oepPathIter++) {
+			std::list<Entry>* dataSource = scriptIter->second->getListByPath(*oepPathIter);
+			if (dataSource) {
+				Rule* oep = this->getPlaceholderBySourceList(*dataSource, this->rules);
+				assert(oep != NULL);
+				Rule* parentRule = this->getParentRule(oep);
+				std::list<Rule>& dataTarget = parentRule ? parentRule->subRules : this->rules;
 
-			std::list<Rule>::iterator dataTargetIter = dataTarget.begin();
-			while (dataTargetIter != dataTarget.end() && (dataTargetIter->type != Rule::OTHER_ENTRIES_PLACEHOLDER || dataTargetIter->__idpath != *oepPathIter)){
-				dataTargetIter++;
-			}
-			std::list<Rule> newRules;
-			for (std::list<Entry>::iterator iter = dataSource->begin(); iter != dataSource->end(); iter++){
-				Rule* relatedRule = this->getRuleByEntry(*iter, this->rules, Rule::NORMAL);
-				Rule* relatedRulePt = this->getRuleByEntry(*iter, this->rules, Rule::PLAINTEXT);
-				Rule* relatedRuleOep = this->getRuleByEntry(*iter, this->rules, Rule::OTHER_ENTRIES_PLACEHOLDER);
-				if (!relatedRule && !relatedRuleOep && !relatedRulePt){
-					newRules.push_back(Rule(*iter, dataTargetIter->isVisible, *this->dataSource, this->__idPathList, this->dataSource->buildPath(*iter))); //generate rule for given entry
+				std::list<Rule>::iterator dataTargetIter = dataTarget.begin();
+				while (dataTargetIter != dataTarget.end() && (dataTargetIter->type != Rule::OTHER_ENTRIES_PLACEHOLDER || dataTargetIter->__idpath != *oepPathIter || dataTargetIter->__sourceScriptPath != scriptIter->first)){
+					dataTargetIter++;
 				}
+				std::list<Rule> newRules;
+				for (std::list<Entry>::iterator iter = dataSource->begin(); iter != dataSource->end(); iter++){
+					Rule* relatedRule = this->getRuleByEntry(*iter, this->rules, Rule::NORMAL);
+					Rule* relatedRulePt = this->getRuleByEntry(*iter, this->rules, Rule::PLAINTEXT);
+					Rule* relatedRuleOep = this->getRuleByEntry(*iter, this->rules, Rule::OTHER_ENTRIES_PLACEHOLDER);
+					if (!relatedRule && !relatedRuleOep && !relatedRulePt){
+						newRules.push_back(Rule(*iter, dataTargetIter->isVisible, *scriptIter->second, this->__idPathList[scriptIter->second], scriptIter->second->buildPath(*iter))); //generate rule for given entry
+					}
+				}
+				dataTargetIter++;
+				dataTarget.splice(dataTargetIter, newRules);
 			}
-			dataTargetIter++;
-			dataTarget.splice(dataTargetIter, newRules);
 		}
 	}
 }

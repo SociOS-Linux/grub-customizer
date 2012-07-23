@@ -56,6 +56,15 @@ add_executable(grubcfg-proxy
 	src/presenter/grubcfg_proxy_main.cpp
 	src/presenter/commonClass.cpp
 	src/lib/md5.cpp
+	# multi:
+	src/model/grublistCfg.cpp
+	src/model/grubEnv.cpp
+	src/model/settingsStore.cpp
+	src/model/mountTable.cpp
+	src/model/proxylist.cpp
+	src/model/repository.cpp
+	src/model/pscriptname_translator.cpp
+	src/model/libproxyscript_parser.cpp
 )
 
 target_link_libraries(grub-customizer 
