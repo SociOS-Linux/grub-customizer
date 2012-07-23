@@ -27,7 +27,8 @@ public:
 		IMPORTANT_EVENT,
 		INFO,
 		WARNING,
-		ERROR
+		ERROR,
+		DEBUG
 	};
 	virtual void log(std::string const& str, Priority prio) = 0;
 };

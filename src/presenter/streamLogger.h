@@ -24,8 +24,16 @@
 class StreamLogger : public Logger {
 	std::ostream* stream;
 public:
+	enum LogLevel {
+		LOG_NOTHING,
+		LOG_DEBUG_ONLY,
+		LOG_IMPORTANT,
+		LOG_EVENT,
+		LOG_VERBOSE
+	} logLevel;
 	StreamLogger(std::ostream& stream);
 	void log(std::string const& message, Logger::Priority prio);
+	void setLogLevel(LogLevel level);
 };
 
 #endif

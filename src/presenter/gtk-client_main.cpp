@@ -38,7 +38,7 @@
 
 int main(int argc, char** argv){
 	if (getuid() != 0 && (argc == 1 || argv[1] != std::string("no-fork"))) {
-		return system((std::string("pkexec ") + argv[0] + " no-fork").c_str());
+		return system((std::string("pkexec ") + argv[0] + (argc == 2 ? std::string(" ") + argv[1] : "") + " no-fork").c_str());
 	}
 	setlocale( LC_ALL, "");
 	bindtextdomain( "grub-customizer", LOCALEDIR);
@@ -128,6 +128,21 @@ int main(int argc, char** argv){
 	listCfgMutex2.setLogger(logger);
 	threadC.setLogger(logger);
 	env.setLogger(logger);
+
+	// configure logger
+	logger.setLogLevel(StreamLogger::LOG_EVENT);
+	if (argc > 1) {
+		std::string logParam = argv[1];
+		if (logParam == "debug") {
+			logger.setLogLevel(StreamLogger::LOG_DEBUG_ONLY);
+		} else if (logParam == "log-important") {
+			logger.setLogLevel(StreamLogger::LOG_IMPORTANT);
+		} else if (logParam == "quiet") {
+			logger.setLogLevel(StreamLogger::LOG_NOTHING);
+		} else if (logParam == "verbose") {
+			logger.setLogLevel(StreamLogger::LOG_VERBOSE);
+		}
+	}
 
 	//configure contentParser factory
 	GrubDeviceMap deviceMap(env);
