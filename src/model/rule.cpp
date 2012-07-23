@@ -108,21 +108,21 @@ bool Rule::hasRealSubrules() const {
 }
 
 
-void Rule::print() const {
+void Rule::print(std::ostream& out) const {
 	if (this->isVisible) {
 		if (this->type == Rule::PLAINTEXT && this->dataSource) {
-			std::cout << this->dataSource->content;
+			out << this->dataSource->content;
 		} else if (this->type == Rule::NORMAL && this->dataSource) {
-			std::cout << "menuentry";
-			std::cout << " \"" << this->outputName << "\"" << this->dataSource->extension << "{\n";
-			std::cout << this->dataSource->content;
-			std::cout << "}\n";
+			out << "menuentry";
+			out << " \"" << this->outputName << "\"" << this->dataSource->extension << "{\n";
+			out << this->dataSource->content;
+			out << "}\n";
 		} else if (this->type == Rule::SUBMENU && this->hasRealSubrules()) {
-			std::cout << "submenu" << " \"" << this->outputName << "\"" << "{\n";
+			out << "submenu" << " \"" << this->outputName << "\"" << "{\n";
 			for (std::list<Rule>::const_iterator iter = this->subRules.begin(); iter != this->subRules.end(); iter++) {
-				iter->print();
+				iter->print(out);
 			}
-			std::cout << "}\n";
+			out << "}\n";
 		}
 	}
 }

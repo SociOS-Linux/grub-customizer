@@ -22,6 +22,8 @@
 #include "../model/rule.h"
 #include "../model/grublistCfg.h" // multi
 
+#include <iostream>
+
 int main(int argc, char** argv){
 	if (argc == 2) {
 		Script script("noname", "");
@@ -41,7 +43,7 @@ int main(int argc, char** argv){
 		proxy.sync(true, true);
 		
 		for (std::list<Rule>::iterator iter = proxy.rules.begin(); iter != proxy.rules.end(); iter++){
-			iter->print();
+			iter->print(std::cout);
 		}
 		return 0;
 	} else if (argc == 3 && std::string(argv[2]) == "multi") {
@@ -61,7 +63,7 @@ int main(int argc, char** argv){
 		scriptSource.proxies.front().sync(true, true, map);
 
 		for (std::list<Rule>::iterator iter = scriptSource.proxies.front().rules.begin(); iter != scriptSource.proxies.front().rules.end(); iter++){
-			iter->print();
+			iter->print(std::cout);
 		}
 	} else {
 		std::cerr << "wrong argument count. You have to give the config as parameter 1!" << std::endl;

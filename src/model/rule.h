@@ -22,7 +22,7 @@
 #include "entry.h"
 #include "../interface/entryPathBuilder.h"
 #include "../interface/entryPathFollower.h"
-#include <iostream>
+#include <ostream>
 #include "../lib/md5.h"
 
 struct Rule {
@@ -42,7 +42,7 @@ struct Rule {
 	Rule();
 	std::string toString(EntryPathBilder const& pathBuilder);
 	bool hasRealSubrules() const;
-	void print() const;
+	void print(std::ostream& out) const;
 	std::string getEntryName() const;
 	void setVisibility(bool isVisible);
 };
