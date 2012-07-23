@@ -21,10 +21,11 @@
 StreamLogger::StreamLogger(std::ostream& stream) : stream(&stream) {}
 
 void StreamLogger::log(std::string const& message, Logger::Priority prio) {
-	if (this->logLevel == LOG_NOTHING ||
+	if (prio != ERROR && (
+		this->logLevel == LOG_NOTHING ||
 		this->logLevel == LOG_DEBUG_ONLY && prio != Logger::DEBUG ||
 		this->logLevel == LOG_IMPORTANT && prio != Logger::IMPORTANT_EVENT ||
-		this->logLevel == LOG_EVENT && prio != Logger::EVENT && prio != Logger::IMPORTANT_EVENT) {
+		this->logLevel == LOG_EVENT && prio != Logger::EVENT && prio != Logger::IMPORTANT_EVENT)) {
 		return;
 	}
 	if (prio == Logger::IMPORTANT_EVENT) {
