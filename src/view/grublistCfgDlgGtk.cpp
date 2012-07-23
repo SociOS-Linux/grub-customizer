@@ -303,7 +303,7 @@ void GrublistCfgDlgGtk::appendEntry(std::string const& name, void* entryPtr, boo
 	}
 
 	Glib::RefPtr<Gdk::Pixbuf> icon;
-	std::string outputName = name + "\n";
+	std::string outputName = "<b>" + escapeXml(name) + "</b>\n<small>";
 	if (is_submenu) {
 		outputName += gettext("submenu");
 		icon = this->win.render_icon(Gtk::Stock::DIRECTORY, Gtk::ICON_SIZE_LARGE_TOOLBAR);
@@ -315,11 +315,17 @@ void GrublistCfgDlgGtk::appendEntry(std::string const& name, void* entryPtr, boo
 		icon = this->win.render_icon(Gtk::Stock::EXECUTE, Gtk::ICON_SIZE_LARGE_TOOLBAR);
 	}
 	if (scriptName != "") {
-		outputName += std::string(" / ") + gettext("script: ") + scriptName;
+		outputName += std::string(" / ") + gettext("script: ") + escapeXml(scriptName);
 	}
 
 	if (defaultName != "" && name != defaultName) {
-		outputName += std::string(" / ") + gettext("default name: ") + defaultName;
+		outputName += std::string(" / ") + gettext("default name: ") + escapeXml(defaultName);
+	}
+
+	outputName += "</small>";
+
+	if (isModified) {
+		outputName = "<i>" + outputName + "</i>";
 	}
 
 	(*entryRow)[tvConfList.treeModel.name] = name;
@@ -328,7 +334,6 @@ void GrublistCfgDlgGtk::appendEntry(std::string const& name, void* entryPtr, boo
 	(*entryRow)[tvConfList.treeModel.is_renamable] = !is_placeholder;
 	(*entryRow)[tvConfList.treeModel.is_editable] = isEditable;
 	(*entryRow)[tvConfList.treeModel.is_sensitive] = !is_placeholder;
-	(*entryRow)[tvConfList.treeModel.fontWeight] = isModified ? Pango::WEIGHT_BOLD : Pango::WEIGHT_NORMAL;
 	(*entryRow)[tvConfList.treeModel.icon] = icon;
 
 
@@ -761,9 +766,8 @@ GrubConfListing::GrubConfListing(){
 	this->mainColumn.pack_start(pixbufRenderer, false);
 	this->mainColumn.add_attribute(pixbufRenderer.property_pixbuf(), treeModel.icon);
 	this->mainColumn.pack_start(this->textRenderer, true);
-	this->mainColumn.add_attribute(this->textRenderer.property_text(), treeModel.text);
+	this->mainColumn.add_attribute(this->textRenderer.property_markup(), treeModel.text);
 	this->mainColumn.add_attribute(this->textRenderer.property_editable(), treeModel.is_renamable);
-	this->mainColumn.add_attribute(this->textRenderer.property_weight(), treeModel.fontWeight);
 	this->mainColumn.set_spacing(10);
 
 	this->set_headers_visible(false);
@@ -779,6 +783,5 @@ GrubConfListing::TreeModel::TreeModel(){
 	this->add(is_renamable);
 	this->add(is_editable);
 	this->add(is_sensitive);
-	this->add(fontWeight);
 	this->add(icon);
 }

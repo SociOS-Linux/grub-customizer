@@ -26,3 +26,7 @@ std::string str_replace(const std::string &search, const std::string &replace, s
 	}
 	return subject;
 }
+
+std::string escapeXml(std::string const& input) {
+	return str_replace("<", "&lt;", str_replace("&", "&amp;", input));
+}

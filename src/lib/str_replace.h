@@ -21,5 +21,6 @@
 #include <string>
 
 std::string str_replace(const std::string &search, const std::string &replace, std::string subject);
+std::string escapeXml(std::string const& input);
 
 #endif /* STR_REPLACE_H_ */

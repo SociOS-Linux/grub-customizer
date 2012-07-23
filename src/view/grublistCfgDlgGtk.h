@@ -25,11 +25,9 @@
 #include "../interface/grublistCfgDlg.h"
 #include "../presenter/commonClass.h"
 #include "settingsDlgGtk.h"
+#include "../lib/str_replace.h"
 #include <cassert>
 
-//TODO: Edit -> Rename [v3]
-//TODO: Edit -> activate/unactivate [v3]
-//TODO: Script descriptions (to avoid two custom entries) [v3]
 class GrubConfListing : public Gtk::TreeView {
 public:
 	struct TreeModel : public Gtk::TreeModelColumnRecord {
@@ -40,7 +38,6 @@ public:
 		Gtk::TreeModelColumn<bool> is_renamable;
 		Gtk::TreeModelColumn<bool> is_editable;
 		Gtk::TreeModelColumn<bool> is_sensitive;
-		Gtk::TreeModelColumn<int> fontWeight;
 		Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > icon;
 		TreeModel();
 	};
