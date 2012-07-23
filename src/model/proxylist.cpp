@@ -175,3 +175,17 @@ Proxy* ProxyList::getProxyByRule(Rule* rule) {
 	throw NO_RELATED_PROXY_FOUND;
 }
 
+std::list<Rule>::iterator ProxyList::moveRuleToNewProxy(Rule& rule, int direction) {
+	Proxy* currentProxy = this->getProxyByRule(&rule);
+	std::list<Proxy>::iterator proxyIter = this->begin();
+	for (;proxyIter != this->end() && &*proxyIter != currentProxy; proxyIter++) {}
+
+	if (direction == 1) {
+		proxyIter++;
+	}
+	std::list<Proxy>::iterator newProxy = this->insert(proxyIter, Proxy(*currentProxy->dataSource, false));
+	newProxy->removeEquivalentRules(rule);
+	std::list<Rule>::iterator movedRule = newProxy->rules.insert(direction == -1 ? newProxy->rules.end() : newProxy->rules.begin(), rule);
+	rule.isVisible = false;
+	return movedRule;
+}

@@ -49,6 +49,7 @@ struct ProxyList : public std::list<Proxy>, public CommonClass {
 	static std::list<EntryTitleListItem> generateEntryTitleList(std::list<Rule> const& parent, std::string const& labelPathPrefix, std::string const& numericPathPrefix, std::string const& numericPathLabelPrefix, int* offset = NULL);
 	Proxy* getProxyByRule(Rule* rule, std::list<Rule> const& list, Proxy& parentProxy);
 	Proxy* getProxyByRule(Rule* rule);
+	std::list<Rule>::iterator moveRuleToNewProxy(Rule& rule, int direction);
 };
 
 #endif

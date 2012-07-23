@@ -38,7 +38,7 @@ struct Proxy {
 	std::map<Script*, std::list<std::list<std::string> > > __idPathList; //to be used by sync();
 	std::map<Script*, std::list<std::list<std::string> > > __idPathList_OtherEntriesPlaceHolders; //to be used by sync();
 	Proxy();
-	Proxy(Script& dataSource);
+	Proxy(Script& dataSource, bool activateRules = true);
 	bool isExecutable() const;
 	void set_isExecutable(bool value);
 	static std::list<Rule> parseRuleString(const char** ruleString);
@@ -57,6 +57,7 @@ struct Proxy {
 	bool generateFile(std::string const& path, int cfg_dir_prefix_length, std::string const& cfg_dir_noprefix, std::map<Entry const*, Script const*> ruleSourceMap, std::map<Script const*, std::string> const& scriptTargetMap); //before running this function, the realted script file must be saved!
 	std::string getScriptName();
 	Rule& moveRule(Rule* rule, int direction);
+	std::list<Rule>::iterator getNextVisibleRule(std::list<Rule>::iterator base, int direction);
 	Rule* removeSubmenu(Rule* childItem);
 	Rule* createSubmenu(Rule* childItem);
 	bool ruleIsFromOwnScript(Rule const& rule) const;

@@ -603,39 +603,55 @@ Rule& GrublistCfg::moveRule(Rule* rule, int direction){
 		return this->proxies.getProxyByRule(rule)->moveRule(rule, direction);
 	} catch (Proxy::Exception e) {
 		if (e == Proxy::NO_MOVE_TARGET_FOUND) {
-			Proxy* currentProxy = this->proxies.getProxyByRule(rule);
+			std::list<Rule>::iterator movedRule = this->proxies.moveRuleToNewProxy(*rule, direction);
+
+			Proxy* currentProxy = this->proxies.getProxyByRule(&*movedRule);
 			std::list<Proxy>::iterator proxyIter = this->proxies.begin();
 			for (;proxyIter != this->proxies.end() && &*proxyIter != currentProxy; proxyIter++) {}
 
-			if (direction == -1 && proxyIter != this->proxies.begin()) {
+			if (direction == -1) {
 				proxyIter--;
-				proxyIter->removeEquivalentRules(*rule);
-				proxyIter->rules.push_back(*rule);
-				if (rule->type == Rule::SUBMENU) {
-					currentProxy->removeForeignChildRules(*rule);
-				}
-				if (rule->type == Rule::SUBMENU && rule->subRules.size() != 0 || rule->type != Rule::SUBMENU && currentProxy->ruleIsFromOwnScript(*rule)) {
-					rule->isVisible = false;
-				} else {
-					currentProxy->rules.pop_front();
-				}
-				return proxyIter->rules.back();
-			} else if (direction == 1 && proxyIter != this->proxies.end() && &*proxyIter != &this->proxies.back()) {
+			} else if (direction == 1) {
 				proxyIter++;
-				proxyIter->removeEquivalentRules(*rule);
-				proxyIter->rules.push_front(*rule);
-				if (rule->type == Rule::SUBMENU) {
-					currentProxy->removeForeignChildRules(*rule);
-				}
-				if (rule->type == Rule::SUBMENU && rule->subRules.size() != 0 || rule->type != Rule::SUBMENU && currentProxy->ruleIsFromOwnScript(*rule)) {
-					rule->isVisible = false;
-				} else {
-					currentProxy->rules.pop_back();
-				}
-				return proxyIter->rules.front();
-			} else {
-				throw GrublistCfg::NO_MOVE_TARGET_FOUND;
 			}
+
+			std::list<Rule>::iterator movedRule2 = this->proxies.moveRuleToNewProxy(direction == -1 ? proxyIter->rules.back() : proxyIter->rules.front(), -direction);
+			this->renumerate();
+			this->swapProxies(currentProxy, this->proxies.getProxyByRule(&*movedRule2));
+
+			return *movedRule;
+
+
+//
+//			if (direction == -1 && proxyIter != this->proxies.begin()) {
+//				proxyIter--;
+//				proxyIter->removeEquivalentRules(*rule);
+//				proxyIter->rules.push_back(*rule);
+//				if (rule->type == Rule::SUBMENU) {
+//					currentProxy->removeForeignChildRules(*rule);
+//				}
+//				if (rule->type == Rule::SUBMENU && rule->subRules.size() != 0 || rule->type != Rule::SUBMENU && currentProxy->ruleIsFromOwnScript(*rule)) {
+//					rule->isVisible = false;
+//				} else {
+//					currentProxy->rules.pop_front();
+//				}
+//				return proxyIter->rules.back();
+//			} else if (direction == 1 && proxyIter != this->proxies.end() && &*proxyIter != &this->proxies.back()) {
+//				proxyIter++;
+//				proxyIter->removeEquivalentRules(*rule);
+//				proxyIter->rules.push_front(*rule);
+//				if (rule->type == Rule::SUBMENU) {
+//					currentProxy->removeForeignChildRules(*rule);
+//				}
+//				if (rule->type == Rule::SUBMENU && rule->subRules.size() != 0 || rule->type != Rule::SUBMENU && currentProxy->ruleIsFromOwnScript(*rule)) {
+//					rule->isVisible = false;
+//				} else {
+//					currentProxy->rules.pop_back();
+//				}
+//				return proxyIter->rules.front();
+//			} else {
+//				throw GrublistCfg::NO_MOVE_TARGET_FOUND;
+//			}
 		} else {
 			throw e;
 		}
