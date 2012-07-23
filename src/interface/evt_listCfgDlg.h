@@ -53,6 +53,9 @@ public:
 	//user has renamed one of the entries
 	virtual void signal_entry_renamed(void* entry, std::string const& newText)=0;
 
+	// user wants to revert all modifications of the grub list
+	virtual void revertRequested() = 0;
+
 	//user wants to swap two rules
 	virtual void ruleAdjustment_requested(std::list<void*> rules, int direction)=0;
 

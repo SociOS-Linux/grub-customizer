@@ -156,6 +156,8 @@ public:
 	void createSubmenu(std::list<void*> childItems);
 	void removeSubmenu(std::list<void*> childItems);
 	
+	void revertList();
+
 	void showRuleInfo(Rule* rule);
 	void showProxyInfo(Proxy* proxy);
 

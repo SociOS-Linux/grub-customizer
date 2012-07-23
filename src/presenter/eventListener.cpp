@@ -98,6 +98,10 @@ void EventListener::signal_entry_renamed(void* entry, std::string const& newText
 	presenter.updateRuleName((Rule*)entry, newText);
 }
 
+void EventListener::revertRequested() {
+	presenter.revertList();
+}
+
 void EventListener::ruleAdjustment_requested(std::list<void*> rules, int direction){
 	presenter.moveRules(rules,direction);
 }

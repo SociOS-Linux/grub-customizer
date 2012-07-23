@@ -60,6 +60,8 @@ public:
 	void signal_entry_remove_requested(std::list<void*> entries);
 	void signal_entry_renamed(void* entry, std::string const& newText);
 
+	void revertRequested();
+
 	void ruleAdjustment_requested(std::list<void*> rules, int direction);
 
 	void ruleSelected(void* rule);

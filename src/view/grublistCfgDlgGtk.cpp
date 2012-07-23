@@ -27,6 +27,7 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	tbttLeft(Gtk::Stock::GO_BACK), tbttRight(Gtk::Stock::GO_FORWARD),
 	tbttSave(Gtk::Stock::SAVE), tbttEditEntry(Gtk::Stock::EDIT),
 	miFile(gettext("_File"), true), miExit(Gtk::Stock::QUIT), tbttReload(Gtk::Stock::REFRESH),
+	tbttRevert(Gtk::Stock::REVERT_TO_SAVED),
 	miEdit(gettext("_Edit"), true), miView(gettext("_View"), true), miHelp(gettext("_Help"), true),
 	miInstallGrub(gettext("_Install to MBR …"), true),
 	miAdd(Gtk::Stock::UNDELETE, Gtk::AccelKey('+', Gdk::CONTROL_MASK)), miRemove(Gtk::Stock::DELETE, Gtk::AccelKey('-', Gdk::CONTROL_MASK)), miUp(Gtk::Stock::GO_UP, Gtk::AccelKey('u', Gdk::CONTROL_MASK)), miDown(Gtk::Stock::GO_DOWN, Gtk::AccelKey('d', Gdk::CONTROL_MASK)),
@@ -35,7 +36,7 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	miCRemove(Gtk::Stock::DELETE), miCUp(Gtk::Stock::GO_UP), miCDown(Gtk::Stock::GO_DOWN),
 	miCLeft(Gtk::Stock::GO_BACK), miCRight(Gtk::Stock::GO_FORWARD), miCRename(Gtk::Stock::EDIT), miCEditEntry(Gtk::Stock::EDIT),
 	miReload(Gtk::Stock::REFRESH, Gtk::AccelKey("F5")), miSave(Gtk::Stock::SAVE),
-	miAbout(Gtk::Stock::ABOUT), miModifyEnvironment(Gtk::Stock::OPEN),
+	miAbout(Gtk::Stock::ABOUT), miModifyEnvironment(Gtk::Stock::OPEN), miRevert(Gtk::Stock::REVERT_TO_SAVED),
 	lock_state(~0), burgSwitcher(gettext("BURG found!"), false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO),
 	bttAdvancedSettings1(gettext("advanced settings")), bttAdvancedSettings2(gettext("advanced settings")),
 	bbxAdvancedSettings1(Gtk::BUTTONBOX_END), bbxAdvancedSettings2(Gtk::BUTTONBOX_END)
@@ -98,6 +99,14 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	
 	toolbar.append(tbttReload);
 
+	toolbar.append(ti_sep5);
+
+	ti_sep5.set_expand(true);
+	ti_sep5.set_draw(false);
+
+	toolbar.append(tbttRevert);
+	tbttRevert.set_is_important(true);
+
 	tbttReload.set_tooltip_text(gettext("reload configuration"));
 	
 	this->setLockState(3);
@@ -126,6 +135,7 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	subEdit.attach(miLeft, 0,1,4,5);
 	subEdit.attach(miRight, 0,1,5,6);
 	subEdit.attach(miEditEntry, 0,1,6,7);
+	subEdit.attach(miRevert, 0,1,7,8);
 	
 
 	contextMenu.attach(miCRename, 0,1,0,1);
@@ -179,6 +189,7 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	tbttRight.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_move_right_click));
 	tbttReload.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_reload_click));
 	tbttEditEntry.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_entry_edit_click));
+	tbttRevert.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_revert));
 	bttAdvancedSettings1.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_preference_click));
 	bttAdvancedSettings2.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_preference_click));
 	
@@ -200,6 +211,7 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	miReload.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_reload_click));
 	miInstallGrub.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_show_grub_install_dialog_click));
 	miModifyEnvironment.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_show_envEditor));
+	miRevert.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_revert));
 
 	miExit.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_quit_click));
 	miAbout.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_info_click));
@@ -256,6 +268,15 @@ bool GrublistCfgDlgGtk::signal_popup() {
 void GrublistCfgDlgGtk::signal_key_press(GdkEventKey* key) {
 	if (key->keyval == GDK_Delete) {
 		this->eventListener->signal_entry_remove_requested(this->getSelectedRules());
+	}
+}
+
+void GrublistCfgDlgGtk::signal_revert() {
+	Gtk::MessageDialog msgDlg(gettext("Are you sure?"), false, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_OK_CANCEL);
+	msgDlg.set_secondary_text(gettext("This removes all your list modifications of the bootloader menu!"));
+	int response = msgDlg.run();
+	if (response == Gtk::RESPONSE_OK) {
+		this->eventListener->revertRequested();
 	}
 }
 
@@ -424,6 +445,10 @@ void GrublistCfgDlgGtk::setLockState(int state){
 	
 	tbttReload.set_sensitive((state & 1) == 0);
 	miReload.set_sensitive((state & 1) == 0);
+
+	tbttRevert.set_sensitive((state & 1) == 0);
+	miRevert.set_sensitive((state & 1) == 0);
+
 	miModifyEnvironment.set_sensitive((state & 4) == 0);
 	bttAdvancedSettings1.set_sensitive((state & 8) == 0);
 	bttAdvancedSettings1.set_sensitive((state & 8) == 0);

@@ -794,6 +794,37 @@ void GrubCustomizer::removeSubmenu(std::list<void*> childItems) {
 	this->moveRules(movedRules, -1);
 }
 
+void GrubCustomizer::revertList() {
+	this->grublistCfg->proxies.clear();
+	int i = 50; // unknown scripts starting at position 50
+	for (std::list<Script>::iterator iter = this->grublistCfg->repository.begin(); iter != this->grublistCfg->repository.end(); iter++) {
+		Proxy newProxy(*iter);
+		if (iter->name == "header") {
+			newProxy.index = 0;
+		} else if (iter->name == "debian_theme") {
+			newProxy.index = 5;
+		} else if (iter->name == "grub-customizer_menu_color_helper") {
+			newProxy.index = 6;
+		} else if (iter->name == "linux") {
+			newProxy.index = 10;
+		} else if (iter->name == "linux_xen" || iter->name == "memtest86+") {
+			newProxy.index = 20;
+		} else if (iter->name == "os-prober") {
+			newProxy.index = 30;
+		} else if (iter->name == "custom" && iter->isCustomScript) {
+			newProxy.index = 40;
+		} else if (iter->name == "custom" && !iter->isCustomScript) {
+			newProxy.index = 41;
+		} else {
+			newProxy.index = i++;
+		}
+
+		this->grublistCfg->proxies.push_back(newProxy);
+	}
+	this->grublistCfg->proxies.sort();
+	this->syncListView_load();
+}
+
 void GrubCustomizer::showRuleInfo(Rule* rule){
 	if (rule && rule->dataSource)
 		this->listCfgDlg->setDefaultTitleStatusText(rule->getEntryName());

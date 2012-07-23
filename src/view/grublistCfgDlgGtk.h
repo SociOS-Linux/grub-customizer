@@ -68,7 +68,7 @@ class GrublistCfgDlgGtk : public GrublistCfgDlg, public CommonClass {
 	GrubConfListing tvConfList;
 	Gtk::ProgressBar progressBar;
 
-	Gtk::ToolButton tbttAdd, tbttRemove, tbttUp, tbttDown, tbttSave, tbttReload, tbttLeft, tbttRight, tbttEditEntry;
+	Gtk::ToolButton tbttAdd, tbttRemove, tbttUp, tbttDown, tbttSave, tbttReload, tbttLeft, tbttRight, tbttEditEntry, tbttRevert;
 	Gtk::ToolItem ti_sep1;
 	Gtk::VSeparator vs_sep1;
 	Gtk::ToolItem ti_sep2;
@@ -77,9 +77,10 @@ class GrublistCfgDlgGtk : public GrublistCfgDlg, public CommonClass {
 	Gtk::VSeparator vs_sep3;
 	Gtk::ToolItem ti_sep4;
 	Gtk::VSeparator vs_sep4;
+	Gtk::SeparatorToolItem ti_sep5;
 	
 	Gtk::MenuItem miFile, miEdit, miView, miHelp, miInstallGrub, miContext;
-	Gtk::ImageMenuItem miExit, miSave, miAbout, miModifyEnvironment;
+	Gtk::ImageMenuItem miExit, miSave, miAbout, miModifyEnvironment, miRevert;
 	ImageMenuItemOwnKey miReload, miAdd, miRemove, miUp, miDown, miLeft, miRight, miEditEntry;
 	Gtk::ImageMenuItem miCRemove, miCUp, miCDown, miCLeft, miCRight, miCRename, miCEditEntry;
 	Gtk::Menu subFile, subEdit, subView, subHelp, contextMenu;
@@ -167,6 +168,7 @@ private:
 	void signal_button_press(GdkEventButton *event);
 	bool signal_popup();
 	void signal_key_press(GdkEventKey* key);
+	void signal_revert();
 };
 
 #endif

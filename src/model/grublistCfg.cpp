@@ -608,8 +608,15 @@ double GrublistCfg::getProgress() const {
 }
 
 void GrublistCfg::renumerate(){
-	short int i = 10;
+	short int i = 0;
 	for (ProxyList::iterator iter = this->proxies.begin(); iter != this->proxies.end(); iter++){
+		if (i <= 0 && iter->dataSource && iter->dataSource->name == "header") {
+			i = 0;
+		} else if (i <= 5 && iter->dataSource && iter->dataSource->name == "debian_theme") {
+			i = 5;
+		} else if (i <= 10) {
+			i = 10;
+		}
 		iter->index = i++;
 	}
 	this->proxies.sort();
