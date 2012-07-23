@@ -175,7 +175,7 @@ Proxy* ProxyList::getProxyByRule(Rule* rule) {
 	throw NO_RELATED_PROXY_FOUND;
 }
 
-std::list<Rule>::iterator ProxyList::moveRuleToNewProxy(Rule& rule, int direction) {
+std::list<Rule>::iterator ProxyList::moveRuleToNewProxy(Rule& rule, int direction, Script* dataSource) {
 	Proxy* currentProxy = this->getProxyByRule(&rule);
 	std::list<Proxy>::iterator proxyIter = this->begin();
 	for (;proxyIter != this->end() && &*proxyIter != currentProxy; proxyIter++) {}
@@ -183,7 +183,10 @@ std::list<Rule>::iterator ProxyList::moveRuleToNewProxy(Rule& rule, int directio
 	if (direction == 1) {
 		proxyIter++;
 	}
-	std::list<Proxy>::iterator newProxy = this->insert(proxyIter, Proxy(*currentProxy->dataSource, false));
+	if (dataSource == NULL) {
+		dataSource = currentProxy->dataSource;
+	}
+	std::list<Proxy>::iterator newProxy = this->insert(proxyIter, Proxy(*dataSource, false));
 	newProxy->removeEquivalentRules(rule);
 	std::list<Rule>::iterator movedRule = newProxy->rules.insert(direction == -1 ? newProxy->rules.end() : newProxy->rules.begin(), rule);
 	rule.isVisible = false;
@@ -231,7 +234,7 @@ std::list<Rule>::iterator ProxyList::getNextVisibleRule(std::list<Rule>::iterato
 	throw ProxyList::NO_MOVE_TARGET_FOUND;
 }
 
-std::list<Proxy>::iterator ProxyList::getIter(Proxy* proxy) {
+std::list<Proxy>::iterator ProxyList::getIter(Proxy const* proxy) {
 	std::list<Proxy>::iterator iter = this->begin();
 	while (iter != this->end()) {
 		if (&*iter == proxy) {
@@ -242,7 +245,39 @@ std::list<Proxy>::iterator ProxyList::getIter(Proxy* proxy) {
 	return iter;
 }
 
+void ProxyList::splitProxy(Proxy const* proxyToSplit, Rule const* firstRuleOfPart2, int direction) {
+	std::list<Proxy>::iterator iter = this->getIter(proxyToSplit);
+	Proxy* sourceProxy = &*iter;
+	if (direction == 1) {
+		iter++;
+	}
+	Proxy* newProxy = &*this->insert(iter, Proxy(*sourceProxy->dataSource, false));
 
+	bool isSecondPart = false;
+	if (direction == 1) {
+		for (std::list<Rule>::iterator ruleIter = sourceProxy->rules.begin(); ruleIter != sourceProxy->rules.end(); ruleIter++) {
+			if (&*ruleIter == firstRuleOfPart2) {
+				isSecondPart = true;
+			}
+			if (isSecondPart) {
+				newProxy->removeEquivalentRules(*ruleIter);
+				newProxy->rules.push_back(*ruleIter);
+				ruleIter->isVisible = false;
+			}
+		}
+	} else {
+		for (std::list<Rule>::reverse_iterator ruleIter = sourceProxy->rules.rbegin(); ruleIter != sourceProxy->rules.rend(); ruleIter++) {
+			if (&*ruleIter == firstRuleOfPart2) {
+				isSecondPart = true;
+			}
+			if (isSecondPart) {
+				newProxy->removeEquivalentRules(*ruleIter);
+				newProxy->rules.push_front(*ruleIter);
+				ruleIter->isVisible = false;
+			}
+		}
+	}
+}
 
 
 

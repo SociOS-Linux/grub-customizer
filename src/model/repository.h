@@ -30,6 +30,7 @@ struct Repository : public std::list<Script>, public CommonClass {
 	void load(std::string const& directory, bool is_proxifiedScript_dir);
 	Script* getScriptByFilename(std::string const& fileName, bool createScriptIfNotFound = false);
 	Script* getScriptByName(std::string const& name);
+	Script* getScriptByEntry(Entry const& entry);
 	Script const* getScriptByEntry(Entry const& entry) const;
 	Script* getNthScript(int pos);
 	void deleteAllEntries();

@@ -421,6 +421,10 @@ Rule& Proxy::moveRule(Rule* rule, int direction) {
 	} catch (Proxy::Exception e) {} // leave parent in NULL state
 	std::list<Rule>& targetList = this->getRuleList(parent);
 
+	if (&targetList == &this->rules && rule->dataSource && !this->ruleIsFromOwnScript(*rule)) {
+		throw Proxy::SHOULD_BE_A_NEW_INSTANCE;
+	}
+
 	Rule* newRule = rule;
 
 	std::list<Rule>::iterator afterNext = next;

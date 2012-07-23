@@ -28,7 +28,8 @@
 struct Proxy {
 	enum Exception {
 		RULE_NOT_FOUND,
-		NO_MOVE_TARGET_FOUND
+		NO_MOVE_TARGET_FOUND,
+		SHOULD_BE_A_NEW_INSTANCE
 	};
 	std::list<Rule> rules;
 	int index;

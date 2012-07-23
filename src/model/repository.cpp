@@ -69,6 +69,15 @@ Script* Repository::getScriptByName(std::string const& name) {
 	return result;
 }
 
+Script* Repository::getScriptByEntry(Entry const& entry) {
+	for (std::list<Script>::iterator iter = this->begin(); iter != this->end(); iter++) {
+		if (iter->hasEntry(entry)) {
+			return &*iter;
+		}
+	}
+	return NULL;
+}
+
 Script const* Repository::getScriptByEntry(Entry const& entry) const {
 	for (std::list<Script>::const_iterator iter = this->begin(); iter != this->end(); iter++) {
 		if (iter->hasEntry(entry)) {
