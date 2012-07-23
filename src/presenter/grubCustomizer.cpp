@@ -417,6 +417,9 @@ void GrubCustomizer::generateSubmountpointSelection(std::string const& prefix){
 }
 
 void GrubCustomizer::switchPartition(std::string const& newPartition) {
+	if (mountTable->getEntryByMountpoint(PARTCHOOSER_MOUNTPOINT).isMounted) {
+		mountTable->umountAll(PARTCHOOSER_MOUNTPOINT);
+	}
 	std::string selectedDevice = newPartition;
 	if (newPartition != "") {
 		mkdir(PARTCHOOSER_MOUNTPOINT, 0755);
@@ -435,7 +438,7 @@ void GrubCustomizer::switchPartition(std::string const& newPartition) {
 		catch (MountTable::Exception e) {
 			if (e == MountTable::MOUNT_ERR_NO_FSTAB){
 				this->partitionChooser->showErrorMessage(PartitionChooser::MOUNT_ERR_NO_FSTAB);
-				mountTable->getEntryByMountpoint(PARTCHOOSER_MOUNTPOINT).umount();
+				mountTable->getEntryRefByMountpoint(PARTCHOOSER_MOUNTPOINT).umount();
 				this->switchPartition("");
 			}
 		}
