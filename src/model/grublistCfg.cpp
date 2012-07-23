@@ -783,10 +783,17 @@ Rule& GrublistCfg::moveRule(Rule* rule, int direction){
 			}
 		} else if (e == Proxy::SHOULD_BE_A_NEW_INSTANCE) {
 			Rule* parentSubmenu = parent;
-			std::list<Rule>::iterator nextRule = this->proxies.getNextVisibleRule(proxy->getListIterator(*parent, proxy->rules), direction); // go forward
+			try {
+				std::list<Rule>::iterator nextRule = this->proxies.getNextVisibleRule(proxy->getListIterator(*parent, proxy->rules), direction); // go forward
 
-			if (this->proxies.getProxyByRule(&*nextRule) == this->proxies.getProxyByRule(&*rule)) {
-				this->proxies.splitProxy(proxy, &*nextRule, direction);
+				if (this->proxies.getProxyByRule(&*nextRule) == this->proxies.getProxyByRule(&*rule)) {
+					this->proxies.splitProxy(proxy, &*nextRule, direction);
+				}
+			} catch (ProxyList::Exception e) {
+				if (e != ProxyList::NO_MOVE_TARGET_FOUND) {
+					throw e;
+				}
+				// there's no next rule… no split required
 			}
 
 			std::list<Proxy>::iterator nextProxy = this->proxies.getIter(this->proxies.getProxyByRule(&*rule));
