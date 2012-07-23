@@ -422,7 +422,8 @@ void GrublistCfgDlgGtk::updateButtonsState(){
 	update_remove_button();
 	update_move_buttons();
 
-	miCRename.set_sensitive(this->tvConfList.get_selection()->count_selected_rows() >= 1);
+	std::vector<Gtk::TreeModel::Path> selectedElementents = this->tvConfList.get_selection()->get_selected_rows();
+	miCRename.set_sensitive(selectedElementents.size() == 1 && (*this->tvConfList.refTreeStore->get_iter(selectedElementents[0]))[this->tvConfList.treeModel.is_editable]);
 }
 
 bool GrublistCfgDlgGtk::selectedEntriesAreOnSameLevel() {
