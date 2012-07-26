@@ -326,7 +326,7 @@ void GrublistCfgDlgGtk::setStatusText(std::string const& new_status_text){
 	statusbar.push(new_status_text);
 }
 
-void GrublistCfgDlgGtk::appendEntry(std::string const& name, void* entryPtr, bool is_placeholder, bool is_submenu, std::string const& scriptName, std::string const& defaultName, bool isEditable, bool isModified, void* parentEntry){
+void GrublistCfgDlgGtk::appendEntry(std::string const& name, void* entryPtr, bool is_placeholder, bool is_submenu, std::string const& scriptName, std::string const& defaultName, bool isEditable, bool isModified, std::map<std::string, std::string> const& options, void* parentEntry){
 	Gtk::TreeIter entryRow;
 	if (parentEntry) {
 		entryRow = tvConfList.refTreeStore->append(this->getIterByRulePtr(parentEntry)->children());
@@ -356,6 +356,10 @@ void GrublistCfgDlgGtk::appendEntry(std::string const& name, void* entryPtr, boo
 
 	if (defaultName != "" && name != defaultName) {
 		outputName += std::string(" / ") + gettext("default name: ") + escapeXml(defaultName);
+	}
+
+	if (options.find("_deviceName") != options.end()) {
+		outputName += escapeXml(Glib::ustring(" / ") + gettext("Partition: ") + options.at("_deviceName"));
 	}
 
 	outputName += "</small>";

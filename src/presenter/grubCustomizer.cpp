@@ -594,7 +594,28 @@ void GrubCustomizer::_rAppendRule(Rule& rule, Rule* parentRule){
 		bool isEditable = rule.type == Rule::NORMAL || rule.type == Rule::PLAINTEXT;
 		bool isModified = rule.dataSource && rule.dataSource->isModified;
 		if (rule.isVisible) {
-			this->listCfgDlg->appendEntry(name, &rule, is_other_entries_ph || is_plaintext, isSubmenu, scriptName, defaultName, isEditable, isModified, parentRule);
+			// parse content to show additional informations
+			std::map<std::string, std::string> options;
+			if (rule.dataSource) {
+				try {
+					options = this->contentParserFactory->create(rule.dataSource->content)->getOptions();
+					if (options.find("partition_uuid") != options.end()) {
+						// add device path
+						for (DeviceDataList_Iface::const_iterator iter = deviceDataList->begin(); iter != deviceDataList->end(); iter++) {
+							if (iter->second.at("UUID") == options["partition_uuid"]) {
+								options["_deviceName"] = iter->first;
+								break;
+							}
+						}
+					}
+				} catch (ContentParserFactory::Exception const& e) {
+					if (e != ContentParserFactory::CREATION_FAILED) {
+						throw e;
+					}
+				}
+			}
+
+			this->listCfgDlg->appendEntry(name, &rule, is_other_entries_ph || is_plaintext, isSubmenu, scriptName, defaultName, isEditable, isModified, options, parentRule);
 
 			for (std::list<Rule>::iterator subruleIter = rule.subRules.begin(); subruleIter != rule.subRules.end(); subruleIter++) {
 				this->_rAppendRule(*subruleIter, &rule);
