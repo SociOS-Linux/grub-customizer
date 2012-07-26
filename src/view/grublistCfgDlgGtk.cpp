@@ -162,7 +162,7 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	
 	subHelp.attach(miAbout, 0,1,0,1);
 	
-	miModifyEnvironment.set_label(gettext("_Environment options …"));
+	miModifyEnvironment.set_label(gettext("_Change Environment …"));
 	miModifyEnvironment.set_use_underline(true);
 	
 	//burg switcher
@@ -799,6 +799,14 @@ bool GrublistCfgDlgGtk::askForEnvironmentSettings(std::string const& failedCmd, 
 
 void GrublistCfgDlgGtk::clear(){
 	tvConfList.refTreeStore->clear();
+}
+
+bool GrublistCfgDlgGtk::confirmUnsavedSwitch() {
+	Gtk::MessageDialog dlg(gettext("Do you want to proceed without saving the current configuration?"), false, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_YES_NO);
+	dlg.set_title(gettext("There are unsaved modifications!"));
+	dlg.set_default_response(Gtk::RESPONSE_YES);
+	int response = dlg.run();
+	return response == Gtk::RESPONSE_YES;
 }
 
 void GrublistCfgDlgGtk::signal_info_click(){

@@ -85,6 +85,9 @@ public:
 	//remove everything from the list
 	virtual void clear()=0;
 
+	//asks the user whether the current config should be dropped while another action is started
+	virtual bool confirmUnsavedSwitch() = 0;
+
 	//reads the name of a rule item
 	virtual std::string getRuleName(void* rule)=0;
 	//assigns a new name to the rule item

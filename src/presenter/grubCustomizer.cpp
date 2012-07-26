@@ -218,6 +218,13 @@ void GrubCustomizer::init(GrubEnv::Mode mode, bool initEnv){
 }
 
 void GrubCustomizer::showEnvEditor(bool resetPartitionChooser) {
+	if (this->modificationsUnsaved) {
+		bool proceed = this->listCfgDlg->confirmUnsavedSwitch();
+		if (!proceed) {
+			return;
+		}
+	}
+
 	this->grubEnvEditor->setEnvSettings(this->env.getProperties(), this->env.getRequiredProperties(), this->env.getValidProperties());
 	this->listCfgDlg->hide();
 	this->grubEnvEditor->show(resetPartitionChooser);

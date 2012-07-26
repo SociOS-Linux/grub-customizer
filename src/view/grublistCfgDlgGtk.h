@@ -135,6 +135,7 @@ public:
 	void showErrorMessage(std::string const& msg, std::vector<std::string> const& values);
 	bool askForEnvironmentSettings(std::string const& failedCmd, std::string const& errorMessage);
 	void clear();
+	bool confirmUnsavedSwitch();
 	
 	std::string getRuleName(void* rule);
 	void setRuleName(void* rule, std::string const& newName);
