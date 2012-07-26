@@ -21,7 +21,7 @@
 const char* ContentParserChainloader::_regex = "\
 [ \t]*set[ \t]+root='\\(hd([0-9]+)[^0-9]+([0-9]+)\\)'\\n\
 [ \t]*search[ \t]+--no-floppy[ \t]+--fs-uuid[ \t]+--set(?:=root)?[ \t]+([-0-9a-fA-F]+)\\n\
-[ \t]*drivemap[ \t]+-s[ \t]+\\(hd([0-9]+)\\)[ \t]+\\$\\{root\\}\n\
+(.|\\n)*\
 [ \t]*chainloader[ \t]+\\+1\\n?[ \t]*\
 ";
 
@@ -36,7 +36,7 @@ void ContentParserChainloader::parse(std::string const& sourceCode) {
 
 		//check partition indices by uuid
 		GrubPartitionIndex pIndex = deviceMap.getHarddriveIndexByPartitionUuid(result[3]);
-		if (pIndex.hddNum != result[1] || pIndex.partNum != result[2] || pIndex.hddNum != result[4]){
+		if (pIndex.hddNum != result[1] || pIndex.partNum != result[2]){
 			throw ContentParser::PARSING_FAILED;
 		}
 
@@ -52,7 +52,6 @@ std::string ContentParserChainloader::buildSource() const {
 	newValues[1] = pIndex.hddNum;
 	newValues[2] = pIndex.partNum;
 	newValues[3] = this->options.at("partition_uuid");
-	newValues[4] = pIndex.hddNum;
 
 	std::string newSourceCode = Regex::replace(ContentParserChainloader::_regex, this->sourceCode, newValues);
 
