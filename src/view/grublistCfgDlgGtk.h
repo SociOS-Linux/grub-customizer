@@ -68,7 +68,7 @@ class GrublistCfgDlgGtk : public GrublistCfgDlg, public CommonClass {
 	GrubConfListing tvConfList;
 	Gtk::ProgressBar progressBar;
 
-	Gtk::ToolButton tbttAdd, tbttRemove, tbttUp, tbttDown, tbttSave, tbttReload, tbttLeft, tbttRight, tbttEditEntry, tbttRevert;
+	Gtk::ToolButton tbttAdd, tbttRemove, tbttUp, tbttDown, tbttSave, tbttReload, tbttLeft, tbttRight, tbttEditEntry, tbttRevert, tbttCreateEntry;
 	Gtk::ToolItem ti_sep1;
 	Gtk::VSeparator vs_sep1;
 	Gtk::ToolItem ti_sep2;
@@ -80,7 +80,7 @@ class GrublistCfgDlgGtk : public GrublistCfgDlg, public CommonClass {
 	Gtk::SeparatorToolItem ti_sep5;
 	
 	Gtk::MenuItem miFile, miEdit, miView, miHelp, miInstallGrub, miContext;
-	Gtk::ImageMenuItem miExit, miSave, miAbout, miModifyEnvironment, miRevert;
+	Gtk::ImageMenuItem miExit, miSave, miAbout, miModifyEnvironment, miRevert, miCreateEntry;
 	ImageMenuItemOwnKey miReload, miAdd, miRemove, miUp, miDown, miLeft, miRight, miEditEntry;
 	Gtk::ImageMenuItem miCRemove, miCUp, miCDown, miCLeft, miCRight, miCRename, miCEditEntry;
 	Gtk::Menu subFile, subEdit, subView, subHelp, contextMenu;

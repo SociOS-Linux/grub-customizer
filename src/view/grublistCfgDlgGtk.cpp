@@ -27,7 +27,7 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	tbttLeft(Gtk::Stock::GO_BACK), tbttRight(Gtk::Stock::GO_FORWARD),
 	tbttSave(Gtk::Stock::SAVE), tbttEditEntry(Gtk::Stock::EDIT),
 	miFile(gettext("_File"), true), miExit(Gtk::Stock::QUIT), tbttReload(Gtk::Stock::REFRESH),
-	tbttRevert(Gtk::Stock::REVERT_TO_SAVED),
+	tbttRevert(Gtk::Stock::REVERT_TO_SAVED), tbttCreateEntry(Gtk::Stock::NEW),
 	miEdit(gettext("_Edit"), true), miView(gettext("_View"), true), miHelp(gettext("_Help"), true),
 	miInstallGrub(gettext("_Install to MBR …"), true),
 	miAdd(Gtk::Stock::UNDELETE, Gtk::AccelKey('+', Gdk::CONTROL_MASK)), miRemove(Gtk::Stock::DELETE, Gtk::AccelKey('-', Gdk::CONTROL_MASK)), miUp(Gtk::Stock::GO_UP, Gtk::AccelKey('u', Gdk::CONTROL_MASK)), miDown(Gtk::Stock::GO_DOWN, Gtk::AccelKey('d', Gdk::CONTROL_MASK)),
@@ -37,6 +37,7 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	miCLeft(Gtk::Stock::GO_BACK), miCRight(Gtk::Stock::GO_FORWARD), miCRename(Gtk::Stock::EDIT), miCEditEntry(Gtk::Stock::EDIT),
 	miReload(Gtk::Stock::REFRESH, Gtk::AccelKey("F5")), miSave(Gtk::Stock::SAVE),
 	miAbout(Gtk::Stock::ABOUT), miModifyEnvironment(Gtk::Stock::OPEN), miRevert(Gtk::Stock::REVERT_TO_SAVED),
+	miCreateEntry(Gtk::Stock::NEW),
 	lock_state(~0), burgSwitcher(gettext("BURG found!"), false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO),
 	bttAdvancedSettings1(gettext("advanced settings")), bttAdvancedSettings2(gettext("advanced settings")),
 	bbxAdvancedSettings1(Gtk::BUTTONBOX_END), bbxAdvancedSettings2(Gtk::BUTTONBOX_END)
@@ -76,6 +77,7 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	tbttAdd.set_label(gettext("Trash"));
 	
 	toolbar.append(tbttEditEntry);
+	toolbar.append(tbttCreateEntry);
 
 	ti_sep2.add(vs_sep2);
 	toolbar.append(ti_sep2);
@@ -135,7 +137,8 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	subEdit.attach(miLeft, 0,1,4,5);
 	subEdit.attach(miRight, 0,1,5,6);
 	subEdit.attach(miEditEntry, 0,1,6,7);
-	subEdit.attach(miRevert, 0,1,7,8);
+	subEdit.attach(miCreateEntry, 0,1,7,8);
+	subEdit.attach(miRevert, 0,1,8,9);
 	
 
 	contextMenu.attach(miCRename, 0,1,0,1);
@@ -459,6 +462,10 @@ void GrublistCfgDlgGtk::setLockState(int state){
 
 	tvConfList.set_sensitive((state & 1) == 0);
 	
+
+	miCreateEntry.set_sensitive((state & 1) == 0);
+	tbttCreateEntry.set_sensitive((state & 1) == 0);
+
 	miInstallGrub.set_sensitive((state & 2) == 0);
 	
 	if ((state & 1) == 0) {
