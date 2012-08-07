@@ -240,6 +240,8 @@ void GrublistCfg::readGeneratedFile(FILE* source, bool createScriptIfNotFound, b
 	int i = 0;
 	bool inScript = false;
 	std::string plaintextBuffer = "";
+	int innerCount = 0;
+	double progressbarScriptSpace = 0.7 / this->repository.size();
 	while (!cancelThreadsRequested && (row = GrubConfRow(source))){
 		if (!inScript && row.text.substr(0,10) == ("### BEGIN ") && row.text.substr(row.text.length()-4,4) == " ###"){
 			this->lock();
@@ -266,25 +268,29 @@ void GrublistCfg::readGeneratedFile(FILE* source, bool createScriptIfNotFound, b
 			}
 			this->unlock();
 			if (script){
-				this->send_new_load_progress(0.1 + (0.7 / this->repository.size() * ++i));
+				this->send_new_load_progress(0.1 + (progressbarScriptSpace * ++i + (progressbarScriptSpace/10*innerCount)));
 			}
 			inScript = true;
 		} else if (inScript && row.text.substr(0,8) == ("### END ") && row.text.substr(row.text.length()-4,4) == " ###") {
 			inScript = false;
+			innerCount = 0;
 		} else if (script != NULL && row.text.substr(0, 10) == "menuentry ") {
 			this->lock();
+			if (innerCount < 10) {
+				innerCount++;
+			}
 			Entry newEntry(source, row, this->getLoggerPtr());
 			script->entries().push_back(newEntry);
 			this->proxies.sync_all(false, false, script);
 			this->unlock();
-			this->send_new_load_progress(0.1 + (0.7 / this->repository.size() * i));
+			this->send_new_load_progress(0.1 + (progressbarScriptSpace * i + (progressbarScriptSpace/10*innerCount)));
 		} else if (script != NULL && row.text.substr(0, 8) == "submenu ") {
 			this->lock();
 			Entry newEntry(source, row, this->getLoggerPtr());
 			script->entries().push_back(newEntry);
 			this->proxies.sync_all(false, false, script);
 			this->unlock();
-			this->send_new_load_progress(0.1 + (0.7 / this->repository.size() * i));
+			this->send_new_load_progress(0.1 + (progressbarScriptSpace * i + (progressbarScriptSpace/10*innerCount)));
 		} else if (inScript) { //Plaintext
 			plaintextBuffer += row.text + "\n";
 		}
