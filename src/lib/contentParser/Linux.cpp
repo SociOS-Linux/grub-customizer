@@ -76,3 +76,19 @@ std::string ContentParserLinux::buildSource() const {
 		return this->sourceCode;
 	}
 }
+
+void ContentParserLinux::buildDefaultEntry(std::string const& partition_uuid) {
+	std::string defaultEntry = "\
+	set root='(hd0,0)'\n\
+	search --no-floppy --fs-uuid --set 000000000000\n\
+	linux /vmlinuz root=UUID=000000000000 \n\
+	initrd /initrd.img";
+	GrubPartitionIndex pIndex = this->deviceMap.getHarddriveIndexByPartitionUuid(partition_uuid);
+	std::map<int, std::string> newValues;
+	newValues[1] = pIndex.hddNum;
+	newValues[2] = pIndex.partNum;
+	newValues[3] = partition_uuid;
+	newValues[6] = partition_uuid;
+
+	this->parse(Regex::replace(ContentParserLinux::_regex, defaultEntry, newValues));
+}

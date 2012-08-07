@@ -173,10 +173,12 @@ int main(int argc, char** argv){
 	ContentParserChainloader chainloadParser(deviceMap);
 	ContentParserMemtest memtestParser(deviceMap);
 
-	contentParserFactory.registerParser(linuxParser);
-	contentParserFactory.registerParser(linuxIsoParser);
-	contentParserFactory.registerParser(chainloadParser);
-	contentParserFactory.registerParser(memtestParser);
+	contentParserFactory.registerParser(linuxParser, gettext("Linux"));
+	contentParserFactory.registerParser(linuxIsoParser, gettext("Linux-ISO"));
+	contentParserFactory.registerParser(chainloadParser, gettext("Chainloader"));
+	contentParserFactory.registerParser(memtestParser, gettext("Memtest"));
+
+	entryEditDlg.setAvailableEntryTypes(contentParserFactory.getNames());
 
 	listcfg.setMutex(listCfgMutex1);
 	savedListCfg.setMutex(listCfgMutex2);

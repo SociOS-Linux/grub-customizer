@@ -192,6 +192,7 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	tbttRight.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_move_right_click));
 	tbttReload.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_reload_click));
 	tbttEditEntry.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_entry_edit_click));
+	tbttCreateEntry.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_entry_create_click));
 	tbttRevert.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_revert));
 	bttAdvancedSettings1.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_preference_click));
 	bttAdvancedSettings2.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_preference_click));
@@ -208,6 +209,7 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	miAdd.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_add_click));
 	miEditEntry.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_entry_edit_click));
 	miCEditEntry.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_entry_edit_click));
+	miCreateEntry.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_entry_create_click));
 	miRemove.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_remove_click));
 	miCRemove.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_remove_click));
 	miCRename.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_rename_click));
@@ -660,6 +662,10 @@ void GrublistCfgDlgGtk::signal_entry_edit_click() {
 	std::list<void*> rules = this->getSelectedRules();
 	assert(rules.size() == 1);
 	eventListener->entryEditDlg_requested(rules.front());
+}
+
+void GrublistCfgDlgGtk::signal_entry_create_click() {
+	eventListener->entryCreateDlgRequested();
 }
 
 void GrublistCfgDlgGtk::signal_add_click(){

@@ -340,31 +340,47 @@ void GrubCustomizer::showAboutDialog(){
 
 void GrubCustomizer::applyEntryEditorModifications() {
 	Rule* rulePtr = static_cast<Rule*>(this->entryEditDlg->getRulePtr());
-	assert(rulePtr != NULL);
-	Script* script = this->grublistCfg->repository.getScriptByEntry(*rulePtr->dataSource);
-	assert(script != NULL);
+	bool isAdded = false;
+	if (rulePtr == NULL) { // insert
+		Script* script = this->grublistCfg->repository.getCustomScript();
+		script->entries().push_back(Entry("new", "", ""));
 
-	if (!script->isCustomScript) {
-		script = this->grublistCfg->repository.getCustomScript();
-		script->entries().push_back(*rulePtr->dataSource);
-
-		Rule ruleCopy = *rulePtr;
-		rulePtr->setVisibility(false);
-		ruleCopy.dataSource = &script->entries().back();
-		Proxy* proxy = this->grublistCfg->proxies.getProxyByRule(rulePtr);
-		std::list<Rule>& ruleList = proxy->getRuleList(proxy->getParentRule(rulePtr));
-
-		Rule dummySubmenu(Rule::SUBMENU, std::list<std::string>(), "DUMMY", true);
-		dummySubmenu.subRules.push_back(ruleCopy);
-		std::list<Rule>::iterator iter = ruleList.insert(proxy->getListIterator(*rulePtr, ruleList), dummySubmenu);
-
-		Rule& insertedRule = iter->subRules.back();
-		rulePtr = &this->grublistCfg->moveRule(&insertedRule, -1);
+		Rule newRule(script->entries().back(), true, *script);
 
 		std::list<Proxy*> proxies = this->grublistCfg->proxies.getProxiesByScript(*script);
 		for (std::list<Proxy*>::iterator proxyIter = proxies.begin(); proxyIter != proxies.end(); proxyIter++) {
-			if (!(*proxyIter)->getRuleByEntry(*rulePtr->dataSource, (*proxyIter)->rules, rulePtr->type)) {
-				(*proxyIter)->rules.push_back(Rule(*rulePtr->dataSource, false, *script));
+			(*proxyIter)->rules.push_back(newRule);
+			newRule.isVisible = false; // if there are more rules of this type, add them invisible
+		}
+		assert(proxies.size() != 0); // there should at least one proxy related to the custom script
+		rulePtr = &proxies.front()->rules.back();
+		isAdded = true;
+	} else { // update
+		Script* script = this->grublistCfg->repository.getScriptByEntry(*rulePtr->dataSource);
+		assert(script != NULL);
+
+		if (!script->isCustomScript) {
+			script = this->grublistCfg->repository.getCustomScript();
+			script->entries().push_back(*rulePtr->dataSource);
+
+			Rule ruleCopy = *rulePtr;
+			rulePtr->setVisibility(false);
+			ruleCopy.dataSource = &script->entries().back();
+			Proxy* proxy = this->grublistCfg->proxies.getProxyByRule(rulePtr);
+			std::list<Rule>& ruleList = proxy->getRuleList(proxy->getParentRule(rulePtr));
+
+			Rule dummySubmenu(Rule::SUBMENU, std::list<std::string>(), "DUMMY", true);
+			dummySubmenu.subRules.push_back(ruleCopy);
+			std::list<Rule>::iterator iter = ruleList.insert(proxy->getListIterator(*rulePtr, ruleList), dummySubmenu);
+
+			Rule& insertedRule = iter->subRules.back();
+			rulePtr = &this->grublistCfg->moveRule(&insertedRule, -1);
+
+			std::list<Proxy*> proxies = this->grublistCfg->proxies.getProxiesByScript(*script);
+			for (std::list<Proxy*>::iterator proxyIter = proxies.begin(); proxyIter != proxies.end(); proxyIter++) {
+				if (!(*proxyIter)->getRuleByEntry(*rulePtr->dataSource, (*proxyIter)->rules, rulePtr->type)) {
+					(*proxyIter)->rules.push_back(Rule(*rulePtr->dataSource, false, *script));
+				}
 			}
 		}
 	}
@@ -377,7 +393,7 @@ void GrubCustomizer::applyEntryEditorModifications() {
 
 	this->syncListView_load();
 
-	this->listCfgDlg->selectRule(rulePtr);
+	this->listCfgDlg->selectRule(rulePtr, isAdded);
 
 	this->currentContentParser = NULL;
 }
@@ -533,10 +549,41 @@ void GrubCustomizer::syncEntryEditDlg(bool useOptionsAsSource) {
 			this->currentContentParser = this->contentParserFactory->create(this->entryEditDlg->getSourcecode());
 			this->entryEditDlg->setOptions(this->currentContentParser->getOptions());
 		}
-		this->entryEditDlg->showOptions();
+		this->entryEditDlg->selectType(this->contentParserFactory->getNameByInstance(*this->currentContentParser));
 	} catch (ContentParserFactory::Exception e) {
-		this->entryEditDlg->hideOptions();
+		this->entryEditDlg->selectType("");
+		this->entryEditDlg->setOptions(std::map<std::string, std::string>());
 	}
+}
+
+void GrubCustomizer::entryEditDlg_buildSource(std::string const& newType) {
+	std::string partition;
+	if (this->deviceDataList->size()) {
+		partition = this->deviceDataList->begin()->second["UUID"];
+	}
+
+	if ((this->currentContentParser || partition != "") && newType != "") {
+		if (this->currentContentParser) {
+			partition = this->currentContentParser->getOption("partition_uuid");
+		}
+		this->currentContentParser = this->contentParserFactory->createByName(newType);
+		this->currentContentParser->buildDefaultEntry(partition);
+
+		// sync
+		this->entryEditDlg->setSourcecode(this->currentContentParser->buildSource());
+		this->entryEditDlg->setOptions(this->currentContentParser->getOptions());
+	} else {
+		this->entryEditDlg->setOptions(std::map<std::string, std::string>());
+		this->entryEditDlg->setSourcecode("");
+	}
+}
+
+void GrubCustomizer::showEntryCreateDlg() {
+	this->entryEditDlg->setRulePtr(NULL);
+	this->entryEditDlg->setSourcecode("");
+	this->entryEditDlg->selectType("");
+	this->entryEditDlg->setOptions(std::map<std::string, std::string>());
+	this->entryEditDlg->show();
 }
 
 void GrubCustomizer::addEntryFromEntryAddDlg(){

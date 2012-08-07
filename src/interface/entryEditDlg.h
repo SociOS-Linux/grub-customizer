@@ -20,6 +20,7 @@
 #define ENTRYEDITDLG_H_
 #include <string>
 #include <map>
+#include <list>
 
 class EntryEditDlg {
 public:
@@ -32,13 +33,14 @@ public:
 	virtual std::map<std::string, std::string> getOptions() const = 0;
 	virtual void removeOptions() = 0;
 
-	virtual void showOptions() = 0;
-	virtual void hideOptions() = 0;
-
 	virtual void setRulePtr(void* rulePtr) = 0;
 	virtual void* getRulePtr() = 0;
 
 	virtual void hide() = 0;
+
+	virtual void setAvailableEntryTypes(std::list<std::string> const& names) = 0;
+	virtual void selectType(std::string const& name) = 0;
+	virtual std::string getSelectedType() const = 0;
 };
 
 #endif /* ENTRYEDITDLG_H_ */

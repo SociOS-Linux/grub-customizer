@@ -43,6 +43,8 @@ public:
 	virtual void entryAddDlg_requested()=0;
 	//user wants to edit an entry
 	virtual void entryEditDlg_requested(void* rule)=0;
+	//user wants to create an entry
+	virtual void entryCreateDlgRequested()=0;
 	//user wants to show the about dialog
 	virtual void aboutDialog_requested()=0;
 	//user wants to quit -> application asks if it should be closed (return values: true = close, false = stay opened)

@@ -38,6 +38,9 @@ class EntryEditDlgGtk : public EntryEditDlg, public Gtk::Dialog, public CommonCl
 	Gtk::Table tblOptions;
 	std::map<std::string, Gtk::Widget*> optionMap;
 	std::map<std::string, Gtk::Label*> labelMap;
+	Gtk::ComboBoxText cbType;
+	Gtk::Label lblType;
+	bool lock_state;
 
 	void* rulePtr;
 protected:
@@ -52,16 +55,20 @@ public:
 	void setOptions(std::map<std::string, std::string> options);
 	std::map<std::string, std::string> getOptions() const;
 	void removeOptions();
-	void showOptions();
-	void hideOptions();
 	void setRulePtr(void* rulePtr);
 	void* getRulePtr();
 	void show();
 	void hide();
+
+	void setAvailableEntryTypes(std::list<std::string> const& names);
+	void selectType(std::string const& name);
+	std::string getSelectedType() const;
+
 	void signal_response_action(int response_id);
 
 	bool signal_sourceModified(GdkEventKey* event);
 	void signal_optionsModified();
+	void signal_typeModified();
 };
 
 #endif /* ENTRYEDITDLGGTK_H_ */

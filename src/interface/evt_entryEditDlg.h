@@ -30,6 +30,8 @@ public:
 	virtual void entryEditDlg_sourceModified()=0;
 	//user has modified the options
 	virtual void entryEditDlg_optionsModified()=0;
+	//user has changed the type
+	virtual void entryEditDlg_typeModified(std::string const& newType)=0;
 };
 
 #endif /* EVT_ENTRYEDITDLG_H_ */

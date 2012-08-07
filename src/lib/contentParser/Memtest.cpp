@@ -65,3 +65,17 @@ std::string ContentParserMemtest::buildSource() const {
 		return this->sourceCode;
 	}
 }
+
+void ContentParserMemtest::buildDefaultEntry(std::string const& partition_uuid) {
+	std::string defaultEntry = "\
+	set root='(hd0,0)'\n\
+	search --no-floppy --fs-uuid --set 000000000000\n\
+	linux16 /boot/memtest86+.bin";
+	GrubPartitionIndex pIndex = this->deviceMap.getHarddriveIndexByPartitionUuid(partition_uuid);
+	std::map<int, std::string> newValues;
+	newValues[1] = pIndex.hddNum;
+	newValues[2] = pIndex.partNum;
+	newValues[3] = partition_uuid;
+
+	this->parse(Regex::replace(ContentParserMemtest::_regex, defaultEntry, newValues));
+}

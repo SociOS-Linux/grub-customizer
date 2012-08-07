@@ -19,6 +19,8 @@
 #ifndef CONTENTPARSERFACTORY_H_
 #define CONTENTPARSERFACTORY_H_
 #include "contentParser.h"
+#include <list>
+#include <string>
 
 class ContentParserFactory {
 public:
@@ -26,6 +28,9 @@ public:
 		CREATION_FAILED
 	};
 	virtual ContentParser* create(std::string const& sourceCode) = 0;
+	virtual ContentParser* createByName(std::string const& name) = 0;
+	virtual std::list<std::string> const& getNames() const = 0;
+	virtual std::string getNameByInstance(ContentParser const& instance) const = 0;
 };
 
 #endif /* CONTENTPARSERFACTORY_H_ */

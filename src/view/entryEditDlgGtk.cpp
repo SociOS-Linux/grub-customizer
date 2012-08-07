@@ -19,7 +19,7 @@
 #include "entryEditDlgGtk.h"
 
 EntryEditDlgGtk::EntryEditDlgGtk()
-	: rulePtr(NULL)
+	: rulePtr(NULL), lblType(gettext("_Type:"), true), lock_state(false)
 {
 	this->add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
 	this->add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
@@ -30,13 +30,21 @@ EntryEditDlgGtk::EntryEditDlgGtk()
 
 	Gtk::VBox& vbMain = *this->get_vbox();
 	vbMain.add(this->tabbox);
+
+	tabbox.append_page(this->scrOptions, gettext("Options"));
 	tabbox.append_page(this->scrSource, gettext("Source"));
 	scrOptions.add(this->tblOptions);
 	scrOptions.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
 	scrSource.add(this->tvSource);
 	scrSource.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
 
+	this->tblOptions.attach(this->lblType, 0, 1, 0, 1, Gtk::SHRINK | Gtk::FILL, Gtk::SHRINK, 5, 5);
+	this->tblOptions.attach(this->cbType, 1, 2, 0, 1, Gtk::EXPAND | Gtk::FILL, Gtk::SHRINK, 5, 5);
+	lblType.set_mnemonic_widget(cbType);
+	lblType.set_alignment(Gtk::ALIGN_RIGHT);
+
 	this->signal_response().connect(sigc::mem_fun(this, &EntryEditDlgGtk::signal_response_action));
+	this->cbType.signal_changed().connect(sigc::mem_fun(this, &EntryEditDlgGtk::signal_typeModified));
 
 	this->tvSource.signal_key_release_event().connect(sigc::mem_fun(this, &EntryEditDlgGtk::signal_sourceModified));
 }
@@ -79,16 +87,16 @@ void EntryEditDlgGtk::setSourcecode(std::string const& source) {
 std::string EntryEditDlgGtk::getSourcecode() {
 	std::string optimizedSourcecode = this->tvSource.get_buffer()->get_text();
 	std::string withIndent = str_replace("\n", "\n\t", optimizedSourcecode);
-	if (withIndent.substr(withIndent.size() - 2) == "\n\t") {
+	if (withIndent.size() >= 2 && withIndent.substr(withIndent.size() - 2) == "\n\t") {
 		withIndent.replace(withIndent.size() - 2, 2, "\n");
-	} else if (withIndent[withIndent.size() - 1] != '\n') {
+	} else if (withIndent.size() >= 1 && withIndent[withIndent.size() - 1] != '\n') {
 		withIndent += '\n'; // add trailing slash
 	}
 	return "\t" + withIndent;
 }
 
 void EntryEditDlgGtk::addOption(std::string const& name, std::string const& value) {
-	int pos = name == "partition_uuid" ? 0 : this->optionMap.size() + 1; // partition should be the first option
+	int pos = name == "partition_uuid" ? 1 : this->optionMap.size() + 2; // partition should be the first option
 	Gtk::Label* label = Gtk::manage(new Gtk::Label(this->mapOptionName(name) + ":", true));
 	label->set_alignment(Gtk::ALIGN_RIGHT);
 	this->tblOptions.attach(*label, 0, 1, pos, pos+1, Gtk::SHRINK | Gtk::FILL, Gtk::SHRINK, 5, 5);
@@ -145,19 +153,6 @@ void EntryEditDlgGtk::removeOptions() {
 	this->optionMap.clear();
 }
 
-void EntryEditDlgGtk::showOptions() {
-	if (!this->tabbox.pages().find(this->scrOptions)) {
-		this->tabbox.prepend_page(this->scrOptions, gettext("Options"));
-		this->tabbox.set_current_page(0);
-	}
-}
-
-void EntryEditDlgGtk::hideOptions() {
-	if (this->tabbox.pages().find(this->scrOptions)) {
-		this->tabbox.remove_page(this->scrOptions);
-	}
-}
-
 void EntryEditDlgGtk::setRulePtr(void* rulePtr) {
 	this->rulePtr = rulePtr;
 }
@@ -174,6 +169,29 @@ void EntryEditDlgGtk::hide() {
 	Gtk::Window::hide();
 }
 
+void EntryEditDlgGtk::setAvailableEntryTypes(std::list<std::string> const& names) {
+	this->cbType.clear();
+	for (std::list<std::string>::const_iterator iter = names.begin(); iter != names.end(); iter++) {
+		this->cbType.append_text(*iter);
+	}
+	this->cbType.append_text(gettext("Other"));
+}
+
+void EntryEditDlgGtk::selectType(std::string const& name) {
+	std::string name2 = name;
+	if (name2 == "") {
+		name2 = gettext("Other");
+	}
+
+	this->lock_state = true;
+	this->cbType.set_active_text(name2);
+	this->lock_state = false;
+}
+
+std::string EntryEditDlgGtk::getSelectedType() const {
+	return this->cbType.get_active_text();
+}
+
 void EntryEditDlgGtk::signal_response_action(int response_id) {
 	if (response_id == Gtk::RESPONSE_OK){
 		eventListener->entryEditDlg_applied();
@@ -182,10 +200,20 @@ void EntryEditDlgGtk::signal_response_action(int response_id) {
 }
 
 bool EntryEditDlgGtk::signal_sourceModified(GdkEventKey* event) {
-	this->eventListener->entryEditDlg_sourceModified();
+	if (!this->lock_state) {
+		this->eventListener->entryEditDlg_sourceModified();
+	}
 	return true;
 }
 
 void EntryEditDlgGtk::signal_optionsModified() {
-	this->eventListener->entryEditDlg_optionsModified();
+	if (!this->lock_state) {
+		this->eventListener->entryEditDlg_optionsModified();
+	}
+}
+
+void EntryEditDlgGtk::signal_typeModified() {
+	if (!this->lock_state) {
+		this->eventListener->entryEditDlg_typeModified(this->cbType.get_active_text() != gettext("Other") ? this->cbType.get_active_text() : "");
+	}
 }

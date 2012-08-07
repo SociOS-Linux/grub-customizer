@@ -51,10 +51,12 @@ public:
 	void installGrub_request(std::string const& device);
 	void entryAddDlg_requested();
 	void entryEditDlg_requested(void* rule);
+	void entryCreateDlgRequested();
 	void entryAddDlg_applied();
 	void entryEditDlg_applied();
 	void entryEditDlg_sourceModified();
 	void entryEditDlg_optionsModified();
+	void entryEditDlg_typeModified(std::string const& newType);
 	void exitRequest();
 
 	void signal_entry_remove_requested(std::list<void*> entries);

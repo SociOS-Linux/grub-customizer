@@ -138,6 +138,8 @@ public:
 	void showEntryAddDlg();
 	void showEntryEditDlg(void* rule);
 	void syncEntryEditDlg(bool useOptionsAsSource);
+	void entryEditDlg_buildSource(std::string const& newType);
+	void showEntryCreateDlg();
 	void addEntryFromEntryAddDlg();
 	
 	//dispatchers

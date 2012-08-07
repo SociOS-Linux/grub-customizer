@@ -21,12 +21,20 @@
 #include "../../interface/contentParserFactory.h"
 #include "../../interface/contentParser.h"
 #include <list>
+#include <cassert>
 
 class ContentParserFactoryImpl : public ContentParserFactory {
 	std::list<ContentParser*> parsers;
+	std::list<std::string> names;
 public:
-	void registerParser(ContentParser& parser);
+	enum Exception {
+		PARSER_NOT_FOUND
+	};
+	void registerParser(ContentParser& parser, std::string const& name);
 	ContentParser* create(std::string const& sourceCode);
+	ContentParser* createByName(std::string const& name);
+	std::list<std::string> const& getNames() const;
+	std::string getNameByInstance(ContentParser const& instance) const;
 };
 
 #endif /* CONTENTPARSERFACTORYIMPL_H_ */

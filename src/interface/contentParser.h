@@ -32,6 +32,7 @@ public:
 	virtual void setOption(std::string const& name, std::string const& value) = 0;
 	virtual void setOptions(std::map<std::string, std::string> const& options) = 0;
 	virtual std::string buildSource() const = 0;
+	virtual void buildDefaultEntry(std::string const& partition_uuid) = 0;
 };
 
 #endif /* CONTENTPARSER_H_ */

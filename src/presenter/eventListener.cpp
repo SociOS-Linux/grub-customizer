@@ -77,12 +77,20 @@ void EventListener::entryEditDlg_optionsModified() {
 	presenter.syncEntryEditDlg(true);
 }
 
+void EventListener::entryEditDlg_typeModified(std::string const& newType) {
+	presenter.entryEditDlg_buildSource(newType);
+}
+
 void EventListener::entryAddDlg_requested(){
 	presenter.showEntryAddDlg();
 }
 
 void EventListener::entryEditDlg_requested(void* rule) {
 	presenter.showEntryEditDlg(rule);
+}
+
+void EventListener::entryCreateDlgRequested() {
+	presenter.showEntryCreateDlg();
 }
 
 void EventListener::exitRequest(){

@@ -160,6 +160,7 @@ private:
 	void signal_move_right_click();
 	void signal_treeview_selection_changed();
 	void signal_entry_edit_click();
+	void signal_entry_create_click();
 	bool signal_delete_event(GdkEventAny* event);
 	void signal_quit_click();
 	void signal_preference_click();

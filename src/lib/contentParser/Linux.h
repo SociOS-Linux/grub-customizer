@@ -30,6 +30,7 @@ public:
 	ContentParserLinux(GrubDeviceMap& deviceMap);
 	void parse(std::string const& sourceCode);
 	std::string buildSource() const;
+	void buildDefaultEntry(std::string const& partition_uuid);
 };
 
 #endif /* CONTENT_PARSER_LINUX_H_ */

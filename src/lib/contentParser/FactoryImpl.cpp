@@ -17,8 +17,10 @@
  */
 #include "FactoryImpl.h"
 
-void ContentParserFactoryImpl::registerParser(ContentParser& parser) {
+void ContentParserFactoryImpl::registerParser(ContentParser& parser, std::string const& name) {
+	assert(this->parsers.size() == this->names.size());
 	this->parsers.push_back(&parser);
+	this->names.push_back(name);
 }
 
 ContentParser* ContentParserFactoryImpl::create(std::string const& sourceCode) {
@@ -31,4 +33,35 @@ ContentParser* ContentParserFactoryImpl::create(std::string const& sourceCode) {
 		}
 	}
 	throw ContentParserFactory::CREATION_FAILED;
+}
+
+
+ContentParser* ContentParserFactoryImpl::createByName(std::string const& name) {
+	assert(this->parsers.size() == this->names.size());
+
+	std::list<std::string>::iterator namesIter = this->names.begin();
+	for (std::list<ContentParser*>::iterator parsersIter = this->parsers.begin(); parsersIter != this->parsers.end(); parsersIter++) {
+		if (name == *namesIter) {
+			return *parsersIter;
+		}
+		namesIter++;
+	}
+	throw PARSER_NOT_FOUND;
+}
+
+std::list<std::string> const& ContentParserFactoryImpl::getNames() const {
+	return this->names;
+}
+
+std::string ContentParserFactoryImpl::getNameByInstance(ContentParser const& instance) const {
+	assert(this->parsers.size() == this->names.size());
+
+	std::list<std::string>::const_iterator namesIter = this->names.begin();
+	for (std::list<ContentParser*>::const_iterator parsersIter = this->parsers.begin(); parsersIter != this->parsers.end(); parsersIter++) {
+		if (&instance == *parsersIter) {
+			return *namesIter;
+		}
+		namesIter++;
+	}
+	throw PARSER_NOT_FOUND;
 }

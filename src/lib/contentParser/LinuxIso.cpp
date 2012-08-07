@@ -80,3 +80,24 @@ std::string ContentParserLinuxIso::buildSource() const {
 		return this->sourceCode;
 	}
 }
+
+void ContentParserLinuxIso::buildDefaultEntry(std::string const& partition_uuid) {
+	std::string defaultEntry = "\
+	set root='(hd0,0)'\n\
+	search --no-floppy --fs-uuid --set 000000000000000000\n\
+	loopback loop /xxx.iso\n\
+	linux (loop)/casper/vmlinuz boot=casper iso-scan/filename=/xxx.iso quiet splash locale=en_US bootkbd=de console-setup/layoutcode=de user-setup/encrypt-home=true noeject --\n\
+	initrd (loop)/casper/initrd.lz\n";
+	GrubPartitionIndex pIndex = this->deviceMap.getHarddriveIndexByPartitionUuid(partition_uuid);
+	std::map<int, std::string> newValues;
+	newValues[1] = pIndex.hddNum;
+	newValues[2] = pIndex.partNum;
+	newValues[3] = partition_uuid;
+//	newValues[4] = ISO
+//	newValues[5] = KERNEL
+//	newValues[6] = ISO
+//	newValues[7] = LOCALE
+//	newValues[8] = INITRD
+
+	this->parse(Regex::replace(ContentParserLinuxIso::_regex, defaultEntry, newValues));
+}
