@@ -332,7 +332,11 @@ void GrublistCfgDlgGtk::setStatusText(std::string const& new_status_text){
 }
 
 void GrublistCfgDlgGtk::setStatusText(std::string const& name, int pos, int max){
-	statusbar.push(Glib::ustring::compose(gettext("loading script %2/%3 (%1)"), name, pos, max));
+	if (name == "") {
+		statusbar.push(gettext("loading configuration…"));
+	} else {
+		statusbar.push(Glib::ustring::compose(gettext("loading script %2/%3 (%1)"), name, pos, max));
+	}
 }
 
 void GrublistCfgDlgGtk::appendEntry(std::string const& name, void* entryPtr, bool is_placeholder, bool is_submenu, std::string const& scriptName, std::string const& defaultName, bool isEditable, bool isModified, std::map<std::string, std::string> const& options, void* parentEntry){
@@ -643,7 +647,7 @@ void GrublistCfgDlgGtk::update_remove_button(){
 }
 
 void GrublistCfgDlgGtk::setDefaultTitleStatusText(std::string const& str){
-	this->setStatusText(gettext("Default title: ")+str, 0, 0);
+	this->setStatusText(gettext("Default title: ")+str);
 }
 
 void GrublistCfgDlgGtk::signal_treeview_selection_changed(){
