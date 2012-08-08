@@ -677,7 +677,7 @@ void GrubCustomizer::syncListView_load() {
 	double progress = this->grublistCfg->getProgress();
 	if (progress != 1) {
 		this->listCfgDlg->setProgress(progress);
-		this->listCfgDlg->setStatusText(gettext("loading configuration…"));
+		this->listCfgDlg->setStatusText(this->grublistCfg->getProgress_name(), this->grublistCfg->getProgress_pos(), this->grublistCfg->getProgress_max());
 	} else {
 		if (this->quit_requested) {
 			this->quit(true);

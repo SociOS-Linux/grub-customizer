@@ -124,6 +124,7 @@ public:
 	void progress_pulse();
 	void hideProgressBar();
 	void setStatusText(std::string const& new_status_text);
+	void setStatusText(std::string const& name, int pos, int max);
 	void appendEntry(std::string const& name, void* entryPtr, bool is_placeholder, bool is_submenu, std::string const& scriptName, std::string const& defaultName, bool isEditable, bool isModified, std::map<std::string, std::string> const& options, void* parentEntry = NULL);
 	void showProxyNotFoundMessage();
 	std::string createNewEntriesPlaceholderString(std::string const& parentMenu = "", std::string const& sourceScriptName = "");

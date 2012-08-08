@@ -22,7 +22,7 @@ GrublistCfg::GrublistCfg(GrubEnv& env)
  : error_proxy_not_found(false),
  progress(0),
  cancelThreadsRequested(false), verbose(true), env(env), eventListener(NULL),
- mutex(NULL), errorLogFile(ERROR_LOG_FILE), ignoreLock(false)
+ mutex(NULL), errorLogFile(ERROR_LOG_FILE), ignoreLock(false), progress_pos(0), progress_max(0)
 {}
 
 void GrublistCfg::setEventListener(EventListener_model& eventListener) {
@@ -268,7 +268,7 @@ void GrublistCfg::readGeneratedFile(FILE* source, bool createScriptIfNotFound, b
 			}
 			this->unlock();
 			if (script){
-				this->send_new_load_progress(0.1 + (progressbarScriptSpace * ++i + (progressbarScriptSpace/10*innerCount)));
+				this->send_new_load_progress(0.1 + (progressbarScriptSpace * ++i + (progressbarScriptSpace/10*innerCount)), script->name, i, this->repository.size());
 			}
 			inScript = true;
 		} else if (inScript && row.text.substr(0,8) == ("### END ") && row.text.substr(row.text.length()-4,4) == " ###") {
@@ -283,14 +283,14 @@ void GrublistCfg::readGeneratedFile(FILE* source, bool createScriptIfNotFound, b
 			script->entries().push_back(newEntry);
 			this->proxies.sync_all(false, false, script);
 			this->unlock();
-			this->send_new_load_progress(0.1 + (progressbarScriptSpace * i + (progressbarScriptSpace/10*innerCount)));
+			this->send_new_load_progress(0.1 + (progressbarScriptSpace * i + (progressbarScriptSpace/10*innerCount)), script->name, i, this->repository.size());
 		} else if (script != NULL && row.text.substr(0, 8) == "submenu ") {
 			this->lock();
 			Entry newEntry(source, row, this->getLoggerPtr());
 			script->entries().push_back(newEntry);
 			this->proxies.sync_all(false, false, script);
 			this->unlock();
-			this->send_new_load_progress(0.1 + (progressbarScriptSpace * i + (progressbarScriptSpace/10*innerCount)));
+			this->send_new_load_progress(0.1 + (progressbarScriptSpace * i + (progressbarScriptSpace/10*innerCount)), script->name, i, this->repository.size());
 		} else if (inScript) { //Plaintext
 			plaintextBuffer += row.text + "\n";
 		}
@@ -577,9 +577,12 @@ bool GrublistCfg::compareLists(std::list<Rule const*> a, std::list<Rule const*> 
 }
 
 
-void GrublistCfg::send_new_load_progress(double newProgress){
+void GrublistCfg::send_new_load_progress(double newProgress, std::string scriptName, int current, int max){
 	if (this->eventListener != NULL){
 		this->progress = newProgress;
+		this->progress_name = scriptName;
+		this->progress_pos = current;
+		this->progress_max = max;
 		this->eventListener->loadProgressChanged();
 	}
 	else if (this->verbose) {
@@ -611,6 +614,16 @@ void GrublistCfg::reset(){
 
 double GrublistCfg::getProgress() const {
 	return progress;
+}
+
+std::string GrublistCfg::getProgress_name() const {
+	return progress_name;
+}
+int GrublistCfg::getProgress_pos() const {
+	return progress_pos;
+}
+int GrublistCfg::getProgress_max() const {
+	return progress_max;
 }
 
 void GrublistCfg::renumerate(){

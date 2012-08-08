@@ -48,6 +48,8 @@ class GrublistCfg : public CommonClass {
 	EventListener_model* eventListener;
 	
 	double progress;
+	std::string progress_name;
+	int progress_pos, progress_max;
 	Mutex* mutex;
 	std::string errorLogFile;
 public:
@@ -84,11 +86,15 @@ public:
 	std::map<Entry const*, Script const*> getEntrySources(Proxy const& proxy, Rule const* parent = NULL) const;
 	bool loadStaticCfg();
 
-	void send_new_load_progress(double newProgress);
+	void send_new_load_progress(double newProgress, std::string scriptName = "", int current = 0, int max = 0);
 	void send_new_save_progress(double newProgress);
 	void cancelThreads();
 	void reset();
 	double getProgress() const;
+	std::string getProgress_name() const;
+	int getProgress_pos() const;
+	int getProgress_max() const;
+
 	void increaseProxyPos(Proxy* proxy);
 	void renumerate();
 	
