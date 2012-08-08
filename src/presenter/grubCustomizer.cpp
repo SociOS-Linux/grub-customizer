@@ -241,6 +241,7 @@ void GrubCustomizer::showSettingsDlg(){
 
 void GrubCustomizer::reload(){
 	this->syncSettings();
+	this->listCfgDlg->hideReloadRecommendation();
 	this->listCfgDlg->setLockState(1|4|8);
 	this->getThreadController().startLoadThread(true);
 }
@@ -998,6 +999,10 @@ void GrubCustomizer::syncSettings(){
 	}
 	else {
 		this->settingsDlg->setBackgroundImagePreviewPath("", menuPicIsInGrubDir);
+	}
+
+	if (this->settings->reloadRequired()) {
+		this->listCfgDlg->showReloadRecommendation();
 	}
 }
 

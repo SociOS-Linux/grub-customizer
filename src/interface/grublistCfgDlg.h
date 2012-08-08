@@ -104,6 +104,12 @@ public:
 
 	// set the number of removed rules
 	virtual void setTrashCounter(int count) = 0;
+
+	// show the warning that config has changed to propose a reload
+	virtual void showReloadRecommendation() = 0;
+
+	// hide the warning that config has changed to propose a reload
+	virtual void hideReloadRecommendation() = 0;
 };
 
 #endif

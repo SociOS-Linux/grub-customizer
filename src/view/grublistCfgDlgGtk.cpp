@@ -40,7 +40,8 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	miCreateEntry(Gtk::Stock::NEW),
 	lock_state(~0), burgSwitcher(gettext("BURG found!"), false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO),
 	bttAdvancedSettings1(gettext("advanced settings")), bttAdvancedSettings2(gettext("advanced settings")),
-	bbxAdvancedSettings1(Gtk::BUTTONBOX_END), bbxAdvancedSettings2(Gtk::BUTTONBOX_END)
+	bbxAdvancedSettings1(Gtk::BUTTONBOX_END), bbxAdvancedSettings2(Gtk::BUTTONBOX_END),
+	lblReloadRequired(gettext("The modifications you've done affects the visible entries. Please reload!"), Gtk::ALIGN_LEFT)
 {
 	win.set_icon_name("grub-customizer");
 
@@ -52,13 +53,20 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	vbMainSplit.pack_start(notebook);
 	vbMainSplit.pack_start(statusbar, Gtk::PACK_SHRINK);
 
-	notebook.append_page(scrEntryList, gettext("_List configuration"), true);
+	notebook.append_page(vbEntryList, gettext("_List configuration"), true);
+	vbEntryList.pack_start(infoReloadRequired, Gtk::PACK_SHRINK);
+	vbEntryList.pack_start(scrEntryList);
 	scrEntryList.add(tvConfList);
 	statusbar.add(progressBar);
 	
 	scrEntryList.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
 	scrEntryList.set_shadow_type(Gtk::SHADOW_IN);
 	
+	infoReloadRequired.set_message_type(Gtk::MESSAGE_WARNING);
+	infoReloadRequired.add_button(Gtk::Stock::REFRESH, Gtk::RESPONSE_APPLY);
+	dynamic_cast<Gtk::Container&>(*infoReloadRequired.get_content_area()).add(lblReloadRequired);
+	infoReloadRequired.set_no_show_all(true);
+
 	progressBar.set_pulse_step(0.1);
 	
 	//toolbar
@@ -223,6 +231,8 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 	
 	burgSwitcher.signal_response().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_burg_switcher_response));
 
+	infoReloadRequired.signal_response().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_reload_recommendation_response));
+
 	win.signal_delete_event().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_delete_event));
 
 }
@@ -285,6 +295,11 @@ void GrublistCfgDlgGtk::signal_revert() {
 	}
 }
 
+void GrublistCfgDlgGtk::signal_reload_recommendation_response(int response_id) {
+	if (response_id == Gtk::RESPONSE_APPLY) {
+		this->eventListener->reload_request();
+	}
+}
 
 void GrublistCfgDlgGtk::showBurgSwitcher(){
 	burgSwitcher.show();
@@ -623,7 +638,14 @@ void GrublistCfgDlgGtk::setTrashCounter(int count) {
 	this->tbttAdd.set_label(Glib::ustring::compose(gettext("Trash (%1)"), count));
 }
 
+void GrublistCfgDlgGtk::showReloadRecommendation() {
+	this->infoReloadRequired.show();
+	this->lblReloadRequired.show();
+}
 
+void GrublistCfgDlgGtk::hideReloadRecommendation() {
+	this->infoReloadRequired.hide();
+}
 
 void GrublistCfgDlgGtk::signal_move_click(int direction){
 	if (this->lock_state == 0){

@@ -63,6 +63,9 @@ class GrublistCfgDlgGtk : public GrublistCfgDlg, public CommonClass {
 	Gtk::MenuBar menu;
 	Gtk::Toolbar toolbar;
 	Gtk::ScrolledWindow scrEntryList;
+	Gtk::InfoBar infoReloadRequired;
+	Gtk::Label lblReloadRequired;
+	Gtk::VBox vbEntryList;
 	Gtk::Statusbar statusbar;
 	
 	GrubConfListing tvConfList;
@@ -147,6 +150,9 @@ public:
 
 	void setTrashCounter(int count);
 
+	void showReloadRecommendation();
+	void hideReloadRecommendation();
+
 private:
 	//event handlers
 	void signal_show_envEditor();
@@ -172,6 +178,7 @@ private:
 	bool signal_popup();
 	void signal_key_press(GdkEventKey* key);
 	void signal_revert();
+	void signal_reload_recommendation_response(int response_id);
 };
 
 #endif
