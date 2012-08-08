@@ -131,7 +131,7 @@ void GrublistCfg::load(bool preserveConfig){
 		this->lock();
 		struct dirent *entry;
 		struct stat fileProperties;
-		while (entry = readdir(hGrubCfgDir)){
+		while ((entry = readdir(hGrubCfgDir))){
 			stat((this->env.cfg_dir+"/"+entry->d_name).c_str(), &fileProperties);
 			if ((fileProperties.st_mode & S_IFMT) != S_IFDIR){ //ignore directories
 				if (entry->d_name[2] == '_'){ //check whether it's an script (they should be named XX_scriptname)…
@@ -372,7 +372,7 @@ void GrublistCfg::save(){
 		struct dirent *entry;
 		struct stat fileProperties;
 		DIR* hScriptDir = opendir((this->env.cfg_dir+"/proxifiedScripts").c_str());
-		while (entry = readdir(hScriptDir)){
+		while ((entry = readdir(hScriptDir))) {
 			if (std::string(entry->d_name) != "." && std::string(entry->d_name) != ".."){
 				proxifiedScriptCount++;
 			}
@@ -525,7 +525,7 @@ bool GrublistCfg::compare(GrublistCfg const& other) const {
 					return false;
 				}
 				std::string fname = piter->dataSource->fileName.substr(other.env.cfg_dir.length()+1);
-				if (i == 0 || fname[0] >= '1' && fname[0] <= '9' && fname[1] >= '0' && fname[1] <= '9' && fname[2] == '_'){
+				if (i == 0 || (fname[0] >= '1' && fname[0] <= '9' && fname[1] >= '0' && fname[1] <= '9' && fname[2] == '_')) {
 					std::list<Rule const*> comparableRules = this->getComparableRules(piter->rules);
 					rlist[i].splice(rlist[i].end(), comparableRules);
 				}
@@ -538,7 +538,7 @@ bool GrublistCfg::compare(GrublistCfg const& other) const {
 std::list<Rule const*> GrublistCfg::getComparableRules(std::list<Rule> const& list) {
 	std::list<Rule const*> result;
 	for (std::list<Rule>::const_iterator riter = list.begin(); riter != list.end(); riter++){
-		if ((riter->type == Rule::NORMAL && riter->dataSource || riter->type == Rule::SUBMENU) && riter->isVisible){
+		if (((riter->type == Rule::NORMAL && riter->dataSource) || riter->type == Rule::SUBMENU) && riter->isVisible){
 			result.push_back(&*riter);
 		}
 	}
@@ -644,12 +644,12 @@ void GrublistCfg::renumerate(){
 Rule& GrublistCfg::moveRule(Rule* rule, int direction){
 	try {
 		return this->proxies.getProxyByRule(rule)->moveRule(rule, direction);
-	} catch (Proxy::Exception e) {
+	} catch (Proxy::Exception const& e) {
 		Proxy* proxy = this->proxies.getProxyByRule(rule);
 		Rule* parent = NULL;
 		try {
 			parent = proxy->getParentRule(rule);
-		} catch (Proxy::Exception e) {if (e != Proxy::RULE_NOT_FOUND) throw e;}
+		} catch (Proxy::Exception const& e) {if (e != Proxy::RULE_NOT_FOUND) throw e;}
 
 		if (e == Proxy::NO_MOVE_TARGET_FOUND) {
 			try {
@@ -694,7 +694,7 @@ Rule& GrublistCfg::moveRule(Rule* rule, int direction){
 									this->proxies.deleteProxy(this->proxies.getProxyByRule(&*nextRule));
 								}
 							}
-						} catch (ProxyList::Exception e) {
+						} catch (ProxyList::Exception const& e) {
 							if (e != ProxyList::NO_MOVE_TARGET_FOUND) {
 								throw e;
 							}
@@ -732,7 +732,7 @@ Rule& GrublistCfg::moveRule(Rule* rule, int direction){
 									this->proxies.deleteProxy(this->proxies.getProxyByRule(&*movedRule2));
 								}
 							}
-						} catch (ProxyList::Exception e) {
+						} catch (ProxyList::Exception const& e) {
 							if (e != ProxyList::NO_MOVE_TARGET_FOUND) {
 								throw e;
 							}
@@ -754,7 +754,7 @@ Rule& GrublistCfg::moveRule(Rule* rule, int direction){
 						if (rule->type == Rule::SUBMENU) {
 							proxy->removeForeignChildRules(*rule);
 						}
-						if (rule->type == Rule::SUBMENU && rule->subRules.size() != 0 || rule->type != Rule::SUBMENU && proxy->ruleIsFromOwnScript(*rule)) {
+						if ((rule->type == Rule::SUBMENU && rule->subRules.size() != 0) || (rule->type != Rule::SUBMENU && proxy->ruleIsFromOwnScript(*rule))) {
 							rule->isVisible = false;
 						} else {
 							proxy->rules.pop_front();
@@ -770,7 +770,7 @@ Rule& GrublistCfg::moveRule(Rule* rule, int direction){
 						if (rule->type == Rule::SUBMENU) {
 							proxy->removeForeignChildRules(*rule);
 						}
-						if (rule->type == Rule::SUBMENU && rule->subRules.size() != 0 || rule->type != Rule::SUBMENU && proxy->ruleIsFromOwnScript(*rule)) {
+						if ((rule->type == Rule::SUBMENU && rule->subRules.size() != 0) || (rule->type != Rule::SUBMENU && proxy->ruleIsFromOwnScript(*rule))) {
 							rule->isVisible = false;
 						} else {
 							proxy->rules.pop_back();
@@ -841,6 +841,7 @@ Rule& GrublistCfg::moveRule(Rule* rule, int direction){
 			throw e;
 		}
 	}
+	throw NO_MOVE_TARGET_FOUND;
 }
 
 void GrublistCfg::swapProxies(Proxy* a, Proxy* b){
@@ -866,9 +867,9 @@ bool GrublistCfg::cfgDirIsClean(){
 	if (hGrubCfgDir){
 		struct dirent *entry;
 		struct stat fileProperties;
-		while (entry = readdir(hGrubCfgDir)){
+		while ((entry = readdir(hGrubCfgDir))){
 			std::string fname = entry->d_name;
-			if (fname.length() >= 4 && fname.substr(0,3) == "LS_" || fname.substr(0,3) == "PS_" || fname.substr(0,3) == "DS_")
+			if ((fname.length() >= 4 && fname.substr(0,3) == "LS_") || fname.substr(0,3) == "PS_" || fname.substr(0,3) == "DS_")
 				return false;
 		}
 		closedir(hGrubCfgDir);
@@ -884,7 +885,7 @@ void GrublistCfg::cleanupCfgDir(){
 		struct stat fileProperties;
 		std::list<std::string> lsfiles, dsfiles, psfiles;
 		std::list<std::string> proxyscripts;
-		while (entry = readdir(hGrubCfgDir)){
+		while ((entry = readdir(hGrubCfgDir))){
 			std::string fname = entry->d_name;
 			if (fname.length() >= 4){
 				if (fname.substr(0,3) == "LS_")

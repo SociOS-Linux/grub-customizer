@@ -24,6 +24,8 @@
  */
 class EventListener_entryEditDlg {
 public:
+	virtual inline ~EventListener_entryEditDlg() {};
+
 	//user wants to apply his changes
 	virtual void entryEditDlg_applied()=0;
 	//user has modified the source

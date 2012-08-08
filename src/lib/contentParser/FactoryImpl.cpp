@@ -28,7 +28,7 @@ ContentParser* ContentParserFactoryImpl::create(std::string const& sourceCode) {
 		try {
 			(*iter)->parse(sourceCode);
 			return *iter;
-		} catch (ContentParser::Exception e) {
+		} catch (ContentParser::Exception const& e) {
 			continue;
 		}
 	}

@@ -41,7 +41,7 @@ GrubConfRow::operator bool(){
 }
 
 Entry::Entry()
-	: isValid(false), isModified(false), quote('\'')
+	: isValid(false), isModified(false), quote('\''), type(MENUENTRY)
 {}
 
 Entry::Entry(std::string name, std::string extension, std::string content, EntryType type)

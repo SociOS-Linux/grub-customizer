@@ -25,6 +25,8 @@
  */
 class EventListener_listCfgDlg {
 public:
+	virtual inline ~EventListener_listCfgDlg() {};
+
 	//user wants to show the settings dialog
 	virtual void settings_dialog_request()=0;
 	//user wants to reload the whole configuration

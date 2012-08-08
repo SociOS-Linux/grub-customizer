@@ -24,6 +24,7 @@
  */
 class AboutDialog {
 public:
+	virtual inline ~AboutDialog() {};
 	//show the about dialog, don't block
 	virtual void show()=0;
 };

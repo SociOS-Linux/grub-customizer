@@ -25,6 +25,8 @@
  */
 class EntryAddDlg {
 public:
+	virtual inline ~EntryAddDlg() {};
+
 	//assigns the event listener
 	virtual void setEventListener(EventListener_entryAddDlg& eventListener)=0;
 	//clear the script menu

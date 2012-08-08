@@ -26,6 +26,8 @@
  */
 class SettingsDlg {
 public:
+	virtual inline ~SettingsDlg() {};
+
 	enum DefEntryType {
 		DEF_ENTRY_PREDEFINED,
 		DEF_ENTRY_SAVED

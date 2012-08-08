@@ -154,7 +154,7 @@ Proxy* ProxyList::getProxyByRule(Rule* rule, std::list<Rule> const& list, Proxy&
 		else {
 			try {
 				return this->getProxyByRule(rule, rule_iter->subRules, parentProxy);
-			} catch (ProxyList::Exception e) {
+			} catch (ProxyList::Exception const& e) {
 				if (e != NO_RELATED_PROXY_FOUND)
 					throw e;
 			}
@@ -167,7 +167,7 @@ Proxy* ProxyList::getProxyByRule(Rule* rule) {
 	for (ProxyList::iterator proxy_iter = this->begin(); proxy_iter != this->end(); proxy_iter++){
 		try {
 			return this->getProxyByRule(rule, proxy_iter->rules, *proxy_iter);
-		} catch (ProxyList::Exception e) {
+		} catch (ProxyList::Exception const& e) {
 			if (e != NO_RELATED_PROXY_FOUND)
 				throw e;
 		}
@@ -221,7 +221,7 @@ std::list<Rule>::iterator ProxyList::getNextVisibleRule(std::list<Rule>::iterato
 	while (proxyIter != this->end()) {
 		try {
 			return proxyIter->getNextVisibleRule(base, direction);
-		} catch (Proxy::Exception e) {
+		} catch (Proxy::Exception const& e) {
 
 			if (hasParent) {
 				throw ProxyList::NO_MOVE_TARGET_FOUND;

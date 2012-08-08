@@ -41,7 +41,7 @@ void ContentParserChainloader::parse(std::string const& sourceCode) {
 		}
 
 		this->options["partition_uuid"] = result[3];
-	} catch (Regex::Exception e) {
+	} catch (Regex::Exception const& e) {
 		throw ContentParser::PARSING_FAILED;
 	}
 }
@@ -53,16 +53,16 @@ std::string ContentParserChainloader::buildSource() const {
 	newValues[2] = pIndex.partNum;
 	newValues[3] = this->options.at("partition_uuid");
 
-	std::string newSourceCode = Regex::replace(ContentParserChainloader::_regex, this->sourceCode, newValues);
+	std::string result = Regex::replace(ContentParserChainloader::_regex, this->sourceCode, newValues);
 
 	//check the new string. If they aren't matchable anymore (evil input), do a rollback
 	try {
-		Regex::match(ContentParserChainloader::_regex, newSourceCode);
-		return newSourceCode;
-	} catch (Regex::Exception e) {
+		Regex::match(ContentParserChainloader::_regex, result);
+	} catch (Regex::Exception const& e) {
 		this->log("Ignoring data - doesn't match", Logger::ERROR);
-		return this->sourceCode;
+		result = this->sourceCode;
 	}
+	return result;
 }
 
 void ContentParserChainloader::buildDefaultEntry(std::string const& partition_uuid) {

@@ -41,7 +41,7 @@ void ContentParserMemtest::parse(std::string const& sourceCode) {
 
 		this->options["partition_uuid"] = result[3];
 		this->options["memtest_image"] = result[4];
-	} catch (Regex::Exception e) {
+	} catch (Regex::Exception const& e) {
 		throw ContentParser::PARSING_FAILED;
 	}
 }
@@ -54,16 +54,16 @@ std::string ContentParserMemtest::buildSource() const {
 	newValues[3] = this->options.at("partition_uuid");
 	newValues[4] = this->options.at("memtest_image");
 
-	std::string newSourceCode = Regex::replace(ContentParserMemtest::_regex, this->sourceCode, newValues);
+	std::string result = Regex::replace(ContentParserMemtest::_regex, this->sourceCode, newValues);
 
 	//check the new string. If they aren't matchable anymore (evil input), do a rollback
 	try {
-		Regex::match(ContentParserMemtest::_regex, newSourceCode);
-		return newSourceCode;
-	} catch (Regex::Exception e) {
+		Regex::match(ContentParserMemtest::_regex, result);
+	} catch (Regex::Exception const& e) {
 		this->log("Ignoring data - doesn't match", Logger::ERROR);
-		return this->sourceCode;
+		result = this->sourceCode;
 	}
+	return result;
 }
 
 void ContentParserMemtest::buildDefaultEntry(std::string const& partition_uuid) {

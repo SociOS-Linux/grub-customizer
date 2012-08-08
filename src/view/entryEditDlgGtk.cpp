@@ -135,7 +135,7 @@ std::map<std::string, std::string> EntryEditDlgGtk::getOptions() const {
 	for (std::map<std::string, Gtk::Widget*>::const_iterator iter = this->optionMap.begin(); iter != this->optionMap.end(); iter++) {
 		try {
 			result[iter->first] = dynamic_cast<PartitionChooser_DropDown&>(*iter->second).getSelectedUuid();
-		} catch (std::bad_cast e) {
+		} catch (std::bad_cast const& e) {
 			result[iter->first] = dynamic_cast<Gtk::Entry&>(*iter->second).get_text();
 		}
 	}

@@ -27,6 +27,8 @@ public:
 	enum Exception {
 		CREATION_FAILED
 	};
+	virtual inline ~ContentParserFactory() {};
+
 	virtual ContentParser* create(std::string const& sourceCode) = 0;
 	virtual ContentParser* createByName(std::string const& name) = 0;
 	virtual std::list<std::string> const& getNames() const = 0;

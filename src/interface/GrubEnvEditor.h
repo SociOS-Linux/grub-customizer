@@ -22,6 +22,8 @@
 
 class GrubEnvEditor {
 public:
+	virtual inline ~GrubEnvEditor() {};
+
 	enum MountExceptionType {
 		MOUNT_FAILED,
 		UMOUNT_FAILED,

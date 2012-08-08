@@ -25,6 +25,8 @@
  */
 class EventListener_grubInstallDlg {
 public:
+	virtual inline ~EventListener_grubInstallDlg() {};
+
 	//should fire when the user has chosen the device and wants to install it now
 	virtual void installGrub_request(std::string const& device)=0;
 };

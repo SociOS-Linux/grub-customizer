@@ -28,7 +28,7 @@ GrubCustomizer::GrubCustomizer(GrubEnv& env)
 	 env(env), config_has_been_different_on_startup_but_unsaved(false),
 	 modificationsUnsaved(false), quit_requested(false), activeThreadCount(0),
 	 is_loading(false), contentParserFactory(NULL), currentContentParser(NULL),
-	 grubEnvEditor(NULL)
+	 grubEnvEditor(NULL), threadController(NULL), thrownException(GrublistCfg::GRUB_CMD_EXEC_FAILED)
 {
 }
 
@@ -114,7 +114,7 @@ void GrubCustomizer::updateList() {
 
 	for (std::list<Proxy>::iterator iter = this->grublistCfg->proxies.begin(); iter != this->grublistCfg->proxies.end(); iter++){
 		std::string name = iter->getScriptName();
-		if (name != "header" && name != "debian_theme" && name != "grub-customizer_menu_color_helper" || iter->isModified()) {
+		if ((name != "header" && name != "debian_theme" && name != "grub-customizer_menu_color_helper") || iter->isModified()) {
 			for (std::list<Rule>::iterator ruleIter = iter->rules.begin(); ruleIter != iter->rules.end(); ruleIter++){
 				this->_rAppendRule(*ruleIter);
 			}
@@ -270,7 +270,7 @@ void GrubCustomizer::load(bool preserveConfig){
 			this->log("loading grub list", Logger::IMPORTANT_EVENT);
 			this->grublistCfg->load(preserveConfig);
 			this->log("grub list completely loaded", Logger::IMPORTANT_EVENT);
-		} catch (GrublistCfg::Exception e){
+		} catch (GrublistCfg::Exception const& e){
 			this->log("error while loading the grub list", Logger::ERROR);
 			this->thrownException = e;
 			this->getThreadController().showThreadDiedError();
@@ -430,13 +430,13 @@ void GrubCustomizer::switchPartition(std::string const& newPartition) {
 			this->generateSubmountpointSelection(PARTCHOOSER_MOUNTPOINT);
 			this->showEnvEditor();
 		}
-		catch (Mountpoint::Exception e) {
+		catch (Mountpoint::Exception const& e) {
 			if (e == Mountpoint::MOUNT_FAILED){
 				this->grubEnvEditor->showErrorMessage(GrubEnvEditor::MOUNT_FAILED);
 				this->switchPartition("");
 			}
 		}
-		catch (MountTable::Exception e) {
+		catch (MountTable::Exception const& e) {
 			if (e == MountTable::MOUNT_ERR_NO_FSTAB){
 				this->grubEnvEditor->showErrorMessage(GrubEnvEditor::MOUNT_ERR_NO_FSTAB);
 				mountTable->getEntryRefByMountpoint(PARTCHOOSER_MOUNTPOINT).umount();
@@ -478,7 +478,7 @@ void GrubCustomizer::mountSubmountpoint(std::string const& submountpoint){
 	try {
 		this->mountTable->getEntryRefByMountpoint(PARTCHOOSER_MOUNTPOINT + submountpoint).mount();
 	}
-	catch (Mountpoint::Exception e){
+	catch (Mountpoint::Exception const& e){
 		if (e == Mountpoint::MOUNT_FAILED){
 			this->grubEnvEditor->showErrorMessage(GrubEnvEditor::SUB_MOUNT_FAILED);
 		}
@@ -491,7 +491,7 @@ void GrubCustomizer::umountSubmountpoint(std::string const& submountpoint){
 	try {
 		this->mountTable->getEntryRefByMountpoint(PARTCHOOSER_MOUNTPOINT + submountpoint).umount();
 	}
-	catch (Mountpoint::Exception e){
+	catch (Mountpoint::Exception const& e){
 		if (e == Mountpoint::UMOUNT_FAILED){
 			this->grubEnvEditor->showErrorMessage(GrubEnvEditor::SUB_UMOUNT_FAILED);
 		}
@@ -550,7 +550,7 @@ void GrubCustomizer::syncEntryEditDlg(bool useOptionsAsSource) {
 			this->entryEditDlg->setOptions(this->currentContentParser->getOptions());
 		}
 		this->entryEditDlg->selectType(this->contentParserFactory->getNameByInstance(*this->currentContentParser));
-	} catch (ContentParserFactory::Exception e) {
+	} catch (ContentParserFactory::Exception const& e) {
 		this->entryEditDlg->selectType("");
 		this->entryEditDlg->setOptions(std::map<std::string, std::string>());
 	}
@@ -841,7 +841,7 @@ void GrubCustomizer::moveRules(std::list<void*> rules, int direction){
 		this->syncListView_load();
 		this->listCfgDlg->selectRules(movedRules);
 		this->modificationsUnsaved = true;
-	} catch (GrublistCfg::Exception e) {
+	} catch (GrublistCfg::Exception const& e) {
 		if (e == GrublistCfg::NO_MOVE_TARGET_FOUND)
 			this->listCfgDlg->showErrorMessage(gettext("cannot move this entry"));
 		else

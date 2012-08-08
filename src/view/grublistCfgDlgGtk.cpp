@@ -567,7 +567,7 @@ Gtk::TreeModel::iterator GrublistCfgDlgGtk::getIterByRulePtr(void* rulePtr, cons
 			return iter;
 		try {
 			return this->getIterByRulePtr(rulePtr, &**iter); //recursively search for the treeview item
-		} catch (GrublistCfgDlg::Exception e) {
+		} catch (GrublistCfgDlg::Exception const& e) {
 			if (e != RULE_ITER_NOT_FOUND)
 				throw e;
 			//(ignore RULE_ITER_NOT_FOUND exceptions)
@@ -607,7 +607,7 @@ void GrublistCfgDlgGtk::selectRule(void* rule, bool startEdit) {
 		if (startEdit) {
 			this->tvConfList.set_cursor(this->tvConfList.refTreeStore->get_path(this->getIterByRulePtr(rule)), *this->tvConfList.get_column(0), true);
 		}
-	} catch (GrublistCfgDlg::Exception e) {
+	} catch (GrublistCfgDlg::Exception const& e) {
 		if (e != RULE_ITER_NOT_FOUND)
 			throw e;
 	}
@@ -749,7 +749,7 @@ int GrublistCfgDlgGtk::showExitConfirmDialog(int type){
 			Gtk::Button* btnSave = msgDlg.add_button(Gtk::Stock::SAVE, Gtk::RESPONSE_YES);
 			btnSave->set_label(gettext("_Update & Quit"));
 		}
-		if (type & 1 && !(type & 2)){
+		if ((type & 1) && !(type & 2)){
 			msgDlg.property_message_type() = Gtk::MESSAGE_QUESTION;
 			msgDlg.set_message(gettext("Do you want to save your modifications?"));
 

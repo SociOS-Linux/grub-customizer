@@ -29,6 +29,8 @@
  */
 class GrublistCfgDlg {
 public:
+	virtual inline ~GrublistCfgDlg() {};
+
 	enum Exception {
 		PROXY_ITER_NOT_FOUND,
 		RULE_ITER_NOT_FOUND

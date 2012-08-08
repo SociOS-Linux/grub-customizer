@@ -25,6 +25,8 @@
  */
 class GrubInstallDlg {
 public:
+	virtual inline ~GrubInstallDlg() {};
+
 	//show this dialog
 	virtual void show()=0;
 	//show the information that grub has been installed completely

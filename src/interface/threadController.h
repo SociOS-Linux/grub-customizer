@@ -22,6 +22,8 @@
 
 class ThreadController {
 public:
+	virtual inline ~ThreadController() {};
+
 	virtual void syncEntryList() = 0;
 	virtual void updateSaveProgress() = 0;
 	virtual void updateSettingsDlgResolutionList() = 0;

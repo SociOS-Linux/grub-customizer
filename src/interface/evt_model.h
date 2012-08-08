@@ -26,6 +26,8 @@
  */
 class EventListener_model {
 public:
+	virtual inline ~EventListener_model() {};
+
 	//some new data is loaded
 	virtual void loadProgressChanged()=0;
 	//save progress continued

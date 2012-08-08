@@ -5,6 +5,8 @@
 
 class DeviceDataList_Iface : public std::map<std::string, std::map<std::string, std::string> > {
 public:
+	virtual inline ~DeviceDataList_Iface() {};
+
 	virtual void loadData(FILE* blkidOutput)=0;
 	virtual void clear()=0;
 };

@@ -26,6 +26,7 @@ public:
 	enum Exception {
 		PARSING_FAILED
 	};
+	virtual inline ~ContentParser() {};
 	virtual void parse(std::string const& sourceCode) = 0;
 	virtual std::map<std::string, std::string> getOptions() const = 0;
 	virtual std::string getOption(std::string const& name) const = 0;

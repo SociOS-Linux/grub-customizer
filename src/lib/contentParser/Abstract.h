@@ -27,6 +27,7 @@ class ContentParserAbstract : public ContentParser, public CommonClass {
 protected:
 	std::map<std::string, std::string> options;
 public:
+	virtual inline ~ContentParserAbstract() {};
 	std::map<std::string, std::string> getOptions() const;
 	std::string getOption(std::string const& name) const;
 	void setOption(std::string const& name, std::string const& value);

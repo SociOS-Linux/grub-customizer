@@ -22,6 +22,8 @@
 
 class Logger {
 public:
+	virtual inline ~Logger() {};
+
 	enum Priority {
 		EVENT,
 		IMPORTANT_EVENT,

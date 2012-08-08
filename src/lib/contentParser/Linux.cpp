@@ -50,7 +50,7 @@ void ContentParserLinux::parse(std::string const& sourceCode) {
 		this->options["partition_uuid"] = result[6];
 		this->options["linux_image"] = result[5];
 		this->options["initramfs"] = result[8];
-	} catch (Regex::Exception e) {
+	} catch (Regex::Exception const& e) {
 		throw ContentParser::PARSING_FAILED;
 	}
 }
@@ -65,16 +65,16 @@ std::string ContentParserLinux::buildSource() const {
 	newValues[6] = this->options.at("partition_uuid");
 	newValues[8] = this->options.at("initramfs");
 
-	std::string newSourceCode = Regex::replace(ContentParserLinux::_regex, this->sourceCode, newValues);
+	std::string result = Regex::replace(ContentParserLinux::_regex, this->sourceCode, newValues);
 
 	//check the new string. If they aren't matchable anymore (evil input), do a rollback
 	try {
-		Regex::match(ContentParserLinux::_regex, newSourceCode);
-		return newSourceCode;
-	} catch (Regex::Exception e) {
+		Regex::match(ContentParserLinux::_regex, result);
+	} catch (Regex::Exception const& e) {
 		this->log("Ignoring data - doesn't match", Logger::ERROR);
-		return this->sourceCode;
+		result = this->sourceCode;
 	}
+	return result;
 }
 
 void ContentParserLinux::buildDefaultEntry(std::string const& partition_uuid) {

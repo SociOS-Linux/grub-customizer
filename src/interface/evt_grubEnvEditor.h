@@ -21,6 +21,8 @@
 
 class EventListener_grubEnvEditor {
 public:
+	virtual inline ~EventListener_grubEnvEditor() {};
+
 	virtual void grubEnvEditor_partitionChanged(std::string const& newPartition) = 0;
 	virtual void grubEnvEditor_typeChanged(int newTypeIndex) = 0;
 	virtual void grubEnvEditor_optionModified() = 0;

@@ -24,6 +24,8 @@
  */
 class EventListener_entryAddDlg {
 public:
+	virtual inline ~EventListener_entryAddDlg() {};
+
 	//user wants to add the selected script instance
 	virtual void entryAddDlg_applied()=0;
 };

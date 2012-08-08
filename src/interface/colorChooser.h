@@ -24,6 +24,8 @@
  */
 class ColorChooser {
 public:
+	virtual inline ~ColorChooser() {};
+
 	//choose one of the colors provided by this control
 	virtual void selectColor(std::string const& codeName)=0;
 

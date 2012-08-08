@@ -25,6 +25,8 @@
  */
 class EventListener_settings {
 public:
+	virtual inline ~EventListener_settings() {};
+
 	//generic changes (name, value, is_active)
 	virtual void setting_row_changed(std::string const& name)=0;
 	//user wants to insert a new generic setting row
