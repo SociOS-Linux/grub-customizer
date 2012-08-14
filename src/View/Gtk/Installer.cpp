@@ -16,7 +16,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "grubInstallDlgGtk.h"
+#include "Installer.h"
 
 GrubInstallDlgGtk::GrubInstallDlgGtk()
 	: lblDescription(gettext("Install the bootloader to MBR and put some\nfiles to the bootloaders data directory\n(if they don't already exist)."), Gtk::ALIGN_LEFT)

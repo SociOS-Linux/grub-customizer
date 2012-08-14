@@ -19,10 +19,10 @@
 #ifndef GRUB_INSTALL_DLG_GTK_INCLUDED
 #define GRUB_INSTALL_DLG_GTK_INCLUDED
 #include <gtkmm.h>
-#include "../interface/evt_grubInstallDlg.h"
+#include "../../interface/evt_grubInstallDlg.h"
 #include <libintl.h>
-#include "../interface/grubInstallDlg.h"
-#include "../presenter/commonClass.h"
+#include "../../interface/grubInstallDlg.h"
+#include "../../presenter/commonClass.h"
 
 class GrubInstallDlgGtk : public Gtk::Dialog, public GrubInstallDlg, public CommonClass {
 	Gtk::Label lblDescription;

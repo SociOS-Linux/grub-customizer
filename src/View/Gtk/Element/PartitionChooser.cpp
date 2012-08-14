@@ -1,4 +1,4 @@
-#include "partitionChooser_DropDown.h"
+#include "PartitionChooser.h"
 
 PartitionChooser_DropDown::PartitionChooser_DropDown(Glib::ustring const& activePartition_uuid, DeviceDataList_Iface const& deviceDataList, bool prependCurrentPartition, std::string const& currentPartitionName)
 	: activePartition_uuid(activePartition_uuid), deviceDataList(&deviceDataList), prependCurrentPartition(prependCurrentPartition), currentPartitionName(currentPartitionName)

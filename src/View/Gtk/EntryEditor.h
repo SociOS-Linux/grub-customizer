@@ -18,15 +18,15 @@
 
 #ifndef ENTRYEDITDLGGTK_H_
 #define ENTRYEDITDLGGTK_H_
-#include "../interface/entryEditDlg.h"
-#include "../presenter/commonClass.h"
-#include "../lib/str_replace.h"
+#include "../../interface/entryEditDlg.h"
+#include "../../presenter/commonClass.h"
+#include "../../lib/str_replace.h"
 #include <libintl.h>
 #include <gtkmm.h>
-#include "../interface/evt_entryEditDlg.h"
-#include "entryEditDlgGtk.h"
-#include "../interface/deviceDataList_Iface.h"
-#include "partitionChooser_DropDown.h"
+#include "../../interface/evt_entryEditDlg.h"
+#include "EntryEditor.h"
+#include "../../interface/deviceDataList_Iface.h"
+#include "Element/PartitionChooser.h"
 
 class EntryEditDlgGtk : public EntryEditDlg, public Gtk::Dialog, public CommonClass {
 	Gtk::Notebook tabbox;

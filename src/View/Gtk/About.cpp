@@ -16,7 +16,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "aboutDialogGtk.h"
+#include "About.h"
 
 void AboutDialogGtk::signal_about_dlg_response(int response_id){
 	if (Gtk::RESPONSE_CLOSE)

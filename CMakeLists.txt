@@ -43,8 +43,6 @@ include_directories(
 add_executable(grub-customizer
 	src/model/entry.cpp
 	src/model/grublistCfg.cpp
-	src/view/grublistCfgDlgGtk.cpp
-	src/view/grubInstallDlgGtk.cpp
 	src/presenter/gtk-client_main.cpp
 	src/presenter/grubCustomizer.cpp
 	src/presenter/eventListener.cpp
@@ -58,15 +56,11 @@ add_executable(grub-customizer
 	src/model/script.cpp
 	src/model/deviceDataList.cpp
 	src/model/grubEnv.cpp
-	src/view/settingsDlgGtk.cpp
 	src/model/settings_mng_ds.cpp
 	src/model/settingsStore.cpp
 	src/model/fbResolutionsGetter.cpp
 	src/model/grubInstaller.cpp
 	src/model/entryPathBuilderImpl.cpp
-	src/view/entryAddDlgGtk.cpp
-	src/view/entryEditDlgGtk.cpp
-	src/view/aboutDialogGtk.cpp
 	src/presenter/glibMutex.cpp
 	src/presenter/glibThreadController.cpp
 	src/presenter/commonClass.cpp
@@ -82,8 +76,14 @@ add_executable(grub-customizer
 	src/lib/regex.cpp
 	src/model/grubDeviceMap.cpp
 	src/model/smartFileHandle.cpp
-	src/view/partitionChooser_DropDown.cpp
-	src/view/GrubEnvEditorGtk.cpp
+	src/View/Gtk/Element/PartitionChooser.cpp
+	src/View/Gtk/About.cpp
+	src/View/Gtk/EntryEditor.cpp
+	src/View/Gtk/EnvEditor.cpp
+	src/View/Gtk/Installer.cpp
+	src/View/Gtk/Main.cpp
+	src/View/Gtk/Settings.cpp
+	src/View/Gtk/Trash.cpp
 )
 
 

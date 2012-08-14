@@ -19,13 +19,13 @@
 #ifndef SETTING_DLG_GTK_INCLUDED
 #define SETTING_DLG_GTK_INCLUDED
 #include <gtkmm.h>
-#include "../interface/settingsDlg.h"
+#include "../../interface/settingsDlg.h"
 #include <libintl.h>
-#include "../model/grubEnv.h"
-#include "../interface/colorChooser.h"
-#include "../interface/evt_settings.h"
+#include "../../model/grubEnv.h"
+#include "../../interface/colorChooser.h"
+#include "../../interface/evt_settings.h"
 #include <string>
-#include "../presenter/commonClass.h"
+#include "../../presenter/commonClass.h"
 
 
 //a gtkmm combobox with colorful foreground and background. useful to choose an item of a predefined color set

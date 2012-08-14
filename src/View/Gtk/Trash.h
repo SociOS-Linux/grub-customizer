@@ -19,10 +19,10 @@
 #ifndef ENTRY_ADD_DLG_INCLUDED
 #define ENTRY_ADD_DLG_INCLUDED
 #include <gtkmm.h>
-#include "../interface/evt_entryAddDlg.h"
-#include "../interface/entryAddDlg.h"
+#include "../../interface/evt_entryAddDlg.h"
+#include "../../interface/entryAddDlg.h"
 #include <libintl.h>
-#include "../presenter/commonClass.h"
+#include "../../presenter/commonClass.h"
 
 class EntryAddDlgGtk : public Gtk::Dialog, public EntryAddDlg, public CommonClass {
 	Gtk::Dialog scriptAddDlg;

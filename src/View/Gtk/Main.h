@@ -19,13 +19,13 @@
 #ifndef GRUBLIST_CFG_DLG_GTK_INCLUDED
 #define GRUBLIST_CFG_DLG_GTK_INCLUDED
 #include <gtkmm.h>
-#include "../interface/evt_listCfgDlg.h"
+#include "../../interface/evt_listCfgDlg.h"
 #include <libintl.h>
-#include "../config.h"
-#include "../interface/grublistCfgDlg.h"
-#include "../presenter/commonClass.h"
-#include "settingsDlgGtk.h"
-#include "../lib/str_replace.h"
+#include "../../config.h"
+#include "../../interface/grublistCfgDlg.h"
+#include "../../presenter/commonClass.h"
+#include "Settings.h"
+#include "../../lib/str_replace.h"
 #include <cassert>
 
 class GrubConfListing : public Gtk::TreeView {

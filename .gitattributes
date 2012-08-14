@@ -40,6 +40,22 @@ misc/icons/48x48.png -text svneol=unset#unset
 misc/icons/64x64.png -text svneol=unset#unset
 misc/manpage.gz -text svneol=unset#unset
 misc/pkexec_policy.in -text
+src/View/Gtk/About.cpp -text
+src/View/Gtk/About.h -text
+src/View/Gtk/Element/PartitionChooser.cpp -text
+src/View/Gtk/Element/PartitionChooser.h -text
+src/View/Gtk/EntryEditor.cpp -text
+src/View/Gtk/EntryEditor.h -text
+src/View/Gtk/EnvEditor.cpp -text
+src/View/Gtk/EnvEditor.h -text
+src/View/Gtk/Installer.cpp -text
+src/View/Gtk/Installer.h -text
+src/View/Gtk/Main.cpp -text
+src/View/Gtk/Main.h -text
+src/View/Gtk/Settings.cpp -text
+src/View/Gtk/Settings.h -text
+src/View/Gtk/Trash.cpp -text
+src/View/Gtk/Trash.h -text
 src/interface/GrubEnvEditor.h -text
 src/interface/aboutDialog.h -text
 src/interface/colorChooser.h -text
@@ -133,22 +149,6 @@ src/presenter/grubcfg_proxy_main.cpp -text
 src/presenter/gtk-client_main.cpp -text
 src/presenter/streamLogger.cpp -text
 src/presenter/streamLogger.h -text
-src/view/GrubEnvEditorGtk.cpp -text
-src/view/GrubEnvEditorGtk.h -text
-src/view/aboutDialogGtk.cpp -text
-src/view/aboutDialogGtk.h -text
-src/view/entryAddDlgGtk.cpp -text
-src/view/entryAddDlgGtk.h -text
-src/view/entryEditDlgGtk.cpp -text
-src/view/entryEditDlgGtk.h -text
-src/view/grubInstallDlgGtk.cpp -text
-src/view/grubInstallDlgGtk.h -text
-src/view/grublistCfgDlgGtk.cpp -text
-src/view/grublistCfgDlgGtk.h -text
-src/view/partitionChooser_DropDown.cpp -text
-src/view/partitionChooser_DropDown.h -text
-src/view/settingsDlgGtk.cpp -text
-src/view/settingsDlgGtk.h -text
 translation/complile_all.sh -text
 translation/translation-ar.mo -text svneol=unset#unset
 translation/translation-ar.po -text

@@ -16,7 +16,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "GrubEnvEditorGtk.h"
+#include "EnvEditor.h"
 
 GrubEnvEditorGtk::GrubEnvEditorGtk()
 	: eventListener(NULL), pChooser(NULL), lblPartition(gettext("_Partition:"), true), deviceDataList(NULL),

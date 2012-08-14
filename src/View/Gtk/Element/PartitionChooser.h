@@ -2,7 +2,7 @@
 #define PARTITIONCHOOSER_DROPDOWN_H_
 #include <gtkmm.h>
 #include <string>
-#include "../interface/deviceDataList_Iface.h"
+#include "../../../interface/deviceDataList_Iface.h"
 #include <libintl.h>
 
 class PartitionChooser_DropDown : public Gtk::ComboBoxText {
