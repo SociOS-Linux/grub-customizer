@@ -26,17 +26,17 @@
 #include <map>
 #include "../presenter/commonClass.h"
 
-struct Repository : public std::list<Script>, public CommonClass {
+struct Model_Repository : public std::list<Model_Script>, public CommonClass {
 	void load(std::string const& directory, bool is_proxifiedScript_dir);
-	Script* getScriptByFilename(std::string const& fileName, bool createScriptIfNotFound = false);
-	Script* getScriptByName(std::string const& name);
-	Script* getScriptByEntry(Entry const& entry);
-	Script const* getScriptByEntry(Entry const& entry) const;
-	Script* getCustomScript();
-	Script* getNthScript(int pos);
+	Model_Script* getScriptByFilename(std::string const& fileName, bool createScriptIfNotFound = false);
+	Model_Script* getScriptByName(std::string const& name);
+	Model_Script* getScriptByEntry(Model_Entry const& entry);
+	Model_Script const* getScriptByEntry(Model_Entry const& entry) const;
+	Model_Script* getCustomScript();
+	Model_Script* getNthScript(int pos);
 	void deleteAllEntries();
-	Script* createScript(std::string const& name, std::string const& fileName, std::string const& content);
-	std::map<std::string, Script*> getScriptPathMap();
+	Model_Script* createScript(std::string const& name, std::string const& fileName, std::string const& content);
+	std::map<std::string, Model_Script*> getScriptPathMap();
 };
 
 #endif

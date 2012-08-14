@@ -22,7 +22,10 @@
 #include <string>
 #include <sstream>
 
-std::string pscriptname_decode(std::string const& input);
-std::string pscriptname_encode(std::string const& input, int x);
+class Model_PscriptnameTranslator {
+public:
+	static std::string decode(std::string const& input);
+	static std::string encode(std::string const& input, int x);
+};
 
 #endif

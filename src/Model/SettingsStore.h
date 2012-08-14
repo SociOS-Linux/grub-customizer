@@ -23,23 +23,23 @@
 #include <string>
 #include <cstdio>
 
-struct SettingRow {
-	SettingRow();
+struct Model_SettingsStore_Row {
+	Model_SettingsStore_Row();
 	std::string name, value, comment, plaintext;
 	bool hasExportPrefix, isActive, isSetting;
 	void validate();
 	std::string getOutput();
 };
 
-class SettingsStore {
+class Model_SettingsStore {
 	std::string filePath;
 protected:
-	std::list<SettingRow> settings;
+	std::list<Model_SettingsStore_Row> settings;
 public:
-	SettingsStore(FILE* source = NULL);
-	std::list<SettingRow>::iterator begin(bool jumpOverPlaintext = true);
-	std::list<SettingRow>::iterator end();
-	void iter_to_next_setting(std::list<SettingRow>::iterator& iter);
+	Model_SettingsStore(FILE* source = NULL);
+	std::list<Model_SettingsStore_Row>::iterator begin(bool jumpOverPlaintext = true);
+	std::list<Model_SettingsStore_Row>::iterator end();
+	void iter_to_next_setting(std::list<Model_SettingsStore_Row>::iterator& iter);
 	std::string getValue(std::string const& name);
 	bool setValue(std::string const& name, std::string const& value);
 	std::string addNewItem();

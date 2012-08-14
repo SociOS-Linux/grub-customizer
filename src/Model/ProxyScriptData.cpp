@@ -18,13 +18,13 @@
 
 #include "ProxyScriptData.h"
 
-ProxyScriptData::ProxyScriptData(FILE* fpProxyScript)
+Model_ProxyScriptData::Model_ProxyScriptData(FILE* fpProxyScript)
 	: is_valid(false)
 {
 	load(fpProxyScript);
 }
 
-bool ProxyScriptData::is_proxyscript(FILE* proxy_fp){
+bool Model_ProxyScriptData::is_proxyscript(FILE* proxy_fp){
 	int c;
 	//skip first line
 	while ((c = fgetc(proxy_fp)) != EOF){
@@ -52,23 +52,23 @@ bool ProxyScriptData::is_proxyscript(FILE* proxy_fp){
 	return !match_error;
 }
 
-bool ProxyScriptData::is_proxyscript(std::string const& filePath){
+bool Model_ProxyScriptData::is_proxyscript(std::string const& filePath){
 	bool result = false;
 	FILE* f = fopen(filePath.c_str(), "r");
 	if (f){
-		result = ProxyScriptData::is_proxyscript(f);
+		result = Model_ProxyScriptData::is_proxyscript(f);
 		fclose(f);
 	}
 	return result;
 }
 
-bool ProxyScriptData::load(FILE* fpProxyScript){
+bool Model_ProxyScriptData::load(FILE* fpProxyScript){
 	//THIS ALGORITHM IS ONLY USEFUL FOR GENERATED PROXIES
 	this->scriptCmd = "";
 	this->proxyCmd = "";
 	this->ruleString = "";
 	
-	if (ProxyScriptData::is_proxyscript(fpProxyScript)){
+	if (Model_ProxyScriptData::is_proxyscript(fpProxyScript)){
 		int c;
 		bool is_begin_of_row = true, is_comment = false, readingScriptRow = false;
 		int parseStep = -2;
@@ -151,6 +151,6 @@ bool ProxyScriptData::load(FILE* fpProxyScript){
 	}
 }
 
-ProxyScriptData::operator bool(){
+Model_ProxyScriptData::operator bool(){
 	return is_valid;
 }

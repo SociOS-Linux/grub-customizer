@@ -18,31 +18,31 @@
 
 #include "EntryPathBuilderImpl.h"
 
-EntryPathBuilderImpl::EntryPathBuilderImpl(Script const& mainScript) {
+Model_EntryPathBuilderImpl::Model_EntryPathBuilderImpl(Model_Script const& mainScript) {
 	this->setMainScript(mainScript);
 }
 
-void EntryPathBuilderImpl::setMainScript(Script const& mainScript) {
+void Model_EntryPathBuilderImpl::setMainScript(Model_Script const& mainScript) {
 	this->mainScript = &mainScript;
 }
 
-void EntryPathBuilderImpl::setEntrySourceMap(std::map<Entry const*, Script const*> const& entrySourceMap) {
+void Model_EntryPathBuilderImpl::setEntrySourceMap(std::map<Model_Entry const*, Model_Script const*> const& entrySourceMap) {
 	this->entrySourceMap = entrySourceMap;
 }
-void EntryPathBuilderImpl::setScriptTargetMap(std::map<Script const*, std::string> const& scriptTargetMap) {
+void Model_EntryPathBuilderImpl::setScriptTargetMap(std::map<Model_Script const*, std::string> const& scriptTargetMap) {
 	this->scriptTargetMap = scriptTargetMap;
 }
 
-std::list<std::string> EntryPathBuilderImpl::buildPath(Entry const& entry) const {
-	Script const* script = entrySourceMap.find(&entry) != entrySourceMap.end() ? entrySourceMap.find(&entry)->second : this->mainScript;
+std::list<std::string> Model_EntryPathBuilderImpl::buildPath(Model_Entry const& entry) const {
+	Model_Script const* script = entrySourceMap.find(&entry) != entrySourceMap.end() ? entrySourceMap.find(&entry)->second : this->mainScript;
 	return script->buildPath(entry);
 }
-std::string EntryPathBuilderImpl::buildPathString(Entry const& entry, bool withOtherEntriesPlaceholder) const {
-	Script const* script = entrySourceMap.find(&entry) != entrySourceMap.end() ? entrySourceMap.find(&entry)->second : this->mainScript;
+std::string Model_EntryPathBuilderImpl::buildPathString(Model_Entry const& entry, bool withOtherEntriesPlaceholder) const {
+	Model_Script const* script = entrySourceMap.find(&entry) != entrySourceMap.end() ? entrySourceMap.find(&entry)->second : this->mainScript;
 	return script->buildPathString(entry, withOtherEntriesPlaceholder);
 }
 
-std::string EntryPathBuilderImpl::buildScriptPath(Entry const& entry) const {
-	Script const* script = entrySourceMap.find(&entry) != entrySourceMap.end() ? entrySourceMap.find(&entry)->second : NULL;
+std::string Model_EntryPathBuilderImpl::buildScriptPath(Model_Entry const& entry) const {
+	Model_Script const* script = entrySourceMap.find(&entry) != entrySourceMap.end() ? entrySourceMap.find(&entry)->second : NULL;
 	return script ? this->scriptTargetMap.find(script)->second : "";
 }

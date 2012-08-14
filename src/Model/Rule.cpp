@@ -18,15 +18,15 @@
 
 #include "Rule.h"
 
-Rule::Rule(Entry& source, bool isVisible, EntryPathFollower& pathFollower, std::list<std::list<std::string> > const& pathesToIgnore, std::list<std::string> const& currentPath) //generate rule for given entry. __idname is only required for re-syncing (soft-reload)
-	: type(source.type == Entry::PLAINTEXT ? Rule::PLAINTEXT : (source.type == Entry::SUBMENU ? Rule::SUBMENU : Rule::NORMAL)), isVisible(isVisible), __idpath(currentPath), outputName(source.name), dataSource(source.type == Entry::SUBMENU ? NULL : &source)
+Model_Rule::Model_Rule(Model_Entry& source, bool isVisible, EntryPathFollower& pathFollower, std::list<std::list<std::string> > const& pathesToIgnore, std::list<std::string> const& currentPath) //generate rule for given entry. __idname is only required for re-syncing (soft-reload)
+	: type(source.type == Model_Entry::PLAINTEXT ? Model_Rule::PLAINTEXT : (source.type == Model_Entry::SUBMENU ? Model_Rule::SUBMENU : Model_Rule::NORMAL)), isVisible(isVisible), __idpath(currentPath), outputName(source.name), dataSource(source.type == Model_Entry::SUBMENU ? NULL : &source)
 {
-	if (source.type == Entry::SUBMENU) {
-		Rule placeholder(Rule::OTHER_ENTRIES_PLACEHOLDER, currentPath, "*", this->isVisible);
+	if (source.type == Model_Entry::SUBMENU) {
+		Model_Rule placeholder(Model_Rule::OTHER_ENTRIES_PLACEHOLDER, currentPath, "*", this->isVisible);
 		placeholder.dataSource = pathFollower.getEntryByPath(currentPath);
 		this->subRules.push_front(placeholder);
 	}
-	for (std::list<Entry>::iterator iter = source.subEntries.begin(); iter != source.subEntries.end(); iter++) {
+	for (std::list<Model_Entry>::iterator iter = source.subEntries.begin(); iter != source.subEntries.end(); iter++) {
 		std::list<std::string> currentPath_in_loop = currentPath;
 		currentPath_in_loop.push_back(iter->name);
 
@@ -41,26 +41,26 @@ Rule::Rule(Entry& source, bool isVisible, EntryPathFollower& pathFollower, std::
 
 		//add this entry as rule if not blacklisted
 		if (!currentPath_in_loop_is_blacklisted){
-			this->subRules.push_back(Rule(*iter, isVisible, pathFollower, pathesToIgnore, currentPath_in_loop));
+			this->subRules.push_back(Model_Rule(*iter, isVisible, pathFollower, pathesToIgnore, currentPath_in_loop));
 		}
 	}
 }
 
-std::string Rule::toString(EntryPathBilder const& pathBuilder){
+std::string Model_Rule::toString(EntryPathBilder const& pathBuilder){
 	std::string result = isVisible ? "+" : "-";
-	if (type == Rule::PLAINTEXT) {
+	if (type == Model_Rule::PLAINTEXT) {
 		result += "#text";
 	} else if (dataSource) {
 		result += pathBuilder.buildPathString(*dataSource, this->type == OTHER_ENTRIES_PLACEHOLDER);
-		if (this->dataSource->content.size() && this->type != Rule::OTHER_ENTRIES_PLACEHOLDER) {
+		if (this->dataSource->content.size() && this->type != Model_Rule::OTHER_ENTRIES_PLACEHOLDER) {
 			result += "~" + md5(this->dataSource->content) + "~";
 		}
-	} else if (type == Rule::SUBMENU) {
+	} else if (type == Model_Rule::SUBMENU) {
 		result += "'SUBMENU'"; // dummy data source
 	} else {
 		result += "???";
 	}
-	if (type == Rule::SUBMENU || (type == Rule::NORMAL && dataSource && dataSource->name != outputName)) {
+	if (type == Model_Rule::SUBMENU || (type == Model_Rule::NORMAL && dataSource && dataSource->name != outputName)) {
 		result += " as '"+str_replace("'", "''", outputName)+"'";
 	}
 
@@ -71,9 +71,9 @@ std::string Rule::toString(EntryPathBilder const& pathBuilder){
 		}
 	}
 
-	if (type == Rule::SUBMENU && this->subRules.size() > 0) {
+	if (type == Model_Rule::SUBMENU && this->subRules.size() > 0) {
 		result += "{";
-		for (std::list<Rule>::iterator iter = this->subRules.begin(); iter != this->subRules.end(); iter++) {
+		for (std::list<Model_Rule>::iterator iter = this->subRules.begin(); iter != this->subRules.end(); iter++) {
 			if (iter != this->subRules.begin())
 				result += ", ";
 			result += iter->toString(pathBuilder);
@@ -83,24 +83,24 @@ std::string Rule::toString(EntryPathBilder const& pathBuilder){
 	return result;
 }
 
-Rule::Rule(RuleType type, std::list<std::string> path, std::string outputName, bool isVisible)
+Model_Rule::Model_Rule(RuleType type, std::list<std::string> path, std::string outputName, bool isVisible)
 	: type(type), isVisible(isVisible), __idpath(path), outputName(outputName), dataSource(NULL)
 {}
 
-Rule::Rule(RuleType type, std::list<std::string> path, bool isVisible)
+Model_Rule::Model_Rule(RuleType type, std::list<std::string> path, bool isVisible)
 	: type(type), isVisible(isVisible), __idpath(path), outputName(path.back()), dataSource(NULL)
 {}
 
-std::string Rule::getEntryName() const {
+std::string Model_Rule::getEntryName() const {
 	if (this->dataSource)
 		return this->dataSource->name;
 	else
 		return "?";
 }
 
-bool Rule::hasRealSubrules() const {
-	for (std::list<Rule>::const_iterator iter = this->subRules.begin(); iter != this->subRules.end(); iter++) {
-		if (iter->isVisible && ((iter->type == Rule::NORMAL && iter->dataSource) || (iter->type == Rule::SUBMENU && iter->hasRealSubrules()))) {
+bool Model_Rule::hasRealSubrules() const {
+	for (std::list<Model_Rule>::const_iterator iter = this->subRules.begin(); iter != this->subRules.end(); iter++) {
+		if (iter->isVisible && ((iter->type == Model_Rule::NORMAL && iter->dataSource) || (iter->type == Model_Rule::SUBMENU && iter->hasRealSubrules()))) {
 			return true;
 		}
 	}
@@ -108,18 +108,18 @@ bool Rule::hasRealSubrules() const {
 }
 
 
-void Rule::print(std::ostream& out) const {
+void Model_Rule::print(std::ostream& out) const {
 	if (this->isVisible) {
-		if (this->type == Rule::PLAINTEXT && this->dataSource) {
+		if (this->type == Model_Rule::PLAINTEXT && this->dataSource) {
 			out << this->dataSource->content;
-		} else if (this->type == Rule::NORMAL && this->dataSource) {
+		} else if (this->type == Model_Rule::NORMAL && this->dataSource) {
 			out << "menuentry";
 			out << " \"" << this->outputName << "\"" << this->dataSource->extension << "{\n";
 			out << this->dataSource->content;
 			out << "}\n";
-		} else if (this->type == Rule::SUBMENU && this->hasRealSubrules()) {
+		} else if (this->type == Model_Rule::SUBMENU && this->hasRealSubrules()) {
 			out << "submenu" << " \"" << this->outputName << "\"" << "{\n";
-			for (std::list<Rule>::const_iterator iter = this->subRules.begin(); iter != this->subRules.end(); iter++) {
+			for (std::list<Model_Rule>::const_iterator iter = this->subRules.begin(); iter != this->subRules.end(); iter++) {
 				iter->print(out);
 			}
 			out << "}\n";
@@ -127,9 +127,9 @@ void Rule::print(std::ostream& out) const {
 	}
 }
 
-void Rule::setVisibility(bool isVisible) {
+void Model_Rule::setVisibility(bool isVisible) {
 	this->isVisible = isVisible;
-	for (std::list<Rule>::iterator iter = this->subRules.begin(); iter != this->subRules.end(); iter++) {
+	for (std::list<Model_Rule>::iterator iter = this->subRules.begin(); iter != this->subRules.end(); iter++) {
 		iter->setVisibility(isVisible);
 	}
 }

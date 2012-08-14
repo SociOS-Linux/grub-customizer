@@ -18,21 +18,21 @@
 
 #include "MountTable.h"
 
-Mountpoint::Mountpoint(std::string const& mountpoint, bool isMounted) : isMounted(isMounted), mountpoint(mountpoint) {}
+Model_MountTable_Mountpoint::Model_MountTable_Mountpoint(std::string const& mountpoint, bool isMounted) : isMounted(isMounted), mountpoint(mountpoint) {}
 
-Mountpoint::Mountpoint(std::string const& device, std::string const& mountpoint, std::string const& options, bool isMounted)
+Model_MountTable_Mountpoint::Model_MountTable_Mountpoint(std::string const& device, std::string const& mountpoint, std::string const& options, bool isMounted)
 	: device(device), mountpoint(mountpoint), isMounted(isMounted), options(options)
 {
 }
 
-bool Mountpoint::isValid(std::string const& prefix, bool isRoot) const {
+bool Model_MountTable_Mountpoint::isValid(std::string const& prefix, bool isRoot) const {
 	return device != "" && (mountpoint != prefix || isRoot) && mountpoint != prefix+"none" && fileSystem != "" && options != "" && dump != "" && pass != "";
 }
-Mountpoint::operator bool() const {
+Model_MountTable_Mountpoint::operator bool() const {
 	return this->isValid();
 }
 
-void Mountpoint::mount(){
+void Model_MountTable_Mountpoint::mount(){
 	if (!isMounted){
 		int res = system(("mount '"+device+"' '"+mountpoint+"'"+(options != "" ? " -o '"+options+"'" : "")).c_str());
 		if (res != 0)
@@ -41,7 +41,7 @@ void Mountpoint::mount(){
 		this->isMounted = true;
 	}
 }
-void Mountpoint::umount(){
+void Model_MountTable_Mountpoint::umount(){
 	if (isMounted){
 		int res = system(("umount '"+mountpoint+"'").c_str());
 		if (res != 0)
@@ -51,27 +51,27 @@ void Mountpoint::umount(){
 	}
 }
 
-bool Mountpoint::isLiveCdFs(){
+bool Model_MountTable_Mountpoint::isLiveCdFs(){
 	return this->fileSystem == "aufs" | this->fileSystem == "overlayfs";
 }
 
-MountTable::MountTable(FILE* source, std::string const& prefix, bool default_isMounted_flag){
+Model_MountTable::Model_MountTable(FILE* source, std::string const& prefix, bool default_isMounted_flag){
 	this->loadData(source, prefix, default_isMounted_flag);
 }
 
-MountTable::MountTable(std::string const& rootDirectory){
+Model_MountTable::Model_MountTable(std::string const& rootDirectory){
 	this->loadData(rootDirectory);
 }
 
-MountTable::MountTable(){}
+Model_MountTable::Model_MountTable(){}
 
-void MountTable::loadData(FILE* source, std::string const& prefix, bool default_isMounted_flag){
+void Model_MountTable::loadData(FILE* source, std::string const& prefix, bool default_isMounted_flag){
 	int c;
 	int rowEntryPos = 0;
 	bool isComment = false;
 	bool isBeginOfRow = true;
 	char previousChar = 0;
-	Mountpoint newMp(prefix, default_isMounted_flag);
+	Model_MountTable_Mountpoint newMp(prefix, default_isMounted_flag);
 	while ((c = fgetc(source)) != EOF){
 		if (isBeginOfRow && c == '#')
 			isComment = true;
@@ -85,7 +85,7 @@ void MountTable::loadData(FILE* source, std::string const& prefix, bool default_
 				this->push_back(newMp);
 			}
 
-			newMp = Mountpoint(prefix, default_isMounted_flag);
+			newMp = Model_MountTable_Mountpoint(prefix, default_isMounted_flag);
 			rowEntryPos = 0;
 			isBeginOfRow = true;
 			isComment = false;
@@ -121,14 +121,14 @@ void MountTable::loadData(FILE* source, std::string const& prefix, bool default_
 	loaded = true;
 }
 
-void MountTable::loadData(std::string const& rootDirectory){
+void Model_MountTable::loadData(std::string const& rootDirectory){
 	FILE* fstabFile = fopen((rootDirectory+"/etc/fstab").c_str(), "r");
 	if (fstabFile != NULL){
 		this->loadData(fstabFile, rootDirectory);
-		MountTable mtab;
+		Model_MountTable mtab;
 		FILE* mtabfile = fopen("/etc/mtab", "r"); //use global mtab - the local one is unmanaged
 		if (mtabfile){
-			mtab = MountTable(mtabfile, "", true);
+			mtab = Model_MountTable(mtabfile, "", true);
 			fclose(mtabfile);
 		}
 		this->sync(mtab);
@@ -136,8 +136,8 @@ void MountTable::loadData(std::string const& rootDirectory){
 	}
 }
 
-void MountTable::clear(std::string const& prefix){
-	MountTable::iterator iter = this->begin();
+void Model_MountTable::clear(std::string const& prefix){
+	Model_MountTable::iterator iter = this->begin();
 	while (iter != this->end()){
 		if (iter->mountpoint.substr(0, prefix.length()) == prefix){
 			this->erase(iter);
@@ -149,44 +149,44 @@ void MountTable::clear(std::string const& prefix){
 	loaded = false;
 }
 
-void MountTable::sync(MountTable const& mtab){
-	for (MountTable::const_iterator iter = mtab.begin(); iter != mtab.end(); iter++){
+void Model_MountTable::sync(Model_MountTable const& mtab){
+	for (Model_MountTable::const_iterator iter = mtab.begin(); iter != mtab.end(); iter++){
 		this->add(*iter);
 	}
 }
 
-bool MountTable::isLoaded() const {
+bool Model_MountTable::isLoaded() const {
 	return loaded;
 }
 
-MountTable::operator bool() const {
+Model_MountTable::operator bool() const {
 	return isLoaded();
 }
 
-Mountpoint& MountTable::getEntryRefByMountpoint(std::string const& mountPoint) {
-	for (std::list<Mountpoint>::iterator iter = this->begin(); iter != this->end(); iter++){
+Model_MountTable_Mountpoint& Model_MountTable::getEntryRefByMountpoint(std::string const& mountPoint) {
+	for (std::list<Model_MountTable_Mountpoint>::iterator iter = this->begin(); iter != this->end(); iter++){
 		if (iter->mountpoint == mountPoint)
 			return *iter;
 	}
 	throw MOUNTPOINT_NOT_FOUND;
 }
 
-Mountpoint MountTable::getEntryByMountpoint(std::string const& mountPoint) const {
-	for (std::list<Mountpoint>::const_iterator iter = this->begin(); iter != this->end(); iter++){
+Model_MountTable_Mountpoint Model_MountTable::getEntryByMountpoint(std::string const& mountPoint) const {
+	for (std::list<Model_MountTable_Mountpoint>::const_iterator iter = this->begin(); iter != this->end(); iter++){
 		if (iter->mountpoint == mountPoint)
 			return *iter;
 	}
-	return Mountpoint();
+	return Model_MountTable_Mountpoint();
 }
 
-Mountpoint& MountTable::add(Mountpoint const& mpToAdd){
+Model_MountTable_Mountpoint& Model_MountTable::add(Model_MountTable_Mountpoint const& mpToAdd){
 	this->remove(mpToAdd); //remove existing mountpoints with the same directory
 	this->push_back(mpToAdd);
 	return this->back();
 }
 
-void MountTable::remove(Mountpoint const& mountpoint){
-	for (std::list<Mountpoint>::iterator iter = this->begin(); iter != this->end(); iter++){
+void Model_MountTable::remove(Model_MountTable_Mountpoint const& mountpoint){
+	for (std::list<Model_MountTable_Mountpoint>::iterator iter = this->begin(); iter != this->end(); iter++){
 		if (iter->mountpoint == mountpoint.mountpoint){
 			this->erase(iter);
 			break;
@@ -194,8 +194,8 @@ void MountTable::remove(Mountpoint const& mountpoint){
 	}
 }
 
-void MountTable::umountAll(std::string const& prefix){
-	for (MountTable::reverse_iterator iter = this->rbegin(); iter != this->rend(); iter++){
+void Model_MountTable::umountAll(std::string const& prefix){
+	for (Model_MountTable::reverse_iterator iter = this->rbegin(); iter != this->rend(); iter++){
 		if (iter->mountpoint.substr(0, prefix.length()) == prefix && iter->mountpoint != prefix && iter->isMounted){
 			iter->umount();
 		}
@@ -204,30 +204,30 @@ void MountTable::umountAll(std::string const& prefix){
 	this->getEntryRefByMountpoint(prefix).umount();
 }
 
-void MountTable::mountRootFs(std::string const& device, std::string const& mountpoint){
-	this->add(Mountpoint(device, mountpoint, "")).mount();
+void Model_MountTable::mountRootFs(std::string const& device, std::string const& mountpoint){
+	this->add(Model_MountTable_Mountpoint(device, mountpoint, "")).mount();
 	this->loadData(mountpoint);
 	FILE* fstab = fopen((mountpoint + "/etc/fstab").c_str(), "r");
 	if (fstab){
 		fclose(fstab); //opening of fstab is just a test
 
 		try {
-			this->add(Mountpoint("/proc", mountpoint + "/proc", "bind")).mount();
-			this->add(Mountpoint("/sys", mountpoint + "/sys", "bind")).mount();
-			this->add(Mountpoint("/dev", mountpoint + "/dev", "bind")).mount();
+			this->add(Model_MountTable_Mountpoint("/proc", mountpoint + "/proc", "bind")).mount();
+			this->add(Model_MountTable_Mountpoint("/sys", mountpoint + "/sys", "bind")).mount();
+			this->add(Model_MountTable_Mountpoint("/dev", mountpoint + "/dev", "bind")).mount();
 		}
 		//errors while mounting any of this partitions may not be a problem
-		catch (MountTable::Exception e){}
-		catch (Mountpoint::Exception e){}
+		catch (Model_MountTable::Exception e){}
+		catch (Model_MountTable_Mountpoint::Exception e){}
 	}
 	else
 		throw MOUNT_ERR_NO_FSTAB;
 	this->loaded = true;
 }
 
-MountTable::operator std::string() const {
+Model_MountTable::operator std::string() const {
 	std::string result;
-	for (MountTable::const_iterator iter = this->begin(); iter != this->end(); iter++){
+	for (Model_MountTable::const_iterator iter = this->begin(); iter != this->end(); iter++){
 		result += std::string("[") + (iter->isMounted ? "x" : " ")  + "] " + iter->device + " " + iter->mountpoint + "\n";
 	}
 	return result;

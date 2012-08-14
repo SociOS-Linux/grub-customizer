@@ -18,18 +18,18 @@
 
 #include "Installer.h"
 
-GrubInstaller::GrubInstaller(GrubEnv& env)
+Model_Installer::Model_Installer(Model_Env& env)
 	: env(env), eventListener(NULL)
 {
 }
 
-void GrubInstaller::threadable_install(std::string const& device){
+void Model_Installer::threadable_install(std::string const& device){
 	this->install_result = install(device);
 	if (eventListener)
 		eventListener->grubInstallCompleted(this->install_result);
 }
 
-std::string GrubInstaller::install(std::string const& device){
+std::string Model_Installer::install(std::string const& device){
 	FILE* install_proc = popen((this->env.install_cmd+" '"+device+"' 2>&1").c_str(), "r");
 	std::string output;
 	int c;
@@ -43,6 +43,6 @@ std::string GrubInstaller::install(std::string const& device){
 		return output;
 }
 
-void GrubInstaller::setEventListener(EventListener_model& eventListener) {
+void Model_Installer::setEventListener(EventListener_model& eventListener) {
 	this->eventListener = &eventListener;
 }

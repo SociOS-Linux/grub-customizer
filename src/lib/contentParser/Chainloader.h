@@ -25,10 +25,10 @@
 
 class ContentParserChainloader : public ContentParserAbstract {
 	static const char* _regex;
-	GrubDeviceMap& deviceMap;
+	Model_DeviceMap& deviceMap;
 	std::string sourceCode;
 public:
-	ContentParserChainloader(GrubDeviceMap& deviceMap);
+	ContentParserChainloader(Model_DeviceMap& deviceMap);
 	void parse(std::string const& sourceCode);
 	std::string buildSource() const;
 	void buildDefaultEntry(std::string const& partition_uuid);

@@ -18,42 +18,42 @@
 
 #include "ListCfg.h"
 
-GrublistCfg::GrublistCfg(GrubEnv& env)
+Model_ListCfg::Model_ListCfg(Model_Env& env)
  : error_proxy_not_found(false),
  progress(0),
  cancelThreadsRequested(false), verbose(true), env(env), eventListener(NULL),
  mutex(NULL), errorLogFile(ERROR_LOG_FILE), ignoreLock(false), progress_pos(0), progress_max(0)
 {}
 
-void GrublistCfg::setEventListener(EventListener_model& eventListener) {
+void Model_ListCfg::setEventListener(EventListener_model& eventListener) {
 	this->eventListener = &eventListener;
 }
 
-void GrublistCfg::setMutex(Mutex& mutex) {
+void Model_ListCfg::setMutex(Mutex& mutex) {
 	this->mutex = &mutex;
 }
 
-void GrublistCfg::setLogger(Logger& logger) {
+void Model_ListCfg::setLogger(Logger& logger) {
 	this->CommonClass::setLogger(logger);
 	this->proxies.setLogger(logger);
 	this->repository.setLogger(logger);
 }
 
-void GrublistCfg::lock(){
+void Model_ListCfg::lock(){
 	if (this->ignoreLock)
 		return;
 	if (this->mutex == NULL)
 		throw MISSING_MUTEX;
 	this->mutex->lock();
 }
-bool GrublistCfg::lock_if_free(){
+bool Model_ListCfg::lock_if_free(){
 	if (this->ignoreLock)
 		return true;
 	if (this->mutex == NULL)
 		throw MISSING_MUTEX;
 	return this->mutex->trylock();
 }
-void GrublistCfg::unlock(){
+void Model_ListCfg::unlock(){
 	if (this->ignoreLock)
 		return;
 	if (this->mutex == NULL)
@@ -61,7 +61,7 @@ void GrublistCfg::unlock(){
 	this->mutex->unlock();
 }
 
-bool GrublistCfg::createScriptForwarder(std::string const& scriptName) const {
+bool Model_ListCfg::createScriptForwarder(std::string const& scriptName) const {
 	//replace: $cfg_dir/proxifiedScripts/ -> $cfg_dir/LS_
 	std::string scriptNameNoPath = scriptName.substr((this->env.cfg_dir+"/proxifiedScripts/").length());
 	std::string outputFilePath = this->env.cfg_dir+"/LS_"+scriptNameNoPath;
@@ -84,13 +84,13 @@ bool GrublistCfg::createScriptForwarder(std::string const& scriptName) const {
 	}
 }
 
-bool GrublistCfg::removeScriptForwarder(std::string const& scriptName) const {
+bool Model_ListCfg::removeScriptForwarder(std::string const& scriptName) const {
 	std::string scriptNameNoPath = scriptName.substr((this->env.cfg_dir+"/proxifiedScripts/").length());
 	std::string filePath = this->env.cfg_dir+"/LS_"+scriptNameNoPath;
 	return unlink(filePath.c_str()) == 0;
 }
 
-std::string GrublistCfg::readScriptForwarder(std::string const& scriptForwarderFilePath) const {
+std::string Model_ListCfg::readScriptForwarder(std::string const& scriptForwarderFilePath) const {
 	std::string result;
 	FILE* scriptForwarderFile = fopen(scriptForwarderFilePath.c_str(), "r");
 	if (scriptForwarderFile){
@@ -107,7 +107,7 @@ std::string GrublistCfg::readScriptForwarder(std::string const& scriptForwarderF
 	}
 }
 
-void GrublistCfg::load(bool preserveConfig){
+void Model_ListCfg::load(bool preserveConfig){
 	if (!preserveConfig){
 		send_new_load_progress(0);
 
@@ -135,13 +135,13 @@ void GrublistCfg::load(bool preserveConfig){
 			stat((this->env.cfg_dir+"/"+entry->d_name).c_str(), &fileProperties);
 			if ((fileProperties.st_mode & S_IFMT) != S_IFDIR){ //ignore directories
 				if (entry->d_name[2] == '_'){ //check whether it's an script (they should be named XX_scriptname)…
-					this->proxies.push_back(Proxy());
+					this->proxies.push_back(Model_Proxy());
 					this->proxies.back().fileName = this->env.cfg_dir+"/"+entry->d_name;
 					this->proxies.back().index = (entry->d_name[0]-'0')*10 + (entry->d_name[1]-'0');
 					this->proxies.back().permissions = fileProperties.st_mode & ~S_IFMT;
 				
 					FILE* proxyFile = fopen((this->env.cfg_dir+"/"+entry->d_name).c_str(), "r");
-					ProxyScriptData data(proxyFile);
+					Model_ProxyScriptData data(proxyFile);
 					fclose(proxyFile);
 					if (data){
 						this->proxies.back().dataSource = repository.getScriptByFilename(this->env.cfg_dir_prefix+data.scriptCmd);
@@ -170,12 +170,12 @@ void GrublistCfg::load(bool preserveConfig){
 	this->log("creating proxifiedScript links & chmodding other files…", Logger::EVENT);
 
 	this->lock();
-	for (Repository::iterator iter = this->repository.begin(); iter != this->repository.end(); iter++){
+	for (Model_Repository::iterator iter = this->repository.begin(); iter != this->repository.end(); iter++){
 		if (iter->isInScriptDir(env.cfg_dir)){
 			//createScriptForwarder & disable proxies
 			createScriptForwarder(iter->fileName);
-			std::list<Proxy*> relatedProxies = proxies.getProxiesByScript(*iter);
-			for (std::list<Proxy*>::iterator piter = relatedProxies.begin(); piter != relatedProxies.end(); piter++){
+			std::list<Model_Proxy*> relatedProxies = proxies.getProxiesByScript(*iter);
+			for (std::list<Model_Proxy*>::iterator piter = relatedProxies.begin(); piter != relatedProxies.end(); piter++){
 				int res = chmod((*piter)->fileName.c_str(), 0644);
 			}
 		} else {
@@ -214,7 +214,7 @@ void GrublistCfg::load(bool preserveConfig){
 	//restore old configuration
 	this->log("restoring grub configuration", Logger::EVENT);
 	this->lock();
-	for (Repository::iterator iter = this->repository.begin(); iter != this->repository.end(); iter++){
+	for (Model_Repository::iterator iter = this->repository.begin(); iter != this->repository.end(); iter++){
 		if (iter->isInScriptDir(env.cfg_dir)){
 			//removeScriptForwarder & reset proxy permissions
 			bool result = removeScriptForwarder(iter->fileName);
@@ -222,8 +222,8 @@ void GrublistCfg::load(bool preserveConfig){
 				this->log("removing of script forwarder not successful!", Logger::ERROR);
 			}
 		}
-		std::list<Proxy*> relatedProxies = proxies.getProxiesByScript(*iter);
-		for (std::list<Proxy*>::iterator piter = relatedProxies.begin(); piter != relatedProxies.end(); piter++){
+		std::list<Model_Proxy*> relatedProxies = proxies.getProxiesByScript(*iter);
+		for (std::list<Model_Proxy*>::iterator piter = relatedProxies.begin(); piter != relatedProxies.end(); piter++){
 			chmod((*piter)->fileName.c_str(), (*piter)->permissions);
 		}
 	}
@@ -234,20 +234,20 @@ void GrublistCfg::load(bool preserveConfig){
 }
 
 
-void GrublistCfg::readGeneratedFile(FILE* source, bool createScriptIfNotFound, bool createProxyIfNotFound){
-	GrubConfRow row;
-	Script* script;
+void Model_ListCfg::readGeneratedFile(FILE* source, bool createScriptIfNotFound, bool createProxyIfNotFound){
+	Model_Entry_Row row;
+	Model_Script* script;
 	int i = 0;
 	bool inScript = false;
 	std::string plaintextBuffer = "";
 	int innerCount = 0;
 	double progressbarScriptSpace = 0.7 / this->repository.size();
-	while (!cancelThreadsRequested && (row = GrubConfRow(source))){
+	while (!cancelThreadsRequested && (row = Model_Entry_Row(source))){
 		if (!inScript && row.text.substr(0,10) == ("### BEGIN ") && row.text.substr(row.text.length()-4,4) == " ###"){
 			this->lock();
 			if (script) {
 				if (plaintextBuffer != "") {
-					Entry newEntry("#text", "", plaintextBuffer, Entry::PLAINTEXT);
+					Model_Entry newEntry("#text", "", plaintextBuffer, Model_Entry::PLAINTEXT);
 					if (this->hasLogger()) {
 						newEntry.setLogger(this->getLogger());
 					}
@@ -264,7 +264,7 @@ void GrublistCfg::readGeneratedFile(FILE* source, bool createScriptIfNotFound, b
 			}
 			script = repository.getScriptByFilename(realScriptName, createScriptIfNotFound);
 			if (createScriptIfNotFound && createProxyIfNotFound){ //for the compare-configuration
-				this->proxies.push_back(Proxy(*script));
+				this->proxies.push_back(Model_Proxy(*script));
 			}
 			this->unlock();
 			if (script){
@@ -279,14 +279,14 @@ void GrublistCfg::readGeneratedFile(FILE* source, bool createScriptIfNotFound, b
 			if (innerCount < 10) {
 				innerCount++;
 			}
-			Entry newEntry(source, row, this->getLoggerPtr());
+			Model_Entry newEntry(source, row, this->getLoggerPtr());
 			script->entries().push_back(newEntry);
 			this->proxies.sync_all(false, false, script);
 			this->unlock();
 			this->send_new_load_progress(0.1 + (progressbarScriptSpace * i + (progressbarScriptSpace/10*innerCount)), script->name, i, this->repository.size());
 		} else if (script != NULL && row.text.substr(0, 8) == "submenu ") {
 			this->lock();
-			Entry newEntry(source, row, this->getLoggerPtr());
+			Model_Entry newEntry(source, row, this->getLoggerPtr());
 			script->entries().push_back(newEntry);
 			this->proxies.sync_all(false, false, script);
 			this->unlock();
@@ -298,7 +298,7 @@ void GrublistCfg::readGeneratedFile(FILE* source, bool createScriptIfNotFound, b
 	this->lock();
 	if (script) {
 		if (plaintextBuffer != "") {
-			Entry newEntry("#text", "", plaintextBuffer, Entry::PLAINTEXT);
+			Model_Entry newEntry("#text", "", plaintextBuffer, Model_Entry::PLAINTEXT);
 			if (this->hasLogger()) {
 				newEntry.setLogger(this->getLogger());
 			}
@@ -313,12 +313,12 @@ void GrublistCfg::readGeneratedFile(FILE* source, bool createScriptIfNotFound, b
 	this->unlock();
 }
 
-void GrublistCfg::save(){
+void Model_ListCfg::save(){
 	send_new_save_progress(0);
 	std::map<std::string, int> samename_counter;
 	proxies.deleteAllProxyscriptFiles();  //delete all proxies to get a clean file system
 	proxies.clearTrash(); //delete all files of removed proxies
-	for (Repository::iterator script_iter = repository.begin(); script_iter != repository.end(); script_iter++)
+	for (Model_Repository::iterator script_iter = repository.begin(); script_iter != repository.end(); script_iter++)
 		script_iter->moveToBasedir(this->env.cfg_dir);
 	
 	send_new_save_progress(0.1);
@@ -326,27 +326,27 @@ void GrublistCfg::save(){
 	int mkdir_result = mkdir((this->env.cfg_dir+"/proxifiedScripts").c_str(), 0755); //create this directory if it doesn't allready exist
 
 	// get new script locations
-	std::map<Script const*, std::string> scriptTargetMap; // scripts and their target directories
-	for (Repository::iterator script_iter = repository.begin(); script_iter != repository.end(); script_iter++) {
-		std::list<Proxy*> relatedProxies = proxies.getProxiesByScript(*script_iter);
+	std::map<Model_Script const*, std::string> scriptTargetMap; // scripts and their target directories
+	for (Model_Repository::iterator script_iter = repository.begin(); script_iter != repository.end(); script_iter++) {
+		std::list<Model_Proxy*> relatedProxies = proxies.getProxiesByScript(*script_iter);
 		if (proxies.proxyRequired(*script_iter)){
-			scriptTargetMap[&*script_iter] = this->env.cfg_dir+"/proxifiedScripts/"+pscriptname_encode(script_iter->name, samename_counter[script_iter->name]++);
+			scriptTargetMap[&*script_iter] = this->env.cfg_dir+"/proxifiedScripts/"+Model_PscriptnameTranslator::encode(script_iter->name, samename_counter[script_iter->name]++);
 		} else {
 			std::ostringstream nameStream;
 			nameStream << std::setw(2) << std::setfill('0') << relatedProxies.front()->index << "_" << script_iter->name;
-			std::list<Proxy*> relatedProxies = proxies.getProxiesByScript(*script_iter);
+			std::list<Model_Proxy*> relatedProxies = proxies.getProxiesByScript(*script_iter);
 			scriptTargetMap[&*script_iter] = this->env.cfg_dir+"/"+nameStream.str();
 		}
 	}
 
 	// move scripts and create proxies
 	int proxyCount = 0;
-	for (Repository::iterator script_iter = repository.begin(); script_iter != repository.end(); script_iter++){
-		std::list<Proxy*> relatedProxies = proxies.getProxiesByScript(*script_iter);
+	for (Model_Repository::iterator script_iter = repository.begin(); script_iter != repository.end(); script_iter++){
+		std::list<Model_Proxy*> relatedProxies = proxies.getProxiesByScript(*script_iter);
 		if (proxies.proxyRequired(*script_iter)){
 			script_iter->moveFile(scriptTargetMap[&*script_iter], 0755);
-			for (std::list<Proxy*>::iterator proxy_iter = relatedProxies.begin(); proxy_iter != relatedProxies.end(); proxy_iter++){
-				std::map<Entry const*, Script const*> entrySourceMap = this->getEntrySources(**proxy_iter);
+			for (std::list<Model_Proxy*>::iterator proxy_iter = relatedProxies.begin(); proxy_iter != relatedProxies.end(); proxy_iter++){
+				std::map<Model_Entry const*, Model_Script const*> entrySourceMap = this->getEntrySources(**proxy_iter);
 				std::ostringstream nameStream;
 				nameStream << std::setw(2) << std::setfill('0') << (*proxy_iter)->index << "_" << script_iter->name << "_proxy";
 				(*proxy_iter)->generateFile(this->env.cfg_dir+"/"+nameStream.str(), this->env.cfg_dir_prefix.length(), this->env.cfg_dir_noprefix, entrySourceMap, scriptTargetMap);
@@ -431,14 +431,14 @@ void GrublistCfg::save(){
 	}
 
 	//update modified "custom" scripts
-	for (std::list<Script>::iterator scriptIter = this->repository.begin(); scriptIter != this->repository.end(); scriptIter++) {
+	for (std::list<Model_Script>::iterator scriptIter = this->repository.begin(); scriptIter != this->repository.end(); scriptIter++) {
 		if (scriptIter->isCustomScript && scriptIter->isModified()) {
 			this->log("modifying script \"" + scriptIter->name + "\"", Logger::INFO);
 			assert(scriptIter->fileName != "");
-			Proxy dummyProxy(*scriptIter);
+			Model_Proxy dummyProxy(*scriptIter);
 			std::ofstream scriptStream(scriptIter->fileName.c_str());
 			scriptStream << CUSTOM_SCRIPT_SHEBANG << "\n" << CUSTOM_SCRIPT_PREFIX << "\n";
-			for (std::list<Rule>::iterator ruleIter = dummyProxy.rules.begin(); ruleIter != dummyProxy.rules.end(); ruleIter++) {
+			for (std::list<Model_Rule>::iterator ruleIter = dummyProxy.rules.begin(); ruleIter != dummyProxy.rules.end(); ruleIter++) {
 				ruleIter->print(scriptStream);
 				if (ruleIter->dataSource) {
 					ruleIter->dataSource->isModified = false;
@@ -467,20 +467,20 @@ void GrublistCfg::save(){
 	send_new_save_progress(1);
 }
 
-std::map<Entry const*, Script const*> GrublistCfg::getEntrySources(Proxy const& proxy, Rule const* parent) const {
-	std::list<Rule> const& list = parent ? parent->subRules : proxy.rules;
-	std::map<Entry const*, Script const*> result;
+std::map<Model_Entry const*, Model_Script const*> Model_ListCfg::getEntrySources(Model_Proxy const& proxy, Model_Rule const* parent) const {
+	std::list<Model_Rule> const& list = parent ? parent->subRules : proxy.rules;
+	std::map<Model_Entry const*, Model_Script const*> result;
 	assert(proxy.dataSource != NULL);
-	for (std::list<Rule>::const_iterator iter = list.begin(); iter != list.end(); iter++) {
+	for (std::list<Model_Rule>::const_iterator iter = list.begin(); iter != list.end(); iter++) {
 		if (iter->dataSource && !proxy.ruleIsFromOwnScript(*iter)) {
-			Script const* script = this->repository.getScriptByEntry(*iter->dataSource);
+			Model_Script const* script = this->repository.getScriptByEntry(*iter->dataSource);
 			if (script != NULL) {
 				result[iter->dataSource] = script;
 			} else {
 				this->log("error finding the associated script! (" + iter->outputName + ")", Logger::WARNING);
 			}
-		} else if (iter->type == Rule::SUBMENU) {
-			std::map<Entry const*, Script const*> subResult = this->getEntrySources(proxy, &*iter);
+		} else if (iter->type == Model_Rule::SUBMENU) {
+			std::map<Model_Entry const*, Model_Script const*> subResult = this->getEntrySources(proxy, &*iter);
 			if (subResult.size()) {
 				result.insert(subResult.begin(), subResult.end());
 			}
@@ -489,7 +489,7 @@ std::map<Entry const*, Script const*> GrublistCfg::getEntrySources(Proxy const& 
 	return result;
 }
 
-bool GrublistCfg::loadStaticCfg(){
+bool Model_ListCfg::loadStaticCfg(){
 	FILE* oldConfigFile = fopen(env.output_config_file.c_str(), "r");
 	if (oldConfigFile){
 		this->readGeneratedFile(oldConfigFile, true, true);
@@ -499,11 +499,11 @@ bool GrublistCfg::loadStaticCfg(){
 	return false;
 }
 
-void GrublistCfg::renameRule(Rule* rule, std::string const& newName){
+void Model_ListCfg::renameRule(Model_Rule* rule, std::string const& newName){
 	rule->outputName = newName;
 }
 
-std::string GrublistCfg::getGrubErrorMessage() const {
+std::string Model_ListCfg::getGrubErrorMessage() const {
 	FILE* errorLogFile = fopen(this->errorLogFile.c_str(), "r");
 	std::string errorMessage;
 	int c;
@@ -514,11 +514,11 @@ std::string GrublistCfg::getGrubErrorMessage() const {
 	return errorMessage;
 }
 
-bool GrublistCfg::compare(GrublistCfg const& other) const {
-	std::list<const Rule*> rlist[2];
+bool Model_ListCfg::compare(Model_ListCfg const& other) const {
+	std::list<const Model_Rule*> rlist[2];
 	for (int i = 0; i < 2; i++){
-		const GrublistCfg* gc = i == 0 ? this : &other;
-		for (ProxyList::const_iterator piter = gc->proxies.begin(); piter != gc->proxies.end(); piter++){
+		const Model_ListCfg* gc = i == 0 ? this : &other;
+		for (Model_Proxylist::const_iterator piter = gc->proxies.begin(); piter != gc->proxies.end(); piter++){
 			assert(piter->dataSource != NULL);
 			if (piter->isExecutable() && piter->dataSource){
 				if (piter->dataSource->fileName == "") { // if the associated file isn't found
@@ -526,30 +526,30 @@ bool GrublistCfg::compare(GrublistCfg const& other) const {
 				}
 				std::string fname = piter->dataSource->fileName.substr(other.env.cfg_dir.length()+1);
 				if (i == 0 || (fname[0] >= '1' && fname[0] <= '9' && fname[1] >= '0' && fname[1] <= '9' && fname[2] == '_')) {
-					std::list<Rule const*> comparableRules = this->getComparableRules(piter->rules);
+					std::list<Model_Rule const*> comparableRules = this->getComparableRules(piter->rules);
 					rlist[i].splice(rlist[i].end(), comparableRules);
 				}
 			}
 		}
 	}
-	return GrublistCfg::compareLists(rlist[0], rlist[1]);
+	return Model_ListCfg::compareLists(rlist[0], rlist[1]);
 }
 
-std::list<Rule const*> GrublistCfg::getComparableRules(std::list<Rule> const& list) {
-	std::list<Rule const*> result;
-	for (std::list<Rule>::const_iterator riter = list.begin(); riter != list.end(); riter++){
-		if (((riter->type == Rule::NORMAL && riter->dataSource) || riter->type == Rule::SUBMENU) && riter->isVisible){
+std::list<Model_Rule const*> Model_ListCfg::getComparableRules(std::list<Model_Rule> const& list) {
+	std::list<Model_Rule const*> result;
+	for (std::list<Model_Rule>::const_iterator riter = list.begin(); riter != list.end(); riter++){
+		if (((riter->type == Model_Rule::NORMAL && riter->dataSource) || riter->type == Model_Rule::SUBMENU) && riter->isVisible){
 			result.push_back(&*riter);
 		}
 	}
 	return result;
 }
 
-bool GrublistCfg::compareLists(std::list<Rule const*> a, std::list<Rule const*> b) {
+bool Model_ListCfg::compareLists(std::list<Model_Rule const*> a, std::list<Model_Rule const*> b) {
 	if (a.size() != b.size())
 		return false;
 
-	std::list<const Rule*>::iterator self_iter = a.begin(), other_iter = b.begin();
+	std::list<const Model_Rule*>::iterator self_iter = a.begin(), other_iter = b.begin();
 	while (self_iter != a.end() && other_iter != b.end()){
 		if ((*self_iter)->type != (*other_iter)->type) {
 			return false;
@@ -567,7 +567,7 @@ bool GrublistCfg::compareLists(std::list<Rule const*> a, std::list<Rule const*> 
 				return false;
 		}
 		//check rules inside the submenu
-		if ((*self_iter)->type == Rule::SUBMENU && !GrublistCfg::compareLists(GrublistCfg::getComparableRules((*self_iter)->subRules), GrublistCfg::getComparableRules((*other_iter)->subRules))) {
+		if ((*self_iter)->type == Model_Rule::SUBMENU && !Model_ListCfg::compareLists(Model_ListCfg::getComparableRules((*self_iter)->subRules), Model_ListCfg::getComparableRules((*other_iter)->subRules))) {
 			return false;
 		}
 		self_iter++;
@@ -577,7 +577,7 @@ bool GrublistCfg::compareLists(std::list<Rule const*> a, std::list<Rule const*> 
 }
 
 
-void GrublistCfg::send_new_load_progress(double newProgress, std::string scriptName, int current, int max){
+void Model_ListCfg::send_new_load_progress(double newProgress, std::string scriptName, int current, int max){
 	if (this->eventListener != NULL){
 		this->progress = newProgress;
 		this->progress_name = scriptName;
@@ -590,7 +590,7 @@ void GrublistCfg::send_new_load_progress(double newProgress, std::string scriptN
 	}
 }
 
-void GrublistCfg::send_new_save_progress(double newProgress){
+void Model_ListCfg::send_new_save_progress(double newProgress){
 	if (this->eventListener != NULL){
 		this->progress = newProgress;
 		this->eventListener->saveProgressChanged();
@@ -600,35 +600,35 @@ void GrublistCfg::send_new_save_progress(double newProgress){
 	}
 }
 
-void GrublistCfg::cancelThreads(){
+void Model_ListCfg::cancelThreads(){
 	cancelThreadsRequested = true;
 }
 
 
-void GrublistCfg::reset(){
+void Model_ListCfg::reset(){
 	this->lock();
 	this->repository.clear();
 	this->proxies.clear();
 	this->unlock();
 }
 
-double GrublistCfg::getProgress() const {
+double Model_ListCfg::getProgress() const {
 	return progress;
 }
 
-std::string GrublistCfg::getProgress_name() const {
+std::string Model_ListCfg::getProgress_name() const {
 	return progress_name;
 }
-int GrublistCfg::getProgress_pos() const {
+int Model_ListCfg::getProgress_pos() const {
 	return progress_pos;
 }
-int GrublistCfg::getProgress_max() const {
+int Model_ListCfg::getProgress_max() const {
 	return progress_max;
 }
 
-void GrublistCfg::renumerate(){
+void Model_ListCfg::renumerate(){
 	short int i = 0;
-	for (ProxyList::iterator iter = this->proxies.begin(); iter != this->proxies.end(); iter++){
+	for (Model_Proxylist::iterator iter = this->proxies.begin(); iter != this->proxies.end(); iter++){
 		if (i <= 0 && iter->dataSource && iter->dataSource->name == "header") {
 			i = 0;
 		} else if (i <= 5 && iter->dataSource && iter->dataSource->name == "debian_theme") {
@@ -641,36 +641,36 @@ void GrublistCfg::renumerate(){
 	this->proxies.sort();
 }
 
-Rule& GrublistCfg::moveRule(Rule* rule, int direction){
+Model_Rule& Model_ListCfg::moveRule(Model_Rule* rule, int direction){
 	try {
 		return this->proxies.getProxyByRule(rule)->moveRule(rule, direction);
-	} catch (Proxy::Exception const& e) {
-		Proxy* proxy = this->proxies.getProxyByRule(rule);
-		Rule* parent = NULL;
+	} catch (Model_Proxy::Exception const& e) {
+		Model_Proxy* proxy = this->proxies.getProxyByRule(rule);
+		Model_Rule* parent = NULL;
 		try {
 			parent = proxy->getParentRule(rule);
-		} catch (Proxy::Exception const& e) {if (e != Proxy::RULE_NOT_FOUND) throw e;}
+		} catch (Model_Proxy::Exception const& e) {if (e != Model_Proxy::RULE_NOT_FOUND) throw e;}
 
-		if (e == Proxy::NO_MOVE_TARGET_FOUND) {
+		if (e == Model_Proxy::NO_MOVE_TARGET_FOUND) {
 			try {
-				std::list<Rule>::iterator nextRule = this->proxies.getNextVisibleRule(proxy->getListIterator(*rule, proxy->getRuleList(parent)), direction);
-				if (nextRule->type != Rule::SUBMENU) { // create new proxy
-					std::list<Rule>::iterator targetRule = proxy->rules.end();
+				std::list<Model_Rule>::iterator nextRule = this->proxies.getNextVisibleRule(proxy->getListIterator(*rule, proxy->getRuleList(parent)), direction);
+				if (nextRule->type != Model_Rule::SUBMENU) { // create new proxy
+					std::list<Model_Rule>::iterator targetRule = proxy->rules.end();
 					bool targetRuleFound = false;
 					try {
 						targetRule = this->proxies.getNextVisibleRule(nextRule, direction);
 						targetRuleFound = true;
-					} catch (ProxyList::Exception e) {
-						if (e != ProxyList::NO_MOVE_TARGET_FOUND) {
+					} catch (Model_Proxylist::Exception e) {
+						if (e != Model_Proxylist::NO_MOVE_TARGET_FOUND) {
 							throw e;
 						}
 						// ignore GrublistCfg::NO_MOVE_TARGET_FOUND - occurs when previousRule is not found. But this isn't a problem
 					}
 
 					if (targetRuleFound && this->proxies.getProxyByRule(&*targetRule)->dataSource == this->proxies.getProxyByRule(&*rule)->dataSource) {
-						Proxy* targetProxy = this->proxies.getProxyByRule(&*targetRule);
+						Model_Proxy* targetProxy = this->proxies.getProxyByRule(&*targetRule);
 						targetProxy->removeEquivalentRules(*rule);
-						Rule* newRule = NULL;
+						Model_Rule* newRule = NULL;
 						if (direction == -1) {
 							targetProxy->rules.push_back(*rule);
 							newRule = &targetProxy->rules.back();
@@ -681,7 +681,7 @@ Rule& GrublistCfg::moveRule(Rule* rule, int direction){
 						rule->isVisible = false;
 
 						try {
-							std::list<Rule>::iterator previousRule = this->proxies.getNextVisibleRule(proxy->getListIterator(*rule, proxy->getRuleList(parent)), -direction);
+							std::list<Model_Rule>::iterator previousRule = this->proxies.getNextVisibleRule(proxy->getListIterator(*rule, proxy->getRuleList(parent)), -direction);
 							if (this->proxies.getProxyByRule(&*nextRule)->dataSource == this->proxies.getProxyByRule(&*previousRule)->dataSource) {
 								this->proxies.getProxyByRule(&*previousRule)->removeEquivalentRules(*nextRule);
 								if (direction == 1) {
@@ -694,8 +694,8 @@ Rule& GrublistCfg::moveRule(Rule* rule, int direction){
 									this->proxies.deleteProxy(this->proxies.getProxyByRule(&*nextRule));
 								}
 							}
-						} catch (ProxyList::Exception const& e) {
-							if (e != ProxyList::NO_MOVE_TARGET_FOUND) {
+						} catch (Model_Proxylist::Exception const& e) {
+							if (e != Model_Proxylist::NO_MOVE_TARGET_FOUND) {
 								throw e;
 							}
 							// ignore GrublistCfg::NO_MOVE_TARGET_FOUND - occurs when previousRule is not found. But this isn't a problem
@@ -708,19 +708,19 @@ Rule& GrublistCfg::moveRule(Rule* rule, int direction){
 
 						return *newRule;
 					} else {
-						std::list<Rule>::iterator movedRule = this->proxies.moveRuleToNewProxy(*rule, direction);
+						std::list<Model_Rule>::iterator movedRule = this->proxies.moveRuleToNewProxy(*rule, direction);
 
-						Proxy* currentProxy = this->proxies.getProxyByRule(&*movedRule);
+						Model_Proxy* currentProxy = this->proxies.getProxyByRule(&*movedRule);
 
-						std::list<Rule>::iterator movedRule2 = this->proxies.moveRuleToNewProxy(*nextRule, -direction);
+						std::list<Model_Rule>::iterator movedRule2 = this->proxies.moveRuleToNewProxy(*nextRule, -direction);
 						this->renumerate();
 						this->swapProxies(currentProxy, this->proxies.getProxyByRule(&*movedRule2));
 
 						try {
-							std::list<Rule>::iterator prevPrevRule = this->proxies.getNextVisibleRule(movedRule2, -direction);
+							std::list<Model_Rule>::iterator prevPrevRule = this->proxies.getNextVisibleRule(movedRule2, -direction);
 
 							if (this->proxies.getProxyByRule(&*prevPrevRule)->dataSource == this->proxies.getProxyByRule(&*movedRule2)->dataSource) {
-								Proxy* prevprev = this->proxies.getProxyByRule(&*prevPrevRule);
+								Model_Proxy* prevprev = this->proxies.getProxyByRule(&*prevPrevRule);
 								prevprev->removeEquivalentRules(*movedRule2);
 								if (direction == 1) {
 									prevprev->rules.push_back(*movedRule2);
@@ -732,8 +732,8 @@ Rule& GrublistCfg::moveRule(Rule* rule, int direction){
 									this->proxies.deleteProxy(this->proxies.getProxyByRule(&*movedRule2));
 								}
 							}
-						} catch (ProxyList::Exception const& e) {
-							if (e != ProxyList::NO_MOVE_TARGET_FOUND) {
+						} catch (Model_Proxylist::Exception const& e) {
+							if (e != Model_Proxylist::NO_MOVE_TARGET_FOUND) {
 								throw e;
 							}
 							// ignore GrublistCfg::NO_MOVE_TARGET_FOUND - occurs when prevPrevRule is not found. But this isn't a problem
@@ -742,19 +742,19 @@ Rule& GrublistCfg::moveRule(Rule* rule, int direction){
 						return *movedRule;
 					}
 				} else { // convert existing proxy to multiproxy
-					std::list<Proxy>::iterator proxyIter = this->proxies.getIter(proxy);
+					std::list<Model_Proxy>::iterator proxyIter = this->proxies.getIter(proxy);
 
-					Rule* movedRule = NULL;
-					Proxy* target = NULL;
+					Model_Rule* movedRule = NULL;
+					Model_Proxy* target = NULL;
 					if (direction == -1 && proxyIter != this->proxies.begin()) {
 						proxyIter--;
 						target = &*proxyIter;
 						target->removeEquivalentRules(*rule);
 						nextRule->subRules.push_back(*rule);
-						if (rule->type == Rule::SUBMENU) {
+						if (rule->type == Model_Rule::SUBMENU) {
 							proxy->removeForeignChildRules(*rule);
 						}
-						if ((rule->type == Rule::SUBMENU && rule->subRules.size() != 0) || (rule->type != Rule::SUBMENU && proxy->ruleIsFromOwnScript(*rule))) {
+						if ((rule->type == Model_Rule::SUBMENU && rule->subRules.size() != 0) || (rule->type != Model_Rule::SUBMENU && proxy->ruleIsFromOwnScript(*rule))) {
 							rule->isVisible = false;
 						} else {
 							proxy->rules.pop_front();
@@ -767,10 +767,10 @@ Rule& GrublistCfg::moveRule(Rule* rule, int direction){
 						target = &*proxyIter;
 						target->removeEquivalentRules(*rule);
 						nextRule->subRules.push_front(*rule);
-						if (rule->type == Rule::SUBMENU) {
+						if (rule->type == Model_Rule::SUBMENU) {
 							proxy->removeForeignChildRules(*rule);
 						}
-						if ((rule->type == Rule::SUBMENU && rule->subRules.size() != 0) || (rule->type != Rule::SUBMENU && proxy->ruleIsFromOwnScript(*rule))) {
+						if ((rule->type == Model_Rule::SUBMENU && rule->subRules.size() != 0) || (rule->type != Model_Rule::SUBMENU && proxy->ruleIsFromOwnScript(*rule))) {
 							rule->isVisible = false;
 						} else {
 							proxy->rules.pop_back();
@@ -780,7 +780,7 @@ Rule& GrublistCfg::moveRule(Rule* rule, int direction){
 						proxyIter--;
 						proxyIter--; // go to the previous proxy
 					} else {
-						throw GrublistCfg::NO_MOVE_TARGET_FOUND;
+						throw Model_ListCfg::NO_MOVE_TARGET_FOUND;
 					}
 
 					if (!proxy->hasVisibleRules()) {
@@ -793,36 +793,36 @@ Rule& GrublistCfg::moveRule(Rule* rule, int direction){
 					}
 					return *movedRule;
 				}
-			} catch (ProxyList::Exception e) {
-				if (e == ProxyList::NO_MOVE_TARGET_FOUND) {
-					throw GrublistCfg::NO_MOVE_TARGET_FOUND;
+			} catch (Model_Proxylist::Exception e) {
+				if (e == Model_Proxylist::NO_MOVE_TARGET_FOUND) {
+					throw Model_ListCfg::NO_MOVE_TARGET_FOUND;
 				} else {
 					throw e;
 				}
 			}
-		} else if (e == Proxy::SHOULD_BE_A_NEW_INSTANCE) {
-			Rule* parentSubmenu = parent;
+		} else if (e == Model_Proxy::SHOULD_BE_A_NEW_INSTANCE) {
+			Model_Rule* parentSubmenu = parent;
 			try {
-				std::list<Rule>::iterator nextRule = this->proxies.getNextVisibleRule(proxy->getListIterator(*parent, proxy->rules), direction); // go forward
+				std::list<Model_Rule>::iterator nextRule = this->proxies.getNextVisibleRule(proxy->getListIterator(*parent, proxy->rules), direction); // go forward
 
 				if (this->proxies.getProxyByRule(&*nextRule) == this->proxies.getProxyByRule(&*rule)) {
 					this->proxies.splitProxy(proxy, &*nextRule, direction);
 				}
-			} catch (ProxyList::Exception e) {
-				if (e != ProxyList::NO_MOVE_TARGET_FOUND) {
+			} catch (Model_Proxylist::Exception e) {
+				if (e != Model_Proxylist::NO_MOVE_TARGET_FOUND) {
 					throw e;
 				}
 				// there's no next rule… no split required
 			}
 
-			std::list<Proxy>::iterator nextProxy = this->proxies.getIter(this->proxies.getProxyByRule(&*rule));
+			std::list<Model_Proxy>::iterator nextProxy = this->proxies.getIter(this->proxies.getProxyByRule(&*rule));
 			if (direction == 1) {
 				nextProxy++;
 			} else {
 				nextProxy--;
 			}
 
-			Rule* movedRule = NULL;
+			Model_Rule* movedRule = NULL;
 			if (nextProxy != this->proxies.end() && nextProxy->dataSource == this->repository.getScriptByEntry(*rule->dataSource)) {
 				nextProxy->removeEquivalentRules(*rule);
 				if (direction == 1) {
@@ -844,7 +844,7 @@ Rule& GrublistCfg::moveRule(Rule* rule, int direction){
 	throw NO_MOVE_TARGET_FOUND;
 }
 
-void GrublistCfg::swapProxies(Proxy* a, Proxy* b){
+void Model_ListCfg::swapProxies(Model_Proxy* a, Model_Proxy* b){
 	if (a->index == b->index) { // swapping has no effect if the indexes are identical
 		this->renumerate();
 	}
@@ -854,15 +854,15 @@ void GrublistCfg::swapProxies(Proxy* a, Proxy* b){
 	this->proxies.sort();
 }
 
-Rule* GrublistCfg::createSubmenu(Rule* position) {
+Model_Rule* Model_ListCfg::createSubmenu(Model_Rule* position) {
 	return this->proxies.getProxyByRule(position)->createSubmenu(position);
 }
 
-Rule* GrublistCfg::splitSubmenu(Rule* child) {
+Model_Rule* Model_ListCfg::splitSubmenu(Model_Rule* child) {
 	return this->proxies.getProxyByRule(child)->splitSubmenu(child);
 }
 
-bool GrublistCfg::cfgDirIsClean(){
+bool Model_ListCfg::cfgDirIsClean(){
 	DIR* hGrubCfgDir = opendir(this->env.cfg_dir.c_str());
 	if (hGrubCfgDir){
 		struct dirent *entry;
@@ -876,7 +876,7 @@ bool GrublistCfg::cfgDirIsClean(){
 	}
 	return true;
 }
-void GrublistCfg::cleanupCfgDir(){
+void Model_ListCfg::cleanupCfgDir(){
 	this->log("cleaning up cfg dir!", Logger::IMPORTANT_EVENT);
 	
 	DIR* hGrubCfgDir = opendir(this->env.cfg_dir.c_str());
@@ -929,10 +929,10 @@ void GrublistCfg::cleanupCfgDir(){
 	}
 }
 
-void GrublistCfg::addColorHelper() {
-	Script* newScript = NULL;
+void Model_ListCfg::addColorHelper() {
+	Model_Script* newScript = NULL;
 	if (this->repository.getScriptByName("grub-customizer_menu_color_helper") == NULL) {
-		Script* newScript = this->repository.createScript("grub-customizer_menu_color_helper", this->env.cfg_dir + "06_grub-customizer_menu_color_helper", "#!/bin/sh\n\
+		Model_Script* newScript = this->repository.createScript("grub-customizer_menu_color_helper", this->env.cfg_dir + "06_grub-customizer_menu_color_helper", "#!/bin/sh\n\
 \n\
 if [ \"x${GRUB_BACKGROUND}\" != \"x\" ] ; then\n\
 	if [ \"x${GRUB_COLOR_NORMAL}\" != \"x\" ] ; then\n\
@@ -945,54 +945,54 @@ if [ \"x${GRUB_BACKGROUND}\" != \"x\" ] ; then\n\
 fi\n\
 ");
 		assert(newScript != NULL);
-		Proxy newProxy(*newScript);
+		Model_Proxy newProxy(*newScript);
 		newProxy.index = 6;
 		this->proxies.push_back(newProxy);
 	}
 }
 
-std::list<Entry*> GrublistCfg::getRemovedEntries(Entry* parent) {
-	std::list<Entry*> result;
+std::list<Model_Entry*> Model_ListCfg::getRemovedEntries(Model_Entry* parent) {
+	std::list<Model_Entry*> result;
 	if (parent == NULL) {
-		for (std::list<Script>::iterator iter = this->repository.begin(); iter != this->repository.end(); iter++) {
-			std::list<Entry*> subResult = this->getRemovedEntries(&iter->root);
+		for (std::list<Model_Script>::iterator iter = this->repository.begin(); iter != this->repository.end(); iter++) {
+			std::list<Model_Entry*> subResult = this->getRemovedEntries(&iter->root);
 			result.insert(result.end(), subResult.begin(), subResult.end());
 		}
 	} else {
 		if (!this->proxies.getVisibleRuleForEntry(*parent)) {
 			result.push_back(parent);
 		}
-		for (std::list<Entry>::iterator entryIter = parent->subEntries.begin(); entryIter != parent->subEntries.end(); entryIter++) {
-			std::list<Entry*> subResult = this->getRemovedEntries(&*entryIter);
+		for (std::list<Model_Entry>::iterator entryIter = parent->subEntries.begin(); entryIter != parent->subEntries.end(); entryIter++) {
+			std::list<Model_Entry*> subResult = this->getRemovedEntries(&*entryIter);
 			result.insert(result.end(), subResult.begin(), subResult.end());
 		}
 	}
 	return result;
 }
 
-Rule* GrublistCfg::addEntry(Entry& entry) {
-	Script* sourceScript = this->repository.getScriptByEntry(entry);
+Model_Rule* Model_ListCfg::addEntry(Model_Entry& entry) {
+	Model_Script* sourceScript = this->repository.getScriptByEntry(entry);
 	assert(sourceScript != NULL);
 
-	Proxy* targetProxy = NULL;
+	Model_Proxy* targetProxy = NULL;
 	if (this->proxies.size() && this->proxies.back().dataSource == sourceScript) {
 		targetProxy = &this->proxies.back();
 		targetProxy->set_isExecutable(true);
 	} else {
-		this->proxies.push_back(Proxy(*sourceScript, false));
+		this->proxies.push_back(Model_Proxy(*sourceScript, false));
 		targetProxy = &this->proxies.back();
 		this->renumerate();
 	}
 
-	Rule::RuleType type = Rule::NORMAL;
-	if (entry.type == Entry::SUBMENU || entry.type == Entry::SCRIPT_ROOT) {
-		type = Rule::OTHER_ENTRIES_PLACEHOLDER;
-	} else if (entry.type == Entry::PLAINTEXT) {
-		type = Rule::PLAINTEXT;
+	Model_Rule::RuleType type = Model_Rule::NORMAL;
+	if (entry.type == Model_Entry::SUBMENU || entry.type == Model_Entry::SCRIPT_ROOT) {
+		type = Model_Rule::OTHER_ENTRIES_PLACEHOLDER;
+	} else if (entry.type == Model_Entry::PLAINTEXT) {
+		type = Model_Rule::PLAINTEXT;
 	}
 
-	Rule* rule = targetProxy->getRuleByEntry(entry, targetProxy->rules, type);
-	Rule ruleCopy = *rule;
+	Model_Rule* rule = targetProxy->getRuleByEntry(entry, targetProxy->rules, type);
+	Model_Rule ruleCopy = *rule;
 	ruleCopy.isVisible = true;
 	targetProxy->removeEquivalentRules(*rule);
 	targetProxy->rules.push_back(ruleCopy);

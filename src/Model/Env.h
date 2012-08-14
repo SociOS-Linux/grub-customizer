@@ -29,7 +29,7 @@
 #include "../presenter/commonClass.h"
 #include "SettingsStore.h"
 
-struct GrubEnv : public CommonClass {
+struct Model_Env : public CommonClass {
 public:
 	enum Mode {
 		GRUB_MODE,
@@ -38,8 +38,8 @@ public:
 	enum Exception {
 		FILE_SAVE_FAILED
 	};
-	GrubEnv();
-	bool init(GrubEnv::Mode mode, std::string const& dir_prefix);
+	Model_Env();
+	bool init(Model_Env::Mode mode, std::string const& dir_prefix);
 	void loadFromFile(FILE* cfg_file, std::string const& dir_prefix);
 	void save();
 	std::map<std::string, std::string> getProperties();
@@ -54,7 +54,7 @@ public:
 	std::string cfg_dir, cfg_dir_noprefix, mkconfig_cmd, mkfont_cmd, cfg_dir_prefix, update_cmd, install_cmd, output_config_file, output_config_dir, settings_file, devicemap_file, mkdevicemap_cmd, cmd_prefix;
 	bool burgMode;
 	bool useDirectBackgroundProps; // Whether background settings should be set directly or by creating a desktop-base script
-	std::list<GrubEnv::Mode> getAvailableModes();
+	std::list<Model_Env::Mode> getAvailableModes();
 };
 
 #endif

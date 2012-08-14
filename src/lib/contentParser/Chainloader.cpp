@@ -25,7 +25,7 @@ const char* ContentParserChainloader::_regex = "\
 [ \t]*chainloader[ \t]+\\+1\\n?[ \t]*\
 ";
 
-ContentParserChainloader::ContentParserChainloader(GrubDeviceMap& deviceMap)
+ContentParserChainloader::ContentParserChainloader(Model_DeviceMap& deviceMap)
 	: deviceMap(deviceMap)
 {}
 
@@ -35,7 +35,7 @@ void ContentParserChainloader::parse(std::string const& sourceCode) {
 		std::vector<std::string> result = Regex::match(ContentParserChainloader::_regex, this->sourceCode);
 
 		//check partition indices by uuid
-		GrubPartitionIndex pIndex = deviceMap.getHarddriveIndexByPartitionUuid(result[3]);
+		Model_DeviceMap_PartitionIndex pIndex = deviceMap.getHarddriveIndexByPartitionUuid(result[3]);
 		if (pIndex.hddNum != result[1] || pIndex.partNum != result[2]){
 			throw ContentParser::PARSING_FAILED;
 		}
@@ -47,7 +47,7 @@ void ContentParserChainloader::parse(std::string const& sourceCode) {
 }
 
 std::string ContentParserChainloader::buildSource() const {
-	GrubPartitionIndex pIndex = deviceMap.getHarddriveIndexByPartitionUuid(this->options.at("partition_uuid"));
+	Model_DeviceMap_PartitionIndex pIndex = deviceMap.getHarddriveIndexByPartitionUuid(this->options.at("partition_uuid"));
 	std::map<int, std::string> newValues;
 	newValues[1] = pIndex.hddNum;
 	newValues[2] = pIndex.partNum;
@@ -71,7 +71,7 @@ void ContentParserChainloader::buildDefaultEntry(std::string const& partition_uu
 	search --no-floppy --fs-uuid --set 000000000000\n\
 	drivemap -s (hd0) ${root}\n\
 	chainloader +1";
-	GrubPartitionIndex pIndex = this->deviceMap.getHarddriveIndexByPartitionUuid(partition_uuid);
+	Model_DeviceMap_PartitionIndex pIndex = this->deviceMap.getHarddriveIndexByPartitionUuid(partition_uuid);
 	std::map<int, std::string> newValues;
 	newValues[1] = pIndex.hddNum;
 	newValues[2] = pIndex.partNum;

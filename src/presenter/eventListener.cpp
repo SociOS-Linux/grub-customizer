@@ -103,7 +103,7 @@ void EventListener::signal_entry_remove_requested(std::list<void*> entries){
 }
 
 void EventListener::signal_entry_renamed(void* entry, std::string const& newText){
-	presenter.updateRuleName((Rule*)entry, newText);
+	presenter.updateRuleName((Model_Rule*)entry, newText);
 }
 
 void EventListener::revertRequested() {
@@ -116,18 +116,18 @@ void EventListener::ruleAdjustment_requested(std::list<void*> rules, int directi
 
 void EventListener::ruleSelected(void* rule){
 	if (rule) {
-		presenter.showRuleInfo((Rule*)rule);
+		presenter.showRuleInfo((Model_Rule*)rule);
 	}
 }
 void EventListener::proxySelected(void* proxy){
-	presenter.showProxyInfo((Proxy*)proxy);
+	presenter.showProxyInfo((Model_Proxy*)proxy);
 }
 
 void EventListener::burgSwitcher_cancelled(){
 	presenter.handleCancelResponse();
 }
 void EventListener::burgSwitcher_response(bool burgChosen){
-	presenter.init(burgChosen ? GrubEnv::BURG_MODE : GrubEnv::GRUB_MODE);
+	presenter.init(burgChosen ? Model_Env::BURG_MODE : Model_Env::GRUB_MODE);
 }
 
 void EventListener::aboutDialog_requested(){

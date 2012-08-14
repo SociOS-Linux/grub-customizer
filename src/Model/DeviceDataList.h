@@ -24,10 +24,10 @@
 #include "../interface/deviceDataList_Iface.h"
 #include "../presenter/commonClass.h"
 
-class DeviceDataList : public DeviceDataList_Iface, public CommonClass {
+class Model_DeviceDataList : public DeviceDataList_Iface, public CommonClass {
 public:
-	DeviceDataList(FILE* blkidOutput);
-	DeviceDataList();
+	Model_DeviceDataList(FILE* blkidOutput);
+	Model_DeviceDataList();
 	void loadData(FILE* blkidOutput);
 	void clear();
 };

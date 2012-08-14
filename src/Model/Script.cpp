@@ -18,12 +18,12 @@
 
 #include "Script.h"
 
-Script::Script(std::string const& name, std::string const& fileName)
-	: name(name), fileName(fileName), root("DUMMY", "DUMMY", "DUMMY", Entry::SCRIPT_ROOT), isCustomScript(false)
+Model_Script::Model_Script(std::string const& name, std::string const& fileName)
+	: name(name), fileName(fileName), root("DUMMY", "DUMMY", "DUMMY", Model_Entry::SCRIPT_ROOT), isCustomScript(false)
 {
 	FILE* script = fopen(fileName.c_str(), "r");
 	if (script) {
-		GrubConfRow row1(script), row2(script);
+		Model_Entry_Row row1(script), row2(script);
 		if (row1.text == CUSTOM_SCRIPT_SHEBANG && row2.text == CUSTOM_SCRIPT_PREFIX) {
 			isCustomScript = true;
 		}
@@ -31,14 +31,14 @@ Script::Script(std::string const& name, std::string const& fileName)
 	}
 }
 
-bool Script::isModified(Entry* parent) {
+bool Model_Script::isModified(Model_Entry* parent) {
 	if (!parent) {
 		parent = &this->root;
 	}
-	for (std::list<Entry>::iterator iter = parent->subEntries.begin(); iter != parent->subEntries.end(); iter++) {
+	for (std::list<Model_Entry>::iterator iter = parent->subEntries.begin(); iter != parent->subEntries.end(); iter++) {
 		if (iter->isModified) {
 			return true;
-		} else if (iter->type == Entry::SUBMENU) {
+		} else if (iter->type == Model_Entry::SUBMENU) {
 			bool modified = this->isModified(&*iter);
 			if (modified) {
 				return true;
@@ -48,19 +48,19 @@ bool Script::isModified(Entry* parent) {
 	return false;
 }
 
-std::list<Entry>& Script::entries() {
+std::list<Model_Entry>& Model_Script::entries() {
 	return this->root.subEntries;
 }
 
-std::list<Entry> const& Script::entries() const {
+std::list<Model_Entry> const& Model_Script::entries() const {
 	return this->root.subEntries;
 }
 
-bool Script::isInScriptDir(std::string const& cfg_dir) const {
+bool Model_Script::isInScriptDir(std::string const& cfg_dir) const {
 	return this->fileName.substr(cfg_dir.length(), std::string("/proxifiedScripts/").length()) == "/proxifiedScripts/";
 }
-Entry* Script::getEntryByPath(std::list<std::string> const& path){
-	Entry* result = NULL;
+Model_Entry* Model_Script::getEntryByPath(std::list<std::string> const& path){
+	Model_Entry* result = NULL;
 	if (path.size() == 0) { // top level oep
 		result = &this->root;
 	} else {
@@ -73,20 +73,20 @@ Entry* Script::getEntryByPath(std::list<std::string> const& path){
 	return result;
 }
 
-Entry* Script::getEntryByName(std::string const& name, std::list<Entry>& parentList) {
-	for (std::list<Entry>::iterator iter = parentList.begin(); iter != parentList.end(); iter++){
+Model_Entry* Model_Script::getEntryByName(std::string const& name, std::list<Model_Entry>& parentList) {
+	for (std::list<Model_Entry>::iterator iter = parentList.begin(); iter != parentList.end(); iter++){
 		if (iter->name == name)
 			return &*iter;
 	}
 	return NULL;
 }
 
-Entry* Script::getEntryByHash(std::string const& hash, std::list<Entry>& parentList) {
-	for (std::list<Entry>::iterator iter = parentList.begin(); iter != parentList.end(); iter++){
-		if (iter->type == Entry::MENUENTRY && iter->content != "" && md5(iter->content) == hash) {
+Model_Entry* Model_Script::getEntryByHash(std::string const& hash, std::list<Model_Entry>& parentList) {
+	for (std::list<Model_Entry>::iterator iter = parentList.begin(); iter != parentList.end(); iter++){
+		if (iter->type == Model_Entry::MENUENTRY && iter->content != "" && md5(iter->content) == hash) {
 			return &*iter;
-		} else if (iter->type == Entry::SUBMENU) {
-			Entry* result = this->getEntryByHash(hash, iter->subEntries);
+		} else if (iter->type == Model_Entry::SUBMENU) {
+			Model_Entry* result = this->getEntryByHash(hash, iter->subEntries);
 			if (result != NULL) {
 				return result;
 			}
@@ -96,7 +96,7 @@ Entry* Script::getEntryByHash(std::string const& hash, std::list<Entry>& parentL
 }
 
 
-void Script::moveToBasedir(std::string const& cfg_dir){
+void Model_Script::moveToBasedir(std::string const& cfg_dir){
 	std::string newPath;
 	if (isInScriptDir(cfg_dir)){
 		newPath = cfg_dir+"/PS_"+this->fileName.substr((cfg_dir+"/proxifiedScripts/").length());
@@ -109,7 +109,7 @@ void Script::moveToBasedir(std::string const& cfg_dir){
 		this->fileName = newPath;
 }
 
-bool Script::moveFile(std::string const& newPath, short int permissions){
+bool Model_Script::moveFile(std::string const& newPath, short int permissions){
 	int rename_success = rename(this->fileName.c_str(), newPath.c_str());
 	if (rename_success == 0){
 		this->fileName = newPath;
@@ -120,23 +120,23 @@ bool Script::moveFile(std::string const& newPath, short int permissions){
 	return false;
 }
 
-std::list<std::string> Script::buildPath(Entry const& entry, Entry const* parent) const {
+std::list<std::string> Model_Script::buildPath(Model_Entry const& entry, Model_Entry const* parent) const {
 	if (&entry == &this->root) { // return an empty list if it's the root entry!
 		return std::list<std::string>();
 	}
-	std::list<Entry> const& list = parent ? parent->subEntries : this->entries();
-	for (std::list<Entry>::const_iterator iter = list.begin(); iter != list.end(); iter++) {
+	std::list<Model_Entry> const& list = parent ? parent->subEntries : this->entries();
+	for (std::list<Model_Entry>::const_iterator iter = list.begin(); iter != list.end(); iter++) {
 		if (&*iter == &entry) {
 			std::list<std::string> result;
 			result.push_back(iter->name);
 			return result;
 		}
-		if (iter->type == Entry::SUBMENU) {
+		if (iter->type == Model_Entry::SUBMENU) {
 			try {
 				std::list<std::string> result = this->buildPath(entry, &*iter);
 				result.push_front(iter->name);
 				return result;
-			} catch (Script::Exception e) {
+			} catch (Model_Script::Exception e) {
 				//continue
 			}
 		}
@@ -145,11 +145,11 @@ std::list<std::string> Script::buildPath(Entry const& entry, Entry const* parent
 }
 
 
-std::list<std::string> Script::buildPath(Entry const& entry) const {
+std::list<std::string> Model_Script::buildPath(Model_Entry const& entry) const {
 	return this->buildPath(entry, NULL);
 }
 
-std::string Script::buildPathString(Entry const& entry, bool withOtherEntriesPlaceholder) const {
+std::string Model_Script::buildPathString(Model_Entry const& entry, bool withOtherEntriesPlaceholder) const {
 	std::string result;
 	std::list<std::string> list = this->buildPath(entry, NULL);
 	for (std::list<std::string>::iterator iter = list.begin(); iter != list.end(); iter++) {
@@ -165,18 +165,18 @@ std::string Script::buildPathString(Entry const& entry, bool withOtherEntriesPla
 	return result;
 }
 
-bool Script::hasEntry(Entry const& entry, Entry const * parent) const {
+bool Model_Script::hasEntry(Model_Entry const& entry, Model_Entry const * parent) const {
 	if (parent == NULL && &this->root == &entry) { // check toplevel entry
 		return true;
 	}
 
-	std::list<Entry> const& list = parent ? parent->subEntries : this->entries();
+	std::list<Model_Entry> const& list = parent ? parent->subEntries : this->entries();
 
-	for (std::list<Entry>::const_iterator iter = list.begin(); iter != list.end(); iter++) {
+	for (std::list<Model_Entry>::const_iterator iter = list.begin(); iter != list.end(); iter++) {
 		if (&*iter == &entry) {
 			return true;
 		}
-		if (iter->type == Entry::SUBMENU) {
+		if (iter->type == Model_Entry::SUBMENU) {
 			bool has = this->hasEntry(entry, &*iter);
 			if (has) {
 				return true;

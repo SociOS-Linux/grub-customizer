@@ -21,10 +21,10 @@
 #include <cstdio>
 #include <string>
 
-struct ProxyScriptData {
+struct Model_ProxyScriptData {
 	std::string scriptCmd, proxyCmd, ruleString;
 	bool is_valid;
-	ProxyScriptData(FILE* fpProxyScript);
+	Model_ProxyScriptData(FILE* fpProxyScript);
 	bool load(FILE* fpProxyScript);
 	static bool is_proxyscript(FILE* fpProxyScript);
 	static bool is_proxyscript(std::string const& filePath);

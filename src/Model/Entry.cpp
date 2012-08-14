@@ -18,7 +18,7 @@
 
 #include "Entry.h"
 
-GrubConfRow::GrubConfRow(FILE* sourceFile)
+Model_Entry_Row::Model_Entry_Row(FILE* sourceFile)
 	: eof(false), is_loaded(true)
 {
 	this->eof = true; //will be set to false on the first loop run
@@ -33,31 +33,31 @@ GrubConfRow::GrubConfRow(FILE* sourceFile)
 		}
 	}
 }
-GrubConfRow::GrubConfRow()
+Model_Entry_Row::Model_Entry_Row()
 	: eof(false), is_loaded(false)
 {}
-GrubConfRow::operator bool(){
+Model_Entry_Row::operator bool(){
 	return !eof && is_loaded;
 }
 
-Entry::Entry()
+Model_Entry::Model_Entry()
 	: isValid(false), isModified(false), quote('\''), type(MENUENTRY)
 {}
 
-Entry::Entry(std::string name, std::string extension, std::string content, EntryType type)
+Model_Entry::Model_Entry(std::string name, std::string extension, std::string content, EntryType type)
 	: name(name), extension(extension), content(content), isValid(true), type(type), isModified(false), quote('\'')
 {}
-Entry::Entry(FILE* sourceFile, GrubConfRow firstRow, Logger* logger, std::string* plaintextBuffer)
+Model_Entry::Model_Entry(FILE* sourceFile, Model_Entry_Row firstRow, Logger* logger, std::string* plaintextBuffer)
 	: isValid(false), type(MENUENTRY), quote('\''), isModified(false)
 {
 	//int c;
 	//std::string row;
 
-	GrubConfRow row;
+	Model_Entry_Row row;
 	bool inEntry = false;
-	while ((row = firstRow) || (row = GrubConfRow(sourceFile))){
+	while ((row = firstRow) || (row = Model_Entry_Row(sourceFile))){
 		if (inEntry && (row.text.substr(0, 10) == "menuentry " || row.text.substr(0, 8) == "submenu ")){
-			this->subEntries.push_back(Entry(sourceFile, row));
+			this->subEntries.push_back(Model_Entry(sourceFile, row));
 		} else if (inEntry && row.text != "}") {
 			this->content += row.text+"\n";
 		} else if (inEntry && row.text == "}") {
@@ -76,7 +76,7 @@ Entry::Entry(FILE* sourceFile, GrubConfRow firstRow, Logger* logger, std::string
 
 			std::string extension = row.text.substr(endOfEntryName+1, row.text.length()-(endOfEntryName+1)-1);
 
-			*this = Entry(entryName, extension);
+			*this = Model_Entry(entryName, extension);
 			this->quote = quote;
 			inEntry = true;
 		} else if (!inEntry && row.text.substr(0, 8) == "submenu ") {
@@ -85,7 +85,7 @@ Entry::Entry(FILE* sourceFile, GrubConfRow firstRow, Logger* logger, std::string
 				endOfEntryName = row.text.find('\'', 10);
 			std::string entryName = row.text.substr(9, endOfEntryName-9);
 
-			*this = Entry(entryName, "", "", SUBMENU);
+			*this = Model_Entry(entryName, "", "", SUBMENU);
 			if (logger) {
 				this->setLogger(*logger);
 			}
@@ -99,11 +99,11 @@ Entry::Entry(FILE* sourceFile, GrubConfRow firstRow, Logger* logger, std::string
 	}
 }
 
-std::list<Entry>& Entry::getSubEntries() {
+std::list<Model_Entry>& Model_Entry::getSubEntries() {
 	return this->subEntries;
 }
 
-Entry::operator bool() const {
+Model_Entry::operator bool() const {
 	return isValid;
 }
 

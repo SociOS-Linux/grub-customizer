@@ -50,23 +50,23 @@ int main(int argc, char** argv){
 
 	Glib::thread_init();
 
-	GrubEnv env;
+	Model_Env env;
 
 	GrubCustomizer presenter(env);
 
-	GrublistCfg listcfg(env);
+	Model_ListCfg listcfg(env);
 	View_Gtk_Main listCfgView;
-	SettingsManagerDataStore settings(env);
-	SettingsManagerDataStore settingsOnDisk(env);
-	GrubInstaller installer(env);
+	Model_SettingsManagerData settings(env);
+	Model_SettingsManagerData settingsOnDisk(env);
+	Model_Installer installer(env);
 	View_Gtk_Installer installDlg;
 	View_Gtk_Trash scriptAddDlg;
 	View_Gtk_EntryEditor entryEditDlg;
-	MountTable mountTable;
-	GrublistCfg savedListCfg(env);
-	FbResolutionsGetter fbResolutionsGetter;
+	Model_MountTable mountTable;
+	Model_ListCfg savedListCfg(env);
+	Model_FbResolutionsGetter fbResolutionsGetter;
 	View_Gtk_Settings settingsDlg;
-	DeviceDataList deviceDataList;
+	Model_DeviceDataList deviceDataList;
 	View_Gtk_About aboutDialog;
 	GlibMutex listCfgMutex1;
 	GlibMutex listCfgMutex2;
@@ -149,7 +149,7 @@ int main(int argc, char** argv){
 	}
 
 	//configure contentParser factory
-	GrubDeviceMap deviceMap(env);
+	Model_DeviceMap deviceMap(env);
 	ContentParserLinux linuxParser(deviceMap);
 	ContentParserLinuxIso linuxIsoParser(deviceMap);
 	ContentParserChainloader chainloadParser(deviceMap);

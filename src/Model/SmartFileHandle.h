@@ -3,7 +3,7 @@
 #include <cstdio>
 #include <string>
 
-class SmartFileHandle {
+class Model_SmartFileHandle {
 private:
 	FILE* proc_or_file;
 	bool isCmd;
@@ -18,7 +18,7 @@ public:
 		TYPE_FILE,
 		TYPE_COMMAND
 	};
-	SmartFileHandle();
+	Model_SmartFileHandle();
 	char getChar();
 	std::string getRow();
 	std::string getAll();

@@ -18,18 +18,18 @@
 
 #include "FbResolutionsGetter.h"
 
-FbResolutionsGetter::FbResolutionsGetter()
+Model_FbResolutionsGetter::Model_FbResolutionsGetter()
 	: eventListener(NULL), _isLoading(false)
 {}
 
-void FbResolutionsGetter::setEventListener(EventListener_model& eventListener){
+void Model_FbResolutionsGetter::setEventListener(EventListener_model& eventListener){
 	this->eventListener = &eventListener;
 }
 
-const std::list<std::string>& FbResolutionsGetter::getData() const {
+const std::list<std::string>& Model_FbResolutionsGetter::getData() const {
 	return data;
 }
-void FbResolutionsGetter::load(){
+void Model_FbResolutionsGetter::load(){
 	if (!_isLoading){ //make sure that only one thread is running this function at the same time
 		_isLoading = true;
 		data.clear();

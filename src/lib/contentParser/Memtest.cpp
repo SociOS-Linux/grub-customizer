@@ -23,7 +23,7 @@ const char* ContentParserMemtest::_regex = "\
 [ \t]*linux16[ \t]*([^ \\t\\n]+).*$\
 ";
 
-ContentParserMemtest::ContentParserMemtest(GrubDeviceMap& deviceMap)
+ContentParserMemtest::ContentParserMemtest(Model_DeviceMap& deviceMap)
 	: deviceMap(deviceMap)
 {}
 
@@ -34,7 +34,7 @@ void ContentParserMemtest::parse(std::string const& sourceCode) {
 
 
 		//check partition indices by uuid
-		GrubPartitionIndex pIndex = deviceMap.getHarddriveIndexByPartitionUuid(result[3]);
+		Model_DeviceMap_PartitionIndex pIndex = deviceMap.getHarddriveIndexByPartitionUuid(result[3]);
 		if (pIndex.hddNum != result[1] || pIndex.partNum != result[2]){
 			throw ContentParser::PARSING_FAILED;
 		}
@@ -47,7 +47,7 @@ void ContentParserMemtest::parse(std::string const& sourceCode) {
 }
 
 std::string ContentParserMemtest::buildSource() const {
-	GrubPartitionIndex pIndex = deviceMap.getHarddriveIndexByPartitionUuid(this->options.at("partition_uuid"));
+	Model_DeviceMap_PartitionIndex pIndex = deviceMap.getHarddriveIndexByPartitionUuid(this->options.at("partition_uuid"));
 	std::map<int, std::string> newValues;
 	newValues[1] = pIndex.hddNum;
 	newValues[2] = pIndex.partNum;
@@ -71,7 +71,7 @@ void ContentParserMemtest::buildDefaultEntry(std::string const& partition_uuid) 
 	set root='(hd0,0)'\n\
 	search --no-floppy --fs-uuid --set 000000000000\n\
 	linux16 /boot/memtest86+.bin";
-	GrubPartitionIndex pIndex = this->deviceMap.getHarddriveIndexByPartitionUuid(partition_uuid);
+	Model_DeviceMap_PartitionIndex pIndex = this->deviceMap.getHarddriveIndexByPartitionUuid(partition_uuid);
 	std::map<int, std::string> newValues;
 	newValues[1] = pIndex.hddNum;
 	newValues[2] = pIndex.partNum;

@@ -25,7 +25,7 @@ const char* ContentParserLinuxIso::_regex = "\
 [ \t]*initrd[ \\t]+\\(loop\\)([^ \\t]+)\\n\
 ";
 
-ContentParserLinuxIso::ContentParserLinuxIso(GrubDeviceMap& deviceMap)
+ContentParserLinuxIso::ContentParserLinuxIso(Model_DeviceMap& deviceMap)
 	: deviceMap(deviceMap)
 {}
 
@@ -35,7 +35,7 @@ void ContentParserLinuxIso::parse(std::string const& sourceCode) {
 		std::vector<std::string> result = Regex::match(ContentParserLinuxIso::_regex, this->sourceCode);
 
 		//check partition indices by uuid
-		GrubPartitionIndex pIndex = deviceMap.getHarddriveIndexByPartitionUuid(result[3]);
+		Model_DeviceMap_PartitionIndex pIndex = deviceMap.getHarddriveIndexByPartitionUuid(result[3]);
 		if (pIndex.hddNum != result[1] || pIndex.partNum != result[2]){
 			throw ContentParser::PARSING_FAILED;
 		}
@@ -57,7 +57,7 @@ void ContentParserLinuxIso::parse(std::string const& sourceCode) {
 }
 
 std::string ContentParserLinuxIso::buildSource() const {
-	GrubPartitionIndex pIndex = deviceMap.getHarddriveIndexByPartitionUuid(this->options.at("partition_uuid"));
+	Model_DeviceMap_PartitionIndex pIndex = deviceMap.getHarddriveIndexByPartitionUuid(this->options.at("partition_uuid"));
 	std::map<int, std::string> newValues;
 	newValues[1] = pIndex.hddNum;
 	newValues[2] = pIndex.partNum;
@@ -88,7 +88,7 @@ void ContentParserLinuxIso::buildDefaultEntry(std::string const& partition_uuid)
 	loopback loop /xxx.iso\n\
 	linux (loop)/casper/vmlinuz boot=casper iso-scan/filename=/xxx.iso quiet splash locale=en_US bootkbd=de console-setup/layoutcode=de user-setup/encrypt-home=true noeject --\n\
 	initrd (loop)/casper/initrd.lz\n";
-	GrubPartitionIndex pIndex = this->deviceMap.getHarddriveIndexByPartitionUuid(partition_uuid);
+	Model_DeviceMap_PartitionIndex pIndex = this->deviceMap.getHarddriveIndexByPartitionUuid(partition_uuid);
 	std::map<int, std::string> newValues;
 	newValues[1] = pIndex.hddNum;
 	newValues[2] = pIndex.partNum;

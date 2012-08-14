@@ -27,7 +27,7 @@ const char* ContentParserLinux::_regex = "\
 [ \t]*initrd[ \t]+([^ \\n]+)[ \\n\t]*$\
 ";
 
-ContentParserLinux::ContentParserLinux(GrubDeviceMap& deviceMap)
+ContentParserLinux::ContentParserLinux(Model_DeviceMap& deviceMap)
 	: deviceMap(deviceMap)
 {}
 
@@ -37,7 +37,7 @@ void ContentParserLinux::parse(std::string const& sourceCode) {
 		std::vector<std::string> result = Regex::match(ContentParserLinux::_regex, sourceCode);
 
 		//check partition indices by uuid
-		GrubPartitionIndex pIndex = deviceMap.getHarddriveIndexByPartitionUuid(result[6]);
+		Model_DeviceMap_PartitionIndex pIndex = deviceMap.getHarddriveIndexByPartitionUuid(result[6]);
 		if (pIndex.hddNum != result[1] || pIndex.partNum != result[2]){
 			throw ContentParser::PARSING_FAILED;
 		}
@@ -56,7 +56,7 @@ void ContentParserLinux::parse(std::string const& sourceCode) {
 }
 
 std::string ContentParserLinux::buildSource() const {
-	GrubPartitionIndex pIndex = deviceMap.getHarddriveIndexByPartitionUuid(this->options.at("partition_uuid"));
+	Model_DeviceMap_PartitionIndex pIndex = deviceMap.getHarddriveIndexByPartitionUuid(this->options.at("partition_uuid"));
 	std::map<int, std::string> newValues;
 	newValues[1] = pIndex.hddNum;
 	newValues[2] = pIndex.partNum;
@@ -83,7 +83,7 @@ void ContentParserLinux::buildDefaultEntry(std::string const& partition_uuid) {
 	search --no-floppy --fs-uuid --set 000000000000\n\
 	linux /vmlinuz root=UUID=000000000000 \n\
 	initrd /initrd.img";
-	GrubPartitionIndex pIndex = this->deviceMap.getHarddriveIndexByPartitionUuid(partition_uuid);
+	Model_DeviceMap_PartitionIndex pIndex = this->deviceMap.getHarddriveIndexByPartitionUuid(partition_uuid);
 	std::map<int, std::string> newValues;
 	newValues[1] = pIndex.hddNum;
 	newValues[2] = pIndex.partNum;

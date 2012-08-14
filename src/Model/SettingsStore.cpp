@@ -18,9 +18,9 @@
 
 #include "SettingsStore.h"
 
-SettingRow::SettingRow() : isActive(true), hasExportPrefix(false), isSetting(true) {}
+Model_SettingsStore_Row::Model_SettingsStore_Row() : isActive(true), hasExportPrefix(false), isSetting(true) {}
 
-void SettingRow::validate(){
+void Model_SettingsStore_Row::validate(){
 	isActive = false;
 	hasExportPrefix = false;
 	isSetting = false;
@@ -50,7 +50,7 @@ void SettingRow::validate(){
 	}
 }
 
-std::string SettingRow::getOutput(){
+std::string Model_SettingsStore_Row::getOutput(){
 	if (isSetting) {
 		if (name != "") {
 			return (isActive ? "" : "#")+std::string(hasExportPrefix ? "export " : "")+name+"=\""+value+"\""+(comment != "" ? " #"+comment : "");
@@ -63,23 +63,23 @@ std::string SettingRow::getOutput(){
 }
 
 
-SettingsStore::SettingsStore(FILE* source) {
+Model_SettingsStore::Model_SettingsStore(FILE* source) {
 	if (source) {
 		this->load(source);
 	}
 }
 
 
-std::list<SettingRow>::iterator SettingsStore::begin(bool jumpOverPlaintext){
-	std::list<SettingRow>::iterator iter = settings.begin();
+std::list<Model_SettingsStore_Row>::iterator Model_SettingsStore::begin(bool jumpOverPlaintext){
+	std::list<Model_SettingsStore_Row>::iterator iter = settings.begin();
 	if (!iter->isSetting && jumpOverPlaintext)
 		iter_to_next_setting(iter);
 	return iter;
 }
-std::list<SettingRow>::iterator SettingsStore::end(){
+std::list<Model_SettingsStore_Row>::iterator Model_SettingsStore::end(){
 	return settings.end();
 }
-void SettingsStore::iter_to_next_setting(std::list<SettingRow>::iterator& iter){
+void Model_SettingsStore::iter_to_next_setting(std::list<Model_SettingsStore_Row>::iterator& iter){
 	iter++;
 	while (iter != settings.end()){
 		if (iter->isSetting)
@@ -88,16 +88,16 @@ void SettingsStore::iter_to_next_setting(std::list<SettingRow>::iterator& iter){
 			iter++;
 	}
 }
-std::string SettingsStore::getValue(std::string const& name){
-	for (std::list<SettingRow>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
+std::string Model_SettingsStore::getValue(std::string const& name){
+	for (std::list<Model_SettingsStore_Row>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
 		if (name == iter->name)
 			return iter->value;
 	}
 	return "";
 }
 
-bool SettingsStore::setValue(std::string const& name, std::string const& value){
-	for (std::list<SettingRow>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
+bool Model_SettingsStore::setValue(std::string const& name, std::string const& value){
+	for (std::list<Model_SettingsStore_Row>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
 		if (name == iter->name){
 			if (iter->value != value){ //only set when the new value is really new
 				iter->value = value;
@@ -106,7 +106,7 @@ bool SettingsStore::setValue(std::string const& name, std::string const& value){
 		}
 	}
 
-	settings.push_back(SettingRow());
+	settings.push_back(Model_SettingsStore_Row());
 	settings.back().name = name;
 	settings.back().value = value;
 	settings.back().validate();
@@ -114,15 +114,15 @@ bool SettingsStore::setValue(std::string const& name, std::string const& value){
 	return false;
 }
 
-std::string SettingsStore::addNewItem(){
-	SettingRow newRow;
+std::string Model_SettingsStore::addNewItem(){
+	Model_SettingsStore_Row newRow;
 	newRow.name = "";
 	settings.push_back(newRow);
 	return newRow.name;
 }
 
-void SettingsStore::removeItem(std::string const& name){
-	for (std::list<SettingRow>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
+void Model_SettingsStore::removeItem(std::string const& name){
+	for (std::list<Model_SettingsStore_Row>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
 		if (iter->name == name){
 			settings.erase(iter);
 			break; //must break because the iterator is invalid now!
@@ -130,8 +130,8 @@ void SettingsStore::removeItem(std::string const& name){
 	}
 }
 
-void SettingsStore::renameItem(std::string const& old_name, std::string const& new_name){
-	for (std::list<SettingRow>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
+void Model_SettingsStore::renameItem(std::string const& old_name, std::string const& new_name){
+	for (std::list<Model_SettingsStore_Row>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
 		if (iter->name == old_name){
 			iter->name = new_name;
 			break; //must break because the iterator is invalid now!
@@ -139,14 +139,14 @@ void SettingsStore::renameItem(std::string const& old_name, std::string const& n
 	}
 }
 
-bool SettingsStore::isActive(std::string const& name, bool checkValueToo){
-	for (std::list<SettingRow>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
+bool Model_SettingsStore::isActive(std::string const& name, bool checkValueToo){
+	for (std::list<Model_SettingsStore_Row>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
 		if (name == iter->name)
 			return iter->isActive && (!checkValueToo || iter->value != "false");
 	}
 }
-bool SettingsStore::setIsActive(std::string const& name, bool value){
-	for (std::list<SettingRow>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
+bool Model_SettingsStore::setIsActive(std::string const& name, bool value){
+	for (std::list<Model_SettingsStore_Row>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
 		if (name == iter->name){
 			if (iter->isActive != value){
 				iter->isActive = value;
@@ -157,8 +157,8 @@ bool SettingsStore::setIsActive(std::string const& name, bool value){
 	return false;
 }
 
-bool SettingsStore::setIsExport(std::string const& name, bool isExport){
-	for (std::list<SettingRow>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
+bool Model_SettingsStore::setIsExport(std::string const& name, bool isExport){
+	for (std::list<Model_SettingsStore_Row>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
 		if (name == iter->name){
 			if (iter->hasExportPrefix != isExport){
 				iter->hasExportPrefix = isExport;
@@ -169,21 +169,21 @@ bool SettingsStore::setIsExport(std::string const& name, bool isExport){
 	return false;
 }
 
-void SettingsStore::clear(){
+void Model_SettingsStore::clear(){
 	this->settings.clear();
 }
 
-void SettingsStore::load(FILE* source) {
+void Model_SettingsStore::load(FILE* source) {
 	std::string row;
 	int c;
 	int step = 0; //0: name parsing, 1: value parsing
 	bool inQuotes = false;
 	char quoteChar;
-	settings.push_back(SettingRow());
+	settings.push_back(Model_SettingsStore_Row());
 	while ((c = fgetc(source)) != EOF){
 		if (c == '\n'){
 			settings.back().validate();
-			settings.push_back(SettingRow());
+			settings.push_back(Model_SettingsStore_Row());
 			inQuotes = false;
 			step = 0;
 		}
@@ -211,8 +211,8 @@ void SettingsStore::load(FILE* source) {
 		settings.back().validate();
 }
 
-void SettingsStore::save(FILE* target) {
-	for (std::list<SettingRow>::iterator iter = this->begin(false); iter != this->end(); iter++){
+void Model_SettingsStore::save(FILE* target) {
+	for (std::list<Model_SettingsStore_Row>::iterator iter = this->begin(false); iter != this->end(); iter++){
 		if (iter != this->begin(false)) {
 			fputs("\n", target);
 		}

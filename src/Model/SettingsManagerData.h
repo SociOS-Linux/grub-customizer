@@ -26,14 +26,14 @@
 #include "../lib/str_replace.h"
 #include <map>
 
-class SettingsManagerDataStore : public SettingsStore, public CommonClass {
+class Model_SettingsManagerData : public Model_SettingsStore, public CommonClass {
 	bool _reloadRequired;
-	GrubEnv& env;
+	Model_Env& env;
 public:
 	bool color_helper_required;
 	std::string grubFont, oldFontFile;
 	int grubFontSize;
-	SettingsManagerDataStore(GrubEnv& env);
+	Model_SettingsManagerData(Model_Env& env);
 	bool reloadRequired() const;
 	static std::map<std::string, std::string> parsePf2(std::string const& fileName);
 	static std::string getFontFileByName(std::string const& name);

@@ -26,9 +26,9 @@ class EntryPathBilder {
 public:
 	virtual inline ~EntryPathBilder() {};
 
-	virtual std::list<std::string> buildPath(Entry const& entry) const =0;
-	virtual std::string buildPathString(Entry const& entry, bool withOtherEntriesPlaceholder = false) const =0;
-	virtual std::string buildScriptPath(Entry const& entry) const =0;
+	virtual std::list<std::string> buildPath(Model_Entry const& entry) const =0;
+	virtual std::string buildPathString(Model_Entry const& entry, bool withOtherEntriesPlaceholder = false) const =0;
+	virtual std::string buildScriptPath(Model_Entry const& entry) const =0;
 };
 
 #endif

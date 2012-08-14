@@ -23,39 +23,39 @@
 #include "Proxy.h"
 #include "../presenter/commonClass.h"
 
-struct EntryTitleListItem {
+struct Model_Proxylist_Item {
 	std::string labelPathValue;
 	std::string labelPathLabel;
 	std::string numericPathValue;
 	std::string numericPathLabel;
 };
-struct ProxyList : public std::list<Proxy>, public CommonClass {
+struct Model_Proxylist : public std::list<Model_Proxy>, public CommonClass {
 	enum Exception {
 		NO_RELATED_PROXY_FOUND,
 		NO_MOVE_TARGET_FOUND
 	};
-	std::list<Proxy> trash; //removed proxies
-	std::list<Proxy*> getProxiesByScript(Script const& script);
-	std::list<const Proxy*> getProxiesByScript(Script const& script) const;
-	void sync_all(bool deleteInvalidRules = true, bool expand = true, Script* relatedScript = NULL, std::map<std::string, Script*> scriptMap = std::map<std::string, Script*>()); //relatedScript = NULL: sync all proxies, otherwise only sync proxies wich target the given Script
+	std::list<Model_Proxy> trash; //removed proxies
+	std::list<Model_Proxy*> getProxiesByScript(Model_Script const& script);
+	std::list<const Model_Proxy*> getProxiesByScript(Model_Script const& script) const;
+	void sync_all(bool deleteInvalidRules = true, bool expand = true, Model_Script* relatedScript = NULL, std::map<std::string, Model_Script*> scriptMap = std::map<std::string, Model_Script*>()); //relatedScript = NULL: sync all proxies, otherwise only sync proxies wich target the given Script
 	void unsync_all();
-	bool proxyRequired(Script const& script) const;
+	bool proxyRequired(Model_Script const& script) const;
 	void deleteAllProxyscriptFiles();
-	static bool compare_proxies(Proxy const& a, Proxy const& b);
+	static bool compare_proxies(Model_Proxy const& a, Model_Proxy const& b);
 	void sort();
-	void deleteProxy(Proxy* proxyPointer);
+	void deleteProxy(Model_Proxy* proxyPointer);
 	void clearTrash();
-	std::list<EntryTitleListItem> generateEntryTitleList() const;
+	std::list<Model_Proxylist_Item> generateEntryTitleList() const;
 	std::list<std::string> getToplevelEntryTitles() const;
-	static std::list<EntryTitleListItem> generateEntryTitleList(std::list<Rule> const& parent, std::string const& labelPathPrefix, std::string const& numericPathPrefix, std::string const& numericPathLabelPrefix, int* offset = NULL);
-	Proxy* getProxyByRule(Rule* rule, std::list<Rule> const& list, Proxy& parentProxy);
-	Proxy* getProxyByRule(Rule* rule);
-	std::list<Rule>::iterator moveRuleToNewProxy(Rule& rule, int direction, Script* dataSource = NULL);
-	std::list<Rule>::iterator getNextVisibleRule(Rule* base, int direction);
-	std::list<Rule>::iterator getNextVisibleRule(std::list<Rule>::iterator base, int direction);
-	std::list<Proxy>::iterator getIter(Proxy const* proxy);
-	void splitProxy(Proxy const* proxyToSplit, Rule const* firstRuleOfPart2, int direction);
-	Rule* getVisibleRuleForEntry(Entry const& entry);
+	static std::list<Model_Proxylist_Item> generateEntryTitleList(std::list<Model_Rule> const& parent, std::string const& labelPathPrefix, std::string const& numericPathPrefix, std::string const& numericPathLabelPrefix, int* offset = NULL);
+	Model_Proxy* getProxyByRule(Model_Rule* rule, std::list<Model_Rule> const& list, Model_Proxy& parentProxy);
+	Model_Proxy* getProxyByRule(Model_Rule* rule);
+	std::list<Model_Rule>::iterator moveRuleToNewProxy(Model_Rule& rule, int direction, Model_Script* dataSource = NULL);
+	std::list<Model_Rule>::iterator getNextVisibleRule(Model_Rule* base, int direction);
+	std::list<Model_Rule>::iterator getNextVisibleRule(std::list<Model_Rule>::iterator base, int direction);
+	std::list<Model_Proxy>::iterator getIter(Model_Proxy const* proxy);
+	void splitProxy(Model_Proxy const* proxyToSplit, Model_Rule const* firstRuleOfPart2, int direction);
+	Model_Rule* getVisibleRuleForEntry(Model_Entry const& entry);
 };
 
 #endif

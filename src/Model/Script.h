@@ -28,27 +28,27 @@
 #include "../lib/md5.h"
 #include "../config.h"
 
-struct Script : public EntryPathFollower, public CommonClass {
+struct Model_Script : public EntryPathFollower, public CommonClass {
 	enum Exception {
 		ELEMENT_NOT_FOUND
 	};
 	std::string name, fileName;
 	bool isCustomScript;
-	Entry root;
-	Script(std::string const& name, std::string const& fileName);
-	bool isModified(Entry* parent = NULL);
-	std::list<Entry>& entries();
-	std::list<Entry> const& entries() const;
+	Model_Entry root;
+	Model_Script(std::string const& name, std::string const& fileName);
+	bool isModified(Model_Entry* parent = NULL);
+	std::list<Model_Entry>& entries();
+	std::list<Model_Entry> const& entries() const;
 	bool isInScriptDir(std::string const& cfg_dir) const;
-	Entry* getEntryByPath(std::list<std::string> const& path);
-	Entry* getEntryByName(std::string const& name, std::list<Entry>& parentList);
-	Entry* getEntryByHash(std::string const& hash, std::list<Entry>& parentList);
+	Model_Entry* getEntryByPath(std::list<std::string> const& path);
+	Model_Entry* getEntryByName(std::string const& name, std::list<Model_Entry>& parentList);
+	Model_Entry* getEntryByHash(std::string const& hash, std::list<Model_Entry>& parentList);
 	void moveToBasedir(std::string const& cfg_dir); //moves the file from any location to grub.d and adds the prefix PS_ (proxified Script) or DS_ (default script)
 	bool moveFile(std::string const& newPath, short int permissions = -1);
-	std::list<std::string> buildPath(Entry const& entry, Entry const* parent) const;
-	std::list<std::string> buildPath(Entry const& entry) const;
-	std::string buildPathString(Entry const& entry, bool withOtherEntriesPlaceholder = false) const;
-	bool hasEntry(Entry const& entry, Entry const * parent = NULL) const;
+	std::list<std::string> buildPath(Model_Entry const& entry, Model_Entry const* parent) const;
+	std::list<std::string> buildPath(Model_Entry const& entry) const;
+	std::string buildPathString(Model_Entry const& entry, bool withOtherEntriesPlaceholder = false) const;
+	bool hasEntry(Model_Entry const& entry, Model_Entry const * parent = NULL) const;
 };
 
 #endif

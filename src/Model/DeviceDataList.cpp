@@ -18,13 +18,13 @@
 
 #include "DeviceDataList.h"
 
-DeviceDataList::DeviceDataList(FILE* blkidOutput){
+Model_DeviceDataList::Model_DeviceDataList(FILE* blkidOutput){
 	loadData(blkidOutput);
 }
 
-DeviceDataList::DeviceDataList(){}
+Model_DeviceDataList::Model_DeviceDataList(){}
 
-void DeviceDataList::loadData(FILE* blkidOutput){
+void Model_DeviceDataList::loadData(FILE* blkidOutput){
 	std::string deviceName, attributeName;
 	bool inAttributeValue = false;
 	bool deviceNameIsComplete = false, attributeNameIsComplete = false;
@@ -61,6 +61,6 @@ void DeviceDataList::loadData(FILE* blkidOutput){
 	}
 }
 
-void DeviceDataList::clear(){
+void Model_DeviceDataList::clear(){
 	this->std::map<std::string, std::map<std::string, std::string> >::clear();
 }

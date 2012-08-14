@@ -18,7 +18,7 @@
 
 #include "PscriptnameTranslator.h"
 
-std::string pscriptname_decode(std::string const& input){
+std::string Model_PscriptnameTranslator::decode(std::string const& input){
 	std::string result = input;
 	int last_nonnum_pos = input.find_last_not_of("0123456789");
 	if (last_nonnum_pos != -1 && result[last_nonnum_pos] == '~' && last_nonnum_pos != input.length()-1)
@@ -26,7 +26,7 @@ std::string pscriptname_decode(std::string const& input){
 	return result;
 }
 
-std::string pscriptname_encode(std::string const& input, int x){
+std::string Model_PscriptnameTranslator::encode(std::string const& input, int x){
 	std::ostringstream out;
 	out << input;
 	int last_nonnum_pos = input.find_last_not_of("0123456789");

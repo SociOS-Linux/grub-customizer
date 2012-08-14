@@ -26,32 +26,32 @@
 
 int main(int argc, char** argv){
 	if (argc == 2) {
-		Script script("noname", "");
-		Entry newEntry;
+		Model_Script script("noname", "");
+		Model_Entry newEntry;
 		std::string plaintextBuffer;
-		while (newEntry = Entry(stdin, GrubConfRow(), NULL, &plaintextBuffer)) {
+		while (newEntry = Model_Entry(stdin, Model_Entry_Row(), NULL, &plaintextBuffer)) {
 			script.entries().push_back(newEntry);
 		}
 		if (plaintextBuffer.size()) {
-			script.entries().push_front(Entry("#text", "", plaintextBuffer, Entry::PLAINTEXT));
+			script.entries().push_front(Model_Entry("#text", "", plaintextBuffer, Model_Entry::PLAINTEXT));
 		}
 		
-		Proxy proxy;
+		Model_Proxy proxy;
 		proxy.importRuleString(argv[1]);
 
 		proxy.dataSource = &script;
 		proxy.sync(true, true);
 		
-		for (std::list<Rule>::iterator iter = proxy.rules.begin(); iter != proxy.rules.end(); iter++){
+		for (std::list<Model_Rule>::iterator iter = proxy.rules.begin(); iter != proxy.rules.end(); iter++){
 			iter->print(std::cout);
 		}
 		return 0;
 	} else if (argc == 3 && std::string(argv[2]) == "multi") {
-		GrubEnv env;
-		GrublistCfg scriptSource(env);
+		Model_Env env;
+		Model_ListCfg scriptSource(env);
 		scriptSource.ignoreLock = true;
 		{ // this scope prevents access to the unused proxy variable - push_back takes a copy!
-			Proxy proxy;
+			Model_Proxy proxy;
 			proxy.importRuleString(argv[1]);
 			scriptSource.proxies.push_back(proxy);
 		}
@@ -59,10 +59,10 @@ int main(int argc, char** argv){
 
 		scriptSource.proxies.front().dataSource = &scriptSource.repository.front(); // the first Script is always the main script
 
-		std::map<std::string, Script*> map = scriptSource.repository.getScriptPathMap();
+		std::map<std::string, Model_Script*> map = scriptSource.repository.getScriptPathMap();
 		scriptSource.proxies.front().sync(true, true, map);
 
-		for (std::list<Rule>::iterator iter = scriptSource.proxies.front().rules.begin(); iter != scriptSource.proxies.front().rules.end(); iter++){
+		for (std::list<Model_Rule>::iterator iter = scriptSource.proxies.front().rules.begin(); iter != scriptSource.proxies.front().rules.end(); iter++){
 			iter->print(std::cout);
 		}
 	} else {

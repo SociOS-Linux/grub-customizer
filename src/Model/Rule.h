@@ -25,21 +25,21 @@
 #include <ostream>
 #include "../lib/md5.h"
 
-struct Rule {
-	Entry* dataSource; //assigned when using RuleType::OTHER_ENTRIES_PLACEHOLDER
+struct Model_Rule {
+	Model_Entry* dataSource; //assigned when using RuleType::OTHER_ENTRIES_PLACEHOLDER
 	std::string outputName;
 	std::string __idHash; //should only be used by sync()!
 	std::list<std::string> __idpath; //should only be used by sync()!
 	std::string __sourceScriptPath; //should only be used by sync()!
 	bool isVisible;
-	std::list<Rule> subRules;
+	std::list<Model_Rule> subRules;
 	enum RuleType {
 		NORMAL, OTHER_ENTRIES_PLACEHOLDER, PLAINTEXT, SUBMENU
 	} type;
-	Rule(RuleType type, std::list<std::string> path, std::string outputName, bool isVisible);
-	Rule(RuleType type, std::list<std::string> path, bool isVisible);
-	Rule(Entry& source, bool isVisible, EntryPathFollower& pathFollower, std::list<std::list<std::string> > const& pathesToIgnore = std::list<std::list<std::string> >(), std::list<std::string> const& currentPath = std::list<std::string>()); //generate rule for given entry
-	Rule();
+	Model_Rule(RuleType type, std::list<std::string> path, std::string outputName, bool isVisible);
+	Model_Rule(RuleType type, std::list<std::string> path, bool isVisible);
+	Model_Rule(Model_Entry& source, bool isVisible, EntryPathFollower& pathFollower, std::list<std::list<std::string> > const& pathesToIgnore = std::list<std::list<std::string> >(), std::list<std::string> const& currentPath = std::list<std::string>()); //generate rule for given entry
+	Model_Rule();
 	std::string toString(EntryPathBilder const& pathBuilder);
 	bool hasRealSubrules() const;
 	void print(std::ostream& out) const;

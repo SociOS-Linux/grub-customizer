@@ -26,7 +26,7 @@ class EntryPathFollower {
 public:
 	virtual inline ~EntryPathFollower() {};
 
-	virtual Entry* getEntryByPath(std::list<std::string> const& path)=0;
+	virtual Model_Entry* getEntryByPath(std::list<std::string> const& path)=0;
 };
 
 #endif

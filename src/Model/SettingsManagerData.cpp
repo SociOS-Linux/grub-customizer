@@ -18,16 +18,16 @@
 
 #include "SettingsManagerData.h"
 
-SettingsManagerDataStore::SettingsManagerDataStore(GrubEnv& env)
+Model_SettingsManagerData::Model_SettingsManagerData(Model_Env& env)
 	: _reloadRequired(false), env(env), color_helper_required(false), grubFontSize(-1)
 {
 }
 
-bool SettingsManagerDataStore::reloadRequired() const {
+bool Model_SettingsManagerData::reloadRequired() const {
 	return this->_reloadRequired;
 }
 
-std::map<std::string, std::string> SettingsManagerDataStore::parsePf2(std::string const& fileName) {
+std::map<std::string, std::string> Model_SettingsManagerData::parsePf2(std::string const& fileName) {
 	std::map<std::string, std::string> result;
 	FILE* file = fopen(fileName.c_str(), "rb");
 	if (file) {
@@ -52,7 +52,7 @@ std::map<std::string, std::string> SettingsManagerDataStore::parsePf2(std::strin
 	return result;
 }
 
-std::string SettingsManagerDataStore::getFontFileByName(std::string const& name) {
+std::string Model_SettingsManagerData::getFontFileByName(std::string const& name) {
 	std::string result;
 	FILE* proc = popen(("fc-match -f '%{file[0]}' '" + str_replace(" ", ":", name) + "'").c_str(), "r");
 	int c;
@@ -63,10 +63,10 @@ std::string SettingsManagerDataStore::getFontFileByName(std::string const& name)
 	return result;
 }
 
-std::string SettingsManagerDataStore::mkFont(std::string fontFile) {
+std::string Model_SettingsManagerData::mkFont(std::string fontFile) {
 	int fontSize = -1;
 	if (fontFile == "") {
-		fontFile = SettingsManagerDataStore::getFontFileByName(this->grubFont);
+		fontFile = Model_SettingsManagerData::getFontFileByName(this->grubFont);
 		fontSize = this->grubFontSize;
 	}
 	std::string sizeParam;
@@ -99,17 +99,17 @@ std::string SettingsManagerDataStore::mkFont(std::string fontFile) {
 	return output;
 }
 
-bool SettingsManagerDataStore::load(){
+bool Model_SettingsManagerData::load(){
 	settings.clear();
 
 	FILE* file = fopen(this->env.settings_file.c_str(), "r");
 	if (file){
-		SettingsStore::load(file);
+		Model_SettingsStore::load(file);
 		this->grubFontSize = -1;
 		if (this->getValue("GRUB_FONT") != "") {
 			this->oldFontFile = this->getValue("GRUB_FONT");
 			this->log("parsing " + this->getValue("GRUB_FONT"), Logger::INFO);
-			this->grubFont = SettingsManagerDataStore::parsePf2(this->getValue("GRUB_FONT"))["NAME"];
+			this->grubFont = Model_SettingsManagerData::parsePf2(this->getValue("GRUB_FONT"))["NAME"];
 			this->log("result " + this->grubFont, Logger::INFO);
 			this->removeItem("GRUB_FONT");
 		}
@@ -121,7 +121,7 @@ bool SettingsManagerDataStore::load(){
 		return false;
 }
 
-bool SettingsManagerDataStore::save(){
+bool Model_SettingsManagerData::save(){
 	const char* background_script = "\
 #! /bin/sh -e\n\
 # Name of this script: 'grub_background.sh'\n\
@@ -151,7 +151,7 @@ fi\n";
 		bool background_script_required = false;
 		bool isGraphical = false;
 		this->color_helper_required = false;
-		for (std::list<SettingRow>::iterator iter = this->begin(false); iter != this->end(); iter++){
+		for (std::list<Model_SettingsStore_Row>::iterator iter = this->begin(false); iter != this->end(); iter++){
 			if (iter != this->begin(false)) {
 				fputs("\n", outFile);
 			}
@@ -197,8 +197,8 @@ fi\n";
 		return false;
 }
 
-bool SettingsManagerDataStore::setValue(std::string const& name, std::string const& value){
-	for (std::list<SettingRow>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
+bool Model_SettingsManagerData::setValue(std::string const& name, std::string const& value){
+	for (std::list<Model_SettingsStore_Row>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
 		if (name == iter->name){
 
 			if (iter->value != value){ //only set when the new value is really new
@@ -211,7 +211,7 @@ bool SettingsManagerDataStore::setValue(std::string const& name, std::string con
 		}
 	}
 
-	settings.push_back(SettingRow());
+	settings.push_back(Model_SettingsStore_Row());
 	settings.back().name = name;
 	settings.back().value = value;
 	settings.back().validate();
@@ -220,8 +220,8 @@ bool SettingsManagerDataStore::setValue(std::string const& name, std::string con
 	return false;
 }
 
-bool SettingsManagerDataStore::setIsActive(std::string const& name, bool value){
-	for (std::list<SettingRow>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
+bool Model_SettingsManagerData::setIsActive(std::string const& name, bool value){
+	for (std::list<Model_SettingsStore_Row>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
 		if (name == iter->name){
 			if (iter->isActive != value){
 				iter->isActive = value;

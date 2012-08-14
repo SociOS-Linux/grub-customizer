@@ -18,37 +18,37 @@
 
 #include "Proxylist.h"
 
-std::list<Proxy*> ProxyList::getProxiesByScript(Script const& script) {
-	std::list<Proxy*> result;
-	for (ProxyList::iterator iter = this->begin(); iter != this->end(); iter++){
+std::list<Model_Proxy*> Model_Proxylist::getProxiesByScript(Model_Script const& script) {
+	std::list<Model_Proxy*> result;
+	for (Model_Proxylist::iterator iter = this->begin(); iter != this->end(); iter++){
 		if (iter->dataSource == &script)
 			result.push_back(&*iter);
 	}
 	return result;
 }
-std::list<const Proxy*> ProxyList::getProxiesByScript(Script const& script) const {
-	std::list<const Proxy*> result;
-	for (ProxyList::const_iterator iter = this->begin(); iter != this->end(); iter++){
+std::list<const Model_Proxy*> Model_Proxylist::getProxiesByScript(Model_Script const& script) const {
+	std::list<const Model_Proxy*> result;
+	for (Model_Proxylist::const_iterator iter = this->begin(); iter != this->end(); iter++){
 		if (iter->dataSource == &script)
 			result.push_back(&*iter);
 	}
 	return result;
 }
-void ProxyList::sync_all(bool deleteInvalidRules, bool expand, Script* relatedScript, std::map<std::string, Script*> scriptMap){ //relatedScript = NULL: sync all proxies, otherwise only sync proxies wich target the given Script
-	for (ProxyList::iterator proxy_iter = this->begin(); proxy_iter != this->end(); proxy_iter++){
+void Model_Proxylist::sync_all(bool deleteInvalidRules, bool expand, Model_Script* relatedScript, std::map<std::string, Model_Script*> scriptMap){ //relatedScript = NULL: sync all proxies, otherwise only sync proxies wich target the given Script
+	for (Model_Proxylist::iterator proxy_iter = this->begin(); proxy_iter != this->end(); proxy_iter++){
 		if (relatedScript == NULL || proxy_iter->dataSource == relatedScript)
 			proxy_iter->sync(deleteInvalidRules, expand, scriptMap);
 	}	
 }
 
-void ProxyList::unsync_all() {
-	for (ProxyList::iterator proxy_iter = this->begin(); proxy_iter != this->end(); proxy_iter++){
+void Model_Proxylist::unsync_all() {
+	for (Model_Proxylist::iterator proxy_iter = this->begin(); proxy_iter != this->end(); proxy_iter++){
 		proxy_iter->unsync();
 	}
 }
 
-bool ProxyList::proxyRequired(Script const& script) const {
-	std::list<const Proxy*> plist = this->getProxiesByScript(script);
+bool Model_Proxylist::proxyRequired(Model_Script const& script) const {
+	std::list<const Model_Proxy*> plist = this->getProxiesByScript(script);
 	if (plist.size() == 1){
 		return plist.front()->isModified();
 	}
@@ -56,24 +56,24 @@ bool ProxyList::proxyRequired(Script const& script) const {
 		return true;
 }
 
-void ProxyList::deleteAllProxyscriptFiles(){
-	for (ProxyList::iterator iter = this->begin(); iter != this->end(); iter++){
+void Model_Proxylist::deleteAllProxyscriptFiles(){
+	for (Model_Proxylist::iterator iter = this->begin(); iter != this->end(); iter++){
 		if (iter->dataSource && iter->dataSource->fileName != iter->fileName){
 			iter->deleteFile();
 		}
 	}
 }
 
-bool ProxyList::compare_proxies(Proxy const& a, Proxy const& b){
+bool Model_Proxylist::compare_proxies(Model_Proxy const& a, Model_Proxy const& b){
 	return a.index < b.index;
 }
 
-void ProxyList::sort(){
-	std::list<Proxy>::sort(ProxyList::compare_proxies);
+void Model_Proxylist::sort(){
+	std::list<Model_Proxy>::sort(Model_Proxylist::compare_proxies);
 }
 
-void ProxyList::deleteProxy(Proxy* proxyPointer){
-	for (ProxyList::iterator iter = this->begin(); iter != this->end(); iter++){
+void Model_Proxylist::deleteProxy(Model_Proxy* proxyPointer){
+	for (Model_Proxylist::iterator iter = this->begin(); iter != this->end(); iter++){
 		if (&*iter == proxyPointer){
 			//if the file must be deleted when saving, move it to trash
 			if (proxyPointer->fileName != "" && proxyPointer->dataSource && proxyPointer->fileName != proxyPointer->dataSource->fileName)
@@ -85,30 +85,30 @@ void ProxyList::deleteProxy(Proxy* proxyPointer){
 	}
 }
 
-void ProxyList::clearTrash(){
-	for (std::list<Proxy>::iterator iter = this->trash.begin(); iter != this->trash.end(); iter++){
+void Model_Proxylist::clearTrash(){
+	for (std::list<Model_Proxy>::iterator iter = this->trash.begin(); iter != this->trash.end(); iter++){
 		iter->deleteFile();
 	}
 }
 
-std::list<EntryTitleListItem> ProxyList::generateEntryTitleList() const {
-	std::list<EntryTitleListItem> result;
+std::list<Model_Proxylist_Item> Model_Proxylist::generateEntryTitleList() const {
+	std::list<Model_Proxylist_Item> result;
 	int offset = 0;
-	for (ProxyList::const_iterator proxy_iter = this->begin(); proxy_iter != this->end(); proxy_iter++){
+	for (Model_Proxylist::const_iterator proxy_iter = this->begin(); proxy_iter != this->end(); proxy_iter++){
 		if (proxy_iter->isExecutable()){
-			std::list<EntryTitleListItem> subList = ProxyList::generateEntryTitleList(proxy_iter->rules, "", "", "", &offset);
+			std::list<Model_Proxylist_Item> subList = Model_Proxylist::generateEntryTitleList(proxy_iter->rules, "", "", "", &offset);
 			result.splice(result.end(), subList);
 		}
 	}
 	return result;
 }
 
-std::list<std::string> ProxyList::getToplevelEntryTitles() const {
+std::list<std::string> Model_Proxylist::getToplevelEntryTitles() const {
 	std::list<std::string> result;
-	for (ProxyList::const_iterator proxy_iter = this->begin(); proxy_iter != this->end(); proxy_iter++){
+	for (Model_Proxylist::const_iterator proxy_iter = this->begin(); proxy_iter != this->end(); proxy_iter++){
 		if (proxy_iter->isExecutable()){
-			for (std::list<Rule>::const_iterator rule_iter = proxy_iter->rules.begin(); rule_iter != proxy_iter->rules.end(); rule_iter++) {
-				if (rule_iter->isVisible && rule_iter->type == Rule::NORMAL) {
+			for (std::list<Model_Rule>::const_iterator rule_iter = proxy_iter->rules.begin(); rule_iter != proxy_iter->rules.end(); rule_iter++) {
+				if (rule_iter->isVisible && rule_iter->type == Model_Rule::NORMAL) {
 					result.push_back(rule_iter->outputName);
 				}
 			}
@@ -117,21 +117,21 @@ std::list<std::string> ProxyList::getToplevelEntryTitles() const {
 	return result;
 }
 
-std::list<EntryTitleListItem> ProxyList::generateEntryTitleList(std::list<Rule> const& parent, std::string const& labelPathPrefix, std::string const& numericPathPrefix, std::string const& numericPathLabelPrefix, int* offset) {
-	std::list<EntryTitleListItem> result;
+std::list<Model_Proxylist_Item> Model_Proxylist::generateEntryTitleList(std::list<Model_Rule> const& parent, std::string const& labelPathPrefix, std::string const& numericPathPrefix, std::string const& numericPathLabelPrefix, int* offset) {
+	std::list<Model_Proxylist_Item> result;
 	int i = (offset != NULL ? *offset : 0);
-	for (std::list<Rule>::const_iterator rule_iter = parent.begin(); rule_iter != parent.end(); rule_iter++){
-		if (rule_iter->isVisible && (rule_iter->type == Rule::NORMAL || rule_iter->type == Rule::SUBMENU)) {
+	for (std::list<Model_Rule>::const_iterator rule_iter = parent.begin(); rule_iter != parent.end(); rule_iter++){
+		if (rule_iter->isVisible && (rule_iter->type == Model_Rule::NORMAL || rule_iter->type == Model_Rule::SUBMENU)) {
 			std::ostringstream currentNumPath;
 			currentNumPath << numericPathPrefix << i;
 			std::ostringstream currentLabelNumPath;
 			currentLabelNumPath << numericPathLabelPrefix << (i+1);
 
-			if (rule_iter->type == Rule::SUBMENU) {
-				std::list<EntryTitleListItem> subList = ProxyList::generateEntryTitleList(rule_iter->subRules, labelPathPrefix + rule_iter->outputName + ">", currentNumPath.str() + ">", currentLabelNumPath.str() + ">");
+			if (rule_iter->type == Model_Rule::SUBMENU) {
+				std::list<Model_Proxylist_Item> subList = Model_Proxylist::generateEntryTitleList(rule_iter->subRules, labelPathPrefix + rule_iter->outputName + ">", currentNumPath.str() + ">", currentLabelNumPath.str() + ">");
 				result.splice(result.end(), subList);
 			} else {
-				EntryTitleListItem newItem;
+				Model_Proxylist_Item newItem;
 				newItem.labelPathLabel = rule_iter->outputName;
 				newItem.labelPathValue = labelPathPrefix + rule_iter->outputName;
 				newItem.numericPathLabel = currentLabelNumPath.str();
@@ -147,14 +147,14 @@ std::list<EntryTitleListItem> ProxyList::generateEntryTitleList(std::list<Rule> 
 	return result;
 }
 
-Proxy* ProxyList::getProxyByRule(Rule* rule, std::list<Rule> const& list, Proxy& parentProxy) {
-	for (std::list<Rule>::const_iterator rule_iter = list.begin(); rule_iter != list.end(); rule_iter++){
+Model_Proxy* Model_Proxylist::getProxyByRule(Model_Rule* rule, std::list<Model_Rule> const& list, Model_Proxy& parentProxy) {
+	for (std::list<Model_Rule>::const_iterator rule_iter = list.begin(); rule_iter != list.end(); rule_iter++){
 		if (&*rule_iter == rule)
 			return &parentProxy;
 		else {
 			try {
 				return this->getProxyByRule(rule, rule_iter->subRules, parentProxy);
-			} catch (ProxyList::Exception const& e) {
+			} catch (Model_Proxylist::Exception const& e) {
 				if (e != NO_RELATED_PROXY_FOUND)
 					throw e;
 			}
@@ -163,11 +163,11 @@ Proxy* ProxyList::getProxyByRule(Rule* rule, std::list<Rule> const& list, Proxy&
 	throw NO_RELATED_PROXY_FOUND;
 }
 
-Proxy* ProxyList::getProxyByRule(Rule* rule) {
-	for (ProxyList::iterator proxy_iter = this->begin(); proxy_iter != this->end(); proxy_iter++){
+Model_Proxy* Model_Proxylist::getProxyByRule(Model_Rule* rule) {
+	for (Model_Proxylist::iterator proxy_iter = this->begin(); proxy_iter != this->end(); proxy_iter++){
 		try {
 			return this->getProxyByRule(rule, proxy_iter->rules, *proxy_iter);
-		} catch (ProxyList::Exception const& e) {
+		} catch (Model_Proxylist::Exception const& e) {
 			if (e != NO_RELATED_PROXY_FOUND)
 				throw e;
 		}
@@ -175,9 +175,9 @@ Proxy* ProxyList::getProxyByRule(Rule* rule) {
 	throw NO_RELATED_PROXY_FOUND;
 }
 
-std::list<Rule>::iterator ProxyList::moveRuleToNewProxy(Rule& rule, int direction, Script* dataSource) {
-	Proxy* currentProxy = this->getProxyByRule(&rule);
-	std::list<Proxy>::iterator proxyIter = this->begin();
+std::list<Model_Rule>::iterator Model_Proxylist::moveRuleToNewProxy(Model_Rule& rule, int direction, Model_Script* dataSource) {
+	Model_Proxy* currentProxy = this->getProxyByRule(&rule);
+	std::list<Model_Proxy>::iterator proxyIter = this->begin();
 	for (;proxyIter != this->end() && &*proxyIter != currentProxy; proxyIter++) {}
 
 	if (direction == 1) {
@@ -186,9 +186,9 @@ std::list<Rule>::iterator ProxyList::moveRuleToNewProxy(Rule& rule, int directio
 	if (dataSource == NULL) {
 		dataSource = currentProxy->dataSource;
 	}
-	std::list<Proxy>::iterator newProxy = this->insert(proxyIter, Proxy(*dataSource, false));
+	std::list<Model_Proxy>::iterator newProxy = this->insert(proxyIter, Model_Proxy(*dataSource, false));
 	newProxy->removeEquivalentRules(rule);
-	std::list<Rule>::iterator movedRule = newProxy->rules.insert(direction == -1 ? newProxy->rules.end() : newProxy->rules.begin(), rule);
+	std::list<Model_Rule>::iterator movedRule = newProxy->rules.insert(direction == -1 ? newProxy->rules.end() : newProxy->rules.begin(), rule);
 	rule.isVisible = false;
 
 	if (!currentProxy->hasVisibleRules()) {
@@ -200,16 +200,16 @@ std::list<Rule>::iterator ProxyList::moveRuleToNewProxy(Rule& rule, int directio
 /**
  * convenience function - to be used if only a pointer is given
  */
-std::list<Rule>::iterator ProxyList::getNextVisibleRule(Rule* base, int direction) {
-	Proxy* proxy = this->getProxyByRule(base);
-	std::list<Rule>::iterator iter = proxy->getListIterator(*base, proxy->getRuleList(proxy->getParentRule(base, NULL)));
+std::list<Model_Rule>::iterator Model_Proxylist::getNextVisibleRule(Model_Rule* base, int direction) {
+	Model_Proxy* proxy = this->getProxyByRule(base);
+	std::list<Model_Rule>::iterator iter = proxy->getListIterator(*base, proxy->getRuleList(proxy->getParentRule(base, NULL)));
 	return this->getNextVisibleRule(iter, direction);
 }
 
-std::list<Rule>::iterator ProxyList::getNextVisibleRule(std::list<Rule>::iterator base, int direction) {
-	std::list<Proxy>::iterator proxyIter = this->begin();
+std::list<Model_Rule>::iterator Model_Proxylist::getNextVisibleRule(std::list<Model_Rule>::iterator base, int direction) {
+	std::list<Model_Proxy>::iterator proxyIter = this->begin();
 	{
-		Proxy* proxy = this->getProxyByRule(&*base);
+		Model_Proxy* proxy = this->getProxyByRule(&*base);
 		for (;proxyIter != this->end() && &*proxyIter != proxy; proxyIter++) {}
 	}
 
@@ -221,23 +221,23 @@ std::list<Rule>::iterator ProxyList::getNextVisibleRule(std::list<Rule>::iterato
 	while (proxyIter != this->end()) {
 		try {
 			return proxyIter->getNextVisibleRule(base, direction);
-		} catch (Proxy::Exception const& e) {
+		} catch (Model_Proxy::Exception const& e) {
 
 			if (hasParent) {
-				throw ProxyList::NO_MOVE_TARGET_FOUND;
+				throw Model_Proxylist::NO_MOVE_TARGET_FOUND;
 			}
 
-			if (e == Proxy::NO_MOVE_TARGET_FOUND) {
+			if (e == Model_Proxy::NO_MOVE_TARGET_FOUND) {
 				if (direction == 1) {
 					proxyIter++;
 					if (proxyIter == this->end()) {
-						throw ProxyList::NO_MOVE_TARGET_FOUND;
+						throw Model_Proxylist::NO_MOVE_TARGET_FOUND;
 					}
 					base = proxyIter->rules.begin();
 				} else {
 					proxyIter--;
 					if (proxyIter == this->end()) {
-						throw ProxyList::NO_MOVE_TARGET_FOUND;
+						throw Model_Proxylist::NO_MOVE_TARGET_FOUND;
 					}
 					base = proxyIter->rules.end();
 					base--;
@@ -250,11 +250,11 @@ std::list<Rule>::iterator ProxyList::getNextVisibleRule(std::list<Rule>::iterato
 			}
 		}
 	}
-	throw ProxyList::NO_MOVE_TARGET_FOUND;
+	throw Model_Proxylist::NO_MOVE_TARGET_FOUND;
 }
 
-std::list<Proxy>::iterator ProxyList::getIter(Proxy const* proxy) {
-	std::list<Proxy>::iterator iter = this->begin();
+std::list<Model_Proxy>::iterator Model_Proxylist::getIter(Model_Proxy const* proxy) {
+	std::list<Model_Proxy>::iterator iter = this->begin();
 	while (iter != this->end()) {
 		if (&*iter == proxy) {
 			break;
@@ -264,17 +264,17 @@ std::list<Proxy>::iterator ProxyList::getIter(Proxy const* proxy) {
 	return iter;
 }
 
-void ProxyList::splitProxy(Proxy const* proxyToSplit, Rule const* firstRuleOfPart2, int direction) {
-	std::list<Proxy>::iterator iter = this->getIter(proxyToSplit);
-	Proxy* sourceProxy = &*iter;
+void Model_Proxylist::splitProxy(Model_Proxy const* proxyToSplit, Model_Rule const* firstRuleOfPart2, int direction) {
+	std::list<Model_Proxy>::iterator iter = this->getIter(proxyToSplit);
+	Model_Proxy* sourceProxy = &*iter;
 	if (direction == 1) {
 		iter++;
 	}
-	Proxy* newProxy = &*this->insert(iter, Proxy(*sourceProxy->dataSource, false));
+	Model_Proxy* newProxy = &*this->insert(iter, Model_Proxy(*sourceProxy->dataSource, false));
 
 	bool isSecondPart = false;
 	if (direction == 1) {
-		for (std::list<Rule>::iterator ruleIter = sourceProxy->rules.begin(); ruleIter != sourceProxy->rules.end(); ruleIter++) {
+		for (std::list<Model_Rule>::iterator ruleIter = sourceProxy->rules.begin(); ruleIter != sourceProxy->rules.end(); ruleIter++) {
 			if (&*ruleIter == firstRuleOfPart2) {
 				isSecondPart = true;
 			}
@@ -285,7 +285,7 @@ void ProxyList::splitProxy(Proxy const* proxyToSplit, Rule const* firstRuleOfPar
 			}
 		}
 	} else {
-		for (std::list<Rule>::reverse_iterator ruleIter = sourceProxy->rules.rbegin(); ruleIter != sourceProxy->rules.rend(); ruleIter++) {
+		for (std::list<Model_Rule>::reverse_iterator ruleIter = sourceProxy->rules.rbegin(); ruleIter != sourceProxy->rules.rend(); ruleIter++) {
 			if (&*ruleIter == firstRuleOfPart2) {
 				isSecondPart = true;
 			}
@@ -298,10 +298,10 @@ void ProxyList::splitProxy(Proxy const* proxyToSplit, Rule const* firstRuleOfPar
 	}
 }
 
-Rule* ProxyList::getVisibleRuleForEntry(Entry const& entry) {
-	for (std::list<Proxy>::iterator proxyIter = this->begin(); proxyIter != this->end(); proxyIter++) {
+Model_Rule* Model_Proxylist::getVisibleRuleForEntry(Model_Entry const& entry) {
+	for (std::list<Model_Proxy>::iterator proxyIter = this->begin(); proxyIter != this->end(); proxyIter++) {
 		if (proxyIter->isExecutable()) {
-			Rule* result = proxyIter->getVisibleRuleForEntry(entry);
+			Model_Rule* result = proxyIter->getVisibleRuleForEntry(entry);
 			if (result) {
 				return result;
 			}

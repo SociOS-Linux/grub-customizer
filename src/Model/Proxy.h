@@ -26,53 +26,53 @@
 #include <map>
 #include "EntryPathBuilderImpl.h"
 
-struct Proxy {
+struct Model_Proxy {
 	enum Exception {
 		RULE_NOT_FOUND,
 		NO_MOVE_TARGET_FOUND,
 		SHOULD_BE_A_NEW_INSTANCE
 	};
-	std::list<Rule> rules;
+	std::list<Model_Rule> rules;
 	int index;
 	short int permissions;
 	std::string fileName; //may be the same as Script::fileName
-	Script* dataSource;
-	std::map<Script*, std::list<std::list<std::string> > > __idPathList; //to be used by sync();
-	std::map<Script*, std::list<std::list<std::string> > > __idPathList_OtherEntriesPlaceHolders; //to be used by sync();
-	Proxy();
-	Proxy(Script& dataSource, bool activateRules = true);
+	Model_Script* dataSource;
+	std::map<Model_Script*, std::list<std::list<std::string> > > __idPathList; //to be used by sync();
+	std::map<Model_Script*, std::list<std::list<std::string> > > __idPathList_OtherEntriesPlaceHolders; //to be used by sync();
+	Model_Proxy();
+	Model_Proxy(Model_Script& dataSource, bool activateRules = true);
 	bool isExecutable() const;
 	void set_isExecutable(bool value);
-	static std::list<Rule> parseRuleString(const char** ruleString);
+	static std::list<Model_Rule> parseRuleString(const char** ruleString);
 	void importRuleString(const char* ruleString);
-	Rule* getRuleByEntry(Entry const& entry, std::list<Rule>& list, Rule::RuleType ruletype);
-	void unsync(Rule* parent = NULL);
-	bool sync(bool deleteInvalidRules = true, bool expand = true, std::map<std::string, Script*> scriptMap = std::map<std::string, Script*>());
-	void sync_connectExisting(Rule* parent = NULL, std::map<std::string, Script*> scriptMap = std::map<std::string, Script*>());
-	void sync_connectExistingByHash(Rule* parent = NULL, std::map<std::string, Script*> scriptMap = std::map<std::string, Script*>());
-	void sync_add_placeholders(Rule* parent = NULL, std::map<std::string, Script*> scriptMap = std::map<std::string, Script*>());
-	void sync_expand(std::map<std::string, Script*> scriptMap = std::map<std::string, Script*>());
-	void sync_cleanup(Rule* parent = NULL, std::map<std::string, Script*> scriptMap = std::map<std::string, Script*>());
-	bool isModified(Rule const* parentRule = NULL, Entry const* parentEntry = NULL) const;
+	Model_Rule* getRuleByEntry(Model_Entry const& entry, std::list<Model_Rule>& list, Model_Rule::RuleType ruletype);
+	void unsync(Model_Rule* parent = NULL);
+	bool sync(bool deleteInvalidRules = true, bool expand = true, std::map<std::string, Model_Script*> scriptMap = std::map<std::string, Model_Script*>());
+	void sync_connectExisting(Model_Rule* parent = NULL, std::map<std::string, Model_Script*> scriptMap = std::map<std::string, Model_Script*>());
+	void sync_connectExistingByHash(Model_Rule* parent = NULL, std::map<std::string, Model_Script*> scriptMap = std::map<std::string, Model_Script*>());
+	void sync_add_placeholders(Model_Rule* parent = NULL, std::map<std::string, Model_Script*> scriptMap = std::map<std::string, Model_Script*>());
+	void sync_expand(std::map<std::string, Model_Script*> scriptMap = std::map<std::string, Model_Script*>());
+	void sync_cleanup(Model_Rule* parent = NULL, std::map<std::string, Model_Script*> scriptMap = std::map<std::string, Model_Script*>());
+	bool isModified(Model_Rule const* parentRule = NULL, Model_Entry const* parentEntry = NULL) const;
 	bool deleteFile();
-	std::list<std::string> getScriptList(std::map<Entry const*, Script const*> const& entrySourceMap, std::map<Script const*, std::string> const& scriptTargetMap) const;
-	bool generateFile(std::string const& path, int cfg_dir_prefix_length, std::string const& cfg_dir_noprefix, std::map<Entry const*, Script const*> ruleSourceMap, std::map<Script const*, std::string> const& scriptTargetMap); //before running this function, the realted script file must be saved!
+	std::list<std::string> getScriptList(std::map<Model_Entry const*, Model_Script const*> const& entrySourceMap, std::map<Model_Script const*, std::string> const& scriptTargetMap) const;
+	bool generateFile(std::string const& path, int cfg_dir_prefix_length, std::string const& cfg_dir_noprefix, std::map<Model_Entry const*, Model_Script const*> ruleSourceMap, std::map<Model_Script const*, std::string> const& scriptTargetMap); //before running this function, the realted script file must be saved!
 	std::string getScriptName();
-	Rule& moveRule(Rule* rule, int direction);
-	void merge(Proxy const& foreignProxy, int direction);
-	std::list<Rule>::iterator getNextVisibleRule(std::list<Rule>::iterator base, int direction);
-	Rule* splitSubmenu(Rule* position);
-	Rule* createSubmenu(Rule* position);
-	bool ruleIsFromOwnScript(Rule const& rule) const;
-	void removeForeignChildRules(Rule& parent);
-	void removeEquivalentRules(Rule const& base);
-	std::list<Rule>::iterator getListIterator(Rule const& needle, std::list<Rule>& haystack);
-	Rule* getParentRule(Rule* child, Rule* root = NULL);
-	std::list<Rule>& getRuleList(Rule* parentElement);
-	bool hasVisibleRules(Rule const* parent = NULL) const;
-	Rule* getVisibleRuleForEntry(Entry const& entry, Rule* parent = NULL);
+	Model_Rule& moveRule(Model_Rule* rule, int direction);
+	void merge(Model_Proxy const& foreignProxy, int direction);
+	std::list<Model_Rule>::iterator getNextVisibleRule(std::list<Model_Rule>::iterator base, int direction);
+	Model_Rule* splitSubmenu(Model_Rule* position);
+	Model_Rule* createSubmenu(Model_Rule* position);
+	bool ruleIsFromOwnScript(Model_Rule const& rule) const;
+	void removeForeignChildRules(Model_Rule& parent);
+	void removeEquivalentRules(Model_Rule const& base);
+	std::list<Model_Rule>::iterator getListIterator(Model_Rule const& needle, std::list<Model_Rule>& haystack);
+	Model_Rule* getParentRule(Model_Rule* child, Model_Rule* root = NULL);
+	std::list<Model_Rule>& getRuleList(Model_Rule* parentElement);
+	bool hasVisibleRules(Model_Rule const* parent = NULL) const;
+	Model_Rule* getVisibleRuleForEntry(Model_Entry const& entry, Model_Rule* parent = NULL);
 private:
-	static void adjustIterator(std::list<Rule>::iterator& iter, int adjustment);
+	static void adjustIterator(std::list<Model_Rule>::iterator& iter, int adjustment);
 };
 
 #endif

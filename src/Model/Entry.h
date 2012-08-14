@@ -24,16 +24,16 @@
 #include "../presenter/commonClass.h"
 #include "../lib/str_replace.h"
 
-struct GrubConfRow {
-	GrubConfRow(FILE* sourceFile);
-	GrubConfRow();
+struct Model_Entry_Row {
+	Model_Entry_Row(FILE* sourceFile);
+	Model_Entry_Row();
 	std::string text;
 	bool eof;
 	bool is_loaded;
 	operator bool();
 };
 
-struct Entry : public CommonClass {
+struct Model_Entry : public CommonClass {
 	enum EntryType {
 		MENUENTRY,
 		SUBMENU,
@@ -43,11 +43,11 @@ struct Entry : public CommonClass {
 	bool isValid, isModified;
 	std::string name, extension, content;
 	char quote;
-	std::list<Entry> subEntries;
-	Entry();
-	Entry(std::string name, std::string extension, std::string content = "", EntryType type = MENUENTRY);
-	Entry(FILE* sourceFile, GrubConfRow firstRow = GrubConfRow(), Logger* logger = NULL, std::string* plaintextBuffer = NULL);
-	std::list<Entry>& getSubEntries();
+	std::list<Model_Entry> subEntries;
+	Model_Entry();
+	Model_Entry(std::string name, std::string extension, std::string content = "", EntryType type = MENUENTRY);
+	Model_Entry(FILE* sourceFile, Model_Entry_Row firstRow = Model_Entry_Row(), Logger* logger = NULL, std::string* plaintextBuffer = NULL);
+	std::list<Model_Entry>& getSubEntries();
 	operator bool() const;
 };
 

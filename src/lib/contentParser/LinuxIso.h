@@ -25,10 +25,10 @@
 
 class ContentParserLinuxIso : public ContentParserAbstract {
 	static const char* _regex;
-	GrubDeviceMap& deviceMap;
+	Model_DeviceMap& deviceMap;
 	std::string sourceCode;
 public:
-	ContentParserLinuxIso(GrubDeviceMap& deviceMap);
+	ContentParserLinuxIso(Model_DeviceMap& deviceMap);
 	void parse(std::string const& sourceCode);
 	std::string buildSource() const;
 

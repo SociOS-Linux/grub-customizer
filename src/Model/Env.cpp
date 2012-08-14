@@ -18,9 +18,9 @@
 
 #include "Env.h"
 
-GrubEnv::GrubEnv() : burgMode(false), useDirectBackgroundProps(false) {}
+Model_Env::Model_Env() : burgMode(false), useDirectBackgroundProps(false) {}
 
-bool GrubEnv::init(GrubEnv::Mode mode, std::string const& dir_prefix){
+bool Model_Env::init(Model_Env::Mode mode, std::string const& dir_prefix){
 	useDirectBackgroundProps = false;
 	this->cmd_prefix = dir_prefix != "" ? "chroot '"+dir_prefix+"' " : "";
 	this->cfg_dir_prefix = dir_prefix;
@@ -82,8 +82,8 @@ bool GrubEnv::init(GrubEnv::Mode mode, std::string const& dir_prefix){
 	return is_valid;
 }
 
-void GrubEnv::loadFromFile(FILE* cfg_file, std::string const& dir_prefix) {
-	SettingsStore ds(cfg_file);
+void Model_Env::loadFromFile(FILE* cfg_file, std::string const& dir_prefix) {
+	Model_SettingsStore ds(cfg_file);
 	this->mkconfig_cmd = ds.getValue("MKCONFIG_CMD");
 	this->install_cmd = ds.getValue("INSTALL_CMD");
 	this->mkfont_cmd = ds.getValue("MKFONT_CMD");
@@ -96,7 +96,7 @@ void GrubEnv::loadFromFile(FILE* cfg_file, std::string const& dir_prefix) {
 	this->devicemap_file = dir_prefix + ds.getValue("DEVICEMAP_FILE");
 }
 
-void GrubEnv::save() {
+void Model_Env::save() {
 	FILE* cfg_file = NULL;
 	DIR* dir = opendir((cfg_dir_prefix + "/etc/grub-customizer").c_str());
 	if (dir) {
@@ -115,7 +115,7 @@ void GrubEnv::save() {
 	if (!cfg_file) {
 		throw FILE_SAVE_FAILED;
 	}
-	SettingsStore ds;
+	Model_SettingsStore ds;
 	std::map<std::string, std::string> props = this->getProperties();
 	for (std::map<std::string, std::string>::iterator iter = props.begin(); iter != props.end(); iter++) {
 		ds.setValue(iter->first, iter->second);
@@ -124,7 +124,7 @@ void GrubEnv::save() {
 	fclose(cfg_file);
 }
 
-std::map<std::string, std::string> GrubEnv::getProperties() {
+std::map<std::string, std::string> Model_Env::getProperties() {
 	std::map<std::string, std::string> result;
 	result["MKCONFIG_CMD"] = this->mkconfig_cmd.substr(this->cmd_prefix.size());
 	result["UPDATE_CMD"] = this->update_cmd.substr(this->cmd_prefix.size());
@@ -140,7 +140,7 @@ std::map<std::string, std::string> GrubEnv::getProperties() {
 	return result;
 }
 
-void GrubEnv::setProperties(std::map<std::string, std::string> const& props) {
+void Model_Env::setProperties(std::map<std::string, std::string> const& props) {
 	this->mkconfig_cmd = this->cmd_prefix + props.at("MKCONFIG_CMD");
 	this->update_cmd = this->cmd_prefix + props.at("UPDATE_CMD");
 	this->install_cmd = this->cmd_prefix + props.at("INSTALL_CMD");
@@ -154,7 +154,7 @@ void GrubEnv::setProperties(std::map<std::string, std::string> const& props) {
 	this->devicemap_file = this->cfg_dir_prefix + props.at("DEVICEMAP_FILE");
 }
 
-std::list<std::string> GrubEnv::getRequiredProperties() {
+std::list<std::string> Model_Env::getRequiredProperties() {
 	std::list<std::string> result;
 	result.push_back("MKCONFIG_CMD");
 	result.push_back("UPDATE_CMD");
@@ -163,7 +163,7 @@ std::list<std::string> GrubEnv::getRequiredProperties() {
 	return result;
 }
 
-std::list<std::string> GrubEnv::getValidProperties() {
+std::list<std::string> Model_Env::getValidProperties() {
 	std::list<std::string> result;
 	if (this->check_cmd(this->mkconfig_cmd.substr(this->cmd_prefix.size()), this->cmd_prefix)) {
 		result.push_back("MKCONFIG_CMD");
@@ -198,7 +198,7 @@ std::list<std::string> GrubEnv::getValidProperties() {
 	return result;
 }
 
-bool GrubEnv::check_cmd(std::string const& cmd, std::string const& cmd_prefix) const {
+bool Model_Env::check_cmd(std::string const& cmd, std::string const& cmd_prefix) const {
 	this->log("checking the " + this->trim_cmd(cmd) + " command… ", Logger::INFO);
 	FILE* proc = popen((cmd_prefix + " which " + this->trim_cmd(cmd) + " 2>&1").c_str(), "r");
 	std::string output;
@@ -217,7 +217,7 @@ bool GrubEnv::check_cmd(std::string const& cmd, std::string const& cmd_prefix) c
 	return result;
 }
 
-bool GrubEnv::check_dir(std::string const& dir_str) const {
+bool Model_Env::check_dir(std::string const& dir_str) const {
 	DIR* dir = opendir(dir_str.c_str());
 	if (dir){
 		closedir(dir);
@@ -226,7 +226,7 @@ bool GrubEnv::check_dir(std::string const& dir_str) const {
 	return false;
 }
 
-bool GrubEnv::check_file(std::string const& file_str) const {
+bool Model_Env::check_file(std::string const& file_str) const {
 	FILE* file = fopen(file_str.c_str(), "r");
 	if (file){
 		fclose(file);
@@ -235,7 +235,7 @@ bool GrubEnv::check_file(std::string const& file_str) const {
 	return false;
 }
 
-std::string GrubEnv::trim_cmd(std::string const& cmd) const {
+std::string Model_Env::trim_cmd(std::string const& cmd) const {
 	int firstSpace = cmd.find_first_of(' ');
 	if (firstSpace != -1) {
 		return cmd.substr(0, firstSpace);
@@ -244,9 +244,9 @@ std::string GrubEnv::trim_cmd(std::string const& cmd) const {
 	}
 }
 
-std::string GrubEnv::getRootDevice(){
+std::string Model_Env::getRootDevice(){
 	FILE* mtabFile = fopen("/etc/mtab", "r");
-	MountTable mtab;
+	Model_MountTable mtab;
 	if (mtabFile){
 		mtab.loadData(mtabFile, "");
 		fclose(mtabFile);
@@ -254,12 +254,12 @@ std::string GrubEnv::getRootDevice(){
 	return mtab.getEntryByMountpoint(cfg_dir_prefix == "" ? "/" : cfg_dir_prefix).device;
 }
 
-std::list<GrubEnv::Mode> GrubEnv::getAvailableModes(){
+std::list<Model_Env::Mode> Model_Env::getAvailableModes(){
 	std::list<Mode> result;
-	if (this->init(GrubEnv::BURG_MODE, this->cfg_dir_prefix))
-		result.push_back(GrubEnv::BURG_MODE);
-	if (this->init(GrubEnv::GRUB_MODE, this->cfg_dir_prefix))
-		result.push_back(GrubEnv::GRUB_MODE);
+	if (this->init(Model_Env::BURG_MODE, this->cfg_dir_prefix))
+		result.push_back(Model_Env::BURG_MODE);
+	if (this->init(Model_Env::GRUB_MODE, this->cfg_dir_prefix))
+		result.push_back(Model_Env::GRUB_MODE);
 	return result;
 }
 

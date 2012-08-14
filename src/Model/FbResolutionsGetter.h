@@ -24,12 +24,12 @@
 #include "../interface/evt_model.h"
 #include "../presenter/commonClass.h"
 
-class FbResolutionsGetter : public CommonClass {
+class Model_FbResolutionsGetter : public CommonClass {
 	std::list<std::string> data;
 	EventListener_model* eventListener;
 	bool _isLoading;
 public:
-	FbResolutionsGetter();
+	Model_FbResolutionsGetter();
 	const std::list<std::string>& getData() const;
 	void load();
 	void setEventListener(EventListener_model& eventListener);

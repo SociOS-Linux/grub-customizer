@@ -18,7 +18,7 @@
 
 #include "grubCustomizer.h"
 
-GrubCustomizer::GrubCustomizer(GrubEnv& env)
+GrubCustomizer::GrubCustomizer(Model_Env& env)
 	: grublistCfg(NULL), listCfgDlg(NULL), settingsDlg(NULL), settings(NULL),
 	  installer(NULL), installDlg(NULL), settingsOnDisk(NULL), entryAddDlg(NULL),
 	  entryEditDlg(NULL),
@@ -28,12 +28,12 @@ GrubCustomizer::GrubCustomizer(GrubEnv& env)
 	 env(env), config_has_been_different_on_startup_but_unsaved(false),
 	 modificationsUnsaved(false), quit_requested(false), activeThreadCount(0),
 	 is_loading(false), contentParserFactory(NULL), currentContentParser(NULL),
-	 grubEnvEditor(NULL), threadController(NULL), thrownException(GrublistCfg::GRUB_CMD_EXEC_FAILED)
+	 grubEnvEditor(NULL), threadController(NULL), thrownException(Model_ListCfg::GRUB_CMD_EXEC_FAILED)
 {
 }
 
 
-void GrubCustomizer::setListCfg(GrublistCfg& grublistCfg){
+void GrubCustomizer::setListCfg(Model_ListCfg& grublistCfg){
 	this->grublistCfg = &grublistCfg;
 }
 void GrubCustomizer::setListCfgDlg(GrublistCfgDlg& listCfgDlg){
@@ -44,15 +44,15 @@ void GrubCustomizer::setSettingsDialog(SettingsDlg& settingsDlg){
 	this->settingsDlg = &settingsDlg;
 }
 
-void GrubCustomizer::setSettingsManager(SettingsManagerDataStore& settings){
+void GrubCustomizer::setSettingsManager(Model_SettingsManagerData& settings){
 	this->settings = &settings;
 }
 
-void GrubCustomizer::setSettingsBuffer(SettingsManagerDataStore& settings){
+void GrubCustomizer::setSettingsBuffer(Model_SettingsManagerData& settings){
 	this->settingsOnDisk = &settings;
 }
 
-void GrubCustomizer::setInstaller(GrubInstaller& installer){
+void GrubCustomizer::setInstaller(Model_Installer& installer){
 	this->installer = &installer;
 }
 void GrubCustomizer::setInstallDlg(GrubInstallDlg& installDlg){
@@ -66,19 +66,19 @@ void GrubCustomizer::setEntryEditDlg(EntryEditDlg& entryEditDlg) {
 	this->entryEditDlg = &entryEditDlg;
 }
 
-void GrubCustomizer::setSavedListCfg(GrublistCfg& savedListCfg){
+void GrubCustomizer::setSavedListCfg(Model_ListCfg& savedListCfg){
 	this->savedListCfg = &savedListCfg;
 }
 
-void GrubCustomizer::setFbResolutionsGetter(FbResolutionsGetter& fbResolutionsGetter){
+void GrubCustomizer::setFbResolutionsGetter(Model_FbResolutionsGetter& fbResolutionsGetter){
 	this->fbResolutionsGetter = &fbResolutionsGetter;
 }
 
-void GrubCustomizer::setDeviceDataList(DeviceDataList& deviceDataList){
+void GrubCustomizer::setDeviceDataList(Model_DeviceDataList& deviceDataList){
 	this->deviceDataList = &deviceDataList;
 }
 
-void GrubCustomizer::setMountTable(MountTable& mountTable){
+void GrubCustomizer::setMountTable(Model_MountTable& mountTable){
 	this->mountTable = &mountTable;
 }
 
@@ -105,17 +105,17 @@ ThreadController& GrubCustomizer::getThreadController() {
 	return *this->threadController;
 }
 
-FbResolutionsGetter& GrubCustomizer::getFbResolutionsGetter() {
+Model_FbResolutionsGetter& GrubCustomizer::getFbResolutionsGetter() {
 	return *this->fbResolutionsGetter;
 }
 
 void GrubCustomizer::updateList() {
 	this->listCfgDlg->clear();
 
-	for (std::list<Proxy>::iterator iter = this->grublistCfg->proxies.begin(); iter != this->grublistCfg->proxies.end(); iter++){
+	for (std::list<Model_Proxy>::iterator iter = this->grublistCfg->proxies.begin(); iter != this->grublistCfg->proxies.end(); iter++){
 		std::string name = iter->getScriptName();
 		if ((name != "header" && name != "debian_theme" && name != "grub-customizer_menu_color_helper") || iter->isModified()) {
-			for (std::list<Rule>::iterator ruleIter = iter->rules.begin(); ruleIter != iter->rules.end(); ruleIter++){
+			for (std::list<Model_Rule>::iterator ruleIter = iter->rules.begin(); ruleIter != iter->rules.end(); ruleIter++){
 				this->_rAppendRule(*ruleIter);
 			}
 		}
@@ -123,11 +123,11 @@ void GrubCustomizer::updateList() {
 }
 
 void GrubCustomizer::updateSettingsDlg(){
-	std::list<EntryTitleListItem> entryTitles = this->grublistCfg->proxies.generateEntryTitleList();
+	std::list<Model_Proxylist_Item> entryTitles = this->grublistCfg->proxies.generateEntryTitleList();
 	std::list<std::string> labelListToplevel  = this->grublistCfg->proxies.getToplevelEntryTitles();
 
 	this->settingsDlg->clearDefaultEntryChooser();
-	for (std::list<EntryTitleListItem>::iterator iter = entryTitles.begin(); iter != entryTitles.end(); iter++) {
+	for (std::list<Model_Proxylist_Item>::iterator iter = entryTitles.begin(); iter != entryTitles.end(); iter++) {
 		this->settingsDlg->addEntryToDefaultEntryChooser(iter->labelPathValue, iter->labelPathLabel, iter->numericPathValue, iter->numericPathLabel);
 	}
 
@@ -187,7 +187,7 @@ void GrubCustomizer::init(){
 		this->showEnvEditor();
 	} else {
 		this->log("running on an installed system", Logger::INFO);
-		std::list<GrubEnv::Mode> modes = this->env.getAvailableModes();
+		std::list<Model_Env::Mode> modes = this->env.getAvailableModes();
 		if (modes.size() == 2)
 			this->listCfgDlg->showBurgSwitcher();
 		else if (modes.size() == 1)
@@ -197,13 +197,13 @@ void GrubCustomizer::init(){
 	}
 }
 
-void GrubCustomizer::init(GrubEnv::Mode mode, bool initEnv){
+void GrubCustomizer::init(Model_Env::Mode mode, bool initEnv){
 	this->log("initializing (w/ specified bootloader type)…", Logger::IMPORTANT_EVENT);
 	if (initEnv) {
 		this->env.init(mode, env.cfg_dir_prefix);
 	}
 	this->listCfgDlg->setLockState(1|4|8);
-	this->listCfgDlg->setIsBurgMode(mode == GrubEnv::BURG_MODE);
+	this->listCfgDlg->setIsBurgMode(mode == Model_Env::BURG_MODE);
 	this->listCfgDlg->show();
 	this->listCfgDlg->hideBurgSwitcher();
 
@@ -271,7 +271,7 @@ void GrubCustomizer::load(bool preserveConfig){
 			this->log("loading grub list", Logger::IMPORTANT_EVENT);
 			this->grublistCfg->load(preserveConfig);
 			this->log("grub list completely loaded", Logger::IMPORTANT_EVENT);
-		} catch (GrublistCfg::Exception const& e){
+		} catch (Model_ListCfg::Exception const& e){
 			this->log("error while loading the grub list", Logger::ERROR);
 			this->thrownException = e;
 			this->getThreadController().showThreadDiedError();
@@ -318,8 +318,8 @@ void GrubCustomizer::save_thread(){
 	this->activeThreadCount--;
 }
 
-void GrubCustomizer::renameEntry(Rule* rule, std::string const& newName){
-	if (rule->type != Rule::PLAINTEXT) {
+void GrubCustomizer::renameEntry(Model_Rule* rule, std::string const& newName){
+	if (rule->type != Model_Rule::PLAINTEXT) {
 		if (this->settings->getValue("GRUB_DEFAULT") == rule->outputName)
 			this->settings->setValue("GRUB_DEFAULT", newName);
 		this->grublistCfg->renameRule(rule, newName);
@@ -340,16 +340,16 @@ void GrubCustomizer::showAboutDialog(){
 }
 
 void GrubCustomizer::applyEntryEditorModifications() {
-	Rule* rulePtr = static_cast<Rule*>(this->entryEditDlg->getRulePtr());
+	Model_Rule* rulePtr = static_cast<Model_Rule*>(this->entryEditDlg->getRulePtr());
 	bool isAdded = false;
 	if (rulePtr == NULL) { // insert
-		Script* script = this->grublistCfg->repository.getCustomScript();
-		script->entries().push_back(Entry("new", "", ""));
+		Model_Script* script = this->grublistCfg->repository.getCustomScript();
+		script->entries().push_back(Model_Entry("new", "", ""));
 
-		Rule newRule(script->entries().back(), true, *script);
+		Model_Rule newRule(script->entries().back(), true, *script);
 
-		std::list<Proxy*> proxies = this->grublistCfg->proxies.getProxiesByScript(*script);
-		for (std::list<Proxy*>::iterator proxyIter = proxies.begin(); proxyIter != proxies.end(); proxyIter++) {
+		std::list<Model_Proxy*> proxies = this->grublistCfg->proxies.getProxiesByScript(*script);
+		for (std::list<Model_Proxy*>::iterator proxyIter = proxies.begin(); proxyIter != proxies.end(); proxyIter++) {
 			(*proxyIter)->rules.push_back(newRule);
 			newRule.isVisible = false; // if there are more rules of this type, add them invisible
 		}
@@ -357,30 +357,30 @@ void GrubCustomizer::applyEntryEditorModifications() {
 		rulePtr = &proxies.front()->rules.back();
 		isAdded = true;
 	} else { // update
-		Script* script = this->grublistCfg->repository.getScriptByEntry(*rulePtr->dataSource);
+		Model_Script* script = this->grublistCfg->repository.getScriptByEntry(*rulePtr->dataSource);
 		assert(script != NULL);
 
 		if (!script->isCustomScript) {
 			script = this->grublistCfg->repository.getCustomScript();
 			script->entries().push_back(*rulePtr->dataSource);
 
-			Rule ruleCopy = *rulePtr;
+			Model_Rule ruleCopy = *rulePtr;
 			rulePtr->setVisibility(false);
 			ruleCopy.dataSource = &script->entries().back();
-			Proxy* proxy = this->grublistCfg->proxies.getProxyByRule(rulePtr);
-			std::list<Rule>& ruleList = proxy->getRuleList(proxy->getParentRule(rulePtr));
+			Model_Proxy* proxy = this->grublistCfg->proxies.getProxyByRule(rulePtr);
+			std::list<Model_Rule>& ruleList = proxy->getRuleList(proxy->getParentRule(rulePtr));
 
-			Rule dummySubmenu(Rule::SUBMENU, std::list<std::string>(), "DUMMY", true);
+			Model_Rule dummySubmenu(Model_Rule::SUBMENU, std::list<std::string>(), "DUMMY", true);
 			dummySubmenu.subRules.push_back(ruleCopy);
-			std::list<Rule>::iterator iter = ruleList.insert(proxy->getListIterator(*rulePtr, ruleList), dummySubmenu);
+			std::list<Model_Rule>::iterator iter = ruleList.insert(proxy->getListIterator(*rulePtr, ruleList), dummySubmenu);
 
-			Rule& insertedRule = iter->subRules.back();
+			Model_Rule& insertedRule = iter->subRules.back();
 			rulePtr = &this->grublistCfg->moveRule(&insertedRule, -1);
 
-			std::list<Proxy*> proxies = this->grublistCfg->proxies.getProxiesByScript(*script);
-			for (std::list<Proxy*>::iterator proxyIter = proxies.begin(); proxyIter != proxies.end(); proxyIter++) {
+			std::list<Model_Proxy*> proxies = this->grublistCfg->proxies.getProxiesByScript(*script);
+			for (std::list<Model_Proxy*>::iterator proxyIter = proxies.begin(); proxyIter != proxies.end(); proxyIter++) {
 				if (!(*proxyIter)->getRuleByEntry(*rulePtr->dataSource, (*proxyIter)->rules, rulePtr->type)) {
-					(*proxyIter)->rules.push_back(Rule(*rulePtr->dataSource, false, *script));
+					(*proxyIter)->rules.push_back(Model_Rule(*rulePtr->dataSource, false, *script));
 				}
 			}
 		}
@@ -404,7 +404,7 @@ void GrubCustomizer::generateSubmountpointSelection(std::string const& prefix){
 	this->grubEnvEditor->removeAllSubmountpoints();
 
 	//create new submountpoint checkbuttons
-	for (MountTable::const_iterator iter = mountTable->begin(); iter != mountTable->end(); iter++){
+	for (Model_MountTable::const_iterator iter = mountTable->begin(); iter != mountTable->end(); iter++){
 		if (iter->mountpoint.length() > prefix.length() && iter->mountpoint.substr(0, prefix.length()) == prefix
 		 && iter->mountpoint != prefix + "/dev"
 		 && iter->mountpoint != prefix + "/proc"
@@ -427,31 +427,31 @@ void GrubCustomizer::switchPartition(std::string const& newPartition) {
 		try {
 			mountTable->clear(PARTCHOOSER_MOUNTPOINT);
 			mountTable->mountRootFs(selectedDevice, PARTCHOOSER_MOUNTPOINT);
-			this->env.init(env.burgMode ? GrubEnv::BURG_MODE : GrubEnv::GRUB_MODE, PARTCHOOSER_MOUNTPOINT);
+			this->env.init(env.burgMode ? Model_Env::BURG_MODE : Model_Env::GRUB_MODE, PARTCHOOSER_MOUNTPOINT);
 			this->generateSubmountpointSelection(PARTCHOOSER_MOUNTPOINT);
 			this->showEnvEditor();
 		}
-		catch (Mountpoint::Exception const& e) {
-			if (e == Mountpoint::MOUNT_FAILED){
+		catch (Model_MountTable_Mountpoint::Exception const& e) {
+			if (e == Model_MountTable_Mountpoint::MOUNT_FAILED){
 				this->grubEnvEditor->showErrorMessage(GrubEnvEditor::MOUNT_FAILED);
 				this->switchPartition("");
 			}
 		}
-		catch (MountTable::Exception const& e) {
-			if (e == MountTable::MOUNT_ERR_NO_FSTAB){
+		catch (Model_MountTable::Exception const& e) {
+			if (e == Model_MountTable::MOUNT_ERR_NO_FSTAB){
 				this->grubEnvEditor->showErrorMessage(GrubEnvEditor::MOUNT_ERR_NO_FSTAB);
 				mountTable->getEntryRefByMountpoint(PARTCHOOSER_MOUNTPOINT).umount();
 				this->switchPartition("");
 			}
 		}
 	} else {
-		this->env.init(env.burgMode ? GrubEnv::BURG_MODE : GrubEnv::GRUB_MODE, selectedDevice);
+		this->env.init(env.burgMode ? Model_Env::BURG_MODE : Model_Env::GRUB_MODE, selectedDevice);
 		this->showEnvEditor(true);
 	}
 }
 
 void GrubCustomizer::switchBootloaderType(int newTypeIndex) {
-	this->env.init(newTypeIndex == 0 ? GrubEnv::GRUB_MODE : GrubEnv::BURG_MODE, this->env.cfg_dir_prefix);
+	this->env.init(newTypeIndex == 0 ? Model_Env::GRUB_MODE : Model_Env::BURG_MODE, this->env.cfg_dir_prefix);
 	this->showEnvEditor();
 }
 
@@ -465,7 +465,7 @@ void GrubCustomizer::applyEnvEditor(bool saveConfig){
 	this->syncSettings();
 	settingsDlg->hide();
 	entryAddDlg->hide();
-	GrubEnv::Mode mode = this->grubEnvEditor->getBootloaderType() == 0 ? GrubEnv::GRUB_MODE : GrubEnv::BURG_MODE;
+	Model_Env::Mode mode = this->grubEnvEditor->getBootloaderType() == 0 ? Model_Env::GRUB_MODE : Model_Env::BURG_MODE;
 	grubEnvEditor->hide();
 
 	if (saveConfig) {
@@ -479,8 +479,8 @@ void GrubCustomizer::mountSubmountpoint(std::string const& submountpoint){
 	try {
 		this->mountTable->getEntryRefByMountpoint(PARTCHOOSER_MOUNTPOINT + submountpoint).mount();
 	}
-	catch (Mountpoint::Exception const& e){
-		if (e == Mountpoint::MOUNT_FAILED){
+	catch (Model_MountTable_Mountpoint::Exception const& e){
+		if (e == Model_MountTable_Mountpoint::MOUNT_FAILED){
 			this->grubEnvEditor->showErrorMessage(GrubEnvEditor::SUB_MOUNT_FAILED);
 		}
 		this->grubEnvEditor->setSubmountpointSelectionState(submountpoint, false);
@@ -492,8 +492,8 @@ void GrubCustomizer::umountSubmountpoint(std::string const& submountpoint){
 	try {
 		this->mountTable->getEntryRefByMountpoint(PARTCHOOSER_MOUNTPOINT + submountpoint).umount();
 	}
-	catch (Mountpoint::Exception const& e){
-		if (e == Mountpoint::UMOUNT_FAILED){
+	catch (Model_MountTable_Mountpoint::Exception const& e){
+		if (e == Model_MountTable_Mountpoint::UMOUNT_FAILED){
 			this->grubEnvEditor->showErrorMessage(GrubEnvEditor::SUB_UMOUNT_FAILED);
 		}
 		this->grubEnvEditor->setSubmountpointSelectionState(submountpoint, true);
@@ -520,14 +520,14 @@ void GrubCustomizer::showMessageGrubInstallCompleted(std::string const& msg){
 void GrubCustomizer::showEntryAddDlg(){
 	entryAddDlg->clear();
 
-	std::list<Entry*> removedEntries = this->grublistCfg->getRemovedEntries();
-	for (std::list<Entry*>::iterator iter = removedEntries.begin(); iter != removedEntries.end(); iter++) {
-		Script* script = this->grublistCfg->repository.getScriptByEntry(**iter);
+	std::list<Model_Entry*> removedEntries = this->grublistCfg->getRemovedEntries();
+	for (std::list<Model_Entry*>::iterator iter = removedEntries.begin(); iter != removedEntries.end(); iter++) {
+		Model_Script* script = this->grublistCfg->repository.getScriptByEntry(**iter);
 
 		std::string name = (*iter)->name;
 		name = this->_mapEntryName(&**iter, name, script->name);
 
-		entryAddDlg->addItem(name, (*iter)->type != Entry::MENUENTRY, script->name, *iter);
+		entryAddDlg->addItem(name, (*iter)->type != Model_Entry::MENUENTRY, script->name, *iter);
 	}
 
 	entryAddDlg->show();
@@ -535,7 +535,7 @@ void GrubCustomizer::showEntryAddDlg(){
 
 void GrubCustomizer::showEntryEditDlg(void* rule) {
 	this->entryEditDlg->setRulePtr(rule);
-	this->entryEditDlg->setSourcecode(((Rule*)rule)->dataSource->content);
+	this->entryEditDlg->setSourcecode(((Model_Rule*)rule)->dataSource->content);
 	this->syncEntryEditDlg(false);
 	this->entryEditDlg->show();
 }
@@ -591,7 +591,7 @@ void GrubCustomizer::addEntryFromEntryAddDlg(){
 	std::list<void*> entries = entryAddDlg->getSelectedEntries();
 	std::list<void*> addedRules;
 	for (std::list<void*>::iterator iter = entries.begin(); iter != entries.end(); iter++) {
-		Entry* entry = static_cast<Entry*>(*iter);
+		Model_Entry* entry = static_cast<Model_Entry*>(*iter);
 		addedRules.push_back(this->grublistCfg->addEntry(*entry));
 	}
 
@@ -602,13 +602,13 @@ void GrubCustomizer::addEntryFromEntryAddDlg(){
 	this->modificationsUnsaved = true;
 }
 
-std::string GrubCustomizer::_mapEntryName(Entry const* sourceEntry, std::string const& defaultName, std::string const& scriptName) {
+std::string GrubCustomizer::_mapEntryName(Model_Entry const* sourceEntry, std::string const& defaultName, std::string const& scriptName) {
 	std::string name;
-	bool is_other_entries_ph = sourceEntry ? sourceEntry->type == Entry::SUBMENU || sourceEntry->type == Entry::SCRIPT_ROOT : false;
-	bool is_plaintext = sourceEntry ? sourceEntry->type == Entry::PLAINTEXT : false;
+	bool is_other_entries_ph = sourceEntry ? sourceEntry->type == Model_Entry::SUBMENU || sourceEntry->type == Model_Entry::SCRIPT_ROOT : false;
+	bool is_plaintext = sourceEntry ? sourceEntry->type == Model_Entry::PLAINTEXT : false;
 	if (is_other_entries_ph) {
 		try {
-			if (sourceEntry->type == Entry::SCRIPT_ROOT) {
+			if (sourceEntry->type == Model_Entry::SCRIPT_ROOT) {
 				throw 1;
 			}
 			name = this->listCfgDlg->createNewEntriesPlaceholderString(sourceEntry->name, scriptName);
@@ -623,15 +623,15 @@ std::string GrubCustomizer::_mapEntryName(Entry const* sourceEntry, std::string 
 	return name;
 }
 
-void GrubCustomizer::_rAppendRule(Rule& rule, Rule* parentRule){
-	bool is_other_entries_ph = rule.type == Rule::OTHER_ENTRIES_PLACEHOLDER;
-	bool is_plaintext = rule.dataSource && rule.dataSource->type == Entry::PLAINTEXT;
-	bool is_submenu = rule.type == Rule::SUBMENU;
+void GrubCustomizer::_rAppendRule(Model_Rule& rule, Model_Rule* parentRule){
+	bool is_other_entries_ph = rule.type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER;
+	bool is_plaintext = rule.dataSource && rule.dataSource->type == Model_Entry::PLAINTEXT;
+	bool is_submenu = rule.type == Model_Rule::SUBMENU;
 
 	if (rule.dataSource || is_submenu){
 		std::string name = this->_mapEntryName(rule.dataSource, rule.outputName);
 
-		bool isSubmenu = rule.type == Rule::SUBMENU;
+		bool isSubmenu = rule.type == Model_Rule::SUBMENU;
 		std::string scriptName = "", defaultName = "";
 		if (rule.dataSource) {
 			scriptName = this->grublistCfg->repository.getScriptByEntry(*rule.dataSource)->name;
@@ -639,7 +639,7 @@ void GrubCustomizer::_rAppendRule(Rule& rule, Rule* parentRule){
 				defaultName = rule.dataSource->name;
 			}
 		}
-		bool isEditable = rule.type == Rule::NORMAL || rule.type == Rule::PLAINTEXT;
+		bool isEditable = rule.type == Model_Rule::NORMAL || rule.type == Model_Rule::PLAINTEXT;
 		bool isModified = rule.dataSource && rule.dataSource->isModified;
 		if (rule.isVisible) {
 			// parse content to show additional informations
@@ -665,7 +665,7 @@ void GrubCustomizer::_rAppendRule(Rule& rule, Rule* parentRule){
 
 			this->listCfgDlg->appendEntry(name, &rule, is_other_entries_ph || is_plaintext, isSubmenu, scriptName, defaultName, isEditable, isModified, options, parentRule);
 
-			for (std::list<Rule>::iterator subruleIter = rule.subRules.begin(); subruleIter != rule.subRules.end(); subruleIter++) {
+			for (std::list<Model_Rule>::iterator subruleIter = rule.subRules.begin(); subruleIter != rule.subRules.end(); subruleIter++) {
 				this->_rAppendRule(*subruleIter, &rule);
 			}
 		}
@@ -729,7 +729,7 @@ void GrubCustomizer::die(){
 	this->is_loading = false;
 	this->activeThreadCount = 0;
 	bool showEnvSettings = false;
-	if (this->thrownException == GrublistCfg::GRUB_CMD_EXEC_FAILED){
+	if (this->thrownException == Model_ListCfg::GRUB_CMD_EXEC_FAILED){
 		showEnvSettings = this->listCfgDlg->askForEnvironmentSettings(this->env.mkconfig_cmd, this->grublistCfg->getGrubErrorMessage());
 	}
 	if (showEnvSettings) {
@@ -769,16 +769,16 @@ void GrubCustomizer::quit(bool force){
 }
 
 void GrubCustomizer::removeRules(std::list<void*> entries){
-	std::map<Proxy*, void*> emptyProxies;
+	std::map<Model_Proxy*, void*> emptyProxies;
 	for (std::list<void*>::iterator iter = entries.begin(); iter != entries.end(); iter++) {
-		Rule* rule = static_cast<Rule*>(*iter);
+		Model_Rule* rule = static_cast<Model_Rule*>(*iter);
 		rule->setVisibility(false);
 		if (!this->grublistCfg->proxies.getProxyByRule(rule)->hasVisibleRules()) {
 			emptyProxies[this->grublistCfg->proxies.getProxyByRule(rule)] = NULL;
 		}
 	}
 
-	for (std::map<Proxy*, void*>::iterator iter = emptyProxies.begin(); iter != emptyProxies.end(); iter++) {
+	for (std::map<Model_Proxy*, void*>::iterator iter = emptyProxies.begin(); iter != emptyProxies.end(); iter++) {
 		this->grublistCfg->proxies.deleteProxy(iter->first);
 		this->log("proxy removed", Logger::INFO);
 	}
@@ -789,7 +789,7 @@ void GrubCustomizer::removeRules(std::list<void*> entries){
 }
 
 
-void GrubCustomizer::updateRuleName(Rule* entry, std::string const& newText){
+void GrubCustomizer::updateRuleName(Model_Rule* entry, std::string const& newText){
 	std::string oldName = entry->outputName;
 //	std::string newName = this->listCfgDlg->getRuleName(entry);
 	if (newText == ""){
@@ -808,7 +808,7 @@ void GrubCustomizer::moveRules(std::list<void*> rules, int direction){
 		assert(direction == -1 || direction == 1);
 
 		int ruleCount = rules.size();
-		Rule* rulePtr = static_cast<Rule*>(direction == -1 ? rules.front() : rules.back());
+		Model_Rule* rulePtr = static_cast<Model_Rule*>(direction == -1 ? rules.front() : rules.back());
 		for (int i = 0; i < ruleCount; i++) {
 			rulePtr = &this->grublistCfg->moveRule(rulePtr, direction);
 			if (i < ruleCount - 1) {
@@ -816,11 +816,11 @@ void GrubCustomizer::moveRules(std::list<void*> rules, int direction){
 				bool targetFound = false;
 				try {
 					rulePtr = &*this->grublistCfg->proxies.getNextVisibleRule(rulePtr, -direction);
-				} catch (ProxyList::Exception e) {
+				} catch (Model_Proxylist::Exception e) {
 					isEndOfList = true;
 					rulePtr = this->grublistCfg->proxies.getProxyByRule(rulePtr)->getParentRule(rulePtr);
 				}
-				if (!isEndOfList && rulePtr->type == Rule::SUBMENU) {
+				if (!isEndOfList && rulePtr->type == Model_Rule::SUBMENU) {
 					rulePtr = direction == -1 ? &rulePtr->subRules.front() : &rulePtr->subRules.back();
 					if (rulePtr->isVisible) {
 						targetFound = true;
@@ -836,14 +836,14 @@ void GrubCustomizer::moveRules(std::list<void*> rules, int direction){
 		std::list<void*> movedRules;
 		movedRules.push_back(rulePtr);
 		for (int i = 1; i < ruleCount; i++) {
-			movedRules.push_back(&*this->grublistCfg->proxies.getNextVisibleRule(static_cast<Rule*>(movedRules.back()), direction));
+			movedRules.push_back(&*this->grublistCfg->proxies.getNextVisibleRule(static_cast<Model_Rule*>(movedRules.back()), direction));
 		}
 
 		this->syncListView_load();
 		this->listCfgDlg->selectRules(movedRules);
 		this->modificationsUnsaved = true;
-	} catch (GrublistCfg::Exception const& e) {
-		if (e == GrublistCfg::NO_MOVE_TARGET_FOUND)
+	} catch (Model_ListCfg::Exception const& e) {
+		if (e == Model_ListCfg::NO_MOVE_TARGET_FOUND)
 			this->listCfgDlg->showErrorMessage(gettext("cannot move this entry"));
 		else
 			throw e;
@@ -852,19 +852,19 @@ void GrubCustomizer::moveRules(std::list<void*> rules, int direction){
 
 
 void GrubCustomizer::createSubmenu(std::list<void*> childItems) {
-	Rule* firstRule = static_cast<Rule*>(childItems.front());
-	Rule* newItem = this->grublistCfg->createSubmenu(firstRule);
+	Model_Rule* firstRule = static_cast<Model_Rule*>(childItems.front());
+	Model_Rule* newItem = this->grublistCfg->createSubmenu(firstRule);
 	this->syncListView_load();
 	this->moveRules(childItems, -1);
 	this->listCfgDlg->selectRule(newItem, true);
 }
 
 void GrubCustomizer::removeSubmenu(std::list<void*> childItems) {
-	Rule* firstItem = this->grublistCfg->splitSubmenu(static_cast<Rule*>(childItems.front()));
+	Model_Rule* firstItem = this->grublistCfg->splitSubmenu(static_cast<Model_Rule*>(childItems.front()));
 	std::list<void*> movedRules;
 	movedRules.push_back(firstItem);
 	for (int i = 1; i < childItems.size(); i++) {
-		movedRules.push_back(&*this->grublistCfg->proxies.getNextVisibleRule(static_cast<Rule*>(movedRules.back()), 1));
+		movedRules.push_back(&*this->grublistCfg->proxies.getNextVisibleRule(static_cast<Model_Rule*>(movedRules.back()), 1));
 	}
 
 	this->moveRules(movedRules, -1);
@@ -878,8 +878,8 @@ void GrubCustomizer::revertList() {
 		remaining = this->grublistCfg->proxies.size();
 	}
 	int i = 50; // unknown scripts starting at position 50
-	for (std::list<Script>::iterator iter = this->grublistCfg->repository.begin(); iter != this->grublistCfg->repository.end(); iter++) {
-		Proxy newProxy(*iter);
+	for (std::list<Model_Script>::iterator iter = this->grublistCfg->repository.begin(); iter != this->grublistCfg->repository.end(); iter++) {
+		Model_Proxy newProxy(*iter);
 		if (iter->name == "header") {
 			newProxy.index = 0;
 		} else if (iter->name == "debian_theme") {
@@ -906,14 +906,14 @@ void GrubCustomizer::revertList() {
 	this->syncListView_load();
 }
 
-void GrubCustomizer::showRuleInfo(Rule* rule){
+void GrubCustomizer::showRuleInfo(Model_Rule* rule){
 	if (rule && rule->dataSource)
 		this->listCfgDlg->setDefaultTitleStatusText(rule->getEntryName());
 	else
 		this->listCfgDlg->setStatusText("");
 }
 
-void GrubCustomizer::showProxyInfo(Proxy* proxy){
+void GrubCustomizer::showProxyInfo(Model_Proxy* proxy){
 	this->listCfgDlg->setStatusText("");
 }
 
@@ -927,7 +927,7 @@ void GrubCustomizer::updateSettingsDlgResolutionList_dispatched(){
 void GrubCustomizer::syncSettings(){
 	std::string sel = this->settingsDlg->getSelectedCustomOption();
 	this->settingsDlg->removeAllSettingRows();
-	for (std::list<SettingRow>::iterator iter = this->settings->begin(); iter != this->settings->end(); this->settings->iter_to_next_setting(iter)){
+	for (std::list<Model_SettingsStore_Row>::iterator iter = this->settings->begin(); iter != this->settings->end(); this->settings->iter_to_next_setting(iter)){
 		this->settingsDlg->addCustomOption(iter->isActive, iter->name, iter->value);
 	}
 	this->settingsDlg->selectCustomOption(sel);

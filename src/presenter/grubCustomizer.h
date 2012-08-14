@@ -60,20 +60,20 @@
  */
 
 class GrubCustomizer : public CommonClass {
-	GrubEnv& env;
-	GrublistCfg* grublistCfg;
+	Model_Env& env;
+	Model_ListCfg* grublistCfg;
 	GrublistCfgDlg* listCfgDlg;
 	SettingsDlg* settingsDlg;
-	SettingsManagerDataStore* settings;
-	SettingsManagerDataStore* settingsOnDisk; //buffer for the existing settings
-	GrubInstaller* installer;
+	Model_SettingsManagerData* settings;
+	Model_SettingsManagerData* settingsOnDisk; //buffer for the existing settings
+	Model_Installer* installer;
 	GrubInstallDlg* installDlg;
 	EntryAddDlg* entryAddDlg;
 	EntryEditDlg* entryEditDlg;
-	GrublistCfg* savedListCfg;
-	FbResolutionsGetter* fbResolutionsGetter;
-	DeviceDataList* deviceDataList;
-	MountTable* mountTable;
+	Model_ListCfg* savedListCfg;
+	Model_FbResolutionsGetter* fbResolutionsGetter;
+	Model_DeviceDataList* deviceDataList;
+	Model_MountTable* mountTable;
 	AboutDialog* aboutDialog;
 	ThreadController* threadController;
 	ContentParserFactory* contentParserFactory;
@@ -85,39 +85,39 @@ class GrubCustomizer : public CommonClass {
 	bool quit_requested;
 	bool is_loading;
 	int activeThreadCount;
-	GrublistCfg::Exception thrownException; //to be used from the die() function
+	Model_ListCfg::Exception thrownException; //to be used from the die() function
 
-	std::string _mapEntryName(Entry const* entry, std::string const& defaultName, std::string const& scriptName = "");
-	void _rAppendRule(Rule& rule, Rule* parentRule = NULL);
+	std::string _mapEntryName(Model_Entry const* entry, std::string const& defaultName, std::string const& scriptName = "");
+	void _rAppendRule(Model_Rule& rule, Model_Rule* parentRule = NULL);
 
 public:
 	enum Exception {
 		INCOMPLETE
 	};
-	void setListCfg(GrublistCfg& grublistCfg);
+	void setListCfg(Model_ListCfg& grublistCfg);
 	void setListCfgDlg(GrublistCfgDlg& listCfgDlg);
 	void setSettingsDialog(SettingsDlg& settingsDlg);
-	void setSettingsManager(SettingsManagerDataStore& settings);
-	void setSettingsBuffer(SettingsManagerDataStore& settings);
-	void setInstaller(GrubInstaller& installer);
+	void setSettingsManager(Model_SettingsManagerData& settings);
+	void setSettingsBuffer(Model_SettingsManagerData& settings);
+	void setInstaller(Model_Installer& installer);
 	void setInstallDlg(GrubInstallDlg& installDlg);
 	void setScriptAddDlg(EntryAddDlg& scriptAddDlg);
 	void setEntryEditDlg(EntryEditDlg& entryEditDlg);
-	void setSavedListCfg(GrublistCfg& savedListCfg);
-	void setFbResolutionsGetter(FbResolutionsGetter& fbResolutionsGetter);
-	void setDeviceDataList(DeviceDataList& deviceDataList);
-	void setMountTable(MountTable& mountTable);
+	void setSavedListCfg(Model_ListCfg& savedListCfg);
+	void setFbResolutionsGetter(Model_FbResolutionsGetter& fbResolutionsGetter);
+	void setDeviceDataList(Model_DeviceDataList& deviceDataList);
+	void setMountTable(Model_MountTable& mountTable);
 	void setAboutDialog(AboutDialog& aboutDialog);
 	void setThreadController(ThreadController& threadController);
 	void setContentParserFactory(ContentParserFactory& contentParserFactory);
 	void setGrubEnvEditor(GrubEnvEditor& envEditor);
 
 	ThreadController& getThreadController();
-	FbResolutionsGetter& getFbResolutionsGetter();
+	Model_FbResolutionsGetter& getFbResolutionsGetter();
 
 	//init functions
 	void init();
-	void init(GrubEnv::Mode mode, bool initEnv = true);
+	void init(Model_Env::Mode mode, bool initEnv = true);
 	void showEnvEditor(bool resetPartitionChooser = false);
 	void handleCancelResponse();
 
@@ -126,9 +126,9 @@ public:
 	void load(bool preserveConfig = false);
 	void save();
 	void save_thread();
-	GrubCustomizer(GrubEnv& env);
+	GrubCustomizer(Model_Env& env);
 	
-	void renameEntry(Rule* rule, std::string const& newName);
+	void renameEntry(Model_Rule* rule, std::string const& newName);
 	void reset();
 	
 	void showInstallDialog();
@@ -153,15 +153,15 @@ public:
 	void quit(bool force = false);
 	
 	void removeRules(std::list<void*> entries);
-	void updateRuleName(Rule* entry, std::string const& newText);
+	void updateRuleName(Model_Rule* entry, std::string const& newText);
 	void moveRules(std::list<void*> rules, int direction);
 	void createSubmenu(std::list<void*> childItems);
 	void removeSubmenu(std::list<void*> childItems);
 	
 	void revertList();
 
-	void showRuleInfo(Rule* rule);
-	void showProxyInfo(Proxy* proxy);
+	void showRuleInfo(Model_Rule* rule);
+	void showProxyInfo(Model_Proxy* proxy);
 
 	void showAboutDialog();
 

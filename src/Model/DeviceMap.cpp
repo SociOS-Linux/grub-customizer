@@ -1,20 +1,20 @@
 #include "DeviceMap.h"
 
-GrubDeviceMap::GrubDeviceMap(GrubEnv const& env) {
+Model_DeviceMap::Model_DeviceMap(Model_Env const& env) {
 	this->env = &env;
 }
-SmartFileHandle GrubDeviceMap::getFileHandle() const {
-	SmartFileHandle result;
+Model_SmartFileHandle Model_DeviceMap::getFileHandle() const {
+	Model_SmartFileHandle result;
 	try {
-		result.open(env->devicemap_file, "r", SmartFileHandle::TYPE_FILE);
-	} catch (SmartFileHandle::Exception e) {
-		result.open(env->mkdevicemap_cmd, "r", SmartFileHandle::TYPE_COMMAND);
+		result.open(env->devicemap_file, "r", Model_SmartFileHandle::TYPE_FILE);
+	} catch (Model_SmartFileHandle::Exception e) {
+		result.open(env->mkdevicemap_cmd, "r", Model_SmartFileHandle::TYPE_COMMAND);
 	}
 	return result;
 }
 
-GrubPartitionIndex GrubDeviceMap::getHarddriveIndexByPartitionUuid(std::string partitionUuid) const {
-	GrubPartitionIndex result;
+Model_DeviceMap_PartitionIndex Model_DeviceMap::getHarddriveIndexByPartitionUuid(std::string partitionUuid) const {
+	Model_DeviceMap_PartitionIndex result;
 	char deviceBuf[101];
 	int size = readlink((this->env->cfg_dir_prefix + "/dev/disk/by-uuid/" + partitionUuid).c_str(), deviceBuf, 100);
 	if (size == -1) { //if this didn't work, try to convert the uuid to uppercase
@@ -33,7 +33,7 @@ GrubPartitionIndex GrubDeviceMap::getHarddriveIndexByPartitionUuid(std::string p
 
 	std::string diskDevice = regexResult[1];
 
-	SmartFileHandle handle = this->getFileHandle();
+	Model_SmartFileHandle handle = this->getFileHandle();
 
 	try {
 		while (result.hddNum == "") {
@@ -49,8 +49,8 @@ GrubPartitionIndex GrubDeviceMap::getHarddriveIndexByPartitionUuid(std::string p
 				}
 			}
 		}
-	} catch (SmartFileHandle::Exception e) {
-		if (e != SmartFileHandle::END_OF_FILE) //don't throw if we didn't find the mapped value
+	} catch (Model_SmartFileHandle::Exception e) {
+		if (e != Model_SmartFileHandle::END_OF_FILE) //don't throw if we didn't find the mapped value
 			throw e;
 	}
 	handle.close();

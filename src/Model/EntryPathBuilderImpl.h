@@ -23,18 +23,18 @@
 #include "Script.h"
 #include <map>
 
-class EntryPathBuilderImpl : public EntryPathBilder {
-	Script const* mainScript;
-	std::map<Entry const*, Script const*> entrySourceMap;
-	std::map<Script const*, std::string> scriptTargetMap;
+class Model_EntryPathBuilderImpl : public EntryPathBilder {
+	Model_Script const* mainScript;
+	std::map<Model_Entry const*, Model_Script const*> entrySourceMap;
+	std::map<Model_Script const*, std::string> scriptTargetMap;
 public:
-	EntryPathBuilderImpl(Script const& mainScript);
-	void setMainScript(Script const& mainScript);
-	void setEntrySourceMap(std::map<Entry const*, Script const*> const& entrySourceMap);
-	void setScriptTargetMap(std::map<Script const*, std::string> const& scriptTargetMap);
-	std::list<std::string> buildPath(Entry const& entry) const;
-	std::string buildPathString(Entry const& entry, bool withOtherEntriesPlaceholder = false) const;
-	std::string buildScriptPath(Entry const& entry) const;
+	Model_EntryPathBuilderImpl(Model_Script const& mainScript);
+	void setMainScript(Model_Script const& mainScript);
+	void setEntrySourceMap(std::map<Model_Entry const*, Model_Script const*> const& entrySourceMap);
+	void setScriptTargetMap(std::map<Model_Script const*, std::string> const& scriptTargetMap);
+	std::list<std::string> buildPath(Model_Entry const& entry) const;
+	std::string buildPathString(Model_Entry const& entry, bool withOtherEntriesPlaceholder = false) const;
+	std::string buildScriptPath(Model_Entry const& entry) const;
 };
 
 #endif

@@ -44,7 +44,7 @@
 #include "../presenter/commonClass.h"
 
 
-class GrublistCfg : public CommonClass {
+class Model_ListCfg : public CommonClass {
 	EventListener_model* eventListener;
 	
 	double progress;
@@ -53,7 +53,7 @@ class GrublistCfg : public CommonClass {
 	Mutex* mutex;
 	std::string errorLogFile;
 public:
-	GrublistCfg(GrubEnv& env);
+	Model_ListCfg(Model_Env& env);
 	void setEventListener(EventListener_model& eventListener);
 	void setMutex(Mutex& mutex);
 	void setLogger(Logger& logger);
@@ -65,12 +65,12 @@ public:
 		MISSING_MUTEX
 	};
 
-	ProxyList proxies;
-	Repository repository;
+	Model_Proxylist proxies;
+	Model_Repository repository;
 	
 	bool verbose;
 	bool error_proxy_not_found;
-	GrubEnv& env;
+	Model_Env& env;
 	void lock();
 	bool lock_if_free();
 	void unlock();
@@ -83,7 +83,7 @@ public:
 	void load(bool preserveConfig = false);
 	void save();
 	void readGeneratedFile(FILE* source, bool createScriptIfNotFound = false, bool createProxyIfNotFound = false);
-	std::map<Entry const*, Script const*> getEntrySources(Proxy const& proxy, Rule const* parent = NULL) const;
+	std::map<Model_Entry const*, Model_Script const*> getEntrySources(Model_Proxy const& proxy, Model_Rule const* parent = NULL) const;
 	bool loadStaticCfg();
 
 	void send_new_load_progress(double newProgress, std::string scriptName = "", int current = 0, int max = 0);
@@ -95,30 +95,30 @@ public:
 	int getProgress_pos() const;
 	int getProgress_max() const;
 
-	void increaseProxyPos(Proxy* proxy);
+	void increaseProxyPos(Model_Proxy* proxy);
 	void renumerate();
 	
-	void swapRules(Rule* a, Rule* b);
-	Rule& moveRule(Rule* rule, int direction);
-	void swapProxies(Proxy* a, Proxy* b);
+	void swapRules(Model_Rule* a, Model_Rule* b);
+	Model_Rule& moveRule(Model_Rule* rule, int direction);
+	void swapProxies(Model_Proxy* a, Model_Proxy* b);
 	
-	Rule* createSubmenu(Rule* position);
-	Rule* splitSubmenu(Rule* child);
+	Model_Rule* createSubmenu(Model_Rule* position);
+	Model_Rule* splitSubmenu(Model_Rule* child);
 
 	bool cfgDirIsClean();
 	void cleanupCfgDir();
 	
-	bool compare(GrublistCfg const& other) const;
-	static std::list<Rule const*> getComparableRules(std::list<Rule> const& list);
-	static bool compareLists(std::list<Rule const*> a, std::list<Rule const*> b);
+	bool compare(Model_ListCfg const& other) const;
+	static std::list<Model_Rule const*> getComparableRules(std::list<Model_Rule> const& list);
+	static bool compareLists(std::list<Model_Rule const*> a, std::list<Model_Rule const*> b);
 	
-	void renameRule(Rule* rule, std::string const& newName);
+	void renameRule(Model_Rule* rule, std::string const& newName);
 	std::string getGrubErrorMessage() const;
 
 	void addColorHelper();
 
-	std::list<Entry*> getRemovedEntries(Entry* parent = NULL);
-	Rule* addEntry(Entry& entry);
+	std::list<Model_Entry*> getRemovedEntries(Model_Entry* parent = NULL);
+	Model_Rule* addEntry(Model_Entry& entry);
 };
 
 #endif

@@ -18,7 +18,7 @@
 
 #include "Repository.h"
 
-void Repository::load(std::string const& directory, bool is_proxifiedScript_dir){
+void Model_Repository::load(std::string const& directory, bool is_proxifiedScript_dir){
 	DIR* dir = opendir(directory.c_str());
 	if (dir){
 		struct dirent *entry;
@@ -27,11 +27,11 @@ void Repository::load(std::string const& directory, bool is_proxifiedScript_dir)
 			stat((directory+"/"+entry->d_name).c_str(), &fileProperties);
 			if ((fileProperties.st_mode & S_IFMT) != S_IFDIR){ //ignore directories
 				bool scriptAdded = false;
-				if (!is_proxifiedScript_dir && !ProxyScriptData::is_proxyscript(directory+"/"+entry->d_name) && std::string(entry->d_name).length() >= 4 && entry->d_name[0] >= '0' && entry->d_name[0] <= '9' && entry->d_name[1] >= '0' && entry->d_name[1] <= '9' && entry->d_name[2] == '_'){
-					this->push_back(Script(std::string(entry->d_name).substr(3), directory+"/"+entry->d_name));
+				if (!is_proxifiedScript_dir && !Model_ProxyScriptData::is_proxyscript(directory+"/"+entry->d_name) && std::string(entry->d_name).length() >= 4 && entry->d_name[0] >= '0' && entry->d_name[0] <= '9' && entry->d_name[1] >= '0' && entry->d_name[1] <= '9' && entry->d_name[2] == '_'){
+					this->push_back(Model_Script(std::string(entry->d_name).substr(3), directory+"/"+entry->d_name));
 					scriptAdded = true;
 				} else if (is_proxifiedScript_dir) {
-					this->push_back(Script(pscriptname_decode(entry->d_name), directory+"/"+entry->d_name));
+					this->push_back(Model_Script(Model_PscriptnameTranslator::decode(entry->d_name), directory+"/"+entry->d_name));
 					scriptAdded = true;
 				}
 				if (scriptAdded && this->hasLogger()) {
@@ -43,14 +43,14 @@ void Repository::load(std::string const& directory, bool is_proxifiedScript_dir)
 	}
 }
 
-Script* Repository::getScriptByFilename(std::string const& fileName, bool createScriptIfNotFound) {
-	Script* result = NULL;
-	for (Repository::iterator iter = this->begin(); iter != this->end() && !result; iter++){
+Model_Script* Model_Repository::getScriptByFilename(std::string const& fileName, bool createScriptIfNotFound) {
+	Model_Script* result = NULL;
+	for (Model_Repository::iterator iter = this->begin(); iter != this->end() && !result; iter++){
 		if (iter->fileName == fileName)
 			result = &*iter;
 	}
 	if (result == NULL && createScriptIfNotFound){
-		this->push_back(Script("noname", fileName));
+		this->push_back(Model_Script("noname", fileName));
 		result = &this->back();
 
 		if (this->hasLogger()) {
@@ -60,17 +60,17 @@ Script* Repository::getScriptByFilename(std::string const& fileName, bool create
 	return result;
 }
 
-Script* Repository::getScriptByName(std::string const& name) {
-	Script* result = NULL;
-	for (Repository::iterator iter = this->begin(); iter != this->end() && !result; iter++){
+Model_Script* Model_Repository::getScriptByName(std::string const& name) {
+	Model_Script* result = NULL;
+	for (Model_Repository::iterator iter = this->begin(); iter != this->end() && !result; iter++){
 		if (iter->name == name)
 			result = &*iter;
 	}
 	return result;
 }
 
-Script* Repository::getScriptByEntry(Entry const& entry) {
-	for (std::list<Script>::iterator iter = this->begin(); iter != this->end(); iter++) {
+Model_Script* Model_Repository::getScriptByEntry(Model_Entry const& entry) {
+	for (std::list<Model_Script>::iterator iter = this->begin(); iter != this->end(); iter++) {
 		if (iter->hasEntry(entry)) {
 			return &*iter;
 		}
@@ -78,8 +78,8 @@ Script* Repository::getScriptByEntry(Entry const& entry) {
 	return NULL;
 }
 
-Script const* Repository::getScriptByEntry(Entry const& entry) const {
-	for (std::list<Script>::const_iterator iter = this->begin(); iter != this->end(); iter++) {
+Model_Script const* Model_Repository::getScriptByEntry(Model_Entry const& entry) const {
+	for (std::list<Model_Script>::const_iterator iter = this->begin(); iter != this->end(); iter++) {
 		if (iter->hasEntry(entry)) {
 			return &*iter;
 		}
@@ -87,8 +87,8 @@ Script const* Repository::getScriptByEntry(Entry const& entry) const {
 	return NULL;
 }
 
-Script* Repository::getCustomScript() {
-	for (std::list<Script>::iterator iter = this->begin(); iter != this->end(); iter++) {
+Model_Script* Model_Repository::getCustomScript() {
+	for (std::list<Model_Script>::iterator iter = this->begin(); iter != this->end(); iter++) {
 		if (iter->isCustomScript) {
 			return &*iter;
 		}
@@ -96,10 +96,10 @@ Script* Repository::getCustomScript() {
 	return NULL;
 }
 
-Script* Repository::getNthScript(int pos){
-	Script* result = NULL;
+Model_Script* Model_Repository::getNthScript(int pos){
+	Model_Script* result = NULL;
 	int i = 0;
-	for (Repository::iterator iter = this->begin(); result == NULL && iter != this->end(); iter++){
+	for (Model_Repository::iterator iter = this->begin(); result == NULL && iter != this->end(); iter++){
 		if (i == pos)
 			result = &*iter;
 		i++;
@@ -107,19 +107,19 @@ Script* Repository::getNthScript(int pos){
 	return result;
 }
 
-void Repository::deleteAllEntries(){
-	for (Repository::iterator iter = this->begin(); iter != this->end(); iter++){
+void Model_Repository::deleteAllEntries(){
+	for (Model_Repository::iterator iter = this->begin(); iter != this->end(); iter++){
 		iter->entries().clear();
 	}
 }
 
-Script* Repository::createScript(std::string const& name, std::string const& fileName, std::string const& content) {
+Model_Script* Model_Repository::createScript(std::string const& name, std::string const& fileName, std::string const& content) {
 	FILE* script = fopen(fileName.c_str(), "w");
 	if (script) {
 		fputs(content.c_str(), script);
 		fclose(script);
 
-		Script newScript(name, fileName);
+		Model_Script newScript(name, fileName);
 		this->push_back(newScript);
 		return &this->back();
 	}
@@ -129,9 +129,9 @@ Script* Repository::createScript(std::string const& name, std::string const& fil
 /**
  * returns a list of all scripts associated by its fileNames
  */
-std::map<std::string, Script*> Repository::getScriptPathMap() {
-	std::map<std::string, Script*> map;
-	for (Repository::iterator iter = this->begin(); iter != this->end(); iter++){
+std::map<std::string, Model_Script*> Model_Repository::getScriptPathMap() {
+	std::map<std::string, Model_Script*> map;
+	for (Model_Repository::iterator iter = this->begin(); iter != this->end(); iter++){
 		map[iter->fileName] = &*iter;
 	}
 	return map;

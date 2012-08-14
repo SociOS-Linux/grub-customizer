@@ -18,20 +18,20 @@
 
 #include "Proxy.h"
 
-Proxy::Proxy()
+Model_Proxy::Model_Proxy()
 	: dataSource(NULL), permissions(0755), index(90)
 {	
 }
 
-Proxy::Proxy(Script& dataSource, bool activateRules)
+Model_Proxy::Model_Proxy(Model_Script& dataSource, bool activateRules)
 	: dataSource(&dataSource), permissions(0755), index(90)
 {
-	rules.push_back(Rule(Rule::OTHER_ENTRIES_PLACEHOLDER, std::list<std::string>(), "*", activateRules));
+	rules.push_back(Model_Rule(Model_Rule::OTHER_ENTRIES_PLACEHOLDER, std::list<std::string>(), "*", activateRules));
 	sync(true, true);
 }
 
-std::list<Rule> Proxy::parseRuleString(const char** ruleString) {
-	std::list<Rule> rules;
+std::list<Model_Rule> Model_Proxy::parseRuleString(const char** ruleString) {
+	std::list<Model_Rule> rules;
 
 	bool inString = false, inAlias = false, inHash = false, inFromClause = false;
 	std::string name;
@@ -54,7 +54,7 @@ std::list<Rule> Proxy::parseRuleString(const char** ruleString) {
 						rules.back().__sourceScriptPath = name;
 					} else {
 						path.push_back(name);
-						rules.push_back(Rule(Rule::NORMAL, path, visible));
+						rules.push_back(Model_Rule(Model_Rule::NORMAL, path, visible));
 						path.clear();
 					}
 					inAlias = false;
@@ -63,11 +63,11 @@ std::list<Rule> Proxy::parseRuleString(const char** ruleString) {
 				name = "";
 			}
 		} else if (!inString && *iter == '*') {
-			rules.push_back(Rule(Rule::OTHER_ENTRIES_PLACEHOLDER, path, "*", visible));
+			rules.push_back(Model_Rule(Model_Rule::OTHER_ENTRIES_PLACEHOLDER, path, "*", visible));
 			path.clear();
 		} else if (!inString && *iter == '#' && *++iter == 't' && *++iter == 'e' && *++iter == 'x' && *++iter == 't') {
 			path.push_back("#text");
-			rules.push_back(Rule(Rule::PLAINTEXT, path, "#text", visible));
+			rules.push_back(Model_Rule(Model_Rule::PLAINTEXT, path, "#text", visible));
 			path.clear();
 			name = "";
 		} else if (inString) {
@@ -85,8 +85,8 @@ std::list<Rule> Proxy::parseRuleString(const char** ruleString) {
 			name = "";
 		} else if (!inString && !inAlias && !inFromClause && *iter == '{') {
 			iter++;
-			rules.back().subRules = Proxy::parseRuleString(&iter);
-			rules.back().type = Rule::SUBMENU;
+			rules.back().subRules = Model_Proxy::parseRuleString(&iter);
+			rules.back().type = Model_Rule::SUBMENU;
 		} else if (!inString && *iter == '~') {
 			inHash = !inHash;
 			if (!inHash) {
@@ -99,16 +99,16 @@ std::list<Rule> Proxy::parseRuleString(const char** ruleString) {
 	return rules;
 }
 
-void Proxy::importRuleString(const char* ruleString){
-	rules = Proxy::parseRuleString(&ruleString);
+void Model_Proxy::importRuleString(const char* ruleString){
+	rules = Model_Proxy::parseRuleString(&ruleString);
 }
 
-Rule* Proxy::getRuleByEntry(Entry const& entry, std::list<Rule>& list, Rule::RuleType ruletype) {
-	for (std::list<Rule>::iterator rule_iter = list.begin(); rule_iter != list.end(); rule_iter++){
+Model_Rule* Model_Proxy::getRuleByEntry(Model_Entry const& entry, std::list<Model_Rule>& list, Model_Rule::RuleType ruletype) {
+	for (std::list<Model_Rule>::iterator rule_iter = list.begin(); rule_iter != list.end(); rule_iter++){
 		if (&entry == rule_iter->dataSource && rule_iter->type == ruletype)
 			return &*rule_iter;
 		else {
-			Rule* result = this->getRuleByEntry(entry, rule_iter->subRules, ruletype);
+			Model_Rule* result = this->getRuleByEntry(entry, rule_iter->subRules, ruletype);
 			if (result)
 				return result;
 		}
@@ -116,9 +116,9 @@ Rule* Proxy::getRuleByEntry(Entry const& entry, std::list<Rule>& list, Rule::Rul
 	return NULL;
 }
 
-void Proxy::unsync(Rule* parent) {
-	std::list<Rule>& list = parent ? parent->subRules : this->rules;
-	for (std::list<Rule>::iterator iter = list.begin(); iter != list.end(); iter++) {
+void Model_Proxy::unsync(Model_Rule* parent) {
+	std::list<Model_Rule>& list = parent ? parent->subRules : this->rules;
+	for (std::list<Model_Rule>::iterator iter = list.begin(); iter != list.end(); iter++) {
 		iter->dataSource = NULL;
 		if (iter->subRules.size()) {
 			this->unsync(&*iter);
@@ -126,7 +126,7 @@ void Proxy::unsync(Rule* parent) {
 	}
 }
 
-bool Proxy::sync(bool deleteInvalidRules, bool expand, std::map<std::string, Script*> scriptMap){
+bool Model_Proxy::sync(bool deleteInvalidRules, bool expand, std::map<std::string, Model_Script*> scriptMap){
 	if (this->dataSource){
 		this->sync_connectExisting(NULL, scriptMap);
 		this->sync_connectExistingByHash(NULL, scriptMap);
@@ -144,18 +144,18 @@ bool Proxy::sync(bool deleteInvalidRules, bool expand, std::map<std::string, Scr
 		return false;
 }
 
-void Proxy::sync_connectExisting(Rule* parent, std::map<std::string, Script*> scriptMap) {
+void Model_Proxy::sync_connectExisting(Model_Rule* parent, std::map<std::string, Model_Script*> scriptMap) {
 	assert(this->dataSource != NULL);
 	if (parent == NULL) {
 		this->__idPathList.clear();
 		this->__idPathList_OtherEntriesPlaceHolders.clear();
 	}
-	std::list<Rule>& list = parent ? parent->subRules : this->rules;
-	for (std::list<Rule>::iterator iter = list.begin(); iter != list.end(); iter++) {
-		if (iter->type != Rule::SUBMENU) { // don't sync submenu entries
+	std::list<Model_Rule>& list = parent ? parent->subRules : this->rules;
+	for (std::list<Model_Rule>::iterator iter = list.begin(); iter != list.end(); iter++) {
+		if (iter->type != Model_Rule::SUBMENU) { // don't sync submenu entries
 			std::list<std::string> path = iter->__idpath;
 
-			Script* script = NULL;
+			Model_Script* script = NULL;
 			if (iter->__sourceScriptPath == "") { // main dataSource
 				script = this->dataSource;
 			} else if (scriptMap.size()) {
@@ -165,7 +165,7 @@ void Proxy::sync_connectExisting(Rule* parent, std::map<std::string, Script*> sc
 				continue; // don't sync foreign entries if scriptMap is empty
 			}
 
-			if (iter->type != Rule::OTHER_ENTRIES_PLACEHOLDER) {
+			if (iter->type != Model_Rule::OTHER_ENTRIES_PLACEHOLDER) {
 				this->__idPathList[script].push_back(path);
 			} else {
 				this->__idPathList_OtherEntriesPlaceHolders[script].push_back(path);
@@ -179,12 +179,12 @@ void Proxy::sync_connectExisting(Rule* parent, std::map<std::string, Script*> sc
 	}
 }
 
-void Proxy::sync_connectExistingByHash(Rule* parent, std::map<std::string, Script*> scriptMap) {
+void Model_Proxy::sync_connectExistingByHash(Model_Rule* parent, std::map<std::string, Model_Script*> scriptMap) {
 	assert(this->dataSource != NULL);
-	std::list<Rule>& list = parent ? parent->subRules : this->rules;
-	for (std::list<Rule>::iterator iter = list.begin(); iter != list.end(); iter++) {
+	std::list<Model_Rule>& list = parent ? parent->subRules : this->rules;
+	for (std::list<Model_Rule>::iterator iter = list.begin(); iter != list.end(); iter++) {
 		if (iter->dataSource == NULL && iter->__idHash != "") {
-			Script* script = NULL;
+			Model_Script* script = NULL;
 			if (iter->__sourceScriptPath == "") {
 				script = this->dataSource;
 			} else if (scriptMap.size()) {
@@ -204,7 +204,7 @@ void Proxy::sync_connectExistingByHash(Rule* parent, std::map<std::string, Scrip
 	}
 }
 
-void Proxy::sync_add_placeholders(Rule* parent, std::map<std::string, Script*> scriptMap) {
+void Model_Proxy::sync_add_placeholders(Model_Rule* parent, std::map<std::string, Model_Script*> scriptMap) {
 	assert(parent == NULL || parent->dataSource != NULL);
 
 	std::list<std::string> path = parent ? this->dataSource->buildPath(*parent->dataSource) : std::list<std::string>();
@@ -218,45 +218,45 @@ void Proxy::sync_add_placeholders(Rule* parent, std::map<std::string, Script*> s
 		}
 	}
 
-	std::list<Rule>& list = parent ? parent->subRules : this->rules;
+	std::list<Model_Rule>& list = parent ? parent->subRules : this->rules;
 	if (!eop_is_blacklisted) {
-		Rule newRule(Rule::OTHER_ENTRIES_PLACEHOLDER, parent ? this->dataSource->buildPath(*parent->dataSource) : std::list<std::string>(), "*", true);
+		Model_Rule newRule(Model_Rule::OTHER_ENTRIES_PLACEHOLDER, parent ? this->dataSource->buildPath(*parent->dataSource) : std::list<std::string>(), "*", true);
 		newRule.dataSource = this->dataSource->getEntryByPath(path);
 		list.push_front(newRule);
 		this->__idPathList_OtherEntriesPlaceHolders[this->dataSource].push_back(path);
 	}
 
 	//sub entries (recursion)
-	for (std::list<Rule>::iterator iter = list.begin(); iter != list.end(); iter++) {
-		if (iter->dataSource && iter->type == Rule::SUBMENU) {
+	for (std::list<Model_Rule>::iterator iter = list.begin(); iter != list.end(); iter++) {
+		if (iter->dataSource && iter->type == Model_Rule::SUBMENU) {
 			this->sync_add_placeholders(&*iter);
 		}
 	}
 }
 
 
-void Proxy::sync_expand(std::map<std::string, Script*> scriptMap) {
+void Model_Proxy::sync_expand(std::map<std::string, Model_Script*> scriptMap) {
 	assert(this->dataSource != NULL);
-	for (std::map<Script*, std::list<std::list<std::string> > >::iterator scriptIter = this->__idPathList_OtherEntriesPlaceHolders.begin(); scriptIter != this->__idPathList_OtherEntriesPlaceHolders.end(); scriptIter++) {
+	for (std::map<Model_Script*, std::list<std::list<std::string> > >::iterator scriptIter = this->__idPathList_OtherEntriesPlaceHolders.begin(); scriptIter != this->__idPathList_OtherEntriesPlaceHolders.end(); scriptIter++) {
 		for (std::list<std::list<std::string> >::iterator oepPathIter = this->__idPathList_OtherEntriesPlaceHolders[scriptIter->first].begin(); oepPathIter != this->__idPathList_OtherEntriesPlaceHolders[scriptIter->first].end(); oepPathIter++) {
-			Entry* dataSource = scriptIter->first->getEntryByPath(*oepPathIter);
+			Model_Entry* dataSource = scriptIter->first->getEntryByPath(*oepPathIter);
 			if (dataSource) {
-				Rule* oep = this->getRuleByEntry(*dataSource, this->rules, Rule::OTHER_ENTRIES_PLACEHOLDER);
+				Model_Rule* oep = this->getRuleByEntry(*dataSource, this->rules, Model_Rule::OTHER_ENTRIES_PLACEHOLDER);
 				assert(oep != NULL);
-				Rule* parentRule = this->getParentRule(oep);
-				std::list<Rule>& dataTarget = parentRule ? parentRule->subRules : this->rules;
+				Model_Rule* parentRule = this->getParentRule(oep);
+				std::list<Model_Rule>& dataTarget = parentRule ? parentRule->subRules : this->rules;
 
-				std::list<Rule>::iterator dataTargetIter = dataTarget.begin();
-				while (dataTargetIter != dataTarget.end() && !(dataTargetIter->type == Rule::OTHER_ENTRIES_PLACEHOLDER && dataTargetIter->__idpath == *oepPathIter && (dataTargetIter->__sourceScriptPath != "" && scriptMap.size() && scriptMap[dataTargetIter->__sourceScriptPath] == scriptIter->first || dataTargetIter->__sourceScriptPath == "" && scriptIter->first == this->dataSource))){
+				std::list<Model_Rule>::iterator dataTargetIter = dataTarget.begin();
+				while (dataTargetIter != dataTarget.end() && !(dataTargetIter->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER && dataTargetIter->__idpath == *oepPathIter && (dataTargetIter->__sourceScriptPath != "" && scriptMap.size() && scriptMap[dataTargetIter->__sourceScriptPath] == scriptIter->first || dataTargetIter->__sourceScriptPath == "" && scriptIter->first == this->dataSource))){
 					dataTargetIter++;
 				}
-				std::list<Rule> newRules;
-				for (std::list<Entry>::iterator iter = dataSource->subEntries.begin(); iter != dataSource->subEntries.end(); iter++){
-					Rule* relatedRule = this->getRuleByEntry(*iter, this->rules, Rule::NORMAL);
-					Rule* relatedRulePt = this->getRuleByEntry(*iter, this->rules, Rule::PLAINTEXT);
-					Rule* relatedRuleOep = this->getRuleByEntry(*iter, this->rules, Rule::OTHER_ENTRIES_PLACEHOLDER);
+				std::list<Model_Rule> newRules;
+				for (std::list<Model_Entry>::iterator iter = dataSource->subEntries.begin(); iter != dataSource->subEntries.end(); iter++){
+					Model_Rule* relatedRule = this->getRuleByEntry(*iter, this->rules, Model_Rule::NORMAL);
+					Model_Rule* relatedRulePt = this->getRuleByEntry(*iter, this->rules, Model_Rule::PLAINTEXT);
+					Model_Rule* relatedRuleOep = this->getRuleByEntry(*iter, this->rules, Model_Rule::OTHER_ENTRIES_PLACEHOLDER);
 					if (!relatedRule && !relatedRuleOep && !relatedRulePt){
-						newRules.push_back(Rule(*iter, dataTargetIter->isVisible, *scriptIter->first, this->__idPathList[scriptIter->first], scriptIter->first->buildPath(*iter))); //generate rule for given entry
+						newRules.push_back(Model_Rule(*iter, dataTargetIter->isVisible, *scriptIter->first, this->__idPathList[scriptIter->first], scriptIter->first->buildPath(*iter))); //generate rule for given entry
 					}
 				}
 				dataTargetIter++;
@@ -266,17 +266,17 @@ void Proxy::sync_expand(std::map<std::string, Script*> scriptMap) {
 	}
 }
 
-void Proxy::sync_cleanup(Rule* parent, std::map<std::string, Script*> scriptMap) {
-	std::list<Rule>& list = parent ? parent->subRules : this->rules;
+void Model_Proxy::sync_cleanup(Model_Rule* parent, std::map<std::string, Model_Script*> scriptMap) {
+	std::list<Model_Rule>& list = parent ? parent->subRules : this->rules;
 
 	bool done = false;
 	do {
 		bool listModified = false;
-		for (std::list<Rule>::iterator iter = list.begin(); !listModified && iter != list.end(); iter++) {
-			if (!(iter->type == Rule::NORMAL && iter->dataSource ||
-				  iter->type == Rule::SUBMENU && iter->subRules.size() ||
-				  iter->type == Rule::OTHER_ENTRIES_PLACEHOLDER && iter->dataSource ||
-				  iter->type == Rule::PLAINTEXT && iter->dataSource)) {
+		for (std::list<Model_Rule>::iterator iter = list.begin(); !listModified && iter != list.end(); iter++) {
+			if (!(iter->type == Model_Rule::NORMAL && iter->dataSource ||
+				  iter->type == Model_Rule::SUBMENU && iter->subRules.size() ||
+				  iter->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER && iter->dataSource ||
+				  iter->type == Model_Rule::PLAINTEXT && iter->dataSource)) {
 				if (iter->__sourceScriptPath == "" || scriptMap.size()) {
 					list.erase(iter);
 					listModified = true; //after ereasing something we have to create a new iterator
@@ -291,23 +291,23 @@ void Proxy::sync_cleanup(Rule* parent, std::map<std::string, Script*> scriptMap)
 	} while (!done);
 }
 
-bool Proxy::isModified(Rule const* parentRule, Entry const* parentEntry) const {
+bool Model_Proxy::isModified(Model_Rule const* parentRule, Model_Entry const* parentEntry) const {
 	assert(this->dataSource != NULL);
 	bool result = false;
 
-	std::list<Rule> const& rlist = parentRule ? parentRule->subRules : this->rules;
-	std::list<Entry> const& elist = parentEntry ? parentEntry->subEntries : this->dataSource->entries();
+	std::list<Model_Rule> const& rlist = parentRule ? parentRule->subRules : this->rules;
+	std::list<Model_Entry> const& elist = parentEntry ? parentEntry->subEntries : this->dataSource->entries();
 	if (rlist.size()-1 == elist.size()){ //rules contains the other entries placeholder, so there is one more entry
-		std::list<Rule>::const_iterator ruleIter = rlist.begin();
-		std::list<Entry>::const_iterator entryIter = elist.begin();
-		if (ruleIter->type == Rule::OTHER_ENTRIES_PLACEHOLDER){ //the first element is the OTHER_ENTRIES_PLACEHOLDER by default.
+		std::list<Model_Rule>::const_iterator ruleIter = rlist.begin();
+		std::list<Model_Entry>::const_iterator entryIter = elist.begin();
+		if (ruleIter->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER){ //the first element is the OTHER_ENTRIES_PLACEHOLDER by default.
 			result = !ruleIter->isVisible; //If not visible, it's modified…
 			ruleIter++;
 		}
 		while (!result && ruleIter != rlist.end() && entryIter != elist.end()){
 			if (ruleIter->outputName != entryIter->name || !ruleIter->isVisible) {
 				result = true;
-			} else if (ruleIter->type == Rule::SUBMENU) {
+			} else if (ruleIter->type == Model_Rule::SUBMENU) {
 				result = this->isModified(&*ruleIter, &*entryIter);
 			}
 
@@ -320,7 +320,7 @@ bool Proxy::isModified(Rule const* parentRule, Entry const* parentEntry) const {
 	return result;
 }
 
-bool Proxy::deleteFile(){
+bool Model_Proxy::deleteFile(){
 	int success = unlink(this->fileName.c_str());
 	if (success == 0){
 		this->fileName = "";
@@ -330,9 +330,9 @@ bool Proxy::deleteFile(){
 		return false;
 }
 
-std::list<std::string> Proxy::getScriptList(std::map<Entry const*, Script const*> const& entrySourceMap, std::map<Script const*, std::string> const& scriptTargetMap) const {
+std::list<std::string> Model_Proxy::getScriptList(std::map<Model_Entry const*, Model_Script const*> const& entrySourceMap, std::map<Model_Script const*, std::string> const& scriptTargetMap) const {
 	std::map<std::string, void*> uniqueList; // the pointer (value) is just a dummy
-	for (std::map<Entry const*, Script const*>::const_iterator iter = entrySourceMap.begin(); iter != entrySourceMap.end(); iter++) {
+	for (std::map<Model_Entry const*, Model_Script const*>::const_iterator iter = entrySourceMap.begin(); iter != entrySourceMap.end(); iter++) {
 		uniqueList[scriptTargetMap.find(iter->second)->second] = NULL;
 	}
 	std::list<std::string> result;
@@ -343,7 +343,7 @@ std::list<std::string> Proxy::getScriptList(std::map<Entry const*, Script const*
 	return result;
 }
 
-bool Proxy::generateFile(std::string const& path, int cfg_dir_prefix_length, std::string const& cfg_dir_noprefix, std::map<Entry const*, Script const*> entrySourceMap, std::map<Script const*, std::string> const& scriptTargetMap){
+bool Model_Proxy::generateFile(std::string const& path, int cfg_dir_prefix_length, std::string const& cfg_dir_noprefix, std::map<Model_Entry const*, Model_Script const*> entrySourceMap, std::map<Model_Script const*, std::string> const& scriptTargetMap){
 	if (this->dataSource){
 		FILE* proxyFile = fopen(path.c_str(), "w");
 		if (proxyFile){
@@ -365,9 +365,9 @@ bool Proxy::generateFile(std::string const& path, int cfg_dir_prefix_length, std
 				fputs("'", proxyFile);
 			}
 			fputs((" | "+cfg_dir_noprefix+"/bin/grubcfg_proxy \"").c_str(), proxyFile);
-			for (std::list<Rule>::iterator ruleIter = this->rules.begin(); ruleIter != this->rules.end(); ruleIter++){
+			for (std::list<Model_Rule>::iterator ruleIter = this->rules.begin(); ruleIter != this->rules.end(); ruleIter++){
 				assert(this->dataSource != NULL);
-				EntryPathBuilderImpl entryPathBuilder(*this->dataSource);
+				Model_EntryPathBuilderImpl entryPathBuilder(*this->dataSource);
 				entryPathBuilder.setScriptTargetMap(scriptTargetMap);
 				entryPathBuilder.setEntrySourceMap(entrySourceMap);
 				fputs((ruleIter->toString(entryPathBuilder)+"\n").c_str(), proxyFile); //write rule
@@ -384,19 +384,19 @@ bool Proxy::generateFile(std::string const& path, int cfg_dir_prefix_length, std
 	return false;
 }
 
-bool Proxy::isExecutable() const {
+bool Model_Proxy::isExecutable() const {
 	return this->permissions & 0111;
 }
 
 
-void Proxy::set_isExecutable(bool value){
+void Model_Proxy::set_isExecutable(bool value){
 	if (value)
 		permissions |= 0111;
 	else
 		permissions &= ~0111;
 }
 
-std::string Proxy::getScriptName(){
+std::string Model_Proxy::getScriptName(){
 	if (this->dataSource)
 		return this->dataSource->name;
 	else
@@ -404,24 +404,24 @@ std::string Proxy::getScriptName(){
 }
 
 
-Rule& Proxy::moveRule(Rule* rule, int direction) {
-	std::list<Rule>& ruleList = this->getRuleList(this->getParentRule(rule));
+Model_Rule& Model_Proxy::moveRule(Model_Rule* rule, int direction) {
+	std::list<Model_Rule>& ruleList = this->getRuleList(this->getParentRule(rule));
 
-	std::list<Rule>::iterator el = this->getListIterator(*rule, ruleList);
-	Rule* parent = NULL;
+	std::list<Model_Rule>::iterator el = this->getListIterator(*rule, ruleList);
+	Model_Rule* parent = NULL;
 	try {
 		parent = this->getParentRule(rule);
-	} catch (Proxy::Exception e) {} // leave parent in NULL state
-	std::list<Rule>& sourceList = this->getRuleList(parent);
+	} catch (Model_Proxy::Exception e) {} // leave parent in NULL state
+	std::list<Model_Rule>& sourceList = this->getRuleList(parent);
 
 
-	std::list<Rule>::iterator next = this->rules.end();
+	std::list<Model_Rule>::iterator next = this->rules.end();
 
 	bool needToGoUp = false;
 	try {
 		next = this->getNextVisibleRule(el, direction);
-	} catch (Proxy::Exception e) {
-		if (e == Proxy::NO_MOVE_TARGET_FOUND && &sourceList != &this->rules) {
+	} catch (Model_Proxy::Exception e) {
+		if (e == Model_Proxy::NO_MOVE_TARGET_FOUND && &sourceList != &this->rules) {
 			needToGoUp = true;
 		} else {
 			throw e;
@@ -430,21 +430,21 @@ Rule& Proxy::moveRule(Rule* rule, int direction) {
 
 	try {
 		parent = this->getParentRule(&*next);
-	} catch (Proxy::Exception e) {} // leave parent in NULL state
-	std::list<Rule>* targetList = &this->getRuleList(parent);
+	} catch (Model_Proxy::Exception e) {} // leave parent in NULL state
+	std::list<Model_Rule>* targetList = &this->getRuleList(parent);
 
-	Rule* newRule = rule;
+	Model_Rule* newRule = rule;
 
-	std::list<Rule>::iterator insertPos = next;
+	std::list<Model_Rule>::iterator insertPos = next;
 
 	if (needToGoUp) {
-		Rule* parentSubmenu = this->getParentRule(rule);
+		Model_Rule* parentSubmenu = this->getParentRule(rule);
 		targetList = &this->getRuleList(this->getParentRule(parentSubmenu));
 		insertPos = this->getListIterator(*parentSubmenu, *targetList);
 		if (direction == 1) {
 			insertPos++;
 		}
-	} else if (next->type == Rule::SUBMENU) {
+	} else if (next->type == Model_Rule::SUBMENU) {
 		targetList = &next->subRules;
 		insertPos = direction == -1 ? targetList->end() : targetList->begin();
 	} else {
@@ -454,15 +454,15 @@ Rule& Proxy::moveRule(Rule* rule, int direction) {
 	}
 
 	if (targetList == &this->rules && rule->dataSource && !this->ruleIsFromOwnScript(*rule)) {
-		throw Proxy::SHOULD_BE_A_NEW_INSTANCE;
+		throw Model_Proxy::SHOULD_BE_A_NEW_INSTANCE;
 	}
 
 	newRule = &*targetList->insert(insertPos, *rule);
 
 	if (ruleList.size() == 1) {
 		// delete parent list if empty
-		Rule* parent = this->getParentRule(rule);
-		std::list<Rule>& parentOfParent = this->getRuleList(this->getParentRule(this->getParentRule(rule)));
+		Model_Rule* parent = this->getParentRule(rule);
+		std::list<Model_Rule>& parentOfParent = this->getRuleList(this->getParentRule(this->getParentRule(rule)));
 		parentOfParent.erase(this->getListIterator(*parent, parentOfParent));
 	} else {
 		ruleList.erase(this->getListIterator(*rule, ruleList));
@@ -472,16 +472,16 @@ Rule& Proxy::moveRule(Rule* rule, int direction) {
 	return *newRule;
 }
 
-void Proxy::merge(Proxy const& foreignProxy, int direction) {
+void Model_Proxy::merge(Model_Proxy const& foreignProxy, int direction) {
 	if (direction == -1) {
-		for (std::list<Rule>::const_iterator iter = foreignProxy.rules.begin(); iter != foreignProxy.rules.end(); iter++) {
+		for (std::list<Model_Rule>::const_iterator iter = foreignProxy.rules.begin(); iter != foreignProxy.rules.end(); iter++) {
 			if (iter->isVisible) {
 				this->removeEquivalentRules(*iter);
 				this->rules.push_back(*iter);
 			}
 		}
 	} else {
-		for (std::list<Rule>::const_reverse_iterator iter = foreignProxy.rules.rbegin(); iter != foreignProxy.rules.rend(); iter++) {
+		for (std::list<Model_Rule>::const_reverse_iterator iter = foreignProxy.rules.rbegin(); iter != foreignProxy.rules.rend(); iter++) {
 			if (iter->isVisible) {
 				this->removeEquivalentRules(*iter);
 				this->rules.push_front(*iter);
@@ -490,13 +490,13 @@ void Proxy::merge(Proxy const& foreignProxy, int direction) {
 	}
 }
 
-std::list<Rule>::iterator Proxy::getNextVisibleRule(std::list<Rule>::iterator base, int direction) {
+std::list<Model_Rule>::iterator Model_Proxy::getNextVisibleRule(std::list<Model_Rule>::iterator base, int direction) {
 	assert(direction == -1 || direction == 1);
-	Rule* parent = NULL;
+	Model_Rule* parent = NULL;
 	try {
 		parent = this->getParentRule(&*base);
-	} catch (Proxy::Exception e) {} // leave parent in NULL state
-	std::list<Rule>* list = &this->getRuleList(parent);
+	} catch (Model_Proxy::Exception e) {} // leave parent in NULL state
+	std::list<Model_Rule>* list = &this->getRuleList(parent);
 
 	do {
 		if (direction == 1) {
@@ -506,20 +506,20 @@ std::list<Rule>::iterator Proxy::getNextVisibleRule(std::list<Rule>::iterator ba
 		}
 	} while (!base->isVisible && base != list->end());
 	if (base == list->end()) {
-		throw Proxy::NO_MOVE_TARGET_FOUND;
+		throw Model_Proxy::NO_MOVE_TARGET_FOUND;
 	}
 	return base;
 }
 
-Rule* Proxy::splitSubmenu(Rule* position) {
-	Rule* parent = this->getParentRule(position);
+Model_Rule* Model_Proxy::splitSubmenu(Model_Rule* position) {
+	Model_Rule* parent = this->getParentRule(position);
 
 	// search items before and after the submenu
-	std::list<Rule> rulesBefore;
-	std::list<Rule> rulesAfter;
+	std::list<Model_Rule> rulesBefore;
+	std::list<Model_Rule> rulesAfter;
 
 	bool isBehindChildtem = false;
-	for (std::list<Rule>::iterator iter = parent->subRules.begin(); iter != parent->subRules.end(); iter++) {
+	for (std::list<Model_Rule>::iterator iter = parent->subRules.begin(); iter != parent->subRules.end(); iter++) {
 		if (&*iter != position) {
 			if (!isBehindChildtem) {
 				rulesBefore.push_back(*iter);
@@ -531,11 +531,11 @@ Rule* Proxy::splitSubmenu(Rule* position) {
 			isBehindChildtem = true;
 		}
 	}
-	Rule oldSubmenu = *parent;
+	Model_Rule oldSubmenu = *parent;
 	oldSubmenu.subRules.clear();
 
-	std::list<Rule>* list = NULL;
-	Rule* parentRule = this->getParentRule(parent);
+	std::list<Model_Rule>* list = NULL;
+	Model_Rule* parentRule = this->getParentRule(parent);
 	if (parentRule) {
 		list = &parentRule->subRules;
 	} else {
@@ -544,17 +544,17 @@ Rule* Proxy::splitSubmenu(Rule* position) {
 	assert(list != NULL);
 	// add the rules before and/or after to new submenus
 	if (rulesBefore.size()) {
-		Rule newSubmenu = oldSubmenu;
+		Model_Rule newSubmenu = oldSubmenu;
 		newSubmenu.subRules = rulesBefore;
 		list->insert(this->getListIterator(*parent, *list), newSubmenu);
 	}
 
 
-	Rule newSubmenu = oldSubmenu;
+	Model_Rule newSubmenu = oldSubmenu;
 	newSubmenu.subRules = rulesAfter;
-	std::list<Rule>::iterator iter = this->getListIterator(*parent, *list);
+	std::list<Model_Rule>::iterator iter = this->getListIterator(*parent, *list);
 	iter++;
-	std::list<Rule>::iterator insertPos = list->insert(iter, newSubmenu);
+	std::list<Model_Rule>::iterator insertPos = list->insert(iter, newSubmenu);
 
 	// remove the submenu
 	list->erase(this->getListIterator(*parent, *list));
@@ -562,16 +562,16 @@ Rule* Proxy::splitSubmenu(Rule* position) {
 	return &insertPos->subRules.front();
 }
 
-Rule* Proxy::createSubmenu(Rule* position) {
-	std::list<Rule>& list = this->getRuleList(this->getParentRule(position));
-	std::list<Rule>::iterator posIter = this->getListIterator(*position, list);
+Model_Rule* Model_Proxy::createSubmenu(Model_Rule* position) {
+	std::list<Model_Rule>& list = this->getRuleList(this->getParentRule(position));
+	std::list<Model_Rule>::iterator posIter = this->getListIterator(*position, list);
 
-	std::list<Rule>::iterator insertPos = list.insert(posIter, Rule(Rule::SUBMENU, std::list<std::string>(), "", true));
+	std::list<Model_Rule>::iterator insertPos = list.insert(posIter, Model_Rule(Model_Rule::SUBMENU, std::list<std::string>(), "", true));
 
 	return &*insertPos;
 }
 
-bool Proxy::ruleIsFromOwnScript(Rule const& rule) const {
+bool Model_Proxy::ruleIsFromOwnScript(Model_Rule const& rule) const {
 	assert(this->dataSource != NULL);
 	assert(rule.dataSource != NULL);
 	if (this->dataSource->hasEntry(*rule.dataSource)) {
@@ -581,16 +581,16 @@ bool Proxy::ruleIsFromOwnScript(Rule const& rule) const {
 	}
 }
 
-Rule* Proxy::getParentRule(Rule* child, Rule* root) {
-	std::list<Rule>& list = root ? root->subRules : this->rules;
-	for (std::list<Rule>::iterator iter = list.begin(); iter != list.end(); iter++) {
+Model_Rule* Model_Proxy::getParentRule(Model_Rule* child, Model_Rule* root) {
+	std::list<Model_Rule>& list = root ? root->subRules : this->rules;
+	for (std::list<Model_Rule>::iterator iter = list.begin(); iter != list.end(); iter++) {
 		if (&*iter == child)
 			return root;
 		else if (iter->subRules.size()) {
-			Rule* parentRule = NULL;
+			Model_Rule* parentRule = NULL;
 			try {
 				parentRule = this->getParentRule(child, &*iter);
-			} catch (Proxy::Exception e) {
+			} catch (Model_Proxy::Exception e) {
 				if (e != RULE_NOT_FOUND)
 					throw e;
 			}
@@ -602,8 +602,8 @@ Rule* Proxy::getParentRule(Rule* child, Rule* root) {
 	throw RULE_NOT_FOUND;
 }
 
-std::list<Rule>::iterator Proxy::getListIterator(Rule const& needle, std::list<Rule>& haystack) {
-	for (std::list<Rule>::iterator iter = haystack.begin(); iter != haystack.end(); iter++) {
+std::list<Model_Rule>::iterator Model_Proxy::getListIterator(Model_Rule const& needle, std::list<Model_Rule>& haystack) {
+	for (std::list<Model_Rule>::iterator iter = haystack.begin(); iter != haystack.end(); iter++) {
 		if (&*iter == &needle)
 			return iter;
 	}
@@ -611,14 +611,14 @@ std::list<Rule>::iterator Proxy::getListIterator(Rule const& needle, std::list<R
 	throw RULE_NOT_FOUND;
 }
 
-std::list<Rule>& Proxy::getRuleList(Rule* parentElement) {
+std::list<Model_Rule>& Model_Proxy::getRuleList(Model_Rule* parentElement) {
 	if (parentElement)
 		return parentElement->subRules;
 	else
 		return this->rules;
 }
 
-void Proxy::adjustIterator(std::list<Rule>::iterator& iter, int adjustment) {
+void Model_Proxy::adjustIterator(std::list<Model_Rule>::iterator& iter, int adjustment) {
 	if (adjustment > 0) {
 		for (int i = 0; i < adjustment; i++) {
 			iter++;
@@ -630,11 +630,11 @@ void Proxy::adjustIterator(std::list<Rule>::iterator& iter, int adjustment) {
 	}
 }
 
-void Proxy::removeForeignChildRules(Rule& parent) {
+void Model_Proxy::removeForeignChildRules(Model_Rule& parent) {
 	bool loopRestartRequired = false;
 	do { // required to restart the loop after an entry has been removed
 		loopRestartRequired = false;
-		for (std::list<Rule>::iterator iter = parent.subRules.begin(); iter != parent.subRules.end(); iter++) {
+		for (std::list<Model_Rule>::iterator iter = parent.subRules.begin(); iter != parent.subRules.end(); iter++) {
 			if (iter->dataSource) {
 				if (!this->ruleIsFromOwnScript(*iter)) {
 					parent.subRules.erase(iter);
@@ -653,24 +653,24 @@ void Proxy::removeForeignChildRules(Rule& parent) {
 	} while (loopRestartRequired);
 }
 
-void Proxy::removeEquivalentRules(Rule const& base) {
+void Model_Proxy::removeEquivalentRules(Model_Rule const& base) {
 	if (base.dataSource) {
-		Rule* eqRule = this->getRuleByEntry(*base.dataSource, this->rules, base.type);
+		Model_Rule* eqRule = this->getRuleByEntry(*base.dataSource, this->rules, base.type);
 		if (eqRule) {
-			Rule* parent = NULL;
+			Model_Rule* parent = NULL;
 			int rlist_size = 0;
 			do {
 				try {
 					parent = this->getParentRule(eqRule);
-				} catch (Proxy::Exception e) {
-					if (e == Proxy::RULE_NOT_FOUND) {
+				} catch (Model_Proxy::Exception e) {
+					if (e == Model_Proxy::RULE_NOT_FOUND) {
 						parent = NULL;
 					} else {
 						throw e;
 					}
 				}
-				std::list<Rule>& rlist = this->getRuleList(parent);
-				std::list<Rule>::iterator iter = this->getListIterator(*eqRule, rlist);
+				std::list<Model_Rule>& rlist = this->getRuleList(parent);
+				std::list<Model_Rule>::iterator iter = this->getListIterator(*eqRule, rlist);
 				rlist.erase(iter);
 
 				eqRule = parent; // go one step up to remove this rule if empty
@@ -678,19 +678,19 @@ void Proxy::removeEquivalentRules(Rule const& base) {
 			} while (rlist_size == 0 && parent != NULL); // delete all the empty submenus above
 		}
 	} else if (base.subRules.size()) {
-		for (std::list<Rule>::const_iterator iter = base.subRules.begin(); iter != base.subRules.end(); iter++) {
+		for (std::list<Model_Rule>::const_iterator iter = base.subRules.begin(); iter != base.subRules.end(); iter++) {
 			this->removeEquivalentRules(*iter);
 		}
 	}
 }
 
-bool Proxy::hasVisibleRules(Rule const* parent) const {
-	std::list<Rule> const& list = parent ? parent->subRules : this->rules;
-	for (std::list<Rule>::const_iterator iter = list.begin(); iter != list.end(); iter++) {
+bool Model_Proxy::hasVisibleRules(Model_Rule const* parent) const {
+	std::list<Model_Rule> const& list = parent ? parent->subRules : this->rules;
+	for (std::list<Model_Rule>::const_iterator iter = list.begin(); iter != list.end(); iter++) {
 		if (iter->isVisible) {
 			return true;
 		}
-		if (iter->type == Rule::SUBMENU) {
+		if (iter->type == Model_Rule::SUBMENU) {
 			bool has = this->hasVisibleRules(&*iter);
 			if (has) {
 				return true;
@@ -700,13 +700,13 @@ bool Proxy::hasVisibleRules(Rule const* parent) const {
 	return false;
 }
 
-Rule* Proxy::getVisibleRuleForEntry(Entry const& entry, Rule* parent) {
-	std::list<Rule>& list = parent ? parent->subRules : this->rules;
-	for (std::list<Rule>::iterator iter = list.begin(); iter != list.end(); iter++) {
+Model_Rule* Model_Proxy::getVisibleRuleForEntry(Model_Entry const& entry, Model_Rule* parent) {
+	std::list<Model_Rule>& list = parent ? parent->subRules : this->rules;
+	for (std::list<Model_Rule>::iterator iter = list.begin(); iter != list.end(); iter++) {
 		if (iter->isVisible && iter->dataSource == &entry) {
 			return &*iter;
 		}
-		Rule* subResult = this->getVisibleRuleForEntry(entry, &*iter);
+		Model_Rule* subResult = this->getVisibleRuleForEntry(entry, &*iter);
 		if (subResult) {
 			return subResult;
 		}
