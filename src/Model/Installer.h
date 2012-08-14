@@ -16,21 +16,22 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "pscriptname_translator.h"
+#ifndef GRUB_INSTALLER_INCLUDED
+#define GRUB_INSTALLER_INCLUDED
+#include <string>
+#include "Env.h"
+#include "../interface/evt_model.h"
+#include "../presenter/commonClass.h"
 
-std::string pscriptname_decode(std::string const& input){
-	std::string result = input;
-	int last_nonnum_pos = input.find_last_not_of("0123456789");
-	if (last_nonnum_pos != -1 && result[last_nonnum_pos] == '~' && last_nonnum_pos != input.length()-1)
-		result = result.substr(0, last_nonnum_pos);
-	return result;
-}
+class GrubInstaller : public CommonClass {
+	GrubEnv& env;
+	std::string install_result;
+	EventListener_model* eventListener;
+public:
+	GrubInstaller(GrubEnv& env);
+	void threadable_install(std::string const& device);
+	std::string install(std::string const& device);
+	void setEventListener(EventListener_model& eventListener);
+};
 
-std::string pscriptname_encode(std::string const& input, int x){
-	std::ostringstream out;
-	out << input;
-	int last_nonnum_pos = input.find_last_not_of("0123456789");
-	if (x != 0 || (last_nonnum_pos != -1 && input[last_nonnum_pos] == '~') && last_nonnum_pos != input.length()-1)
-		out << "~" << x;
-	return out.str();
-}
+#endif

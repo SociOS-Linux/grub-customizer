@@ -1,4 +1,4 @@
-#include "smartFileHandle.h"
+#include "SmartFileHandle.h"
 
 SmartFileHandle::SmartFileHandle()
 	: isCmd(false), proc_or_file(NULL)

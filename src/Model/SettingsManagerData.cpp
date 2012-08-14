@@ -16,7 +16,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "settings_mng_ds.h"
+#include "SettingsManagerData.h"
 
 SettingsManagerDataStore::SettingsManagerDataStore(GrubEnv& env)
 	: _reloadRequired(false), env(env), color_helper_required(false), grubFontSize(-1)

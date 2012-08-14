@@ -19,7 +19,7 @@
 #ifndef CONTENT_PARSER_LINUX_H_
 #define CONTENT_PARSER_LINUX_H_
 #include "../regex.h"
-#include "../../model/grubDeviceMap.h"
+#include "../../Model/DeviceMap.h"
 #include "Abstract.h"
 
 class ContentParserLinux : public ContentParserAbstract {

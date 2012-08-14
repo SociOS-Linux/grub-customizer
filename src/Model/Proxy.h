@@ -18,13 +18,13 @@
 
 #ifndef GRUB_CUSTOMIZER_PROXY_INCLUDED
 #define GRUB_CUSTOMIZER_PROXY_INCLUDED
-#include "rule.h"
-#include "script.h"
+#include "Rule.h"
+#include "Script.h"
 #include <sys/stat.h>
 #include <assert.h>
 #include <unistd.h>
 #include <map>
-#include "entryPathBuilderImpl.h"
+#include "EntryPathBuilderImpl.h"
 
 struct Proxy {
 	enum Exception {

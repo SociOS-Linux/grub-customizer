@@ -18,7 +18,7 @@
 
 #include "grubCustomizer.h"
 #include "eventListener.h"
-#include "../model/grubEnv.h"
+#include "../Model/Env.h"
 #include "../View/Gtk/Main.h"
 #include "../View/Gtk/About.h"
 #include "../View/Gtk/Installer.h"

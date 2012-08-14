@@ -19,28 +19,28 @@
 #ifndef GTK_CLIENT_INCLUDED
 #define GTK_CLIENT_INCLUDED
 
-#include "../model/grublistCfg.h"
+#include "../Model/ListCfg.h"
 #include "../interface/grublistCfgDlg.h"
 #include <libintl.h>
 #include <locale.h>
 #include <sstream>
 #include "../config.h"
 
-#include "../model/grubEnv.h"
+#include "../Model/Env.h"
 
-#include "../model/mountTable.h"
+#include "../Model/MountTable.h"
 
-#include "../model/grubInstaller.h"
+#include "../Model/Installer.h"
 #include "../interface/grubInstallDlg.h"
 
 #include "../interface/entryAddDlg.h"
 #include "../interface/entryEditDlg.h"
 
-#include "../model/grublistCfg.h"
+#include "../Model/ListCfg.h"
 #include "../interface/settingsDlg.h"
-#include "../model/fbResolutionsGetter.h"
+#include "../Model/FbResolutionsGetter.h"
 #include "../interface/aboutDialog.h"
-#include "../model/deviceDataList.h"
+#include "../Model/DeviceDataList.h"
 #include "../interface/threadController.h"
 #include "../interface/contentParserFactory.h"
 #include "../interface/GrubEnvEditor.h"

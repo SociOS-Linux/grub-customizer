@@ -18,9 +18,9 @@
 
 #ifndef GRUB_CUSTOMIZER_REPOSITORY_INCLUDED
 #define GRUB_CUSTOMIZER_REPOSITORY_INCLUDED
-#include "script.h"
-#include "libproxyscript_parser.h"
-#include "pscriptname_translator.h"
+#include "Script.h"
+#include "ProxyScriptData.h"
+#include "PscriptnameTranslator.h"
 #include <sys/stat.h>
 #include <dirent.h>
 #include <map>

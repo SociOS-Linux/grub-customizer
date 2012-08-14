@@ -19,7 +19,7 @@
 #ifndef GRUB_CUSTOMIZER_RULE_INCLUDED
 #define GRUB_CUSTOMIZER_RULE_INCLUDED
 #include <string>
-#include "entry.h"
+#include "Entry.h"
 #include "../interface/entryPathBuilder.h"
 #include "../interface/entryPathFollower.h"
 #include <ostream>

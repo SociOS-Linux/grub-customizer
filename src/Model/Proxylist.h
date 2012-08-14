@@ -20,7 +20,7 @@
 #define GRUB_CUSTOMIZER_PROXYLIST_INCLUDED
 #include <list>
 #include <sstream>
-#include "proxy.h"
+#include "Proxy.h"
 #include "../presenter/commonClass.h"
 
 struct EntryTitleListItem {

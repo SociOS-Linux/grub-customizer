@@ -16,11 +16,11 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "../model/script.h"
-#include "../model/proxy.h"
-#include "../model/entry.h"
-#include "../model/rule.h"
-#include "../model/grublistCfg.h" // multi
+#include "../Model/Script.h"
+#include "../Model/Proxy.h"
+#include "../Model/Entry.h"
+#include "../Model/Rule.h"
+#include "../Model/ListCfg.h" // multi
 
 #include <iostream>
 

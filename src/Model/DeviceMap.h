@@ -1,7 +1,7 @@
 #ifndef GRUBDEVICEMAP_H_
 #define GRUBDEVICEMAP_H_
-#include "smartFileHandle.h"
-#include "grubEnv.h"
+#include "SmartFileHandle.h"
+#include "Env.h"
 #include "../lib/regex.h"
 
 struct GrubPartitionIndex {

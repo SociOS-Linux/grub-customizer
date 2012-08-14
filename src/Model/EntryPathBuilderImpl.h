@@ -20,7 +20,7 @@
 #ifndef ENTRYPATHBUILDERIMPL_H_
 #define ENTRYPATHBUILDERIMPL_H_
 #include "../interface/entryPathBuilder.h"
-#include "script.h"
+#include "Script.h"
 #include <map>
 
 class EntryPathBuilderImpl : public EntryPathBilder {

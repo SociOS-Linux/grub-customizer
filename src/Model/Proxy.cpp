@@ -16,7 +16,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "proxy.h"
+#include "Proxy.h"
 
 Proxy::Proxy()
 	: dataSource(NULL), permissions(0755), index(90)

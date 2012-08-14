@@ -30,13 +30,13 @@
 #include <unistd.h>
 #include <fstream>
 
-#include "proxylist.h"
-#include "repository.h"
-#include "libproxyscript_parser.h"
+#include "Proxylist.h"
+#include "Repository.h"
+#include "ProxyScriptData.h"
 #include "../config.h"
-#include "mountTable.h"
-#include "settings_mng_ds.h"
-#include "grubEnv.h"
+#include "MountTable.h"
+#include "SettingsManagerData.h"
+#include "Env.h"
 #include "../interface/evt_model.h"
 
 #include "../interface/mutex.h"

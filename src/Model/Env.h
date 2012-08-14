@@ -21,13 +21,13 @@
 
 #include <string>
 #include <cstdio>
-#include "mountTable.h"
+#include "MountTable.h"
 #include <cstdlib>
 #include <dirent.h>
 #include <map>
 #include <sys/stat.h>
 #include "../presenter/commonClass.h"
-#include "settingsStore.h"
+#include "SettingsStore.h"
 
 struct GrubEnv : public CommonClass {
 public:

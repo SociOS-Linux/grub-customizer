@@ -21,7 +21,6 @@
 #include <gtkmm.h>
 #include "../../interface/settingsDlg.h"
 #include <libintl.h>
-#include "../../model/grubEnv.h"
 #include "../../interface/colorChooser.h"
 #include "../../interface/evt_settings.h"
 #include <string>

@@ -16,7 +16,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "script.h"
+#include "Script.h"
 
 Script::Script(std::string const& name, std::string const& fileName)
 	: name(name), fileName(fileName), root("DUMMY", "DUMMY", "DUMMY", Entry::SCRIPT_ROOT), isCustomScript(false)

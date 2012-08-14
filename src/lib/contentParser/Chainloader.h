@@ -20,7 +20,7 @@
 #define CONTENT_PARSER_CHAINLOADER_H_
 
 #include "../regex.h"
-#include "../../model/grubDeviceMap.h"
+#include "../../Model/DeviceMap.h"
 #include "Abstract.h"
 
 class ContentParserChainloader : public ContentParserAbstract {

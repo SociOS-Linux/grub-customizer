@@ -19,9 +19,9 @@
 #ifndef SETTING_MANAGER_DATASTORE_INCLUDED
 #define SETTING_MANAGER_DATASTORE_INCLUDED
 #include <sys/stat.h> //mkdir
-#include "grubEnv.h"
+#include "Env.h"
 #include "../presenter/commonClass.h"
-#include "settingsStore.h"
+#include "SettingsStore.h"
 #include <sstream>
 #include "../lib/str_replace.h"
 #include <map>

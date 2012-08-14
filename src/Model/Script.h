@@ -22,7 +22,7 @@
 #include <list>
 #include <cstdlib>
 #include <sys/stat.h>
-#include "entry.h"
+#include "Entry.h"
 #include "../interface/entryPathFollower.h"
 #include "../presenter/commonClass.h"
 #include "../lib/md5.h"

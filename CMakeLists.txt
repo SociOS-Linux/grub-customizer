@@ -41,30 +41,28 @@ include_directories(
     ${GTKMM_INCLUDE_DIRS}  )
 
 add_executable(grub-customizer
-	src/model/entry.cpp
-	src/model/grublistCfg.cpp
+	src/Model/Entry.cpp
+	src/Model/ListCfg.cpp
+	src/Model/ProxyScriptData.cpp
+	src/Model/MountTable.cpp
+	src/Model/Proxy.cpp
+	src/Model/Proxylist.cpp
+	src/Model/PscriptnameTranslator.cpp
+	src/Model/Repository.cpp
+	src/Model/Rule.cpp
+	src/Model/Script.cpp
+	src/Model/DeviceDataList.cpp
+	src/Model/Env.cpp
+	src/Model/SettingsManagerData.cpp
+	src/Model/SettingsStore.cpp
+	src/Model/FbResolutionsGetter.cpp
+	src/Model/Installer.cpp
+	src/Model/EntryPathBuilderImpl.cpp
+	src/Model/DeviceMap.cpp
+	src/Model/SmartFileHandle.cpp
 	src/presenter/gtk-client_main.cpp
 	src/presenter/grubCustomizer.cpp
 	src/presenter/eventListener.cpp
-	src/model/libproxyscript_parser.cpp
-	src/model/mountTable.cpp
-	src/model/proxy.cpp
-	src/model/proxylist.cpp
-	src/model/pscriptname_translator.cpp
-	src/model/repository.cpp
-	src/model/rule.cpp
-	src/model/script.cpp
-	src/model/deviceDataList.cpp
-	src/model/grubEnv.cpp
-	src/model/settings_mng_ds.cpp
-	src/model/settingsStore.cpp
-	src/model/fbResolutionsGetter.cpp
-	src/model/grubInstaller.cpp
-	src/model/entryPathBuilderImpl.cpp
-	src/presenter/glibMutex.cpp
-	src/presenter/glibThreadController.cpp
-	src/presenter/commonClass.cpp
-	src/presenter/streamLogger.cpp
 	src/lib/md5.cpp
 	src/lib/str_replace.cpp
 	src/lib/contentParser/FactoryImpl.cpp
@@ -73,9 +71,11 @@ add_executable(grub-customizer
 	src/lib/contentParser/LinuxIso.cpp
 	src/lib/contentParser/Memtest.cpp
 	src/lib/contentParser/Abstract.cpp
+	src/presenter/glibMutex.cpp
+	src/presenter/glibThreadController.cpp
+	src/presenter/commonClass.cpp
+	src/presenter/streamLogger.cpp
 	src/lib/regex.cpp
-	src/model/grubDeviceMap.cpp
-	src/model/smartFileHandle.cpp
 	src/View/Gtk/Element/PartitionChooser.cpp
 	src/View/Gtk/About.cpp
 	src/View/Gtk/EntryEditor.cpp
@@ -88,24 +88,24 @@ add_executable(grub-customizer
 
 
 add_executable(grubcfg-proxy
-	src/model/entry.cpp
-	src/model/rule.cpp
-	src/model/script.cpp
-	src/model/proxy.cpp
+	src/Model/Entry.cpp
+	src/Model/Rule.cpp
+	src/Model/Script.cpp
+	src/Model/Proxy.cpp
 	src/presenter/grubcfg_proxy_main.cpp
 	src/presenter/commonClass.cpp
 	src/lib/md5.cpp
 	src/lib/str_replace.cpp
 	# multi:
-	src/model/grublistCfg.cpp
-	src/model/grubEnv.cpp
-	src/model/settingsStore.cpp
-	src/model/mountTable.cpp
-	src/model/proxylist.cpp
-	src/model/repository.cpp
-	src/model/pscriptname_translator.cpp
-	src/model/libproxyscript_parser.cpp
-	src/model/entryPathBuilderImpl.cpp
+	src/Model/ListCfg.cpp
+	src/Model/Env.cpp
+	src/Model/SettingsStore.cpp
+	src/Model/MountTable.cpp
+	src/Model/Proxylist.cpp
+	src/Model/Repository.cpp
+	src/Model/PscriptnameTranslator.cpp
+	src/Model/ProxyScriptData.cpp
+	src/Model/EntryPathBuilderImpl.cpp
 )
 
 target_link_libraries(grub-customizer 

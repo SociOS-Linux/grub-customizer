@@ -1,4 +1,4 @@
-#include "grubDeviceMap.h"
+#include "DeviceMap.h"
 
 GrubDeviceMap::GrubDeviceMap(GrubEnv const& env) {
 	this->env = &env;

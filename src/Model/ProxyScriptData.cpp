@@ -16,7 +16,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "libproxyscript_parser.h"
+#include "ProxyScriptData.h"
 
 ProxyScriptData::ProxyScriptData(FILE* fpProxyScript)
 	: is_valid(false)

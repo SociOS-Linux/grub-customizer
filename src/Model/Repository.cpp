@@ -16,7 +16,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "repository.h"
+#include "Repository.h"
 
 void Repository::load(std::string const& directory, bool is_proxifiedScript_dir){
 	DIR* dir = opendir(directory.c_str());
