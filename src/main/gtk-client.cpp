@@ -16,8 +16,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "grubCustomizer.h"
-#include "eventListener.h"
+#include "../presenter/grubCustomizer.h"
+#include "../presenter/eventListener.h"
 #include "../Model/Env.h"
 #include "../View/Gtk/Main.h"
 #include "../View/Gtk/About.h"
@@ -26,9 +26,9 @@
 #include "../View/Gtk/EntryEditor.h"
 #include "../View/Gtk/Settings.h"
 #include "../View/Gtk/EnvEditor.h"
-#include "glibMutex.h"
-#include "glibThreadController.h"
-#include "streamLogger.h"
+#include "../presenter/glibMutex.h"
+#include "../presenter/glibThreadController.h"
+#include "../presenter/streamLogger.h"
 #include <iostream>
 #include "../lib/contentParser/FactoryImpl.h"
 #include "../lib/contentParser/Linux.h"

@@ -135,6 +135,8 @@ src/lib/regex.cpp -text
 src/lib/regex.h -text
 src/lib/str_replace.cpp -text
 src/lib/str_replace.h -text
+src/main/gtk-client.cpp -text
+src/main/proxy.cpp -text
 src/presenter/commonClass.cpp -text
 src/presenter/commonClass.h -text
 src/presenter/eventListener.cpp -text
@@ -145,8 +147,6 @@ src/presenter/glibThreadController.cpp -text
 src/presenter/glibThreadController.h -text
 src/presenter/grubCustomizer.cpp -text
 src/presenter/grubCustomizer.h -text
-src/presenter/grubcfg_proxy_main.cpp -text
-src/presenter/gtk-client_main.cpp -text
 src/presenter/streamLogger.cpp -text
 src/presenter/streamLogger.h -text
 translation/complile_all.sh -text

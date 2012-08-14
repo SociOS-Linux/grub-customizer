@@ -60,7 +60,7 @@ add_executable(grub-customizer
 	src/Model/EntryPathBuilderImpl.cpp
 	src/Model/DeviceMap.cpp
 	src/Model/SmartFileHandle.cpp
-	src/presenter/gtk-client_main.cpp
+	src/main/gtk-client.cpp
 	src/presenter/grubCustomizer.cpp
 	src/presenter/eventListener.cpp
 	src/lib/md5.cpp
@@ -92,7 +92,7 @@ add_executable(grubcfg-proxy
 	src/Model/Rule.cpp
 	src/Model/Script.cpp
 	src/Model/Proxy.cpp
-	src/presenter/grubcfg_proxy_main.cpp
+	src/main/proxy.cpp
 	src/presenter/commonClass.cpp
 	src/lib/md5.cpp
 	src/lib/str_replace.cpp
