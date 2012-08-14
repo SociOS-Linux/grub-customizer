@@ -34,7 +34,6 @@
 #include "../View/Installer.h"
 
 #include "../View/Trash.h"
-#include "../View/EntryEditor.h"
 
 #include "../Model/ListCfg.h"
 #include "../View/Settings.h"
@@ -45,7 +44,11 @@
 #include "../interface/contentParserFactory.h"
 #include "../View/EnvEditor.h"
 
+#include "../Controller/ControllerAbstract.h"
+
 #include "commonClass.h"
+
+#include "grubCustomizerIface.h"
 
 /**
  * master class of Grub Customizer.
@@ -59,7 +62,7 @@
  * not too much work to change this.
  */
 
-class GrubCustomizer : public CommonClass {
+class GrubCustomizer : public ControllerAbstract, public GrubCustomizerIface {
 	Model_Env& env;
 	Model_ListCfg* grublistCfg;
 	View_Main* listCfgDlg;
@@ -69,7 +72,7 @@ class GrubCustomizer : public CommonClass {
 	Model_Installer* installer;
 	View_Installer* installDlg;
 	View_Trash* entryAddDlg;
-	View_EntryEditor* entryEditDlg;
+//	View_EntryEditor* entryEditDlg;
 	Model_ListCfg* savedListCfg;
 	Model_FbResolutionsGetter* fbResolutionsGetter;
 	Model_DeviceDataList* deviceDataList;
@@ -81,7 +84,6 @@ class GrubCustomizer : public CommonClass {
 	View_EnvEditor* grubEnvEditor;
 
 	bool config_has_been_different_on_startup_but_unsaved;
-	bool modificationsUnsaved;
 	bool quit_requested;
 	bool is_loading;
 	int activeThreadCount;
@@ -91,6 +93,7 @@ class GrubCustomizer : public CommonClass {
 	void _rAppendRule(Model_Rule& rule, Model_Rule* parentRule = NULL);
 
 public:
+	bool modificationsUnsaved;
 	enum Exception {
 		INCOMPLETE
 	};
@@ -102,7 +105,6 @@ public:
 	void setInstaller(Model_Installer& installer);
 	void setInstallDlg(View_Installer& installDlg);
 	void setScriptAddDlg(View_Trash& scriptAddDlg);
-	void setEntryEditDlg(View_EntryEditor& entryEditDlg);
 	void setSavedListCfg(Model_ListCfg& savedListCfg);
 	void setFbResolutionsGetter(Model_FbResolutionsGetter& fbResolutionsGetter);
 	void setDeviceDataList(Model_DeviceDataList& deviceDataList);
@@ -137,8 +139,6 @@ public:
 	
 	void showEntryAddDlg();
 	void showEntryEditDlg(void* rule);
-	void syncEntryEditDlg(bool useOptionsAsSource);
-	void entryEditDlg_buildSource(std::string const& newType);
 	void showEntryCreateDlg();
 	void addEntryFromEntryAddDlg();
 	
@@ -164,8 +164,6 @@ public:
 	void showProxyInfo(Model_Proxy* proxy);
 
 	void showAboutDialog();
-
-	void applyEntryEditorModifications();
 
 	//settings dialog
 	void updateSettingsDlgResolutionList_dispatched();
@@ -198,6 +196,10 @@ public:
 	void switchBootloaderType(int newTypeIndex);
 	void updateGrubEnvOptions();
 	void applyEnvEditor(bool saveConfig);
+
+	// transitional
+	void selectRule(void* rulePtr, bool isAdded);
+	void setModificationsUnsaved(bool val);
 };
 
 #endif

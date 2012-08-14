@@ -21,7 +21,6 @@
 GrubCustomizer::GrubCustomizer(Model_Env& env)
 	: grublistCfg(NULL), listCfgDlg(NULL), settingsDlg(NULL), settings(NULL),
 	  installer(NULL), installDlg(NULL), settingsOnDisk(NULL), entryAddDlg(NULL),
-	  entryEditDlg(NULL),
 	  savedListCfg(NULL),
 	  fbResolutionsGetter(NULL), deviceDataList(NULL),
 	  mountTable(NULL), aboutDialog(NULL),
@@ -60,10 +59,6 @@ void GrubCustomizer::setInstallDlg(View_Installer& installDlg){
 }
 void GrubCustomizer::setScriptAddDlg(View_Trash& scriptAddDlg){
 	this->entryAddDlg = &scriptAddDlg;
-}
-
-void GrubCustomizer::setEntryEditDlg(View_EntryEditor& entryEditDlg) {
-	this->entryEditDlg = &entryEditDlg;
 }
 
 void GrubCustomizer::setSavedListCfg(Model_ListCfg& savedListCfg){
@@ -150,7 +145,6 @@ void GrubCustomizer::init(){
 		or !deviceDataList
 		or !mountTable
 		or !aboutDialog
-		or !entryEditDlg
 		or !contentParserFactory
 		or !grubEnvEditor
 	) {
@@ -339,67 +333,6 @@ void GrubCustomizer::showAboutDialog(){
 	this->aboutDialog->show();
 }
 
-void GrubCustomizer::applyEntryEditorModifications() {
-	Model_Rule* rulePtr = static_cast<Model_Rule*>(this->entryEditDlg->getRulePtr());
-	bool isAdded = false;
-	if (rulePtr == NULL) { // insert
-		Model_Script* script = this->grublistCfg->repository.getCustomScript();
-		script->entries().push_back(Model_Entry("new", "", ""));
-
-		Model_Rule newRule(script->entries().back(), true, *script);
-
-		std::list<Model_Proxy*> proxies = this->grublistCfg->proxies.getProxiesByScript(*script);
-		for (std::list<Model_Proxy*>::iterator proxyIter = proxies.begin(); proxyIter != proxies.end(); proxyIter++) {
-			(*proxyIter)->rules.push_back(newRule);
-			newRule.isVisible = false; // if there are more rules of this type, add them invisible
-		}
-		assert(proxies.size() != 0); // there should at least one proxy related to the custom script
-		rulePtr = &proxies.front()->rules.back();
-		isAdded = true;
-	} else { // update
-		Model_Script* script = this->grublistCfg->repository.getScriptByEntry(*rulePtr->dataSource);
-		assert(script != NULL);
-
-		if (!script->isCustomScript) {
-			script = this->grublistCfg->repository.getCustomScript();
-			script->entries().push_back(*rulePtr->dataSource);
-
-			Model_Rule ruleCopy = *rulePtr;
-			rulePtr->setVisibility(false);
-			ruleCopy.dataSource = &script->entries().back();
-			Model_Proxy* proxy = this->grublistCfg->proxies.getProxyByRule(rulePtr);
-			std::list<Model_Rule>& ruleList = proxy->getRuleList(proxy->getParentRule(rulePtr));
-
-			Model_Rule dummySubmenu(Model_Rule::SUBMENU, std::list<std::string>(), "DUMMY", true);
-			dummySubmenu.subRules.push_back(ruleCopy);
-			std::list<Model_Rule>::iterator iter = ruleList.insert(proxy->getListIterator(*rulePtr, ruleList), dummySubmenu);
-
-			Model_Rule& insertedRule = iter->subRules.back();
-			rulePtr = &this->grublistCfg->moveRule(&insertedRule, -1);
-
-			std::list<Model_Proxy*> proxies = this->grublistCfg->proxies.getProxiesByScript(*script);
-			for (std::list<Model_Proxy*>::iterator proxyIter = proxies.begin(); proxyIter != proxies.end(); proxyIter++) {
-				if (!(*proxyIter)->getRuleByEntry(*rulePtr->dataSource, (*proxyIter)->rules, rulePtr->type)) {
-					(*proxyIter)->rules.push_back(Model_Rule(*rulePtr->dataSource, false, *script));
-				}
-			}
-		}
-	}
-
-	std::string newCode = this->entryEditDlg->getSourcecode();
-	rulePtr->dataSource->content = newCode;
-	rulePtr->dataSource->isModified = true;
-
-	this->modificationsUnsaved = true;
-
-	this->syncListView_load();
-
-	this->listCfgDlg->selectRule(rulePtr, isAdded);
-
-	this->currentContentParser = NULL;
-}
-
-
 void GrubCustomizer::generateSubmountpointSelection(std::string const& prefix){
 	this->grubEnvEditor->removeAllSubmountpoints();
 
@@ -534,57 +467,11 @@ void GrubCustomizer::showEntryAddDlg(){
 }
 
 void GrubCustomizer::showEntryEditDlg(void* rule) {
-	this->entryEditDlg->setRulePtr(rule);
-	this->entryEditDlg->setSourcecode(((Model_Rule*)rule)->dataSource->content);
-	this->syncEntryEditDlg(false);
-	this->entryEditDlg->show();
-}
-
-void GrubCustomizer::syncEntryEditDlg(bool useOptionsAsSource) {
-	try {
-		if (useOptionsAsSource) {
-			assert(this->currentContentParser != NULL);
-			this->currentContentParser->setOptions(this->entryEditDlg->getOptions());
-			this->entryEditDlg->setSourcecode(this->currentContentParser->buildSource());
-		} else {
-			this->currentContentParser = this->contentParserFactory->create(this->entryEditDlg->getSourcecode());
-			this->entryEditDlg->setOptions(this->currentContentParser->getOptions());
-		}
-		this->entryEditDlg->selectType(this->contentParserFactory->getNameByInstance(*this->currentContentParser));
-	} catch (ContentParserFactory::Exception const& e) {
-		this->entryEditDlg->selectType("");
-		this->entryEditDlg->setOptions(std::map<std::string, std::string>());
-	}
-}
-
-void GrubCustomizer::entryEditDlg_buildSource(std::string const& newType) {
-	std::string partition;
-	if (this->deviceDataList->size()) {
-		partition = this->deviceDataList->begin()->second["UUID"];
-	}
-
-	if ((this->currentContentParser || partition != "") && newType != "") {
-		if (this->currentContentParser) {
-			partition = this->currentContentParser->getOption("partition_uuid");
-		}
-		this->currentContentParser = this->contentParserFactory->createByName(newType);
-		this->currentContentParser->buildDefaultEntry(partition);
-
-		// sync
-		this->entryEditDlg->setSourcecode(this->currentContentParser->buildSource());
-		this->entryEditDlg->setOptions(this->currentContentParser->getOptions());
-	} else {
-		this->entryEditDlg->setOptions(std::map<std::string, std::string>());
-		this->entryEditDlg->setSourcecode("");
-	}
+	this->getAllControllers().entryEditController->showAction(rule);
 }
 
 void GrubCustomizer::showEntryCreateDlg() {
-	this->entryEditDlg->setRulePtr(NULL);
-	this->entryEditDlg->setSourcecode("");
-	this->entryEditDlg->selectType("");
-	this->entryEditDlg->setOptions(std::map<std::string, std::string>());
-	this->entryEditDlg->show();
+	this->getAllControllers().entryEditController->showCreatorAction();
 }
 
 void GrubCustomizer::addEntryFromEntryAddDlg(){
@@ -1156,4 +1043,12 @@ void GrubCustomizer::updateGenerateRecoverySetting(){
 	this->settings->setIsActive("GRUB_DISABLE_LINUX_RECOVERY", !this->settingsDlg->getRecoveryCheckboxState());
 	this->syncSettings();
 	this->modificationsUnsaved = true;
+}
+
+void GrubCustomizer::selectRule(void* rulePtr, bool isAdded) {
+	this->listCfgDlg->selectRule(rulePtr, isAdded);
+}
+
+void GrubCustomizer::setModificationsUnsaved(bool val) {
+	this->modificationsUnsaved = val;
 }

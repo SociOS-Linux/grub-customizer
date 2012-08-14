@@ -84,6 +84,8 @@ add_executable(grub-customizer
 	src/View/Gtk/Main.cpp
 	src/View/Gtk/Settings.cpp
 	src/View/Gtk/Trash.cpp
+	src/Controller/EntryEditControllerImpl.cpp
+	src/Controller/ControllerAbstract.cpp
 )
 
 

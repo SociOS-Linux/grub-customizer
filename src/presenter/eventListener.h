@@ -34,7 +34,6 @@ class EventListener :
 	public EventListener_listCfgDlg,
 	public EventListener_model,
 	public EventListener_entryAddDlg,
-	public EventListener_entryEditDlg,
 	public EventListener_grubEnvEditor
 {
 	GrubCustomizer& presenter;
@@ -53,10 +52,6 @@ public:
 	void entryEditDlg_requested(void* rule);
 	void entryCreateDlgRequested();
 	void entryAddDlg_applied();
-	void entryEditDlg_applied();
-	void entryEditDlg_sourceModified();
-	void entryEditDlg_optionsModified();
-	void entryEditDlg_typeModified(std::string const& newType);
 	void exitRequest();
 
 	void signal_entry_remove_requested(std::list<void*> entries);

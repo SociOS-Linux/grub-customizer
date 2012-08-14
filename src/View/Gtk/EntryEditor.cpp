@@ -49,7 +49,7 @@ View_Gtk_EntryEditor::View_Gtk_EntryEditor()
 	this->tvSource.signal_key_release_event().connect(sigc::mem_fun(this, &View_Gtk_EntryEditor::signal_sourceModified));
 }
 
-void View_Gtk_EntryEditor::setEventListener(EventListener_entryEditDlg& eventListener) {
+void View_Gtk_EntryEditor::setEventListener(EntryEditController& eventListener) {
 	this->eventListener = &eventListener;
 }
 
@@ -194,26 +194,26 @@ std::string View_Gtk_EntryEditor::getSelectedType() const {
 
 void View_Gtk_EntryEditor::signal_response_action(int response_id) {
 	if (response_id == Gtk::RESPONSE_OK){
-		eventListener->entryEditDlg_applied();
+		this->eventListener->applyAction();
 	}
 	this->hide();
 }
 
 bool View_Gtk_EntryEditor::signal_sourceModified(GdkEventKey* event) {
 	if (!this->lock_state) {
-		this->eventListener->entryEditDlg_sourceModified();
+		this->eventListener->syncOptionsAction();
 	}
 	return true;
 }
 
 void View_Gtk_EntryEditor::signal_optionsModified() {
 	if (!this->lock_state) {
-		this->eventListener->entryEditDlg_optionsModified();
+		this->eventListener->syncSourceAction();
 	}
 }
 
 void View_Gtk_EntryEditor::signal_typeModified() {
 	if (!this->lock_state) {
-		this->eventListener->entryEditDlg_typeModified(this->cbType.get_active_text() != gettext("Other") ? this->cbType.get_active_text() : "");
+		this->eventListener->switchTypeAction(this->cbType.get_active_text() != gettext("Other") ? this->cbType.get_active_text() : "");
 	}
 }

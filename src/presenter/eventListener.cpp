@@ -65,22 +65,6 @@ void EventListener::entryAddDlg_applied(){
 	presenter.addEntryFromEntryAddDlg();
 }
 
-void EventListener::entryEditDlg_applied() {
-	presenter.applyEntryEditorModifications();
-}
-
-void EventListener::entryEditDlg_sourceModified() {
-	presenter.syncEntryEditDlg(false);
-}
-
-void EventListener::entryEditDlg_optionsModified() {
-	presenter.syncEntryEditDlg(true);
-}
-
-void EventListener::entryEditDlg_typeModified(std::string const& newType) {
-	presenter.entryEditDlg_buildSource(newType);
-}
-
 void EventListener::entryAddDlg_requested(){
 	presenter.showEntryAddDlg();
 }

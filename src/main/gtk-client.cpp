@@ -35,6 +35,8 @@
 #include "../lib/contentParser/LinuxIso.h"
 #include "../lib/contentParser/Chainloader.h"
 #include "../lib/contentParser/Memtest.h"
+#include "../Controller/EntryEditControllerImpl.h"
+#include "../ControllerCollection.h"
 
 
 int main(int argc, char** argv){
@@ -77,6 +79,19 @@ int main(int argc, char** argv){
 	entryEditDlg.setDeviceDataList(deviceDataList);
 	envEditor.setDeviceDataList(deviceDataList);
 
+	EntryEditControllerImpl entryEditController(env);
+	entryEditController.setContentParserFactory(contentParserFactory);
+	entryEditController.setView(entryEditDlg);
+	entryEditController.setDeviceDataList(deviceDataList);
+	entryEditController.setListCfg(listcfg);
+
+	ControllerCollection controllerCollection;
+	controllerCollection.entryEditController = &entryEditController;
+	controllerCollection.masterclass_deprecated = &presenter;
+
+	entryEditController.setControllerCollection(controllerCollection);
+	presenter.setControllerCollection(controllerCollection);
+
 	//assign objects to presenter
 	presenter.setListCfg(listcfg);
 	presenter.setListCfgDlg(listCfgView);
@@ -86,7 +101,6 @@ int main(int argc, char** argv){
 	presenter.setInstaller(installer);
 	presenter.setInstallDlg(installDlg);
 	presenter.setScriptAddDlg(scriptAddDlg);
-	presenter.setEntryEditDlg(entryEditDlg);
 	presenter.setSavedListCfg(savedListCfg);
 	presenter.setFbResolutionsGetter(fbResolutionsGetter);
 	presenter.setDeviceDataList(deviceDataList);
@@ -103,7 +117,7 @@ int main(int argc, char** argv){
 	listCfgView.setEventListener(evt);
 	installDlg.setEventListener(evt);
 	scriptAddDlg.setEventListener(evt);
-	entryEditDlg.setEventListener(evt);
+	entryEditDlg.setEventListener(entryEditController);
 	settingsDlg.setEventListener(evt);
 	listcfg.setEventListener(evt);
 	installer.setEventListener(evt);

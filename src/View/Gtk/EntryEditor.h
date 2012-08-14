@@ -23,7 +23,7 @@
 #include "../../lib/str_replace.h"
 #include <libintl.h>
 #include <gtkmm.h>
-#include "../../interface/evt_entryEditDlg.h"
+#include "../../Controller/EntryEditController.h"
 #include "EntryEditor.h"
 #include "../../interface/deviceDataList_Iface.h"
 #include "Element/PartitionChooser.h"
@@ -32,7 +32,7 @@ class View_Gtk_EntryEditor : public View_EntryEditor, public Gtk::Dialog, public
 	Gtk::Notebook tabbox;
 	Gtk::TextView tvSource;
 	Gtk::ScrolledWindow scrSource;
-	EventListener_entryEditDlg* eventListener;
+	EntryEditController* eventListener;
 	DeviceDataList_Iface* deviceDataList;
 	Gtk::ScrolledWindow scrOptions;
 	Gtk::Table tblOptions;
@@ -47,7 +47,7 @@ protected:
 	virtual std::string mapOptionName(std::string const& name);
 public:
 	View_Gtk_EntryEditor();
-	void setEventListener(EventListener_entryEditDlg& eventListener);
+	void setEventListener(EntryEditController& eventListener);
 	void setDeviceDataList(DeviceDataList_Iface& deviceDataList);
 	void setSourcecode(std::string const& source);
 	std::string getSourcecode();
