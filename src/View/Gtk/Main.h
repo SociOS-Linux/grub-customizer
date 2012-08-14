@@ -22,7 +22,7 @@
 #include "../../interface/evt_listCfgDlg.h"
 #include <libintl.h>
 #include "../../config.h"
-#include "../../interface/grublistCfgDlg.h"
+#include "../Main.h"
 #include "../../presenter/commonClass.h"
 #include "Settings.h"
 #include "../../lib/str_replace.h"

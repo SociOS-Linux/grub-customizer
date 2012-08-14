@@ -20,7 +20,7 @@
 #define ENTRY_ADD_DLG_INCLUDED
 #include <gtkmm.h>
 #include "../../interface/evt_entryAddDlg.h"
-#include "../../interface/entryAddDlg.h"
+#include "../Trash.h"
 #include <libintl.h>
 #include "../../presenter/commonClass.h"
 

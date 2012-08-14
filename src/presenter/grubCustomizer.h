@@ -20,7 +20,7 @@
 #define GTK_CLIENT_INCLUDED
 
 #include "../Model/ListCfg.h"
-#include "../interface/grublistCfgDlg.h"
+#include "../View/Main.h"
 #include <libintl.h>
 #include <locale.h>
 #include <sstream>
@@ -31,19 +31,19 @@
 #include "../Model/MountTable.h"
 
 #include "../Model/Installer.h"
-#include "../interface/grubInstallDlg.h"
+#include "../View/Installer.h"
 
-#include "../interface/entryAddDlg.h"
-#include "../interface/entryEditDlg.h"
+#include "../View/Trash.h"
+#include "../View/EntryEditor.h"
 
 #include "../Model/ListCfg.h"
-#include "../interface/settingsDlg.h"
+#include "../View/Settings.h"
 #include "../Model/FbResolutionsGetter.h"
-#include "../interface/aboutDialog.h"
+#include "../View/About.h"
 #include "../Model/DeviceDataList.h"
 #include "../interface/threadController.h"
 #include "../interface/contentParserFactory.h"
-#include "../interface/GrubEnvEditor.h"
+#include "../View/EnvEditor.h"
 
 #include "commonClass.h"
 

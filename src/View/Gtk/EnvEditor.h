@@ -21,7 +21,7 @@
 #include <gtkmm.h>
 #include <libintl.h>
 #include "../../presenter/commonClass.h"
-#include "../../interface/GrubEnvEditor.h"
+#include "../EnvEditor.h"
 #include "../../interface/evt_grubEnvEditor.h"
 #include "Element/PartitionChooser.h"
 #include "../../interface/deviceDataList_Iface.h"

@@ -19,9 +19,9 @@
 #ifndef SETTING_DLG_GTK_INCLUDED
 #define SETTING_DLG_GTK_INCLUDED
 #include <gtkmm.h>
-#include "../../interface/settingsDlg.h"
+#include "../Settings.h"
 #include <libintl.h>
-#include "../../interface/colorChooser.h"
+#include "../ColorChooser.h"
 #include "../../interface/evt_settings.h"
 #include <string>
 #include "../../presenter/commonClass.h"

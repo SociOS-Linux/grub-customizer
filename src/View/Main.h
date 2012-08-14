@@ -19,8 +19,8 @@
 #ifndef GRUBLISTCFGDLG_H_
 #define GRUBLISTCFGDLG_H_
 
-#include "evt_listCfgDlg.h"
-#include "settingsDlg.h"
+#include "../interface/evt_listCfgDlg.h"
+#include "Settings.h"
 #include <string>
 #include <vector>
 

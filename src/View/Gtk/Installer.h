@@ -21,7 +21,7 @@
 #include <gtkmm.h>
 #include "../../interface/evt_grubInstallDlg.h"
 #include <libintl.h>
-#include "../../interface/grubInstallDlg.h"
+#include "../Installer.h"
 #include "../../presenter/commonClass.h"
 
 class View_Gtk_Installer : public Gtk::Dialog, public GrubInstallDlg, public CommonClass {

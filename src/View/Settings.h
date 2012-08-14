@@ -19,8 +19,8 @@
 #ifndef SETTINGSDLG_H_
 #define SETTINGSDLG_H_
 
-#include "colorChooser.h"
-#include "evt_settings.h"
+#include "ColorChooser.h"
+#include "../interface/evt_settings.h"
 /**
  * Interface to be implemented by settings dialogs
  */

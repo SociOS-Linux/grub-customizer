@@ -21,7 +21,7 @@
 #include <gtkmm.h>
 #include "../../config.h"
 #include <libintl.h>
-#include "../../interface/aboutDialog.h"
+#include "../About.h"
 #include "../../presenter/commonClass.h"
 
 class View_Gtk_About : public Gtk::AboutDialog, public AboutDialog, public CommonClass {
