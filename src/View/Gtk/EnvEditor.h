@@ -26,7 +26,7 @@
 #include "Element/PartitionChooser.h"
 #include "../../interface/deviceDataList_Iface.h"
 
-class View_Gtk_EnvEditor : public Gtk::Dialog, public GrubEnvEditor, public CommonClass {
+class View_Gtk_EnvEditor : public Gtk::Dialog, public View_EnvEditor, public CommonClass {
 	EventListener_grubEnvEditor* eventListener;
 	Gtk::VBox vbContent;
 	Gtk::Table tblLayout;

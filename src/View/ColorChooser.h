@@ -22,9 +22,9 @@
 /**
  * base class to be implemented by color chooser controls
  */
-class ColorChooser {
+class View_ColorChooser {
 public:
-	virtual inline ~ColorChooser() {};
+	virtual inline ~View_ColorChooser() {};
 
 	//choose one of the colors provided by this control
 	virtual void selectColor(std::string const& codeName)=0;

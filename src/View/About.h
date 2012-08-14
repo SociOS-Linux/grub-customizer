@@ -22,9 +22,9 @@
 /**
  * base class to be implemented by about dialogs
  */
-class AboutDialog {
+class View_About {
 public:
-	virtual inline ~AboutDialog() {};
+	virtual inline ~View_About() {};
 	//show the about dialog, don't block
 	virtual void show()=0;
 };

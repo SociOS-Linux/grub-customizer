@@ -466,7 +466,7 @@ void View_Gtk_Settings::setResolution(std::string const& resolution){
 	this->event_lock = false;
 }
 
-ColorChooser& View_Gtk_Settings::getColorChooser(ColorChooserType type){
+View_ColorChooser& View_Gtk_Settings::getColorChooser(ColorChooserType type){
 	this->event_lock = true;
 	switch (type){
 		case COLOR_CHOOSER_DEFAULT_BACKGROUND: return this->gccNormalBackground;

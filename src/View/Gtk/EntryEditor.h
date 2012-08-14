@@ -28,7 +28,7 @@
 #include "../../interface/deviceDataList_Iface.h"
 #include "Element/PartitionChooser.h"
 
-class View_Gtk_EntryEditor : public EntryEditDlg, public Gtk::Dialog, public CommonClass {
+class View_Gtk_EntryEditor : public View_EntryEditor, public Gtk::Dialog, public CommonClass {
 	Gtk::Notebook tabbox;
 	Gtk::TextView tvSource;
 	Gtk::ScrolledWindow scrSource;

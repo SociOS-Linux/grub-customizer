@@ -20,9 +20,9 @@
 #define GRUBENVEDITOR_H_
 #include <map>
 
-class GrubEnvEditor {
+class View_EnvEditor {
 public:
-	virtual inline ~GrubEnvEditor() {};
+	virtual inline ~View_EnvEditor() {};
 
 	enum MountExceptionType {
 		MOUNT_FAILED,

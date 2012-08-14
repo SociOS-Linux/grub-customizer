@@ -23,9 +23,9 @@
 /**
  * Interface for dialogs which helps users to install grub into the MBR
  */
-class GrubInstallDlg {
+class View_Installer {
 public:
-	virtual inline ~GrubInstallDlg() {};
+	virtual inline ~View_Installer() {};
 
 	//show this dialog
 	virtual void show()=0;

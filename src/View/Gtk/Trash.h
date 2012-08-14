@@ -24,7 +24,7 @@
 #include <libintl.h>
 #include "../../presenter/commonClass.h"
 
-class View_Gtk_Trash : public Gtk::Dialog, public EntryAddDlg, public CommonClass {
+class View_Gtk_Trash : public Gtk::Dialog, public View_Trash, public CommonClass {
 	Gtk::Dialog scriptAddDlg;
 	Gtk::ScrolledWindow scrEntryBox;
 	Gtk::IconView iconBox;

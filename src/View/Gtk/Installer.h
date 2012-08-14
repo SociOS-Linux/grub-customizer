@@ -24,7 +24,7 @@
 #include "../Installer.h"
 #include "../../presenter/commonClass.h"
 
-class View_Gtk_Installer : public Gtk::Dialog, public GrubInstallDlg, public CommonClass {
+class View_Gtk_Installer : public Gtk::Dialog, public View_Installer, public CommonClass {
 	Gtk::Label lblDescription;
 	Gtk::HBox hbDevice;
 	Gtk::Label lblDevice, lblInstallInfo;

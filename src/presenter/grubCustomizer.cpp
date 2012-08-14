@@ -36,11 +36,11 @@ GrubCustomizer::GrubCustomizer(Model_Env& env)
 void GrubCustomizer::setListCfg(Model_ListCfg& grublistCfg){
 	this->grublistCfg = &grublistCfg;
 }
-void GrubCustomizer::setListCfgDlg(GrublistCfgDlg& listCfgDlg){
+void GrubCustomizer::setListCfgDlg(View_Main& listCfgDlg){
 	this->listCfgDlg = &listCfgDlg;
 }
 
-void GrubCustomizer::setSettingsDialog(SettingsDlg& settingsDlg){
+void GrubCustomizer::setSettingsDialog(View_Settings& settingsDlg){
 	this->settingsDlg = &settingsDlg;
 }
 
@@ -55,14 +55,14 @@ void GrubCustomizer::setSettingsBuffer(Model_SettingsManagerData& settings){
 void GrubCustomizer::setInstaller(Model_Installer& installer){
 	this->installer = &installer;
 }
-void GrubCustomizer::setInstallDlg(GrubInstallDlg& installDlg){
+void GrubCustomizer::setInstallDlg(View_Installer& installDlg){
 	this->installDlg = &installDlg;
 }
-void GrubCustomizer::setScriptAddDlg(EntryAddDlg& scriptAddDlg){
+void GrubCustomizer::setScriptAddDlg(View_Trash& scriptAddDlg){
 	this->entryAddDlg = &scriptAddDlg;
 }
 
-void GrubCustomizer::setEntryEditDlg(EntryEditDlg& entryEditDlg) {
+void GrubCustomizer::setEntryEditDlg(View_EntryEditor& entryEditDlg) {
 	this->entryEditDlg = &entryEditDlg;
 }
 
@@ -82,7 +82,7 @@ void GrubCustomizer::setMountTable(Model_MountTable& mountTable){
 	this->mountTable = &mountTable;
 }
 
-void GrubCustomizer::setAboutDialog(AboutDialog& aboutDialog){
+void GrubCustomizer::setAboutDialog(View_About& aboutDialog){
 	this->aboutDialog = &aboutDialog;
 }
 
@@ -94,7 +94,7 @@ void GrubCustomizer::setContentParserFactory(ContentParserFactory& contentParser
 	this->contentParserFactory = &contentParserFactory;
 }
 
-void GrubCustomizer::setGrubEnvEditor(GrubEnvEditor& envEditor) {
+void GrubCustomizer::setGrubEnvEditor(View_EnvEditor& envEditor) {
 	this->grubEnvEditor = &envEditor;
 }
 
@@ -433,13 +433,13 @@ void GrubCustomizer::switchPartition(std::string const& newPartition) {
 		}
 		catch (Model_MountTable_Mountpoint::Exception const& e) {
 			if (e == Model_MountTable_Mountpoint::MOUNT_FAILED){
-				this->grubEnvEditor->showErrorMessage(GrubEnvEditor::MOUNT_FAILED);
+				this->grubEnvEditor->showErrorMessage(View_EnvEditor::MOUNT_FAILED);
 				this->switchPartition("");
 			}
 		}
 		catch (Model_MountTable::Exception const& e) {
 			if (e == Model_MountTable::MOUNT_ERR_NO_FSTAB){
-				this->grubEnvEditor->showErrorMessage(GrubEnvEditor::MOUNT_ERR_NO_FSTAB);
+				this->grubEnvEditor->showErrorMessage(View_EnvEditor::MOUNT_ERR_NO_FSTAB);
 				mountTable->getEntryRefByMountpoint(PARTCHOOSER_MOUNTPOINT).umount();
 				this->switchPartition("");
 			}
@@ -481,7 +481,7 @@ void GrubCustomizer::mountSubmountpoint(std::string const& submountpoint){
 	}
 	catch (Model_MountTable_Mountpoint::Exception const& e){
 		if (e == Model_MountTable_Mountpoint::MOUNT_FAILED){
-			this->grubEnvEditor->showErrorMessage(GrubEnvEditor::SUB_MOUNT_FAILED);
+			this->grubEnvEditor->showErrorMessage(View_EnvEditor::SUB_MOUNT_FAILED);
 		}
 		this->grubEnvEditor->setSubmountpointSelectionState(submountpoint, false);
 		this->grubEnvEditor->show();
@@ -494,7 +494,7 @@ void GrubCustomizer::umountSubmountpoint(std::string const& submountpoint){
 	}
 	catch (Model_MountTable_Mountpoint::Exception const& e){
 		if (e == Model_MountTable_Mountpoint::UMOUNT_FAILED){
-			this->grubEnvEditor->showErrorMessage(GrubEnvEditor::SUB_UMOUNT_FAILED);
+			this->grubEnvEditor->showErrorMessage(View_EnvEditor::SUB_UMOUNT_FAILED);
 		}
 		this->grubEnvEditor->setSubmountpointSelectionState(submountpoint, true);
 		this->grubEnvEditor->show();
@@ -933,10 +933,10 @@ void GrubCustomizer::syncSettings(){
 	this->settingsDlg->selectCustomOption(sel);
 	std::string defEntry = this->settings->getValue("GRUB_DEFAULT");
 	if (defEntry == "saved"){
-		this->settingsDlg->setActiveDefEntryOption(SettingsDlg::DEF_ENTRY_SAVED);
+		this->settingsDlg->setActiveDefEntryOption(View_Settings::DEF_ENTRY_SAVED);
 	}
 	else {
-		this->settingsDlg->setActiveDefEntryOption(SettingsDlg::DEF_ENTRY_PREDEFINED);
+		this->settingsDlg->setActiveDefEntryOption(View_Settings::DEF_ENTRY_PREDEFINED);
 		this->settingsDlg->setDefEntry(defEntry);
 	}
 
@@ -966,22 +966,22 @@ void GrubCustomizer::syncSettings(){
 	std::string nColor = this->settings->getValue("GRUB_COLOR_NORMAL");
 	std::string hColor = this->settings->getValue("GRUB_COLOR_HIGHLIGHT");
 	if (nColor != ""){
-		this->settingsDlg->getColorChooser(SettingsDlg::COLOR_CHOOSER_DEFAULT_FONT).selectColor(nColor.substr(0, nColor.find('/')));
-		this->settingsDlg->getColorChooser(SettingsDlg::COLOR_CHOOSER_DEFAULT_BACKGROUND).selectColor(nColor.substr(nColor.find('/')+1));
+		this->settingsDlg->getColorChooser(View_Settings::COLOR_CHOOSER_DEFAULT_FONT).selectColor(nColor.substr(0, nColor.find('/')));
+		this->settingsDlg->getColorChooser(View_Settings::COLOR_CHOOSER_DEFAULT_BACKGROUND).selectColor(nColor.substr(nColor.find('/')+1));
 	}
 	else {
 		//default grub menu colors
-		this->settingsDlg->getColorChooser(SettingsDlg::COLOR_CHOOSER_DEFAULT_FONT).selectColor("light-gray");
-		this->settingsDlg->getColorChooser(SettingsDlg::COLOR_CHOOSER_DEFAULT_BACKGROUND).selectColor("black");
+		this->settingsDlg->getColorChooser(View_Settings::COLOR_CHOOSER_DEFAULT_FONT).selectColor("light-gray");
+		this->settingsDlg->getColorChooser(View_Settings::COLOR_CHOOSER_DEFAULT_BACKGROUND).selectColor("black");
 	}
 	if (hColor != ""){
-		this->settingsDlg->getColorChooser(SettingsDlg::COLOR_CHOOSER_HIGHLIGHT_FONT).selectColor(hColor.substr(0, hColor.find('/')));
-		this->settingsDlg->getColorChooser(SettingsDlg::COLOR_CHOOSER_HIGHLIGHT_BACKGROUND).selectColor(hColor.substr(hColor.find('/')+1));
+		this->settingsDlg->getColorChooser(View_Settings::COLOR_CHOOSER_HIGHLIGHT_FONT).selectColor(hColor.substr(0, hColor.find('/')));
+		this->settingsDlg->getColorChooser(View_Settings::COLOR_CHOOSER_HIGHLIGHT_BACKGROUND).selectColor(hColor.substr(hColor.find('/')+1));
 	}
 	else {
 		//default grub menu colors
-		this->settingsDlg->getColorChooser(SettingsDlg::COLOR_CHOOSER_HIGHLIGHT_FONT).selectColor("magenta");
-		this->settingsDlg->getColorChooser(SettingsDlg::COLOR_CHOOSER_HIGHLIGHT_BACKGROUND).selectColor("black");
+		this->settingsDlg->getColorChooser(View_Settings::COLOR_CHOOSER_HIGHLIGHT_FONT).selectColor("magenta");
+		this->settingsDlg->getColorChooser(View_Settings::COLOR_CHOOSER_HIGHLIGHT_BACKGROUND).selectColor("black");
 	}
 
 	std::string wallpaper_key = this->env.useDirectBackgroundProps ? "GRUB_BACKGROUND" : "GRUB_MENU_PICTURE";
@@ -1007,7 +1007,7 @@ void GrubCustomizer::syncSettings(){
 }
 
 void GrubCustomizer::updateDefaultSetting(){
-	if (this->settingsDlg->getActiveDefEntryOption() == SettingsDlg::DEF_ENTRY_SAVED){
+	if (this->settingsDlg->getActiveDefEntryOption() == View_Settings::DEF_ENTRY_SAVED){
 		this->settings->setValue("GRUB_DEFAULT", "saved");
 		this->settings->setValue("GRUB_SAVEDEFAULT", "true");
 		this->settings->setIsActive("GRUB_SAVEDEFAULT", true);
@@ -1021,7 +1021,7 @@ void GrubCustomizer::updateDefaultSetting(){
 }
 
 void GrubCustomizer::updateCustomSetting(std::string const& name){
-	SettingsDlg::CustomOption c = this->settingsDlg->getCustomOption(name);
+	View_Settings::CustomOption c = this->settingsDlg->getCustomOption(name);
 	this->settings->renameItem(c.old_name, c.name);
 	this->settings->setValue(c.name, c.value);
 	this->settings->setIsActive(c.name, c.isActive);
@@ -1088,13 +1088,13 @@ void GrubCustomizer::updateBackgroundImage(){
 }
 
 void GrubCustomizer::updateColorSettings(){
-	if (this->settingsDlg->getColorChooser(SettingsDlg::COLOR_CHOOSER_DEFAULT_FONT).getSelectedColor() != "" && this->settingsDlg->getColorChooser(SettingsDlg::COLOR_CHOOSER_DEFAULT_BACKGROUND).getSelectedColor() != ""){
-		this->settings->setValue("GRUB_COLOR_NORMAL", this->settingsDlg->getColorChooser(SettingsDlg::COLOR_CHOOSER_DEFAULT_FONT).getSelectedColor() + "/" + this->settingsDlg->getColorChooser(SettingsDlg::COLOR_CHOOSER_DEFAULT_BACKGROUND).getSelectedColor());
+	if (this->settingsDlg->getColorChooser(View_Settings::COLOR_CHOOSER_DEFAULT_FONT).getSelectedColor() != "" && this->settingsDlg->getColorChooser(View_Settings::COLOR_CHOOSER_DEFAULT_BACKGROUND).getSelectedColor() != ""){
+		this->settings->setValue("GRUB_COLOR_NORMAL", this->settingsDlg->getColorChooser(View_Settings::COLOR_CHOOSER_DEFAULT_FONT).getSelectedColor() + "/" + this->settingsDlg->getColorChooser(View_Settings::COLOR_CHOOSER_DEFAULT_BACKGROUND).getSelectedColor());
 		this->settings->setIsActive("GRUB_COLOR_NORMAL", true);
 		this->settings->setIsExport("GRUB_COLOR_NORMAL", true);
 	}
-	if (this->settingsDlg->getColorChooser(SettingsDlg::COLOR_CHOOSER_HIGHLIGHT_FONT).getSelectedColor() != "" && this->settingsDlg->getColorChooser(SettingsDlg::COLOR_CHOOSER_HIGHLIGHT_BACKGROUND).getSelectedColor() != ""){
-		this->settings->setValue("GRUB_COLOR_HIGHLIGHT", this->settingsDlg->getColorChooser(SettingsDlg::COLOR_CHOOSER_HIGHLIGHT_FONT).getSelectedColor() + "/" + this->settingsDlg->getColorChooser(SettingsDlg::COLOR_CHOOSER_HIGHLIGHT_BACKGROUND).getSelectedColor());
+	if (this->settingsDlg->getColorChooser(View_Settings::COLOR_CHOOSER_HIGHLIGHT_FONT).getSelectedColor() != "" && this->settingsDlg->getColorChooser(View_Settings::COLOR_CHOOSER_HIGHLIGHT_BACKGROUND).getSelectedColor() != ""){
+		this->settings->setValue("GRUB_COLOR_HIGHLIGHT", this->settingsDlg->getColorChooser(View_Settings::COLOR_CHOOSER_HIGHLIGHT_FONT).getSelectedColor() + "/" + this->settingsDlg->getColorChooser(View_Settings::COLOR_CHOOSER_HIGHLIGHT_BACKGROUND).getSelectedColor());
 		this->settings->setIsActive("GRUB_COLOR_HIGHLIGHT", true);
 		this->settings->setIsExport("GRUB_COLOR_HIGHLIGHT", true);
 	}

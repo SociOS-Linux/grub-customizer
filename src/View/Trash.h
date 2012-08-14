@@ -23,9 +23,9 @@
 /**
  * Interface to be implemented by dialogs which lets the user adding scripts
  */
-class EntryAddDlg {
+class View_Trash {
 public:
-	virtual inline ~EntryAddDlg() {};
+	virtual inline ~View_Trash() {};
 
 	//assigns the event listener
 	virtual void setEventListener(EventListener_entryAddDlg& eventListener)=0;

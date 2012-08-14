@@ -62,23 +62,23 @@
 class GrubCustomizer : public CommonClass {
 	Model_Env& env;
 	Model_ListCfg* grublistCfg;
-	GrublistCfgDlg* listCfgDlg;
-	SettingsDlg* settingsDlg;
+	View_Main* listCfgDlg;
+	View_Settings* settingsDlg;
 	Model_SettingsManagerData* settings;
 	Model_SettingsManagerData* settingsOnDisk; //buffer for the existing settings
 	Model_Installer* installer;
-	GrubInstallDlg* installDlg;
-	EntryAddDlg* entryAddDlg;
-	EntryEditDlg* entryEditDlg;
+	View_Installer* installDlg;
+	View_Trash* entryAddDlg;
+	View_EntryEditor* entryEditDlg;
 	Model_ListCfg* savedListCfg;
 	Model_FbResolutionsGetter* fbResolutionsGetter;
 	Model_DeviceDataList* deviceDataList;
 	Model_MountTable* mountTable;
-	AboutDialog* aboutDialog;
+	View_About* aboutDialog;
 	ThreadController* threadController;
 	ContentParserFactory* contentParserFactory;
 	ContentParser* currentContentParser;
-	GrubEnvEditor* grubEnvEditor;
+	View_EnvEditor* grubEnvEditor;
 
 	bool config_has_been_different_on_startup_but_unsaved;
 	bool modificationsUnsaved;
@@ -95,22 +95,22 @@ public:
 		INCOMPLETE
 	};
 	void setListCfg(Model_ListCfg& grublistCfg);
-	void setListCfgDlg(GrublistCfgDlg& listCfgDlg);
-	void setSettingsDialog(SettingsDlg& settingsDlg);
+	void setListCfgDlg(View_Main& listCfgDlg);
+	void setSettingsDialog(View_Settings& settingsDlg);
 	void setSettingsManager(Model_SettingsManagerData& settings);
 	void setSettingsBuffer(Model_SettingsManagerData& settings);
 	void setInstaller(Model_Installer& installer);
-	void setInstallDlg(GrubInstallDlg& installDlg);
-	void setScriptAddDlg(EntryAddDlg& scriptAddDlg);
-	void setEntryEditDlg(EntryEditDlg& entryEditDlg);
+	void setInstallDlg(View_Installer& installDlg);
+	void setScriptAddDlg(View_Trash& scriptAddDlg);
+	void setEntryEditDlg(View_EntryEditor& entryEditDlg);
 	void setSavedListCfg(Model_ListCfg& savedListCfg);
 	void setFbResolutionsGetter(Model_FbResolutionsGetter& fbResolutionsGetter);
 	void setDeviceDataList(Model_DeviceDataList& deviceDataList);
 	void setMountTable(Model_MountTable& mountTable);
-	void setAboutDialog(AboutDialog& aboutDialog);
+	void setAboutDialog(View_About& aboutDialog);
 	void setThreadController(ThreadController& threadController);
 	void setContentParserFactory(ContentParserFactory& contentParserFactory);
-	void setGrubEnvEditor(GrubEnvEditor& envEditor);
+	void setGrubEnvEditor(View_EnvEditor& envEditor);
 
 	ThreadController& getThreadController();
 	Model_FbResolutionsGetter& getFbResolutionsGetter();

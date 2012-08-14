@@ -54,7 +54,7 @@ class ImageMenuItemOwnKey : public Gtk::ImageMenuItem {
 	ImageMenuItemOwnKey(const Gtk::StockID& id, const Gtk::AccelKey& accel_key);
 };
 
-class View_Gtk_Main : public GrublistCfgDlg, public CommonClass {
+class View_Gtk_Main : public View_Main, public CommonClass {
 	EventListener_listCfgDlg* eventListener;
 	Gtk::Window win;
 	Gtk::VBox vbMainSplit;

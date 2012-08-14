@@ -24,7 +24,7 @@
 #include "../About.h"
 #include "../../presenter/commonClass.h"
 
-class View_Gtk_About : public Gtk::AboutDialog, public AboutDialog, public CommonClass {
+class View_Gtk_About : public Gtk::AboutDialog, public View_About, public CommonClass {
 	Glib::ustring appName, appVersion;
 	std::vector<Glib::ustring> authors;
 	std::vector<Glib::ustring> artists;

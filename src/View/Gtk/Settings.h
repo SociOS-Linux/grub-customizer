@@ -28,7 +28,7 @@
 
 
 //a gtkmm combobox with colorful foreground and background. useful to choose an item of a predefined color set
-class View_Gtk_Settings_ColorChooser : public Gtk::ComboBox, public ColorChooser {
+class View_Gtk_Settings_ColorChooser : public Gtk::ComboBox, public View_ColorChooser {
 	struct Columns : public Gtk::TreeModelColumnRecord {
 		Gtk::TreeModelColumn<Glib::ustring> name;
 		Gtk::TreeModelColumn<Glib::ustring> idName;
@@ -52,7 +52,7 @@ public:
 	GrubColorChooser(bool blackIsTransparent = false);
 };
 
-class View_Gtk_Settings : public Gtk::Dialog, public SettingsDlg, public CommonClass {
+class View_Gtk_Settings : public Gtk::Dialog, public View_Settings, public CommonClass {
 	struct AdvancedSettingsTreeModel : public Gtk::TreeModelColumnRecord {
 		Gtk::TreeModelColumn<bool> active;
 		Gtk::TreeModelColumn<Glib::ustring> name;
@@ -180,7 +180,7 @@ class View_Gtk_Settings : public Gtk::Dialog, public SettingsDlg, public CommonC
 	Gtk::VBox& getAppearanceSettingsPane();
 	void show(bool burgMode);
 	void hide();
-	ColorChooser& getColorChooser(ColorChooserType type);
+	View_ColorChooser& getColorChooser(ColorChooserType type);
 	std::string getFontName();
 	int getFontSize();
 	void setFontName(std::string const& value);

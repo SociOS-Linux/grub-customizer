@@ -22,9 +22,9 @@
 #include <map>
 #include <list>
 
-class EntryEditDlg {
+class View_EntryEditor {
 public:
-	virtual inline ~EntryEditDlg() {};
+	virtual inline ~View_EntryEditor() {};
 
 	virtual void show() = 0;
 	virtual void setSourcecode(std::string const& source) = 0;

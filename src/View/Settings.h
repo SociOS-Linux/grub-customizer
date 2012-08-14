@@ -24,9 +24,9 @@
 /**
  * Interface to be implemented by settings dialogs
  */
-class SettingsDlg {
+class View_Settings {
 public:
-	virtual inline ~SettingsDlg() {};
+	virtual inline ~View_Settings() {};
 
 	enum DefEntryType {
 		DEF_ENTRY_PREDEFINED,
@@ -52,7 +52,7 @@ public:
 	//hide this dialog
 	virtual void hide()=0;
 	//returns an interface to the given color chooser
-	virtual ColorChooser& getColorChooser(ColorChooserType type)=0;
+	virtual View_ColorChooser& getColorChooser(ColorChooserType type)=0;
 	//get the name of the selected font
 	virtual std::string getFontName()=0;
 	//get the font size

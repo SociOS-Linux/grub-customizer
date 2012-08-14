@@ -27,9 +27,9 @@
 /**
  * Interface for dialogs which lets the user control the grub list
  */
-class GrublistCfgDlg {
+class View_Main {
 public:
-	virtual inline ~GrublistCfgDlg() {};
+	virtual inline ~View_Main() {};
 
 	enum Exception {
 		PROXY_ITER_NOT_FOUND,
