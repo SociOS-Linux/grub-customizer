@@ -24,7 +24,7 @@
 #include "../../interface/grubInstallDlg.h"
 #include "../../presenter/commonClass.h"
 
-class GrubInstallDlgGtk : public Gtk::Dialog, public GrubInstallDlg, public CommonClass {
+class View_Gtk_Installer : public Gtk::Dialog, public GrubInstallDlg, public CommonClass {
 	Gtk::Label lblDescription;
 	Gtk::HBox hbDevice;
 	Gtk::Label lblDevice, lblInstallInfo;
@@ -35,7 +35,7 @@ class GrubInstallDlgGtk : public Gtk::Dialog, public GrubInstallDlg, public Comm
 	void signal_grub_install_dialog_response(int response_id);
 	Glib::ustring install_result;
 	public:
-	GrubInstallDlgGtk();
+	View_Gtk_Installer();
 	void show();
 	void showMessageGrubInstallCompleted(std::string const& msg);
 	void setEventListener(EventListener_grubInstallDlg& eventListener);

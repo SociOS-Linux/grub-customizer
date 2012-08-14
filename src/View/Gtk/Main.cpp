@@ -22,7 +22,7 @@ ImageMenuItemOwnKey::ImageMenuItemOwnKey(const Gtk::StockID& id, const Gtk::Acce
 	set_accel_key(accel_key);
 }
 
-GrublistCfgDlgGtk::GrublistCfgDlgGtk()
+View_Gtk_Main::View_Gtk_Main()
 	: tbttAdd(Gtk::Stock::UNDELETE), tbttRemove(Gtk::Stock::DELETE), tbttUp(Gtk::Stock::GO_UP), tbttDown(Gtk::Stock::GO_DOWN),
 	tbttLeft(Gtk::Stock::GO_BACK), tbttRight(Gtk::Stock::GO_FORWARD),
 	tbttSave(Gtk::Stock::SAVE), tbttEditEntry(Gtk::Stock::EDIT),
@@ -185,63 +185,63 @@ GrublistCfgDlgGtk::GrublistCfgDlgGtk()
 
 	//signals
 	
-	tbttUp.signal_clicked().connect(sigc::bind<int>(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_move_click),-1));
-	tbttDown.signal_clicked().connect(sigc::bind<int>(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_move_click),1));
-	tvConfList.get_selection()->signal_changed().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_treeview_selection_changed));
-	tvConfList.textRenderer.signal_editing_started().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_edit_name));
-	tvConfList.textRenderer.signal_edited().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_edit_name_finished));
-	tvConfList.signal_button_press_event().connect_notify(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_button_press));
-	tvConfList.signal_popup_menu().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_popup));
-	tvConfList.signal_key_press_event().connect_notify(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_key_press));
-	tbttSave.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::saveConfig));
-	tbttAdd.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_add_click));
-	tbttRemove.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_remove_click));
-	tbttLeft.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_move_left_click));
-	tbttRight.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_move_right_click));
-	tbttReload.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_reload_click));
-	tbttEditEntry.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_entry_edit_click));
-	tbttCreateEntry.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_entry_create_click));
-	tbttRevert.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_revert));
-	bttAdvancedSettings1.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_preference_click));
-	bttAdvancedSettings2.signal_clicked().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_preference_click));
+	tbttUp.signal_clicked().connect(sigc::bind<int>(sigc::mem_fun(this, &View_Gtk_Main::signal_move_click),-1));
+	tbttDown.signal_clicked().connect(sigc::bind<int>(sigc::mem_fun(this, &View_Gtk_Main::signal_move_click),1));
+	tvConfList.get_selection()->signal_changed().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_treeview_selection_changed));
+	tvConfList.textRenderer.signal_editing_started().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_edit_name));
+	tvConfList.textRenderer.signal_edited().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_edit_name_finished));
+	tvConfList.signal_button_press_event().connect_notify(sigc::mem_fun(this, &View_Gtk_Main::signal_button_press));
+	tvConfList.signal_popup_menu().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_popup));
+	tvConfList.signal_key_press_event().connect_notify(sigc::mem_fun(this, &View_Gtk_Main::signal_key_press));
+	tbttSave.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Main::saveConfig));
+	tbttAdd.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_add_click));
+	tbttRemove.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_remove_click));
+	tbttLeft.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_move_left_click));
+	tbttRight.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_move_right_click));
+	tbttReload.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_reload_click));
+	tbttEditEntry.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_entry_edit_click));
+	tbttCreateEntry.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_entry_create_click));
+	tbttRevert.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_revert));
+	bttAdvancedSettings1.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_preference_click));
+	bttAdvancedSettings2.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_preference_click));
 	
-	miUp.signal_activate().connect(sigc::bind<int>(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_move_click),-1));
-	miCUp.signal_activate().connect(sigc::bind<int>(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_move_click),-1));
-	miDown.signal_activate().connect(sigc::bind<int>(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_move_click),1));
-	miCDown.signal_activate().connect(sigc::bind<int>(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_move_click),1));
-	miLeft.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_move_left_click));
-	miCLeft.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_move_left_click));
-	miRight.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_move_right_click));
-	miCRight.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_move_right_click));
-	miSave.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::saveConfig));
-	miAdd.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_add_click));
-	miEditEntry.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_entry_edit_click));
-	miCEditEntry.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_entry_edit_click));
-	miCreateEntry.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_entry_create_click));
-	miRemove.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_remove_click));
-	miCRemove.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_remove_click));
-	miCRename.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_rename_click));
-	miReload.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_reload_click));
-	miInstallGrub.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_show_grub_install_dialog_click));
-	miModifyEnvironment.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_show_envEditor));
-	miRevert.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_revert));
+	miUp.signal_activate().connect(sigc::bind<int>(sigc::mem_fun(this, &View_Gtk_Main::signal_move_click),-1));
+	miCUp.signal_activate().connect(sigc::bind<int>(sigc::mem_fun(this, &View_Gtk_Main::signal_move_click),-1));
+	miDown.signal_activate().connect(sigc::bind<int>(sigc::mem_fun(this, &View_Gtk_Main::signal_move_click),1));
+	miCDown.signal_activate().connect(sigc::bind<int>(sigc::mem_fun(this, &View_Gtk_Main::signal_move_click),1));
+	miLeft.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_move_left_click));
+	miCLeft.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_move_left_click));
+	miRight.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_move_right_click));
+	miCRight.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_move_right_click));
+	miSave.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::saveConfig));
+	miAdd.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_add_click));
+	miEditEntry.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_entry_edit_click));
+	miCEditEntry.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_entry_edit_click));
+	miCreateEntry.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_entry_create_click));
+	miRemove.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_remove_click));
+	miCRemove.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_remove_click));
+	miCRename.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_rename_click));
+	miReload.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_reload_click));
+	miInstallGrub.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_show_grub_install_dialog_click));
+	miModifyEnvironment.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_show_envEditor));
+	miRevert.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_revert));
 
-	miExit.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_quit_click));
-	miAbout.signal_activate().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_info_click));
+	miExit.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_quit_click));
+	miAbout.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_info_click));
 	
-	burgSwitcher.signal_response().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_burg_switcher_response));
+	burgSwitcher.signal_response().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_burg_switcher_response));
 
-	infoReloadRequired.signal_response().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_reload_recommendation_response));
+	infoReloadRequired.signal_response().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_reload_recommendation_response));
 
-	win.signal_delete_event().connect(sigc::mem_fun(this, &GrublistCfgDlgGtk::signal_delete_event));
+	win.signal_delete_event().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_delete_event));
 
 }
 
-void GrublistCfgDlgGtk::setEventListener(EventListener_listCfgDlg& eventListener) {
+void View_Gtk_Main::setEventListener(EventListener_listCfgDlg& eventListener) {
 	this->eventListener = &eventListener;
 }
 
-void GrublistCfgDlgGtk::putSettingsDialog(Gtk::VBox& commonSettingsPane, Gtk::VBox& appearanceSettingsPane) {
+void View_Gtk_Main::putSettingsDialog(Gtk::VBox& commonSettingsPane, Gtk::VBox& appearanceSettingsPane) {
 //	notebook.append_page(this->settingsHBox, "_settings", true);
 	commonSettingsPane.set_border_width(20);
 	notebook.append_page(commonSettingsPane, gettext("_General settings"), true);
@@ -254,13 +254,13 @@ void GrublistCfgDlgGtk::putSettingsDialog(Gtk::VBox& commonSettingsPane, Gtk::VB
 	bbxAdvancedSettings2.pack_end(bttAdvancedSettings2);
 }
 
-void GrublistCfgDlgGtk::signal_edit_name(Gtk::CellEditable* editable, const Glib::ustring& path) {
+void View_Gtk_Main::signal_edit_name(Gtk::CellEditable* editable, const Glib::ustring& path) {
 	Gtk::TreeModel::iterator iter = this->tvConfList.refTreeStore->get_iter(path);
 	Glib::ustring name = (*iter)[this->tvConfList.treeModel.name];
 	editable->set_property<Glib::ustring>("text", name);
 }
 
-void GrublistCfgDlgGtk::setIsBurgMode(bool isBurgMode){
+void View_Gtk_Main::setIsBurgMode(bool isBurgMode){
 	if (isBurgMode)
 		win.set_title("Grub Customizer (" + Glib::ustring(gettext("BURG Mode")) + ")");
 	else
@@ -269,24 +269,24 @@ void GrublistCfgDlgGtk::setIsBurgMode(bool isBurgMode){
 	tbttSave.set_tooltip_text(Glib::ustring(gettext("Save configuration and generate a new "))+(isBurgMode?"burg.cfg":"grub.cfg"));
 }
 
-void GrublistCfgDlgGtk::signal_button_press(GdkEventButton *event) {
+void View_Gtk_Main::signal_button_press(GdkEventButton *event) {
 	if (event->type == GDK_BUTTON_PRESS && event->button == 3) {
 		contextMenu.popup(event->button, event->time);
 	}
 }
 
-bool GrublistCfgDlgGtk::signal_popup() {
+bool View_Gtk_Main::signal_popup() {
 	contextMenu.popup(0, gdk_event_get_time(NULL));
 	return true;
 }
 
-void GrublistCfgDlgGtk::signal_key_press(GdkEventKey* key) {
+void View_Gtk_Main::signal_key_press(GdkEventKey* key) {
 	if (key->keyval == GDK_Delete) {
 		this->eventListener->signal_entry_remove_requested(this->getSelectedRules());
 	}
 }
 
-void GrublistCfgDlgGtk::signal_revert() {
+void View_Gtk_Main::signal_revert() {
 	Gtk::MessageDialog msgDlg(gettext("Are you sure?"), false, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_OK_CANCEL);
 	msgDlg.set_secondary_text(gettext("This removes all your list modifications of the bootloader menu!"));
 	int response = msgDlg.run();
@@ -295,58 +295,58 @@ void GrublistCfgDlgGtk::signal_revert() {
 	}
 }
 
-void GrublistCfgDlgGtk::signal_reload_recommendation_response(int response_id) {
+void View_Gtk_Main::signal_reload_recommendation_response(int response_id) {
 	if (response_id == Gtk::RESPONSE_APPLY) {
 		this->eventListener->reload_request();
 	}
 }
 
-void GrublistCfgDlgGtk::showBurgSwitcher(){
+void View_Gtk_Main::showBurgSwitcher(){
 	burgSwitcher.show();
 }
 
-void GrublistCfgDlgGtk::hideBurgSwitcher(){
+void View_Gtk_Main::hideBurgSwitcher(){
 	burgSwitcher.hide();
 }
 
-bool GrublistCfgDlgGtk::isVisible(){
+bool View_Gtk_Main::isVisible(){
 	return win.is_visible();
 }
 
-void GrublistCfgDlgGtk::show(){
+void View_Gtk_Main::show(){
 	win.show_all();
 }
 
-void GrublistCfgDlgGtk::hide() {
+void View_Gtk_Main::hide() {
 	win.hide();
 }
 
-void GrublistCfgDlgGtk::run(){
+void View_Gtk_Main::run(){
 	this->show();
 	Gtk::Main::run(win);
 }
 
-void GrublistCfgDlgGtk::setProgress(double progress){
+void View_Gtk_Main::setProgress(double progress){
 	progressBar.set_fraction(progress);
 	progressBar.show();
 	statusbar.show();
 }
 
-void GrublistCfgDlgGtk::progress_pulse(){
+void View_Gtk_Main::progress_pulse(){
 	progressBar.pulse();
 	progressBar.show();
 	statusbar.show();
 }
 
-void GrublistCfgDlgGtk::hideProgressBar(){
+void View_Gtk_Main::hideProgressBar(){
 	statusbar.hide();
 }
 
-void GrublistCfgDlgGtk::setStatusText(std::string const& new_status_text){
+void View_Gtk_Main::setStatusText(std::string const& new_status_text){
 	statusbar.push(new_status_text);
 }
 
-void GrublistCfgDlgGtk::setStatusText(std::string const& name, int pos, int max){
+void View_Gtk_Main::setStatusText(std::string const& name, int pos, int max){
 	if (name == "") {
 		statusbar.push(gettext("loading configuration…"));
 	} else {
@@ -354,7 +354,7 @@ void GrublistCfgDlgGtk::setStatusText(std::string const& name, int pos, int max)
 	}
 }
 
-void GrublistCfgDlgGtk::appendEntry(std::string const& name, void* entryPtr, bool is_placeholder, bool is_submenu, std::string const& scriptName, std::string const& defaultName, bool isEditable, bool isModified, std::map<std::string, std::string> const& options, void* parentEntry){
+void View_Gtk_Main::appendEntry(std::string const& name, void* entryPtr, bool is_placeholder, bool is_submenu, std::string const& scriptName, std::string const& defaultName, bool isEditable, bool isModified, std::map<std::string, std::string> const& options, void* parentEntry){
 	Gtk::TreeIter entryRow;
 	if (parentEntry) {
 		entryRow = tvConfList.refTreeStore->append(this->getIterByRulePtr(parentEntry)->children());
@@ -410,13 +410,13 @@ void GrublistCfgDlgGtk::appendEntry(std::string const& name, void* entryPtr, boo
 
 
 
-void GrublistCfgDlgGtk::showProxyNotFoundMessage(){
+void View_Gtk_Main::showProxyNotFoundMessage(){
 	Gtk::MessageDialog msg(gettext("Proxy binary not found!"), false, Gtk::MESSAGE_WARNING);
 	msg.set_secondary_text(gettext("You will see all entries (uncustomized) when you run grub. This error accurs (in most cases), when you didn't install grub gustomizer currectly."));
 	msg.run();
 }
 
-std::string GrublistCfgDlgGtk::createNewEntriesPlaceholderString(std::string const& parentMenu, std::string const& sourceScriptName) {
+std::string View_Gtk_Main::createNewEntriesPlaceholderString(std::string const& parentMenu, std::string const& sourceScriptName) {
 	if (sourceScriptName != "" && parentMenu != "") {
 		return Glib::ustring::compose(gettext("(incoming Entries of %1, Script: %2)"), parentMenu, sourceScriptName);
 	} else if (parentMenu != "") {
@@ -428,7 +428,7 @@ std::string GrublistCfgDlgGtk::createNewEntriesPlaceholderString(std::string con
 	}
 }
 
-std::string GrublistCfgDlgGtk::createPlaintextString(std::string const& scriptName) const {
+std::string View_Gtk_Main::createPlaintextString(std::string const& scriptName) const {
 	if (scriptName == "") {
 		return gettext("(script code)");
 	} else {
@@ -436,12 +436,12 @@ std::string GrublistCfgDlgGtk::createPlaintextString(std::string const& scriptNa
 	}
 }
 
-void GrublistCfgDlgGtk::saveConfig(){
+void View_Gtk_Main::saveConfig(){
 	eventListener->save_request();
 }
 
 
-void GrublistCfgDlgGtk::setLockState(int state){
+void View_Gtk_Main::setLockState(int state){
 	//state(bin):
 	//	0: lock nothing
 	//	1: lock normal items/buttons
@@ -501,7 +501,7 @@ void GrublistCfgDlgGtk::setLockState(int state){
 }
 
 
-void GrublistCfgDlgGtk::updateButtonsState(){
+void View_Gtk_Main::updateButtonsState(){
 	update_remove_button();
 	update_move_buttons();
 
@@ -514,7 +514,7 @@ void GrublistCfgDlgGtk::updateButtonsState(){
 	miCEditEntry.set_sensitive(editableEntrySelected);
 }
 
-bool GrublistCfgDlgGtk::selectedEntriesAreOnSameLevel() {
+bool View_Gtk_Main::selectedEntriesAreOnSameLevel() {
 	assert(this->tvConfList.get_selection()->count_selected_rows() >= 1);
 
 	std::vector<Gtk::TreeModel::Path> pathes = this->tvConfList.get_selection()->get_selected_rows();
@@ -539,7 +539,7 @@ bool GrublistCfgDlgGtk::selectedEntriesAreOnSameLevel() {
 	return result;
 }
 
-bool GrublistCfgDlgGtk::selectedEntriesAreSubsequent() {
+bool View_Gtk_Main::selectedEntriesAreSubsequent() {
 	assert(this->selectedEntriesAreOnSameLevel());
 	if (this->tvConfList.get_selection()->count_selected_rows() == 1) {
 		return true;
@@ -559,7 +559,7 @@ bool GrublistCfgDlgGtk::selectedEntriesAreSubsequent() {
 	return true;
 }
 
-std::list<void*> GrublistCfgDlgGtk::getSelectedRules() {
+std::list<void*> View_Gtk_Main::getSelectedRules() {
 	std::list<void*> rules;
 	std::vector<Gtk::TreeModel::Path> pathes = tvConfList.get_selection()->get_selected_rows();
 	for (std::vector<Gtk::TreeModel::Path>::iterator iter = pathes.begin(); iter != pathes.end(); iter++) {
@@ -571,11 +571,11 @@ std::list<void*> GrublistCfgDlgGtk::getSelectedRules() {
 }
 
 
-void GrublistCfgDlgGtk::signal_reload_click(){
+void View_Gtk_Main::signal_reload_click(){
 	eventListener->reload_request();
 }
 
-Gtk::TreeModel::iterator GrublistCfgDlgGtk::getIterByRulePtr(void* rulePtr, const Gtk::TreeRow* parentRow) const {
+Gtk::TreeModel::iterator View_Gtk_Main::getIterByRulePtr(void* rulePtr, const Gtk::TreeRow* parentRow) const {
 	const Gtk::TreeNodeChildren children = parentRow ? parentRow->children() : tvConfList.refTreeStore->children();
 	for (Gtk::TreeModel::const_iterator iter = children.begin(); iter != children.end(); iter++) {
 		if ((*iter)[tvConfList.treeModel.relatedRule] == rulePtr)
@@ -591,24 +591,24 @@ Gtk::TreeModel::iterator GrublistCfgDlgGtk::getIterByRulePtr(void* rulePtr, cons
 	throw RULE_ITER_NOT_FOUND;
 }
 
-void GrublistCfgDlgGtk::signal_edit_name_finished(const Glib::ustring& path, const Glib::ustring& new_text){
+void View_Gtk_Main::signal_edit_name_finished(const Glib::ustring& path, const Glib::ustring& new_text){
 	if (this->lock_state == 0){
 		Gtk::TreeModel::iterator iter = this->tvConfList.refTreeStore->get_iter(path);
 		eventListener->signal_entry_renamed((void*)(*iter)[tvConfList.treeModel.relatedRule], new_text);
 	}
 }
 
-void GrublistCfgDlgGtk::signal_show_envEditor(){
+void View_Gtk_Main::signal_show_envEditor(){
 	eventListener->envEditor_request();
 }
 
 
 
-std::string GrublistCfgDlgGtk::getRuleName(void* rule){
+std::string View_Gtk_Main::getRuleName(void* rule){
 	Gtk::TreeModel::iterator iter = this->getIterByRulePtr(rule);
 	return (Glib::ustring)(*iter)[tvConfList.treeModel.text];
 }
-void GrublistCfgDlgGtk::setRuleName(void* rule, std::string const& newName){
+void View_Gtk_Main::setRuleName(void* rule, std::string const& newName){
 	Gtk::TreeModel::iterator iter = this->getIterByRulePtr(rule);
 	this->setLockState(~0);
 	(*iter)[tvConfList.treeModel.name] = newName;
@@ -616,7 +616,7 @@ void GrublistCfgDlgGtk::setRuleName(void* rule, std::string const& newName){
 }
 
 
-void GrublistCfgDlgGtk::selectRule(void* rule, bool startEdit) {
+void View_Gtk_Main::selectRule(void* rule, bool startEdit) {
 	try {
 		this->tvConfList.get_selection()->select(this->getIterByRulePtr(rule));
 		if (startEdit) {
@@ -628,26 +628,26 @@ void GrublistCfgDlgGtk::selectRule(void* rule, bool startEdit) {
 	}
 }
 
-void GrublistCfgDlgGtk::selectRules(std::list<void*> rules) {
+void View_Gtk_Main::selectRules(std::list<void*> rules) {
 	for (std::list<void*>::iterator iter = rules.begin(); iter != rules.end(); iter++) {
 		this->tvConfList.get_selection()->select(this->getIterByRulePtr(*iter));
 	}
 }
 
-void GrublistCfgDlgGtk::setTrashCounter(int count) {
+void View_Gtk_Main::setTrashCounter(int count) {
 	this->tbttAdd.set_label(Glib::ustring::compose(gettext("Trash (%1)"), count));
 }
 
-void GrublistCfgDlgGtk::showReloadRecommendation() {
+void View_Gtk_Main::showReloadRecommendation() {
 	this->infoReloadRequired.show();
 	this->lblReloadRequired.show();
 }
 
-void GrublistCfgDlgGtk::hideReloadRecommendation() {
+void View_Gtk_Main::hideReloadRecommendation() {
 	this->infoReloadRequired.hide();
 }
 
-void GrublistCfgDlgGtk::signal_move_click(int direction){
+void View_Gtk_Main::signal_move_click(int direction){
 	if (this->lock_state == 0){
 		assert(direction == 1 || direction == -1);
 
@@ -656,7 +656,7 @@ void GrublistCfgDlgGtk::signal_move_click(int direction){
 	}
 }
 
-void GrublistCfgDlgGtk::update_remove_button(){
+void View_Gtk_Main::update_remove_button(){
 	if (tvConfList.get_selection()->count_selected_rows() >= 1){
 		tbttRemove.set_sensitive(true);
 		miRemove.set_sensitive(true);
@@ -668,11 +668,11 @@ void GrublistCfgDlgGtk::update_remove_button(){
 	}
 }
 
-void GrublistCfgDlgGtk::setDefaultTitleStatusText(std::string const& str){
+void View_Gtk_Main::setDefaultTitleStatusText(std::string const& str){
 	this->setStatusText(gettext("Default title: ")+str);
 }
 
-void GrublistCfgDlgGtk::signal_treeview_selection_changed(){
+void View_Gtk_Main::signal_treeview_selection_changed(){
 	if (this->lock_state == 0){
 		if (tvConfList.get_selection()->count_selected_rows()) {
 			std::vector<Gtk::TreeModel::Path> selectedRows = tvConfList.get_selection()->get_selected_rows();
@@ -688,33 +688,33 @@ void GrublistCfgDlgGtk::signal_treeview_selection_changed(){
 	}
 }
 
-void GrublistCfgDlgGtk::signal_entry_edit_click() {
+void View_Gtk_Main::signal_entry_edit_click() {
 	std::list<void*> rules = this->getSelectedRules();
 	assert(rules.size() == 1);
 	eventListener->entryEditDlg_requested(rules.front());
 }
 
-void GrublistCfgDlgGtk::signal_entry_create_click() {
+void View_Gtk_Main::signal_entry_create_click() {
 	eventListener->entryCreateDlgRequested();
 }
 
-void GrublistCfgDlgGtk::signal_add_click(){
+void View_Gtk_Main::signal_add_click(){
 	eventListener->entryAddDlg_requested();
 }
 
-void GrublistCfgDlgGtk::signal_remove_click() {
+void View_Gtk_Main::signal_remove_click() {
 	eventListener->signal_entry_remove_requested(this->getSelectedRules());
 }
 
-void GrublistCfgDlgGtk::signal_rename_click() {
+void View_Gtk_Main::signal_rename_click() {
 	this->selectRule(this->getSelectedRules().front(), true);
 }
 
-void GrublistCfgDlgGtk::signal_preference_click(){
+void View_Gtk_Main::signal_preference_click(){
 	eventListener->settings_dialog_request();
 }
 
-void GrublistCfgDlgGtk::update_move_buttons(){
+void View_Gtk_Main::update_move_buttons(){
 	int selectedRowsCount = tvConfList.get_selection()->count_selected_rows();
 	bool is_toplevel = false;
 	bool sameLevel = false;
@@ -748,7 +748,7 @@ void GrublistCfgDlgGtk::update_move_buttons(){
 }
 
 
-void GrublistCfgDlgGtk::close(){
+void View_Gtk_Main::close(){
 	win.hide();
 	Gtk::Main::quit();
 }
@@ -757,7 +757,7 @@ void GrublistCfgDlgGtk::close(){
  * @param type int: which type of dialog to show (1: changes unsaved, 2: conf not up to date, 3: 1 + 2)
  * @return int: type of the answer: 0: cancel, 1: yes, 2: no
  */
-int GrublistCfgDlgGtk::showExitConfirmDialog(int type){
+int View_Gtk_Main::showExitConfirmDialog(int type){
 	int dlgResponse = Gtk::RESPONSE_NO;
 	if (type != 0){
 		Gtk::MessageDialog msgDlg("", false, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_NONE);
@@ -796,29 +796,29 @@ int GrublistCfgDlgGtk::showExitConfirmDialog(int type){
 	}
 }
 
-bool GrublistCfgDlgGtk::signal_delete_event(GdkEventAny* event){ //return value: keep window open
+bool View_Gtk_Main::signal_delete_event(GdkEventAny* event){ //return value: keep window open
 	eventListener->exitRequest();
 	return true;
 }
 
-void GrublistCfgDlgGtk::signal_quit_click(){
+void View_Gtk_Main::signal_quit_click(){
 	eventListener->exitRequest();
 }
 
 
-void GrublistCfgDlgGtk::signal_show_grub_install_dialog_click(){
+void View_Gtk_Main::signal_show_grub_install_dialog_click(){
 	eventListener->installDialogRequest();
 }
 
-void GrublistCfgDlgGtk::signal_move_left_click() {
+void View_Gtk_Main::signal_move_left_click() {
 	eventListener->removeSubmenuRequest(this->getSelectedRules());
 }
 
-void GrublistCfgDlgGtk::signal_move_right_click() {
+void View_Gtk_Main::signal_move_right_click() {
 	eventListener->createSubmenuRequest(this->getSelectedRules());
 }
 
-void GrublistCfgDlgGtk::showErrorMessage(std::string const& msg, std::vector<std::string> const& values = std::vector<std::string>()){
+void View_Gtk_Main::showErrorMessage(std::string const& msg, std::vector<std::string> const& values = std::vector<std::string>()){
 	Glib::ustring msg2 = msg;
 	switch (values.size()) {
 	case 1:	msg2 = Glib::ustring::compose(msg, values[0]); break;
@@ -834,7 +834,7 @@ void GrublistCfgDlgGtk::showErrorMessage(std::string const& msg, std::vector<std
 	Gtk::MessageDialog(msg2, false, Gtk::MESSAGE_ERROR).run();
 }
 
-bool GrublistCfgDlgGtk::askForEnvironmentSettings(std::string const& failedCmd, std::string const& errorMessage) {
+bool View_Gtk_Main::askForEnvironmentSettings(std::string const& failedCmd, std::string const& errorMessage) {
 	Glib::ustring msg = Glib::ustring::compose(gettext("%1 couldn't be executed successfully. error message:\n %2"), failedCmd, errorMessage);
 	Gtk::MessageDialog dlg(msg, false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_NONE);
 	dlg.add_button(gettext("Environment settings"), Gtk::RESPONSE_YES);
@@ -844,11 +844,11 @@ bool GrublistCfgDlgGtk::askForEnvironmentSettings(std::string const& failedCmd, 
 	return response == Gtk::RESPONSE_YES;
 }
 
-void GrublistCfgDlgGtk::clear(){
+void View_Gtk_Main::clear(){
 	tvConfList.refTreeStore->clear();
 }
 
-bool GrublistCfgDlgGtk::confirmUnsavedSwitch() {
+bool View_Gtk_Main::confirmUnsavedSwitch() {
 	Gtk::MessageDialog dlg(gettext("Do you want to proceed without saving the current configuration?"), false, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_YES_NO);
 	dlg.set_title(gettext("There are unsaved modifications!"));
 	dlg.set_default_response(Gtk::RESPONSE_YES);
@@ -856,18 +856,18 @@ bool GrublistCfgDlgGtk::confirmUnsavedSwitch() {
 	return response == Gtk::RESPONSE_YES;
 }
 
-void GrublistCfgDlgGtk::signal_info_click(){
+void View_Gtk_Main::signal_info_click(){
 	eventListener->aboutDialog_requested();
 }
 
-void GrublistCfgDlgGtk::signal_burg_switcher_response(int response_id){
+void View_Gtk_Main::signal_burg_switcher_response(int response_id){
 	if (response_id == Gtk::RESPONSE_DELETE_EVENT)
 		eventListener->burgSwitcher_cancelled();
 	else
 		eventListener->burgSwitcher_response(response_id == Gtk::RESPONSE_YES);
 }
 
-GrubConfListing::GrubConfListing(){
+View_Gtk_Main_List::View_Gtk_Main_List(){
 	refTreeStore = Gtk::TreeStore::create(treeModel);
 	this->set_model(refTreeStore);
 
@@ -884,7 +884,7 @@ GrubConfListing::GrubConfListing(){
 	this->set_rubber_banding(true);
 }
 
-GrubConfListing::TreeModel::TreeModel(){
+View_Gtk_Main_List::TreeModel::TreeModel(){
 	this->add(name);
 	this->add(text);
 	this->add(relatedRule);

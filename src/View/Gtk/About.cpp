@@ -18,12 +18,12 @@
 
 #include "About.h"
 
-void AboutDialogGtk::signal_about_dlg_response(int response_id){
+void View_Gtk_About::signal_about_dlg_response(int response_id){
 	if (Gtk::RESPONSE_CLOSE)
 		this->hide();
 }
 
-AboutDialogGtk::AboutDialogGtk()
+View_Gtk_About::View_Gtk_About()
 	: appName("Grub Customizer"), appVersion(GC_VERSION)
 {
 	this->set_name(appName);
@@ -88,9 +88,9 @@ Tubuntu https://launchpad.net/~t-ubuntu\n\
 Zbyněk Schwarz https://launchpad.net/~tsbook\n\
 zeugma https://launchpad.net/~sunder67\
 ");
-	this->signal_response().connect(sigc::mem_fun(this, &AboutDialogGtk::signal_about_dlg_response));
+	this->signal_response().connect(sigc::mem_fun(this, &View_Gtk_About::signal_about_dlg_response));
 }
 
-void AboutDialogGtk::show(){
+void View_Gtk_About::show(){
 	Gtk::AboutDialog::show();
 }

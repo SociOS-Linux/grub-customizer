@@ -28,7 +28,7 @@
 
 
 //a gtkmm combobox with colorful foreground and background. useful to choose an item of a predefined color set
-class ColorChooserGtk : public Gtk::ComboBox, public ColorChooser {
+class View_Gtk_Settings_ColorChooser : public Gtk::ComboBox, public ColorChooser {
 	struct Columns : public Gtk::TreeModelColumnRecord {
 		Gtk::TreeModelColumn<Glib::ustring> name;
 		Gtk::TreeModelColumn<Glib::ustring> idName;
@@ -39,7 +39,7 @@ class ColorChooserGtk : public Gtk::ComboBox, public ColorChooser {
 	Columns columns;
 	Glib::RefPtr<Gtk::ListStore> refListStore;
 	public:
-	ColorChooserGtk();
+	View_Gtk_Settings_ColorChooser();
 	void addColor(std::string const& codeName, std::string const& outputName, std::string const& cell_background, std::string const& cell_foreground);
 	void selectColor(std::string const& codeName);
 	std::string getSelectedColor() const;
@@ -47,12 +47,12 @@ class ColorChooserGtk : public Gtk::ComboBox, public ColorChooser {
 };
 
 //a color chooser with predefined colors for grub
-class GrubColorChooser : public ColorChooserGtk {
+class GrubColorChooser : public View_Gtk_Settings_ColorChooser {
 public:
 	GrubColorChooser(bool blackIsTransparent = false);
 };
 
-class GrubSettingsDlgGtk : public Gtk::Dialog, public SettingsDlg, public CommonClass {
+class View_Gtk_Settings : public Gtk::Dialog, public SettingsDlg, public CommonClass {
 	struct AdvancedSettingsTreeModel : public Gtk::TreeModelColumnRecord {
 		Gtk::TreeModelColumn<bool> active;
 		Gtk::TreeModelColumn<Glib::ustring> name;
@@ -174,7 +174,7 @@ class GrubSettingsDlgGtk : public Gtk::Dialog, public SettingsDlg, public Common
 	bool signal_redraw_preview(GdkEventExpose* event);
 	void on_response(int response_id);
 	public:
-	GrubSettingsDlgGtk();
+	View_Gtk_Settings();
 	void setEventListener(EventListener_settings& eventListener);
 	Gtk::VBox& getCommonSettingsPane();
 	Gtk::VBox& getAppearanceSettingsPane();

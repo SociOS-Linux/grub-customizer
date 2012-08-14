@@ -55,24 +55,24 @@ int main(int argc, char** argv){
 	GrubCustomizer presenter(env);
 
 	GrublistCfg listcfg(env);
-	GrublistCfgDlgGtk listCfgView;
+	View_Gtk_Main listCfgView;
 	SettingsManagerDataStore settings(env);
 	SettingsManagerDataStore settingsOnDisk(env);
 	GrubInstaller installer(env);
-	GrubInstallDlgGtk installDlg;
-	EntryAddDlgGtk scriptAddDlg;
-	EntryEditDlgGtk entryEditDlg;
+	View_Gtk_Installer installDlg;
+	View_Gtk_Trash scriptAddDlg;
+	View_Gtk_EntryEditor entryEditDlg;
 	MountTable mountTable;
 	GrublistCfg savedListCfg(env);
 	FbResolutionsGetter fbResolutionsGetter;
-	GrubSettingsDlgGtk settingsDlg;
+	View_Gtk_Settings settingsDlg;
 	DeviceDataList deviceDataList;
-	AboutDialogGtk aboutDialog;
+	View_Gtk_About aboutDialog;
 	GlibMutex listCfgMutex1;
 	GlibMutex listCfgMutex2;
 	GlibThreadController threadC(presenter);
 	ContentParserFactoryImpl contentParserFactory;
-	GrubEnvEditorGtk envEditor;
+	View_Gtk_EnvEditor envEditor;
 
 	entryEditDlg.setDeviceDataList(deviceDataList);
 	envEditor.setDeviceDataList(deviceDataList);

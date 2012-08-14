@@ -26,7 +26,7 @@
 #include "Element/PartitionChooser.h"
 #include "../../interface/deviceDataList_Iface.h"
 
-class GrubEnvEditorGtk : public Gtk::Dialog, public GrubEnvEditor, public CommonClass {
+class View_Gtk_EnvEditor : public Gtk::Dialog, public GrubEnvEditor, public CommonClass {
 	EventListener_grubEnvEditor* eventListener;
 	Gtk::VBox vbContent;
 	Gtk::Table tblLayout;
@@ -37,7 +37,7 @@ class GrubEnvEditorGtk : public Gtk::Dialog, public GrubEnvEditor, public Common
 	Gtk::ScrolledWindow scrSubmountpoints;
 	Gtk::VBox vbSubmountpoints;
 	Gtk::Label lblSubmountpoints;
-	PartitionChooser_DropDown* pChooser;
+	View_Gtk_Element_PartitionChooser* pChooser;
 	DeviceDataList_Iface* deviceDataList;
 	std::map<std::string, Gtk::Entry*> optionMap;
 	std::map<std::string, Gtk::Label*> labelMap;
@@ -49,8 +49,8 @@ class GrubEnvEditorGtk : public Gtk::Dialog, public GrubEnvEditor, public Common
 
 	std::string rootDeviceName;
 public:
-	GrubEnvEditorGtk();
-	~GrubEnvEditorGtk();
+	View_Gtk_EnvEditor();
+	~View_Gtk_EnvEditor();
 	void setEventListener(EventListener_grubEnvEditor& eventListener);
 	void setDeviceDataList(DeviceDataList_Iface& deviceDataList);
 	void setRootDeviceName(std::string const& rootDeviceName);

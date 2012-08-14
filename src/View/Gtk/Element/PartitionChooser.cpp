@@ -1,12 +1,12 @@
 #include "PartitionChooser.h"
 
-PartitionChooser_DropDown::PartitionChooser_DropDown(Glib::ustring const& activePartition_uuid, DeviceDataList_Iface const& deviceDataList, bool prependCurrentPartition, std::string const& currentPartitionName)
+View_Gtk_Element_PartitionChooser::View_Gtk_Element_PartitionChooser(Glib::ustring const& activePartition_uuid, DeviceDataList_Iface const& deviceDataList, bool prependCurrentPartition, std::string const& currentPartitionName)
 	: activePartition_uuid(activePartition_uuid), deviceDataList(&deviceDataList), prependCurrentPartition(prependCurrentPartition), currentPartitionName(currentPartitionName)
 {
 	load();
 }
 
-std::string PartitionChooser_DropDown::strToLower(std::string str) {
+std::string View_Gtk_Element_PartitionChooser::strToLower(std::string str) {
 	for (std::string::iterator iter = str.begin(); iter != str.end(); iter++) {
 		*iter = std::tolower(*iter);
 	}
@@ -16,7 +16,7 @@ std::string PartitionChooser_DropDown::strToLower(std::string str) {
 /**
  * returns the uuid of the selected entry of the combobox
  */
-std::string PartitionChooser_DropDown::getSelectedUuid() const {
+std::string View_Gtk_Element_PartitionChooser::getSelectedUuid() const {
 	if (this->get_active_row_number() == 0 && prependCurrentPartition) { // (current)
 		return "";
 	} else {
@@ -24,7 +24,7 @@ std::string PartitionChooser_DropDown::getSelectedUuid() const {
 	}
 }
 
-void PartitionChooser_DropDown::load(){
+void View_Gtk_Element_PartitionChooser::load(){
 	this->clear();
 	if (prependCurrentPartition) {
 		this->append_text(currentPartitionName + "\n(" + gettext("current") + ")");

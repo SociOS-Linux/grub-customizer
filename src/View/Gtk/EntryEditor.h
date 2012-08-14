@@ -28,7 +28,7 @@
 #include "../../interface/deviceDataList_Iface.h"
 #include "Element/PartitionChooser.h"
 
-class EntryEditDlgGtk : public EntryEditDlg, public Gtk::Dialog, public CommonClass {
+class View_Gtk_EntryEditor : public EntryEditDlg, public Gtk::Dialog, public CommonClass {
 	Gtk::Notebook tabbox;
 	Gtk::TextView tvSource;
 	Gtk::ScrolledWindow scrSource;
@@ -46,7 +46,7 @@ class EntryEditDlgGtk : public EntryEditDlg, public Gtk::Dialog, public CommonCl
 protected:
 	virtual std::string mapOptionName(std::string const& name);
 public:
-	EntryEditDlgGtk();
+	View_Gtk_EntryEditor();
 	void setEventListener(EventListener_entryEditDlg& eventListener);
 	void setDeviceDataList(DeviceDataList_Iface& deviceDataList);
 	void setSourcecode(std::string const& source);

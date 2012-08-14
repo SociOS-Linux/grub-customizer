@@ -18,7 +18,7 @@
 
 #include "Trash.h"
 
-EntryAddDlgGtk::EntryAddDlgGtk() {
+View_Gtk_Trash::View_Gtk_Trash() {
 	this->set_title(gettext("Add entry from trash"));
 	this->set_icon_name("grub-customizer");
 	this->set_default_size(650, 500);
@@ -36,36 +36,36 @@ EntryAddDlgGtk::EntryAddDlgGtk() {
 
 	this->iconBox.set_selection_mode(Gtk::SELECTION_MULTIPLE);
 
-	this->iconBox.signal_item_activated().connect(sigc::mem_fun(this, &EntryAddDlgGtk::signal_icon_dblClick));
+	this->iconBox.signal_item_activated().connect(sigc::mem_fun(this, &View_Gtk_Trash::signal_icon_dblClick));
 
 	this->add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
 	this->add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
 
-	this->signal_response().connect(sigc::mem_fun(this, &EntryAddDlgGtk::signal_entryAddDlg_response));
+	this->signal_response().connect(sigc::mem_fun(this, &View_Gtk_Trash::signal_entryAddDlg_response));
 }
 
-void EntryAddDlgGtk::setEventListener(EventListener_entryAddDlg& eventListener){
+void View_Gtk_Trash::setEventListener(EventListener_entryAddDlg& eventListener){
 	this->eventListener = &eventListener;
 }
 
-void EntryAddDlgGtk::clear(){
+void View_Gtk_Trash::clear(){
 	listStore->clear();
 }
 
-void EntryAddDlgGtk::signal_entryAddDlg_response(int response_id){
+void View_Gtk_Trash::signal_entryAddDlg_response(int response_id){
 	if (response_id == Gtk::RESPONSE_OK){
 		eventListener->entryAddDlg_applied();
 	}
 	this->hide();
 }
 
-void EntryAddDlgGtk::signal_icon_dblClick(Gtk::TreeModel::Path path) {
+void View_Gtk_Trash::signal_icon_dblClick(Gtk::TreeModel::Path path) {
 	this->iconBox.select_path(path);
 	eventListener->entryAddDlg_applied();
 	this->hide();
 }
 
-std::list<void*> EntryAddDlgGtk::getSelectedEntries(){
+std::list<void*> View_Gtk_Trash::getSelectedEntries(){
 	std::list<void*> result;
 	std::vector<Gtk::TreePath> pathes = iconBox.get_selected_items();
 	for (std::vector<Gtk::TreePath>::iterator pathIter = pathes.begin(); pathIter != pathes.end(); pathIter++) {
@@ -75,7 +75,7 @@ std::list<void*> EntryAddDlgGtk::getSelectedEntries(){
 	return result;
 }
 
-void EntryAddDlgGtk::addItem(std::string const& name, bool isPlaceholder, std::string const& scriptName, void* relatedEntry){
+void View_Gtk_Trash::addItem(std::string const& name, bool isPlaceholder, std::string const& scriptName, void* relatedEntry){
 	Gtk::TreeModel::iterator iter = this->listStore->append();
 	(*iter)[iconModel.name] = name;
 	(*iter)[iconModel.icon] = this->iconBox.render_icon(isPlaceholder ? Gtk::Stock::FIND : Gtk::Stock::EXECUTE, Gtk::ICON_SIZE_DND);
@@ -83,15 +83,15 @@ void EntryAddDlgGtk::addItem(std::string const& name, bool isPlaceholder, std::s
 	(*iter)[iconModel.relatedRule] = relatedEntry;
 }
 
-void EntryAddDlgGtk::show(){
+void View_Gtk_Trash::show(){
 	this->show_all();
 }
 
-void EntryAddDlgGtk::hide(){
+void View_Gtk_Trash::hide(){
 	this->Gtk::Dialog::hide();
 }
 
-EntryAddDlgGtk::IconModel::IconModel() {
+View_Gtk_Trash::IconModel::IconModel() {
 	this->add(this->name);
 	this->add(this->icon);
 	this->add(this->description);

@@ -18,7 +18,7 @@
 
 #include "Installer.h"
 
-GrubInstallDlgGtk::GrubInstallDlgGtk()
+View_Gtk_Installer::View_Gtk_Installer()
 	: lblDescription(gettext("Install the bootloader to MBR and put some\nfiles to the bootloaders data directory\n(if they don't already exist)."), Gtk::ALIGN_LEFT)
 	, lblDevice(gettext("_Device: "), Gtk::ALIGN_LEFT, Gtk::ALIGN_CENTER, true)
 {
@@ -39,12 +39,12 @@ GrubInstallDlgGtk::GrubInstallDlgGtk()
 	this->set_default_response(Gtk::RESPONSE_OK);
 	txtDevice.set_activates_default(true);
 
-	this->signal_response().connect(sigc::mem_fun(this, &GrubInstallDlgGtk::signal_grub_install_dialog_response));
+	this->signal_response().connect(sigc::mem_fun(this, &View_Gtk_Installer::signal_grub_install_dialog_response));
 	
-	disp_grub_install_ready.connect(sigc::mem_fun(this, &GrubInstallDlgGtk::func_disp_grub_install_ready));
+	disp_grub_install_ready.connect(sigc::mem_fun(this, &View_Gtk_Installer::func_disp_grub_install_ready));
 }
 
-void GrubInstallDlgGtk::func_disp_grub_install_ready(){
+void View_Gtk_Installer::func_disp_grub_install_ready(){
 	std::string output = this->install_result;
 	if (output == ""){
 		Gtk::MessageDialog msg(gettext("The bootloader has been installed successfully"));
@@ -62,7 +62,7 @@ void GrubInstallDlgGtk::func_disp_grub_install_ready(){
 	lblInstallInfo.set_text("");
 }
 
-void GrubInstallDlgGtk::signal_grub_install_dialog_response(int response_id){
+void View_Gtk_Installer::signal_grub_install_dialog_response(int response_id){
 	if (response_id == Gtk::RESPONSE_OK){
 		if (txtDevice.get_text().length()){
 			this->set_response_sensitive(Gtk::RESPONSE_OK, false);
@@ -79,16 +79,16 @@ void GrubInstallDlgGtk::signal_grub_install_dialog_response(int response_id){
 		this->hide();
 }
 
-void GrubInstallDlgGtk::showMessageGrubInstallCompleted(std::string const& msg){
+void View_Gtk_Installer::showMessageGrubInstallCompleted(std::string const& msg){
 	this->install_result = msg;
 	disp_grub_install_ready();
 }
 
-void GrubInstallDlgGtk::setEventListener(EventListener_grubInstallDlg& eventListener) {
+void View_Gtk_Installer::setEventListener(EventListener_grubInstallDlg& eventListener) {
 	this->eventListener = &eventListener;
 }
 
-void GrubInstallDlgGtk::show(){
+void View_Gtk_Installer::show(){
 	this->show_all();
 }
 

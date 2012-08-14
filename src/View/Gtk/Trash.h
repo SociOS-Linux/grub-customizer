@@ -24,7 +24,7 @@
 #include <libintl.h>
 #include "../../presenter/commonClass.h"
 
-class EntryAddDlgGtk : public Gtk::Dialog, public EntryAddDlg, public CommonClass {
+class View_Gtk_Trash : public Gtk::Dialog, public EntryAddDlg, public CommonClass {
 	Gtk::Dialog scriptAddDlg;
 	Gtk::ScrolledWindow scrEntryBox;
 	Gtk::IconView iconBox;
@@ -39,7 +39,7 @@ public:
 		IconModel();
 	} iconModel;
 	Glib::RefPtr<Gtk::ListStore> listStore;
-	EntryAddDlgGtk();
+	View_Gtk_Trash();
 	void setEventListener(EventListener_entryAddDlg& eventListener);
 	void signal_entryAddDlg_response(int response_id);
 	void signal_icon_dblClick(Gtk::TreeModel::Path path);

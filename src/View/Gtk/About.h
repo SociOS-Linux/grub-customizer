@@ -24,14 +24,14 @@
 #include "../../interface/aboutDialog.h"
 #include "../../presenter/commonClass.h"
 
-class AboutDialogGtk : public Gtk::AboutDialog, public AboutDialog, public CommonClass {
+class View_Gtk_About : public Gtk::AboutDialog, public AboutDialog, public CommonClass {
 	Glib::ustring appName, appVersion;
 	std::vector<Glib::ustring> authors;
 	std::vector<Glib::ustring> artists;
 
 	void signal_about_dlg_response(int response_id);
 public:
-	AboutDialogGtk();
+	View_Gtk_About();
 	void show();
 };
 

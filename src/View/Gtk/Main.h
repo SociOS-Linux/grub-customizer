@@ -28,7 +28,7 @@
 #include "../../lib/str_replace.h"
 #include <cassert>
 
-class GrubConfListing : public Gtk::TreeView {
+class View_Gtk_Main_List : public Gtk::TreeView {
 public:
 	struct TreeModel : public Gtk::TreeModelColumnRecord {
 		Gtk::TreeModelColumn<Glib::ustring> name;
@@ -46,7 +46,7 @@ public:
 	Gtk::CellRendererPixbuf pixbufRenderer;
 	Gtk::CellRendererText textRenderer;
 	Gtk::TreeViewColumn mainColumn;
-	GrubConfListing();
+	View_Gtk_Main_List();
 };
 
 class ImageMenuItemOwnKey : public Gtk::ImageMenuItem {
@@ -54,7 +54,7 @@ class ImageMenuItemOwnKey : public Gtk::ImageMenuItem {
 	ImageMenuItemOwnKey(const Gtk::StockID& id, const Gtk::AccelKey& accel_key);
 };
 
-class GrublistCfgDlgGtk : public GrublistCfgDlg, public CommonClass {
+class View_Gtk_Main : public GrublistCfgDlg, public CommonClass {
 	EventListener_listCfgDlg* eventListener;
 	Gtk::Window win;
 	Gtk::VBox vbMainSplit;
@@ -68,7 +68,7 @@ class GrublistCfgDlgGtk : public GrublistCfgDlg, public CommonClass {
 	Gtk::VBox vbEntryList;
 	Gtk::Statusbar statusbar;
 	
-	GrubConfListing tvConfList;
+	View_Gtk_Main_List tvConfList;
 	Gtk::ProgressBar progressBar;
 
 	Gtk::ToolButton tbttAdd, tbttRemove, tbttUp, tbttDown, tbttSave, tbttReload, tbttLeft, tbttRight, tbttEditEntry, tbttRevert, tbttCreateEntry;
@@ -107,7 +107,7 @@ class GrublistCfgDlgGtk : public GrublistCfgDlg, public CommonClass {
 	bool selectedEntriesAreSubsequent();
 	std::list<void*> getSelectedRules();
 public:
-	GrublistCfgDlgGtk();
+	View_Gtk_Main();
 	void setEventListener(EventListener_listCfgDlg& eventListener);
 	void putSettingsDialog(Gtk::VBox& commonSettingsPane, Gtk::VBox& appearanceSettingsPane);
 	void putEnvEditor(Gtk::Widget& envEditor);

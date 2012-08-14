@@ -18,7 +18,7 @@
 
 #include "EnvEditor.h"
 
-GrubEnvEditorGtk::GrubEnvEditorGtk()
+View_Gtk_EnvEditor::View_Gtk_EnvEditor()
 	: eventListener(NULL), pChooser(NULL), lblPartition(gettext("_Partition:"), true), deviceDataList(NULL),
 	  lblType(gettext("_Type:"), true), eventLock(true), lblSubmountpoints(gettext("Submountpoints:")),
 	  cbSaveConfig(gettext("save this configuration"))
@@ -53,7 +53,7 @@ GrubEnvEditorGtk::GrubEnvEditorGtk()
 	this->cbType.append(gettext("Grub 2"));
 	this->cbType.append(gettext("BURG"));
 	this->cbType.set_active(0);
-	this->cbType.signal_changed().connect(sigc::mem_fun(this, &GrubEnvEditorGtk::signal_bootloaderType_changed));
+	this->cbType.signal_changed().connect(sigc::mem_fun(this, &View_Gtk_EnvEditor::signal_bootloaderType_changed));
 
 	lblPartition.set_alignment(Gtk::ALIGN_RIGHT);
 	lblType.set_alignment(Gtk::ALIGN_RIGHT);
@@ -65,30 +65,30 @@ GrubEnvEditorGtk::GrubEnvEditorGtk()
 	this->add_button(Gtk::Stock::QUIT, Gtk::RESPONSE_CLOSE);
 	this->add_button(Gtk::Stock::APPLY, Gtk::RESPONSE_APPLY);
 
-	this->signal_response().connect(sigc::mem_fun(this, &GrubEnvEditorGtk::signal_response_action));
+	this->signal_response().connect(sigc::mem_fun(this, &View_Gtk_EnvEditor::signal_response_action));
 
 	this->eventLock = false;
 }
 
-GrubEnvEditorGtk::~GrubEnvEditorGtk() {
+View_Gtk_EnvEditor::~View_Gtk_EnvEditor() {
 	this->tblLayout.remove(*this->pChooser);
 	delete this->pChooser;
 	this->pChooser = NULL;
 }
 
-void GrubEnvEditorGtk::setEventListener(EventListener_grubEnvEditor& eventListener) {
+void View_Gtk_EnvEditor::setEventListener(EventListener_grubEnvEditor& eventListener) {
 	this->eventListener = &eventListener;
 }
 
-void GrubEnvEditorGtk::setDeviceDataList(DeviceDataList_Iface& deviceDataList) {
+void View_Gtk_EnvEditor::setDeviceDataList(DeviceDataList_Iface& deviceDataList) {
 	this->deviceDataList = &deviceDataList;
 }
 
-void GrubEnvEditorGtk::setRootDeviceName(std::string const& rootDeviceName) {
+void View_Gtk_EnvEditor::setRootDeviceName(std::string const& rootDeviceName) {
 	this->rootDeviceName = rootDeviceName;
 }
 
-void GrubEnvEditorGtk::setEnvSettings(std::map<std::string, std::string> const& props, std::list<std::string> const& requiredProps, std::list<std::string> const& validProps) {
+void View_Gtk_EnvEditor::setEnvSettings(std::map<std::string, std::string> const& props, std::list<std::string> const& requiredProps, std::list<std::string> const& validProps) {
 	this->eventLock = true;
 	int pos = 4;
 	for (std::map<std::string, std::string>::const_iterator iter = props.begin(); iter != props.end(); iter++) {
@@ -109,7 +109,7 @@ void GrubEnvEditorGtk::setEnvSettings(std::map<std::string, std::string> const& 
 			entryCreated = true;
 			this->tblLayout.attach(*entry, 1, 2, pos, pos+1, Gtk::EXPAND | Gtk::FILL, Gtk::SHRINK);
 			label->set_mnemonic_widget(*entry);
-			entry->signal_changed().connect(sigc::mem_fun(this, &GrubEnvEditorGtk::signal_optionModified));
+			entry->signal_changed().connect(sigc::mem_fun(this, &View_Gtk_EnvEditor::signal_optionModified));
 			this->optionMap[iter->first] = entry;
 		} else {
 			entry = this->optionMap[iter->first];
@@ -147,7 +147,7 @@ void GrubEnvEditorGtk::setEnvSettings(std::map<std::string, std::string> const& 
 	this->eventLock = false;
 }
 
-std::map<std::string, std::string> GrubEnvEditorGtk::getEnvSettings() {
+std::map<std::string, std::string> View_Gtk_EnvEditor::getEnvSettings() {
 	std::map<std::string, std::string> result;
 	for (std::map<std::string, Gtk::Entry*>::iterator iter = this->optionMap.begin(); iter != this->optionMap.end(); iter++) {
 		result[iter->first] = iter->second->get_text();
@@ -155,19 +155,19 @@ std::map<std::string, std::string> GrubEnvEditorGtk::getEnvSettings() {
 	return result;
 }
 
-int GrubEnvEditorGtk::getBootloaderType() const {
+int View_Gtk_EnvEditor::getBootloaderType() const {
 	return this->cbType.get_active_row_number();
 }
 
-void GrubEnvEditorGtk::show(bool resetPartitionChooser) {
+void View_Gtk_EnvEditor::show(bool resetPartitionChooser) {
 	this->eventLock = true;
 	if (this->pChooser != NULL) {
 		this->tblLayout.remove(*pChooser);
 	}
 
 	if (!this->pChooser) {
-		this->pChooser = new PartitionChooser_DropDown("", *this->deviceDataList, true, this->rootDeviceName);
-		this->pChooser->signal_changed().connect(sigc::mem_fun(this, &GrubEnvEditorGtk::signal_partitionChanged));
+		this->pChooser = new View_Gtk_Element_PartitionChooser("", *this->deviceDataList, true, this->rootDeviceName);
+		this->pChooser->signal_changed().connect(sigc::mem_fun(this, &View_Gtk_EnvEditor::signal_partitionChanged));
 	}
 	if (resetPartitionChooser) {
 		this->pChooser->set_active(0);
@@ -180,11 +180,11 @@ void GrubEnvEditorGtk::show(bool resetPartitionChooser) {
 
 	this->eventLock = false;
 }
-void GrubEnvEditorGtk::hide() {
+void View_Gtk_EnvEditor::hide() {
 	Gtk::Dialog::hide();
 }
 
-void GrubEnvEditorGtk::removeAllSubmountpoints() {
+void View_Gtk_EnvEditor::removeAllSubmountpoints() {
 	for (std::map<std::string, Gtk::CheckButton*>::iterator iter = this->subMountpoints.begin(); iter != this->subMountpoints.end(); iter++) {
 		this->vbSubmountpoints.remove(*iter->second);
 		delete iter->second;
@@ -195,10 +195,10 @@ void GrubEnvEditorGtk::removeAllSubmountpoints() {
 	this->lblSubmountpoints.hide();
 }
 
-void GrubEnvEditorGtk::addSubmountpoint(std::string const& name, bool isActive) {
+void View_Gtk_EnvEditor::addSubmountpoint(std::string const& name, bool isActive) {
 	Gtk::CheckButton* cb = new Gtk::CheckButton(name);
 	cb->set_active(isActive);
-	cb->signal_toggled().connect(sigc::bind<Gtk::CheckButton&>(sigc::mem_fun(this, &GrubEnvEditorGtk::signal_submountpointToggled), *cb));
+	cb->signal_toggled().connect(sigc::bind<Gtk::CheckButton&>(sigc::mem_fun(this, &View_Gtk_EnvEditor::signal_submountpointToggled), *cb));
 	this->vbSubmountpoints.pack_start(*cb, Gtk::PACK_SHRINK);
 	this->subMountpoints[name] = cb;
 
@@ -207,11 +207,11 @@ void GrubEnvEditorGtk::addSubmountpoint(std::string const& name, bool isActive) 
 	this->lblSubmountpoints.show();
 }
 
-void GrubEnvEditorGtk::setSubmountpointSelectionState(std::string const& submountpoint, bool new_isSelected) {
+void View_Gtk_EnvEditor::setSubmountpointSelectionState(std::string const& submountpoint, bool new_isSelected) {
 	this->subMountpoints[submountpoint]->set_active(new_isSelected);
 }
 
-void GrubEnvEditorGtk::showErrorMessage(MountExceptionType type){
+void View_Gtk_EnvEditor::showErrorMessage(MountExceptionType type){
 	switch (type){
 		case MOUNT_FAILED:       Gtk::MessageDialog(gettext("Mount failed!")).run(); break;
 		case UMOUNT_FAILED:      Gtk::MessageDialog(gettext("umount failed!")).run(); break;
@@ -221,12 +221,12 @@ void GrubEnvEditorGtk::showErrorMessage(MountExceptionType type){
 	}
 }
 
-Gtk::Widget& GrubEnvEditorGtk::getContentBox() {
+Gtk::Widget& View_Gtk_EnvEditor::getContentBox() {
 	this->get_vbox()->remove(this->vbContent);
 	return this->vbContent;
 }
 
-void GrubEnvEditorGtk::signal_partitionChanged() {
+void View_Gtk_EnvEditor::signal_partitionChanged() {
 	if (!this->eventLock) {
 		std::string selectedUuid = this->pChooser->getSelectedUuid();
 		if (selectedUuid != "") {
@@ -236,19 +236,19 @@ void GrubEnvEditorGtk::signal_partitionChanged() {
 	}
 }
 
-void GrubEnvEditorGtk::signal_bootloaderType_changed() {
+void View_Gtk_EnvEditor::signal_bootloaderType_changed() {
 	if (!this->eventLock) {
 		this->eventListener->grubEnvEditor_typeChanged(this->cbType.get_active_row_number());
 	}
 }
 
-void GrubEnvEditorGtk::signal_optionModified() {
+void View_Gtk_EnvEditor::signal_optionModified() {
 	if (!this->eventLock) {
 		this->eventListener->grubEnvEditor_optionModified();
 	}
 }
 
-void GrubEnvEditorGtk::signal_response_action(int response_id) {
+void View_Gtk_EnvEditor::signal_response_action(int response_id) {
 	if (response_id == Gtk::RESPONSE_CLOSE || response_id == Gtk::RESPONSE_DELETE_EVENT) {
 		this->eventListener->grubEnvEditor_cancellationRequested();
 	} else if (response_id == Gtk::RESPONSE_APPLY) {
@@ -256,7 +256,7 @@ void GrubEnvEditorGtk::signal_response_action(int response_id) {
 	}
 }
 
-void GrubEnvEditorGtk::signal_submountpointToggled(Gtk::CheckButton& sender) {
+void View_Gtk_EnvEditor::signal_submountpointToggled(Gtk::CheckButton& sender) {
 	if (!eventLock) {
 		if (sender.get_active()) {
 			this->eventListener->submountpoint_mount_request(sender.get_label());

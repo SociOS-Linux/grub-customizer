@@ -18,14 +18,14 @@
 
 #include "Settings.h"
 
-ColorChooserGtk::Columns::Columns(){
+View_Gtk_Settings_ColorChooser::Columns::Columns(){
 	this->add(this->idName);
 	this->add(this->name);
 	this->add(this->colorCode_background);
 	this->add(this->colorCode_foreground);
 }
 
-ColorChooserGtk::ColorChooserGtk(){
+View_Gtk_Settings_ColorChooser::View_Gtk_Settings_ColorChooser(){
 	refListStore = Gtk::ListStore::create(columns);
 	this->set_model(refListStore);
 	
@@ -37,14 +37,14 @@ ColorChooserGtk::ColorChooserGtk(){
 	this->add_attribute(*cellRenderer, "background", columns.colorCode_background);
 	this->add_attribute(*cellRenderer, "foreground", columns.colorCode_foreground);
 }
-void ColorChooserGtk::addColor(std::string const& codeName, std::string const& outputName, std::string const& cell_background, std::string const& cell_foreground){
+void View_Gtk_Settings_ColorChooser::addColor(std::string const& codeName, std::string const& outputName, std::string const& cell_background, std::string const& cell_foreground){
 	Gtk::TreeModel::iterator iter = refListStore->append();
 	(*iter)[columns.idName] = codeName;
 	(*iter)[columns.name] = outputName;
 	(*iter)[columns.colorCode_background] = cell_background;
 	(*iter)[columns.colorCode_foreground] = cell_foreground;
 }
-void ColorChooserGtk::selectColor(std::string const& codeName){
+void View_Gtk_Settings_ColorChooser::selectColor(std::string const& codeName){
 	this->set_active(0);
 	for (Gtk::TreeModel::iterator iter = this->get_active(); iter; iter++){
 		if ((*iter)[columns.idName] == codeName){
@@ -53,7 +53,7 @@ void ColorChooserGtk::selectColor(std::string const& codeName){
 		}
 	}
 }
-std::string ColorChooserGtk::getSelectedColor() const {
+std::string View_Gtk_Settings_ColorChooser::getSelectedColor() const {
 	Gtk::TreeModel::iterator iter = this->get_active();
 	if (iter)
 		return (Glib::ustring)(*iter)[columns.idName];
@@ -61,7 +61,7 @@ std::string ColorChooserGtk::getSelectedColor() const {
 		return "";
 }
 
-Pango::Color ColorChooserGtk::getSelectedColorAsPangoObject() const {
+Pango::Color View_Gtk_Settings_ColorChooser::getSelectedColorAsPangoObject() const {
 	Pango::Color color;
 	Gtk::TreeModel::iterator iter = this->get_active();
 	if (iter) {
@@ -70,7 +70,7 @@ Pango::Color ColorChooserGtk::getSelectedColorAsPangoObject() const {
 	return color;
 }
 
-GrubColorChooser::GrubColorChooser(bool blackIsTransparent) : ColorChooserGtk() {
+GrubColorChooser::GrubColorChooser(bool blackIsTransparent) : View_Gtk_Settings_ColorChooser() {
 	this->addColor("white",          gettext("white"),         "#ffffff", "#000000");
 	this->addColor("yellow",         gettext("yellow"),        "#fefe54", "#000000");
 	this->addColor("light-cyan",     gettext("light-cyan"),    "#54fefe", "#000000");
@@ -89,14 +89,14 @@ GrubColorChooser::GrubColorChooser(bool blackIsTransparent) : ColorChooserGtk() 
 	this->addColor("black", blackIsTransparent ? gettext("transparent") : gettext("black"), "#000000", "#ffffff");
 }
 
-GrubSettingsDlgGtk::CustomOption_obj::CustomOption_obj(std::string name, std::string old_name, std::string value, bool isActive){
+View_Gtk_Settings::CustomOption_obj::CustomOption_obj(std::string name, std::string old_name, std::string value, bool isActive){
 	this->name = name;
 	this->old_name = old_name;
 	this->value = value;
 	this->isActive = isActive;
 }
 
-GrubSettingsDlgGtk::GrubSettingsDlgGtk()
+View_Gtk_Settings::View_Gtk_Settings()
 	: event_lock(false), bttAddCustomEntry(Gtk::Stock::ADD), bttRemoveCustomEntry(Gtk::Stock::REMOVE),
 	rbDefPredefined(gettext("pre_defined: "), true), rbDefSaved(gettext("previously _booted entry"), true),
 	lblDefaultEntry(gettext("default entry")), lblView(gettext("visibility")), chkShowMenu(gettext("show menu")),
@@ -132,7 +132,7 @@ GrubSettingsDlgGtk::GrubSettingsDlgGtk()
 	tvAllEntries.append_column_editable(gettext("is active"), asTreeModel.active);
 	tvAllEntries.append_column_editable(gettext("name"), asTreeModel.name);
 	tvAllEntries.append_column_editable(gettext("value"), asTreeModel.value);
-	refAsListStore->signal_row_changed().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_setting_row_changed));
+	refAsListStore->signal_row_changed().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_setting_row_changed));
 	vbCommonSettings.set_spacing(15);
 	vbAppearanceSettings.set_spacing(15);
 	
@@ -266,48 +266,48 @@ GrubSettingsDlgGtk::GrubSettingsDlgGtk()
 	lblBackgroundRequiredInfo.set_no_show_all(true);
 	
 	//<signals>
-	rbDefPredefined.signal_toggled().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_default_entry_predefined_toggeled));
-	rbDefSaved.signal_toggled().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_default_entry_saved_toggeled));
-	cbDefEntry.signal_changed().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_default_entry_changed));
-	chkShowMenu.signal_toggled().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_showMenu_toggled));
-	chkOsProber.signal_toggled().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_osProber_toggled));
-	spTimeout.signal_value_changed().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_timeout_changed));
-	txtKernelParams.signal_changed().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_kernelparams_changed));
-	chkGenerateRecovery.signal_toggled().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_recovery_toggled));
-	chkResolution.signal_toggled().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_chkResolution_toggled));
-	cbResolution.get_entry()->signal_changed().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_resolution_selected));
-	gccNormalForeground.signal_changed().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_color_changed));
-	gccNormalBackground.signal_changed().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_color_changed));
-	gccHighlightForeground.signal_changed().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_color_changed));
-	gccHighlightBackground.signal_changed().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_color_changed));
-	bttFont.signal_font_set().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_font_changed));
-	bttRemoveFont.signal_clicked().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_font_removed));
-	fcBackgroundImage.signal_file_set().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_other_image_chosen));
-	bttRemoveBackground.signal_clicked().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_bttRemoveBackground_clicked));
-	bttAddCustomEntry.signal_clicked().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_add_row_button_clicked));
-	bttRemoveCustomEntry.signal_clicked().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_remove_row_button_clicked));
-	drwBackgroundPreview.signal_expose_event().connect(sigc::mem_fun(this, &GrubSettingsDlgGtk::signal_redraw_preview));
+	rbDefPredefined.signal_toggled().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_default_entry_predefined_toggeled));
+	rbDefSaved.signal_toggled().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_default_entry_saved_toggeled));
+	cbDefEntry.signal_changed().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_default_entry_changed));
+	chkShowMenu.signal_toggled().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_showMenu_toggled));
+	chkOsProber.signal_toggled().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_osProber_toggled));
+	spTimeout.signal_value_changed().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_timeout_changed));
+	txtKernelParams.signal_changed().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_kernelparams_changed));
+	chkGenerateRecovery.signal_toggled().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_recovery_toggled));
+	chkResolution.signal_toggled().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_chkResolution_toggled));
+	cbResolution.get_entry()->signal_changed().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_resolution_selected));
+	gccNormalForeground.signal_changed().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_color_changed));
+	gccNormalBackground.signal_changed().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_color_changed));
+	gccHighlightForeground.signal_changed().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_color_changed));
+	gccHighlightBackground.signal_changed().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_color_changed));
+	bttFont.signal_font_set().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_font_changed));
+	bttRemoveFont.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_font_removed));
+	fcBackgroundImage.signal_file_set().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_other_image_chosen));
+	bttRemoveBackground.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_bttRemoveBackground_clicked));
+	bttAddCustomEntry.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_add_row_button_clicked));
+	bttRemoveCustomEntry.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_remove_row_button_clicked));
+	drwBackgroundPreview.signal_expose_event().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_redraw_preview));
 
 	this->add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
 	this->set_default_size(500, 600);
 }
 
-void GrubSettingsDlgGtk::setEventListener(EventListener_settings& eventListener){
+void View_Gtk_Settings::setEventListener(EventListener_settings& eventListener){
 	this->eventListener = &eventListener;
 }
 
-Gtk::VBox& GrubSettingsDlgGtk::getCommonSettingsPane() {
+Gtk::VBox& View_Gtk_Settings::getCommonSettingsPane() {
 	tabbox.remove(alignCommonSettings);
 	alignCommonSettings.remove();
 	return vbCommonSettings;
 }
 
-Gtk::VBox& GrubSettingsDlgGtk::getAppearanceSettingsPane() {
+Gtk::VBox& View_Gtk_Settings::getAppearanceSettingsPane() {
 	tabbox.remove(vbAppearanceSettings);
 	return vbAppearanceSettings;
 }
 
-void GrubSettingsDlgGtk::show(bool burgMode) {
+void View_Gtk_Settings::show(bool burgMode) {
 	this->show_all();
 	if (burgMode){
 		groupColorChooser.hide();
@@ -319,16 +319,16 @@ void GrubSettingsDlgGtk::show(bool burgMode) {
 	}
 }
 
-void GrubSettingsDlgGtk::hide(){
+void View_Gtk_Settings::hide(){
 	Gtk::Dialog::hide();
 }
 
 
-void GrubSettingsDlgGtk::on_response(int response_id) {
+void View_Gtk_Settings::on_response(int response_id) {
 	this->eventListener->settings_dialog_hide_request();
 }
 
-void GrubSettingsDlgGtk::addEntryToDefaultEntryChooser(std::string const& labelPathValue, std::string const& labelPathLabel, std::string const& numericPathValue, std::string const& numericPathLabel){
+void View_Gtk_Settings::addEntryToDefaultEntryChooser(std::string const& labelPathValue, std::string const& labelPathLabel, std::string const& numericPathValue, std::string const& numericPathLabel){
 	event_lock = true;
 	this->defEntryValueMapping[this->defEntryValueMapping.size()] = numericPathValue;
 	cbDefEntry.append_text(Glib::ustring::compose(gettext("Entry %1 (by position)"), numericPathLabel));
@@ -339,7 +339,7 @@ void GrubSettingsDlgGtk::addEntryToDefaultEntryChooser(std::string const& labelP
 	event_lock = false;
 }
 
-void GrubSettingsDlgGtk::clearDefaultEntryChooser(){
+void View_Gtk_Settings::clearDefaultEntryChooser(){
 	event_lock = true;
 	cbDefEntry.clear_items();
 	this->defEntryValueMapping.clear();
@@ -348,21 +348,21 @@ void GrubSettingsDlgGtk::clearDefaultEntryChooser(){
 }
 
 
-void GrubSettingsDlgGtk::clearResolutionChooser(){
+void View_Gtk_Settings::clearResolutionChooser(){
 	this->cbResolution.clear_items();
 }
-void GrubSettingsDlgGtk::addResolution(std::string const& resolution){
+void View_Gtk_Settings::addResolution(std::string const& resolution){
 	this->cbResolution.append_text(resolution);
 }
 
-GrubSettingsDlgGtk::AdvancedSettingsTreeModel::AdvancedSettingsTreeModel(){
+View_Gtk_Settings::AdvancedSettingsTreeModel::AdvancedSettingsTreeModel(){
 	this->add(active);
 	this->add(name);
 	this->add(old_name);
 	this->add(value);
 }
 
-void GrubSettingsDlgGtk::addCustomOption(bool isActive, std::string const& name, std::string const& value){
+void View_Gtk_Settings::addCustomOption(bool isActive, std::string const& name, std::string const& value){
 	this->event_lock = true;
 	Gtk::TreeModel::iterator newItemIter = refAsListStore->append();
 	(*newItemIter)[asTreeModel.active] = isActive;
@@ -372,7 +372,7 @@ void GrubSettingsDlgGtk::addCustomOption(bool isActive, std::string const& name,
 	this->event_lock = false;
 }
 
-void GrubSettingsDlgGtk::selectCustomOption(std::string const& name){
+void View_Gtk_Settings::selectCustomOption(std::string const& name){
 	for (Gtk::TreeModel::iterator iter = refAsListStore->children().begin(); iter != refAsListStore->children().end(); iter++){
 		if ((*iter)[asTreeModel.old_name] == name){
 			tvAllEntries.set_cursor(refAsListStore->get_path(iter), *tvAllEntries.get_column(name == "" ? 1 : 2), name == "");
@@ -381,7 +381,7 @@ void GrubSettingsDlgGtk::selectCustomOption(std::string const& name){
 	}
 }
 
-std::string GrubSettingsDlgGtk::getSelectedCustomOption(){
+std::string View_Gtk_Settings::getSelectedCustomOption(){
 	std::list<Gtk::TreeModel::Path> p = tvAllEntries.get_selection()->get_selected_rows();
 	if (p.size() == 1)
 		return (Glib::ustring)(*refAsListStore->get_iter(p.front()))[asTreeModel.name];
@@ -389,13 +389,13 @@ std::string GrubSettingsDlgGtk::getSelectedCustomOption(){
 		return "";
 }
 
-void GrubSettingsDlgGtk::removeAllSettingRows(){
+void View_Gtk_Settings::removeAllSettingRows(){
 	this->event_lock = true;
 	this->refAsListStore->clear();
 	this->event_lock = false;
 }
 
-void GrubSettingsDlgGtk::setActiveDefEntryOption(DefEntryType option){
+void View_Gtk_Settings::setActiveDefEntryOption(DefEntryType option){
 	this->event_lock = true;
 	if (option == this->DEF_ENTRY_SAVED) {
 		rbDefSaved.set_active(true);
@@ -408,7 +408,7 @@ void GrubSettingsDlgGtk::setActiveDefEntryOption(DefEntryType option){
 	this->event_lock = false;
 }
 
-void GrubSettingsDlgGtk::setDefEntry(std::string const& defEntry){
+void View_Gtk_Settings::setDefEntry(std::string const& defEntry){
 	this->event_lock = true;
 
 	int pos = 0;
@@ -423,50 +423,50 @@ void GrubSettingsDlgGtk::setDefEntry(std::string const& defEntry){
 	this->event_lock = false;
 }
 
-void GrubSettingsDlgGtk::setShowMenuCheckboxState(bool isActive){
+void View_Gtk_Settings::setShowMenuCheckboxState(bool isActive){
 	this->event_lock = true;
 	chkShowMenu.set_active(isActive);
 	this->event_lock = false;
 }
 
-void GrubSettingsDlgGtk::setOsProberCheckboxState(bool isActive){
+void View_Gtk_Settings::setOsProberCheckboxState(bool isActive){
 	this->event_lock = true;
 	chkOsProber.set_active(isActive);
 	this->event_lock = false;
 }
 
-void GrubSettingsDlgGtk::setTimeoutValue(int value){
+void View_Gtk_Settings::setTimeoutValue(int value){
 	this->event_lock = true;
 	spTimeout.set_value(value);
 	this->event_lock = false;
 }
 
-void GrubSettingsDlgGtk::setKernelParams(std::string const& params){
+void View_Gtk_Settings::setKernelParams(std::string const& params){
 	this->event_lock = true;
 	txtKernelParams.set_text(params);
 	this->event_lock = false;
 }
 
-void GrubSettingsDlgGtk::setRecoveryCheckboxState(bool isActive){
+void View_Gtk_Settings::setRecoveryCheckboxState(bool isActive){
 	this->event_lock = true;
 	chkGenerateRecovery.set_active(isActive);
 	this->event_lock = false;
 }
 
-void GrubSettingsDlgGtk::setResolutionCheckboxState(bool isActive){
+void View_Gtk_Settings::setResolutionCheckboxState(bool isActive){
 	this->event_lock = true;
 	chkResolution.set_active(isActive);
 	cbResolution.set_sensitive(isActive);
 	this->event_lock = false;
 }
 
-void GrubSettingsDlgGtk::setResolution(std::string const& resolution){
+void View_Gtk_Settings::setResolution(std::string const& resolution){
 	this->event_lock = true;
 	cbResolution.get_entry()->set_text(resolution);
 	this->event_lock = false;
 }
 
-ColorChooser& GrubSettingsDlgGtk::getColorChooser(ColorChooserType type){
+ColorChooser& View_Gtk_Settings::getColorChooser(ColorChooserType type){
 	this->event_lock = true;
 	switch (type){
 		case COLOR_CHOOSER_DEFAULT_BACKGROUND: return this->gccNormalBackground;
@@ -477,22 +477,22 @@ ColorChooser& GrubSettingsDlgGtk::getColorChooser(ColorChooserType type){
 	this->event_lock = false;
 }
 
-std::string GrubSettingsDlgGtk::getFontName() {
+std::string View_Gtk_Settings::getFontName() {
 	return bttFont.get_font_name();
 }
 
-int GrubSettingsDlgGtk::getFontSize() {
+int View_Gtk_Settings::getFontSize() {
 	Pango::FontDescription desc(bttFont.get_font_name());
 	return desc.get_size() / 1024;
 }
 
-void GrubSettingsDlgGtk::setFontName(std::string const& value) {
+void View_Gtk_Settings::setFontName(std::string const& value) {
 	bttFont.set_font_name(value);
 	bttRemoveFont.set_visible(value != "");
 	imgRemoveFont.set_visible(value != "");
 }
 
-Glib::RefPtr<Pango::Layout> GrubSettingsDlgGtk::createFormattedText(Cairo::RefPtr<Cairo::Context>& context, Glib::ustring const& text, std::string const& format, int r, int g, int b, int r_b, int g_b, int b_b, bool black_bg_is_transparent) {
+Glib::RefPtr<Pango::Layout> View_Gtk_Settings::createFormattedText(Cairo::RefPtr<Cairo::Context>& context, Glib::ustring const& text, std::string const& format, int r, int g, int b, int r_b, int g_b, int b_b, bool black_bg_is_transparent) {
 	Glib::RefPtr<Pango::Layout> layout = Pango::Layout::create(context);
 	layout->set_text(text);
 	Pango::AttrList attrList;
@@ -512,7 +512,7 @@ Glib::RefPtr<Pango::Layout> GrubSettingsDlgGtk::createFormattedText(Cairo::RefPt
 	return layout;
 }
 
-void GrubSettingsDlgGtk::setBackgroundImagePreviewPath(std::string const& menuPicturePath, bool isInGrubDir){
+void View_Gtk_Settings::setBackgroundImagePreviewPath(std::string const& menuPicturePath, bool isInGrubDir){
 	this->event_lock = true;
 	this->backgroundImagePath = menuPicturePath;
 
@@ -537,9 +537,9 @@ void GrubSettingsDlgGtk::setBackgroundImagePreviewPath(std::string const& menuPi
 				this->previewEntryTitles_mutex.lock();
 				for (std::list<std::string>::iterator iter = this->previewEntryTitles.begin(); iter != this->previewEntryTitles.end(); iter++) {
 					if (iter == this->previewEntryTitles.begin()) {
-						exampleTexts.push_back(GrubSettingsDlgGtk::createFormattedText(context, *iter, fontName, fg_s.get_red() / 255, fg_s.get_green() / 255, fg_s.get_blue() / 255, bg_s.get_red() / 255, bg_s.get_green() / 255, bg_s.get_blue() / 255));
+						exampleTexts.push_back(View_Gtk_Settings::createFormattedText(context, *iter, fontName, fg_s.get_red() / 255, fg_s.get_green() / 255, fg_s.get_blue() / 255, bg_s.get_red() / 255, bg_s.get_green() / 255, bg_s.get_blue() / 255));
 					} else {
-						exampleTexts.push_back(GrubSettingsDlgGtk::createFormattedText(context, *iter, fontName, fg_n.get_red() / 255, fg_n.get_green() / 255, fg_n.get_blue() / 255, bg_n.get_red() / 255, bg_n.get_green() / 255, bg_n.get_blue() / 255));
+						exampleTexts.push_back(View_Gtk_Settings::createFormattedText(context, *iter, fontName, fg_n.get_red() / 255, fg_n.get_green() / 255, fg_n.get_blue() / 255, bg_n.get_red() / 255, bg_n.get_green() / 255, bg_n.get_blue() / 255));
 					}
 				}
 				this->previewEntryTitles_mutex.unlock();
@@ -582,11 +582,11 @@ void GrubSettingsDlgGtk::setBackgroundImagePreviewPath(std::string const& menuPi
 }
 
 
-std::string GrubSettingsDlgGtk::getSelectedDefaultGrubValue(){
+std::string View_Gtk_Settings::getSelectedDefaultGrubValue(){
 	return this->defEntryValueMapping[cbDefEntry.get_active_row_number()];
 }
 
-GrubSettingsDlgGtk::CustomOption GrubSettingsDlgGtk::getCustomOption(std::string const& name){
+View_Gtk_Settings::CustomOption View_Gtk_Settings::getCustomOption(std::string const& name){
 	for (Gtk::TreeModel::iterator iter = this->refAsListStore->children().begin(); iter != this->refAsListStore->children().end(); iter++){
 		if ((*iter)[asTreeModel.old_name] == name)
 			return CustomOption_obj(Glib::ustring((*iter)[asTreeModel.name]), Glib::ustring((*iter)[asTreeModel.old_name]), Glib::ustring((*iter)[asTreeModel.value]), (*iter)[asTreeModel.active]);
@@ -594,172 +594,172 @@ GrubSettingsDlgGtk::CustomOption GrubSettingsDlgGtk::getCustomOption(std::string
 	throw REQUESTED_CUSTOM_OPTION_NOT_FOUND;
 }
 
-void GrubSettingsDlgGtk::signal_setting_row_changed(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter){
+void View_Gtk_Settings::signal_setting_row_changed(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter){
 	if (!event_lock){
 		this->eventListener->setting_row_changed((Glib::ustring)(*iter)[asTreeModel.old_name]);
 	}
 }
 
-void GrubSettingsDlgGtk::signal_default_entry_predefined_toggeled(){
+void View_Gtk_Settings::signal_default_entry_predefined_toggeled(){
 	if (!event_lock){
 		this->eventListener->default_entry_predefined_toggeled();
 	}
 }
 
-GrubSettingsDlgGtk::DefEntryType GrubSettingsDlgGtk::getActiveDefEntryOption(){
+View_Gtk_Settings::DefEntryType View_Gtk_Settings::getActiveDefEntryOption(){
 	return rbDefSaved.get_active() ? DEF_ENTRY_SAVED : DEF_ENTRY_PREDEFINED;
 }
 
-void GrubSettingsDlgGtk::signal_default_entry_saved_toggeled(){
+void View_Gtk_Settings::signal_default_entry_saved_toggeled(){
 	if (!event_lock){
 		this->eventListener->default_entry_saved_toggeled();
 	}
 }
 
-void GrubSettingsDlgGtk::signal_default_entry_changed(){
+void View_Gtk_Settings::signal_default_entry_changed(){
 	if (!event_lock){
 		this->eventListener->default_entry_changed();
 	}
 }
 
-bool GrubSettingsDlgGtk::getShowMenuCheckboxState(){
+bool View_Gtk_Settings::getShowMenuCheckboxState(){
 	return chkShowMenu.get_active();
 }
 
-bool GrubSettingsDlgGtk::getOsProberCheckboxState(){
+bool View_Gtk_Settings::getOsProberCheckboxState(){
 	return chkOsProber.get_active();
 }
 
-void GrubSettingsDlgGtk::showHiddenMenuOsProberConflictMessage(){
+void View_Gtk_Settings::showHiddenMenuOsProberConflictMessage(){
 	Gtk::MessageDialog(Glib::ustring::compose(gettext("This option doesn't work when the \"os-prober\" script finds other operating systems. Disable \"%1\" if you don't need to boot other operating systems."), chkOsProber.get_label())).run();
 }
 
 
-void GrubSettingsDlgGtk::signal_showMenu_toggled(){
+void View_Gtk_Settings::signal_showMenu_toggled(){
 	if (!event_lock){
 		this->eventListener->showMenu_toggled();
 	}
 }
 
 
-void GrubSettingsDlgGtk::signal_osProber_toggled(){
+void View_Gtk_Settings::signal_osProber_toggled(){
 	if (!event_lock){
 		this->eventListener->osProber_toggled();
 	}
 }
 
-int GrubSettingsDlgGtk::getTimeoutValue(){
+int View_Gtk_Settings::getTimeoutValue(){
 	return spTimeout.get_value_as_int();
 }
 
-std::string GrubSettingsDlgGtk::getTimeoutValueString() {
+std::string View_Gtk_Settings::getTimeoutValueString() {
 	return Glib::ustring::format(this->getTimeoutValue());
 }
 
-void GrubSettingsDlgGtk::signal_timeout_changed(){
+void View_Gtk_Settings::signal_timeout_changed(){
 	if (!event_lock){
 		this->eventListener->timeout_changed();
 	}
 }
 
-std::string GrubSettingsDlgGtk::getKernelParams(){
+std::string View_Gtk_Settings::getKernelParams(){
 	return txtKernelParams.get_text();
 }
 
 
-void GrubSettingsDlgGtk::signal_kernelparams_changed(){
+void View_Gtk_Settings::signal_kernelparams_changed(){
 	if (!event_lock){
 		this->eventListener->kernelparams_changed();
 	}
 }
 
-bool GrubSettingsDlgGtk::getRecoveryCheckboxState(){
+bool View_Gtk_Settings::getRecoveryCheckboxState(){
 	return chkGenerateRecovery.get_active();
 }
 
 
-void GrubSettingsDlgGtk::signal_recovery_toggled(){
+void View_Gtk_Settings::signal_recovery_toggled(){
 	if (!event_lock){
 		this->eventListener->generateRecovery_toggled();
 	}
 }
 
-bool GrubSettingsDlgGtk::getResolutionCheckboxState(){
+bool View_Gtk_Settings::getResolutionCheckboxState(){
 	return chkResolution.get_active();
 }
 
 
-void GrubSettingsDlgGtk::signal_chkResolution_toggled(){
+void View_Gtk_Settings::signal_chkResolution_toggled(){
 	if (!event_lock){
 		this->eventListener->useCustomResolution_toggled();
 	}
 }
 
-std::string GrubSettingsDlgGtk::getResolution(){
+std::string View_Gtk_Settings::getResolution(){
 	return cbResolution.get_entry()->get_text();
 }
 
 
-void GrubSettingsDlgGtk::signal_resolution_selected(){
+void View_Gtk_Settings::signal_resolution_selected(){
 	if (!event_lock){
 		this->eventListener->resolution_changed();
 	}
 }
 
 
-void GrubSettingsDlgGtk::signal_color_changed(){
+void View_Gtk_Settings::signal_color_changed(){
 	if (!event_lock){
 		this->eventListener->colorChange_requested();
 	}
 }
 
-void GrubSettingsDlgGtk::signal_font_changed() {
+void View_Gtk_Settings::signal_font_changed() {
 	if (!event_lock) {
 		this->eventListener->fontChange_requested();
 	}
 }
 
-void GrubSettingsDlgGtk::signal_font_removed() {
+void View_Gtk_Settings::signal_font_removed() {
 	if (!event_lock) {
 		this->eventListener->fontRemove_requested();
 	}
 }
 
-std::string GrubSettingsDlgGtk::getBackgroundImagePath(){
+std::string View_Gtk_Settings::getBackgroundImagePath(){
 	return fcBackgroundImage.get_filename();
 }
 
 
-void GrubSettingsDlgGtk::signal_bttRemoveBackground_clicked(){
+void View_Gtk_Settings::signal_bttRemoveBackground_clicked(){
 	if (!event_lock){
 		this->eventListener->backgroundRemove_requested();
 	}
 }
 
 
-void GrubSettingsDlgGtk::signal_other_image_chosen(){
+void View_Gtk_Settings::signal_other_image_chosen(){
 	if (!event_lock){
 		this->eventListener->backgroundChange_requested();
 	}
 }
 
-void GrubSettingsDlgGtk::signal_add_row_button_clicked(){
+void View_Gtk_Settings::signal_add_row_button_clicked(){
 	if (!event_lock)
 		this->eventListener->customRow_insert_requested();
 }
-void GrubSettingsDlgGtk::signal_remove_row_button_clicked(){
+void View_Gtk_Settings::signal_remove_row_button_clicked(){
 	if (!event_lock)
 		this->eventListener->customRow_remove_requested((Glib::ustring)(*tvAllEntries.get_selection()->get_selected())[asTreeModel.name]);
 }
 
-bool GrubSettingsDlgGtk::signal_redraw_preview(GdkEventExpose* event) {
+bool View_Gtk_Settings::signal_redraw_preview(GdkEventExpose* event) {
 	if (!event_lock) {
 		this->setBackgroundImagePreviewPath(this->backgroundImagePath, false);
 	}
 	return false;
 }
 
-void GrubSettingsDlgGtk::setPreviewEntryTitles(std::list<std::string> const& entries) {
+void View_Gtk_Settings::setPreviewEntryTitles(std::list<std::string> const& entries) {
 	this->previewEntryTitles_mutex.lock();
 	this->previewEntryTitles = entries;
 	this->previewEntryTitles_mutex.unlock();
