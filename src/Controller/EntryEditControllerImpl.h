@@ -28,25 +28,14 @@
 
 #include "../Model/Env.h"
 
-#include "../Model/MountTable.h"
-
 #include "../Model/Installer.h"
-#include "../View/Installer.h"
-
-#include "../View/Trash.h"
 #include "../View/EntryEditor.h"
 
 #include "../Model/ListCfg.h"
-#include "../View/Settings.h"
-#include "../Model/FbResolutionsGetter.h"
-#include "../View/About.h"
 #include "../Model/DeviceDataList.h"
-#include "../interface/threadController.h"
 #include "../interface/contentParserFactory.h"
-#include "../View/EnvEditor.h"
 
 #include "../presenter/commonClass.h"
-#include "../Controller/EntryEditController.h"
 #include "../Controller/ControllerAbstract.h"
 
 
