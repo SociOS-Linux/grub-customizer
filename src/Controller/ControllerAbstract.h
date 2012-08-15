@@ -21,6 +21,7 @@
 
 #include "../ControllerCollection.h"
 #include <cassert>
+#include "../presenter/commonClass.h"
 
 class ControllerAbstract : public CommonClass {
 	ControllerCollection* _controllerCollection;

@@ -19,7 +19,7 @@
 #ifndef ENTRYEDITCONTROLLER_H_
 #define ENTRYEDITCONTROLLER_H_
 
-#include "../presenter/commonClass.h"
+#include <string>
 
 class EntryEditController {
 public:
