@@ -18,13 +18,13 @@
 
 #include "glibThreadController.h"
 
-GlibThreadController::GlibThreadController(GrubCustomizer& app)
-	: app(app)
+GlibThreadController::GlibThreadController(GrubCustomizer& app, ControllerCollection& controllers)
+	: app(app), _controllers(controllers)
 {
-	disp_sync_load.connect(sigc::mem_fun(&this->app, &GrubCustomizer::syncListView_load));
-	disp_sync_save.connect(sigc::mem_fun(&this->app, &GrubCustomizer::syncListView_save));
-	disp_thread_died.connect(sigc::mem_fun(&this->app, &GrubCustomizer::die));
-	disp_settings_loaded.connect(sigc::mem_fun(&this->app, &GrubCustomizer::activateSettingsBtn));
+	disp_sync_load.connect(sigc::mem_fun(this, &GlibThreadController::_execLoadSync));
+	disp_sync_save.connect(sigc::mem_fun(this, &GlibThreadController::_execSaveSync));
+	disp_thread_died.connect(sigc::mem_fun(this, &GlibThreadController::_execDie));
+	disp_settings_loaded.connect(sigc::mem_fun(this, &GlibThreadController::_execActivateSettings));
 	disp_updateSettingsDlgResolutionList.connect(sigc::mem_fun(&this->app, &GrubCustomizer::updateSettingsDlgResolutionList_dispatched));
 }
 
@@ -49,11 +49,11 @@ void GlibThreadController::enableSettings() {
 }
 
 void GlibThreadController::startLoadThread(bool preserveConfig) {
-	Glib::Thread::create(sigc::bind(sigc::mem_fun(&this->app, &GrubCustomizer::load), preserveConfig), false);
+	Glib::Thread::create(sigc::bind(sigc::mem_fun(this, &GlibThreadController::_execLoad), preserveConfig), false);
 }
 
 void GlibThreadController::startSaveThread() {
-	Glib::Thread::create(sigc::mem_fun(&this->app, &GrubCustomizer::save_thread), false);
+	Glib::Thread::create(sigc::mem_fun(this, &GlibThreadController::_execSave), false);
 }
 
 void GlibThreadController::startFramebufferResolutionLoader() {
@@ -67,3 +67,28 @@ void GlibThreadController::startGrubInstallThread(std::string const& device) {
 void GlibThreadController::stopApplication() {
 	Gtk::Main::quit();
 }
+
+void GlibThreadController::_execLoadSync() {
+	this->_controllers.mainController->syncLoadStateAction();
+}
+
+void GlibThreadController::_execSaveSync() {
+	this->_controllers.mainController->syncSaveStateAction();
+}
+
+void GlibThreadController::_execLoad(bool preserveConfig) {
+	this->_controllers.mainController->loadThreadedAction(preserveConfig);
+}
+
+void GlibThreadController::_execSave() {
+	this->_controllers.mainController->saveThreadedAction();
+}
+
+void GlibThreadController::_execDie() {
+	this->_controllers.mainController->dieAction();
+}
+
+void GlibThreadController::_execActivateSettings() {
+	this->_controllers.mainController->activateSettingsAction();
+}
+

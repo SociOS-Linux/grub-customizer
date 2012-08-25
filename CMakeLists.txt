@@ -60,6 +60,7 @@ add_executable(grub-customizer
 	src/Model/EntryPathBuilderImpl.cpp
 	src/Model/DeviceMap.cpp
 	src/Model/SmartFileHandle.cpp
+	src/Mapper/EntryNameImpl.cpp
 	src/main/gtk-client.cpp
 	src/presenter/grubCustomizer.cpp
 	src/presenter/eventListener.cpp
@@ -85,6 +86,7 @@ add_executable(grub-customizer
 	src/View/Gtk/Settings.cpp
 	src/View/Gtk/Trash.cpp
 	src/Controller/EntryEditControllerImpl.cpp
+	src/Controller/MainControllerImpl.cpp
 	src/Controller/ControllerAbstract.cpp
 )
 

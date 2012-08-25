@@ -45,7 +45,13 @@ src/Controller/ControllerAbstract.h -text
 src/Controller/EntryEditController.h -text
 src/Controller/EntryEditControllerImpl.cpp -text
 src/Controller/EntryEditControllerImpl.h -text
+src/Controller/MainController.h -text
+src/Controller/MainControllerImpl.cpp -text
+src/Controller/MainControllerImpl.h -text
 src/ControllerCollection.h -text
+src/Mapper/EntryName.h -text
+src/Mapper/EntryNameImpl.cpp -text
+src/Mapper/EntryNameImpl.h -text
 src/Model/DeviceDataList.cpp -text
 src/Model/DeviceDataList.h -text
 src/Model/DeviceMap.cpp -text

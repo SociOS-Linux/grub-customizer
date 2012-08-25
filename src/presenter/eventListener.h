@@ -27,45 +27,26 @@
 #include "../interface/evt_settings.h"
 #include "../interface/evt_entryEditDlg.h"
 #include "../interface/evt_grubEnvEditor.h"
+#include "../ControllerCollection.h"
 
 class EventListener :
 	public EventListener_settings,
 	public EventListener_grubInstallDlg,
-	public EventListener_listCfgDlg,
 	public EventListener_model,
 	public EventListener_entryAddDlg,
 	public EventListener_grubEnvEditor
 {
 	GrubCustomizer& presenter;
+	ControllerCollection& _controllers;
 public:
-	EventListener(GrubCustomizer& presenter);
+	EventListener(GrubCustomizer& presenter, ControllerCollection& controllers);
 	void settings_dialog_request();
-	void reload_request();
-	void save_request();
 	void rootSelectorCompleted();
-	void envEditor_request();
-	void createSubmenuRequest(std::list<void*> childItems);
-	void removeSubmenuRequest(std::list<void*> childItems);
-	void installDialogRequest();
 	void installGrub_request(std::string const& device);
 	void entryAddDlg_requested();
 	void entryEditDlg_requested(void* rule);
 	void entryCreateDlgRequested();
 	void entryAddDlg_applied();
-	void exitRequest();
-
-	void signal_entry_remove_requested(std::list<void*> entries);
-	void signal_entry_renamed(void* entry, std::string const& newText);
-
-	void revertRequested();
-
-	void ruleAdjustment_requested(std::list<void*> rules, int direction);
-
-	void ruleSelected(void* rule);
-	void proxySelected(void* proxy);
-
-	void burgSwitcher_cancelled();
-	void burgSwitcher_response(bool burgChosen);
 
 	void aboutDialog_requested();
 

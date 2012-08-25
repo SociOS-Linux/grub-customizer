@@ -18,8 +18,8 @@
 
 #include "eventListener.h"
 
-EventListener::EventListener(GrubCustomizer& presenter)
-	: presenter(presenter)
+EventListener::EventListener(GrubCustomizer& presenter, ControllerCollection& controllers)
+	: presenter(presenter), _controllers(controllers)
 {
 }
 
@@ -27,35 +27,10 @@ void EventListener::settings_dialog_request(){
 	presenter.showSettingsDlg();
 }
 
-void EventListener::reload_request(){
-	presenter.reload();
-}
-
-void EventListener::save_request(){
-	presenter.save();
-}
-
 void EventListener::rootSelectorCompleted(){
 	this->presenter.getThreadController().startLoadThread(false);
 }
 
-
-void EventListener::envEditor_request(){
-	presenter.showEnvEditor();
-}
-
-
-void EventListener::createSubmenuRequest(std::list<void*> childItems) {
-	presenter.createSubmenu(childItems);
-}
-
-void EventListener::removeSubmenuRequest(std::list<void*> childItems) {
-	presenter.removeSubmenu(childItems);
-}
-
-void EventListener::installDialogRequest(){
-	presenter.showInstallDialog();
-}
 
 void EventListener::installGrub_request(std::string const& device){
 	this->presenter.getThreadController().startGrubInstallThread(device);
@@ -75,43 +50,6 @@ void EventListener::entryEditDlg_requested(void* rule) {
 
 void EventListener::entryCreateDlgRequested() {
 	presenter.showEntryCreateDlg();
-}
-
-void EventListener::exitRequest(){
-	return presenter.quit();
-}
-
-
-void EventListener::signal_entry_remove_requested(std::list<void*> entries){
-	presenter.removeRules(entries);
-}
-
-void EventListener::signal_entry_renamed(void* entry, std::string const& newText){
-	presenter.updateRuleName((Model_Rule*)entry, newText);
-}
-
-void EventListener::revertRequested() {
-	presenter.revertList();
-}
-
-void EventListener::ruleAdjustment_requested(std::list<void*> rules, int direction){
-	presenter.moveRules(rules,direction);
-}
-
-void EventListener::ruleSelected(void* rule){
-	if (rule) {
-		presenter.showRuleInfo((Model_Rule*)rule);
-	}
-}
-void EventListener::proxySelected(void* proxy){
-	presenter.showProxyInfo((Model_Proxy*)proxy);
-}
-
-void EventListener::burgSwitcher_cancelled(){
-	presenter.handleCancelResponse();
-}
-void EventListener::burgSwitcher_response(bool burgChosen){
-	presenter.init(burgChosen ? Model_Env::BURG_MODE : Model_Env::GRUB_MODE);
 }
 
 void EventListener::aboutDialog_requested(){
@@ -192,11 +130,11 @@ void EventListener::submountpoint_umount_request(std::string const& mountpoint){
 
 
 void EventListener::loadProgressChanged(){
-	presenter.getThreadController().syncEntryList();
+	this->_controllers.mainController->syncLoadStateThreadedAction();
 }
 
 void EventListener::saveProgressChanged(){
-	presenter.getThreadController().updateSaveProgress();
+	this->_controllers.mainController->syncSaveStateThreadedAction();
 }
 
 void EventListener::grubInstallCompleted(std::string const& msg){
@@ -221,7 +159,7 @@ void EventListener::grubEnvEditor_optionModified() {
 }
 
 void EventListener::grubEnvEditor_cancellationRequested() {
-	presenter.quit(true);
+	this->_controllers.mainController->exitAction(true);
 }
 
 void EventListener::grubEnvEditor_applyRequested(bool saveConfig) {

@@ -19,11 +19,23 @@
 #ifndef GRUBCUSTOMIZERIFACE_H_
 #define GRUBCUSTOMIZERIFACE_H_
 
+#include <string>
+#include <map>
+#include <list>
+
 class GrubCustomizerIface {
 public:
-	virtual void setModificationsUnsaved(bool val) = 0;
-	virtual void syncListView_load() = 0;
-	virtual void selectRule(void* rulePtr, bool isAdded) = 0;
+	virtual void updateSettingsDlg() = 0;
+	virtual void syncSettings() = 0;
+	virtual void grubEnvSetRootDeviceName(std::string const& rootDevice) = 0;
+	virtual void grubEnvsetEnvSettings(std::map<std::string, std::string> const& props, std::list<std::string> const& requiredProps, std::list<std::string> const& validProps) = 0;
+	virtual void grubEnvShow(bool resetPartitionChooser = false) = 0;
+	virtual void showAboutDialog() = 0;
+	virtual void showInstallDialog() = 0;
+	virtual void showMessageGrubInstallCompleted(std::string const& msg) = 0;
+	virtual void showSettingsDlg() = 0;
+	virtual void showEntryAddDlg() = 0;
+	virtual void showEnvEditor(bool resetPartitionChooser = false) = 0;
 };
 
 

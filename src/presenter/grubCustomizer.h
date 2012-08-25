@@ -43,6 +43,7 @@
 #include "../interface/threadController.h"
 #include "../interface/contentParserFactory.h"
 #include "../View/EnvEditor.h"
+#include "../Mapper/EntryName.h"
 
 #include "../Controller/ControllerAbstract.h"
 
@@ -65,7 +66,6 @@
 class GrubCustomizer : public ControllerAbstract, public GrubCustomizerIface {
 	Model_Env& env;
 	Model_ListCfg* grublistCfg;
-	View_Main* listCfgDlg;
 	View_Settings* settingsDlg;
 	Model_SettingsManagerData* settings;
 	Model_SettingsManagerData* settingsOnDisk; //buffer for the existing settings
@@ -82,23 +82,13 @@ class GrubCustomizer : public ControllerAbstract, public GrubCustomizerIface {
 	ContentParserFactory* contentParserFactory;
 	ContentParser* currentContentParser;
 	View_EnvEditor* grubEnvEditor;
-
-	bool config_has_been_different_on_startup_but_unsaved;
-	bool quit_requested;
-	bool is_loading;
-	int activeThreadCount;
-	Model_ListCfg::Exception thrownException; //to be used from the die() function
-
-	std::string _mapEntryName(Model_Entry const* entry, std::string const& defaultName, std::string const& scriptName = "");
-	void _rAppendRule(Model_Rule& rule, Model_Rule* parentRule = NULL);
+	Mapper_EntryName* entryNameMapper;
 
 public:
-	bool modificationsUnsaved;
 	enum Exception {
 		INCOMPLETE
 	};
 	void setListCfg(Model_ListCfg& grublistCfg);
-	void setListCfgDlg(View_Main& listCfgDlg);
 	void setSettingsDialog(View_Settings& settingsDlg);
 	void setSettingsManager(Model_SettingsManagerData& settings);
 	void setSettingsBuffer(Model_SettingsManagerData& settings);
@@ -113,25 +103,16 @@ public:
 	void setThreadController(ThreadController& threadController);
 	void setContentParserFactory(ContentParserFactory& contentParserFactory);
 	void setGrubEnvEditor(View_EnvEditor& envEditor);
+	void setEntryNameMapper(Mapper_EntryName& mapper);
 
 	ThreadController& getThreadController();
 	Model_FbResolutionsGetter& getFbResolutionsGetter();
 
-	//init functions
-	void init();
-	void init(Model_Env::Mode mode, bool initEnv = true);
 	void showEnvEditor(bool resetPartitionChooser = false);
-	void handleCancelResponse();
 
 	void showSettingsDlg();
-	void reload();
-	void load(bool preserveConfig = false);
-	void save();
 	void save_thread();
 	GrubCustomizer(Model_Env& env);
-	
-	void renameEntry(Model_Rule* rule, std::string const& newName);
-	void reset();
 	
 	void showInstallDialog();
 	void installGrub(std::string device);
@@ -143,26 +124,9 @@ public:
 	void addEntryFromEntryAddDlg();
 	
 	//dispatchers
-	void syncListView_load();
-	void syncListView_save();
-	void die();
-	void activateSettingsBtn();
 	void updateSettingsDlg();
-	void updateList();
 	
-	void quit(bool force = false);
 	
-	void removeRules(std::list<void*> entries);
-	void updateRuleName(Model_Rule* entry, std::string const& newText);
-	void moveRules(std::list<void*> rules, int direction);
-	void createSubmenu(std::list<void*> childItems);
-	void removeSubmenu(std::list<void*> childItems);
-	
-	void revertList();
-
-	void showRuleInfo(Model_Rule* rule);
-	void showProxyInfo(Model_Proxy* proxy);
-
 	void showAboutDialog();
 
 	//settings dialog
@@ -198,8 +162,9 @@ public:
 	void applyEnvEditor(bool saveConfig);
 
 	// transitional
-	void selectRule(void* rulePtr, bool isAdded);
-	void setModificationsUnsaved(bool val);
+	void grubEnvSetRootDeviceName(std::string const& rootDevice);
+	void grubEnvsetEnvSettings(std::map<std::string, std::string> const& props, std::list<std::string> const& requiredProps, std::list<std::string> const& validProps);
+	void grubEnvShow(bool resetPartitionChooser);
 };
 
 #endif

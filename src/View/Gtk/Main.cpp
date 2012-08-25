@@ -237,7 +237,7 @@ View_Gtk_Main::View_Gtk_Main()
 
 }
 
-void View_Gtk_Main::setEventListener(EventListener_listCfgDlg& eventListener) {
+void View_Gtk_Main::setEventListener(MainController& eventListener) {
 	this->eventListener = &eventListener;
 }
 
@@ -282,7 +282,7 @@ bool View_Gtk_Main::signal_popup() {
 
 void View_Gtk_Main::signal_key_press(GdkEventKey* key) {
 	if (key->keyval == GDK_Delete) {
-		this->eventListener->signal_entry_remove_requested(this->getSelectedRules());
+		this->eventListener->removeRulesAction(this->getSelectedRules());
 	}
 }
 
@@ -291,13 +291,13 @@ void View_Gtk_Main::signal_revert() {
 	msgDlg.set_secondary_text(gettext("This removes all your list modifications of the bootloader menu!"));
 	int response = msgDlg.run();
 	if (response == Gtk::RESPONSE_OK) {
-		this->eventListener->revertRequested();
+		this->eventListener->revertAction();
 	}
 }
 
 void View_Gtk_Main::signal_reload_recommendation_response(int response_id) {
 	if (response_id == Gtk::RESPONSE_APPLY) {
-		this->eventListener->reload_request();
+		this->eventListener->reloadAction();
 	}
 }
 
@@ -437,7 +437,7 @@ std::string View_Gtk_Main::createPlaintextString(std::string const& scriptName) 
 }
 
 void View_Gtk_Main::saveConfig(){
-	eventListener->save_request();
+	eventListener->saveAction();
 }
 
 
@@ -572,7 +572,7 @@ std::list<void*> View_Gtk_Main::getSelectedRules() {
 
 
 void View_Gtk_Main::signal_reload_click(){
-	eventListener->reload_request();
+	eventListener->reloadAction();
 }
 
 Gtk::TreeModel::iterator View_Gtk_Main::getIterByRulePtr(void* rulePtr, const Gtk::TreeRow* parentRow) const {
@@ -594,12 +594,12 @@ Gtk::TreeModel::iterator View_Gtk_Main::getIterByRulePtr(void* rulePtr, const Gt
 void View_Gtk_Main::signal_edit_name_finished(const Glib::ustring& path, const Glib::ustring& new_text){
 	if (this->lock_state == 0){
 		Gtk::TreeModel::iterator iter = this->tvConfList.refTreeStore->get_iter(path);
-		eventListener->signal_entry_renamed((void*)(*iter)[tvConfList.treeModel.relatedRule], new_text);
+		eventListener->renameRuleAction((void*)(*iter)[tvConfList.treeModel.relatedRule], new_text);
 	}
 }
 
 void View_Gtk_Main::signal_show_envEditor(){
-	eventListener->envEditor_request();
+	eventListener->showEnvEditorAction();
 }
 
 
@@ -652,7 +652,7 @@ void View_Gtk_Main::signal_move_click(int direction){
 		assert(direction == 1 || direction == -1);
 
 		//if rule swap
-		eventListener->ruleAdjustment_requested(this->getSelectedRules(), direction);
+		eventListener->moveAction(this->getSelectedRules(), direction);
 	}
 }
 
@@ -679,9 +679,9 @@ void View_Gtk_Main::signal_treeview_selection_changed(){
 			Gtk::TreeModel::iterator iter = this->tvConfList.refTreeStore->get_iter(selectedRows[0]);
 
 			void* rptr = (*iter)[tvConfList.treeModel.relatedRule];
-			this->eventListener->ruleSelected(rptr);
+			this->eventListener->showInfoAction(rptr);
 		} else {
-			this->eventListener->ruleSelected(NULL);
+			this->eventListener->showInfoAction(NULL);
 		}
 
 		this->updateButtonsState();
@@ -691,19 +691,19 @@ void View_Gtk_Main::signal_treeview_selection_changed(){
 void View_Gtk_Main::signal_entry_edit_click() {
 	std::list<void*> rules = this->getSelectedRules();
 	assert(rules.size() == 1);
-	eventListener->entryEditDlg_requested(rules.front());
+	eventListener->showEntryEditorAction(rules.front());
 }
 
 void View_Gtk_Main::signal_entry_create_click() {
-	eventListener->entryCreateDlgRequested();
+	eventListener->showEntryCreatorAction();
 }
 
 void View_Gtk_Main::signal_add_click(){
-	eventListener->entryAddDlg_requested();
+	eventListener->showTrashAction();
 }
 
 void View_Gtk_Main::signal_remove_click() {
-	eventListener->signal_entry_remove_requested(this->getSelectedRules());
+	eventListener->removeRulesAction(this->getSelectedRules());
 }
 
 void View_Gtk_Main::signal_rename_click() {
@@ -711,7 +711,7 @@ void View_Gtk_Main::signal_rename_click() {
 }
 
 void View_Gtk_Main::signal_preference_click(){
-	eventListener->settings_dialog_request();
+	eventListener->showSettingsAction();
 }
 
 void View_Gtk_Main::update_move_buttons(){
@@ -797,25 +797,25 @@ int View_Gtk_Main::showExitConfirmDialog(int type){
 }
 
 bool View_Gtk_Main::signal_delete_event(GdkEventAny* event){ //return value: keep window open
-	eventListener->exitRequest();
+	eventListener->exitAction();
 	return true;
 }
 
 void View_Gtk_Main::signal_quit_click(){
-	eventListener->exitRequest();
+	eventListener->exitAction();
 }
 
 
 void View_Gtk_Main::signal_show_grub_install_dialog_click(){
-	eventListener->installDialogRequest();
+	eventListener->showInstallerAction();
 }
 
 void View_Gtk_Main::signal_move_left_click() {
-	eventListener->removeSubmenuRequest(this->getSelectedRules());
+	eventListener->removeSubmenuAction(this->getSelectedRules());
 }
 
 void View_Gtk_Main::signal_move_right_click() {
-	eventListener->createSubmenuRequest(this->getSelectedRules());
+	eventListener->createSubmenuAction(this->getSelectedRules());
 }
 
 void View_Gtk_Main::showErrorMessage(std::string const& msg, std::vector<std::string> const& values = std::vector<std::string>()){
@@ -857,14 +857,14 @@ bool View_Gtk_Main::confirmUnsavedSwitch() {
 }
 
 void View_Gtk_Main::signal_info_click(){
-	eventListener->aboutDialog_requested();
+	eventListener->showAboutAction();
 }
 
 void View_Gtk_Main::signal_burg_switcher_response(int response_id){
 	if (response_id == Gtk::RESPONSE_DELETE_EVENT)
-		eventListener->burgSwitcher_cancelled();
+		eventListener->cancelBurgSwitcherAction();
 	else
-		eventListener->burgSwitcher_response(response_id == Gtk::RESPONSE_YES);
+		eventListener->initModeAction(response_id == Gtk::RESPONSE_YES);
 }
 
 View_Gtk_Main_List::View_Gtk_Main_List(){

@@ -20,9 +20,11 @@
 #define GRUBLISTCFGDLG_H_
 
 #include "../interface/evt_listCfgDlg.h"
+#include "../Controller/MainController.h"
 #include "Settings.h"
 #include <string>
 #include <vector>
+#include <map>
 
 /**
  * Interface for dialogs which lets the user control the grub list
@@ -36,7 +38,7 @@ public:
 		RULE_ITER_NOT_FOUND
 	};
 	//function to assign the event listener
-	virtual void setEventListener(EventListener_listCfgDlg& eventListener)=0;
+	virtual void setEventListener(MainController& eventListener)=0;
 	//show this dialog without waiting
 	virtual void show()=0;
 	//hide this dialog

@@ -38,6 +38,12 @@ public:
 	enum Exception {
 		FILE_SAVE_FAILED
 	};
+
+	// application status flags:
+	bool quit_requested;
+	int activeThreadCount;
+	bool modificationsUnsaved;
+
 	Model_Env();
 	bool init(Model_Env::Mode mode, std::string const& dir_prefix);
 	void loadFromFile(FILE* cfg_file, std::string const& dir_prefix);

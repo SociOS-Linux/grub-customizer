@@ -18,7 +18,13 @@
 
 #include "Env.h"
 
-Model_Env::Model_Env() : burgMode(false), useDirectBackgroundProps(false) {}
+Model_Env::Model_Env()
+	: burgMode(false),
+	  useDirectBackgroundProps(false),
+	  modificationsUnsaved(false),
+	  quit_requested(false),
+	  activeThreadCount(0)
+{}
 
 bool Model_Env::init(Model_Env::Mode mode, std::string const& dir_prefix){
 	useDirectBackgroundProps = false;

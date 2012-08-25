@@ -16,17 +16,19 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CONTROLLERCOLLECTION_H_
-#define CONTROLLERCOLLECTION_H_
-#include "Controller/EntryEditController.h"
-#include "Controller/MainController.h"
-#include "presenter/grubCustomizerIface.h"
+#ifndef ENTRYNAMEIMPL_H_
+#define ENTRYNAMEIMPL_H_
 
-struct ControllerCollection {
-	EntryEditController* entryEditController;
-	MainController* mainController;
-	GrubCustomizerIface* masterclass_deprecated;
+#include "EntryName.h"
+#include "../View/Main.h"
+#include <cassert>
+
+class Mapper_EntryNameImpl : public Mapper_EntryName {
+	View_Main* view;
+public:
+	void setView(View_Main& view);
+	std::string map(Model_Entry const* sourceEntry, std::string const& defaultName, std::string const& scriptName = "");
 };
 
 
-#endif /* CONTROLLERCOLLECTION_H_ */
+#endif /* ENTRYNAMEIMPL_H_ */

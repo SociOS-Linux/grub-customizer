@@ -55,7 +55,7 @@ class ImageMenuItemOwnKey : public Gtk::ImageMenuItem {
 };
 
 class View_Gtk_Main : public View_Main, public CommonClass {
-	EventListener_listCfgDlg* eventListener;
+	MainController* eventListener;
 	Gtk::Window win;
 	Gtk::VBox vbMainSplit;
 	Gtk::Notebook notebook;
@@ -108,7 +108,7 @@ class View_Gtk_Main : public View_Main, public CommonClass {
 	std::list<void*> getSelectedRules();
 public:
 	View_Gtk_Main();
-	void setEventListener(EventListener_listCfgDlg& eventListener);
+	void setEventListener(MainController& eventListener);
 	void putSettingsDialog(Gtk::VBox& commonSettingsPane, Gtk::VBox& appearanceSettingsPane);
 	void putEnvEditor(Gtk::Widget& envEditor);
 	void show();

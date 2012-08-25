@@ -93,10 +93,10 @@ void EntryEditControllerImpl::applyAction() {
 	rulePtr->dataSource->content = newCode;
 	rulePtr->dataSource->isModified = true;
 
-	this->getAllControllers().masterclass_deprecated->setModificationsUnsaved(true);
-	this->getAllControllers().masterclass_deprecated->syncListView_load();
+	this->env.modificationsUnsaved = true;
+	this->getAllControllers().mainController->syncLoadStateAction();
 
-	this->getAllControllers().masterclass_deprecated->selectRule(rulePtr, isAdded);
+	this->getAllControllers().mainController->selectRuleAction(rulePtr, isAdded);
 
 	this->currentContentParser = NULL;
 }

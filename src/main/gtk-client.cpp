@@ -36,7 +36,9 @@
 #include "../lib/contentParser/Chainloader.h"
 #include "../lib/contentParser/Memtest.h"
 #include "../Controller/EntryEditControllerImpl.h"
+#include "../Controller/MainControllerImpl.h"
 #include "../ControllerCollection.h"
+#include "../Mapper/EntryNameImpl.h"
 
 
 int main(int argc, char** argv){
@@ -72,9 +74,11 @@ int main(int argc, char** argv){
 	View_Gtk_About aboutDialog;
 	GlibMutex listCfgMutex1;
 	GlibMutex listCfgMutex2;
-	GlibThreadController threadC(presenter);
 	ContentParserFactoryImpl contentParserFactory;
 	View_Gtk_EnvEditor envEditor;
+	Mapper_EntryNameImpl entryNameMapper;
+
+	entryNameMapper.setView(listCfgView);
 
 	entryEditDlg.setDeviceDataList(deviceDataList);
 	envEditor.setDeviceDataList(deviceDataList);
@@ -85,16 +89,32 @@ int main(int argc, char** argv){
 	entryEditController.setDeviceDataList(deviceDataList);
 	entryEditController.setListCfg(listcfg);
 
+	MainControllerImpl mainController(env);
+	mainController.setListCfg(listcfg);
+	mainController.setSettingsManager(settings);
+	mainController.setSettingsBuffer(settingsOnDisk);
+	mainController.setSavedListCfg(savedListCfg);
+	mainController.setFbResolutionsGetter(fbResolutionsGetter);
+	mainController.setDeviceDataList(deviceDataList);
+	mainController.setMountTable(mountTable);
+	mainController.setContentParserFactory(contentParserFactory);
+	mainController.setView(listCfgView);
+	mainController.setEntryNameMapper(entryNameMapper);
+
 	ControllerCollection controllerCollection;
 	controllerCollection.entryEditController = &entryEditController;
+	controllerCollection.mainController = &mainController;
 	controllerCollection.masterclass_deprecated = &presenter;
 
 	entryEditController.setControllerCollection(controllerCollection);
+	mainController.setControllerCollection(controllerCollection);
 	presenter.setControllerCollection(controllerCollection);
+
+	GlibThreadController threadC(presenter, controllerCollection);
+	mainController.setThreadController(threadC);
 
 	//assign objects to presenter
 	presenter.setListCfg(listcfg);
-	presenter.setListCfgDlg(listCfgView);
 	presenter.setSettingsDialog(settingsDlg);
 	presenter.setSettingsManager(settings);
 	presenter.setSettingsBuffer(settingsOnDisk);
@@ -109,12 +129,13 @@ int main(int argc, char** argv){
 	presenter.setThreadController(threadC);
 	presenter.setContentParserFactory(contentParserFactory);
 	presenter.setGrubEnvEditor(envEditor);
+	presenter.setEntryNameMapper(entryNameMapper);
 
 	listCfgView.putSettingsDialog(settingsDlg.getCommonSettingsPane(), settingsDlg.getAppearanceSettingsPane());
 
 	//assign event listener
-	EventListener evt(presenter);
-	listCfgView.setEventListener(evt);
+	EventListener evt(presenter, controllerCollection);
+	listCfgView.setEventListener(mainController);
 	installDlg.setEventListener(evt);
 	scriptAddDlg.setEventListener(evt);
 	entryEditDlg.setEventListener(entryEditController);
@@ -146,6 +167,7 @@ int main(int argc, char** argv){
 	threadC.setLogger(logger);
 	env.setLogger(logger);
 	envEditor.setLogger(logger);
+	mainController.setLogger(logger);
 
 	// configure logger
 	logger.setLogLevel(StreamLogger::LOG_EVENT);
@@ -179,7 +201,7 @@ int main(int argc, char** argv){
 	listcfg.setMutex(listCfgMutex1);
 	savedListCfg.setMutex(listCfgMutex2);
 
-	presenter.init();
+	mainController.init();
 	app.run();
 }
 
