@@ -35,13 +35,8 @@
 
 #include "../View/Trash.h"
 
-#include "../Model/ListCfg.h"
-#include "../View/Settings.h"
-#include "../Model/FbResolutionsGetter.h"
 #include "../View/About.h"
-#include "../Model/DeviceDataList.h"
 #include "../interface/threadController.h"
-#include "../interface/contentParserFactory.h"
 #include "../View/EnvEditor.h"
 #include "../Mapper/EntryName.h"
 
@@ -69,15 +64,9 @@ class GrubCustomizer : public ControllerAbstract, public GrubCustomizerIface {
 	Model_Installer* installer;
 	View_Installer* installDlg;
 	View_Trash* entryAddDlg;
-//	View_EntryEditor* entryEditDlg;
-	Model_ListCfg* savedListCfg;
-	Model_FbResolutionsGetter* fbResolutionsGetter;
-	Model_DeviceDataList* deviceDataList;
 	Model_MountTable* mountTable;
 	View_About* aboutDialog;
 	ThreadController* threadController;
-	ContentParserFactory* contentParserFactory;
-	ContentParser* currentContentParser;
 	View_EnvEditor* grubEnvEditor;
 	Mapper_EntryName* entryNameMapper;
 
@@ -89,18 +78,13 @@ public:
 	void setInstaller(Model_Installer& installer);
 	void setInstallDlg(View_Installer& installDlg);
 	void setScriptAddDlg(View_Trash& scriptAddDlg);
-	void setSavedListCfg(Model_ListCfg& savedListCfg);
-	void setFbResolutionsGetter(Model_FbResolutionsGetter& fbResolutionsGetter);
-	void setDeviceDataList(Model_DeviceDataList& deviceDataList);
 	void setMountTable(Model_MountTable& mountTable);
 	void setAboutDialog(View_About& aboutDialog);
 	void setThreadController(ThreadController& threadController);
-	void setContentParserFactory(ContentParserFactory& contentParserFactory);
 	void setGrubEnvEditor(View_EnvEditor& envEditor);
 	void setEntryNameMapper(Mapper_EntryName& mapper);
 
 	ThreadController& getThreadController();
-	Model_FbResolutionsGetter& getFbResolutionsGetter();
 
 	void showEnvEditor(bool resetPartitionChooser = false);
 

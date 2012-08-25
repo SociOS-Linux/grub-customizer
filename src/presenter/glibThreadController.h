@@ -51,6 +51,7 @@ private:
 	void _execDie();
 	void _execActivateSettings();
 	void _execResolutionListUpdate();
+	void _execFbResolutionsGetter();
 };
 
 #endif

@@ -22,9 +22,7 @@
 
 #include "../interface/evt_grubInstallDlg.h"
 #include "../interface/evt_model.h"
-#include "../interface/evt_listCfgDlg.h"
 #include "../interface/evt_entryAddDlg.h"
-#include "../interface/evt_entryEditDlg.h"
 #include "../interface/evt_grubEnvEditor.h"
 #include "../ControllerCollection.h"
 

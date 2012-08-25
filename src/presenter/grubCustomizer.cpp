@@ -21,11 +21,8 @@
 GrubCustomizer::GrubCustomizer(Model_Env& env)
 	: grublistCfg(NULL),
 	  installer(NULL), installDlg(NULL), entryAddDlg(NULL),
-	  savedListCfg(NULL),
-	  fbResolutionsGetter(NULL), deviceDataList(NULL),
 	  mountTable(NULL), aboutDialog(NULL),
 	 env(env),
-	 contentParserFactory(NULL), currentContentParser(NULL),
 	 grubEnvEditor(NULL), threadController(NULL),
 	 entryNameMapper(NULL)
 {
@@ -46,18 +43,6 @@ void GrubCustomizer::setScriptAddDlg(View_Trash& scriptAddDlg){
 	this->entryAddDlg = &scriptAddDlg;
 }
 
-void GrubCustomizer::setSavedListCfg(Model_ListCfg& savedListCfg){
-	this->savedListCfg = &savedListCfg;
-}
-
-void GrubCustomizer::setFbResolutionsGetter(Model_FbResolutionsGetter& fbResolutionsGetter){
-	this->fbResolutionsGetter = &fbResolutionsGetter;
-}
-
-void GrubCustomizer::setDeviceDataList(Model_DeviceDataList& deviceDataList){
-	this->deviceDataList = &deviceDataList;
-}
-
 void GrubCustomizer::setMountTable(Model_MountTable& mountTable){
 	this->mountTable = &mountTable;
 }
@@ -68,10 +53,6 @@ void GrubCustomizer::setAboutDialog(View_About& aboutDialog){
 
 void GrubCustomizer::setThreadController(ThreadController& threadController) {
 	this->threadController = &threadController;
-}
-
-void GrubCustomizer::setContentParserFactory(ContentParserFactory& contentParserFactory) {
-	this->contentParserFactory = &contentParserFactory;
 }
 
 void GrubCustomizer::setGrubEnvEditor(View_EnvEditor& envEditor) {
@@ -87,10 +68,6 @@ ThreadController& GrubCustomizer::getThreadController() {
 		throw INCOMPLETE;
 	}
 	return *this->threadController;
-}
-
-Model_FbResolutionsGetter& GrubCustomizer::getFbResolutionsGetter() {
-	return *this->fbResolutionsGetter;
 }
 
 void GrubCustomizer::showEnvEditor(bool resetPartitionChooser) {

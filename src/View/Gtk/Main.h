@@ -19,7 +19,6 @@
 #ifndef GRUBLIST_CFG_DLG_GTK_INCLUDED
 #define GRUBLIST_CFG_DLG_GTK_INCLUDED
 #include <gtkmm.h>
-#include "../../interface/evt_listCfgDlg.h"
 #include <libintl.h>
 #include "../../config.h"
 #include "../Main.h"

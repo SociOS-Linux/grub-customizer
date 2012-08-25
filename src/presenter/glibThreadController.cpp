@@ -57,7 +57,7 @@ void GlibThreadController::startSaveThread() {
 }
 
 void GlibThreadController::startFramebufferResolutionLoader() {
-	Glib::Thread::create(sigc::mem_fun(&this->app.getFbResolutionsGetter(), &Model_FbResolutionsGetter::load), false);
+	Glib::Thread::create(sigc::mem_fun(this, &GlibThreadController::_execFbResolutionsGetter), false);
 }
 
 void GlibThreadController::startGrubInstallThread(std::string const& device) {
@@ -94,5 +94,9 @@ void GlibThreadController::_execActivateSettings() {
 
 void GlibThreadController::_execResolutionListUpdate() {
 	this->_controllers.settingsController->updateResolutionlistAction();
+}
+
+void GlibThreadController::_execFbResolutionsGetter() {
+	this->_controllers.settingsController->getFbResolutionsGetter().load();
 }
 

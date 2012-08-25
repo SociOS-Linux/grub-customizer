@@ -19,7 +19,6 @@
 #ifndef GRUBLISTCFGDLG_H_
 #define GRUBLISTCFGDLG_H_
 
-#include "../interface/evt_listCfgDlg.h"
 #include "../Controller/MainController.h"
 #include "Settings.h"
 #include <string>

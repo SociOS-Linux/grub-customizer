@@ -129,13 +129,9 @@ int main(int argc, char** argv){
 	presenter.setInstaller(installer);
 	presenter.setInstallDlg(installDlg);
 	presenter.setScriptAddDlg(scriptAddDlg);
-	presenter.setSavedListCfg(savedListCfg);
-	presenter.setFbResolutionsGetter(fbResolutionsGetter);
-	presenter.setDeviceDataList(deviceDataList);
 	presenter.setMountTable(mountTable);
 	presenter.setAboutDialog(aboutDialog);
 	presenter.setThreadController(threadC);
-	presenter.setContentParserFactory(contentParserFactory);
 	presenter.setGrubEnvEditor(envEditor);
 	presenter.setEntryNameMapper(entryNameMapper);
 

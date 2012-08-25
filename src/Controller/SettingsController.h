@@ -19,9 +19,12 @@
 #ifndef SETTINGSCONTROLLER_H_
 #define SETTINGSCONTROLLER_H_
 
+#include "../Model/FbResolutionsGetter.h"
+
 class SettingsController {
 public:
 	virtual inline ~SettingsController(){};
+	virtual Model_FbResolutionsGetter& getFbResolutionsGetter() = 0;
 	virtual void updateSettingsDataAction() = 0;
 	virtual void updateResolutionlistAction() = 0;
 	virtual void updateDefaultSystemAction() = 0;
