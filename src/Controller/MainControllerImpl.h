@@ -28,10 +28,6 @@
 
 #include "../Model/Env.h"
 
-#include "../Model/MountTable.h"
-
-#include "../Model/Installer.h"
-
 #include "../Model/ListCfg.h"
 #include "../Model/FbResolutionsGetter.h"
 #include "../Model/DeviceDataList.h"

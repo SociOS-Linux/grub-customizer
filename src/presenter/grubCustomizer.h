@@ -66,9 +66,6 @@
 class GrubCustomizer : public ControllerAbstract, public GrubCustomizerIface {
 	Model_Env& env;
 	Model_ListCfg* grublistCfg;
-	View_Settings* settingsDlg;
-	Model_SettingsManagerData* settings;
-	Model_SettingsManagerData* settingsOnDisk; //buffer for the existing settings
 	Model_Installer* installer;
 	View_Installer* installDlg;
 	View_Trash* entryAddDlg;
@@ -89,9 +86,6 @@ public:
 		INCOMPLETE
 	};
 	void setListCfg(Model_ListCfg& grublistCfg);
-	void setSettingsDialog(View_Settings& settingsDlg);
-	void setSettingsManager(Model_SettingsManagerData& settings);
-	void setSettingsBuffer(Model_SettingsManagerData& settings);
 	void setInstaller(Model_Installer& installer);
 	void setInstallDlg(View_Installer& installDlg);
 	void setScriptAddDlg(View_Trash& scriptAddDlg);
@@ -110,8 +104,6 @@ public:
 
 	void showEnvEditor(bool resetPartitionChooser = false);
 
-	void showSettingsDlg();
-	void save_thread();
 	GrubCustomizer(Model_Env& env);
 	
 	void showInstallDialog();
@@ -123,32 +115,8 @@ public:
 	void showEntryCreateDlg();
 	void addEntryFromEntryAddDlg();
 	
-	//dispatchers
-	void updateSettingsDlg();
-	
 	
 	void showAboutDialog();
-
-	//settings dialog
-	void updateSettingsDlgResolutionList_dispatched();
-
-	void syncSettings();
-	void updateDefaultSetting();
-	void updateCustomSetting(std::string const& name);
-	void addNewCustomSettingRow();
-	void removeCustomSettingRow(std::string const& name);
-	void updateShowMenuSetting();
-	void updateOsProberSetting();
-	void updateTimeoutSetting();
-	void updateKernalParams();
-	void updateGenerateRecoverySetting();
-	void updateCustomResolution();
-	void updateColorSettings();
-	void updateFontSettings(bool removeFont);
-	void updateBackgroundImage();
-	void updateUseCustomResolution();
-	void removeBackgroundImage();
-	void hideSettingsDialog();
 
 	//partition chooser
 	void mountSubmountpoint(std::string const& submountpoint);

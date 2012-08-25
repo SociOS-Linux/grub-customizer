@@ -19,8 +19,8 @@
 #include "grubCustomizer.h"
 
 GrubCustomizer::GrubCustomizer(Model_Env& env)
-	: grublistCfg(NULL), settingsDlg(NULL), settings(NULL),
-	  installer(NULL), installDlg(NULL), settingsOnDisk(NULL), entryAddDlg(NULL),
+	: grublistCfg(NULL),
+	  installer(NULL), installDlg(NULL), entryAddDlg(NULL),
 	  savedListCfg(NULL),
 	  fbResolutionsGetter(NULL), deviceDataList(NULL),
 	  mountTable(NULL), aboutDialog(NULL),
@@ -34,18 +34,6 @@ GrubCustomizer::GrubCustomizer(Model_Env& env)
 
 void GrubCustomizer::setListCfg(Model_ListCfg& grublistCfg){
 	this->grublistCfg = &grublistCfg;
-}
-
-void GrubCustomizer::setSettingsDialog(View_Settings& settingsDlg){
-	this->settingsDlg = &settingsDlg;
-}
-
-void GrubCustomizer::setSettingsManager(Model_SettingsManagerData& settings){
-	this->settings = &settings;
-}
-
-void GrubCustomizer::setSettingsBuffer(Model_SettingsManagerData& settings){
-	this->settingsOnDisk = &settings;
 }
 
 void GrubCustomizer::setInstaller(Model_Installer& installer){
@@ -105,38 +93,9 @@ Model_FbResolutionsGetter& GrubCustomizer::getFbResolutionsGetter() {
 	return *this->fbResolutionsGetter;
 }
 
-void GrubCustomizer::updateSettingsDlg(){
-	std::list<Model_Proxylist_Item> entryTitles = this->grublistCfg->proxies.generateEntryTitleList();
-	std::list<std::string> labelListToplevel  = this->grublistCfg->proxies.getToplevelEntryTitles();
-
-	this->settingsDlg->clearDefaultEntryChooser();
-	for (std::list<Model_Proxylist_Item>::iterator iter = entryTitles.begin(); iter != entryTitles.end(); iter++) {
-		this->settingsDlg->addEntryToDefaultEntryChooser(iter->labelPathValue, iter->labelPathLabel, iter->numericPathValue, iter->numericPathLabel);
-	}
-
-	this->settingsDlg->setPreviewEntryTitles(labelListToplevel);
-
-	this->syncSettings();
-}
-
 void GrubCustomizer::showEnvEditor(bool resetPartitionChooser) {
 	this->grubEnvEditor->setEnvSettings(this->env.getProperties(), this->env.getRequiredProperties(), this->env.getValidProperties());
 	this->grubEnvEditor->show(resetPartitionChooser);
-}
-
-void GrubCustomizer::showSettingsDlg(){
-	this->settingsDlg->show(env.burgMode);
-}
-
-void GrubCustomizer::save_thread(){
-	this->log("writing settings file", Logger::IMPORTANT_EVENT);
-	this->settings->save();
-	if (this->settings->color_helper_required) {
-		this->grublistCfg->addColorHelper();
-	}
-	this->log("writing grub list configuration", Logger::IMPORTANT_EVENT);
-	this->grublistCfg->save();
-	this->env.activeThreadCount--;
 }
 
 
@@ -207,7 +166,7 @@ void GrubCustomizer::updateGrubEnvOptions() {
 void GrubCustomizer::applyEnvEditor(bool saveConfig){
 //	listCfgDlg->setLockState(1|2|8);
 //	this->syncSettings();
-	settingsDlg->hide();
+	this->getAllControllers().settingsController->hideAction();
 	entryAddDlg->hide();
 	bool isBurgMode = this->grubEnvEditor->getBootloaderType() == 1;
 	grubEnvEditor->hide();
@@ -291,247 +250,6 @@ void GrubCustomizer::addEntryFromEntryAddDlg(){
 	this->getAllControllers().mainController->addEntriesAction(entries);
 }
 
-
-void GrubCustomizer::updateSettingsDlgResolutionList_dispatched(){
-	const std::list<std::string>& data = this->fbResolutionsGetter->getData();
-	this->settingsDlg->clearResolutionChooser();
-	for (std::list<std::string>::const_iterator iter = data.begin(); iter != data.end(); iter++)
-		this->settingsDlg->addResolution(*iter);
-}
-
-void GrubCustomizer::syncSettings(){
-	std::string sel = this->settingsDlg->getSelectedCustomOption();
-	this->settingsDlg->removeAllSettingRows();
-	for (std::list<Model_SettingsStore_Row>::iterator iter = this->settings->begin(); iter != this->settings->end(); this->settings->iter_to_next_setting(iter)){
-		this->settingsDlg->addCustomOption(iter->isActive, iter->name, iter->value);
-	}
-	this->settingsDlg->selectCustomOption(sel);
-	std::string defEntry = this->settings->getValue("GRUB_DEFAULT");
-	if (defEntry == "saved"){
-		this->settingsDlg->setActiveDefEntryOption(View_Settings::DEF_ENTRY_SAVED);
-	}
-	else {
-		this->settingsDlg->setActiveDefEntryOption(View_Settings::DEF_ENTRY_PREDEFINED);
-		this->settingsDlg->setDefEntry(defEntry);
-	}
-
-	this->settingsDlg->setShowMenuCheckboxState(!this->settings->isActive("GRUB_HIDDEN_TIMEOUT", true));
-	this->settingsDlg->setOsProberCheckboxState(!this->settings->isActive("GRUB_DISABLE_OS_PROBER", true));
-
-	std::string timeoutStr;
-	if (this->settingsDlg->getShowMenuCheckboxState())
-		timeoutStr = this->settings->getValue("GRUB_TIMEOUT");
-	else
-		timeoutStr = this->settings->getValue("GRUB_HIDDEN_TIMEOUT");
-
-	if (timeoutStr == "" || timeoutStr.find_first_not_of("0123456789") != -1) {
-		timeoutStr = "10"; //default value
-	}
-	std::istringstream in(timeoutStr);
-	int timeout;
-	in >> timeout;
-	this->settingsDlg->setTimeoutValue(timeout);
-
-	this->settingsDlg->setKernelParams(this->settings->getValue("GRUB_CMDLINE_LINUX_DEFAULT"));
-	this->settingsDlg->setRecoveryCheckboxState(!this->settings->isActive("GRUB_DISABLE_LINUX_RECOVERY", true));
-
-	this->settingsDlg->setResolutionCheckboxState(this->settings->isActive("GRUB_GFXMODE", true));
-	this->settingsDlg->setResolution(this->settings->getValue("GRUB_GFXMODE"));
-
-	std::string nColor = this->settings->getValue("GRUB_COLOR_NORMAL");
-	std::string hColor = this->settings->getValue("GRUB_COLOR_HIGHLIGHT");
-	if (nColor != ""){
-		this->settingsDlg->getColorChooser(View_Settings::COLOR_CHOOSER_DEFAULT_FONT).selectColor(nColor.substr(0, nColor.find('/')));
-		this->settingsDlg->getColorChooser(View_Settings::COLOR_CHOOSER_DEFAULT_BACKGROUND).selectColor(nColor.substr(nColor.find('/')+1));
-	}
-	else {
-		//default grub menu colors
-		this->settingsDlg->getColorChooser(View_Settings::COLOR_CHOOSER_DEFAULT_FONT).selectColor("light-gray");
-		this->settingsDlg->getColorChooser(View_Settings::COLOR_CHOOSER_DEFAULT_BACKGROUND).selectColor("black");
-	}
-	if (hColor != ""){
-		this->settingsDlg->getColorChooser(View_Settings::COLOR_CHOOSER_HIGHLIGHT_FONT).selectColor(hColor.substr(0, hColor.find('/')));
-		this->settingsDlg->getColorChooser(View_Settings::COLOR_CHOOSER_HIGHLIGHT_BACKGROUND).selectColor(hColor.substr(hColor.find('/')+1));
-	}
-	else {
-		//default grub menu colors
-		this->settingsDlg->getColorChooser(View_Settings::COLOR_CHOOSER_HIGHLIGHT_FONT).selectColor("magenta");
-		this->settingsDlg->getColorChooser(View_Settings::COLOR_CHOOSER_HIGHLIGHT_BACKGROUND).selectColor("black");
-	}
-
-	std::string wallpaper_key = this->env.useDirectBackgroundProps ? "GRUB_BACKGROUND" : "GRUB_MENU_PICTURE";
-	std::string menuPicturePath = this->settings->getValue(wallpaper_key);
-	bool menuPicIsInGrubDir = false;
-	if (menuPicturePath != "" && menuPicturePath[0] != '/'){
-		menuPicturePath = env.output_config_dir + "/" + menuPicturePath;
-		menuPicIsInGrubDir = true;
-	}
-
-	this->settingsDlg->setFontName(this->settings->grubFont);
-
-	if (this->settings->isActive(wallpaper_key) && menuPicturePath != ""){
-		this->settingsDlg->setBackgroundImagePreviewPath(menuPicturePath, menuPicIsInGrubDir);
-	}
-	else {
-		this->settingsDlg->setBackgroundImagePreviewPath("", menuPicIsInGrubDir);
-	}
-
-	if (this->settings->reloadRequired()) {
-		this->getAllControllers().mainController->showReloadRecommendationAction();
-	}
-}
-
-void GrubCustomizer::updateDefaultSetting(){
-	if (this->settingsDlg->getActiveDefEntryOption() == View_Settings::DEF_ENTRY_SAVED){
-		this->settings->setValue("GRUB_DEFAULT", "saved");
-		this->settings->setValue("GRUB_SAVEDEFAULT", "true");
-		this->settings->setIsActive("GRUB_SAVEDEFAULT", true);
-	}
-	else {
-		this->settings->setValue("GRUB_DEFAULT", this->settingsDlg->getSelectedDefaultGrubValue());
-		this->settings->setValue("GRUB_SAVEDEFAULT", "false");
-	}
-	this->syncSettings();
-	this->env.modificationsUnsaved = true;
-}
-
-void GrubCustomizer::updateCustomSetting(std::string const& name){
-	View_Settings::CustomOption c = this->settingsDlg->getCustomOption(name);
-	this->settings->renameItem(c.old_name, c.name);
-	this->settings->setValue(c.name, c.value);
-	this->settings->setIsActive(c.name, c.isActive);
-	this->syncSettings();
-	this->env.modificationsUnsaved = true;
-}
-
-void GrubCustomizer::addNewCustomSettingRow(){
-	std::string newSettingName = this->settings->addNewItem();
-	this->syncSettings();
-}
-void GrubCustomizer::removeCustomSettingRow(std::string const& name){
-	this->settings->removeItem(name);
-	this->syncSettings();
-	this->env.modificationsUnsaved = true;
-}
-
-void GrubCustomizer::updateShowMenuSetting(){
-	std::string val = this->settings->getValue("GRUB_HIDDEN_TIMEOUT");
-	if (val == "" || val.find_first_not_of("0123456789") != -1) {
-		this->settings->setValue("GRUB_HIDDEN_TIMEOUT", "0"); //create this entry - if it has an invalid value
-	}
-	this->settings->setIsActive("GRUB_HIDDEN_TIMEOUT", !this->settingsDlg->getShowMenuCheckboxState());
-	if (!this->settingsDlg->getShowMenuCheckboxState() && this->settingsDlg->getOsProberCheckboxState()){
-		this->settingsDlg->showHiddenMenuOsProberConflictMessage();
-	}
-	this->syncSettings();
-	this->env.modificationsUnsaved = true;
-}
-
-void GrubCustomizer::updateOsProberSetting(){
-	this->settings->setValue("GRUB_DISABLE_OS_PROBER", this->settingsDlg->getOsProberCheckboxState() ? "false" : "true");
-	this->settings->setIsActive("GRUB_DISABLE_OS_PROBER", !this->settingsDlg->getOsProberCheckboxState());
-	this->syncSettings();
-	this->env.modificationsUnsaved = true;
-}
-
-void GrubCustomizer::updateKernalParams(){
-	this->settings->setValue("GRUB_CMDLINE_LINUX_DEFAULT", this->settingsDlg->getKernelParams());
-	this->syncSettings();
-	this->env.modificationsUnsaved = true;
-}
-
-void GrubCustomizer::updateUseCustomResolution(){
-	if (this->settings->getValue("GRUB_GFXMODE") == "") {
-		this->settings->setValue("GRUB_GFXMODE", "saved"); //use saved as default value (if empty)
-	}
-	this->settings->setIsActive("GRUB_GFXMODE", this->settingsDlg->getResolutionCheckboxState());
-	this->syncSettings();
-	this->env.modificationsUnsaved = true;
-}
-
-void GrubCustomizer::updateBackgroundImage(){
-	if (!this->env.useDirectBackgroundProps) {
-		this->settings->setValue("GRUB_MENU_PICTURE", this->settingsDlg->getBackgroundImagePath());
-		this->settings->setIsActive("GRUB_MENU_PICTURE", true);
-		this->settings->setIsExport("GRUB_MENU_PICTURE", true);
-	} else {
-		this->settings->setValue("GRUB_BACKGROUND", this->settingsDlg->getBackgroundImagePath());
-		this->settings->setIsActive("GRUB_BACKGROUND", true);
-	}
-	this->syncSettings();
-	this->env.modificationsUnsaved = true;
-}
-
-void GrubCustomizer::updateColorSettings(){
-	if (this->settingsDlg->getColorChooser(View_Settings::COLOR_CHOOSER_DEFAULT_FONT).getSelectedColor() != "" && this->settingsDlg->getColorChooser(View_Settings::COLOR_CHOOSER_DEFAULT_BACKGROUND).getSelectedColor() != ""){
-		this->settings->setValue("GRUB_COLOR_NORMAL", this->settingsDlg->getColorChooser(View_Settings::COLOR_CHOOSER_DEFAULT_FONT).getSelectedColor() + "/" + this->settingsDlg->getColorChooser(View_Settings::COLOR_CHOOSER_DEFAULT_BACKGROUND).getSelectedColor());
-		this->settings->setIsActive("GRUB_COLOR_NORMAL", true);
-		this->settings->setIsExport("GRUB_COLOR_NORMAL", true);
-	}
-	if (this->settingsDlg->getColorChooser(View_Settings::COLOR_CHOOSER_HIGHLIGHT_FONT).getSelectedColor() != "" && this->settingsDlg->getColorChooser(View_Settings::COLOR_CHOOSER_HIGHLIGHT_BACKGROUND).getSelectedColor() != ""){
-		this->settings->setValue("GRUB_COLOR_HIGHLIGHT", this->settingsDlg->getColorChooser(View_Settings::COLOR_CHOOSER_HIGHLIGHT_FONT).getSelectedColor() + "/" + this->settingsDlg->getColorChooser(View_Settings::COLOR_CHOOSER_HIGHLIGHT_BACKGROUND).getSelectedColor());
-		this->settings->setIsActive("GRUB_COLOR_HIGHLIGHT", true);
-		this->settings->setIsExport("GRUB_COLOR_HIGHLIGHT", true);
-	}
-	this->syncSettings();
-	this->env.modificationsUnsaved = true;
-}
-
-void GrubCustomizer::updateFontSettings(bool removeFont) {
-	std::string fontName;
-	int fontSize = -1;
-	if (!removeFont) {
-		fontName = this->settingsDlg->getFontName();
-		fontSize = this->settingsDlg->getFontSize();;
-	}
-	this->settings->grubFont = fontName;
-	this->settings->grubFontSize = fontSize;
-	this->syncSettings();
-	this->env.modificationsUnsaved = true;
-}
-
-void GrubCustomizer::removeBackgroundImage(){
-	if (!this->env.useDirectBackgroundProps) {
-		this->settings->setIsActive("GRUB_MENU_PICTURE", false);
-	} else {
-		this->settings->setIsActive("GRUB_BACKGROUND", false);
-	}
-	this->syncSettings();
-	this->env.modificationsUnsaved = true;
-}
-
-void GrubCustomizer::hideSettingsDialog(){
-	this->settingsDlg->hide();
-	if (this->settings->reloadRequired()){
-		this->getThreadController().startLoadThread(true);
-	}
-}
-
-void GrubCustomizer::updateTimeoutSetting(){
-	if (this->settingsDlg->getShowMenuCheckboxState()){
-		this->settings->setValue("GRUB_TIMEOUT", this->settingsDlg->getTimeoutValueString());
-	}
-	else {
-		this->settings->setValue("GRUB_HIDDEN_TIMEOUT", this->settingsDlg->getTimeoutValueString());
-	}
-	this->syncSettings();
-	this->env.modificationsUnsaved = true;
-}
-
-void GrubCustomizer::updateCustomResolution(){
-	this->settings->setValue("GRUB_GFXMODE", this->settingsDlg->getResolution());
-	this->syncSettings();
-	this->env.modificationsUnsaved = true;
-}
-
-void GrubCustomizer::updateGenerateRecoverySetting(){
-	if (this->settings->getValue("GRUB_DISABLE_LINUX_RECOVERY") != "true") {
-		this->settings->setValue("GRUB_DISABLE_LINUX_RECOVERY", "true");
-	}
-	this->settings->setIsActive("GRUB_DISABLE_LINUX_RECOVERY", !this->settingsDlg->getRecoveryCheckboxState());
-	this->syncSettings();
-	this->env.modificationsUnsaved = true;
-}
 
 void GrubCustomizer::grubEnvSetRootDeviceName(std::string const& rootDevice) {
 	this->grubEnvEditor->setRootDeviceName(rootDevice);

@@ -20,11 +20,13 @@
 #define CONTROLLERCOLLECTION_H_
 #include "Controller/EntryEditController.h"
 #include "Controller/MainController.h"
+#include "Controller/SettingsController.h"
 #include "presenter/grubCustomizerIface.h"
 
 struct ControllerCollection {
 	EntryEditController* entryEditController;
 	MainController* mainController;
+	SettingsController* settingsController;
 	GrubCustomizerIface* masterclass_deprecated;
 };
 

@@ -292,7 +292,7 @@ View_Gtk_Settings::View_Gtk_Settings()
 	this->set_default_size(500, 600);
 }
 
-void View_Gtk_Settings::setEventListener(EventListener_settings& eventListener){
+void View_Gtk_Settings::setEventListener(SettingsController& eventListener){
 	this->eventListener = &eventListener;
 }
 
@@ -325,7 +325,7 @@ void View_Gtk_Settings::hide(){
 
 
 void View_Gtk_Settings::on_response(int response_id) {
-	this->eventListener->settings_dialog_hide_request();
+	this->eventListener->hideAction();
 }
 
 void View_Gtk_Settings::addEntryToDefaultEntryChooser(std::string const& labelPathValue, std::string const& labelPathLabel, std::string const& numericPathValue, std::string const& numericPathLabel){
@@ -596,13 +596,13 @@ View_Gtk_Settings::CustomOption View_Gtk_Settings::getCustomOption(std::string c
 
 void View_Gtk_Settings::signal_setting_row_changed(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter){
 	if (!event_lock){
-		this->eventListener->setting_row_changed((Glib::ustring)(*iter)[asTreeModel.old_name]);
+		this->eventListener->updateCustomSettingAction((Glib::ustring)(*iter)[asTreeModel.old_name]);
 	}
 }
 
 void View_Gtk_Settings::signal_default_entry_predefined_toggeled(){
 	if (!event_lock){
-		this->eventListener->default_entry_predefined_toggeled();
+		this->eventListener->updateDefaultSystemAction();
 	}
 }
 
@@ -612,13 +612,13 @@ View_Gtk_Settings::DefEntryType View_Gtk_Settings::getActiveDefEntryOption(){
 
 void View_Gtk_Settings::signal_default_entry_saved_toggeled(){
 	if (!event_lock){
-		this->eventListener->default_entry_saved_toggeled();
+		this->eventListener->updateDefaultSystemAction();
 	}
 }
 
 void View_Gtk_Settings::signal_default_entry_changed(){
 	if (!event_lock){
-		this->eventListener->default_entry_changed();
+		this->eventListener->updateDefaultSystemAction();
 	}
 }
 
@@ -637,14 +637,14 @@ void View_Gtk_Settings::showHiddenMenuOsProberConflictMessage(){
 
 void View_Gtk_Settings::signal_showMenu_toggled(){
 	if (!event_lock){
-		this->eventListener->showMenu_toggled();
+		this->eventListener->updateShowMenuSettingAction();
 	}
 }
 
 
 void View_Gtk_Settings::signal_osProber_toggled(){
 	if (!event_lock){
-		this->eventListener->osProber_toggled();
+		this->eventListener->updateOsProberSettingAction();
 	}
 }
 
@@ -658,7 +658,7 @@ std::string View_Gtk_Settings::getTimeoutValueString() {
 
 void View_Gtk_Settings::signal_timeout_changed(){
 	if (!event_lock){
-		this->eventListener->timeout_changed();
+		this->eventListener->updateTimeoutSettingAction();
 	}
 }
 
@@ -669,7 +669,7 @@ std::string View_Gtk_Settings::getKernelParams(){
 
 void View_Gtk_Settings::signal_kernelparams_changed(){
 	if (!event_lock){
-		this->eventListener->kernelparams_changed();
+		this->eventListener->updateKernelParamsAction();
 	}
 }
 
@@ -680,7 +680,7 @@ bool View_Gtk_Settings::getRecoveryCheckboxState(){
 
 void View_Gtk_Settings::signal_recovery_toggled(){
 	if (!event_lock){
-		this->eventListener->generateRecovery_toggled();
+		this->eventListener->updateRecoverySettingAction();
 	}
 }
 
@@ -691,7 +691,7 @@ bool View_Gtk_Settings::getResolutionCheckboxState(){
 
 void View_Gtk_Settings::signal_chkResolution_toggled(){
 	if (!event_lock){
-		this->eventListener->useCustomResolution_toggled();
+		this->eventListener->updateUseCustomResolutionAction();
 	}
 }
 
@@ -702,26 +702,26 @@ std::string View_Gtk_Settings::getResolution(){
 
 void View_Gtk_Settings::signal_resolution_selected(){
 	if (!event_lock){
-		this->eventListener->resolution_changed();
+		this->eventListener->updateCustomResolutionAction();
 	}
 }
 
 
 void View_Gtk_Settings::signal_color_changed(){
 	if (!event_lock){
-		this->eventListener->colorChange_requested();
+		this->eventListener->updateColorSettingsAction();
 	}
 }
 
 void View_Gtk_Settings::signal_font_changed() {
 	if (!event_lock) {
-		this->eventListener->fontChange_requested();
+		this->eventListener->updateFontSettingsAction(false);
 	}
 }
 
 void View_Gtk_Settings::signal_font_removed() {
 	if (!event_lock) {
-		this->eventListener->fontRemove_requested();
+		this->eventListener->updateFontSettingsAction(true);
 	}
 }
 
@@ -732,24 +732,24 @@ std::string View_Gtk_Settings::getBackgroundImagePath(){
 
 void View_Gtk_Settings::signal_bttRemoveBackground_clicked(){
 	if (!event_lock){
-		this->eventListener->backgroundRemove_requested();
+		this->eventListener->removeBackgroundImageAction();
 	}
 }
 
 
 void View_Gtk_Settings::signal_other_image_chosen(){
 	if (!event_lock){
-		this->eventListener->backgroundChange_requested();
+		this->eventListener->updateBackgroundImageAction();
 	}
 }
 
 void View_Gtk_Settings::signal_add_row_button_clicked(){
 	if (!event_lock)
-		this->eventListener->customRow_insert_requested();
+		this->eventListener->addCustomSettingAction();
 }
 void View_Gtk_Settings::signal_remove_row_button_clicked(){
 	if (!event_lock)
-		this->eventListener->customRow_remove_requested((Glib::ustring)(*tvAllEntries.get_selection()->get_selected())[asTreeModel.name]);
+		this->eventListener->removeCustomSettingAction((Glib::ustring)(*tvAllEntries.get_selection()->get_selected())[asTreeModel.name]);
 }
 
 bool View_Gtk_Settings::signal_redraw_preview(GdkEventExpose* event) {

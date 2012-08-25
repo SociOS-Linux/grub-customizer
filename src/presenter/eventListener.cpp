@@ -23,10 +23,6 @@ EventListener::EventListener(GrubCustomizer& presenter, ControllerCollection& co
 {
 }
 
-void EventListener::settings_dialog_request(){
-	presenter.showSettingsDlg();
-}
-
 void EventListener::rootSelectorCompleted(){
 	this->presenter.getThreadController().startLoadThread(false);
 }
@@ -54,69 +50,6 @@ void EventListener::entryCreateDlgRequested() {
 
 void EventListener::aboutDialog_requested(){
 	presenter.showAboutDialog();
-}
-
-//settings dialog
-void EventListener::setting_row_changed(std::string const& name){
-	presenter.updateCustomSetting(name);
-}
-
-void EventListener::customRow_insert_requested(){
-	presenter.addNewCustomSettingRow();
-}
-void EventListener::customRow_remove_requested(std::string const& name){
-	presenter.removeCustomSettingRow(name);
-
-}
-
-void EventListener::default_entry_predefined_toggeled(){
-	presenter.updateDefaultSetting();
-}
-void EventListener::default_entry_saved_toggeled(){
-	presenter.updateDefaultSetting();
-}
-void EventListener::default_entry_changed(){
-	presenter.updateDefaultSetting();
-}
-void EventListener::showMenu_toggled(){
-	presenter.updateShowMenuSetting();
-}
-void EventListener::osProber_toggled(){
-	presenter.updateOsProberSetting();
-}
-void EventListener::timeout_changed(){
-	presenter.updateTimeoutSetting();
-}
-void EventListener::kernelparams_changed(){
-	presenter.updateKernalParams();
-}
-void EventListener::generateRecovery_toggled(){
-	presenter.updateGenerateRecoverySetting();
-}
-void EventListener::useCustomResolution_toggled(){
-	presenter.updateUseCustomResolution();
-}
-void EventListener::resolution_changed(){
-	presenter.updateCustomResolution();
-}
-void EventListener::colorChange_requested(){
-	presenter.updateColorSettings();
-}
-void EventListener::fontChange_requested() {
-	presenter.updateFontSettings(false);
-}
-void EventListener::fontRemove_requested() {
-	presenter.updateFontSettings(true);
-}
-void EventListener::backgroundChange_requested(){
-	presenter.updateBackgroundImage();
-}
-void EventListener::backgroundRemove_requested(){
-	presenter.removeBackgroundImage();
-}
-
-void EventListener::settings_dialog_hide_request(){
-	presenter.hideSettingsDialog();
 }
 
 //partition chooser

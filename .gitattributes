@@ -48,6 +48,9 @@ src/Controller/EntryEditControllerImpl.h -text
 src/Controller/MainController.h -text
 src/Controller/MainControllerImpl.cpp -text
 src/Controller/MainControllerImpl.h -text
+src/Controller/SettingsController.h -text
+src/Controller/SettingsControllerImpl.cpp -text
+src/Controller/SettingsControllerImpl.h -text
 src/ControllerCollection.h -text
 src/Mapper/EntryName.h -text
 src/Mapper/EntryNameImpl.cpp -text
@@ -125,7 +128,6 @@ src/interface/evt_grubEnvEditor.h -text
 src/interface/evt_grubInstallDlg.h -text
 src/interface/evt_listCfgDlg.h -text
 src/interface/evt_model.h -text
-src/interface/evt_settings.h -text
 src/interface/logger.h -text
 src/interface/mutex.h -text
 src/interface/threadController.h -text

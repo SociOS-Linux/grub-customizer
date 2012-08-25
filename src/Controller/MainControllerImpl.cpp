@@ -200,7 +200,7 @@ void MainControllerImpl::cancelBurgSwitcherAction(){
 }
 
 void MainControllerImpl::reloadAction(){
-	this->getAllControllers().masterclass_deprecated->syncSettings();
+	this->getAllControllers().settingsController->syncAction();
 	this->view->hideReloadRecommendation();
 	this->view->setLockState(1|4|8);
 	this->getThreadController().startLoadThread(true);
@@ -419,7 +419,7 @@ void MainControllerImpl::removeRulesAction(std::list<void*> entries){
 
 	this->syncLoadStateAction();
 	this->modificationsUnsaved = true;
-	this->getAllControllers().masterclass_deprecated->updateSettingsDlg();
+	this->getAllControllers().settingsController->updateSettingsDataAction();
 }
 
 
@@ -610,7 +610,7 @@ void MainControllerImpl::syncLoadStateAction() {
 	}
 
 	if (progress == 1){
-		this->getAllControllers().masterclass_deprecated->updateSettingsDlg();
+		this->getAllControllers().settingsController->updateSettingsDataAction();
 
 		this->view->setTrashCounter(this->grublistCfg->getRemovedEntries().size());
 		this->view->setLockState(0);
@@ -619,7 +619,7 @@ void MainControllerImpl::syncLoadStateAction() {
 }
 
 void MainControllerImpl::showSettingsAction() {
-	this->getAllControllers().masterclass_deprecated->showSettingsDlg();
+	this->getAllControllers().settingsController->showAction(env.burgMode);
 }
 
 void MainControllerImpl::showEnvEditorAction(bool resetPartitionChooser) {
@@ -659,7 +659,7 @@ void MainControllerImpl::addEntriesAction(std::list<void*> entries) {
 
 void MainControllerImpl::activateSettingsAction() {
 	this->view->setLockState(1);
-	this->getAllControllers().masterclass_deprecated->syncSettings();
+	this->getAllControllers().settingsController->syncAction();
 }
 
 

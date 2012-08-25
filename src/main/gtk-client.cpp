@@ -37,6 +37,7 @@
 #include "../lib/contentParser/Memtest.h"
 #include "../Controller/EntryEditControllerImpl.h"
 #include "../Controller/MainControllerImpl.h"
+#include "../Controller/SettingsControllerImpl.h"
 #include "../ControllerCollection.h"
 #include "../Mapper/EntryNameImpl.h"
 
@@ -101,23 +102,30 @@ int main(int argc, char** argv){
 	mainController.setView(listCfgView);
 	mainController.setEntryNameMapper(entryNameMapper);
 
+	SettingsControllerImpl settingsController(env);
+	settingsController.setListCfg(listcfg);
+	settingsController.setSettingsDialog(settingsDlg);
+	settingsController.setSettingsManager(settings);
+	settingsController.setSettingsBuffer(settingsOnDisk);
+	settingsController.setFbResolutionsGetter(fbResolutionsGetter);
+
 	ControllerCollection controllerCollection;
 	controllerCollection.entryEditController = &entryEditController;
 	controllerCollection.mainController = &mainController;
+	controllerCollection.settingsController = &settingsController;
 	controllerCollection.masterclass_deprecated = &presenter;
 
 	entryEditController.setControllerCollection(controllerCollection);
 	mainController.setControllerCollection(controllerCollection);
 	presenter.setControllerCollection(controllerCollection);
+	settingsController.setControllerCollection(controllerCollection);
 
 	GlibThreadController threadC(presenter, controllerCollection);
 	mainController.setThreadController(threadC);
+	settingsController.setThreadController(threadC);
 
 	//assign objects to presenter
 	presenter.setListCfg(listcfg);
-	presenter.setSettingsDialog(settingsDlg);
-	presenter.setSettingsManager(settings);
-	presenter.setSettingsBuffer(settingsOnDisk);
 	presenter.setInstaller(installer);
 	presenter.setInstallDlg(installDlg);
 	presenter.setScriptAddDlg(scriptAddDlg);
@@ -139,7 +147,7 @@ int main(int argc, char** argv){
 	installDlg.setEventListener(evt);
 	scriptAddDlg.setEventListener(evt);
 	entryEditDlg.setEventListener(entryEditController);
-	settingsDlg.setEventListener(evt);
+	settingsDlg.setEventListener(settingsController);
 	listcfg.setEventListener(evt);
 	installer.setEventListener(evt);
 	fbResolutionsGetter.setEventListener(evt);

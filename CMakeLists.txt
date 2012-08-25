@@ -88,6 +88,7 @@ add_executable(grub-customizer
 	src/Controller/EntryEditControllerImpl.cpp
 	src/Controller/MainControllerImpl.cpp
 	src/Controller/ControllerAbstract.cpp
+	src/Controller/SettingsControllerImpl.cpp
 )
 
 

@@ -50,6 +50,7 @@ private:
 	void _execSave();
 	void _execDie();
 	void _execActivateSettings();
+	void _execResolutionListUpdate();
 };
 
 #endif

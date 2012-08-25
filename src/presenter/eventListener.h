@@ -24,13 +24,11 @@
 #include "../interface/evt_model.h"
 #include "../interface/evt_listCfgDlg.h"
 #include "../interface/evt_entryAddDlg.h"
-#include "../interface/evt_settings.h"
 #include "../interface/evt_entryEditDlg.h"
 #include "../interface/evt_grubEnvEditor.h"
 #include "../ControllerCollection.h"
 
 class EventListener :
-	public EventListener_settings,
 	public EventListener_grubInstallDlg,
 	public EventListener_model,
 	public EventListener_entryAddDlg,
@@ -40,7 +38,6 @@ class EventListener :
 	ControllerCollection& _controllers;
 public:
 	EventListener(GrubCustomizer& presenter, ControllerCollection& controllers);
-	void settings_dialog_request();
 	void rootSelectorCompleted();
 	void installGrub_request(std::string const& device);
 	void entryAddDlg_requested();
@@ -49,27 +46,6 @@ public:
 	void entryAddDlg_applied();
 
 	void aboutDialog_requested();
-
-	//settings dialog
-	void setting_row_changed(std::string const& name);
-	void customRow_insert_requested();
-	void customRow_remove_requested(std::string const& name);
-	void default_entry_predefined_toggeled();
-	void default_entry_saved_toggeled();
-	void default_entry_changed();
-	void showMenu_toggled();
-	void osProber_toggled();
-	void timeout_changed();
-	void kernelparams_changed();
-	void generateRecovery_toggled();
-	void useCustomResolution_toggled();
-	void resolution_changed();
-	void colorChange_requested();
-	void fontChange_requested();
-	void fontRemove_requested();
-	void backgroundChange_requested();
-	void backgroundRemove_requested();
-	void settings_dialog_hide_request();
 
 	//root selector
 	void submountpoint_mount_request(std::string const& mountpoint);

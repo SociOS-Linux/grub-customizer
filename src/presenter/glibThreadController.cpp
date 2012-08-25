@@ -25,7 +25,7 @@ GlibThreadController::GlibThreadController(GrubCustomizer& app, ControllerCollec
 	disp_sync_save.connect(sigc::mem_fun(this, &GlibThreadController::_execSaveSync));
 	disp_thread_died.connect(sigc::mem_fun(this, &GlibThreadController::_execDie));
 	disp_settings_loaded.connect(sigc::mem_fun(this, &GlibThreadController::_execActivateSettings));
-	disp_updateSettingsDlgResolutionList.connect(sigc::mem_fun(&this->app, &GrubCustomizer::updateSettingsDlgResolutionList_dispatched));
+	disp_updateSettingsDlgResolutionList.connect(sigc::mem_fun(this, &GlibThreadController::_execResolutionListUpdate));
 }
 
 void GlibThreadController::syncEntryList(){
@@ -90,5 +90,9 @@ void GlibThreadController::_execDie() {
 
 void GlibThreadController::_execActivateSettings() {
 	this->_controllers.mainController->activateSettingsAction();
+}
+
+void GlibThreadController::_execResolutionListUpdate() {
+	this->_controllers.settingsController->updateResolutionlistAction();
 }
 

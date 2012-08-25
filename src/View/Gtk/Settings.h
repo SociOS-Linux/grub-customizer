@@ -22,9 +22,9 @@
 #include "../Settings.h"
 #include <libintl.h>
 #include "../ColorChooser.h"
-#include "../../interface/evt_settings.h"
 #include <string>
 #include "../../presenter/commonClass.h"
+#include "../../Controller/SettingsController.h"
 
 
 //a gtkmm combobox with colorful foreground and background. useful to choose an item of a predefined color set
@@ -66,7 +66,7 @@ class View_Gtk_Settings : public Gtk::Dialog, public View_Settings, public Commo
 	AdvancedSettingsTreeModel asTreeModel;
 	Glib::RefPtr<Gtk::ListStore> refAsListStore;
 	bool event_lock;
-	EventListener_settings* eventListener;
+	SettingsController* eventListener;
 	
 	Gtk::Notebook tabbox;
 	Gtk::ScrolledWindow scrAllEntries;
@@ -175,7 +175,7 @@ class View_Gtk_Settings : public Gtk::Dialog, public View_Settings, public Commo
 	void on_response(int response_id);
 	public:
 	View_Gtk_Settings();
-	void setEventListener(EventListener_settings& eventListener);
+	void setEventListener(SettingsController& eventListener);
 	Gtk::VBox& getCommonSettingsPane();
 	Gtk::VBox& getAppearanceSettingsPane();
 	void show(bool burgMode);

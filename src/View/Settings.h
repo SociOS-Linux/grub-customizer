@@ -20,7 +20,7 @@
 #define SETTINGSDLG_H_
 
 #include "ColorChooser.h"
-#include "../interface/evt_settings.h"
+
 /**
  * Interface to be implemented by settings dialogs
  */
@@ -45,8 +45,6 @@ public:
 		std::string name, old_name, value;
 		bool isActive;
 	};
-	//assigns the event listener
-	virtual void setEventListener(EventListener_settings& eventListener)=0;
 	//show this dialog
 	virtual void show(bool burgMode)=0;
 	//hide this dialog
