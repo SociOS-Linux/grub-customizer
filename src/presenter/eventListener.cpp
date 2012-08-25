@@ -40,14 +40,6 @@ void EventListener::entryAddDlg_requested(){
 	presenter.showEntryAddDlg();
 }
 
-void EventListener::entryEditDlg_requested(void* rule) {
-	presenter.showEntryEditDlg(rule);
-}
-
-void EventListener::entryCreateDlgRequested() {
-	presenter.showEntryCreateDlg();
-}
-
 void EventListener::aboutDialog_requested(){
 	presenter.showAboutDialog();
 }

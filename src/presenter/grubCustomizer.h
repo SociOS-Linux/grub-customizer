@@ -95,8 +95,6 @@ public:
 	void showMessageGrubInstallCompleted(std::string const& msg);
 	
 	void showEntryAddDlg();
-	void showEntryEditDlg(void* rule);
-	void showEntryCreateDlg();
 	void addEntryFromEntryAddDlg();
 	
 	

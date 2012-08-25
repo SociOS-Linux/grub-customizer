@@ -214,14 +214,6 @@ void GrubCustomizer::showEntryAddDlg(){
 	entryAddDlg->show();
 }
 
-void GrubCustomizer::showEntryEditDlg(void* rule) {
-	this->getAllControllers().entryEditController->showAction(rule);
-}
-
-void GrubCustomizer::showEntryCreateDlg() {
-	this->getAllControllers().entryEditController->showCreatorAction();
-}
-
 void GrubCustomizer::addEntryFromEntryAddDlg(){
 	std::list<void*> entries = entryAddDlg->getSelectedEntries();
 	this->getAllControllers().mainController->addEntriesAction(entries);
