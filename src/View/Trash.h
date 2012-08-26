@@ -19,7 +19,6 @@
 #ifndef ENTRYADDDLG_H_
 #define ENTRYADDDLG_H_
 
-#include "../interface/evt_entryAddDlg.h"
 /**
  * Interface to be implemented by dialogs which lets the user adding scripts
  */

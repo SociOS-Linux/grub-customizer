@@ -19,12 +19,10 @@
 #ifndef EVENTLISTENER_INCLUDED
 #define EVENTLISTENER_INCLUDED
 
-#include "../interface/evt_grubInstallDlg.h"
 #include "../interface/evt_model.h"
 #include "../ControllerCollection.h"
 
 class EventListener :
-	public EventListener_grubInstallDlg,
 	public EventListener_model
 {
 	ControllerCollection& _controllers;

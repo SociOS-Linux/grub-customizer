@@ -18,7 +18,6 @@
 
 #ifndef GRUBINSTALLDLG_H_
 #define GRUBINSTALLDLG_H_
-#include "../interface/evt_grubInstallDlg.h"
 
 /**
  * Interface for dialogs which helps users to install grub into the MBR
