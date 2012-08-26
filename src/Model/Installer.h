@@ -20,18 +20,18 @@
 #define GRUB_INSTALLER_INCLUDED
 #include <string>
 #include "Env.h"
-#include "../interface/evt_model.h"
+#include "../Controller/InstallerController.h"
 #include "../lib/CommonClass.h"
 
 class Model_Installer : public CommonClass {
 	Model_Env& env;
 	std::string install_result;
-	EventListener_model* eventListener;
+	InstallerController* eventListener;
 public:
 	Model_Installer(Model_Env& env);
 	void threadable_install(std::string const& device);
 	std::string install(std::string const& device);
-	void setEventListener(EventListener_model& eventListener);
+	void setEventListener(InstallerController& eventListener);
 };
 
 #endif

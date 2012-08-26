@@ -97,7 +97,7 @@ void GLib_ThreadController::_execResolutionListUpdate() {
 }
 
 void GLib_ThreadController::_execFbResolutionsGetter() {
-	this->_controllers.settingsController->getFbResolutionsGetter().load();
+	this->_controllers.settingsController->loadResolutionsAction();
 }
 
 void GLib_ThreadController::_execInstallGrub(std::string const& device) {

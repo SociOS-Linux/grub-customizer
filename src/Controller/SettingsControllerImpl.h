@@ -57,9 +57,11 @@ public:
 	//dispatchers
 	void updateSettingsDataAction();
 
+	void loadResolutionsAction();
 
 	//settings dialog
 	void updateResolutionlistAction();
+	void updateResolutionlistThreadedAction();
 
 	void syncSettings();
 

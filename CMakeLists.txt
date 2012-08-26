@@ -62,7 +62,6 @@ add_executable(grub-customizer
 	src/Model/SmartFileHandle.cpp
 	src/Mapper/EntryNameImpl.cpp
 	src/main/gtk-client.cpp
-	src/presenter/eventListener.cpp
 	src/lib/md5.cpp
 	src/lib/str_replace.cpp
 	src/lib/contentParser/FactoryImpl.cpp

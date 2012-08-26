@@ -26,7 +26,7 @@ Model_Installer::Model_Installer(Model_Env& env)
 void Model_Installer::threadable_install(std::string const& device){
 	this->install_result = install(device);
 	if (eventListener)
-		eventListener->grubInstallCompleted(this->install_result);
+		eventListener->showMessageAction(this->install_result);
 }
 
 std::string Model_Installer::install(std::string const& device){
@@ -43,6 +43,6 @@ std::string Model_Installer::install(std::string const& device){
 		return output;
 }
 
-void Model_Installer::setEventListener(EventListener_model& eventListener) {
+void Model_Installer::setEventListener(InstallerController& eventListener) {
 	this->eventListener = &eventListener;
 }

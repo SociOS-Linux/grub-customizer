@@ -25,7 +25,7 @@ Model_ListCfg::Model_ListCfg(Model_Env& env)
  mutex(NULL), errorLogFile(ERROR_LOG_FILE), ignoreLock(false), progress_pos(0), progress_max(0)
 {}
 
-void Model_ListCfg::setEventListener(EventListener_model& eventListener) {
+void Model_ListCfg::setEventListener(MainController& eventListener) {
 	this->eventListener = &eventListener;
 }
 
@@ -583,7 +583,7 @@ void Model_ListCfg::send_new_load_progress(double newProgress, std::string scrip
 		this->progress_name = scriptName;
 		this->progress_pos = current;
 		this->progress_max = max;
-		this->eventListener->loadProgressChanged();
+		this->eventListener->syncLoadStateThreadedAction();
 	}
 	else if (this->verbose) {
 		this->log("cannot show updated load progress - no UI connected!", Logger::ERROR);
@@ -593,7 +593,7 @@ void Model_ListCfg::send_new_load_progress(double newProgress, std::string scrip
 void Model_ListCfg::send_new_save_progress(double newProgress){
 	if (this->eventListener != NULL){
 		this->progress = newProgress;
-		this->eventListener->saveProgressChanged();
+		this->eventListener->syncSaveStateThreadedAction();
 	}
 	else if (this->verbose) {
 		this->log("cannot show updated save progress - no UI connected!", Logger::ERROR);

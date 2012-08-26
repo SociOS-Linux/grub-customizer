@@ -17,7 +17,6 @@ public:
 	virtual void installGrubAction(std::string device) = 0;
 	virtual void installGrubThreadedAction(std::string device) = 0;
 	virtual void showMessageAction(std::string const& msg) = 0;
-	virtual ThreadController& getThreadController() = 0;
 };
 
 

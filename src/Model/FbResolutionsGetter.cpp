@@ -22,7 +22,7 @@ Model_FbResolutionsGetter::Model_FbResolutionsGetter()
 	: eventListener(NULL), _isLoading(false)
 {}
 
-void Model_FbResolutionsGetter::setEventListener(EventListener_model& eventListener){
+void Model_FbResolutionsGetter::setEventListener(SettingsController& eventListener){
 	this->eventListener = &eventListener;
 }
 
@@ -59,7 +59,7 @@ void Model_FbResolutionsGetter::load(){
 				}
 			}
 			if (pclose(hwinfo_proc) == 0 && this->eventListener)
-				this->eventListener->fb_resolutions_loaded();
+				this->eventListener->updateResolutionlistThreadedAction();
 		}
 		_isLoading = false;
 	}

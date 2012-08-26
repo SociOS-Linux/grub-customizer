@@ -63,6 +63,10 @@ Model_FbResolutionsGetter& SettingsControllerImpl::getFbResolutionsGetter() {
 	return *this->fbResolutionsGetter;
 }
 
+void SettingsControllerImpl::loadResolutionsAction() {
+	this->fbResolutionsGetter->load();
+}
+
 void SettingsControllerImpl::updateSettingsDataAction(){
 	std::list<Model_Proxylist_Item> entryTitles = this->grublistCfg->proxies.generateEntryTitleList();
 	std::list<std::string> labelListToplevel  = this->grublistCfg->proxies.getToplevelEntryTitles();
@@ -86,6 +90,10 @@ void SettingsControllerImpl::updateResolutionlistAction(){
 	this->view->clearResolutionChooser();
 	for (std::list<std::string>::const_iterator iter = data.begin(); iter != data.end(); iter++)
 		this->view->addResolution(*iter);
+}
+
+void SettingsControllerImpl::updateResolutionlistThreadedAction() {
+	this->threadController->updateSettingsDlgResolutionList();
 }
 
 void SettingsControllerImpl::syncSettings(){

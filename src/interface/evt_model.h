@@ -28,12 +28,6 @@ class EventListener_model {
 public:
 	virtual inline ~EventListener_model() {};
 
-	//some new data is loaded
-	virtual void loadProgressChanged()=0;
-	//save progress continued
-	virtual void saveProgressChanged()=0;
-	//grub install completely installed
-	virtual void grubInstallCompleted(std::string const& msg)=0;
 	//framebuffer resolutions has been loaded
 	virtual void fb_resolutions_loaded()=0;
 };

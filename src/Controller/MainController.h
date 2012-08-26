@@ -60,8 +60,6 @@ public:
 	virtual void showReloadRecommendationAction() = 0;
 	virtual void selectRulesAction(std::list<void*> rules) = 0;
 	virtual void selectRuleAction(void* rule, bool startEdit = false) = 0;
-
-	virtual ThreadController& getThreadController() = 0;
 };
 
 

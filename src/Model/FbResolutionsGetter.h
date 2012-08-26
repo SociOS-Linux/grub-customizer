@@ -21,18 +21,18 @@
 #include <string>
 #include <list>
 #include <cstdio>
-#include "../interface/evt_model.h"
+#include "../Controller/SettingsController.h"
 #include "../lib/CommonClass.h"
 
 class Model_FbResolutionsGetter : public CommonClass {
 	std::list<std::string> data;
-	EventListener_model* eventListener;
+	SettingsController* eventListener;
 	bool _isLoading;
 public:
 	Model_FbResolutionsGetter();
 	const std::list<std::string>& getData() const;
 	void load();
-	void setEventListener(EventListener_model& eventListener);
+	void setEventListener(SettingsController& eventListener);
 };
 
 #endif

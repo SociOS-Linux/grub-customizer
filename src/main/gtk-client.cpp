@@ -16,7 +16,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "../presenter/eventListener.h"
 #include "../Model/Env.h"
 #include "../View/Gtk/Main.h"
 #include "../View/Gtk/About.h"
@@ -152,15 +151,14 @@ int main(int argc, char** argv){
 	listCfgView.putSettingsDialog(settingsDlg.getCommonSettingsPane(), settingsDlg.getAppearanceSettingsPane());
 
 	//assign event listener
-	EventListener evt(controllerCollection);
 	listCfgView.setEventListener(mainController);
 	installDlg.setEventListener(installController);
 	trashView.setEventListener(trashController);
 	entryEditDlg.setEventListener(entryEditController);
 	settingsDlg.setEventListener(settingsController);
-	listcfg.setEventListener(evt);
-	installer.setEventListener(evt);
-	fbResolutionsGetter.setEventListener(evt);
+	listcfg.setEventListener(mainController);
+	installer.setEventListener(installController);
+	fbResolutionsGetter.setEventListener(settingsController);
 	envEditor.setEventListener(envEditController);
 	
 	//assign logger

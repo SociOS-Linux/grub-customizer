@@ -38,13 +38,14 @@
 #include "SettingsManagerData.h"
 #include "Env.h"
 #include "../interface/evt_model.h"
+#include "../Controller/MainController.h"
 
 #include "../lib/Mutex.h"
 #include "../lib/CommonClass.h"
 
 
 class Model_ListCfg : public CommonClass {
-	EventListener_model* eventListener;
+	MainController* eventListener;
 	
 	double progress;
 	std::string progress_name;
@@ -53,7 +54,7 @@ class Model_ListCfg : public CommonClass {
 	std::string errorLogFile;
 public:
 	Model_ListCfg(Model_Env& env);
-	void setEventListener(EventListener_model& eventListener);
+	void setEventListener(MainController& eventListener);
 	void setMutex(Mutex& mutex);
 	void setLogger(Logger& logger);
 	

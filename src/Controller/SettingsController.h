@@ -19,15 +19,15 @@
 #ifndef SETTINGSCONTROLLER_H_
 #define SETTINGSCONTROLLER_H_
 
-#include "../Model/FbResolutionsGetter.h"
 #include "../Controller/ThreadController.h"
 
 class SettingsController {
 public:
 	virtual inline ~SettingsController(){};
-	virtual Model_FbResolutionsGetter& getFbResolutionsGetter() = 0;
+	virtual void loadResolutionsAction() = 0;
 	virtual void updateSettingsDataAction() = 0;
 	virtual void updateResolutionlistAction() = 0;
+	virtual void updateResolutionlistThreadedAction() = 0;
 	virtual void updateDefaultSystemAction() = 0;
 	virtual void updateCustomSettingAction(std::string const& name) = 0;
 	virtual void addCustomSettingAction() = 0;
@@ -46,8 +46,6 @@ public:
 	virtual void hideAction() = 0;
 	virtual void showAction(bool burgMode) = 0;
 	virtual void syncAction() = 0;
-
-	virtual ThreadController& getThreadController() = 0;
 };
 
 
