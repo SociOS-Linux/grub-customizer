@@ -44,16 +44,6 @@ void EventListener::aboutDialog_requested(){
 	presenter.showAboutDialog();
 }
 
-//partition chooser
-void EventListener::submountpoint_mount_request(std::string const& mountpoint){
-	presenter.mountSubmountpoint(mountpoint);
-}
-
-void EventListener::submountpoint_umount_request(std::string const& mountpoint){
-	presenter.umountSubmountpoint(mountpoint);
-}
-
-
 void EventListener::loadProgressChanged(){
 	this->_controllers.mainController->syncLoadStateThreadedAction();
 }
@@ -69,24 +59,4 @@ void EventListener::grubInstallCompleted(std::string const& msg){
 
 void EventListener::fb_resolutions_loaded(){
 	presenter.getThreadController().updateSettingsDlgResolutionList();
-}
-
-void EventListener::grubEnvEditor_partitionChanged(std::string const& newPartition) {
-	presenter.switchPartition(newPartition);
-}
-
-void EventListener::grubEnvEditor_typeChanged(int newTypeIndex) {
-	presenter.switchBootloaderType(newTypeIndex);
-}
-
-void EventListener::grubEnvEditor_optionModified() {
-	presenter.updateGrubEnvOptions();
-}
-
-void EventListener::grubEnvEditor_cancellationRequested() {
-	this->_controllers.mainController->exitAction(true);
-}
-
-void EventListener::grubEnvEditor_applyRequested(bool saveConfig) {
-	presenter.applyEnvEditor(saveConfig);
 }

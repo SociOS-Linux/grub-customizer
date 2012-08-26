@@ -137,7 +137,6 @@ public:
 	void syncLoadStateAction();
 
 	void showSettingsAction();
-	void showEnvEditor(bool resetPartitionChooser = false);
 	void showTrashAction();
 	void initModeAction(bool burgChosen);
 	void addEntriesAction(std::list<void*> entries);

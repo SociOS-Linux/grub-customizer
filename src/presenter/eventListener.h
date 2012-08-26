@@ -23,14 +23,12 @@
 #include "../interface/evt_grubInstallDlg.h"
 #include "../interface/evt_model.h"
 #include "../interface/evt_entryAddDlg.h"
-#include "../interface/evt_grubEnvEditor.h"
 #include "../ControllerCollection.h"
 
 class EventListener :
 	public EventListener_grubInstallDlg,
 	public EventListener_model,
-	public EventListener_entryAddDlg,
-	public EventListener_grubEnvEditor
+	public EventListener_entryAddDlg
 {
 	GrubCustomizer& presenter;
 	ControllerCollection& _controllers;
@@ -43,21 +41,10 @@ public:
 
 	void aboutDialog_requested();
 
-	//root selector
-	void submountpoint_mount_request(std::string const& mountpoint);
-	void submountpoint_umount_request(std::string const& mountpoint);
-
 	//model
 	void loadProgressChanged();
 	void saveProgressChanged();
 	void grubInstallCompleted(std::string const& msg);
 	void fb_resolutions_loaded();
-
-	// env editor
-	void grubEnvEditor_partitionChanged(std::string const& newPartition);
-	void grubEnvEditor_typeChanged(int newTypeIndex);
-	void grubEnvEditor_optionModified();
-	void grubEnvEditor_cancellationRequested();
-	void grubEnvEditor_applyRequested(bool saveConfig);
 };
 #endif

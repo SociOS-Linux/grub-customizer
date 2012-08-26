@@ -67,7 +67,6 @@ class GrubCustomizer : public ControllerAbstract, public GrubCustomizerIface {
 	Model_MountTable* mountTable;
 	View_About* aboutDialog;
 	ThreadController* threadController;
-	View_EnvEditor* grubEnvEditor;
 	Mapper_EntryName* entryNameMapper;
 
 public:
@@ -81,12 +80,9 @@ public:
 	void setMountTable(Model_MountTable& mountTable);
 	void setAboutDialog(View_About& aboutDialog);
 	void setThreadController(ThreadController& threadController);
-	void setGrubEnvEditor(View_EnvEditor& envEditor);
 	void setEntryNameMapper(Mapper_EntryName& mapper);
 
 	ThreadController& getThreadController();
-
-	void showEnvEditor(bool resetPartitionChooser = false);
 
 	GrubCustomizer(Model_Env& env);
 	
@@ -100,21 +96,8 @@ public:
 	
 	void showAboutDialog();
 
-	//partition chooser
-	void mountSubmountpoint(std::string const& submountpoint);
-	void umountSubmountpoint(std::string const& submountpoint);
-	void generateSubmountpointSelection(std::string const& prefix);
-
-	// env editor
-	void switchPartition(std::string const& newPartition);
-	void switchBootloaderType(int newTypeIndex);
-	void updateGrubEnvOptions();
-	void applyEnvEditor(bool saveConfig);
-
 	// transitional
-	void grubEnvSetRootDeviceName(std::string const& rootDevice);
-	void grubEnvsetEnvSettings(std::map<std::string, std::string> const& props, std::list<std::string> const& requiredProps, std::list<std::string> const& validProps);
-	void grubEnvShow(bool resetPartitionChooser);
+	void hideEntryAddDlg();
 };
 
 #endif

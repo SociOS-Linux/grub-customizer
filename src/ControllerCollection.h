@@ -21,12 +21,14 @@
 #include "Controller/EntryEditController.h"
 #include "Controller/MainController.h"
 #include "Controller/SettingsController.h"
+#include "Controller/EnvEditorController.h"
 #include "presenter/grubCustomizerIface.h"
 
 struct ControllerCollection {
 	EntryEditController* entryEditController;
 	MainController* mainController;
 	SettingsController* settingsController;
+	EnvEditorController* envEditController;
 	GrubCustomizerIface* masterclass_deprecated;
 };
 

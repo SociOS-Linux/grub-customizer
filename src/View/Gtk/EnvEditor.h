@@ -25,9 +25,10 @@
 #include "../../interface/evt_grubEnvEditor.h"
 #include "Element/PartitionChooser.h"
 #include "../../interface/deviceDataList_Iface.h"
+#include "../../Controller/EnvEditorController.h"
 
 class View_Gtk_EnvEditor : public Gtk::Dialog, public View_EnvEditor, public CommonClass {
-	EventListener_grubEnvEditor* eventListener;
+	EnvEditorController* eventListener;
 	Gtk::VBox vbContent;
 	Gtk::Table tblLayout;
 	Gtk::Label lblPartition;
@@ -51,7 +52,7 @@ class View_Gtk_EnvEditor : public Gtk::Dialog, public View_EnvEditor, public Com
 public:
 	View_Gtk_EnvEditor();
 	~View_Gtk_EnvEditor();
-	void setEventListener(EventListener_grubEnvEditor& eventListener);
+	void setEventListener(EnvEditorController& eventListener);
 	void setDeviceDataList(DeviceDataList_Iface& deviceDataList);
 	void setRootDeviceName(std::string const& rootDeviceName);
 	void setEnvSettings(std::map<std::string, std::string> const& props, std::list<std::string> const& requiredProps, std::list<std::string> const& validProps);

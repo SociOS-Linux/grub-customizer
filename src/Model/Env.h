@@ -43,6 +43,7 @@ public:
 	bool quit_requested;
 	int activeThreadCount;
 	bool modificationsUnsaved;
+	std::string rootDeviceName;
 
 	Model_Env();
 	bool init(Model_Env::Mode mode, std::string const& dir_prefix);

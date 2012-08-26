@@ -130,7 +130,7 @@ void MainControllerImpl::init(){
 	mountTable->loadData(PARTCHOOSER_MOUNTPOINT);
 
 
-	this->getAllControllers().masterclass_deprecated->grubEnvSetRootDeviceName(mountTable->getEntryByMountpoint("").device);
+	this->env.rootDeviceName = mountTable->getEntryByMountpoint("").device;
 
 
 	this->log("Loading Framebuffer resolutions (background process)", Logger::EVENT);
@@ -179,19 +179,6 @@ void MainControllerImpl::init(Model_Env::Mode mode, bool initEnv){
 void MainControllerImpl::reInitAction(bool burgMode) {
 	Model_Env::Mode mode = burgMode ? Model_Env::BURG_MODE : Model_Env::GRUB_MODE;
 	this->init(mode, false);
-}
-
-void MainControllerImpl::showEnvEditor(bool resetPartitionChooser) {
-	if (this->modificationsUnsaved) {
-		bool proceed = this->view->confirmUnsavedSwitch();
-		if (!proceed) {
-			return;
-		}
-	}
-
-	this->getAllControllers().masterclass_deprecated->grubEnvsetEnvSettings(this->env.getProperties(), this->env.getRequiredProperties(), this->env.getValidProperties());
-	this->view->hide();
-	this->getAllControllers().masterclass_deprecated->grubEnvShow(resetPartitionChooser);
 }
 
 void MainControllerImpl::cancelBurgSwitcherAction(){
@@ -372,7 +359,7 @@ void MainControllerImpl::dieAction(){
 		showEnvSettings = this->view->askForEnvironmentSettings(this->env.mkconfig_cmd, this->grublistCfg->getGrubErrorMessage());
 	}
 	if (showEnvSettings) {
-		this->showEnvEditor();
+		this->showEnvEditorAction();
 	} else {
 		this->exitAction(true); //exit
 	}
@@ -632,7 +619,7 @@ void MainControllerImpl::showEnvEditorAction(bool resetPartitionChooser) {
 
 	this->view->hide();
 
-	this->getAllControllers().masterclass_deprecated->showEnvEditor();
+	this->getAllControllers().envEditController->showAction();
 }
 
 void MainControllerImpl::showTrashAction() {

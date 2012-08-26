@@ -38,6 +38,7 @@
 #include "../Controller/EntryEditControllerImpl.h"
 #include "../Controller/MainControllerImpl.h"
 #include "../Controller/SettingsControllerImpl.h"
+#include "../Controller/EnvEditorControllerImpl.h"
 #include "../ControllerCollection.h"
 #include "../Mapper/EntryNameImpl.h"
 
@@ -109,16 +110,22 @@ int main(int argc, char** argv){
 	settingsController.setSettingsBuffer(settingsOnDisk);
 	settingsController.setFbResolutionsGetter(fbResolutionsGetter);
 
+	EnvEditorControllerImpl envEditController(env);
+	envEditController.setMountTable(mountTable);
+	envEditController.setView(envEditor);
+
 	ControllerCollection controllerCollection;
 	controllerCollection.entryEditController = &entryEditController;
 	controllerCollection.mainController = &mainController;
 	controllerCollection.settingsController = &settingsController;
+	controllerCollection.envEditController = &envEditController;
 	controllerCollection.masterclass_deprecated = &presenter;
 
 	entryEditController.setControllerCollection(controllerCollection);
 	mainController.setControllerCollection(controllerCollection);
 	presenter.setControllerCollection(controllerCollection);
 	settingsController.setControllerCollection(controllerCollection);
+	envEditController.setControllerCollection(controllerCollection);
 
 	GlibThreadController threadC(presenter, controllerCollection);
 	mainController.setThreadController(threadC);
@@ -132,7 +139,6 @@ int main(int argc, char** argv){
 	presenter.setMountTable(mountTable);
 	presenter.setAboutDialog(aboutDialog);
 	presenter.setThreadController(threadC);
-	presenter.setGrubEnvEditor(envEditor);
 	presenter.setEntryNameMapper(entryNameMapper);
 
 	listCfgView.putSettingsDialog(settingsDlg.getCommonSettingsPane(), settingsDlg.getAppearanceSettingsPane());
@@ -147,7 +153,7 @@ int main(int argc, char** argv){
 	listcfg.setEventListener(evt);
 	installer.setEventListener(evt);
 	fbResolutionsGetter.setEventListener(evt);
-	envEditor.setEventListener(evt);
+	envEditor.setEventListener(envEditController);
 	
 	//assign logger
 	StreamLogger logger(std::cout);
@@ -172,6 +178,8 @@ int main(int argc, char** argv){
 	env.setLogger(logger);
 	envEditor.setLogger(logger);
 	mainController.setLogger(logger);
+	settingsController.setLogger(logger);
+	envEditController.setLogger(logger);
 
 	// configure logger
 	logger.setLogLevel(StreamLogger::LOG_EVENT);

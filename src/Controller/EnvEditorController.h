@@ -16,21 +16,23 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef GRUBCUSTOMIZERIFACE_H_
-#define GRUBCUSTOMIZERIFACE_H_
+#ifndef ENVEDITORCONTROLLER_H_
+#define ENVEDITORCONTROLLER_H_
 
-#include <string>
-#include <map>
-#include <list>
-
-class GrubCustomizerIface {
+class EnvEditorController {
 public:
-	virtual void showAboutDialog() = 0;
-	virtual void showInstallDialog() = 0;
-	virtual void showMessageGrubInstallCompleted(std::string const& msg) = 0;
-	virtual void showEntryAddDlg() = 0;
-	virtual void hideEntryAddDlg() = 0;
+	virtual inline ~EnvEditorController(){};
+
+	virtual void showAction(bool resetPartitionChooser = false) = 0;
+	virtual void mountSubmountpointAction(std::string const& submountpoint) = 0;
+	virtual void umountSubmountpointAction(std::string const& submountpoint) = 0;
+	virtual void switchPartitionAction(std::string const& newPartition) = 0;
+	virtual void switchBootloaderTypeAction(int newTypeIndex) = 0;
+	virtual void updateGrubEnvOptionsAction() = 0;
+	virtual void applyAction(bool saveConfig) = 0;
+
+	virtual void exitAction() = 0;
 };
 
 
-#endif /* GRUBCUSTOMIZERIFACE_H_ */
+#endif /* ENVEDITORCONTROLLER_H_ */

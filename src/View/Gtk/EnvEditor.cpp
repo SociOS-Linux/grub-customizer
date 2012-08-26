@@ -76,7 +76,7 @@ View_Gtk_EnvEditor::~View_Gtk_EnvEditor() {
 	this->pChooser = NULL;
 }
 
-void View_Gtk_EnvEditor::setEventListener(EventListener_grubEnvEditor& eventListener) {
+void View_Gtk_EnvEditor::setEventListener(EnvEditorController& eventListener) {
 	this->eventListener = &eventListener;
 }
 
@@ -232,36 +232,36 @@ void View_Gtk_EnvEditor::signal_partitionChanged() {
 		if (selectedUuid != "") {
 			selectedUuid = "UUID=" + selectedUuid;
 		}
-		this->eventListener->grubEnvEditor_partitionChanged(selectedUuid);
+		this->eventListener->switchPartitionAction(selectedUuid);
 	}
 }
 
 void View_Gtk_EnvEditor::signal_bootloaderType_changed() {
 	if (!this->eventLock) {
-		this->eventListener->grubEnvEditor_typeChanged(this->cbType.get_active_row_number());
+		this->eventListener->switchBootloaderTypeAction(this->cbType.get_active_row_number());
 	}
 }
 
 void View_Gtk_EnvEditor::signal_optionModified() {
 	if (!this->eventLock) {
-		this->eventListener->grubEnvEditor_optionModified();
+		this->eventListener->updateGrubEnvOptionsAction();
 	}
 }
 
 void View_Gtk_EnvEditor::signal_response_action(int response_id) {
 	if (response_id == Gtk::RESPONSE_CLOSE || response_id == Gtk::RESPONSE_DELETE_EVENT) {
-		this->eventListener->grubEnvEditor_cancellationRequested();
+		this->eventListener->exitAction();
 	} else if (response_id == Gtk::RESPONSE_APPLY) {
-		this->eventListener->grubEnvEditor_applyRequested(this->cbSaveConfig.get_active());
+		this->eventListener->applyAction(this->cbSaveConfig.get_active());
 	}
 }
 
 void View_Gtk_EnvEditor::signal_submountpointToggled(Gtk::CheckButton& sender) {
 	if (!eventLock) {
 		if (sender.get_active()) {
-			this->eventListener->submountpoint_mount_request(sender.get_label());
+			this->eventListener->mountSubmountpointAction(sender.get_label());
 		} else {
-			this->eventListener->submountpoint_umount_request(sender.get_label());
+			this->eventListener->umountSubmountpointAction(sender.get_label());
 		}
 	}
 }
