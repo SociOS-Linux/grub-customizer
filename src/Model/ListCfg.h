@@ -37,7 +37,6 @@
 #include "MountTable.h"
 #include "SettingsManagerData.h"
 #include "Env.h"
-#include "../interface/evt_model.h"
 #include "../Controller/MainController.h"
 
 #include "../lib/Mutex.h"
