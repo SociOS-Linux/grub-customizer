@@ -18,7 +18,7 @@
 
 #include "Rule.h"
 
-Model_Rule::Model_Rule(Model_Entry& source, bool isVisible, EntryPathFollower& pathFollower, std::list<std::list<std::string> > const& pathesToIgnore, std::list<std::string> const& currentPath) //generate rule for given entry. __idname is only required for re-syncing (soft-reload)
+Model_Rule::Model_Rule(Model_Entry& source, bool isVisible, Model_EntryPathFollower& pathFollower, std::list<std::list<std::string> > const& pathesToIgnore, std::list<std::string> const& currentPath) //generate rule for given entry. __idname is only required for re-syncing (soft-reload)
 	: type(source.type == Model_Entry::PLAINTEXT ? Model_Rule::PLAINTEXT : (source.type == Model_Entry::SUBMENU ? Model_Rule::SUBMENU : Model_Rule::NORMAL)), isVisible(isVisible), __idpath(currentPath), outputName(source.name), dataSource(source.type == Model_Entry::SUBMENU ? NULL : &source)
 {
 	if (source.type == Model_Entry::SUBMENU) {
@@ -46,7 +46,7 @@ Model_Rule::Model_Rule(Model_Entry& source, bool isVisible, EntryPathFollower& p
 	}
 }
 
-std::string Model_Rule::toString(EntryPathBilder const& pathBuilder){
+std::string Model_Rule::toString(Model_EntryPathBilder const& pathBuilder){
 	std::string result = isVisible ? "+" : "-";
 	if (type == Model_Rule::PLAINTEXT) {
 		result += "#text";

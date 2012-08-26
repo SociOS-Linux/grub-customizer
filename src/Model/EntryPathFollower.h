@@ -16,19 +16,17 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef DEVICE_DATALIST_INCLUDED
-#define DEVICE_DATALIST_INCLUDED
-#include <map>
-#include <cstdio>
+#ifndef ENTRY_PATH_FOLLOWER_INCLUDED
+#define ENTRY_PATH_FOLLOWER_INCLUDED
 #include <string>
-#include "../Model/DeviceDataListInterface.h"
-#include "../lib/CommonClass.h"
+#include <list>
+#include "../Model/Entry.h"
 
-class Model_DeviceDataList : public Model_DeviceDataListInterface, public CommonClass {
+class Model_EntryPathFollower {
 public:
-	Model_DeviceDataList(FILE* blkidOutput);
-	Model_DeviceDataList();
-	void loadData(FILE* blkidOutput);
-	void clear();
+	virtual inline ~Model_EntryPathFollower() {};
+
+	virtual Model_Entry* getEntryByPath(std::list<std::string> const& path)=0;
 };
+
 #endif

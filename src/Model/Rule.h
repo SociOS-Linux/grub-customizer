@@ -20,8 +20,8 @@
 #define GRUB_CUSTOMIZER_RULE_INCLUDED
 #include <string>
 #include "Entry.h"
-#include "../interface/entryPathBuilder.h"
-#include "../interface/entryPathFollower.h"
+#include "../Model/EntryPathBuilder.h"
+#include "../Model/EntryPathFollower.h"
 #include <ostream>
 #include "../lib/md5.h"
 
@@ -38,9 +38,9 @@ struct Model_Rule {
 	} type;
 	Model_Rule(RuleType type, std::list<std::string> path, std::string outputName, bool isVisible);
 	Model_Rule(RuleType type, std::list<std::string> path, bool isVisible);
-	Model_Rule(Model_Entry& source, bool isVisible, EntryPathFollower& pathFollower, std::list<std::list<std::string> > const& pathesToIgnore = std::list<std::list<std::string> >(), std::list<std::string> const& currentPath = std::list<std::string>()); //generate rule for given entry
+	Model_Rule(Model_Entry& source, bool isVisible, Model_EntryPathFollower& pathFollower, std::list<std::list<std::string> > const& pathesToIgnore = std::list<std::list<std::string> >(), std::list<std::string> const& currentPath = std::list<std::string>()); //generate rule for given entry
 	Model_Rule();
-	std::string toString(EntryPathBilder const& pathBuilder);
+	std::string toString(Model_EntryPathBilder const& pathBuilder);
 	bool hasRealSubrules() const;
 	void print(std::ostream& out) const;
 	std::string getEntryName() const;

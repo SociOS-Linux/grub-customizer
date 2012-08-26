@@ -72,12 +72,15 @@ src/Mapper/EntryNameImpl.cpp -text
 src/Mapper/EntryNameImpl.h -text
 src/Model/DeviceDataList.cpp -text
 src/Model/DeviceDataList.h -text
+src/Model/DeviceDataListInterface.h -text
 src/Model/DeviceMap.cpp -text
 src/Model/DeviceMap.h -text
 src/Model/Entry.cpp -text
 src/Model/Entry.h -text
+src/Model/EntryPathBuilder.h -text
 src/Model/EntryPathBuilderImpl.cpp -text
 src/Model/EntryPathBuilderImpl.h -text
+src/Model/EntryPathFollower.h -text
 src/Model/Env.cpp -text
 src/Model/Env.h -text
 src/Model/FbResolutionsGetter.cpp -text

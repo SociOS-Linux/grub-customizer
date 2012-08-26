@@ -1,6 +1,6 @@
 #include "PartitionChooser.h"
 
-View_Gtk_Element_PartitionChooser::View_Gtk_Element_PartitionChooser(Glib::ustring const& activePartition_uuid, DeviceDataList_Iface const& deviceDataList, bool prependCurrentPartition, std::string const& currentPartitionName)
+View_Gtk_Element_PartitionChooser::View_Gtk_Element_PartitionChooser(Glib::ustring const& activePartition_uuid, Model_DeviceDataListInterface const& deviceDataList, bool prependCurrentPartition, std::string const& currentPartitionName)
 	: activePartition_uuid(activePartition_uuid), deviceDataList(&deviceDataList), prependCurrentPartition(prependCurrentPartition), currentPartitionName(currentPartitionName)
 {
 	load();
@@ -30,7 +30,7 @@ void View_Gtk_Element_PartitionChooser::load(){
 		this->append_text(currentPartitionName + "\n(" + gettext("current") + ")");
 		this->set_active(0);
 	}
-	for (DeviceDataList_Iface::const_iterator iter = deviceDataList->begin(); iter != deviceDataList->end(); iter++) {
+	for (Model_DeviceDataListInterface::const_iterator iter = deviceDataList->begin(); iter != deviceDataList->end(); iter++) {
 		Glib::ustring text = iter->first + "\n(" + (iter->second.find("LABEL") != iter->second.end() ? iter->second.at("LABEL") + ", " : "") + (iter->second.find("TYPE") != iter->second.end() ? iter->second.at("TYPE") : "") + ")";
 		uuid_map[text] = iter->second.at("UUID");
 		this->append_text(text);

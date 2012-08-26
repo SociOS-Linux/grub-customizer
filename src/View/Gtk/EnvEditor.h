@@ -23,7 +23,7 @@
 #include "../../lib/CommonClass.h"
 #include "../EnvEditor.h"
 #include "Element/PartitionChooser.h"
-#include "../../interface/deviceDataList_Iface.h"
+#include "../../Model/DeviceDataListInterface.h"
 #include "../../Controller/EnvEditorController.h"
 
 class View_Gtk_EnvEditor : public Gtk::Dialog, public View_EnvEditor, public CommonClass {
@@ -38,7 +38,7 @@ class View_Gtk_EnvEditor : public Gtk::Dialog, public View_EnvEditor, public Com
 	Gtk::VBox vbSubmountpoints;
 	Gtk::Label lblSubmountpoints;
 	View_Gtk_Element_PartitionChooser* pChooser;
-	DeviceDataList_Iface* deviceDataList;
+	Model_DeviceDataListInterface* deviceDataList;
 	std::map<std::string, Gtk::Entry*> optionMap;
 	std::map<std::string, Gtk::Label*> labelMap;
 	std::map<std::string, Gtk::Image*> imageMap;
@@ -52,7 +52,7 @@ public:
 	View_Gtk_EnvEditor();
 	~View_Gtk_EnvEditor();
 	void setEventListener(EnvEditorController& eventListener);
-	void setDeviceDataList(DeviceDataList_Iface& deviceDataList);
+	void setDeviceDataList(Model_DeviceDataListInterface& deviceDataList);
 	void setRootDeviceName(std::string const& rootDeviceName);
 	void setEnvSettings(std::map<std::string, std::string> const& props, std::list<std::string> const& requiredProps, std::list<std::string> const& validProps);
 	std::map<std::string, std::string> getEnvSettings();

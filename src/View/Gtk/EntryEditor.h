@@ -25,7 +25,7 @@
 #include <gtkmm.h>
 #include "../../Controller/EntryEditController.h"
 #include "EntryEditor.h"
-#include "../../interface/deviceDataList_Iface.h"
+#include "../../Model/DeviceDataListInterface.h"
 #include "Element/PartitionChooser.h"
 
 class View_Gtk_EntryEditor : public View_EntryEditor, public Gtk::Dialog, public CommonClass {
@@ -33,7 +33,7 @@ class View_Gtk_EntryEditor : public View_EntryEditor, public Gtk::Dialog, public
 	Gtk::TextView tvSource;
 	Gtk::ScrolledWindow scrSource;
 	EntryEditController* eventListener;
-	DeviceDataList_Iface* deviceDataList;
+	Model_DeviceDataListInterface* deviceDataList;
 	Gtk::ScrolledWindow scrOptions;
 	Gtk::Table tblOptions;
 	std::map<std::string, Gtk::Widget*> optionMap;
@@ -48,7 +48,7 @@ protected:
 public:
 	View_Gtk_EntryEditor();
 	void setEventListener(EntryEditController& eventListener);
-	void setDeviceDataList(DeviceDataList_Iface& deviceDataList);
+	void setDeviceDataList(Model_DeviceDataListInterface& deviceDataList);
 	void setSourcecode(std::string const& source);
 	std::string getSourcecode();
 	void addOption(std::string const& name, std::string const& value);

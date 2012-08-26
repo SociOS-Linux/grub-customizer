@@ -23,12 +23,12 @@
 #include <cstdlib>
 #include <sys/stat.h>
 #include "Entry.h"
-#include "../interface/entryPathFollower.h"
+#include "../Model/EntryPathFollower.h"
 #include "../lib/CommonClass.h"
 #include "../lib/md5.h"
 #include "../config.h"
 
-struct Model_Script : public EntryPathFollower, public CommonClass {
+struct Model_Script : public Model_EntryPathFollower, public CommonClass {
 	enum Exception {
 		ELEMENT_NOT_FOUND
 	};

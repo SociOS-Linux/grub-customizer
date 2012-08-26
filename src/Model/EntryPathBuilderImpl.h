@@ -19,11 +19,11 @@
 
 #ifndef ENTRYPATHBUILDERIMPL_H_
 #define ENTRYPATHBUILDERIMPL_H_
-#include "../interface/entryPathBuilder.h"
+#include "../Model/EntryPathBuilder.h"
 #include "Script.h"
 #include <map>
 
-class Model_EntryPathBuilderImpl : public EntryPathBilder {
+class Model_EntryPathBuilderImpl : public Model_EntryPathBilder {
 	Model_Script const* mainScript;
 	std::map<Model_Entry const*, Model_Script const*> entrySourceMap;
 	std::map<Model_Script const*, std::string> scriptTargetMap;

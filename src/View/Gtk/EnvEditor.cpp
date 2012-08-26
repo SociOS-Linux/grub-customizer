@@ -80,7 +80,7 @@ void View_Gtk_EnvEditor::setEventListener(EnvEditorController& eventListener) {
 	this->eventListener = &eventListener;
 }
 
-void View_Gtk_EnvEditor::setDeviceDataList(DeviceDataList_Iface& deviceDataList) {
+void View_Gtk_EnvEditor::setDeviceDataList(Model_DeviceDataListInterface& deviceDataList) {
 	this->deviceDataList = &deviceDataList;
 }
 

@@ -53,7 +53,7 @@ void View_Gtk_EntryEditor::setEventListener(EntryEditController& eventListener) 
 	this->eventListener = &eventListener;
 }
 
-void View_Gtk_EntryEditor::setDeviceDataList(DeviceDataList_Iface& deviceDataList) {
+void View_Gtk_EntryEditor::setDeviceDataList(Model_DeviceDataListInterface& deviceDataList) {
 	this->deviceDataList = &deviceDataList;
 }
 
