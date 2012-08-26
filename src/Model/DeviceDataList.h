@@ -22,7 +22,7 @@
 #include <cstdio>
 #include <string>
 #include "../interface/deviceDataList_Iface.h"
-#include "../presenter/commonClass.h"
+#include "../lib/CommonClass.h"
 
 class Model_DeviceDataList : public DeviceDataList_Iface, public CommonClass {
 public:

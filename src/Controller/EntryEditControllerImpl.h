@@ -35,7 +35,7 @@
 #include "../Model/DeviceDataList.h"
 #include "../interface/contentParserFactory.h"
 
-#include "../presenter/commonClass.h"
+#include "../lib/CommonClass.h"
 #include "../Controller/ControllerAbstract.h"
 
 

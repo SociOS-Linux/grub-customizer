@@ -20,7 +20,7 @@
 #define MAINCONTROLLER_H_
 
 #include <list>
-#include "../interface/threadController.h"
+#include "../Controller/ThreadController.h"
 
 class MainController {
 public:

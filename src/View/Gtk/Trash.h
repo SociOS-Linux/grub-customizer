@@ -22,7 +22,7 @@
 #include "../../Controller/TrashController.h"
 #include "../Trash.h"
 #include <libintl.h>
-#include "../../presenter/commonClass.h"
+#include "../../lib/CommonClass.h"
 
 class View_Gtk_Trash : public Gtk::Dialog, public View_Trash, public CommonClass {
 	Gtk::Dialog scriptAddDlg;

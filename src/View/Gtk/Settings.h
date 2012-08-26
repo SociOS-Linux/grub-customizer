@@ -23,7 +23,7 @@
 #include <libintl.h>
 #include "../ColorChooser.h"
 #include <string>
-#include "../../presenter/commonClass.h"
+#include "../../lib/CommonClass.h"
 #include "../../Controller/SettingsController.h"
 
 

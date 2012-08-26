@@ -24,7 +24,7 @@
 #include <sys/stat.h>
 #include <dirent.h>
 #include <map>
-#include "../presenter/commonClass.h"
+#include "../lib/CommonClass.h"
 
 struct Model_Repository : public std::list<Model_Script>, public CommonClass {
 	void load(std::string const& directory, bool is_proxifiedScript_dir);

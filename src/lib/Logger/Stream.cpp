@@ -16,11 +16,11 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "streamLogger.h"
+#include "Stream.h"
 
-StreamLogger::StreamLogger(std::ostream& stream) : stream(&stream) {}
+Logger_Stream::Logger_Stream(std::ostream& stream) : stream(&stream) {}
 
-void StreamLogger::log(std::string const& message, Logger::Priority prio) {
+void Logger_Stream::log(std::string const& message, Logger::Priority prio) {
 	if (prio != ERROR && (
 		this->logLevel == LOG_NOTHING ||
 		this->logLevel == LOG_DEBUG_ONLY && prio != Logger::DEBUG ||
@@ -47,6 +47,6 @@ void StreamLogger::log(std::string const& message, Logger::Priority prio) {
 	*this->stream << std::endl;
 }
 
-void StreamLogger::setLogLevel(LogLevel level) {
+void Logger_Stream::setLogLevel(LogLevel level) {
 	this->logLevel = level;
 }

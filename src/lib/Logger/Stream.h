@@ -16,25 +16,24 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CONTROLLERCOLLECTION_H_
-#define CONTROLLERCOLLECTION_H_
-#include "Controller/EntryEditController.h"
-#include "Controller/MainController.h"
-#include "Controller/SettingsController.h"
-#include "Controller/EnvEditorController.h"
-#include "Controller/TrashController.h"
-#include "Controller/InstallerController.h"
-#include "Controller/AboutController.h"
+#ifndef STREAM_LOGGER_H_
+#define STREAM_LOGGER_H_
+#include "../Logger.h"
+#include <ostream>
 
-struct ControllerCollection {
-	EntryEditController* entryEditController;
-	MainController* mainController;
-	SettingsController* settingsController;
-	EnvEditorController* envEditController;
-	TrashController* trashController;
-	InstallerController* installerController;
-	AboutController* aboutController;
+class Logger_Stream : public Logger {
+	std::ostream* stream;
+public:
+	enum LogLevel {
+		LOG_NOTHING,
+		LOG_DEBUG_ONLY,
+		LOG_IMPORTANT,
+		LOG_EVENT,
+		LOG_VERBOSE
+	} logLevel;
+	Logger_Stream(std::ostream& stream);
+	void log(std::string const& message, Logger::Priority prio);
+	void setLogLevel(LogLevel level);
 };
 
-
-#endif /* CONTROLLERCOLLECTION_H_ */
+#endif

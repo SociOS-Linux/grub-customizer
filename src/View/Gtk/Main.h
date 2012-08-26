@@ -22,7 +22,7 @@
 #include <libintl.h>
 #include "../../config.h"
 #include "../Main.h"
-#include "../../presenter/commonClass.h"
+#include "../../lib/CommonClass.h"
 #include "Settings.h"
 #include "../../lib/str_replace.h"
 #include <cassert>

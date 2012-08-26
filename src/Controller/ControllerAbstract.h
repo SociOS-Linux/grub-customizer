@@ -19,9 +19,9 @@
 #ifndef CONTROLLER_ABSTRACT_H_
 #define CONTROLLER_ABSTRACT_H_
 
-#include "../ControllerCollection.h"
+#include "ControllerCollection.h"
 #include <cassert>
-#include "../presenter/commonClass.h"
+#include "../lib/CommonClass.h"
 
 class ControllerAbstract : public CommonClass {
 	ControllerCollection* _controllerCollection;

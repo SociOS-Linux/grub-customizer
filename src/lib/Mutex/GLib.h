@@ -18,11 +18,11 @@
 
 #ifndef GLIBMUTEX_H_
 #define GLIBMUTEX_H_
-#include "../interface/mutex.h"
+#include "../Mutex.h"
 #include <glibmm/thread.h>
-#include "../presenter/commonClass.h"
+#include "../CommonClass.h"
 
-class GlibMutex : public Mutex, public CommonClass {
+class Mutex_GLib : public Mutex, public CommonClass {
 protected:
 	Glib::Mutex mutex;
 public:

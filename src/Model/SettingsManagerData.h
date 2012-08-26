@@ -20,7 +20,7 @@
 #define SETTING_MANAGER_DATASTORE_INCLUDED
 #include <sys/stat.h> //mkdir
 #include "Env.h"
-#include "../presenter/commonClass.h"
+#include "../lib/CommonClass.h"
 #include "SettingsStore.h"
 #include <sstream>
 #include "../lib/str_replace.h"

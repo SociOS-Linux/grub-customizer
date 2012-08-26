@@ -8,7 +8,7 @@
 #ifndef INSTALLERCONTROLLER_H_
 #define INSTALLERCONTROLLER_H_
 
-#include "../interface/threadController.h"
+#include "ThreadController.h"
 
 class InstallerController {
 public:

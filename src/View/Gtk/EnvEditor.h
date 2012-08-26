@@ -20,7 +20,7 @@
 #define GRUBENVEDITORGTK_H_
 #include <gtkmm.h>
 #include <libintl.h>
-#include "../../presenter/commonClass.h"
+#include "../../lib/CommonClass.h"
 #include "../EnvEditor.h"
 #include "Element/PartitionChooser.h"
 #include "../../interface/deviceDataList_Iface.h"

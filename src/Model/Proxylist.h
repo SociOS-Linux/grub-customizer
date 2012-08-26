@@ -21,7 +21,7 @@
 #include <list>
 #include <sstream>
 #include "Proxy.h"
-#include "../presenter/commonClass.h"
+#include "../lib/CommonClass.h"
 
 struct Model_Proxylist_Item {
 	std::string labelPathValue;

@@ -31,12 +31,12 @@
 #include "../Model/ListCfg.h"
 #include "../Model/FbResolutionsGetter.h"
 #include "../Model/DeviceDataList.h"
-#include "../interface/threadController.h"
+#include "ThreadController.h"
 #include "../interface/contentParserFactory.h"
 
 #include "../Controller/ControllerAbstract.h"
 
-#include "../presenter/commonClass.h"
+#include "../lib/CommonClass.h"
 #include "../Mapper/EntryName.h"
 
 #include "MainController.h"

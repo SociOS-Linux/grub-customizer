@@ -71,10 +71,10 @@ add_executable(grub-customizer
 	src/lib/contentParser/LinuxIso.cpp
 	src/lib/contentParser/Memtest.cpp
 	src/lib/contentParser/Abstract.cpp
-	src/presenter/glibMutex.cpp
-	src/presenter/glibThreadController.cpp
-	src/presenter/commonClass.cpp
-	src/presenter/streamLogger.cpp
+	src/lib/Mutex/GLib.cpp
+	src/Controller/GLib/ThreadController.cpp
+	src/lib/CommonClass.cpp
+	src/lib/Logger/Stream.cpp
 	src/lib/regex.cpp
 	src/View/Gtk/Element/PartitionChooser.cpp
 	src/View/Gtk/About.cpp
@@ -101,7 +101,7 @@ add_executable(grubcfg-proxy
 	src/Model/Script.cpp
 	src/Model/Proxy.cpp
 	src/main/proxy.cpp
-	src/presenter/commonClass.cpp
+	src/lib/CommonClass.cpp
 	src/lib/md5.cpp
 	src/lib/str_replace.cpp
 	# multi:

@@ -22,7 +22,7 @@
 #include "../../Controller/InstallerController.h"
 #include <libintl.h>
 #include "../Installer.h"
-#include "../../presenter/commonClass.h"
+#include "../../lib/CommonClass.h"
 
 class View_Gtk_Installer : public Gtk::Dialog, public View_Installer, public CommonClass {
 	Gtk::Label lblDescription;

@@ -22,7 +22,7 @@
 #include "../../config.h"
 #include <libintl.h>
 #include "../About.h"
-#include "../../presenter/commonClass.h"
+#include "../../lib/CommonClass.h"
 
 class View_Gtk_About : public Gtk::AboutDialog, public View_About, public CommonClass {
 	Glib::ustring appName, appVersion;

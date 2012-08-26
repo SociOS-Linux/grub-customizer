@@ -26,7 +26,7 @@
 #include <dirent.h>
 #include <map>
 #include <sys/stat.h>
-#include "../presenter/commonClass.h"
+#include "../lib/CommonClass.h"
 #include "SettingsStore.h"
 
 struct Model_Env : public CommonClass {

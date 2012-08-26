@@ -32,7 +32,7 @@
 
 #include "../View/Trash.h"
 
-#include "../interface/threadController.h"
+#include "ThreadController.h"
 #include "../View/EnvEditor.h"
 #include "../Mapper/EntryName.h"
 

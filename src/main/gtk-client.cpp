@@ -25,9 +25,9 @@
 #include "../View/Gtk/EntryEditor.h"
 #include "../View/Gtk/Settings.h"
 #include "../View/Gtk/EnvEditor.h"
-#include "../presenter/glibMutex.h"
-#include "../presenter/glibThreadController.h"
-#include "../presenter/streamLogger.h"
+#include "../lib/Mutex/GLib.h"
+#include "../Controller/GLib/ThreadController.h"
+#include "../lib/Logger/Stream.h"
 #include <iostream>
 #include "../lib/contentParser/FactoryImpl.h"
 #include "../lib/contentParser/Linux.h"
@@ -41,7 +41,7 @@
 #include "../Controller/TrashControllerImpl.h"
 #include "../Controller/InstallerControllerImpl.h"
 #include "../Controller/AboutControllerImpl.h"
-#include "../ControllerCollection.h"
+#include "../Controller/ControllerCollection.h"
 #include "../Mapper/EntryNameImpl.h"
 
 
@@ -74,8 +74,8 @@ int main(int argc, char** argv){
 	View_Gtk_Settings settingsDlg;
 	Model_DeviceDataList deviceDataList;
 	View_Gtk_About aboutDialog;
-	GlibMutex listCfgMutex1;
-	GlibMutex listCfgMutex2;
+	Mutex_GLib listCfgMutex1;
+	Mutex_GLib listCfgMutex2;
 	ContentParserFactoryImpl contentParserFactory;
 	View_Gtk_EnvEditor envEditor;
 	Mapper_EntryNameImpl entryNameMapper;
@@ -143,7 +143,7 @@ int main(int argc, char** argv){
 	installController.setControllerCollection(controllerCollection);
 	aboutController.setControllerCollection(controllerCollection);
 
-	GlibThreadController threadC(controllerCollection);
+	GLib_ThreadController threadC(controllerCollection);
 	mainController.setThreadController(threadC);
 	settingsController.setThreadController(threadC);
 	installController.setThreadController(threadC);
@@ -164,7 +164,7 @@ int main(int argc, char** argv){
 	envEditor.setEventListener(envEditController);
 	
 	//assign logger
-	StreamLogger logger(std::cout);
+	Logger_Stream logger(std::cout);
 	listcfg.setLogger(logger);
 	listCfgView.setLogger(logger);
 	settings.setLogger(logger);
@@ -190,17 +190,17 @@ int main(int argc, char** argv){
 	trashController.setLogger(logger);
 
 	// configure logger
-	logger.setLogLevel(StreamLogger::LOG_EVENT);
+	logger.setLogLevel(Logger_Stream::LOG_EVENT);
 	if (argc > 1) {
 		std::string logParam = argv[1];
 		if (logParam == "debug") {
-			logger.setLogLevel(StreamLogger::LOG_DEBUG_ONLY);
+			logger.setLogLevel(Logger_Stream::LOG_DEBUG_ONLY);
 		} else if (logParam == "log-important") {
-			logger.setLogLevel(StreamLogger::LOG_IMPORTANT);
+			logger.setLogLevel(Logger_Stream::LOG_IMPORTANT);
 		} else if (logParam == "quiet") {
-			logger.setLogLevel(StreamLogger::LOG_NOTHING);
+			logger.setLogLevel(Logger_Stream::LOG_NOTHING);
 		} else if (logParam == "verbose") {
-			logger.setLogLevel(StreamLogger::LOG_VERBOSE);
+			logger.setLogLevel(Logger_Stream::LOG_VERBOSE);
 		}
 	}
 

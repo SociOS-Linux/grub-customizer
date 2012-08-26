@@ -20,7 +20,7 @@
 #define SETTINGSCONTROLLER_H_
 
 #include "../Model/FbResolutionsGetter.h"
-#include "../interface/threadController.h"
+#include "../Controller/ThreadController.h"
 
 class SettingsController {
 public:

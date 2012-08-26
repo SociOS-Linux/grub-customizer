@@ -21,7 +21,7 @@
 #include <map>
 #include <string>
 #include "../../interface/contentParser.h"
-#include "../../presenter/commonClass.h"
+#include "../../lib/CommonClass.h"
 
 class ContentParserAbstract : public ContentParser, public CommonClass {
 protected:

@@ -16,16 +16,24 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "glibMutex.h"
+#ifndef COMMONCLASS_H_
+#define COMMONCLASS_H_
+#include "../lib/Logger.h"
 
-void GlibMutex::lock() {
-	this->mutex.lock();
-}
+class CommonClass {
+	mutable Logger* logger;
+public:
+	enum Exception {
+		LOGGER_NOT_SET
+	};
+	CommonClass();
+	void setLogger(Logger& logger);
+	Logger const& getLogger() const;
+	Logger& getLogger();
+	Logger* getLoggerPtr();
+	bool hasLogger() const;
+protected:
+	void log(std::string const& message, Logger::Priority prio) const;
+};
 
-bool GlibMutex::trylock() {
-	return this->mutex.trylock();
-}
-
-void GlibMutex::unlock() {
-	this->mutex.unlock();
-}
+#endif

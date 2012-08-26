@@ -19,7 +19,7 @@
 #ifndef ENTRYEDITDLGGTK_H_
 #define ENTRYEDITDLGGTK_H_
 #include "../EntryEditor.h"
-#include "../../presenter/commonClass.h"
+#include "../../lib/CommonClass.h"
 #include "../../lib/str_replace.h"
 #include <libintl.h>
 #include <gtkmm.h>

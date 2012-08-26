@@ -29,7 +29,7 @@
 #include "../Model/Installer.h"
 #include "../View/Installer.h"
 
-#include "../interface/threadController.h"
+#include "ThreadController.h"
 
 #include "../Controller/ControllerAbstract.h"
 

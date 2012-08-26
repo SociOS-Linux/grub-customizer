@@ -16,35 +16,25 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "commonClass.h"
+#ifndef CONTROLLERCOLLECTION_H_
+#define CONTROLLERCOLLECTION_H_
+#include "EntryEditController.h"
+#include "MainController.h"
+#include "SettingsController.h"
+#include "EnvEditorController.h"
+#include "TrashController.h"
+#include "InstallerController.h"
+#include "AboutController.h"
 
-CommonClass::CommonClass() {
-	this->logger = NULL;
-}
+struct ControllerCollection {
+	EntryEditController* entryEditController;
+	MainController* mainController;
+	SettingsController* settingsController;
+	EnvEditorController* envEditController;
+	TrashController* trashController;
+	InstallerController* installerController;
+	AboutController* aboutController;
+};
 
-void CommonClass::setLogger(Logger& logger) {
-	this->logger = &logger;
-}
-Logger const& CommonClass::getLogger() const {
-	if (this->logger == NULL) {
-		throw LOGGER_NOT_SET;
-	}
-	return *this->logger;
-}
-Logger& CommonClass::getLogger() {
-	if (this->logger == NULL) {
-		throw LOGGER_NOT_SET;
-	}
-	return *this->logger;
-}
-Logger* CommonClass::getLoggerPtr() {
-	return this->logger;
-}
-bool CommonClass::hasLogger() const {
-	return this->logger != NULL;
-}
-void CommonClass::log(std::string const& message, Logger::Priority prio) const {
-	if (this->logger) {
-		this->logger->log(message, prio);
-	}
-}
+
+#endif /* CONTROLLERCOLLECTION_H_ */

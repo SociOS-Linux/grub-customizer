@@ -24,7 +24,7 @@
 #include <sys/stat.h>
 #include "Entry.h"
 #include "../interface/entryPathFollower.h"
-#include "../presenter/commonClass.h"
+#include "../lib/CommonClass.h"
 #include "../lib/md5.h"
 #include "../config.h"
 

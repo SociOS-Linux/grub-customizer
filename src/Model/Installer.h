@@ -21,7 +21,7 @@
 #include <string>
 #include "Env.h"
 #include "../interface/evt_model.h"
-#include "../presenter/commonClass.h"
+#include "../lib/CommonClass.h"
 
 class Model_Installer : public CommonClass {
 	Model_Env& env;
