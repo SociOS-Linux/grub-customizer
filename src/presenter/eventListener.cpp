@@ -32,14 +32,6 @@ void EventListener::installGrub_request(std::string const& device){
 	this->presenter.getThreadController().startGrubInstallThread(device);
 }
 
-void EventListener::entryAddDlg_applied(){
-	presenter.addEntryFromEntryAddDlg();
-}
-
-void EventListener::entryAddDlg_requested(){
-	presenter.showEntryAddDlg();
-}
-
 void EventListener::aboutDialog_requested(){
 	presenter.showAboutDialog();
 }

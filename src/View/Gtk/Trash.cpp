@@ -44,7 +44,7 @@ View_Gtk_Trash::View_Gtk_Trash() {
 	this->signal_response().connect(sigc::mem_fun(this, &View_Gtk_Trash::signal_entryAddDlg_response));
 }
 
-void View_Gtk_Trash::setEventListener(EventListener_entryAddDlg& eventListener){
+void View_Gtk_Trash::setEventListener(TrashController& eventListener){
 	this->eventListener = &eventListener;
 }
 
@@ -54,14 +54,14 @@ void View_Gtk_Trash::clear(){
 
 void View_Gtk_Trash::signal_entryAddDlg_response(int response_id){
 	if (response_id == Gtk::RESPONSE_OK){
-		eventListener->entryAddDlg_applied();
+		eventListener->applyAction();
 	}
 	this->hide();
 }
 
 void View_Gtk_Trash::signal_icon_dblClick(Gtk::TreeModel::Path path) {
 	this->iconBox.select_path(path);
-	eventListener->entryAddDlg_applied();
+	eventListener->applyAction();
 	this->hide();
 }
 

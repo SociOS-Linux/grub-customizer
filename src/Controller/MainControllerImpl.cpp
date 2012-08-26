@@ -623,7 +623,7 @@ void MainControllerImpl::showEnvEditorAction(bool resetPartitionChooser) {
 }
 
 void MainControllerImpl::showTrashAction() {
-	this->getAllControllers().masterclass_deprecated->showEntryAddDlg();
+	this->getAllControllers().trashController->showAction();
 }
 
 void MainControllerImpl::initModeAction(bool burgChosen) {

@@ -20,7 +20,7 @@
 
 GrubCustomizer::GrubCustomizer(Model_Env& env)
 	: grublistCfg(NULL),
-	  installer(NULL), installDlg(NULL), entryAddDlg(NULL),
+	  installer(NULL), installDlg(NULL),
 	  mountTable(NULL), aboutDialog(NULL),
 	 env(env),
 	 threadController(NULL),
@@ -38,9 +38,6 @@ void GrubCustomizer::setInstaller(Model_Installer& installer){
 }
 void GrubCustomizer::setInstallDlg(View_Installer& installDlg){
 	this->installDlg = &installDlg;
-}
-void GrubCustomizer::setScriptAddDlg(View_Trash& scriptAddDlg){
-	this->entryAddDlg = &scriptAddDlg;
 }
 
 void GrubCustomizer::setMountTable(Model_MountTable& mountTable){
@@ -88,28 +85,3 @@ void GrubCustomizer::showMessageGrubInstallCompleted(std::string const& msg){
 	installDlg->showMessageGrubInstallCompleted(msg);
 }
 
-void GrubCustomizer::showEntryAddDlg(){
-	entryAddDlg->clear();
-
-	std::list<Model_Entry*> removedEntries = this->grublistCfg->getRemovedEntries();
-	for (std::list<Model_Entry*>::iterator iter = removedEntries.begin(); iter != removedEntries.end(); iter++) {
-		Model_Script* script = this->grublistCfg->repository.getScriptByEntry(**iter);
-
-		std::string name = (*iter)->name;
-		name = this->entryNameMapper->map(&**iter, name, script->name);
-
-		entryAddDlg->addItem(name, (*iter)->type != Model_Entry::MENUENTRY, script->name, *iter);
-	}
-
-	entryAddDlg->show();
-}
-
-void GrubCustomizer::addEntryFromEntryAddDlg(){
-	std::list<void*> entries = entryAddDlg->getSelectedEntries();
-	this->getAllControllers().mainController->addEntriesAction(entries);
-}
-
-
-void GrubCustomizer::hideEntryAddDlg() {
-	this->entryAddDlg->hide();
-}

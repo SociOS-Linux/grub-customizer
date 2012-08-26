@@ -28,8 +28,6 @@ public:
 	virtual void showAboutDialog() = 0;
 	virtual void showInstallDialog() = 0;
 	virtual void showMessageGrubInstallCompleted(std::string const& msg) = 0;
-	virtual void showEntryAddDlg() = 0;
-	virtual void hideEntryAddDlg() = 0;
 };
 
 

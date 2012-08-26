@@ -39,6 +39,7 @@
 #include "../Controller/MainControllerImpl.h"
 #include "../Controller/SettingsControllerImpl.h"
 #include "../Controller/EnvEditorControllerImpl.h"
+#include "../Controller/TrashControllerImpl.h"
 #include "../ControllerCollection.h"
 #include "../Mapper/EntryNameImpl.h"
 
@@ -66,7 +67,7 @@ int main(int argc, char** argv){
 	Model_SettingsManagerData settingsOnDisk(env);
 	Model_Installer installer(env);
 	View_Gtk_Installer installDlg;
-	View_Gtk_Trash scriptAddDlg;
+	View_Gtk_Trash trashView;
 	View_Gtk_EntryEditor entryEditDlg;
 	Model_MountTable mountTable;
 	Model_ListCfg savedListCfg(env);
@@ -114,11 +115,17 @@ int main(int argc, char** argv){
 	envEditController.setMountTable(mountTable);
 	envEditController.setView(envEditor);
 
+	TrashControllerImpl trashController(env);
+	trashController.setEntryNameMapper(entryNameMapper);
+	trashController.setListCfg(listcfg);
+	trashController.setView(trashView);
+
 	ControllerCollection controllerCollection;
 	controllerCollection.entryEditController = &entryEditController;
 	controllerCollection.mainController = &mainController;
 	controllerCollection.settingsController = &settingsController;
 	controllerCollection.envEditController = &envEditController;
+	controllerCollection.trashController = &trashController;
 	controllerCollection.masterclass_deprecated = &presenter;
 
 	entryEditController.setControllerCollection(controllerCollection);
@@ -126,6 +133,7 @@ int main(int argc, char** argv){
 	presenter.setControllerCollection(controllerCollection);
 	settingsController.setControllerCollection(controllerCollection);
 	envEditController.setControllerCollection(controllerCollection);
+	trashController.setControllerCollection(controllerCollection);
 
 	GlibThreadController threadC(presenter, controllerCollection);
 	mainController.setThreadController(threadC);
@@ -135,7 +143,6 @@ int main(int argc, char** argv){
 	presenter.setListCfg(listcfg);
 	presenter.setInstaller(installer);
 	presenter.setInstallDlg(installDlg);
-	presenter.setScriptAddDlg(scriptAddDlg);
 	presenter.setMountTable(mountTable);
 	presenter.setAboutDialog(aboutDialog);
 	presenter.setThreadController(threadC);
@@ -147,7 +154,7 @@ int main(int argc, char** argv){
 	EventListener evt(presenter, controllerCollection);
 	listCfgView.setEventListener(mainController);
 	installDlg.setEventListener(evt);
-	scriptAddDlg.setEventListener(evt);
+	trashView.setEventListener(trashController);
 	entryEditDlg.setEventListener(entryEditController);
 	settingsDlg.setEventListener(settingsController);
 	listcfg.setEventListener(evt);
@@ -164,7 +171,7 @@ int main(int argc, char** argv){
 	settingsOnDisk.setLogger(logger);
 	installer.setLogger(logger);
 	installDlg.setLogger(logger);
-	scriptAddDlg.setLogger(logger);
+	trashView.setLogger(logger);
 	entryEditDlg.setLogger(logger);
 	mountTable.setLogger(logger);
 	savedListCfg.setLogger(logger);
@@ -180,6 +187,7 @@ int main(int argc, char** argv){
 	mainController.setLogger(logger);
 	settingsController.setLogger(logger);
 	envEditController.setLogger(logger);
+	trashController.setLogger(logger);
 
 	// configure logger
 	logger.setLogLevel(StreamLogger::LOG_EVENT);

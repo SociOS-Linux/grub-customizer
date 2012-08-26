@@ -22,13 +22,11 @@
 
 #include "../interface/evt_grubInstallDlg.h"
 #include "../interface/evt_model.h"
-#include "../interface/evt_entryAddDlg.h"
 #include "../ControllerCollection.h"
 
 class EventListener :
 	public EventListener_grubInstallDlg,
-	public EventListener_model,
-	public EventListener_entryAddDlg
+	public EventListener_model
 {
 	GrubCustomizer& presenter;
 	ControllerCollection& _controllers;
@@ -36,8 +34,6 @@ public:
 	EventListener(GrubCustomizer& presenter, ControllerCollection& controllers);
 	void rootSelectorCompleted();
 	void installGrub_request(std::string const& device);
-	void entryAddDlg_requested();
-	void entryAddDlg_applied();
 
 	void aboutDialog_requested();
 

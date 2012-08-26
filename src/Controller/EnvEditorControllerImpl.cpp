@@ -104,7 +104,7 @@ void EnvEditorControllerImpl::applyAction(bool saveConfig){
 //	listCfgDlg->setLockState(1|2|8);
 //	this->syncSettings();
 	this->getAllControllers().settingsController->hideAction();
-	this->getAllControllers().masterclass_deprecated->hideEntryAddDlg();
+	this->getAllControllers().trashController->hideAction();
 	bool isBurgMode = this->view->getBootloaderType() == 1;
 	view->hide();
 

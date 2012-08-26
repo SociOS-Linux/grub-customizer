@@ -63,7 +63,6 @@ class GrubCustomizer : public ControllerAbstract, public GrubCustomizerIface {
 	Model_ListCfg* grublistCfg;
 	Model_Installer* installer;
 	View_Installer* installDlg;
-	View_Trash* entryAddDlg;
 	Model_MountTable* mountTable;
 	View_About* aboutDialog;
 	ThreadController* threadController;
@@ -76,7 +75,6 @@ public:
 	void setListCfg(Model_ListCfg& grublistCfg);
 	void setInstaller(Model_Installer& installer);
 	void setInstallDlg(View_Installer& installDlg);
-	void setScriptAddDlg(View_Trash& scriptAddDlg);
 	void setMountTable(Model_MountTable& mountTable);
 	void setAboutDialog(View_About& aboutDialog);
 	void setThreadController(ThreadController& threadController);
@@ -90,14 +88,7 @@ public:
 	void installGrub(std::string device);
 	void showMessageGrubInstallCompleted(std::string const& msg);
 	
-	void showEntryAddDlg();
-	void addEntryFromEntryAddDlg();
-	
-	
 	void showAboutDialog();
-
-	// transitional
-	void hideEntryAddDlg();
 };
 
 #endif

@@ -19,7 +19,7 @@
 #ifndef ENTRY_ADD_DLG_INCLUDED
 #define ENTRY_ADD_DLG_INCLUDED
 #include <gtkmm.h>
-#include "../../interface/evt_entryAddDlg.h"
+#include "../../Controller/TrashController.h"
 #include "../Trash.h"
 #include <libintl.h>
 #include "../../presenter/commonClass.h"
@@ -29,7 +29,7 @@ class View_Gtk_Trash : public Gtk::Dialog, public View_Trash, public CommonClass
 	Gtk::ScrolledWindow scrEntryBox;
 	Gtk::IconView iconBox;
 
-	EventListener_entryAddDlg* eventListener;
+	TrashController* eventListener;
 public:
 	struct IconModel : public Gtk::TreeModelColumnRecord {
 		Gtk::TreeModelColumn<Glib::ustring> name;
@@ -40,7 +40,7 @@ public:
 	} iconModel;
 	Glib::RefPtr<Gtk::ListStore> listStore;
 	View_Gtk_Trash();
-	void setEventListener(EventListener_entryAddDlg& eventListener);
+	void setEventListener(TrashController& eventListener);
 	void signal_entryAddDlg_response(int response_id);
 	void signal_icon_dblClick(Gtk::TreeModel::Path path);
 	void clear();

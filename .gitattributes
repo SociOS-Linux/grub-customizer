@@ -54,6 +54,9 @@ src/Controller/MainControllerImpl.h -text
 src/Controller/SettingsController.h -text
 src/Controller/SettingsControllerImpl.cpp -text
 src/Controller/SettingsControllerImpl.h -text
+src/Controller/TrashController.h -text
+src/Controller/TrashControllerImpl.cpp -text
+src/Controller/TrashControllerImpl.h -text
 src/ControllerCollection.h -text
 src/Mapper/EntryName.h -text
 src/Mapper/EntryNameImpl.cpp -text

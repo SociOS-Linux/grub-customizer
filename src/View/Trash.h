@@ -27,8 +27,6 @@ class View_Trash {
 public:
 	virtual inline ~View_Trash() {};
 
-	//assigns the event listener
-	virtual void setEventListener(EventListener_entryAddDlg& eventListener)=0;
 	//clear the script menu
 	virtual void clear()=0;
 	//gets the index of the selected script item

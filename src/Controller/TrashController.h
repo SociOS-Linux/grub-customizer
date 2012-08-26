@@ -16,23 +16,16 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CONTROLLERCOLLECTION_H_
-#define CONTROLLERCOLLECTION_H_
-#include "Controller/EntryEditController.h"
-#include "Controller/MainController.h"
-#include "Controller/SettingsController.h"
-#include "Controller/EnvEditorController.h"
-#include "Controller/TrashController.h"
-#include "presenter/grubCustomizerIface.h"
+#ifndef TRASHCONTROLLER_H_
+#define TRASHCONTROLLER_H_
 
-struct ControllerCollection {
-	EntryEditController* entryEditController;
-	MainController* mainController;
-	SettingsController* settingsController;
-	EnvEditorController* envEditController;
-	TrashController* trashController;
-	GrubCustomizerIface* masterclass_deprecated;
+class TrashController {
+public:
+	virtual inline ~TrashController(){}
+	virtual void applyAction() = 0;
+	virtual void showAction() = 0;
+	virtual void hideAction() = 0;
 };
 
 
-#endif /* CONTROLLERCOLLECTION_H_ */
+#endif /* TRASHCONTROLLER_H_ */
