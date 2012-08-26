@@ -283,7 +283,7 @@ void MainControllerImpl::reset(){
 
 
 void MainControllerImpl::showAboutAction(){
-	this->getAllControllers().masterclass_deprecated->showAboutDialog();
+	this->getAllControllers().aboutController->showAction();
 }
 
 void MainControllerImpl::showInstallerAction(){

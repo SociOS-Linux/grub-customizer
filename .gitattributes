@@ -40,6 +40,9 @@ misc/icons/48x48.png -text svneol=unset#unset
 misc/icons/64x64.png -text svneol=unset#unset
 misc/manpage.gz -text svneol=unset#unset
 misc/pkexec_policy.in -text
+src/Controller/AboutController.h -text
+src/Controller/AboutControllerImpl.cpp -text
+src/Controller/AboutControllerImpl.h -text
 src/Controller/ControllerAbstract.cpp -text
 src/Controller/ControllerAbstract.h -text
 src/Controller/EntryEditController.h -text
@@ -166,9 +169,6 @@ src/presenter/glibMutex.cpp -text
 src/presenter/glibMutex.h -text
 src/presenter/glibThreadController.cpp -text
 src/presenter/glibThreadController.h -text
-src/presenter/grubCustomizer.cpp -text
-src/presenter/grubCustomizer.h -text
-src/presenter/grubCustomizerIface.h -text
 src/presenter/streamLogger.cpp -text
 src/presenter/streamLogger.h -text
 translation/complile_all.sh -text

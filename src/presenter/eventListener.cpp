@@ -18,8 +18,8 @@
 
 #include "eventListener.h"
 
-EventListener::EventListener(GrubCustomizer& presenter, ControllerCollection& controllers)
-	: presenter(presenter), _controllers(controllers)
+EventListener::EventListener(ControllerCollection& controllers)
+	: _controllers(controllers)
 {
 }
 
@@ -30,10 +30,6 @@ void EventListener::rootSelectorCompleted(){
 
 void EventListener::installGrub_request(std::string const& device){
 	this->_controllers.installerController->getThreadController().startGrubInstallThread(device);
-}
-
-void EventListener::aboutDialog_requested(){
-	presenter.showAboutDialog();
 }
 
 void EventListener::loadProgressChanged(){

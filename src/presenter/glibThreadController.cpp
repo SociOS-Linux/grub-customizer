@@ -18,8 +18,8 @@
 
 #include "glibThreadController.h"
 
-GlibThreadController::GlibThreadController(GrubCustomizer& app, ControllerCollection& controllers)
-	: app(app), _controllers(controllers)
+GlibThreadController::GlibThreadController(ControllerCollection& controllers)
+	: _controllers(controllers)
 {
 	disp_sync_load.connect(sigc::mem_fun(this, &GlibThreadController::_execLoadSync));
 	disp_sync_save.connect(sigc::mem_fun(this, &GlibThreadController::_execSaveSync));

@@ -16,20 +16,31 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "grubCustomizer.h"
+#ifndef ABOUTCONTROLLERIMPL_H_
+#define ABOUTCONTROLLERIMPL_H_
 
-GrubCustomizer::GrubCustomizer(Model_Env& env)
-	: aboutDialog(NULL),
-	 env(env)
-{
-}
+#include <libintl.h>
+#include <locale.h>
+#include <sstream>
+#include "../config.h"
 
+#include "../Model/Env.h"
 
-void GrubCustomizer::setAboutDialog(View_About& aboutDialog){
-	this->aboutDialog = &aboutDialog;
-}
+#include "../View/About.h"
 
-void GrubCustomizer::showAboutDialog(){
-	this->aboutDialog->show();
-}
+#include "../Controller/ControllerAbstract.h"
 
+#include "AboutController.h"
+
+class AboutControllerImpl : public ControllerAbstract, public AboutController {
+	Model_Env& env;
+	View_About* view;
+public:
+	void setView(View_About& aboutDialog);
+
+	AboutControllerImpl(Model_Env& env);
+	
+	void showAction();
+};
+
+#endif

@@ -24,7 +24,7 @@
 #include "Controller/EnvEditorController.h"
 #include "Controller/TrashController.h"
 #include "Controller/InstallerController.h"
-#include "presenter/grubCustomizerIface.h"
+#include "Controller/AboutController.h"
 
 struct ControllerCollection {
 	EntryEditController* entryEditController;
@@ -33,7 +33,7 @@ struct ControllerCollection {
 	EnvEditorController* envEditController;
 	TrashController* trashController;
 	InstallerController* installerController;
-	GrubCustomizerIface* masterclass_deprecated;
+	AboutController* aboutController;
 };
 
 

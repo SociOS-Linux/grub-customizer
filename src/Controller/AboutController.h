@@ -16,17 +16,14 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef GRUBCUSTOMIZERIFACE_H_
-#define GRUBCUSTOMIZERIFACE_H_
+#ifndef ABOUTCONTROLLER_H_
+#define ABOUTCONTROLLER_H_
 
-#include <string>
-#include <map>
-#include <list>
-
-class GrubCustomizerIface {
+class AboutController {
 public:
-	virtual void showAboutDialog() = 0;
+	virtual inline ~AboutController(){}
+	virtual void showAction() = 0;
 };
 
 
-#endif /* GRUBCUSTOMIZERIFACE_H_ */
+#endif /* ABOUTCONTROLLER_H_ */

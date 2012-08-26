@@ -62,7 +62,6 @@ add_executable(grub-customizer
 	src/Model/SmartFileHandle.cpp
 	src/Mapper/EntryNameImpl.cpp
 	src/main/gtk-client.cpp
-	src/presenter/grubCustomizer.cpp
 	src/presenter/eventListener.cpp
 	src/lib/md5.cpp
 	src/lib/str_replace.cpp
@@ -92,6 +91,7 @@ add_executable(grub-customizer
 	src/Controller/EnvEditorControllerImpl.cpp
 	src/Controller/TrashControllerImpl.cpp
 	src/Controller/InstallerControllerImpl.cpp
+	src/Controller/AboutControllerImpl.cpp
 )
 
 

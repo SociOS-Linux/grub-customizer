@@ -16,7 +16,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "../presenter/grubCustomizer.h"
 #include "../presenter/eventListener.h"
 #include "../Model/Env.h"
 #include "../View/Gtk/Main.h"
@@ -41,6 +40,7 @@
 #include "../Controller/EnvEditorControllerImpl.h"
 #include "../Controller/TrashControllerImpl.h"
 #include "../Controller/InstallerControllerImpl.h"
+#include "../Controller/AboutControllerImpl.h"
 #include "../ControllerCollection.h"
 #include "../Mapper/EntryNameImpl.h"
 
@@ -59,8 +59,6 @@ int main(int argc, char** argv){
 	Glib::thread_init();
 
 	Model_Env env;
-
-	GrubCustomizer presenter(env);
 
 	Model_ListCfg listcfg(env);
 	View_Gtk_Main listCfgView;
@@ -125,6 +123,9 @@ int main(int argc, char** argv){
 	installController.setInstaller(installer);
 	installController.setView(installDlg);
 
+	AboutControllerImpl aboutController(env);
+	aboutController.setView(aboutDialog);
+
 	ControllerCollection controllerCollection;
 	controllerCollection.entryEditController = &entryEditController;
 	controllerCollection.mainController = &mainController;
@@ -132,28 +133,26 @@ int main(int argc, char** argv){
 	controllerCollection.envEditController = &envEditController;
 	controllerCollection.trashController = &trashController;
 	controllerCollection.installerController = &installController;
-	controllerCollection.masterclass_deprecated = &presenter;
+	controllerCollection.aboutController = &aboutController;
 
 	entryEditController.setControllerCollection(controllerCollection);
 	mainController.setControllerCollection(controllerCollection);
-	presenter.setControllerCollection(controllerCollection);
 	settingsController.setControllerCollection(controllerCollection);
 	envEditController.setControllerCollection(controllerCollection);
 	trashController.setControllerCollection(controllerCollection);
 	installController.setControllerCollection(controllerCollection);
+	aboutController.setControllerCollection(controllerCollection);
 
-	GlibThreadController threadC(presenter, controllerCollection);
+	GlibThreadController threadC(controllerCollection);
 	mainController.setThreadController(threadC);
 	settingsController.setThreadController(threadC);
 	installController.setThreadController(threadC);
 
-	//assign objects to presenter
-	presenter.setAboutDialog(aboutDialog);
 
 	listCfgView.putSettingsDialog(settingsDlg.getCommonSettingsPane(), settingsDlg.getAppearanceSettingsPane());
 
 	//assign event listener
-	EventListener evt(presenter, controllerCollection);
+	EventListener evt(controllerCollection);
 	listCfgView.setEventListener(mainController);
 	installDlg.setEventListener(installController);
 	trashView.setEventListener(trashController);
@@ -166,7 +165,6 @@ int main(int argc, char** argv){
 	
 	//assign logger
 	StreamLogger logger(std::cout);
-	presenter.setLogger(logger);
 	listcfg.setLogger(logger);
 	listCfgView.setLogger(logger);
 	settings.setLogger(logger);

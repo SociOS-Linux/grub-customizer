@@ -22,17 +22,15 @@
 #include <glibmm/thread.h>
 #include <glibmm/dispatcher.h>
 #include <gtkmm/main.h>
-#include "grubCustomizer.h"
 #include "../ControllerCollection.h"
 #include "../presenter/commonClass.h"
 
 class GlibThreadController : public ThreadController, public CommonClass {
-	GrubCustomizer& app;
 	ControllerCollection& _controllers;
 
 	Glib::Dispatcher disp_sync_load, disp_sync_save, disp_thread_died, disp_updateSettingsDlgResolutionList, disp_settings_loaded;
 public:
-	GlibThreadController(GrubCustomizer& app, ControllerCollection& controllers);
+	GlibThreadController(ControllerCollection& controllers);
 	void syncEntryList();
 	void updateSaveProgress();
 	void updateSettingsDlgResolutionList();

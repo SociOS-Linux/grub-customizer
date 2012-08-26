@@ -16,27 +16,20 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef EVENTLISTENER_INCLUDED
-#define EVENTLISTENER_INCLUDED
+#include "AboutControllerImpl.h"
 
-#include "../interface/evt_grubInstallDlg.h"
-#include "../interface/evt_model.h"
-#include "../ControllerCollection.h"
-
-class EventListener :
-	public EventListener_grubInstallDlg,
-	public EventListener_model
+AboutControllerImpl::AboutControllerImpl(Model_Env& env)
+	: view(NULL),
+	 env(env)
 {
-	ControllerCollection& _controllers;
-public:
-	EventListener(ControllerCollection& controllers);
-	void rootSelectorCompleted();
-	void installGrub_request(std::string const& device);
+}
 
-	//model
-	void loadProgressChanged();
-	void saveProgressChanged();
-	void grubInstallCompleted(std::string const& msg);
-	void fb_resolutions_loaded();
-};
-#endif
+
+void AboutControllerImpl::setView(View_About& aboutDialog){
+	this->view = &aboutDialog;
+}
+
+void AboutControllerImpl::showAction(){
+	this->view->show();
+}
+
