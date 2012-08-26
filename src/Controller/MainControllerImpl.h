@@ -106,7 +106,6 @@ public:
 	void reset();
 	
 	void showInstallerAction();
-	void showMessageGrubInstallCompleted(std::string const& msg);
 	
 	void showEntryEditorAction(void* rule);
 	void showEntryCreatorAction();

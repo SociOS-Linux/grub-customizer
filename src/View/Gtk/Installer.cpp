@@ -70,7 +70,7 @@ void View_Gtk_Installer::signal_grub_install_dialog_response(int response_id){
 			txtDevice.set_sensitive(false);
 			lblInstallInfo.set_text(gettext("installing the bootloader…"));
 			
-			eventListener->installGrub_request(txtDevice.get_text());
+			eventListener->installGrubAction(txtDevice.get_text());
 		}
 		else
 			Gtk::MessageDialog(gettext("Please type a device string!")).run();
@@ -84,7 +84,7 @@ void View_Gtk_Installer::showMessageGrubInstallCompleted(std::string const& msg)
 	disp_grub_install_ready();
 }
 
-void View_Gtk_Installer::setEventListener(EventListener_grubInstallDlg& eventListener) {
+void View_Gtk_Installer::setEventListener(InstallerController& eventListener) {
 	this->eventListener = &eventListener;
 }
 

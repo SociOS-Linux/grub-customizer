@@ -16,8 +16,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef GTK_CLIENT_INCLUDED
-#define GTK_CLIENT_INCLUDED
+#ifndef INSTALLERCONTROLLERIMPL_H_
+#define INSTALLERCONTROLLERIMPL_H_
 
 #include <libintl.h>
 #include <locale.h>
@@ -26,40 +26,38 @@
 
 #include "../Model/Env.h"
 
-#include "../View/About.h"
+#include "../Model/Installer.h"
+#include "../View/Installer.h"
+
 #include "../interface/threadController.h"
 
 #include "../Controller/ControllerAbstract.h"
 
-#include "commonClass.h"
+#include "InstallerController.h"
 
-#include "grubCustomizerIface.h"
 
-/**
- * master class of Grub Customizer.
- * Coordinates all the windows (views) and data objects.
- *
- * This application is based on one presenter (this object) and multiple views and models which are
- * controlled by the presenter (MVP). To be independent of the concrete implementation of model and view
- * this class doesn't create any of these objects. They must be set from outside using the set-Methods.
- * This allows to simply change the view class simply by providing other implementations of the given
- * interfaces. The model doesn't use interfaces yet, but it's set from outside too. So it should be
- * not too much work to change this.
- */
-
-class GrubCustomizer : public ControllerAbstract, public GrubCustomizerIface {
+class InstallerControllerImpl : public ControllerAbstract, public InstallerController {
 	Model_Env& env;
-	View_About* aboutDialog;
+	Model_Installer* installer;
+	View_Installer* view;
+	ThreadController* threadController;
 
 public:
 	enum Exception {
 		INCOMPLETE
 	};
-	void setAboutDialog(View_About& aboutDialog);
+	void setInstaller(Model_Installer& installer);
+	void setView(View_Installer& installDlg);
+	void setThreadController(ThreadController& threadController);
 
-	GrubCustomizer(Model_Env& env);
+	ThreadController& getThreadController();
+
+	InstallerControllerImpl(Model_Env& env);
 	
-	void showAboutDialog();
+	void showAction();
+	void installGrubAction(std::string device);
+	void installGrubThreadedAction(std::string device);
+	void showMessageAction(std::string const& msg);
 };
 
 #endif

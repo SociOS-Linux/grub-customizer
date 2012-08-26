@@ -52,6 +52,7 @@ private:
 	void _execActivateSettings();
 	void _execResolutionListUpdate();
 	void _execFbResolutionsGetter();
+	void _execInstallGrub(std::string const& device);
 };
 
 #endif

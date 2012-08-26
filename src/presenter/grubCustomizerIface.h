@@ -26,8 +26,6 @@
 class GrubCustomizerIface {
 public:
 	virtual void showAboutDialog() = 0;
-	virtual void showInstallDialog() = 0;
-	virtual void showMessageGrubInstallCompleted(std::string const& msg) = 0;
 };
 
 

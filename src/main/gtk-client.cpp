@@ -40,6 +40,7 @@
 #include "../Controller/SettingsControllerImpl.h"
 #include "../Controller/EnvEditorControllerImpl.h"
 #include "../Controller/TrashControllerImpl.h"
+#include "../Controller/InstallerControllerImpl.h"
 #include "../ControllerCollection.h"
 #include "../Mapper/EntryNameImpl.h"
 
@@ -120,12 +121,17 @@ int main(int argc, char** argv){
 	trashController.setListCfg(listcfg);
 	trashController.setView(trashView);
 
+	InstallerControllerImpl installController(env);
+	installController.setInstaller(installer);
+	installController.setView(installDlg);
+
 	ControllerCollection controllerCollection;
 	controllerCollection.entryEditController = &entryEditController;
 	controllerCollection.mainController = &mainController;
 	controllerCollection.settingsController = &settingsController;
 	controllerCollection.envEditController = &envEditController;
 	controllerCollection.trashController = &trashController;
+	controllerCollection.installerController = &installController;
 	controllerCollection.masterclass_deprecated = &presenter;
 
 	entryEditController.setControllerCollection(controllerCollection);
@@ -134,26 +140,22 @@ int main(int argc, char** argv){
 	settingsController.setControllerCollection(controllerCollection);
 	envEditController.setControllerCollection(controllerCollection);
 	trashController.setControllerCollection(controllerCollection);
+	installController.setControllerCollection(controllerCollection);
 
 	GlibThreadController threadC(presenter, controllerCollection);
 	mainController.setThreadController(threadC);
 	settingsController.setThreadController(threadC);
+	installController.setThreadController(threadC);
 
 	//assign objects to presenter
-	presenter.setListCfg(listcfg);
-	presenter.setInstaller(installer);
-	presenter.setInstallDlg(installDlg);
-	presenter.setMountTable(mountTable);
 	presenter.setAboutDialog(aboutDialog);
-	presenter.setThreadController(threadC);
-	presenter.setEntryNameMapper(entryNameMapper);
 
 	listCfgView.putSettingsDialog(settingsDlg.getCommonSettingsPane(), settingsDlg.getAppearanceSettingsPane());
 
 	//assign event listener
 	EventListener evt(presenter, controllerCollection);
 	listCfgView.setEventListener(mainController);
-	installDlg.setEventListener(evt);
+	installDlg.setEventListener(installController);
 	trashView.setEventListener(trashController);
 	entryEditDlg.setEventListener(entryEditController);
 	settingsDlg.setEventListener(settingsController);

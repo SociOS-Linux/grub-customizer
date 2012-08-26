@@ -19,7 +19,7 @@
 #ifndef GRUB_INSTALL_DLG_GTK_INCLUDED
 #define GRUB_INSTALL_DLG_GTK_INCLUDED
 #include <gtkmm.h>
-#include "../../interface/evt_grubInstallDlg.h"
+#include "../../Controller/InstallerController.h"
 #include <libintl.h>
 #include "../Installer.h"
 #include "../../presenter/commonClass.h"
@@ -30,7 +30,7 @@ class View_Gtk_Installer : public Gtk::Dialog, public View_Installer, public Com
 	Gtk::Label lblDevice, lblInstallInfo;
 	Gtk::Entry txtDevice;
 	Glib::Dispatcher disp_grub_install_ready;
-	EventListener_grubInstallDlg* eventListener;
+	InstallerController* eventListener;
 	void func_disp_grub_install_ready();
 	void signal_grub_install_dialog_response(int response_id);
 	Glib::ustring install_result;
@@ -38,6 +38,6 @@ class View_Gtk_Installer : public Gtk::Dialog, public View_Installer, public Com
 	View_Gtk_Installer();
 	void show();
 	void showMessageGrubInstallCompleted(std::string const& msg);
-	void setEventListener(EventListener_grubInstallDlg& eventListener);
+	void setEventListener(InstallerController& eventListener);
 };
 #endif

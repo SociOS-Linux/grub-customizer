@@ -91,6 +91,7 @@ add_executable(grub-customizer
 	src/Controller/SettingsControllerImpl.cpp
 	src/Controller/EnvEditorControllerImpl.cpp
 	src/Controller/TrashControllerImpl.cpp
+	src/Controller/InstallerControllerImpl.cpp
 )
 
 

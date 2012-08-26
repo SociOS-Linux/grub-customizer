@@ -20,6 +20,7 @@
 #define SETTINGSCONTROLLER_H_
 
 #include "../Model/FbResolutionsGetter.h"
+#include "../interface/threadController.h"
 
 class SettingsController {
 public:
@@ -45,6 +46,8 @@ public:
 	virtual void hideAction() = 0;
 	virtual void showAction(bool burgMode) = 0;
 	virtual void syncAction() = 0;
+
+	virtual ThreadController& getThreadController() = 0;
 };
 
 

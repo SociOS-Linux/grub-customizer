@@ -24,12 +24,12 @@ EventListener::EventListener(GrubCustomizer& presenter, ControllerCollection& co
 }
 
 void EventListener::rootSelectorCompleted(){
-	this->presenter.getThreadController().startLoadThread(false);
+	this->_controllers.mainController->getThreadController().startLoadThread(false);
 }
 
 
 void EventListener::installGrub_request(std::string const& device){
-	this->presenter.getThreadController().startGrubInstallThread(device);
+	this->_controllers.installerController->getThreadController().startGrubInstallThread(device);
 }
 
 void EventListener::aboutDialog_requested(){
@@ -45,10 +45,10 @@ void EventListener::saveProgressChanged(){
 }
 
 void EventListener::grubInstallCompleted(std::string const& msg){
-	presenter.showMessageGrubInstallCompleted(msg);
+	this->_controllers.installerController->showMessageAction(msg);
 }
 
 
 void EventListener::fb_resolutions_loaded(){
-	presenter.getThreadController().updateSettingsDlgResolutionList();
+	this->_controllers.settingsController->getThreadController().updateSettingsDlgResolutionList();
 }

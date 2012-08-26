@@ -31,8 +31,6 @@ public:
 	virtual void show()=0;
 	//show the information that grub has been installed completely
 	virtual void showMessageGrubInstallCompleted(std::string const& msg)=0;
-	//assign the event listener
-	virtual void setEventListener(EventListener_grubInstallDlg& eventListener)=0;
 };
 
 #endif

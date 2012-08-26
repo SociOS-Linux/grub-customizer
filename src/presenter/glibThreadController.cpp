@@ -61,7 +61,7 @@ void GlibThreadController::startFramebufferResolutionLoader() {
 }
 
 void GlibThreadController::startGrubInstallThread(std::string const& device) {
-	Glib::Thread::create(sigc::bind<std::string>(sigc::mem_fun(&this->app, &GrubCustomizer::installGrub), device), false);
+	Glib::Thread::create(sigc::bind<std::string>(sigc::mem_fun(this, &GlibThreadController::_execInstallGrub), device), false);
 }
 
 void GlibThreadController::stopApplication() {
@@ -100,3 +100,6 @@ void GlibThreadController::_execFbResolutionsGetter() {
 	this->_controllers.settingsController->getFbResolutionsGetter().load();
 }
 
+void GlibThreadController::_execInstallGrub(std::string const& device) {
+	this->_controllers.installerController->installGrubThreadedAction(device);
+}

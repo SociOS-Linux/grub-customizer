@@ -19,69 +19,17 @@
 #include "grubCustomizer.h"
 
 GrubCustomizer::GrubCustomizer(Model_Env& env)
-	: grublistCfg(NULL),
-	  installer(NULL), installDlg(NULL),
-	  mountTable(NULL), aboutDialog(NULL),
-	 env(env),
-	 threadController(NULL),
-	 entryNameMapper(NULL)
+	: aboutDialog(NULL),
+	 env(env)
 {
 }
 
-
-void GrubCustomizer::setListCfg(Model_ListCfg& grublistCfg){
-	this->grublistCfg = &grublistCfg;
-}
-
-void GrubCustomizer::setInstaller(Model_Installer& installer){
-	this->installer = &installer;
-}
-void GrubCustomizer::setInstallDlg(View_Installer& installDlg){
-	this->installDlg = &installDlg;
-}
-
-void GrubCustomizer::setMountTable(Model_MountTable& mountTable){
-	this->mountTable = &mountTable;
-}
 
 void GrubCustomizer::setAboutDialog(View_About& aboutDialog){
 	this->aboutDialog = &aboutDialog;
 }
 
-void GrubCustomizer::setThreadController(ThreadController& threadController) {
-	this->threadController = &threadController;
-}
-
-void GrubCustomizer::setEntryNameMapper(Mapper_EntryName& mapper) {
-	this->entryNameMapper = &mapper;
-}
-
-ThreadController& GrubCustomizer::getThreadController() {
-	if (this->threadController == NULL) {
-		throw INCOMPLETE;
-	}
-	return *this->threadController;
-}
-
 void GrubCustomizer::showAboutDialog(){
 	this->aboutDialog->show();
-}
-
-
-void GrubCustomizer::showInstallDialog(){
-	installDlg->show();
-}
-
-void GrubCustomizer::installGrub(std::string device){
-	this->env.activeThreadCount++;
-	installer->threadable_install(device);
-	this->env.activeThreadCount--;
-	if (this->env.activeThreadCount == 0 && this->env.quit_requested) {
-		this->getAllControllers().mainController->exitAction(true);
-	}
-}
-
-void GrubCustomizer::showMessageGrubInstallCompleted(std::string const& msg){
-	installDlg->showMessageGrubInstallCompleted(msg);
 }
 

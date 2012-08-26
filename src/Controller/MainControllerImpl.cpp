@@ -287,11 +287,7 @@ void MainControllerImpl::showAboutAction(){
 }
 
 void MainControllerImpl::showInstallerAction(){
-	this->getAllControllers().masterclass_deprecated->showInstallDialog();
-}
-
-void MainControllerImpl::showMessageGrubInstallCompleted(std::string const& msg){
-	this->getAllControllers().masterclass_deprecated->showMessageGrubInstallCompleted(msg);
+	this->getAllControllers().installerController->showAction();
 }
 
 void MainControllerImpl::showEntryEditorAction(void* rule) {
