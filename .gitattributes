@@ -166,8 +166,6 @@ src/lib/str_replace.cpp -text
 src/lib/str_replace.h -text
 src/main/gtk-client.cpp -text
 src/main/proxy.cpp -text
-src/presenter/eventListener.cpp -text
-src/presenter/eventListener.h -text
 translation/complile_all.sh -text
 translation/translation-ar.mo -text svneol=unset#unset
 translation/translation-ar.po -text
