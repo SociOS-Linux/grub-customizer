@@ -18,21 +18,21 @@
 
 #include "Chainloader.h"
 
-const char* ContentParserChainloader::_regex = "\
+const char* ContentParser_Chainloader::_regex = "\
 [ \t]*set[ \t]+root='\\(hd([0-9]+)[^0-9]+([0-9]+)\\)'\\n\
 [ \t]*search[ \t]+--no-floppy[ \t]+--fs-uuid[ \t]+--set(?:=root)?[ \t]+([-0-9a-fA-F]+)\\n\
 (.|\\n)*\
 [ \t]*chainloader[ \t]+\\+1\\n?[ \t]*\
 ";
 
-ContentParserChainloader::ContentParserChainloader(Model_DeviceMap& deviceMap)
+ContentParser_Chainloader::ContentParser_Chainloader(Model_DeviceMap& deviceMap)
 	: deviceMap(deviceMap)
 {}
 
-void ContentParserChainloader::parse(std::string const& sourceCode) {
+void ContentParser_Chainloader::parse(std::string const& sourceCode) {
 	this->sourceCode = sourceCode;
 	try {
-		std::vector<std::string> result = Regex::match(ContentParserChainloader::_regex, this->sourceCode);
+		std::vector<std::string> result = Regex::match(ContentParser_Chainloader::_regex, this->sourceCode);
 
 		//check partition indices by uuid
 		Model_DeviceMap_PartitionIndex pIndex = deviceMap.getHarddriveIndexByPartitionUuid(result[3]);
@@ -46,18 +46,18 @@ void ContentParserChainloader::parse(std::string const& sourceCode) {
 	}
 }
 
-std::string ContentParserChainloader::buildSource() const {
+std::string ContentParser_Chainloader::buildSource() const {
 	Model_DeviceMap_PartitionIndex pIndex = deviceMap.getHarddriveIndexByPartitionUuid(this->options.at("partition_uuid"));
 	std::map<int, std::string> newValues;
 	newValues[1] = pIndex.hddNum;
 	newValues[2] = pIndex.partNum;
 	newValues[3] = this->options.at("partition_uuid");
 
-	std::string result = Regex::replace(ContentParserChainloader::_regex, this->sourceCode, newValues);
+	std::string result = Regex::replace(ContentParser_Chainloader::_regex, this->sourceCode, newValues);
 
 	//check the new string. If they aren't matchable anymore (evil input), do a rollback
 	try {
-		Regex::match(ContentParserChainloader::_regex, result);
+		Regex::match(ContentParser_Chainloader::_regex, result);
 	} catch (Regex::Exception const& e) {
 		this->log("Ignoring data - doesn't match", Logger::ERROR);
 		result = this->sourceCode;
@@ -65,7 +65,7 @@ std::string ContentParserChainloader::buildSource() const {
 	return result;
 }
 
-void ContentParserChainloader::buildDefaultEntry(std::string const& partition_uuid) {
+void ContentParser_Chainloader::buildDefaultEntry(std::string const& partition_uuid) {
 	std::string defaultEntry = "\
 	set root='(hd0,0)'\n\
 	search --no-floppy --fs-uuid --set 000000000000\n\
@@ -77,5 +77,5 @@ void ContentParserChainloader::buildDefaultEntry(std::string const& partition_uu
 	newValues[2] = pIndex.partNum;
 	newValues[3] = partition_uuid;
 
-	this->parse(Regex::replace(ContentParserChainloader::_regex, defaultEntry, newValues));
+	this->parse(Regex::replace(ContentParser_Chainloader::_regex, defaultEntry, newValues));
 }

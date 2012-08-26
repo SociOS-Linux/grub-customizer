@@ -22,12 +22,12 @@
 #include "../../Model/DeviceMap.h"
 #include "Abstract.h"
 
-class ContentParserLinux : public ContentParserAbstract {
+class ContentParser_Linux : public ContentParser_Abstract {
 	static const char* _regex;
 	Model_DeviceMap& deviceMap;
 	std::string sourceCode;
 public:
-	ContentParserLinux(Model_DeviceMap& deviceMap);
+	ContentParser_Linux(Model_DeviceMap& deviceMap);
 	void parse(std::string const& sourceCode);
 	std::string buildSource() const;
 	void buildDefaultEntry(std::string const& partition_uuid);

@@ -18,7 +18,7 @@
 
 #include "Linux.h"
 
-const char* ContentParserLinux::_regex = "\
+const char* ContentParser_Linux::_regex = "\
 [ \t]*set root='\\(hd([0-9]+)[^0-9]+([0-9]+)\\)'\\n\
 [ \t]*search[ \t]+--no-floppy[ \t]+--fs-uuid[ \t]+--set(?:=root)? ([-0-9a-fA-F]+)\\n\
 ([ \t]*echo[ \t]+.*\n)?\
@@ -27,14 +27,14 @@ const char* ContentParserLinux::_regex = "\
 [ \t]*initrd[ \t]+([^ \\n]+)[ \\n\t]*$\
 ";
 
-ContentParserLinux::ContentParserLinux(Model_DeviceMap& deviceMap)
+ContentParser_Linux::ContentParser_Linux(Model_DeviceMap& deviceMap)
 	: deviceMap(deviceMap)
 {}
 
-void ContentParserLinux::parse(std::string const& sourceCode) {
+void ContentParser_Linux::parse(std::string const& sourceCode) {
 	this->sourceCode = sourceCode;
 	try {
-		std::vector<std::string> result = Regex::match(ContentParserLinux::_regex, sourceCode);
+		std::vector<std::string> result = Regex::match(ContentParser_Linux::_regex, sourceCode);
 
 		//check partition indices by uuid
 		Model_DeviceMap_PartitionIndex pIndex = deviceMap.getHarddriveIndexByPartitionUuid(result[6]);
@@ -55,7 +55,7 @@ void ContentParserLinux::parse(std::string const& sourceCode) {
 	}
 }
 
-std::string ContentParserLinux::buildSource() const {
+std::string ContentParser_Linux::buildSource() const {
 	Model_DeviceMap_PartitionIndex pIndex = deviceMap.getHarddriveIndexByPartitionUuid(this->options.at("partition_uuid"));
 	std::map<int, std::string> newValues;
 	newValues[1] = pIndex.hddNum;
@@ -65,11 +65,11 @@ std::string ContentParserLinux::buildSource() const {
 	newValues[6] = this->options.at("partition_uuid");
 	newValues[8] = this->options.at("initramfs");
 
-	std::string result = Regex::replace(ContentParserLinux::_regex, this->sourceCode, newValues);
+	std::string result = Regex::replace(ContentParser_Linux::_regex, this->sourceCode, newValues);
 
 	//check the new string. If they aren't matchable anymore (evil input), do a rollback
 	try {
-		Regex::match(ContentParserLinux::_regex, result);
+		Regex::match(ContentParser_Linux::_regex, result);
 	} catch (Regex::Exception const& e) {
 		this->log("Ignoring data - doesn't match", Logger::ERROR);
 		result = this->sourceCode;
@@ -77,7 +77,7 @@ std::string ContentParserLinux::buildSource() const {
 	return result;
 }
 
-void ContentParserLinux::buildDefaultEntry(std::string const& partition_uuid) {
+void ContentParser_Linux::buildDefaultEntry(std::string const& partition_uuid) {
 	std::string defaultEntry = "\
 	set root='(hd0,0)'\n\
 	search --no-floppy --fs-uuid --set 000000000000\n\
@@ -90,5 +90,5 @@ void ContentParserLinux::buildDefaultEntry(std::string const& partition_uuid) {
 	newValues[3] = partition_uuid;
 	newValues[6] = partition_uuid;
 
-	this->parse(Regex::replace(ContentParserLinux::_regex, defaultEntry, newValues));
+	this->parse(Regex::replace(ContentParser_Linux::_regex, defaultEntry, newValues));
 }

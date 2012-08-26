@@ -32,7 +32,7 @@
 #include "../Model/FbResolutionsGetter.h"
 #include "../Model/DeviceDataList.h"
 #include "ThreadController.h"
-#include "../interface/contentParserFactory.h"
+#include "../lib/ContentParserFactory.h"
 
 #include "../Controller/ControllerAbstract.h"
 

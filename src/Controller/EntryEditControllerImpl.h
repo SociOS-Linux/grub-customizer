@@ -33,7 +33,7 @@
 
 #include "../Model/ListCfg.h"
 #include "../Model/DeviceDataList.h"
-#include "../interface/contentParserFactory.h"
+#include "../lib/ContentParserFactory.h"
 
 #include "../lib/CommonClass.h"
 #include "../Controller/ControllerAbstract.h"

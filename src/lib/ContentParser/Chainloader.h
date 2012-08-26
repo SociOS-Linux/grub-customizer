@@ -16,23 +16,21 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CONTENTPARSERFACTORY_H_
-#define CONTENTPARSERFACTORY_H_
-#include "contentParser.h"
-#include <list>
-#include <string>
+#ifndef CONTENT_PARSER_CHAINLOADER_H_
+#define CONTENT_PARSER_CHAINLOADER_H_
 
-class ContentParserFactory {
+#include "../regex.h"
+#include "../../Model/DeviceMap.h"
+#include "Abstract.h"
+
+class ContentParser_Chainloader : public ContentParser_Abstract {
+	static const char* _regex;
+	Model_DeviceMap& deviceMap;
+	std::string sourceCode;
 public:
-	enum Exception {
-		CREATION_FAILED
-	};
-	virtual inline ~ContentParserFactory() {};
-
-	virtual ContentParser* create(std::string const& sourceCode) = 0;
-	virtual ContentParser* createByName(std::string const& name) = 0;
-	virtual std::list<std::string> const& getNames() const = 0;
-	virtual std::string getNameByInstance(ContentParser const& instance) const = 0;
+	ContentParser_Chainloader(Model_DeviceMap& deviceMap);
+	void parse(std::string const& sourceCode);
+	std::string buildSource() const;
+	void buildDefaultEntry(std::string const& partition_uuid);
 };
-
-#endif /* CONTENTPARSERFACTORY_H_ */
+#endif /* CONTENT_PARSER_CHAINLOADER_H_ */

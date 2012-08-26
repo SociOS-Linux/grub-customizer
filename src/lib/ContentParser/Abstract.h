@@ -16,20 +16,22 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "Abstract.h"
+#ifndef CONTENT_PARSER_ABSTRACT_H_
+#define CONTENT_PARSER_ABSTRACT_H_
+#include <map>
+#include <string>
+#include "../../lib/ContentParser.h"
+#include "../../lib/CommonClass.h"
 
-std::map<std::string, std::string> ContentParserAbstract::getOptions() const {
-	return this->options;
-}
+class ContentParser_Abstract : public ContentParser, public CommonClass {
+protected:
+	std::map<std::string, std::string> options;
+public:
+	virtual inline ~ContentParser_Abstract() {};
+	std::map<std::string, std::string> getOptions() const;
+	std::string getOption(std::string const& name) const;
+	void setOption(std::string const& name, std::string const& value);
+	void setOptions(std::map<std::string, std::string> const& options);
+};
 
-std::string ContentParserAbstract::getOption(std::string const& name) const {
-	return this->options.at(name);
-}
-
-void ContentParserAbstract::setOption(std::string const& name, std::string const& value) {
-	this->options[name] = value;
-}
-
-void ContentParserAbstract::setOptions(std::map<std::string, std::string> const& options) {
-	this->options = options;
-}
+#endif /* CONTENT_PARSER_ABSTRACT_H_ */

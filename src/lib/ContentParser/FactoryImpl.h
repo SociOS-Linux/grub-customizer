@@ -16,22 +16,25 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CONTENT_PARSER_ABSTRACT_H_
-#define CONTENT_PARSER_ABSTRACT_H_
-#include <map>
-#include <string>
-#include "../../interface/contentParser.h"
-#include "../../lib/CommonClass.h"
+#ifndef CONTENTPARSERFACTORYIMPL_H_
+#define CONTENTPARSERFACTORYIMPL_H_
+#include "../../lib/ContentParserFactory.h"
+#include "../../lib/ContentParser.h"
+#include <list>
+#include <cassert>
 
-class ContentParserAbstract : public ContentParser, public CommonClass {
-protected:
-	std::map<std::string, std::string> options;
+class ContentParser_FactoryImpl : public ContentParserFactory {
+	std::list<ContentParser*> parsers;
+	std::list<std::string> names;
 public:
-	virtual inline ~ContentParserAbstract() {};
-	std::map<std::string, std::string> getOptions() const;
-	std::string getOption(std::string const& name) const;
-	void setOption(std::string const& name, std::string const& value);
-	void setOptions(std::map<std::string, std::string> const& options);
+	enum Exception {
+		PARSER_NOT_FOUND
+	};
+	void registerParser(ContentParser& parser, std::string const& name);
+	ContentParser* create(std::string const& sourceCode);
+	ContentParser* createByName(std::string const& name);
+	std::list<std::string> const& getNames() const;
+	std::string getNameByInstance(ContentParser const& instance) const;
 };
 
-#endif /* CONTENT_PARSER_ABSTRACT_H_ */
+#endif /* CONTENTPARSERFACTORYIMPL_H_ */

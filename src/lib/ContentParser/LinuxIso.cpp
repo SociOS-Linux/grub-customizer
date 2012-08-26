@@ -17,7 +17,7 @@
  */
 #include "LinuxIso.h"
 
-const char* ContentParserLinuxIso::_regex = "\
+const char* ContentParser_LinuxIso::_regex = "\
 [ \t]*set root='\\(hd([0-9]+)[^0-9]+([0-9]+)\\)'\\n\
 [ \t]*search[ \\t]+--no-floppy[ \\t]+--fs-uuid[ \\t]+--set(?:=root)? ([-0-9a-fA-F]+)\\n\
 [ \t]*loopback[ \\t]+loop[ \t]+([^ \\t]+)\\n\
@@ -25,14 +25,14 @@ const char* ContentParserLinuxIso::_regex = "\
 [ \t]*initrd[ \\t]+\\(loop\\)([^ \\t]+)\\n\
 ";
 
-ContentParserLinuxIso::ContentParserLinuxIso(Model_DeviceMap& deviceMap)
+ContentParser_LinuxIso::ContentParser_LinuxIso(Model_DeviceMap& deviceMap)
 	: deviceMap(deviceMap)
 {}
 
-void ContentParserLinuxIso::parse(std::string const& sourceCode) {
+void ContentParser_LinuxIso::parse(std::string const& sourceCode) {
 	this->sourceCode = sourceCode;
 	try {
-		std::vector<std::string> result = Regex::match(ContentParserLinuxIso::_regex, this->sourceCode);
+		std::vector<std::string> result = Regex::match(ContentParser_LinuxIso::_regex, this->sourceCode);
 
 		//check partition indices by uuid
 		Model_DeviceMap_PartitionIndex pIndex = deviceMap.getHarddriveIndexByPartitionUuid(result[3]);
@@ -56,7 +56,7 @@ void ContentParserLinuxIso::parse(std::string const& sourceCode) {
 	}
 }
 
-std::string ContentParserLinuxIso::buildSource() const {
+std::string ContentParser_LinuxIso::buildSource() const {
 	Model_DeviceMap_PartitionIndex pIndex = deviceMap.getHarddriveIndexByPartitionUuid(this->options.at("partition_uuid"));
 	std::map<int, std::string> newValues;
 	newValues[1] = pIndex.hddNum;
@@ -69,11 +69,11 @@ std::string ContentParserLinuxIso::buildSource() const {
 	newValues[8] = this->options.at("other_params");
 	newValues[9] = this->options.at("initramfs");
 
-	std::string result = Regex::replace(ContentParserLinuxIso::_regex, this->sourceCode, newValues);
+	std::string result = Regex::replace(ContentParser_LinuxIso::_regex, this->sourceCode, newValues);
 
 	//check the new string. If they aren't matchable anymore (evil input), do a rollback
 	try {
-		Regex::match(ContentParserLinuxIso::_regex, result);
+		Regex::match(ContentParser_LinuxIso::_regex, result);
 	} catch (Regex::Exception const& e) {
 		this->log("Ignoring data - doesn't match", Logger::ERROR);
 		result = this->sourceCode;
@@ -81,7 +81,7 @@ std::string ContentParserLinuxIso::buildSource() const {
 	return result;
 }
 
-void ContentParserLinuxIso::buildDefaultEntry(std::string const& partition_uuid) {
+void ContentParser_LinuxIso::buildDefaultEntry(std::string const& partition_uuid) {
 	std::string defaultEntry = "\
 	set root='(hd0,0)'\n\
 	search --no-floppy --fs-uuid --set 000000000000000000\n\
@@ -99,5 +99,5 @@ void ContentParserLinuxIso::buildDefaultEntry(std::string const& partition_uuid)
 //	newValues[7] = LOCALE
 //	newValues[8] = INITRD
 
-	this->parse(Regex::replace(ContentParserLinuxIso::_regex, defaultEntry, newValues));
+	this->parse(Regex::replace(ContentParser_LinuxIso::_regex, defaultEntry, newValues));
 }

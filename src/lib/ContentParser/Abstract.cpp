@@ -16,22 +16,20 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CONTENT_PARSER_MEMTEST_H_
-#define CONTENT_PARSER_MEMTEST_H_
-
-#include "../regex.h"
-#include "../../Model/DeviceMap.h"
 #include "Abstract.h"
 
-class ContentParserMemtest : public ContentParserAbstract {
-	static const char* _regex;
-	Model_DeviceMap& deviceMap;
-	std::string sourceCode;
-public:
-	ContentParserMemtest(Model_DeviceMap& deviceMap);
-	void parse(std::string const& sourceCode);
-	std::string buildSource() const;
+std::map<std::string, std::string> ContentParser_Abstract::getOptions() const {
+	return this->options;
+}
 
-	void buildDefaultEntry(std::string const& partition_uuid);
-};
-#endif /* CONTENT_PARSER_MEMTEST_H_ */
+std::string ContentParser_Abstract::getOption(std::string const& name) const {
+	return this->options.at(name);
+}
+
+void ContentParser_Abstract::setOption(std::string const& name, std::string const& value) {
+	this->options[name] = value;
+}
+
+void ContentParser_Abstract::setOptions(std::map<std::string, std::string> const& options) {
+	this->options = options;
+}

@@ -16,22 +16,23 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CONTENT_PARSER_LINUXISO_H_
-#define CONTENT_PARSER_LINUXISO_H_
+#ifndef CONTENTPARSERFACTORY_H_
+#define CONTENTPARSERFACTORY_H_
+#include "ContentParser.h"
+#include <list>
+#include <string>
 
-#include "../regex.h"
-#include "../../Model/DeviceMap.h"
-#include "Abstract.h"
-
-class ContentParserLinuxIso : public ContentParserAbstract {
-	static const char* _regex;
-	Model_DeviceMap& deviceMap;
-	std::string sourceCode;
+class ContentParserFactory {
 public:
-	ContentParserLinuxIso(Model_DeviceMap& deviceMap);
-	void parse(std::string const& sourceCode);
-	std::string buildSource() const;
+	enum Exception {
+		CREATION_FAILED
+	};
+	virtual inline ~ContentParserFactory() {};
 
-	void buildDefaultEntry(std::string const& partition_uuid);
+	virtual ContentParser* create(std::string const& sourceCode) = 0;
+	virtual ContentParser* createByName(std::string const& name) = 0;
+	virtual std::list<std::string> const& getNames() const = 0;
+	virtual std::string getNameByInstance(ContentParser const& instance) const = 0;
 };
-#endif /* CONTENT_PARSER_LINUXISO_H_ */
+
+#endif /* CONTENTPARSERFACTORY_H_ */

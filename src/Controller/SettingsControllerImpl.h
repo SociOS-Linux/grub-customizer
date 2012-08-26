@@ -18,7 +18,7 @@
 #include "../Model/FbResolutionsGetter.h"
 #include "../Model/DeviceDataList.h"
 #include "ThreadController.h"
-#include "../interface/contentParserFactory.h"
+#include "../lib/ContentParserFactory.h"
 #include "../Mapper/EntryName.h"
 
 #include "../Controller/ControllerAbstract.h"

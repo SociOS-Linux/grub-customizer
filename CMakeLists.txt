@@ -64,12 +64,12 @@ add_executable(grub-customizer
 	src/main/gtk-client.cpp
 	src/lib/md5.cpp
 	src/lib/str_replace.cpp
-	src/lib/contentParser/FactoryImpl.cpp
-	src/lib/contentParser/Linux.cpp
-	src/lib/contentParser/Chainloader.cpp
-	src/lib/contentParser/LinuxIso.cpp
-	src/lib/contentParser/Memtest.cpp
-	src/lib/contentParser/Abstract.cpp
+	src/lib/ContentParser/FactoryImpl.cpp
+	src/lib/ContentParser/Linux.cpp
+	src/lib/ContentParser/Chainloader.cpp
+	src/lib/ContentParser/LinuxIso.cpp
+	src/lib/ContentParser/Memtest.cpp
+	src/lib/ContentParser/Abstract.cpp
 	src/lib/Mutex/GLib.cpp
 	src/Controller/GLib/ThreadController.cpp
 	src/lib/CommonClass.cpp

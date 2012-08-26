@@ -16,21 +16,22 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CONTENT_PARSER_CHAINLOADER_H_
-#define CONTENT_PARSER_CHAINLOADER_H_
+#ifndef CONTENT_PARSER_MEMTEST_H_
+#define CONTENT_PARSER_MEMTEST_H_
 
 #include "../regex.h"
 #include "../../Model/DeviceMap.h"
 #include "Abstract.h"
 
-class ContentParserChainloader : public ContentParserAbstract {
+class ContentParser_Memtest : public ContentParser_Abstract {
 	static const char* _regex;
 	Model_DeviceMap& deviceMap;
 	std::string sourceCode;
 public:
-	ContentParserChainloader(Model_DeviceMap& deviceMap);
+	ContentParser_Memtest(Model_DeviceMap& deviceMap);
 	void parse(std::string const& sourceCode);
 	std::string buildSource() const;
+
 	void buildDefaultEntry(std::string const& partition_uuid);
 };
-#endif /* CONTENT_PARSER_CHAINLOADER_H_ */
+#endif /* CONTENT_PARSER_MEMTEST_H_ */

@@ -17,20 +17,20 @@
  */
 #include "Memtest.h"
 
-const char* ContentParserMemtest::_regex = "\
+const char* ContentParser_Memtest::_regex = "\
 [ \t]*set root='\\(hd([0-9]+)[^0-9]+([0-9]+)\\)'\\n\
 [ \t]*search[ \t]+--no-floppy[ \t]+--fs-uuid[ \t]+--set(?:=root)? ([-0-9a-fA-F]+)\\n\
 [ \t]*linux16[ \t]*([^ \\t\\n]+).*$\
 ";
 
-ContentParserMemtest::ContentParserMemtest(Model_DeviceMap& deviceMap)
+ContentParser_Memtest::ContentParser_Memtest(Model_DeviceMap& deviceMap)
 	: deviceMap(deviceMap)
 {}
 
-void ContentParserMemtest::parse(std::string const& sourceCode) {
+void ContentParser_Memtest::parse(std::string const& sourceCode) {
 	this->sourceCode = sourceCode;
 	try {
-		std::vector<std::string> result = Regex::match(ContentParserMemtest::_regex, this->sourceCode);
+		std::vector<std::string> result = Regex::match(ContentParser_Memtest::_regex, this->sourceCode);
 
 
 		//check partition indices by uuid
@@ -46,7 +46,7 @@ void ContentParserMemtest::parse(std::string const& sourceCode) {
 	}
 }
 
-std::string ContentParserMemtest::buildSource() const {
+std::string ContentParser_Memtest::buildSource() const {
 	Model_DeviceMap_PartitionIndex pIndex = deviceMap.getHarddriveIndexByPartitionUuid(this->options.at("partition_uuid"));
 	std::map<int, std::string> newValues;
 	newValues[1] = pIndex.hddNum;
@@ -54,11 +54,11 @@ std::string ContentParserMemtest::buildSource() const {
 	newValues[3] = this->options.at("partition_uuid");
 	newValues[4] = this->options.at("memtest_image");
 
-	std::string result = Regex::replace(ContentParserMemtest::_regex, this->sourceCode, newValues);
+	std::string result = Regex::replace(ContentParser_Memtest::_regex, this->sourceCode, newValues);
 
 	//check the new string. If they aren't matchable anymore (evil input), do a rollback
 	try {
-		Regex::match(ContentParserMemtest::_regex, result);
+		Regex::match(ContentParser_Memtest::_regex, result);
 	} catch (Regex::Exception const& e) {
 		this->log("Ignoring data - doesn't match", Logger::ERROR);
 		result = this->sourceCode;
@@ -66,7 +66,7 @@ std::string ContentParserMemtest::buildSource() const {
 	return result;
 }
 
-void ContentParserMemtest::buildDefaultEntry(std::string const& partition_uuid) {
+void ContentParser_Memtest::buildDefaultEntry(std::string const& partition_uuid) {
 	std::string defaultEntry = "\
 	set root='(hd0,0)'\n\
 	search --no-floppy --fs-uuid --set 000000000000\n\
@@ -77,5 +77,5 @@ void ContentParserMemtest::buildDefaultEntry(std::string const& partition_uuid) 
 	newValues[2] = pIndex.partNum;
 	newValues[3] = partition_uuid;
 
-	this->parse(Regex::replace(ContentParserMemtest::_regex, defaultEntry, newValues));
+	this->parse(Regex::replace(ContentParser_Memtest::_regex, defaultEntry, newValues));
 }
