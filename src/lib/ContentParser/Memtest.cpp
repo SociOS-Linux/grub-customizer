@@ -36,13 +36,13 @@ void ContentParser_Memtest::parse(std::string const& sourceCode) {
 		//check partition indices by uuid
 		Model_DeviceMap_PartitionIndex pIndex = deviceMap.getHarddriveIndexByPartitionUuid(result[3]);
 		if (pIndex.hddNum != result[1] || pIndex.partNum != result[2]){
-			throw ContentParser::PARSING_FAILED;
+			throw ParserException("parsing failed - hdd num check", __FILE__, __LINE__);
 		}
 
 		this->options["partition_uuid"] = result[3];
 		this->options["memtest_image"] = result[4];
-	} catch (Regex::Exception const& e) {
-		throw ContentParser::PARSING_FAILED;
+	} catch (RegExNotMatchedException const& e) {
+		throw ParserException("parsing failed - RegEx not matched", __FILE__, __LINE__);
 	}
 }
 
@@ -59,7 +59,7 @@ std::string ContentParser_Memtest::buildSource() const {
 	//check the new string. If they aren't matchable anymore (evil input), do a rollback
 	try {
 		Regex::match(ContentParser_Memtest::_regex, result);
-	} catch (Regex::Exception const& e) {
+	} catch (RegExNotMatchedException const& e) {
 		this->log("Ignoring data - doesn't match", Logger::ERROR);
 		result = this->sourceCode;
 	}

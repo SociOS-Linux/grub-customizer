@@ -38,6 +38,8 @@
 #include "../lib/CommonClass.h"
 #include "../Controller/ControllerAbstract.h"
 
+#include "../lib/Exception.h"
+
 
 class EntryEditControllerImpl : public EntryEditController, public ControllerAbstract {
 	Model_Env& env;

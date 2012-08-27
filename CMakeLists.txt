@@ -91,6 +91,7 @@ add_executable(grub-customizer
 	src/Controller/TrashControllerImpl.cpp
 	src/Controller/InstallerControllerImpl.cpp
 	src/Controller/AboutControllerImpl.cpp
+	src/lib/Exception.cpp
 )
 
 
@@ -113,6 +114,7 @@ add_executable(grubcfg-proxy
 	src/Model/PscriptnameTranslator.cpp
 	src/Model/ProxyScriptData.cpp
 	src/Model/EntryPathBuilderImpl.cpp
+	src/lib/Exception.cpp
 )
 
 target_link_libraries(grub-customizer 

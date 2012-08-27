@@ -42,6 +42,8 @@
 #include "../lib/Mutex.h"
 #include "../lib/CommonClass.h"
 
+#include "../lib/Exception.h"
+
 
 class Model_ListCfg : public CommonClass {
 	MainController* eventListener;
@@ -56,13 +58,6 @@ public:
 	void setEventListener(MainController& eventListener);
 	void setMutex(Mutex& mutex);
 	void setLogger(Logger& logger);
-	
-	enum Exception {
-		GRUB_CFG_DIR_NOT_FOUND,
-		GRUB_CMD_EXEC_FAILED,
-		NO_MOVE_TARGET_FOUND,
-		MISSING_MUTEX
-	};
 
 	Model_Proxylist proxies;
 	Model_Repository repository;

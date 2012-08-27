@@ -154,25 +154,23 @@ Model_Proxy* Model_Proxylist::getProxyByRule(Model_Rule* rule, std::list<Model_R
 		else {
 			try {
 				return this->getProxyByRule(rule, rule_iter->subRules, parentProxy);
-			} catch (Model_Proxylist::Exception const& e) {
-				if (e != NO_RELATED_PROXY_FOUND)
-					throw e;
+			} catch (ItemNotFoundException const& e) {
+				// do nothing
 			}
 		}
 	}
-	throw NO_RELATED_PROXY_FOUND;
+	throw ItemNotFoundException("proxy by rule not found", __FILE__, __LINE__);
 }
 
 Model_Proxy* Model_Proxylist::getProxyByRule(Model_Rule* rule) {
 	for (Model_Proxylist::iterator proxy_iter = this->begin(); proxy_iter != this->end(); proxy_iter++){
 		try {
 			return this->getProxyByRule(rule, proxy_iter->rules, *proxy_iter);
-		} catch (Model_Proxylist::Exception const& e) {
-			if (e != NO_RELATED_PROXY_FOUND)
-				throw e;
+		} catch (ItemNotFoundException const& e) {
+			// do nothing
 		}
 	}
-	throw NO_RELATED_PROXY_FOUND;
+	throw ItemNotFoundException("proxy by rule not found", __FILE__, __LINE__);
 }
 
 std::list<Model_Rule>::iterator Model_Proxylist::moveRuleToNewProxy(Model_Rule& rule, int direction, Model_Script* dataSource) {
@@ -221,36 +219,32 @@ std::list<Model_Rule>::iterator Model_Proxylist::getNextVisibleRule(std::list<Mo
 	while (proxyIter != this->end()) {
 		try {
 			return proxyIter->getNextVisibleRule(base, direction);
-		} catch (Model_Proxy::Exception const& e) {
+		} catch (NoMoveTargetException const& e) {
 
 			if (hasParent) {
-				throw Model_Proxylist::NO_MOVE_TARGET_FOUND;
+				throw NoMoveTargetException("next visible rule not found", __FILE__, __LINE__);
 			}
 
-			if (e == Model_Proxy::NO_MOVE_TARGET_FOUND) {
-				if (direction == 1) {
-					proxyIter++;
-					if (proxyIter == this->end()) {
-						throw Model_Proxylist::NO_MOVE_TARGET_FOUND;
-					}
-					base = proxyIter->rules.begin();
-				} else {
-					proxyIter--;
-					if (proxyIter == this->end()) {
-						throw Model_Proxylist::NO_MOVE_TARGET_FOUND;
-					}
-					base = proxyIter->rules.end();
-					base--;
+			if (direction == 1) {
+				proxyIter++;
+				if (proxyIter == this->end()) {
+					throw NoMoveTargetException("next visible rule not found", __FILE__, __LINE__);
 				}
-				if (base->isVisible) {
-					return base;
-				}
+				base = proxyIter->rules.begin();
 			} else {
-				throw e;
+				proxyIter--;
+				if (proxyIter == this->end()) {
+					throw NoMoveTargetException("next visible rule not found", __FILE__, __LINE__);
+				}
+				base = proxyIter->rules.end();
+				base--;
+			}
+			if (base->isVisible) {
+				return base;
 			}
 		}
 	}
-	throw Model_Proxylist::NO_MOVE_TARGET_FOUND;
+	throw NoMoveTargetException("next visible rule not found", __FILE__, __LINE__);
 }
 
 std::list<Model_Proxy>::iterator Model_Proxylist::getIter(Model_Proxy const* proxy) {

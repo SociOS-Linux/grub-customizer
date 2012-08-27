@@ -71,18 +71,14 @@ void EnvEditorControllerImpl::switchPartitionAction(std::string const& newPartit
 			this->generateSubmountpointSelection(PARTCHOOSER_MOUNTPOINT);
 			this->showAction();
 		}
-		catch (Model_MountTable_Mountpoint::Exception const& e) {
-			if (e == Model_MountTable_Mountpoint::MOUNT_FAILED){
-				this->view->showErrorMessage(View_EnvEditor::MOUNT_FAILED);
-				this->switchPartitionAction("");
-			}
+		catch (MountException const& e) {
+			this->view->showErrorMessage(View_EnvEditor::MOUNT_FAILED);
+			this->switchPartitionAction("");
 		}
-		catch (Model_MountTable::Exception const& e) {
-			if (e == Model_MountTable::MOUNT_ERR_NO_FSTAB){
-				this->view->showErrorMessage(View_EnvEditor::MOUNT_ERR_NO_FSTAB);
-				mountTable->getEntryRefByMountpoint(PARTCHOOSER_MOUNTPOINT).umount();
-				this->switchPartitionAction("");
-			}
+		catch (MissingFstabException const& e) {
+			this->view->showErrorMessage(View_EnvEditor::MOUNT_ERR_NO_FSTAB);
+			mountTable->getEntryRefByMountpoint(PARTCHOOSER_MOUNTPOINT).umount();
+			this->switchPartitionAction("");
 		}
 	} else {
 		this->env.init(env.burgMode ? Model_Env::BURG_MODE : Model_Env::GRUB_MODE, selectedDevice);
@@ -121,11 +117,11 @@ void EnvEditorControllerImpl::exitAction() {
 void EnvEditorControllerImpl::mountSubmountpointAction(std::string const& submountpoint){
 	try {
 		this->mountTable->getEntryRefByMountpoint(PARTCHOOSER_MOUNTPOINT + submountpoint).mount();
-	}
-	catch (Model_MountTable_Mountpoint::Exception const& e){
-		if (e == Model_MountTable_Mountpoint::MOUNT_FAILED){
-			this->view->showErrorMessage(View_EnvEditor::SUB_MOUNT_FAILED);
-		}
+	} catch (MountException const& e){
+		this->view->showErrorMessage(View_EnvEditor::SUB_MOUNT_FAILED);
+		this->view->setSubmountpointSelectionState(submountpoint, false);
+		this->view->show();
+	} catch (SystemException const& e){
 		this->view->setSubmountpointSelectionState(submountpoint, false);
 		this->view->show();
 	}
@@ -134,11 +130,11 @@ void EnvEditorControllerImpl::mountSubmountpointAction(std::string const& submou
 void EnvEditorControllerImpl::umountSubmountpointAction(std::string const& submountpoint){
 	try {
 		this->mountTable->getEntryRefByMountpoint(PARTCHOOSER_MOUNTPOINT + submountpoint).umount();
-	}
-	catch (Model_MountTable_Mountpoint::Exception const& e){
-		if (e == Model_MountTable_Mountpoint::UMOUNT_FAILED){
-			this->view->showErrorMessage(View_EnvEditor::SUB_UMOUNT_FAILED);
-		}
+	} catch (UMountException const& e){
+		this->view->showErrorMessage(View_EnvEditor::SUB_UMOUNT_FAILED);
+		this->view->setSubmountpointSelectionState(submountpoint, true);
+		this->view->show();
+	} catch (SystemException const& e){
 		this->view->setSubmountpointSelectionState(submountpoint, true);
 		this->view->show();
 	}

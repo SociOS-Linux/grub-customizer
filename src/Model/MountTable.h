@@ -23,13 +23,10 @@
 #include <string>
 #include <cstdlib>
 #include "../lib/CommonClass.h"
+#include "../lib/Exception.h"
 
 
 struct Model_MountTable_Mountpoint {
-	enum Exception {
-		MOUNT_FAILED,
-		UMOUNT_FAILED
-	};
 	std::string device, mountpoint, fileSystem, options, dump, pass;
 	bool isMounted;
 	bool isValid(std::string const& prefix = "", bool isRoot = false) const;
@@ -44,10 +41,6 @@ struct Model_MountTable_Mountpoint {
 class Model_MountTable : public std::list<Model_MountTable_Mountpoint>, public CommonClass {
 	bool loaded;
 	public:
-	enum Exception {
-		MOUNT_ERR_NO_FSTAB,
-		MOUNTPOINT_NOT_FOUND
-	};
 	Model_MountTable(FILE* source, std::string const& rootDirectory, bool default_isMounted_flag = false);
 	Model_MountTable(std::string const& rootDirectory);
 	Model_MountTable();

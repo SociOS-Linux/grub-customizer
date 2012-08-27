@@ -27,7 +27,7 @@ MainControllerImpl::MainControllerImpl(Model_Env& env)
 	 env(env), config_has_been_different_on_startup_but_unsaved(false),
 	 modificationsUnsaved(false), quit_requested(false), activeThreadCount(0),
 	 is_loading(false), contentParserFactory(NULL), currentContentParser(NULL),
-	 threadController(NULL), thrownException(Model_ListCfg::GRUB_CMD_EXEC_FAILED),
+	 threadController(NULL), thrownException(""),
 	 entryNameMapper(NULL)
 {
 }
@@ -78,7 +78,7 @@ void MainControllerImpl::setEntryNameMapper(Mapper_EntryName& mapper) {
 
 ThreadController& MainControllerImpl::getThreadController() {
 	if (this->threadController == NULL) {
-		throw INCOMPLETE;
+		throw ConfigException("missing ThreadController", __FILE__, __LINE__);
 	}
 	return *this->threadController;
 }
@@ -113,7 +113,7 @@ void MainControllerImpl::init(){
 		or !threadController
 		or !entryNameMapper
 	) {
-		throw INCOMPLETE;
+		throw ConfigException("init(): missing some objects", __FILE__, __LINE__);
 	}
 	this->log("initializing (w/o specified bootloader type)…", Logger::IMPORTANT_EVENT);
 	savedListCfg->verbose = false;
@@ -218,7 +218,7 @@ void MainControllerImpl::loadThreadedAction(bool preserveConfig){
 			this->log("loading grub list", Logger::IMPORTANT_EVENT);
 			this->grublistCfg->load(preserveConfig);
 			this->log("grub list completely loaded", Logger::IMPORTANT_EVENT);
-		} catch (Model_ListCfg::Exception const& e){
+		} catch (CmdExecException const& e){
 			this->log("error while loading the grub list", Logger::ERROR);
 			this->thrownException = e;
 			this->getThreadController().showThreadDiedError();
@@ -331,10 +331,8 @@ void MainControllerImpl::_rAppendRule(Model_Rule& rule, Model_Rule* parentRule){
 							}
 						}
 					}
-				} catch (ContentParserFactory::Exception const& e) {
-					if (e != ContentParserFactory::CREATION_FAILED) {
-						throw e;
-					}
+				} catch (ParserNotFoundException const& e) {
+					// nothing to do
 				}
 			}
 
@@ -351,7 +349,7 @@ void MainControllerImpl::dieAction(){
 	this->is_loading = false;
 	this->activeThreadCount = 0;
 	bool showEnvSettings = false;
-	if (this->thrownException == Model_ListCfg::GRUB_CMD_EXEC_FAILED){
+	if (this->thrownException){
 		showEnvSettings = this->view->askForEnvironmentSettings(this->env.mkconfig_cmd, this->grublistCfg->getGrubErrorMessage());
 	}
 	if (showEnvSettings) {
@@ -434,7 +432,7 @@ void MainControllerImpl::moveAction(std::list<void*> rules, int direction){
 				bool targetFound = false;
 				try {
 					rulePtr = &*this->grublistCfg->proxies.getNextVisibleRule(rulePtr, -direction);
-				} catch (Model_Proxylist::Exception e) {
+				} catch (NoMoveTargetException const& e) {
 					isEndOfList = true;
 					rulePtr = this->grublistCfg->proxies.getProxyByRule(rulePtr)->getParentRule(rulePtr);
 				}
@@ -460,11 +458,8 @@ void MainControllerImpl::moveAction(std::list<void*> rules, int direction){
 		this->syncLoadStateAction();
 		this->view->selectRules(movedRules);
 		this->modificationsUnsaved = true;
-	} catch (Model_ListCfg::Exception const& e) {
-		if (e == Model_ListCfg::NO_MOVE_TARGET_FOUND)
-			this->view->showErrorMessage(gettext("cannot move this entry"));
-		else
-			throw e;
+	} catch (NoMoveTargetException const& e) {
+		this->view->showErrorMessage(gettext("cannot move this entry"));
 	}
 }
 

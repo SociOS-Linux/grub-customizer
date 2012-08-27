@@ -21,12 +21,10 @@
 #include "ContentParser.h"
 #include <list>
 #include <string>
+#include "Exception.h"
 
 class ContentParserFactory {
 public:
-	enum Exception {
-		CREATION_FAILED
-	};
 	virtual inline ~ContentParserFactory() {};
 
 	virtual ContentParser* create(std::string const& sourceCode) = 0;

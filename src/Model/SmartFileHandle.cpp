@@ -10,7 +10,7 @@ char Model_SmartFileHandle::getChar() {
 	if (c != EOF)
 		return c;
 	else
-		throw END_OF_FILE;
+		throw EndOfFileException("end of file", __FILE__, __LINE__);
 }
 std::string Model_SmartFileHandle::getRow() {
 	std::string result;
@@ -19,7 +19,7 @@ std::string Model_SmartFileHandle::getRow() {
 		result += c;
 	}
 	if (result == "" && c == EOF)
-		throw END_OF_FILE;
+		throw EndOfFileException("end of file", __FILE__, __LINE__);
 	return result;
 }
 std::string Model_SmartFileHandle::getAll() {
@@ -29,14 +29,14 @@ std::string Model_SmartFileHandle::getAll() {
 		result += c;
 	}
 	if (result == "" && c == EOF)
-		throw END_OF_FILE;
+		throw EndOfFileException("end of file", __FILE__, __LINE__);
 	return result;
 }
 
 
 void Model_SmartFileHandle::open(std::string const& cmd_or_file, std::string const& mode, Type type) {
 	if (this->proc_or_file)
-		throw HANDLE_NOT_CLOSED;
+		throw HandleNotClosedException("handle not closed - cannot open", __FILE__, __LINE__);
 
 	if (type == TYPE_COMMAND)
 		this->proc_or_file = popen(cmd_or_file.c_str(), mode.c_str());
@@ -46,11 +46,11 @@ void Model_SmartFileHandle::open(std::string const& cmd_or_file, std::string con
 	if (this->proc_or_file)
 		this->isCmd = type == TYPE_COMMAND;
 	else
-		throw UNABLE_TO_OPEN;
+		throw FileReadException("Cannot rad the file", __FILE__, __LINE__);
 }
 void Model_SmartFileHandle::close() {
 	if (!this->proc_or_file)
-		throw HANDLE_NOT_OPENED;
+		throw HandleNotOpenedException("handle not opened - cannot close", __FILE__, __LINE__);
 
 	if (isCmd)
 		pclose(this->proc_or_file);

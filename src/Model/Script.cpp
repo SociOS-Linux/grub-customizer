@@ -136,12 +136,12 @@ std::list<std::string> Model_Script::buildPath(Model_Entry const& entry, Model_E
 				std::list<std::string> result = this->buildPath(entry, &*iter);
 				result.push_front(iter->name);
 				return result;
-			} catch (Model_Script::Exception e) {
+			} catch (ItemNotFoundException const& e) {
 				//continue
 			}
 		}
 	}
-	throw ELEMENT_NOT_FOUND;
+	throw ItemNotFoundException("entry not found inside of specified parent", __FILE__, __LINE__);
 }
 
 

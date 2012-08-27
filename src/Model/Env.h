@@ -28,15 +28,13 @@
 #include <sys/stat.h>
 #include "../lib/CommonClass.h"
 #include "SettingsStore.h"
+#include "../lib/Exception.h"
 
 struct Model_Env : public CommonClass {
 public:
 	enum Mode {
 		GRUB_MODE,
 		BURG_MODE
-	};
-	enum Exception {
-		FILE_SAVE_FAILED
 	};
 
 	// application status flags:

@@ -120,7 +120,7 @@ void EntryEditControllerImpl::syncEntryEditDlg(bool useOptionsAsSource) {
 			this->view->setOptions(this->currentContentParser->getOptions());
 		}
 		this->view->selectType(this->contentParserFactory->getNameByInstance(*this->currentContentParser));
-	} catch (ContentParserFactory::Exception const& e) {
+	} catch (ParserNotFoundException const& e) {
 		this->view->selectType("");
 		this->view->setOptions(std::map<std::string, std::string>());
 	}

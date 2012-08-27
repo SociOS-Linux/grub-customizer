@@ -22,14 +22,12 @@
 #include "../../lib/ContentParser.h"
 #include <list>
 #include <cassert>
+#include "../Exception.h"
 
 class ContentParser_FactoryImpl : public ContentParserFactory {
 	std::list<ContentParser*> parsers;
 	std::list<std::string> names;
 public:
-	enum Exception {
-		PARSER_NOT_FOUND
-	};
 	void registerParser(ContentParser& parser, std::string const& name);
 	ContentParser* create(std::string const& sourceCode);
 	ContentParser* createByName(std::string const& name);

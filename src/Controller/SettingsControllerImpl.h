@@ -25,6 +25,8 @@
 
 #include "../lib/CommonClass.h"
 
+#include "../lib/Exception.h"
+
 #include "SettingsController.h"
 
 
@@ -38,9 +40,6 @@ class SettingsControllerImpl : public ControllerAbstract, public SettingsControl
 	ThreadController* threadController;
 
 public:
-	enum Exception {
-		INCOMPLETE
-	};
 	void setListCfg(Model_ListCfg& grublistCfg);
 	void setSettingsDialog(View_Settings& settingsDlg);
 	void setSettingsManager(Model_SettingsManagerData& settings);

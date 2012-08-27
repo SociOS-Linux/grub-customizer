@@ -411,7 +411,7 @@ Model_Rule& Model_Proxy::moveRule(Model_Rule* rule, int direction) {
 	Model_Rule* parent = NULL;
 	try {
 		parent = this->getParentRule(rule);
-	} catch (Model_Proxy::Exception e) {} // leave parent in NULL state
+	} catch (ItemNotFoundException const& e) {} // leave parent in NULL state
 	std::list<Model_Rule>& sourceList = this->getRuleList(parent);
 
 
@@ -420,17 +420,15 @@ Model_Rule& Model_Proxy::moveRule(Model_Rule* rule, int direction) {
 	bool needToGoUp = false;
 	try {
 		next = this->getNextVisibleRule(el, direction);
-	} catch (Model_Proxy::Exception e) {
-		if (e == Model_Proxy::NO_MOVE_TARGET_FOUND && &sourceList != &this->rules) {
+	} catch (NoMoveTargetException const& e) {
+		if (&sourceList != &this->rules) {
 			needToGoUp = true;
-		} else {
-			throw e;
 		}
 	}
 
 	try {
 		parent = this->getParentRule(&*next);
-	} catch (Model_Proxy::Exception e) {} // leave parent in NULL state
+	} catch (ItemNotFoundException const& e) {} // leave parent in NULL state
 	std::list<Model_Rule>* targetList = &this->getRuleList(parent);
 
 	Model_Rule* newRule = rule;
@@ -454,7 +452,7 @@ Model_Rule& Model_Proxy::moveRule(Model_Rule* rule, int direction) {
 	}
 
 	if (targetList == &this->rules && rule->dataSource && !this->ruleIsFromOwnScript(*rule)) {
-		throw Model_Proxy::SHOULD_BE_A_NEW_INSTANCE;
+		throw MustBeProxyException("this rule must be placed into a new proxy instead of moving internally", __FILE__, __LINE__);
 	}
 
 	newRule = &*targetList->insert(insertPos, *rule);
@@ -495,7 +493,7 @@ std::list<Model_Rule>::iterator Model_Proxy::getNextVisibleRule(std::list<Model_
 	Model_Rule* parent = NULL;
 	try {
 		parent = this->getParentRule(&*base);
-	} catch (Model_Proxy::Exception e) {} // leave parent in NULL state
+	} catch (ItemNotFoundException const& e) {} // leave parent in NULL state
 	std::list<Model_Rule>* list = &this->getRuleList(parent);
 
 	do {
@@ -506,7 +504,7 @@ std::list<Model_Rule>::iterator Model_Proxy::getNextVisibleRule(std::list<Model_
 		}
 	} while (!base->isVisible && base != list->end());
 	if (base == list->end()) {
-		throw Model_Proxy::NO_MOVE_TARGET_FOUND;
+		throw NoMoveTargetException("no move target found inside of this proxy", __FILE__, __LINE__);
 	}
 	return base;
 }
@@ -590,16 +588,15 @@ Model_Rule* Model_Proxy::getParentRule(Model_Rule* child, Model_Rule* root) {
 			Model_Rule* parentRule = NULL;
 			try {
 				parentRule = this->getParentRule(child, &*iter);
-			} catch (Model_Proxy::Exception e) {
-				if (e != RULE_NOT_FOUND)
-					throw e;
+			} catch (ItemNotFoundException const& e) {
+				// do nothing
 			}
 			if (parentRule) {
 				return parentRule;
 			}
 		}
 	}
-	throw RULE_NOT_FOUND;
+	throw ItemNotFoundException("specified rule not found", __FILE__, __LINE__);
 }
 
 std::list<Model_Rule>::iterator Model_Proxy::getListIterator(Model_Rule const& needle, std::list<Model_Rule>& haystack) {
@@ -608,7 +605,7 @@ std::list<Model_Rule>::iterator Model_Proxy::getListIterator(Model_Rule const& n
 			return iter;
 	}
 
-	throw RULE_NOT_FOUND;
+	throw ItemNotFoundException("specified rule not found", __FILE__, __LINE__);
 }
 
 std::list<Model_Rule>& Model_Proxy::getRuleList(Model_Rule* parentElement) {
@@ -662,12 +659,8 @@ void Model_Proxy::removeEquivalentRules(Model_Rule const& base) {
 			do {
 				try {
 					parent = this->getParentRule(eqRule);
-				} catch (Model_Proxy::Exception e) {
-					if (e == Model_Proxy::RULE_NOT_FOUND) {
-						parent = NULL;
-					} else {
-						throw e;
-					}
+				} catch (ItemNotFoundException const& e) {
+					parent = NULL;
 				}
 				std::list<Model_Rule>& rlist = this->getRuleList(parent);
 				std::list<Model_Rule>::iterator iter = this->getListIterator(*eqRule, rlist);

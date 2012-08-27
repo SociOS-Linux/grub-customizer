@@ -20,12 +20,10 @@
 #define CONTENTPARSER_H_
 #include <map>
 #include <string>
+#include "Exception.h"
 
 class ContentParser {
 public:
-	enum Exception {
-		PARSING_FAILED
-	};
 	virtual inline ~ContentParser() {};
 	virtual void parse(std::string const& sourceCode) = 0;
 	virtual std::map<std::string, std::string> getOptions() const = 0;

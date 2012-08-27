@@ -39,6 +39,8 @@
 #include "../lib/CommonClass.h"
 #include "../Mapper/EntryName.h"
 
+#include "../lib/Exception.h"
+
 #include "MainController.h"
 
 /**
@@ -64,15 +66,12 @@ class MainControllerImpl : public ControllerAbstract, public MainController {
 	bool quit_requested;
 	bool is_loading;
 	int activeThreadCount;
-	Model_ListCfg::Exception thrownException; //to be used from the die() function
+	CmdExecException thrownException; //to be used from the die() function
 
 	void _rAppendRule(Model_Rule& rule, Model_Rule* parentRule = NULL);
 
 public:
 	bool modificationsUnsaved;
-	enum Exception {
-		INCOMPLETE
-	};
 	void setListCfg(Model_ListCfg& grublistCfg);
 	void setView(View_Main& listCfgDlg);
 	void setSettingsDialog(View_Settings& settingsDlg);

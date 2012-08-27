@@ -36,7 +36,7 @@ void Model_MountTable_Mountpoint::mount(){
 	if (!isMounted){
 		int res = system(("mount '"+device+"' '"+mountpoint+"'"+(options != "" ? " -o '"+options+"'" : "")).c_str());
 		if (res != 0)
-			throw MOUNT_FAILED;
+			throw MountException("mount failed", __FILE__, __LINE__);
 
 		this->isMounted = true;
 	}
@@ -45,7 +45,7 @@ void Model_MountTable_Mountpoint::umount(){
 	if (isMounted){
 		int res = system(("umount '"+mountpoint+"'").c_str());
 		if (res != 0)
-			throw UMOUNT_FAILED;
+			throw UMountException("umount failed", __FILE__, __LINE__);
 
 		this->isMounted = false;
 	}
@@ -168,7 +168,7 @@ Model_MountTable_Mountpoint& Model_MountTable::getEntryRefByMountpoint(std::stri
 		if (iter->mountpoint == mountPoint)
 			return *iter;
 	}
-	throw MOUNTPOINT_NOT_FOUND;
+	throw MountpointNotFoundException("mountpoint not found", __FILE__, __LINE__);
 }
 
 Model_MountTable_Mountpoint Model_MountTable::getEntryByMountpoint(std::string const& mountPoint) const {
@@ -217,11 +217,11 @@ void Model_MountTable::mountRootFs(std::string const& device, std::string const&
 			this->add(Model_MountTable_Mountpoint("/dev", mountpoint + "/dev", "bind")).mount();
 		}
 		//errors while mounting any of this partitions may not be a problem
-		catch (Model_MountTable::Exception e){}
-		catch (Model_MountTable_Mountpoint::Exception e){}
+		catch (SystemException const& e){}
+		catch (MountpointNotFoundException::Exception e){}
 	}
 	else
-		throw MOUNT_ERR_NO_FSTAB;
+		throw MissingFstabException("fstab is required but was not found", __FILE__, __LINE__);
 	this->loaded = true;
 }
 

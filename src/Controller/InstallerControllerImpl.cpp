@@ -39,7 +39,7 @@ void InstallerControllerImpl::setThreadController(ThreadController& threadContro
 
 ThreadController& InstallerControllerImpl::getThreadController() {
 	if (this->threadController == NULL) {
-		throw INCOMPLETE;
+		throw ConfigException("missing ThreadController", __FILE__, __LINE__);
 	}
 	return *this->threadController;
 }

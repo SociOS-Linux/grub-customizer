@@ -110,7 +110,7 @@ void Model_Env::save() {
 	} else {
 		int res = mkdir((cfg_dir_prefix + "/etc/grub-customizer").c_str(), 0755);
 		if (res != 0) {
-			throw FILE_SAVE_FAILED;
+			throw FileSaveException("cannot save the config file (directory creation)", __FILE__, __LINE__);
 		}
 	}
 	if (this->burgMode) {
@@ -119,7 +119,7 @@ void Model_Env::save() {
 		cfg_file = fopen((cfg_dir_prefix + "/etc/grub-customizer/grub.cfg").c_str(), "w");
 	}
 	if (!cfg_file) {
-		throw FILE_SAVE_FAILED;
+		throw FileSaveException("cannot save the config file (file creation)", __FILE__, __LINE__);
 	}
 	Model_SettingsStore ds;
 	std::map<std::string, std::string> props = this->getProperties();

@@ -16,35 +16,24 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "CommonClass.h"
+#include "Exception.h"
 
-CommonClass::CommonClass() {
-	this->logger = NULL;
+Exception::Exception(std::string const& message, std::string const& file, int line)
+	: _message(message), _file(file), _line(line)
+{
 }
 
-void CommonClass::setLogger(Logger& logger) {
-	this->logger = &logger;
-}
-Logger const& CommonClass::getLogger() const {
-	if (this->logger == NULL) {
-		throw ConfigException("missing logger");
+Exception::operator std::string() const {
+	std::ostringstream out;
+	out << "exception '" << typeid(*this).name()
+	    << "'\n with message '" << this->_message;
+	if (this->_file != "") {
+		out << "'\n in " << this->_file << ":" << this->_line;
 	}
-	return *this->logger;
+	return out.str();
 }
-Logger& CommonClass::getLogger() {
-	if (this->logger == NULL) {
-		throw ConfigException("missing logger");
-	}
-	return *this->logger;
-}
-Logger* CommonClass::getLoggerPtr() {
-	return this->logger;
-}
-bool CommonClass::hasLogger() const {
-	return this->logger != NULL;
-}
-void CommonClass::log(std::string const& message, Logger::Priority prio) const {
-	if (this->logger) {
-		this->logger->log(message, prio);
-	}
+
+
+Exception::operator bool() const {
+	return this->_message != "";
 }

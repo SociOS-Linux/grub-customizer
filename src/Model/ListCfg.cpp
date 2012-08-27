@@ -43,21 +43,21 @@ void Model_ListCfg::lock(){
 	if (this->ignoreLock)
 		return;
 	if (this->mutex == NULL)
-		throw MISSING_MUTEX;
+		throw ConfigException("missing mutex", __FILE__, __LINE__);
 	this->mutex->lock();
 }
 bool Model_ListCfg::lock_if_free(){
 	if (this->ignoreLock)
 		return true;
 	if (this->mutex == NULL)
-		throw MISSING_MUTEX;
+		throw ConfigException("missing mutex", __FILE__, __LINE__);
 	return this->mutex->trylock();
 }
 void Model_ListCfg::unlock(){
 	if (this->ignoreLock)
 		return;
 	if (this->mutex == NULL)
-		throw MISSING_MUTEX;
+		throw ConfigException("missing mutex", __FILE__, __LINE__);
 	this->mutex->unlock();
 }
 
@@ -114,7 +114,7 @@ void Model_ListCfg::load(bool preserveConfig){
 		DIR* hGrubCfgDir = opendir(this->env.cfg_dir.c_str());
 
 		if (!hGrubCfgDir){
-			throw GRUB_CFG_DIR_NOT_FOUND;
+			throw DirectoryNotFoundException("grub cfg dir not found", __FILE__, __LINE__);
 		}
 
 		//load scripts
@@ -193,7 +193,7 @@ void Model_ListCfg::load(bool preserveConfig){
 	
 	int success = pclose(mkconfigProc);
 	if (success != 0 && !cancelThreadsRequested){
-		throw GRUB_CMD_EXEC_FAILED;
+		throw CmdExecException("failed running " + this->env.mkconfig_cmd, __FILE__, __LINE__);
 	} else {
 		remove(errorLogFile.c_str()); //remove file, if everything was ok
 	}
@@ -644,204 +644,190 @@ void Model_ListCfg::renumerate(){
 Model_Rule& Model_ListCfg::moveRule(Model_Rule* rule, int direction){
 	try {
 		return this->proxies.getProxyByRule(rule)->moveRule(rule, direction);
-	} catch (Model_Proxy::Exception const& e) {
+	} catch (NoMoveTargetException const& e) {
 		Model_Proxy* proxy = this->proxies.getProxyByRule(rule);
 		Model_Rule* parent = NULL;
 		try {
 			parent = proxy->getParentRule(rule);
-		} catch (Model_Proxy::Exception const& e) {if (e != Model_Proxy::RULE_NOT_FOUND) throw e;}
+		} catch (ItemNotFoundException const& e) {/* do nothing */}
 
-		if (e == Model_Proxy::NO_MOVE_TARGET_FOUND) {
-			try {
-				std::list<Model_Rule>::iterator nextRule = this->proxies.getNextVisibleRule(proxy->getListIterator(*rule, proxy->getRuleList(parent)), direction);
-				if (nextRule->type != Model_Rule::SUBMENU) { // create new proxy
-					std::list<Model_Rule>::iterator targetRule = proxy->rules.end();
-					bool targetRuleFound = false;
+		try {
+			std::list<Model_Rule>::iterator nextRule = this->proxies.getNextVisibleRule(proxy->getListIterator(*rule, proxy->getRuleList(parent)), direction);
+			if (nextRule->type != Model_Rule::SUBMENU) { // create new proxy
+				std::list<Model_Rule>::iterator targetRule = proxy->rules.end();
+				bool targetRuleFound = false;
+				try {
+					targetRule = this->proxies.getNextVisibleRule(nextRule, direction);
+					targetRuleFound = true;
+				} catch (NoMoveTargetException const& e) {
+					// ignore GrublistCfg::NO_MOVE_TARGET_FOUND - occurs when previousRule is not found. But this isn't a problem
+				}
+
+				if (targetRuleFound && this->proxies.getProxyByRule(&*targetRule)->dataSource == this->proxies.getProxyByRule(&*rule)->dataSource) {
+					Model_Proxy* targetProxy = this->proxies.getProxyByRule(&*targetRule);
+					targetProxy->removeEquivalentRules(*rule);
+					Model_Rule* newRule = NULL;
+					if (direction == -1) {
+						targetProxy->rules.push_back(*rule);
+						newRule = &targetProxy->rules.back();
+					} else {
+						targetProxy->rules.push_front(*rule);
+						newRule = &targetProxy->rules.front();
+					}
+					rule->isVisible = false;
+
 					try {
-						targetRule = this->proxies.getNextVisibleRule(nextRule, direction);
-						targetRuleFound = true;
-					} catch (Model_Proxylist::Exception e) {
-						if (e != Model_Proxylist::NO_MOVE_TARGET_FOUND) {
-							throw e;
+						std::list<Model_Rule>::iterator previousRule = this->proxies.getNextVisibleRule(proxy->getListIterator(*rule, proxy->getRuleList(parent)), -direction);
+						if (this->proxies.getProxyByRule(&*nextRule)->dataSource == this->proxies.getProxyByRule(&*previousRule)->dataSource) {
+							this->proxies.getProxyByRule(&*previousRule)->removeEquivalentRules(*nextRule);
+							if (direction == 1) {
+								this->proxies.getProxyByRule(&*previousRule)->rules.push_back(*nextRule);
+							} else {
+								this->proxies.getProxyByRule(&*previousRule)->rules.push_front(*nextRule);
+							}
+							nextRule->isVisible = false;
+							if (!this->proxies.getProxyByRule(&*nextRule)->hasVisibleRules()) {
+								this->proxies.deleteProxy(this->proxies.getProxyByRule(&*nextRule));
+							}
 						}
-						// ignore GrublistCfg::NO_MOVE_TARGET_FOUND - occurs when previousRule is not found. But this isn't a problem
+					} catch (NoMoveTargetException const& e) {
+						// ignore NoMoveTargetException - occurs when previousRule is not found. But this isn't a problem
 					}
 
-					if (targetRuleFound && this->proxies.getProxyByRule(&*targetRule)->dataSource == this->proxies.getProxyByRule(&*rule)->dataSource) {
-						Model_Proxy* targetProxy = this->proxies.getProxyByRule(&*targetRule);
-						targetProxy->removeEquivalentRules(*rule);
-						Model_Rule* newRule = NULL;
-						if (direction == -1) {
-							targetProxy->rules.push_back(*rule);
-							newRule = &targetProxy->rules.back();
-						} else {
-							targetProxy->rules.push_front(*rule);
-							newRule = &targetProxy->rules.front();
-						}
-						rule->isVisible = false;
-
-						try {
-							std::list<Model_Rule>::iterator previousRule = this->proxies.getNextVisibleRule(proxy->getListIterator(*rule, proxy->getRuleList(parent)), -direction);
-							if (this->proxies.getProxyByRule(&*nextRule)->dataSource == this->proxies.getProxyByRule(&*previousRule)->dataSource) {
-								this->proxies.getProxyByRule(&*previousRule)->removeEquivalentRules(*nextRule);
-								if (direction == 1) {
-									this->proxies.getProxyByRule(&*previousRule)->rules.push_back(*nextRule);
-								} else {
-									this->proxies.getProxyByRule(&*previousRule)->rules.push_front(*nextRule);
-								}
-								nextRule->isVisible = false;
-								if (!this->proxies.getProxyByRule(&*nextRule)->hasVisibleRules()) {
-									this->proxies.deleteProxy(this->proxies.getProxyByRule(&*nextRule));
-								}
-							}
-						} catch (Model_Proxylist::Exception const& e) {
-							if (e != Model_Proxylist::NO_MOVE_TARGET_FOUND) {
-								throw e;
-							}
-							// ignore GrublistCfg::NO_MOVE_TARGET_FOUND - occurs when previousRule is not found. But this isn't a problem
-						}
-
-						// cleanup
-						if (!proxy->hasVisibleRules()) {
-							this->proxies.deleteProxy(proxy);
-						}
-
-						return *newRule;
-					} else {
-						std::list<Model_Rule>::iterator movedRule = this->proxies.moveRuleToNewProxy(*rule, direction);
-
-						Model_Proxy* currentProxy = this->proxies.getProxyByRule(&*movedRule);
-
-						std::list<Model_Rule>::iterator movedRule2 = this->proxies.moveRuleToNewProxy(*nextRule, -direction);
-						this->renumerate();
-						this->swapProxies(currentProxy, this->proxies.getProxyByRule(&*movedRule2));
-
-						try {
-							std::list<Model_Rule>::iterator prevPrevRule = this->proxies.getNextVisibleRule(movedRule2, -direction);
-
-							if (this->proxies.getProxyByRule(&*prevPrevRule)->dataSource == this->proxies.getProxyByRule(&*movedRule2)->dataSource) {
-								Model_Proxy* prevprev = this->proxies.getProxyByRule(&*prevPrevRule);
-								prevprev->removeEquivalentRules(*movedRule2);
-								if (direction == 1) {
-									prevprev->rules.push_back(*movedRule2);
-								} else {
-									prevprev->rules.push_front(*movedRule2);
-								}
-								movedRule2->isVisible = false;
-								if (!this->proxies.getProxyByRule(&*movedRule2)->hasVisibleRules()) {
-									this->proxies.deleteProxy(this->proxies.getProxyByRule(&*movedRule2));
-								}
-							}
-						} catch (Model_Proxylist::Exception const& e) {
-							if (e != Model_Proxylist::NO_MOVE_TARGET_FOUND) {
-								throw e;
-							}
-							// ignore GrublistCfg::NO_MOVE_TARGET_FOUND - occurs when prevPrevRule is not found. But this isn't a problem
-						}
-
-						return *movedRule;
-					}
-				} else { // convert existing proxy to multiproxy
-					std::list<Model_Proxy>::iterator proxyIter = this->proxies.getIter(proxy);
-
-					Model_Rule* movedRule = NULL;
-					Model_Proxy* target = NULL;
-					if (direction == -1 && proxyIter != this->proxies.begin()) {
-						proxyIter--;
-						target = &*proxyIter;
-						target->removeEquivalentRules(*rule);
-						nextRule->subRules.push_back(*rule);
-						if (rule->type == Model_Rule::SUBMENU) {
-							proxy->removeForeignChildRules(*rule);
-						}
-						if ((rule->type == Model_Rule::SUBMENU && rule->subRules.size() != 0) || (rule->type != Model_Rule::SUBMENU && proxy->ruleIsFromOwnScript(*rule))) {
-							rule->isVisible = false;
-						} else {
-							proxy->rules.pop_front();
-						}
-						movedRule = &nextRule->subRules.back();
-						proxyIter++;
-						proxyIter++; // go to the next proxy
-					} else if (direction == 1 && proxyIter != this->proxies.end() && &*proxyIter != &this->proxies.back()) {
-						proxyIter++;
-						target = &*proxyIter;
-						target->removeEquivalentRules(*rule);
-						nextRule->subRules.push_front(*rule);
-						if (rule->type == Model_Rule::SUBMENU) {
-							proxy->removeForeignChildRules(*rule);
-						}
-						if ((rule->type == Model_Rule::SUBMENU && rule->subRules.size() != 0) || (rule->type != Model_Rule::SUBMENU && proxy->ruleIsFromOwnScript(*rule))) {
-							rule->isVisible = false;
-						} else {
-							proxy->rules.pop_back();
-						}
-						movedRule = &nextRule->subRules.front();
-
-						proxyIter--;
-						proxyIter--; // go to the previous proxy
-					} else {
-						throw Model_ListCfg::NO_MOVE_TARGET_FOUND;
-					}
-
+					// cleanup
 					if (!proxy->hasVisibleRules()) {
-						if (proxyIter != this->proxies.end()) {
-							target->merge(*proxyIter, direction);
-							this->proxies.deleteProxy(&*proxyIter);
-						}
-
 						this->proxies.deleteProxy(proxy);
 					}
+
+					return *newRule;
+				} else {
+					std::list<Model_Rule>::iterator movedRule = this->proxies.moveRuleToNewProxy(*rule, direction);
+
+					Model_Proxy* currentProxy = this->proxies.getProxyByRule(&*movedRule);
+
+					std::list<Model_Rule>::iterator movedRule2 = this->proxies.moveRuleToNewProxy(*nextRule, -direction);
+					this->renumerate();
+					this->swapProxies(currentProxy, this->proxies.getProxyByRule(&*movedRule2));
+
+					try {
+						std::list<Model_Rule>::iterator prevPrevRule = this->proxies.getNextVisibleRule(movedRule2, -direction);
+
+						if (this->proxies.getProxyByRule(&*prevPrevRule)->dataSource == this->proxies.getProxyByRule(&*movedRule2)->dataSource) {
+							Model_Proxy* prevprev = this->proxies.getProxyByRule(&*prevPrevRule);
+							prevprev->removeEquivalentRules(*movedRule2);
+							if (direction == 1) {
+								prevprev->rules.push_back(*movedRule2);
+							} else {
+								prevprev->rules.push_front(*movedRule2);
+							}
+							movedRule2->isVisible = false;
+							if (!this->proxies.getProxyByRule(&*movedRule2)->hasVisibleRules()) {
+								this->proxies.deleteProxy(this->proxies.getProxyByRule(&*movedRule2));
+							}
+						}
+					} catch (NoMoveTargetException const& e) {
+						// ignore NoMoveTargetException - occurs when prevPrevRule is not found. But this isn't a problem
+					}
+
 					return *movedRule;
 				}
-			} catch (Model_Proxylist::Exception e) {
-				if (e == Model_Proxylist::NO_MOVE_TARGET_FOUND) {
-					throw Model_ListCfg::NO_MOVE_TARGET_FOUND;
+			} else { // convert existing proxy to multiproxy
+				std::list<Model_Proxy>::iterator proxyIter = this->proxies.getIter(proxy);
+
+				Model_Rule* movedRule = NULL;
+				Model_Proxy* target = NULL;
+				if (direction == -1 && proxyIter != this->proxies.begin()) {
+					proxyIter--;
+					target = &*proxyIter;
+					target->removeEquivalentRules(*rule);
+					nextRule->subRules.push_back(*rule);
+					if (rule->type == Model_Rule::SUBMENU) {
+						proxy->removeForeignChildRules(*rule);
+					}
+					if ((rule->type == Model_Rule::SUBMENU && rule->subRules.size() != 0) || (rule->type != Model_Rule::SUBMENU && proxy->ruleIsFromOwnScript(*rule))) {
+						rule->isVisible = false;
+					} else {
+						proxy->rules.pop_front();
+					}
+					movedRule = &nextRule->subRules.back();
+					proxyIter++;
+					proxyIter++; // go to the next proxy
+				} else if (direction == 1 && proxyIter != this->proxies.end() && &*proxyIter != &this->proxies.back()) {
+					proxyIter++;
+					target = &*proxyIter;
+					target->removeEquivalentRules(*rule);
+					nextRule->subRules.push_front(*rule);
+					if (rule->type == Model_Rule::SUBMENU) {
+						proxy->removeForeignChildRules(*rule);
+					}
+					if ((rule->type == Model_Rule::SUBMENU && rule->subRules.size() != 0) || (rule->type != Model_Rule::SUBMENU && proxy->ruleIsFromOwnScript(*rule))) {
+						rule->isVisible = false;
+					} else {
+						proxy->rules.pop_back();
+					}
+					movedRule = &nextRule->subRules.front();
+
+					proxyIter--;
+					proxyIter--; // go to the previous proxy
 				} else {
-					throw e;
+					throw NoMoveTargetException("cannot move this rule", __FILE__, __LINE__);
 				}
-			}
-		} else if (e == Model_Proxy::SHOULD_BE_A_NEW_INSTANCE) {
-			Model_Rule* parentSubmenu = parent;
-			try {
-				std::list<Model_Rule>::iterator nextRule = this->proxies.getNextVisibleRule(proxy->getListIterator(*parent, proxy->rules), direction); // go forward
 
-				if (this->proxies.getProxyByRule(&*nextRule) == this->proxies.getProxyByRule(&*rule)) {
-					this->proxies.splitProxy(proxy, &*nextRule, direction);
-				}
-			} catch (Model_Proxylist::Exception e) {
-				if (e != Model_Proxylist::NO_MOVE_TARGET_FOUND) {
-					throw e;
-				}
-				// there's no next rule… no split required
-			}
+				if (!proxy->hasVisibleRules()) {
+					if (proxyIter != this->proxies.end()) {
+						target->merge(*proxyIter, direction);
+						this->proxies.deleteProxy(&*proxyIter);
+					}
 
-			std::list<Model_Proxy>::iterator nextProxy = this->proxies.getIter(this->proxies.getProxyByRule(&*rule));
-			if (direction == 1) {
-				nextProxy++;
-			} else {
-				nextProxy--;
-			}
-
-			Model_Rule* movedRule = NULL;
-			if (nextProxy != this->proxies.end() && nextProxy->dataSource == this->repository.getScriptByEntry(*rule->dataSource)) {
-				nextProxy->removeEquivalentRules(*rule);
-				if (direction == 1) {
-					nextProxy->rules.push_front(*rule);
-					movedRule = &nextProxy->rules.front();
-				} else {
-					nextProxy->rules.push_back(*rule);
-					movedRule = &nextProxy->rules.back();
+					this->proxies.deleteProxy(proxy);
 				}
-			} else {
-				movedRule = &*this->proxies.moveRuleToNewProxy(*rule, direction, this->repository.getScriptByEntry(*rule->dataSource));
+				return *movedRule;
 			}
-			proxy->removeEquivalentRules(*rule);
-			return *movedRule;
-		} else {
+		} catch (NoMoveTargetException::Exception const& e) {
 			throw e;
 		}
+	} catch (MustBeProxyException const& e) {
+		Model_Proxy* proxy = this->proxies.getProxyByRule(rule);
+		Model_Rule* parent = NULL;
+		try {
+			parent = proxy->getParentRule(rule);
+		} catch (ItemNotFoundException const& e) {/* do nothing */}
+
+		Model_Rule* parentSubmenu = parent;
+		try {
+			std::list<Model_Rule>::iterator nextRule = this->proxies.getNextVisibleRule(proxy->getListIterator(*parent, proxy->rules), direction); // go forward
+
+			if (this->proxies.getProxyByRule(&*nextRule) == this->proxies.getProxyByRule(&*rule)) {
+				this->proxies.splitProxy(proxy, &*nextRule, direction);
+			}
+		} catch (NoMoveTargetException e) {
+			// there's no next rule… no split required
+		}
+
+		std::list<Model_Proxy>::iterator nextProxy = this->proxies.getIter(this->proxies.getProxyByRule(&*rule));
+		if (direction == 1) {
+			nextProxy++;
+		} else {
+			nextProxy--;
+		}
+
+		Model_Rule* movedRule = NULL;
+		if (nextProxy != this->proxies.end() && nextProxy->dataSource == this->repository.getScriptByEntry(*rule->dataSource)) {
+			nextProxy->removeEquivalentRules(*rule);
+			if (direction == 1) {
+				nextProxy->rules.push_front(*rule);
+				movedRule = &nextProxy->rules.front();
+			} else {
+				nextProxy->rules.push_back(*rule);
+				movedRule = &nextProxy->rules.back();
+			}
+		} else {
+			movedRule = &*this->proxies.moveRuleToNewProxy(*rule, direction, this->repository.getScriptByEntry(*rule->dataSource));
+		}
+		proxy->removeEquivalentRules(*rule);
+		return *movedRule;
 	}
-	throw NO_MOVE_TARGET_FOUND;
+	throw NoMoveTargetException("no move target found", __FILE__, __LINE__);
 }
 
 void Model_ListCfg::swapProxies(Model_Proxy* a, Model_Proxy* b){

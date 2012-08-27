@@ -25,13 +25,9 @@
 #include <unistd.h>
 #include <map>
 #include "EntryPathBuilderImpl.h"
+#include "../lib/Exception.h"
 
 struct Model_Proxy {
-	enum Exception {
-		RULE_NOT_FOUND,
-		NO_MOVE_TARGET_FOUND,
-		SHOULD_BE_A_NEW_INSTANCE
-	};
 	std::list<Model_Rule> rules;
 	int index;
 	short int permissions;

@@ -582,13 +582,11 @@ Gtk::TreeModel::iterator View_Gtk_Main::getIterByRulePtr(void* rulePtr, const Gt
 			return iter;
 		try {
 			return this->getIterByRulePtr(rulePtr, &**iter); //recursively search for the treeview item
-		} catch (View_Main::Exception const& e) {
-			if (e != RULE_ITER_NOT_FOUND)
-				throw e;
-			//(ignore RULE_ITER_NOT_FOUND exceptions)
+		} catch (ItemNotFoundException const& e) {
+			//(ignore ItemNotFoundException exception)
 		}
 	}
-	throw RULE_ITER_NOT_FOUND;
+	throw ItemNotFoundException("rule not found", __FILE__, __LINE__);
 }
 
 void View_Gtk_Main::signal_edit_name_finished(const Glib::ustring& path, const Glib::ustring& new_text){
@@ -622,9 +620,8 @@ void View_Gtk_Main::selectRule(void* rule, bool startEdit) {
 		if (startEdit) {
 			this->tvConfList.set_cursor(this->tvConfList.refTreeStore->get_path(this->getIterByRulePtr(rule)), *this->tvConfList.get_column(0), true);
 		}
-	} catch (View_Main::Exception const& e) {
-		if (e != RULE_ITER_NOT_FOUND)
-			throw e;
+	} catch (ItemNotFoundException const& e) {
+		// do nothing
 	}
 }
 

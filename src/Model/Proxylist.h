@@ -22,6 +22,7 @@
 #include <sstream>
 #include "Proxy.h"
 #include "../lib/CommonClass.h"
+#include "../lib/Exception.h"
 
 struct Model_Proxylist_Item {
 	std::string labelPathValue;
@@ -30,10 +31,6 @@ struct Model_Proxylist_Item {
 	std::string numericPathLabel;
 };
 struct Model_Proxylist : public std::list<Model_Proxy>, public CommonClass {
-	enum Exception {
-		NO_RELATED_PROXY_FOUND,
-		NO_MOVE_TARGET_FOUND
-	};
 	std::list<Model_Proxy> trash; //removed proxies
 	std::list<Model_Proxy*> getProxiesByScript(Model_Script const& script);
 	std::list<const Model_Proxy*> getProxiesByScript(Model_Script const& script) const;

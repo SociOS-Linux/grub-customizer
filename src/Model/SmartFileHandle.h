@@ -2,18 +2,13 @@
 #define SMARTFILEHANDLE_H_
 #include <cstdio>
 #include <string>
+#include "../lib/Exception.h"
 
 class Model_SmartFileHandle {
 private:
 	FILE* proc_or_file;
 	bool isCmd;
 public:
-	enum Exception {
-		END_OF_FILE,
-		UNABLE_TO_OPEN,
-		HANDLE_NOT_CLOSED,
-		HANDLE_NOT_OPENED
-	};
 	enum Type {
 		TYPE_FILE,
 		TYPE_COMMAND

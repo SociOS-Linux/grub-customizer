@@ -19,13 +19,11 @@
 #ifndef COMMONCLASS_H_
 #define COMMONCLASS_H_
 #include "../lib/Logger.h"
+#include "Exception.h"
 
 class CommonClass {
 	mutable Logger* logger;
 public:
-	enum Exception {
-		LOGGER_NOT_SET
-	};
 	CommonClass();
 	void setLogger(Logger& logger);
 	Logger const& getLogger() const;

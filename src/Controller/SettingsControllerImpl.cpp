@@ -54,7 +54,7 @@ void SettingsControllerImpl::setThreadController(ThreadController& threadControl
 
 ThreadController& SettingsControllerImpl::getThreadController() {
 	if (this->threadController == NULL) {
-		throw INCOMPLETE;
+		throw ConfigException("missing ThreadController", __FILE__, __LINE__);
 	}
 	return *this->threadController;
 }

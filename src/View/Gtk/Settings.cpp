@@ -591,7 +591,7 @@ View_Gtk_Settings::CustomOption View_Gtk_Settings::getCustomOption(std::string c
 		if ((*iter)[asTreeModel.old_name] == name)
 			return CustomOption_obj(Glib::ustring((*iter)[asTreeModel.name]), Glib::ustring((*iter)[asTreeModel.old_name]), Glib::ustring((*iter)[asTreeModel.value]), (*iter)[asTreeModel.active]);
 	}
-	throw REQUESTED_CUSTOM_OPTION_NOT_FOUND;
+	throw ItemNotFoundException("requested custom option not found", __FILE__, __LINE__);
 }
 
 void View_Gtk_Settings::signal_setting_row_changed(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter){

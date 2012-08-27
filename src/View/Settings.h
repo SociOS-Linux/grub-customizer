@@ -38,9 +38,6 @@ public:
 		COLOR_CHOOSER_HIGHLIGHT_FONT,
 		COLOR_CHOOSER_HIGHLIGHT_BACKGROUND
 	};
-	enum Exception {
-		REQUESTED_CUSTOM_OPTION_NOT_FOUND
-	};
 	struct CustomOption {
 		std::string name, old_name, value;
 		bool isActive;

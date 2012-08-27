@@ -32,10 +32,6 @@ class View_Main {
 public:
 	virtual inline ~View_Main() {};
 
-	enum Exception {
-		PROXY_ITER_NOT_FOUND,
-		RULE_ITER_NOT_FOUND
-	};
 	//function to assign the event listener
 	virtual void setEventListener(MainController& eventListener)=0;
 	//show this dialog without waiting

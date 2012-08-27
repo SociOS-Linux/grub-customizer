@@ -28,11 +28,11 @@ ContentParser* ContentParser_FactoryImpl::create(std::string const& sourceCode) 
 		try {
 			(*iter)->parse(sourceCode);
 			return *iter;
-		} catch (ContentParser::Exception const& e) {
+		} catch (ParserException const& e) {
 			continue;
 		}
 	}
-	throw ContentParserFactory::CREATION_FAILED;
+	throw ParserNotFoundException("no matching parser found", __FILE__, __LINE__);
 }
 
 
@@ -46,7 +46,7 @@ ContentParser* ContentParser_FactoryImpl::createByName(std::string const& name) 
 		}
 		namesIter++;
 	}
-	throw PARSER_NOT_FOUND;
+	throw ItemNotFoundException("no parser found by name '" + name + "'", __FILE__, __LINE__);
 }
 
 std::list<std::string> const& ContentParser_FactoryImpl::getNames() const {
@@ -63,5 +63,5 @@ std::string ContentParser_FactoryImpl::getNameByInstance(ContentParser const& in
 		}
 		namesIter++;
 	}
-	throw PARSER_NOT_FOUND;
+	throw ItemNotFoundException("no parser found by instance pointer", __FILE__, __LINE__);
 }

@@ -151,6 +151,8 @@ src/lib/ContentParser/LinuxIso.h -text
 src/lib/ContentParser/Memtest.cpp -text
 src/lib/ContentParser/Memtest.h -text
 src/lib/ContentParserFactory.h -text
+src/lib/Exception.cpp -text
+src/lib/Exception.h -text
 src/lib/Logger.h -text
 src/lib/Logger/Stream.cpp -text
 src/lib/Logger/Stream.h -text

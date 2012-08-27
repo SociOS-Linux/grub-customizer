@@ -7,7 +7,7 @@ Model_SmartFileHandle Model_DeviceMap::getFileHandle() const {
 	Model_SmartFileHandle result;
 	try {
 		result.open(env->devicemap_file, "r", Model_SmartFileHandle::TYPE_FILE);
-	} catch (Model_SmartFileHandle::Exception e) {
+	} catch (FileReadException const& e) {
 		result.open(env->mkdevicemap_cmd, "r", Model_SmartFileHandle::TYPE_COMMAND);
 	}
 	return result;
@@ -49,9 +49,8 @@ Model_DeviceMap_PartitionIndex Model_DeviceMap::getHarddriveIndexByPartitionUuid
 				}
 			}
 		}
-	} catch (Model_SmartFileHandle::Exception e) {
-		if (e != Model_SmartFileHandle::END_OF_FILE) //don't throw if we didn't find the mapped value
-			throw e;
+	} catch (EndOfFileException const& e) {
+		//don't throw if we didn't find the mapped value
 	}
 	handle.close();
 

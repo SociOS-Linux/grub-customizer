@@ -33,6 +33,8 @@
 
 #include "../Controller/ControllerAbstract.h"
 
+#include "../lib/Exception.h"
+
 #include "InstallerController.h"
 
 
@@ -43,9 +45,6 @@ class InstallerControllerImpl : public ControllerAbstract, public InstallerContr
 	ThreadController* threadController;
 
 public:
-	enum Exception {
-		INCOMPLETE
-	};
 	void setInstaller(Model_Installer& installer);
 	void setView(View_Installer& installDlg);
 	void setThreadController(ThreadController& threadController);
