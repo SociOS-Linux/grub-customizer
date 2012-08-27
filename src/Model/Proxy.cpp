@@ -423,6 +423,8 @@ Model_Rule& Model_Proxy::moveRule(Model_Rule* rule, int direction) {
 	} catch (NoMoveTargetException const& e) {
 		if (&sourceList != &this->rules) {
 			needToGoUp = true;
+		} else {
+			throw e;
 		}
 	}
 

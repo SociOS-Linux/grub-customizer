@@ -218,7 +218,7 @@ void Model_MountTable::mountRootFs(std::string const& device, std::string const&
 		}
 		//errors while mounting any of this partitions may not be a problem
 		catch (SystemException const& e){}
-		catch (MountpointNotFoundException::Exception e){}
+		catch (MountpointNotFoundException const& e){}
 	}
 	else
 		throw MissingFstabException("fstab is required but was not found", __FILE__, __LINE__);

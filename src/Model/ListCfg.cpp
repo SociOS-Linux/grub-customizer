@@ -783,7 +783,7 @@ Model_Rule& Model_ListCfg::moveRule(Model_Rule* rule, int direction){
 				}
 				return *movedRule;
 			}
-		} catch (NoMoveTargetException::Exception const& e) {
+		} catch (NoMoveTargetException const& e) {
 			throw e;
 		}
 	} catch (MustBeProxyException const& e) {
@@ -800,7 +800,7 @@ Model_Rule& Model_ListCfg::moveRule(Model_Rule* rule, int direction){
 			if (this->proxies.getProxyByRule(&*nextRule) == this->proxies.getProxyByRule(&*rule)) {
 				this->proxies.splitProxy(proxy, &*nextRule, direction);
 			}
-		} catch (NoMoveTargetException e) {
+		} catch (NoMoveTargetException const& e) {
 			// there's no next rule… no split required
 		}
 
