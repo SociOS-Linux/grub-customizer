@@ -32,7 +32,7 @@ void SettingsControllerImpl::setListCfg(Model_ListCfg& grublistCfg){
 	this->grublistCfg = &grublistCfg;
 }
 
-void SettingsControllerImpl::setSettingsDialog(View_Settings& settingsDlg){
+void SettingsControllerImpl::setView(View_Settings& settingsDlg){
 	this->view = &settingsDlg;
 }
 

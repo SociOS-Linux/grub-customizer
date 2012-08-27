@@ -41,7 +41,7 @@ class SettingsControllerImpl : public ControllerAbstract, public SettingsControl
 
 public:
 	void setListCfg(Model_ListCfg& grublistCfg);
-	void setSettingsDialog(View_Settings& settingsDlg);
+	void setView(View_Settings& settingsDlg);
 	void setSettingsManager(Model_SettingsManagerData& settings);
 	void setSettingsBuffer(Model_SettingsManagerData& settings);
 	void setFbResolutionsGetter(Model_FbResolutionsGetter& fbResolutionsGetter);

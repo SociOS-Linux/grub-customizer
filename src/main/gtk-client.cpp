@@ -110,7 +110,7 @@ int main(int argc, char** argv){
 
 		SettingsControllerImpl settingsController(env);
 		settingsController.setListCfg(listcfg);
-		settingsController.setSettingsDialog(settingsDlg);
+		settingsController.setView(settingsDlg);
 		settingsController.setSettingsManager(settings);
 		settingsController.setSettingsBuffer(settingsOnDisk);
 		settingsController.setFbResolutionsGetter(fbResolutionsGetter);
