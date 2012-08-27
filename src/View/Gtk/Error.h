@@ -16,19 +16,20 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CONTROLLER_ABSTRACT_H_
-#define CONTROLLER_ABSTRACT_H_
+#ifndef ERRORGTK_H_
+#define ERRORGTK_H_
+#include <gtkmm.h>
+#include <libintl.h>
+#include "../Error.h"
+#include "../../Controller/ErrorController.h"
 
-#include "ControllerCollection.h"
-#include "../lib/assert.h"
-#include "../lib/CommonClass.h"
-
-class ControllerAbstract : public CommonClass {
-	ControllerCollection* _controllerCollection;
+class View_Gtk_Error : public View_Error {
+	ErrorController* eventListener;
 public:
-	void setControllerCollection(ControllerCollection& controllerCollection);
-	ControllerCollection& getAllControllers();
+	View_Gtk_Error();
+	void setEventListener(ErrorController& eventListener);
+	void showErrorMessage(std::string const& errorMessage, bool allowContinue);
 };
 
 
-#endif /* ABSTRACT_H_ */
+#endif /* ERRORGTK_H_ */

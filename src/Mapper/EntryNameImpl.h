@@ -21,7 +21,7 @@
 
 #include "EntryName.h"
 #include "../View/Main.h"
-#include <cassert>
+#include "../lib/assert.h"
 
 class Mapper_EntryNameImpl : public Mapper_EntryName {
 	View_Main* view;

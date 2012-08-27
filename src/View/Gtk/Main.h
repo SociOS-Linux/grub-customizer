@@ -25,7 +25,7 @@
 #include "../../lib/CommonClass.h"
 #include "Settings.h"
 #include "../../lib/str_replace.h"
-#include <cassert>
+#include "../../lib/assert.h"
 
 class View_Gtk_Main_List : public Gtk::TreeView {
 public:

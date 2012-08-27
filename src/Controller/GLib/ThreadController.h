@@ -24,11 +24,14 @@
 #include <gtkmm/main.h>
 #include "../ControllerCollection.h"
 #include "../../lib/CommonClass.h"
+#include "../../lib/assert.h"
 
 class GLib_ThreadController : public ThreadController, public CommonClass {
 	ControllerCollection& _controllers;
 
-	Glib::Dispatcher disp_sync_load, disp_sync_save, disp_thread_died, disp_updateSettingsDlgResolutionList, disp_settings_loaded;
+	Glib::Dispatcher disp_sync_load, disp_sync_save, disp_thread_died, disp_updateSettingsDlgResolutionList, disp_settings_loaded, disp_exception;
+
+	Exception _cachedException;
 public:
 	GLib_ThreadController(ControllerCollection& controllers);
 	void syncEntryList();
@@ -41,6 +44,7 @@ public:
 	void startFramebufferResolutionLoader();
 	void startGrubInstallThread(std::string const& device);
 	void stopApplication();
+	void showException(Exception const& e);
 private:
 	void _execLoadSync();
 	void _execSaveSync();
@@ -51,6 +55,7 @@ private:
 	void _execResolutionListUpdate();
 	void _execFbResolutionsGetter();
 	void _execInstallGrub(std::string const& device);
+	void _execShowException();
 };
 
 #endif

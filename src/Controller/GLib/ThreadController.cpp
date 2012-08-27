@@ -19,13 +19,14 @@
 #include "ThreadController.h"
 
 GLib_ThreadController::GLib_ThreadController(ControllerCollection& controllers)
-	: _controllers(controllers)
+	: _controllers(controllers), _cachedException("")
 {
 	disp_sync_load.connect(sigc::mem_fun(this, &GLib_ThreadController::_execLoadSync));
 	disp_sync_save.connect(sigc::mem_fun(this, &GLib_ThreadController::_execSaveSync));
 	disp_thread_died.connect(sigc::mem_fun(this, &GLib_ThreadController::_execDie));
 	disp_settings_loaded.connect(sigc::mem_fun(this, &GLib_ThreadController::_execActivateSettings));
 	disp_updateSettingsDlgResolutionList.connect(sigc::mem_fun(this, &GLib_ThreadController::_execResolutionListUpdate));
+	disp_exception.connect(sigc::mem_fun(this, &GLib_ThreadController::_execShowException));
 }
 
 void GLib_ThreadController::syncEntryList(){
@@ -68,6 +69,11 @@ void GLib_ThreadController::stopApplication() {
 	Gtk::Main::quit();
 }
 
+void GLib_ThreadController::showException(Exception const& e) {
+	this->_cachedException = e;
+	this->disp_exception();
+}
+
 void GLib_ThreadController::_execLoadSync() {
 	this->_controllers.mainController->syncLoadStateAction();
 }
@@ -102,4 +108,8 @@ void GLib_ThreadController::_execFbResolutionsGetter() {
 
 void GLib_ThreadController::_execInstallGrub(std::string const& device) {
 	this->_controllers.installerController->installGrubThreadedAction(device);
+}
+
+void GLib_ThreadController::_execShowException() {
+	this->_controllers.errorController->errorAction(this->_cachedException);
 }

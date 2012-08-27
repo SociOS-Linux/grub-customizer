@@ -23,7 +23,7 @@ Logger_Stream::Logger_Stream(std::ostream& stream) : stream(&stream) {}
 void Logger_Stream::log(std::string const& message, Logger::Priority prio) {
 	if (prio != ERROR && (
 		this->logLevel == LOG_NOTHING ||
-		this->logLevel == LOG_DEBUG_ONLY && prio != Logger::DEBUG ||
+		this->logLevel == LOG_DEBUG_ONLY && prio != Logger::DEBUG && prio != Logger::EXCEPTION ||
 		this->logLevel == LOG_IMPORTANT && prio != Logger::IMPORTANT_EVENT ||
 		this->logLevel == LOG_EVENT && prio != Logger::EVENT && prio != Logger::IMPORTANT_EVENT)) {
 		return;

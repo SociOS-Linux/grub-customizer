@@ -40,27 +40,39 @@ void TrashControllerImpl::setEntryNameMapper(Mapper_EntryName& mapper) {
 }
 
 void TrashControllerImpl::showAction(){
-	view->clear();
+	try {
+		view->clear();
 
-	std::list<Model_Entry*> removedEntries = this->grublistCfg->getRemovedEntries();
-	for (std::list<Model_Entry*>::iterator iter = removedEntries.begin(); iter != removedEntries.end(); iter++) {
-		Model_Script* script = this->grublistCfg->repository.getScriptByEntry(**iter);
+		std::list<Model_Entry*> removedEntries = this->grublistCfg->getRemovedEntries();
+		for (std::list<Model_Entry*>::iterator iter = removedEntries.begin(); iter != removedEntries.end(); iter++) {
+			Model_Script* script = this->grublistCfg->repository.getScriptByEntry(**iter);
 
-		std::string name = (*iter)->name;
-		name = this->entryNameMapper->map(&**iter, name, script->name);
+			std::string name = (*iter)->name;
+			name = this->entryNameMapper->map(&**iter, name, script->name);
 
-		view->addItem(name, (*iter)->type != Model_Entry::MENUENTRY, script->name, *iter);
+			view->addItem(name, (*iter)->type != Model_Entry::MENUENTRY, script->name, *iter);
+		}
+
+		view->show();
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
 	}
-
-	view->show();
 }
 
 void TrashControllerImpl::applyAction(){
-	std::list<void*> entries = view->getSelectedEntries();
-	this->getAllControllers().mainController->addEntriesAction(entries);
+	try {
+		std::list<void*> entries = view->getSelectedEntries();
+		this->getAllControllers().mainController->addEntriesAction(entries);
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
 }
 
 
 void TrashControllerImpl::hideAction() {
-	this->view->hide();
+	try {
+		this->view->hide();
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
 }

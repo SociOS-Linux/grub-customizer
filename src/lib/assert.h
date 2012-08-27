@@ -16,19 +16,23 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CONTROLLER_ABSTRACT_H_
-#define CONTROLLER_ABSTRACT_H_
+#ifndef ASSERT_H_
+#define ASSERT_H_
 
-#include "ControllerCollection.h"
-#include "../lib/assert.h"
-#include "../lib/CommonClass.h"
+/**
+ * a custom assert implementation throwing exceptions instead of aborting directly
+ */
 
-class ControllerAbstract : public CommonClass {
-	ControllerCollection* _controllerCollection;
-public:
-	void setControllerCollection(ControllerCollection& controllerCollection);
-	ControllerCollection& getAllControllers();
-};
+#include "Exception.h"
+
+# define ASSERT_VOID_CAST static_cast<void>
+
+void assert_fail(std::string const& expr, std::string const& file, int line, std::string const& func);
+
+# define assert(expr)							\
+  ((expr)								\
+   ? ASSERT_VOID_CAST (0)						\
+   : assert_fail (__STRING(expr), __FILE__, __LINE__, __func__))
 
 
-#endif /* ABSTRACT_H_ */
+#endif /* ASSERT_H_ */

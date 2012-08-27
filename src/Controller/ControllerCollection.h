@@ -25,6 +25,7 @@
 #include "TrashController.h"
 #include "InstallerController.h"
 #include "AboutController.h"
+#include "ErrorController.h"
 
 struct ControllerCollection {
 	EntryEditController* entryEditController;
@@ -34,6 +35,7 @@ struct ControllerCollection {
 	TrashController* trashController;
 	InstallerController* installerController;
 	AboutController* aboutController;
+	ErrorController* errorController;
 };
 
 

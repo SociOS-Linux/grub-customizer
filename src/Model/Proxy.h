@@ -21,7 +21,7 @@
 #include "Rule.h"
 #include "Script.h"
 #include <sys/stat.h>
-#include <assert.h>
+#include "../lib/assert.h"
 #include <unistd.h>
 #include <map>
 #include "EntryPathBuilderImpl.h"

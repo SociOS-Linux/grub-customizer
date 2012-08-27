@@ -52,6 +52,9 @@ src/Controller/EntryEditControllerImpl.h -text
 src/Controller/EnvEditorController.h -text
 src/Controller/EnvEditorControllerImpl.cpp -text
 src/Controller/EnvEditorControllerImpl.h -text
+src/Controller/ErrorController.h -text
+src/Controller/ErrorControllerImpl.cpp -text
+src/Controller/ErrorControllerImpl.h -text
 src/Controller/GLib/ThreadController.cpp -text
 src/Controller/GLib/ThreadController.h -text
 src/Controller/InstallerController.h -text
@@ -115,6 +118,7 @@ src/View/About.h -text
 src/View/ColorChooser.h -text
 src/View/EntryEditor.h -text
 src/View/EnvEditor.h -text
+src/View/Error.h -text
 src/View/Gtk/About.cpp -text
 src/View/Gtk/About.h -text
 src/View/Gtk/Element/PartitionChooser.cpp -text
@@ -123,6 +127,8 @@ src/View/Gtk/EntryEditor.cpp -text
 src/View/Gtk/EntryEditor.h -text
 src/View/Gtk/EnvEditor.cpp -text
 src/View/Gtk/EnvEditor.h -text
+src/View/Gtk/Error.cpp -text
+src/View/Gtk/Error.h -text
 src/View/Gtk/Installer.cpp -text
 src/View/Gtk/Installer.h -text
 src/View/Gtk/Main.cpp -text
@@ -159,6 +165,8 @@ src/lib/Logger/Stream.h -text
 src/lib/Mutex.h -text
 src/lib/Mutex/GLib.cpp -text
 src/lib/Mutex/GLib.h -text
+src/lib/assert.cpp -text
+src/lib/assert.h -text
 src/lib/md5.cpp -text
 src/lib/md5.h -text
 src/lib/regex.cpp -text

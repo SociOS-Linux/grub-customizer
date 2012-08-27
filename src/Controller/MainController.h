@@ -32,6 +32,7 @@ public:
 	virtual void syncLoadStateAction() = 0;
 	virtual void syncSaveStateAction() = 0;
 
+	virtual void initAction() = 0;
 	virtual void reInitAction(bool burgMode) = 0;
 	virtual void showSettingsAction() = 0;
 	virtual void reloadAction() = 0;

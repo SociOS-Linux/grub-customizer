@@ -20,7 +20,7 @@
 
 #include <openssl/md5.h>
 #include <string>
-#include <assert.h>
+#include "assert.h"
 
 std::string md5(std::string const& input);
 

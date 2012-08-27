@@ -30,6 +30,10 @@ void AboutControllerImpl::setView(View_About& aboutDialog){
 }
 
 void AboutControllerImpl::showAction(){
-	this->view->show();
+	try {
+		this->view->show();
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
 }
 

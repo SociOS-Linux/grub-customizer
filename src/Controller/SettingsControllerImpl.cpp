@@ -64,21 +64,29 @@ Model_FbResolutionsGetter& SettingsControllerImpl::getFbResolutionsGetter() {
 }
 
 void SettingsControllerImpl::loadResolutionsAction() {
-	this->fbResolutionsGetter->load();
+	try {
+		this->fbResolutionsGetter->load();
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
 }
 
 void SettingsControllerImpl::updateSettingsDataAction(){
-	std::list<Model_Proxylist_Item> entryTitles = this->grublistCfg->proxies.generateEntryTitleList();
-	std::list<std::string> labelListToplevel  = this->grublistCfg->proxies.getToplevelEntryTitles();
+	try {
+		std::list<Model_Proxylist_Item> entryTitles = this->grublistCfg->proxies.generateEntryTitleList();
+		std::list<std::string> labelListToplevel  = this->grublistCfg->proxies.getToplevelEntryTitles();
 
-	this->view->clearDefaultEntryChooser();
-	for (std::list<Model_Proxylist_Item>::iterator iter = entryTitles.begin(); iter != entryTitles.end(); iter++) {
-		this->view->addEntryToDefaultEntryChooser(iter->labelPathValue, iter->labelPathLabel, iter->numericPathValue, iter->numericPathLabel);
+		this->view->clearDefaultEntryChooser();
+		for (std::list<Model_Proxylist_Item>::iterator iter = entryTitles.begin(); iter != entryTitles.end(); iter++) {
+			this->view->addEntryToDefaultEntryChooser(iter->labelPathValue, iter->labelPathLabel, iter->numericPathValue, iter->numericPathLabel);
+		}
+
+		this->view->setPreviewEntryTitles(labelListToplevel);
+
+		this->syncSettings();
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
 	}
-
-	this->view->setPreviewEntryTitles(labelListToplevel);
-
-	this->syncSettings();
 }
 
 void SettingsControllerImpl::showSettingsDlg(){
@@ -86,14 +94,23 @@ void SettingsControllerImpl::showSettingsDlg(){
 }
 
 void SettingsControllerImpl::updateResolutionlistAction(){
-	const std::list<std::string>& data = this->fbResolutionsGetter->getData();
-	this->view->clearResolutionChooser();
-	for (std::list<std::string>::const_iterator iter = data.begin(); iter != data.end(); iter++)
-		this->view->addResolution(*iter);
+	try {
+		const std::list<std::string>& data = this->fbResolutionsGetter->getData();
+		this->view->clearResolutionChooser();
+		for (std::list<std::string>::const_iterator iter = data.begin(); iter != data.end(); iter++) {
+			this->view->addResolution(*iter);
+		}
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
 }
 
 void SettingsControllerImpl::updateResolutionlistThreadedAction() {
-	this->threadController->updateSettingsDlgResolutionList();
+	try {
+		this->threadController->updateSettingsDlgResolutionList();
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorThreadedAction(e);
+	}
 }
 
 void SettingsControllerImpl::syncSettings(){
@@ -179,161 +196,233 @@ void SettingsControllerImpl::syncSettings(){
 }
 
 void SettingsControllerImpl::updateDefaultSystemAction(){
-	if (this->view->getActiveDefEntryOption() == View_Settings::DEF_ENTRY_SAVED){
-		this->settings->setValue("GRUB_DEFAULT", "saved");
-		this->settings->setValue("GRUB_SAVEDEFAULT", "true");
-		this->settings->setIsActive("GRUB_SAVEDEFAULT", true);
+	try {
+		if (this->view->getActiveDefEntryOption() == View_Settings::DEF_ENTRY_SAVED){
+			this->settings->setValue("GRUB_DEFAULT", "saved");
+			this->settings->setValue("GRUB_SAVEDEFAULT", "true");
+			this->settings->setIsActive("GRUB_SAVEDEFAULT", true);
+		}
+		else {
+			this->settings->setValue("GRUB_DEFAULT", this->view->getSelectedDefaultGrubValue());
+			this->settings->setValue("GRUB_SAVEDEFAULT", "false");
+		}
+		this->syncSettings();
+		this->env.modificationsUnsaved = true;
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
 	}
-	else {
-		this->settings->setValue("GRUB_DEFAULT", this->view->getSelectedDefaultGrubValue());
-		this->settings->setValue("GRUB_SAVEDEFAULT", "false");
-	}
-	this->syncSettings();
-	this->env.modificationsUnsaved = true;
 }
 
 void SettingsControllerImpl::updateCustomSettingAction(std::string const& name){
-	View_Settings::CustomOption c = this->view->getCustomOption(name);
-	this->settings->renameItem(c.old_name, c.name);
-	this->settings->setValue(c.name, c.value);
-	this->settings->setIsActive(c.name, c.isActive);
-	this->syncSettings();
-	this->env.modificationsUnsaved = true;
+	try {
+		View_Settings::CustomOption c = this->view->getCustomOption(name);
+		this->settings->renameItem(c.old_name, c.name);
+		this->settings->setValue(c.name, c.value);
+		this->settings->setIsActive(c.name, c.isActive);
+		this->syncSettings();
+		this->env.modificationsUnsaved = true;
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
 }
 
 void SettingsControllerImpl::addCustomSettingAction(){
-	std::string newSettingName = this->settings->addNewItem();
-	this->syncSettings();
+	try {
+		std::string newSettingName = this->settings->addNewItem();
+		this->syncSettings();
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
 }
 void SettingsControllerImpl::removeCustomSettingAction(std::string const& name){
-	this->settings->removeItem(name);
-	this->syncSettings();
-	this->env.modificationsUnsaved = true;
+	try {
+		this->settings->removeItem(name);
+		this->syncSettings();
+		this->env.modificationsUnsaved = true;
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
 }
 
 void SettingsControllerImpl::updateShowMenuSettingAction(){
-	std::string val = this->settings->getValue("GRUB_HIDDEN_TIMEOUT");
-	if (val == "" || val.find_first_not_of("0123456789") != -1) {
-		this->settings->setValue("GRUB_HIDDEN_TIMEOUT", "0"); //create this entry - if it has an invalid value
+	try {
+		std::string val = this->settings->getValue("GRUB_HIDDEN_TIMEOUT");
+		if (val == "" || val.find_first_not_of("0123456789") != -1) {
+			this->settings->setValue("GRUB_HIDDEN_TIMEOUT", "0"); //create this entry - if it has an invalid value
+		}
+		this->settings->setIsActive("GRUB_HIDDEN_TIMEOUT", !this->view->getShowMenuCheckboxState());
+		if (!this->view->getShowMenuCheckboxState() && this->view->getOsProberCheckboxState()){
+			this->view->showHiddenMenuOsProberConflictMessage();
+		}
+		this->syncSettings();
+		this->env.modificationsUnsaved = true;
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
 	}
-	this->settings->setIsActive("GRUB_HIDDEN_TIMEOUT", !this->view->getShowMenuCheckboxState());
-	if (!this->view->getShowMenuCheckboxState() && this->view->getOsProberCheckboxState()){
-		this->view->showHiddenMenuOsProberConflictMessage();
-	}
-	this->syncSettings();
-	this->env.modificationsUnsaved = true;
 }
 
 void SettingsControllerImpl::updateOsProberSettingAction(){
-	this->settings->setValue("GRUB_DISABLE_OS_PROBER", this->view->getOsProberCheckboxState() ? "false" : "true");
-	this->settings->setIsActive("GRUB_DISABLE_OS_PROBER", !this->view->getOsProberCheckboxState());
-	this->syncSettings();
-	this->env.modificationsUnsaved = true;
+	try {
+		this->settings->setValue("GRUB_DISABLE_OS_PROBER", this->view->getOsProberCheckboxState() ? "false" : "true");
+		this->settings->setIsActive("GRUB_DISABLE_OS_PROBER", !this->view->getOsProberCheckboxState());
+		this->syncSettings();
+		this->env.modificationsUnsaved = true;
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
 }
 
 void SettingsControllerImpl::updateKernelParamsAction(){
-	this->settings->setValue("GRUB_CMDLINE_LINUX_DEFAULT", this->view->getKernelParams());
-	this->syncSettings();
-	this->env.modificationsUnsaved = true;
+	try {
+		this->settings->setValue("GRUB_CMDLINE_LINUX_DEFAULT", this->view->getKernelParams());
+		this->syncSettings();
+		this->env.modificationsUnsaved = true;
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
 }
 
 void SettingsControllerImpl::updateUseCustomResolutionAction(){
-	if (this->settings->getValue("GRUB_GFXMODE") == "") {
-		this->settings->setValue("GRUB_GFXMODE", "saved"); //use saved as default value (if empty)
+	try {
+		if (this->settings->getValue("GRUB_GFXMODE") == "") {
+			this->settings->setValue("GRUB_GFXMODE", "saved"); //use saved as default value (if empty)
+		}
+		this->settings->setIsActive("GRUB_GFXMODE", this->view->getResolutionCheckboxState());
+		this->syncSettings();
+		this->env.modificationsUnsaved = true;
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
 	}
-	this->settings->setIsActive("GRUB_GFXMODE", this->view->getResolutionCheckboxState());
-	this->syncSettings();
-	this->env.modificationsUnsaved = true;
 }
 
 void SettingsControllerImpl::updateBackgroundImageAction(){
-	if (!this->env.useDirectBackgroundProps) {
-		this->settings->setValue("GRUB_MENU_PICTURE", this->view->getBackgroundImagePath());
-		this->settings->setIsActive("GRUB_MENU_PICTURE", true);
-		this->settings->setIsExport("GRUB_MENU_PICTURE", true);
-	} else {
-		this->settings->setValue("GRUB_BACKGROUND", this->view->getBackgroundImagePath());
-		this->settings->setIsActive("GRUB_BACKGROUND", true);
+	try {
+		if (!this->env.useDirectBackgroundProps) {
+			this->settings->setValue("GRUB_MENU_PICTURE", this->view->getBackgroundImagePath());
+			this->settings->setIsActive("GRUB_MENU_PICTURE", true);
+			this->settings->setIsExport("GRUB_MENU_PICTURE", true);
+		} else {
+			this->settings->setValue("GRUB_BACKGROUND", this->view->getBackgroundImagePath());
+			this->settings->setIsActive("GRUB_BACKGROUND", true);
+		}
+		this->syncSettings();
+		this->env.modificationsUnsaved = true;
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
 	}
-	this->syncSettings();
-	this->env.modificationsUnsaved = true;
 }
 
 void SettingsControllerImpl::updateColorSettingsAction(){
-	if (this->view->getColorChooser(View_Settings::COLOR_CHOOSER_DEFAULT_FONT).getSelectedColor() != "" && this->view->getColorChooser(View_Settings::COLOR_CHOOSER_DEFAULT_BACKGROUND).getSelectedColor() != ""){
-		this->settings->setValue("GRUB_COLOR_NORMAL", this->view->getColorChooser(View_Settings::COLOR_CHOOSER_DEFAULT_FONT).getSelectedColor() + "/" + this->view->getColorChooser(View_Settings::COLOR_CHOOSER_DEFAULT_BACKGROUND).getSelectedColor());
-		this->settings->setIsActive("GRUB_COLOR_NORMAL", true);
-		this->settings->setIsExport("GRUB_COLOR_NORMAL", true);
+	try {
+		if (this->view->getColorChooser(View_Settings::COLOR_CHOOSER_DEFAULT_FONT).getSelectedColor() != "" && this->view->getColorChooser(View_Settings::COLOR_CHOOSER_DEFAULT_BACKGROUND).getSelectedColor() != ""){
+			this->settings->setValue("GRUB_COLOR_NORMAL", this->view->getColorChooser(View_Settings::COLOR_CHOOSER_DEFAULT_FONT).getSelectedColor() + "/" + this->view->getColorChooser(View_Settings::COLOR_CHOOSER_DEFAULT_BACKGROUND).getSelectedColor());
+			this->settings->setIsActive("GRUB_COLOR_NORMAL", true);
+			this->settings->setIsExport("GRUB_COLOR_NORMAL", true);
+		}
+		if (this->view->getColorChooser(View_Settings::COLOR_CHOOSER_HIGHLIGHT_FONT).getSelectedColor() != "" && this->view->getColorChooser(View_Settings::COLOR_CHOOSER_HIGHLIGHT_BACKGROUND).getSelectedColor() != ""){
+			this->settings->setValue("GRUB_COLOR_HIGHLIGHT", this->view->getColorChooser(View_Settings::COLOR_CHOOSER_HIGHLIGHT_FONT).getSelectedColor() + "/" + this->view->getColorChooser(View_Settings::COLOR_CHOOSER_HIGHLIGHT_BACKGROUND).getSelectedColor());
+			this->settings->setIsActive("GRUB_COLOR_HIGHLIGHT", true);
+			this->settings->setIsExport("GRUB_COLOR_HIGHLIGHT", true);
+		}
+		this->syncSettings();
+		this->env.modificationsUnsaved = true;
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
 	}
-	if (this->view->getColorChooser(View_Settings::COLOR_CHOOSER_HIGHLIGHT_FONT).getSelectedColor() != "" && this->view->getColorChooser(View_Settings::COLOR_CHOOSER_HIGHLIGHT_BACKGROUND).getSelectedColor() != ""){
-		this->settings->setValue("GRUB_COLOR_HIGHLIGHT", this->view->getColorChooser(View_Settings::COLOR_CHOOSER_HIGHLIGHT_FONT).getSelectedColor() + "/" + this->view->getColorChooser(View_Settings::COLOR_CHOOSER_HIGHLIGHT_BACKGROUND).getSelectedColor());
-		this->settings->setIsActive("GRUB_COLOR_HIGHLIGHT", true);
-		this->settings->setIsExport("GRUB_COLOR_HIGHLIGHT", true);
-	}
-	this->syncSettings();
-	this->env.modificationsUnsaved = true;
 }
 
 void SettingsControllerImpl::updateFontSettingsAction(bool removeFont) {
-	std::string fontName;
-	int fontSize = -1;
-	if (!removeFont) {
-		fontName = this->view->getFontName();
-		fontSize = this->view->getFontSize();;
+	try {
+		std::string fontName;
+		int fontSize = -1;
+		if (!removeFont) {
+			fontName = this->view->getFontName();
+			fontSize = this->view->getFontSize();;
+		}
+		this->settings->grubFont = fontName;
+		this->settings->grubFontSize = fontSize;
+		this->syncSettings();
+		this->env.modificationsUnsaved = true;
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
 	}
-	this->settings->grubFont = fontName;
-	this->settings->grubFontSize = fontSize;
-	this->syncSettings();
-	this->env.modificationsUnsaved = true;
 }
 
 void SettingsControllerImpl::removeBackgroundImageAction(){
-	if (!this->env.useDirectBackgroundProps) {
-		this->settings->setIsActive("GRUB_MENU_PICTURE", false);
-	} else {
-		this->settings->setIsActive("GRUB_BACKGROUND", false);
+	try {
+		if (!this->env.useDirectBackgroundProps) {
+			this->settings->setIsActive("GRUB_MENU_PICTURE", false);
+		} else {
+			this->settings->setIsActive("GRUB_BACKGROUND", false);
+		}
+		this->syncSettings();
+		this->env.modificationsUnsaved = true;
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
 	}
-	this->syncSettings();
-	this->env.modificationsUnsaved = true;
 }
 
 void SettingsControllerImpl::hideAction(){
-	this->view->hide();
-	if (this->settings->reloadRequired()){
-		this->getThreadController().startLoadThread(true);
+	try {
+		this->view->hide();
+		if (this->settings->reloadRequired()){
+			this->getThreadController().startLoadThread(true);
+		}
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
 	}
 }
 
 void SettingsControllerImpl::showAction(bool burgMode) {
-	this->view->show(burgMode);
+	try {
+		this->view->show(burgMode);
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
 }
 
 void SettingsControllerImpl::updateTimeoutSettingAction(){
-	if (this->view->getShowMenuCheckboxState()){
-		this->settings->setValue("GRUB_TIMEOUT", this->view->getTimeoutValueString());
+	try {
+		if (this->view->getShowMenuCheckboxState()){
+			this->settings->setValue("GRUB_TIMEOUT", this->view->getTimeoutValueString());
+		}
+		else {
+			this->settings->setValue("GRUB_HIDDEN_TIMEOUT", this->view->getTimeoutValueString());
+		}
+		this->syncSettings();
+		this->env.modificationsUnsaved = true;
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
 	}
-	else {
-		this->settings->setValue("GRUB_HIDDEN_TIMEOUT", this->view->getTimeoutValueString());
-	}
-	this->syncSettings();
-	this->env.modificationsUnsaved = true;
 }
 
 void SettingsControllerImpl::updateCustomResolutionAction(){
-	this->settings->setValue("GRUB_GFXMODE", this->view->getResolution());
-	this->syncSettings();
-	this->env.modificationsUnsaved = true;
+	try {
+		this->settings->setValue("GRUB_GFXMODE", this->view->getResolution());
+		this->syncSettings();
+		this->env.modificationsUnsaved = true;
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
 }
 
 void SettingsControllerImpl::updateRecoverySettingAction(){
-	if (this->settings->getValue("GRUB_DISABLE_LINUX_RECOVERY") != "true") {
-		this->settings->setValue("GRUB_DISABLE_LINUX_RECOVERY", "true");
+	try {
+		if (this->settings->getValue("GRUB_DISABLE_LINUX_RECOVERY") != "true") {
+			this->settings->setValue("GRUB_DISABLE_LINUX_RECOVERY", "true");
+		}
+		this->settings->setIsActive("GRUB_DISABLE_LINUX_RECOVERY", !this->view->getRecoveryCheckboxState());
+		this->syncSettings();
+		this->env.modificationsUnsaved = true;
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
 	}
-	this->settings->setIsActive("GRUB_DISABLE_LINUX_RECOVERY", !this->view->getRecoveryCheckboxState());
-	this->syncSettings();
-	this->env.modificationsUnsaved = true;
 }
 
 void SettingsControllerImpl::syncAction() {
-	this->syncSettings();
+	try {
+		this->syncSettings();
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
 }

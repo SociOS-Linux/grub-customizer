@@ -83,6 +83,7 @@ add_executable(grub-customizer
 	src/View/Gtk/Main.cpp
 	src/View/Gtk/Settings.cpp
 	src/View/Gtk/Trash.cpp
+	src/View/Gtk/Error.cpp
 	src/Controller/EntryEditControllerImpl.cpp
 	src/Controller/MainControllerImpl.cpp
 	src/Controller/ControllerAbstract.cpp
@@ -91,7 +92,9 @@ add_executable(grub-customizer
 	src/Controller/TrashControllerImpl.cpp
 	src/Controller/InstallerControllerImpl.cpp
 	src/Controller/AboutControllerImpl.cpp
+	src/Controller/ErrorControllerImpl.cpp
 	src/lib/Exception.cpp
+	src/lib/assert.cpp
 )
 
 
@@ -115,6 +118,7 @@ add_executable(grubcfg-proxy
 	src/Model/ProxyScriptData.cpp
 	src/Model/EntryPathBuilderImpl.cpp
 	src/lib/Exception.cpp
+	src/lib/assert.cpp
 )
 
 target_link_libraries(grub-customizer 

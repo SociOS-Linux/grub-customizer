@@ -16,19 +16,37 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CONTROLLER_ABSTRACT_H_
-#define CONTROLLER_ABSTRACT_H_
+#ifndef ERRORCONTROLLERIMPL_H_
+#define ERRORCONTROLLERIMPL_H_
 
-#include "ControllerCollection.h"
-#include "../lib/assert.h"
-#include "../lib/CommonClass.h"
+#include <libintl.h>
+#include <locale.h>
+#include <sstream>
+#include "../config.h"
 
-class ControllerAbstract : public CommonClass {
-	ControllerCollection* _controllerCollection;
+#include "../Model/Env.h"
+
+#include "../View/Error.h"
+
+#include "../Controller/ControllerAbstract.h"
+
+#include "ErrorController.h"
+
+class ErrorControllerImpl : public ControllerAbstract, public ErrorController {
+	Model_Env& env;
+	View_Error* view;
+	ThreadController* threadController;
+	bool applicationStarted;
 public:
-	void setControllerCollection(ControllerCollection& controllerCollection);
-	ControllerCollection& getAllControllers();
+	void setView(View_Error& view);
+	void setThreadController(ThreadController& threadController);
+	void setApplicationStarted(bool val);
+
+	ErrorControllerImpl(Model_Env& env);
+	
+	void errorAction(Exception const& e);
+	void errorThreadedAction(Exception const& e);
+	void quitAction();
 };
 
-
-#endif /* ABSTRACT_H_ */
+#endif

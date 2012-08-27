@@ -19,6 +19,7 @@
 #ifndef THREADCONTROLLER_H_INCLUDED
 #define THREADCONTROLLER_H_INCLUDED
 #include <string>
+#include "../lib/Exception.h"
 
 class ThreadController {
 public:
@@ -34,6 +35,7 @@ public:
 	virtual void startFramebufferResolutionLoader() = 0;
 	virtual void startGrubInstallThread(std::string const& device) = 0;
 	virtual void stopApplication() = 0;
+	virtual void showException(Exception const& e) = 0;
 };
 
 #endif

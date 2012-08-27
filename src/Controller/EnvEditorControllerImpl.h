@@ -60,11 +60,6 @@ public:
 	void applyAction(bool saveConfig);
 
 	void exitAction();
-
-	// transitional
-	void grubEnvSetRootDeviceName(std::string const& rootDevice);
-	void grubEnvsetEnvSettings(std::map<std::string, std::string> const& props, std::list<std::string> const& requiredProps, std::list<std::string> const& validProps);
-	void grubEnvShow(bool resetPartitionChooser);
 };
 
 #endif

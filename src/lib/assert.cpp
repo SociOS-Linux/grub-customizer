@@ -16,19 +16,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CONTROLLER_ABSTRACT_H_
-#define CONTROLLER_ABSTRACT_H_
+#include "assert.h"
 
-#include "ControllerCollection.h"
-#include "../lib/assert.h"
-#include "../lib/CommonClass.h"
-
-class ControllerAbstract : public CommonClass {
-	ControllerCollection* _controllerCollection;
-public:
-	void setControllerCollection(ControllerCollection& controllerCollection);
-	ControllerCollection& getAllControllers();
-};
-
-
-#endif /* ABSTRACT_H_ */
+void assert_fail(std::string const& expr, std::string const& file, int line, std::string const& func) {
+	throw AssertException("Assertion `" + expr + "' failed. Function: " + func, file, line);
+}

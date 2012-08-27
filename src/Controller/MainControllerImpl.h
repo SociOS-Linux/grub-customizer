@@ -91,6 +91,7 @@ public:
 	//init functions
 	void init();
 	void init(Model_Env::Mode mode, bool initEnv = true);
+	void initAction();
 	void reInitAction(bool burgMode);
 	void showEnvEditorAction(bool resetPartitionChooser = false);
 	void cancelBurgSwitcherAction();

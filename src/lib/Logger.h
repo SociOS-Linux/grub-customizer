@@ -30,7 +30,8 @@ public:
 		INFO,
 		WARNING,
 		ERROR,
-		DEBUG
+		DEBUG,
+		EXCEPTION
 	};
 	virtual void log(std::string const& str, Priority prio) = 0;
 };

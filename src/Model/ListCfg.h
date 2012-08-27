@@ -39,6 +39,8 @@
 #include "Env.h"
 #include "../Controller/MainController.h"
 
+#include "../lib/assert.h"
+
 #include "../lib/Mutex.h"
 #include "../lib/CommonClass.h"
 

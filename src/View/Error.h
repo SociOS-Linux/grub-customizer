@@ -16,19 +16,16 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CONTROLLER_ABSTRACT_H_
-#define CONTROLLER_ABSTRACT_H_
+#ifndef ERROR_H_
+#define ERROR_H_
 
-#include "ControllerCollection.h"
-#include "../lib/assert.h"
-#include "../lib/CommonClass.h"
+#include <string>
 
-class ControllerAbstract : public CommonClass {
-	ControllerCollection* _controllerCollection;
+class View_Error {
 public:
-	void setControllerCollection(ControllerCollection& controllerCollection);
-	ControllerCollection& getAllControllers();
+	virtual inline ~View_Error(){}
+	virtual void showErrorMessage(std::string const& errorMessage, bool allowContinue) = 0;
 };
 
 
-#endif /* ABSTRACT_H_ */
+#endif /* ERROR_H_ */

@@ -176,93 +176,126 @@ void MainControllerImpl::init(Model_Env::Mode mode, bool initEnv){
 	this->getThreadController().startLoadThread(false);
 }
 
+void MainControllerImpl::initAction() {
+	try {
+		this->init();
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
+}
+
 void MainControllerImpl::reInitAction(bool burgMode) {
-	Model_Env::Mode mode = burgMode ? Model_Env::BURG_MODE : Model_Env::GRUB_MODE;
-	this->init(mode, false);
+	try {
+		Model_Env::Mode mode = burgMode ? Model_Env::BURG_MODE : Model_Env::GRUB_MODE;
+		this->init(mode, false);
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
 }
 
 void MainControllerImpl::cancelBurgSwitcherAction(){
-	if (!this->view->isVisible())
-		this->getThreadController().stopApplication();
+	try {
+		if (!this->view->isVisible()) {
+			this->getThreadController().stopApplication();
+		}
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
 }
 
 void MainControllerImpl::reloadAction(){
-	this->getAllControllers().settingsController->syncAction();
-	this->view->hideReloadRecommendation();
-	this->view->setLockState(1|4|8);
-	this->getThreadController().startLoadThread(true);
+	try {
+		this->getAllControllers().settingsController->syncAction();
+		this->view->hideReloadRecommendation();
+		this->view->setLockState(1|4|8);
+		this->getThreadController().startLoadThread(true);
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
 }
 
 //threaded!
 void MainControllerImpl::loadThreadedAction(bool preserveConfig){
-	if (!is_loading){ //allow only one load thread at the same time!
-		this->log(std::string("loading - preserveConfig: ") + (preserveConfig ? "yes" : "no"), Logger::IMPORTANT_EVENT);
-		is_loading = true;
-		this->activeThreadCount++;
-
-		if (!preserveConfig){
-			this->log("unsetting saved config", Logger::EVENT);
-			this->grublistCfg->reset();
-			this->savedListCfg->reset();
-			//load the burg/grub settings file
-			this->log("loading settings", Logger::IMPORTANT_EVENT);
-			this->settings->load();
-			this->getThreadController().enableSettings();
-		} else {
-			this->log("switching settings", Logger::IMPORTANT_EVENT);
-			this->settingsOnDisk->load();
-			this->settings->save();
-		}
-
-		try {
-			this->log("loading grub list", Logger::IMPORTANT_EVENT);
-			this->grublistCfg->load(preserveConfig);
-			this->log("grub list completely loaded", Logger::IMPORTANT_EVENT);
-		} catch (CmdExecException const& e){
-			this->log("error while loading the grub list", Logger::ERROR);
-			this->thrownException = e;
-			this->getThreadController().showThreadDiedError();
-			return; //cancel
-		}
+	try {
+		if (!is_loading){ //allow only one load thread at the same time!
+			this->log(std::string("loading - preserveConfig: ") + (preserveConfig ? "yes" : "no"), Logger::IMPORTANT_EVENT);
+			is_loading = true;
+			this->activeThreadCount++;
 	
-		if (!preserveConfig){
-			this->log("loading saved grub list", Logger::IMPORTANT_EVENT);
-			if (this->savedListCfg->loadStaticCfg()) {
-				this->config_has_been_different_on_startup_but_unsaved = !this->grublistCfg->compare(*this->savedListCfg);
+			if (!preserveConfig){
+				this->log("unsetting saved config", Logger::EVENT);
+				this->grublistCfg->reset();
+				this->savedListCfg->reset();
+				//load the burg/grub settings file
+				this->log("loading settings", Logger::IMPORTANT_EVENT);
+				this->settings->load();
+				this->getThreadController().enableSettings();
 			} else {
-				this->log("saved grub list not found", Logger::WARNING);
-				this->config_has_been_different_on_startup_but_unsaved = false;
+				this->log("switching settings", Logger::IMPORTANT_EVENT);
+				this->settingsOnDisk->load();
+				this->settings->save();
 			}
+
+			try {
+				this->log("loading grub list", Logger::IMPORTANT_EVENT);
+				this->grublistCfg->load(preserveConfig);
+				this->log("grub list completely loaded", Logger::IMPORTANT_EVENT);
+			} catch (CmdExecException const& e){
+				this->log("error while loading the grub list", Logger::ERROR);
+				this->thrownException = e;
+				this->getThreadController().showThreadDiedError();
+				return; //cancel
+			}
+
+			if (!preserveConfig){
+				this->log("loading saved grub list", Logger::IMPORTANT_EVENT);
+				if (this->savedListCfg->loadStaticCfg()) {
+					this->config_has_been_different_on_startup_but_unsaved = !this->grublistCfg->compare(*this->savedListCfg);
+				} else {
+					this->log("saved grub list not found", Logger::WARNING);
+					this->config_has_been_different_on_startup_but_unsaved = false;
+				}
+			}
+			if (preserveConfig){
+				this->log("restoring settings", Logger::IMPORTANT_EVENT);
+				this->settingsOnDisk->save();
+			}
+			this->activeThreadCount--;
+			this->is_loading = false;
+		} else {
+			this->log("ignoring load request (only one load thread allowed at the same time)", Logger::WARNING);
 		}
-		if (preserveConfig){
-			this->log("restoring settings", Logger::IMPORTANT_EVENT);
-			this->settingsOnDisk->save();
-		}
-		this->activeThreadCount--;
-		this->is_loading = false;
-	} else {
-		this->log("ignoring load request (only one load thread allowed at the same time)", Logger::WARNING);
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorThreadedAction(e);
 	}
 }
 
 void MainControllerImpl::saveAction(){
-	this->config_has_been_different_on_startup_but_unsaved = false;
-	this->modificationsUnsaved = false; //deprecated
+	try {
+		this->config_has_been_different_on_startup_but_unsaved = false;
+		this->modificationsUnsaved = false; //deprecated
 
-	this->view->setLockState(1|4|8);
-	this->activeThreadCount++; //not in save_thead() to be faster set
-	this->getThreadController().startSaveThread();
+		this->view->setLockState(1|4|8);
+		this->activeThreadCount++; //not in save_thead() to be faster set
+		this->getThreadController().startSaveThread();
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
 }
 
 void MainControllerImpl::saveThreadedAction(){
-	this->log("writing settings file", Logger::IMPORTANT_EVENT);
-	this->settings->save();
-	if (this->settings->color_helper_required) {
-		this->grublistCfg->addColorHelper();
+	try {
+		this->log("writing settings file", Logger::IMPORTANT_EVENT);
+		this->settings->save();
+		if (this->settings->color_helper_required) {
+			this->grublistCfg->addColorHelper();
+		}
+		this->log("writing grub list configuration", Logger::IMPORTANT_EVENT);
+		this->grublistCfg->save();
+		this->activeThreadCount--;
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorThreadedAction(e);
 	}
-	this->log("writing grub list configuration", Logger::IMPORTANT_EVENT);
-	this->grublistCfg->save();
-	this->activeThreadCount--;
 }
 
 void MainControllerImpl::renameEntry(Model_Rule* rule, std::string const& newName){
@@ -283,19 +316,35 @@ void MainControllerImpl::reset(){
 
 
 void MainControllerImpl::showAboutAction(){
-	this->getAllControllers().aboutController->showAction();
+	try {
+		this->getAllControllers().aboutController->showAction();
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
 }
 
 void MainControllerImpl::showInstallerAction(){
-	this->getAllControllers().installerController->showAction();
+	try {
+		this->getAllControllers().installerController->showAction();
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
 }
 
 void MainControllerImpl::showEntryEditorAction(void* rule) {
-	this->getAllControllers().entryEditController->showAction(rule);
+	try {
+		this->getAllControllers().entryEditController->showAction(rule);
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
 }
 
 void MainControllerImpl::showEntryCreatorAction() {
-	this->getAllControllers().entryEditController->showCreatorAction();
+	try {
+		this->getAllControllers().entryEditController->showCreatorAction();
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
 }
 
 void MainControllerImpl::_rAppendRule(Model_Rule& rule, Model_Rule* parentRule){
@@ -346,188 +395,224 @@ void MainControllerImpl::_rAppendRule(Model_Rule& rule, Model_Rule* parentRule){
 }
 
 void MainControllerImpl::dieAction(){
-	this->is_loading = false;
-	this->activeThreadCount = 0;
-	bool showEnvSettings = false;
-	if (this->thrownException){
-		showEnvSettings = this->view->askForEnvironmentSettings(this->env.mkconfig_cmd, this->grublistCfg->getGrubErrorMessage());
-	}
-	if (showEnvSettings) {
-		this->showEnvEditorAction();
-	} else {
-		this->exitAction(true); //exit
+	try {
+		this->is_loading = false;
+		this->activeThreadCount = 0;
+		bool showEnvSettings = false;
+		if (this->thrownException){
+			showEnvSettings = this->view->askForEnvironmentSettings(this->env.mkconfig_cmd, this->grublistCfg->getGrubErrorMessage());
+		}
+		if (showEnvSettings) {
+			this->showEnvEditorAction();
+		} else {
+			this->exitAction(true); //exit
+		}
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
 	}
 }
 
 void MainControllerImpl::exitAction(bool force){
-	if (force){
-		if (this->mountTable->getEntryByMountpoint(PARTCHOOSER_MOUNTPOINT))
-			this->mountTable->umountAll(PARTCHOOSER_MOUNTPOINT);
-		this->getThreadController().stopApplication();
-	}
-	else {
-		int dlgResponse = this->view->showExitConfirmDialog(this->config_has_been_different_on_startup_but_unsaved*2 + this->modificationsUnsaved);
-		if (dlgResponse == 1){
-			this->saveAction(); //starts a thread that delays the application exiting
+	try {
+		if (force){
+			if (this->mountTable->getEntryByMountpoint(PARTCHOOSER_MOUNTPOINT))
+				this->mountTable->umountAll(PARTCHOOSER_MOUNTPOINT);
+			this->getThreadController().stopApplication();
 		}
+		else {
+			int dlgResponse = this->view->showExitConfirmDialog(this->config_has_been_different_on_startup_but_unsaved*2 + this->modificationsUnsaved);
+			if (dlgResponse == 1){
+				this->saveAction(); //starts a thread that delays the application exiting
+			}
 
-		if (dlgResponse != 0){
-			if (this->activeThreadCount != 0){
-				this->quit_requested = true;
-				this->grublistCfg->cancelThreads();
-			}
-			else {
-				this->exitAction(true); //re-run with force option
+			if (dlgResponse != 0){
+				if (this->activeThreadCount != 0){
+					this->quit_requested = true;
+					this->grublistCfg->cancelThreads();
+				}
+				else {
+					this->exitAction(true); //re-run with force option
+				}
 			}
 		}
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
 	}
 }
 
 void MainControllerImpl::removeRulesAction(std::list<void*> entries){
-	std::map<Model_Proxy*, void*> emptyProxies;
-	for (std::list<void*>::iterator iter = entries.begin(); iter != entries.end(); iter++) {
-		Model_Rule* rule = static_cast<Model_Rule*>(*iter);
-		rule->setVisibility(false);
-		if (!this->grublistCfg->proxies.getProxyByRule(rule)->hasVisibleRules()) {
-			emptyProxies[this->grublistCfg->proxies.getProxyByRule(rule)] = NULL;
+	try {
+		std::map<Model_Proxy*, void*> emptyProxies;
+		for (std::list<void*>::iterator iter = entries.begin(); iter != entries.end(); iter++) {
+			Model_Rule* rule = static_cast<Model_Rule*>(*iter);
+			rule->setVisibility(false);
+			if (!this->grublistCfg->proxies.getProxyByRule(rule)->hasVisibleRules()) {
+				emptyProxies[this->grublistCfg->proxies.getProxyByRule(rule)] = NULL;
+			}
 		}
-	}
 
-	for (std::map<Model_Proxy*, void*>::iterator iter = emptyProxies.begin(); iter != emptyProxies.end(); iter++) {
-		this->grublistCfg->proxies.deleteProxy(iter->first);
-		this->log("proxy removed", Logger::INFO);
-	}
+		for (std::map<Model_Proxy*, void*>::iterator iter = emptyProxies.begin(); iter != emptyProxies.end(); iter++) {
+			this->grublistCfg->proxies.deleteProxy(iter->first);
+			this->log("proxy removed", Logger::INFO);
+		}
 
-	this->syncLoadStateAction();
-	this->modificationsUnsaved = true;
-	this->getAllControllers().settingsController->updateSettingsDataAction();
+		this->syncLoadStateAction();
+		this->modificationsUnsaved = true;
+		this->getAllControllers().settingsController->updateSettingsDataAction();
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
 }
 
 
 void MainControllerImpl::renameRuleAction(void* entry, std::string const& newText){
-	Model_Rule* entry2 = (Model_Rule*)entry;
-	std::string oldName = entry2->outputName;
-//	std::string newName = this->view->getRuleName(entry);
-	if (newText == ""){
-		this->view->showErrorMessage(gettext("Name the Entry"));
-		this->view->setRuleName(entry, oldName);
+	try {
+		Model_Rule* entry2 = (Model_Rule*)entry;
+		std::string oldName = entry2->outputName;
+	//	std::string newName = this->view->getRuleName(entry);
+		if (newText == ""){
+			this->view->showErrorMessage(gettext("Name the Entry"));
+			this->view->setRuleName(entry, oldName);
+		}
+		else {
+			this->renameEntry(entry2, newText);
+		}
+		this->modificationsUnsaved = true;
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
 	}
-	else {
-		this->renameEntry(entry2, newText);
-	}
-	this->modificationsUnsaved = true;
 }
 
 
 void MainControllerImpl::moveAction(std::list<void*> rules, int direction){
 	try {
-		assert(direction == -1 || direction == 1);
+		try {
+			assert(direction == -1 || direction == 1);
 
-		int ruleCount = rules.size();
-		Model_Rule* rulePtr = static_cast<Model_Rule*>(direction == -1 ? rules.front() : rules.back());
-		for (int i = 0; i < ruleCount; i++) {
-			rulePtr = &this->grublistCfg->moveRule(rulePtr, direction);
-			if (i < ruleCount - 1) {
-				bool isEndOfList = false;
-				bool targetFound = false;
-				try {
-					rulePtr = &*this->grublistCfg->proxies.getNextVisibleRule(rulePtr, -direction);
-				} catch (NoMoveTargetException const& e) {
-					isEndOfList = true;
-					rulePtr = this->grublistCfg->proxies.getProxyByRule(rulePtr)->getParentRule(rulePtr);
-				}
-				if (!isEndOfList && rulePtr->type == Model_Rule::SUBMENU) {
-					rulePtr = direction == -1 ? &rulePtr->subRules.front() : &rulePtr->subRules.back();
-					if (rulePtr->isVisible) {
-						targetFound = true;
+			int ruleCount = rules.size();
+			Model_Rule* rulePtr = static_cast<Model_Rule*>(direction == -1 ? rules.front() : rules.back());
+			for (int i = 0; i < ruleCount; i++) {
+				rulePtr = &this->grublistCfg->moveRule(rulePtr, direction);
+				if (i < ruleCount - 1) {
+					bool isEndOfList = false;
+					bool targetFound = false;
+					try {
+						rulePtr = &*this->grublistCfg->proxies.getNextVisibleRule(rulePtr, -direction);
+					} catch (NoMoveTargetException const& e) {
+						isEndOfList = true;
+						rulePtr = this->grublistCfg->proxies.getProxyByRule(rulePtr)->getParentRule(rulePtr);
+					}
+					if (!isEndOfList && rulePtr->type == Model_Rule::SUBMENU) {
+						rulePtr = direction == -1 ? &rulePtr->subRules.front() : &rulePtr->subRules.back();
+						if (rulePtr->isVisible) {
+							targetFound = true;
+						}
+					}
+
+					if (!targetFound) {
+						rulePtr = &*this->grublistCfg->proxies.getNextVisibleRule(rulePtr, -direction);
 					}
 				}
-
-				if (!targetFound) {
-					rulePtr = &*this->grublistCfg->proxies.getNextVisibleRule(rulePtr, -direction);
-				}
 			}
-		}
 
-		std::list<void*> movedRules;
-		movedRules.push_back(rulePtr);
-		for (int i = 1; i < ruleCount; i++) {
-			movedRules.push_back(&*this->grublistCfg->proxies.getNextVisibleRule(static_cast<Model_Rule*>(movedRules.back()), direction));
-		}
+			std::list<void*> movedRules;
+			movedRules.push_back(rulePtr);
+			for (int i = 1; i < ruleCount; i++) {
+				movedRules.push_back(&*this->grublistCfg->proxies.getNextVisibleRule(static_cast<Model_Rule*>(movedRules.back()), direction));
+			}
 
-		this->syncLoadStateAction();
-		this->view->selectRules(movedRules);
-		this->modificationsUnsaved = true;
-	} catch (NoMoveTargetException const& e) {
-		this->view->showErrorMessage(gettext("cannot move this entry"));
+			this->syncLoadStateAction();
+			this->view->selectRules(movedRules);
+			this->modificationsUnsaved = true;
+		} catch (NoMoveTargetException const& e) {
+			this->view->showErrorMessage(gettext("cannot move this entry"));
+		}
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
 	}
 }
 
 
 void MainControllerImpl::createSubmenuAction(std::list<void*> childItems) {
-	Model_Rule* firstRule = static_cast<Model_Rule*>(childItems.front());
-	Model_Rule* newItem = this->grublistCfg->createSubmenu(firstRule);
-	this->syncLoadStateAction();
-	this->moveAction(childItems, -1);
-	this->view->selectRule(newItem, true);
+	try {
+		Model_Rule* firstRule = static_cast<Model_Rule*>(childItems.front());
+		Model_Rule* newItem = this->grublistCfg->createSubmenu(firstRule);
+		this->syncLoadStateAction();
+		this->moveAction(childItems, -1);
+		this->view->selectRule(newItem, true);
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
 }
 
 void MainControllerImpl::removeSubmenuAction(std::list<void*> childItems) {
-	Model_Rule* firstItem = this->grublistCfg->splitSubmenu(static_cast<Model_Rule*>(childItems.front()));
-	std::list<void*> movedRules;
-	movedRules.push_back(firstItem);
-	for (int i = 1; i < childItems.size(); i++) {
-		movedRules.push_back(&*this->grublistCfg->proxies.getNextVisibleRule(static_cast<Model_Rule*>(movedRules.back()), 1));
-	}
+	try {
+		Model_Rule* firstItem = this->grublistCfg->splitSubmenu(static_cast<Model_Rule*>(childItems.front()));
+		std::list<void*> movedRules;
+		movedRules.push_back(firstItem);
+		for (int i = 1; i < childItems.size(); i++) {
+			movedRules.push_back(&*this->grublistCfg->proxies.getNextVisibleRule(static_cast<Model_Rule*>(movedRules.back()), 1));
+		}
 
-	this->moveAction(movedRules, -1);
+		this->moveAction(movedRules, -1);
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
 }
 
 void MainControllerImpl::revertAction() {
-	int remaining = this->grublistCfg->proxies.size();
-	while (remaining) {
-		this->grublistCfg->proxies.deleteProxy(&this->grublistCfg->proxies.front());
-		assert(this->grublistCfg->proxies.size() < remaining); // make sure that the proxy has really been deleted to prevent an endless loop
-		remaining = this->grublistCfg->proxies.size();
-	}
-	int i = 50; // unknown scripts starting at position 50
-	for (std::list<Model_Script>::iterator iter = this->grublistCfg->repository.begin(); iter != this->grublistCfg->repository.end(); iter++) {
-		Model_Proxy newProxy(*iter);
-		if (iter->name == "header") {
-			newProxy.index = 0;
-		} else if (iter->name == "debian_theme") {
-			newProxy.index = 5;
-		} else if (iter->name == "grub-customizer_menu_color_helper") {
-			newProxy.index = 6;
-		} else if (iter->name == "linux") {
-			newProxy.index = 10;
-		} else if (iter->name == "linux_xen" || iter->name == "memtest86+") {
-			newProxy.index = 20;
-		} else if (iter->name == "os-prober") {
-			newProxy.index = 30;
-		} else if (iter->name == "custom" && iter->isCustomScript) {
-			newProxy.index = 40;
-		} else if (iter->name == "custom" && !iter->isCustomScript) {
-			newProxy.index = 41;
-		} else {
-			newProxy.index = i++;
+	try {
+		int remaining = this->grublistCfg->proxies.size();
+		while (remaining) {
+			this->grublistCfg->proxies.deleteProxy(&this->grublistCfg->proxies.front());
+			assert(this->grublistCfg->proxies.size() < remaining); // make sure that the proxy has really been deleted to prevent an endless loop
+			remaining = this->grublistCfg->proxies.size();
 		}
+		int i = 50; // unknown scripts starting at position 50
+		for (std::list<Model_Script>::iterator iter = this->grublistCfg->repository.begin(); iter != this->grublistCfg->repository.end(); iter++) {
+			Model_Proxy newProxy(*iter);
+			if (iter->name == "header") {
+				newProxy.index = 0;
+			} else if (iter->name == "debian_theme") {
+				newProxy.index = 5;
+			} else if (iter->name == "grub-customizer_menu_color_helper") {
+				newProxy.index = 6;
+			} else if (iter->name == "linux") {
+				newProxy.index = 10;
+			} else if (iter->name == "linux_xen" || iter->name == "memtest86+") {
+				newProxy.index = 20;
+			} else if (iter->name == "os-prober") {
+				newProxy.index = 30;
+			} else if (iter->name == "custom" && iter->isCustomScript) {
+				newProxy.index = 40;
+			} else if (iter->name == "custom" && !iter->isCustomScript) {
+				newProxy.index = 41;
+			} else {
+				newProxy.index = i++;
+			}
 
-		this->grublistCfg->proxies.push_back(newProxy);
+			this->grublistCfg->proxies.push_back(newProxy);
+		}
+		this->grublistCfg->proxies.sort();
+		this->syncLoadStateAction();
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
 	}
-	this->grublistCfg->proxies.sort();
-	this->syncLoadStateAction();
 }
 
 void MainControllerImpl::showInfoAction(void* rule){
-	if (rule == NULL) {
-		return;
+	try {
+		if (rule == NULL) {
+			return;
+		}
+		Model_Rule* rule2 = (Model_Rule*)rule;
+		if (rule2 && rule2->dataSource)
+			this->view->setDefaultTitleStatusText(rule2->getEntryName());
+		else
+			this->view->setStatusText("");
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
 	}
-	Model_Rule* rule2 = (Model_Rule*)rule;
-	if (rule2 && rule2->dataSource)
-		this->view->setDefaultTitleStatusText(rule2->getEntryName());
-	else
-		this->view->setStatusText("");
 }
 
 void MainControllerImpl::showProxyInfo(Model_Proxy* proxy){
@@ -536,119 +621,171 @@ void MainControllerImpl::showProxyInfo(Model_Proxy* proxy){
 
 
 void MainControllerImpl::syncLoadStateThreadedAction() {
-	this->getThreadController().syncEntryList();
+	try {
+		this->getThreadController().syncEntryList();
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorThreadedAction(e);
+	}
 }
 void MainControllerImpl::syncSaveStateThreadedAction() {
-	this->getThreadController().updateSaveProgress();
+	try {
+		this->getThreadController().updateSaveProgress();
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorThreadedAction(e);
+	}
 }
 
 void MainControllerImpl::syncSaveStateAction(){
-	this->log("running MainControllerImpl::syncListView_save", Logger::INFO);
-	this->view->progress_pulse();
-	if (this->grublistCfg->getProgress() == 1){
-		if (this->grublistCfg->error_proxy_not_found){
-			this->view->showProxyNotFoundMessage();
-			this->grublistCfg->error_proxy_not_found = false;
+	try {
+		this->log("running MainControllerImpl::syncListView_save", Logger::INFO);
+		this->view->progress_pulse();
+		if (this->grublistCfg->getProgress() == 1){
+			if (this->grublistCfg->error_proxy_not_found){
+				this->view->showProxyNotFoundMessage();
+				this->grublistCfg->error_proxy_not_found = false;
+			}
+			if (this->quit_requested)
+				this->exitAction(true);
+
+			this->view->setLockState(0);
+
+			this->view->hideProgressBar();
+			this->view->setStatusText(gettext("Configuration has been saved"));
+
+			this->updateList();
 		}
-		if (this->quit_requested)
-			this->exitAction(true);
-
-		this->view->setLockState(0);
-
-		this->view->hideProgressBar();
-		this->view->setStatusText(gettext("Configuration has been saved"));
-
-		this->updateList();
+		else {
+			this->view->setStatusText(gettext("updating configuration"));
+		}
+		this->log("MainControllerImpl::syncListView_save completed", Logger::INFO);
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
 	}
-	else {
-		this->view->setStatusText(gettext("updating configuration"));
-	}
-	this->log("MainControllerImpl::syncListView_save completed", Logger::INFO);
 }
 
 void MainControllerImpl::syncLoadStateAction() {
-	this->log("running MainControllerImpl::syncListView_load", Logger::INFO);
-	this->view->setLockState(1|4);
-	double progress = this->grublistCfg->getProgress();
-	if (progress != 1) {
-		this->view->setProgress(progress);
-		this->view->setStatusText(this->grublistCfg->getProgress_name(), this->grublistCfg->getProgress_pos(), this->grublistCfg->getProgress_max());
-	} else {
-		if (this->quit_requested) {
-			this->exitAction(true);
+	try {
+		this->log("running MainControllerImpl::syncListView_load", Logger::INFO);
+		this->view->setLockState(1|4);
+		double progress = this->grublistCfg->getProgress();
+		if (progress != 1) {
+			this->view->setProgress(progress);
+			this->view->setStatusText(this->grublistCfg->getProgress_name(), this->grublistCfg->getProgress_pos(), this->grublistCfg->getProgress_max());
+		} else {
+			if (this->quit_requested) {
+				this->exitAction(true);
+			}
+			this->view->hideProgressBar();
+			this->view->setStatusText("");
 		}
-		this->view->hideProgressBar();
-		this->view->setStatusText("");
-	}
 
-	//if grubConfig is locked, it will be cancelled as early as possible
-	if (this->grublistCfg->lock_if_free()) {
-		this->updateList();
-		this->grublistCfg->unlock();
-	}
+		//if grubConfig is locked, it will be cancelled as early as possible
+		if (this->grublistCfg->lock_if_free()) {
+			this->updateList();
+			this->grublistCfg->unlock();
+		}
 
-	if (progress == 1){
-		this->getAllControllers().settingsController->updateSettingsDataAction();
+		if (progress == 1){
+			this->getAllControllers().settingsController->updateSettingsDataAction();
 
-		this->view->setTrashCounter(this->grublistCfg->getRemovedEntries().size());
-		this->view->setLockState(0);
+			this->view->setTrashCounter(this->grublistCfg->getRemovedEntries().size());
+			this->view->setLockState(0);
+		}
+		this->log("MainControllerImpl::syncListView_load completed", Logger::INFO);
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
 	}
-	this->log("MainControllerImpl::syncListView_load completed", Logger::INFO);
 }
 
 void MainControllerImpl::showSettingsAction() {
-	this->getAllControllers().settingsController->showAction(env.burgMode);
+	try {
+		this->getAllControllers().settingsController->showAction(env.burgMode);
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
 }
 
 void MainControllerImpl::showEnvEditorAction(bool resetPartitionChooser) {
-	if (this->modificationsUnsaved) {
-		bool proceed = this->view->confirmUnsavedSwitch();
-		if (!proceed) {
-			return;
+	try {
+		if (this->modificationsUnsaved) {
+			bool proceed = this->view->confirmUnsavedSwitch();
+			if (!proceed) {
+				return;
+			}
 		}
+
+		this->view->hide();
+
+		this->getAllControllers().envEditController->showAction();
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
 	}
-
-	this->view->hide();
-
-	this->getAllControllers().envEditController->showAction();
 }
 
 void MainControllerImpl::showTrashAction() {
-	this->getAllControllers().trashController->showAction();
+	try {
+		this->getAllControllers().trashController->showAction();
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
 }
 
 void MainControllerImpl::initModeAction(bool burgChosen) {
-	this->init(burgChosen ? Model_Env::BURG_MODE : Model_Env::GRUB_MODE);
+	try {
+		this->init(burgChosen ? Model_Env::BURG_MODE : Model_Env::GRUB_MODE);
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
 }
 
 void MainControllerImpl::addEntriesAction(std::list<void*> entries) {
-	std::list<void*> addedRules;
-	for (std::list<void*>::iterator iter = entries.begin(); iter != entries.end(); iter++) {
-		Model_Entry* entry = static_cast<Model_Entry*>(*iter);
-		addedRules.push_back(this->grublistCfg->addEntry(*entry));
+	try {
+		std::list<void*> addedRules;
+		for (std::list<void*>::iterator iter = entries.begin(); iter != entries.end(); iter++) {
+			Model_Entry* entry = static_cast<Model_Entry*>(*iter);
+			addedRules.push_back(this->grublistCfg->addEntry(*entry));
+		}
+
+		this->syncLoadStateAction();
+
+		this->view->selectRules(addedRules);
+
+		this->modificationsUnsaved = true;
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
 	}
-
-	this->syncLoadStateAction();
-
-	this->view->selectRules(addedRules);
-
-	this->modificationsUnsaved = true;
 }
 
 void MainControllerImpl::activateSettingsAction() {
-	this->view->setLockState(1);
-	this->getAllControllers().settingsController->syncAction();
+	try {
+		this->view->setLockState(1);
+		this->getAllControllers().settingsController->syncAction();
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
 }
 
 
 void MainControllerImpl::showReloadRecommendationAction() {
-	this->view->showReloadRecommendation();
+	try {
+		this->view->showReloadRecommendation();
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
 }
 
 void MainControllerImpl::selectRulesAction(std::list<void*> rules) {
-	this->view->selectRules(rules);
+	try {
+		this->view->selectRules(rules);
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
 }
 
 void MainControllerImpl::selectRuleAction(void* rule, bool startEdit) {
-	this->view->selectRule(rule, startEdit);
+	try {
+		this->view->selectRule(rule, startEdit);
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
 }
