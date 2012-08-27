@@ -28,12 +28,9 @@ std::string Mapper_EntryNameImpl::map(Model_Entry const* sourceEntry, std::strin
 	bool is_other_entries_ph = sourceEntry ? sourceEntry->type == Model_Entry::SUBMENU || sourceEntry->type == Model_Entry::SCRIPT_ROOT : false;
 	bool is_plaintext = sourceEntry ? sourceEntry->type == Model_Entry::PLAINTEXT : false;
 	if (is_other_entries_ph) {
-		try {
-			if (sourceEntry->type == Model_Entry::SCRIPT_ROOT) {
-				throw 1;
-			}
+		if (sourceEntry->type != Model_Entry::SCRIPT_ROOT) {
 			name = this->view->createNewEntriesPlaceholderString(sourceEntry->name, scriptName);
-		} catch (...) {
+		} else {
 			name = this->view->createNewEntriesPlaceholderString("", scriptName);
 		}
 	} else if (is_plaintext) {
