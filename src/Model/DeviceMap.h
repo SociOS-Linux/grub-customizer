@@ -3,6 +3,7 @@
 #include "SmartFileHandle.h"
 #include "Env.h"
 #include "../lib/regex.h"
+#include <map>
 
 struct Model_DeviceMap_PartitionIndex {
 	std::string hddNum, partNum;
@@ -11,6 +12,7 @@ struct Model_DeviceMap_PartitionIndex {
 
 class Model_DeviceMap {
 	Model_Env const * env;
+	mutable std::map<std::string, Model_DeviceMap_PartitionIndex> _cache;
 public:
 	Model_DeviceMap(Model_Env const& env);
 	Model_SmartFileHandle getFileHandle() const;

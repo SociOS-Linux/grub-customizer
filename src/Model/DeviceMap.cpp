@@ -14,6 +14,10 @@ Model_SmartFileHandle Model_DeviceMap::getFileHandle() const {
 }
 
 Model_DeviceMap_PartitionIndex Model_DeviceMap::getHarddriveIndexByPartitionUuid(std::string partitionUuid) const {
+	if (this->_cache.find(partitionUuid) != this->_cache.end()) {
+		return this->_cache[partitionUuid];
+	}
+
 	Model_DeviceMap_PartitionIndex result;
 	char deviceBuf[101];
 	int size = readlink((this->env->cfg_dir_prefix + "/dev/disk/by-uuid/" + partitionUuid).c_str(), deviceBuf, 100);
@@ -54,5 +58,6 @@ Model_DeviceMap_PartitionIndex Model_DeviceMap::getHarddriveIndexByPartitionUuid
 	}
 	handle.close();
 
+	this->_cache[partitionUuid] = result;
 	return result;
 }
