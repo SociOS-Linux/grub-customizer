@@ -41,6 +41,10 @@ bool Model_ProxyScriptData::is_proxyscript(FILE* proxy_fp){
 		}
 	}
 	
+	if (!match_error && c == EOF) { // if the loop above ended because of EOF then it isn't a proxy script
+		match_error = true;
+	}
+
 	//go to the next line
 	if (!match_error){
 		//read the script name (ends by line break)
