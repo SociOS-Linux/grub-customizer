@@ -25,7 +25,9 @@ View_Gtk_Settings_ColorChooser::Columns::Columns(){
 	this->add(this->colorCode_foreground);
 }
 
-View_Gtk_Settings_ColorChooser::View_Gtk_Settings_ColorChooser(){
+View_Gtk_Settings_ColorChooser::View_Gtk_Settings_ColorChooser()
+	: event_lock(false)
+{
 	refListStore = Gtk::ListStore::create(columns);
 	this->set_model(refListStore);
 	
@@ -38,13 +40,16 @@ View_Gtk_Settings_ColorChooser::View_Gtk_Settings_ColorChooser(){
 	this->add_attribute(*cellRenderer, "foreground", columns.colorCode_foreground);
 }
 void View_Gtk_Settings_ColorChooser::addColor(std::string const& codeName, std::string const& outputName, std::string const& cell_background, std::string const& cell_foreground){
+	this->event_lock = true;
 	Gtk::TreeModel::iterator iter = refListStore->append();
 	(*iter)[columns.idName] = codeName;
 	(*iter)[columns.name] = outputName;
 	(*iter)[columns.colorCode_background] = cell_background;
 	(*iter)[columns.colorCode_foreground] = cell_foreground;
+	this->event_lock = false;
 }
 void View_Gtk_Settings_ColorChooser::selectColor(std::string const& codeName){
+	this->event_lock = true;
 	this->set_active(0);
 	for (Gtk::TreeModel::iterator iter = this->get_active(); iter; iter++){
 		if ((*iter)[columns.idName] == codeName){
@@ -52,6 +57,7 @@ void View_Gtk_Settings_ColorChooser::selectColor(std::string const& codeName){
 			break;
 		}
 	}
+	this->event_lock = false;
 }
 std::string View_Gtk_Settings_ColorChooser::getSelectedColor() const {
 	Gtk::TreeModel::iterator iter = this->get_active();
@@ -276,10 +282,10 @@ View_Gtk_Settings::View_Gtk_Settings()
 	chkGenerateRecovery.signal_toggled().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_recovery_toggled));
 	chkResolution.signal_toggled().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_chkResolution_toggled));
 	cbResolution.get_entry()->signal_changed().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_resolution_selected));
-	gccNormalForeground.signal_changed().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_color_changed));
-	gccNormalBackground.signal_changed().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_color_changed));
-	gccHighlightForeground.signal_changed().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_color_changed));
-	gccHighlightBackground.signal_changed().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_color_changed));
+	gccNormalForeground.signal_changed().connect(sigc::bind<View_Gtk_Settings_ColorChooser&>(sigc::mem_fun(this, &View_Gtk_Settings::signal_color_changed), gccNormalForeground));
+	gccNormalBackground.signal_changed().connect(sigc::bind<View_Gtk_Settings_ColorChooser&>(sigc::mem_fun(this, &View_Gtk_Settings::signal_color_changed), gccNormalBackground));
+	gccHighlightForeground.signal_changed().connect(sigc::bind<View_Gtk_Settings_ColorChooser&>(sigc::mem_fun(this, &View_Gtk_Settings::signal_color_changed), gccHighlightForeground));
+	gccHighlightBackground.signal_changed().connect(sigc::bind<View_Gtk_Settings_ColorChooser&>(sigc::mem_fun(this, &View_Gtk_Settings::signal_color_changed), gccHighlightBackground));
 	bttFont.signal_font_set().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_font_changed));
 	bttRemoveFont.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_font_removed));
 	fcBackgroundImage.signal_file_set().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_other_image_chosen));
@@ -467,14 +473,16 @@ void View_Gtk_Settings::setResolution(std::string const& resolution){
 }
 
 View_ColorChooser& View_Gtk_Settings::getColorChooser(ColorChooserType type){
-	this->event_lock = true;
+	View_ColorChooser* result = NULL;
 	switch (type){
-		case COLOR_CHOOSER_DEFAULT_BACKGROUND: return this->gccNormalBackground;
-		case COLOR_CHOOSER_DEFAULT_FONT: return this->gccNormalForeground;
-		case COLOR_CHOOSER_HIGHLIGHT_BACKGROUND: return this->gccHighlightBackground;
-		case COLOR_CHOOSER_HIGHLIGHT_FONT: return this->gccHighlightForeground;
+		case COLOR_CHOOSER_DEFAULT_BACKGROUND: result = &this->gccNormalBackground; break;
+		case COLOR_CHOOSER_DEFAULT_FONT: result = &this->gccNormalForeground; break;
+		case COLOR_CHOOSER_HIGHLIGHT_BACKGROUND: result = &this->gccHighlightBackground; break;
+		case COLOR_CHOOSER_HIGHLIGHT_FONT: result = &this->gccHighlightForeground; break;
 	}
-	this->event_lock = false;
+
+	assert(result != NULL);
+	return *result;
 }
 
 std::string View_Gtk_Settings::getFontName() {
@@ -707,8 +715,8 @@ void View_Gtk_Settings::signal_resolution_selected(){
 }
 
 
-void View_Gtk_Settings::signal_color_changed(){
-	if (!event_lock){
+void View_Gtk_Settings::signal_color_changed(View_Gtk_Settings_ColorChooser& caller){
+	if (!event_lock && !caller.event_lock){
 		this->eventListener->updateColorSettingsAction();
 	}
 }

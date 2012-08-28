@@ -25,6 +25,7 @@
 #include <string>
 #include "../../lib/CommonClass.h"
 #include "../../Controller/SettingsController.h"
+#include "../../lib/assert.h"
 
 
 //a gtkmm combobox with colorful foreground and background. useful to choose an item of a predefined color set
@@ -44,6 +45,7 @@ class View_Gtk_Settings_ColorChooser : public Gtk::ComboBox, public View_ColorCh
 	void selectColor(std::string const& codeName);
 	std::string getSelectedColor() const;
 	Pango::Color getSelectedColorAsPangoObject() const;
+	bool event_lock;
 };
 
 //a color chooser with predefined colors for grub
@@ -166,7 +168,7 @@ class View_Gtk_Settings : public Gtk::Dialog, public View_Settings, public Commo
 	void signal_recovery_toggled();
 	void signal_chkResolution_toggled();
 	void signal_resolution_selected();
-	void signal_color_changed();
+	void signal_color_changed(View_Gtk_Settings_ColorChooser& caller);
 	void signal_font_changed();
 	void signal_font_removed();
 	void signal_other_image_chosen();

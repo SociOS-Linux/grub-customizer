@@ -18,14 +18,14 @@
 
 #include "Stream.h"
 
-Logger_Stream::Logger_Stream(std::ostream& stream) : stream(&stream), actionStackDepth(0) {}
+Logger_Stream::Logger_Stream(std::ostream& stream) : stream(&stream), actionStackDepth(0), logLevel(LOG_NOTHING) {}
 
 void Logger_Stream::log(std::string const& message, Logger::Priority prio) {
 	if (prio != ERROR && (
 		this->logLevel == LOG_NOTHING ||
-		this->logLevel == LOG_DEBUG_ONLY && prio != Logger::DEBUG && prio != Logger::EXCEPTION ||
-		this->logLevel == LOG_IMPORTANT && prio != Logger::IMPORTANT_EVENT ||
-		this->logLevel == LOG_EVENT && prio != Logger::EVENT && prio != Logger::IMPORTANT_EVENT)) {
+		(this->logLevel == LOG_DEBUG_ONLY && prio != Logger::DEBUG && prio != Logger::EXCEPTION) ||
+		(this->logLevel == LOG_IMPORTANT && prio != Logger::IMPORTANT_EVENT) ||
+		(this->logLevel == LOG_EVENT && prio != Logger::EVENT && prio != Logger::IMPORTANT_EVENT))) {
 		return;
 	}
 	if (prio == Logger::IMPORTANT_EVENT) {

@@ -55,15 +55,19 @@ bool Model_MountTable_Mountpoint::isLiveCdFs(){
 	return this->fileSystem == "aufs" | this->fileSystem == "overlayfs";
 }
 
-Model_MountTable::Model_MountTable(FILE* source, std::string const& prefix, bool default_isMounted_flag){
+Model_MountTable::Model_MountTable(FILE* source, std::string const& prefix, bool default_isMounted_flag)
+	: loaded(false)
+{
 	this->loadData(source, prefix, default_isMounted_flag);
 }
 
-Model_MountTable::Model_MountTable(std::string const& rootDirectory){
+Model_MountTable::Model_MountTable(std::string const& rootDirectory)
+	: loaded(false)
+{
 	this->loadData(rootDirectory);
 }
 
-Model_MountTable::Model_MountTable(){}
+Model_MountTable::Model_MountTable() : loaded(false) {}
 
 void Model_MountTable::loadData(FILE* source, std::string const& prefix, bool default_isMounted_flag){
 	int c;

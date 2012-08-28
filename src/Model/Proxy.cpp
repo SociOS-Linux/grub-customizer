@@ -247,7 +247,17 @@ void Model_Proxy::sync_expand(std::map<std::string, Model_Script*> scriptMap) {
 				std::list<Model_Rule>& dataTarget = parentRule ? parentRule->subRules : this->rules;
 
 				std::list<Model_Rule>::iterator dataTargetIter = dataTarget.begin();
-				while (dataTargetIter != dataTarget.end() && !(dataTargetIter->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER && dataTargetIter->__idpath == *oepPathIter && (dataTargetIter->__sourceScriptPath != "" && scriptMap.size() && scriptMap[dataTargetIter->__sourceScriptPath] == scriptIter->first || dataTargetIter->__sourceScriptPath == "" && scriptIter->first == this->dataSource))){
+				while (dataTargetIter != dataTarget.end()
+					&& !(dataTargetIter->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER
+						&& dataTargetIter->__idpath == *oepPathIter
+						&& ((dataTargetIter->__sourceScriptPath != ""
+								&& scriptMap.size()
+								&& scriptMap[dataTargetIter->__sourceScriptPath] == scriptIter->first)
+							|| (dataTargetIter->__sourceScriptPath == ""
+								&& scriptIter->first == this->dataSource)
+							)
+						)
+					) {
 					dataTargetIter++;
 				}
 				std::list<Model_Rule> newRules;
@@ -273,10 +283,10 @@ void Model_Proxy::sync_cleanup(Model_Rule* parent, std::map<std::string, Model_S
 	do {
 		bool listModified = false;
 		for (std::list<Model_Rule>::iterator iter = list.begin(); !listModified && iter != list.end(); iter++) {
-			if (!(iter->type == Model_Rule::NORMAL && iter->dataSource ||
-				  iter->type == Model_Rule::SUBMENU && iter->subRules.size() ||
-				  iter->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER && iter->dataSource ||
-				  iter->type == Model_Rule::PLAINTEXT && iter->dataSource)) {
+			if (!((iter->type == Model_Rule::NORMAL && iter->dataSource) ||
+				  (iter->type == Model_Rule::SUBMENU && iter->subRules.size()) ||
+				  (iter->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER && iter->dataSource) ||
+				  (iter->type == Model_Rule::PLAINTEXT && iter->dataSource))) {
 				if (iter->__sourceScriptPath == "" || scriptMap.size()) {
 					list.erase(iter);
 					listModified = true; //after ereasing something we have to create a new iterator

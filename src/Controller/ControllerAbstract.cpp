@@ -18,7 +18,9 @@
 
 #include "ControllerAbstract.h"
 
-ControllerAbstract::ControllerAbstract(std::string const& controllerName) {
+ControllerAbstract::ControllerAbstract(std::string const& controllerName)
+	: _controllerCollection(NULL)
+{
 	this->setControllerName(controllerName);
 }
 
