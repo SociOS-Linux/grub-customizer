@@ -50,6 +50,7 @@ void EntryEditControllerImpl::applyAction() {
 		bool isAdded = false;
 		if (rulePtr == NULL) { // insert
 			Model_Script* script = this->grublistCfg->repository.getCustomScript();
+			assert(script != NULL);
 			script->entries().push_back(Model_Entry("new", "", ""));
 
 			Model_Rule newRule(script->entries().back(), true, *script);
@@ -68,6 +69,7 @@ void EntryEditControllerImpl::applyAction() {
 
 			if (!script->isCustomScript) {
 				script = this->grublistCfg->repository.getCustomScript();
+				assert(script != NULL);
 				script->entries().push_back(*rulePtr->dataSource);
 
 				Model_Rule ruleCopy = *rulePtr;
@@ -82,6 +84,7 @@ void EntryEditControllerImpl::applyAction() {
 
 				Model_Rule& insertedRule = iter->subRules.back();
 				rulePtr = &this->grublistCfg->moveRule(&insertedRule, -1);
+				this->grublistCfg->renumerate();
 
 				std::list<Model_Proxy*> proxies = this->grublistCfg->proxies.getProxiesByScript(*script);
 				for (std::list<Model_Proxy*>::iterator proxyIter = proxies.begin(); proxyIter != proxies.end(); proxyIter++) {
