@@ -34,6 +34,10 @@ public:
 		EXCEPTION
 	};
 	virtual void log(std::string const& str, Priority prio) = 0;
+	virtual void logActionBegin(std::string const& controller, std::string const& action) = 0;
+	virtual void logActionEnd() = 0;
+	virtual void logActionBeginThreaded(std::string const& controller, std::string const& action) = 0;
+	virtual void logActionEndThreaded() = 0;
 };
 
 #endif

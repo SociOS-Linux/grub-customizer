@@ -18,6 +18,10 @@
 
 #include "ControllerAbstract.h"
 
+ControllerAbstract::ControllerAbstract(std::string const& controllerName) {
+	this->setControllerName(controllerName);
+}
+
 void ControllerAbstract::setControllerCollection(ControllerCollection& controllerCollection) {
 	this->_controllerCollection = &controllerCollection;
 }

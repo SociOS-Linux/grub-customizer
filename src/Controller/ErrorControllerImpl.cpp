@@ -20,7 +20,8 @@
 #include "ThreadController.h"
 
 ErrorControllerImpl::ErrorControllerImpl(Model_Env& env)
-	: view(NULL), threadController(NULL),
+	: ControllerAbstract("error"),
+	 view(NULL), threadController(NULL),
 	 env(env), applicationStarted(false)
 {
 }

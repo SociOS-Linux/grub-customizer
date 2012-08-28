@@ -195,10 +195,13 @@ int main(int argc, char** argv){
 		env.setLogger(logger);
 		envEditor.setLogger(logger);
 		mainController.setLogger(logger);
+		entryEditController.setLogger(logger);
 		settingsController.setLogger(logger);
 		envEditController.setLogger(logger);
 		trashController.setLogger(logger);
 		errorController.setLogger(logger);
+		installController.setLogger(logger);
+		aboutController.setLogger(logger);
 
 		// configure logger
 		logger.setLogLevel(Logger_Stream::LOG_EVENT);

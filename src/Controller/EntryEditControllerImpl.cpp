@@ -19,7 +19,8 @@
 #include "EntryEditControllerImpl.h"
 
 EntryEditControllerImpl::EntryEditControllerImpl(Model_Env& env)
-	: grublistCfg(NULL),
+	: ControllerAbstract("entry-edit"),
+	  grublistCfg(NULL),
 	 env(env), contentParserFactory(NULL), currentContentParser(NULL),
 	 deviceDataList(NULL), view(NULL)
 {
@@ -43,6 +44,7 @@ void EntryEditControllerImpl::setView(View_EntryEditor& view) {
 
 
 void EntryEditControllerImpl::applyAction() {
+	this->logActionBegin("apply");
 	try {
 		Model_Rule* rulePtr = static_cast<Model_Rule*>(this->view->getRulePtr());
 		bool isAdded = false;
@@ -103,9 +105,11 @@ void EntryEditControllerImpl::applyAction() {
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void EntryEditControllerImpl::showAction(void* rule) {
+	this->logActionBegin("show");
 	try {
 		this->view->setRulePtr(rule);
 		this->view->setSourcecode(((Model_Rule*)rule)->dataSource->content);
@@ -114,46 +118,48 @@ void EntryEditControllerImpl::showAction(void* rule) {
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void EntryEditControllerImpl::syncEntryEditDlg(bool useOptionsAsSource) {
 	try {
-		try {
-			if (useOptionsAsSource) {
-				assert(this->currentContentParser != NULL);
-				this->currentContentParser->setOptions(this->view->getOptions());
-				this->view->setSourcecode(this->currentContentParser->buildSource());
-			} else {
-				this->currentContentParser = this->contentParserFactory->create(this->view->getSourcecode());
-				this->view->setOptions(this->currentContentParser->getOptions());
-			}
-			this->view->selectType(this->contentParserFactory->getNameByInstance(*this->currentContentParser));
-		} catch (ParserNotFoundException const& e) {
-			this->view->selectType("");
-			this->view->setOptions(std::map<std::string, std::string>());
+		if (useOptionsAsSource) {
+			assert(this->currentContentParser != NULL);
+			this->currentContentParser->setOptions(this->view->getOptions());
+			this->view->setSourcecode(this->currentContentParser->buildSource());
+		} else {
+			this->currentContentParser = this->contentParserFactory->create(this->view->getSourcecode());
+			this->view->setOptions(this->currentContentParser->getOptions());
 		}
-	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->view->selectType(this->contentParserFactory->getNameByInstance(*this->currentContentParser));
+	} catch (ParserNotFoundException const& e) {
+		this->view->selectType("");
+		this->view->setOptions(std::map<std::string, std::string>());
 	}
 }
 
 
 void EntryEditControllerImpl::syncOptionsAction() {
+	this->logActionBegin("sync-options");
 	try {
 		this->syncEntryEditDlg(false);
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 void EntryEditControllerImpl::syncSourceAction() {
+	this->logActionBegin("sync-source");
 	try {
 		this->syncEntryEditDlg(true);
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void EntryEditControllerImpl::switchTypeAction(std::string const& newType) {
+	this->logActionBegin("switch-type");
 	try {
 		std::string partition;
 		if (this->deviceDataList->size()) {
@@ -177,9 +183,11 @@ void EntryEditControllerImpl::switchTypeAction(std::string const& newType) {
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void EntryEditControllerImpl::showCreatorAction() {
+	this->logActionBegin("show-creator");
 	try {
 		this->view->setRulePtr(NULL);
 		this->view->setSourcecode("");
@@ -189,4 +197,5 @@ void EntryEditControllerImpl::showCreatorAction() {
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }

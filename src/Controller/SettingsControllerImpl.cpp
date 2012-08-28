@@ -19,7 +19,8 @@
 #include "SettingsControllerImpl.h"
 
 SettingsControllerImpl::SettingsControllerImpl(Model_Env& env)
-	: grublistCfg(NULL), view(NULL), settings(NULL),
+	: ControllerAbstract("settings"),
+	  grublistCfg(NULL), view(NULL), settings(NULL),
 	  settingsOnDisk(NULL),
 	  fbResolutionsGetter(NULL),
 	 env(env),
@@ -64,14 +65,17 @@ Model_FbResolutionsGetter& SettingsControllerImpl::getFbResolutionsGetter() {
 }
 
 void SettingsControllerImpl::loadResolutionsAction() {
+	this->logActionBegin("load-resolutions");
 	try {
 		this->fbResolutionsGetter->load();
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void SettingsControllerImpl::updateSettingsDataAction(){
+	this->logActionBegin("update-settings-data");
 	try {
 		std::list<Model_Proxylist_Item> entryTitles = this->grublistCfg->proxies.generateEntryTitleList();
 		std::list<std::string> labelListToplevel  = this->grublistCfg->proxies.getToplevelEntryTitles();
@@ -87,6 +91,7 @@ void SettingsControllerImpl::updateSettingsDataAction(){
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void SettingsControllerImpl::showSettingsDlg(){
@@ -94,6 +99,7 @@ void SettingsControllerImpl::showSettingsDlg(){
 }
 
 void SettingsControllerImpl::updateResolutionlistAction(){
+	this->logActionBegin("update-resolutionlist");
 	try {
 		const std::list<std::string>& data = this->fbResolutionsGetter->getData();
 		this->view->clearResolutionChooser();
@@ -103,14 +109,17 @@ void SettingsControllerImpl::updateResolutionlistAction(){
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void SettingsControllerImpl::updateResolutionlistThreadedAction() {
+	this->logActionBeginThreaded("update-resolutionlist-threaded");
 	try {
 		this->threadController->updateSettingsDlgResolutionList();
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorThreadedAction(e);
 	}
+	this->logActionEndThreaded();
 }
 
 void SettingsControllerImpl::syncSettings(){
@@ -196,6 +205,7 @@ void SettingsControllerImpl::syncSettings(){
 }
 
 void SettingsControllerImpl::updateDefaultSystemAction(){
+	this->logActionBegin("update-default-system");
 	try {
 		if (this->view->getActiveDefEntryOption() == View_Settings::DEF_ENTRY_SAVED){
 			this->settings->setValue("GRUB_DEFAULT", "saved");
@@ -211,9 +221,11 @@ void SettingsControllerImpl::updateDefaultSystemAction(){
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void SettingsControllerImpl::updateCustomSettingAction(std::string const& name){
+	this->logActionBegin("update-custom-setting");
 	try {
 		View_Settings::CustomOption c = this->view->getCustomOption(name);
 		this->settings->renameItem(c.old_name, c.name);
@@ -224,17 +236,21 @@ void SettingsControllerImpl::updateCustomSettingAction(std::string const& name){
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void SettingsControllerImpl::addCustomSettingAction(){
+	this->logActionBegin("add-custom-setting");
 	try {
 		std::string newSettingName = this->settings->addNewItem();
 		this->syncSettings();
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 void SettingsControllerImpl::removeCustomSettingAction(std::string const& name){
+	this->logActionBegin("remove-custom-setting");
 	try {
 		this->settings->removeItem(name);
 		this->syncSettings();
@@ -242,9 +258,11 @@ void SettingsControllerImpl::removeCustomSettingAction(std::string const& name){
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void SettingsControllerImpl::updateShowMenuSettingAction(){
+	this->logActionBegin("update-show-menu-setting");
 	try {
 		std::string val = this->settings->getValue("GRUB_HIDDEN_TIMEOUT");
 		if (val == "" || val.find_first_not_of("0123456789") != -1) {
@@ -259,9 +277,11 @@ void SettingsControllerImpl::updateShowMenuSettingAction(){
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void SettingsControllerImpl::updateOsProberSettingAction(){
+	this->logActionBegin("update-os-prober-setting");
 	try {
 		this->settings->setValue("GRUB_DISABLE_OS_PROBER", this->view->getOsProberCheckboxState() ? "false" : "true");
 		this->settings->setIsActive("GRUB_DISABLE_OS_PROBER", !this->view->getOsProberCheckboxState());
@@ -270,9 +290,11 @@ void SettingsControllerImpl::updateOsProberSettingAction(){
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void SettingsControllerImpl::updateKernelParamsAction(){
+	this->logActionBegin("update-kernel-params");
 	try {
 		this->settings->setValue("GRUB_CMDLINE_LINUX_DEFAULT", this->view->getKernelParams());
 		this->syncSettings();
@@ -280,9 +302,11 @@ void SettingsControllerImpl::updateKernelParamsAction(){
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void SettingsControllerImpl::updateUseCustomResolutionAction(){
+	this->logActionBegin("update-use-custom-resolution");
 	try {
 		if (this->settings->getValue("GRUB_GFXMODE") == "") {
 			this->settings->setValue("GRUB_GFXMODE", "saved"); //use saved as default value (if empty)
@@ -293,9 +317,11 @@ void SettingsControllerImpl::updateUseCustomResolutionAction(){
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void SettingsControllerImpl::updateBackgroundImageAction(){
+	this->logActionBegin("update-background-image");
 	try {
 		if (!this->env.useDirectBackgroundProps) {
 			this->settings->setValue("GRUB_MENU_PICTURE", this->view->getBackgroundImagePath());
@@ -310,9 +336,11 @@ void SettingsControllerImpl::updateBackgroundImageAction(){
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void SettingsControllerImpl::updateColorSettingsAction(){
+	this->logActionBegin("update-color-settings");
 	try {
 		if (this->view->getColorChooser(View_Settings::COLOR_CHOOSER_DEFAULT_FONT).getSelectedColor() != "" && this->view->getColorChooser(View_Settings::COLOR_CHOOSER_DEFAULT_BACKGROUND).getSelectedColor() != ""){
 			this->settings->setValue("GRUB_COLOR_NORMAL", this->view->getColorChooser(View_Settings::COLOR_CHOOSER_DEFAULT_FONT).getSelectedColor() + "/" + this->view->getColorChooser(View_Settings::COLOR_CHOOSER_DEFAULT_BACKGROUND).getSelectedColor());
@@ -329,9 +357,11 @@ void SettingsControllerImpl::updateColorSettingsAction(){
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void SettingsControllerImpl::updateFontSettingsAction(bool removeFont) {
+	this->logActionBegin("update-font-settings");
 	try {
 		std::string fontName;
 		int fontSize = -1;
@@ -346,9 +376,11 @@ void SettingsControllerImpl::updateFontSettingsAction(bool removeFont) {
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void SettingsControllerImpl::removeBackgroundImageAction(){
+	this->logActionBegin("remove-background-image");
 	try {
 		if (!this->env.useDirectBackgroundProps) {
 			this->settings->setIsActive("GRUB_MENU_PICTURE", false);
@@ -360,9 +392,11 @@ void SettingsControllerImpl::removeBackgroundImageAction(){
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void SettingsControllerImpl::hideAction(){
+	this->logActionBegin("hide");
 	try {
 		this->view->hide();
 		if (this->settings->reloadRequired()){
@@ -371,17 +405,21 @@ void SettingsControllerImpl::hideAction(){
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void SettingsControllerImpl::showAction(bool burgMode) {
+	this->logActionBegin("show");
 	try {
 		this->view->show(burgMode);
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void SettingsControllerImpl::updateTimeoutSettingAction(){
+	this->logActionBegin("update-timeout-setting");
 	try {
 		if (this->view->getShowMenuCheckboxState()){
 			this->settings->setValue("GRUB_TIMEOUT", this->view->getTimeoutValueString());
@@ -394,9 +432,11 @@ void SettingsControllerImpl::updateTimeoutSettingAction(){
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void SettingsControllerImpl::updateCustomResolutionAction(){
+	this->logActionBegin("update-custom-resolution");
 	try {
 		this->settings->setValue("GRUB_GFXMODE", this->view->getResolution());
 		this->syncSettings();
@@ -404,9 +444,11 @@ void SettingsControllerImpl::updateCustomResolutionAction(){
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void SettingsControllerImpl::updateRecoverySettingAction(){
+	this->logActionBegin("update-recovery-setting");
 	try {
 		if (this->settings->getValue("GRUB_DISABLE_LINUX_RECOVERY") != "true") {
 			this->settings->setValue("GRUB_DISABLE_LINUX_RECOVERY", "true");
@@ -417,12 +459,15 @@ void SettingsControllerImpl::updateRecoverySettingAction(){
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void SettingsControllerImpl::syncAction() {
+	this->logActionBegin("sync");
 	try {
 		this->syncSettings();
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }

@@ -20,9 +20,11 @@
 #define STREAM_LOGGER_H_
 #include "../Logger.h"
 #include <ostream>
+#include <string>
 
 class Logger_Stream : public Logger {
 	std::ostream* stream;
+	int actionStackDepth;
 public:
 	enum LogLevel {
 		LOG_NOTHING,
@@ -33,6 +35,10 @@ public:
 	} logLevel;
 	Logger_Stream(std::ostream& stream);
 	void log(std::string const& message, Logger::Priority prio);
+	void logActionBegin(std::string const& controller, std::string const& action);
+	void logActionEnd();
+	void logActionBeginThreaded(std::string const& controller, std::string const& action);
+	void logActionEndThreaded();
 	void setLogLevel(LogLevel level);
 };
 

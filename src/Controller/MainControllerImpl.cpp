@@ -19,7 +19,8 @@
 #include "MainControllerImpl.h"
 
 MainControllerImpl::MainControllerImpl(Model_Env& env)
-	: grublistCfg(NULL), view(NULL), settings(NULL),
+	: ControllerAbstract("main"),
+	  grublistCfg(NULL), view(NULL), settings(NULL),
 	  settingsOnDisk(NULL),
 	  savedListCfg(NULL),
 	  fbResolutionsGetter(NULL), deviceDataList(NULL),
@@ -177,23 +178,28 @@ void MainControllerImpl::init(Model_Env::Mode mode, bool initEnv){
 }
 
 void MainControllerImpl::initAction() {
+	this->logActionBegin("init");
 	try {
 		this->init();
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void MainControllerImpl::reInitAction(bool burgMode) {
+	this->logActionBegin("re-init");
 	try {
 		Model_Env::Mode mode = burgMode ? Model_Env::BURG_MODE : Model_Env::GRUB_MODE;
 		this->init(mode, false);
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void MainControllerImpl::cancelBurgSwitcherAction(){
+	this->logActionBegin("cancel-burg-switcher");
 	try {
 		if (!this->view->isVisible()) {
 			this->getThreadController().stopApplication();
@@ -201,9 +207,11 @@ void MainControllerImpl::cancelBurgSwitcherAction(){
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void MainControllerImpl::reloadAction(){
+	this->logActionBegin("reload");
 	try {
 		this->getAllControllers().settingsController->syncAction();
 		this->view->hideReloadRecommendation();
@@ -212,10 +220,12 @@ void MainControllerImpl::reloadAction(){
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 //threaded!
 void MainControllerImpl::loadThreadedAction(bool preserveConfig){
+	this->logActionBeginThreaded("load-threaded");
 	try {
 		if (!is_loading){ //allow only one load thread at the same time!
 			this->log(std::string("loading - preserveConfig: ") + (preserveConfig ? "yes" : "no"), Logger::IMPORTANT_EVENT);
@@ -268,9 +278,11 @@ void MainControllerImpl::loadThreadedAction(bool preserveConfig){
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorThreadedAction(e);
 	}
+	this->logActionEndThreaded();
 }
 
 void MainControllerImpl::saveAction(){
+	this->logActionBegin("save");
 	try {
 		this->config_has_been_different_on_startup_but_unsaved = false;
 		this->modificationsUnsaved = false; //deprecated
@@ -281,9 +293,11 @@ void MainControllerImpl::saveAction(){
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void MainControllerImpl::saveThreadedAction(){
+	this->logActionBeginThreaded("save-threaded");
 	try {
 		this->log("writing settings file", Logger::IMPORTANT_EVENT);
 		this->settings->save();
@@ -296,6 +310,7 @@ void MainControllerImpl::saveThreadedAction(){
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorThreadedAction(e);
 	}
+	this->logActionEndThreaded();
 }
 
 void MainControllerImpl::renameEntry(Model_Rule* rule, std::string const& newName){
@@ -316,35 +331,43 @@ void MainControllerImpl::reset(){
 
 
 void MainControllerImpl::showAboutAction(){
+	this->logActionBegin("show-about");
 	try {
 		this->getAllControllers().aboutController->showAction();
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void MainControllerImpl::showInstallerAction(){
+	this->logActionBegin("show-installer");
 	try {
 		this->getAllControllers().installerController->showAction();
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void MainControllerImpl::showEntryEditorAction(void* rule) {
+	this->logActionBegin("show-entry-editor");
 	try {
 		this->getAllControllers().entryEditController->showAction(rule);
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void MainControllerImpl::showEntryCreatorAction() {
+	this->logActionBegin("show-entry-creator");
 	try {
 		this->getAllControllers().entryEditController->showCreatorAction();
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void MainControllerImpl::_rAppendRule(Model_Rule& rule, Model_Rule* parentRule){
@@ -395,6 +418,7 @@ void MainControllerImpl::_rAppendRule(Model_Rule& rule, Model_Rule* parentRule){
 }
 
 void MainControllerImpl::dieAction(){
+	this->logActionBegin("die");
 	try {
 		this->is_loading = false;
 		this->activeThreadCount = 0;
@@ -410,9 +434,11 @@ void MainControllerImpl::dieAction(){
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void MainControllerImpl::exitAction(bool force){
+	this->logActionBegin("exit");
 	try {
 		if (force){
 			if (this->mountTable->getEntryByMountpoint(PARTCHOOSER_MOUNTPOINT))
@@ -438,9 +464,11 @@ void MainControllerImpl::exitAction(bool force){
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void MainControllerImpl::removeRulesAction(std::list<void*> entries){
+	this->logActionBegin("remove-rules");
 	try {
 		std::map<Model_Proxy*, void*> emptyProxies;
 		for (std::list<void*>::iterator iter = entries.begin(); iter != entries.end(); iter++) {
@@ -462,10 +490,12 @@ void MainControllerImpl::removeRulesAction(std::list<void*> entries){
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 
 void MainControllerImpl::renameRuleAction(void* entry, std::string const& newText){
+	this->logActionBegin("rename-rule");
 	try {
 		Model_Rule* entry2 = (Model_Rule*)entry;
 		std::string oldName = entry2->outputName;
@@ -481,10 +511,12 @@ void MainControllerImpl::renameRuleAction(void* entry, std::string const& newTex
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 
 void MainControllerImpl::moveAction(std::list<void*> rules, int direction){
+	this->logActionBegin("move");
 	try {
 		try {
 			assert(direction == -1 || direction == 1);
@@ -530,10 +562,12 @@ void MainControllerImpl::moveAction(std::list<void*> rules, int direction){
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 
 void MainControllerImpl::createSubmenuAction(std::list<void*> childItems) {
+	this->logActionBegin("create-submenu");
 	try {
 		Model_Rule* firstRule = static_cast<Model_Rule*>(childItems.front());
 		Model_Rule* newItem = this->grublistCfg->createSubmenu(firstRule);
@@ -543,9 +577,11 @@ void MainControllerImpl::createSubmenuAction(std::list<void*> childItems) {
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void MainControllerImpl::removeSubmenuAction(std::list<void*> childItems) {
+	this->logActionBegin("remove-submenu");
 	try {
 		Model_Rule* firstItem = this->grublistCfg->splitSubmenu(static_cast<Model_Rule*>(childItems.front()));
 		std::list<void*> movedRules;
@@ -558,9 +594,11 @@ void MainControllerImpl::removeSubmenuAction(std::list<void*> childItems) {
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void MainControllerImpl::revertAction() {
+	this->logActionBegin("revert");
 	try {
 		int remaining = this->grublistCfg->proxies.size();
 		while (remaining) {
@@ -598,9 +636,11 @@ void MainControllerImpl::revertAction() {
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void MainControllerImpl::showInfoAction(void* rule){
+	this->logActionBegin("show-info");
 	try {
 		if (rule == NULL) {
 			return;
@@ -613,6 +653,7 @@ void MainControllerImpl::showInfoAction(void* rule){
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void MainControllerImpl::showProxyInfo(Model_Proxy* proxy){
@@ -621,21 +662,26 @@ void MainControllerImpl::showProxyInfo(Model_Proxy* proxy){
 
 
 void MainControllerImpl::syncLoadStateThreadedAction() {
+	this->logActionBeginThreaded("sync-load-state-threaded");
 	try {
 		this->getThreadController().syncEntryList();
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorThreadedAction(e);
 	}
+	this->logActionEndThreaded();
 }
 void MainControllerImpl::syncSaveStateThreadedAction() {
+	this->logActionBeginThreaded("sync-save-state-threaded");
 	try {
 		this->getThreadController().updateSaveProgress();
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorThreadedAction(e);
 	}
+	this->logActionEndThreaded();
 }
 
 void MainControllerImpl::syncSaveStateAction(){
+	this->logActionBegin("sync-save-state");
 	try {
 		this->log("running MainControllerImpl::syncListView_save", Logger::INFO);
 		this->view->progress_pulse();
@@ -661,9 +707,11 @@ void MainControllerImpl::syncSaveStateAction(){
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void MainControllerImpl::syncLoadStateAction() {
+	this->logActionBegin("sync-load-state");
 	try {
 		this->log("running MainControllerImpl::syncListView_load", Logger::INFO);
 		this->view->setLockState(1|4);
@@ -695,17 +743,21 @@ void MainControllerImpl::syncLoadStateAction() {
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void MainControllerImpl::showSettingsAction() {
+	this->logActionBegin("show-settings");
 	try {
 		this->getAllControllers().settingsController->showAction(env.burgMode);
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void MainControllerImpl::showEnvEditorAction(bool resetPartitionChooser) {
+	this->logActionBegin("show-env-editor");
 	try {
 		if (this->modificationsUnsaved) {
 			bool proceed = this->view->confirmUnsavedSwitch();
@@ -720,25 +772,31 @@ void MainControllerImpl::showEnvEditorAction(bool resetPartitionChooser) {
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void MainControllerImpl::showTrashAction() {
+	this->logActionBegin("show-trash");
 	try {
 		this->getAllControllers().trashController->showAction();
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void MainControllerImpl::initModeAction(bool burgChosen) {
+	this->logActionBegin("init-mode");
 	try {
 		this->init(burgChosen ? Model_Env::BURG_MODE : Model_Env::GRUB_MODE);
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void MainControllerImpl::addEntriesAction(std::list<void*> entries) {
+	this->logActionBegin("add-entries");
 	try {
 		std::list<void*> addedRules;
 		for (std::list<void*>::iterator iter = entries.begin(); iter != entries.end(); iter++) {
@@ -754,38 +812,47 @@ void MainControllerImpl::addEntriesAction(std::list<void*> entries) {
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void MainControllerImpl::activateSettingsAction() {
+	this->logActionBegin("activate-settings");
 	try {
 		this->view->setLockState(1);
 		this->getAllControllers().settingsController->syncAction();
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 
 void MainControllerImpl::showReloadRecommendationAction() {
+	this->logActionBegin("show-reload-recommendation");
 	try {
 		this->view->showReloadRecommendation();
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void MainControllerImpl::selectRulesAction(std::list<void*> rules) {
+	this->logActionBegin("select-rules");
 	try {
 		this->view->selectRules(rules);
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void MainControllerImpl::selectRuleAction(void* rule, bool startEdit) {
+	this->logActionBegin("select-rule");
 	try {
 		this->view->selectRule(rule, startEdit);
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }

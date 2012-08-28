@@ -19,7 +19,8 @@
 #include "InstallerControllerImpl.h"
 
 InstallerControllerImpl::InstallerControllerImpl(Model_Env& env)
-	: installer(NULL), view(NULL),
+	: ControllerAbstract("installer"),
+	  installer(NULL), view(NULL),
 	  env(env),
 	 threadController(NULL)
 {
@@ -45,22 +46,27 @@ ThreadController& InstallerControllerImpl::getThreadController() {
 }
 
 void InstallerControllerImpl::showAction(){
+	this->logActionBegin("show");
 	try {
 		view->show();
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void InstallerControllerImpl::installGrubAction(std::string device){
+	this->logActionBegin("install-grub");
 	try {
 		this->getThreadController().startGrubInstallThread(device);
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void InstallerControllerImpl::installGrubThreadedAction(std::string device) {
+	this->logActionBeginThreaded("install-grub-threaded");
 	try {
 		this->env.activeThreadCount++;
 		installer->threadable_install(device);
@@ -71,13 +77,16 @@ void InstallerControllerImpl::installGrubThreadedAction(std::string device) {
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorThreadedAction(e);
 	}
+	this->logActionEndThreaded();
 }
 
 void InstallerControllerImpl::showMessageAction(std::string const& msg){
+	this->logActionBegin("show-message");
 	try {
 		view->showMessageGrubInstallCompleted(msg);
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 

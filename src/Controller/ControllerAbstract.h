@@ -26,6 +26,7 @@
 class ControllerAbstract : public CommonClass {
 	ControllerCollection* _controllerCollection;
 public:
+	ControllerAbstract(std::string const& controllerName);
 	void setControllerCollection(ControllerCollection& controllerCollection);
 	ControllerCollection& getAllControllers();
 };

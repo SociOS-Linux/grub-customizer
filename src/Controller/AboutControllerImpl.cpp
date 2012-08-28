@@ -19,8 +19,9 @@
 #include "AboutControllerImpl.h"
 
 AboutControllerImpl::AboutControllerImpl(Model_Env& env)
-	: view(NULL),
-	 env(env)
+	: ControllerAbstract("about"),
+	  view(NULL),
+	  env(env)
 {
 }
 
@@ -30,10 +31,12 @@ void AboutControllerImpl::setView(View_About& aboutDialog){
 }
 
 void AboutControllerImpl::showAction(){
+	this->logActionBegin("show");
 	try {
 		this->view->show();
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 

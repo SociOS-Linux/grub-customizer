@@ -25,26 +25,57 @@ CommonClass::CommonClass() {
 void CommonClass::setLogger(Logger& logger) {
 	this->logger = &logger;
 }
+
 Logger const& CommonClass::getLogger() const {
 	if (this->logger == NULL) {
 		throw ConfigException("missing logger");
 	}
 	return *this->logger;
 }
+
 Logger& CommonClass::getLogger() {
 	if (this->logger == NULL) {
 		throw ConfigException("missing logger");
 	}
 	return *this->logger;
 }
+
 Logger* CommonClass::getLoggerPtr() {
 	return this->logger;
 }
+
 bool CommonClass::hasLogger() const {
 	return this->logger != NULL;
 }
+
+void CommonClass::setControllerName(std::string const& name) {
+	this->_controllerName = name;
+}
+
 void CommonClass::log(std::string const& message, Logger::Priority prio) const {
 	if (this->logger) {
 		this->logger->log(message, prio);
+	}
+}
+void CommonClass::logActionBegin(std::string const& action) const {
+	if (this->logger) {
+		this->logger->logActionBegin(this->_controllerName, action);
+	}
+}
+
+void CommonClass::logActionEnd() const {
+	if (this->logger) {
+		this->logger->logActionEnd();
+	}
+}
+void CommonClass::logActionBeginThreaded(std::string const& action) const {
+	if (this->logger) {
+		this->logger->logActionBeginThreaded(this->_controllerName, action);
+	}
+}
+
+void CommonClass::logActionEndThreaded() const {
+	if (this->logger) {
+		this->logger->logActionEndThreaded();
 	}
 }

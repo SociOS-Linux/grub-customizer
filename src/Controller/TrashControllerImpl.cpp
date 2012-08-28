@@ -19,7 +19,8 @@
 #include "TrashControllerImpl.h"
 
 TrashControllerImpl::TrashControllerImpl(Model_Env& env)
-	: grublistCfg(NULL),
+	: ControllerAbstract("trash"),
+	  grublistCfg(NULL),
 	  view(NULL),
 	 env(env),
 	 entryNameMapper(NULL)
@@ -40,6 +41,7 @@ void TrashControllerImpl::setEntryNameMapper(Mapper_EntryName& mapper) {
 }
 
 void TrashControllerImpl::showAction(){
+	this->logActionBegin("show");
 	try {
 		view->clear();
 
@@ -57,22 +59,27 @@ void TrashControllerImpl::showAction(){
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void TrashControllerImpl::applyAction(){
+	this->logActionBegin("apply");
 	try {
 		std::list<void*> entries = view->getSelectedEntries();
 		this->getAllControllers().mainController->addEntriesAction(entries);
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 
 void TrashControllerImpl::hideAction() {
+	this->logActionBegin("hide");
 	try {
 		this->view->hide();
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }

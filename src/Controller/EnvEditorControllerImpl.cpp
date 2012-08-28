@@ -19,7 +19,8 @@
 #include "EnvEditorControllerImpl.h"
 
 EnvEditorControllerImpl::EnvEditorControllerImpl(Model_Env& env)
-	: mountTable(NULL),
+	: ControllerAbstract("env-editor"),
+	 mountTable(NULL),
 	 env(env),
 	 view(NULL)
 {
@@ -34,6 +35,7 @@ void EnvEditorControllerImpl::setView(View_EnvEditor& view) {
 }
 
 void EnvEditorControllerImpl::showAction(bool resetPartitionChooser) {
+	this->logActionBegin("show");
 	try {
 		this->view->setEnvSettings(this->env.getProperties(), this->env.getRequiredProperties(), this->env.getValidProperties());
 		this->view->setRootDeviceName(this->env.rootDeviceName);
@@ -41,6 +43,7 @@ void EnvEditorControllerImpl::showAction(bool resetPartitionChooser) {
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 
@@ -60,6 +63,7 @@ void EnvEditorControllerImpl::generateSubmountpointSelection(std::string const& 
 }
 
 void EnvEditorControllerImpl::switchPartitionAction(std::string const& newPartition) {
+	this->logActionBegin("switch-partition");
 	try {
 		if (this->mountTable->getEntryByMountpoint(PARTCHOOSER_MOUNTPOINT).isMounted) {
 			this->mountTable->umountAll(PARTCHOOSER_MOUNTPOINT);
@@ -92,27 +96,33 @@ void EnvEditorControllerImpl::switchPartitionAction(std::string const& newPartit
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void EnvEditorControllerImpl::switchBootloaderTypeAction(int newTypeIndex) {
+	this->logActionBegin("switch-bootloader-type");
 	try {
 		this->env.init(newTypeIndex == 0 ? Model_Env::GRUB_MODE : Model_Env::BURG_MODE, this->env.cfg_dir_prefix);
 		this->showAction();
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void EnvEditorControllerImpl::updateGrubEnvOptionsAction() {
+	this->logActionBegin("update-grub-env-options");
 	try {
 		this->env.setProperties(this->view->getEnvSettings());
 		this->showAction();
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void EnvEditorControllerImpl::applyAction(bool saveConfig){
+	this->logActionBegin("apply");
 	try {
 		//	listCfgDlg->setLockState(1|2|8);
 		//	this->syncSettings();
@@ -128,17 +138,21 @@ void EnvEditorControllerImpl::applyAction(bool saveConfig){
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void EnvEditorControllerImpl::exitAction() {
+	this->logActionBegin("exit");
 	try {
 		this->getAllControllers().mainController->exitAction(true);
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void EnvEditorControllerImpl::mountSubmountpointAction(std::string const& submountpoint){
+	this->logActionBegin("mount-submountpoint");
 	try {
 		try {
 			this->mountTable->getEntryRefByMountpoint(PARTCHOOSER_MOUNTPOINT + submountpoint).mount();
@@ -153,9 +167,11 @@ void EnvEditorControllerImpl::mountSubmountpointAction(std::string const& submou
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }
 
 void EnvEditorControllerImpl::umountSubmountpointAction(std::string const& submountpoint){
+	this->logActionBegin("umount-submountpoint");
 	try {
 		try {
 			this->mountTable->getEntryRefByMountpoint(PARTCHOOSER_MOUNTPOINT + submountpoint).umount();
@@ -170,4 +186,5 @@ void EnvEditorControllerImpl::umountSubmountpointAction(std::string const& submo
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
+	this->logActionEnd();
 }

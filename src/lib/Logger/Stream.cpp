@@ -18,7 +18,7 @@
 
 #include "Stream.h"
 
-Logger_Stream::Logger_Stream(std::ostream& stream) : stream(&stream) {}
+Logger_Stream::Logger_Stream(std::ostream& stream) : stream(&stream), actionStackDepth(0) {}
 
 void Logger_Stream::log(std::string const& message, Logger::Priority prio) {
 	if (prio != ERROR && (
@@ -45,6 +45,35 @@ void Logger_Stream::log(std::string const& message, Logger::Priority prio) {
 	}
 
 	*this->stream << std::endl;
+}
+
+void Logger_Stream::logActionBegin(std::string const& controller, std::string const& action) {
+	if (this->logLevel == LOG_DEBUG_ONLY || this->logLevel == LOG_VERBOSE) {
+		actionStackDepth++;
+		for (int i = 0; i < actionStackDepth; i++) {
+			*this->stream << " ";
+		}
+		*this->stream << "-> " << controller << "/" << action << std::endl;
+	}
+}
+void Logger_Stream::logActionEnd() {
+	if (this->logLevel == LOG_DEBUG_ONLY || this->logLevel == LOG_VERBOSE) {
+		if (actionStackDepth) {
+			actionStackDepth--;
+		}
+		if (actionStackDepth == 0) {
+			*this->stream << std::endl;
+		}
+	}
+}
+
+
+void Logger_Stream::logActionBeginThreaded(std::string const& controller, std::string const& action) {
+	// not yet implemented
+}
+
+void Logger_Stream::logActionEndThreaded() {
+	// not yet implemented
 }
 
 void Logger_Stream::setLogLevel(LogLevel level) {
