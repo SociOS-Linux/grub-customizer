@@ -15,13 +15,21 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#ifndef MD5_H_INCLUDED
-#define MD5_H_INCLUDED
 
-#include <openssl/md5.h>
-#include <string>
-#include "assert.h"
+#ifndef CONTROLLER_ABSTRACT_H_
+#define CONTROLLER_ABSTRACT_H_
 
-std::string md5(std::string const& input);
+#include "ControllerCollection.h"
+#include "../lib/assert.h"
+#include "../lib/CommonClass.h"
 
-#endif /* MD5_H_ */
+class ControllerAbstract : public CommonClass {
+	ControllerCollection* _controllerCollection;
+public:
+	ControllerAbstract(std::string const& controllerName);
+	void setControllerCollection(ControllerCollection& controllerCollection);
+	ControllerCollection& getAllControllers();
+};
+
+
+#endif /* ABSTRACT_H_ */

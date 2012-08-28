@@ -15,13 +15,28 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#ifndef MD5_H_INCLUDED
-#define MD5_H_INCLUDED
 
-#include <openssl/md5.h>
-#include <string>
-#include "assert.h"
+#ifndef CONTROLLERCOLLECTION_H_
+#define CONTROLLERCOLLECTION_H_
+#include "EntryEditController.h"
+#include "MainController.h"
+#include "SettingsController.h"
+#include "EnvEditorController.h"
+#include "TrashController.h"
+#include "InstallerController.h"
+#include "AboutController.h"
+#include "ErrorController.h"
 
-std::string md5(std::string const& input);
+struct ControllerCollection {
+	EntryEditController* entryEditController;
+	MainController* mainController;
+	SettingsController* settingsController;
+	EnvEditorController* envEditController;
+	TrashController* trashController;
+	InstallerController* installerController;
+	AboutController* aboutController;
+	ErrorController* errorController;
+};
 
-#endif /* MD5_H_ */
+
+#endif /* CONTROLLERCOLLECTION_H_ */

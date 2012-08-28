@@ -15,13 +15,24 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#ifndef MD5_H_INCLUDED
-#define MD5_H_INCLUDED
 
-#include <openssl/md5.h>
-#include <string>
-#include "assert.h"
+#ifndef ENVEDITORCONTROLLER_H_
+#define ENVEDITORCONTROLLER_H_
 
-std::string md5(std::string const& input);
+class EnvEditorController {
+public:
+	virtual inline ~EnvEditorController(){};
 
-#endif /* MD5_H_ */
+	virtual void showAction(bool resetPartitionChooser = false) = 0;
+	virtual void mountSubmountpointAction(std::string const& submountpoint) = 0;
+	virtual void umountSubmountpointAction(std::string const& submountpoint) = 0;
+	virtual void switchPartitionAction(std::string const& newPartition) = 0;
+	virtual void switchBootloaderTypeAction(int newTypeIndex) = 0;
+	virtual void updateGrubEnvOptionsAction() = 0;
+	virtual void applyAction(bool saveConfig) = 0;
+
+	virtual void exitAction() = 0;
+};
+
+
+#endif /* ENVEDITORCONTROLLER_H_ */

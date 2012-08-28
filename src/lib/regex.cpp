@@ -6,7 +6,7 @@ std::vector<std::string> Regex::match(std::string const& pattern, std::string co
 	GRegex* gr = g_regex_new(pattern.c_str(), GRegexCompileFlags(0), GRegexMatchFlags(0), NULL);
 	bool success = g_regex_match(gr, str.c_str(), GRegexMatchFlags(0), &mi);
 	if (!success)
-		throw REGEX_PATTERN_NOT_MATCHING;
+		throw RegExNotMatchedException("RegEx doesn't match", __FILE__, __LINE__);
 
 	gint match_count = g_match_info_get_match_count(mi);
 	for (gint i = 0; i < match_count; i++){
@@ -25,7 +25,7 @@ std::string Regex::replace(std::string const& pattern, std::string const& str, s
 	GRegex* gr = g_regex_new(pattern.c_str(), GRegexCompileFlags(0), GRegexMatchFlags(0), NULL);
 	bool success = g_regex_match(gr, str.c_str(), GRegexMatchFlags(0), &mi);
 	if (!success)
-		throw REGEX_PATTERN_NOT_MATCHING;
+		throw RegExNotMatchedException("RegEx doesn't match", __FILE__, __LINE__);
 
 	gint match_count = g_match_info_get_match_count(mi);
 	gint offset = 0;

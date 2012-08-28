@@ -15,13 +15,24 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#ifndef MD5_H_INCLUDED
-#define MD5_H_INCLUDED
 
-#include <openssl/md5.h>
-#include <string>
-#include "assert.h"
+#ifndef ASSERT_H_
+#define ASSERT_H_
 
-std::string md5(std::string const& input);
+/**
+ * a custom assert implementation throwing exceptions instead of aborting directly
+ */
 
-#endif /* MD5_H_ */
+#include "Exception.h"
+
+# define ASSERT_VOID_CAST static_cast<void>
+
+void assert_fail(std::string const& expr, std::string const& file, int line, std::string const& func);
+
+# define assert(expr)							\
+  ((expr)								\
+   ? ASSERT_VOID_CAST (0)						\
+   : assert_fail (__STRING(expr), __FILE__, __LINE__, __func__))
+
+
+#endif /* ASSERT_H_ */

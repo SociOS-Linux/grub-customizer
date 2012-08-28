@@ -15,13 +15,31 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#ifndef MD5_H_INCLUDED
-#define MD5_H_INCLUDED
 
-#include <openssl/md5.h>
+#ifndef STREAM_LOGGER_H_
+#define STREAM_LOGGER_H_
+#include "../Logger.h"
+#include <ostream>
 #include <string>
-#include "assert.h"
 
-std::string md5(std::string const& input);
+class Logger_Stream : public Logger {
+	std::ostream* stream;
+	int actionStackDepth;
+public:
+	enum LogLevel {
+		LOG_NOTHING,
+		LOG_DEBUG_ONLY,
+		LOG_IMPORTANT,
+		LOG_EVENT,
+		LOG_VERBOSE
+	} logLevel;
+	Logger_Stream(std::ostream& stream);
+	void log(std::string const& message, Logger::Priority prio);
+	void logActionBegin(std::string const& controller, std::string const& action);
+	void logActionEnd();
+	void logActionBeginThreaded(std::string const& controller, std::string const& action);
+	void logActionEndThreaded();
+	void setLogLevel(LogLevel level);
+};
 
-#endif /* MD5_H_ */
+#endif

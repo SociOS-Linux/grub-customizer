@@ -15,13 +15,22 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#ifndef MD5_H_INCLUDED
-#define MD5_H_INCLUDED
 
-#include <openssl/md5.h>
-#include <string>
-#include "assert.h"
+#include "PscriptnameTranslator.h"
 
-std::string md5(std::string const& input);
+std::string Model_PscriptnameTranslator::decode(std::string const& input){
+	std::string result = input;
+	int last_nonnum_pos = input.find_last_not_of("0123456789");
+	if (last_nonnum_pos != -1 && result[last_nonnum_pos] == '~' && last_nonnum_pos != input.length()-1)
+		result = result.substr(0, last_nonnum_pos);
+	return result;
+}
 
-#endif /* MD5_H_ */
+std::string Model_PscriptnameTranslator::encode(std::string const& input, int x){
+	std::ostringstream out;
+	out << input;
+	int last_nonnum_pos = input.find_last_not_of("0123456789");
+	if (x != 0 || (last_nonnum_pos != -1 && input[last_nonnum_pos] == '~') && last_nonnum_pos != input.length()-1)
+		out << "~" << x;
+	return out.str();
+}

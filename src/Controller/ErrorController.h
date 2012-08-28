@@ -15,13 +15,19 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#ifndef MD5_H_INCLUDED
-#define MD5_H_INCLUDED
 
-#include <openssl/md5.h>
-#include <string>
-#include "assert.h"
+#ifndef ERRORCONTROLLER_H_
+#define ERRORCONTROLLER_H_
 
-std::string md5(std::string const& input);
+#include "../lib/Exception.h"
 
-#endif /* MD5_H_ */
+class ErrorController {
+public:
+	virtual inline ~ErrorController(){}
+	virtual void errorAction(Exception const& e) = 0;
+	virtual void errorThreadedAction(Exception const& e) = 0;
+	virtual void quitAction() = 0;
+};
+
+
+#endif /* ERRORCONTROLLER_H_ */

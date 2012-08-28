@@ -15,13 +15,20 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#ifndef MD5_H_INCLUDED
-#define MD5_H_INCLUDED
 
-#include <openssl/md5.h>
-#include <string>
-#include "assert.h"
+#ifndef ENTRYNAMEIMPL_H_
+#define ENTRYNAMEIMPL_H_
 
-std::string md5(std::string const& input);
+#include "EntryName.h"
+#include "../View/Main.h"
+#include "../lib/assert.h"
 
-#endif /* MD5_H_ */
+class Mapper_EntryNameImpl : public Mapper_EntryName {
+	View_Main* view;
+public:
+	void setView(View_Main& view);
+	std::string map(Model_Entry const* sourceEntry, std::string const& defaultName, std::string const& scriptName = "");
+};
+
+
+#endif /* ENTRYNAMEIMPL_H_ */

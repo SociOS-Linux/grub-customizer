@@ -15,13 +15,22 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#ifndef MD5_H_INCLUDED
-#define MD5_H_INCLUDED
 
-#include <openssl/md5.h>
+#ifndef COLOR_CHOOSER_INCLUDED
+#define COLOR_CHOOSER_INCLUDED
 #include <string>
-#include "assert.h"
+/**
+ * base class to be implemented by color chooser controls
+ */
+class View_ColorChooser {
+public:
+	virtual inline ~View_ColorChooser() {};
 
-std::string md5(std::string const& input);
+	//choose one of the colors provided by this control
+	virtual void selectColor(std::string const& codeName)=0;
 
-#endif /* MD5_H_ */
+	//determine which color is currently selected
+	virtual std::string getSelectedColor() const=0;
+};
+
+#endif

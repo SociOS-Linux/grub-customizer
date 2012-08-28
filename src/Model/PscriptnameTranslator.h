@@ -15,13 +15,17 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#ifndef MD5_H_INCLUDED
-#define MD5_H_INCLUDED
 
-#include <openssl/md5.h>
+#ifndef PSCRIPTNAME_TRANSLATOR_INCLUDED
+#define PSCRIPTNAME_TRANSLATOR_INCLUDED
+
 #include <string>
-#include "assert.h"
+#include <sstream>
 
-std::string md5(std::string const& input);
+class Model_PscriptnameTranslator {
+public:
+	static std::string decode(std::string const& input);
+	static std::string encode(std::string const& input, int x);
+};
 
-#endif /* MD5_H_ */
+#endif

@@ -15,13 +15,17 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#ifndef MD5_H_INCLUDED
-#define MD5_H_INCLUDED
 
-#include <openssl/md5.h>
+#ifndef ERROR_H_
+#define ERROR_H_
+
 #include <string>
-#include "assert.h"
 
-std::string md5(std::string const& input);
+class View_Error {
+public:
+	virtual inline ~View_Error(){}
+	virtual void showErrorMessage(std::string const& errorMessage, bool allowContinue) = 0;
+};
 
-#endif /* MD5_H_ */
+
+#endif /* ERROR_H_ */

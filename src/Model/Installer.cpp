@@ -15,13 +15,34 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#ifndef MD5_H_INCLUDED
-#define MD5_H_INCLUDED
 
-#include <openssl/md5.h>
-#include <string>
-#include "assert.h"
+#include "Installer.h"
 
-std::string md5(std::string const& input);
+Model_Installer::Model_Installer(Model_Env& env)
+	: env(env), eventListener(NULL)
+{
+}
 
-#endif /* MD5_H_ */
+void Model_Installer::threadable_install(std::string const& device){
+	this->install_result = install(device);
+	if (eventListener)
+		eventListener->showMessageAction(this->install_result);
+}
+
+std::string Model_Installer::install(std::string const& device){
+	FILE* install_proc = popen((this->env.install_cmd+" '"+device+"' 2>&1").c_str(), "r");
+	std::string output;
+	int c;
+	while ((c = fgetc(install_proc)) != EOF){
+		output += c;
+	}
+	int success = pclose(install_proc);
+	if (success == 0)
+		return ""; //empty return string = no error
+	else
+		return output;
+}
+
+void Model_Installer::setEventListener(InstallerController& eventListener) {
+	this->eventListener = &eventListener;
+}

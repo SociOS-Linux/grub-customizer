@@ -15,13 +15,21 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#ifndef MD5_H_INCLUDED
-#define MD5_H_INCLUDED
 
-#include <openssl/md5.h>
-#include <string>
-#include "assert.h"
+#ifndef GRUBINSTALLDLG_H_
+#define GRUBINSTALLDLG_H_
 
-std::string md5(std::string const& input);
+/**
+ * Interface for dialogs which helps users to install grub into the MBR
+ */
+class View_Installer {
+public:
+	virtual inline ~View_Installer() {};
 
-#endif /* MD5_H_ */
+	//show this dialog
+	virtual void show()=0;
+	//show the information that grub has been installed completely
+	virtual void showMessageGrubInstallCompleted(std::string const& msg)=0;
+};
+
+#endif

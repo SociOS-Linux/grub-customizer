@@ -15,13 +15,20 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#ifndef MD5_H_INCLUDED
-#define MD5_H_INCLUDED
 
-#include <openssl/md5.h>
+#ifndef DEVICE_DATALIST_INCLUDED
+#define DEVICE_DATALIST_INCLUDED
+#include <map>
+#include <cstdio>
 #include <string>
-#include "assert.h"
+#include "../Model/DeviceDataListInterface.h"
+#include "../lib/CommonClass.h"
 
-std::string md5(std::string const& input);
-
-#endif /* MD5_H_ */
+class Model_DeviceDataList : public Model_DeviceDataListInterface, public CommonClass {
+public:
+	Model_DeviceDataList(FILE* blkidOutput);
+	Model_DeviceDataList();
+	void loadData(FILE* blkidOutput);
+	void clear();
+};
+#endif

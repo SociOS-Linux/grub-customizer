@@ -15,13 +15,23 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#ifndef MD5_H_INCLUDED
-#define MD5_H_INCLUDED
 
-#include <openssl/md5.h>
-#include <string>
-#include "assert.h"
+#ifndef CONTENT_PARSER_LINUXISO_H_
+#define CONTENT_PARSER_LINUXISO_H_
 
-std::string md5(std::string const& input);
+#include "../regex.h"
+#include "../../Model/DeviceMap.h"
+#include "Abstract.h"
 
-#endif /* MD5_H_ */
+class ContentParser_LinuxIso : public ContentParser_Abstract {
+	static const char* _regex;
+	Model_DeviceMap& deviceMap;
+	std::string sourceCode;
+public:
+	ContentParser_LinuxIso(Model_DeviceMap& deviceMap);
+	void parse(std::string const& sourceCode);
+	std::string buildSource() const;
+
+	void buildDefaultEntry(std::string const& partition_uuid);
+};
+#endif /* CONTENT_PARSER_LINUXISO_H_ */

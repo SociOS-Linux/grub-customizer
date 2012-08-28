@@ -15,13 +15,38 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#ifndef MD5_H_INCLUDED
-#define MD5_H_INCLUDED
 
-#include <openssl/md5.h>
-#include <string>
-#include "assert.h"
+#ifndef ERRORCONTROLLERIMPL_H_
+#define ERRORCONTROLLERIMPL_H_
 
-std::string md5(std::string const& input);
+#include <libintl.h>
+#include <locale.h>
+#include <sstream>
+#include "../config.h"
 
-#endif /* MD5_H_ */
+#include "../Model/Env.h"
+
+#include "../View/Error.h"
+
+#include "../Controller/ControllerAbstract.h"
+
+#include "ErrorController.h"
+
+class ErrorControllerImpl : public ControllerAbstract, public ErrorController {
+	Model_Env& env;
+	View_Error* view;
+	ThreadController* threadController;
+	bool applicationStarted;
+public:
+	void setView(View_Error& view);
+	void setThreadController(ThreadController& threadController);
+	void setApplicationStarted(bool val);
+
+	ErrorControllerImpl(Model_Env& env);
+	
+	void errorAction(Exception const& e);
+	void errorThreadedAction(Exception const& e);
+	void quitAction();
+};
+
+#endif

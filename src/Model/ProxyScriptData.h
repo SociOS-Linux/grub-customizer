@@ -15,13 +15,20 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#ifndef MD5_H_INCLUDED
-#define MD5_H_INCLUDED
 
-#include <openssl/md5.h>
+#ifndef GRUB_CFG_LIBProxyScriptData_PARSER_INCLUDED
+#define GRUB_CFG_LIBProxyScriptData_PARSER_INCLUDED
+#include <cstdio>
 #include <string>
-#include "assert.h"
 
-std::string md5(std::string const& input);
+struct Model_ProxyScriptData {
+	std::string scriptCmd, proxyCmd, ruleString;
+	bool is_valid;
+	Model_ProxyScriptData(FILE* fpProxyScript);
+	bool load(FILE* fpProxyScript);
+	static bool is_proxyscript(FILE* fpProxyScript);
+	static bool is_proxyscript(std::string const& filePath);
+	operator bool();
+};
 
-#endif /* MD5_H_ */
+#endif

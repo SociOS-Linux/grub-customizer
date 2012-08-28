@@ -15,13 +15,23 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#ifndef MD5_H_INCLUDED
-#define MD5_H_INCLUDED
 
-#include <openssl/md5.h>
+#ifndef GRUB_INSTALLER_INCLUDED
+#define GRUB_INSTALLER_INCLUDED
 #include <string>
-#include "assert.h"
+#include "Env.h"
+#include "../Controller/InstallerController.h"
+#include "../lib/CommonClass.h"
 
-std::string md5(std::string const& input);
+class Model_Installer : public CommonClass {
+	Model_Env& env;
+	std::string install_result;
+	InstallerController* eventListener;
+public:
+	Model_Installer(Model_Env& env);
+	void threadable_install(std::string const& device);
+	std::string install(std::string const& device);
+	void setEventListener(InstallerController& eventListener);
+};
 
-#endif /* MD5_H_ */
+#endif

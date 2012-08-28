@@ -15,13 +15,24 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#ifndef MD5_H_INCLUDED
-#define MD5_H_INCLUDED
 
-#include <openssl/md5.h>
-#include <string>
-#include "assert.h"
+#ifndef GC_ABOUNTDIALOG_GTK_INCLUDED
+#define GC_ABOUNTDIALOG_GTK_INCLUDED
+#include <gtkmm.h>
+#include "../../config.h"
+#include <libintl.h>
+#include "../About.h"
+#include "../../lib/CommonClass.h"
 
-std::string md5(std::string const& input);
+class View_Gtk_About : public Gtk::AboutDialog, public View_About, public CommonClass {
+	Glib::ustring appName, appVersion;
+	std::vector<Glib::ustring> authors;
+	std::vector<Glib::ustring> artists;
 
-#endif /* MD5_H_ */
+	void signal_about_dlg_response(int response_id);
+public:
+	View_Gtk_About();
+	void show();
+};
+
+#endif

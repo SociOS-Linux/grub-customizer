@@ -15,13 +15,9 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#ifndef MD5_H_INCLUDED
-#define MD5_H_INCLUDED
 
-#include <openssl/md5.h>
-#include <string>
 #include "assert.h"
 
-std::string md5(std::string const& input);
-
-#endif /* MD5_H_ */
+void assert_fail(std::string const& expr, std::string const& file, int line, std::string const& func) {
+	throw AssertException("Assertion `" + expr + "' failed. Function: " + func, file, line);
+}

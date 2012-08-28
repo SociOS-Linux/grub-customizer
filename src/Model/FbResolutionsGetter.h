@@ -15,13 +15,24 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#ifndef MD5_H_INCLUDED
-#define MD5_H_INCLUDED
 
-#include <openssl/md5.h>
+#ifndef FB_RESOLUTIONS_GETTER
+#define FB_RESOLUTIONS_GETTER
 #include <string>
-#include "assert.h"
+#include <list>
+#include <cstdio>
+#include "../Controller/SettingsController.h"
+#include "../lib/CommonClass.h"
 
-std::string md5(std::string const& input);
+class Model_FbResolutionsGetter : public CommonClass {
+	std::list<std::string> data;
+	SettingsController* eventListener;
+	bool _isLoading;
+public:
+	Model_FbResolutionsGetter();
+	const std::list<std::string>& getData() const;
+	void load();
+	void setEventListener(SettingsController& eventListener);
+};
 
-#endif /* MD5_H_ */
+#endif

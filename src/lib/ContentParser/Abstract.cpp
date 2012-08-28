@@ -15,13 +15,21 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#ifndef MD5_H_INCLUDED
-#define MD5_H_INCLUDED
 
-#include <openssl/md5.h>
-#include <string>
-#include "assert.h"
+#include "Abstract.h"
 
-std::string md5(std::string const& input);
+std::map<std::string, std::string> ContentParser_Abstract::getOptions() const {
+	return this->options;
+}
 
-#endif /* MD5_H_ */
+std::string ContentParser_Abstract::getOption(std::string const& name) const {
+	return this->options.at(name);
+}
+
+void ContentParser_Abstract::setOption(std::string const& name, std::string const& value) {
+	this->options[name] = value;
+}
+
+void ContentParser_Abstract::setOptions(std::map<std::string, std::string> const& options) {
+	this->options = options;
+}

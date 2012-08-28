@@ -15,13 +15,25 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#ifndef MD5_H_INCLUDED
-#define MD5_H_INCLUDED
 
-#include <openssl/md5.h>
-#include <string>
-#include "assert.h"
+#include "Exception.h"
 
-std::string md5(std::string const& input);
+Exception::Exception(std::string const& message, std::string const& file, int line)
+	: _message(message), _file(file), _line(line)
+{
+}
 
-#endif /* MD5_H_ */
+Exception::operator std::string() const {
+	std::ostringstream out;
+	out << "exception '" << typeid(*this).name()
+	    << "'\n with message '" << this->_message;
+	if (this->_file != "") {
+		out << "'\n in " << this->_file << ":" << this->_line;
+	}
+	return out.str();
+}
+
+
+Exception::operator bool() const {
+	return this->_message != "";
+}

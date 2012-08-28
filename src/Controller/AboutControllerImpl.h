@@ -15,13 +15,32 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#ifndef MD5_H_INCLUDED
-#define MD5_H_INCLUDED
 
-#include <openssl/md5.h>
-#include <string>
-#include "assert.h"
+#ifndef ABOUTCONTROLLERIMPL_H_
+#define ABOUTCONTROLLERIMPL_H_
 
-std::string md5(std::string const& input);
+#include <libintl.h>
+#include <locale.h>
+#include <sstream>
+#include "../config.h"
 
-#endif /* MD5_H_ */
+#include "../Model/Env.h"
+
+#include "../View/About.h"
+
+#include "../Controller/ControllerAbstract.h"
+
+#include "AboutController.h"
+
+class AboutControllerImpl : public ControllerAbstract, public AboutController {
+	Model_Env& env;
+	View_About* view;
+public:
+	void setView(View_About& aboutDialog);
+
+	AboutControllerImpl(Model_Env& env);
+	
+	void showAction();
+};
+
+#endif

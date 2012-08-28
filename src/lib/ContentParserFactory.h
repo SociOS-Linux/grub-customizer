@@ -15,13 +15,22 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#ifndef MD5_H_INCLUDED
-#define MD5_H_INCLUDED
 
-#include <openssl/md5.h>
+#ifndef CONTENTPARSERFACTORY_H_
+#define CONTENTPARSERFACTORY_H_
+#include "ContentParser.h"
+#include <list>
 #include <string>
-#include "assert.h"
+#include "Exception.h"
 
-std::string md5(std::string const& input);
+class ContentParserFactory {
+public:
+	virtual inline ~ContentParserFactory() {};
 
-#endif /* MD5_H_ */
+	virtual ContentParser* create(std::string const& sourceCode) = 0;
+	virtual ContentParser* createByName(std::string const& name) = 0;
+	virtual std::list<std::string> const& getNames() const = 0;
+	virtual std::string getNameByInstance(ContentParser const& instance) const = 0;
+};
+
+#endif /* CONTENTPARSERFACTORY_H_ */

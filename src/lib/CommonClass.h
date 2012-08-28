@@ -15,13 +15,29 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#ifndef MD5_H_INCLUDED
-#define MD5_H_INCLUDED
 
-#include <openssl/md5.h>
-#include <string>
-#include "assert.h"
+#ifndef COMMONCLASS_H_
+#define COMMONCLASS_H_
+#include "../lib/Logger.h"
+#include "Exception.h"
 
-std::string md5(std::string const& input);
+class CommonClass {
+	mutable Logger* logger;
+	std::string _controllerName;
+public:
+	CommonClass();
+	void setLogger(Logger& logger);
+	Logger const& getLogger() const;
+	Logger& getLogger();
+	Logger* getLoggerPtr();
+	bool hasLogger() const;
+protected:
+	void setControllerName(std::string const& name);
+	void log(std::string const& message, Logger::Priority prio) const;
+	void logActionBegin(std::string const& action) const;
+	void logActionEnd() const;
+	void logActionBeginThreaded(std::string const& action) const;
+	void logActionEndThreaded() const;
+};
 
-#endif /* MD5_H_ */
+#endif

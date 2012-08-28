@@ -15,13 +15,20 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-#ifndef MD5_H_INCLUDED
-#define MD5_H_INCLUDED
 
-#include <openssl/md5.h>
-#include <string>
-#include "assert.h"
+#ifndef GLIBMUTEX_H_
+#define GLIBMUTEX_H_
+#include "../Mutex.h"
+#include <glibmm/thread.h>
+#include "../CommonClass.h"
 
-std::string md5(std::string const& input);
+class Mutex_GLib : public Mutex, public CommonClass {
+protected:
+	Glib::Mutex mutex;
+public:
+	void lock();
+	bool trylock();
+	void unlock();
+};
 
-#endif /* MD5_H_ */
+#endif /* GLIBMUTEX_H_ */
