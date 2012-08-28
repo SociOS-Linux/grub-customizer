@@ -642,14 +642,13 @@ void MainControllerImpl::revertAction() {
 void MainControllerImpl::showInfoAction(void* rule){
 	this->logActionBegin("show-info");
 	try {
-		if (rule == NULL) {
-			return;
+		if (rule != NULL) {
+			Model_Rule* rule2 = (Model_Rule*)rule;
+			if (rule2 && rule2->dataSource)
+				this->view->setDefaultTitleStatusText(rule2->getEntryName());
+			else
+				this->view->setStatusText("");
 		}
-		Model_Rule* rule2 = (Model_Rule*)rule;
-		if (rule2 && rule2->dataSource)
-			this->view->setDefaultTitleStatusText(rule2->getEntryName());
-		else
-			this->view->setStatusText("");
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
