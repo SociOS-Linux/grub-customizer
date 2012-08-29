@@ -28,6 +28,7 @@ class View_Gtk_Trash : public Gtk::Dialog, public View_Trash, public CommonClass
 	Gtk::Dialog scriptAddDlg;
 	Gtk::ScrolledWindow scrEntryBox;
 	Gtk::IconView iconBox;
+	Gtk::Button* deleteButton;
 
 	TrashController* eventListener;
 public:
@@ -46,8 +47,10 @@ public:
 	void clear();
 	std::list<void*> getSelectedEntries();
 	void addItem(std::string const& name, bool isPlaceholder, std::string const& scriptName,void* relatedRule);
+	void setDeleteButtonEnabled(bool val);
 	void show();
 	void hide();
+	void askForDeletion(std::list<std::string> const& names);
 };
 
 #endif

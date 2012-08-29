@@ -666,27 +666,32 @@ void Model_Proxy::removeEquivalentRules(Model_Rule const& base) {
 	if (base.dataSource) {
 		Model_Rule* eqRule = this->getRuleByEntry(*base.dataSource, this->rules, base.type);
 		if (eqRule) {
-			Model_Rule* parent = NULL;
-			int rlist_size = 0;
-			do {
-				try {
-					parent = this->getParentRule(eqRule);
-				} catch (ItemNotFoundException const& e) {
-					parent = NULL;
-				}
-				std::list<Model_Rule>& rlist = this->getRuleList(parent);
-				std::list<Model_Rule>::iterator iter = this->getListIterator(*eqRule, rlist);
-				rlist.erase(iter);
-
-				eqRule = parent; // go one step up to remove this rule if empty
-				rlist_size = rlist.size();
-			} while (rlist_size == 0 && parent != NULL); // delete all the empty submenus above
+			this->removeRule(eqRule);
 		}
 	} else if (base.subRules.size()) {
 		for (std::list<Model_Rule>::const_iterator iter = base.subRules.begin(); iter != base.subRules.end(); iter++) {
 			this->removeEquivalentRules(*iter);
 		}
 	}
+}
+
+void Model_Proxy::removeRule(Model_Rule* rule) {
+	assert(rule != NULL);
+	Model_Rule* parent = NULL;
+	int rlist_size = 0;
+	do {
+		try {
+			parent = this->getParentRule(rule);
+		} catch (ItemNotFoundException const& e) {
+			parent = NULL;
+		}
+		std::list<Model_Rule>& rlist = this->getRuleList(parent);
+		std::list<Model_Rule>::iterator iter = this->getListIterator(*rule, rlist);
+		rlist.erase(iter);
+
+		rule = parent; // go one step up to remove this rule if empty
+		rlist_size = rlist.size();
+	} while (rlist_size == 0 && parent != NULL); // delete all the empty submenus above
 }
 
 bool Model_Proxy::hasVisibleRules(Model_Rule const* parent) const {

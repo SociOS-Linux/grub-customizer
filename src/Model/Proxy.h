@@ -63,6 +63,7 @@ struct Model_Proxy {
 	bool ruleIsFromOwnScript(Model_Rule const& rule) const;
 	void removeForeignChildRules(Model_Rule& parent);
 	void removeEquivalentRules(Model_Rule const& base);
+	void removeRule(Model_Rule* rule);
 	std::list<Model_Rule>::iterator getListIterator(Model_Rule const& needle, std::list<Model_Rule>& haystack);
 	Model_Rule* getParentRule(Model_Rule* child, Model_Rule* root = NULL);
 	std::list<Model_Rule>& getRuleList(Model_Rule* parentElement);

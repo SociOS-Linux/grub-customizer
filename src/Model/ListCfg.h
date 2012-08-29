@@ -117,6 +117,8 @@ public:
 	std::list<Model_Entry*> getRemovedEntries(Model_Entry* parent = NULL);
 	Model_Rule* addEntry(Model_Entry& entry);
 
+	void deleteEntry(Model_Entry const& entry);
+
 	operator ArrayStructure() const;
 };
 

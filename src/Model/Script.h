@@ -48,6 +48,7 @@ struct Model_Script : public Model_EntryPathFollower, public CommonClass {
 	std::list<std::string> buildPath(Model_Entry const& entry) const;
 	std::string buildPathString(Model_Entry const& entry, bool withOtherEntriesPlaceholder = false) const;
 	bool hasEntry(Model_Entry const& entry, Model_Entry const * parent = NULL) const;
+	void deleteEntry(Model_Entry const& entry, Model_Entry* parent = NULL);
 	operator ArrayStructure() const;
 };
 

@@ -985,6 +985,19 @@ Model_Rule* Model_ListCfg::addEntry(Model_Entry& entry) {
 	return &targetProxy->rules.back();
 }
 
+/**
+ * deletes an entry and its rules
+ */
+void Model_ListCfg::deleteEntry(Model_Entry const& entry) {
+	for (std::list<Model_Proxy>::iterator proxyIter = this->proxies.begin(); proxyIter != this->proxies.end(); proxyIter++) {
+		Model_Rule* rule = proxyIter->getRuleByEntry(entry, proxyIter->rules, Model_Rule::NORMAL);
+		if (rule) {
+			proxyIter->removeRule(rule);
+		}
+	}
+	this->repository.getScriptByEntry(entry)->deleteEntry(entry);
+}
+
 Model_ListCfg::operator ArrayStructure() const {
 	ArrayStructure result;
 	result["eventListener"] = this->eventListener;

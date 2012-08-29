@@ -25,6 +25,8 @@ public:
 	virtual void applyAction() = 0;
 	virtual void showAction() = 0;
 	virtual void hideAction() = 0;
+	virtual void askForDeletionAction() = 0;
+	virtual void deleteCustomEntriesAction() = 0;
 };
 
 

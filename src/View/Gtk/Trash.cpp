@@ -18,7 +18,7 @@
 
 #include "Trash.h"
 
-View_Gtk_Trash::View_Gtk_Trash() {
+View_Gtk_Trash::View_Gtk_Trash() : deleteButton(NULL) {
 	this->set_title(gettext("Add entry from trash"));
 	this->set_icon_name("grub-customizer");
 	this->set_default_size(650, 500);
@@ -38,6 +38,8 @@ View_Gtk_Trash::View_Gtk_Trash() {
 
 	this->iconBox.signal_item_activated().connect(sigc::mem_fun(this, &View_Gtk_Trash::signal_icon_dblClick));
 
+	deleteButton = this->add_button("delete custom entries", Gtk::RESPONSE_REJECT);
+	deleteButton->set_no_show_all(true);
 	this->add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
 	this->add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
 
@@ -53,10 +55,18 @@ void View_Gtk_Trash::clear(){
 }
 
 void View_Gtk_Trash::signal_entryAddDlg_response(int response_id){
-	if (response_id == Gtk::RESPONSE_OK){
-		eventListener->applyAction();
+	switch (response_id) {
+	case Gtk::RESPONSE_OK:
+		this->eventListener->applyAction();
+		this->hide();
+		break;
+	case Gtk::RESPONSE_CANCEL:
+		this->hide();
+		break;
+	case Gtk::RESPONSE_REJECT:
+		this->eventListener->askForDeletionAction();
+		break;
 	}
-	this->hide();
 }
 
 void View_Gtk_Trash::signal_icon_dblClick(Gtk::TreeModel::Path path) {
@@ -83,12 +93,28 @@ void View_Gtk_Trash::addItem(std::string const& name, bool isPlaceholder, std::s
 	(*iter)[iconModel.relatedRule] = relatedEntry;
 }
 
+void View_Gtk_Trash::setDeleteButtonEnabled(bool val) {
+	this->deleteButton->set_visible(val);
+}
+
 void View_Gtk_Trash::show(){
 	this->show_all();
 }
 
 void View_Gtk_Trash::hide(){
 	this->Gtk::Dialog::hide();
+}
+
+void View_Gtk_Trash::askForDeletion(std::list<std::string> const& names) {
+	Glib::ustring question = "This deletes the following entries:\n";
+	for (std::list<std::string>::const_iterator iter = names.begin(); iter != names.end(); iter++) {
+		question += *iter + "\n";
+	}
+
+	int response = Gtk::MessageDialog(question, false, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_OK_CANCEL).run();
+	if (response == Gtk::RESPONSE_OK) {
+		this->eventListener->deleteCustomEntriesAction();
+	}
 }
 
 View_Gtk_Trash::IconModel::IconModel() {

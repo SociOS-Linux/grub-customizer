@@ -47,6 +47,8 @@ class TrashControllerImpl : public ControllerAbstract, public TrashController {
 	View_Trash* view;
 	Mapper_EntryName* entryNameMapper;
 
+	void _refreshView();
+	std::list<Model_Entry*> _getDeletableEntries();
 public:
 	void setListCfg(Model_ListCfg& grublistCfg);
 	void setView(View_Trash& scriptAddDlg);
@@ -60,6 +62,9 @@ public:
 	void showAboutDialog();
 
 	void hideAction();
+
+	void askForDeletionAction();
+	void deleteCustomEntriesAction();
 };
 
 #endif

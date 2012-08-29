@@ -35,6 +35,9 @@ bool Model_Script::isModified(Model_Entry* parent) {
 	if (!parent) {
 		parent = &this->root;
 	}
+	if (parent->isModified) {
+		return true;
+	}
 	for (std::list<Model_Entry>::iterator iter = parent->subEntries.begin(); iter != parent->subEntries.end(); iter++) {
 		if (iter->isModified) {
 			return true;
@@ -184,6 +187,25 @@ bool Model_Script::hasEntry(Model_Entry const& entry, Model_Entry const * parent
 		}
 	}
 	return false;
+}
+
+void Model_Script::deleteEntry(Model_Entry const& entry, Model_Entry* parent) {
+	if (parent == NULL) {
+		parent = &this->root;
+	}
+	for (std::list<Model_Entry>::iterator iter = parent->subEntries.begin(); iter != parent->subEntries.end(); iter++) {
+		if (&*iter == &entry) {
+			parent->subEntries.erase(iter);
+			this->root.isModified = true;
+			return;
+		} else if (iter->subEntries.size()) {
+			try {
+				this->deleteEntry(entry, &*iter);
+				return; // if no exception the entry has been deleted
+			} catch (ItemNotFoundException const& e) {}
+		}
+	}
+	throw ItemNotFoundException("entry for deletion not found");
 }
 
 Model_Script::operator ArrayStructure() const {
