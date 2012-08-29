@@ -23,6 +23,7 @@
 #include "Proxy.h"
 #include "../lib/CommonClass.h"
 #include "../lib/Exception.h"
+#include "../lib/ArrayStructure.h"
 
 struct Model_Proxylist_Item {
 	std::string labelPathValue;
@@ -53,6 +54,7 @@ struct Model_Proxylist : public std::list<Model_Proxy>, public CommonClass {
 	std::list<Model_Proxy>::iterator getIter(Model_Proxy const* proxy);
 	void splitProxy(Model_Proxy const* proxyToSplit, Model_Rule const* firstRuleOfPart2, int direction);
 	Model_Rule* getVisibleRuleForEntry(Model_Entry const& entry);
+	operator ArrayStructure() const;
 };
 
 #endif

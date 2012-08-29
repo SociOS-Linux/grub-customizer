@@ -107,4 +107,21 @@ Model_Entry::operator bool() const {
 	return isValid;
 }
 
+Model_Entry::operator ArrayStructure() const {
+	ArrayStructure result;
+	result["type"] = this->type;
+	result["isValid"] = this->isValid;
+	result["isModified"] = this->isModified;
+	result["name"] = this->name;
+	result["extension"] = this->extension;
+	result["content"] = this->content;
+	result["quote"] = this->quote;
+	result["subEntries"].isArray = true;
+	int i = 0;
+	for (std::list<Model_Entry>::const_iterator iter = this->subEntries.begin(); iter != this->subEntries.end(); iter++) {
+		result["subEntries"][i] = ArrayStructure(*iter);
+		i++;
+	}
 
+	return result;
+}

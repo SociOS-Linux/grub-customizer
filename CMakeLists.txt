@@ -95,6 +95,7 @@ add_executable(grub-customizer
 	src/Controller/ErrorControllerImpl.cpp
 	src/lib/Exception.cpp
 	src/lib/assert.cpp
+	src/lib/ArrayStructure.cpp
 )
 
 
@@ -119,6 +120,7 @@ add_executable(grubcfg-proxy
 	src/Model/EntryPathBuilderImpl.cpp
 	src/lib/Exception.cpp
 	src/lib/assert.cpp
+	src/lib/ArrayStructure.cpp
 )
 
 target_link_libraries(grub-customizer 

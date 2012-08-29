@@ -29,6 +29,7 @@
 #include "../lib/CommonClass.h"
 #include "SettingsStore.h"
 #include "../lib/Exception.h"
+#include "../lib/ArrayStructure.h"
 
 struct Model_Env : public CommonClass {
 public:
@@ -60,6 +61,7 @@ public:
 	bool burgMode;
 	bool useDirectBackgroundProps; // Whether background settings should be set directly or by creating a desktop-base script
 	std::list<Model_Env::Mode> getAvailableModes();
+	operator ArrayStructure();
 };
 
 #endif

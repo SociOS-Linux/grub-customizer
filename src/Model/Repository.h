@@ -25,6 +25,7 @@
 #include <dirent.h>
 #include <map>
 #include "../lib/CommonClass.h"
+#include "../lib/ArrayStructure.h"
 
 struct Model_Repository : public std::list<Model_Script>, public CommonClass {
 	void load(std::string const& directory, bool is_proxifiedScript_dir);
@@ -37,6 +38,7 @@ struct Model_Repository : public std::list<Model_Script>, public CommonClass {
 	void deleteAllEntries();
 	Model_Script* createScript(std::string const& name, std::string const& fileName, std::string const& content);
 	std::map<std::string, Model_Script*> getScriptPathMap();
+	operator ArrayStructure() const;
 };
 
 #endif

@@ -23,6 +23,7 @@
 #include <list>
 #include "../lib/CommonClass.h"
 #include "../lib/str_replace.h"
+#include "../lib/ArrayStructure.h"
 
 struct Model_Entry_Row {
 	Model_Entry_Row(FILE* sourceFile);
@@ -49,6 +50,7 @@ struct Model_Entry : public CommonClass {
 	Model_Entry(FILE* sourceFile, Model_Entry_Row firstRow = Model_Entry_Row(), Logger* logger = NULL, std::string* plaintextBuffer = NULL);
 	std::list<Model_Entry>& getSubEntries();
 	operator bool() const;
+	operator ArrayStructure() const;
 };
 
 #endif

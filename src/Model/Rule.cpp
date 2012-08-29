@@ -133,3 +133,23 @@ void Model_Rule::setVisibility(bool isVisible) {
 		iter->setVisibility(isVisible);
 	}
 }
+
+Model_Rule::operator ArrayStructure() const {
+	ArrayStructure result;
+
+	result["dataSource"] = this->dataSource;
+	result["outputName"] = this->outputName;
+	result["__idHash"] = this->__idHash;
+	result["__idpath"] = ArrayStructure(this->__idpath);
+	result["__sourceScriptPath"] = this->__sourceScriptPath;
+	result["isVisible"] = this->isVisible;
+	result["subRules"].isArray = true;
+	int i = 0;
+	for (std::list<Model_Rule>::const_iterator subRuleIter = this->subRules.begin(); subRuleIter != this->subRules.end(); subRuleIter++) {
+		result["subRules"][i] = ArrayStructure(*subRuleIter);
+		i++;
+	}
+	result["type"] = this->type;
+
+	return result;
+}

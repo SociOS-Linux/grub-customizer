@@ -165,7 +165,7 @@ void Model_ListCfg::load(bool preserveConfig){
 		repository.deleteAllEntries();
 		this->unlock();
 	}
-	
+
 	//create proxifiedScript links & chmod other files
 	this->log("creating proxifiedScript links & chmodding other files…", Logger::EVENT);
 
@@ -984,4 +984,28 @@ Model_Rule* Model_ListCfg::addEntry(Model_Entry& entry) {
 	targetProxy->rules.push_back(ruleCopy);
 	return &targetProxy->rules.back();
 }
+
+Model_ListCfg::operator ArrayStructure() const {
+	ArrayStructure result;
+	result["eventListener"] = this->eventListener;
+	result["proxies"] = ArrayStructure(this->proxies);
+	result["repository"] = ArrayStructure(this->repository);
+	result["progress"] = this->progress;
+	result["progress_name"] = this->progress_name;
+	result["progress_pos"] = this->progress_pos;
+	result["progress_max"] = this->progress_max;
+	result["mutex"] = this->mutex;
+	result["errorLogFile"] = this->errorLogFile;
+	result["verbose"] = this->verbose;
+	result["error_proxy_not_found"] = this->error_proxy_not_found;
+	result["env"] = ArrayStructure(this->env);
+	result["ignoreLock"] = this->ignoreLock;
+	result["cancelThreadsRequested"] = this->cancelThreadsRequested;
+	return result;
+}
+
+
+
+
+
 

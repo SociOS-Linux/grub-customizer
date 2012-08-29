@@ -45,6 +45,7 @@
 #include "../lib/CommonClass.h"
 
 #include "../lib/Exception.h"
+#include "../lib/ArrayStructure.h"
 
 
 class Model_ListCfg : public CommonClass {
@@ -115,6 +116,8 @@ public:
 
 	std::list<Model_Entry*> getRemovedEntries(Model_Entry* parent = NULL);
 	Model_Rule* addEntry(Model_Entry& entry);
+
+	operator ArrayStructure() const;
 };
 
 #endif

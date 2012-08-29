@@ -24,6 +24,7 @@
 #include "../Model/EntryPathFollower.h"
 #include <ostream>
 #include "../lib/md5.h"
+#include "../lib/ArrayStructure.h"
 
 struct Model_Rule {
 	Model_Entry* dataSource; //assigned when using RuleType::OTHER_ENTRIES_PLACEHOLDER
@@ -45,6 +46,7 @@ struct Model_Rule {
 	void print(std::ostream& out) const;
 	std::string getEntryName() const;
 	void setVisibility(bool isVisible);
+	operator ArrayStructure() const;
 };
 
 #endif

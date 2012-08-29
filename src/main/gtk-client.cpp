@@ -45,6 +45,7 @@
 #include "../Controller/ErrorControllerImpl.h"
 #include "../Mapper/EntryNameImpl.h"
 #include "../lib/assert.h"
+#include "../lib/ArrayStructure.h"
 
 
 int main(int argc, char** argv){

@@ -26,6 +26,7 @@
 #include <map>
 #include "EntryPathBuilderImpl.h"
 #include "../lib/Exception.h"
+#include "../lib/ArrayStructure.h"
 
 struct Model_Proxy {
 	std::list<Model_Rule> rules;
@@ -67,6 +68,7 @@ struct Model_Proxy {
 	std::list<Model_Rule>& getRuleList(Model_Rule* parentElement);
 	bool hasVisibleRules(Model_Rule const* parent = NULL) const;
 	Model_Rule* getVisibleRuleForEntry(Model_Entry const& entry, Model_Rule* parent = NULL);
+	operator ArrayStructure() const;
 private:
 	static void adjustIterator(std::list<Model_Rule>::iterator& iter, int adjustment);
 };

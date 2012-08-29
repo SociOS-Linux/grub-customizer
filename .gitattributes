@@ -141,6 +141,8 @@ src/View/Installer.h -text
 src/View/Main.h -text
 src/View/Settings.h -text
 src/View/Trash.h -text
+src/lib/ArrayStructure.cpp -text
+src/lib/ArrayStructure.h -text
 src/lib/CommonClass.cpp -text
 src/lib/CommonClass.h -text
 src/lib/ContentParser.h -text

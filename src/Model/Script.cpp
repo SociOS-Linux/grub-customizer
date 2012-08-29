@@ -186,7 +186,16 @@ bool Model_Script::hasEntry(Model_Entry const& entry, Model_Entry const * parent
 	return false;
 }
 
+Model_Script::operator ArrayStructure() const {
+	ArrayStructure result;
 
+	result["name"] = this->name;
+	result["fileName"] = this->fileName;
+	result["isCustomScript"] = this->isCustomScript;
+	result["root"] = ArrayStructure(this->root);
+
+	return result;
+}
 
 
 

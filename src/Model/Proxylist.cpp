@@ -304,3 +304,19 @@ Model_Rule* Model_Proxylist::getVisibleRuleForEntry(Model_Entry const& entry) {
 	return NULL;
 }
 
+Model_Proxylist::operator ArrayStructure() const {
+	ArrayStructure result;
+	int trashIterPos = 0;
+	result["trash"].isArray = true;
+	for (std::list<Model_Proxy>::const_iterator trashIter = this->trash.begin(); trashIter != this->trash.end(); trashIter++) {
+		result["trash"][trashIterPos] = ArrayStructure(*trashIter);
+		trashIterPos++;
+	}
+	int itemsIterPos = 0;
+	result["(items)"].isArray = true;
+	for (std::list<Model_Proxy>::const_iterator itemIter = this->begin(); itemIter != this->end(); itemIter++) {
+		result["(items)"][itemsIterPos] = ArrayStructure(*itemIter);
+		itemsIterPos++;
+	}
+	return result;
+}

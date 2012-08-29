@@ -269,3 +269,26 @@ std::list<Model_Env::Mode> Model_Env::getAvailableModes(){
 	return result;
 }
 
+Model_Env::operator ArrayStructure() {
+	ArrayStructure result;
+	result["cfg_dir"] = this->cfg_dir;
+	result["cfg_dir_noprefix"] = this->cfg_dir_noprefix;
+	result["mkconfig_cmd"] = this->mkconfig_cmd;
+	result["mkfont_cmd"] = this->mkfont_cmd;
+	result["cfg_dir_prefix"] = this->cfg_dir_prefix;
+	result["update_cmd"] = this->update_cmd;
+	result["install_cmd"] = this->install_cmd;
+	result["output_config_file"] = this->output_config_file;
+	result["output_config_dir"] = this->output_config_dir;
+	result["settings_file"] = this->settings_file;
+	result["devicemap_file"] = this->devicemap_file;
+	result["mkdevicemap_cmd"] = this->mkdevicemap_cmd;
+	result["cmd_prefix"] = this->cmd_prefix;
+	result["burgMode"] = this->burgMode;
+	result["useDirectBackgroundProps"] = this->useDirectBackgroundProps;
+	result["quit_requested"] = this->quit_requested;
+	result["activeThreadCount"] = this->activeThreadCount;
+	result["modificationsUnsaved"] = this->modificationsUnsaved;
+	result["rootDeviceName"] = this->rootDeviceName;
+	return result;
+}

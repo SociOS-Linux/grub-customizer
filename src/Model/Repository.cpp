@@ -137,3 +137,17 @@ std::map<std::string, Model_Script*> Model_Repository::getScriptPathMap() {
 	return map;
 }
 
+Model_Repository::operator ArrayStructure() const {
+	ArrayStructure result;
+	result["(items)"].isArray = true;
+	int i = 0;
+	for (std::list<Model_Script>::const_iterator iter = this->begin(); iter != this->end(); iter++) {
+		result["(items)"][i] = ArrayStructure(*iter);
+		i++;
+	}
+	return result;
+}
+
+
+
+

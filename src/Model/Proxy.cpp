@@ -719,3 +719,41 @@ Model_Rule* Model_Proxy::getVisibleRuleForEntry(Model_Entry const& entry, Model_
 	return NULL;
 }
 
+Model_Proxy::operator ArrayStructure() const {
+	ArrayStructure result;
+	result["rules"].isArray = true;
+	int ruleIterPos = 0;
+	for (std::list<Model_Rule>::const_iterator ruleIter = this->rules.begin(); ruleIter != this->rules.end(); ruleIter++) {
+		result["rules"][ruleIterPos] = *ruleIter;
+		ruleIterPos++;
+	}
+	result["index"] = this->index;
+	result["permissions"] = this->permissions;
+	result["fileName"] = this->fileName;
+	result["dataSource"] = this->dataSource;
+	result["__idPathList"].isArray = true;
+	{
+		for (std::map<Model_Script*, std::list<std::list<std::string> > >::const_iterator iter = this->__idPathList.begin(); iter != this->__idPathList.end(); iter++) {
+			result["__idPathList"]["k"] = iter->first;
+			int i = 0;
+			for (std::list<std::list<std::string> >::const_iterator iter2 = iter->second.begin(); iter2 != iter->second.end(); iter2++) {
+				result["__idPathList"]["v"][i] = ArrayStructure(*iter2);
+				i++;
+			}
+		}
+	}
+	result["__idPathList_OtherEntriesPlaceHolders"].isArray = true;
+	{
+		for (std::map<Model_Script*, std::list<std::list<std::string> > >::const_iterator iter = this->__idPathList_OtherEntriesPlaceHolders.begin(); iter != this->__idPathList_OtherEntriesPlaceHolders.end(); iter++) {
+			result["__idPathList_OtherEntriesPlaceHolders"]["k"] = iter->first;
+			int i = 0;
+			for (std::list<std::list<std::string> >::const_iterator iter2 = iter->second.begin(); iter2 != iter->second.end(); iter2++) {
+				result["__idPathList_OtherEntriesPlaceHolders"]["v"][i] = ArrayStructure(*iter2);
+				i++;
+			}
+		}
+	}
+
+	return result;
+}
+
