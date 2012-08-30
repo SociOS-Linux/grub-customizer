@@ -65,7 +65,12 @@ void Model_Proxylist::deleteAllProxyscriptFiles(){
 }
 
 bool Model_Proxylist::compare_proxies(Model_Proxy const& a, Model_Proxy const& b){
-	return a.index < b.index;
+	if (a.index != b.index) {
+		return a.index < b.index;
+	} else {
+		assert(a.dataSource != NULL && b.dataSource != NULL);
+		return a.dataSource->name < b.dataSource->name;
+	}
 }
 
 void Model_Proxylist::sort(){
