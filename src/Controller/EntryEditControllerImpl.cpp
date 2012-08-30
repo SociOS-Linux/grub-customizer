@@ -42,6 +42,13 @@ void EntryEditControllerImpl::setView(View_EntryEditor& view) {
 	this->view = &view;
 }
 
+Model_Script* EntryEditControllerImpl::_createCustomScript() {
+	this->grublistCfg->repository.push_back(Model_Script("custom", ""));
+	Model_Script& script = this->grublistCfg->repository.back();
+	script.isCustomScript = true;
+	return &script;
+}
+
 
 void EntryEditControllerImpl::applyAction() {
 	this->logActionBegin("apply");
@@ -50,6 +57,9 @@ void EntryEditControllerImpl::applyAction() {
 		bool isAdded = false;
 		if (rulePtr == NULL) { // insert
 			Model_Script* script = this->grublistCfg->repository.getCustomScript();
+			if (script == NULL) {
+				script = this->_createCustomScript();
+			}
 			assert(script != NULL);
 			script->entries().push_back(Model_Entry("new", "", ""));
 
@@ -69,6 +79,9 @@ void EntryEditControllerImpl::applyAction() {
 
 			if (!script->isCustomScript) {
 				script = this->grublistCfg->repository.getCustomScript();
+				if (script == NULL) {
+					script = this->_createCustomScript();
+				}
 				assert(script != NULL);
 				script->entries().push_back(*rulePtr->dataSource);
 

@@ -318,12 +318,21 @@ void Model_ListCfg::save(){
 	std::map<std::string, int> samename_counter;
 	proxies.deleteAllProxyscriptFiles();  //delete all proxies to get a clean file system
 	proxies.clearTrash(); //delete all files of removed proxies
+	
+	// create virtual custom scripts on file system
+	for (std::list<Model_Script>::iterator scriptIter = this->repository.begin(); scriptIter != this->repository.end(); scriptIter++) {
+		if (scriptIter->isCustomScript && scriptIter->fileName == "") {
+			scriptIter->fileName = this->env.cfg_dir + "/IN_" + scriptIter->name;
+			this->repository.createScript(scriptIter->name, scriptIter->fileName, "");
+		}
+	}
+
 	for (Model_Repository::iterator script_iter = repository.begin(); script_iter != repository.end(); script_iter++)
 		script_iter->moveToBasedir(this->env.cfg_dir);
-	
+
 	send_new_save_progress(0.1);
 
-	int mkdir_result = mkdir((this->env.cfg_dir+"/proxifiedScripts").c_str(), 0755); //create this directory if it doesn't allready exist
+	int mkdir_result = mkdir((this->env.cfg_dir+"/proxifiedScripts").c_str(), 0755); //create this directory if it doesn't already exist
 
 	// get new script locations
 	std::map<Model_Script const*, std::string> scriptTargetMap; // scripts and their target directories

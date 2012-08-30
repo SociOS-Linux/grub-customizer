@@ -48,6 +48,7 @@ class EntryEditControllerImpl : public EntryEditController, public ControllerAbs
 	ContentParserFactory* contentParserFactory;
 	ContentParser* currentContentParser;
 	Model_DeviceDataListInterface* deviceDataList;
+	Model_Script* _createCustomScript();
 public:
 	EntryEditControllerImpl(Model_Env& env);
 
