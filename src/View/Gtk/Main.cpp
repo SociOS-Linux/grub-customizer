@@ -644,6 +644,14 @@ void View_Gtk_Main::hideReloadRecommendation() {
 	this->infoReloadRequired.hide();
 }
 
+void View_Gtk_Main::showPlaintextRemoveWarning() {
+	Gtk::MessageDialog dlg(gettext("Removing Script Code can cause problems when trying to boot entries relying on it. Are you sure you want to do it anyway?"), false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO);
+	int result = dlg.run();
+	if (result == Gtk::RESPONSE_YES) {
+		eventListener->removeRulesAction(this->getSelectedRules(), true);
+	}
+}
+
 void View_Gtk_Main::signal_move_click(int direction){
 	if (this->lock_state == 0){
 		assert(direction == 1 || direction == -1);

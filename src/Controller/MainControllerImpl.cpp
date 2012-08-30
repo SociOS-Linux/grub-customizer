@@ -417,6 +417,16 @@ void MainControllerImpl::_rAppendRule(Model_Rule& rule, Model_Rule* parentRule){
 	}
 }
 
+bool MainControllerImpl::_listHasPlaintextRules(std::list<void*> const& rules) {
+	for (std::list<void*>::const_iterator iter = rules.begin(); iter != rules.end(); iter++) {
+		const Model_Rule* rule = static_cast<const Model_Rule*>(*iter);
+		if (rule->type == Model_Rule::PLAINTEXT) {
+			return true;
+		}
+	}
+	return false;
+}
+
 void MainControllerImpl::dieAction(){
 	this->logActionBegin("die");
 	try {
@@ -467,26 +477,30 @@ void MainControllerImpl::exitAction(bool force){
 	this->logActionEnd();
 }
 
-void MainControllerImpl::removeRulesAction(std::list<void*> entries){
+void MainControllerImpl::removeRulesAction(std::list<void*> rules, bool force){
 	this->logActionBegin("remove-rules");
 	try {
-		std::map<Model_Proxy*, void*> emptyProxies;
-		for (std::list<void*>::iterator iter = entries.begin(); iter != entries.end(); iter++) {
-			Model_Rule* rule = static_cast<Model_Rule*>(*iter);
-			rule->setVisibility(false);
-			if (!this->grublistCfg->proxies.getProxyByRule(rule)->hasVisibleRules()) {
-				emptyProxies[this->grublistCfg->proxies.getProxyByRule(rule)] = NULL;
+		if (!force && this->_listHasPlaintextRules(rules)) {
+			this->view->showPlaintextRemoveWarning();
+		} else {
+			std::map<Model_Proxy*, void*> emptyProxies;
+			for (std::list<void*>::iterator iter = rules.begin(); iter != rules.end(); iter++) {
+				Model_Rule* rule = static_cast<Model_Rule*>(*iter);
+				rule->setVisibility(false);
+				if (!this->grublistCfg->proxies.getProxyByRule(rule)->hasVisibleRules()) {
+					emptyProxies[this->grublistCfg->proxies.getProxyByRule(rule)] = NULL;
+				}
 			}
-		}
 
-		for (std::map<Model_Proxy*, void*>::iterator iter = emptyProxies.begin(); iter != emptyProxies.end(); iter++) {
-			this->grublistCfg->proxies.deleteProxy(iter->first);
-			this->log("proxy removed", Logger::INFO);
-		}
+			for (std::map<Model_Proxy*, void*>::iterator iter = emptyProxies.begin(); iter != emptyProxies.end(); iter++) {
+				this->grublistCfg->proxies.deleteProxy(iter->first);
+				this->log("proxy removed", Logger::INFO);
+			}
 
-		this->syncLoadStateAction();
-		this->modificationsUnsaved = true;
-		this->getAllControllers().settingsController->updateSettingsDataAction();
+			this->syncLoadStateAction();
+			this->modificationsUnsaved = true;
+			this->getAllControllers().settingsController->updateSettingsDataAction();
+		}
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}

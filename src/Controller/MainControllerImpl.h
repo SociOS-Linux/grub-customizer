@@ -69,6 +69,7 @@ class MainControllerImpl : public ControllerAbstract, public MainController {
 	CmdExecException thrownException; //to be used from the die() function
 
 	void _rAppendRule(Model_Rule& rule, Model_Rule* parentRule = NULL);
+	bool _listHasPlaintextRules(std::list<void*> const& rules);
 
 public:
 	bool modificationsUnsaved;
@@ -116,7 +117,7 @@ public:
 	
 	void exitAction(bool force = false);
 	
-	void removeRulesAction(std::list<void*> entries);
+	void removeRulesAction(std::list<void*> rules, bool force = false);
 	void renameRuleAction(void* entry, std::string const& newText);
 	void moveAction(std::list<void*> rules, int direction);
 	void createSubmenuAction(std::list<void*> childItems);

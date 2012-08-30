@@ -152,6 +152,8 @@ public:
 	void showReloadRecommendation();
 	void hideReloadRecommendation();
 
+	void showPlaintextRemoveWarning();
+
 private:
 	//event handlers
 	void signal_show_envEditor();

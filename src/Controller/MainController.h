@@ -47,7 +47,7 @@ public:
 	virtual void showAboutAction() = 0;
 	virtual void dieAction() = 0;
 	virtual void exitAction(bool force = false) = 0;
-	virtual void removeRulesAction(std::list<void*> entries) = 0;
+	virtual void removeRulesAction(std::list<void*> rules, bool force = false) = 0;
 	virtual void renameRuleAction(void* entry, std::string const& newText) = 0;
 	virtual void revertAction() = 0;
 	virtual void moveAction(std::list<void*> rules, int direction) = 0;

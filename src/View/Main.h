@@ -107,6 +107,8 @@ public:
 
 	// hide the warning that config has changed to propose a reload
 	virtual void hideReloadRecommendation() = 0;
+
+	virtual void showPlaintextRemoveWarning() = 0;
 };
 
 #endif
