@@ -24,7 +24,7 @@ View_Gtk_EntryEditor::View_Gtk_EntryEditor()
 	this->add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
 	this->add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
 
-	this->set_default_size(400, 300);
+	this->set_default_size(500, 400);
 	this->set_title(Glib::ustring() + gettext("Entry editor") + " - Grub Customizer");
 	this->set_icon_name("grub-customizer");
 
