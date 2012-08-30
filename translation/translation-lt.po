@@ -7,63 +7,62 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-11-22 19:34+0100\n"
-"PO-Revision-Date: 2011-12-11 05:10+0000\n"
-"Last-Translator: Mantas Kriaučiūnas <mantas@akl.lt>\n"
+"POT-Creation-Date: 2012-06-20 00:16+0200\n"
+"PO-Revision-Date: 2012-06-20 04:48+0000\n"
+"Last-Translator: Algimantas Margevičius <Margevicius.Algimantas@gmail.com>\n"
 "Language-Team: Lithuanian <lt@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-28 17:08+0000\n"
-"X-Generator: Launchpad (build 14560)\n"
+"X-Launchpad-Export-Date: 2012-08-30 21:28+0000\n"
+"X-Generator: Launchpad (build 15877)\n"
 
-#: ../src/presenter/grubCustomizer.cpp:439
+#: ../src/presenter/grubCustomizer.cpp:448
 msgid "No script found"
-msgstr ""
+msgstr "Scenarijų nerasta"
 
-#: ../src/presenter/grubCustomizer.cpp:512
+#: ../src/presenter/grubCustomizer.cpp:515
 msgid "loading configuration…"
 msgstr "įkeliama konfigūracija…"
 
-#: ../src/presenter/grubCustomizer.cpp:526
-#: ../src/view/grublistCfgDlgGtk.cpp:359
+#: ../src/presenter/grubCustomizer.cpp:529
+#: ../src/view/grublistCfgDlgGtk.cpp:380
 msgid " (custom)"
-msgstr ""
+msgstr " (pasirinktinis)"
 
-#: ../src/presenter/grubCustomizer.cpp:556
+#: ../src/presenter/grubCustomizer.cpp:561
 msgid "Configuration has been saved"
-msgstr ""
+msgstr "Nustatymai įrašyti"
 
-#: ../src/presenter/grubCustomizer.cpp:559
+#: ../src/presenter/grubCustomizer.cpp:564
 msgid "updating configuration"
-msgstr "atnaujinami nustatymai"
+msgstr "nustatymai atnaujinami"
 
-#: ../src/presenter/grubCustomizer.cpp:571
+#: ../src/presenter/grubCustomizer.cpp:576
 msgid "%1 not found. Is grub2 installed?"
-msgstr "%1 nerasta. Ar grub2 programa yra įdiegta šiame kompiuteryje?"
+msgstr "%1 nerasta. Grub2 įdiegta?"
 
-#: ../src/presenter/grubCustomizer.cpp:581
+#: ../src/presenter/grubCustomizer.cpp:586
 msgid ""
 "%1 couldn't be executed successfully. error message:\n"
 " %2"
 msgstr ""
-"%1 nepavyksta sėkmingai įvykdyti. Klaidos pranešimas:\n"
-" %2"
+"Sėkmingai įvykdyti %1 nepavyko. Klaidos pranešimas:\n"
+"%2"
 
-#: ../src/presenter/grubCustomizer.cpp:638
+#: ../src/presenter/grubCustomizer.cpp:643
 msgid "Name the Entry"
-msgstr ""
+msgstr "Pavadinkite šį įrašą"
 
-#: ../src/presenter/grubCustomizer.cpp:671
+#: ../src/presenter/grubCustomizer.cpp:676
 msgid "cannot move this entry"
-msgstr ""
+msgstr "perkelti įrašo nepavyko"
 
 #: ../src/view/aboutDialogGtk.cpp:36
 msgid ""
 "Grub Customizer is a graphical interface to configure the grub2/burg settings"
 msgstr ""
-"Grub Customizer- tai patogus grafinis įrankis operacinių sistemų paleidiklių "
-"grub2 bei burg nustatymams keisti."
+"Grub Customizer - tai grafinis įrankis skirtas grub2/burg konfigūravimui"
 
 #: ../src/view/grubInstallDlgGtk.cpp:22
 msgid ""
@@ -99,109 +98,119 @@ msgstr "įdiegiama OS paleidimo programa"
 msgid "Please type a device string!"
 msgstr "Nurodykite įrenginio failo pavadinimą!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:28
+#: ../src/view/grublistCfgDlgGtk.cpp:29
 msgid "_File"
 msgstr "_Failas"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:29
+#: ../src/view/grublistCfgDlgGtk.cpp:30
 msgid "_Edit"
 msgstr "_Keisti"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:29
+#: ../src/view/grublistCfgDlgGtk.cpp:30
 msgid "_View"
 msgstr "_Rodymas"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:29
-msgid "_Help"
-msgstr "_Pagalba"
-
 #: ../src/view/grublistCfgDlgGtk.cpp:30
+msgid "_Help"
+msgstr "_Žinynas"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:31
 msgid "_Install to MBR …"
 msgstr "Į_diegti į MBR sektorių ..."
 
-#: ../src/view/grublistCfgDlgGtk.cpp:34
+#: ../src/view/grublistCfgDlgGtk.cpp:36
 msgid "BURG found!"
 msgstr "Aptiktas BURG įkėliklis!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:35
+#: ../src/view/grublistCfgDlgGtk.cpp:37
 msgid "No Bootloader found"
 msgstr "Neaptiktas Linux OS įkėliklis"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:63
-msgid "Add a script to your configuration"
-msgstr ""
-
 #: ../src/view/grublistCfgDlgGtk.cpp:65
-msgid "Remove a script from your configuration"
-msgstr ""
+msgid "Add a script to your configuration"
+msgstr "Pridėkite scenarijų į savo konfigūraciją"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:71
-msgid "Move up the selected entry or script"
-msgstr ""
+#: ../src/view/grublistCfgDlgGtk.cpp:67
+msgid "Remove a script from your configuration"
+msgstr "Pašalinkite scenarijų iš konfigūracijos"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:73
+msgid "Move up the selected entry or script"
+msgstr "Perkelkite aukštyn pasirinktą įrašą ar scenarijų"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:75
 msgid "Move down the selected entry or script"
-msgstr ""
+msgstr "Perkelkite žemyn pasirinktą įrašą ar scenarijų"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:81
+msgid "remove this entry from the current submenu"
+msgstr "pašalinti įrašą iš dabartinio submeniu"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:84
+msgid "add this entry to a new submenu"
+msgstr "pridėti šį įrašą į naują submeniu"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:92
 msgid "reload configuration"
 msgstr "Įkelti nustatymus iš naujo"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:84
+#: ../src/view/grublistCfgDlgGtk.cpp:95
 msgid "Edit grub preferences"
 msgstr "Keisti įkėliklio GRUB nustatymus"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:113
+#: ../src/view/grublistCfgDlgGtk.cpp:126
 msgid "Select _partition …"
 msgstr "Pasirinkite _skirsnį ..."
 
-#: ../src/view/grublistCfgDlgGtk.cpp:120
+#: ../src/view/grublistCfgDlgGtk.cpp:133
 msgid "Do you want to configure BURG instead of grub2?"
 msgstr "Ar norėtumėte konfigūruoti įkėliklį BURG, o ne GRUB2?"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:127
+#: ../src/view/grublistCfgDlgGtk.cpp:140
 msgid "Do you want to select another root partition?"
 msgstr "Ar norėtumėte pasirinkti kitą pagrindinį skirsnį?"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:168
+#: ../src/view/grublistCfgDlgGtk.cpp:185
 msgid "BURG Mode"
-msgstr ""
+msgstr "BURG režimas"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:172
+#: ../src/view/grublistCfgDlgGtk.cpp:189
 msgid "Save configuration and generate a new "
 msgstr "Įrašyti konfigūraciją ir sugeneruoti naują "
 
-#: ../src/view/grublistCfgDlgGtk.cpp:256
+#: ../src/view/grublistCfgDlgGtk.cpp:273
 msgid "Proxy binary not found!"
-msgstr ""
+msgstr "Tarpinis serveris nerastas!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:257
+#: ../src/view/grublistCfgDlgGtk.cpp:274
 msgid ""
 "You will see all entries (uncustomized) when you run grub. This error accurs "
 "(in most cases), when you didn't install grub gustomizer currectly."
 msgstr ""
+"Kai paleisite grub matysite visus įrašus(nederintus). Ši klaida dažniausiai "
+"įvyksta kai gustomizer įdiegtas neteisingai."
 
-#: ../src/view/grublistCfgDlgGtk.cpp:263
+#: ../src/view/grublistCfgDlgGtk.cpp:280
 msgid "(new Entries of %1)"
-msgstr ""
+msgstr "(nauji įrašai iš %1)"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:265
+#: ../src/view/grublistCfgDlgGtk.cpp:282
 msgid "(new Entries)"
-msgstr ""
+msgstr "(nauji įrašai)"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:270
+#: ../src/view/grublistCfgDlgGtk.cpp:287
 msgid "(script code)"
-msgstr ""
+msgstr "(scenarijaus kodas)"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:494
+#: ../src/view/grublistCfgDlgGtk.cpp:518
 msgid "Default title: "
-msgstr ""
+msgstr "Numatytasis pavadinimas: "
 
-#: ../src/view/grublistCfgDlgGtk.cpp:586
+#: ../src/view/grublistCfgDlgGtk.cpp:612
 msgid "The saved configuration is not up to date!"
-msgstr ""
+msgstr "Išsaugoti nustatymai pasenę!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:587
+#: ../src/view/grublistCfgDlgGtk.cpp:613
 msgid ""
 "The generated configuration didn't equal to the saved configuration on "
 "startup. So what you see now may not be what you see when you restart your "
@@ -211,36 +220,36 @@ msgstr ""
 "Tai, ką matote dabar gali neatitikti realios situacijos, kurią matysite "
 "paleidę kompiuterį iš naujo. Norėdami tai pataisyti - spauskite „Atnaujinti“!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:590
+#: ../src/view/grublistCfgDlgGtk.cpp:616
 msgid "_Quit without update"
 msgstr "_Baigti neatnaujinant"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:593
+#: ../src/view/grublistCfgDlgGtk.cpp:619
 msgid "_Update & Quit"
 msgstr "_Atnaujinti ir baigti"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:597
+#: ../src/view/grublistCfgDlgGtk.cpp:623
 msgid "Do you want to save your modifications?"
 msgstr "Ar norite įrašyti dabartinius pakeitimus?"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:600
+#: ../src/view/grublistCfgDlgGtk.cpp:626
 msgid "_Quit without saving"
 msgstr "_Baigti neišsaugant"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:603
+#: ../src/view/grublistCfgDlgGtk.cpp:629
 msgid "_Save & Quit"
 msgstr "Į_rašyti ir baigti"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:606
+#: ../src/view/grublistCfgDlgGtk.cpp:632
 msgid "AND: your modifications are still unsaved, update will save them too!"
 msgstr ""
-"taipogi: jūsų pakeitimai vis dar nėra įrašyti, atnaujinimas tai padarytų!"
+"TAIPOGI: jūsų pakeitimai vis dar nėra įrašyti, atnaujinimas tai padarytų!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:672 ../src/view/settingsDlgGtk.cpp:123
+#: ../src/view/grublistCfgDlgGtk.cpp:708 ../src/view/settingsDlgGtk.cpp:132
 msgid "is active"
-msgstr ""
+msgstr "yra aktyvus"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:673 ../src/view/settingsDlgGtk.cpp:124
+#: ../src/view/grublistCfgDlgGtk.cpp:709 ../src/view/settingsDlgGtk.cpp:133
 msgid "name"
 msgstr "pavadinimas"
 
@@ -261,6 +270,8 @@ msgid ""
 "These are the mountpoints of your fstab file.\n"
 "Please select every grub/boot related partition."
 msgstr ""
+"Tai yra jūsų „fstab“ failo prijungimo taškai.\n"
+"Pasirinkite visus grub/boot įrašus kurie susiję su skirsniu."
 
 #: ../src/view/partitionChooserGtk.cpp:48
 msgid "partition"
@@ -284,7 +295,7 @@ msgstr "Parinkite bei prijunkite pagrindinį sistemos skirsnį"
 
 #: ../src/view/partitionChooserGtk.cpp:88
 msgid "Select required submountpoints"
-msgstr ""
+msgstr "Pasirinkite reikiamus subprijungimo taškus"
 
 #: ../src/view/partitionChooserGtk.cpp:94
 msgid "Partition Chooser"
@@ -300,8 +311,7 @@ msgstr "atjungimas nepavyko!"
 
 #: ../src/view/partitionChooserGtk.cpp:170
 msgid "This seems not to be a root file system (no fstab found)"
-msgstr ""
-"Tai tikriausiai nėra pagrindinė failų sistema (neaptiktas /etc/fstab)"
+msgstr "Tai tikriausiai nėra pagrindinė failų sistema (neaptiktas fstab)"
 
 #: ../src/view/partitionChooserGtk.cpp:171
 msgid "Couldn't mount the selected partition"
@@ -319,6 +329,11 @@ msgid ""
 "again and save the configuration (or run update-grub/update-burg)\n"
 "to get the entry back!"
 msgstr ""
+"Pasirinkote parinkty kito skirsnio pasirinkimui.\n"
+"Pastaba: os-prober gali nerasti jūsų sistemos.\n"
+"Taigi norėdami vėl matyti įrašą dar kartą paleiskite \n"
+"Grub Customizer paskirties sistemoje ir išsaugokite \n"
+"nustatymus (arba įvykdykite update-grub/update-burg)"
 
 #: ../src/view/partitionChooserGtk.cpp:242
 msgid "You started Grub Customizer using the live CD."
@@ -336,195 +351,221 @@ msgid ""
 "as the actually running one.\n"
 "If not, you will get an error message when trying to load the configuration."
 msgstr ""
+"Norint redaguoti grub konfigūraciją reikia prijungti\n"
+"reikiamus skirsnius.\n"
+"\n"
+"Šis vedlys padės tai padaryti.\n"
+"\n"
+"\n"
+"Įsitikinkite jog paskirties sistema naudoja tokią pačią cpu architektūrą\n"
+"kaip ir veikianti.\n"
+"Jei skiriasi, įkeliant konfigūraciją gausite klaidos pranešimą."
 
 #: ../src/view/scriptAddDlgGtk.cpp:23
 msgid "Script to insert:"
-msgstr ""
+msgstr "Scenarijus kurį įterpti:"
 
 #: ../src/view/scriptAddDlgGtk.cpp:25
 msgid "Preview:"
-msgstr ""
+msgstr "Peržiūra:"
 
 #: ../src/view/scriptAddDlgGtk.cpp:27
 msgid "Add script"
-msgstr ""
+msgstr "Pridėti scenarijų"
 
 #: ../src/view/scriptAddDlgGtk.cpp:43
 msgid "Entry"
-msgstr ""
+msgstr "Įrašas"
 
-#: ../src/view/settingsDlgGtk.cpp:65
+#: ../src/view/settingsDlgGtk.cpp:74
 msgid "white"
 msgstr "balta"
 
-#: ../src/view/settingsDlgGtk.cpp:66
+#: ../src/view/settingsDlgGtk.cpp:75
 msgid "yellow"
 msgstr "geltona"
 
-#: ../src/view/settingsDlgGtk.cpp:67
+#: ../src/view/settingsDlgGtk.cpp:76
 msgid "light-cyan"
 msgstr "šviesiai žydra"
 
-#: ../src/view/settingsDlgGtk.cpp:68
+#: ../src/view/settingsDlgGtk.cpp:77
 msgid "cyan"
 msgstr "žydra"
 
-#: ../src/view/settingsDlgGtk.cpp:69
+#: ../src/view/settingsDlgGtk.cpp:78
 msgid "light-blue"
-msgstr "šviesia mėlyna"
+msgstr "šviesiai mėlyna"
 
-#: ../src/view/settingsDlgGtk.cpp:70
+#: ../src/view/settingsDlgGtk.cpp:79
 msgid "blue"
 msgstr "mėlyna"
 
-#: ../src/view/settingsDlgGtk.cpp:71
+#: ../src/view/settingsDlgGtk.cpp:80
 msgid "light-green"
 msgstr "šviesiai žalia"
 
-#: ../src/view/settingsDlgGtk.cpp:72
+#: ../src/view/settingsDlgGtk.cpp:81
 msgid "green"
 msgstr "žalia"
 
-#: ../src/view/settingsDlgGtk.cpp:73
+#: ../src/view/settingsDlgGtk.cpp:82
 msgid "light-magenta"
 msgstr "šviesiai purpurinė"
 
-#: ../src/view/settingsDlgGtk.cpp:74
+#: ../src/view/settingsDlgGtk.cpp:83
 msgid "magenta"
 msgstr "purpurinė"
 
-#: ../src/view/settingsDlgGtk.cpp:75
+#: ../src/view/settingsDlgGtk.cpp:84
 msgid "light-red"
 msgstr "šviesiai raudona"
 
-#: ../src/view/settingsDlgGtk.cpp:76
+#: ../src/view/settingsDlgGtk.cpp:85
 msgid "red"
 msgstr "raudona"
 
-#: ../src/view/settingsDlgGtk.cpp:77
+#: ../src/view/settingsDlgGtk.cpp:86
 msgid "brown"
 msgstr "ruda"
 
-#: ../src/view/settingsDlgGtk.cpp:78
+#: ../src/view/settingsDlgGtk.cpp:87
 msgid "light-gray"
 msgstr "šviesiai pilka"
 
-#: ../src/view/settingsDlgGtk.cpp:79
+#: ../src/view/settingsDlgGtk.cpp:88
 msgid "dark-gray"
 msgstr "tamsiai pilka"
 
-#: ../src/view/settingsDlgGtk.cpp:80
+#: ../src/view/settingsDlgGtk.cpp:89
 msgid "transparent"
 msgstr "permatoma"
 
-#: ../src/view/settingsDlgGtk.cpp:80
+#: ../src/view/settingsDlgGtk.cpp:89
 msgid "black"
 msgstr "juoda"
 
-#: ../src/view/settingsDlgGtk.cpp:92
+#: ../src/view/settingsDlgGtk.cpp:101
 msgid "pre_defined: "
-msgstr ""
+msgstr "_numatytasis: "
 
-#: ../src/view/settingsDlgGtk.cpp:92
+#: ../src/view/settingsDlgGtk.cpp:101
 msgid "previously _booted entry"
 msgstr "_paskutinis pasirinktas elementas"
 
-#: ../src/view/settingsDlgGtk.cpp:93
+#: ../src/view/settingsDlgGtk.cpp:102
 msgid "default entry"
-msgstr "Numatytasis elementas"
+msgstr "numatytasis elementas"
 
-#: ../src/view/settingsDlgGtk.cpp:93
+#: ../src/view/settingsDlgGtk.cpp:102
 msgid "visibility"
-msgstr ""
+msgstr "matomumas"
 
-#: ../src/view/settingsDlgGtk.cpp:93
+#: ../src/view/settingsDlgGtk.cpp:102
 msgid "show menu"
 msgstr "rodyti meniu"
 
-#: ../src/view/settingsDlgGtk.cpp:94
+#: ../src/view/settingsDlgGtk.cpp:103
 msgid "Timeout"
 msgstr "Laiko limitas"
 
-#: ../src/view/settingsDlgGtk.cpp:94
+#: ../src/view/settingsDlgGtk.cpp:103
 msgid "Seconds"
 msgstr "sek."
 
-#: ../src/view/settingsDlgGtk.cpp:94
+#: ../src/view/settingsDlgGtk.cpp:103
 msgid "kernel parameters"
 msgstr "branduolio parametrai"
 
-#: ../src/view/settingsDlgGtk.cpp:95
+#: ../src/view/settingsDlgGtk.cpp:104
 msgid "generate recovery entries"
-msgstr ""
+msgstr "generuoti atkūrimo įrašus"
 
-#: ../src/view/settingsDlgGtk.cpp:95
+#: ../src/view/settingsDlgGtk.cpp:104
 msgid "look for other operating systems"
 msgstr "ieškoti kitų operacinių sistemų"
 
-#: ../src/view/settingsDlgGtk.cpp:96
+#: ../src/view/settingsDlgGtk.cpp:105
 msgid "custom resolution: "
 msgstr "pasirinktinė raiška: "
 
-#: ../src/view/settingsDlgGtk.cpp:97
+#: ../src/view/settingsDlgGtk.cpp:106
 msgid "font color"
 msgstr "šrifto spalva"
 
-#: ../src/view/settingsDlgGtk.cpp:97
+#: ../src/view/settingsDlgGtk.cpp:106
 msgid "background"
 msgstr "fonas"
 
-#: ../src/view/settingsDlgGtk.cpp:98
+#: ../src/view/settingsDlgGtk.cpp:107
 msgid "normal:"
-msgstr ""
+msgstr "įprastas:"
 
-#: ../src/view/settingsDlgGtk.cpp:98
+#: ../src/view/settingsDlgGtk.cpp:107
 msgid "highlight:"
-msgstr ""
+msgstr "ryškus:"
 
-#: ../src/view/settingsDlgGtk.cpp:99
+#: ../src/view/settingsDlgGtk.cpp:108
 msgid "menu colors"
 msgstr "meniu spalvos"
 
-#: ../src/view/settingsDlgGtk.cpp:99
+#: ../src/view/settingsDlgGtk.cpp:108
 msgid "background image"
 msgstr "fono paveikslėlis"
 
-#: ../src/view/settingsDlgGtk.cpp:100
-msgid "remove background"
-msgstr ""
-
-#: ../src/view/settingsDlgGtk.cpp:101
+#: ../src/view/settingsDlgGtk.cpp:110
 msgid ""
 "To get the colors above working,\n"
 "you have to select a background image!"
 msgstr ""
+"Norint jog aukščiau esančios spalvos veiktų,\n"
+"turite pasirinkti fono paveikslėlį!"
 
-#: ../src/view/settingsDlgGtk.cpp:104
+#: ../src/view/settingsDlgGtk.cpp:111
+msgid "_Font"
+msgstr "Šri_ftas"
+
+#: ../src/view/settingsDlgGtk.cpp:113
 msgid "settings"
 msgstr "nustatymai"
 
-#: ../src/view/settingsDlgGtk.cpp:108
+#: ../src/view/settingsDlgGtk.cpp:117
 msgid "_General"
-msgstr ""
+msgstr "_Bendra"
 
-#: ../src/view/settingsDlgGtk.cpp:109
+#: ../src/view/settingsDlgGtk.cpp:118
 msgid "A_ppearance"
 msgstr "_Išvaizda"
 
-#: ../src/view/settingsDlgGtk.cpp:110
+#: ../src/view/settingsDlgGtk.cpp:119
 msgid "_Advanced"
-msgstr ""
+msgstr "_Papildoma"
 
-#: ../src/view/settingsDlgGtk.cpp:125
+#: ../src/view/settingsDlgGtk.cpp:134
 msgid "value"
-msgstr ""
+msgstr "reikšmė"
 
-#: ../src/view/settingsDlgGtk.cpp:295
+#: ../src/view/settingsDlgGtk.cpp:209 ../src/view/settingsDlgGtk.cpp:345
+#: ../src/view/settingsDlgGtk.cpp:693
+msgid "saved"
+msgstr "išsaugota"
+
+#: ../src/view/settingsDlgGtk.cpp:239
+msgid "remove font"
+msgstr "pašalinti šriftą"
+
+#: ../src/view/settingsDlgGtk.cpp:263
+msgid "remove background"
+msgstr "pašalinti foną"
+
+#: ../src/view/settingsDlgGtk.cpp:323
 msgid "Entry %1 (by position)"
-msgstr ""
+msgstr "Įrašas %1 (pagal vietą)"
 
-#: ../src/view/settingsDlgGtk.cpp:520
+#: ../src/view/settingsDlgGtk.cpp:627
 msgid ""
 "This option doesn't work when the \"os-prober\" script finds other operating "
 "systems. Disable \"%1\" if you don't need to boot other operating systems."
 msgstr ""
+"Ši parinktis neveikia kai „os-prober“ scenarijus randa kitų operacinių "
+"sistemų. Išjunkite „%1“ jei nenorite įkrauti kitų operacinių sistemų."

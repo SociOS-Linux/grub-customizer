@@ -7,42 +7,42 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-11-22 19:34+0100\n"
-"PO-Revision-Date: 2011-11-29 18:30+0000\n"
-"Last-Translator: Péter Trombitás <Unknown>\n"
+"POT-Creation-Date: 2012-06-20 00:16+0200\n"
+"PO-Revision-Date: 2012-03-08 22:05+0000\n"
+"Last-Translator: Vizion-HUN <Unknown>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-28 17:08+0000\n"
-"X-Generator: Launchpad (build 14560)\n"
+"X-Launchpad-Export-Date: 2012-08-30 21:28+0000\n"
+"X-Generator: Launchpad (build 15877)\n"
 
-#: ../src/presenter/grubCustomizer.cpp:439
+#: ../src/presenter/grubCustomizer.cpp:448
 msgid "No script found"
 msgstr "Script nem található"
 
-#: ../src/presenter/grubCustomizer.cpp:512
+#: ../src/presenter/grubCustomizer.cpp:515
 msgid "loading configuration…"
 msgstr "konfiguráció betöltése..."
 
-#: ../src/presenter/grubCustomizer.cpp:526
-#: ../src/view/grublistCfgDlgGtk.cpp:359
+#: ../src/presenter/grubCustomizer.cpp:529
+#: ../src/view/grublistCfgDlgGtk.cpp:380
 msgid " (custom)"
 msgstr " (egyéni)"
 
-#: ../src/presenter/grubCustomizer.cpp:556
+#: ../src/presenter/grubCustomizer.cpp:561
 msgid "Configuration has been saved"
 msgstr "Konfiguráció elmentve"
 
-#: ../src/presenter/grubCustomizer.cpp:559
+#: ../src/presenter/grubCustomizer.cpp:564
 msgid "updating configuration"
 msgstr "konfiguráció frissítése"
 
-#: ../src/presenter/grubCustomizer.cpp:571
+#: ../src/presenter/grubCustomizer.cpp:576
 msgid "%1 not found. Is grub2 installed?"
 msgstr "A(z) %1 nem található. Fel van telepítve a grub2?"
 
-#: ../src/presenter/grubCustomizer.cpp:581
+#: ../src/presenter/grubCustomizer.cpp:586
 msgid ""
 "%1 couldn't be executed successfully. error message:\n"
 " %2"
@@ -50,11 +50,11 @@ msgstr ""
 "A(z) %1 végrhajtása sikertelen. A hibeüzenet a következő:\n"
 " %2"
 
-#: ../src/presenter/grubCustomizer.cpp:638
+#: ../src/presenter/grubCustomizer.cpp:643
 msgid "Name the Entry"
 msgstr "A bejegyzés neve"
 
-#: ../src/presenter/grubCustomizer.cpp:671
+#: ../src/presenter/grubCustomizer.cpp:676
 msgid "cannot move this entry"
 msgstr "Ezt a bejegyzést nem lehet áthelyezni"
 
@@ -97,83 +97,91 @@ msgstr "boottöltő telepítése..."
 msgid "Please type a device string!"
 msgstr "Kérem gépeljen be egy eszköz stringet!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:28
+#: ../src/view/grublistCfgDlgGtk.cpp:29
 msgid "_File"
 msgstr "_Fájl"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:29
+#: ../src/view/grublistCfgDlgGtk.cpp:30
 msgid "_Edit"
 msgstr "_Szerkesztés"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:29
+#: ../src/view/grublistCfgDlgGtk.cpp:30
 msgid "_View"
 msgstr "_Nézet"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:29
+#: ../src/view/grublistCfgDlgGtk.cpp:30
 msgid "_Help"
 msgstr "_Súgó"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:30
+#: ../src/view/grublistCfgDlgGtk.cpp:31
 msgid "_Install to MBR …"
 msgstr "_Telepítés az MBR-be..."
 
-#: ../src/view/grublistCfgDlgGtk.cpp:34
+#: ../src/view/grublistCfgDlgGtk.cpp:36
 msgid "BURG found!"
 msgstr "BURG megtalálva!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:35
+#: ../src/view/grublistCfgDlgGtk.cpp:37
 msgid "No Bootloader found"
 msgstr "Nem található boottöltő"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:63
+#: ../src/view/grublistCfgDlgGtk.cpp:65
 msgid "Add a script to your configuration"
 msgstr "Script hozzáadása a konfigurációhoz"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:65
+#: ../src/view/grublistCfgDlgGtk.cpp:67
 msgid "Remove a script from your configuration"
 msgstr "Script eltávolítása"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:71
+#: ../src/view/grublistCfgDlgGtk.cpp:73
 msgid "Move up the selected entry or script"
 msgstr "A kiválasztott bejegyzés vagy script feljebb mozgatása"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:73
+#: ../src/view/grublistCfgDlgGtk.cpp:75
 msgid "Move down the selected entry or script"
 msgstr "A kiválasztott bejegyzés vagy script lejjebb mozgatása"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:81
+msgid "remove this entry from the current submenu"
+msgstr "Bejegyzés eltávolítása ebből az almenüből"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:84
+msgid "add this entry to a new submenu"
+msgstr "Bejegyzés hozzáadása az almenühöz"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:92
 msgid "reload configuration"
 msgstr "konfiguráció újratöltése"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:84
+#: ../src/view/grublistCfgDlgGtk.cpp:95
 msgid "Edit grub preferences"
 msgstr "Grub tulajdonságok szerkesztése"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:113
+#: ../src/view/grublistCfgDlgGtk.cpp:126
 msgid "Select _partition …"
 msgstr "_Partició kiválasztása ..."
 
-#: ../src/view/grublistCfgDlgGtk.cpp:120
+#: ../src/view/grublistCfgDlgGtk.cpp:133
 msgid "Do you want to configure BURG instead of grub2?"
 msgstr "Szeretné a BURG-ot konfigurálni a grub2 helyett?"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:127
+#: ../src/view/grublistCfgDlgGtk.cpp:140
 msgid "Do you want to select another root partition?"
 msgstr "Szeretne más root partíciót kiválasztani?"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:168
+#: ../src/view/grublistCfgDlgGtk.cpp:185
 msgid "BURG Mode"
 msgstr "BURG Mód"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:172
+#: ../src/view/grublistCfgDlgGtk.cpp:189
 msgid "Save configuration and generate a new "
 msgstr "Konfiguráció mentése és új fájl létrehozása: "
 
-#: ../src/view/grublistCfgDlgGtk.cpp:256
+#: ../src/view/grublistCfgDlgGtk.cpp:273
 msgid "Proxy binary not found!"
 msgstr "Proxy nem található!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:257
+#: ../src/view/grublistCfgDlgGtk.cpp:274
 msgid ""
 "You will see all entries (uncustomized) when you run grub. This error accurs "
 "(in most cases), when you didn't install grub gustomizer currectly."
@@ -182,27 +190,27 @@ msgstr ""
 "a grub-ot. Ez a hiba akkor fordul elő (a legtöbb esetben), amikor a grub "
 "customizer nincs helyesen telepítve."
 
-#: ../src/view/grublistCfgDlgGtk.cpp:263
+#: ../src/view/grublistCfgDlgGtk.cpp:280
 msgid "(new Entries of %1)"
 msgstr "(%1 új Bejegyzés)"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:265
+#: ../src/view/grublistCfgDlgGtk.cpp:282
 msgid "(new Entries)"
 msgstr "(új Bejegyzés)"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:270
+#: ../src/view/grublistCfgDlgGtk.cpp:287
 msgid "(script code)"
-msgstr ""
+msgstr "Kód írása"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:494
+#: ../src/view/grublistCfgDlgGtk.cpp:518
 msgid "Default title: "
 msgstr "Alapértelmezett cím: "
 
-#: ../src/view/grublistCfgDlgGtk.cpp:586
+#: ../src/view/grublistCfgDlgGtk.cpp:612
 msgid "The saved configuration is not up to date!"
 msgstr "Az elmentett konfiguráció nem naprakész!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:587
+#: ../src/view/grublistCfgDlgGtk.cpp:613
 msgid ""
 "The generated configuration didn't equal to the saved configuration on "
 "startup. So what you see now may not be what you see when you restart your "
@@ -212,36 +220,36 @@ msgstr ""
 "induláskor. Tehát amit most lát nem ugyanaz mit akkor fog látni mikor újra "
 "indítja a számítógépét. Hogy javítsa ezt, kattintson a frissítésre!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:590
+#: ../src/view/grublistCfgDlgGtk.cpp:616
 msgid "_Quit without update"
 msgstr "_Kilépés frissítés nélkül"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:593
+#: ../src/view/grublistCfgDlgGtk.cpp:619
 msgid "_Update & Quit"
 msgstr "_Frissítés & Kilépés"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:597
+#: ../src/view/grublistCfgDlgGtk.cpp:623
 msgid "Do you want to save your modifications?"
 msgstr "Szeretné menteni a módosításokat?"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:600
+#: ../src/view/grublistCfgDlgGtk.cpp:626
 msgid "_Quit without saving"
 msgstr "K_ilépés mentés nélkül"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:603
+#: ../src/view/grublistCfgDlgGtk.cpp:629
 msgid "_Save & Quit"
 msgstr "_Mentés @ Kilépés"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:606
+#: ../src/view/grublistCfgDlgGtk.cpp:632
 msgid "AND: your modifications are still unsaved, update will save them too!"
 msgstr ""
 "ÉS: a módosítások még nincsenek mentve, a frissítés menteni is fogja őket!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:672 ../src/view/settingsDlgGtk.cpp:123
+#: ../src/view/grublistCfgDlgGtk.cpp:708 ../src/view/settingsDlgGtk.cpp:132
 msgid "is active"
 msgstr "aktív"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:673 ../src/view/settingsDlgGtk.cpp:124
+#: ../src/view/grublistCfgDlgGtk.cpp:709 ../src/view/settingsDlgGtk.cpp:133
 msgid "name"
 msgstr "név"
 
@@ -371,147 +379,143 @@ msgstr "Script hozzáadása"
 msgid "Entry"
 msgstr "Bejegyzés"
 
-#: ../src/view/settingsDlgGtk.cpp:65
+#: ../src/view/settingsDlgGtk.cpp:74
 msgid "white"
 msgstr "fehér"
 
-#: ../src/view/settingsDlgGtk.cpp:66
+#: ../src/view/settingsDlgGtk.cpp:75
 msgid "yellow"
 msgstr "sárga"
 
-#: ../src/view/settingsDlgGtk.cpp:67
+#: ../src/view/settingsDlgGtk.cpp:76
 msgid "light-cyan"
 msgstr "világos-ciánkék"
 
-#: ../src/view/settingsDlgGtk.cpp:68
+#: ../src/view/settingsDlgGtk.cpp:77
 msgid "cyan"
 msgstr "ciánkék"
 
-#: ../src/view/settingsDlgGtk.cpp:69
+#: ../src/view/settingsDlgGtk.cpp:78
 msgid "light-blue"
 msgstr "világoskék"
 
-#: ../src/view/settingsDlgGtk.cpp:70
+#: ../src/view/settingsDlgGtk.cpp:79
 msgid "blue"
 msgstr "kék"
 
-#: ../src/view/settingsDlgGtk.cpp:71
+#: ../src/view/settingsDlgGtk.cpp:80
 msgid "light-green"
 msgstr "világoszöld"
 
-#: ../src/view/settingsDlgGtk.cpp:72
+#: ../src/view/settingsDlgGtk.cpp:81
 msgid "green"
 msgstr "zöld"
 
-#: ../src/view/settingsDlgGtk.cpp:73
+#: ../src/view/settingsDlgGtk.cpp:82
 msgid "light-magenta"
 msgstr "világos-magenta"
 
-#: ../src/view/settingsDlgGtk.cpp:74
+#: ../src/view/settingsDlgGtk.cpp:83
 msgid "magenta"
 msgstr "magenta"
 
-#: ../src/view/settingsDlgGtk.cpp:75
+#: ../src/view/settingsDlgGtk.cpp:84
 msgid "light-red"
 msgstr "világospiros"
 
-#: ../src/view/settingsDlgGtk.cpp:76
+#: ../src/view/settingsDlgGtk.cpp:85
 msgid "red"
 msgstr "piros"
 
-#: ../src/view/settingsDlgGtk.cpp:77
+#: ../src/view/settingsDlgGtk.cpp:86
 msgid "brown"
 msgstr "barna"
 
-#: ../src/view/settingsDlgGtk.cpp:78
+#: ../src/view/settingsDlgGtk.cpp:87
 msgid "light-gray"
 msgstr "világosszürke"
 
-#: ../src/view/settingsDlgGtk.cpp:79
+#: ../src/view/settingsDlgGtk.cpp:88
 msgid "dark-gray"
 msgstr "sötétszürke"
 
-#: ../src/view/settingsDlgGtk.cpp:80
+#: ../src/view/settingsDlgGtk.cpp:89
 msgid "transparent"
 msgstr "átlátszó"
 
-#: ../src/view/settingsDlgGtk.cpp:80
+#: ../src/view/settingsDlgGtk.cpp:89
 msgid "black"
 msgstr "fekete"
 
-#: ../src/view/settingsDlgGtk.cpp:92
+#: ../src/view/settingsDlgGtk.cpp:101
 msgid "pre_defined: "
 msgstr "előre_definiált: "
 
-#: ../src/view/settingsDlgGtk.cpp:92
+#: ../src/view/settingsDlgGtk.cpp:101
 msgid "previously _booted entry"
 msgstr "előzetesen _bootolt bejegyzés"
 
-#: ../src/view/settingsDlgGtk.cpp:93
+#: ../src/view/settingsDlgGtk.cpp:102
 msgid "default entry"
 msgstr "alapértelmezett bejegyzés"
 
-#: ../src/view/settingsDlgGtk.cpp:93
+#: ../src/view/settingsDlgGtk.cpp:102
 msgid "visibility"
 msgstr "láthatóság"
 
-#: ../src/view/settingsDlgGtk.cpp:93
+#: ../src/view/settingsDlgGtk.cpp:102
 msgid "show menu"
 msgstr "menü mutatása"
 
-#: ../src/view/settingsDlgGtk.cpp:94
+#: ../src/view/settingsDlgGtk.cpp:103
 msgid "Timeout"
 msgstr "Várakozási idő"
 
-#: ../src/view/settingsDlgGtk.cpp:94
+#: ../src/view/settingsDlgGtk.cpp:103
 msgid "Seconds"
 msgstr "Másodpercek"
 
-#: ../src/view/settingsDlgGtk.cpp:94
+#: ../src/view/settingsDlgGtk.cpp:103
 msgid "kernel parameters"
 msgstr "kernel paraméterek"
 
-#: ../src/view/settingsDlgGtk.cpp:95
+#: ../src/view/settingsDlgGtk.cpp:104
 msgid "generate recovery entries"
 msgstr "helyreállító bejegyzés generálása"
 
-#: ../src/view/settingsDlgGtk.cpp:95
+#: ../src/view/settingsDlgGtk.cpp:104
 msgid "look for other operating systems"
 msgstr "más operációs rendszer keresése"
 
-#: ../src/view/settingsDlgGtk.cpp:96
+#: ../src/view/settingsDlgGtk.cpp:105
 msgid "custom resolution: "
 msgstr "egyéni felbontás: "
 
-#: ../src/view/settingsDlgGtk.cpp:97
+#: ../src/view/settingsDlgGtk.cpp:106
 msgid "font color"
 msgstr "betűszín"
 
-#: ../src/view/settingsDlgGtk.cpp:97
+#: ../src/view/settingsDlgGtk.cpp:106
 msgid "background"
 msgstr "háttér"
 
-#: ../src/view/settingsDlgGtk.cpp:98
+#: ../src/view/settingsDlgGtk.cpp:107
 msgid "normal:"
 msgstr "normális:"
 
-#: ../src/view/settingsDlgGtk.cpp:98
+#: ../src/view/settingsDlgGtk.cpp:107
 msgid "highlight:"
 msgstr "kiemelés:"
 
-#: ../src/view/settingsDlgGtk.cpp:99
+#: ../src/view/settingsDlgGtk.cpp:108
 msgid "menu colors"
 msgstr "menü színei"
 
-#: ../src/view/settingsDlgGtk.cpp:99
+#: ../src/view/settingsDlgGtk.cpp:108
 msgid "background image"
 msgstr "háttérkép"
 
-#: ../src/view/settingsDlgGtk.cpp:100
-msgid "remove background"
-msgstr "háttér törlése"
-
-#: ../src/view/settingsDlgGtk.cpp:101
+#: ../src/view/settingsDlgGtk.cpp:110
 msgid ""
 "To get the colors above working,\n"
 "you have to select a background image!"
@@ -519,31 +523,48 @@ msgstr ""
 "Ahhoz, hogy a fenti színek működjenek,\n"
 "ki kell választania egy háttérképet!"
 
-#: ../src/view/settingsDlgGtk.cpp:104
+#: ../src/view/settingsDlgGtk.cpp:111
+msgid "_Font"
+msgstr ""
+
+#: ../src/view/settingsDlgGtk.cpp:113
 msgid "settings"
 msgstr "beállítások"
 
-#: ../src/view/settingsDlgGtk.cpp:108
+#: ../src/view/settingsDlgGtk.cpp:117
 msgid "_General"
 msgstr "Á_ltalános"
 
-#: ../src/view/settingsDlgGtk.cpp:109
+#: ../src/view/settingsDlgGtk.cpp:118
 msgid "A_ppearance"
 msgstr "_Megjelenés"
 
-#: ../src/view/settingsDlgGtk.cpp:110
+#: ../src/view/settingsDlgGtk.cpp:119
 msgid "_Advanced"
 msgstr "_Speciális"
 
-#: ../src/view/settingsDlgGtk.cpp:125
+#: ../src/view/settingsDlgGtk.cpp:134
 msgid "value"
 msgstr "érték"
 
-#: ../src/view/settingsDlgGtk.cpp:295
+#: ../src/view/settingsDlgGtk.cpp:209 ../src/view/settingsDlgGtk.cpp:345
+#: ../src/view/settingsDlgGtk.cpp:693
+msgid "saved"
+msgstr ""
+
+#: ../src/view/settingsDlgGtk.cpp:239
+msgid "remove font"
+msgstr ""
+
+#: ../src/view/settingsDlgGtk.cpp:263
+msgid "remove background"
+msgstr "háttér törlése"
+
+#: ../src/view/settingsDlgGtk.cpp:323
 msgid "Entry %1 (by position)"
 msgstr "Bejegyzés %1 (pozíció szerint)"
 
-#: ../src/view/settingsDlgGtk.cpp:520
+#: ../src/view/settingsDlgGtk.cpp:627
 msgid ""
 "This option doesn't work when the \"os-prober\" script finds other operating "
 "systems. Disable \"%1\" if you don't need to boot other operating systems."

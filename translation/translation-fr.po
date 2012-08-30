@@ -7,42 +7,42 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-11-22 19:34+0100\n"
-"PO-Revision-Date: 2011-11-29 18:30+0000\n"
-"Last-Translator: gilles chaon <Unknown>\n"
+"POT-Creation-Date: 2012-06-20 00:16+0200\n"
+"PO-Revision-Date: 2012-01-11 17:19+0000\n"
+"Last-Translator: Mohamed SEDKI <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-28 17:08+0000\n"
-"X-Generator: Launchpad (build 14560)\n"
+"X-Launchpad-Export-Date: 2012-08-30 21:28+0000\n"
+"X-Generator: Launchpad (build 15877)\n"
 
-#: ../src/presenter/grubCustomizer.cpp:439
+#: ../src/presenter/grubCustomizer.cpp:448
 msgid "No script found"
 msgstr "Aucun script trouvé"
 
-#: ../src/presenter/grubCustomizer.cpp:512
+#: ../src/presenter/grubCustomizer.cpp:515
 msgid "loading configuration…"
 msgstr "chargement de la configuration..."
 
-#: ../src/presenter/grubCustomizer.cpp:526
-#: ../src/view/grublistCfgDlgGtk.cpp:359
+#: ../src/presenter/grubCustomizer.cpp:529
+#: ../src/view/grublistCfgDlgGtk.cpp:380
 msgid " (custom)"
 msgstr " (personnalisé)"
 
-#: ../src/presenter/grubCustomizer.cpp:556
+#: ../src/presenter/grubCustomizer.cpp:561
 msgid "Configuration has been saved"
 msgstr "La configuration a été enregistrée"
 
-#: ../src/presenter/grubCustomizer.cpp:559
+#: ../src/presenter/grubCustomizer.cpp:564
 msgid "updating configuration"
 msgstr "mise à jour de la configuration"
 
-#: ../src/presenter/grubCustomizer.cpp:571
+#: ../src/presenter/grubCustomizer.cpp:576
 msgid "%1 not found. Is grub2 installed?"
 msgstr "%1 not found. grub2 est-il bien installé ?"
 
-#: ../src/presenter/grubCustomizer.cpp:581
+#: ../src/presenter/grubCustomizer.cpp:586
 msgid ""
 "%1 couldn't be executed successfully. error message:\n"
 " %2"
@@ -50,11 +50,11 @@ msgstr ""
 "%1 ne peut pas s’exécuter correctement. Message d'erreur :\n"
 "%2"
 
-#: ../src/presenter/grubCustomizer.cpp:638
+#: ../src/presenter/grubCustomizer.cpp:643
 msgid "Name the Entry"
 msgstr "Nommer l'entrée"
 
-#: ../src/presenter/grubCustomizer.cpp:671
+#: ../src/presenter/grubCustomizer.cpp:676
 msgid "cannot move this entry"
 msgstr "Cette entrée ne peut être déplacée"
 
@@ -99,83 +99,91 @@ msgstr "Installation du programme de démarrage..."
 msgid "Please type a device string!"
 msgstr "Veuillez introduire une chaîne de périphérique!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:28
+#: ../src/view/grublistCfgDlgGtk.cpp:29
 msgid "_File"
 msgstr "_Fichier"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:29
+#: ../src/view/grublistCfgDlgGtk.cpp:30
 msgid "_Edit"
 msgstr "_Éditer"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:29
+#: ../src/view/grublistCfgDlgGtk.cpp:30
 msgid "_View"
 msgstr "_Affichage"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:29
+#: ../src/view/grublistCfgDlgGtk.cpp:30
 msgid "_Help"
 msgstr "_Aide"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:30
+#: ../src/view/grublistCfgDlgGtk.cpp:31
 msgid "_Install to MBR …"
 msgstr "_Installation dans le MBR"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:34
+#: ../src/view/grublistCfgDlgGtk.cpp:36
 msgid "BURG found!"
 msgstr "BURG trouvé !"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:35
+#: ../src/view/grublistCfgDlgGtk.cpp:37
 msgid "No Bootloader found"
 msgstr "Aucun programme de démarrage trouvé"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:63
+#: ../src/view/grublistCfgDlgGtk.cpp:65
 msgid "Add a script to your configuration"
 msgstr "Ajouter un script à votre configuration"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:65
+#: ../src/view/grublistCfgDlgGtk.cpp:67
 msgid "Remove a script from your configuration"
 msgstr "Supprimer un script de votre configuration"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:71
+#: ../src/view/grublistCfgDlgGtk.cpp:73
 msgid "Move up the selected entry or script"
 msgstr "Déplacer vers le haut l'entrée ou le script sélectionné"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:73
+#: ../src/view/grublistCfgDlgGtk.cpp:75
 msgid "Move down the selected entry or script"
 msgstr "Déplacer vers le bas l'entrée ou le script sélectionné"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:81
+msgid "remove this entry from the current submenu"
+msgstr "supprimer cette entrée du sous-menu courant"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:84
+msgid "add this entry to a new submenu"
+msgstr "ajouter cette entrée à un nouveau sous-menu"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:92
 msgid "reload configuration"
 msgstr "Recharger la configuration"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:84
+#: ../src/view/grublistCfgDlgGtk.cpp:95
 msgid "Edit grub preferences"
 msgstr "Éditer les préférences de grub"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:113
+#: ../src/view/grublistCfgDlgGtk.cpp:126
 msgid "Select _partition …"
 msgstr "Sélectionner une _partition..."
 
-#: ../src/view/grublistCfgDlgGtk.cpp:120
+#: ../src/view/grublistCfgDlgGtk.cpp:133
 msgid "Do you want to configure BURG instead of grub2?"
 msgstr "Voulez-vous configurer BURG à la place de grub2 ?"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:127
+#: ../src/view/grublistCfgDlgGtk.cpp:140
 msgid "Do you want to select another root partition?"
 msgstr "Voulez-vous sélectionner une autre partition root ?"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:168
+#: ../src/view/grublistCfgDlgGtk.cpp:185
 msgid "BURG Mode"
 msgstr "mode BURG"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:172
+#: ../src/view/grublistCfgDlgGtk.cpp:189
 msgid "Save configuration and generate a new "
 msgstr "Enregistrer la configuration et en générer une nouvelle "
 
-#: ../src/view/grublistCfgDlgGtk.cpp:256
+#: ../src/view/grublistCfgDlgGtk.cpp:273
 msgid "Proxy binary not found!"
 msgstr "Binaire du proxy non trouvé !"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:257
+#: ../src/view/grublistCfgDlgGtk.cpp:274
 msgid ""
 "You will see all entries (uncustomized) when you run grub. This error accurs "
 "(in most cases), when you didn't install grub gustomizer currectly."
@@ -184,27 +192,27 @@ msgstr ""
 "grub. Cette erreur apparaît (dans la plupart des cas), lorsque vous n'avez "
 "pas installé grub customizer correctement."
 
-#: ../src/view/grublistCfgDlgGtk.cpp:263
+#: ../src/view/grublistCfgDlgGtk.cpp:280
 msgid "(new Entries of %1)"
 msgstr "(nouvelles entrées de %1)"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:265
+#: ../src/view/grublistCfgDlgGtk.cpp:282
 msgid "(new Entries)"
 msgstr "(nouvelles entrées)"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:270
+#: ../src/view/grublistCfgDlgGtk.cpp:287
 msgid "(script code)"
-msgstr ""
+msgstr "(script du code)"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:494
+#: ../src/view/grublistCfgDlgGtk.cpp:518
 msgid "Default title: "
 msgstr "Titre par défaut : "
 
-#: ../src/view/grublistCfgDlgGtk.cpp:586
+#: ../src/view/grublistCfgDlgGtk.cpp:612
 msgid "The saved configuration is not up to date!"
 msgstr "La configuration enregistrée n'est pas à jour !"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:587
+#: ../src/view/grublistCfgDlgGtk.cpp:613
 msgid ""
 "The generated configuration didn't equal to the saved configuration on "
 "startup. So what you see now may not be what you see when you restart your "
@@ -215,37 +223,37 @@ msgstr ""
 "vous verrez lorsque vous redémarrerez votre ordinateur. Pour corrigez ceci, "
 "cliquez sur mettre à jour !"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:590
+#: ../src/view/grublistCfgDlgGtk.cpp:616
 msgid "_Quit without update"
 msgstr "_Quitter sans mettre à jour"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:593
+#: ../src/view/grublistCfgDlgGtk.cpp:619
 msgid "_Update & Quit"
 msgstr "_Mettre à jour & Quitter"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:597
+#: ../src/view/grublistCfgDlgGtk.cpp:623
 msgid "Do you want to save your modifications?"
 msgstr "Voulez-vous enregistrer vos modifications ?"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:600
+#: ../src/view/grublistCfgDlgGtk.cpp:626
 msgid "_Quit without saving"
 msgstr "_Quitter sans enregistrer"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:603
+#: ../src/view/grublistCfgDlgGtk.cpp:629
 msgid "_Save & Quit"
 msgstr "_Enregistrer & Quitter"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:606
+#: ../src/view/grublistCfgDlgGtk.cpp:632
 msgid "AND: your modifications are still unsaved, update will save them too!"
 msgstr ""
 "AND: Vos modifications ne sont pas enregistrées, la mise à jour le fera "
 "automatiquement!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:672 ../src/view/settingsDlgGtk.cpp:123
+#: ../src/view/grublistCfgDlgGtk.cpp:708 ../src/view/settingsDlgGtk.cpp:132
 msgid "is active"
 msgstr "est actif"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:673 ../src/view/settingsDlgGtk.cpp:124
+#: ../src/view/grublistCfgDlgGtk.cpp:709 ../src/view/settingsDlgGtk.cpp:133
 msgid "name"
 msgstr "Nom"
 
@@ -376,147 +384,143 @@ msgstr "Ajouter un script"
 msgid "Entry"
 msgstr "Entrée"
 
-#: ../src/view/settingsDlgGtk.cpp:65
+#: ../src/view/settingsDlgGtk.cpp:74
 msgid "white"
 msgstr "blanc"
 
-#: ../src/view/settingsDlgGtk.cpp:66
+#: ../src/view/settingsDlgGtk.cpp:75
 msgid "yellow"
 msgstr "jaune"
 
-#: ../src/view/settingsDlgGtk.cpp:67
+#: ../src/view/settingsDlgGtk.cpp:76
 msgid "light-cyan"
 msgstr "cyan clair"
 
-#: ../src/view/settingsDlgGtk.cpp:68
+#: ../src/view/settingsDlgGtk.cpp:77
 msgid "cyan"
 msgstr "cyan"
 
-#: ../src/view/settingsDlgGtk.cpp:69
+#: ../src/view/settingsDlgGtk.cpp:78
 msgid "light-blue"
 msgstr "bleu clair"
 
-#: ../src/view/settingsDlgGtk.cpp:70
+#: ../src/view/settingsDlgGtk.cpp:79
 msgid "blue"
 msgstr "bleu"
 
-#: ../src/view/settingsDlgGtk.cpp:71
+#: ../src/view/settingsDlgGtk.cpp:80
 msgid "light-green"
 msgstr "vert clair"
 
-#: ../src/view/settingsDlgGtk.cpp:72
+#: ../src/view/settingsDlgGtk.cpp:81
 msgid "green"
 msgstr "vert"
 
-#: ../src/view/settingsDlgGtk.cpp:73
+#: ../src/view/settingsDlgGtk.cpp:82
 msgid "light-magenta"
 msgstr "magenta clair"
 
-#: ../src/view/settingsDlgGtk.cpp:74
+#: ../src/view/settingsDlgGtk.cpp:83
 msgid "magenta"
 msgstr "magenta"
 
-#: ../src/view/settingsDlgGtk.cpp:75
+#: ../src/view/settingsDlgGtk.cpp:84
 msgid "light-red"
 msgstr "rouge clair"
 
-#: ../src/view/settingsDlgGtk.cpp:76
+#: ../src/view/settingsDlgGtk.cpp:85
 msgid "red"
 msgstr "rouge"
 
-#: ../src/view/settingsDlgGtk.cpp:77
+#: ../src/view/settingsDlgGtk.cpp:86
 msgid "brown"
 msgstr "marron"
 
-#: ../src/view/settingsDlgGtk.cpp:78
+#: ../src/view/settingsDlgGtk.cpp:87
 msgid "light-gray"
 msgstr "gris clair"
 
-#: ../src/view/settingsDlgGtk.cpp:79
+#: ../src/view/settingsDlgGtk.cpp:88
 msgid "dark-gray"
 msgstr "gris foncé"
 
-#: ../src/view/settingsDlgGtk.cpp:80
+#: ../src/view/settingsDlgGtk.cpp:89
 msgid "transparent"
 msgstr "transparent"
 
-#: ../src/view/settingsDlgGtk.cpp:80
+#: ../src/view/settingsDlgGtk.cpp:89
 msgid "black"
 msgstr "noir"
 
-#: ../src/view/settingsDlgGtk.cpp:92
+#: ../src/view/settingsDlgGtk.cpp:101
 msgid "pre_defined: "
 msgstr "pré_défini : "
 
-#: ../src/view/settingsDlgGtk.cpp:92
+#: ../src/view/settingsDlgGtk.cpp:101
 msgid "previously _booted entry"
 msgstr "entrée précédemment _amorcée"
 
-#: ../src/view/settingsDlgGtk.cpp:93
+#: ../src/view/settingsDlgGtk.cpp:102
 msgid "default entry"
 msgstr "entrée par défaut"
 
-#: ../src/view/settingsDlgGtk.cpp:93
+#: ../src/view/settingsDlgGtk.cpp:102
 msgid "visibility"
 msgstr "visibilité"
 
-#: ../src/view/settingsDlgGtk.cpp:93
+#: ../src/view/settingsDlgGtk.cpp:102
 msgid "show menu"
 msgstr "afficher le menu"
 
-#: ../src/view/settingsDlgGtk.cpp:94
+#: ../src/view/settingsDlgGtk.cpp:103
 msgid "Timeout"
 msgstr "Délai d'expiration"
 
-#: ../src/view/settingsDlgGtk.cpp:94
+#: ../src/view/settingsDlgGtk.cpp:103
 msgid "Seconds"
 msgstr "Secondes"
 
-#: ../src/view/settingsDlgGtk.cpp:94
+#: ../src/view/settingsDlgGtk.cpp:103
 msgid "kernel parameters"
 msgstr "paramètres du noyau"
 
-#: ../src/view/settingsDlgGtk.cpp:95
+#: ../src/view/settingsDlgGtk.cpp:104
 msgid "generate recovery entries"
 msgstr "génère les entrées de récupération"
 
-#: ../src/view/settingsDlgGtk.cpp:95
+#: ../src/view/settingsDlgGtk.cpp:104
 msgid "look for other operating systems"
 msgstr "recherche d'autres systèmes d'exploitation"
 
-#: ../src/view/settingsDlgGtk.cpp:96
+#: ../src/view/settingsDlgGtk.cpp:105
 msgid "custom resolution: "
 msgstr "résolution personnalisée : "
 
-#: ../src/view/settingsDlgGtk.cpp:97
+#: ../src/view/settingsDlgGtk.cpp:106
 msgid "font color"
 msgstr "couleur de la police"
 
-#: ../src/view/settingsDlgGtk.cpp:97
+#: ../src/view/settingsDlgGtk.cpp:106
 msgid "background"
 msgstr "arrière-plan"
 
-#: ../src/view/settingsDlgGtk.cpp:98
+#: ../src/view/settingsDlgGtk.cpp:107
 msgid "normal:"
 msgstr "normal :"
 
-#: ../src/view/settingsDlgGtk.cpp:98
+#: ../src/view/settingsDlgGtk.cpp:107
 msgid "highlight:"
 msgstr "éclairé:"
 
-#: ../src/view/settingsDlgGtk.cpp:99
+#: ../src/view/settingsDlgGtk.cpp:108
 msgid "menu colors"
 msgstr "couleur des menus"
 
-#: ../src/view/settingsDlgGtk.cpp:99
+#: ../src/view/settingsDlgGtk.cpp:108
 msgid "background image"
 msgstr "Image de fond"
 
-#: ../src/view/settingsDlgGtk.cpp:100
-msgid "remove background"
-msgstr "supprime l'image de fond"
-
-#: ../src/view/settingsDlgGtk.cpp:101
+#: ../src/view/settingsDlgGtk.cpp:110
 msgid ""
 "To get the colors above working,\n"
 "you have to select a background image!"
@@ -524,31 +528,48 @@ msgstr ""
 "Pour que les couleurs ci-dessus fonctionnent,\n"
 "vous devez sélectionner une image de fond !"
 
-#: ../src/view/settingsDlgGtk.cpp:104
+#: ../src/view/settingsDlgGtk.cpp:111
+msgid "_Font"
+msgstr ""
+
+#: ../src/view/settingsDlgGtk.cpp:113
 msgid "settings"
 msgstr "paramètres"
 
-#: ../src/view/settingsDlgGtk.cpp:108
+#: ../src/view/settingsDlgGtk.cpp:117
 msgid "_General"
 msgstr "_Général"
 
-#: ../src/view/settingsDlgGtk.cpp:109
+#: ../src/view/settingsDlgGtk.cpp:118
 msgid "A_ppearance"
 msgstr "A_pparence"
 
-#: ../src/view/settingsDlgGtk.cpp:110
+#: ../src/view/settingsDlgGtk.cpp:119
 msgid "_Advanced"
 msgstr "_Avancé"
 
-#: ../src/view/settingsDlgGtk.cpp:125
+#: ../src/view/settingsDlgGtk.cpp:134
 msgid "value"
 msgstr "valeur"
 
-#: ../src/view/settingsDlgGtk.cpp:295
+#: ../src/view/settingsDlgGtk.cpp:209 ../src/view/settingsDlgGtk.cpp:345
+#: ../src/view/settingsDlgGtk.cpp:693
+msgid "saved"
+msgstr ""
+
+#: ../src/view/settingsDlgGtk.cpp:239
+msgid "remove font"
+msgstr ""
+
+#: ../src/view/settingsDlgGtk.cpp:263
+msgid "remove background"
+msgstr "supprime l'image de fond"
+
+#: ../src/view/settingsDlgGtk.cpp:323
 msgid "Entry %1 (by position)"
 msgstr "Entrée %1 (par emplacement)"
 
-#: ../src/view/settingsDlgGtk.cpp:520
+#: ../src/view/settingsDlgGtk.cpp:627
 msgid ""
 "This option doesn't work when the \"os-prober\" script finds other operating "
 "systems. Disable \"%1\" if you don't need to boot other operating systems."

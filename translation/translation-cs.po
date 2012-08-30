@@ -7,42 +7,42 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-11-22 19:34+0100\n"
-"PO-Revision-Date: 2011-11-29 18:30+0000\n"
-"Last-Translator: Zbyněk Schwarz <Unknown>\n"
+"POT-Creation-Date: 2012-06-20 00:16+0200\n"
+"PO-Revision-Date: 2012-02-24 10:35+0000\n"
+"Last-Translator: Jan Dolejš <jackdown3csr@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-28 17:08+0000\n"
-"X-Generator: Launchpad (build 14560)\n"
+"X-Launchpad-Export-Date: 2012-08-30 21:28+0000\n"
+"X-Generator: Launchpad (build 15877)\n"
 
-#: ../src/presenter/grubCustomizer.cpp:439
+#: ../src/presenter/grubCustomizer.cpp:448
 msgid "No script found"
 msgstr "Žádný skript nalezen"
 
-#: ../src/presenter/grubCustomizer.cpp:512
+#: ../src/presenter/grubCustomizer.cpp:515
 msgid "loading configuration…"
 msgstr "načítání konfigurace..."
 
-#: ../src/presenter/grubCustomizer.cpp:526
-#: ../src/view/grublistCfgDlgGtk.cpp:359
+#: ../src/presenter/grubCustomizer.cpp:529
+#: ../src/view/grublistCfgDlgGtk.cpp:380
 msgid " (custom)"
 msgstr " (vlastní)"
 
-#: ../src/presenter/grubCustomizer.cpp:556
+#: ../src/presenter/grubCustomizer.cpp:561
 msgid "Configuration has been saved"
 msgstr "Konfigurace byla uložena"
 
-#: ../src/presenter/grubCustomizer.cpp:559
+#: ../src/presenter/grubCustomizer.cpp:564
 msgid "updating configuration"
 msgstr "aktualizace konfigurace"
 
-#: ../src/presenter/grubCustomizer.cpp:571
+#: ../src/presenter/grubCustomizer.cpp:576
 msgid "%1 not found. Is grub2 installed?"
 msgstr "%1 nebylo nalezeno. Je grub2 nainstalován?"
 
-#: ../src/presenter/grubCustomizer.cpp:581
+#: ../src/presenter/grubCustomizer.cpp:586
 msgid ""
 "%1 couldn't be executed successfully. error message:\n"
 " %2"
@@ -50,11 +50,11 @@ msgstr ""
 "%1 nemohlo být správně spuštěno. chybová zpráva:\n"
 " %2"
 
-#: ../src/presenter/grubCustomizer.cpp:638
+#: ../src/presenter/grubCustomizer.cpp:643
 msgid "Name the Entry"
-msgstr "Název vstupu"
+msgstr "Jméno položky"
 
-#: ../src/presenter/grubCustomizer.cpp:671
+#: ../src/presenter/grubCustomizer.cpp:676
 msgid "cannot move this entry"
 msgstr "nelze přesunout tuto položku"
 
@@ -98,83 +98,91 @@ msgstr "instalace zavaděče..."
 msgid "Please type a device string!"
 msgstr "Prosím, zadejte řetězec zařízení!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:28
+#: ../src/view/grublistCfgDlgGtk.cpp:29
 msgid "_File"
 msgstr "_Soubor"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:29
+#: ../src/view/grublistCfgDlgGtk.cpp:30
 msgid "_Edit"
 msgstr "_Upravit"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:29
+#: ../src/view/grublistCfgDlgGtk.cpp:30
 msgid "_View"
 msgstr "_Zobrazit"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:29
+#: ../src/view/grublistCfgDlgGtk.cpp:30
 msgid "_Help"
 msgstr "_Nápověda"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:30
+#: ../src/view/grublistCfgDlgGtk.cpp:31
 msgid "_Install to MBR …"
 msgstr "_Instalovat do MBR …"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:34
+#: ../src/view/grublistCfgDlgGtk.cpp:36
 msgid "BURG found!"
 msgstr "BURG nalezen!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:35
+#: ../src/view/grublistCfgDlgGtk.cpp:37
 msgid "No Bootloader found"
 msgstr "Žádný zavaděč nenalezen"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:63
+#: ../src/view/grublistCfgDlgGtk.cpp:65
 msgid "Add a script to your configuration"
 msgstr "Přidat skript pro vaši konfiguraci"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:65
+#: ../src/view/grublistCfgDlgGtk.cpp:67
 msgid "Remove a script from your configuration"
 msgstr "Odebrat skript z vaší konfigurace"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:71
+#: ../src/view/grublistCfgDlgGtk.cpp:73
 msgid "Move up the selected entry or script"
 msgstr "Posunout vybrané položky nebo skript nahoru"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:73
+#: ../src/view/grublistCfgDlgGtk.cpp:75
 msgid "Move down the selected entry or script"
 msgstr "Posunout vybrané položky nebo skript dolů"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:81
+msgid "remove this entry from the current submenu"
+msgstr "Odebrat tuto položku ze současného submenu"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:84
+msgid "add this entry to a new submenu"
+msgstr "Přidat položku do nového submenu"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:92
 msgid "reload configuration"
 msgstr "načíst konfiguraci znovu"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:84
+#: ../src/view/grublistCfgDlgGtk.cpp:95
 msgid "Edit grub preferences"
 msgstr "Editovat grub předvolby"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:113
+#: ../src/view/grublistCfgDlgGtk.cpp:126
 msgid "Select _partition …"
 msgstr "Vybrat _oddíl..."
 
-#: ../src/view/grublistCfgDlgGtk.cpp:120
+#: ../src/view/grublistCfgDlgGtk.cpp:133
 msgid "Do you want to configure BURG instead of grub2?"
 msgstr "Chcete konfigurovat BURG místo grub2?"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:127
+#: ../src/view/grublistCfgDlgGtk.cpp:140
 msgid "Do you want to select another root partition?"
 msgstr "Chcete si vybrat jiný kořenový oddíl?"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:168
+#: ../src/view/grublistCfgDlgGtk.cpp:185
 msgid "BURG Mode"
 msgstr "BURG mód"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:172
+#: ../src/view/grublistCfgDlgGtk.cpp:189
 msgid "Save configuration and generate a new "
 msgstr "Uložit nastavení a vytvářet nové "
 
-#: ../src/view/grublistCfgDlgGtk.cpp:256
+#: ../src/view/grublistCfgDlgGtk.cpp:273
 msgid "Proxy binary not found!"
 msgstr "Spustitelný soubor proxy nenalezen!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:257
+#: ../src/view/grublistCfgDlgGtk.cpp:274
 msgid ""
 "You will see all entries (uncustomized) when you run grub. This error accurs "
 "(in most cases), when you didn't install grub gustomizer currectly."
@@ -182,27 +190,27 @@ msgstr ""
 "Když spustíte grub, uvidíte všechny záznamy (nepřizpůsobené). Tato chyba se "
 "(většinou) objeví, když jste správně nenainstalovali grub přizpůsobovač."
 
-#: ../src/view/grublistCfgDlgGtk.cpp:263
+#: ../src/view/grublistCfgDlgGtk.cpp:280
 msgid "(new Entries of %1)"
 msgstr "(nových položek z %1)"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:265
+#: ../src/view/grublistCfgDlgGtk.cpp:282
 msgid "(new Entries)"
 msgstr "(nové položky)"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:270
+#: ../src/view/grublistCfgDlgGtk.cpp:287
 msgid "(script code)"
-msgstr ""
+msgstr "(kód scriptu)"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:494
+#: ../src/view/grublistCfgDlgGtk.cpp:518
 msgid "Default title: "
 msgstr "Výchozí název: "
 
-#: ../src/view/grublistCfgDlgGtk.cpp:586
+#: ../src/view/grublistCfgDlgGtk.cpp:612
 msgid "The saved configuration is not up to date!"
 msgstr "Uložená konfigurace není aktuální!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:587
+#: ../src/view/grublistCfgDlgGtk.cpp:613
 msgid ""
 "The generated configuration didn't equal to the saved configuration on "
 "startup. So what you see now may not be what you see when you restart your "
@@ -212,35 +220,35 @@ msgstr ""
 "vidíte teď nemusí být to, co se zobrazí při restartování pc. Chcete-li tento "
 "problém odstranit, klepněte na tlačítko Aktualizovat!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:590
+#: ../src/view/grublistCfgDlgGtk.cpp:616
 msgid "_Quit without update"
 msgstr "U_končit bez aktualizace"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:593
+#: ../src/view/grublistCfgDlgGtk.cpp:619
 msgid "_Update & Quit"
 msgstr "_Aktualizovat & ukončit"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:597
+#: ../src/view/grublistCfgDlgGtk.cpp:623
 msgid "Do you want to save your modifications?"
 msgstr "Přejete si uložit změny?"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:600
+#: ../src/view/grublistCfgDlgGtk.cpp:626
 msgid "_Quit without saving"
 msgstr "Uko_nčit bez uložení"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:603
+#: ../src/view/grublistCfgDlgGtk.cpp:629
 msgid "_Save & Quit"
 msgstr "_Uložit & ukončit"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:606
+#: ../src/view/grublistCfgDlgGtk.cpp:632
 msgid "AND: your modifications are still unsaved, update will save them too!"
 msgstr "A: Vaše úpravy jsou stále neuložené, aktualizací se uloží také!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:672 ../src/view/settingsDlgGtk.cpp:123
+#: ../src/view/grublistCfgDlgGtk.cpp:708 ../src/view/settingsDlgGtk.cpp:132
 msgid "is active"
 msgstr "je aktivní"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:673 ../src/view/settingsDlgGtk.cpp:124
+#: ../src/view/grublistCfgDlgGtk.cpp:709 ../src/view/settingsDlgGtk.cpp:133
 msgid "name"
 msgstr "jméno"
 
@@ -369,147 +377,143 @@ msgstr "Přidat skript"
 msgid "Entry"
 msgstr "Vstup"
 
-#: ../src/view/settingsDlgGtk.cpp:65
+#: ../src/view/settingsDlgGtk.cpp:74
 msgid "white"
 msgstr "bílá"
 
-#: ../src/view/settingsDlgGtk.cpp:66
+#: ../src/view/settingsDlgGtk.cpp:75
 msgid "yellow"
 msgstr "žlutá"
 
-#: ../src/view/settingsDlgGtk.cpp:67
+#: ../src/view/settingsDlgGtk.cpp:76
 msgid "light-cyan"
 msgstr "světlá azurová"
 
-#: ../src/view/settingsDlgGtk.cpp:68
+#: ../src/view/settingsDlgGtk.cpp:77
 msgid "cyan"
 msgstr "azurová"
 
-#: ../src/view/settingsDlgGtk.cpp:69
+#: ../src/view/settingsDlgGtk.cpp:78
 msgid "light-blue"
 msgstr "světle modrá"
 
-#: ../src/view/settingsDlgGtk.cpp:70
+#: ../src/view/settingsDlgGtk.cpp:79
 msgid "blue"
 msgstr "modrá"
 
-#: ../src/view/settingsDlgGtk.cpp:71
+#: ../src/view/settingsDlgGtk.cpp:80
 msgid "light-green"
 msgstr "světle zelená"
 
-#: ../src/view/settingsDlgGtk.cpp:72
+#: ../src/view/settingsDlgGtk.cpp:81
 msgid "green"
 msgstr "zelená"
 
-#: ../src/view/settingsDlgGtk.cpp:73
+#: ../src/view/settingsDlgGtk.cpp:82
 msgid "light-magenta"
 msgstr "světlá purpurová"
 
-#: ../src/view/settingsDlgGtk.cpp:74
+#: ../src/view/settingsDlgGtk.cpp:83
 msgid "magenta"
 msgstr "purpurová"
 
-#: ../src/view/settingsDlgGtk.cpp:75
+#: ../src/view/settingsDlgGtk.cpp:84
 msgid "light-red"
 msgstr "světle červená"
 
-#: ../src/view/settingsDlgGtk.cpp:76
+#: ../src/view/settingsDlgGtk.cpp:85
 msgid "red"
 msgstr "červená"
 
-#: ../src/view/settingsDlgGtk.cpp:77
+#: ../src/view/settingsDlgGtk.cpp:86
 msgid "brown"
 msgstr "hnědá"
 
-#: ../src/view/settingsDlgGtk.cpp:78
+#: ../src/view/settingsDlgGtk.cpp:87
 msgid "light-gray"
 msgstr "světle šedivá"
 
-#: ../src/view/settingsDlgGtk.cpp:79
+#: ../src/view/settingsDlgGtk.cpp:88
 msgid "dark-gray"
 msgstr "tmavě šedivá"
 
-#: ../src/view/settingsDlgGtk.cpp:80
+#: ../src/view/settingsDlgGtk.cpp:89
 msgid "transparent"
 msgstr "průhledné"
 
-#: ../src/view/settingsDlgGtk.cpp:80
+#: ../src/view/settingsDlgGtk.cpp:89
 msgid "black"
 msgstr "černá"
 
-#: ../src/view/settingsDlgGtk.cpp:92
+#: ../src/view/settingsDlgGtk.cpp:101
 msgid "pre_defined: "
 msgstr "před_definované: "
 
-#: ../src/view/settingsDlgGtk.cpp:92
+#: ../src/view/settingsDlgGtk.cpp:101
 msgid "previously _booted entry"
 msgstr "dříve _zavedený záznam"
 
-#: ../src/view/settingsDlgGtk.cpp:93
+#: ../src/view/settingsDlgGtk.cpp:102
 msgid "default entry"
 msgstr "výchozí vstup"
 
-#: ../src/view/settingsDlgGtk.cpp:93
+#: ../src/view/settingsDlgGtk.cpp:102
 msgid "visibility"
 msgstr "viditelnost"
 
-#: ../src/view/settingsDlgGtk.cpp:93
+#: ../src/view/settingsDlgGtk.cpp:102
 msgid "show menu"
 msgstr "zobrazit menu"
 
-#: ../src/view/settingsDlgGtk.cpp:94
+#: ../src/view/settingsDlgGtk.cpp:103
 msgid "Timeout"
 msgstr "Prodleva"
 
-#: ../src/view/settingsDlgGtk.cpp:94
+#: ../src/view/settingsDlgGtk.cpp:103
 msgid "Seconds"
 msgstr "Sekund"
 
-#: ../src/view/settingsDlgGtk.cpp:94
+#: ../src/view/settingsDlgGtk.cpp:103
 msgid "kernel parameters"
 msgstr "parametry jádra"
 
-#: ../src/view/settingsDlgGtk.cpp:95
+#: ../src/view/settingsDlgGtk.cpp:104
 msgid "generate recovery entries"
 msgstr "vytvořit záznamy k obnově"
 
-#: ../src/view/settingsDlgGtk.cpp:95
+#: ../src/view/settingsDlgGtk.cpp:104
 msgid "look for other operating systems"
 msgstr "hledat další operační systémy"
 
-#: ../src/view/settingsDlgGtk.cpp:96
+#: ../src/view/settingsDlgGtk.cpp:105
 msgid "custom resolution: "
 msgstr "vlastní rozlišení: "
 
-#: ../src/view/settingsDlgGtk.cpp:97
+#: ../src/view/settingsDlgGtk.cpp:106
 msgid "font color"
 msgstr "barva písma"
 
-#: ../src/view/settingsDlgGtk.cpp:97
+#: ../src/view/settingsDlgGtk.cpp:106
 msgid "background"
 msgstr "pozadí"
 
-#: ../src/view/settingsDlgGtk.cpp:98
+#: ../src/view/settingsDlgGtk.cpp:107
 msgid "normal:"
 msgstr "normální:"
 
-#: ../src/view/settingsDlgGtk.cpp:98
+#: ../src/view/settingsDlgGtk.cpp:107
 msgid "highlight:"
 msgstr "zvýraznění:"
 
-#: ../src/view/settingsDlgGtk.cpp:99
+#: ../src/view/settingsDlgGtk.cpp:108
 msgid "menu colors"
 msgstr "barvy menu"
 
-#: ../src/view/settingsDlgGtk.cpp:99
+#: ../src/view/settingsDlgGtk.cpp:108
 msgid "background image"
 msgstr "obrázek na pozadí"
 
-#: ../src/view/settingsDlgGtk.cpp:100
-msgid "remove background"
-msgstr "odstranit pozadí"
-
-#: ../src/view/settingsDlgGtk.cpp:101
+#: ../src/view/settingsDlgGtk.cpp:110
 msgid ""
 "To get the colors above working,\n"
 "you have to select a background image!"
@@ -517,31 +521,48 @@ msgstr ""
 "Aby se barvy uvedené výše použily,\n"
 "musíte vybrat obrázek na pozadí!"
 
-#: ../src/view/settingsDlgGtk.cpp:104
+#: ../src/view/settingsDlgGtk.cpp:111
+msgid "_Font"
+msgstr ""
+
+#: ../src/view/settingsDlgGtk.cpp:113
 msgid "settings"
 msgstr "nastavení"
 
-#: ../src/view/settingsDlgGtk.cpp:108
+#: ../src/view/settingsDlgGtk.cpp:117
 msgid "_General"
 msgstr "_Obecné"
 
-#: ../src/view/settingsDlgGtk.cpp:109
+#: ../src/view/settingsDlgGtk.cpp:118
 msgid "A_ppearance"
 msgstr "_Vzhled"
 
-#: ../src/view/settingsDlgGtk.cpp:110
+#: ../src/view/settingsDlgGtk.cpp:119
 msgid "_Advanced"
 msgstr "_Pokročilé"
 
-#: ../src/view/settingsDlgGtk.cpp:125
+#: ../src/view/settingsDlgGtk.cpp:134
 msgid "value"
 msgstr "hodnota"
 
-#: ../src/view/settingsDlgGtk.cpp:295
+#: ../src/view/settingsDlgGtk.cpp:209 ../src/view/settingsDlgGtk.cpp:345
+#: ../src/view/settingsDlgGtk.cpp:693
+msgid "saved"
+msgstr ""
+
+#: ../src/view/settingsDlgGtk.cpp:239
+msgid "remove font"
+msgstr ""
+
+#: ../src/view/settingsDlgGtk.cpp:263
+msgid "remove background"
+msgstr "odstranit pozadí"
+
+#: ../src/view/settingsDlgGtk.cpp:323
 msgid "Entry %1 (by position)"
 msgstr "Vstup% 1 (dle pozice)"
 
-#: ../src/view/settingsDlgGtk.cpp:520
+#: ../src/view/settingsDlgGtk.cpp:627
 msgid ""
 "This option doesn't work when the \"os-prober\" script finds other operating "
 "systems. Disable \"%1\" if you don't need to boot other operating systems."

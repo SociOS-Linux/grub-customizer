@@ -7,59 +7,62 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-11-22 19:34+0100\n"
-"PO-Revision-Date: 2011-11-29 18:30+0000\n"
-"Last-Translator: nafterburner <nafterburner@gmail.com>\n"
+"POT-Creation-Date: 2012-06-20 00:16+0200\n"
+"PO-Revision-Date: 2012-06-22 00:43+0000\n"
+"Last-Translator: Tomislav Krznar <tomislav.krznar@gmail.com>\n"
 "Language-Team: Croatian <hr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-28 17:08+0000\n"
-"X-Generator: Launchpad (build 14560)\n"
+"X-Launchpad-Export-Date: 2012-08-30 21:28+0000\n"
+"X-Generator: Launchpad (build 15877)\n"
 
-#: ../src/presenter/grubCustomizer.cpp:439
+#: ../src/presenter/grubCustomizer.cpp:448
 msgid "No script found"
-msgstr "Nijedna skripta nije pronađena"
+msgstr "Nema pronađenih skripti"
 
-#: ../src/presenter/grubCustomizer.cpp:512
+#: ../src/presenter/grubCustomizer.cpp:515
 msgid "loading configuration…"
-msgstr "učitavanje konfiguracije..."
+msgstr "Učitavanje postavki..."
 
-#: ../src/presenter/grubCustomizer.cpp:526
-#: ../src/view/grublistCfgDlgGtk.cpp:359
+#: ../src/presenter/grubCustomizer.cpp:529
+#: ../src/view/grublistCfgDlgGtk.cpp:380
 msgid " (custom)"
-msgstr " (po narudžbi)"
+msgstr " (prilagođeno)"
 
-#: ../src/presenter/grubCustomizer.cpp:556
+#: ../src/presenter/grubCustomizer.cpp:561
 msgid "Configuration has been saved"
-msgstr "Konfiguracija je bila spremljena"
+msgstr "Postavke su spremljene"
 
-#: ../src/presenter/grubCustomizer.cpp:559
+#: ../src/presenter/grubCustomizer.cpp:564
 msgid "updating configuration"
-msgstr "ažuriranje konfiguracije"
+msgstr "Ažuriranje postavki"
 
-#: ../src/presenter/grubCustomizer.cpp:571
+#: ../src/presenter/grubCustomizer.cpp:576
 msgid "%1 not found. Is grub2 installed?"
-msgstr ""
+msgstr "%1 nije pronađen. Jeli grub2 instaliran?"
 
-#: ../src/presenter/grubCustomizer.cpp:581
+#: ../src/presenter/grubCustomizer.cpp:586
 msgid ""
 "%1 couldn't be executed successfully. error message:\n"
 " %2"
 msgstr ""
+"%1 ne može se izvršiti uspješno. Poruka greške:\n"
+" %2"
 
-#: ../src/presenter/grubCustomizer.cpp:638
+#: ../src/presenter/grubCustomizer.cpp:643
 msgid "Name the Entry"
-msgstr "Ime Unosa"
+msgstr "Naziv unosa"
 
-#: ../src/presenter/grubCustomizer.cpp:671
+#: ../src/presenter/grubCustomizer.cpp:676
 msgid "cannot move this entry"
-msgstr ""
+msgstr "nemoguće je pomaknuti ovaj unos"
 
 #: ../src/view/aboutDialogGtk.cpp:36
 msgid ""
 "Grub Customizer is a graphical interface to configure the grub2/burg settings"
 msgstr ""
+"Grub Prilagoditelj je grafičko sučelje za podešavanje Grub2/Burg postavki"
 
 #: ../src/view/grubInstallDlgGtk.cpp:22
 msgid ""
@@ -67,10 +70,13 @@ msgid ""
 "files to the bootloaders data directory\n"
 "(if they don't already exist)."
 msgstr ""
+"Instaliraj boot učitavač u MBR i stavi nešto\n"
+"datoteka u boot učitavačov direktorij podataka\n"
+"(ako već ne postoje)."
 
 #: ../src/view/grubInstallDlgGtk.cpp:23
 msgid "_Device: "
-msgstr ""
+msgstr "_Uređaj: "
 
 #: ../src/view/grubInstallDlgGtk.cpp:33
 msgid "Install to MBR"
@@ -78,206 +84,222 @@ msgstr "Instaliraj u MBR"
 
 #: ../src/view/grubInstallDlgGtk.cpp:50
 msgid "The bootloader has been installed successfully"
-msgstr "Bootloader je instaliran uspješno"
+msgstr "Boot učitavač je instaliran uspješno"
 
 #: ../src/view/grubInstallDlgGtk.cpp:55
 msgid "Error while installing the bootloader"
-msgstr "Pogreška tijekom instalacije bootloadera"
+msgstr "Pogreška tijekom instalacije boot učitavača"
 
 #: ../src/view/grubInstallDlgGtk.cpp:71
 msgid "installing the bootloader…"
-msgstr "instaliranje bootloadera..."
+msgstr "Instaliranje boot učitavača..."
 
 #: ../src/view/grubInstallDlgGtk.cpp:76
 msgid "Please type a device string!"
 msgstr "Molim utipkajte niz uređaja!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:28
+#: ../src/view/grublistCfgDlgGtk.cpp:29
 msgid "_File"
 msgstr "_Datoteka"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:29
+#: ../src/view/grublistCfgDlgGtk.cpp:30
 msgid "_Edit"
 msgstr "_Uredi"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:29
+#: ../src/view/grublistCfgDlgGtk.cpp:30
 msgid "_View"
 msgstr "_Prikaz"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:29
+#: ../src/view/grublistCfgDlgGtk.cpp:30
 msgid "_Help"
 msgstr "_Pomoć"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:30
+#: ../src/view/grublistCfgDlgGtk.cpp:31
 msgid "_Install to MBR …"
-msgstr ""
+msgstr "_Instaliraj u MBR …"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:34
+#: ../src/view/grublistCfgDlgGtk.cpp:36
 msgid "BURG found!"
 msgstr "BURG pronađen!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:35
+#: ../src/view/grublistCfgDlgGtk.cpp:37
 msgid "No Bootloader found"
-msgstr ""
-
-#: ../src/view/grublistCfgDlgGtk.cpp:63
-msgid "Add a script to your configuration"
-msgstr "Vašoj konfiguraciji dodajte skriptu"
+msgstr "Nema pronađenih boot učitavača"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:65
-msgid "Remove a script from your configuration"
-msgstr "Odstranite skriptu iz vaše konfiguracije"
+msgid "Add a script to your configuration"
+msgstr "Dodajte skriptu vašim postavkama"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:71
-msgid "Move up the selected entry or script"
-msgstr "Premaknite prema gore odabrani unos ili skriptu"
+#: ../src/view/grublistCfgDlgGtk.cpp:67
+msgid "Remove a script from your configuration"
+msgstr "Uklonite skriptu iz vaših postavki"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:73
+msgid "Move up the selected entry or script"
+msgstr "Pomaknite gore odabrani unos ili skriptu"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:75
 msgid "Move down the selected entry or script"
-msgstr "Premaknite prema dolje odabrani unos ili skriptu"
+msgstr "Pomaknite dolje odabrani unos ili skriptu"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:81
-msgid "reload configuration"
-msgstr ""
+msgid "remove this entry from the current submenu"
+msgstr "ukloni ovaj unos iz trenutnog podizbornika"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:84
+msgid "add this entry to a new submenu"
+msgstr "dodaj ovaj unos na novi podizbornik"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:92
+msgid "reload configuration"
+msgstr "ponovno učitaj postavke"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:95
 msgid "Edit grub preferences"
 msgstr "Uredi grub postavke"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:113
+#: ../src/view/grublistCfgDlgGtk.cpp:126
 msgid "Select _partition …"
-msgstr ""
+msgstr "Odaberi _particiju …"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:120
+#: ../src/view/grublistCfgDlgGtk.cpp:133
 msgid "Do you want to configure BURG instead of grub2?"
-msgstr "Želite li konfigurirati BURG umjesto grub2?"
+msgstr "Želite li podesiti BURG umjesto Grub2?"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:127
+#: ../src/view/grublistCfgDlgGtk.cpp:140
 msgid "Do you want to select another root partition?"
-msgstr ""
+msgstr "Želite li odabrati drugu korijensku (root) particiju?"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:168
+#: ../src/view/grublistCfgDlgGtk.cpp:185
 msgid "BURG Mode"
-msgstr ""
+msgstr "BURG način"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:172
+#: ../src/view/grublistCfgDlgGtk.cpp:189
 msgid "Save configuration and generate a new "
-msgstr "Spremi konfiguraciju i generiraj novu "
+msgstr "Spremi postavke i generiraj novi "
 
-#: ../src/view/grublistCfgDlgGtk.cpp:256
+#: ../src/view/grublistCfgDlgGtk.cpp:273
 msgid "Proxy binary not found!"
-msgstr ""
+msgstr "Proxy binaran nije pronađen!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:257
+#: ../src/view/grublistCfgDlgGtk.cpp:274
 msgid ""
 "You will see all entries (uncustomized) when you run grub. This error accurs "
 "(in most cases), when you didn't install grub gustomizer currectly."
 msgstr ""
+"Vidjet ćete sve unose (neprilagođene) kada pokrenete Grub. Ova greška "
+"nastaje (u većini slučaja), kada ne instalirate Grub Prilagoditelja ispravno."
 
-#: ../src/view/grublistCfgDlgGtk.cpp:263
+#: ../src/view/grublistCfgDlgGtk.cpp:280
 msgid "(new Entries of %1)"
-msgstr ""
+msgstr "(novi unosi od %1)"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:265
+#: ../src/view/grublistCfgDlgGtk.cpp:282
 msgid "(new Entries)"
-msgstr "(novi Unosi)"
+msgstr "(novi unosi)"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:270
+#: ../src/view/grublistCfgDlgGtk.cpp:287
 msgid "(script code)"
-msgstr ""
+msgstr "(kod skripte)"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:494
+#: ../src/view/grublistCfgDlgGtk.cpp:518
 msgid "Default title: "
-msgstr "Zadani naslov: "
+msgstr "Uobičajeni naslov: "
 
-#: ../src/view/grublistCfgDlgGtk.cpp:586
+#: ../src/view/grublistCfgDlgGtk.cpp:612
 msgid "The saved configuration is not up to date!"
-msgstr "Spremljena konfiguracija nije svježa!!"
+msgstr "Spremljene postavke nisu ažurirane!!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:587
+#: ../src/view/grublistCfgDlgGtk.cpp:613
 msgid ""
 "The generated configuration didn't equal to the saved configuration on "
 "startup. So what you see now may not be what you see when you restart your "
 "pc. To fix this, click update!"
 msgstr ""
+"Generirane postavke nisu jednake spremljenim postavkama prilikom pokretanja. "
+"Stoga ono što vidite sada možda nećete vidjeti nakon ponovnog pokretanja "
+"računala. Da bi to popravili, kliknite ažuriraj!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:590
+#: ../src/view/grublistCfgDlgGtk.cpp:616
 msgid "_Quit without update"
 msgstr "_Izađi bez ažuriranja"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:593
+#: ../src/view/grublistCfgDlgGtk.cpp:619
 msgid "_Update & Quit"
-msgstr "_Ažuriraj i Izađi"
+msgstr "_Ažuriraj i izađi"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:597
+#: ../src/view/grublistCfgDlgGtk.cpp:623
 msgid "Do you want to save your modifications?"
 msgstr "Želite li spremiti izmjene?"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:600
+#: ../src/view/grublistCfgDlgGtk.cpp:626
 msgid "_Quit without saving"
 msgstr "_Izađi bez spremanja"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:603
+#: ../src/view/grublistCfgDlgGtk.cpp:629
 msgid "_Save & Quit"
-msgstr "_Spremi i Izađi"
+msgstr "_Spremi i izađi"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:606
+#: ../src/view/grublistCfgDlgGtk.cpp:632
 msgid "AND: your modifications are still unsaved, update will save them too!"
 msgstr ""
+"I: vaše promjene još uvijek nisu spremljene, ažuriranje će spremiti i njih!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:672 ../src/view/settingsDlgGtk.cpp:123
+#: ../src/view/grublistCfgDlgGtk.cpp:708 ../src/view/settingsDlgGtk.cpp:132
 msgid "is active"
-msgstr "je aktivan"
+msgstr "Aktivno"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:673 ../src/view/settingsDlgGtk.cpp:124
+#: ../src/view/grublistCfgDlgGtk.cpp:709 ../src/view/settingsDlgGtk.cpp:133
 msgid "name"
-msgstr "ime"
+msgstr "Naziv"
 
 #: ../src/view/partitionChooserGtk.cpp:23
 msgid "_use another partition: "
-msgstr "_upotrijebi druge particije: "
+msgstr "_upotrijebi drugu particiju: "
 
 #: ../src/view/partitionChooserGtk.cpp:24
 msgid "Mount selected Filesystem"
-msgstr "Montiraj odabrani Datotečni sustav"
+msgstr "Montiraj odabrani datotečni sustav"
 
 #: ../src/view/partitionChooserGtk.cpp:25
 msgid "Unmount mounted Filesystem"
-msgstr "Demontiraj montirani Datotečni sustav"
+msgstr "Demontiraj odabrani datotečni sustav"
 
 #: ../src/view/partitionChooserGtk.cpp:27
 msgid ""
 "These are the mountpoints of your fstab file.\n"
 "Please select every grub/boot related partition."
 msgstr ""
+"Ovo su točke montiranja vaše fstab datoteke.\n"
+"Odaberite svaku odgovarajuću Grub/Boot particiju."
 
 #: ../src/view/partitionChooserGtk.cpp:48
 msgid "partition"
-msgstr "particija"
+msgstr "Particija"
 
 #: ../src/view/partitionChooserGtk.cpp:49
 msgid "type"
-msgstr "tip"
+msgstr "Vrsta"
 
 #: ../src/view/partitionChooserGtk.cpp:50
 msgid "label"
-msgstr "natpis"
+msgstr "Naziv"
 
 #: ../src/view/partitionChooserGtk.cpp:82
 msgid "Grub Customizer: Partition chooser"
-msgstr ""
+msgstr "Odabir particija"
 
 #: ../src/view/partitionChooserGtk.cpp:86
 msgid "Select and mount your root partition"
-msgstr "Odaberite i montirajte vašu root particiju"
+msgstr "Odaberite i montirajte vašu korijensku (root) particiju"
 
 #: ../src/view/partitionChooserGtk.cpp:88
 msgid "Select required submountpoints"
-msgstr ""
+msgstr "Odaberite odgovarajuću točku podmontiranja"
 
 #: ../src/view/partitionChooserGtk.cpp:94
 msgid "Partition Chooser"
-msgstr ""
+msgstr "Odabir particija"
 
 #: ../src/view/partitionChooserGtk.cpp:168
 msgid "Mount failed!"
@@ -290,14 +312,15 @@ msgstr "demontiranje nije uspjelo!"
 #: ../src/view/partitionChooserGtk.cpp:170
 msgid "This seems not to be a root file system (no fstab found)"
 msgstr ""
+"Čini se da ovo nije korijenski (root) datotečni sustav (fstab nije pronađen)"
 
 #: ../src/view/partitionChooserGtk.cpp:171
 msgid "Couldn't mount the selected partition"
-msgstr "Ne mogu montirati odabranu particiju"
+msgstr "Nemoguće montiranje odabrane particije"
 
 #: ../src/view/partitionChooserGtk.cpp:172
 msgid "Couldn't umount the selected partition"
-msgstr "Ne mogu demontirati odabranu particiju"
+msgstr "Nemoguće demontiranje odabrane particije"
 
 #: ../src/view/partitionChooserGtk.cpp:240
 msgid ""
@@ -307,10 +330,15 @@ msgid ""
 "again and save the configuration (or run update-grub/update-burg)\n"
 "to get the entry back!"
 msgstr ""
+"Odabrali ste mogućnost odabira druge particije.\n"
+"Imajte na umu: OS-prober možda neće pronaći trenutno pokrenuti sustav.\n"
+"Stoga ponovno pokrenite Grub Prilagoditelja na željenom sustavu\n"
+"i spremite postavke (ili pokrenite ažuriraj-grub/ažuriraj-burg)\n"
+"za povratak unosa!"
 
 #: ../src/view/partitionChooserGtk.cpp:242
 msgid "You started Grub Customizer using the live CD."
-msgstr ""
+msgstr "Pokrenuli ste Grub Prilagoditelja koristeći live CD."
 
 #: ../src/view/partitionChooserGtk.cpp:244
 msgid ""
@@ -324,6 +352,14 @@ msgid ""
 "as the actually running one.\n"
 "If not, you will get an error message when trying to load the configuration."
 msgstr ""
+"Prije uređivanja vaših Grub postavki morate\n"
+"montirati sve potrebne particije.\n"
+"Ovaj pomoćnik će vam pomoći da to učinite.\n"
+"\n"
+"\n"
+"Osigurajte da je željeni sustav temeljen na istoj cpu arhitekturi\n"
+"kao trenutno pokrenuti.\n"
+"Ako nije, dobit ćete poruku o grešci prilikom učitavanja postavki."
 
 #: ../src/view/scriptAddDlgGtk.cpp:23
 msgid "Script to insert:"
@@ -339,180 +375,197 @@ msgstr "Dodaj skriptu"
 
 #: ../src/view/scriptAddDlgGtk.cpp:43
 msgid "Entry"
-msgstr "Odrednica"
-
-#: ../src/view/settingsDlgGtk.cpp:65
-msgid "white"
-msgstr ""
-
-#: ../src/view/settingsDlgGtk.cpp:66
-msgid "yellow"
-msgstr ""
-
-#: ../src/view/settingsDlgGtk.cpp:67
-msgid "light-cyan"
-msgstr ""
-
-#: ../src/view/settingsDlgGtk.cpp:68
-msgid "cyan"
-msgstr ""
-
-#: ../src/view/settingsDlgGtk.cpp:69
-msgid "light-blue"
-msgstr ""
-
-#: ../src/view/settingsDlgGtk.cpp:70
-msgid "blue"
-msgstr ""
-
-#: ../src/view/settingsDlgGtk.cpp:71
-msgid "light-green"
-msgstr ""
-
-#: ../src/view/settingsDlgGtk.cpp:72
-msgid "green"
-msgstr ""
-
-#: ../src/view/settingsDlgGtk.cpp:73
-msgid "light-magenta"
-msgstr ""
+msgstr "Unos"
 
 #: ../src/view/settingsDlgGtk.cpp:74
-msgid "magenta"
-msgstr ""
+msgid "white"
+msgstr "bijela"
 
 #: ../src/view/settingsDlgGtk.cpp:75
-msgid "light-red"
-msgstr ""
+msgid "yellow"
+msgstr "žuta"
 
 #: ../src/view/settingsDlgGtk.cpp:76
-msgid "red"
-msgstr ""
+msgid "light-cyan"
+msgstr "svijetlo-modra"
 
 #: ../src/view/settingsDlgGtk.cpp:77
-msgid "brown"
-msgstr ""
+msgid "cyan"
+msgstr "modra"
 
 #: ../src/view/settingsDlgGtk.cpp:78
-msgid "light-gray"
-msgstr ""
+msgid "light-blue"
+msgstr "svijetlo-plava"
 
 #: ../src/view/settingsDlgGtk.cpp:79
+msgid "blue"
+msgstr "plava"
+
+#: ../src/view/settingsDlgGtk.cpp:80
+msgid "light-green"
+msgstr "svijetlo-zelena"
+
+#: ../src/view/settingsDlgGtk.cpp:81
+msgid "green"
+msgstr "zelena"
+
+#: ../src/view/settingsDlgGtk.cpp:82
+msgid "light-magenta"
+msgstr "svijetlo-ljubičastocrvena"
+
+#: ../src/view/settingsDlgGtk.cpp:83
+msgid "magenta"
+msgstr "ljubičastocrvena"
+
+#: ../src/view/settingsDlgGtk.cpp:84
+msgid "light-red"
+msgstr "svijetlo-crvena"
+
+#: ../src/view/settingsDlgGtk.cpp:85
+msgid "red"
+msgstr "crvena"
+
+#: ../src/view/settingsDlgGtk.cpp:86
+msgid "brown"
+msgstr "smeđa"
+
+#: ../src/view/settingsDlgGtk.cpp:87
+msgid "light-gray"
+msgstr "svijetlo-smeđa"
+
+#: ../src/view/settingsDlgGtk.cpp:88
 msgid "dark-gray"
-msgstr ""
+msgstr "tamno-siva"
 
-#: ../src/view/settingsDlgGtk.cpp:80
+#: ../src/view/settingsDlgGtk.cpp:89
 msgid "transparent"
-msgstr ""
+msgstr "prozirno"
 
-#: ../src/view/settingsDlgGtk.cpp:80
+#: ../src/view/settingsDlgGtk.cpp:89
 msgid "black"
-msgstr ""
-
-#: ../src/view/settingsDlgGtk.cpp:92
-msgid "pre_defined: "
-msgstr ""
-
-#: ../src/view/settingsDlgGtk.cpp:92
-msgid "previously _booted entry"
-msgstr ""
-
-#: ../src/view/settingsDlgGtk.cpp:93
-msgid "default entry"
-msgstr ""
-
-#: ../src/view/settingsDlgGtk.cpp:93
-msgid "visibility"
-msgstr ""
-
-#: ../src/view/settingsDlgGtk.cpp:93
-msgid "show menu"
-msgstr ""
-
-#: ../src/view/settingsDlgGtk.cpp:94
-msgid "Timeout"
-msgstr ""
-
-#: ../src/view/settingsDlgGtk.cpp:94
-msgid "Seconds"
-msgstr ""
-
-#: ../src/view/settingsDlgGtk.cpp:94
-msgid "kernel parameters"
-msgstr ""
-
-#: ../src/view/settingsDlgGtk.cpp:95
-msgid "generate recovery entries"
-msgstr ""
-
-#: ../src/view/settingsDlgGtk.cpp:95
-msgid "look for other operating systems"
-msgstr ""
-
-#: ../src/view/settingsDlgGtk.cpp:96
-msgid "custom resolution: "
-msgstr ""
-
-#: ../src/view/settingsDlgGtk.cpp:97
-msgid "font color"
-msgstr ""
-
-#: ../src/view/settingsDlgGtk.cpp:97
-msgid "background"
-msgstr ""
-
-#: ../src/view/settingsDlgGtk.cpp:98
-msgid "normal:"
-msgstr ""
-
-#: ../src/view/settingsDlgGtk.cpp:98
-msgid "highlight:"
-msgstr ""
-
-#: ../src/view/settingsDlgGtk.cpp:99
-msgid "menu colors"
-msgstr ""
-
-#: ../src/view/settingsDlgGtk.cpp:99
-msgid "background image"
-msgstr ""
-
-#: ../src/view/settingsDlgGtk.cpp:100
-msgid "remove background"
-msgstr ""
+msgstr "crna"
 
 #: ../src/view/settingsDlgGtk.cpp:101
+msgid "pre_defined: "
+msgstr "pred_definirano: "
+
+#: ../src/view/settingsDlgGtk.cpp:101
+msgid "previously _booted entry"
+msgstr "prije _učitan unos"
+
+#: ../src/view/settingsDlgGtk.cpp:102
+msgid "default entry"
+msgstr "Uobičajeni unos"
+
+#: ../src/view/settingsDlgGtk.cpp:102
+msgid "visibility"
+msgstr "Vidljivost"
+
+#: ../src/view/settingsDlgGtk.cpp:102
+msgid "show menu"
+msgstr "prikaži izbornik"
+
+#: ../src/view/settingsDlgGtk.cpp:103
+msgid "Timeout"
+msgstr "Istek vremena"
+
+#: ../src/view/settingsDlgGtk.cpp:103
+msgid "Seconds"
+msgstr "sekundi"
+
+#: ../src/view/settingsDlgGtk.cpp:103
+msgid "kernel parameters"
+msgstr "Parametri kernela"
+
+#: ../src/view/settingsDlgGtk.cpp:104
+msgid "generate recovery entries"
+msgstr "generiraj unos obnavljanja"
+
+#: ../src/view/settingsDlgGtk.cpp:104
+msgid "look for other operating systems"
+msgstr "potraži druge operativne sustave"
+
+#: ../src/view/settingsDlgGtk.cpp:105
+msgid "custom resolution: "
+msgstr "prilagođena rezolucija: "
+
+#: ../src/view/settingsDlgGtk.cpp:106
+msgid "font color"
+msgstr "Boja slova"
+
+#: ../src/view/settingsDlgGtk.cpp:106
+msgid "background"
+msgstr "Pozadina"
+
+#: ../src/view/settingsDlgGtk.cpp:107
+msgid "normal:"
+msgstr "Normalno:"
+
+#: ../src/view/settingsDlgGtk.cpp:107
+msgid "highlight:"
+msgstr "Istaknuto:"
+
+#: ../src/view/settingsDlgGtk.cpp:108
+msgid "menu colors"
+msgstr "Boje izbornika"
+
+#: ../src/view/settingsDlgGtk.cpp:108
+msgid "background image"
+msgstr "Slika pozadine"
+
+#: ../src/view/settingsDlgGtk.cpp:110
 msgid ""
 "To get the colors above working,\n"
 "you have to select a background image!"
 msgstr ""
+"Da bi boje iznad radile, morate\n"
+"odabrati sliku pozadine!"
 
-#: ../src/view/settingsDlgGtk.cpp:104
+#: ../src/view/settingsDlgGtk.cpp:111
+msgid "_Font"
+msgstr "_Pismo"
+
+#: ../src/view/settingsDlgGtk.cpp:113
 msgid "settings"
-msgstr ""
+msgstr "postavke"
 
-#: ../src/view/settingsDlgGtk.cpp:108
+#: ../src/view/settingsDlgGtk.cpp:117
 msgid "_General"
-msgstr ""
+msgstr "_Općenito"
 
-#: ../src/view/settingsDlgGtk.cpp:109
+#: ../src/view/settingsDlgGtk.cpp:118
 msgid "A_ppearance"
-msgstr ""
+msgstr "I_zgled"
 
-#: ../src/view/settingsDlgGtk.cpp:110
+#: ../src/view/settingsDlgGtk.cpp:119
 msgid "_Advanced"
-msgstr ""
+msgstr "_Napredno"
 
-#: ../src/view/settingsDlgGtk.cpp:125
+#: ../src/view/settingsDlgGtk.cpp:134
 msgid "value"
-msgstr ""
+msgstr "Vrijednost"
 
-#: ../src/view/settingsDlgGtk.cpp:295
+#: ../src/view/settingsDlgGtk.cpp:209 ../src/view/settingsDlgGtk.cpp:345
+#: ../src/view/settingsDlgGtk.cpp:693
+msgid "saved"
+msgstr "spremljeno"
+
+#: ../src/view/settingsDlgGtk.cpp:239
+msgid "remove font"
+msgstr "ukloni pismo"
+
+#: ../src/view/settingsDlgGtk.cpp:263
+msgid "remove background"
+msgstr "ukloni pozadinu"
+
+#: ../src/view/settingsDlgGtk.cpp:323
 msgid "Entry %1 (by position)"
-msgstr ""
+msgstr "Unos %1 (po položaju)"
 
-#: ../src/view/settingsDlgGtk.cpp:520
+#: ../src/view/settingsDlgGtk.cpp:627
 msgid ""
 "This option doesn't work when the \"os-prober\" script finds other operating "
 "systems. Disable \"%1\" if you don't need to boot other operating systems."
 msgstr ""
+"Ova mogućnost ne radi dok \"os-prober\" skripta traži ostale operativne "
+"sustave. Onemogući \"%1\" ako ne trebate pokrenuti ostale operativne sustave"

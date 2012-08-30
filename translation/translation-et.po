@@ -1,16 +1,16 @@
-# Kazakh translation for grub-customizer
-# Copyright (c) 2011 Rosetta Contributors and Canonical Ltd 2011
+# Estonian translation for grub-customizer
+# Copyright (c) 2012 Rosetta Contributors and Canonical Ltd 2012
 # This file is distributed under the same license as the grub-customizer package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2011.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2012.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-06-20 00:16+0200\n"
-"PO-Revision-Date: 2011-12-28 18:00+0000\n"
-"Last-Translator: jmb_kz <Unknown>\n"
-"Language-Team: Kazakh <kk@li.org>\n"
+"PO-Revision-Date: 2012-05-06 19:28+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Estonian <et@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -19,11 +19,11 @@ msgstr ""
 
 #: ../src/presenter/grubCustomizer.cpp:448
 msgid "No script found"
-msgstr "Скрипттар табылған жоқ"
+msgstr ""
 
 #: ../src/presenter/grubCustomizer.cpp:515
 msgid "loading configuration…"
-msgstr "баптауламаны оқу..."
+msgstr ""
 
 #: ../src/presenter/grubCustomizer.cpp:529
 #: ../src/view/grublistCfgDlgGtk.cpp:380
@@ -32,11 +32,11 @@ msgstr ""
 
 #: ../src/presenter/grubCustomizer.cpp:561
 msgid "Configuration has been saved"
-msgstr "Баптаулама сақталынды"
+msgstr ""
 
 #: ../src/presenter/grubCustomizer.cpp:564
 msgid "updating configuration"
-msgstr "баптауламаны жаңарту"
+msgstr ""
 
 #: ../src/presenter/grubCustomizer.cpp:576
 msgid "%1 not found. Is grub2 installed?"
@@ -50,7 +50,7 @@ msgstr ""
 
 #: ../src/presenter/grubCustomizer.cpp:643
 msgid "Name the Entry"
-msgstr "Мәзір пунктың аты"
+msgstr ""
 
 #: ../src/presenter/grubCustomizer.cpp:676
 msgid "cannot move this entry"
@@ -60,8 +60,6 @@ msgstr ""
 msgid ""
 "Grub Customizer is a graphical interface to configure the grub2/burg settings"
 msgstr ""
-"Grub Customizer - grub2 мен burg баптауларын қалыпқа келтіру графикалық "
-"интерфейсі"
 
 #: ../src/view/grubInstallDlgGtk.cpp:22
 msgid ""
@@ -72,63 +70,63 @@ msgstr ""
 
 #: ../src/view/grubInstallDlgGtk.cpp:23
 msgid "_Device: "
-msgstr "Құ_рылғы: "
+msgstr ""
 
 #: ../src/view/grubInstallDlgGtk.cpp:33
 msgid "Install to MBR"
-msgstr "MBR-ға орнату"
+msgstr ""
 
 #: ../src/view/grubInstallDlgGtk.cpp:50
 msgid "The bootloader has been installed successfully"
-msgstr "Жүктегіш сәтті орнатылды"
+msgstr ""
 
 #: ../src/view/grubInstallDlgGtk.cpp:55
 msgid "Error while installing the bootloader"
-msgstr "Жүктегіш орнату кезінде қате туындады"
+msgstr ""
 
 #: ../src/view/grubInstallDlgGtk.cpp:71
 msgid "installing the bootloader…"
-msgstr "жүктегіш орнатылуда..."
+msgstr ""
 
 #: ../src/view/grubInstallDlgGtk.cpp:76
 msgid "Please type a device string!"
-msgstr "Құрылғы орналасуын көрсетіңіз!"
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:29
 msgid "_File"
-msgstr "_Файл"
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:30
 msgid "_Edit"
-msgstr "Тү_зету"
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:30
 msgid "_View"
-msgstr "Сырт _көрініс"
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:30
 msgid "_Help"
-msgstr "_Көмек"
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:31
 msgid "_Install to MBR …"
-msgstr "MBR-ға _орнату..."
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:36
 msgid "BURG found!"
-msgstr "BURG табылды!"
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:37
 msgid "No Bootloader found"
-msgstr "Жүктегіш табылмады"
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:65
 msgid "Add a script to your configuration"
-msgstr "Сіздің конфигурацияңызға скриптті қосу"
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:67
 msgid "Remove a script from your configuration"
-msgstr "Сіздің конфигурацияңыздан скриптті алып тастау"
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:73
 msgid "Move up the selected entry or script"
@@ -148,19 +146,19 @@ msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:92
 msgid "reload configuration"
-msgstr "конфигурацияны қайта оқу"
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:95
 msgid "Edit grub preferences"
-msgstr "Grub баптауларын өзгерту"
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:126
 msgid "Select _partition …"
-msgstr "Бө_лімді таңдау…"
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:133
 msgid "Do you want to configure BURG instead of grub2?"
-msgstr "Grub2 орнына BURG қалыпқа келтіруін қалайсыз ба?"
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:140
 msgid "Do you want to select another root partition?"
@@ -168,15 +166,15 @@ msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:185
 msgid "BURG Mode"
-msgstr "BURG режимі"
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:189
 msgid "Save configuration and generate a new "
-msgstr "Конфигурацияны сақтап, жаңасының генерациясын жасау "
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:273
 msgid "Proxy binary not found!"
-msgstr "Екілік прокси файлы табылған жоқ!"
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:274
 msgid ""
@@ -198,11 +196,11 @@ msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:518
 msgid "Default title: "
-msgstr "Қалыпты атау: "
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:612
 msgid "The saved configuration is not up to date!"
-msgstr "Сақталынған баптаулама ескерді!"
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:613
 msgid ""
@@ -213,23 +211,23 @@ msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:616
 msgid "_Quit without update"
-msgstr "Жаңартпай _шығу"
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:619
 msgid "_Update & Quit"
-msgstr "_Жаңартып шығу"
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:623
 msgid "Do you want to save your modifications?"
-msgstr "Өзгерістеріңізді сақтау қажет пе?"
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:626
 msgid "_Quit without saving"
-msgstr "Сақтамай _шығу"
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:629
 msgid "_Save & Quit"
-msgstr "_Сақтап шығу"
+msgstr ""
 
 #: ../src/view/grublistCfgDlgGtk.cpp:632
 msgid "AND: your modifications are still unsaved, update will save them too!"
@@ -245,43 +243,41 @@ msgstr ""
 
 #: ../src/view/partitionChooserGtk.cpp:23
 msgid "_use another partition: "
-msgstr "басқа диск бөлімін қо_лдану: "
+msgstr ""
 
 #: ../src/view/partitionChooserGtk.cpp:24
 msgid "Mount selected Filesystem"
-msgstr "Таңдалған файлдық жүйелерді тіркеу"
+msgstr ""
 
 #: ../src/view/partitionChooserGtk.cpp:25
 msgid "Unmount mounted Filesystem"
-msgstr "Тіркелген файлдық жүйелерді тіркеуден босату"
+msgstr ""
 
 #: ../src/view/partitionChooserGtk.cpp:27
 msgid ""
 "These are the mountpoints of your fstab file.\n"
 "Please select every grub/boot related partition."
 msgstr ""
-"Бұл сіздің fstab файлындағы тіркеу нүктелеріңіз.\n"
-"Әрбір жүктелінетін диск бөлімін таңдаңыз."
 
 #: ../src/view/partitionChooserGtk.cpp:48
 msgid "partition"
-msgstr "диск бөлімі"
+msgstr ""
 
 #: ../src/view/partitionChooserGtk.cpp:49
 msgid "type"
-msgstr "түрі"
+msgstr ""
 
 #: ../src/view/partitionChooserGtk.cpp:50
 msgid "label"
-msgstr "белгі"
+msgstr ""
 
 #: ../src/view/partitionChooserGtk.cpp:82
 msgid "Grub Customizer: Partition chooser"
-msgstr "Grub Customizer: Диск бөлімін таңдау"
+msgstr ""
 
 #: ../src/view/partitionChooserGtk.cpp:86
 msgid "Select and mount your root partition"
-msgstr "Түбірлі (/) диск бөлімін таңдап, тіркеңіз"
+msgstr ""
 
 #: ../src/view/partitionChooserGtk.cpp:88
 msgid "Select required submountpoints"
@@ -289,27 +285,27 @@ msgstr ""
 
 #: ../src/view/partitionChooserGtk.cpp:94
 msgid "Partition Chooser"
-msgstr "Диск бөлімін таңдау"
+msgstr ""
 
 #: ../src/view/partitionChooserGtk.cpp:168
 msgid "Mount failed!"
-msgstr "Тіркеу сәтсіз аяқталды!"
+msgstr ""
 
 #: ../src/view/partitionChooserGtk.cpp:169
 msgid "umount failed!"
-msgstr "тіркеуден босату сәтсіз аяқталды!"
+msgstr ""
 
 #: ../src/view/partitionChooserGtk.cpp:170
 msgid "This seems not to be a root file system (no fstab found)"
-msgstr "Мүмкін бұл түбірлі (/) бөлім емес шығар (fstab табылмады)"
+msgstr ""
 
 #: ../src/view/partitionChooserGtk.cpp:171
 msgid "Couldn't mount the selected partition"
-msgstr "Таңдалған диск бөлімін тіркеу мүмкін емес"
+msgstr ""
 
 #: ../src/view/partitionChooserGtk.cpp:172
 msgid "Couldn't umount the selected partition"
-msgstr "Таңдалған диск бөлімін тіркеуден босату мүмкін емес"
+msgstr ""
 
 #: ../src/view/partitionChooserGtk.cpp:240
 msgid ""
@@ -322,7 +318,7 @@ msgstr ""
 
 #: ../src/view/partitionChooserGtk.cpp:242
 msgid "You started Grub Customizer using the live CD."
-msgstr "Сіз Grub Customizer бағдарламасын тірі CD қолданып ашып тұрсыз."
+msgstr ""
 
 #: ../src/view/partitionChooserGtk.cpp:244
 msgid ""
@@ -343,83 +339,83 @@ msgstr ""
 
 #: ../src/view/scriptAddDlgGtk.cpp:25
 msgid "Preview:"
-msgstr "Алдын-ала қарау:"
+msgstr ""
 
 #: ../src/view/scriptAddDlgGtk.cpp:27
 msgid "Add script"
-msgstr "Скрипт қосу"
+msgstr ""
 
 #: ../src/view/scriptAddDlgGtk.cpp:43
 msgid "Entry"
-msgstr "Жазу"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:74
 msgid "white"
-msgstr "ақ"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:75
 msgid "yellow"
-msgstr "сары"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:76
 msgid "light-cyan"
-msgstr "ашық-көгілдір"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:77
 msgid "cyan"
-msgstr "көгілдір"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:78
 msgid "light-blue"
-msgstr "ашық-көк"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:79
 msgid "blue"
-msgstr "көк"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:80
 msgid "light-green"
-msgstr "ашық-жасыл"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:81
 msgid "green"
-msgstr "жасыл"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:82
 msgid "light-magenta"
-msgstr "ашық-қара қошқыл"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:83
 msgid "magenta"
-msgstr "қара қошқыл"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:84
 msgid "light-red"
-msgstr "ашық-қызыл"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:85
 msgid "red"
-msgstr "қызыл"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:86
 msgid "brown"
-msgstr "қоңыр"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:87
 msgid "light-gray"
-msgstr "ашық-қоңыр"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:88
 msgid "dark-gray"
-msgstr "қара-сұр"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:89
 msgid "transparent"
-msgstr "мөлдір"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:89
 msgid "black"
-msgstr "қара"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:101
 msgid "pre_defined: "
@@ -431,23 +427,23 @@ msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:102
 msgid "default entry"
-msgstr "қалыптысы"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:102
 msgid "visibility"
-msgstr "көрінетін"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:102
 msgid "show menu"
-msgstr "мәзірді көрсету"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:103
 msgid "Timeout"
-msgstr "Күту уақыты"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:103
 msgid "Seconds"
-msgstr "Секундалар"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:103
 msgid "kernel parameters"
@@ -455,23 +451,23 @@ msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:104
 msgid "generate recovery entries"
-msgstr "мәзірге жүйені қайта қалыпқа келтіру режимдер пункттерін қосу"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:104
 msgid "look for other operating systems"
-msgstr "басқа операциялық жүйелерді іздеу"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:105
 msgid "custom resolution: "
-msgstr "өзіндік экран өлшемдер қатынасы: "
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:106
 msgid "font color"
-msgstr "қаріп түсі"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:106
 msgid "background"
-msgstr "фон суреті"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:107
 msgid "normal:"
@@ -483,19 +479,17 @@ msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:108
 msgid "menu colors"
-msgstr "мәзір түсі"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:108
 msgid "background image"
-msgstr "фон суреті"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:110
 msgid ""
 "To get the colors above working,\n"
 "you have to select a background image!"
 msgstr ""
-"Жоғарыдағы таңдалған түстерді қолдану үшін,\n"
-"сіз фон суретін таңдауыңыз қажет!"
 
 #: ../src/view/settingsDlgGtk.cpp:111
 msgid "_Font"
@@ -503,23 +497,23 @@ msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:113
 msgid "settings"
-msgstr "баптаулар"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:117
 msgid "_General"
-msgstr "_Негізгі"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:118
 msgid "A_ppearance"
-msgstr "Сырт _көрініс"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:119
 msgid "_Advanced"
-msgstr "Кеңейтіл_ген"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:134
 msgid "value"
-msgstr "мән"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:209 ../src/view/settingsDlgGtk.cpp:345
 #: ../src/view/settingsDlgGtk.cpp:693
@@ -532,7 +526,7 @@ msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:263
 msgid "remove background"
-msgstr "фон суретін алып тастау"
+msgstr ""
 
 #: ../src/view/settingsDlgGtk.cpp:323
 msgid "Entry %1 (by position)"

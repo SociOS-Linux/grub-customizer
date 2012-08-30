@@ -7,54 +7,56 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-11-22 19:34+0100\n"
-"PO-Revision-Date: 2011-11-29 18:30+0000\n"
-"Last-Translator: Daniel Richter <danielrichter2007@web.de>\n"
+"POT-Creation-Date: 2012-06-20 00:16+0200\n"
+"PO-Revision-Date: 2012-06-22 15:06+0000\n"
+"Last-Translator: tzem <athmakrigiannis@gmail.com>\n"
 "Language-Team: Greek <el@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-12-28 17:08+0000\n"
-"X-Generator: Launchpad (build 14560)\n"
+"X-Launchpad-Export-Date: 2012-08-30 21:28+0000\n"
+"X-Generator: Launchpad (build 15877)\n"
 
-#: ../src/presenter/grubCustomizer.cpp:439
+#: ../src/presenter/grubCustomizer.cpp:448
 msgid "No script found"
 msgstr "Δεν βρέθηκε script"
 
-#: ../src/presenter/grubCustomizer.cpp:512
+#: ../src/presenter/grubCustomizer.cpp:515
 msgid "loading configuration…"
 msgstr "φόρτωση διαμόρφωσης…"
 
-#: ../src/presenter/grubCustomizer.cpp:526
-#: ../src/view/grublistCfgDlgGtk.cpp:359
+#: ../src/presenter/grubCustomizer.cpp:529
+#: ../src/view/grublistCfgDlgGtk.cpp:380
 msgid " (custom)"
 msgstr " (προσαρμοσμένη)"
 
-#: ../src/presenter/grubCustomizer.cpp:556
+#: ../src/presenter/grubCustomizer.cpp:561
 msgid "Configuration has been saved"
 msgstr "Η διαμόρφωση αποθηκεύτηκε"
 
-#: ../src/presenter/grubCustomizer.cpp:559
+#: ../src/presenter/grubCustomizer.cpp:564
 msgid "updating configuration"
 msgstr "ενημέρωση διαμόρφωσης"
 
-#: ../src/presenter/grubCustomizer.cpp:571
+#: ../src/presenter/grubCustomizer.cpp:576
 msgid "%1 not found. Is grub2 installed?"
-msgstr ""
+msgstr "%1 δεν βρέθηκε. Έχει εγκατασταθεί το grub2;"
 
-#: ../src/presenter/grubCustomizer.cpp:581
+#: ../src/presenter/grubCustomizer.cpp:586
 msgid ""
 "%1 couldn't be executed successfully. error message:\n"
 " %2"
 msgstr ""
+"%1 δεν μπόρεσε να εκτελεσθεί επιτυχώς. Μήνυμα λάθους:\n"
+" %2"
 
-#: ../src/presenter/grubCustomizer.cpp:638
+#: ../src/presenter/grubCustomizer.cpp:643
 msgid "Name the Entry"
 msgstr "Ονομάστε την καταχώρηση"
 
-#: ../src/presenter/grubCustomizer.cpp:671
+#: ../src/presenter/grubCustomizer.cpp:676
 msgid "cannot move this entry"
-msgstr ""
+msgstr "δεν γίνεται να μετακινηθεί η συγκεκριμένη καταχώριση"
 
 #: ../src/view/aboutDialogGtk.cpp:36
 msgid ""
@@ -97,83 +99,91 @@ msgstr "εγκατάσταση του bootloader…"
 msgid "Please type a device string!"
 msgstr "Παρακαλούμε πληκτρολογήστε ένα αλφαριθμητικό συσκευής!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:28
+#: ../src/view/grublistCfgDlgGtk.cpp:29
 msgid "_File"
 msgstr "_Αρχείο"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:29
+#: ../src/view/grublistCfgDlgGtk.cpp:30
 msgid "_Edit"
 msgstr "_Επεξεργασία"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:29
+#: ../src/view/grublistCfgDlgGtk.cpp:30
 msgid "_View"
 msgstr "_Προβολή"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:29
+#: ../src/view/grublistCfgDlgGtk.cpp:30
 msgid "_Help"
 msgstr "_Βοήθεια"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:30
+#: ../src/view/grublistCfgDlgGtk.cpp:31
 msgid "_Install to MBR …"
 msgstr "Ε_γκατάσταση στο MBR …"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:34
+#: ../src/view/grublistCfgDlgGtk.cpp:36
 msgid "BURG found!"
 msgstr "Βρέθηκε το BURG!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:35
+#: ../src/view/grublistCfgDlgGtk.cpp:37
 msgid "No Bootloader found"
 msgstr "Δεν βρέθηκε Bootloader"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:63
+#: ../src/view/grublistCfgDlgGtk.cpp:65
 msgid "Add a script to your configuration"
 msgstr "Προσθήκη script στη διαμόρφωσή σας"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:65
+#: ../src/view/grublistCfgDlgGtk.cpp:67
 msgid "Remove a script from your configuration"
 msgstr "Αφαίρεση script από τη διαμόρφωσή σας"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:71
+#: ../src/view/grublistCfgDlgGtk.cpp:73
 msgid "Move up the selected entry or script"
 msgstr "Μετακινήστε πάνω την επιλεγμένη καταχώρηση ή script"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:73
+#: ../src/view/grublistCfgDlgGtk.cpp:75
 msgid "Move down the selected entry or script"
 msgstr "Μετακινήστε κάτω την επιλεγμένη καταχώρηση ή script"
 
 #: ../src/view/grublistCfgDlgGtk.cpp:81
+msgid "remove this entry from the current submenu"
+msgstr "αφαίρεση αυτής της καταχώρισης από το τρέχον υπομενού"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:84
+msgid "add this entry to a new submenu"
+msgstr "προσθήκη αυτής της καταχώρισης από το τρέχον υπομενού"
+
+#: ../src/view/grublistCfgDlgGtk.cpp:92
 msgid "reload configuration"
 msgstr "επαναφόρτωση διαμόρφωσης"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:84
+#: ../src/view/grublistCfgDlgGtk.cpp:95
 msgid "Edit grub preferences"
 msgstr "Επεξεργασία προτιμήσεων του grub"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:113
+#: ../src/view/grublistCfgDlgGtk.cpp:126
 msgid "Select _partition …"
 msgstr "Επιλογή _κατάτμησης …"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:120
+#: ../src/view/grublistCfgDlgGtk.cpp:133
 msgid "Do you want to configure BURG instead of grub2?"
 msgstr "Θέλετε να διαμορφώσετε το BURG αντί για το grub2;"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:127
+#: ../src/view/grublistCfgDlgGtk.cpp:140
 msgid "Do you want to select another root partition?"
 msgstr "Θέλετε να επιλέξετε άλλη ριζική (root) κατάτμηση;"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:168
+#: ../src/view/grublistCfgDlgGtk.cpp:185
 msgid "BURG Mode"
 msgstr "Κατάσταση BURG"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:172
+#: ../src/view/grublistCfgDlgGtk.cpp:189
 msgid "Save configuration and generate a new "
 msgstr "Αποθήκευση διαμόρφωσης και δημιουργία νέας "
 
-#: ../src/view/grublistCfgDlgGtk.cpp:256
+#: ../src/view/grublistCfgDlgGtk.cpp:273
 msgid "Proxy binary not found!"
 msgstr "Δεν βρέθηκε proxy binary!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:257
+#: ../src/view/grublistCfgDlgGtk.cpp:274
 msgid ""
 "You will see all entries (uncustomized) when you run grub. This error accurs "
 "(in most cases), when you didn't install grub gustomizer currectly."
@@ -182,27 +192,27 @@ msgstr ""
 "Αυτό το σφάλμα συμβαίνει (στις περισσότερες περιπτώσεις), όταν δεν έχετε "
 "εγκαταστήσει τον διαμορφωτή του grub σωστά."
 
-#: ../src/view/grublistCfgDlgGtk.cpp:263
+#: ../src/view/grublistCfgDlgGtk.cpp:280
 msgid "(new Entries of %1)"
-msgstr ""
+msgstr "(νέες Είσοδοι από %1)"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:265
+#: ../src/view/grublistCfgDlgGtk.cpp:282
 msgid "(new Entries)"
 msgstr "(νέες καταχωρήσεις)"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:270
+#: ../src/view/grublistCfgDlgGtk.cpp:287
 msgid "(script code)"
-msgstr ""
+msgstr "(script κώδικας)"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:494
+#: ../src/view/grublistCfgDlgGtk.cpp:518
 msgid "Default title: "
 msgstr "Προεπιλεγμένος τίτλος: "
 
-#: ../src/view/grublistCfgDlgGtk.cpp:586
+#: ../src/view/grublistCfgDlgGtk.cpp:612
 msgid "The saved configuration is not up to date!"
 msgstr "Η αποθηκευμένη διαμόρφωση δεν είναι ενήμερη!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:587
+#: ../src/view/grublistCfgDlgGtk.cpp:613
 msgid ""
 "The generated configuration didn't equal to the saved configuration on "
 "startup. So what you see now may not be what you see when you restart your "
@@ -213,37 +223,37 @@ msgstr ""
 "όταν επανεκκινήσετε τον υπολογιστή σας. Για να το διορθώσετε, πατήστε "
 "ενημέρωση!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:590
+#: ../src/view/grublistCfgDlgGtk.cpp:616
 msgid "_Quit without update"
 msgstr "Έ_ξοδος χωρίς ενημέρωση"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:593
+#: ../src/view/grublistCfgDlgGtk.cpp:619
 msgid "_Update & Quit"
 msgstr "_Ενημέρωση και έξοδος"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:597
+#: ../src/view/grublistCfgDlgGtk.cpp:623
 msgid "Do you want to save your modifications?"
 msgstr "Θέλετε να αποθηκεύσετε τις τροποποιήσεις σας;"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:600
+#: ../src/view/grublistCfgDlgGtk.cpp:626
 msgid "_Quit without saving"
 msgstr "Έξο_δος χωρίς αποθήκευση"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:603
+#: ../src/view/grublistCfgDlgGtk.cpp:629
 msgid "_Save & Quit"
 msgstr "_Αποθήκευση και έξοδος"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:606
+#: ../src/view/grublistCfgDlgGtk.cpp:632
 msgid "AND: your modifications are still unsaved, update will save them too!"
 msgstr ""
 "AND: οι τροποποιήσεις σας δεν έχουν αποθηκευτεί ακόμη, η ενημέρωση θα "
 "αποθηκεύσει και αυτές!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:672 ../src/view/settingsDlgGtk.cpp:123
+#: ../src/view/grublistCfgDlgGtk.cpp:708 ../src/view/settingsDlgGtk.cpp:132
 msgid "is active"
 msgstr "είναι ενεργή"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:673 ../src/view/settingsDlgGtk.cpp:124
+#: ../src/view/grublistCfgDlgGtk.cpp:709 ../src/view/settingsDlgGtk.cpp:133
 msgid "name"
 msgstr "όνομα"
 
@@ -375,147 +385,143 @@ msgstr "Προσθήκη script"
 msgid "Entry"
 msgstr "Καταχώρηση"
 
-#: ../src/view/settingsDlgGtk.cpp:65
+#: ../src/view/settingsDlgGtk.cpp:74
 msgid "white"
 msgstr "λευκό"
 
-#: ../src/view/settingsDlgGtk.cpp:66
+#: ../src/view/settingsDlgGtk.cpp:75
 msgid "yellow"
 msgstr "κίτρινο"
 
-#: ../src/view/settingsDlgGtk.cpp:67
+#: ../src/view/settingsDlgGtk.cpp:76
 msgid "light-cyan"
 msgstr "ανοιχτό κυανό"
 
-#: ../src/view/settingsDlgGtk.cpp:68
+#: ../src/view/settingsDlgGtk.cpp:77
 msgid "cyan"
 msgstr "κυανό"
 
-#: ../src/view/settingsDlgGtk.cpp:69
+#: ../src/view/settingsDlgGtk.cpp:78
 msgid "light-blue"
 msgstr "ανοιχτό μπλε"
 
-#: ../src/view/settingsDlgGtk.cpp:70
+#: ../src/view/settingsDlgGtk.cpp:79
 msgid "blue"
 msgstr "μπλε"
 
-#: ../src/view/settingsDlgGtk.cpp:71
+#: ../src/view/settingsDlgGtk.cpp:80
 msgid "light-green"
 msgstr "ανοιχτό πράσινο"
 
-#: ../src/view/settingsDlgGtk.cpp:72
+#: ../src/view/settingsDlgGtk.cpp:81
 msgid "green"
 msgstr "πράσινο"
 
-#: ../src/view/settingsDlgGtk.cpp:73
+#: ../src/view/settingsDlgGtk.cpp:82
 msgid "light-magenta"
 msgstr "ανοιχτό μωβ"
 
-#: ../src/view/settingsDlgGtk.cpp:74
+#: ../src/view/settingsDlgGtk.cpp:83
 msgid "magenta"
 msgstr "μωβ"
 
-#: ../src/view/settingsDlgGtk.cpp:75
+#: ../src/view/settingsDlgGtk.cpp:84
 msgid "light-red"
 msgstr "ανοιχτό κόκκινο"
 
-#: ../src/view/settingsDlgGtk.cpp:76
+#: ../src/view/settingsDlgGtk.cpp:85
 msgid "red"
 msgstr "κόκκινο"
 
-#: ../src/view/settingsDlgGtk.cpp:77
+#: ../src/view/settingsDlgGtk.cpp:86
 msgid "brown"
 msgstr "καφέ"
 
-#: ../src/view/settingsDlgGtk.cpp:78
+#: ../src/view/settingsDlgGtk.cpp:87
 msgid "light-gray"
 msgstr "ανοιχτό γκρι"
 
-#: ../src/view/settingsDlgGtk.cpp:79
+#: ../src/view/settingsDlgGtk.cpp:88
 msgid "dark-gray"
 msgstr "σκούρο γκρι"
 
-#: ../src/view/settingsDlgGtk.cpp:80
+#: ../src/view/settingsDlgGtk.cpp:89
 msgid "transparent"
 msgstr "διαφανές"
 
-#: ../src/view/settingsDlgGtk.cpp:80
+#: ../src/view/settingsDlgGtk.cpp:89
 msgid "black"
 msgstr "μαύρο"
 
-#: ../src/view/settingsDlgGtk.cpp:92
+#: ../src/view/settingsDlgGtk.cpp:101
 msgid "pre_defined: "
 msgstr "προ_καθορισμένο: "
 
-#: ../src/view/settingsDlgGtk.cpp:92
+#: ../src/view/settingsDlgGtk.cpp:101
 msgid "previously _booted entry"
 msgstr "καταχώρηση _προηγούμενης εκκίνησης συστήματος"
 
-#: ../src/view/settingsDlgGtk.cpp:93
+#: ../src/view/settingsDlgGtk.cpp:102
 msgid "default entry"
 msgstr "προεπιλεγμένη καταχώρηση"
 
-#: ../src/view/settingsDlgGtk.cpp:93
+#: ../src/view/settingsDlgGtk.cpp:102
 msgid "visibility"
 msgstr "ορατότητα"
 
-#: ../src/view/settingsDlgGtk.cpp:93
+#: ../src/view/settingsDlgGtk.cpp:102
 msgid "show menu"
 msgstr "εμφάνιση μενού"
 
-#: ../src/view/settingsDlgGtk.cpp:94
+#: ../src/view/settingsDlgGtk.cpp:103
 msgid "Timeout"
 msgstr "Λήξη χρονικού ορίου"
 
-#: ../src/view/settingsDlgGtk.cpp:94
+#: ../src/view/settingsDlgGtk.cpp:103
 msgid "Seconds"
 msgstr "Δευτερόλεπτα"
 
-#: ../src/view/settingsDlgGtk.cpp:94
+#: ../src/view/settingsDlgGtk.cpp:103
 msgid "kernel parameters"
 msgstr "παράμετροι πυρήνα"
 
-#: ../src/view/settingsDlgGtk.cpp:95
+#: ../src/view/settingsDlgGtk.cpp:104
 msgid "generate recovery entries"
 msgstr "δημιουργία καταχωρήσεων επαναφοράς"
 
-#: ../src/view/settingsDlgGtk.cpp:95
+#: ../src/view/settingsDlgGtk.cpp:104
 msgid "look for other operating systems"
 msgstr "έρευνα για άλλα λειτουργικά συστήματα"
 
-#: ../src/view/settingsDlgGtk.cpp:96
+#: ../src/view/settingsDlgGtk.cpp:105
 msgid "custom resolution: "
 msgstr "προσαρμοσμένη ανάλυση: "
 
-#: ../src/view/settingsDlgGtk.cpp:97
+#: ../src/view/settingsDlgGtk.cpp:106
 msgid "font color"
 msgstr "χρώμα γραμματοσειράς"
 
-#: ../src/view/settingsDlgGtk.cpp:97
+#: ../src/view/settingsDlgGtk.cpp:106
 msgid "background"
 msgstr "φόντο"
 
-#: ../src/view/settingsDlgGtk.cpp:98
+#: ../src/view/settingsDlgGtk.cpp:107
 msgid "normal:"
 msgstr "κανονικό:"
 
-#: ../src/view/settingsDlgGtk.cpp:98
+#: ../src/view/settingsDlgGtk.cpp:107
 msgid "highlight:"
 msgstr "επισήμανση:"
 
-#: ../src/view/settingsDlgGtk.cpp:99
+#: ../src/view/settingsDlgGtk.cpp:108
 msgid "menu colors"
 msgstr "χρώματα μενού"
 
-#: ../src/view/settingsDlgGtk.cpp:99
+#: ../src/view/settingsDlgGtk.cpp:108
 msgid "background image"
 msgstr "εικόνα παρασκηνίου"
 
-#: ../src/view/settingsDlgGtk.cpp:100
-msgid "remove background"
-msgstr "αφαίρεση παρασκηνίου"
-
-#: ../src/view/settingsDlgGtk.cpp:101
+#: ../src/view/settingsDlgGtk.cpp:110
 msgid ""
 "To get the colors above working,\n"
 "you have to select a background image!"
@@ -523,31 +529,48 @@ msgstr ""
 "Για να δουλέψουν τα παραπάνω χρώματα,\n"
 "πρέπει να επιλέξετε μια εικόνα παρασκηνίου!"
 
-#: ../src/view/settingsDlgGtk.cpp:104
+#: ../src/view/settingsDlgGtk.cpp:111
+msgid "_Font"
+msgstr "_Γραμματοσειρά"
+
+#: ../src/view/settingsDlgGtk.cpp:113
 msgid "settings"
 msgstr "ρυθμίσεις"
 
-#: ../src/view/settingsDlgGtk.cpp:108
+#: ../src/view/settingsDlgGtk.cpp:117
 msgid "_General"
 msgstr "_Γενικά"
 
-#: ../src/view/settingsDlgGtk.cpp:109
+#: ../src/view/settingsDlgGtk.cpp:118
 msgid "A_ppearance"
 msgstr "Ε_μφάνιση"
 
-#: ../src/view/settingsDlgGtk.cpp:110
+#: ../src/view/settingsDlgGtk.cpp:119
 msgid "_Advanced"
 msgstr "Για προ_χωρημένους"
 
-#: ../src/view/settingsDlgGtk.cpp:125
+#: ../src/view/settingsDlgGtk.cpp:134
 msgid "value"
 msgstr "τιμή"
 
-#: ../src/view/settingsDlgGtk.cpp:295
+#: ../src/view/settingsDlgGtk.cpp:209 ../src/view/settingsDlgGtk.cpp:345
+#: ../src/view/settingsDlgGtk.cpp:693
+msgid "saved"
+msgstr "αποθηκεύτηκε"
+
+#: ../src/view/settingsDlgGtk.cpp:239
+msgid "remove font"
+msgstr "αφαίρεση γραμματοσειράς"
+
+#: ../src/view/settingsDlgGtk.cpp:263
+msgid "remove background"
+msgstr "αφαίρεση παρασκηνίου"
+
+#: ../src/view/settingsDlgGtk.cpp:323
 msgid "Entry %1 (by position)"
 msgstr "Καταχώρηση %1 (ως προς τη θέση)"
 
-#: ../src/view/settingsDlgGtk.cpp:520
+#: ../src/view/settingsDlgGtk.cpp:627
 msgid ""
 "This option doesn't work when the \"os-prober\" script finds other operating "
 "systems. Disable \"%1\" if you don't need to boot other operating systems."
