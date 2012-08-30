@@ -113,6 +113,12 @@ void Model_Script::moveToBasedir(std::string const& cfg_dir){
 }
 
 bool Model_Script::moveFile(std::string const& newPath, short int permissions){
+	FILE* testFileHandle = fopen(newPath.c_str(), "r");
+	if (testFileHandle) {
+		fclose(testFileHandle);
+		throw FileSaveException("cannot move the file " + this->fileName + " to " + newPath + " (already exists)", __FILE__, __LINE__);
+	}
+
 	int rename_success = rename(this->fileName.c_str(), newPath.c_str());
 	if (rename_success == 0){
 		this->fileName = newPath;

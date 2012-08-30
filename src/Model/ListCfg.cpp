@@ -323,7 +323,7 @@ void Model_ListCfg::save(){
 	for (std::list<Model_Script>::iterator scriptIter = this->repository.begin(); scriptIter != this->repository.end(); scriptIter++) {
 		if (scriptIter->isCustomScript && scriptIter->fileName == "") {
 			scriptIter->fileName = this->env.cfg_dir + "/IN_" + scriptIter->name;
-			this->repository.createScript(scriptIter->name, scriptIter->fileName, "");
+			this->repository.createScript(*scriptIter, "");
 		}
 	}
 

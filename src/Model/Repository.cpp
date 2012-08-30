@@ -126,6 +126,16 @@ Model_Script* Model_Repository::createScript(std::string const& name, std::strin
 	return NULL;
 }
 
+void Model_Repository::createScript(Model_Script const& script, std::string const& content) {
+	FILE* scriptFile = fopen(script.fileName.c_str(), "w");
+	if (scriptFile) {
+		fputs(content.c_str(), scriptFile);
+		fclose(scriptFile);
+	} else {
+		throw FileSaveException("cannot open file for saving: " + script.fileName, __FILE__, __LINE__);
+	}
+}
+
 /**
  * returns a list of all scripts associated by its fileNames
  */

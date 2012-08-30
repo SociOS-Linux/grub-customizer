@@ -37,6 +37,7 @@ struct Model_Repository : public std::list<Model_Script>, public CommonClass {
 	Model_Script* getNthScript(int pos);
 	void deleteAllEntries();
 	Model_Script* createScript(std::string const& name, std::string const& fileName, std::string const& content);
+	void createScript(Model_Script const& script, std::string const& content); // create existing script (in scriptlist) on file system
 	std::map<std::string, Model_Script*> getScriptPathMap();
 	operator ArrayStructure() const;
 };
