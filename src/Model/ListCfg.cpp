@@ -732,6 +732,7 @@ Model_Rule& Model_ListCfg::moveRule(Model_Rule* rule, int direction){
 					return *movedRule;
 				}
 			} else { // convert existing proxy to multiproxy
+				this->log("convert to multiproxy", Logger::INFO);
 				std::list<Model_Proxy>::iterator proxyIter = this->proxies.getIter(proxy);
 
 				Model_Rule* movedRule = NULL;
@@ -774,7 +775,7 @@ Model_Rule& Model_ListCfg::moveRule(Model_Rule* rule, int direction){
 				}
 
 				if (!proxy->hasVisibleRules()) {
-					if (proxyIter != this->proxies.end()) {
+					if (proxyIter != this->proxies.end() && target->dataSource == proxyIter->dataSource) {
 						target->merge(*proxyIter, direction);
 						this->proxies.deleteProxy(&*proxyIter);
 					}
