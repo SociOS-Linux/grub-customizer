@@ -77,7 +77,7 @@ View_Gtk_Main::View_Gtk_Main()
 	toolbar.append(ti_sep1);
 
 	toolbar.append(tbttRemove);
-	tbttRemove.set_tooltip_text(gettext("Remove selected entries"));
+	tbttRemove.set_tooltip_text(gettext("Remove selected entries (you can restore them from trash)"));
 	tbttRemove.set_is_important(true);
 	toolbar.append(tbttAdd);
 	tbttAdd.set_tooltip_text(gettext("restore entries from trash"));
@@ -116,8 +116,9 @@ View_Gtk_Main::View_Gtk_Main()
 
 	toolbar.append(tbttRevert);
 	tbttRevert.set_is_important(true);
+	tbttRevert.set_tooltip_text(gettext("Reverts the list to the default order"));
 
-	tbttReload.set_tooltip_text(gettext("reload configuration"));
+	tbttReload.set_tooltip_text(gettext("reloads the configuration. Unsaved changes will be preserved."));
 	
 	this->setLockState(3);
 	//menu

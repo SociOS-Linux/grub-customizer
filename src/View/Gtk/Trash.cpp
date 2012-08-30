@@ -38,7 +38,7 @@ View_Gtk_Trash::View_Gtk_Trash() : deleteButton(NULL) {
 
 	this->iconBox.signal_item_activated().connect(sigc::mem_fun(this, &View_Gtk_Trash::signal_icon_dblClick));
 
-	deleteButton = this->add_button("delete custom entries", Gtk::RESPONSE_REJECT);
+	deleteButton = this->add_button(gettext("Delete custom entries"), Gtk::RESPONSE_REJECT);
 	deleteButton->set_no_show_all(true);
 	this->add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
 	this->add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
@@ -106,7 +106,8 @@ void View_Gtk_Trash::hide(){
 }
 
 void View_Gtk_Trash::askForDeletion(std::list<std::string> const& names) {
-	Glib::ustring question = "This deletes the following entries:\n";
+	Glib::ustring question = gettext("This deletes the following entries:");
+	question += "\n";
 	for (std::list<std::string>::const_iterator iter = names.begin(); iter != names.end(); iter++) {
 		question += *iter + "\n";
 	}
