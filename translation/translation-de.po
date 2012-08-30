@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-30 21:26+0200\n"
+"POT-Creation-Date: 2012-08-30 22:28+0200\n"
 "PO-Revision-Date: 2011-01-22 15:00+0000\n"
 "Last-Translator: Daniel Richter <danielrichter2007@web.de>\n"
 "Language-Team: German\n"
@@ -18,19 +18,19 @@ msgstr ""
 "X-Launchpad-Export-Date: 2011-03-26 14:24+0000\n"
 "X-Generator: Launchpad (build 12661)\n"
 
-#: ../src/Controller/MainControllerImpl.cpp:518
+#: ../src/Controller/MainControllerImpl.cpp:533
 msgid "Name the Entry"
 msgstr "Geben Sie eine Bezeichnung ein!"
 
-#: ../src/Controller/MainControllerImpl.cpp:574
+#: ../src/Controller/MainControllerImpl.cpp:589
 msgid "cannot move this entry"
 msgstr "Dieses Element kann nicht wie gewünscht verschoben werden."
 
-#: ../src/Controller/MainControllerImpl.cpp:712
+#: ../src/Controller/MainControllerImpl.cpp:727
 msgid "Configuration has been saved"
 msgstr "Konfiguration gespeichert"
 
-#: ../src/Controller/MainControllerImpl.cpp:717
+#: ../src/Controller/MainControllerImpl.cpp:732
 msgid "updating configuration"
 msgstr "Konfiguration wird gespeichert"
 
@@ -152,7 +152,9 @@ msgstr "Partition konnte nicht ausgehängt werden"
 msgid ""
 "please Inform the author about this problem. The following information could "
 "be helpful:"
-msgstr "Bitte informiere den Ersteller dieses Programms über das Problem. Die folgende Information könnte hilfreich sein:"
+msgstr ""
+"Bitte informiere den Ersteller dieses Programms über das Problem. Die "
+"folgende Information könnte hilfreich sein:"
 
 #: ../src/View/Gtk/Error.cpp:32
 msgid "An error occurred"
@@ -235,7 +237,9 @@ msgstr "_Bootmenü-Konfiguration"
 
 #: ../src/View/Gtk/Main.cpp:80
 msgid "Remove selected entries (you can restore them from trash)"
-msgstr "Ausgewählte Einträge löschen (diese können aus dem Papierkorb wiederhergestellt werden)"
+msgstr ""
+"Ausgewählte Einträge löschen (diese können aus dem Papierkorb "
+"wiederhergestellt werden)"
 
 #: ../src/View/Gtk/Main.cpp:83
 msgid "restore entries from trash"
@@ -267,7 +271,9 @@ msgstr "Bringt die Liste in den Ausgangszustand zurück"
 
 #: ../src/View/Gtk/Main.cpp:121
 msgid "reloads the configuration. Unsaved changes will be preserved."
-msgstr "Lädt die Konfiguration neu. Ungespeicherte Anpassungen gehen dabei *nicht* verloren!"
+msgstr ""
+"Lädt die Konfiguration neu. Ungespeicherte Anpassungen gehen dabei *nicht* "
+"verloren!"
 
 #: ../src/View/Gtk/Main.cpp:161
 msgid "Restore entry"
@@ -402,18 +408,31 @@ msgstr "Papierkorb (%1)"
 msgid ""
 "Removing Script Code can cause problems when trying to boot entries relying "
 "on it. Are you sure you want to do it anyway?"
-msgstr "Das Entfernen von Skript-Code kann dazu führen, dass einige Menüeinträge nicht mehr korrekt funktionieren. "
-"Soll die Aktion trotzdem ausgeführt werden?"
+msgstr ""
+"Das Entfernen von Skript-Code kann dazu führen, dass einige Menüeinträge "
+"nicht mehr korrekt funktionieren. Soll die Aktion trotzdem ausgeführt werden?"
 
-#: ../src/View/Gtk/Main.cpp:678
+#: ../src/View/Gtk/Main.cpp:657
+msgid ""
+"You're trying to remove an entry of the currently running system. Make sure "
+"there are other working entries of this system!\n"
+"If you just want to remove old kernels: The better way is uninstalling them "
+"instead of just hiding them in boot menu."
+msgstr ""
+"Sie versuchen gerade, einen Menü-Eintrag des momentan laufenden Systems zu entfernen. "
+"Bitte stellen Sie unbedingt sicher, dass es Alternativ-Einträge gibt, die funktionieren!\n"
+"Falls Sie einfach nur alte Kernel entfernen möchten: Grundsätzlich ist es besser, diese "
+"komplett zu deinstallieren, statt einfach nur deren Bootmenü-Einträge auszublenden."
+
+#: ../src/View/Gtk/Main.cpp:686
 msgid "Default title: "
 msgstr "Vorgabetitel: "
 
-#: ../src/View/Gtk/Main.cpp:771
+#: ../src/View/Gtk/Main.cpp:779
 msgid "The saved configuration is not up to date!"
 msgstr "Die gespeicherte Konfiguration ist nicht aktuell!"
 
-#: ../src/View/Gtk/Main.cpp:772
+#: ../src/View/Gtk/Main.cpp:780
 msgid ""
 "The generated configuration didn't equal to the saved configuration on "
 "startup. So what you see now may not be what you see when you restart your "
@@ -424,31 +443,31 @@ msgstr ""
 "führen, dass die Anzeige im Bootloader nicht der Anzeige dieses Programms "
 "entspricht. Um dieses Problem zu beheben, klicken Sie auf Aktualisieren!"
 
-#: ../src/View/Gtk/Main.cpp:775
+#: ../src/View/Gtk/Main.cpp:783
 msgid "_Quit without update"
 msgstr "_Beenden, ohne zu aktualisieren"
 
-#: ../src/View/Gtk/Main.cpp:778
+#: ../src/View/Gtk/Main.cpp:786
 msgid "_Update & Quit"
 msgstr "_Aktualisieren und Beenden"
 
-#: ../src/View/Gtk/Main.cpp:782
+#: ../src/View/Gtk/Main.cpp:790
 msgid "Do you want to save your modifications?"
 msgstr "Sollen alle vorgenommenen Änderungen gespeichert werden?"
 
-#: ../src/View/Gtk/Main.cpp:785
+#: ../src/View/Gtk/Main.cpp:793
 msgid "_Quit without saving"
 msgstr "_Beenden, ohne zu speichern"
 
-#: ../src/View/Gtk/Main.cpp:788
+#: ../src/View/Gtk/Main.cpp:796
 msgid "_Save & Quit"
 msgstr "_Speichern und Beenden"
 
-#: ../src/View/Gtk/Main.cpp:791
+#: ../src/View/Gtk/Main.cpp:799
 msgid "AND: your modifications are still unsaved, update will save them too!"
 msgstr "UND: Es gibt noch einige ungespeicherte Änderungen!"
 
-#: ../src/View/Gtk/Main.cpp:844
+#: ../src/View/Gtk/Main.cpp:852
 msgid ""
 "%1 couldn't be executed successfully. error message:\n"
 " %2"
@@ -456,15 +475,15 @@ msgstr ""
 "%1 konnte nicht erfolgreich ausgeführt werden. Fehlermeldung:\n"
 " %2"
 
-#: ../src/View/Gtk/Main.cpp:846
+#: ../src/View/Gtk/Main.cpp:854
 msgid "Environment settings"
 msgstr "Umgebungs-Einstellungen:"
 
-#: ../src/View/Gtk/Main.cpp:858
+#: ../src/View/Gtk/Main.cpp:866
 msgid "Do you want to proceed without saving the current configuration?"
 msgstr "Möchten Sie fortfahren, ohne die aktuelle Konfiguration zu speichern?"
 
-#: ../src/View/Gtk/Main.cpp:859
+#: ../src/View/Gtk/Main.cpp:867
 msgid "There are unsaved modifications!"
 msgstr "Es gibt ungespeicherte Änderungen!"
 
@@ -680,4 +699,3 @@ msgstr "Die folgenden Menü-Einträge werden durch diese Aktion gelöscht:"
 #: ../src/View/Gtk/Element/PartitionChooser.cpp:30
 msgid "current"
 msgstr "dieses System"
-

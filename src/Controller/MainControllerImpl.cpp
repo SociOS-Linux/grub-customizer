@@ -427,6 +427,19 @@ bool MainControllerImpl::_listHasPlaintextRules(std::list<void*> const& rules) {
 	return false;
 }
 
+bool MainControllerImpl::_listHasCurrentSystemRules(std::list<void*> const& rules) {
+	for (std::list<void*>::const_iterator iter = rules.begin(); iter != rules.end(); iter++) {
+		const Model_Rule* rule = static_cast<const Model_Rule*>(*iter);
+		if (rule->type == Model_Rule::NORMAL) {
+			assert(rule->dataSource != NULL);
+			if (this->grublistCfg->repository.getScriptByEntry(*rule->dataSource)->name == "linux") {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 void MainControllerImpl::dieAction(){
 	this->logActionBegin("die");
 	try {
@@ -480,7 +493,9 @@ void MainControllerImpl::exitAction(bool force){
 void MainControllerImpl::removeRulesAction(std::list<void*> rules, bool force){
 	this->logActionBegin("remove-rules");
 	try {
-		if (!force && this->_listHasPlaintextRules(rules)) {
+		if (!force && this->_listHasCurrentSystemRules(rules)) {
+			this->view->showSystemRuleRemoveWarning();
+		} else if (!force && this->_listHasPlaintextRules(rules)) {
 			this->view->showPlaintextRemoveWarning();
 		} else {
 			std::map<Model_Proxy*, void*> emptyProxies;

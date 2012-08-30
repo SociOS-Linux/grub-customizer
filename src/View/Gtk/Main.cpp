@@ -653,6 +653,14 @@ void View_Gtk_Main::showPlaintextRemoveWarning() {
 	}
 }
 
+void View_Gtk_Main::showSystemRuleRemoveWarning() {
+	Gtk::MessageDialog dlg(gettext("You're trying to remove an entry of the currently running system. Make sure there are other working entries of this system!\nIf you just want to remove old kernels: The better way is uninstalling them instead of just hiding them in boot menu."), false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_OK_CANCEL);
+	int result = dlg.run();
+	if (result == Gtk::RESPONSE_OK) {
+		eventListener->removeRulesAction(this->getSelectedRules(), true);
+	}
+}
+
 void View_Gtk_Main::signal_move_click(int direction){
 	if (this->lock_state == 0){
 		assert(direction == 1 || direction == -1);

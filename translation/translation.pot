@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: 3.0\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-30 21:26+0200\n"
+"POT-Creation-Date: 2012-08-30 22:28+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,19 +17,19 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/Controller/MainControllerImpl.cpp:518
+#: ../src/Controller/MainControllerImpl.cpp:533
 msgid "Name the Entry"
 msgstr ""
 
-#: ../src/Controller/MainControllerImpl.cpp:574
+#: ../src/Controller/MainControllerImpl.cpp:589
 msgid "cannot move this entry"
 msgstr ""
 
-#: ../src/Controller/MainControllerImpl.cpp:712
+#: ../src/Controller/MainControllerImpl.cpp:727
 msgid "Configuration has been saved"
 msgstr ""
 
-#: ../src/Controller/MainControllerImpl.cpp:717
+#: ../src/Controller/MainControllerImpl.cpp:732
 msgid "updating configuration"
 msgstr ""
 
@@ -393,60 +393,68 @@ msgid ""
 "on it. Are you sure you want to do it anyway?"
 msgstr ""
 
-#: ../src/View/Gtk/Main.cpp:678
+#: ../src/View/Gtk/Main.cpp:657
+msgid ""
+"You're trying to remove an entry of the currently running system. Make sure "
+"there are other working entries of this system!\n"
+"If you just want to remove old kernels: The better way is uninstalling them "
+"instead of just hiding them in boot menu."
+msgstr ""
+
+#: ../src/View/Gtk/Main.cpp:686
 msgid "Default title: "
 msgstr ""
 
-#: ../src/View/Gtk/Main.cpp:771
+#: ../src/View/Gtk/Main.cpp:779
 msgid "The saved configuration is not up to date!"
 msgstr ""
 
-#: ../src/View/Gtk/Main.cpp:772
+#: ../src/View/Gtk/Main.cpp:780
 msgid ""
 "The generated configuration didn't equal to the saved configuration on "
 "startup. So what you see now may not be what you see when you restart your "
 "pc. To fix this, click update!"
 msgstr ""
 
-#: ../src/View/Gtk/Main.cpp:775
+#: ../src/View/Gtk/Main.cpp:783
 msgid "_Quit without update"
 msgstr ""
 
-#: ../src/View/Gtk/Main.cpp:778
+#: ../src/View/Gtk/Main.cpp:786
 msgid "_Update & Quit"
 msgstr ""
 
-#: ../src/View/Gtk/Main.cpp:782
+#: ../src/View/Gtk/Main.cpp:790
 msgid "Do you want to save your modifications?"
 msgstr ""
 
-#: ../src/View/Gtk/Main.cpp:785
+#: ../src/View/Gtk/Main.cpp:793
 msgid "_Quit without saving"
 msgstr ""
 
-#: ../src/View/Gtk/Main.cpp:788
+#: ../src/View/Gtk/Main.cpp:796
 msgid "_Save & Quit"
 msgstr ""
 
-#: ../src/View/Gtk/Main.cpp:791
+#: ../src/View/Gtk/Main.cpp:799
 msgid "AND: your modifications are still unsaved, update will save them too!"
 msgstr ""
 
-#: ../src/View/Gtk/Main.cpp:844
+#: ../src/View/Gtk/Main.cpp:852
 msgid ""
 "%1 couldn't be executed successfully. error message:\n"
 " %2"
 msgstr ""
 
-#: ../src/View/Gtk/Main.cpp:846
+#: ../src/View/Gtk/Main.cpp:854
 msgid "Environment settings"
 msgstr ""
 
-#: ../src/View/Gtk/Main.cpp:858
+#: ../src/View/Gtk/Main.cpp:866
 msgid "Do you want to proceed without saving the current configuration?"
 msgstr ""
 
-#: ../src/View/Gtk/Main.cpp:859
+#: ../src/View/Gtk/Main.cpp:867
 msgid "There are unsaved modifications!"
 msgstr ""
 

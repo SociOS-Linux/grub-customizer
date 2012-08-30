@@ -153,7 +153,7 @@ public:
 	void hideReloadRecommendation();
 
 	void showPlaintextRemoveWarning();
-
+	void showSystemRuleRemoveWarning();
 private:
 	//event handlers
 	void signal_show_envEditor();

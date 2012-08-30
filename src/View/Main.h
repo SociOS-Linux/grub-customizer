@@ -109,6 +109,8 @@ public:
 	virtual void hideReloadRecommendation() = 0;
 
 	virtual void showPlaintextRemoveWarning() = 0;
+
+	virtual void showSystemRuleRemoveWarning() = 0;
 };
 
 #endif
