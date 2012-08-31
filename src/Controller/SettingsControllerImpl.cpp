@@ -399,9 +399,6 @@ void SettingsControllerImpl::hideAction(){
 	this->logActionBegin("hide");
 	try {
 		this->view->hide();
-		if (this->settings->reloadRequired()){
-			this->getThreadController().startLoadThread(true);
-		}
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
