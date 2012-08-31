@@ -71,9 +71,11 @@ View_Gtk_EnvEditor::View_Gtk_EnvEditor()
 }
 
 View_Gtk_EnvEditor::~View_Gtk_EnvEditor() {
-	this->tblLayout.remove(*this->pChooser);
-	delete this->pChooser;
-	this->pChooser = NULL;
+	if (this->pChooser) {
+		this->tblLayout.remove(*this->pChooser);
+		delete this->pChooser;
+		this->pChooser = NULL;
+	}
 }
 
 void View_Gtk_EnvEditor::setEventListener(EnvEditorController& eventListener) {
