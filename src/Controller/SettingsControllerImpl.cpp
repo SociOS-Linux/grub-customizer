@@ -156,7 +156,7 @@ void SettingsControllerImpl::syncSettings(){
 	this->view->setTimeoutValue(timeout);
 
 	this->view->setKernelParams(this->settings->getValue("GRUB_CMDLINE_LINUX_DEFAULT"));
-	this->view->setRecoveryCheckboxState(!this->settings->isActive("GRUB_DISABLE_LINUX_RECOVERY", true));
+	this->view->setRecoveryCheckboxState(!this->settings->isActive("GRUB_DISABLE_RECOVERY", true));
 
 	this->view->setResolutionCheckboxState(this->settings->isActive("GRUB_GFXMODE", true));
 	this->view->setResolution(this->settings->getValue("GRUB_GFXMODE"));
@@ -447,10 +447,18 @@ void SettingsControllerImpl::updateCustomResolutionAction(){
 void SettingsControllerImpl::updateRecoverySettingAction(){
 	this->logActionBegin("update-recovery-setting");
 	try {
+		// GRUB_DISABLE_LINUX_RECOVERY is used until GRUB 1.98
 		if (this->settings->getValue("GRUB_DISABLE_LINUX_RECOVERY") != "true") {
 			this->settings->setValue("GRUB_DISABLE_LINUX_RECOVERY", "true");
 		}
 		this->settings->setIsActive("GRUB_DISABLE_LINUX_RECOVERY", !this->view->getRecoveryCheckboxState());
+
+		// GRUB_DISABLE_RECOVERY is the new version
+		if (this->settings->getValue("GRUB_DISABLE_RECOVERY") != "true") {
+			this->settings->setValue("GRUB_DISABLE_RECOVERY", "true");
+		}
+		this->settings->setIsActive("GRUB_DISABLE_RECOVERY", !this->view->getRecoveryCheckboxState());
+
 		this->syncSettings();
 		this->env.modificationsUnsaved = true;
 	} catch (Exception const& e) {
