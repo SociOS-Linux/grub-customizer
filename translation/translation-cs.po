@@ -7,64 +7,159 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2012-06-20 00:16+0200\n"
-"PO-Revision-Date: 2012-02-24 10:35+0000\n"
+"POT-Creation-Date: 2012-08-30 22:28+0200\n"
+"PO-Revision-Date: 2012-08-30 21:30+0000\n"
 "Last-Translator: Jan Dolejš <jackdown3csr@gmail.com>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-08-30 21:28+0000\n"
-"X-Generator: Launchpad (build 15877)\n"
+"X-Launchpad-Export-Date: 2012-09-04 20:44+0000\n"
+"X-Generator: Launchpad (build 15901)\n"
 
-#: ../src/presenter/grubCustomizer.cpp:448
-msgid "No script found"
-msgstr "Žádný skript nalezen"
-
-#: ../src/presenter/grubCustomizer.cpp:515
-msgid "loading configuration…"
-msgstr "načítání konfigurace..."
-
-#: ../src/presenter/grubCustomizer.cpp:529
-#: ../src/view/grublistCfgDlgGtk.cpp:380
-msgid " (custom)"
-msgstr " (vlastní)"
-
-#: ../src/presenter/grubCustomizer.cpp:561
-msgid "Configuration has been saved"
-msgstr "Konfigurace byla uložena"
-
-#: ../src/presenter/grubCustomizer.cpp:564
-msgid "updating configuration"
-msgstr "aktualizace konfigurace"
-
-#: ../src/presenter/grubCustomizer.cpp:576
-msgid "%1 not found. Is grub2 installed?"
-msgstr "%1 nebylo nalezeno. Je grub2 nainstalován?"
-
-#: ../src/presenter/grubCustomizer.cpp:586
-msgid ""
-"%1 couldn't be executed successfully. error message:\n"
-" %2"
-msgstr ""
-"%1 nemohlo být správně spuštěno. chybová zpráva:\n"
-" %2"
-
-#: ../src/presenter/grubCustomizer.cpp:643
+#: ../src/Controller/MainControllerImpl.cpp:533
 msgid "Name the Entry"
 msgstr "Jméno položky"
 
-#: ../src/presenter/grubCustomizer.cpp:676
+#: ../src/Controller/MainControllerImpl.cpp:589
 msgid "cannot move this entry"
 msgstr "nelze přesunout tuto položku"
 
-#: ../src/view/aboutDialogGtk.cpp:36
+#: ../src/Controller/MainControllerImpl.cpp:727
+msgid "Configuration has been saved"
+msgstr "Konfigurace byla uložena"
+
+#: ../src/Controller/MainControllerImpl.cpp:732
+msgid "updating configuration"
+msgstr "aktualizace konfigurace"
+
+#: ../src/main/gtk-client.cpp:229
+msgid "Linux"
+msgstr ""
+
+#: ../src/main/gtk-client.cpp:230
+msgid "Linux-ISO"
+msgstr ""
+
+#: ../src/main/gtk-client.cpp:231
+msgid "Chainloader"
+msgstr ""
+
+#: ../src/main/gtk-client.cpp:232
+msgid "Memtest"
+msgstr ""
+
+#: ../src/View/Gtk/About.cpp:36
 msgid ""
 "Grub Customizer is a graphical interface to configure the grub2/burg settings"
 msgstr ""
 "Grub Customizer je grafická nadstavba ke konfiguraci grub2/burg nastavení"
 
-#: ../src/view/grubInstallDlgGtk.cpp:22
+#: ../src/View/Gtk/EntryEditor.cpp:22 ../src/View/Gtk/EnvEditor.cpp:23
+msgid "_Type:"
+msgstr ""
+
+#: ../src/View/Gtk/EntryEditor.cpp:28
+msgid "Entry editor"
+msgstr ""
+
+#: ../src/View/Gtk/EntryEditor.cpp:34
+msgid "Options"
+msgstr ""
+
+#: ../src/View/Gtk/EntryEditor.cpp:35
+msgid "Source"
+msgstr ""
+
+#: ../src/View/Gtk/EntryEditor.cpp:62
+msgid "_Partition"
+msgstr ""
+
+#: ../src/View/Gtk/EntryEditor.cpp:64
+msgid "_Initial ramdisk"
+msgstr ""
+
+#: ../src/View/Gtk/EntryEditor.cpp:66
+msgid "_Linux image"
+msgstr ""
+
+#: ../src/View/Gtk/EntryEditor.cpp:68
+msgid "_Memtest image"
+msgstr ""
+
+#: ../src/View/Gtk/EntryEditor.cpp:70
+msgid "Path to iso file"
+msgstr ""
+
+#: ../src/View/Gtk/EntryEditor.cpp:72
+msgid "Locale"
+msgstr ""
+
+#: ../src/View/Gtk/EntryEditor.cpp:74
+msgid "Kernel params"
+msgstr ""
+
+#: ../src/View/Gtk/EntryEditor.cpp:177 ../src/View/Gtk/EntryEditor.cpp:183
+#: ../src/View/Gtk/EntryEditor.cpp:217
+msgid "Other"
+msgstr ""
+
+#: ../src/View/Gtk/EnvEditor.cpp:22
+msgid "_Partition:"
+msgstr ""
+
+#: ../src/View/Gtk/EnvEditor.cpp:23
+msgid "Submountpoints:"
+msgstr ""
+
+#: ../src/View/Gtk/EnvEditor.cpp:24
+msgid "save this configuration"
+msgstr ""
+
+#: ../src/View/Gtk/EnvEditor.cpp:53
+msgid "Grub 2"
+msgstr ""
+
+#: ../src/View/Gtk/EnvEditor.cpp:54
+msgid "BURG"
+msgstr ""
+
+#: ../src/View/Gtk/EnvEditor.cpp:216
+msgid "Mount failed!"
+msgstr "Připojení se nezdařilo!"
+
+#: ../src/View/Gtk/EnvEditor.cpp:217
+msgid "umount failed!"
+msgstr "odpojení se nezdařilo!"
+
+#: ../src/View/Gtk/EnvEditor.cpp:218
+msgid "This seems not to be a root file system (no fstab found)"
+msgstr ""
+"Zdá se, že toto není kořenový souborový systém (nebyly nalezeny žádné fstab)"
+
+#: ../src/View/Gtk/EnvEditor.cpp:219
+msgid "Couldn't mount the selected partition"
+msgstr "Nemohu připojit vybraný oddíl"
+
+#: ../src/View/Gtk/EnvEditor.cpp:220
+msgid "Couldn't umount the selected partition"
+msgstr "Nemohu odpojit vybraný oddíl"
+
+#: ../src/View/Gtk/Error.cpp:31
+msgid ""
+"please Inform the author about this problem. The following information could "
+"be helpful:"
+msgstr ""
+
+#: ../src/View/Gtk/Error.cpp:32
+msgid "An error occurred"
+msgstr ""
+
+#: ../src/View/Gtk/Error.cpp:35
+msgid "continue (risk data loss)"
+msgstr ""
+
+#: ../src/View/Gtk/Installer.cpp:22
 msgid ""
 "Install the bootloader to MBR and put some\n"
 "files to the bootloaders data directory\n"
@@ -74,115 +169,196 @@ msgstr ""
 "soubory do datového adresáře zavaděče\n"
 "(pokud ještě neexistují)."
 
-#: ../src/view/grubInstallDlgGtk.cpp:23
+#: ../src/View/Gtk/Installer.cpp:23
 msgid "_Device: "
 msgstr "_Zařízení: "
 
-#: ../src/view/grubInstallDlgGtk.cpp:33
+#: ../src/View/Gtk/Installer.cpp:33
 msgid "Install to MBR"
 msgstr "Instalovat do MBR"
 
-#: ../src/view/grubInstallDlgGtk.cpp:50
+#: ../src/View/Gtk/Installer.cpp:50
 msgid "The bootloader has been installed successfully"
 msgstr "Zavaděč byl úspěšně nainstalován"
 
-#: ../src/view/grubInstallDlgGtk.cpp:55
+#: ../src/View/Gtk/Installer.cpp:55
 msgid "Error while installing the bootloader"
 msgstr "Chyba při instalaci zavaděče"
 
-#: ../src/view/grubInstallDlgGtk.cpp:71
+#: ../src/View/Gtk/Installer.cpp:71
 msgid "installing the bootloader…"
 msgstr "instalace zavaděče..."
 
-#: ../src/view/grubInstallDlgGtk.cpp:76
+#: ../src/View/Gtk/Installer.cpp:76
 msgid "Please type a device string!"
 msgstr "Prosím, zadejte řetězec zařízení!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:29
+#: ../src/View/Gtk/Main.cpp:29
 msgid "_File"
 msgstr "_Soubor"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:30
+#: ../src/View/Gtk/Main.cpp:31
 msgid "_Edit"
 msgstr "_Upravit"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:30
+#: ../src/View/Gtk/Main.cpp:31
 msgid "_View"
 msgstr "_Zobrazit"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:30
+#: ../src/View/Gtk/Main.cpp:31
 msgid "_Help"
 msgstr "_Nápověda"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:31
+#: ../src/View/Gtk/Main.cpp:32
 msgid "_Install to MBR …"
 msgstr "_Instalovat do MBR …"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:36
+#: ../src/View/Gtk/Main.cpp:41
 msgid "BURG found!"
 msgstr "BURG nalezen!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:37
-msgid "No Bootloader found"
-msgstr "Žádný zavaděč nenalezen"
+#: ../src/View/Gtk/Main.cpp:42
+msgid "advanced settings"
+msgstr ""
 
-#: ../src/view/grublistCfgDlgGtk.cpp:65
-msgid "Add a script to your configuration"
-msgstr "Přidat skript pro vaši konfiguraci"
+#: ../src/View/Gtk/Main.cpp:44
+msgid ""
+"The modifications you've done affects the visible entries. Please reload!"
+msgstr ""
 
-#: ../src/view/grublistCfgDlgGtk.cpp:67
-msgid "Remove a script from your configuration"
-msgstr "Odebrat skript z vaší konfigurace"
+#: ../src/View/Gtk/Main.cpp:56
+msgid "_List configuration"
+msgstr ""
 
-#: ../src/view/grublistCfgDlgGtk.cpp:73
+#: ../src/View/Gtk/Main.cpp:80
+msgid "Remove selected entries (you can restore them from trash)"
+msgstr ""
+
+#: ../src/View/Gtk/Main.cpp:83
+msgid "restore entries from trash"
+msgstr ""
+
+#: ../src/View/Gtk/Main.cpp:85
+msgid "Trash"
+msgstr ""
+
+#: ../src/View/Gtk/Main.cpp:94
 msgid "Move up the selected entry or script"
 msgstr "Posunout vybrané položky nebo skript nahoru"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:75
+#: ../src/View/Gtk/Main.cpp:96
 msgid "Move down the selected entry or script"
 msgstr "Posunout vybrané položky nebo skript dolů"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:81
+#: ../src/View/Gtk/Main.cpp:102
 msgid "remove this entry from the current submenu"
 msgstr "Odebrat tuto položku ze současného submenu"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:84
+#: ../src/View/Gtk/Main.cpp:105
 msgid "add this entry to a new submenu"
 msgstr "Přidat položku do nového submenu"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:92
-msgid "reload configuration"
-msgstr "načíst konfiguraci znovu"
+#: ../src/View/Gtk/Main.cpp:119
+msgid "Reverts the list to the default order"
+msgstr ""
 
-#: ../src/view/grublistCfgDlgGtk.cpp:95
-msgid "Edit grub preferences"
-msgstr "Editovat grub předvolby"
+#: ../src/View/Gtk/Main.cpp:121
+msgid "reloads the configuration. Unsaved changes will be preserved."
+msgstr ""
 
-#: ../src/view/grublistCfgDlgGtk.cpp:126
-msgid "Select _partition …"
-msgstr "Vybrat _oddíl..."
+#: ../src/View/Gtk/Main.cpp:161
+msgid "Restore entry"
+msgstr ""
 
-#: ../src/view/grublistCfgDlgGtk.cpp:133
+#: ../src/View/Gtk/Main.cpp:162
+msgid "Rename"
+msgstr ""
+
+#: ../src/View/Gtk/Main.cpp:163 ../src/View/Gtk/Main.cpp:164
+msgid "Move up"
+msgstr ""
+
+#: ../src/View/Gtk/Main.cpp:165 ../src/View/Gtk/Main.cpp:166
+msgid "Move down"
+msgstr ""
+
+#: ../src/View/Gtk/Main.cpp:167 ../src/View/Gtk/Main.cpp:168
+msgid "Remove from submenu"
+msgstr ""
+
+#: ../src/View/Gtk/Main.cpp:169 ../src/View/Gtk/Main.cpp:170
+msgid "Create submenu"
+msgstr ""
+
+#: ../src/View/Gtk/Main.cpp:177
+msgid "_Change Environment …"
+msgstr ""
+
+#: ../src/View/Gtk/Main.cpp:184
 msgid "Do you want to configure BURG instead of grub2?"
 msgstr "Chcete konfigurovat BURG místo grub2?"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:140
-msgid "Do you want to select another root partition?"
-msgstr "Chcete si vybrat jiný kořenový oddíl?"
+#: ../src/View/Gtk/Main.cpp:248
+msgid "_General settings"
+msgstr ""
 
-#: ../src/view/grublistCfgDlgGtk.cpp:185
+#: ../src/View/Gtk/Main.cpp:253
+msgid "_Appearance settings"
+msgstr ""
+
+#: ../src/View/Gtk/Main.cpp:266
 msgid "BURG Mode"
 msgstr "BURG mód"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:189
+#: ../src/View/Gtk/Main.cpp:270
 msgid "Save configuration and generate a new "
 msgstr "Uložit nastavení a vytvářet nové "
 
-#: ../src/view/grublistCfgDlgGtk.cpp:273
+#: ../src/View/Gtk/Main.cpp:291
+msgid "Are you sure?"
+msgstr ""
+
+#: ../src/View/Gtk/Main.cpp:292
+msgid "This removes all your list modifications of the bootloader menu!"
+msgstr ""
+
+#: ../src/View/Gtk/Main.cpp:352
+msgid "loading configuration…"
+msgstr "načítání konfigurace..."
+
+#: ../src/View/Gtk/Main.cpp:354
+msgid "loading script %2/%3 (%1)"
+msgstr ""
+
+#: ../src/View/Gtk/Main.cpp:373
+msgid "submenu"
+msgstr ""
+
+#: ../src/View/Gtk/Main.cpp:376 ../src/View/Gtk/Trash.cpp:92
+msgid "placeholder"
+msgstr ""
+
+#: ../src/View/Gtk/Main.cpp:379 ../src/View/Gtk/Trash.cpp:92
+msgid "menuentry"
+msgstr ""
+
+#: ../src/View/Gtk/Main.cpp:383 ../src/View/Gtk/Trash.cpp:92
+msgid "script: "
+msgstr ""
+
+#: ../src/View/Gtk/Main.cpp:387
+msgid "default name: "
+msgstr ""
+
+#: ../src/View/Gtk/Main.cpp:391
+msgid "Partition: "
+msgstr ""
+
+#: ../src/View/Gtk/Main.cpp:415
 msgid "Proxy binary not found!"
 msgstr "Spustitelný soubor proxy nenalezen!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:274
+#: ../src/View/Gtk/Main.cpp:416
 msgid ""
 "You will see all entries (uncustomized) when you run grub. This error accurs "
 "(in most cases), when you didn't install grub gustomizer currectly."
@@ -190,27 +366,57 @@ msgstr ""
 "Když spustíte grub, uvidíte všechny záznamy (nepřizpůsobené). Tato chyba se "
 "(většinou) objeví, když jste správně nenainstalovali grub přizpůsobovač."
 
-#: ../src/view/grublistCfgDlgGtk.cpp:280
-msgid "(new Entries of %1)"
-msgstr "(nových položek z %1)"
+#: ../src/View/Gtk/Main.cpp:422
+msgid "(incoming Entries of %1, Script: %2)"
+msgstr ""
 
-#: ../src/view/grublistCfgDlgGtk.cpp:282
-msgid "(new Entries)"
-msgstr "(nové položky)"
+#: ../src/View/Gtk/Main.cpp:424
+msgid "(incoming Entries of %1)"
+msgstr ""
 
-#: ../src/view/grublistCfgDlgGtk.cpp:287
+#: ../src/View/Gtk/Main.cpp:426
+msgid "(incoming Entries of Script: %1)"
+msgstr ""
+
+#: ../src/View/Gtk/Main.cpp:428
+msgid "(incoming Entries)"
+msgstr ""
+
+#: ../src/View/Gtk/Main.cpp:434
 msgid "(script code)"
 msgstr "(kód scriptu)"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:518
+#: ../src/View/Gtk/Main.cpp:436
+msgid "(script code of %1)"
+msgstr ""
+
+#: ../src/View/Gtk/Main.cpp:636
+msgid "Trash (%1)"
+msgstr ""
+
+#: ../src/View/Gtk/Main.cpp:649
+msgid ""
+"Removing Script Code can cause problems when trying to boot entries relying "
+"on it. Are you sure you want to do it anyway?"
+msgstr ""
+
+#: ../src/View/Gtk/Main.cpp:657
+msgid ""
+"You're trying to remove an entry of the currently running system. Make sure "
+"there are other working entries of this system!\n"
+"If you just want to remove old kernels: The better way is uninstalling them "
+"instead of just hiding them in boot menu."
+msgstr ""
+
+#: ../src/View/Gtk/Main.cpp:686
 msgid "Default title: "
 msgstr "Výchozí název: "
 
-#: ../src/view/grublistCfgDlgGtk.cpp:612
+#: ../src/View/Gtk/Main.cpp:779
 msgid "The saved configuration is not up to date!"
 msgstr "Uložená konfigurace není aktuální!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:613
+#: ../src/View/Gtk/Main.cpp:780
 msgid ""
 "The generated configuration didn't equal to the saved configuration on "
 "startup. So what you see now may not be what you see when you restart your "
@@ -220,300 +426,187 @@ msgstr ""
 "vidíte teď nemusí být to, co se zobrazí při restartování pc. Chcete-li tento "
 "problém odstranit, klepněte na tlačítko Aktualizovat!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:616
+#: ../src/View/Gtk/Main.cpp:783
 msgid "_Quit without update"
 msgstr "U_končit bez aktualizace"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:619
+#: ../src/View/Gtk/Main.cpp:786
 msgid "_Update & Quit"
 msgstr "_Aktualizovat & ukončit"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:623
+#: ../src/View/Gtk/Main.cpp:790
 msgid "Do you want to save your modifications?"
 msgstr "Přejete si uložit změny?"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:626
+#: ../src/View/Gtk/Main.cpp:793
 msgid "_Quit without saving"
 msgstr "Uko_nčit bez uložení"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:629
+#: ../src/View/Gtk/Main.cpp:796
 msgid "_Save & Quit"
 msgstr "_Uložit & ukončit"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:632
+#: ../src/View/Gtk/Main.cpp:799
 msgid "AND: your modifications are still unsaved, update will save them too!"
 msgstr "A: Vaše úpravy jsou stále neuložené, aktualizací se uloží také!"
 
-#: ../src/view/grublistCfgDlgGtk.cpp:708 ../src/view/settingsDlgGtk.cpp:132
-msgid "is active"
-msgstr "je aktivní"
-
-#: ../src/view/grublistCfgDlgGtk.cpp:709 ../src/view/settingsDlgGtk.cpp:133
-msgid "name"
-msgstr "jméno"
-
-#: ../src/view/partitionChooserGtk.cpp:23
-msgid "_use another partition: "
-msgstr "Po_užijte jiný oddíl: "
-
-#: ../src/view/partitionChooserGtk.cpp:24
-msgid "Mount selected Filesystem"
-msgstr "Připojit vybraný systém souborů"
-
-#: ../src/view/partitionChooserGtk.cpp:25
-msgid "Unmount mounted Filesystem"
-msgstr "Odpojit připojený systém souborů"
-
-#: ../src/view/partitionChooserGtk.cpp:27
+#: ../src/View/Gtk/Main.cpp:852
 msgid ""
-"These are the mountpoints of your fstab file.\n"
-"Please select every grub/boot related partition."
+"%1 couldn't be executed successfully. error message:\n"
+" %2"
 msgstr ""
-"Jedná se o přípojné body z vašeho fstab souboru.\n"
-"Prosím, vyberte každý grub/boot související s oblastí."
+"%1 nemohlo být správně spuštěno. chybová zpráva:\n"
+" %2"
 
-#: ../src/view/partitionChooserGtk.cpp:48
-msgid "partition"
-msgstr "oddíl"
-
-#: ../src/view/partitionChooserGtk.cpp:49
-msgid "type"
-msgstr "typ"
-
-#: ../src/view/partitionChooserGtk.cpp:50
-msgid "label"
-msgstr "popisek"
-
-#: ../src/view/partitionChooserGtk.cpp:82
-msgid "Grub Customizer: Partition chooser"
-msgstr "Grub Customizer: Výběr oddílu"
-
-#: ../src/view/partitionChooserGtk.cpp:86
-msgid "Select and mount your root partition"
-msgstr "Zvolit a připojit kořenový oddíl"
-
-#: ../src/view/partitionChooserGtk.cpp:88
-msgid "Select required submountpoints"
-msgstr "Vyberte požadované podbody připojení"
-
-#: ../src/view/partitionChooserGtk.cpp:94
-msgid "Partition Chooser"
-msgstr "Výběr oddílu"
-
-#: ../src/view/partitionChooserGtk.cpp:168
-msgid "Mount failed!"
-msgstr "Připojení se nezdařilo!"
-
-#: ../src/view/partitionChooserGtk.cpp:169
-msgid "umount failed!"
-msgstr "odpojení se nezdařilo!"
-
-#: ../src/view/partitionChooserGtk.cpp:170
-msgid "This seems not to be a root file system (no fstab found)"
+#: ../src/View/Gtk/Main.cpp:854
+msgid "Environment settings"
 msgstr ""
-"Zdá se, že toto není kořenový souborový systém (nebyly nalezeny žádné fstab)"
 
-#: ../src/view/partitionChooserGtk.cpp:171
-msgid "Couldn't mount the selected partition"
-msgstr "Nemohu připojit vybraný oddíl"
-
-#: ../src/view/partitionChooserGtk.cpp:172
-msgid "Couldn't umount the selected partition"
-msgstr "Nemohu odpojit vybraný oddíl"
-
-#: ../src/view/partitionChooserGtk.cpp:240
-msgid ""
-"You selected the option for choosing another partition.\n"
-"Please note: The os-prober may not find your actually running system.\n"
-"So run Grub Customizer on the target system\n"
-"again and save the configuration (or run update-grub/update-burg)\n"
-"to get the entry back!"
+#: ../src/View/Gtk/Main.cpp:866
+msgid "Do you want to proceed without saving the current configuration?"
 msgstr ""
-"Vybrali jste možnost výběru jiného oddílu.\n"
-"Vezměte prosím na vědomí: os-prober nemusí najít skutečně běžící systém.\n"
-"Spusťte Grub Customizer na cílovém systému\n"
-"znovu a uložte konfigurace (nebo spusťte update-grub/update-burg)\n"
-"abyste získali vstup zpět!"
 
-#: ../src/view/partitionChooserGtk.cpp:242
-msgid "You started Grub Customizer using the live CD."
-msgstr "Spustili jste Grub Customizer pomocí live CD."
-
-#: ../src/view/partitionChooserGtk.cpp:244
-msgid ""
-"Before you can edit your grub configuration we have to\n"
-"mount the required partitions.\n"
-"\n"
-"This assistant will help you doing this.\n"
-"\n"
-"\n"
-"Please ensure the target system is based on the same cpu architecture\n"
-"as the actually running one.\n"
-"If not, you will get an error message when trying to load the configuration."
+#: ../src/View/Gtk/Main.cpp:867
+msgid "There are unsaved modifications!"
 msgstr ""
-"Než budete moci upravovat své grub konfigurace, musíme\n"
-"připojit požadované oddíly.\n"
-"\n"
-"Tento pomocník vám s tím pomůže \n"
-"\n"
-"\n"
-"Ujistěte se prosím, že cílový systém je založen na stejné CPU architektuře\n"
-"jako aktuálně spuštěný. \n"
-"Pokud není,  objeví se při pokusu o načtení konfigurace chybové hlášení."
 
-#: ../src/view/scriptAddDlgGtk.cpp:23
-msgid "Script to insert:"
-msgstr "Skript k vložení:"
-
-#: ../src/view/scriptAddDlgGtk.cpp:25
-msgid "Preview:"
-msgstr "Náhled:"
-
-#: ../src/view/scriptAddDlgGtk.cpp:27
-msgid "Add script"
-msgstr "Přidat skript"
-
-#: ../src/view/scriptAddDlgGtk.cpp:43
-msgid "Entry"
-msgstr "Vstup"
-
-#: ../src/view/settingsDlgGtk.cpp:74
+#: ../src/View/Gtk/Settings.cpp:80
 msgid "white"
 msgstr "bílá"
 
-#: ../src/view/settingsDlgGtk.cpp:75
+#: ../src/View/Gtk/Settings.cpp:81
 msgid "yellow"
 msgstr "žlutá"
 
-#: ../src/view/settingsDlgGtk.cpp:76
+#: ../src/View/Gtk/Settings.cpp:82
 msgid "light-cyan"
 msgstr "světlá azurová"
 
-#: ../src/view/settingsDlgGtk.cpp:77
+#: ../src/View/Gtk/Settings.cpp:83
 msgid "cyan"
 msgstr "azurová"
 
-#: ../src/view/settingsDlgGtk.cpp:78
+#: ../src/View/Gtk/Settings.cpp:84
 msgid "light-blue"
 msgstr "světle modrá"
 
-#: ../src/view/settingsDlgGtk.cpp:79
+#: ../src/View/Gtk/Settings.cpp:85
 msgid "blue"
 msgstr "modrá"
 
-#: ../src/view/settingsDlgGtk.cpp:80
+#: ../src/View/Gtk/Settings.cpp:86
 msgid "light-green"
 msgstr "světle zelená"
 
-#: ../src/view/settingsDlgGtk.cpp:81
+#: ../src/View/Gtk/Settings.cpp:87
 msgid "green"
 msgstr "zelená"
 
-#: ../src/view/settingsDlgGtk.cpp:82
+#: ../src/View/Gtk/Settings.cpp:88
 msgid "light-magenta"
 msgstr "světlá purpurová"
 
-#: ../src/view/settingsDlgGtk.cpp:83
+#: ../src/View/Gtk/Settings.cpp:89
 msgid "magenta"
 msgstr "purpurová"
 
-#: ../src/view/settingsDlgGtk.cpp:84
+#: ../src/View/Gtk/Settings.cpp:90
 msgid "light-red"
 msgstr "světle červená"
 
-#: ../src/view/settingsDlgGtk.cpp:85
+#: ../src/View/Gtk/Settings.cpp:91
 msgid "red"
 msgstr "červená"
 
-#: ../src/view/settingsDlgGtk.cpp:86
+#: ../src/View/Gtk/Settings.cpp:92
 msgid "brown"
 msgstr "hnědá"
 
-#: ../src/view/settingsDlgGtk.cpp:87
+#: ../src/View/Gtk/Settings.cpp:93
 msgid "light-gray"
 msgstr "světle šedivá"
 
-#: ../src/view/settingsDlgGtk.cpp:88
+#: ../src/View/Gtk/Settings.cpp:94
 msgid "dark-gray"
 msgstr "tmavě šedivá"
 
-#: ../src/view/settingsDlgGtk.cpp:89
+#: ../src/View/Gtk/Settings.cpp:95
 msgid "transparent"
 msgstr "průhledné"
 
-#: ../src/view/settingsDlgGtk.cpp:89
+#: ../src/View/Gtk/Settings.cpp:95
 msgid "black"
 msgstr "černá"
 
-#: ../src/view/settingsDlgGtk.cpp:101
+#: ../src/View/Gtk/Settings.cpp:107
 msgid "pre_defined: "
 msgstr "před_definované: "
 
-#: ../src/view/settingsDlgGtk.cpp:101
+#: ../src/View/Gtk/Settings.cpp:107
 msgid "previously _booted entry"
 msgstr "dříve _zavedený záznam"
 
-#: ../src/view/settingsDlgGtk.cpp:102
+#: ../src/View/Gtk/Settings.cpp:108
 msgid "default entry"
 msgstr "výchozí vstup"
 
-#: ../src/view/settingsDlgGtk.cpp:102
+#: ../src/View/Gtk/Settings.cpp:108
 msgid "visibility"
 msgstr "viditelnost"
 
-#: ../src/view/settingsDlgGtk.cpp:102
+#: ../src/View/Gtk/Settings.cpp:108
 msgid "show menu"
 msgstr "zobrazit menu"
 
-#: ../src/view/settingsDlgGtk.cpp:103
+#: ../src/View/Gtk/Settings.cpp:109
 msgid "Timeout"
 msgstr "Prodleva"
 
-#: ../src/view/settingsDlgGtk.cpp:103
+#: ../src/View/Gtk/Settings.cpp:109
 msgid "Seconds"
 msgstr "Sekund"
 
-#: ../src/view/settingsDlgGtk.cpp:103
+#: ../src/View/Gtk/Settings.cpp:109
 msgid "kernel parameters"
 msgstr "parametry jádra"
 
-#: ../src/view/settingsDlgGtk.cpp:104
+#: ../src/View/Gtk/Settings.cpp:110
 msgid "generate recovery entries"
 msgstr "vytvořit záznamy k obnově"
 
-#: ../src/view/settingsDlgGtk.cpp:104
+#: ../src/View/Gtk/Settings.cpp:110
 msgid "look for other operating systems"
 msgstr "hledat další operační systémy"
 
-#: ../src/view/settingsDlgGtk.cpp:105
+#: ../src/View/Gtk/Settings.cpp:111
 msgid "custom resolution: "
 msgstr "vlastní rozlišení: "
 
-#: ../src/view/settingsDlgGtk.cpp:106
+#: ../src/View/Gtk/Settings.cpp:112
 msgid "font color"
 msgstr "barva písma"
 
-#: ../src/view/settingsDlgGtk.cpp:106
+#: ../src/View/Gtk/Settings.cpp:112
 msgid "background"
 msgstr "pozadí"
 
-#: ../src/view/settingsDlgGtk.cpp:107
+#: ../src/View/Gtk/Settings.cpp:113
 msgid "normal:"
 msgstr "normální:"
 
-#: ../src/view/settingsDlgGtk.cpp:107
+#: ../src/View/Gtk/Settings.cpp:113
 msgid "highlight:"
 msgstr "zvýraznění:"
 
-#: ../src/view/settingsDlgGtk.cpp:108
+#: ../src/View/Gtk/Settings.cpp:114
 msgid "menu colors"
 msgstr "barvy menu"
 
-#: ../src/view/settingsDlgGtk.cpp:108
+#: ../src/View/Gtk/Settings.cpp:114
 msgid "background image"
 msgstr "obrázek na pozadí"
 
-#: ../src/view/settingsDlgGtk.cpp:110
+#: ../src/View/Gtk/Settings.cpp:116
 msgid ""
 "To get the colors above working,\n"
 "you have to select a background image!"
@@ -521,51 +614,70 @@ msgstr ""
 "Aby se barvy uvedené výše použily,\n"
 "musíte vybrat obrázek na pozadí!"
 
-#: ../src/view/settingsDlgGtk.cpp:111
-msgid "_Font"
-msgstr ""
-
-#: ../src/view/settingsDlgGtk.cpp:113
+#: ../src/View/Gtk/Settings.cpp:119
 msgid "settings"
 msgstr "nastavení"
 
-#: ../src/view/settingsDlgGtk.cpp:117
+#: ../src/View/Gtk/Settings.cpp:123
 msgid "_General"
 msgstr "_Obecné"
 
-#: ../src/view/settingsDlgGtk.cpp:118
+#: ../src/View/Gtk/Settings.cpp:124
 msgid "A_ppearance"
 msgstr "_Vzhled"
 
-#: ../src/view/settingsDlgGtk.cpp:119
+#: ../src/View/Gtk/Settings.cpp:125
 msgid "_Advanced"
 msgstr "_Pokročilé"
 
-#: ../src/view/settingsDlgGtk.cpp:134
+#: ../src/View/Gtk/Settings.cpp:138
+msgid "is active"
+msgstr "je aktivní"
+
+#: ../src/View/Gtk/Settings.cpp:139
+msgid "name"
+msgstr "jméno"
+
+#: ../src/View/Gtk/Settings.cpp:140
 msgid "value"
 msgstr "hodnota"
 
-#: ../src/view/settingsDlgGtk.cpp:209 ../src/view/settingsDlgGtk.cpp:345
-#: ../src/view/settingsDlgGtk.cpp:693
-msgid "saved"
-msgstr ""
-
-#: ../src/view/settingsDlgGtk.cpp:239
+#: ../src/View/Gtk/Settings.cpp:245
 msgid "remove font"
 msgstr ""
 
-#: ../src/view/settingsDlgGtk.cpp:263
+#: ../src/View/Gtk/Settings.cpp:269
 msgid "remove background"
 msgstr "odstranit pozadí"
 
-#: ../src/view/settingsDlgGtk.cpp:323
+#: ../src/View/Gtk/Settings.cpp:340
 msgid "Entry %1 (by position)"
 msgstr "Vstup% 1 (dle pozice)"
 
-#: ../src/view/settingsDlgGtk.cpp:627
+#: ../src/View/Gtk/Settings.cpp:642
 msgid ""
 "This option doesn't work when the \"os-prober\" script finds other operating "
 "systems. Disable \"%1\" if you don't need to boot other operating systems."
 msgstr ""
 "Tato volba nefunguje, když skript \"os-prober\" nalezne jíné operační "
 "systémy. Vypněte \"%1\", pokud nepotřebujete zavádět jiné operační systémy"
+
+#: ../src/View/Gtk/Trash.cpp:22
+msgid "Add entry from trash"
+msgstr ""
+
+#: ../src/View/Gtk/Trash.cpp:41
+msgid "Delete custom entries"
+msgstr ""
+
+#: ../src/View/Gtk/Trash.cpp:92
+msgid "type: "
+msgstr ""
+
+#: ../src/View/Gtk/Trash.cpp:109
+msgid "This deletes the following entries:"
+msgstr ""
+
+#: ../src/View/Gtk/Element/PartitionChooser.cpp:30
+msgid "current"
+msgstr ""
