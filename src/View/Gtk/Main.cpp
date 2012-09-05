@@ -236,6 +236,7 @@ View_Gtk_Main::View_Gtk_Main()
 
 	win.signal_delete_event().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_delete_event));
 
+	notebook.signal_switch_page().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_tab_changed));
 }
 
 void View_Gtk_Main::setEventListener(MainController& eventListener) {
@@ -299,6 +300,12 @@ void View_Gtk_Main::signal_revert() {
 void View_Gtk_Main::signal_reload_recommendation_response(int response_id) {
 	if (response_id == Gtk::RESPONSE_APPLY) {
 		this->eventListener->reloadAction();
+	}
+}
+
+void View_Gtk_Main::signal_tab_changed(GtkNotebookPage* page, guint page_num) {
+	if (this->eventListener && this->lock_state == 0) { // this->eventListener must be called because this event may be propagated from bootstrap
+		this->eventListener->refreshTabAction(page_num);
 	}
 }
 

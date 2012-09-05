@@ -464,6 +464,7 @@ void MainControllerImpl::exitAction(bool force){
 	this->logActionBegin("exit");
 	try {
 		if (force){
+			this->view->setLockState(~0);
 			if (this->mountTable->getEntryByMountpoint(PARTCHOOSER_MOUNTPOINT))
 				this->mountTable->umountAll(PARTCHOOSER_MOUNTPOINT);
 			this->getThreadController().stopApplication();
@@ -879,6 +880,18 @@ void MainControllerImpl::selectRuleAction(void* rule, bool startEdit) {
 	this->logActionBegin("select-rule");
 	try {
 		this->view->selectRule(rule, startEdit);
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
+	this->logActionEnd();
+}
+
+void MainControllerImpl::refreshTabAction(unsigned int pos) {
+	this->logActionBegin("refresh-tab");
+	try {
+		if (pos != 0) { // list
+			this->getAllControllers().settingsController->syncAction();
+		}
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}

@@ -145,6 +145,7 @@ public:
 	void showReloadRecommendationAction();
 	void selectRulesAction(std::list<void*> rules);
 	void selectRuleAction(void* rule, bool startEdit = false);
+	void refreshTabAction(unsigned int pos);
 };
 
 #endif
