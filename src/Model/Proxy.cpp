@@ -699,11 +699,12 @@ bool Model_Proxy::hasVisibleRules(Model_Rule const* parent) const {
 	std::list<Model_Rule> const& list = parent ? parent->subRules : this->rules;
 	for (std::list<Model_Rule>::const_iterator iter = list.begin(); iter != list.end(); iter++) {
 		if (iter->isVisible) {
-			return true;
-		}
-		if (iter->type == Model_Rule::SUBMENU) {
-			bool has = this->hasVisibleRules(&*iter);
-			if (has) {
+			if (iter->type == Model_Rule::SUBMENU) {
+				bool has = this->hasVisibleRules(&*iter);
+				if (has) {
+					return true;
+				}
+			} else {
 				return true;
 			}
 		}
