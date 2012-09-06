@@ -58,7 +58,7 @@ bool Model_Proxylist::proxyRequired(Model_Script const& script) const {
 
 void Model_Proxylist::deleteAllProxyscriptFiles(){
 	for (Model_Proxylist::iterator iter = this->begin(); iter != this->end(); iter++){
-		if (iter->dataSource && iter->dataSource->fileName != iter->fileName){
+		if (iter->fileName != "" && iter->dataSource && iter->dataSource->fileName != iter->fileName){
 			iter->deleteFile();
 		}
 	}
@@ -92,7 +92,9 @@ void Model_Proxylist::deleteProxy(Model_Proxy* proxyPointer){
 
 void Model_Proxylist::clearTrash(){
 	for (std::list<Model_Proxy>::iterator iter = this->trash.begin(); iter != this->trash.end(); iter++){
-		iter->deleteFile();
+		if (iter->fileName != "") {
+			iter->deleteFile();
+		}
 	}
 }
 

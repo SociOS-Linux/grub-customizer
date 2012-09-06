@@ -27,6 +27,7 @@
 #include "EntryPathBuilderImpl.h"
 #include "../lib/Exception.h"
 #include "../lib/ArrayStructure.h"
+#include "ProxyScriptData.h"
 
 struct Model_Proxy {
 	std::list<Model_Rule> rules;

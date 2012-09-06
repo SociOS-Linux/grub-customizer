@@ -331,6 +331,7 @@ bool Model_Proxy::isModified(Model_Rule const* parentRule, Model_Entry const* pa
 }
 
 bool Model_Proxy::deleteFile(){
+	assert(Model_ProxyScriptData::is_proxyscript(this->fileName));
 	int success = unlink(this->fileName.c_str());
 	if (success == 0){
 		this->fileName = "";
