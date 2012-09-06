@@ -24,6 +24,7 @@
  */
 
 #include "Exception.h"
+#include <cstdio>
 
 # define ASSERT_VOID_CAST static_cast<void>
 
@@ -34,5 +35,6 @@ void assert_fail(std::string const& expr, std::string const& file, int line, std
    ? ASSERT_VOID_CAST (0)						\
    : assert_fail (__STRING(expr), __FILE__, __LINE__, __func__))
 
+void assert_filepath_empty(std::string const& filepath, std::string const& sourceCodeFile, int line);
 
 #endif /* ASSERT_H_ */

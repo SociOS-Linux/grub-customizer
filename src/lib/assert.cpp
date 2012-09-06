@@ -21,3 +21,11 @@
 void assert_fail(std::string const& expr, std::string const& file, int line, std::string const& func) {
 	throw AssertException("Assertion `" + expr + "' failed. Function: " + func, file, line);
 }
+
+void assert_filepath_empty(std::string const& filepath, std::string const& sourceCodeFile, int line) {
+	FILE* file = fopen(filepath.c_str(), "r");
+	if (file) {
+		fclose(file);
+		throw AssertException("found unexpected file on path: " + filepath, sourceCodeFile, line);
+	}
+}

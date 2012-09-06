@@ -67,6 +67,7 @@ bool Model_ListCfg::createScriptForwarder(std::string const& scriptName) const {
 	std::string outputFilePath = this->env.cfg_dir+"/LS_"+scriptNameNoPath;
 	FILE* existingScript = fopen(outputFilePath.c_str(), "r");
 	if (existingScript == NULL){
+		assert_filepath_empty(outputFilePath, __FILE__, __LINE__);
 		FILE* fwdScript = fopen(outputFilePath.c_str(), "w");
 		if (fwdScript){
 			fputs("#!/bin/sh\n", fwdScript);
@@ -910,7 +911,9 @@ void Model_ListCfg::cleanupCfgDir(){
 		//remove the DS_ prefix  (DS_10_foo -> 10_foo)
 		for (std::list<std::string>::iterator iter = dsfiles.begin(); iter != dsfiles.end(); iter++) {
 			this->log("renaming " + *iter, Logger::EVENT);
-			rename((this->env.cfg_dir+"/"+(*iter)).c_str(), (this->env.cfg_dir+"/"+iter->substr(3)).c_str());
+			std::string newPath = this->env.cfg_dir+"/"+iter->substr(3);
+			assert_filepath_empty(newPath, __FILE__, __LINE__);
+			rename((this->env.cfg_dir+"/"+(*iter)).c_str(), newPath.c_str());
 		}
 
 		//remove the PS_ prefix and add index prefix (PS_foo -> 10_foo)
@@ -919,7 +922,9 @@ void Model_ListCfg::cleanupCfgDir(){
 			this->log("renaming " + *iter, Logger::EVENT);
 			std::string out = *iter;
 			out.replace(0, 2, (std::string("") + char('0' + (i/10)%10) + char('0' + i%10)));
-			rename((this->env.cfg_dir+"/"+(*iter)).c_str(), (this->env.cfg_dir+"/"+out).c_str());
+			std::string newPath = this->env.cfg_dir+"/"+out;
+			assert_filepath_empty(newPath, __FILE__, __LINE__);
+			rename((this->env.cfg_dir+"/"+(*iter)).c_str(), newPath.c_str());
 			i++;
 		}
 	}

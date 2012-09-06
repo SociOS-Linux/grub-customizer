@@ -114,6 +114,7 @@ void Model_Repository::deleteAllEntries(){
 }
 
 Model_Script* Model_Repository::createScript(std::string const& name, std::string const& fileName, std::string const& content) {
+	assert_filepath_empty(fileName, __FILE__, __LINE__);
 	FILE* script = fopen(fileName.c_str(), "w");
 	if (script) {
 		fputs(content.c_str(), script);
@@ -127,6 +128,7 @@ Model_Script* Model_Repository::createScript(std::string const& name, std::strin
 }
 
 void Model_Repository::createScript(Model_Script const& script, std::string const& content) {
+	assert_filepath_empty(script.fileName, __FILE__, __LINE__);
 	FILE* scriptFile = fopen(script.fileName.c_str(), "w");
 	if (scriptFile) {
 		fputs(content.c_str(), scriptFile);
