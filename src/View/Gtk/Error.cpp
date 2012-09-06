@@ -27,7 +27,7 @@ void View_Gtk_Error::setEventListener(ErrorController& eventListener) {
 }
 
 void View_Gtk_Error::showErrorMessage(std::string const& errorMessage, bool allowContinue) {
-	Gtk::MessageDialog msgDlg("An error occurred", false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_NONE, true);
+	Gtk::MessageDialog msgDlg(gettext("An error occurred"), false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_NONE, true);
 	msgDlg.set_secondary_text(gettext("please Inform the author about this problem. The following information could be helpful:") + std::string("\n\n") + errorMessage);
 	msgDlg.set_title(gettext("An error occurred"));
 	msgDlg.add_button(Gtk::Stock::QUIT, Gtk::RESPONSE_CLOSE);
