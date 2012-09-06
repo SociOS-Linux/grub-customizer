@@ -366,6 +366,7 @@ void Model_ListCfg::save(){
 		else {
 			if (relatedProxies.size() == 1){
 				script_iter->moveFile(scriptTargetMap[&*script_iter], relatedProxies.front()->permissions);
+				relatedProxies.front()->fileName = script_iter->fileName; // update filename
 			}
 			else {
 				this->log("GrublistCfg::save: cannot move proxy… only one expected!", Logger::ERROR);
