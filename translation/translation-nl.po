@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-08-30 22:28+0200\n"
-"PO-Revision-Date: 2012-08-30 21:30+0000\n"
+"PO-Revision-Date: 2012-09-07 19:02+0000\n"
 "Last-Translator: rob <linuxned@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-09-06 21:24+0000\n"
-"X-Generator: Launchpad (build 15909)\n"
+"X-Launchpad-Export-Date: 2012-09-07 19:12+0000\n"
+"X-Generator: Launchpad (build 15914)\n"
 
 #: ../src/Controller/MainControllerImpl.cpp:533
 msgid "Name the Entry"
@@ -35,11 +35,11 @@ msgstr "configuratie bijwerken"
 
 #: ../src/main/gtk-client.cpp:229
 msgid "Linux"
-msgstr ""
+msgstr "Linux"
 
 #: ../src/main/gtk-client.cpp:230
 msgid "Linux-ISO"
-msgstr ""
+msgstr "Linux-ISO"
 
 #: ../src/main/gtk-client.cpp:231
 msgid "Chainloader"
@@ -58,7 +58,7 @@ msgstr ""
 
 #: ../src/View/Gtk/EntryEditor.cpp:22 ../src/View/Gtk/EnvEditor.cpp:23
 msgid "_Type:"
-msgstr ""
+msgstr "_Type:"
 
 #: ../src/View/Gtk/EntryEditor.cpp:28
 msgid "Entry editor"
@@ -66,15 +66,15 @@ msgstr ""
 
 #: ../src/View/Gtk/EntryEditor.cpp:34
 msgid "Options"
-msgstr ""
+msgstr "Opties"
 
 #: ../src/View/Gtk/EntryEditor.cpp:35
 msgid "Source"
-msgstr ""
+msgstr "Bron"
 
 #: ../src/View/Gtk/EntryEditor.cpp:62
 msgid "_Partition"
-msgstr ""
+msgstr "_Partitie"
 
 #: ../src/View/Gtk/EntryEditor.cpp:64
 msgid "_Initial ramdisk"
@@ -82,7 +82,7 @@ msgstr ""
 
 #: ../src/View/Gtk/EntryEditor.cpp:66
 msgid "_Linux image"
-msgstr ""
+msgstr "_Linux-imagebestand"
 
 #: ../src/View/Gtk/EntryEditor.cpp:68
 msgid "_Memtest image"
@@ -90,7 +90,7 @@ msgstr ""
 
 #: ../src/View/Gtk/EntryEditor.cpp:70
 msgid "Path to iso file"
-msgstr ""
+msgstr "Pad naar ISO-bestand"
 
 #: ../src/View/Gtk/EntryEditor.cpp:72
 msgid "Locale"
@@ -103,11 +103,11 @@ msgstr ""
 #: ../src/View/Gtk/EntryEditor.cpp:177 ../src/View/Gtk/EntryEditor.cpp:183
 #: ../src/View/Gtk/EntryEditor.cpp:217
 msgid "Other"
-msgstr ""
+msgstr "Anders"
 
 #: ../src/View/Gtk/EnvEditor.cpp:22
 msgid "_Partition:"
-msgstr ""
+msgstr "_Partitie:"
 
 #: ../src/View/Gtk/EnvEditor.cpp:23
 msgid "Submountpoints:"
@@ -115,15 +115,15 @@ msgstr ""
 
 #: ../src/View/Gtk/EnvEditor.cpp:24
 msgid "save this configuration"
-msgstr ""
+msgstr "deze configuratie opslaan"
 
 #: ../src/View/Gtk/EnvEditor.cpp:53
 msgid "Grub 2"
-msgstr ""
+msgstr "Grub 2"
 
 #: ../src/View/Gtk/EnvEditor.cpp:54
 msgid "BURG"
-msgstr ""
+msgstr "BURG"
 
 #: ../src/View/Gtk/EnvEditor.cpp:216
 msgid "Mount failed!"
@@ -153,7 +153,7 @@ msgstr ""
 
 #: ../src/View/Gtk/Error.cpp:32
 msgid "An error occurred"
-msgstr ""
+msgstr "Er is een fout opgetreden"
 
 #: ../src/View/Gtk/Error.cpp:35
 msgid "continue (risk data loss)"
@@ -219,7 +219,7 @@ msgstr "BURG gevonden!"
 
 #: ../src/View/Gtk/Main.cpp:42
 msgid "advanced settings"
-msgstr ""
+msgstr "geavanceerde instellingen"
 
 #: ../src/View/Gtk/Main.cpp:44
 msgid ""
@@ -240,7 +240,7 @@ msgstr ""
 
 #: ../src/View/Gtk/Main.cpp:85
 msgid "Trash"
-msgstr ""
+msgstr "Prullenbak"
 
 #: ../src/View/Gtk/Main.cpp:94
 msgid "Move up the selected entry or script"
@@ -272,23 +272,23 @@ msgstr ""
 
 #: ../src/View/Gtk/Main.cpp:162
 msgid "Rename"
-msgstr ""
+msgstr "Hernoemen"
 
 #: ../src/View/Gtk/Main.cpp:163 ../src/View/Gtk/Main.cpp:164
 msgid "Move up"
-msgstr ""
+msgstr "Omhoog verplaatsen"
 
 #: ../src/View/Gtk/Main.cpp:165 ../src/View/Gtk/Main.cpp:166
 msgid "Move down"
-msgstr ""
+msgstr "Omlaag verplaatsen"
 
 #: ../src/View/Gtk/Main.cpp:167 ../src/View/Gtk/Main.cpp:168
 msgid "Remove from submenu"
-msgstr ""
+msgstr "Uit submenu verwijderen"
 
 #: ../src/View/Gtk/Main.cpp:169 ../src/View/Gtk/Main.cpp:170
 msgid "Create submenu"
-msgstr ""
+msgstr "Submenu aanmaken"
 
 #: ../src/View/Gtk/Main.cpp:177
 msgid "_Change Environment …"
@@ -300,11 +300,11 @@ msgstr "Wilt u BURG configureren in plaats van grub2?"
 
 #: ../src/View/Gtk/Main.cpp:248
 msgid "_General settings"
-msgstr ""
+msgstr "Al_gemene instellingen"
 
 #: ../src/View/Gtk/Main.cpp:253
 msgid "_Appearance settings"
-msgstr ""
+msgstr "_Weergave-instellingen"
 
 #: ../src/View/Gtk/Main.cpp:266
 msgid "BURG Mode"
@@ -316,7 +316,7 @@ msgstr "Sla configuratie op en genereer nieuwe "
 
 #: ../src/View/Gtk/Main.cpp:291
 msgid "Are you sure?"
-msgstr ""
+msgstr "Weet u het zeker?"
 
 #: ../src/View/Gtk/Main.cpp:292
 msgid "This removes all your list modifications of the bootloader menu!"
@@ -328,11 +328,11 @@ msgstr "configuratie wordt geladen…"
 
 #: ../src/View/Gtk/Main.cpp:354
 msgid "loading script %2/%3 (%1)"
-msgstr ""
+msgstr "Script %2/%3 (%1) laden"
 
 #: ../src/View/Gtk/Main.cpp:373
 msgid "submenu"
-msgstr ""
+msgstr "submenu"
 
 #: ../src/View/Gtk/Main.cpp:376 ../src/View/Gtk/Trash.cpp:92
 msgid "placeholder"
@@ -340,19 +340,19 @@ msgstr ""
 
 #: ../src/View/Gtk/Main.cpp:379 ../src/View/Gtk/Trash.cpp:92
 msgid "menuentry"
-msgstr ""
+msgstr "menu-invoer"
 
 #: ../src/View/Gtk/Main.cpp:383 ../src/View/Gtk/Trash.cpp:92
 msgid "script: "
-msgstr ""
+msgstr "script: "
 
 #: ../src/View/Gtk/Main.cpp:387
 msgid "default name: "
-msgstr ""
+msgstr "standaardnaam: "
 
 #: ../src/View/Gtk/Main.cpp:391
 msgid "Partition: "
-msgstr ""
+msgstr "Partitie: "
 
 #: ../src/View/Gtk/Main.cpp:415
 msgid "Proxy binary not found!"
@@ -393,7 +393,7 @@ msgstr ""
 
 #: ../src/View/Gtk/Main.cpp:636
 msgid "Trash (%1)"
-msgstr ""
+msgstr "Prullenbak (%1)"
 
 #: ../src/View/Gtk/Main.cpp:649
 msgid ""
@@ -463,11 +463,11 @@ msgstr ""
 
 #: ../src/View/Gtk/Main.cpp:854
 msgid "Environment settings"
-msgstr ""
+msgstr "Omgevingsinstellingen"
 
 #: ../src/View/Gtk/Main.cpp:866
 msgid "Do you want to proceed without saving the current configuration?"
-msgstr ""
+msgstr "Wilt u doorgaan zonder de huidige configuratie op te slaan?"
 
 #: ../src/View/Gtk/Main.cpp:867
 msgid "There are unsaved modifications!"
@@ -676,7 +676,7 @@ msgstr ""
 
 #: ../src/View/Gtk/Trash.cpp:92
 msgid "type: "
-msgstr ""
+msgstr "type: "
 
 #: ../src/View/Gtk/Trash.cpp:109
 msgid "This deletes the following entries:"
@@ -684,4 +684,4 @@ msgstr ""
 
 #: ../src/View/Gtk/Element/PartitionChooser.cpp:30
 msgid "current"
-msgstr ""
+msgstr "huidige"
