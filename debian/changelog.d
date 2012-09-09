@@ -1,5 +1,11 @@
 #!/bin/sh
 cat << EOF
+grub-customizer (3.0.1-0ubuntu1~ppa1$1) $2; urgency=medium
+
+   * new upstream release
+
+ -- Daniel Richter <danielrichter2007@web.de>  Sat, 08 Sep 2012 11:34:47 +0200
+
 grub-customizer (3.0-0ubuntu1~ppa2$1) $2; urgency=low
 
    * problems when using old gtkmm versions - patched
