@@ -396,7 +396,7 @@ void MainControllerImpl::_rAppendRule(Model_Rule& rule, Model_Rule* parentRule){
 					if (options.find("partition_uuid") != options.end()) {
 						// add device path
 						for (Model_DeviceDataListInterface::const_iterator iter = deviceDataList->begin(); iter != deviceDataList->end(); iter++) {
-							if (iter->second.at("UUID") == options["partition_uuid"]) {
+							if (iter->second.find("UUID") != iter->second.end() && iter->second.at("UUID") == options["partition_uuid"]) {
 								options["_deviceName"] = iter->first;
 								break;
 							}
