@@ -63,9 +63,7 @@ class MainControllerImpl : public ControllerAbstract, public MainController {
 	Mapper_EntryName* entryNameMapper;
 
 	bool config_has_been_different_on_startup_but_unsaved;
-	bool quit_requested;
 	bool is_loading;
-	int activeThreadCount;
 	CmdExecException thrownException; //to be used from the die() function
 
 	void _rAppendRule(Model_Rule& rule, Model_Rule* parentRule = NULL);
@@ -73,7 +71,6 @@ class MainControllerImpl : public ControllerAbstract, public MainController {
 	bool _listHasCurrentSystemRules(std::list<void*> const& rules);
 
 public:
-	bool modificationsUnsaved;
 	void setListCfg(Model_ListCfg& grublistCfg);
 	void setView(View_Main& listCfgDlg);
 	void setSettingsDialog(View_Settings& settingsDlg);

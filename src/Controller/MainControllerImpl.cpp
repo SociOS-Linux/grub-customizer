@@ -26,7 +26,6 @@ MainControllerImpl::MainControllerImpl(Model_Env& env)
 	  fbResolutionsGetter(NULL), deviceDataList(NULL),
 	  mountTable(NULL),
 	 env(env), config_has_been_different_on_startup_but_unsaved(false),
-	 modificationsUnsaved(false), quit_requested(false), activeThreadCount(0),
 	 is_loading(false), contentParserFactory(NULL), currentContentParser(NULL),
 	 threadController(NULL), thrownException(""),
 	 entryNameMapper(NULL)
@@ -230,7 +229,7 @@ void MainControllerImpl::loadThreadedAction(bool preserveConfig){
 		if (!is_loading){ //allow only one load thread at the same time!
 			this->log(std::string("loading - preserveConfig: ") + (preserveConfig ? "yes" : "no"), Logger::IMPORTANT_EVENT);
 			is_loading = true;
-			this->activeThreadCount++;
+			this->env.activeThreadCount++;
 	
 			if (!preserveConfig){
 				this->log("unsetting saved config", Logger::EVENT);
@@ -270,7 +269,7 @@ void MainControllerImpl::loadThreadedAction(bool preserveConfig){
 				this->log("restoring settings", Logger::IMPORTANT_EVENT);
 				this->settingsOnDisk->save();
 			}
-			this->activeThreadCount--;
+			this->env.activeThreadCount--;
 			this->is_loading = false;
 		} else {
 			this->log("ignoring load request (only one load thread allowed at the same time)", Logger::WARNING);
@@ -285,10 +284,10 @@ void MainControllerImpl::saveAction(){
 	this->logActionBegin("save");
 	try {
 		this->config_has_been_different_on_startup_but_unsaved = false;
-		this->modificationsUnsaved = false; //deprecated
+		this->env.modificationsUnsaved = false; //deprecated
 
 		this->view->setLockState(1|4|8);
-		this->activeThreadCount++; //not in save_thead() to be faster set
+		this->env.activeThreadCount++; //not in save_thead() to be faster set
 		this->getThreadController().startSaveThread();
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
@@ -306,7 +305,7 @@ void MainControllerImpl::saveThreadedAction(){
 		}
 		this->log("writing grub list configuration", Logger::IMPORTANT_EVENT);
 		this->grublistCfg->save();
-		this->activeThreadCount--;
+		this->env.activeThreadCount--;
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorThreadedAction(e);
 	}
@@ -444,7 +443,7 @@ void MainControllerImpl::dieAction(){
 	this->logActionBegin("die");
 	try {
 		this->is_loading = false;
-		this->activeThreadCount = 0;
+		this->env.activeThreadCount = 0;
 		bool showEnvSettings = false;
 		if (this->thrownException){
 			showEnvSettings = this->view->askForEnvironmentSettings(this->env.mkconfig_cmd, this->grublistCfg->getGrubErrorMessage());
@@ -470,14 +469,14 @@ void MainControllerImpl::exitAction(bool force){
 			this->getThreadController().stopApplication();
 		}
 		else {
-			int dlgResponse = this->view->showExitConfirmDialog(this->config_has_been_different_on_startup_but_unsaved*2 + this->modificationsUnsaved);
+			int dlgResponse = this->view->showExitConfirmDialog(this->config_has_been_different_on_startup_but_unsaved*2 + this->env.modificationsUnsaved);
 			if (dlgResponse == 1){
 				this->saveAction(); //starts a thread that delays the application exiting
 			}
 
 			if (dlgResponse != 0){
-				if (this->activeThreadCount != 0){
-					this->quit_requested = true;
+				if (this->env.activeThreadCount != 0){
+					this->env.quit_requested = true;
 					this->grublistCfg->cancelThreads();
 				}
 				else {
@@ -514,7 +513,7 @@ void MainControllerImpl::removeRulesAction(std::list<void*> rules, bool force){
 			}
 
 			this->syncLoadStateAction();
-			this->modificationsUnsaved = true;
+			this->env.modificationsUnsaved = true;
 			this->getAllControllers().settingsController->updateSettingsDataAction();
 		}
 	} catch (Exception const& e) {
@@ -537,7 +536,7 @@ void MainControllerImpl::renameRuleAction(void* entry, std::string const& newTex
 		else {
 			this->renameEntry(entry2, newText);
 		}
-		this->modificationsUnsaved = true;
+		this->env.modificationsUnsaved = true;
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
@@ -585,7 +584,7 @@ void MainControllerImpl::moveAction(std::list<void*> rules, int direction){
 
 			this->syncLoadStateAction();
 			this->view->selectRules(movedRules);
-			this->modificationsUnsaved = true;
+			this->env.modificationsUnsaved = true;
 		} catch (NoMoveTargetException const& e) {
 			this->view->showErrorMessage(gettext("cannot move this entry"));
 		}
@@ -663,6 +662,7 @@ void MainControllerImpl::revertAction() {
 		}
 		this->grublistCfg->proxies.sort();
 		this->syncLoadStateAction();
+		this->env.modificationsUnsaved = true;
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
@@ -719,7 +719,7 @@ void MainControllerImpl::syncSaveStateAction(){
 				this->view->showProxyNotFoundMessage();
 				this->grublistCfg->error_proxy_not_found = false;
 			}
-			if (this->quit_requested)
+			if (this->env.quit_requested)
 				this->exitAction(true);
 
 			this->view->setLockState(0);
@@ -749,7 +749,7 @@ void MainControllerImpl::syncLoadStateAction() {
 			this->view->setProgress(progress);
 			this->view->setStatusText(this->grublistCfg->getProgress_name(), this->grublistCfg->getProgress_pos(), this->grublistCfg->getProgress_max());
 		} else {
-			if (this->quit_requested) {
+			if (this->env.quit_requested) {
 				this->exitAction(true);
 			}
 			this->view->hideProgressBar();
@@ -788,7 +788,7 @@ void MainControllerImpl::showSettingsAction() {
 void MainControllerImpl::showEnvEditorAction(bool resetPartitionChooser) {
 	this->logActionBegin("show-env-editor");
 	try {
-		if (this->modificationsUnsaved) {
+		if (this->env.modificationsUnsaved) {
 			bool proceed = this->view->confirmUnsavedSwitch();
 			if (!proceed) {
 				return;
@@ -837,7 +837,7 @@ void MainControllerImpl::addEntriesAction(std::list<void*> entries) {
 
 		this->view->selectRules(addedRules);
 
-		this->modificationsUnsaved = true;
+		this->env.modificationsUnsaved = true;
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
