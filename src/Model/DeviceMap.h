@@ -22,6 +22,7 @@
 #include "Env.h"
 #include "../lib/regex.h"
 #include <map>
+#include <unistd.h>
 
 struct Model_DeviceMap_PartitionIndex {
 	std::string hddNum, partNum;
