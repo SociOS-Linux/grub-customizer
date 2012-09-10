@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-08-30 22:28+0200\n"
-"PO-Revision-Date: 2012-09-04 17:55+0000\n"
-"Last-Translator: Bernardo Miguel Savone <Unknown>\n"
+"PO-Revision-Date: 2012-09-08 05:48+0000\n"
+"Last-Translator: Costeelation <costeelation@hotmail.com>\n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-09-07 19:12+0000\n"
-"X-Generator: Launchpad (build 15914)\n"
+"X-Launchpad-Export-Date: 2012-09-10 18:16+0000\n"
+"X-Generator: Launchpad (build 15924)\n"
 "X-Poedit-Country: SPAIN\n"
 "X-Poedit-Language: Spanish\n"
 
@@ -72,7 +72,7 @@ msgstr "Opciones"
 
 #: ../src/View/Gtk/EntryEditor.cpp:35
 msgid "Source"
-msgstr "Origen"
+msgstr "Fuente"
 
 #: ../src/View/Gtk/EntryEditor.cpp:62
 msgid "_Partition"
@@ -307,7 +307,7 @@ msgstr "¿Quiere configurar BURG en lugar de grub2?"
 
 #: ../src/View/Gtk/Main.cpp:248
 msgid "_General settings"
-msgstr "_Configuración general"
+msgstr "_Configuración General"
 
 #: ../src/View/Gtk/Main.cpp:253
 msgid "_Appearance settings"
@@ -348,7 +348,7 @@ msgstr "marcador"
 
 #: ../src/View/Gtk/Main.cpp:379 ../src/View/Gtk/Trash.cpp:92
 msgid "menuentry"
-msgstr "entrada de menu"
+msgstr "entrada de menú"
 
 #: ../src/View/Gtk/Main.cpp:383 ../src/View/Gtk/Trash.cpp:92
 msgid "script: "
@@ -364,7 +364,7 @@ msgstr "Partición: "
 
 #: ../src/View/Gtk/Main.cpp:415
 msgid "Proxy binary not found!"
-msgstr "Proxy binario no encontrado"
+msgstr "Proxy binario no encontrado!"
 
 #: ../src/View/Gtk/Main.cpp:416
 msgid ""
@@ -377,11 +377,11 @@ msgstr ""
 
 #: ../src/View/Gtk/Main.cpp:422
 msgid "(incoming Entries of %1, Script: %2)"
-msgstr "(entradas recibidas de %1, Script: %2)"
+msgstr "(Entradas recibidas de %1, Script: %2)"
 
 #: ../src/View/Gtk/Main.cpp:424
 msgid "(incoming Entries of %1)"
-msgstr "(entradas recibidas de %1)"
+msgstr "(Entradas recibidas de %1)"
 
 #: ../src/View/Gtk/Main.cpp:426
 msgid "(incoming Entries of Script: %1)"
@@ -389,7 +389,7 @@ msgstr "(entradas recibidas de Script: %1)"
 
 #: ../src/View/Gtk/Main.cpp:428
 msgid "(incoming Entries)"
-msgstr "(entradas recibidas)"
+msgstr "(Entradas recibidas)"
 
 #: ../src/View/Gtk/Main.cpp:434
 msgid "(script code)"
@@ -408,8 +408,8 @@ msgid ""
 "Removing Script Code can cause problems when trying to boot entries relying "
 "on it. Are you sure you want to do it anyway?"
 msgstr ""
-"Quitar código script puede causar problemas al tratar de arrancar las "
-"entradas que dependen de ello. ¿Seguro que quieres hacerlo de todos modos?"
+"Quitar código Script puede causar problemas al tratar de arrancar las "
+"entradas que dependen de ello. ¿Seguro que quiere hacerlo de todos modos?"
 
 #: ../src/View/Gtk/Main.cpp:657
 msgid ""
@@ -447,7 +447,7 @@ msgstr "_Salir sin actualizar"
 
 #: ../src/View/Gtk/Main.cpp:786
 msgid "_Update & Quit"
-msgstr "_Actualizar y salir"
+msgstr "_Actualizar y Salir"
 
 #: ../src/View/Gtk/Main.cpp:790
 msgid "Do you want to save your modifications?"
@@ -459,7 +459,7 @@ msgstr "_Salir sin guardar"
 
 #: ../src/View/Gtk/Main.cpp:796
 msgid "_Save & Quit"
-msgstr "_Guardar y salir"
+msgstr "_Guardar y Salir"
 
 #: ../src/View/Gtk/Main.cpp:799
 msgid "AND: your modifications are still unsaved, update will save them too!"
@@ -633,7 +633,7 @@ msgstr ""
 
 #: ../src/View/Gtk/Settings.cpp:119
 msgid "settings"
-msgstr "configuración"
+msgstr "configuraciones"
 
 #: ../src/View/Gtk/Settings.cpp:123
 msgid "_General"
@@ -649,7 +649,7 @@ msgstr "_Avanzado"
 
 #: ../src/View/Gtk/Settings.cpp:138
 msgid "is active"
-msgstr "activa"
+msgstr "activo"
 
 #: ../src/View/Gtk/Settings.cpp:139
 msgid "name"
@@ -661,7 +661,7 @@ msgstr "valor"
 
 #: ../src/View/Gtk/Settings.cpp:245
 msgid "remove font"
-msgstr "Remover tipografia"
+msgstr "Remover tipografía"
 
 #: ../src/View/Gtk/Settings.cpp:269
 msgid "remove background"

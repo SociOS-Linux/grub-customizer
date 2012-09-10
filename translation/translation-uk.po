@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-08-30 22:28+0200\n"
-"PO-Revision-Date: 2012-09-03 18:01+0000\n"
+"PO-Revision-Date: 2012-09-08 14:37+0000\n"
 "Last-Translator: Fedik <Unknown>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-09-07 19:12+0000\n"
-"X-Generator: Launchpad (build 15914)\n"
+"X-Launchpad-Export-Date: 2012-09-10 18:16+0000\n"
+"X-Generator: Launchpad (build 15924)\n"
 
 #: ../src/Controller/MainControllerImpl.cpp:533
 msgid "Name the Entry"
@@ -229,7 +229,7 @@ msgstr ""
 
 #: ../src/View/Gtk/Main.cpp:56
 msgid "_List configuration"
-msgstr "_Список налаштувань"
+msgstr "_Налаштування списку"
 
 #: ../src/View/Gtk/Main.cpp:80
 msgid "Remove selected entries (you can restore them from trash)"
@@ -552,7 +552,7 @@ msgstr "попередньо _визначений: "
 
 #: ../src/View/Gtk/Settings.cpp:107
 msgid "previously _booted entry"
-msgstr "попередній запис _завантаження"
+msgstr "попередній _завантажений запис"
 
 #: ../src/View/Gtk/Settings.cpp:108
 msgid "default entry"
@@ -560,7 +560,7 @@ msgstr "запис за замовчуванням"
 
 #: ../src/View/Gtk/Settings.cpp:108
 msgid "visibility"
-msgstr "відображення"
+msgstr "вигляд"
 
 #: ../src/View/Gtk/Settings.cpp:108
 msgid "show menu"

@@ -1,3 +1,7 @@
+v 3.0.2
+	* crash if blkid prints devices without UUID... fixed
+	* translation updates
+
 v 3.0.1
 	* crash if blkid prints devices without UUID... fixed
 	* compiler problem fixed (new GCCs)

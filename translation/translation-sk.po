@@ -9,14 +9,14 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-08-30 22:28+0200\n"
-"PO-Revision-Date: 2012-09-06 07:46+0000\n"
+"PO-Revision-Date: 2012-09-10 07:24+0000\n"
 "Last-Translator: Ondrej Mosnáček <Unknown>\n"
 "Language-Team: Slovak <sk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-09-07 19:12+0000\n"
-"X-Generator: Launchpad (build 15914)\n"
+"X-Launchpad-Export-Date: 2012-09-10 18:16+0000\n"
+"X-Generator: Launchpad (build 15924)\n"
 
 #: ../src/Controller/MainControllerImpl.cpp:533
 msgid "Name the Entry"
@@ -70,7 +70,7 @@ msgstr "Možnosti"
 
 #: ../src/View/Gtk/EntryEditor.cpp:35
 msgid "Source"
-msgstr "Zdroj"
+msgstr "Zdrojový kód"
 
 #: ../src/View/Gtk/EntryEditor.cpp:62
 msgid "_Partition"
@@ -391,7 +391,7 @@ msgstr "(prebrané položky)"
 
 #: ../src/View/Gtk/Main.cpp:434
 msgid "(script code)"
-msgstr "(script kód)"
+msgstr "(kód skriptu)"
 
 #: ../src/View/Gtk/Main.cpp:436
 msgid "(script code of %1)"
