@@ -347,7 +347,7 @@ void View_Gtk_Settings::addEntryToDefaultEntryChooser(std::string const& labelPa
 
 void View_Gtk_Settings::clearDefaultEntryChooser(){
 	event_lock = true;
-	cbDefEntry.clear();
+	cbDefEntry.remove_all();
 	this->defEntryValueMapping.clear();
 	this->groupDefaultEntry.set_sensitive(false); //if there's no entry to select, disable this area
 	event_lock = false;
@@ -355,7 +355,7 @@ void View_Gtk_Settings::clearDefaultEntryChooser(){
 
 
 void View_Gtk_Settings::clearResolutionChooser(){
-	this->cbResolution.clear();
+	this->cbResolution.remove_all();
 }
 void View_Gtk_Settings::addResolution(std::string const& resolution){
 	this->cbResolution.append(resolution);

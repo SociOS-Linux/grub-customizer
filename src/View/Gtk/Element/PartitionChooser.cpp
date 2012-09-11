@@ -43,7 +43,7 @@ std::string View_Gtk_Element_PartitionChooser::getSelectedUuid() const {
 }
 
 void View_Gtk_Element_PartitionChooser::load(){
-	this->clear();
+	this->remove_all();
 	if (prependCurrentPartition) {
 		this->append(currentPartitionName + "\n(" + gettext("current") + ")");
 		this->set_active(0);
