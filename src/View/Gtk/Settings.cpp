@@ -511,7 +511,7 @@ Glib::RefPtr<Pango::Layout> View_Gtk_Settings::createFormattedText(Cairo::RefPtr
 	Pango::AttrColor fColor = Pango::Attribute::create_attr_foreground(r*255, g*255, b*255);
 	attrList.insert(fColor);
 	Pango::AttrString font = Pango::Attribute::create_attr_family("monospace");
-	if (format == "") {
+	if (format == "" || format == "Normal") {
 		attrList.insert(font);
 	} else {
 		layout->set_font_description(Pango::FontDescription(format));
@@ -537,18 +537,11 @@ void View_Gtk_Settings::redraw(std::string const& menuPicturePath, bool isInGrub
 			Glib::RefPtr<Gdk::Pixbuf> buf = Gdk::Pixbuf::create_from_file(menuPicturePath, drwBackgroundPreview.get_width(), -1, true);
 			if (buf) {
 				Cairo::RefPtr<Cairo::Context> context = cr ? *cr : drwBackgroundPreview.get_window()->create_cairo_context();
-				context->clip();
 
 				drwBackgroundPreview.show();
 				Gdk::Cairo::set_source_pixbuf(context, buf);
-				context->rectangle(0, 0, 20, 20);
+				context->rectangle(0, 0, buf->get_width(), buf->get_height());
 				context->fill();
-//				this->log("drawing completed!", Logger::DEBUG);
-//				this->event_lock = false;
-//				return;
-
-//				GTK2
-//				buf->render_to_drawable(drwBackgroundPreview.get_window(), drwBackgroundPreview.get_style()->get_black_gc(), 0, 0, 0, 0, buf->get_width(), buf->get_height(), Gdk::RGB_DITHER_NONE, 0, 0);
 
 				std::list<Glib::RefPtr<Pango::Layout> > exampleTexts;
 				Pango::Color fg_n = this->gccNormalForeground.getSelectedColorAsPangoObject();
@@ -568,8 +561,8 @@ void View_Gtk_Settings::redraw(std::string const& menuPicturePath, bool isInGrub
 
 				int vpos = 0;
 				for (std::list<Glib::RefPtr<Pango::Layout> >::iterator iter = exampleTexts.begin(); iter != exampleTexts.end(); iter++) {
-//					GTK2
-//					drwBackgroundPreview.get_window()->draw_layout(drwBackgroundPreview.get_style()->get_black_gc(), 0,vpos, *iter);
+					context->move_to(0, vpos);
+					(*iter)->show_in_cairo_context(context);
 					vpos += (*iter)->get_height();
 					int x,y;
 					(*iter)->get_pixel_size(x,y);
@@ -580,13 +573,12 @@ void View_Gtk_Settings::redraw(std::string const& menuPicturePath, bool isInGrub
 			}
 		}
 		catch (Glib::Error const& e){
-//			GTK2
-//			drwBackgroundPreview.get_window()->clear();
-			Cairo::RefPtr<Cairo::Context> context = drwBackgroundPreview.get_window()->create_cairo_context();
-			context->reset_clip();
+			Cairo::RefPtr<Cairo::Context> context = cr ? *cr : drwBackgroundPreview.get_window()->create_cairo_context();
 			Glib::RefPtr<Gdk::Pixbuf> buf = drwBackgroundPreview.render_icon_pixbuf(Gtk::Stock::MISSING_IMAGE, Gtk::ICON_SIZE_DIALOG);
-//			GTK2
-//			buf->render_to_drawable(drwBackgroundPreview.get_window(), drwBackgroundPreview.get_style()->get_black_gc(), 0, 0, 0, 0, buf->get_width(), buf->get_height(), Gdk::RGB_DITHER_NONE, 0, 0);
+
+			Gdk::Cairo::set_source_pixbuf(context, buf);
+			context->rectangle(0, 0, buf->get_width(), buf->get_height());
+			context->fill();
 		}
 
 		bttRemoveBackground.show();
