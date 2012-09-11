@@ -119,7 +119,7 @@ View_Gtk_Settings::View_Gtk_Settings()
 	this->set_title("Grub Customizer - "+Glib::ustring(gettext("settings")));
 	this->set_icon_name("grub-customizer");
 	Gtk::Box* winBox = this->get_vbox();
-	winBox->add(tabbox);
+	winBox->pack_start(tabbox);
 	tabbox.append_page(alignCommonSettings, gettext("_General"), true);
 	tabbox.append_page(vbAppearanceSettings, gettext("A_ppearance"), true);
 	tabbox.append_page(vbAllEntries, gettext("_Advanced"), true);

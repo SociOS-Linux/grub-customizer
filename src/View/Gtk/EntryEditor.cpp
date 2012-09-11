@@ -29,7 +29,7 @@ View_Gtk_EntryEditor::View_Gtk_EntryEditor()
 	this->set_icon_name("grub-customizer");
 
 	Gtk::Box& vbMain = *this->get_vbox();
-	vbMain.add(this->tabbox);
+	vbMain.pack_start(this->tabbox);
 
 	tabbox.append_page(this->scrOptions, gettext("Options"));
 	tabbox.append_page(this->scrSource, gettext("Source"));
