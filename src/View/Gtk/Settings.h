@@ -118,7 +118,7 @@ class View_Gtk_Settings : public Gtk::Dialog, public View_Settings, public Commo
 	Gtk::Alignment alignResolution;
 	Gtk::HBox hbResolution;
 	Gtk::CheckButton chkResolution;
-	Gtk::ComboBoxEntryText cbResolution;
+	Gtk::ComboBoxText cbResolution;
 	
 	//color chooser
 	Gtk::Frame groupColorChooser;
@@ -173,7 +173,7 @@ class View_Gtk_Settings : public Gtk::Dialog, public View_Settings, public Commo
 	void signal_font_removed();
 	void signal_other_image_chosen();
 	void signal_bttRemoveBackground_clicked();
-	bool signal_redraw_preview(GdkEventExpose* event);
+	bool signal_redraw_preview(const Cairo::RefPtr<Cairo::Context>& cr);
 	void on_response(int response_id);
 	public:
 	View_Gtk_Settings();
@@ -217,6 +217,7 @@ class View_Gtk_Settings : public Gtk::Dialog, public View_Settings, public Commo
 	std::string getResolution();
 	Glib::RefPtr<Pango::Layout> createFormattedText(Cairo::RefPtr<Cairo::Context>& context, Glib::ustring const& text, std::string const& format, int r, int g, int b, int r_b, int g_b, int b_b, bool black_bg_is_transparent = true);
 	void setBackgroundImagePreviewPath(std::string const& menuPicturePath, bool isInGrubDir);
+	void redraw(std::string const& menuPicturePath, bool isInGrubDir, Cairo::RefPtr<Cairo::Context> const* cr = NULL);
 	std::string getBackgroundImagePath();
 	void setPreviewEntryTitles(std::list<std::string> const& entries);
 };

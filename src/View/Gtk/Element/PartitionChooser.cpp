@@ -45,14 +45,14 @@ std::string View_Gtk_Element_PartitionChooser::getSelectedUuid() const {
 void View_Gtk_Element_PartitionChooser::load(){
 	this->clear();
 	if (prependCurrentPartition) {
-		this->append_text(currentPartitionName + "\n(" + gettext("current") + ")");
+		this->append(currentPartitionName + "\n(" + gettext("current") + ")");
 		this->set_active(0);
 	}
 	for (Model_DeviceDataListInterface::const_iterator iter = deviceDataList->begin(); iter != deviceDataList->end(); iter++) {
 		if (iter->second.find("UUID") != iter->second.end()) {
 			Glib::ustring text = iter->first + "\n(" + (iter->second.find("LABEL") != iter->second.end() ? iter->second.at("LABEL") + ", " : "") + (iter->second.find("TYPE") != iter->second.end() ? iter->second.at("TYPE") : "") + ")";
 			uuid_map[text] = iter->second.at("UUID");
-			this->append_text(text);
+			this->append(text);
 			if (strToLower(iter->second.at("UUID")) == strToLower(activePartition_uuid) || (activePartition_uuid == "" && iter == deviceDataList->begin() && !prependCurrentPartition)) {
 				this->set_active_text(text);
 			}

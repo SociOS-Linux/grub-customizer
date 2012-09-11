@@ -19,10 +19,10 @@
 #include "Installer.h"
 
 View_Gtk_Installer::View_Gtk_Installer()
-	: lblDescription(gettext("Install the bootloader to MBR and put some\nfiles to the bootloaders data directory\n(if they don't already exist)."), Gtk::ALIGN_LEFT)
-	, lblDevice(gettext("_Device: "), Gtk::ALIGN_LEFT, Gtk::ALIGN_CENTER, true)
+	: lblDescription(gettext("Install the bootloader to MBR and put some\nfiles to the bootloaders data directory\n(if they don't already exist)."), Pango::ALIGN_LEFT)
+	, lblDevice(gettext("_Device: "), Pango::ALIGN_LEFT, Pango::ALIGN_CENTER, true)
 {
-	Gtk::VBox* vbDialog = this->get_vbox();
+	Gtk::Box* vbDialog = this->get_vbox();
 	this->set_icon_name("grub-customizer");
 	vbDialog->pack_start(lblDescription, Gtk::PACK_SHRINK);
 	vbDialog->pack_start(hbDevice);

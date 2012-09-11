@@ -41,7 +41,7 @@ View_Gtk_Main::View_Gtk_Main()
 	lock_state(~0), burgSwitcher(gettext("BURG found!"), false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO),
 	bttAdvancedSettings1(gettext("advanced settings")), bttAdvancedSettings2(gettext("advanced settings")),
 	bbxAdvancedSettings1(Gtk::BUTTONBOX_END), bbxAdvancedSettings2(Gtk::BUTTONBOX_END),
-	lblReloadRequired(gettext("The modifications you've done affects the visible entries. Please reload!"), Gtk::ALIGN_LEFT)
+	lblReloadRequired(gettext("The modifications you've done affects the visible entries. Please reload!"), Pango::ALIGN_LEFT)
 {
 	win.set_icon_name("grub-customizer");
 
@@ -71,6 +71,9 @@ View_Gtk_Main::View_Gtk_Main()
 	
 	//toolbar
 	toolbar.append(tbttSave);
+	Glib::RefPtr<Gtk::StyleContext> context = toolbar.get_style_context();
+	context->add_class(GTK_STYLE_CLASS_PRIMARY_TOOLBAR);
+
 	tbttSave.set_is_important(true);
 	
 	ti_sep1.add(vs_sep1);
@@ -283,7 +286,7 @@ bool View_Gtk_Main::signal_popup() {
 }
 
 void View_Gtk_Main::signal_key_press(GdkEventKey* key) {
-	if (key->keyval == GDK_Delete) {
+	if (key->keyval == GDK_DELETE) {
 		this->eventListener->removeRulesAction(this->getSelectedRules());
 	}
 }
@@ -303,7 +306,7 @@ void View_Gtk_Main::signal_reload_recommendation_response(int response_id) {
 	}
 }
 
-void View_Gtk_Main::signal_tab_changed(GtkNotebookPage* page, guint page_num) {
+void View_Gtk_Main::signal_tab_changed(Gtk::Widget* page, guint page_num) {
 	if (this->eventListener && this->lock_state == 0) { // this->eventListener must be called because this event may be propagated from bootstrap
 		this->eventListener->refreshTabAction(page_num);
 	}
@@ -318,7 +321,7 @@ void View_Gtk_Main::hideBurgSwitcher(){
 }
 
 bool View_Gtk_Main::isVisible(){
-	return win.is_visible();
+	return win.get_visible();
 }
 
 void View_Gtk_Main::show(){
@@ -378,13 +381,13 @@ void View_Gtk_Main::appendEntry(std::string const& name, void* entryPtr, bool is
 	outputName += "\n<small>";
 	if (is_submenu) {
 		outputName += gettext("submenu");
-		icon = this->win.render_icon(Gtk::Stock::DIRECTORY, Gtk::ICON_SIZE_LARGE_TOOLBAR);
+		icon = this->win.render_icon_pixbuf(Gtk::Stock::DIRECTORY, Gtk::ICON_SIZE_LARGE_TOOLBAR);
 	} else if (is_placeholder) {
 		outputName += gettext("placeholder");
-		icon = this->win.render_icon(Gtk::Stock::FIND, Gtk::ICON_SIZE_LARGE_TOOLBAR);
+		icon = this->win.render_icon_pixbuf(Gtk::Stock::FIND, Gtk::ICON_SIZE_LARGE_TOOLBAR);
 	} else {
 		outputName += gettext("menuentry");
-		icon = this->win.render_icon(Gtk::Stock::EXECUTE, Gtk::ICON_SIZE_LARGE_TOOLBAR);
+		icon = this->win.render_icon_pixbuf(Gtk::Stock::EXECUTE, Gtk::ICON_SIZE_LARGE_TOOLBAR);
 	}
 	if (scriptName != "") {
 		outputName += std::string(" / ") + gettext("script: ") + escapeXml(scriptName);

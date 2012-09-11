@@ -28,7 +28,7 @@ View_Gtk_EntryEditor::View_Gtk_EntryEditor()
 	this->set_title(Glib::ustring() + gettext("Entry editor") + " - Grub Customizer");
 	this->set_icon_name("grub-customizer");
 
-	Gtk::VBox& vbMain = *this->get_vbox();
+	Gtk::Box& vbMain = *this->get_vbox();
 	vbMain.add(this->tabbox);
 
 	tabbox.append_page(this->scrOptions, gettext("Options"));
@@ -41,7 +41,7 @@ View_Gtk_EntryEditor::View_Gtk_EntryEditor()
 	this->tblOptions.attach(this->lblType, 0, 1, 0, 1, Gtk::SHRINK | Gtk::FILL, Gtk::SHRINK, 5, 5);
 	this->tblOptions.attach(this->cbType, 1, 2, 0, 1, Gtk::EXPAND | Gtk::FILL, Gtk::SHRINK, 5, 5);
 	lblType.set_mnemonic_widget(cbType);
-	lblType.set_alignment(Gtk::ALIGN_RIGHT);
+	lblType.set_alignment(Pango::ALIGN_RIGHT);
 
 	this->signal_response().connect(sigc::mem_fun(this, &View_Gtk_EntryEditor::signal_response_action));
 	this->cbType.signal_changed().connect(sigc::mem_fun(this, &View_Gtk_EntryEditor::signal_typeModified));
@@ -98,7 +98,7 @@ std::string View_Gtk_EntryEditor::getSourcecode() {
 void View_Gtk_EntryEditor::addOption(std::string const& name, std::string const& value) {
 	int pos = name == "partition_uuid" ? 1 : this->optionMap.size() + 2; // partition should be the first option
 	Gtk::Label* label = Gtk::manage(new Gtk::Label(this->mapOptionName(name) + ":", true));
-	label->set_alignment(Gtk::ALIGN_RIGHT);
+	label->set_alignment(Pango::ALIGN_RIGHT);
 	this->tblOptions.attach(*label, 0, 1, pos, pos+1, Gtk::SHRINK | Gtk::FILL, Gtk::SHRINK, 5, 5);
 	this->labelMap[name] = label;
 
@@ -118,7 +118,7 @@ void View_Gtk_EntryEditor::addOption(std::string const& name, std::string const&
 	label->set_mnemonic_widget(*addedWidget);
 
 	this->optionMap[name] = addedWidget;
-	if (this->is_visible()) {
+	if (this->get_visible()) {
 		this->tblOptions.show_all();
 	}
 }
@@ -172,9 +172,9 @@ void View_Gtk_EntryEditor::hide() {
 void View_Gtk_EntryEditor::setAvailableEntryTypes(std::list<std::string> const& names) {
 	this->cbType.clear();
 	for (std::list<std::string>::const_iterator iter = names.begin(); iter != names.end(); iter++) {
-		this->cbType.append_text(*iter);
+		this->cbType.append(*iter);
 	}
-	this->cbType.append_text(gettext("Other"));
+	this->cbType.append(gettext("Other"));
 }
 
 void View_Gtk_EntryEditor::selectType(std::string const& name) {
