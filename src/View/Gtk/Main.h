@@ -180,7 +180,7 @@ private:
 	void signal_key_press(GdkEventKey* key);
 	void signal_revert();
 	void signal_reload_recommendation_response(int response_id);
-	void signal_tab_changed(GtkNotebookPage* page, guint page_num);
+	void signal_tab_changed(Gtk::Widget* page, guint page_num);
 };
 
 #endif

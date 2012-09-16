@@ -22,7 +22,7 @@ View_Gtk_Trash::View_Gtk_Trash() : deleteButton(NULL) {
 	this->set_title(gettext("Add entry from trash"));
 	this->set_icon_name("grub-customizer");
 	this->set_default_size(650, 500);
-	Gtk::VBox* vbEntryAddDlg = this->get_vbox();
+	Gtk::Box* vbEntryAddDlg = this->get_vbox();
 	vbEntryAddDlg->pack_start(scrEntryBox);
 	scrEntryBox.add(iconBox);
 	
@@ -88,7 +88,7 @@ std::list<void*> View_Gtk_Trash::getSelectedEntries(){
 void View_Gtk_Trash::addItem(std::string const& name, bool isPlaceholder, std::string const& scriptName, void* relatedEntry){
 	Gtk::TreeModel::iterator iter = this->listStore->append();
 	(*iter)[iconModel.name] = name;
-	(*iter)[iconModel.icon] = this->iconBox.render_icon(isPlaceholder ? Gtk::Stock::FIND : Gtk::Stock::EXECUTE, Gtk::ICON_SIZE_DND);
+	(*iter)[iconModel.icon] = this->iconBox.render_icon_pixbuf(isPlaceholder ? Gtk::Stock::FIND : Gtk::Stock::EXECUTE, Gtk::ICON_SIZE_DND);
 	(*iter)[iconModel.description] = name + "\n" + gettext("type: ") + (isPlaceholder ? gettext("placeholder") : gettext("menuentry")) + "\n" + gettext("script: ") + scriptName;
 	(*iter)[iconModel.relatedRule] = relatedEntry;
 }

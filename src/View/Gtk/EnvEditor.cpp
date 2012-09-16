@@ -26,7 +26,7 @@ View_Gtk_EnvEditor::View_Gtk_EnvEditor()
 	this->set_title("Grub Customizer environment setup");
 	this->set_icon_name("grub-customizer");
 
-	Gtk::VBox& box = *this->get_vbox();
+	Gtk::Box& box = *this->get_vbox();
 	box.add(this->vbContent);
 	this->vbContent.add(this->tblLayout);
 	this->vbContent.add(this->bbxSaveConfig);
@@ -55,9 +55,9 @@ View_Gtk_EnvEditor::View_Gtk_EnvEditor()
 	this->cbType.set_active(0);
 	this->cbType.signal_changed().connect(sigc::mem_fun(this, &View_Gtk_EnvEditor::signal_bootloaderType_changed));
 
-	lblPartition.set_alignment(Gtk::ALIGN_RIGHT);
-	lblType.set_alignment(Gtk::ALIGN_RIGHT);
-	lblSubmountpoints.set_alignment(Gtk::ALIGN_RIGHT);
+	lblPartition.set_alignment(Pango::ALIGN_RIGHT);
+	lblType.set_alignment(Pango::ALIGN_RIGHT);
+	lblSubmountpoints.set_alignment(Pango::ALIGN_RIGHT);
 
 	this->tblLayout.set_spacings(10);
 	this->tblLayout.set_border_width(10);
@@ -97,7 +97,7 @@ void View_Gtk_EnvEditor::setEnvSettings(std::map<std::string, std::string> const
 		Gtk::Label* label = NULL;
 		if (this->labelMap.find(iter->first) == this->labelMap.end()) {
 			label = Gtk::manage(new Gtk::Label(iter->first + ":"));
-			label->set_alignment(Gtk::ALIGN_RIGHT);
+			label->set_alignment(Pango::ALIGN_RIGHT);
 			this->tblLayout.attach(*label, 0, 1, pos, pos+1, Gtk::SHRINK | Gtk::FILL, Gtk::SHRINK);
 			this->labelMap[iter->first] = label;
 		} else {
@@ -132,16 +132,16 @@ void View_Gtk_EnvEditor::setEnvSettings(std::map<std::string, std::string> const
 
 		Glib::RefPtr<Gdk::Pixbuf> icon;
 		if (std::find(validProps.begin(), validProps.end(), iter->first) != validProps.end()) {
-			icon = this->render_icon(Gtk::Stock::OK, Gtk::ICON_SIZE_BUTTON);
+			icon = this->render_icon_pixbuf(Gtk::Stock::OK, Gtk::ICON_SIZE_BUTTON);
 		} else if (std::find(requiredProps.begin(), requiredProps.end(), iter->first) != requiredProps.end()) {
-			icon = this->render_icon(Gtk::Stock::DIALOG_ERROR, Gtk::ICON_SIZE_BUTTON);
+			icon = this->render_icon_pixbuf(Gtk::Stock::DIALOG_ERROR, Gtk::ICON_SIZE_BUTTON);
 		} else {
-			icon = this->render_icon(Gtk::Stock::DIALOG_WARNING, Gtk::ICON_SIZE_BUTTON);
+			icon = this->render_icon_pixbuf(Gtk::Stock::DIALOG_WARNING, Gtk::ICON_SIZE_BUTTON);
 		}
 
 		img->set(icon);
 
-		if (this->is_visible()) {
+		if (this->get_visible()) {
 			this->tblLayout.show_all();
 		}
 		pos++;
