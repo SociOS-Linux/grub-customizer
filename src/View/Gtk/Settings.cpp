@@ -114,7 +114,7 @@ View_Gtk_Settings::View_Gtk_Settings()
 	lblColorChooser(gettext("menu colors")), lblBackgroundImage(gettext("background image")),
 	imgRemoveBackground(Gtk::Stock::REMOVE, Gtk::ICON_SIZE_BUTTON), imgRemoveFont(Gtk::Stock::REMOVE, Gtk::ICON_SIZE_BUTTON),
 	lblBackgroundRequiredInfo(gettext("To get the colors above working,\nyou have to select a background image!")),
-	gccNormalBackground(true), gccHighlightBackground(true), lblFont("_Font", true), cbResolution(true)
+	gccNormalBackground(true), gccHighlightBackground(true), lblFont("_Font", true), cbResolution()
 {
 	this->set_title("Grub Customizer - "+Glib::ustring(gettext("settings")));
 	this->set_icon_name("grub-customizer");
@@ -212,7 +212,7 @@ View_Gtk_Settings::View_Gtk_Settings()
 	alignResolution.set_padding(10, 0, 6, 0);
 	hbResolution.pack_start(chkResolution, Gtk::PACK_SHRINK);
 	hbResolution.pack_start(cbResolution);
-	cbResolution.append("saved");
+	cbResolution.append_text("saved");
 	
 	//color chooser
 	vbAppearanceSettings.pack_start(groupColorChooser, Gtk::PACK_SHRINK);
@@ -292,7 +292,7 @@ View_Gtk_Settings::View_Gtk_Settings()
 	bttRemoveBackground.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_bttRemoveBackground_clicked));
 	bttAddCustomEntry.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_add_row_button_clicked));
 	bttRemoveCustomEntry.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_remove_row_button_clicked));
-	drwBackgroundPreview.signal_draw().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_redraw_preview));
+	drwBackgroundPreview.signal_expose_event().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_redraw_preview));
 
 	this->add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
 	this->set_default_size(500, 600);
@@ -337,9 +337,9 @@ void View_Gtk_Settings::on_response(int response_id) {
 void View_Gtk_Settings::addEntryToDefaultEntryChooser(std::string const& labelPathValue, std::string const& labelPathLabel, std::string const& numericPathValue, std::string const& numericPathLabel){
 	event_lock = true;
 	this->defEntryValueMapping[this->defEntryValueMapping.size()] = numericPathValue;
-	cbDefEntry.append(Glib::ustring::compose(gettext("Entry %1 (by position)"), numericPathLabel));
+	cbDefEntry.append_text(Glib::ustring::compose(gettext("Entry %1 (by position)"), numericPathLabel));
 	this->defEntryValueMapping[this->defEntryValueMapping.size()] = labelPathValue;
-	cbDefEntry.append(labelPathLabel);
+	cbDefEntry.append_text(labelPathLabel);
 	cbDefEntry.set_active(0);
 	this->groupDefaultEntry.set_sensitive(true);
 	event_lock = false;
@@ -347,7 +347,7 @@ void View_Gtk_Settings::addEntryToDefaultEntryChooser(std::string const& labelPa
 
 void View_Gtk_Settings::clearDefaultEntryChooser(){
 	event_lock = true;
-	cbDefEntry.remove_all();
+	cbDefEntry.clear_items();
 	this->defEntryValueMapping.clear();
 	this->groupDefaultEntry.set_sensitive(false); //if there's no entry to select, disable this area
 	event_lock = false;
@@ -355,10 +355,10 @@ void View_Gtk_Settings::clearDefaultEntryChooser(){
 
 
 void View_Gtk_Settings::clearResolutionChooser(){
-	this->cbResolution.remove_all();
+	this->cbResolution.clear_items();
 }
 void View_Gtk_Settings::addResolution(std::string const& resolution){
-	this->cbResolution.append(resolution);
+	this->cbResolution.append_text(resolution);
 }
 
 View_Gtk_Settings::AdvancedSettingsTreeModel::AdvancedSettingsTreeModel(){
@@ -539,7 +539,7 @@ void View_Gtk_Settings::redraw(std::string const& menuPicturePath, bool isInGrub
 				Cairo::RefPtr<Cairo::Context> context = cr ? *cr : drwBackgroundPreview.get_window()->create_cairo_context();
 
 				drwBackgroundPreview.show();
-				Gdk::Cairo::set_source_pixbuf(context, buf);
+				Gdk::Cairo::set_source_pixbuf(context, buf, 0, 0);
 				context->rectangle(0, 0, buf->get_width(), buf->get_height());
 				context->fill();
 
@@ -574,9 +574,9 @@ void View_Gtk_Settings::redraw(std::string const& menuPicturePath, bool isInGrub
 		}
 		catch (Glib::Error const& e){
 			Cairo::RefPtr<Cairo::Context> context = cr ? *cr : drwBackgroundPreview.get_window()->create_cairo_context();
-			Glib::RefPtr<Gdk::Pixbuf> buf = drwBackgroundPreview.render_icon_pixbuf(Gtk::Stock::MISSING_IMAGE, Gtk::ICON_SIZE_DIALOG);
+			Glib::RefPtr<Gdk::Pixbuf> buf = drwBackgroundPreview.render_icon(Gtk::Stock::MISSING_IMAGE, Gtk::ICON_SIZE_DIALOG);
 
-			Gdk::Cairo::set_source_pixbuf(context, buf);
+			Gdk::Cairo::set_source_pixbuf(context, buf, 0, 0);
 			context->rectangle(0, 0, buf->get_width(), buf->get_height());
 			context->fill();
 		}
@@ -769,9 +769,9 @@ void View_Gtk_Settings::signal_remove_row_button_clicked(){
 		this->eventListener->removeCustomSettingAction((Glib::ustring)(*tvAllEntries.get_selection()->get_selected())[asTreeModel.name]);
 }
 
-bool View_Gtk_Settings::signal_redraw_preview(const Cairo::RefPtr<Cairo::Context>& cr) {
+bool View_Gtk_Settings::signal_redraw_preview(GdkEventExpose* event) {
 	if (!event_lock) {
-		this->redraw(this->backgroundImagePath, false, &cr);
+		this->redraw(this->backgroundImagePath, false);
 	}
 	return true;
 }

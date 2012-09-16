@@ -170,11 +170,11 @@ void View_Gtk_EntryEditor::hide() {
 }
 
 void View_Gtk_EntryEditor::setAvailableEntryTypes(std::list<std::string> const& names) {
-	this->cbType.remove_all();
+	this->cbType.clear_items();
 	for (std::list<std::string>::const_iterator iter = names.begin(); iter != names.end(); iter++) {
-		this->cbType.append(*iter);
+		this->cbType.append_text(*iter);
 	}
-	this->cbType.append(gettext("Other"));
+	this->cbType.append_text(gettext("Other"));
 }
 
 void View_Gtk_EntryEditor::selectType(std::string const& name) {

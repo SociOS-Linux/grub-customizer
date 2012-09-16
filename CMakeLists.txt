@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 2.6.2) # may be lower
 
 find_package(PkgConfig)
 
-pkg_check_modules(GTKMM gtkmm-3.0)
+pkg_check_modules(GTKMM gtkmm-2.4)
 pkg_check_modules(GTHREAD gthread-2.0)
 pkg_check_modules(OPENSSL openssl)
 

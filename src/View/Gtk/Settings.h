@@ -92,7 +92,7 @@ class View_Gtk_Settings : public Gtk::Dialog, public View_Settings, public Commo
 	Gtk::VBox vbDefaultEntry;
 	Gtk::HBox hbDefPredefined;
 	//Gtk::SpinButton spDefPosition;
-	Gtk::ComboBoxText cbDefEntry;
+	Gtk::ComboBoxEntryText cbDefEntry;
 	std::map<int, std::string> defEntryValueMapping;
 	
 	//view group
@@ -118,7 +118,7 @@ class View_Gtk_Settings : public Gtk::Dialog, public View_Settings, public Commo
 	Gtk::Alignment alignResolution;
 	Gtk::HBox hbResolution;
 	Gtk::CheckButton chkResolution;
-	Gtk::ComboBoxText cbResolution;
+	Gtk::ComboBoxEntryText cbResolution;
 	
 	//color chooser
 	Gtk::Frame groupColorChooser;
@@ -173,7 +173,7 @@ class View_Gtk_Settings : public Gtk::Dialog, public View_Settings, public Commo
 	void signal_font_removed();
 	void signal_other_image_chosen();
 	void signal_bttRemoveBackground_clicked();
-	bool signal_redraw_preview(const Cairo::RefPtr<Cairo::Context>& cr);
+	bool signal_redraw_preview(GdkEventExpose* event);
 	void on_response(int response_id);
 	public:
 	View_Gtk_Settings();

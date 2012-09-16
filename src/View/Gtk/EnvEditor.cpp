@@ -50,8 +50,8 @@ View_Gtk_EnvEditor::View_Gtk_EnvEditor()
 	this->lblSubmountpoints.set_no_show_all(true);
 	this->scrSubmountpoints.set_no_show_all(true);
 
-	this->cbType.append(gettext("Grub 2"));
-	this->cbType.append(gettext("BURG"));
+	this->cbType.append_text(gettext("Grub 2"));
+	this->cbType.append_text(gettext("BURG"));
 	this->cbType.set_active(0);
 	this->cbType.signal_changed().connect(sigc::mem_fun(this, &View_Gtk_EnvEditor::signal_bootloaderType_changed));
 
@@ -132,11 +132,11 @@ void View_Gtk_EnvEditor::setEnvSettings(std::map<std::string, std::string> const
 
 		Glib::RefPtr<Gdk::Pixbuf> icon;
 		if (std::find(validProps.begin(), validProps.end(), iter->first) != validProps.end()) {
-			icon = this->render_icon_pixbuf(Gtk::Stock::OK, Gtk::ICON_SIZE_BUTTON);
+			icon = this->render_icon(Gtk::Stock::OK, Gtk::ICON_SIZE_BUTTON);
 		} else if (std::find(requiredProps.begin(), requiredProps.end(), iter->first) != requiredProps.end()) {
-			icon = this->render_icon_pixbuf(Gtk::Stock::DIALOG_ERROR, Gtk::ICON_SIZE_BUTTON);
+			icon = this->render_icon(Gtk::Stock::DIALOG_ERROR, Gtk::ICON_SIZE_BUTTON);
 		} else {
-			icon = this->render_icon_pixbuf(Gtk::Stock::DIALOG_WARNING, Gtk::ICON_SIZE_BUTTON);
+			icon = this->render_icon(Gtk::Stock::DIALOG_WARNING, Gtk::ICON_SIZE_BUTTON);
 		}
 
 		img->set(icon);

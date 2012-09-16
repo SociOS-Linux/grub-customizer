@@ -71,8 +71,6 @@ View_Gtk_Main::View_Gtk_Main()
 	
 	//toolbar
 	toolbar.append(tbttSave);
-	Glib::RefPtr<Gtk::StyleContext> context = toolbar.get_style_context();
-	context->add_class(GTK_STYLE_CLASS_PRIMARY_TOOLBAR);
 
 	tbttSave.set_is_important(true);
 	
@@ -115,7 +113,6 @@ View_Gtk_Main::View_Gtk_Main()
 	toolbar.append(ti_sep5);
 
 	ti_sep5.set_expand(true);
-	ti_sep5.set_draw(false);
 
 	toolbar.append(tbttRevert);
 	tbttRevert.set_is_important(true);
@@ -306,7 +303,7 @@ void View_Gtk_Main::signal_reload_recommendation_response(int response_id) {
 	}
 }
 
-void View_Gtk_Main::signal_tab_changed(Gtk::Widget* page, guint page_num) {
+void View_Gtk_Main::signal_tab_changed(GtkNotebookPage* page, guint page_num) {
 	if (this->eventListener && this->lock_state == 0) { // this->eventListener must be called because this event may be propagated from bootstrap
 		this->eventListener->refreshTabAction(page_num);
 	}
@@ -381,13 +378,13 @@ void View_Gtk_Main::appendEntry(std::string const& name, void* entryPtr, bool is
 	outputName += "\n<small>";
 	if (is_submenu) {
 		outputName += gettext("submenu");
-		icon = this->win.render_icon_pixbuf(Gtk::Stock::DIRECTORY, Gtk::ICON_SIZE_LARGE_TOOLBAR);
+		icon = this->win.render_icon(Gtk::Stock::DIRECTORY, Gtk::ICON_SIZE_LARGE_TOOLBAR);
 	} else if (is_placeholder) {
 		outputName += gettext("placeholder");
-		icon = this->win.render_icon_pixbuf(Gtk::Stock::FIND, Gtk::ICON_SIZE_LARGE_TOOLBAR);
+		icon = this->win.render_icon(Gtk::Stock::FIND, Gtk::ICON_SIZE_LARGE_TOOLBAR);
 	} else {
 		outputName += gettext("menuentry");
-		icon = this->win.render_icon_pixbuf(Gtk::Stock::EXECUTE, Gtk::ICON_SIZE_LARGE_TOOLBAR);
+		icon = this->win.render_icon(Gtk::Stock::EXECUTE, Gtk::ICON_SIZE_LARGE_TOOLBAR);
 	}
 	if (scriptName != "") {
 		outputName += std::string(" / ") + gettext("script: ") + escapeXml(scriptName);
