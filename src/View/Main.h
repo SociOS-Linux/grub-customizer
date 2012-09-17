@@ -111,6 +111,9 @@ public:
 	virtual void showSystemRuleRemoveWarning() = 0;
 
 	virtual void setOption(ViewOption option, bool value) = 0;
+
+	virtual std::map<ViewOption, bool> const& getOptions() = 0;
+	virtual void setOptions(std::map<ViewOption, bool> const& options) = 0;
 };
 
 #endif

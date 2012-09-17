@@ -691,7 +691,25 @@ void View_Gtk_Main::showSystemRuleRemoveWarning() {
 }
 
 void View_Gtk_Main::setOption(ViewOption option, bool value) {
+	int oldLockState = this->lock_state;
+	this->setLockState(~0);
 	this->options[option] = value;
+	switch (option) {
+	case VIEW_SHOW_DETAILS: this->miShowDetails.set_active(value); break;
+	default:
+		throw LogicException("unexpected option");
+	}
+	this->setLockState(oldLockState);
+}
+
+std::map<ViewOption, bool> const& View_Gtk_Main::getOptions() {
+	return this->options;
+}
+
+void View_Gtk_Main::setOptions(std::map<ViewOption, bool> const& options) {
+	for (std::map<ViewOption, bool>::const_iterator iter = options.begin(); iter != options.end(); iter++) {
+		this->setOption(iter->first, iter->second);
+	}
 }
 
 void View_Gtk_Main::signal_move_click(int direction){

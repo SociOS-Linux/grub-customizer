@@ -230,6 +230,12 @@ void MainControllerImpl::loadThreadedAction(bool preserveConfig){
 			this->log(std::string("loading - preserveConfig: ") + (preserveConfig ? "yes" : "no"), Logger::IMPORTANT_EVENT);
 			is_loading = true;
 			this->env.activeThreadCount++;
+
+			try {
+				this->view->setOptions(this->env.loadViewOptions());
+			} catch (FileReadException e) {
+				this->log("view options not found", Logger::INFO);
+			}
 	
 			if (!preserveConfig){
 				this->log("unsetting saved config", Logger::EVENT);
@@ -300,6 +306,11 @@ void MainControllerImpl::saveThreadedAction(){
 	try {
 		this->log("writing settings file", Logger::IMPORTANT_EVENT);
 		this->settings->save();
+		try {
+			this->env.saveViewOptions(this->view->getOptions());
+		} catch (FileSaveException e) {
+			this->log("option saving failed", Logger::ERROR);
+		}
 		if (this->settings->color_helper_required) {
 			this->grublistCfg->addColorHelper();
 		}

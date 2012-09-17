@@ -160,6 +160,8 @@ public:
 	void showPlaintextRemoveWarning();
 	void showSystemRuleRemoveWarning();
 	void setOption(ViewOption option, bool value);
+	std::map<ViewOption, bool> const& getOptions();
+	void setOptions(std::map<ViewOption, bool> const& options);
 private:
 	//event handlers
 	void signal_show_envEditor();
