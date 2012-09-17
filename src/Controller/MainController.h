@@ -20,7 +20,7 @@
 #define MAINCONTROLLER_H_
 
 #include <list>
-#include "../View/Main.h"
+#include "../lib/Type.h"
 #include "../Controller/ThreadController.h"
 
 class MainController {
@@ -63,7 +63,7 @@ public:
 	virtual void selectRulesAction(std::list<void*> rules) = 0;
 	virtual void selectRuleAction(void* rule, bool startEdit = false) = 0;
 	virtual void refreshTabAction(unsigned int pos) = 0;
-	virtual void setViewOptionAction(View_Main::ViewOption option, bool value) = 0;
+	virtual void setViewOptionAction(ViewOption option, bool value) = 0;
 };
 
 

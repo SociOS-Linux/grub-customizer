@@ -27,6 +27,7 @@
 #include "../../lib/str_replace.h"
 #include "../../lib/assert.h"
 #include "../../Controller/MainController.h"
+#include "../../lib/Type.h"
 
 class View_Gtk_Main_List : public Gtk::TreeView {
 public:
@@ -93,7 +94,7 @@ class View_Gtk_Main : public View_Main, public CommonClass {
 
 	bool lock_state;
 
-	std::map<View_Main::ViewOption, bool> options;
+	std::map<ViewOption, bool> options;
 
 	Gtk::MessageDialog burgSwitcher;
 
@@ -158,7 +159,7 @@ public:
 
 	void showPlaintextRemoveWarning();
 	void showSystemRuleRemoveWarning();
-	void setOption(View_Main::ViewOption option, bool value);
+	void setOption(ViewOption option, bool value);
 private:
 	//event handlers
 	void signal_show_envEditor();

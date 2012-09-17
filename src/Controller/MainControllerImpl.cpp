@@ -898,7 +898,7 @@ void MainControllerImpl::refreshTabAction(unsigned int pos) {
 	this->logActionEnd();
 }
 
-void MainControllerImpl::setViewOptionAction(View_Main::ViewOption option, bool value) {
+void MainControllerImpl::setViewOptionAction(ViewOption option, bool value) {
 	this->logActionBegin("set-view-option");
 	try {
 		this->view->setOption(option, value);

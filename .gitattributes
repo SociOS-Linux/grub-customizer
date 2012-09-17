@@ -168,6 +168,7 @@ src/lib/Logger/Stream.h -text
 src/lib/Mutex.h -text
 src/lib/Mutex/GLib.cpp -text
 src/lib/Mutex/GLib.h -text
+src/lib/Type.h -text
 src/lib/assert.cpp -text
 src/lib/assert.h -text
 src/lib/md5.cpp -text

@@ -23,15 +23,13 @@
 #include <string>
 #include <vector>
 #include <map>
+#include "../lib/Type.h"
 
 /**
  * Interface for dialogs which lets the user control the grub list
  */
 class View_Main {
 public:
-	enum ViewOption {
-		VIEW_SHOW_DETAILS
-	};
 	virtual inline ~View_Main() {};
 
 	//show this dialog without waiting
@@ -112,7 +110,7 @@ public:
 
 	virtual void showSystemRuleRemoveWarning() = 0;
 
-	virtual void setOption(View_Main::ViewOption option, bool value) = 0;
+	virtual void setOption(ViewOption option, bool value) = 0;
 };
 
 #endif

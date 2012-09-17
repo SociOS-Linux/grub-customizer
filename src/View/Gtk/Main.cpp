@@ -124,7 +124,7 @@ View_Gtk_Main::View_Gtk_Main()
 	tbttReload.set_tooltip_text(gettext("reloads the configuration. Unsaved changes will be preserved."));
 	
 	this->setLockState(3);
-	this->options[View_Main::VIEW_SHOW_DETAILS] = true;
+	this->options[VIEW_SHOW_DETAILS] = true;
 
 	//menu
 	menu.append(miFile);
@@ -320,7 +320,7 @@ void View_Gtk_Main::signal_tab_changed(Gtk::Widget* page, guint page_num) {
 
 void View_Gtk_Main::signal_viewopt_details_toggled() {
 	if (this->eventListener) {
-		this->eventListener->setViewOptionAction(View_Main::VIEW_SHOW_DETAILS, this->miShowDetails.get_active());
+		this->eventListener->setViewOptionAction(VIEW_SHOW_DETAILS, this->miShowDetails.get_active());
 	}
 }
 
@@ -390,7 +390,7 @@ void View_Gtk_Main::appendEntry(std::string const& name, void* entryPtr, bool is
 	if (!is_placeholder) {
 		outputName = "<b>" + outputName + "</b>";
 	}
-	if (this->options[View_Main::VIEW_SHOW_DETAILS]) {
+	if (this->options[VIEW_SHOW_DETAILS]) {
 		outputName += "\n<small>";
 		if (is_submenu) {
 			outputName += gettext("submenu");
@@ -415,11 +415,11 @@ void View_Gtk_Main::appendEntry(std::string const& name, void* entryPtr, bool is
 	}
 
 	if (is_submenu) {
-		icon = this->win.render_icon_pixbuf(Gtk::Stock::DIRECTORY, this->options[View_Main::VIEW_SHOW_DETAILS] ? Gtk::ICON_SIZE_LARGE_TOOLBAR : Gtk::ICON_SIZE_MENU);
+		icon = this->win.render_icon_pixbuf(Gtk::Stock::DIRECTORY, this->options[VIEW_SHOW_DETAILS] ? Gtk::ICON_SIZE_LARGE_TOOLBAR : Gtk::ICON_SIZE_MENU);
 	} else if (is_placeholder) {
-		icon = this->win.render_icon_pixbuf(Gtk::Stock::FIND, this->options[View_Main::VIEW_SHOW_DETAILS] ? Gtk::ICON_SIZE_LARGE_TOOLBAR : Gtk::ICON_SIZE_MENU);
+		icon = this->win.render_icon_pixbuf(Gtk::Stock::FIND, this->options[VIEW_SHOW_DETAILS] ? Gtk::ICON_SIZE_LARGE_TOOLBAR : Gtk::ICON_SIZE_MENU);
 	} else {
-		icon = this->win.render_icon_pixbuf(Gtk::Stock::EXECUTE, this->options[View_Main::VIEW_SHOW_DETAILS] ? Gtk::ICON_SIZE_LARGE_TOOLBAR : Gtk::ICON_SIZE_MENU);
+		icon = this->win.render_icon_pixbuf(Gtk::Stock::EXECUTE, this->options[VIEW_SHOW_DETAILS] ? Gtk::ICON_SIZE_LARGE_TOOLBAR : Gtk::ICON_SIZE_MENU);
 	}
 
 	if (isModified) {
@@ -690,7 +690,7 @@ void View_Gtk_Main::showSystemRuleRemoveWarning() {
 	}
 }
 
-void View_Gtk_Main::setOption(View_Main::ViewOption option, bool value) {
+void View_Gtk_Main::setOption(ViewOption option, bool value) {
 	this->options[option] = value;
 }
 
