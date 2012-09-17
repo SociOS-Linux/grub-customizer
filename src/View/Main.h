@@ -19,7 +19,6 @@
 #ifndef GRUBLISTCFGDLG_H_
 #define GRUBLISTCFGDLG_H_
 
-#include "../Controller/MainController.h"
 #include "Settings.h"
 #include <string>
 #include <vector>
@@ -30,10 +29,11 @@
  */
 class View_Main {
 public:
+	enum ViewOption {
+		VIEW_SHOW_DETAILS
+	};
 	virtual inline ~View_Main() {};
 
-	//function to assign the event listener
-	virtual void setEventListener(MainController& eventListener)=0;
 	//show this dialog without waiting
 	virtual void show()=0;
 	//hide this dialog
@@ -111,6 +111,8 @@ public:
 	virtual void showPlaintextRemoveWarning() = 0;
 
 	virtual void showSystemRuleRemoveWarning() = 0;
+
+	virtual void setOption(View_Main::ViewOption option, bool value) = 0;
 };
 
 #endif

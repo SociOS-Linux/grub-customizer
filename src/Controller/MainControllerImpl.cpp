@@ -897,3 +897,14 @@ void MainControllerImpl::refreshTabAction(unsigned int pos) {
 	}
 	this->logActionEnd();
 }
+
+void MainControllerImpl::setViewOptionAction(View_Main::ViewOption option, bool value) {
+	this->logActionBegin("set-view-option");
+	try {
+		this->view->setOption(option, value);
+		this->syncLoadStateAction();
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
+	this->logActionEnd();
+}

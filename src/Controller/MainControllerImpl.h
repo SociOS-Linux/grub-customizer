@@ -143,6 +143,7 @@ public:
 	void selectRulesAction(std::list<void*> rules);
 	void selectRuleAction(void* rule, bool startEdit = false);
 	void refreshTabAction(unsigned int pos);
+	void setViewOptionAction(View_Main::ViewOption option, bool value);
 };
 
 #endif
