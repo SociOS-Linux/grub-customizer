@@ -143,16 +143,18 @@ void MainControllerImpl::init(){
 	//aufs is the virtual root fileSystem used by live cds
 	if (mountTable->getEntryByMountpoint("").isLiveCdFs() && env.cfg_dir_prefix == ""){
 		this->log("is live CD", Logger::INFO);
+		this->env.init(Model_Env::GRUB_MODE, "");
 		this->showEnvEditorAction();
 	} else {
 		this->log("running on an installed system", Logger::INFO);
 		std::list<Model_Env::Mode> modes = this->env.getAvailableModes();
-		if (modes.size() == 2)
+		if (modes.size() == 2) {
 			this->view->showBurgSwitcher();
-		else if (modes.size() == 1)
+		} else if (modes.size() == 1) {
 			this->init(modes.front());
-		else if (modes.size() == 0)
+		} else if (modes.size() == 0) {
 			this->showEnvEditorAction();
+		}
 	}
 }
 
