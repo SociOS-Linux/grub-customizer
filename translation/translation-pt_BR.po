@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-08-30 22:28+0200\n"
-"PO-Revision-Date: 2012-08-30 21:30+0000\n"
-"Last-Translator: Hriostat <Unknown>\n"
+"PO-Revision-Date: 2012-09-09 11:43+0000\n"
+"Last-Translator: José Humberto Alvarenga Melo <Unknown>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-09-07 19:12+0000\n"
-"X-Generator: Launchpad (build 15914)\n"
+"X-Launchpad-Export-Date: 2012-09-10 18:16+0000\n"
+"X-Generator: Launchpad (build 15924)\n"
 
 #: ../src/Controller/MainControllerImpl.cpp:533
 msgid "Name the Entry"
@@ -35,19 +35,19 @@ msgstr "atualizando configuração"
 
 #: ../src/main/gtk-client.cpp:229
 msgid "Linux"
-msgstr ""
+msgstr "Linux"
 
 #: ../src/main/gtk-client.cpp:230
 msgid "Linux-ISO"
-msgstr ""
+msgstr "Linux-ISO"
 
 #: ../src/main/gtk-client.cpp:231
 msgid "Chainloader"
-msgstr ""
+msgstr "Carregador"
 
 #: ../src/main/gtk-client.cpp:232
 msgid "Memtest"
-msgstr ""
+msgstr "Memtest"
 
 #: ../src/View/Gtk/About.cpp:36
 msgid ""
@@ -58,72 +58,72 @@ msgstr ""
 
 #: ../src/View/Gtk/EntryEditor.cpp:22 ../src/View/Gtk/EnvEditor.cpp:23
 msgid "_Type:"
-msgstr ""
+msgstr "_Tipo:"
 
 #: ../src/View/Gtk/EntryEditor.cpp:28
 msgid "Entry editor"
-msgstr ""
+msgstr "Editor de entradas"
 
 #: ../src/View/Gtk/EntryEditor.cpp:34
 msgid "Options"
-msgstr ""
+msgstr "Opções"
 
 #: ../src/View/Gtk/EntryEditor.cpp:35
 msgid "Source"
-msgstr ""
+msgstr "Fonte"
 
 #: ../src/View/Gtk/EntryEditor.cpp:62
 msgid "_Partition"
-msgstr ""
+msgstr "_Partição"
 
 #: ../src/View/Gtk/EntryEditor.cpp:64
 msgid "_Initial ramdisk"
-msgstr ""
+msgstr "_Disco de RAM inicial"
 
 #: ../src/View/Gtk/EntryEditor.cpp:66
 msgid "_Linux image"
-msgstr ""
+msgstr "_Imagem do Linux"
 
 #: ../src/View/Gtk/EntryEditor.cpp:68
 msgid "_Memtest image"
-msgstr ""
+msgstr "_Imgem do Memtest"
 
 #: ../src/View/Gtk/EntryEditor.cpp:70
 msgid "Path to iso file"
-msgstr ""
+msgstr "Caminho para o arquivo iso"
 
 #: ../src/View/Gtk/EntryEditor.cpp:72
 msgid "Locale"
-msgstr ""
+msgstr "Localidade"
 
 #: ../src/View/Gtk/EntryEditor.cpp:74
 msgid "Kernel params"
-msgstr ""
+msgstr "Parâmetros do kernel"
 
 #: ../src/View/Gtk/EntryEditor.cpp:177 ../src/View/Gtk/EntryEditor.cpp:183
 #: ../src/View/Gtk/EntryEditor.cpp:217
 msgid "Other"
-msgstr ""
+msgstr "Outro"
 
 #: ../src/View/Gtk/EnvEditor.cpp:22
 msgid "_Partition:"
-msgstr ""
+msgstr "_Partição:"
 
 #: ../src/View/Gtk/EnvEditor.cpp:23
 msgid "Submountpoints:"
-msgstr ""
+msgstr "Sub pontos de montagem"
 
 #: ../src/View/Gtk/EnvEditor.cpp:24
 msgid "save this configuration"
-msgstr ""
+msgstr "salvar esta configuração"
 
 #: ../src/View/Gtk/EnvEditor.cpp:53
 msgid "Grub 2"
-msgstr ""
+msgstr "Grub 2"
 
 #: ../src/View/Gtk/EnvEditor.cpp:54
 msgid "BURG"
-msgstr ""
+msgstr "BURG"
 
 #: ../src/View/Gtk/EnvEditor.cpp:216
 msgid "Mount failed!"
@@ -151,14 +151,16 @@ msgid ""
 "please Inform the author about this problem. The following information could "
 "be helpful:"
 msgstr ""
+"por favor, informe o autor sobre este problema. As informações a seguir "
+"podem ser úteis:"
 
 #: ../src/View/Gtk/Error.cpp:32
 msgid "An error occurred"
-msgstr ""
+msgstr "Ocorreu um erro"
 
 #: ../src/View/Gtk/Error.cpp:35
 msgid "continue (risk data loss)"
-msgstr ""
+msgstr "continuar (risco de perda de arquivos)"
 
 #: ../src/View/Gtk/Installer.cpp:22
 msgid ""
@@ -220,28 +222,29 @@ msgstr "BURG encontrado!"
 
 #: ../src/View/Gtk/Main.cpp:42
 msgid "advanced settings"
-msgstr ""
+msgstr "configurações avançadas"
 
 #: ../src/View/Gtk/Main.cpp:44
 msgid ""
 "The modifications you've done affects the visible entries. Please reload!"
 msgstr ""
+"As modificações que você fez afeta as entradas visíveis. Por favor, volte!"
 
 #: ../src/View/Gtk/Main.cpp:56
 msgid "_List configuration"
-msgstr ""
+msgstr "_Configuração da lista"
 
 #: ../src/View/Gtk/Main.cpp:80
 msgid "Remove selected entries (you can restore them from trash)"
-msgstr ""
+msgstr "Remover entradas selecionadas (você pode restaurá-las da lixeira)"
 
 #: ../src/View/Gtk/Main.cpp:83
 msgid "restore entries from trash"
-msgstr ""
+msgstr "restaurar entradas da lixeira"
 
 #: ../src/View/Gtk/Main.cpp:85
 msgid "Trash"
-msgstr ""
+msgstr "Lixeira"
 
 #: ../src/View/Gtk/Main.cpp:94
 msgid "Move up the selected entry or script"
@@ -261,39 +264,40 @@ msgstr "adiconar esta entrada ao novo submenu"
 
 #: ../src/View/Gtk/Main.cpp:119
 msgid "Reverts the list to the default order"
-msgstr ""
+msgstr "Reverte a lista para a ordem padrão"
 
 #: ../src/View/Gtk/Main.cpp:121
 msgid "reloads the configuration. Unsaved changes will be preserved."
 msgstr ""
+"recarrega a configuração. As alterações não salvas serão preservadas."
 
 #: ../src/View/Gtk/Main.cpp:161
 msgid "Restore entry"
-msgstr ""
+msgstr "Restaurar entrada"
 
 #: ../src/View/Gtk/Main.cpp:162
 msgid "Rename"
-msgstr ""
+msgstr "Renomear"
 
 #: ../src/View/Gtk/Main.cpp:163 ../src/View/Gtk/Main.cpp:164
 msgid "Move up"
-msgstr ""
+msgstr "Mover para cima"
 
 #: ../src/View/Gtk/Main.cpp:165 ../src/View/Gtk/Main.cpp:166
 msgid "Move down"
-msgstr ""
+msgstr "Mover para baixo"
 
 #: ../src/View/Gtk/Main.cpp:167 ../src/View/Gtk/Main.cpp:168
 msgid "Remove from submenu"
-msgstr ""
+msgstr "Remover do submenu"
 
 #: ../src/View/Gtk/Main.cpp:169 ../src/View/Gtk/Main.cpp:170
 msgid "Create submenu"
-msgstr ""
+msgstr "Criar submenu"
 
 #: ../src/View/Gtk/Main.cpp:177
 msgid "_Change Environment …"
-msgstr ""
+msgstr "_Alterar Ambiente"
 
 #: ../src/View/Gtk/Main.cpp:184
 msgid "Do you want to configure BURG instead of grub2?"
@@ -301,11 +305,11 @@ msgstr "Você deseja configurar BURG, em vez de grub2?"
 
 #: ../src/View/Gtk/Main.cpp:248
 msgid "_General settings"
-msgstr ""
+msgstr "_Configurações gerais"
 
 #: ../src/View/Gtk/Main.cpp:253
 msgid "_Appearance settings"
-msgstr ""
+msgstr "_Configurações da aparência"
 
 #: ../src/View/Gtk/Main.cpp:266
 msgid "BURG Mode"
@@ -317,11 +321,11 @@ msgstr "Salve a configuração e gere um novo "
 
 #: ../src/View/Gtk/Main.cpp:291
 msgid "Are you sure?"
-msgstr ""
+msgstr "Você tem certeza?"
 
 #: ../src/View/Gtk/Main.cpp:292
 msgid "This removes all your list modifications of the bootloader menu!"
-msgstr ""
+msgstr "Isso remove todas as modificações na sua lista de menu bootloader!"
 
 #: ../src/View/Gtk/Main.cpp:352
 msgid "loading configuration…"
@@ -329,31 +333,31 @@ msgstr "carregando configuração..."
 
 #: ../src/View/Gtk/Main.cpp:354
 msgid "loading script %2/%3 (%1)"
-msgstr ""
+msgstr "carregando script %2/%3 (%1)"
 
 #: ../src/View/Gtk/Main.cpp:373
 msgid "submenu"
-msgstr ""
+msgstr "submenu"
 
 #: ../src/View/Gtk/Main.cpp:376 ../src/View/Gtk/Trash.cpp:92
 msgid "placeholder"
-msgstr ""
+msgstr "espaço reservado"
 
 #: ../src/View/Gtk/Main.cpp:379 ../src/View/Gtk/Trash.cpp:92
 msgid "menuentry"
-msgstr ""
+msgstr "entrada do menu"
 
 #: ../src/View/Gtk/Main.cpp:383 ../src/View/Gtk/Trash.cpp:92
 msgid "script: "
-msgstr ""
+msgstr "script: "
 
 #: ../src/View/Gtk/Main.cpp:387
 msgid "default name: "
-msgstr ""
+msgstr "nome padrão: "
 
 #: ../src/View/Gtk/Main.cpp:391
 msgid "Partition: "
-msgstr ""
+msgstr "Partição: "
 
 #: ../src/View/Gtk/Main.cpp:415
 msgid "Proxy binary not found!"
@@ -370,19 +374,19 @@ msgstr ""
 
 #: ../src/View/Gtk/Main.cpp:422
 msgid "(incoming Entries of %1, Script: %2)"
-msgstr ""
+msgstr "(Entradas inseridas de %1, Script: %2)"
 
 #: ../src/View/Gtk/Main.cpp:424
 msgid "(incoming Entries of %1)"
-msgstr ""
+msgstr "(Entradas inseridas de %1)"
 
 #: ../src/View/Gtk/Main.cpp:426
 msgid "(incoming Entries of Script: %1)"
-msgstr ""
+msgstr "(Entradas inseridas do Script: %1)"
 
 #: ../src/View/Gtk/Main.cpp:428
 msgid "(incoming Entries)"
-msgstr ""
+msgstr "(Entradas inseridas)"
 
 #: ../src/View/Gtk/Main.cpp:434
 msgid "(script code)"
@@ -390,17 +394,20 @@ msgstr "(código de script)"
 
 #: ../src/View/Gtk/Main.cpp:436
 msgid "(script code of %1)"
-msgstr ""
+msgstr "(código de script de %1)"
 
 #: ../src/View/Gtk/Main.cpp:636
 msgid "Trash (%1)"
-msgstr ""
+msgstr "Lixeira (%1)"
 
 #: ../src/View/Gtk/Main.cpp:649
 msgid ""
 "Removing Script Code can cause problems when trying to boot entries relying "
 "on it. Are you sure you want to do it anyway?"
 msgstr ""
+"Removendo o código de script pode causar problemas ao tentar iniciar "
+"entradas confiando nelas. Tem certeza de que quer fazer isso de qualquer "
+"maneira?"
 
 #: ../src/View/Gtk/Main.cpp:657
 msgid ""
@@ -409,6 +416,10 @@ msgid ""
 "If you just want to remove old kernels: The better way is uninstalling them "
 "instead of just hiding them in boot menu."
 msgstr ""
+"Você está tentando remover uma entrada do sistema atualmente em execução. "
+"Verifique se há outras entradas de trabalho deste sistema!\n"
+"Se você quiser apenas remover kernels antigos: A melhor maneira é desinstalá-"
+"los em vez de apenas escondê-los no menu de inicialização."
 
 #: ../src/View/Gtk/Main.cpp:686
 msgid "Default title: "
@@ -463,15 +474,15 @@ msgstr ""
 
 #: ../src/View/Gtk/Main.cpp:854
 msgid "Environment settings"
-msgstr ""
+msgstr "Configurações de ambiente"
 
 #: ../src/View/Gtk/Main.cpp:866
 msgid "Do you want to proceed without saving the current configuration?"
-msgstr ""
+msgstr "Você quer continuar sem salvar a configuração atual?"
 
 #: ../src/View/Gtk/Main.cpp:867
 msgid "There are unsaved modifications!"
-msgstr ""
+msgstr "Há modificações que não foram salvas!"
 
 #: ../src/View/Gtk/Settings.cpp:80
 msgid "white"
@@ -668,20 +679,20 @@ msgstr ""
 
 #: ../src/View/Gtk/Trash.cpp:22
 msgid "Add entry from trash"
-msgstr ""
+msgstr "Adicionar entrada da lixeira"
 
 #: ../src/View/Gtk/Trash.cpp:41
 msgid "Delete custom entries"
-msgstr ""
+msgstr "Excluir entradas personalizadas"
 
 #: ../src/View/Gtk/Trash.cpp:92
 msgid "type: "
-msgstr ""
+msgstr "digite: "
 
 #: ../src/View/Gtk/Trash.cpp:109
 msgid "This deletes the following entries:"
-msgstr ""
+msgstr "Isso exclui as seguintes entradas:"
 
 #: ../src/View/Gtk/Element/PartitionChooser.cpp:30
 msgid "current"
-msgstr ""
+msgstr "atual"

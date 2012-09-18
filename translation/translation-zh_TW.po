@@ -1,50 +1,53 @@
-#, fuzzy
+# Chinese (Traditional) translation for grub-customizer
+# Copyright (c) 2012 Rosetta Contributors and Canonical Ltd 2012
+# This file is distributed under the same license as the grub-customizer package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2012.
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version: grub-customizer\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-08-30 22:28+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2012-09-10 13:46+0000\n"
+"Last-Translator: taijuin lee <Unknown>\n"
+"Language-Team: Chinese (Traditional) <zh_TW@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2012-09-10 18:16+0000\n"
 "X-Generator: Launchpad (build 15924)\n"
-"Language: \n"
 
 #: ../src/Controller/MainControllerImpl.cpp:533
 msgid "Name the Entry"
-msgstr ""
+msgstr "命名該項目"
 
 #: ../src/Controller/MainControllerImpl.cpp:589
 msgid "cannot move this entry"
-msgstr ""
+msgstr "不能移動這個項目"
 
 #: ../src/Controller/MainControllerImpl.cpp:727
 msgid "Configuration has been saved"
-msgstr ""
+msgstr "配置已被儲存"
 
 #: ../src/Controller/MainControllerImpl.cpp:732
 msgid "updating configuration"
-msgstr ""
+msgstr "更新配置"
 
 #: ../src/main/gtk-client.cpp:229
 msgid "Linux"
-msgstr ""
+msgstr "Linux"
 
 #: ../src/main/gtk-client.cpp:230
 msgid "Linux-ISO"
-msgstr ""
+msgstr "Linux-ISO"
 
 #: ../src/main/gtk-client.cpp:231
 msgid "Chainloader"
-msgstr ""
+msgstr "Chainloader"
 
 #: ../src/main/gtk-client.cpp:232
 msgid "Memtest"
-msgstr ""
+msgstr "記憶體檢測"
 
 #: ../src/View/Gtk/About.cpp:36
 msgid ""
@@ -53,27 +56,27 @@ msgstr ""
 
 #: ../src/View/Gtk/EntryEditor.cpp:22 ../src/View/Gtk/EnvEditor.cpp:23
 msgid "_Type:"
-msgstr ""
+msgstr "類型(_T)："
 
 #: ../src/View/Gtk/EntryEditor.cpp:28
 msgid "Entry editor"
-msgstr ""
+msgstr "項目編輯器"
 
 #: ../src/View/Gtk/EntryEditor.cpp:34
 msgid "Options"
-msgstr ""
+msgstr "選項"
 
 #: ../src/View/Gtk/EntryEditor.cpp:35
 msgid "Source"
-msgstr ""
+msgstr "來源"
 
 #: ../src/View/Gtk/EntryEditor.cpp:62
 msgid "_Partition"
-msgstr ""
+msgstr "分割區(_P)"
 
 #: ../src/View/Gtk/EntryEditor.cpp:64
 msgid "_Initial ramdisk"
-msgstr ""
+msgstr "虛擬檔案系統(_I)"
 
 #: ../src/View/Gtk/EntryEditor.cpp:66
 msgid "_Linux image"
@@ -85,24 +88,24 @@ msgstr ""
 
 #: ../src/View/Gtk/EntryEditor.cpp:70
 msgid "Path to iso file"
-msgstr ""
+msgstr "到iso檔的路徑"
 
 #: ../src/View/Gtk/EntryEditor.cpp:72
 msgid "Locale"
-msgstr ""
+msgstr "本地"
 
 #: ../src/View/Gtk/EntryEditor.cpp:74
 msgid "Kernel params"
-msgstr ""
+msgstr "核心參數"
 
 #: ../src/View/Gtk/EntryEditor.cpp:177 ../src/View/Gtk/EntryEditor.cpp:183
 #: ../src/View/Gtk/EntryEditor.cpp:217
 msgid "Other"
-msgstr ""
+msgstr "其他"
 
 #: ../src/View/Gtk/EnvEditor.cpp:22
 msgid "_Partition:"
-msgstr ""
+msgstr "分割區(_P)："
 
 #: ../src/View/Gtk/EnvEditor.cpp:23
 msgid "Submountpoints:"
@@ -110,35 +113,35 @@ msgstr ""
 
 #: ../src/View/Gtk/EnvEditor.cpp:24
 msgid "save this configuration"
-msgstr ""
+msgstr "儲存這個配置"
 
 #: ../src/View/Gtk/EnvEditor.cpp:53
 msgid "Grub 2"
-msgstr ""
+msgstr "Grub 2"
 
 #: ../src/View/Gtk/EnvEditor.cpp:54
 msgid "BURG"
-msgstr ""
+msgstr "BURG"
 
 #: ../src/View/Gtk/EnvEditor.cpp:216
 msgid "Mount failed!"
-msgstr ""
+msgstr "掛載失敗！"
 
 #: ../src/View/Gtk/EnvEditor.cpp:217
 msgid "umount failed!"
-msgstr ""
+msgstr "卸載失敗！"
 
 #: ../src/View/Gtk/EnvEditor.cpp:218
 msgid "This seems not to be a root file system (no fstab found)"
-msgstr ""
+msgstr "這似乎不是一個根檔案系統( 沒有找到 fstab )"
 
 #: ../src/View/Gtk/EnvEditor.cpp:219
 msgid "Couldn't mount the selected partition"
-msgstr ""
+msgstr "無法掛載選取的分割區"
 
 #: ../src/View/Gtk/EnvEditor.cpp:220
 msgid "Couldn't umount the selected partition"
-msgstr ""
+msgstr "無法卸載選取的分割區"
 
 #: ../src/View/Gtk/Error.cpp:31
 msgid ""
@@ -148,7 +151,7 @@ msgstr ""
 
 #: ../src/View/Gtk/Error.cpp:32
 msgid "An error occurred"
-msgstr ""
+msgstr "有錯誤發生"
 
 #: ../src/View/Gtk/Error.cpp:35
 msgid "continue (risk data loss)"
@@ -163,47 +166,47 @@ msgstr ""
 
 #: ../src/View/Gtk/Installer.cpp:23
 msgid "_Device: "
-msgstr ""
+msgstr "裝置(_V)： "
 
 #: ../src/View/Gtk/Installer.cpp:33
 msgid "Install to MBR"
-msgstr ""
+msgstr "安裝到 MBR"
 
 #: ../src/View/Gtk/Installer.cpp:50
 msgid "The bootloader has been installed successfully"
-msgstr ""
+msgstr "開機載入程式已經成功安裝"
 
 #: ../src/View/Gtk/Installer.cpp:55
 msgid "Error while installing the bootloader"
-msgstr ""
+msgstr "安裝開機載入程式時出現錯誤"
 
 #: ../src/View/Gtk/Installer.cpp:71
 msgid "installing the bootloader…"
-msgstr ""
+msgstr "正在安裝開機載入程式..."
 
 #: ../src/View/Gtk/Installer.cpp:76
 msgid "Please type a device string!"
-msgstr ""
+msgstr "請輸入一個裝置字串！"
 
 #: ../src/View/Gtk/Main.cpp:29
 msgid "_File"
-msgstr ""
+msgstr "檔案(_F)"
 
 #: ../src/View/Gtk/Main.cpp:31
 msgid "_Edit"
-msgstr ""
+msgstr "編輯(_E)"
 
 #: ../src/View/Gtk/Main.cpp:31
 msgid "_View"
-msgstr ""
+msgstr "檢視(_V)"
 
 #: ../src/View/Gtk/Main.cpp:31
 msgid "_Help"
-msgstr ""
+msgstr "求助(_H)"
 
 #: ../src/View/Gtk/Main.cpp:32
 msgid "_Install to MBR …"
-msgstr ""
+msgstr "安裝到MBR(_I)..."
 
 #: ../src/View/Gtk/Main.cpp:41
 msgid "BURG found!"
@@ -211,7 +214,7 @@ msgstr ""
 
 #: ../src/View/Gtk/Main.cpp:42
 msgid "advanced settings"
-msgstr ""
+msgstr "進階設定"
 
 #: ../src/View/Gtk/Main.cpp:44
 msgid ""
@@ -228,11 +231,11 @@ msgstr ""
 
 #: ../src/View/Gtk/Main.cpp:83
 msgid "restore entries from trash"
-msgstr ""
+msgstr "從回收筒中復原項目"
 
 #: ../src/View/Gtk/Main.cpp:85
 msgid "Trash"
-msgstr ""
+msgstr "回收筒"
 
 #: ../src/View/Gtk/Main.cpp:94
 msgid "Move up the selected entry or script"
@@ -260,31 +263,31 @@ msgstr ""
 
 #: ../src/View/Gtk/Main.cpp:161
 msgid "Restore entry"
-msgstr ""
+msgstr "復原項目"
 
 #: ../src/View/Gtk/Main.cpp:162
 msgid "Rename"
-msgstr ""
+msgstr "重新命名"
 
 #: ../src/View/Gtk/Main.cpp:163 ../src/View/Gtk/Main.cpp:164
 msgid "Move up"
-msgstr ""
+msgstr "上移"
 
 #: ../src/View/Gtk/Main.cpp:165 ../src/View/Gtk/Main.cpp:166
 msgid "Move down"
-msgstr ""
+msgstr "下移"
 
 #: ../src/View/Gtk/Main.cpp:167 ../src/View/Gtk/Main.cpp:168
 msgid "Remove from submenu"
-msgstr ""
+msgstr "從子選單移除"
 
 #: ../src/View/Gtk/Main.cpp:169 ../src/View/Gtk/Main.cpp:170
 msgid "Create submenu"
-msgstr ""
+msgstr "建立子選單"
 
 #: ../src/View/Gtk/Main.cpp:177
 msgid "_Change Environment …"
-msgstr ""
+msgstr "變更環境(_C)..."
 
 #: ../src/View/Gtk/Main.cpp:184
 msgid "Do you want to configure BURG instead of grub2?"
@@ -292,23 +295,23 @@ msgstr ""
 
 #: ../src/View/Gtk/Main.cpp:248
 msgid "_General settings"
-msgstr ""
+msgstr "一般設定(_G)"
 
 #: ../src/View/Gtk/Main.cpp:253
 msgid "_Appearance settings"
-msgstr ""
+msgstr "外觀設定(_A)"
 
 #: ../src/View/Gtk/Main.cpp:266
 msgid "BURG Mode"
-msgstr ""
+msgstr "BURG 模式"
 
 #: ../src/View/Gtk/Main.cpp:270
 msgid "Save configuration and generate a new "
-msgstr ""
+msgstr "儲存配置及產生一新的 "
 
 #: ../src/View/Gtk/Main.cpp:291
 msgid "Are you sure?"
-msgstr ""
+msgstr "您確定嗎？"
 
 #: ../src/View/Gtk/Main.cpp:292
 msgid "This removes all your list modifications of the bootloader menu!"
@@ -316,7 +319,7 @@ msgstr ""
 
 #: ../src/View/Gtk/Main.cpp:352
 msgid "loading configuration…"
-msgstr ""
+msgstr "正在載入配置..."
 
 #: ../src/View/Gtk/Main.cpp:354
 msgid "loading script %2/%3 (%1)"
@@ -324,7 +327,7 @@ msgstr ""
 
 #: ../src/View/Gtk/Main.cpp:373
 msgid "submenu"
-msgstr ""
+msgstr "子選單"
 
 #: ../src/View/Gtk/Main.cpp:376 ../src/View/Gtk/Trash.cpp:92
 msgid "placeholder"
@@ -340,11 +343,11 @@ msgstr ""
 
 #: ../src/View/Gtk/Main.cpp:387
 msgid "default name: "
-msgstr ""
+msgstr "預設名稱： "
 
 #: ../src/View/Gtk/Main.cpp:391
 msgid "Partition: "
-msgstr ""
+msgstr "分割區： "
 
 #: ../src/View/Gtk/Main.cpp:415
 msgid "Proxy binary not found!"
@@ -400,11 +403,11 @@ msgstr ""
 
 #: ../src/View/Gtk/Main.cpp:686
 msgid "Default title: "
-msgstr ""
+msgstr "預設標題： "
 
 #: ../src/View/Gtk/Main.cpp:779
 msgid "The saved configuration is not up to date!"
-msgstr ""
+msgstr "儲存的配置不是最新的！"
 
 #: ../src/View/Gtk/Main.cpp:780
 msgid ""
@@ -415,23 +418,23 @@ msgstr ""
 
 #: ../src/View/Gtk/Main.cpp:783
 msgid "_Quit without update"
-msgstr ""
+msgstr "結束而不更新"
 
 #: ../src/View/Gtk/Main.cpp:786
 msgid "_Update & Quit"
-msgstr ""
+msgstr "更新及結束(_U)"
 
 #: ../src/View/Gtk/Main.cpp:790
 msgid "Do you want to save your modifications?"
-msgstr ""
+msgstr "您是否要儲存所做的修改？"
 
 #: ../src/View/Gtk/Main.cpp:793
 msgid "_Quit without saving"
-msgstr ""
+msgstr "結束而不更新(_Q)"
 
 #: ../src/View/Gtk/Main.cpp:796
 msgid "_Save & Quit"
-msgstr ""
+msgstr "儲存及結束(_S)"
 
 #: ../src/View/Gtk/Main.cpp:799
 msgid "AND: your modifications are still unsaved, update will save them too!"
@@ -445,7 +448,7 @@ msgstr ""
 
 #: ../src/View/Gtk/Main.cpp:854
 msgid "Environment settings"
-msgstr ""
+msgstr "環境設定"
 
 #: ../src/View/Gtk/Main.cpp:866
 msgid "Do you want to proceed without saving the current configuration?"
@@ -453,75 +456,75 @@ msgstr ""
 
 #: ../src/View/Gtk/Main.cpp:867
 msgid "There are unsaved modifications!"
-msgstr ""
+msgstr "有未儲存的修改！"
 
 #: ../src/View/Gtk/Settings.cpp:80
 msgid "white"
-msgstr ""
+msgstr "白色"
 
 #: ../src/View/Gtk/Settings.cpp:81
 msgid "yellow"
-msgstr ""
+msgstr "黃色"
 
 #: ../src/View/Gtk/Settings.cpp:82
 msgid "light-cyan"
-msgstr ""
+msgstr "淺青色"
 
 #: ../src/View/Gtk/Settings.cpp:83
 msgid "cyan"
-msgstr ""
+msgstr "青色"
 
 #: ../src/View/Gtk/Settings.cpp:84
 msgid "light-blue"
-msgstr ""
+msgstr "淡藍色"
 
 #: ../src/View/Gtk/Settings.cpp:85
 msgid "blue"
-msgstr ""
+msgstr "藍色"
 
 #: ../src/View/Gtk/Settings.cpp:86
 msgid "light-green"
-msgstr ""
+msgstr "淺綠色"
 
 #: ../src/View/Gtk/Settings.cpp:87
 msgid "green"
-msgstr ""
+msgstr "綠色"
 
 #: ../src/View/Gtk/Settings.cpp:88
 msgid "light-magenta"
-msgstr ""
+msgstr "淺洋紅色"
 
 #: ../src/View/Gtk/Settings.cpp:89
 msgid "magenta"
-msgstr ""
+msgstr "洋紅色"
 
 #: ../src/View/Gtk/Settings.cpp:90
 msgid "light-red"
-msgstr ""
+msgstr "淺紅色"
 
 #: ../src/View/Gtk/Settings.cpp:91
 msgid "red"
-msgstr ""
+msgstr "紅色"
 
 #: ../src/View/Gtk/Settings.cpp:92
 msgid "brown"
-msgstr ""
+msgstr "棕色"
 
 #: ../src/View/Gtk/Settings.cpp:93
 msgid "light-gray"
-msgstr ""
+msgstr "淺棕色"
 
 #: ../src/View/Gtk/Settings.cpp:94
 msgid "dark-gray"
-msgstr ""
+msgstr "深灰色"
 
 #: ../src/View/Gtk/Settings.cpp:95
 msgid "transparent"
-msgstr ""
+msgstr "透明度"
 
 #: ../src/View/Gtk/Settings.cpp:95
 msgid "black"
-msgstr ""
+msgstr "黑色"
 
 #: ../src/View/Gtk/Settings.cpp:107
 msgid "pre_defined: "
@@ -533,63 +536,63 @@ msgstr ""
 
 #: ../src/View/Gtk/Settings.cpp:108
 msgid "default entry"
-msgstr ""
+msgstr "預設項目"
 
 #: ../src/View/Gtk/Settings.cpp:108
 msgid "visibility"
-msgstr ""
+msgstr "能見度"
 
 #: ../src/View/Gtk/Settings.cpp:108
 msgid "show menu"
-msgstr ""
+msgstr "顯示選單"
 
 #: ../src/View/Gtk/Settings.cpp:109
 msgid "Timeout"
-msgstr ""
+msgstr "逾時"
 
 #: ../src/View/Gtk/Settings.cpp:109
 msgid "Seconds"
-msgstr ""
+msgstr "秒鐘"
 
 #: ../src/View/Gtk/Settings.cpp:109
 msgid "kernel parameters"
-msgstr ""
+msgstr "核心參數"
 
 #: ../src/View/Gtk/Settings.cpp:110
 msgid "generate recovery entries"
-msgstr ""
+msgstr "產生復原項目"
 
 #: ../src/View/Gtk/Settings.cpp:110
 msgid "look for other operating systems"
-msgstr ""
+msgstr "尋找其他作業系統"
 
 #: ../src/View/Gtk/Settings.cpp:111
 msgid "custom resolution: "
-msgstr ""
+msgstr "自訂解析度： "
 
 #: ../src/View/Gtk/Settings.cpp:112
 msgid "font color"
-msgstr ""
+msgstr "字體顏色"
 
 #: ../src/View/Gtk/Settings.cpp:112
 msgid "background"
-msgstr ""
+msgstr "背景"
 
 #: ../src/View/Gtk/Settings.cpp:113
 msgid "normal:"
-msgstr ""
+msgstr "一般："
 
 #: ../src/View/Gtk/Settings.cpp:113
 msgid "highlight:"
-msgstr ""
+msgstr "突出加亮："
 
 #: ../src/View/Gtk/Settings.cpp:114
 msgid "menu colors"
-msgstr ""
+msgstr "選單顏色"
 
 #: ../src/View/Gtk/Settings.cpp:114
 msgid "background image"
-msgstr ""
+msgstr "背景圖片"
 
 #: ../src/View/Gtk/Settings.cpp:116
 msgid ""
@@ -599,11 +602,11 @@ msgstr ""
 
 #: ../src/View/Gtk/Settings.cpp:119
 msgid "settings"
-msgstr ""
+msgstr "設定"
 
 #: ../src/View/Gtk/Settings.cpp:123
 msgid "_General"
-msgstr ""
+msgstr "一般(_G)"
 
 #: ../src/View/Gtk/Settings.cpp:124
 msgid "A_ppearance"
@@ -611,7 +614,7 @@ msgstr ""
 
 #: ../src/View/Gtk/Settings.cpp:125
 msgid "_Advanced"
-msgstr ""
+msgstr "進階(_A)"
 
 #: ../src/View/Gtk/Settings.cpp:138
 msgid "is active"
@@ -619,7 +622,7 @@ msgstr ""
 
 #: ../src/View/Gtk/Settings.cpp:139
 msgid "name"
-msgstr ""
+msgstr "名稱"
 
 #: ../src/View/Gtk/Settings.cpp:140
 msgid "value"
@@ -649,16 +652,16 @@ msgstr ""
 
 #: ../src/View/Gtk/Trash.cpp:41
 msgid "Delete custom entries"
-msgstr ""
+msgstr "刪除自訂項目"
 
 #: ../src/View/Gtk/Trash.cpp:92
 msgid "type: "
-msgstr ""
+msgstr "類型： "
 
 #: ../src/View/Gtk/Trash.cpp:109
 msgid "This deletes the following entries:"
-msgstr ""
+msgstr "這刪除了下列項目："
 
 #: ../src/View/Gtk/Element/PartitionChooser.cpp:30
 msgid "current"
-msgstr ""
+msgstr "目前"

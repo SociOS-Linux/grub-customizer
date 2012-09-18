@@ -106,6 +106,12 @@ ArrayStructure::ArrayStructure(std::list<std::string> const& source) {
 	}
 }
 
+ArrayStructure::ArrayStructure(std::map<std::string, std::string> const& source) {
+	for (std::map<std::string, std::string>::const_iterator iter = source.begin(); iter != source.end(); iter++) {
+		(*this)[iter->first] = iter->second;
+	}
+}
+
 void var_dump(std::map<std::string, ArrayStructureItem> const& data, std::string prefix, unsigned int indent) {
 	if (prefix[0] == '!') {
 		indent = 2;

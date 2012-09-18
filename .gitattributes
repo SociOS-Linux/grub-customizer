@@ -237,4 +237,6 @@ translation/translation-vi.mo -text svneol=unset#unset
 translation/translation-vi.po -text
 translation/translation-zh_CN.mo -text svneol=unset#unset
 translation/translation-zh_CN.po -text
+translation/translation-zh_TW.mo -text
+translation/translation-zh_TW.po -text
 translation/translation.pot -text

@@ -68,6 +68,7 @@ class ArrayStructure : public std::map<std::string, ArrayStructureItem> {
 public:
 	ArrayStructure();
 	ArrayStructure(std::list<std::string> const& source);
+	ArrayStructure(std::map<std::string, std::string> const& source);
 };
 
 // prefix "!" = use prefixes

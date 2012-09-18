@@ -143,16 +143,18 @@ void MainControllerImpl::init(){
 	//aufs is the virtual root fileSystem used by live cds
 	if (mountTable->getEntryByMountpoint("").isLiveCdFs() && env.cfg_dir_prefix == ""){
 		this->log("is live CD", Logger::INFO);
+		this->env.init(Model_Env::GRUB_MODE, "");
 		this->showEnvEditorAction();
 	} else {
 		this->log("running on an installed system", Logger::INFO);
 		std::list<Model_Env::Mode> modes = this->env.getAvailableModes();
-		if (modes.size() == 2)
+		if (modes.size() == 2) {
 			this->view->showBurgSwitcher();
-		else if (modes.size() == 1)
+		} else if (modes.size() == 1) {
 			this->init(modes.front());
-		else if (modes.size() == 0)
+		} else if (modes.size() == 0) {
 			this->showEnvEditorAction();
+		}
 	}
 }
 
@@ -396,7 +398,7 @@ void MainControllerImpl::_rAppendRule(Model_Rule& rule, Model_Rule* parentRule){
 					if (options.find("partition_uuid") != options.end()) {
 						// add device path
 						for (Model_DeviceDataListInterface::const_iterator iter = deviceDataList->begin(); iter != deviceDataList->end(); iter++) {
-							if (iter->second.at("UUID") == options["partition_uuid"]) {
+							if (iter->second.find("UUID") != iter->second.end() && iter->second.at("UUID") == options["partition_uuid"]) {
 								options["_deviceName"] = iter->first;
 								break;
 							}

@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-08-30 22:28+0200\n"
-"PO-Revision-Date: 2012-09-07 19:02+0000\n"
+"PO-Revision-Date: 2012-09-08 19:06+0000\n"
 "Last-Translator: rob <linuxned@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-09-07 19:12+0000\n"
-"X-Generator: Launchpad (build 15914)\n"
+"X-Launchpad-Export-Date: 2012-09-10 18:16+0000\n"
+"X-Generator: Launchpad (build 15924)\n"
 
 #: ../src/Controller/MainControllerImpl.cpp:533
 msgid "Name the Entry"
@@ -62,7 +62,7 @@ msgstr "_Type:"
 
 #: ../src/View/Gtk/EntryEditor.cpp:28
 msgid "Entry editor"
-msgstr ""
+msgstr "Invoer-editor"
 
 #: ../src/View/Gtk/EntryEditor.cpp:34
 msgid "Options"
@@ -94,7 +94,7 @@ msgstr "Pad naar ISO-bestand"
 
 #: ../src/View/Gtk/EntryEditor.cpp:72
 msgid "Locale"
-msgstr ""
+msgstr "Taal"
 
 #: ../src/View/Gtk/EntryEditor.cpp:74
 msgid "Kernel params"
