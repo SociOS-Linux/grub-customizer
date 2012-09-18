@@ -114,7 +114,7 @@ View_Gtk_Settings::View_Gtk_Settings()
 	lblColorChooser(gettext("menu colors")), lblBackgroundImage(gettext("background image")),
 	imgRemoveBackground(Gtk::Stock::REMOVE, Gtk::ICON_SIZE_BUTTON), imgRemoveFont(Gtk::Stock::REMOVE, Gtk::ICON_SIZE_BUTTON),
 	lblBackgroundRequiredInfo(gettext("To get the colors above working,\nyou have to select a background image!")),
-	gccNormalBackground(true), gccHighlightBackground(true), lblFont("_Font", true), cbResolution(true)
+	gccNormalBackground(true), gccHighlightBackground(true), lblFont(gettext("_Font"), true), cbResolution(true)
 {
 	this->set_title("Grub Customizer - "+Glib::ustring(gettext("settings")));
 	this->set_icon_name("grub-customizer");
