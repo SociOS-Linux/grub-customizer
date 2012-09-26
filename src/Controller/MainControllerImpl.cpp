@@ -395,31 +395,30 @@ void MainControllerImpl::_rAppendRule(Model_Rule& rule, Model_Rule* parentRule){
 		}
 		bool isEditable = rule.type == Model_Rule::NORMAL || rule.type == Model_Rule::PLAINTEXT;
 		bool isModified = rule.dataSource && rule.dataSource->isModified;
-		if (rule.isVisible) {
-			// parse content to show additional informations
-			std::map<std::string, std::string> options;
-			if (rule.dataSource) {
-				try {
-					options = this->contentParserFactory->create(rule.dataSource->content)->getOptions();
-					if (options.find("partition_uuid") != options.end()) {
-						// add device path
-						for (Model_DeviceDataListInterface::const_iterator iter = deviceDataList->begin(); iter != deviceDataList->end(); iter++) {
-							if (iter->second.find("UUID") != iter->second.end() && iter->second.at("UUID") == options["partition_uuid"]) {
-								options["_deviceName"] = iter->first;
-								break;
-							}
+
+		// parse content to show additional informations
+		std::map<std::string, std::string> options;
+		if (rule.dataSource) {
+			try {
+				options = this->contentParserFactory->create(rule.dataSource->content)->getOptions();
+				if (options.find("partition_uuid") != options.end()) {
+					// add device path
+					for (Model_DeviceDataListInterface::const_iterator iter = deviceDataList->begin(); iter != deviceDataList->end(); iter++) {
+						if (iter->second.find("UUID") != iter->second.end() && iter->second.at("UUID") == options["partition_uuid"]) {
+							options["_deviceName"] = iter->first;
+							break;
 						}
 					}
-				} catch (ParserNotFoundException const& e) {
-					// nothing to do
 				}
+			} catch (ParserNotFoundException const& e) {
+				// nothing to do
 			}
+		}
 
-			this->view->appendEntry(name, &rule, is_other_entries_ph || is_plaintext, isSubmenu, scriptName, defaultName, isEditable, isModified, options, parentRule);
+		this->view->appendEntry(name, &rule, is_other_entries_ph || is_plaintext, isSubmenu, scriptName, defaultName, isEditable, isModified, options, rule.isVisible, parentRule);
 
-			for (std::list<Model_Rule>::iterator subruleIter = rule.subRules.begin(); subruleIter != rule.subRules.end(); subruleIter++) {
-				this->_rAppendRule(*subruleIter, &rule);
-			}
+		for (std::list<Model_Rule>::iterator subruleIter = rule.subRules.begin(); subruleIter != rule.subRules.end(); subruleIter++) {
+			this->_rAppendRule(*subruleIter, &rule);
 		}
 	}
 }
@@ -916,6 +915,18 @@ void MainControllerImpl::setViewOptionAction(ViewOption option, bool value) {
 			this->log("option saving failed", Logger::ERROR);
 		}
 		this->syncLoadStateAction();
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
+	this->logActionEnd();
+}
+
+
+void MainControllerImpl::entryStateToggledAction(void* entry, bool state) {
+	this->logActionBegin("entry-state-toggled");
+	try {
+		static_cast<Model_Rule*>(entry)->setVisibility(state);
+		this->view->setEntryVisibility(entry, state);
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}

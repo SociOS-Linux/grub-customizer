@@ -64,6 +64,7 @@ public:
 	virtual void selectRuleAction(void* rule, bool startEdit = false) = 0;
 	virtual void refreshTabAction(unsigned int pos) = 0;
 	virtual void setViewOptionAction(ViewOption option, bool value) = 0;
+	virtual void entryStateToggledAction(void* entry, bool state) = 0;
 };
 
 

@@ -37,7 +37,7 @@ View_Gtk_Main::View_Gtk_Main()
 	miCLeft(Gtk::Stock::GO_BACK), miCRight(Gtk::Stock::GO_FORWARD), miCRename(Gtk::Stock::EDIT), miCEditEntry(Gtk::Stock::EDIT),
 	miReload(Gtk::Stock::REFRESH, Gtk::AccelKey("F5")), miSave(Gtk::Stock::SAVE),
 	miAbout(Gtk::Stock::ABOUT), miModifyEnvironment(Gtk::Stock::OPEN), miRevert(Gtk::Stock::REVERT_TO_SAVED),
-	miCreateEntry(Gtk::Stock::NEW), miShowDetails(gettext("_Show details"), true),
+	miCreateEntry(Gtk::Stock::NEW), miShowDetails(gettext("_Show details"), true), miShowHiddenEntries(gettext("Show _hidden entries"), true),
 	lock_state(~0), burgSwitcher(gettext("BURG found!"), false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO),
 	bttAdvancedSettings1(gettext("advanced settings")), bttAdvancedSettings2(gettext("advanced settings")),
 	bbxAdvancedSettings1(Gtk::BUTTONBOX_END), bbxAdvancedSettings2(Gtk::BUTTONBOX_END),
@@ -125,6 +125,7 @@ View_Gtk_Main::View_Gtk_Main()
 	
 	this->setLockState(3);
 	this->options[VIEW_SHOW_DETAILS] = true;
+	this->options[VIEW_SHOW_HIDDEN_ENTRIES] = false;
 
 	//menu
 	menu.append(miFile);
@@ -177,8 +178,10 @@ View_Gtk_Main::View_Gtk_Main()
 
 	subView.attach(miReload, 0,1,0,1);
 	subView.attach(miShowDetails, 0, 1, 1, 2);
-	
+	subView.attach(miShowHiddenEntries, 0, 1, 2, 3);
+
 	miShowDetails.set_active(true);
+	miShowHiddenEntries.set_active(false);
 
 	subHelp.attach(miAbout, 0,1,0,1);
 	
@@ -199,6 +202,7 @@ View_Gtk_Main::View_Gtk_Main()
 	tvConfList.get_selection()->signal_changed().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_treeview_selection_changed));
 	tvConfList.textRenderer.signal_editing_started().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_edit_name));
 	tvConfList.textRenderer.signal_edited().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_edit_name_finished));
+	tvConfList.toggleRenderer.signal_toggled().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_checkbox_toggled));
 	tvConfList.signal_button_press_event().connect_notify(sigc::mem_fun(this, &View_Gtk_Main::signal_button_press));
 	tvConfList.signal_popup_menu().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_popup));
 	tvConfList.signal_key_press_event().connect_notify(sigc::mem_fun(this, &View_Gtk_Main::signal_key_press));
@@ -235,6 +239,7 @@ View_Gtk_Main::View_Gtk_Main()
 	miModifyEnvironment.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_show_envEditor));
 	miRevert.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_revert));
 	miShowDetails.signal_toggled().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_viewopt_details_toggled));
+	miShowHiddenEntries.signal_toggled().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_viewopt_checkboxes_toggled));
 
 	miExit.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_quit_click));
 	miAbout.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_info_click));
@@ -324,6 +329,12 @@ void View_Gtk_Main::signal_viewopt_details_toggled() {
 	}
 }
 
+void View_Gtk_Main::signal_viewopt_checkboxes_toggled() {
+	if (this->eventListener) {
+		this->eventListener->setViewOptionAction(VIEW_SHOW_HIDDEN_ENTRIES, this->miShowHiddenEntries.get_active());
+	}
+}
+
 void View_Gtk_Main::showBurgSwitcher(){
 	burgSwitcher.show();
 }
@@ -377,7 +388,10 @@ void View_Gtk_Main::setStatusText(std::string const& name, int pos, int max){
 	}
 }
 
-void View_Gtk_Main::appendEntry(std::string const& name, void* entryPtr, bool is_placeholder, bool is_submenu, std::string const& scriptName, std::string const& defaultName, bool isEditable, bool isModified, std::map<std::string, std::string> const& options, void* parentEntry){
+void View_Gtk_Main::appendEntry(std::string const& name, void* entryPtr, bool is_placeholder, bool is_submenu, std::string const& scriptName, std::string const& defaultName, bool isEditable, bool isModified, std::map<std::string, std::string> const& options, bool isVisible, void* parentEntry){
+	if (!isVisible && !this->options[VIEW_SHOW_HIDDEN_ENTRIES]) {
+		return;
+	}
 	Gtk::TreeIter entryRow;
 	if (parentEntry) {
 		entryRow = tvConfList.refTreeStore->append(this->getIterByRulePtr(parentEntry)->children());
@@ -428,8 +442,10 @@ void View_Gtk_Main::appendEntry(std::string const& name, void* entryPtr, bool is
 
 	(*entryRow)[tvConfList.treeModel.name] = name;
 	(*entryRow)[tvConfList.treeModel.text] = outputName;
+	(*entryRow)[tvConfList.treeModel.is_activated] = isVisible;
 	(*entryRow)[tvConfList.treeModel.relatedRule] = (void*)entryPtr;
-	(*entryRow)[tvConfList.treeModel.is_renamable] = !is_placeholder;
+	(*entryRow)[tvConfList.treeModel.is_renamable] = false;
+	(*entryRow)[tvConfList.treeModel.is_renamable_real] = !is_placeholder;
 	(*entryRow)[tvConfList.treeModel.is_editable] = isEditable;
 	(*entryRow)[tvConfList.treeModel.is_sensitive] = !is_placeholder;
 	(*entryRow)[tvConfList.treeModel.icon] = icon;
@@ -601,6 +617,16 @@ std::list<void*> View_Gtk_Main::getSelectedRules() {
 }
 
 
+void View_Gtk_Main::_rDisableRules(Gtk::TreeNodeChildren const& list) {
+	for (Gtk::TreeNodeChildren::iterator pathIter = list.begin(); pathIter != list.end(); pathIter++) {
+		(*pathIter)[this->tvConfList.treeModel.is_renamable] = false;
+		if (pathIter->children().size()) {
+			this->_rDisableRules(pathIter->children());
+		}
+	}
+}
+
+
 void View_Gtk_Main::signal_reload_click(){
 	eventListener->reloadAction();
 }
@@ -617,6 +643,15 @@ Gtk::TreeModel::iterator View_Gtk_Main::getIterByRulePtr(void* rulePtr, const Gt
 		}
 	}
 	throw ItemNotFoundException("rule not found", __FILE__, __LINE__);
+}
+
+void View_Gtk_Main::signal_checkbox_toggled(Glib::ustring const& path) {
+	if (!this->lock_state) {
+		this->eventListener->entryStateToggledAction(
+			(*this->tvConfList.refTreeStore->get_iter(path))[this->tvConfList.treeModel.relatedRule],
+			!(*this->tvConfList.refTreeStore->get_iter(path))[this->tvConfList.treeModel.is_activated]
+		);
+	}
 }
 
 void View_Gtk_Main::signal_edit_name_finished(const Glib::ustring& path, const Glib::ustring& new_text){
@@ -696,6 +731,11 @@ void View_Gtk_Main::setOption(ViewOption option, bool value) {
 	this->options[option] = value;
 	switch (option) {
 	case VIEW_SHOW_DETAILS: this->miShowDetails.set_active(value); break;
+	case VIEW_SHOW_HIDDEN_ENTRIES:
+		this->miShowHiddenEntries.set_active(value);
+		this->tvConfList.toggleRenderer.set_visible(value);
+		this->tvConfList.pixbufRenderer.set_visible(!value);
+		break;
 	default:
 		throw LogicException("unexpected option");
 	}
@@ -710,6 +750,10 @@ void View_Gtk_Main::setOptions(std::map<ViewOption, bool> const& options) {
 	for (std::map<ViewOption, bool>::const_iterator iter = options.begin(); iter != options.end(); iter++) {
 		this->setOption(iter->first, iter->second);
 	}
+}
+
+void View_Gtk_Main::setEntryVisibility(void* entry, bool value) {
+	(*this->getIterByRulePtr(entry))[tvConfList.treeModel.is_activated] = value;
 }
 
 void View_Gtk_Main::signal_move_click(int direction){
@@ -745,6 +789,13 @@ void View_Gtk_Main::signal_treeview_selection_changed(){
 
 			void* rptr = (*iter)[tvConfList.treeModel.relatedRule];
 			this->eventListener->showInfoAction(rptr);
+
+			// all entries must be not renamable while not selected to allow direct toggling of the checkboxes
+			this->_rDisableRules(tvConfList.refTreeStore->children());
+
+			if (selectedRows.size() == 1) {
+				(*this->tvConfList.refTreeStore->get_iter(selectedRows[0]))[this->tvConfList.treeModel.is_renamable] = (*this->tvConfList.refTreeStore->get_iter(selectedRows[0])).get_value(this->tvConfList.treeModel.is_renamable_real);
+			}
 		} else {
 			this->eventListener->showInfoAction(NULL);
 		}
@@ -939,6 +990,9 @@ View_Gtk_Main_List::View_Gtk_Main_List(){
 	this->append_column(this->mainColumn);
 	this->mainColumn.pack_start(pixbufRenderer, false);
 	this->mainColumn.add_attribute(pixbufRenderer.property_pixbuf(), treeModel.icon);
+	this->mainColumn.pack_start(toggleRenderer, false);
+	toggleRenderer.set_visible(false);
+	this->mainColumn.add_attribute(toggleRenderer.property_active(), treeModel.is_activated);
 	this->mainColumn.pack_start(this->textRenderer, true);
 	this->mainColumn.add_attribute(this->textRenderer.property_markup(), treeModel.text);
 	this->mainColumn.add_attribute(this->textRenderer.property_editable(), treeModel.is_renamable);
@@ -955,7 +1009,9 @@ View_Gtk_Main_List::TreeModel::TreeModel(){
 	this->add(relatedRule);
 	this->add(is_other_entries_marker);
 	this->add(is_renamable);
+	this->add(is_renamable_real);
 	this->add(is_editable);
+	this->add(is_activated);
 	this->add(is_sensitive);
 	this->add(icon);
 }

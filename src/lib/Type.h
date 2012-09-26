@@ -20,7 +20,8 @@
 #define TYPE_H_
 
 enum ViewOption {
-	VIEW_SHOW_DETAILS
+	VIEW_SHOW_DETAILS,
+	VIEW_SHOW_HIDDEN_ENTRIES
 };
 
 

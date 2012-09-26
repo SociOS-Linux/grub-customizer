@@ -144,6 +144,7 @@ public:
 	void selectRuleAction(void* rule, bool startEdit = false);
 	void refreshTabAction(unsigned int pos);
 	void setViewOptionAction(ViewOption option, bool value);
+	void entryStateToggledAction(void* entry, bool state);
 };
 
 #endif
