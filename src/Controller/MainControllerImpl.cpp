@@ -308,11 +308,6 @@ void MainControllerImpl::saveThreadedAction(){
 	try {
 		this->log("writing settings file", Logger::IMPORTANT_EVENT);
 		this->settings->save();
-		try {
-			this->env.saveViewOptions(this->view->getOptions());
-		} catch (FileSaveException e) {
-			this->log("option saving failed", Logger::ERROR);
-		}
 		if (this->settings->color_helper_required) {
 			this->grublistCfg->addColorHelper();
 		}
@@ -915,6 +910,11 @@ void MainControllerImpl::setViewOptionAction(ViewOption option, bool value) {
 	this->logActionBegin("set-view-option");
 	try {
 		this->view->setOption(option, value);
+		try {
+			this->env.saveViewOptions(this->view->getOptions());
+		} catch (FileSaveException e) {
+			this->log("option saving failed", Logger::ERROR);
+		}
 		this->syncLoadStateAction();
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
