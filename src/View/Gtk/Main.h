@@ -35,12 +35,14 @@ public:
 		Gtk::TreeModelColumn<Glib::ustring> name;
 		Gtk::TreeModelColumn<Glib::ustring> text;
 		Gtk::TreeModelColumn<void*> relatedRule;
+		Gtk::TreeModelColumn<void*> relatedScript;
 		Gtk::TreeModelColumn<bool> is_other_entries_marker;
 		Gtk::TreeModelColumn<bool> is_renamable;
 		Gtk::TreeModelColumn<bool> is_renamable_real;
 		Gtk::TreeModelColumn<bool> is_editable;
 		Gtk::TreeModelColumn<bool> is_sensitive;
 		Gtk::TreeModelColumn<bool> is_activated;
+		Gtk::TreeModelColumn<bool> is_toplevel;
 		Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > icon;
 		TreeModel();
 	};
@@ -90,7 +92,7 @@ class View_Gtk_Main : public View_Main, public CommonClass {
 	Gtk::ImageMenuItem miExit, miSave, miAbout, miModifyEnvironment, miRevert, miCreateEntry;
 	ImageMenuItemOwnKey miReload, miAdd, miRemove, miUp, miDown, miLeft, miRight, miEditEntry;
 	Gtk::ImageMenuItem miCRemove, miCUp, miCDown, miCLeft, miCRight, miCRename, miCEditEntry;
-	Gtk::CheckMenuItem miShowDetails, miShowHiddenEntries;
+	Gtk::CheckMenuItem miShowDetails, miShowHiddenEntries, miGroupByScript;
 	Gtk::Menu subFile, subEdit, subView, subHelp, contextMenu;
 	
 	Gtk::VBox settingsHBox;
@@ -106,6 +108,7 @@ class View_Gtk_Main : public View_Main, public CommonClass {
 
 
 	Gtk::TreeModel::iterator getIterByRulePtr(void* rulePtr, const Gtk::TreeRow* parentRow = NULL) const;
+	Gtk::TreeModel::iterator getIterByScriptPtr(void* scriptPtr) const;
 	void update_move_buttons();
 	void update_remove_button();
 	void saveConfig();
@@ -136,7 +139,7 @@ public:
 	void hideProgressBar();
 	void setStatusText(std::string const& new_status_text);
 	void setStatusText(std::string const& name, int pos, int max);
-	void appendEntry(std::string const& name, void* entryPtr, bool is_placeholder, bool is_submenu, std::string const& scriptName, std::string const& defaultName, bool isEditable, bool isModified, std::map<std::string, std::string> const& options, bool isVisible, void* parentEntry = NULL);
+	void appendEntry(std::string const& name, void* entryPtr, void* scriptPtr, bool is_placeholder, bool is_submenu, std::string const& scriptName, std::string const& defaultName, bool isEditable, bool isModified, std::map<std::string, std::string> const& options, bool isVisible, void* parentEntry = NULL, void* parentScript = NULL);
 	void showProxyNotFoundMessage();
 	std::string createNewEntriesPlaceholderString(std::string const& parentMenu = "", std::string const& sourceScriptName = "");
 	std::string createPlaintextString(std::string const& scriptName) const;
@@ -197,6 +200,7 @@ private:
 	void signal_tab_changed(Gtk::Widget* page, guint page_num);
 	void signal_viewopt_details_toggled();
 	void signal_viewopt_checkboxes_toggled();
+	void signal_viewopt_script_toggled();
 };
 
 #endif

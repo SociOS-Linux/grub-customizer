@@ -151,6 +151,7 @@ void Model_Env::saveViewOptions(std::map<ViewOption, bool> const& options) {
 		switch (iter->first) {
 		case VIEW_SHOW_DETAILS: optionText = "SHOW_DETAILS"; break;
 		case VIEW_SHOW_HIDDEN_ENTRIES: optionText = "SHOW_HIDDEN_ENTRIES"; break;
+		case VIEW_GROUP_BY_SCRIPT: optionText = "GROUP_BY_SCRIPT"; break;
 		default: throw LogicException("option mapping failed");
 		}
 		ds.setValue(optionText, iter->second ? "true" : "false");
@@ -171,6 +172,9 @@ std::map<ViewOption, bool> Model_Env::loadViewOptions() {
 	}
 	if (ds.getValue("SHOW_HIDDEN_ENTRIES") != "") {
 		result[VIEW_SHOW_HIDDEN_ENTRIES] = ds.getValue("SHOW_HIDDEN_ENTRIES") == "true";
+	}
+	if (ds.getValue("GROUP_BY_SCRIPT") != "") {
+		result[VIEW_GROUP_BY_SCRIPT] = ds.getValue("GROUP_BY_SCRIPT") == "true";
 	}
 	return result;
 }

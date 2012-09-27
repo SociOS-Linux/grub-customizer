@@ -93,6 +93,7 @@ void MainControllerImpl::updateList() {
 	for (std::list<Model_Proxy>::iterator iter = this->grublistCfg->proxies.begin(); iter != this->grublistCfg->proxies.end(); iter++){
 		std::string name = iter->getScriptName();
 		if ((name != "header" && name != "debian_theme" && name != "grub-customizer_menu_color_helper") || iter->isModified()) {
+			this->view->appendEntry(name, NULL, &*iter, false, true, "", name, false, false, std::map<std::string, std::string>(), true, NULL);
 			for (std::list<Model_Rule>::iterator ruleIter = iter->rules.begin(); ruleIter != iter->rules.end(); ruleIter++){
 				this->_rAppendRule(*ruleIter);
 			}
@@ -415,7 +416,9 @@ void MainControllerImpl::_rAppendRule(Model_Rule& rule, Model_Rule* parentRule){
 			}
 		}
 
-		this->view->appendEntry(name, &rule, is_other_entries_ph || is_plaintext, isSubmenu, scriptName, defaultName, isEditable, isModified, options, rule.isVisible, parentRule);
+		Model_Proxy* proxy = this->grublistCfg->proxies.getProxyByRule(&rule);
+
+		this->view->appendEntry(name, &rule, NULL, is_other_entries_ph || is_plaintext, isSubmenu, scriptName, defaultName, isEditable, isModified, options, rule.isVisible, parentRule, proxy);
 
 		for (std::list<Model_Rule>::iterator subruleIter = rule.subRules.begin(); subruleIter != rule.subRules.end(); subruleIter++) {
 			this->_rAppendRule(*subruleIter, &rule);
