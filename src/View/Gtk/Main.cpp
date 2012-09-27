@@ -822,18 +822,11 @@ void View_Gtk_Main::update_remove_button(){
 	}
 }
 
-void View_Gtk_Main::setDefaultTitleStatusText(std::string const& str){
-	this->setStatusText(gettext("Default title: ")+str);
-}
-
 void View_Gtk_Main::signal_treeview_selection_changed(){
 	if (this->lock_state == 0){
 		if (tvConfList.get_selection()->count_selected_rows()) {
 			std::vector<Gtk::TreeModel::Path> selectedRows = tvConfList.get_selection()->get_selected_rows();
 			Gtk::TreeModel::iterator iter = this->tvConfList.refTreeStore->get_iter(selectedRows[0]);
-
-			void* rptr = (*iter)[tvConfList.treeModel.relatedRule];
-			this->eventListener->showInfoAction(rptr);
 
 			// all entries must be not renamable while not selected to allow direct toggling of the checkboxes
 			this->_rDisableRules(tvConfList.refTreeStore->children());
@@ -841,8 +834,6 @@ void View_Gtk_Main::signal_treeview_selection_changed(){
 			if (selectedRows.size() == 1) {
 				(*this->tvConfList.refTreeStore->get_iter(selectedRows[0]))[this->tvConfList.treeModel.is_renamable] = (*this->tvConfList.refTreeStore->get_iter(selectedRows[0])).get_value(this->tvConfList.treeModel.is_renamable_real);
 			}
-		} else {
-			this->eventListener->showInfoAction(NULL);
 		}
 
 		this->updateButtonsState();

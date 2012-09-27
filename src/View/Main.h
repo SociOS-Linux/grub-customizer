@@ -70,9 +70,6 @@ public:
 	//creates the string for plaintexts
 	virtual std::string createPlaintextString(std::string const& scriptName) const=0;
 
-	//sets the given title to be showed as default title inside the status bar
-	virtual void setDefaultTitleStatusText(std::string const& str)=0;
-
 	//asks the user if he wants to exit the whole application
 	virtual int showExitConfirmDialog(int type)=0;
 	//show the given error message

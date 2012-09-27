@@ -123,7 +123,6 @@ public:
 	
 	void revertAction();
 
-	void showInfoAction(void* rule);
 	void showProxyInfo(Model_Proxy* proxy);
 
 	void showAboutAction();

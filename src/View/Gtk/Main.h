@@ -144,8 +144,6 @@ public:
 	std::string createNewEntriesPlaceholderString(std::string const& parentMenu = "", std::string const& sourceScriptName = "");
 	std::string createPlaintextString(std::string const& scriptName) const;
 	
-	void setDefaultTitleStatusText(std::string const& str);
-	
 	int showExitConfirmDialog(int type);
 	void showErrorMessage(std::string const& msg, std::vector<std::string> const& values);
 	bool askForEnvironmentSettings(std::string const& failedCmd, std::string const& errorMessage);

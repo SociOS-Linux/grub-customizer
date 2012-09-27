@@ -679,22 +679,6 @@ void MainControllerImpl::revertAction() {
 	this->logActionEnd();
 }
 
-void MainControllerImpl::showInfoAction(void* rule){
-	this->logActionBegin("show-info");
-	try {
-		if (rule != NULL) {
-			Model_Rule* rule2 = (Model_Rule*)rule;
-			if (rule2 && rule2->dataSource)
-				this->view->setDefaultTitleStatusText(rule2->getEntryName());
-			else
-				this->view->setStatusText("");
-		}
-	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
-	}
-	this->logActionEnd();
-}
-
 void MainControllerImpl::showProxyInfo(Model_Proxy* proxy){
 	this->view->setStatusText("");
 }
