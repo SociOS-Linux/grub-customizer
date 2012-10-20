@@ -645,6 +645,7 @@ void MainControllerImpl::revertAction() {
 			assert(this->grublistCfg->proxies.size() < remaining); // make sure that the proxy has really been deleted to prevent an endless loop
 			remaining = this->grublistCfg->proxies.size();
 		}
+		std::list<std::string> usedIndices;
 		int i = 50; // unknown scripts starting at position 50
 		for (std::list<Model_Script>::iterator iter = this->grublistCfg->repository.begin(); iter != this->grublistCfg->repository.end(); iter++) {
 			Model_Proxy newProxy(*iter);
@@ -667,6 +668,16 @@ void MainControllerImpl::revertAction() {
 			} else {
 				newProxy.index = i++;
 			}
+
+			// avoid duplicates
+			std::ostringstream uniqueIndex;
+			uniqueIndex << newProxy.index << iter->name;
+
+			if (std::find(usedIndices.begin(), usedIndices.end(), uniqueIndex.str()) != usedIndices.end()) {
+				newProxy.index = i++;
+			}
+
+			usedIndices.push_back(uniqueIndex.str());
 
 			this->grublistCfg->proxies.push_back(newProxy);
 		}

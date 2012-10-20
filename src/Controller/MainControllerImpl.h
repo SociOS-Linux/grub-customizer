@@ -24,6 +24,7 @@
 #include <libintl.h>
 #include <locale.h>
 #include <sstream>
+#include <algorithm>
 #include "../config.h"
 
 #include "../Model/Env.h"
