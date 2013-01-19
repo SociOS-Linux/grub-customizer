@@ -24,6 +24,7 @@
 #include "../lib/CommonClass.h"
 #include "../lib/str_replace.h"
 #include "../lib/ArrayStructure.h"
+#include "../lib/trim.h"
 
 struct Model_Entry_Row {
 	Model_Entry_Row(FILE* sourceFile);

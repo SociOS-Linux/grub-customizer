@@ -46,6 +46,7 @@
 
 #include "../lib/Exception.h"
 #include "../lib/ArrayStructure.h"
+#include "../lib/trim.h"
 
 
 class Model_ListCfg : public CommonClass {

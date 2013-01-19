@@ -24,6 +24,7 @@
 #include <libintl.h>
 #include <locale.h>
 #include <sstream>
+#include <algorithm>
 #include "../config.h"
 
 #include "../Model/Env.h"
@@ -123,7 +124,6 @@ public:
 	
 	void revertAction();
 
-	void showInfoAction(void* rule);
 	void showProxyInfo(Model_Proxy* proxy);
 
 	void showAboutAction();

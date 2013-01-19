@@ -77,9 +77,13 @@ Model_Entry* Model_Script::getEntryByPath(std::list<std::string> const& path){
 }
 
 Model_Entry* Model_Script::getEntryByName(std::string const& name, std::list<Model_Entry>& parentList) {
+	std::list<Model_Entry*> results;
 	for (std::list<Model_Entry>::iterator iter = parentList.begin(); iter != parentList.end(); iter++){
 		if (iter->name == name)
-			return &*iter;
+			results.push_back(&*iter);
+	}
+	if (results.size() == 1) {
+		return results.front();
 	}
 	return NULL;
 }

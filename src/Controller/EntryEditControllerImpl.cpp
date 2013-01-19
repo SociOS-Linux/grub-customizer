@@ -66,11 +66,16 @@ void EntryEditControllerImpl::applyAction() {
 			Model_Rule newRule(script->entries().back(), true, *script);
 
 			std::list<Model_Proxy*> proxies = this->grublistCfg->proxies.getProxiesByScript(*script);
+			if (proxies.size() == 0) {
+				this->grublistCfg->proxies.push_back(Model_Proxy(*script, false));
+				proxies = this->grublistCfg->proxies.getProxiesByScript(*script);
+			}
+			assert(proxies.size() != 0);
+
 			for (std::list<Model_Proxy*>::iterator proxyIter = proxies.begin(); proxyIter != proxies.end(); proxyIter++) {
 				(*proxyIter)->rules.push_back(newRule);
 				newRule.isVisible = false; // if there are more rules of this type, add them invisible
 			}
-			assert(proxies.size() != 0); // there should at least one proxy related to the custom script
 			rulePtr = &proxies.front()->rules.back();
 			isAdded = true;
 		} else { // update

@@ -311,6 +311,15 @@ Model_Rule* Model_Proxylist::getVisibleRuleForEntry(Model_Entry const& entry) {
 	return NULL;
 }
 
+bool Model_Proxylist::hasProxy(Model_Proxy* proxy) {
+	for (std::list<Model_Proxy>::iterator proxyIter = this->begin(); proxyIter != this->end(); proxyIter++) {
+		if (&*proxyIter == proxy) {
+			return true;
+		}
+	}
+	return false;
+}
+
 Model_Proxylist::operator ArrayStructure() const {
 	ArrayStructure result;
 	int trashIterPos = 0;

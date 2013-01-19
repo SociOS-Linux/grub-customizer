@@ -320,6 +320,10 @@ void MainControllerImpl::renameEntry(Model_Rule* rule, std::string const& newNam
 			this->settings->setValue("GRUB_DEFAULT", newName);
 		this->grublistCfg->renameRule(rule, newName);
 
+		if (rule->dataSource && this->grublistCfg->repository.getScriptByEntry(*rule->dataSource)->isCustomScript) {
+			rule->dataSource->name = newName;
+		}
+
 		this->syncLoadStateAction();
 		this->view->selectRule(rule);
 	}
@@ -637,6 +641,7 @@ void MainControllerImpl::revertAction() {
 			assert(this->grublistCfg->proxies.size() < remaining); // make sure that the proxy has really been deleted to prevent an endless loop
 			remaining = this->grublistCfg->proxies.size();
 		}
+		std::list<std::string> usedIndices;
 		int i = 50; // unknown scripts starting at position 50
 		for (std::list<Model_Script>::iterator iter = this->grublistCfg->repository.begin(); iter != this->grublistCfg->repository.end(); iter++) {
 			Model_Proxy newProxy(*iter);
@@ -660,27 +665,21 @@ void MainControllerImpl::revertAction() {
 				newProxy.index = i++;
 			}
 
+			// avoid duplicates
+			std::ostringstream uniqueIndex;
+			uniqueIndex << newProxy.index << iter->name;
+
+			if (std::find(usedIndices.begin(), usedIndices.end(), uniqueIndex.str()) != usedIndices.end()) {
+				newProxy.index = i++;
+			}
+
+			usedIndices.push_back(uniqueIndex.str());
+
 			this->grublistCfg->proxies.push_back(newProxy);
 		}
 		this->grublistCfg->proxies.sort();
 		this->syncLoadStateAction();
 		this->env.modificationsUnsaved = true;
-	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
-	}
-	this->logActionEnd();
-}
-
-void MainControllerImpl::showInfoAction(void* rule){
-	this->logActionBegin("show-info");
-	try {
-		if (rule != NULL) {
-			Model_Rule* rule2 = (Model_Rule*)rule;
-			if (rule2 && rule2->dataSource)
-				this->view->setDefaultTitleStatusText(rule2->getEntryName());
-			else
-				this->view->setStatusText("");
-		}
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}

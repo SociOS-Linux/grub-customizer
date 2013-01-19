@@ -230,6 +230,27 @@ void Model_ListCfg::load(bool preserveConfig){
 	}
 	this->unlock();
 	
+	//remove invalid proxies from list (no file system action here)
+	this->log("removing invalid proxies from list", Logger::EVENT);
+	std::string invalidProxies = "";
+	bool foundInvalidScript = false;
+	do {
+		foundInvalidScript = false;
+		for (std::list<Model_Proxy>::iterator pIter = this->proxies.begin(); pIter != this->proxies.end(); pIter++){
+			if (pIter->dataSource == NULL) {
+				this->proxies.trash.push_back(*pIter); // mark for deletion
+				this->proxies.erase(pIter);
+				foundInvalidScript = true;
+				invalidProxies += pIter->fileName + ",";
+				break;
+			}
+		}
+	} while (foundInvalidScript);
+
+	if (invalidProxies != "") {
+		this->log("found invalid proxies: " + rtrim(invalidProxies, ","), Logger::INFO);
+	}
+
 	this->log("loading completed", Logger::EVENT);
 	send_new_load_progress(1);
 }
@@ -244,7 +265,8 @@ void Model_ListCfg::readGeneratedFile(FILE* source, bool createScriptIfNotFound,
 	int innerCount = 0;
 	double progressbarScriptSpace = 0.7 / this->repository.size();
 	while (!cancelThreadsRequested && (row = Model_Entry_Row(source))){
-		if (!inScript && row.text.substr(0,10) == ("### BEGIN ") && row.text.substr(row.text.length()-4,4) == " ###"){
+		std::string rowText = ltrim(row.text);
+		if (!inScript && rowText.substr(0,10) == ("### BEGIN ") && rowText.substr(rowText.length()-4,4) == " ###"){
 			this->lock();
 			if (script) {
 				if (plaintextBuffer != "") {
@@ -257,7 +279,7 @@ void Model_ListCfg::readGeneratedFile(FILE* source, bool createScriptIfNotFound,
 				this->proxies.sync_all(true, true, script);
 			}
 			plaintextBuffer = "";
-			std::string scriptName = row.text.substr(10, row.text.length()-14);
+			std::string scriptName = rowText.substr(10, rowText.length()-14);
 			std::string prefix = this->env.cfg_dir_prefix;
 			std::string realScriptName = prefix+scriptName;
 			if (realScriptName.substr(0, (this->env.cfg_dir+"/LS_").length()) == this->env.cfg_dir+"/LS_"){
@@ -272,10 +294,10 @@ void Model_ListCfg::readGeneratedFile(FILE* source, bool createScriptIfNotFound,
 				this->send_new_load_progress(0.1 + (progressbarScriptSpace * ++i + (progressbarScriptSpace/10*innerCount)), script->name, i, this->repository.size());
 			}
 			inScript = true;
-		} else if (inScript && row.text.substr(0,8) == ("### END ") && row.text.substr(row.text.length()-4,4) == " ###") {
+		} else if (inScript && rowText.substr(0,8) == ("### END ") && rowText.substr(rowText.length()-4,4) == " ###") {
 			inScript = false;
 			innerCount = 0;
-		} else if (script != NULL && row.text.substr(0, 10) == "menuentry ") {
+		} else if (script != NULL && rowText.substr(0, 10) == "menuentry ") {
 			this->lock();
 			if (innerCount < 10) {
 				innerCount++;
@@ -285,7 +307,7 @@ void Model_ListCfg::readGeneratedFile(FILE* source, bool createScriptIfNotFound,
 			this->proxies.sync_all(false, false, script);
 			this->unlock();
 			this->send_new_load_progress(0.1 + (progressbarScriptSpace * i + (progressbarScriptSpace/10*innerCount)), script->name, i, this->repository.size());
-		} else if (script != NULL && row.text.substr(0, 8) == "submenu ") {
+		} else if (script != NULL && rowText.substr(0, 8) == "submenu ") {
 			this->lock();
 			Model_Entry newEntry(source, row, this->getLoggerPtr());
 			script->entries().push_back(newEntry);
@@ -836,7 +858,10 @@ Model_Rule& Model_ListCfg::moveRule(Model_Rule* rule, int direction){
 		} else {
 			movedRule = &*this->proxies.moveRuleToNewProxy(*rule, direction, this->repository.getScriptByEntry(*rule->dataSource));
 		}
-		proxy->removeEquivalentRules(*rule);
+
+		if (this->proxies.hasProxy(proxy)) { // check whether the proxy pointer is still valid
+			proxy->removeEquivalentRules(*rule);
+		}
 		return *movedRule;
 	}
 	throw NoMoveTargetException("no move target found", __FILE__, __LINE__);

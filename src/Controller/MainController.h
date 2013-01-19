@@ -51,7 +51,6 @@ public:
 	virtual void renameRuleAction(void* entry, std::string const& newText) = 0;
 	virtual void revertAction() = 0;
 	virtual void moveAction(std::list<void*> rules, int direction) = 0;
-	virtual void showInfoAction(void* rule) = 0;
 	virtual void cancelBurgSwitcherAction() = 0;
 	virtual void initModeAction(bool burgChosen) = 0;
 	virtual void loadThreadedAction(bool preserveConfig = false) = 0;
