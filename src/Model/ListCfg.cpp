@@ -244,7 +244,8 @@ void Model_ListCfg::readGeneratedFile(FILE* source, bool createScriptIfNotFound,
 	int innerCount = 0;
 	double progressbarScriptSpace = 0.7 / this->repository.size();
 	while (!cancelThreadsRequested && (row = Model_Entry_Row(source))){
-		if (!inScript && row.text.substr(0,10) == ("### BEGIN ") && row.text.substr(row.text.length()-4,4) == " ###"){
+		std::string rowText = ltrim(row.text);
+		if (!inScript && rowText.substr(0,10) == ("### BEGIN ") && rowText.substr(rowText.length()-4,4) == " ###"){
 			this->lock();
 			if (script) {
 				if (plaintextBuffer != "") {
@@ -257,7 +258,7 @@ void Model_ListCfg::readGeneratedFile(FILE* source, bool createScriptIfNotFound,
 				this->proxies.sync_all(true, true, script);
 			}
 			plaintextBuffer = "";
-			std::string scriptName = row.text.substr(10, row.text.length()-14);
+			std::string scriptName = rowText.substr(10, rowText.length()-14);
 			std::string prefix = this->env.cfg_dir_prefix;
 			std::string realScriptName = prefix+scriptName;
 			if (realScriptName.substr(0, (this->env.cfg_dir+"/LS_").length()) == this->env.cfg_dir+"/LS_"){
@@ -272,10 +273,10 @@ void Model_ListCfg::readGeneratedFile(FILE* source, bool createScriptIfNotFound,
 				this->send_new_load_progress(0.1 + (progressbarScriptSpace * ++i + (progressbarScriptSpace/10*innerCount)), script->name, i, this->repository.size());
 			}
 			inScript = true;
-		} else if (inScript && row.text.substr(0,8) == ("### END ") && row.text.substr(row.text.length()-4,4) == " ###") {
+		} else if (inScript && rowText.substr(0,8) == ("### END ") && rowText.substr(rowText.length()-4,4) == " ###") {
 			inScript = false;
 			innerCount = 0;
-		} else if (script != NULL && row.text.substr(0, 10) == "menuentry ") {
+		} else if (script != NULL && rowText.substr(0, 10) == "menuentry ") {
 			this->lock();
 			if (innerCount < 10) {
 				innerCount++;
@@ -285,7 +286,7 @@ void Model_ListCfg::readGeneratedFile(FILE* source, bool createScriptIfNotFound,
 			this->proxies.sync_all(false, false, script);
 			this->unlock();
 			this->send_new_load_progress(0.1 + (progressbarScriptSpace * i + (progressbarScriptSpace/10*innerCount)), script->name, i, this->repository.size());
-		} else if (script != NULL && row.text.substr(0, 8) == "submenu ") {
+		} else if (script != NULL && rowText.substr(0, 8) == "submenu ") {
 			this->lock();
 			Model_Entry newEntry(source, row, this->getLoggerPtr());
 			script->entries().push_back(newEntry);

@@ -177,6 +177,8 @@ src/lib/regex.cpp -text
 src/lib/regex.h -text
 src/lib/str_replace.cpp -text
 src/lib/str_replace.h -text
+src/lib/trim.cpp -text
+src/lib/trim.h -text
 src/main/gtk-client.cpp -text
 src/main/proxy.cpp -text
 translation/compile_all.sh -text

@@ -55,7 +55,7 @@ int main(int argc, char** argv){
 	setlocale( LC_ALL, "");
 	bindtextdomain( "grub-customizer", LOCALEDIR);
 	textdomain( "grub-customizer" );
-	
+
 	Logger_Stream logger(std::cout);
 
 	try {

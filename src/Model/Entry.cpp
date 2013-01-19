@@ -50,40 +50,38 @@ Model_Entry::Model_Entry(std::string name, std::string extension, std::string co
 Model_Entry::Model_Entry(FILE* sourceFile, Model_Entry_Row firstRow, Logger* logger, std::string* plaintextBuffer)
 	: isValid(false), type(MENUENTRY), quote('\''), isModified(false)
 {
-	//int c;
-	//std::string row;
-
 	Model_Entry_Row row;
 	bool inEntry = false;
 	while ((row = firstRow) || (row = Model_Entry_Row(sourceFile))){
-		if (inEntry && (row.text.substr(0, 10) == "menuentry " || row.text.substr(0, 8) == "submenu ")){
+		std::string rowText = ltrim(row.text);
+		if (inEntry && (rowText.substr(0, 10) == "menuentry " || rowText.substr(0, 8) == "submenu ")){
 			this->subEntries.push_back(Model_Entry(sourceFile, row));
-		} else if (inEntry && row.text != "}") {
+		} else if (inEntry && rowText != "}") {
 			this->content += row.text+"\n";
-		} else if (inEntry && row.text == "}") {
+		} else if (inEntry && rowText == "}") {
 			//std::cout << "end of entry!" << std::endl;
 			isValid = true;
 			inEntry = false;
 			break; //nur einen Eintrag lesen!
-		} else if (!inEntry && row.text.substr(0, 10) == "menuentry "){
+		} else if (!inEntry && rowText.substr(0, 10) == "menuentry "){
 			char quote = '"';
-			int endOfEntryName = row.text.find('"', 12);
+			int endOfEntryName = rowText.find('"', 12);
 			if (endOfEntryName == -1) {
-				endOfEntryName = row.text.find('\'', 12);
+				endOfEntryName = rowText.find('\'', 12);
 				quote = '\'';
 			}
-			std::string entryName = row.text.substr(11, endOfEntryName-11);
+			std::string entryName = rowText.substr(11, endOfEntryName-11);
 
-			std::string extension = row.text.substr(endOfEntryName+1, row.text.length()-(endOfEntryName+1)-1);
+			std::string extension = rowText.substr(endOfEntryName+1, rowText.length()-(endOfEntryName+1)-1);
 
 			*this = Model_Entry(entryName, extension);
 			this->quote = quote;
 			inEntry = true;
-		} else if (!inEntry && row.text.substr(0, 8) == "submenu ") {
-			int endOfEntryName = row.text.find('"', 10);
+		} else if (!inEntry && rowText.substr(0, 8) == "submenu ") {
+			int endOfEntryName = rowText.find('"', 10);
 			if (endOfEntryName == -1)
-				endOfEntryName = row.text.find('\'', 10);
-			std::string entryName = row.text.substr(9, endOfEntryName-9);
+				endOfEntryName = rowText.find('\'', 10);
+			std::string entryName = rowText.substr(9, endOfEntryName-9);
 
 			*this = Model_Entry(entryName, "", "", SUBMENU);
 			if (logger) {
