@@ -68,8 +68,11 @@ bool Model_Proxylist::compare_proxies(Model_Proxy const& a, Model_Proxy const& b
 	if (a.index != b.index) {
 		return a.index < b.index;
 	} else {
-		assert(a.dataSource != NULL && b.dataSource != NULL);
-		return a.dataSource->name < b.dataSource->name;
+		if (a.dataSource != NULL && b.dataSource != NULL) {
+			return a.dataSource->name < b.dataSource->name;
+		} else {
+			return true;
+		}
 	}
 }
 
