@@ -182,7 +182,6 @@ std::map<ViewOption, bool> Model_Env::loadViewOptions() {
 std::map<std::string, std::string> Model_Env::getProperties() {
 	std::map<std::string, std::string> result;
 	result["MKCONFIG_CMD"] = this->mkconfig_cmd.substr(this->cmd_prefix.size());
-	result["UPDATE_CMD"] = this->update_cmd.substr(this->cmd_prefix.size());
 	result["INSTALL_CMD"] = this->install_cmd.substr(this->cmd_prefix.size());
 	result["MKFONT_CMD"] = this->mkfont_cmd.substr(this->cmd_prefix.size());
 	result["MKDEVICEMAP_CMD"] = this->mkdevicemap_cmd.substr(this->cmd_prefix.size());
@@ -197,7 +196,6 @@ std::map<std::string, std::string> Model_Env::getProperties() {
 
 void Model_Env::setProperties(std::map<std::string, std::string> const& props) {
 	this->mkconfig_cmd = this->cmd_prefix + props.at("MKCONFIG_CMD");
-	this->update_cmd = this->cmd_prefix + props.at("UPDATE_CMD");
 	this->install_cmd = this->cmd_prefix + props.at("INSTALL_CMD");
 	this->mkfont_cmd = this->cmd_prefix + props.at("MKFONT_CMD");
 	this->mkdevicemap_cmd = this->cmd_prefix + props.at("MKDEVICEMAP_CMD");
@@ -212,7 +210,6 @@ void Model_Env::setProperties(std::map<std::string, std::string> const& props) {
 std::list<std::string> Model_Env::getRequiredProperties() {
 	std::list<std::string> result;
 	result.push_back("MKCONFIG_CMD");
-	result.push_back("UPDATE_CMD");
 	result.push_back("INSTALL_CMD");
 	result.push_back("CFG_DIR");
 	return result;
@@ -222,9 +219,6 @@ std::list<std::string> Model_Env::getValidProperties() {
 	std::list<std::string> result;
 	if (this->check_cmd(this->mkconfig_cmd.substr(this->cmd_prefix.size()), this->cmd_prefix)) {
 		result.push_back("MKCONFIG_CMD");
-	}
-	if (this->check_cmd(this->update_cmd.substr(this->cmd_prefix.size()), this->cmd_prefix)) {
-		result.push_back("UPDATE_CMD");
 	}
 	if (this->check_cmd(this->install_cmd.substr(this->cmd_prefix.size()), this->cmd_prefix)) {
 		result.push_back("INSTALL_CMD");
@@ -325,7 +319,6 @@ Model_Env::operator ArrayStructure() {
 	result["mkconfig_cmd"] = this->mkconfig_cmd;
 	result["mkfont_cmd"] = this->mkfont_cmd;
 	result["cfg_dir_prefix"] = this->cfg_dir_prefix;
-	result["update_cmd"] = this->update_cmd;
 	result["install_cmd"] = this->install_cmd;
 	result["output_config_file"] = this->output_config_file;
 	result["output_config_dir"] = this->output_config_dir;
