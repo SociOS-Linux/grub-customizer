@@ -858,7 +858,10 @@ Model_Rule& Model_ListCfg::moveRule(Model_Rule* rule, int direction){
 		} else {
 			movedRule = &*this->proxies.moveRuleToNewProxy(*rule, direction, this->repository.getScriptByEntry(*rule->dataSource));
 		}
-		proxy->removeEquivalentRules(*rule);
+
+		if (this->proxies.hasProxy(proxy)) { // check whether the proxy pointer is still valid
+			proxy->removeEquivalentRules(*rule);
+		}
 		return *movedRule;
 	}
 	throw NoMoveTargetException("no move target found", __FILE__, __LINE__);
