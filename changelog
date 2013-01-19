@@ -1,3 +1,15 @@
+v 3.0.3
+	* updated README file
+	* update default title on custom entry scripts
+	* add entry functionality: add custom script proxy, if missing
+	* fixed crash when editing the only visible entry
+	* auto remove of invalid proxies after loading
+	* removed UPDATE_CMD from config dialog as it's not used
+	* ignore whitespace in front of menuentries (fixes an parsing issue of ubuntu 12.10 submenus)
+	* connect by name: only if name is unique
+	* revert functionality: duplicate check
+	* removed unused show-info action
+
 v 3.0.2
 	* crash if blkid prints devices without UUID... fixed
 	* translation updates

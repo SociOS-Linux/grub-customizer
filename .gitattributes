@@ -199,6 +199,8 @@ translation/translation-de.mo -text svneol=unset#unset
 translation/translation-de.po -text
 translation/translation-el.mo -text svneol=unset#unset
 translation/translation-el.po -text
+translation/translation-en_GB.mo -text
+translation/translation-en_GB.po -text
 translation/translation-es.mo -text svneol=unset#unset
 translation/translation-es.po -text
 translation/translation-et.mo -text

@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-08-30 22:28+0200\n"
-"PO-Revision-Date: 2012-09-08 05:48+0000\n"
-"Last-Translator: Costeelation <costeelation@hotmail.com>\n"
+"PO-Revision-Date: 2012-09-12 22:58+0000\n"
+"Last-Translator: Monkey <monkey.libre@gmail.com>\n"
 "Language-Team: Spanish\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-09-10 18:16+0000\n"
-"X-Generator: Launchpad (build 15924)\n"
+"X-Launchpad-Export-Date: 2013-01-19 19:08+0000\n"
+"X-Generator: Launchpad (build 16430)\n"
 "X-Poedit-Country: SPAIN\n"
 "X-Poedit-Language: Spanish\n"
 
@@ -100,7 +100,7 @@ msgstr "Localización"
 
 #: ../src/View/Gtk/EntryEditor.cpp:74
 msgid "Kernel params"
-msgstr "Parametros del kernel"
+msgstr "Parámetros del núcleo"
 
 #: ../src/View/Gtk/EntryEditor.cpp:177 ../src/View/Gtk/EntryEditor.cpp:183
 #: ../src/View/Gtk/EntryEditor.cpp:217
@@ -229,8 +229,8 @@ msgstr "configuración avanzada"
 msgid ""
 "The modifications you've done affects the visible entries. Please reload!"
 msgstr ""
-"Las modificaciones que has hecho afectan a las entradas visibles. Vuelve a "
-"cargar!"
+"Las modificaciones que ha hecho afectan a las entradas visibles. Vuelva a "
+"cargar."
 
 #: ../src/View/Gtk/Main.cpp:56
 msgid "_List configuration"
@@ -307,7 +307,7 @@ msgstr "¿Quiere configurar BURG en lugar de grub2?"
 
 #: ../src/View/Gtk/Main.cpp:248
 msgid "_General settings"
-msgstr "_Configuración General"
+msgstr "_Configuración general"
 
 #: ../src/View/Gtk/Main.cpp:253
 msgid "_Appearance settings"
@@ -377,7 +377,7 @@ msgstr ""
 
 #: ../src/View/Gtk/Main.cpp:422
 msgid "(incoming Entries of %1, Script: %2)"
-msgstr "(Entradas recibidas de %1, Script: %2)"
+msgstr "(Entradas recibidas de %1, guion: %2)"
 
 #: ../src/View/Gtk/Main.cpp:424
 msgid "(incoming Entries of %1)"
@@ -661,7 +661,7 @@ msgstr "valor"
 
 #: ../src/View/Gtk/Settings.cpp:245
 msgid "remove font"
-msgstr "Remover tipografía"
+msgstr "Eliminar tipografía"
 
 #: ../src/View/Gtk/Settings.cpp:269
 msgid "remove background"

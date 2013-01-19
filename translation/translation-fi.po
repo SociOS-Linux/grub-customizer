@@ -9,14 +9,14 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-08-30 22:28+0200\n"
-"PO-Revision-Date: 2012-08-30 21:30+0000\n"
+"PO-Revision-Date: 2012-10-01 21:50+0000\n"
 "Last-Translator: Timo Seppola <Unknown>\n"
 "Language-Team: Finnish <fin@ x x x x.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-09-10 18:16+0000\n"
-"X-Generator: Launchpad (build 15924)\n"
+"X-Launchpad-Export-Date: 2013-01-19 19:08+0000\n"
+"X-Generator: Launchpad (build 16430)\n"
 
 #: ../src/Controller/MainControllerImpl.cpp:533
 msgid "Name the Entry"
@@ -36,19 +36,19 @@ msgstr "päivitetään asetuksia"
 
 #: ../src/main/gtk-client.cpp:229
 msgid "Linux"
-msgstr ""
+msgstr "Linux"
 
 #: ../src/main/gtk-client.cpp:230
 msgid "Linux-ISO"
-msgstr ""
+msgstr "Linux-ISO"
 
 #: ../src/main/gtk-client.cpp:231
 msgid "Chainloader"
-msgstr ""
+msgstr "Ketjulataaja"
 
 #: ../src/main/gtk-client.cpp:232
 msgid "Memtest"
-msgstr ""
+msgstr "Muistitestaus"
 
 #: ../src/View/Gtk/About.cpp:36
 msgid ""
@@ -58,72 +58,72 @@ msgstr ""
 
 #: ../src/View/Gtk/EntryEditor.cpp:22 ../src/View/Gtk/EnvEditor.cpp:23
 msgid "_Type:"
-msgstr ""
+msgstr "_Tyyppi:"
 
 #: ../src/View/Gtk/EntryEditor.cpp:28
 msgid "Entry editor"
-msgstr ""
+msgstr "Käynnistä muokkaus"
 
 #: ../src/View/Gtk/EntryEditor.cpp:34
 msgid "Options"
-msgstr ""
+msgstr "Lisäasetukset"
 
 #: ../src/View/Gtk/EntryEditor.cpp:35
 msgid "Source"
-msgstr ""
+msgstr "Lähde"
 
 #: ../src/View/Gtk/EntryEditor.cpp:62
 msgid "_Partition"
-msgstr ""
+msgstr "_Osio"
 
 #: ../src/View/Gtk/EntryEditor.cpp:64
 msgid "_Initial ramdisk"
-msgstr ""
+msgstr "_alustava ram-levy (initial ramdisk)"
 
 #: ../src/View/Gtk/EntryEditor.cpp:66
 msgid "_Linux image"
-msgstr ""
+msgstr "_Linux-kuva (image)"
 
 #: ../src/View/Gtk/EntryEditor.cpp:68
 msgid "_Memtest image"
-msgstr ""
+msgstr "_Muistitestauksen kuva (image)"
 
 #: ../src/View/Gtk/EntryEditor.cpp:70
 msgid "Path to iso file"
-msgstr ""
+msgstr "polku ISO-tiedostolle"
 
 #: ../src/View/Gtk/EntryEditor.cpp:72
 msgid "Locale"
-msgstr ""
+msgstr "Maa-asetukset"
 
 #: ../src/View/Gtk/EntryEditor.cpp:74
 msgid "Kernel params"
-msgstr ""
+msgstr "Kernel muuttujat"
 
 #: ../src/View/Gtk/EntryEditor.cpp:177 ../src/View/Gtk/EntryEditor.cpp:183
 #: ../src/View/Gtk/EntryEditor.cpp:217
 msgid "Other"
-msgstr ""
+msgstr "Muu"
 
 #: ../src/View/Gtk/EnvEditor.cpp:22
 msgid "_Partition:"
-msgstr ""
+msgstr "_Osio:"
 
 #: ../src/View/Gtk/EnvEditor.cpp:23
 msgid "Submountpoints:"
-msgstr ""
+msgstr "Alakiinnityskohdat (Submountpoints):"
 
 #: ../src/View/Gtk/EnvEditor.cpp:24
 msgid "save this configuration"
-msgstr ""
+msgstr "tallenna nämä asetukset"
 
 #: ../src/View/Gtk/EnvEditor.cpp:53
 msgid "Grub 2"
-msgstr ""
+msgstr "Grub 2"
 
 #: ../src/View/Gtk/EnvEditor.cpp:54
 msgid "BURG"
-msgstr ""
+msgstr "BURG"
 
 #: ../src/View/Gtk/EnvEditor.cpp:216
 msgid "Mount failed!"
@@ -150,14 +150,16 @@ msgid ""
 "please Inform the author about this problem. The following information could "
 "be helpful:"
 msgstr ""
+"ole hyvä ja ilmoita ohjelman kirjoittajalle virheestä. Seuraava tieto voisi "
+"olla avuksi:"
 
 #: ../src/View/Gtk/Error.cpp:32
 msgid "An error occurred"
-msgstr ""
+msgstr "Tapahtui virhe"
 
 #: ../src/View/Gtk/Error.cpp:35
 msgid "continue (risk data loss)"
-msgstr ""
+msgstr "jatka (on riski tietojen menetykselle)"
 
 #: ../src/View/Gtk/Installer.cpp:22
 msgid ""
@@ -219,28 +221,30 @@ msgstr "BURG löytyi!"
 
 #: ../src/View/Gtk/Main.cpp:42
 msgid "advanced settings"
-msgstr ""
+msgstr "lisäasetukset"
 
 #: ../src/View/Gtk/Main.cpp:44
 msgid ""
 "The modifications you've done affects the visible entries. Please reload!"
-msgstr ""
+msgstr "Tekemäsi muutokset vaikuttavat näkyviin valikoihin. Lataa uudelleen!"
 
 #: ../src/View/Gtk/Main.cpp:56
 msgid "_List configuration"
-msgstr ""
+msgstr "_Näytä asetukset"
 
 #: ../src/View/Gtk/Main.cpp:80
 msgid "Remove selected entries (you can restore them from trash)"
 msgstr ""
+"Poista valitsemasi  käynnistysrivit  \"entries\" (voit palauttaa ne "
+"roskakorista)"
 
 #: ../src/View/Gtk/Main.cpp:83
 msgid "restore entries from trash"
-msgstr ""
+msgstr "palauta käynnistysrivit \"entries\" roskakorista"
 
 #: ../src/View/Gtk/Main.cpp:85
 msgid "Trash"
-msgstr ""
+msgstr "Roskakori"
 
 #: ../src/View/Gtk/Main.cpp:94
 msgid "Move up the selected entry or script"
@@ -260,51 +264,51 @@ msgstr "Lisää tämä käynnistysrivi (entry) uudeksi alavalikoksi"
 
 #: ../src/View/Gtk/Main.cpp:119
 msgid "Reverts the list to the default order"
-msgstr ""
+msgstr "Tekee käänteisen listauksen nykyiselle järjestykselle"
 
 #: ../src/View/Gtk/Main.cpp:121
 msgid "reloads the configuration. Unsaved changes will be preserved."
-msgstr ""
+msgstr "Lataa uudelleen asetukset. Tallentamattomat muutokset tallennetaan."
 
 #: ../src/View/Gtk/Main.cpp:161
 msgid "Restore entry"
-msgstr ""
+msgstr "Palauta käynnistysrivi (entry)"
 
 #: ../src/View/Gtk/Main.cpp:162
 msgid "Rename"
-msgstr ""
+msgstr "Nimeä uudelleen"
 
 #: ../src/View/Gtk/Main.cpp:163 ../src/View/Gtk/Main.cpp:164
 msgid "Move up"
-msgstr ""
+msgstr "Siirrä ylöspäin"
 
 #: ../src/View/Gtk/Main.cpp:165 ../src/View/Gtk/Main.cpp:166
 msgid "Move down"
-msgstr ""
+msgstr "Siirrä alaspäin"
 
 #: ../src/View/Gtk/Main.cpp:167 ../src/View/Gtk/Main.cpp:168
 msgid "Remove from submenu"
-msgstr ""
+msgstr "Poista alavalikosta (submenu)"
 
 #: ../src/View/Gtk/Main.cpp:169 ../src/View/Gtk/Main.cpp:170
 msgid "Create submenu"
-msgstr ""
+msgstr "Luo alavalikko (submenu)"
 
 #: ../src/View/Gtk/Main.cpp:177
 msgid "_Change Environment …"
-msgstr ""
+msgstr "_Muuta ympäristö ..."
 
 #: ../src/View/Gtk/Main.cpp:184
 msgid "Do you want to configure BURG instead of grub2?"
-msgstr "Haluatko tehdä asetukset BURG:iin eikä grub2:een ?"
+msgstr "Haluatko tehdä asetukset BURG:iin eikä grub2:een?"
 
 #: ../src/View/Gtk/Main.cpp:248
 msgid "_General settings"
-msgstr ""
+msgstr "_Yleiset asetukset"
 
 #: ../src/View/Gtk/Main.cpp:253
 msgid "_Appearance settings"
-msgstr ""
+msgstr "_Ulkonäköasetukset"
 
 #: ../src/View/Gtk/Main.cpp:266
 msgid "BURG Mode"
@@ -316,11 +320,11 @@ msgstr "Tallenna asetukset ja luo uusi "
 
 #: ../src/View/Gtk/Main.cpp:291
 msgid "Are you sure?"
-msgstr ""
+msgstr "Oletko varma?"
 
 #: ../src/View/Gtk/Main.cpp:292
 msgid "This removes all your list modifications of the bootloader menu!"
-msgstr ""
+msgstr "Tämä poistaa kaikki sinun lista-muutokset boot-lataajan valikosta!"
 
 #: ../src/View/Gtk/Main.cpp:352
 msgid "loading configuration…"
@@ -328,31 +332,31 @@ msgstr "ladataan asetukset..."
 
 #: ../src/View/Gtk/Main.cpp:354
 msgid "loading script %2/%3 (%1)"
-msgstr ""
+msgstr "ladataan komentosarja (script) %2/%3 (%1)"
 
 #: ../src/View/Gtk/Main.cpp:373
 msgid "submenu"
-msgstr ""
+msgstr "alavalikko"
 
 #: ../src/View/Gtk/Main.cpp:376 ../src/View/Gtk/Trash.cpp:92
 msgid "placeholder"
-msgstr ""
+msgstr "paikan kiinnittäjä"
 
 #: ../src/View/Gtk/Main.cpp:379 ../src/View/Gtk/Trash.cpp:92
 msgid "menuentry"
-msgstr ""
+msgstr "menu-valikko"
 
 #: ../src/View/Gtk/Main.cpp:383 ../src/View/Gtk/Trash.cpp:92
 msgid "script: "
-msgstr ""
+msgstr "komentosarja (script): "
 
 #: ../src/View/Gtk/Main.cpp:387
 msgid "default name: "
-msgstr ""
+msgstr "nykyinen nimi (oletus, default name): "
 
 #: ../src/View/Gtk/Main.cpp:391
 msgid "Partition: "
-msgstr ""
+msgstr "Osio: "
 
 #: ../src/View/Gtk/Main.cpp:415
 msgid "Proxy binary not found!"
@@ -369,19 +373,19 @@ msgstr ""
 
 #: ../src/View/Gtk/Main.cpp:422
 msgid "(incoming Entries of %1, Script: %2)"
-msgstr ""
+msgstr "(sisääntulevat käynnistysvalikot  %1 :sta, komentosarja: %2 )"
 
 #: ../src/View/Gtk/Main.cpp:424
 msgid "(incoming Entries of %1)"
-msgstr ""
+msgstr "(sisääntulevat käynnistysvalikot  %1 :sta)"
 
 #: ../src/View/Gtk/Main.cpp:426
 msgid "(incoming Entries of Script: %1)"
-msgstr ""
+msgstr "(sisääntulevat käynnistysvalikot komentosarjasta:  %1)"
 
 #: ../src/View/Gtk/Main.cpp:428
 msgid "(incoming Entries)"
-msgstr ""
+msgstr "(sisääntulevat käynnistysvalikot)"
 
 #: ../src/View/Gtk/Main.cpp:434
 msgid "(script code)"
@@ -389,17 +393,19 @@ msgstr "(komentosarja koodi)"
 
 #: ../src/View/Gtk/Main.cpp:436
 msgid "(script code of %1)"
-msgstr ""
+msgstr "(komentosarja koodi %1 :ssa)"
 
 #: ../src/View/Gtk/Main.cpp:636
 msgid "Trash (%1)"
-msgstr ""
+msgstr "Roskakori (%1)"
 
 #: ../src/View/Gtk/Main.cpp:649
 msgid ""
 "Removing Script Code can cause problems when trying to boot entries relying "
 "on it. Are you sure you want to do it anyway?"
 msgstr ""
+"Komentosarjan poistaminen voi aiheuttaa ongelmia käynnistasvalikoihin, jotka "
+"liittyvät tähän. Oletko varma, että haluat tehdä tämän poiston?"
 
 #: ../src/View/Gtk/Main.cpp:657
 msgid ""
@@ -408,10 +414,14 @@ msgid ""
 "If you just want to remove old kernels: The better way is uninstalling them "
 "instead of just hiding them in boot menu."
 msgstr ""
+"Yrität poistaa käynnistysvalikkoa toiminnassa olevasta järjestelmästä.  "
+"Varmista, että on muita toimivia käynnistyvalintoja tähän järjestelmään!\n"
+"Jos haluat vain poistaa vanhat kernelit: Parempi tapa on poistaa ne "
+"(uninstall) kuin vain  piilottaa ne boot-valikoissa."
 
 #: ../src/View/Gtk/Main.cpp:686
 msgid "Default title: "
-msgstr "Valittu otsikko: "
+msgstr "Valittu otsikko (oletus): "
 
 #: ../src/View/Gtk/Main.cpp:779
 msgid "The saved configuration is not up to date!"
@@ -463,15 +473,15 @@ msgstr ""
 
 #: ../src/View/Gtk/Main.cpp:854
 msgid "Environment settings"
-msgstr ""
+msgstr "Ympäristöasetukset"
 
 #: ../src/View/Gtk/Main.cpp:866
 msgid "Do you want to proceed without saving the current configuration?"
-msgstr ""
+msgstr "Haluatko edetä ilman että olet tallentanut nykyiset asetukset?"
 
 #: ../src/View/Gtk/Main.cpp:867
 msgid "There are unsaved modifications!"
-msgstr ""
+msgstr "On tallentamattomia muutoksia!"
 
 #: ../src/View/Gtk/Settings.cpp:80
 msgid "white"
@@ -483,11 +493,11 @@ msgstr "keltainen"
 
 #: ../src/View/Gtk/Settings.cpp:82
 msgid "light-cyan"
-msgstr "vaalea syaani"
+msgstr "vaalea sinivihreä (cyan)"
 
 #: ../src/View/Gtk/Settings.cpp:83
 msgid "cyan"
-msgstr "syaani"
+msgstr "sinivihreä"
 
 #: ../src/View/Gtk/Settings.cpp:84
 msgid "light-blue"
@@ -511,7 +521,7 @@ msgstr "vaalea magenta"
 
 #: ../src/View/Gtk/Settings.cpp:89
 msgid "magenta"
-msgstr "magenta"
+msgstr "violetti (magenta)"
 
 #: ../src/View/Gtk/Settings.cpp:90
 msgid "light-red"
@@ -531,7 +541,7 @@ msgstr "vaalean harmaa"
 
 #: ../src/View/Gtk/Settings.cpp:94
 msgid "dark-gray"
-msgstr "vaalean harmaa"
+msgstr "tumman harmaa"
 
 #: ../src/View/Gtk/Settings.cpp:95
 msgid "transparent"
@@ -563,7 +573,7 @@ msgstr "näytä valikko"
 
 #: ../src/View/Gtk/Settings.cpp:109
 msgid "Timeout"
-msgstr "Aikaraja"
+msgstr "Aikakatkaisu"
 
 #: ../src/View/Gtk/Settings.cpp:109
 msgid "Seconds"
@@ -647,7 +657,7 @@ msgstr "arvo"
 
 #: ../src/View/Gtk/Settings.cpp:245
 msgid "remove font"
-msgstr ""
+msgstr "poiosta kirjaintyyppi (font)"
 
 #: ../src/View/Gtk/Settings.cpp:269
 msgid "remove background"
@@ -668,20 +678,20 @@ msgstr ""
 
 #: ../src/View/Gtk/Trash.cpp:22
 msgid "Add entry from trash"
-msgstr ""
+msgstr "Lisää käynnistysvalikko roskakorista"
 
 #: ../src/View/Gtk/Trash.cpp:41
 msgid "Delete custom entries"
-msgstr ""
+msgstr "Poista muokatut käynnistysvalikot"
 
 #: ../src/View/Gtk/Trash.cpp:92
 msgid "type: "
-msgstr ""
+msgstr "tyyppi: "
 
 #: ../src/View/Gtk/Trash.cpp:109
 msgid "This deletes the following entries:"
-msgstr ""
+msgstr "Tämä poistaa seuraavat käynnistysvalikot"
 
 #: ../src/View/Gtk/Element/PartitionChooser.cpp:30
 msgid "current"
-msgstr ""
+msgstr "nykyinen"
