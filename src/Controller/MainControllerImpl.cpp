@@ -327,6 +327,10 @@ void MainControllerImpl::renameEntry(Model_Rule* rule, std::string const& newNam
 			this->settings->setValue("GRUB_DEFAULT", newName);
 		this->grublistCfg->renameRule(rule, newName);
 
+		if (rule->dataSource && this->grublistCfg->repository.getScriptByEntry(*rule->dataSource)->isCustomScript) {
+			rule->dataSource->name = newName;
+		}
+
 		this->syncLoadStateAction();
 		this->view->selectRule(rule);
 	}
