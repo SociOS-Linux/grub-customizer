@@ -230,6 +230,27 @@ void Model_ListCfg::load(bool preserveConfig){
 	}
 	this->unlock();
 	
+	//remove invalid proxies from list (no file system action here)
+	this->log("removing invalid proxies from list", Logger::EVENT);
+	std::string invalidProxies = "";
+	bool foundInvalidScript = false;
+	do {
+		foundInvalidScript = false;
+		for (std::list<Model_Proxy>::iterator pIter = this->proxies.begin(); pIter != this->proxies.end(); pIter++){
+			if (pIter->dataSource == NULL) {
+				this->proxies.trash.push_back(*pIter); // mark for deletion
+				this->proxies.erase(pIter);
+				foundInvalidScript = true;
+				invalidProxies += pIter->fileName + ",";
+				break;
+			}
+		}
+	} while (foundInvalidScript);
+
+	if (invalidProxies != "") {
+		this->log("found invalid proxies: " + rtrim(invalidProxies, ","), Logger::INFO);
+	}
+
 	this->log("loading completed", Logger::EVENT);
 	send_new_load_progress(1);
 }
