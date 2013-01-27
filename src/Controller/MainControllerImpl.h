@@ -70,6 +70,10 @@ class MainControllerImpl : public ControllerAbstract, public MainController {
 	void _rAppendRule(Model_Rule& rule, Model_Rule* parentRule = NULL);
 	bool _listHasPlaintextRules(std::list<void*> const& rules);
 	bool _listHasCurrentSystemRules(std::list<void*> const& rules);
+	std::list<void*> _populateSelection(std::list<void*> rules);
+	void _populateSelection(std::list<void*>& rules, Model_Rule* currentRule, int direction);
+	int _countRulesUntilNextRealRule(Model_Rule* baseRule, int direction);
+	std::list<void*> _removePlaceholdersFromSelection(std::list<void*> rules);
 
 public:
 	void setListCfg(Model_ListCfg& grublistCfg);

@@ -92,7 +92,7 @@ class View_Gtk_Main : public View_Main, public CommonClass {
 	Gtk::ImageMenuItem miExit, miSave, miAbout, miModifyEnvironment, miRevert, miCreateEntry;
 	ImageMenuItemOwnKey miReload, miAdd, miRemove, miUp, miDown, miLeft, miRight, miEditEntry;
 	Gtk::ImageMenuItem miCRemove, miCUp, miCDown, miCLeft, miCRight, miCRename, miCEditEntry;
-	Gtk::CheckMenuItem miShowDetails, miShowHiddenEntries, miGroupByScript;
+	Gtk::CheckMenuItem miShowDetails, miShowHiddenEntries, miGroupByScript, miShowPlaceholders;
 	Gtk::Menu subFile, subEdit, subView, subHelp, contextMenu;
 	
 	Gtk::VBox settingsHBox;
@@ -199,6 +199,7 @@ private:
 	void signal_viewopt_details_toggled();
 	void signal_viewopt_checkboxes_toggled();
 	void signal_viewopt_script_toggled();
+	void signal_viewopt_placeholders_toggled();
 };
 
 #endif
