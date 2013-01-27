@@ -72,6 +72,7 @@ class MainControllerImpl : public ControllerAbstract, public MainController {
 	bool _listHasCurrentSystemRules(std::list<void*> const& rules);
 	std::list<void*> _populateSelection(std::list<void*> rules);
 	void _populateSelection(std::list<void*>& rules, Model_Rule* currentRule, int direction);
+	int _countRulesUntilNextRealRule(Model_Rule* baseRule, int direction);
 
 public:
 	void setListCfg(Model_ListCfg& grublistCfg);

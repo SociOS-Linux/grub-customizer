@@ -496,6 +496,27 @@ void MainControllerImpl::_populateSelection(std::list<void*>& rules, Model_Rule*
 	} while (placeholderFound);
 }
 
+int MainControllerImpl::_countRulesUntilNextRealRule(Model_Rule* baseRule, int direction) {
+	int result = 1;
+	bool placeholderFound = false;
+	Model_Rule* currentRule = baseRule;
+	do {
+		try {
+			currentRule = &*this->grublistCfg->proxies.getNextVisibleRule(currentRule, direction);
+
+			if (currentRule->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER || currentRule->type == Model_Rule::PLAINTEXT) {
+				result++;
+				placeholderFound = true;
+			} else {
+				placeholderFound = false;
+			}
+		} catch (NoMoveTargetException const& e) {
+			placeholderFound = false;
+		}
+	} while (placeholderFound);
+	return result;
+}
+
 void MainControllerImpl::dieAction(){
 	this->logActionBegin("die");
 	try {
@@ -606,41 +627,47 @@ void MainControllerImpl::moveAction(std::list<void*> rules, int direction){
 	try {
 		bool stickyPlaceholders = true;
 		try {
+			assert(direction == -1 || direction == 1);
+			int distance = 1;
 			if (stickyPlaceholders) {
 				rules = this->_populateSelection(rules);
+				distance = this->_countRulesUntilNextRealRule(reinterpret_cast<Model_Rule*>(direction == -1 ? rules.front() : rules.back()), direction);
 			}
-			assert(direction == -1 || direction == 1);
+			std::list<void*> movedRules;
 
-			int ruleCount = rules.size();
-			Model_Rule* rulePtr = static_cast<Model_Rule*>(direction == -1 ? rules.front() : rules.back());
-			for (int i = 0; i < ruleCount; i++) {
-				rulePtr = &this->grublistCfg->moveRule(rulePtr, direction);
-				if (i < ruleCount - 1) {
-					bool isEndOfList = false;
-					bool targetFound = false;
-					try {
-						rulePtr = &*this->grublistCfg->proxies.getNextVisibleRule(rulePtr, -direction);
-					} catch (NoMoveTargetException const& e) {
-						isEndOfList = true;
-						rulePtr = this->grublistCfg->proxies.getProxyByRule(rulePtr)->getParentRule(rulePtr);
-					}
-					if (!isEndOfList && rulePtr->type == Model_Rule::SUBMENU) {
-						rulePtr = direction == -1 ? &rulePtr->subRules.front() : &rulePtr->subRules.back();
-						if (rulePtr->isVisible) {
-							targetFound = true;
+			for (int j = 0; j < distance; j++) { // move the range multiple times
+				int ruleCount = rules.size();
+				Model_Rule* rulePtr = static_cast<Model_Rule*>(direction == -1 ? rules.front() : rules.back());
+				for (int i = 0; i < ruleCount; i++) { // move multiple rules
+					rulePtr = &this->grublistCfg->moveRule(rulePtr, direction);
+					if (i < ruleCount - 1) {
+						bool isEndOfList = false;
+						bool targetFound = false;
+						try {
+							rulePtr = &*this->grublistCfg->proxies.getNextVisibleRule(rulePtr, -direction);
+						} catch (NoMoveTargetException const& e) {
+							isEndOfList = true;
+							rulePtr = this->grublistCfg->proxies.getProxyByRule(rulePtr)->getParentRule(rulePtr);
+						}
+						if (!isEndOfList && rulePtr->type == Model_Rule::SUBMENU) {
+							rulePtr = direction == -1 ? &rulePtr->subRules.front() : &rulePtr->subRules.back();
+							if (rulePtr->isVisible) {
+								targetFound = true;
+							}
+						}
+
+						if (!targetFound) {
+							rulePtr = &*this->grublistCfg->proxies.getNextVisibleRule(rulePtr, -direction);
 						}
 					}
-
-					if (!targetFound) {
-						rulePtr = &*this->grublistCfg->proxies.getNextVisibleRule(rulePtr, -direction);
-					}
 				}
-			}
 
-			std::list<void*> movedRules;
-			movedRules.push_back(rulePtr);
-			for (int i = 1; i < ruleCount; i++) {
-				movedRules.push_back(&*this->grublistCfg->proxies.getNextVisibleRule(static_cast<Model_Rule*>(movedRules.back()), direction));
+				movedRules.clear();
+				movedRules.push_back(rulePtr);
+				for (int i = 1; i < ruleCount; i++) {
+					movedRules.push_back(&*this->grublistCfg->proxies.getNextVisibleRule(static_cast<Model_Rule*>(movedRules.back()), direction));
+				}
+				rules = movedRules;
 			}
 
 			this->syncLoadStateAction();
@@ -648,6 +675,7 @@ void MainControllerImpl::moveAction(std::list<void*> rules, int direction){
 			this->env.modificationsUnsaved = true;
 		} catch (NoMoveTargetException const& e) {
 			this->view->showErrorMessage(gettext("cannot move this entry"));
+			this->syncLoadStateAction();
 		}
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
