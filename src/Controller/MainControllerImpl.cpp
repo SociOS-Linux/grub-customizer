@@ -453,6 +453,49 @@ bool MainControllerImpl::_listHasCurrentSystemRules(std::list<void*> const& rule
 	return false;
 }
 
+std::list<void*> MainControllerImpl::_populateSelection(std::list<void*> rules) {
+	std::list<void*> result;
+	for (std::list<void*>::iterator ruleIter = rules.begin(); ruleIter != rules.end(); ruleIter++) {
+		this->_populateSelection(result, reinterpret_cast<Model_Rule*>(*ruleIter), -1);
+		result.push_back(*ruleIter);
+		this->_populateSelection(result, reinterpret_cast<Model_Rule*>(*ruleIter), 1);
+	}
+	// remove duplicates
+	std::list<void*> result2;
+	std::map<void*, void*> duplicateIndex; // key: pointer to the rule, value: always NULL
+	for (std::list<void*>::iterator ruleIter = result.begin(); ruleIter != result.end(); ruleIter++) {
+		if (duplicateIndex.find(*ruleIter) == duplicateIndex.end()) {
+			duplicateIndex[*ruleIter] = NULL;
+			result2.push_back(*ruleIter);
+		}
+	}
+	return result2;
+}
+
+void MainControllerImpl::_populateSelection(std::list<void*>& rules, Model_Rule* baseRule, int direction) {
+	bool placeholderFound = false;
+	Model_Rule* currentRule = baseRule;
+	do {
+		try {
+			currentRule = &*this->grublistCfg->proxies.getNextVisibleRule(currentRule, direction);
+			if (currentRule->dataSource == NULL || baseRule->dataSource == NULL) {
+				break;
+			}
+			Model_Script* scriptCurrent = this->grublistCfg->repository.getScriptByEntry(*currentRule->dataSource);
+			Model_Script* scriptBase    = this->grublistCfg->repository.getScriptByEntry(*baseRule->dataSource);
+
+			if (scriptCurrent == scriptBase && (currentRule->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER || currentRule->type == Model_Rule::PLAINTEXT)) {
+				rules.push_back(currentRule);
+				placeholderFound = true;
+			} else {
+				placeholderFound = false;
+			}
+		} catch (NoMoveTargetException const& e) {
+			placeholderFound = false;
+		}
+	} while (placeholderFound);
+}
+
 void MainControllerImpl::dieAction(){
 	this->logActionBegin("die");
 	try {
@@ -561,7 +604,11 @@ void MainControllerImpl::renameRuleAction(void* entry, std::string const& newTex
 void MainControllerImpl::moveAction(std::list<void*> rules, int direction){
 	this->logActionBegin("move");
 	try {
+		bool stickyPlaceholders = true;
 		try {
+			if (stickyPlaceholders) {
+				rules = this->_populateSelection(rules);
+			}
 			assert(direction == -1 || direction == 1);
 
 			int ruleCount = rules.size();
