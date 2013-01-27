@@ -517,6 +517,17 @@ int MainControllerImpl::_countRulesUntilNextRealRule(Model_Rule* baseRule, int d
 	return result;
 }
 
+std::list<void*> MainControllerImpl::_removePlaceholdersFromSelection(std::list<void*> rules) {
+	std::list<void*> result;
+	for (std::list<void*>::iterator ruleIter = rules.begin(); ruleIter != rules.end(); ruleIter++) {
+		Model_Rule* rule = reinterpret_cast<Model_Rule*>(*ruleIter);
+		if (!(rule->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER || rule->type == Model_Rule::PLAINTEXT)) {
+			result.push_back(rule);
+		}
+	}
+	return result;
+}
+
 void MainControllerImpl::dieAction(){
 	this->logActionBegin("die");
 	try {
@@ -671,6 +682,9 @@ void MainControllerImpl::moveAction(std::list<void*> rules, int direction){
 			}
 
 			this->syncLoadStateAction();
+			if (stickyPlaceholders) {
+				movedRules = this->_removePlaceholdersFromSelection(movedRules);
+			}
 			this->view->selectRules(movedRules);
 			this->env.modificationsUnsaved = true;
 		} catch (NoMoveTargetException const& e) {
