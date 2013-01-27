@@ -473,6 +473,7 @@ std::list<void*> MainControllerImpl::_populateSelection(std::list<void*> rules) 
 }
 
 void MainControllerImpl::_populateSelection(std::list<void*>& rules, Model_Rule* baseRule, int direction) {
+	assert(direction == 1 || direction == -1);
 	bool placeholderFound = false;
 	Model_Rule* currentRule = baseRule;
 	do {
@@ -485,7 +486,11 @@ void MainControllerImpl::_populateSelection(std::list<void*>& rules, Model_Rule*
 			Model_Script* scriptBase    = this->grublistCfg->repository.getScriptByEntry(*baseRule->dataSource);
 
 			if (scriptCurrent == scriptBase && (currentRule->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER || currentRule->type == Model_Rule::PLAINTEXT)) {
-				rules.push_back(currentRule);
+				if (direction == 1) {
+					rules.push_back(currentRule);
+				} else {
+					rules.push_front(currentRule);
+				}
 				placeholderFound = true;
 			} else {
 				placeholderFound = false;
