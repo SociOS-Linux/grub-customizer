@@ -38,7 +38,7 @@ View_Gtk_Main::View_Gtk_Main()
 	miReload(Gtk::Stock::REFRESH, Gtk::AccelKey("F5")), miSave(Gtk::Stock::SAVE),
 	miAbout(Gtk::Stock::ABOUT), miModifyEnvironment(Gtk::Stock::OPEN), miRevert(Gtk::Stock::REVERT_TO_SAVED),
 	miCreateEntry(Gtk::Stock::NEW), miShowDetails(gettext("_Show details"), true), miShowHiddenEntries(gettext("Show _hidden entries"), true),
-	miGroupByScript(gettext("_Group by Script"), true),
+	miGroupByScript(gettext("_Group by Script"), true), miShowPlaceholders(gettext("Show _Placeholders"), true),
 	lock_state(~0), burgSwitcher(gettext("BURG found!"), false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO),
 	bttAdvancedSettings1(gettext("advanced settings")), bttAdvancedSettings2(gettext("advanced settings")),
 	bbxAdvancedSettings1(Gtk::BUTTONBOX_END), bbxAdvancedSettings2(Gtk::BUTTONBOX_END),
@@ -127,6 +127,7 @@ View_Gtk_Main::View_Gtk_Main()
 	this->setLockState(3);
 	this->options[VIEW_SHOW_DETAILS] = true;
 	this->options[VIEW_SHOW_HIDDEN_ENTRIES] = false;
+	this->options[VIEW_SHOW_PLACEHOLDERS] = false;
 
 	//menu
 	menu.append(miFile);
@@ -181,6 +182,7 @@ View_Gtk_Main::View_Gtk_Main()
 	subView.attach(miShowDetails, 0, 1, 1, 2);
 	subView.attach(miShowHiddenEntries, 0, 1, 2, 3);
 	subView.attach(miGroupByScript, 0, 1, 3, 4);
+	subView.attach(miShowPlaceholders, 0, 1, 4, 5);
 
 	miShowDetails.set_active(true);
 	miShowHiddenEntries.set_active(false);
@@ -243,6 +245,7 @@ View_Gtk_Main::View_Gtk_Main()
 	miShowDetails.signal_toggled().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_viewopt_details_toggled));
 	miShowHiddenEntries.signal_toggled().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_viewopt_checkboxes_toggled));
 	miGroupByScript.signal_toggled().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_viewopt_script_toggled));
+	miShowPlaceholders.signal_toggled().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_viewopt_placeholders_toggled));
 
 	miExit.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_quit_click));
 	miAbout.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_info_click));
@@ -344,6 +347,12 @@ void View_Gtk_Main::signal_viewopt_script_toggled() {
 	}
 }
 
+void View_Gtk_Main::signal_viewopt_placeholders_toggled() {
+	if (this->eventListener) {
+		this->eventListener->setViewOptionAction(VIEW_SHOW_PLACEHOLDERS, this->miShowPlaceholders.get_active());
+	}
+}
+
 void View_Gtk_Main::showBurgSwitcher(){
 	burgSwitcher.show();
 }
@@ -402,6 +411,9 @@ void View_Gtk_Main::appendEntry(std::string const& name, void* entryPtr, void* s
 		return;
 	}
 	if (entryPtr == NULL && !this->options[VIEW_GROUP_BY_SCRIPT]) {
+		return;
+	}
+	if (is_placeholder && !this->options[VIEW_SHOW_PLACEHOLDERS]) {
 		return;
 	}
 	Gtk::TreeIter entryRow;
@@ -773,6 +785,7 @@ void View_Gtk_Main::setOption(ViewOption option, bool value) {
 		this->tvConfList.pixbufRenderer.set_visible(!value);
 		break;
 	case VIEW_GROUP_BY_SCRIPT: this->miGroupByScript.set_active(value); break;
+	case VIEW_SHOW_PLACEHOLDERS: this->miShowPlaceholders.set_active(value); break;
 	default:
 		throw LogicException("unexpected option");
 	}

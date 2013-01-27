@@ -625,7 +625,7 @@ void MainControllerImpl::renameRuleAction(void* entry, std::string const& newTex
 void MainControllerImpl::moveAction(std::list<void*> rules, int direction){
 	this->logActionBegin("move");
 	try {
-		bool stickyPlaceholders = true;
+		bool stickyPlaceholders = !this->view->getOptions().at(VIEW_SHOW_PLACEHOLDERS);
 		try {
 			assert(direction == -1 || direction == 1);
 			int distance = 1;
