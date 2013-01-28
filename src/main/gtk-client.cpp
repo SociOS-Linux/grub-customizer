@@ -159,7 +159,7 @@ int main(int argc, char** argv){
 		settingsController.setThreadController(threadC);
 		installController.setThreadController(threadC);
 		errorController.setThreadController(threadC);
-
+		entryEditController.setThreadController(threadC);
 
 		listCfgView.putSettingsDialog(settingsDlg.getCommonSettingsPane(), settingsDlg.getAppearanceSettingsPane());
 

@@ -42,6 +42,10 @@ void EntryEditControllerImpl::setView(View_EntryEditor& view) {
 	this->view = &view;
 }
 
+void EntryEditControllerImpl::setThreadController(ThreadController& threadController) {
+	this->threadController = &threadController;
+}
+
 Model_Script* EntryEditControllerImpl::_createCustomScript() {
 	this->grublistCfg->repository.push_back(Model_Script("custom", ""));
 	Model_Script& script = this->grublistCfg->repository.back();
@@ -120,7 +124,13 @@ void EntryEditControllerImpl::applyAction() {
 		this->env.modificationsUnsaved = true;
 		this->getAllControllers().mainController->syncLoadStateAction();
 
-		this->getAllControllers().mainController->selectRuleAction(rulePtr, isAdded);
+		assert(this->threadController != NULL);
+		if (isAdded) {
+			this->threadController->startEdit(rulePtr);
+		} else {
+			this->getAllControllers().mainController->selectRuleAction(rulePtr, isAdded);
+		}
+
 
 		this->currentContentParser = NULL;
 	} catch (Exception const& e) {

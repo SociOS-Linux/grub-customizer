@@ -48,6 +48,7 @@ class EntryEditControllerImpl : public EntryEditController, public ControllerAbs
 	ContentParserFactory* contentParserFactory;
 	ContentParser* currentContentParser;
 	Model_DeviceDataListInterface* deviceDataList;
+	ThreadController* threadController;
 	Model_Script* _createCustomScript();
 public:
 	EntryEditControllerImpl(Model_Env& env);
@@ -56,6 +57,7 @@ public:
 	void setContentParserFactory(ContentParserFactory& contentParserFactory);
 	void setListCfg(Model_ListCfg& grublistCfg);
 	void setView(View_EntryEditor& view);
+	void setThreadController(ThreadController& threadController);
 
 	void showAction(void* rule);
 	void showCreatorAction();

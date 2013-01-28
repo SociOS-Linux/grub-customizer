@@ -49,6 +49,12 @@ void GLib_ThreadController::enableSettings() {
 	this->disp_settings_loaded();
 }
 
+void GLib_ThreadController::startEdit(void* rule) {
+	this->_cachedRulePtr = rule;
+
+	Glib::signal_timeout().connect_once(sigc::mem_fun(this, &GLib_ThreadController::_execRuleEdit), 100);
+}
+
 void GLib_ThreadController::startLoadThread(bool preserveConfig) {
 	Glib::Thread::create(sigc::bind(sigc::mem_fun(this, &GLib_ThreadController::_execLoad), preserveConfig), false);
 }
@@ -112,4 +118,11 @@ void GLib_ThreadController::_execInstallGrub(std::string const& device) {
 
 void GLib_ThreadController::_execShowException() {
 	this->_controllers.errorController->errorAction(this->_cachedException);
+}
+
+void GLib_ThreadController::_execRuleEdit() {
+	if (this->_cachedRulePtr != NULL) {
+		this->_controllers.mainController->selectRuleAction(this->_cachedRulePtr, true);
+		this->_cachedRulePtr = NULL;
+	}
 }

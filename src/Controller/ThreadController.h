@@ -36,6 +36,7 @@ public:
 	virtual void startGrubInstallThread(std::string const& device) = 0;
 	virtual void stopApplication() = 0;
 	virtual void showException(Exception const& e) = 0;
+	virtual void startEdit(void* rule) = 0;
 };
 
 #endif
