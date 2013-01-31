@@ -29,6 +29,7 @@ View_Gtk_Trash::View_Gtk_Trash()
 	frmList.set_shadow_type(Gtk::SHADOW_NONE);
 	frmList.add(scrEntryBox);
 	scrEntryBox.add(list);
+	scrEntryBox.set_min_content_width(250);
 	
 	deleteButton = this->add_button(gettext("Delete custom entries"), Gtk::RESPONSE_REJECT);
 	deleteButton->set_no_show_all(true);

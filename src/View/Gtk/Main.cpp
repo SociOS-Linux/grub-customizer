@@ -279,7 +279,7 @@ void View_Gtk_Main::putSettingsDialog(Gtk::VBox& commonSettingsPane, Gtk::VBox& 
 }
 
 void View_Gtk_Main::putTrashList(Gtk::Widget& trashList) {
-	hpLists.pack2(trashList);
+	hpLists.pack2(trashList, Gtk::SHRINK);
 	this->trashList = &trashList;
 }
 
