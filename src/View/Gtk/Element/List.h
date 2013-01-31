@@ -21,13 +21,14 @@
 #include <gtkmm.h>
 #include "../../../lib/Type.h"
 
+template<typename TItem, typename TWrapper>
 class View_Gtk_Element_List : public Gtk::TreeView {
 public:
 	struct TreeModel : public Gtk::TreeModelColumnRecord {
 		Gtk::TreeModelColumn<Glib::ustring> name;
 		Gtk::TreeModelColumn<Glib::ustring> text;
-		Gtk::TreeModelColumn<Rule*> relatedRule;
-		Gtk::TreeModelColumn<Proxy*> relatedScript;
+		Gtk::TreeModelColumn<TItem*> relatedRule;
+		Gtk::TreeModelColumn<TWrapper*> relatedScript;
 		Gtk::TreeModelColumn<bool> is_other_entries_marker;
 		Gtk::TreeModelColumn<bool> is_renamable;
 		Gtk::TreeModelColumn<bool> is_renamable_real;
@@ -36,7 +37,21 @@ public:
 		Gtk::TreeModelColumn<bool> is_activated;
 		Gtk::TreeModelColumn<bool> is_toplevel;
 		Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > icon;
-		TreeModel();
+
+		TreeModel(){
+			this->add(name);
+			this->add(text);
+			this->add(relatedRule);
+			this->add(relatedScript);
+			this->add(is_other_entries_marker);
+			this->add(is_renamable);
+			this->add(is_renamable_real);
+			this->add(is_editable);
+			this->add(is_activated);
+			this->add(is_sensitive);
+			this->add(is_toplevel);
+			this->add(icon);
+		}
 	};
 	TreeModel treeModel;
 	Glib::RefPtr<Gtk::TreeStore> refTreeStore;
@@ -44,7 +59,28 @@ public:
 	Gtk::CellRendererToggle toggleRenderer;
 	Gtk::CellRendererText textRenderer;
 	Gtk::TreeViewColumn mainColumn;
-	View_Gtk_Element_List();
+
+	View_Gtk_Element_List(){
+		refTreeStore = Gtk::TreeStore::create(treeModel);
+		this->set_model(refTreeStore);
+
+		this->append_column(this->mainColumn);
+		this->mainColumn.pack_start(pixbufRenderer, false);
+		this->mainColumn.add_attribute(pixbufRenderer.property_pixbuf(), treeModel.icon);
+		this->mainColumn.pack_start(toggleRenderer, false);
+		this->mainColumn.add_attribute(toggleRenderer.property_sensitive(), treeModel.is_sensitive);
+		toggleRenderer.set_visible(false);
+		this->mainColumn.add_attribute(toggleRenderer.property_active(), treeModel.is_activated);
+		this->mainColumn.pack_start(this->textRenderer, true);
+		this->mainColumn.add_attribute(this->textRenderer.property_markup(), treeModel.text);
+		this->mainColumn.add_attribute(this->textRenderer.property_editable(), treeModel.is_renamable);
+		this->mainColumn.set_spacing(10);
+
+		this->set_headers_visible(false);
+		this->get_selection()->set_mode(Gtk::SELECTION_MULTIPLE);
+		this->set_rubber_banding(true);
+	}
 };
+
 
 #endif /* LIST_H_ */

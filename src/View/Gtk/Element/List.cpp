@@ -18,38 +18,4 @@
 
 #include "List.h"
 
-View_Gtk_Element_List::View_Gtk_Element_List(){
-	refTreeStore = Gtk::TreeStore::create(treeModel);
-	this->set_model(refTreeStore);
 
-	this->append_column(this->mainColumn);
-	this->mainColumn.pack_start(pixbufRenderer, false);
-	this->mainColumn.add_attribute(pixbufRenderer.property_pixbuf(), treeModel.icon);
-	this->mainColumn.pack_start(toggleRenderer, false);
-	this->mainColumn.add_attribute(toggleRenderer.property_sensitive(), treeModel.is_sensitive);
-	toggleRenderer.set_visible(false);
-	this->mainColumn.add_attribute(toggleRenderer.property_active(), treeModel.is_activated);
-	this->mainColumn.pack_start(this->textRenderer, true);
-	this->mainColumn.add_attribute(this->textRenderer.property_markup(), treeModel.text);
-	this->mainColumn.add_attribute(this->textRenderer.property_editable(), treeModel.is_renamable);
-	this->mainColumn.set_spacing(10);
-
-	this->set_headers_visible(false);
-	this->get_selection()->set_mode(Gtk::SELECTION_MULTIPLE);
-	this->set_rubber_banding(true);
-}
-
-View_Gtk_Element_List::TreeModel::TreeModel(){
-	this->add(name);
-	this->add(text);
-	this->add(relatedRule);
-	this->add(relatedScript);
-	this->add(is_other_entries_marker);
-	this->add(is_renamable);
-	this->add(is_renamable_real);
-	this->add(is_editable);
-	this->add(is_activated);
-	this->add(is_sensitive);
-	this->add(is_toplevel);
-	this->add(icon);
-}

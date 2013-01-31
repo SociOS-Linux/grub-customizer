@@ -49,7 +49,7 @@ class View_Gtk_Main : public View_Main, public CommonClass {
 	Gtk::VBox vbEntryList;
 	Gtk::Statusbar statusbar;
 	
-	View_Gtk_Element_List tvConfList;
+	View_Gtk_Element_List<Rule, Proxy> tvConfList;
 	Gtk::ProgressBar progressBar;
 
 	Gtk::ToolButton tbttAdd, tbttRemove, tbttUp, tbttDown, tbttSave, tbttReload, tbttLeft, tbttRight, tbttEditEntry, tbttRevert, tbttCreateEntry;
