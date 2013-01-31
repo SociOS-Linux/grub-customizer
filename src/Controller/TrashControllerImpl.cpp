@@ -90,7 +90,7 @@ void TrashControllerImpl::showAction(){
 void TrashControllerImpl::applyAction(){
 	this->logActionBegin("apply");
 	try {
-		std::list<void*> entries = view->getSelectedEntries();
+		std::list<Entry*> entries = view->getSelectedEntries();
 		this->getAllControllers().mainController->addEntriesAction(entries);
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);

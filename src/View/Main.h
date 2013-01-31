@@ -62,7 +62,7 @@ public:
 	virtual void setStatusText(std::string const& new_status_text)=0;
 	virtual void setStatusText(std::string const& name, int pos, int max)=0;
 	//add entry to the end of the last script of the list
-	virtual void appendEntry(std::string const& name, void* entryPtr, void* scriptPtr, bool is_placeholder, bool is_submenu, std::string const& scriptName, std::string const& defaultName, bool isEditable, bool isModified, std::map<std::string, std::string> const& options, bool isVisible, void* parentEntry = NULL, void* parentScript = NULL)=0;
+	virtual void appendEntry(std::string const& name, Rule* entryPtr, Proxy* scriptPtr, bool is_placeholder, bool is_submenu, std::string const& scriptName, std::string const& defaultName, bool isEditable, bool isModified, std::map<std::string, std::string> const& options, bool isVisible, Rule* parentEntry = NULL, Proxy* parentScript = NULL)=0;
 	//notifies the user about the problem that no grublistcfg_proxy has been found
 	virtual void showProxyNotFoundMessage()=0;
 	//creates a string for an other entry placeholder
@@ -84,15 +84,15 @@ public:
 	virtual bool confirmUnsavedSwitch() = 0;
 
 	//reads the name of a rule item
-	virtual std::string getRuleName(void* rule)=0;
+	virtual std::string getRuleName(Rule* rule)=0;
 	//assigns a new name to the rule item
-	virtual void setRuleName(void* rule, std::string const& newName)=0;
+	virtual void setRuleName(Rule* rule, std::string const& newName)=0;
 
 	//select the given rule
-	virtual void selectRule(void* rule, bool startEdit = false)=0;
+	virtual void selectRule(Rule* rule, bool startEdit = false)=0;
 
 	// select multiple rules
-	virtual void selectRules(std::list<void*> rules)=0;
+	virtual void selectRules(std::list<Rule*> rules)=0;
 
 	// set the number of removed rules
 	virtual void setTrashCounter(int count) = 0;
@@ -112,7 +112,7 @@ public:
 	virtual std::map<ViewOption, bool> const& getOptions() = 0;
 	virtual void setOptions(std::map<ViewOption, bool> const& options) = 0;
 
-	virtual void setEntryVisibility(void* entry, bool value) = 0;
+	virtual void setEntryVisibility(Rule* entry, bool value) = 0;
 };
 
 #endif

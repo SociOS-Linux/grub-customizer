@@ -29,8 +29,9 @@
 #include "../config.h"
 #include "../lib/Exception.h"
 #include "../lib/ArrayStructure.h"
+#include "../lib/Type.h"
 
-struct Model_Script : public Model_EntryPathFollower, public CommonClass {
+struct Model_Script : public Model_EntryPathFollower, public CommonClass, public Script {
 	std::string name, fileName;
 	bool isCustomScript;
 	Model_Entry root;
@@ -50,6 +51,8 @@ struct Model_Script : public Model_EntryPathFollower, public CommonClass {
 	bool hasEntry(Model_Entry const& entry, Model_Entry const * parent = NULL) const;
 	void deleteEntry(Model_Entry const& entry, Model_Entry* parent = NULL);
 	operator ArrayStructure() const;
+	static Model_Script& fromPtr(Script* script);
+	static Model_Script const& fromPtr(Script const* script);
 };
 
 #endif

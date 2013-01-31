@@ -21,6 +21,7 @@
 
 #include <list>
 #include <string>
+#include "../lib/Type.h"
 
 /**
  * Interface to be implemented by dialogs which lets the user adding scripts
@@ -32,9 +33,9 @@ public:
 	//clear the script menu
 	virtual void clear()=0;
 	//gets the index of the selected script item
-	virtual std::list<void*> getSelectedEntries()=0;
+	virtual std::list<Entry*> getSelectedEntries()=0;
 	//adds a new item
-	virtual void addItem(std::string const& name, bool isPlaceholder, std::string const& scriptName, void* relatedEntry)=0;
+	virtual void addItem(std::string const& name, bool isPlaceholder, std::string const& scriptName, Entry* relatedEntry)=0;
 	//whether to active the delete button
 	virtual void setDeleteButtonEnabled(bool val) = 0;
 	//show this dialog

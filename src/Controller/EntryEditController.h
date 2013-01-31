@@ -20,11 +20,12 @@
 #define ENTRYEDITCONTROLLER_H_
 
 #include <string>
+#include "../lib/Type.h"
 
 class EntryEditController {
 public:
 	virtual inline ~EntryEditController() {};
-	virtual void showAction(void* rule) = 0;
+	virtual void showAction(Rule* rule) = 0;
 	virtual void showCreatorAction() = 0;
 	virtual void applyAction() = 0;
 	virtual void syncOptionsAction() = 0;

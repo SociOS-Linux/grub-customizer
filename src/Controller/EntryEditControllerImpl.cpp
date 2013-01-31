@@ -57,7 +57,7 @@ Model_Script* EntryEditControllerImpl::_createCustomScript() {
 void EntryEditControllerImpl::applyAction() {
 	this->logActionBegin("apply");
 	try {
-		Model_Rule* rulePtr = static_cast<Model_Rule*>(this->view->getRulePtr());
+		Model_Rule* rulePtr = &Model_Rule::fromPtr(this->view->getRulePtr());
 		bool isAdded = false;
 		if (rulePtr == NULL) { // insert
 			Model_Script* script = this->grublistCfg->repository.getCustomScript();
@@ -139,11 +139,11 @@ void EntryEditControllerImpl::applyAction() {
 	this->logActionEnd();
 }
 
-void EntryEditControllerImpl::showAction(void* rule) {
+void EntryEditControllerImpl::showAction(Rule* rule) {
 	this->logActionBegin("show");
 	try {
 		this->view->setRulePtr(rule);
-		this->view->setSourcecode(((Model_Rule*)rule)->dataSource->content);
+		this->view->setSourcecode(Model_Rule::fromPtr(rule).dataSource->content);
 		this->syncEntryEditDlg(false);
 		this->view->show();
 	} catch (Exception const& e) {

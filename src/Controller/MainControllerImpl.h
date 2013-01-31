@@ -68,12 +68,12 @@ class MainControllerImpl : public ControllerAbstract, public MainController {
 	CmdExecException thrownException; //to be used from the die() function
 
 	void _rAppendRule(Model_Rule& rule, Model_Rule* parentRule = NULL);
-	bool _listHasPlaintextRules(std::list<void*> const& rules);
-	bool _listHasCurrentSystemRules(std::list<void*> const& rules);
-	std::list<void*> _populateSelection(std::list<void*> rules);
-	void _populateSelection(std::list<void*>& rules, Model_Rule* currentRule, int direction);
+	bool _listHasPlaintextRules(std::list<Rule*> const& rules);
+	bool _listHasCurrentSystemRules(std::list<Rule*> const& rules);
+	std::list<Rule*> _populateSelection(std::list<Rule*> rules);
+	void _populateSelection(std::list<Rule*>& rules, Model_Rule* currentRule, int direction);
 	int _countRulesUntilNextRealRule(Model_Rule* baseRule, int direction);
-	std::list<void*> _removePlaceholdersFromSelection(std::list<void*> rules);
+	std::list<Rule*> _removePlaceholdersFromSelection(std::list<Rule*> rules);
 
 public:
 	void setListCfg(Model_ListCfg& grublistCfg);
@@ -111,7 +111,7 @@ public:
 	
 	void showInstallerAction();
 	
-	void showEntryEditorAction(void* rule);
+	void showEntryEditorAction(Rule* rule);
 	void showEntryCreatorAction();
 	
 	//dispatchers
@@ -120,11 +120,11 @@ public:
 	
 	void exitAction(bool force = false);
 	
-	void removeRulesAction(std::list<void*> rules, bool force = false);
-	void renameRuleAction(void* entry, std::string const& newText);
-	void moveAction(std::list<void*> rules, int direction);
-	void createSubmenuAction(std::list<void*> childItems);
-	void removeSubmenuAction(std::list<void*> childItems);
+	void removeRulesAction(std::list<Rule*> rules, bool force = false);
+	void renameRuleAction(Rule* entry, std::string const& newText);
+	void moveAction(std::list<Rule*> rules, int direction);
+	void createSubmenuAction(std::list<Rule*> childItems);
+	void removeSubmenuAction(std::list<Rule*> childItems);
 	
 	void revertAction();
 
@@ -141,14 +141,14 @@ public:
 	void showSettingsAction();
 	void showTrashAction();
 	void initModeAction(bool burgChosen);
-	void addEntriesAction(std::list<void*> entries);
+	void addEntriesAction(std::list<Entry*> entries);
 	void activateSettingsAction();
 	void showReloadRecommendationAction();
-	void selectRulesAction(std::list<void*> rules);
-	void selectRuleAction(void* rule, bool startEdit = false);
+	void selectRulesAction(std::list<Rule*> rules);
+	void selectRuleAction(Rule* rule, bool startEdit = false);
 	void refreshTabAction(unsigned int pos);
 	void setViewOptionAction(ViewOption option, bool value);
-	void entryStateToggledAction(void* entry, bool state);
+	void entryStateToggledAction(Rule* entry, bool state);
 };
 
 #endif

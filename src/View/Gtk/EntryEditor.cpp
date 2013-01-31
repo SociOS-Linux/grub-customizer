@@ -153,11 +153,11 @@ void View_Gtk_EntryEditor::removeOptions() {
 	this->optionMap.clear();
 }
 
-void View_Gtk_EntryEditor::setRulePtr(void* rulePtr) {
+void View_Gtk_EntryEditor::setRulePtr(Rule* rulePtr) {
 	this->rulePtr = rulePtr;
 }
 
-void* View_Gtk_EntryEditor::getRulePtr() {
+Rule* View_Gtk_EntryEditor::getRulePtr() {
 	return this->rulePtr;
 }
 

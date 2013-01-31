@@ -36,7 +36,7 @@ public:
 		Gtk::TreeModelColumn<Glib::ustring> name;
 		Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > icon;
 		Gtk::TreeModelColumn<Glib::ustring> description;
-		Gtk::TreeModelColumn<void*> relatedRule;
+		Gtk::TreeModelColumn<Entry*> relatedRule;
 		IconModel();
 	} iconModel;
 	Glib::RefPtr<Gtk::ListStore> listStore;
@@ -45,8 +45,8 @@ public:
 	void signal_entryAddDlg_response(int response_id);
 	void signal_icon_dblClick(Gtk::TreeModel::Path path);
 	void clear();
-	std::list<void*> getSelectedEntries();
-	void addItem(std::string const& name, bool isPlaceholder, std::string const& scriptName,void* relatedRule);
+	std::list<Entry*> getSelectedEntries();
+	void addItem(std::string const& name, bool isPlaceholder, std::string const& scriptName, Entry* relatedRule);
 	void setDeleteButtonEnabled(bool val);
 	void show();
 	void hide();

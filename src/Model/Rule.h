@@ -25,8 +25,9 @@
 #include <ostream>
 #include "../lib/md5.h"
 #include "../lib/ArrayStructure.h"
+#include "../lib/Type.h"
 
-struct Model_Rule {
+struct Model_Rule : public Rule {
 	Model_Entry* dataSource; //assigned when using RuleType::OTHER_ENTRIES_PLACEHOLDER
 	std::string outputName;
 	std::string __idHash; //should only be used by sync()!
@@ -47,6 +48,8 @@ struct Model_Rule {
 	std::string getEntryName() const;
 	void setVisibility(bool isVisible);
 	operator ArrayStructure() const;
+	static Model_Rule& fromPtr(Rule* rule);
+	static Model_Rule const& fromPtr(Rule const* rule);
 };
 
 #endif

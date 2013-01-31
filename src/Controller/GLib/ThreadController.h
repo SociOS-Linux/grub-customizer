@@ -25,6 +25,7 @@
 #include "../ControllerCollection.h"
 #include "../../lib/CommonClass.h"
 #include "../../lib/assert.h"
+#include "../../lib/Type.h"
 
 class GLib_ThreadController : public ThreadController, public CommonClass {
 	ControllerCollection& _controllers;
@@ -32,7 +33,7 @@ class GLib_ThreadController : public ThreadController, public CommonClass {
 	Glib::Dispatcher disp_sync_load, disp_sync_save, disp_thread_died, disp_updateSettingsDlgResolutionList, disp_settings_loaded, disp_exception;
 
 	Exception _cachedException;
-	void* _cachedRulePtr;
+	Rule* _cachedRulePtr;
 public:
 	GLib_ThreadController(ControllerCollection& controllers);
 	void syncEntryList();
@@ -46,7 +47,7 @@ public:
 	void startGrubInstallThread(std::string const& device);
 	void stopApplication();
 	void showException(Exception const& e);
-	void startEdit(void* rule);
+	void startEdit(Rule* rule);
 private:
 	void _execLoadSync();
 	void _execSaveSync();

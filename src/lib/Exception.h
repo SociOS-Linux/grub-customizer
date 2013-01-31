@@ -149,6 +149,11 @@ class MissingFstabException : public SystemException {
 	   : SystemException(message, file, line) {}
 };
 
+class BadCastException : public TechnicalException {
+public: inline BadCastException(std::string const& message, std::string const& file = "", int line = -1)
+   : TechnicalException(message, file, line) {}
+};
+
 // Template:
 //class CLASSNAME : public BASECLASS {
 //	public: inline CLASSNAME(std::string const& message, std::string const& file = "", int line = -1)

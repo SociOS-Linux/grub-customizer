@@ -362,7 +362,7 @@ void MainControllerImpl::showInstallerAction(){
 	this->logActionEnd();
 }
 
-void MainControllerImpl::showEntryEditorAction(void* rule) {
+void MainControllerImpl::showEntryEditorAction(Rule* rule) {
 	this->logActionBegin("show-entry-editor");
 	try {
 		this->getAllControllers().entryEditController->showAction(rule);
@@ -430,9 +430,9 @@ void MainControllerImpl::_rAppendRule(Model_Rule& rule, Model_Rule* parentRule){
 	}
 }
 
-bool MainControllerImpl::_listHasPlaintextRules(std::list<void*> const& rules) {
-	for (std::list<void*>::const_iterator iter = rules.begin(); iter != rules.end(); iter++) {
-		const Model_Rule* rule = static_cast<const Model_Rule*>(*iter);
+bool MainControllerImpl::_listHasPlaintextRules(std::list<Rule*> const& rules) {
+	for (std::list<Rule*>::const_iterator iter = rules.begin(); iter != rules.end(); iter++) {
+		const Model_Rule* rule = &Model_Rule::fromPtr(*iter);
 		if (rule->type == Model_Rule::PLAINTEXT) {
 			return true;
 		}
@@ -440,9 +440,9 @@ bool MainControllerImpl::_listHasPlaintextRules(std::list<void*> const& rules) {
 	return false;
 }
 
-bool MainControllerImpl::_listHasCurrentSystemRules(std::list<void*> const& rules) {
-	for (std::list<void*>::const_iterator iter = rules.begin(); iter != rules.end(); iter++) {
-		const Model_Rule* rule = static_cast<const Model_Rule*>(*iter);
+bool MainControllerImpl::_listHasCurrentSystemRules(std::list<Rule*> const& rules) {
+	for (std::list<Rule*>::const_iterator iter = rules.begin(); iter != rules.end(); iter++) {
+		const Model_Rule* rule = &Model_Rule::fromPtr(*iter);
 		if (rule->type == Model_Rule::NORMAL) {
 			assert(rule->dataSource != NULL);
 			if (this->grublistCfg->repository.getScriptByEntry(*rule->dataSource)->name == "linux") {
@@ -453,17 +453,17 @@ bool MainControllerImpl::_listHasCurrentSystemRules(std::list<void*> const& rule
 	return false;
 }
 
-std::list<void*> MainControllerImpl::_populateSelection(std::list<void*> rules) {
-	std::list<void*> result;
-	for (std::list<void*>::iterator ruleIter = rules.begin(); ruleIter != rules.end(); ruleIter++) {
-		this->_populateSelection(result, reinterpret_cast<Model_Rule*>(*ruleIter), -1);
+std::list<Rule*> MainControllerImpl::_populateSelection(std::list<Rule*> rules) {
+	std::list<Rule*> result;
+	for (std::list<Rule*>::iterator ruleIter = rules.begin(); ruleIter != rules.end(); ruleIter++) {
+		this->_populateSelection(result, &Model_Rule::fromPtr(*ruleIter), -1);
 		result.push_back(*ruleIter);
-		this->_populateSelection(result, reinterpret_cast<Model_Rule*>(*ruleIter), 1);
+		this->_populateSelection(result, &Model_Rule::fromPtr(*ruleIter), 1);
 	}
 	// remove duplicates
-	std::list<void*> result2;
-	std::map<void*, void*> duplicateIndex; // key: pointer to the rule, value: always NULL
-	for (std::list<void*>::iterator ruleIter = result.begin(); ruleIter != result.end(); ruleIter++) {
+	std::list<Rule*> result2;
+	std::map<Rule*, Rule*> duplicateIndex; // key: pointer to the rule, value: always NULL
+	for (std::list<Rule*>::iterator ruleIter = result.begin(); ruleIter != result.end(); ruleIter++) {
 		if (duplicateIndex.find(*ruleIter) == duplicateIndex.end()) {
 			duplicateIndex[*ruleIter] = NULL;
 			result2.push_back(*ruleIter);
@@ -472,7 +472,7 @@ std::list<void*> MainControllerImpl::_populateSelection(std::list<void*> rules) 
 	return result2;
 }
 
-void MainControllerImpl::_populateSelection(std::list<void*>& rules, Model_Rule* baseRule, int direction) {
+void MainControllerImpl::_populateSelection(std::list<Rule*>& rules, Model_Rule* baseRule, int direction) {
 	assert(direction == 1 || direction == -1);
 	bool placeholderFound = false;
 	Model_Rule* currentRule = baseRule;
@@ -522,10 +522,10 @@ int MainControllerImpl::_countRulesUntilNextRealRule(Model_Rule* baseRule, int d
 	return result;
 }
 
-std::list<void*> MainControllerImpl::_removePlaceholdersFromSelection(std::list<void*> rules) {
-	std::list<void*> result;
-	for (std::list<void*>::iterator ruleIter = rules.begin(); ruleIter != rules.end(); ruleIter++) {
-		Model_Rule* rule = reinterpret_cast<Model_Rule*>(*ruleIter);
+std::list<Rule*> MainControllerImpl::_removePlaceholdersFromSelection(std::list<Rule*> rules) {
+	std::list<Rule*> result;
+	for (std::list<Rule*>::iterator ruleIter = rules.begin(); ruleIter != rules.end(); ruleIter++) {
+		Model_Rule* rule = &Model_Rule::fromPtr(*ruleIter);
 		if (!(rule->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER || rule->type == Model_Rule::PLAINTEXT)) {
 			result.push_back(rule);
 		}
@@ -584,7 +584,7 @@ void MainControllerImpl::exitAction(bool force){
 	this->logActionEnd();
 }
 
-void MainControllerImpl::removeRulesAction(std::list<void*> rules, bool force){
+void MainControllerImpl::removeRulesAction(std::list<Rule*> rules, bool force){
 	this->logActionBegin("remove-rules");
 	try {
 		if (!force && this->_listHasCurrentSystemRules(rules)) {
@@ -592,16 +592,16 @@ void MainControllerImpl::removeRulesAction(std::list<void*> rules, bool force){
 		} else if (!force && this->_listHasPlaintextRules(rules)) {
 			this->view->showPlaintextRemoveWarning();
 		} else {
-			std::map<Model_Proxy*, void*> emptyProxies;
-			for (std::list<void*>::iterator iter = rules.begin(); iter != rules.end(); iter++) {
-				Model_Rule* rule = static_cast<Model_Rule*>(*iter);
+			std::map<Model_Proxy*, Nothing> emptyProxies;
+			for (std::list<Rule*>::iterator iter = rules.begin(); iter != rules.end(); iter++) {
+				Model_Rule* rule = &Model_Rule::fromPtr(*iter);
 				rule->setVisibility(false);
 				if (!this->grublistCfg->proxies.getProxyByRule(rule)->hasVisibleRules()) {
-					emptyProxies[this->grublistCfg->proxies.getProxyByRule(rule)] = NULL;
+					emptyProxies[this->grublistCfg->proxies.getProxyByRule(rule)] = Nothing();
 				}
 			}
 
-			for (std::map<Model_Proxy*, void*>::iterator iter = emptyProxies.begin(); iter != emptyProxies.end(); iter++) {
+			for (std::map<Model_Proxy*, Nothing>::iterator iter = emptyProxies.begin(); iter != emptyProxies.end(); iter++) {
 				this->grublistCfg->proxies.deleteProxy(iter->first);
 				this->log("proxy removed", Logger::INFO);
 			}
@@ -617,10 +617,10 @@ void MainControllerImpl::removeRulesAction(std::list<void*> rules, bool force){
 }
 
 
-void MainControllerImpl::renameRuleAction(void* entry, std::string const& newText){
+void MainControllerImpl::renameRuleAction(Rule* entry, std::string const& newText){
 	this->logActionBegin("rename-rule");
 	try {
-		Model_Rule* entry2 = (Model_Rule*)entry;
+		Model_Rule* entry2 = &Model_Rule::fromPtr(entry);
 		std::string oldName = entry2->outputName;
 	//	std::string newName = this->view->getRuleName(entry);
 		if (newText == ""){
@@ -638,7 +638,7 @@ void MainControllerImpl::renameRuleAction(void* entry, std::string const& newTex
 }
 
 
-void MainControllerImpl::moveAction(std::list<void*> rules, int direction){
+void MainControllerImpl::moveAction(std::list<Rule*> rules, int direction){
 	this->logActionBegin("move");
 	try {
 		bool stickyPlaceholders = !this->view->getOptions().at(VIEW_SHOW_PLACEHOLDERS);
@@ -647,13 +647,13 @@ void MainControllerImpl::moveAction(std::list<void*> rules, int direction){
 			int distance = 1;
 			if (stickyPlaceholders) {
 				rules = this->_populateSelection(rules);
-				distance = this->_countRulesUntilNextRealRule(reinterpret_cast<Model_Rule*>(direction == -1 ? rules.front() : rules.back()), direction);
+				distance = this->_countRulesUntilNextRealRule(&Model_Rule::fromPtr(direction == -1 ? rules.front() : rules.back()), direction);
 			}
-			std::list<void*> movedRules;
+			std::list<Rule*> movedRules;
 
 			for (int j = 0; j < distance; j++) { // move the range multiple times
 				int ruleCount = rules.size();
-				Model_Rule* rulePtr = static_cast<Model_Rule*>(direction == -1 ? rules.front() : rules.back());
+				Model_Rule* rulePtr = &Model_Rule::fromPtr(direction == -1 ? rules.front() : rules.back());
 				for (int i = 0; i < ruleCount; i++) { // move multiple rules
 					rulePtr = &this->grublistCfg->moveRule(rulePtr, direction);
 					if (i < ruleCount - 1) {
@@ -681,7 +681,7 @@ void MainControllerImpl::moveAction(std::list<void*> rules, int direction){
 				movedRules.clear();
 				movedRules.push_back(rulePtr);
 				for (int i = 1; i < ruleCount; i++) {
-					movedRules.push_back(&*this->grublistCfg->proxies.getNextVisibleRule(static_cast<Model_Rule*>(movedRules.back()), direction));
+					movedRules.push_back(&*this->grublistCfg->proxies.getNextVisibleRule(&Model_Rule::fromPtr(movedRules.back()), direction));
 				}
 				rules = movedRules;
 			}
@@ -703,10 +703,10 @@ void MainControllerImpl::moveAction(std::list<void*> rules, int direction){
 }
 
 
-void MainControllerImpl::createSubmenuAction(std::list<void*> childItems) {
+void MainControllerImpl::createSubmenuAction(std::list<Rule*> childItems) {
 	this->logActionBegin("create-submenu");
 	try {
-		Model_Rule* firstRule = static_cast<Model_Rule*>(childItems.front());
+		Model_Rule* firstRule = &Model_Rule::fromPtr(childItems.front());
 		Model_Rule* newItem = this->grublistCfg->createSubmenu(firstRule);
 		this->syncLoadStateAction();
 		this->moveAction(childItems, -1);
@@ -717,14 +717,14 @@ void MainControllerImpl::createSubmenuAction(std::list<void*> childItems) {
 	this->logActionEnd();
 }
 
-void MainControllerImpl::removeSubmenuAction(std::list<void*> childItems) {
+void MainControllerImpl::removeSubmenuAction(std::list<Rule*> childItems) {
 	this->logActionBegin("remove-submenu");
 	try {
-		Model_Rule* firstItem = this->grublistCfg->splitSubmenu(static_cast<Model_Rule*>(childItems.front()));
-		std::list<void*> movedRules;
+		Model_Rule* firstItem = this->grublistCfg->splitSubmenu(&Model_Rule::fromPtr(childItems.front()));
+		std::list<Rule*> movedRules;
 		movedRules.push_back(firstItem);
 		for (int i = 1; i < childItems.size(); i++) {
-			movedRules.push_back(&*this->grublistCfg->proxies.getNextVisibleRule(static_cast<Model_Rule*>(movedRules.back()), 1));
+			movedRules.push_back(&*this->grublistCfg->proxies.getNextVisibleRule(&Model_Rule::fromPtr(movedRules.back()), 1));
 		}
 
 		this->moveAction(movedRules, -1);
@@ -927,12 +927,12 @@ void MainControllerImpl::initModeAction(bool burgChosen) {
 	this->logActionEnd();
 }
 
-void MainControllerImpl::addEntriesAction(std::list<void*> entries) {
+void MainControllerImpl::addEntriesAction(std::list<Entry*> entries) {
 	this->logActionBegin("add-entries");
 	try {
-		std::list<void*> addedRules;
-		for (std::list<void*>::iterator iter = entries.begin(); iter != entries.end(); iter++) {
-			Model_Entry* entry = static_cast<Model_Entry*>(*iter);
+		std::list<Rule*> addedRules;
+		for (std::list<Entry*>::iterator iter = entries.begin(); iter != entries.end(); iter++) {
+			Model_Entry* entry = &Model_Entry::fromPtr(*iter);
 			addedRules.push_back(this->grublistCfg->addEntry(*entry));
 		}
 
@@ -969,7 +969,7 @@ void MainControllerImpl::showReloadRecommendationAction() {
 	this->logActionEnd();
 }
 
-void MainControllerImpl::selectRulesAction(std::list<void*> rules) {
+void MainControllerImpl::selectRulesAction(std::list<Rule*> rules) {
 	this->logActionBegin("select-rules");
 	try {
 		this->view->selectRules(rules);
@@ -979,7 +979,7 @@ void MainControllerImpl::selectRulesAction(std::list<void*> rules) {
 	this->logActionEnd();
 }
 
-void MainControllerImpl::selectRuleAction(void* rule, bool startEdit) {
+void MainControllerImpl::selectRuleAction(Rule* rule, bool startEdit) {
 	this->logActionBegin("select-rule");
 	try {
 		this->view->selectRule(rule, startEdit);
@@ -1018,10 +1018,10 @@ void MainControllerImpl::setViewOptionAction(ViewOption option, bool value) {
 }
 
 
-void MainControllerImpl::entryStateToggledAction(void* entry, bool state) {
+void MainControllerImpl::entryStateToggledAction(Rule* entry, bool state) {
 	this->logActionBegin("entry-state-toggled");
 	try {
-		static_cast<Model_Rule*>(entry)->setVisibility(state);
+		Model_Rule::fromPtr(entry).setVisibility(state);
 		this->view->setEntryVisibility(entry, state);
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);

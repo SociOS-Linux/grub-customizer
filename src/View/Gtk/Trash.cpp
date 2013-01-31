@@ -75,8 +75,8 @@ void View_Gtk_Trash::signal_icon_dblClick(Gtk::TreeModel::Path path) {
 	this->hide();
 }
 
-std::list<void*> View_Gtk_Trash::getSelectedEntries(){
-	std::list<void*> result;
+std::list<Entry*> View_Gtk_Trash::getSelectedEntries(){
+	std::list<Entry*> result;
 	std::vector<Gtk::TreePath> pathes = iconBox.get_selected_items();
 	for (std::vector<Gtk::TreePath>::iterator pathIter = pathes.begin(); pathIter != pathes.end(); pathIter++) {
 		Gtk::TreeModel::iterator elementIter = listStore->get_iter(*pathIter);
@@ -85,7 +85,7 @@ std::list<void*> View_Gtk_Trash::getSelectedEntries(){
 	return result;
 }
 
-void View_Gtk_Trash::addItem(std::string const& name, bool isPlaceholder, std::string const& scriptName, void* relatedEntry){
+void View_Gtk_Trash::addItem(std::string const& name, bool isPlaceholder, std::string const& scriptName, Entry* relatedEntry){
 	Gtk::TreeModel::iterator iter = this->listStore->append();
 	(*iter)[iconModel.name] = name;
 	(*iter)[iconModel.icon] = this->iconBox.render_icon_pixbuf(isPlaceholder ? Gtk::Stock::FIND : Gtk::Stock::EXECUTE, Gtk::ICON_SIZE_DND);

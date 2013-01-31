@@ -25,6 +25,7 @@
 #include "../lib/str_replace.h"
 #include "../lib/ArrayStructure.h"
 #include "../lib/trim.h"
+#include "../lib/Type.h"
 
 struct Model_Entry_Row {
 	Model_Entry_Row(FILE* sourceFile);
@@ -35,7 +36,7 @@ struct Model_Entry_Row {
 	operator bool();
 };
 
-struct Model_Entry : public CommonClass {
+struct Model_Entry : public CommonClass, public Entry {
 	enum EntryType {
 		MENUENTRY,
 		SUBMENU,
@@ -52,6 +53,8 @@ struct Model_Entry : public CommonClass {
 	std::list<Model_Entry>& getSubEntries();
 	operator bool() const;
 	operator ArrayStructure() const;
+	static Model_Entry& fromPtr(Entry* entry);
+	static Model_Entry const& fromPtr(Entry const* entry);
 };
 
 #endif

@@ -21,6 +21,7 @@
 #include <string>
 #include <map>
 #include <list>
+#include "../lib/Type.h"
 
 class View_EntryEditor {
 public:
@@ -35,8 +36,8 @@ public:
 	virtual std::map<std::string, std::string> getOptions() const = 0;
 	virtual void removeOptions() = 0;
 
-	virtual void setRulePtr(void* rulePtr) = 0;
-	virtual void* getRulePtr() = 0;
+	virtual void setRulePtr(Rule* rulePtr) = 0;
+	virtual Rule* getRulePtr() = 0;
 
 	virtual void hide() = 0;
 

@@ -59,7 +59,7 @@ public:
 	void setView(View_EntryEditor& view);
 	void setThreadController(ThreadController& threadController);
 
-	void showAction(void* rule);
+	void showAction(Rule* rule);
 	void showCreatorAction();
 	void syncOptionsAction();
 	void syncSourceAction();

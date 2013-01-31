@@ -42,7 +42,7 @@ class View_Gtk_EntryEditor : public View_EntryEditor, public Gtk::Dialog, public
 	Gtk::Label lblType;
 	bool lock_state;
 
-	void* rulePtr;
+	Rule* rulePtr;
 protected:
 	virtual std::string mapOptionName(std::string const& name);
 public:
@@ -55,8 +55,8 @@ public:
 	void setOptions(std::map<std::string, std::string> options);
 	std::map<std::string, std::string> getOptions() const;
 	void removeOptions();
-	void setRulePtr(void* rulePtr);
-	void* getRulePtr();
+	void setRulePtr(Rule* rulePtr);
+	Rule* getRulePtr();
 	void show();
 	void hide();
 

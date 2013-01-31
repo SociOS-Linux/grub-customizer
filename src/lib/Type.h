@@ -26,5 +26,25 @@ enum ViewOption {
 	VIEW_SHOW_PLACEHOLDERS
 };
 
+// Just a basic class, no own functionality - used as storage type
+class Rule {
+public:
+	virtual ~Rule(){}
+};
+class Entry {
+public:
+	virtual ~Entry(){}
+};
+class Proxy {
+public:
+	virtual ~Proxy(){}
+};
+class Script {
+public:
+	virtual ~Script(){}
+};
+
+// to be used as dummy class
+class Nothing {};
 
 #endif /* TYPE_H_ */

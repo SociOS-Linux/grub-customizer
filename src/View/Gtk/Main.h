@@ -34,8 +34,8 @@ public:
 	struct TreeModel : public Gtk::TreeModelColumnRecord {
 		Gtk::TreeModelColumn<Glib::ustring> name;
 		Gtk::TreeModelColumn<Glib::ustring> text;
-		Gtk::TreeModelColumn<void*> relatedRule;
-		Gtk::TreeModelColumn<void*> relatedScript;
+		Gtk::TreeModelColumn<Rule*> relatedRule;
+		Gtk::TreeModelColumn<Proxy*> relatedScript;
 		Gtk::TreeModelColumn<bool> is_other_entries_marker;
 		Gtk::TreeModelColumn<bool> is_renamable;
 		Gtk::TreeModelColumn<bool> is_renamable_real;
@@ -107,15 +107,15 @@ class View_Gtk_Main : public View_Main, public CommonClass {
 	Gtk::HButtonBox bbxAdvancedSettings1, bbxAdvancedSettings2;
 
 
-	Gtk::TreeModel::iterator getIterByRulePtr(void* rulePtr, const Gtk::TreeRow* parentRow = NULL) const;
-	Gtk::TreeModel::iterator getIterByScriptPtr(void* scriptPtr) const;
+	Gtk::TreeModel::iterator getIterByRulePtr(Rule* rulePtr, const Gtk::TreeRow* parentRow = NULL) const;
+	Gtk::TreeModel::iterator getIterByScriptPtr(Proxy* scriptPtr) const;
 	void update_move_buttons();
 	void update_remove_button();
 	void saveConfig();
 	void updateButtonsState();
 	bool selectedEntriesAreOnSameLevel();
 	bool selectedEntriesAreSubsequent();
-	std::list<void*> getSelectedRules();
+	std::list<Rule*> getSelectedRules();
 	void _rDisableRules(Gtk::TreeNodeChildren const& list);
 public:
 	View_Gtk_Main();
@@ -139,7 +139,7 @@ public:
 	void hideProgressBar();
 	void setStatusText(std::string const& new_status_text);
 	void setStatusText(std::string const& name, int pos, int max);
-	void appendEntry(std::string const& name, void* entryPtr, void* scriptPtr, bool is_placeholder, bool is_submenu, std::string const& scriptName, std::string const& defaultName, bool isEditable, bool isModified, std::map<std::string, std::string> const& options, bool isVisible, void* parentEntry = NULL, void* parentScript = NULL);
+	void appendEntry(std::string const& name, Rule* entryPtr, Proxy* scriptPtr, bool is_placeholder, bool is_submenu, std::string const& scriptName, std::string const& defaultName, bool isEditable, bool isModified, std::map<std::string, std::string> const& options, bool isVisible, Rule* parentEntry = NULL, Proxy* parentScript = NULL);
 	void showProxyNotFoundMessage();
 	std::string createNewEntriesPlaceholderString(std::string const& parentMenu = "", std::string const& sourceScriptName = "");
 	std::string createPlaintextString(std::string const& scriptName) const;
@@ -150,12 +150,12 @@ public:
 	void clear();
 	bool confirmUnsavedSwitch();
 	
-	std::string getRuleName(void* rule);
-	void setRuleName(void* rule, std::string const& newName);
+	std::string getRuleName(Rule* rule);
+	void setRuleName(Rule* rule, std::string const& newName);
 
-	void selectRule(void* rule, bool startEdit = false);
+	void selectRule(Rule* rule, bool startEdit = false);
 
-	void selectRules(std::list<void*> rules);
+	void selectRules(std::list<Rule*> rules);
 
 	void setTrashCounter(int count);
 
@@ -167,7 +167,7 @@ public:
 	void setOption(ViewOption option, bool value);
 	std::map<ViewOption, bool> const& getOptions();
 	void setOptions(std::map<ViewOption, bool> const& options);
-	void setEntryVisibility(void* entry, bool value);
+	void setEntryVisibility(Rule* entry, bool value);
 private:
 	//event handlers
 	void signal_show_envEditor();

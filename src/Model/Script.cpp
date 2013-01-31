@@ -225,5 +225,19 @@ Model_Script::operator ArrayStructure() const {
 	return result;
 }
 
+Model_Script& Model_Script::fromPtr(Script* script) {
+	try {
+		return dynamic_cast<Model_Script&>(*script);
+	} catch (std::bad_cast const& e) {
+	}
+	throw BadCastException("Model_Script::fromPtr failed");
+}
 
+Model_Script const& Model_Script::fromPtr(Script const* script) {
+	try {
+		return dynamic_cast<Model_Script const&>(*script);
+	} catch (std::bad_cast const& e) {
+	}
+	throw BadCastException("Model_Script::fromPtr [const] failed");
+}
 
