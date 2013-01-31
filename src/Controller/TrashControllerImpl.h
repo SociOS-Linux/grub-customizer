@@ -57,6 +57,7 @@ public:
 	TrashControllerImpl(Model_Env& env);
 	
 	void showAction();
+	void updateAction();
 	void applyAction();
 	
 	void showAboutDialog();

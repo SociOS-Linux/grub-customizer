@@ -51,6 +51,7 @@ class View_Gtk_Main : public View_Main, public CommonClass {
 	
 	View_Gtk_Element_List<Rule, Proxy> tvConfList;
 	Gtk::ProgressBar progressBar;
+	Gtk::HPaned hpLists;
 
 	Gtk::ToolButton tbttAdd, tbttRemove, tbttUp, tbttDown, tbttSave, tbttReload, tbttLeft, tbttRight, tbttEditEntry, tbttRevert, tbttCreateEntry;
 	Gtk::ToolItem ti_sep1;
@@ -97,6 +98,7 @@ public:
 	void setEventListener(MainController& eventListener);
 	void putSettingsDialog(Gtk::VBox& commonSettingsPane, Gtk::VBox& appearanceSettingsPane);
 	void putEnvEditor(Gtk::Widget& envEditor);
+	void putTrashList(Gtk::Widget& trashList);
 	void show();
 	void hide();
 	void run();

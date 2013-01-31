@@ -78,9 +78,19 @@ void TrashControllerImpl::setEntryNameMapper(Mapper_EntryName& mapper) {
 void TrashControllerImpl::showAction(){
 	this->logActionBegin("show");
 	try {
-		this->_refreshView();
+		this->updateAction();
 
 		view->show();
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
+	this->logActionEnd();
+}
+
+void TrashControllerImpl::updateAction(){
+	this->logActionBegin("update");
+	try {
+		this->_refreshView();
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}

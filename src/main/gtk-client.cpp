@@ -162,6 +162,7 @@ int main(int argc, char** argv){
 		entryEditController.setThreadController(threadC);
 
 		listCfgView.putSettingsDialog(settingsDlg.getCommonSettingsPane(), settingsDlg.getAppearanceSettingsPane());
+		listCfgView.putTrashList(trashView.getList());
 
 		//assign event listener
 		listCfgView.setEventListener(mainController);

@@ -106,3 +106,9 @@ void View_Gtk_Trash::askForDeletion(std::list<std::string> const& names) {
 		this->eventListener->deleteCustomEntriesAction();
 	}
 }
+
+Gtk::Widget& View_Gtk_Trash::getList() {
+	Gtk::Box* vbEntryAddDlg = this->get_vbox();
+	vbEntryAddDlg->remove(this->scrEntryBox);
+	return this->scrEntryBox;
+}

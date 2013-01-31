@@ -44,6 +44,7 @@ public:
 	void show();
 	void hide();
 	void askForDeletion(std::list<std::string> const& names);
+	Gtk::Widget& getList();
 };
 
 #endif

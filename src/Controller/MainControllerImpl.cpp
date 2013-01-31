@@ -867,6 +867,7 @@ void MainControllerImpl::syncLoadStateAction() {
 
 		if (progress == 1){
 			this->getAllControllers().settingsController->updateSettingsDataAction();
+			this->getAllControllers().trashController->updateAction();
 
 			this->view->setTrashCounter(this->grublistCfg->getRemovedEntries().size());
 			this->view->setLockState(0);

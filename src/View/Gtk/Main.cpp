@@ -54,7 +54,9 @@ View_Gtk_Main::View_Gtk_Main()
 	vbMainSplit.pack_start(notebook);
 	vbMainSplit.pack_start(statusbar, Gtk::PACK_SHRINK);
 
-	notebook.append_page(vbEntryList, gettext("_List configuration"), true);
+	notebook.append_page(hpLists, gettext("_List configuration"), true);
+	hpLists.pack1(vbEntryList);
+
 	vbEntryList.pack_start(infoReloadRequired, Gtk::PACK_SHRINK);
 	vbEntryList.pack_start(scrEntryList);
 	scrEntryList.add(tvConfList);
@@ -274,6 +276,10 @@ void View_Gtk_Main::putSettingsDialog(Gtk::VBox& commonSettingsPane, Gtk::VBox& 
 	notebook.append_page(appearanceSettingsPane, gettext("_Appearance settings"), true);
 	appearanceSettingsPane.pack_end(bbxAdvancedSettings2, false, false);
 	bbxAdvancedSettings2.pack_end(bttAdvancedSettings2);
+}
+
+void View_Gtk_Main::putTrashList(Gtk::Widget& trashList) {
+	hpLists.pack2(trashList);
 }
 
 void View_Gtk_Main::signal_edit_name(Gtk::CellEditable* editable, const Glib::ustring& path) {
