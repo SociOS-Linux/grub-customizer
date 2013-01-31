@@ -24,20 +24,8 @@ View_Gtk_Trash::View_Gtk_Trash() : deleteButton(NULL) {
 	this->set_default_size(650, 500);
 	Gtk::Box* vbEntryAddDlg = this->get_vbox();
 	vbEntryAddDlg->pack_start(scrEntryBox);
-	scrEntryBox.add(iconBox);
+	scrEntryBox.add(list);
 	
-	this->listStore = Gtk::ListStore::create(iconModel);
-	iconBox.set_model(this->listStore);
-	this->iconBox.set_text_column(this->iconModel.name);
-	this->iconBox.set_pixbuf_column(this->iconModel.icon);
-
-	this->iconBox.set_tooltip_column(2);
-	this->iconBox.set_item_width(200);
-
-	this->iconBox.set_selection_mode(Gtk::SELECTION_MULTIPLE);
-
-	this->iconBox.signal_item_activated().connect(sigc::mem_fun(this, &View_Gtk_Trash::signal_icon_dblClick));
-
 	deleteButton = this->add_button(gettext("Delete custom entries"), Gtk::RESPONSE_REJECT);
 	deleteButton->set_no_show_all(true);
 	this->add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
@@ -51,7 +39,7 @@ void View_Gtk_Trash::setEventListener(TrashController& eventListener){
 }
 
 void View_Gtk_Trash::clear(){
-	listStore->clear();
+	list.refTreeStore->clear();
 }
 
 void View_Gtk_Trash::signal_entryAddDlg_response(int response_id){
@@ -69,28 +57,29 @@ void View_Gtk_Trash::signal_entryAddDlg_response(int response_id){
 	}
 }
 
-void View_Gtk_Trash::signal_icon_dblClick(Gtk::TreeModel::Path path) {
-	this->iconBox.select_path(path);
-	eventListener->applyAction();
-	this->hide();
-}
-
 std::list<Entry*> View_Gtk_Trash::getSelectedEntries(){
 	std::list<Entry*> result;
-	std::vector<Gtk::TreePath> pathes = iconBox.get_selected_items();
+	std::vector<Gtk::TreePath> pathes = list.get_selection()->get_selected_rows();
 	for (std::vector<Gtk::TreePath>::iterator pathIter = pathes.begin(); pathIter != pathes.end(); pathIter++) {
-		Gtk::TreeModel::iterator elementIter = listStore->get_iter(*pathIter);
-		result.push_back((*elementIter)[iconModel.relatedRule]);
+		Gtk::TreeModel::iterator elementIter = list.refTreeStore->get_iter(*pathIter);
+		result.push_back((*elementIter)[list.treeModel.relatedRule]);
 	}
 	return result;
 }
 
 void View_Gtk_Trash::addItem(std::string const& name, bool isPlaceholder, std::string const& scriptName, Entry* relatedEntry){
-	Gtk::TreeModel::iterator iter = this->listStore->append();
-	(*iter)[iconModel.name] = name;
-	(*iter)[iconModel.icon] = this->iconBox.render_icon_pixbuf(isPlaceholder ? Gtk::Stock::FIND : Gtk::Stock::EXECUTE, Gtk::ICON_SIZE_DND);
-	(*iter)[iconModel.description] = name + "\n" + gettext("type: ") + (isPlaceholder ? gettext("placeholder") : gettext("menuentry")) + "\n" + gettext("script: ") + scriptName;
-	(*iter)[iconModel.relatedRule] = relatedEntry;
+	Gtk::TreeModel::iterator entryRow = this->list.refTreeStore->append();
+	(*entryRow)[list.treeModel.name] = name;
+	(*entryRow)[list.treeModel.text] = name;
+	(*entryRow)[list.treeModel.is_activated] = true;
+	(*entryRow)[list.treeModel.relatedRule] = relatedEntry;
+	(*entryRow)[list.treeModel.relatedScript] = NULL;
+	(*entryRow)[list.treeModel.is_renamable] = false;
+	(*entryRow)[list.treeModel.is_renamable_real] = false;
+	(*entryRow)[list.treeModel.is_editable] = false;
+	(*entryRow)[list.treeModel.is_sensitive] = true;
+	(*entryRow)[list.treeModel.is_toplevel] = true;
+	(*entryRow)[list.treeModel.icon] = this->list.render_icon_pixbuf(isPlaceholder ? Gtk::Stock::FIND : Gtk::Stock::EXECUTE, Gtk::ICON_SIZE_DND);;
 }
 
 void View_Gtk_Trash::setDeleteButtonEnabled(bool val) {
@@ -116,11 +105,4 @@ void View_Gtk_Trash::askForDeletion(std::list<std::string> const& names) {
 	if (response == Gtk::RESPONSE_OK) {
 		this->eventListener->deleteCustomEntriesAction();
 	}
-}
-
-View_Gtk_Trash::IconModel::IconModel() {
-	this->add(this->name);
-	this->add(this->icon);
-	this->add(this->description);
-	this->add(this->relatedRule);
 }

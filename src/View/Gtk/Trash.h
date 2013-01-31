@@ -23,27 +23,20 @@
 #include "../Trash.h"
 #include <libintl.h>
 #include "../../lib/CommonClass.h"
+#include "../../lib/Type.h"
+#include "Element/List.h"
 
 class View_Gtk_Trash : public Gtk::Dialog, public View_Trash, public CommonClass {
 	Gtk::Dialog scriptAddDlg;
 	Gtk::ScrolledWindow scrEntryBox;
-	Gtk::IconView iconBox;
+	View_Gtk_Element_List<Entry, Script> list;
 	Gtk::Button* deleteButton;
 
 	TrashController* eventListener;
 public:
-	struct IconModel : public Gtk::TreeModelColumnRecord {
-		Gtk::TreeModelColumn<Glib::ustring> name;
-		Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > icon;
-		Gtk::TreeModelColumn<Glib::ustring> description;
-		Gtk::TreeModelColumn<Entry*> relatedRule;
-		IconModel();
-	} iconModel;
-	Glib::RefPtr<Gtk::ListStore> listStore;
 	View_Gtk_Trash();
 	void setEventListener(TrashController& eventListener);
 	void signal_entryAddDlg_response(int response_id);
-	void signal_icon_dblClick(Gtk::TreeModel::Path path);
 	void clear();
 	std::list<Entry*> getSelectedEntries();
 	void addItem(std::string const& name, bool isPlaceholder, std::string const& scriptName, Entry* relatedRule);
