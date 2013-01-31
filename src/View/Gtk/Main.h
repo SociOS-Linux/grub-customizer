@@ -67,7 +67,7 @@ class View_Gtk_Main : public View_Main, public CommonClass {
 	
 	Gtk::MenuItem miFile, miEdit, miView, miHelp, miInstallGrub, miContext;
 	Gtk::ImageMenuItem miExit, miSave, miAbout, miModifyEnvironment, miRevert, miCreateEntry;
-	ImageMenuItemOwnKey miReload, miAdd, miRemove, miUp, miDown, miLeft, miRight, miEditEntry;
+	ImageMenuItemOwnKey miReload, miRemove, miUp, miDown, miLeft, miRight, miEditEntry;
 	Gtk::ImageMenuItem miCRemove, miCUp, miCDown, miCLeft, miCRight, miCRename, miCEditEntry;
 	Gtk::CheckMenuItem miShowDetails, miShowHiddenEntries, miGroupByScript, miShowPlaceholders;
 	Gtk::Menu subFile, subEdit, subView, subHelp, contextMenu;

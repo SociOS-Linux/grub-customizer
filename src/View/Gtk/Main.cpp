@@ -30,7 +30,7 @@ View_Gtk_Main::View_Gtk_Main()
 	tbttRevert(Gtk::Stock::REVERT_TO_SAVED), tbttCreateEntry(Gtk::Stock::NEW),
 	miEdit(gettext("_Edit"), true), miView(gettext("_View"), true), miHelp(gettext("_Help"), true),
 	miInstallGrub(gettext("_Install to MBR …"), true),
-	miAdd(Gtk::Stock::UNDELETE, Gtk::AccelKey('+', Gdk::CONTROL_MASK)), miRemove(Gtk::Stock::REMOVE, Gtk::AccelKey('-', Gdk::CONTROL_MASK)), miUp(Gtk::Stock::GO_UP, Gtk::AccelKey('u', Gdk::CONTROL_MASK)), miDown(Gtk::Stock::GO_DOWN, Gtk::AccelKey('d', Gdk::CONTROL_MASK)),
+	miRemove(Gtk::Stock::REMOVE, Gtk::AccelKey('-', Gdk::CONTROL_MASK)), miUp(Gtk::Stock::GO_UP, Gtk::AccelKey('u', Gdk::CONTROL_MASK)), miDown(Gtk::Stock::GO_DOWN, Gtk::AccelKey('d', Gdk::CONTROL_MASK)),
 	miLeft(Gtk::Stock::GO_BACK, Gtk::AccelKey('l', Gdk::CONTROL_MASK)), miRight(Gtk::Stock::GO_FORWARD, Gtk::AccelKey('r', Gdk::CONTROL_MASK)),
 	miEditEntry(Gtk::Stock::EDIT, Gtk::AccelKey('e', Gdk::CONTROL_MASK)),
 	miCRemove(Gtk::Stock::REMOVE), miCUp(Gtk::Stock::GO_UP), miCDown(Gtk::Stock::GO_DOWN),
@@ -145,7 +145,6 @@ View_Gtk_Main::View_Gtk_Main()
 	subFile.attach(miInstallGrub, 0,1,2,3);
 	subFile.attach(miExit, 0,1,3,4);
 	
-	subEdit.attach(miAdd, 0,1,0,1);
 	subEdit.attach(miRemove, 0,1,1,2);
 	subEdit.attach(miUp, 0,1,2,3);
 	subEdit.attach(miDown, 0,1,3,4);
@@ -164,7 +163,6 @@ View_Gtk_Main::View_Gtk_Main()
 	contextMenu.attach(miCLeft, 0,1,5,6);
 	contextMenu.attach(miCRight, 0,1,6,7);
 
-	miAdd.set_label(gettext("Restore entry"));
 	miCRename.set_label(gettext("Rename"));
 	miUp.set_label(gettext("Move up"));
 	miCUp.set_label(gettext("Move up"));
@@ -228,7 +226,6 @@ View_Gtk_Main::View_Gtk_Main()
 	miRight.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_move_right_click));
 	miCRight.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_move_right_click));
 	miSave.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::saveConfig));
-	miAdd.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_add_click));
 	miEditEntry.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_entry_edit_click));
 	miCEditEntry.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_entry_edit_click));
 	miCreateEntry.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_entry_create_click));
@@ -548,7 +545,6 @@ void View_Gtk_Main::setLockState(int state){
 	miEditEntry.set_sensitive((state & 1) == 0);
 	miCEditEntry.set_sensitive((state & 1) == 0);
 
-	miAdd.set_sensitive((state & 1) == 0);
 	tbttRemove.set_sensitive((state & 1) == 0);
 	miRemove.set_sensitive((state & 1) == 0);
 	miCRemove.set_sensitive((state & 1) == 0);
