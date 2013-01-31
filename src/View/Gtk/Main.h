@@ -28,32 +28,7 @@
 #include "../../lib/assert.h"
 #include "../../Controller/MainController.h"
 #include "../../lib/Type.h"
-
-class View_Gtk_Main_List : public Gtk::TreeView {
-public:
-	struct TreeModel : public Gtk::TreeModelColumnRecord {
-		Gtk::TreeModelColumn<Glib::ustring> name;
-		Gtk::TreeModelColumn<Glib::ustring> text;
-		Gtk::TreeModelColumn<Rule*> relatedRule;
-		Gtk::TreeModelColumn<Proxy*> relatedScript;
-		Gtk::TreeModelColumn<bool> is_other_entries_marker;
-		Gtk::TreeModelColumn<bool> is_renamable;
-		Gtk::TreeModelColumn<bool> is_renamable_real;
-		Gtk::TreeModelColumn<bool> is_editable;
-		Gtk::TreeModelColumn<bool> is_sensitive;
-		Gtk::TreeModelColumn<bool> is_activated;
-		Gtk::TreeModelColumn<bool> is_toplevel;
-		Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > icon;
-		TreeModel();
-	};
-	TreeModel treeModel;
-	Glib::RefPtr<Gtk::TreeStore> refTreeStore;
-	Gtk::CellRendererPixbuf pixbufRenderer;
-	Gtk::CellRendererToggle toggleRenderer;
-	Gtk::CellRendererText textRenderer;
-	Gtk::TreeViewColumn mainColumn;
-	View_Gtk_Main_List();
-};
+#include "Element/List.h"
 
 class ImageMenuItemOwnKey : public Gtk::ImageMenuItem {
 	public:
@@ -74,7 +49,7 @@ class View_Gtk_Main : public View_Main, public CommonClass {
 	Gtk::VBox vbEntryList;
 	Gtk::Statusbar statusbar;
 	
-	View_Gtk_Main_List tvConfList;
+	View_Gtk_Element_List tvConfList;
 	Gtk::ProgressBar progressBar;
 
 	Gtk::ToolButton tbttAdd, tbttRemove, tbttUp, tbttDown, tbttSave, tbttReload, tbttLeft, tbttRight, tbttEditEntry, tbttRevert, tbttCreateEntry;

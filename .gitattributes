@@ -122,6 +122,8 @@ src/View/EnvEditor.h -text
 src/View/Error.h -text
 src/View/Gtk/About.cpp -text
 src/View/Gtk/About.h -text
+src/View/Gtk/Element/List.cpp -text
+src/View/Gtk/Element/List.h -text
 src/View/Gtk/Element/PartitionChooser.cpp -text
 src/View/Gtk/Element/PartitionChooser.h -text
 src/View/Gtk/EntryEditor.cpp -text
