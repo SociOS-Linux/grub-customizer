@@ -18,12 +18,16 @@
 
 #include "Trash.h"
 
-View_Gtk_Trash::View_Gtk_Trash() : deleteButton(NULL) {
+View_Gtk_Trash::View_Gtk_Trash()
+	: deleteButton(NULL) {
 	this->set_title(gettext("Add entry from trash"));
 	this->set_icon_name("grub-customizer");
 	this->set_default_size(650, 500);
 	Gtk::Box* vbEntryAddDlg = this->get_vbox();
-	vbEntryAddDlg->pack_start(scrEntryBox);
+	vbEntryAddDlg->pack_start(frmList);
+	frmList.set_label(gettext("Removed items"));
+	frmList.set_shadow_type(Gtk::SHADOW_NONE);
+	frmList.add(scrEntryBox);
 	scrEntryBox.add(list);
 	
 	deleteButton = this->add_button(gettext("Delete custom entries"), Gtk::RESPONSE_REJECT);
@@ -109,6 +113,6 @@ void View_Gtk_Trash::askForDeletion(std::list<std::string> const& names) {
 
 Gtk::Widget& View_Gtk_Trash::getList() {
 	Gtk::Box* vbEntryAddDlg = this->get_vbox();
-	vbEntryAddDlg->remove(this->scrEntryBox);
-	return this->scrEntryBox;
+	vbEntryAddDlg->remove(this->frmList);
+	return this->frmList;
 }

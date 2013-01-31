@@ -31,6 +31,7 @@ class View_Gtk_Trash : public Gtk::Dialog, public View_Trash, public CommonClass
 	Gtk::ScrolledWindow scrEntryBox;
 	View_Gtk_Element_List<Entry, Script> list;
 	Gtk::Button* deleteButton;
+	Gtk::Frame frmList;
 
 	TrashController* eventListener;
 public:
