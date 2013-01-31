@@ -54,7 +54,7 @@ class View_Gtk_Main : public View_Main, public CommonClass {
 	Gtk::HPaned hpLists;
 	Gtk::Widget* trashList;
 
-	Gtk::ToolButton tbttAdd, tbttRemove, tbttUp, tbttDown, tbttSave, tbttReload, tbttLeft, tbttRight, tbttEditEntry, tbttRevert, tbttCreateEntry;
+	Gtk::ToolButton tbttRemove, tbttUp, tbttDown, tbttSave, tbttReload, tbttLeft, tbttRight, tbttEditEntry, tbttRevert, tbttCreateEntry;
 	Gtk::ToolItem ti_sep1;
 	Gtk::VSeparator vs_sep1;
 	Gtk::ToolItem ti_sep2;
@@ -135,7 +135,6 @@ public:
 
 	void selectRules(std::list<Rule*> rules);
 
-	void setTrashCounter(int count);
 	void setTrashPaneVisibility(bool value);
 
 	void showReloadRecommendation();

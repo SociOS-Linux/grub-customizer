@@ -94,9 +94,6 @@ public:
 	// select multiple rules
 	virtual void selectRules(std::list<Rule*> rules)=0;
 
-	// set the number of removed rules
-	virtual void setTrashCounter(int count) = 0;
-
 	// set whether the trash pane should be visible
 	virtual void setTrashPaneVisibility(bool value) = 0;
 

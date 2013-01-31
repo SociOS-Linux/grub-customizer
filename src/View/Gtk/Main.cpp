@@ -23,17 +23,17 @@ ImageMenuItemOwnKey::ImageMenuItemOwnKey(const Gtk::StockID& id, const Gtk::Acce
 }
 
 View_Gtk_Main::View_Gtk_Main()
-	: tbttAdd(Gtk::Stock::UNDELETE), tbttRemove(Gtk::Stock::DELETE), tbttUp(Gtk::Stock::GO_UP), tbttDown(Gtk::Stock::GO_DOWN),
+	: tbttRemove(Gtk::Stock::REMOVE), tbttUp(Gtk::Stock::GO_UP), tbttDown(Gtk::Stock::GO_DOWN),
 	tbttLeft(Gtk::Stock::GO_BACK), tbttRight(Gtk::Stock::GO_FORWARD),
 	tbttSave(Gtk::Stock::SAVE), tbttEditEntry(Gtk::Stock::EDIT),
 	miFile(gettext("_File"), true), miExit(Gtk::Stock::QUIT), tbttReload(Gtk::Stock::REFRESH),
 	tbttRevert(Gtk::Stock::REVERT_TO_SAVED), tbttCreateEntry(Gtk::Stock::NEW),
 	miEdit(gettext("_Edit"), true), miView(gettext("_View"), true), miHelp(gettext("_Help"), true),
 	miInstallGrub(gettext("_Install to MBR …"), true),
-	miAdd(Gtk::Stock::UNDELETE, Gtk::AccelKey('+', Gdk::CONTROL_MASK)), miRemove(Gtk::Stock::DELETE, Gtk::AccelKey('-', Gdk::CONTROL_MASK)), miUp(Gtk::Stock::GO_UP, Gtk::AccelKey('u', Gdk::CONTROL_MASK)), miDown(Gtk::Stock::GO_DOWN, Gtk::AccelKey('d', Gdk::CONTROL_MASK)),
+	miAdd(Gtk::Stock::UNDELETE, Gtk::AccelKey('+', Gdk::CONTROL_MASK)), miRemove(Gtk::Stock::REMOVE, Gtk::AccelKey('-', Gdk::CONTROL_MASK)), miUp(Gtk::Stock::GO_UP, Gtk::AccelKey('u', Gdk::CONTROL_MASK)), miDown(Gtk::Stock::GO_DOWN, Gtk::AccelKey('d', Gdk::CONTROL_MASK)),
 	miLeft(Gtk::Stock::GO_BACK, Gtk::AccelKey('l', Gdk::CONTROL_MASK)), miRight(Gtk::Stock::GO_FORWARD, Gtk::AccelKey('r', Gdk::CONTROL_MASK)),
 	miEditEntry(Gtk::Stock::EDIT, Gtk::AccelKey('e', Gdk::CONTROL_MASK)),
-	miCRemove(Gtk::Stock::DELETE), miCUp(Gtk::Stock::GO_UP), miCDown(Gtk::Stock::GO_DOWN),
+	miCRemove(Gtk::Stock::REMOVE), miCUp(Gtk::Stock::GO_UP), miCDown(Gtk::Stock::GO_DOWN),
 	miCLeft(Gtk::Stock::GO_BACK), miCRight(Gtk::Stock::GO_FORWARD), miCRename(Gtk::Stock::EDIT), miCEditEntry(Gtk::Stock::EDIT),
 	miReload(Gtk::Stock::REFRESH, Gtk::AccelKey("F5")), miSave(Gtk::Stock::SAVE),
 	miAbout(Gtk::Stock::ABOUT), miModifyEnvironment(Gtk::Stock::OPEN), miRevert(Gtk::Stock::REVERT_TO_SAVED),
@@ -85,10 +85,6 @@ View_Gtk_Main::View_Gtk_Main()
 	toolbar.append(tbttRemove);
 	tbttRemove.set_tooltip_text(gettext("Remove selected entries (you can restore them from trash)"));
 	tbttRemove.set_is_important(true);
-	toolbar.append(tbttAdd);
-	tbttAdd.set_tooltip_text(gettext("restore entries from trash"));
-	tbttAdd.set_is_important(true);
-	tbttAdd.set_label(gettext("Trash"));
 	
 	toolbar.append(tbttEditEntry);
 	toolbar.append(tbttCreateEntry);
@@ -213,7 +209,6 @@ View_Gtk_Main::View_Gtk_Main()
 	tvConfList.signal_popup_menu().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_popup));
 	tvConfList.signal_key_press_event().connect_notify(sigc::mem_fun(this, &View_Gtk_Main::signal_key_press));
 	tbttSave.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Main::saveConfig));
-	tbttAdd.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_add_click));
 	tbttRemove.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_remove_click));
 	tbttLeft.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_move_left_click));
 	tbttRight.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_move_right_click));
@@ -553,7 +548,6 @@ void View_Gtk_Main::setLockState(int state){
 	miEditEntry.set_sensitive((state & 1) == 0);
 	miCEditEntry.set_sensitive((state & 1) == 0);
 
-	tbttAdd.set_sensitive((state & 1) == 0);
 	miAdd.set_sensitive((state & 1) == 0);
 	tbttRemove.set_sensitive((state & 1) == 0);
 	miRemove.set_sensitive((state & 1) == 0);
@@ -750,10 +744,6 @@ void View_Gtk_Main::selectRules(std::list<Rule*> rules) {
 	for (std::list<Rule*>::iterator iter = rules.begin(); iter != rules.end(); iter++) {
 		this->tvConfList.get_selection()->select(this->getIterByRulePtr(*iter));
 	}
-}
-
-void View_Gtk_Main::setTrashCounter(int count) {
-	this->tbttAdd.set_label(Glib::ustring::compose(gettext("Trash (%1)"), count));
 }
 
 void View_Gtk_Main::setTrashPaneVisibility(bool value) {
