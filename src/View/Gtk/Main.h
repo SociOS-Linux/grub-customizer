@@ -52,6 +52,7 @@ class View_Gtk_Main : public View_Main, public CommonClass {
 	View_Gtk_Element_List<Rule, Proxy> tvConfList;
 	Gtk::ProgressBar progressBar;
 	Gtk::HPaned hpLists;
+	Gtk::Widget* trashList;
 
 	Gtk::ToolButton tbttAdd, tbttRemove, tbttUp, tbttDown, tbttSave, tbttReload, tbttLeft, tbttRight, tbttEditEntry, tbttRevert, tbttCreateEntry;
 	Gtk::ToolItem ti_sep1;
@@ -135,6 +136,7 @@ public:
 	void selectRules(std::list<Rule*> rules);
 
 	void setTrashCounter(int count);
+	void setTrashPaneVisibility(bool value);
 
 	void showReloadRecommendation();
 	void hideReloadRecommendation();

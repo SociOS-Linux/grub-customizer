@@ -97,6 +97,9 @@ public:
 	// set the number of removed rules
 	virtual void setTrashCounter(int count) = 0;
 
+	// set whether the trash pane should be visible
+	virtual void setTrashPaneVisibility(bool value) = 0;
+
 	// show the warning that config has changed to propose a reload
 	virtual void showReloadRecommendation() = 0;
 

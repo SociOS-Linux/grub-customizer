@@ -280,6 +280,7 @@ void View_Gtk_Main::putSettingsDialog(Gtk::VBox& commonSettingsPane, Gtk::VBox& 
 
 void View_Gtk_Main::putTrashList(Gtk::Widget& trashList) {
 	hpLists.pack2(trashList);
+	this->trashList = &trashList;
 }
 
 void View_Gtk_Main::signal_edit_name(Gtk::CellEditable* editable, const Glib::ustring& path) {
@@ -373,6 +374,7 @@ bool View_Gtk_Main::isVisible(){
 
 void View_Gtk_Main::show(){
 	win.show_all();
+	trashList->hide();
 }
 
 void View_Gtk_Main::hide() {
@@ -752,6 +754,10 @@ void View_Gtk_Main::selectRules(std::list<Rule*> rules) {
 
 void View_Gtk_Main::setTrashCounter(int count) {
 	this->tbttAdd.set_label(Glib::ustring::compose(gettext("Trash (%1)"), count));
+}
+
+void View_Gtk_Main::setTrashPaneVisibility(bool value) {
+	this->trashList->set_visible(value);
 }
 
 void View_Gtk_Main::showReloadRecommendation() {
