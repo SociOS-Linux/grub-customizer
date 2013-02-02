@@ -37,6 +37,8 @@ View_Gtk_Trash::View_Gtk_Trash()
 	this->add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
 
 	this->signal_response().connect(sigc::mem_fun(this, &View_Gtk_Trash::signal_entryAddDlg_response));
+
+	list.set_tooltip_column(0);
 }
 
 void View_Gtk_Trash::setEventListener(TrashController& eventListener){
