@@ -773,16 +773,20 @@ Model_Proxy::operator ArrayStructure() const {
 
 
 Model_Proxy& Model_Proxy::fromPtr(Proxy* proxy) {
-	try {
-		return dynamic_cast<Model_Proxy&>(*proxy);
-	} catch (std::bad_cast const& e) {
+	if (proxy != NULL) {
+		try {
+			return dynamic_cast<Model_Proxy&>(*proxy);
+		} catch (std::bad_cast const& e) {
+		}
 	}
 	throw BadCastException("Model_Proxy::fromPtr failed");
 }
 Model_Proxy const& Model_Proxy::fromPtr(Proxy const* proxy) {
-	try {
-		return dynamic_cast<Model_Proxy const&>(*proxy);
-	} catch (std::bad_cast const& e) {
+	if (proxy != NULL) {
+		try {
+			return dynamic_cast<Model_Proxy const&>(*proxy);
+		} catch (std::bad_cast const& e) {
+		}
 	}
 	throw BadCastException("Model_Proxy::fromPtr [const] failed");
 }

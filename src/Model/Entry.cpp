@@ -125,17 +125,21 @@ Model_Entry::operator ArrayStructure() const {
 }
 
 Model_Entry& Model_Entry::fromPtr(Entry* entry) {
-	try {
-		return dynamic_cast<Model_Entry&>(*entry);
-	} catch (std::bad_cast const& e) {
+	if (entry != NULL) {
+		try {
+			return dynamic_cast<Model_Entry&>(*entry);
+		} catch (std::bad_cast const& e) {
+		}
 	}
 	throw BadCastException("Model_Entry::fromPtr failed");
 }
 
 Model_Entry const& Model_Entry::fromPtr(Entry const* entry) {
-	try {
-		return dynamic_cast<Model_Entry const&>(*entry);
-	} catch (std::bad_cast const& e) {
+	if (entry != NULL) {
+		try {
+			return dynamic_cast<Model_Entry const&>(*entry);
+		} catch (std::bad_cast const& e) {
+		}
 	}
 	throw BadCastException("Model_Entry::fromPtr [const] failed");
 }

@@ -155,17 +155,21 @@ Model_Rule::operator ArrayStructure() const {
 }
 
 Model_Rule& Model_Rule::fromPtr(Rule* rule) {
-	try {
-		return dynamic_cast<Model_Rule&>(*rule);
-	} catch (std::bad_cast const& e) {
+	if (rule != NULL) {
+		try {
+			return dynamic_cast<Model_Rule&>(*rule);
+		} catch (std::bad_cast const& e) {
+		}
 	}
 	throw BadCastException("Model_Rule::fromPtr failed");
 }
 
 Model_Rule const& Model_Rule::fromPtr(Rule const* rule) {
-	try {
-		return dynamic_cast<Model_Rule const&>(*rule);
-	} catch (std::bad_cast const& e) {
+	if (rule != NULL) {
+		try {
+			return dynamic_cast<Model_Rule const&>(*rule);
+		} catch (std::bad_cast const& e) {
+		}
 	}
 	throw BadCastException("Model_Rule::fromPtr [const] failed");
 }
