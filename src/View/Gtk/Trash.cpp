@@ -85,6 +85,7 @@ void View_Gtk_Trash::addItem(std::string const& name, bool isPlaceholder, std::s
 	(*entryRow)[list.treeModel.is_sensitive] = true;
 	(*entryRow)[list.treeModel.is_toplevel] = true;
 	(*entryRow)[list.treeModel.icon] = this->list.render_icon_pixbuf(isPlaceholder ? Gtk::Stock::FIND : Gtk::Stock::EXECUTE, Gtk::ICON_SIZE_DND);;
+	(*entryRow)[list.treeModel.ellipsize] = Pango::ELLIPSIZE_END;
 }
 
 void View_Gtk_Trash::setDeleteButtonEnabled(bool val) {

@@ -481,6 +481,7 @@ void View_Gtk_Main::appendEntry(std::string const& name, Rule* entryPtr, Proxy* 
 	(*entryRow)[tvConfList.treeModel.is_sensitive] = scriptPtr == NULL;
 	(*entryRow)[tvConfList.treeModel.is_toplevel] = parentEntry == NULL;
 	(*entryRow)[tvConfList.treeModel.icon] = icon;
+	(*entryRow)[tvConfList.treeModel.ellipsize] = Pango::ELLIPSIZE_NONE;
 
 
 	tvConfList.expand_all();

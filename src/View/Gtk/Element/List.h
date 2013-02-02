@@ -36,6 +36,7 @@ public:
 		Gtk::TreeModelColumn<bool> is_sensitive;
 		Gtk::TreeModelColumn<bool> is_activated;
 		Gtk::TreeModelColumn<bool> is_toplevel;
+		Gtk::TreeModelColumn<Pango::EllipsizeMode> ellipsize;
 		Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > icon;
 
 		TreeModel(){
@@ -51,6 +52,7 @@ public:
 			this->add(is_sensitive);
 			this->add(is_toplevel);
 			this->add(icon);
+			this->add(ellipsize);
 		}
 	};
 	TreeModel treeModel;
@@ -75,6 +77,8 @@ public:
 		this->mainColumn.add_attribute(this->textRenderer.property_markup(), treeModel.text);
 		this->mainColumn.add_attribute(this->textRenderer.property_editable(), treeModel.is_renamable);
 		this->mainColumn.set_spacing(10);
+
+		this->mainColumn.add_attribute(this->textRenderer.property_ellipsize(), treeModel.ellipsize);
 
 		this->set_headers_visible(false);
 		this->get_selection()->set_mode(Gtk::SELECTION_MULTIPLE);
