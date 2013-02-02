@@ -710,7 +710,7 @@ void MainControllerImpl::createSubmenuAction(std::list<Rule*> childItems) {
 		Model_Rule* newItem = this->grublistCfg->createSubmenu(firstRule);
 		this->syncLoadStateAction();
 		this->moveAction(childItems, -1);
-		this->view->selectRule(newItem, true);
+		this->threadController->startEdit(newItem);
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
