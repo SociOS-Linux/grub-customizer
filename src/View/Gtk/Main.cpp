@@ -55,7 +55,7 @@ View_Gtk_Main::View_Gtk_Main()
 	vbMainSplit.pack_start(statusbar, Gtk::PACK_SHRINK);
 
 	notebook.append_page(hpLists, gettext("_List configuration"), true);
-	hpLists.pack1(vbEntryList);
+	hpLists.pack1(vbEntryList, Gtk::FILL | Gtk::EXPAND);
 
 	vbEntryList.pack_start(infoReloadRequired, Gtk::PACK_SHRINK);
 	vbEntryList.pack_start(scrEntryList);
@@ -271,7 +271,7 @@ void View_Gtk_Main::putSettingsDialog(Gtk::VBox& commonSettingsPane, Gtk::VBox& 
 }
 
 void View_Gtk_Main::putTrashList(Gtk::Widget& trashList) {
-	hpLists.pack2(trashList, Gtk::SHRINK);
+	hpLists.pack2(trashList, Gtk::FILL);
 	this->trashList = &trashList;
 }
 
