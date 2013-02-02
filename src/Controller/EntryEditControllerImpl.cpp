@@ -57,7 +57,10 @@ Model_Script* EntryEditControllerImpl::_createCustomScript() {
 void EntryEditControllerImpl::applyAction() {
 	this->logActionBegin("apply");
 	try {
-		Model_Rule* rulePtr = &Model_Rule::fromPtr(this->view->getRulePtr());
+		Model_Rule* rulePtr = NULL;
+		if (this->view->getRulePtr() != NULL) {
+			rulePtr = &Model_Rule::fromPtr(this->view->getRulePtr());
+		}
 		bool isAdded = false;
 		if (rulePtr == NULL) { // insert
 			Model_Script* script = this->grublistCfg->repository.getCustomScript();

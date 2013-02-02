@@ -313,11 +313,18 @@ bool Model_Proxy::isModified(Model_Rule const* parentRule, Model_Entry const* pa
 		if (ruleIter->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER){ //the first element is the OTHER_ENTRIES_PLACEHOLDER by default.
 			result = !ruleIter->isVisible; //If not visible, it's modified…
 			ruleIter++;
+		} else {
+			result = true;
 		}
 		while (!result && ruleIter != rlist.end() && entryIter != elist.end()){
-			if (ruleIter->outputName != entryIter->name || !ruleIter->isVisible) {
+			// type compare
+			if ((ruleIter->type == Model_Rule::NORMAL && entryIter->type != Model_Entry::MENUENTRY)
+				|| (ruleIter->type == Model_Rule::PLAINTEXT && entryIter->type != Model_Entry::PLAINTEXT)
+				|| (ruleIter->type == Model_Rule::SUBMENU && entryIter->type != Model_Entry::SUBMENU)) {
 				result = true;
-			} else if (ruleIter->type == Model_Rule::SUBMENU) {
+			} else if (ruleIter->outputName != entryIter->name || !ruleIter->isVisible) { // data compare
+				result = true;
+			} else if (ruleIter->type == Model_Rule::SUBMENU) { // submenu check
 				result = this->isModified(&*ruleIter, &*entryIter);
 			}
 
@@ -766,16 +773,20 @@ Model_Proxy::operator ArrayStructure() const {
 
 
 Model_Proxy& Model_Proxy::fromPtr(Proxy* proxy) {
-	try {
-		return dynamic_cast<Model_Proxy&>(*proxy);
-	} catch (std::bad_cast const& e) {
+	if (proxy != NULL) {
+		try {
+			return dynamic_cast<Model_Proxy&>(*proxy);
+		} catch (std::bad_cast const& e) {
+		}
 	}
 	throw BadCastException("Model_Proxy::fromPtr failed");
 }
 Model_Proxy const& Model_Proxy::fromPtr(Proxy const* proxy) {
-	try {
-		return dynamic_cast<Model_Proxy const&>(*proxy);
-	} catch (std::bad_cast const& e) {
+	if (proxy != NULL) {
+		try {
+			return dynamic_cast<Model_Proxy const&>(*proxy);
+		} catch (std::bad_cast const& e) {
+		}
 	}
 	throw BadCastException("Model_Proxy::fromPtr [const] failed");
 }

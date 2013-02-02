@@ -302,7 +302,7 @@ bool View_Gtk_Main::signal_popup() {
 }
 
 void View_Gtk_Main::signal_key_press(GdkEventKey* key) {
-	if (key->keyval == GDK_DELETE) {
+	if (key->keyval == GDK_KEY_Delete) {
 		this->eventListener->removeRulesAction(this->getSelectedRules());
 	}
 }

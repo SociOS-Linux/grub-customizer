@@ -52,7 +52,7 @@ void GLib_ThreadController::enableSettings() {
 void GLib_ThreadController::startEdit(Rule* rule) {
 	this->_cachedRulePtr = rule;
 
-	Glib::signal_timeout().connect_once(sigc::mem_fun(this, &GLib_ThreadController::_execRuleEdit), 100);
+	Glib::signal_timeout().connect_once(sigc::mem_fun(this, &GLib_ThreadController::_execRuleEdit), 10);
 }
 
 void GLib_ThreadController::startLoadThread(bool preserveConfig) {
