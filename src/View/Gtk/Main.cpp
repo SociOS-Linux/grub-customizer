@@ -406,80 +406,80 @@ void View_Gtk_Main::setStatusText(std::string const& name, int pos, int max){
 	}
 }
 
-void View_Gtk_Main::appendEntry(std::string const& name, Rule* entryPtr, Proxy* scriptPtr, bool is_placeholder, bool is_submenu, std::string const& scriptName, std::string const& defaultName, bool isEditable, bool isModified, std::map<std::string, std::string> const& options, bool isVisible, Rule* parentEntry, Proxy* parentScript){
-	if (!isVisible && !this->options[VIEW_SHOW_HIDDEN_ENTRIES]) {
+void View_Gtk_Main::appendEntry(View_Model_ListItem<Rule, Proxy> const& listItem){
+	if (!listItem.isVisible && !this->options[VIEW_SHOW_HIDDEN_ENTRIES]) {
 		return;
 	}
-	if (entryPtr == NULL && !this->options[VIEW_GROUP_BY_SCRIPT]) {
+	if (listItem.entryPtr == NULL && !this->options[VIEW_GROUP_BY_SCRIPT]) {
 		return;
 	}
-	if (is_placeholder && !this->options[VIEW_SHOW_PLACEHOLDERS]) {
+	if (listItem.is_placeholder && !this->options[VIEW_SHOW_PLACEHOLDERS]) {
 		return;
 	}
 	Gtk::TreeIter entryRow;
-	if (parentEntry) {
-		entryRow = tvConfList.refTreeStore->append(this->getIterByRulePtr(parentEntry)->children());
-	} else if (parentScript && this->options[VIEW_GROUP_BY_SCRIPT]) {
-		entryRow = tvConfList.refTreeStore->append(this->getIterByScriptPtr(parentScript)->children());
+	if (listItem.parentEntry) {
+		entryRow = tvConfList.refTreeStore->append(this->getIterByRulePtr(listItem.parentEntry)->children());
+	} else if (listItem.parentScript && this->options[VIEW_GROUP_BY_SCRIPT]) {
+		entryRow = tvConfList.refTreeStore->append(this->getIterByScriptPtr(listItem.parentScript)->children());
 	} else {
 		entryRow = tvConfList.refTreeStore->append();
 	}
 
 	Glib::RefPtr<Gdk::Pixbuf> icon;
-	std::string outputName = escapeXml(name);
-	if (!is_placeholder) {
+	std::string outputName = escapeXml(listItem.name);
+	if (!listItem.is_placeholder) {
 		outputName = "<b>" + outputName + "</b>";
 	}
 	if (this->options[VIEW_SHOW_DETAILS]) {
 		outputName += "\n<small>";
-		if (scriptPtr != NULL) {
+		if (listItem.scriptPtr != NULL) {
 			outputName += gettext("script");
-		} else if (is_submenu) {
+		} else if (listItem.is_submenu) {
 			outputName += gettext("submenu");
-		} else if (is_placeholder) {
+		} else if (listItem.is_placeholder) {
 			outputName += gettext("placeholder");
 		} else {
 			outputName += gettext("menuentry");
 		}
-		if (scriptName != "") {
-			outputName += std::string(" / ") + gettext("script: ") + escapeXml(scriptName);
+		if (listItem.scriptName != "") {
+			outputName += std::string(" / ") + gettext("script: ") + escapeXml(listItem.scriptName);
 		}
 
-		if (defaultName != "" && name != defaultName) {
-			outputName += std::string(" / ") + gettext("default name: ") + escapeXml(defaultName);
+		if (listItem.defaultName != "" && listItem.name != listItem.defaultName) {
+			outputName += std::string(" / ") + gettext("default name: ") + escapeXml(listItem.defaultName);
 		}
 
-		if (options.find("_deviceName") != options.end()) {
-			outputName += escapeXml(Glib::ustring(" / ") + gettext("Partition: ") + options.at("_deviceName"));
+		if (listItem.options.find("_deviceName") != listItem.options.end()) {
+			outputName += escapeXml(Glib::ustring(" / ") + gettext("Partition: ") + listItem.options.at("_deviceName"));
 		}
 
 		outputName += "</small>";
 	}
 
-	if (scriptPtr != NULL) {
+	if (listItem.scriptPtr != NULL) {
 		icon = this->win.render_icon_pixbuf(Gtk::Stock::FILE, this->options[VIEW_SHOW_DETAILS] ? Gtk::ICON_SIZE_LARGE_TOOLBAR : Gtk::ICON_SIZE_MENU);
-	} else if (is_submenu) {
+	} else if (listItem.is_submenu) {
 		icon = this->win.render_icon_pixbuf(Gtk::Stock::DIRECTORY, this->options[VIEW_SHOW_DETAILS] ? Gtk::ICON_SIZE_LARGE_TOOLBAR : Gtk::ICON_SIZE_MENU);
-	} else if (is_placeholder) {
+	} else if (listItem.is_placeholder) {
 		icon = this->win.render_icon_pixbuf(Gtk::Stock::FIND, this->options[VIEW_SHOW_DETAILS] ? Gtk::ICON_SIZE_LARGE_TOOLBAR : Gtk::ICON_SIZE_MENU);
 	} else {
 		icon = this->win.render_icon_pixbuf(Gtk::Stock::EXECUTE, this->options[VIEW_SHOW_DETAILS] ? Gtk::ICON_SIZE_LARGE_TOOLBAR : Gtk::ICON_SIZE_MENU);
 	}
 
-	if (isModified) {
+	if (listItem.isModified) {
 		outputName = "<i>" + outputName + "</i>";
 	}
 
-	(*entryRow)[tvConfList.treeModel.name] = name;
+	(*entryRow)[tvConfList.treeModel.name] = listItem.name;
 	(*entryRow)[tvConfList.treeModel.text] = outputName;
-	(*entryRow)[tvConfList.treeModel.is_activated] = isVisible;
-	(*entryRow)[tvConfList.treeModel.relatedRule] = (Rule*)entryPtr;
-	(*entryRow)[tvConfList.treeModel.relatedScript] = (Proxy*)scriptPtr;
+	(*entryRow)[tvConfList.treeModel.is_activated] = listItem.isVisible;
+	(*entryRow)[tvConfList.treeModel.relatedRule] = listItem.entryPtr;
+	(*entryRow)[tvConfList.treeModel.relatedScript] = listItem.scriptPtr;
 	(*entryRow)[tvConfList.treeModel.is_renamable] = false;
-	(*entryRow)[tvConfList.treeModel.is_renamable_real] = !is_placeholder && scriptPtr == NULL;
-	(*entryRow)[tvConfList.treeModel.is_editable] = isEditable;
-	(*entryRow)[tvConfList.treeModel.is_sensitive] = scriptPtr == NULL;
-	(*entryRow)[tvConfList.treeModel.is_toplevel] = parentEntry == NULL;
+	(*entryRow)[tvConfList.treeModel.is_renamable_real] = !listItem.is_placeholder && listItem.scriptPtr == NULL;
+	(*entryRow)[tvConfList.treeModel.is_editable] = listItem.isEditable;
+	(*entryRow)[tvConfList.treeModel.is_sensitive] = listItem.scriptPtr == NULL;
+	(*entryRow)[tvConfList.treeModel.is_toplevel] = listItem.parentEntry == NULL;
 	(*entryRow)[tvConfList.treeModel.icon] = icon;
 	(*entryRow)[tvConfList.treeModel.ellipsize] = Pango::ELLIPSIZE_NONE;
 

@@ -142,6 +142,7 @@ src/View/Gtk/Trash.cpp -text
 src/View/Gtk/Trash.h -text
 src/View/Installer.h -text
 src/View/Main.h -text
+src/View/Model/ListItem.h -text
 src/View/Settings.h -text
 src/View/Trash.h -text
 src/lib/ArrayStructure.cpp -text

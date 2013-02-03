@@ -41,6 +41,7 @@
 #include "../Mapper/EntryName.h"
 
 #include "../lib/Exception.h"
+#include "../View/Model/ListItem.h"
 
 #include "MainController.h"
 

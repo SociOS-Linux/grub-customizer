@@ -117,7 +117,7 @@ public:
 	void hideProgressBar();
 	void setStatusText(std::string const& new_status_text);
 	void setStatusText(std::string const& name, int pos, int max);
-	void appendEntry(std::string const& name, Rule* entryPtr, Proxy* scriptPtr, bool is_placeholder, bool is_submenu, std::string const& scriptName, std::string const& defaultName, bool isEditable, bool isModified, std::map<std::string, std::string> const& options, bool isVisible, Rule* parentEntry = NULL, Proxy* parentScript = NULL);
+	void appendEntry(View_Model_ListItem<Rule, Proxy> const& listItem);
 	void showProxyNotFoundMessage();
 	std::string createNewEntriesPlaceholderString(std::string const& parentMenu = "", std::string const& sourceScriptName = "");
 	std::string createPlaintextString(std::string const& scriptName) const;

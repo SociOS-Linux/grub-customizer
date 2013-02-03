@@ -24,6 +24,7 @@
 #include <vector>
 #include <map>
 #include "../lib/Type.h"
+#include "Model/ListItem.h"
 
 /**
  * Interface for dialogs which lets the user control the grub list
@@ -62,7 +63,7 @@ public:
 	virtual void setStatusText(std::string const& new_status_text)=0;
 	virtual void setStatusText(std::string const& name, int pos, int max)=0;
 	//add entry to the end of the last script of the list
-	virtual void appendEntry(std::string const& name, Rule* entryPtr, Proxy* scriptPtr, bool is_placeholder, bool is_submenu, std::string const& scriptName, std::string const& defaultName, bool isEditable, bool isModified, std::map<std::string, std::string> const& options, bool isVisible, Rule* parentEntry = NULL, Proxy* parentScript = NULL)=0;
+	virtual void appendEntry(View_Model_ListItem<Rule, Proxy> const& listItem)=0;
 	//notifies the user about the problem that no grublistcfg_proxy has been found
 	virtual void showProxyNotFoundMessage()=0;
 	//creates a string for an other entry placeholder

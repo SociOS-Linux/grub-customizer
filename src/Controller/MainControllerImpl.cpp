@@ -93,7 +93,13 @@ void MainControllerImpl::updateList() {
 	for (std::list<Model_Proxy>::iterator iter = this->grublistCfg->proxies.begin(); iter != this->grublistCfg->proxies.end(); iter++){
 		std::string name = iter->getScriptName();
 		if ((name != "header" && name != "debian_theme" && name != "grub-customizer_menu_color_helper") || iter->isModified()) {
-			this->view->appendEntry(name, NULL, &*iter, false, true, "", name, false, false, std::map<std::string, std::string>(), true, NULL);
+			View_Model_ListItem<Rule, Proxy> listItem;
+			listItem.name = name;
+			listItem.scriptPtr = &*iter;
+			listItem.is_submenu = true;
+			listItem.defaultName = name;
+			listItem.isVisible = true;
+			this->view->appendEntry(listItem);
 			for (std::list<Model_Rule>::iterator ruleIter = iter->rules.begin(); ruleIter != iter->rules.end(); ruleIter++){
 				this->_rAppendRule(*ruleIter);
 			}
@@ -422,7 +428,20 @@ void MainControllerImpl::_rAppendRule(Model_Rule& rule, Model_Rule* parentRule){
 
 		Model_Proxy* proxy = this->grublistCfg->proxies.getProxyByRule(&rule);
 
-		this->view->appendEntry(name, &rule, NULL, is_other_entries_ph || is_plaintext, isSubmenu, scriptName, defaultName, isEditable, isModified, options, rule.isVisible, parentRule, proxy);
+		View_Model_ListItem<Rule, Proxy> listItem;
+		listItem.name = name;
+		listItem.entryPtr = &rule;
+		listItem.is_placeholder = is_other_entries_ph || is_plaintext;
+		listItem.is_submenu = isSubmenu;
+		listItem.scriptName = scriptName;
+		listItem.defaultName = defaultName;
+		listItem.isEditable = isEditable;
+		listItem.isModified = isModified;
+		listItem.options = options;
+		listItem.isVisible = rule.isVisible;
+		listItem.parentEntry = parentRule;
+		listItem.parentScript = proxy;
+		this->view->appendEntry(listItem);
 
 		for (std::list<Model_Rule>::iterator subruleIter = rule.subRules.begin(); subruleIter != rule.subRules.end(); subruleIter++) {
 			this->_rAppendRule(*subruleIter, &rule);
