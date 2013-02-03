@@ -22,7 +22,7 @@ EntryEditControllerImpl::EntryEditControllerImpl(Model_Env& env)
 	: ControllerAbstract("entry-edit"),
 	  grublistCfg(NULL),
 	 env(env), contentParserFactory(NULL), currentContentParser(NULL),
-	 deviceDataList(NULL), view(NULL)
+	 deviceDataList(NULL), view(NULL), threadController(NULL)
 {
 }
 
