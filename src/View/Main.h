@@ -84,8 +84,6 @@ public:
 	//asks the user whether the current config should be dropped while another action is started
 	virtual bool confirmUnsavedSwitch() = 0;
 
-	//reads the name of a rule item
-	virtual std::string getRuleName(Rule* rule)=0;
 	//assigns a new name to the rule item
 	virtual void setRuleName(Rule* rule, std::string const& newName)=0;
 

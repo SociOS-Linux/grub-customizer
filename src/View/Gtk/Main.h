@@ -84,8 +84,6 @@ class View_Gtk_Main : public View_Main, public CommonClass {
 	Gtk::HButtonBox bbxAdvancedSettings1, bbxAdvancedSettings2;
 
 
-	Gtk::TreeModel::iterator getIterByRulePtr(Rule* rulePtr, const Gtk::TreeRow* parentRow = NULL) const;
-	Gtk::TreeModel::iterator getIterByScriptPtr(Proxy* scriptPtr) const;
 	void update_move_buttons();
 	void update_remove_button();
 	void saveConfig();
@@ -128,7 +126,6 @@ public:
 	void clear();
 	bool confirmUnsavedSwitch();
 	
-	std::string getRuleName(Rule* rule);
 	void setRuleName(Rule* rule, std::string const& newName);
 
 	void selectRule(Rule* rule, bool startEdit = false);

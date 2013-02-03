@@ -407,82 +407,7 @@ void View_Gtk_Main::setStatusText(std::string const& name, int pos, int max){
 }
 
 void View_Gtk_Main::appendEntry(View_Model_ListItem<Rule, Proxy> const& listItem){
-	if (!listItem.isVisible && !this->options[VIEW_SHOW_HIDDEN_ENTRIES]) {
-		return;
-	}
-	if (listItem.entryPtr == NULL && !this->options[VIEW_GROUP_BY_SCRIPT]) {
-		return;
-	}
-	if (listItem.is_placeholder && !this->options[VIEW_SHOW_PLACEHOLDERS]) {
-		return;
-	}
-	Gtk::TreeIter entryRow;
-	if (listItem.parentEntry) {
-		entryRow = tvConfList.refTreeStore->append(this->getIterByRulePtr(listItem.parentEntry)->children());
-	} else if (listItem.parentScript && this->options[VIEW_GROUP_BY_SCRIPT]) {
-		entryRow = tvConfList.refTreeStore->append(this->getIterByScriptPtr(listItem.parentScript)->children());
-	} else {
-		entryRow = tvConfList.refTreeStore->append();
-	}
-
-	Glib::RefPtr<Gdk::Pixbuf> icon;
-	std::string outputName = escapeXml(listItem.name);
-	if (!listItem.is_placeholder) {
-		outputName = "<b>" + outputName + "</b>";
-	}
-	if (this->options[VIEW_SHOW_DETAILS]) {
-		outputName += "\n<small>";
-		if (listItem.scriptPtr != NULL) {
-			outputName += gettext("script");
-		} else if (listItem.is_submenu) {
-			outputName += gettext("submenu");
-		} else if (listItem.is_placeholder) {
-			outputName += gettext("placeholder");
-		} else {
-			outputName += gettext("menuentry");
-		}
-		if (listItem.scriptName != "") {
-			outputName += std::string(" / ") + gettext("script: ") + escapeXml(listItem.scriptName);
-		}
-
-		if (listItem.defaultName != "" && listItem.name != listItem.defaultName) {
-			outputName += std::string(" / ") + gettext("default name: ") + escapeXml(listItem.defaultName);
-		}
-
-		if (listItem.options.find("_deviceName") != listItem.options.end()) {
-			outputName += escapeXml(Glib::ustring(" / ") + gettext("Partition: ") + listItem.options.at("_deviceName"));
-		}
-
-		outputName += "</small>";
-	}
-
-	if (listItem.scriptPtr != NULL) {
-		icon = this->win.render_icon_pixbuf(Gtk::Stock::FILE, this->options[VIEW_SHOW_DETAILS] ? Gtk::ICON_SIZE_LARGE_TOOLBAR : Gtk::ICON_SIZE_MENU);
-	} else if (listItem.is_submenu) {
-		icon = this->win.render_icon_pixbuf(Gtk::Stock::DIRECTORY, this->options[VIEW_SHOW_DETAILS] ? Gtk::ICON_SIZE_LARGE_TOOLBAR : Gtk::ICON_SIZE_MENU);
-	} else if (listItem.is_placeholder) {
-		icon = this->win.render_icon_pixbuf(Gtk::Stock::FIND, this->options[VIEW_SHOW_DETAILS] ? Gtk::ICON_SIZE_LARGE_TOOLBAR : Gtk::ICON_SIZE_MENU);
-	} else {
-		icon = this->win.render_icon_pixbuf(Gtk::Stock::EXECUTE, this->options[VIEW_SHOW_DETAILS] ? Gtk::ICON_SIZE_LARGE_TOOLBAR : Gtk::ICON_SIZE_MENU);
-	}
-
-	if (listItem.isModified) {
-		outputName = "<i>" + outputName + "</i>";
-	}
-
-	(*entryRow)[tvConfList.treeModel.name] = listItem.name;
-	(*entryRow)[tvConfList.treeModel.text] = outputName;
-	(*entryRow)[tvConfList.treeModel.is_activated] = listItem.isVisible;
-	(*entryRow)[tvConfList.treeModel.relatedRule] = listItem.entryPtr;
-	(*entryRow)[tvConfList.treeModel.relatedScript] = listItem.scriptPtr;
-	(*entryRow)[tvConfList.treeModel.is_renamable] = false;
-	(*entryRow)[tvConfList.treeModel.is_renamable_real] = !listItem.is_placeholder && listItem.scriptPtr == NULL;
-	(*entryRow)[tvConfList.treeModel.is_editable] = listItem.isEditable;
-	(*entryRow)[tvConfList.treeModel.is_sensitive] = listItem.scriptPtr == NULL;
-	(*entryRow)[tvConfList.treeModel.is_toplevel] = listItem.parentEntry == NULL;
-	(*entryRow)[tvConfList.treeModel.icon] = icon;
-	(*entryRow)[tvConfList.treeModel.ellipsize] = Pango::ELLIPSIZE_NONE;
-
+	this->tvConfList.addListItem(listItem, this->options, this->win);
 
 	tvConfList.expand_all();
 }
@@ -668,30 +593,6 @@ void View_Gtk_Main::signal_reload_click(){
 	eventListener->reloadAction();
 }
 
-Gtk::TreeModel::iterator View_Gtk_Main::getIterByRulePtr(Rule* rulePtr, const Gtk::TreeRow* parentRow) const {
-	const Gtk::TreeNodeChildren children = parentRow ? parentRow->children() : tvConfList.refTreeStore->children();
-	for (Gtk::TreeModel::const_iterator iter = children.begin(); iter != children.end(); iter++) {
-		if ((*iter)[tvConfList.treeModel.relatedRule] == rulePtr)
-			return iter;
-		try {
-			return this->getIterByRulePtr(rulePtr, &**iter); //recursively search for the treeview item
-		} catch (ItemNotFoundException const& e) {
-			//(ignore ItemNotFoundException exception)
-		}
-	}
-	throw ItemNotFoundException("rule not found", __FILE__, __LINE__);
-}
-
-Gtk::TreeModel::iterator View_Gtk_Main::getIterByScriptPtr(Proxy* scriptPtr) const {
-	const Gtk::TreeNodeChildren children = tvConfList.refTreeStore->children();
-	for (Gtk::TreeModel::const_iterator iter = children.begin(); iter != children.end(); iter++) {
-		if ((*iter)[tvConfList.treeModel.relatedScript] == scriptPtr) {
-			return iter;
-		}
-	}
-	throw ItemNotFoundException("script not found", __FILE__, __LINE__);
-}
-
 void View_Gtk_Main::signal_checkbox_toggled(Glib::ustring const& path) {
 	if (!this->lock_state) {
 		this->eventListener->entryStateToggledAction(
@@ -714,33 +615,19 @@ void View_Gtk_Main::signal_show_envEditor(){
 
 
 
-std::string View_Gtk_Main::getRuleName(Rule* rule){
-	Gtk::TreeModel::iterator iter = this->getIterByRulePtr(rule);
-	return (Glib::ustring)(*iter)[tvConfList.treeModel.text];
-}
 void View_Gtk_Main::setRuleName(Rule* rule, std::string const& newName){
-	Gtk::TreeModel::iterator iter = this->getIterByRulePtr(rule);
 	this->setLockState(~0);
-	(*iter)[tvConfList.treeModel.name] = newName;
+	this->tvConfList.setRuleName(rule, newName);
 	this->setLockState(0);
 }
 
 
 void View_Gtk_Main::selectRule(Rule* rule, bool startEdit) {
-	try {
-		this->tvConfList.get_selection()->select(this->getIterByRulePtr(rule));
-		if (startEdit) {
-			this->tvConfList.set_cursor(this->tvConfList.refTreeStore->get_path(this->getIterByRulePtr(rule)), *this->tvConfList.get_column(0), true);
-		}
-	} catch (ItemNotFoundException const& e) {
-		// do nothing
-	}
+	this->tvConfList.selectRule(rule, startEdit);
 }
 
 void View_Gtk_Main::selectRules(std::list<Rule*> rules) {
-	for (std::list<Rule*>::iterator iter = rules.begin(); iter != rules.end(); iter++) {
-		this->tvConfList.get_selection()->select(this->getIterByRulePtr(*iter));
-	}
+	this->tvConfList.selectRules(rules);
 }
 
 void View_Gtk_Main::setTrashPaneVisibility(bool value) {
@@ -802,7 +689,7 @@ void View_Gtk_Main::setOptions(std::map<ViewOption, bool> const& options) {
 }
 
 void View_Gtk_Main::setEntryVisibility(Rule* entry, bool value) {
-	(*this->getIterByRulePtr(entry))[tvConfList.treeModel.is_activated] = value;
+	this->tvConfList.setEntryVisibility(entry, value);
 }
 
 void View_Gtk_Main::signal_move_click(int direction){
