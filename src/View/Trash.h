@@ -47,6 +47,8 @@ public:
 	virtual void askForDeletion(std::list<std::string> const& names) = 0;
 
 	virtual void setOptions(std::map<ViewOption, bool> const& viewOptions) = 0;
+
+	virtual void selectEntries(std::list<Entry*> const& entries) = 0;
 };
 
 #endif

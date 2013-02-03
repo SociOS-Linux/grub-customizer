@@ -149,6 +149,7 @@ public:
 	void refreshTabAction(unsigned int pos);
 	void setViewOptionAction(ViewOption option, bool value);
 	void entryStateToggledAction(Rule* entry, bool state);
+	void updateSelectionAction(std::list<Rule*> selectedRules);
 };
 
 #endif

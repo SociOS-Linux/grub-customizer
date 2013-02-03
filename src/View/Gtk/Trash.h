@@ -48,6 +48,8 @@ public:
 	void askForDeletion(std::list<std::string> const& names);
 	Gtk::Widget& getList();
 	void setOptions(std::map<ViewOption, bool> const& viewOptions);
+	void selectEntries(std::list<Entry*> const& entries);
+	void signal_treeview_selection_changed();
 };
 
 #endif

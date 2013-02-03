@@ -146,3 +146,25 @@ void TrashControllerImpl::deleteCustomEntriesAction() {
 	}
 	this->logActionEnd();
 }
+
+void TrashControllerImpl::selectEntriesAction(std::list<Entry*> const& entries) {
+	this->logActionBegin("select-entries");
+	try {
+		this->view->selectEntries(entries);
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
+	this->logActionEnd();
+}
+
+void TrashControllerImpl::updateSelectionAction(std::list<Entry*> const& selectedEntries) {
+	this->logActionBegin("update-selection");
+	try {
+		if (selectedEntries.size()) {
+			this->getAllControllers().mainController->selectRulesAction(std::list<Rule*>());
+		}
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
+	this->logActionEnd();
+}

@@ -65,6 +65,9 @@ public:
 
 	void askForDeletionAction();
 	void deleteCustomEntriesAction();
+
+	void selectEntriesAction(std::list<Entry*> const& entries);
+	void updateSelectionAction(std::list<Entry*> const& selectedEntries);
 };
 
 #endif

@@ -63,6 +63,7 @@ public:
 	virtual void refreshTabAction(unsigned int pos) = 0;
 	virtual void setViewOptionAction(ViewOption option, bool value) = 0;
 	virtual void entryStateToggledAction(Rule* entry, bool state) = 0;
+	virtual void updateSelectionAction(std::list<Rule*> selectedRules) = 0;
 };
 
 

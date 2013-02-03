@@ -1038,3 +1038,15 @@ void MainControllerImpl::entryStateToggledAction(Rule* entry, bool state) {
 	}
 	this->logActionEnd();
 }
+
+void MainControllerImpl::updateSelectionAction(std::list<Rule*> selectedRules) {
+	this->logActionBegin("update-selection");
+	try {
+		if (selectedRules.size()) {
+			this->getAllControllers().trashController->selectEntriesAction(std::list<Entry*>());
+		}
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
+	this->logActionEnd();
+}

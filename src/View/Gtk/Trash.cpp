@@ -37,6 +37,7 @@ View_Gtk_Trash::View_Gtk_Trash()
 	this->add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
 
 	this->signal_response().connect(sigc::mem_fun(this, &View_Gtk_Trash::signal_entryAddDlg_response));
+	this->list.get_selection()->signal_changed().connect(sigc::mem_fun(this, &View_Gtk_Trash::signal_treeview_selection_changed));
 
 	list.set_tooltip_column(1);
 
@@ -113,4 +114,12 @@ Gtk::Widget& View_Gtk_Trash::getList() {
 
 void View_Gtk_Trash::setOptions(std::map<ViewOption, bool> const& viewOptions) {
 	this->options = viewOptions;
+}
+
+void View_Gtk_Trash::selectEntries(std::list<Entry*> const& entries) {
+	this->list.selectRules(entries);
+}
+
+void View_Gtk_Trash::signal_treeview_selection_changed() {
+	this->eventListener->updateSelectionAction(this->list.getSelectedRules());
 }

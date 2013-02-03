@@ -568,14 +568,7 @@ bool View_Gtk_Main::selectedEntriesAreSubsequent() {
 }
 
 std::list<Rule*> View_Gtk_Main::getSelectedRules() {
-	std::list<Rule*> rules;
-	std::vector<Gtk::TreeModel::Path> pathes = tvConfList.get_selection()->get_selected_rows();
-	for (std::vector<Gtk::TreeModel::Path>::iterator iter = pathes.begin(); iter != pathes.end(); iter++) {
-		Rule* rptr = (*tvConfList.refTreeStore->get_iter(*iter))[tvConfList.treeModel.relatedRule];
-		rules.push_back(rptr);
-	}
-
-	return rules;
+	return this->tvConfList.getSelectedRules();
 }
 
 
@@ -734,6 +727,8 @@ void View_Gtk_Main::signal_treeview_selection_changed(){
 				(*this->tvConfList.refTreeStore->get_iter(selectedRows[0]))[this->tvConfList.treeModel.is_renamable] = (*this->tvConfList.refTreeStore->get_iter(selectedRows[0])).get_value(this->tvConfList.treeModel.is_renamable_real);
 			}
 		}
+
+		this->eventListener->updateSelectionAction(this->getSelectedRules());
 
 		this->updateButtonsState();
 	}

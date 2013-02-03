@@ -194,13 +194,13 @@ public:
 		throw ItemNotFoundException("script not found", __FILE__, __LINE__);
 	}
 
-	void setRuleName(Rule* rule, std::string const& newName){
+	void setRuleName(TItem* rule, std::string const& newName){
 		Gtk::TreeModel::iterator iter = this->getIterByRulePtr(rule);
 		(*iter)[this->treeModel.name] = newName;
 	}
 
 
-	void selectRule(Rule* rule, bool startEdit) {
+	void selectRule(TItem* rule, bool startEdit) {
 		try {
 			this->get_selection()->select(this->getIterByRulePtr(rule));
 			if (startEdit) {
@@ -211,14 +211,26 @@ public:
 		}
 	}
 
-	void selectRules(std::list<Rule*> rules) {
-		for (std::list<Rule*>::iterator iter = rules.begin(); iter != rules.end(); iter++) {
+	void selectRules(std::list<TItem*> rules) {
+		this->get_selection()->unselect_all();
+		for (typename std::list<TItem*>::iterator iter = rules.begin(); iter != rules.end(); iter++) {
 			this->get_selection()->select(this->getIterByRulePtr(*iter));
 		}
 	}
 
-	void setEntryVisibility(Rule* entry, bool value) {
+	void setEntryVisibility(TItem* entry, bool value) {
 		(*this->getIterByRulePtr(entry))[this->treeModel.is_activated] = value;
+	}
+
+	std::list<TItem*> getSelectedRules() {
+		std::list<TItem*> rules;
+		std::vector<Gtk::TreeModel::Path> pathes = this->get_selection()->get_selected_rows();
+		for (std::vector<Gtk::TreeModel::Path>::iterator iter = pathes.begin(); iter != pathes.end(); iter++) {
+			TItem* rptr = (*this->refTreeStore->get_iter(*iter))[this->treeModel.relatedRule];
+			rules.push_back(rptr);
+		}
+
+		return rules;
 	}
 };
 
