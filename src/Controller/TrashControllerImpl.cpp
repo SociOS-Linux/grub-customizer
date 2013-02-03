@@ -43,8 +43,7 @@ void TrashControllerImpl::_refreshView() {
 		listItem.name = name;
 		listItem.entryPtr = *iter;
 		listItem.scriptPtr = NULL;
-		listItem.is_placeholder = (*iter)->type == Model_Entry::PLAINTEXT;
-		listItem.is_submenu = (*iter)->type == Model_Entry::SUBMENU;
+		listItem.is_placeholder = (*iter)->type == Model_Entry::PLAINTEXT || (*iter)->type == Model_Entry::SUBMENU || (*iter)->type == Model_Entry::SCRIPT_ROOT;
 		listItem.scriptName = script->name;
 		listItem.isVisible = true;
 
