@@ -1032,7 +1032,7 @@ void MainControllerImpl::entryStateToggledAction(Rule* entry, bool state) {
 	this->logActionBegin("entry-state-toggled");
 	try {
 		Model_Rule::fromPtr(entry).setVisibility(state);
-		this->view->setEntryVisibility(entry, state);
+		this->syncLoadStateAction();
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
