@@ -888,7 +888,7 @@ void MainControllerImpl::syncLoadStateAction() {
 			this->getAllControllers().settingsController->updateSettingsDataAction();
 			this->getAllControllers().trashController->updateAction(this->view->getOptions());
 
-			this->view->setTrashPaneVisibility(this->grublistCfg->getRemovedEntries().size() >= 1);
+			this->view->setTrashPaneVisibility(this->grublistCfg->getRemovedEntries().size() >= 1 && !this->view->getOptions().at(VIEW_SHOW_HIDDEN_ENTRIES));
 			this->view->setLockState(0);
 		}
 		this->log("MainControllerImpl::syncListView_load completed", Logger::INFO);
