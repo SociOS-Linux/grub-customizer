@@ -38,6 +38,7 @@ View_Gtk_Trash::View_Gtk_Trash()
 
 	this->signal_response().connect(sigc::mem_fun(this, &View_Gtk_Trash::signal_entryAddDlg_response));
 	this->list.get_selection()->signal_changed().connect(sigc::mem_fun(this, &View_Gtk_Trash::signal_treeview_selection_changed));
+	this->list.signal_row_activated().connect(sigc::mem_fun(this, &View_Gtk_Trash::signal_item_dblClick));
 
 	list.set_tooltip_column(1);
 
@@ -65,6 +66,13 @@ void View_Gtk_Trash::signal_entryAddDlg_response(int response_id){
 		this->eventListener->askForDeletionAction();
 		break;
 	}
+}
+
+void View_Gtk_Trash::signal_item_dblClick(Gtk::TreeModel::Path const& path, Gtk::TreeViewColumn* column) {
+	this->list.get_selection()->unselect_all();
+	this->list.get_selection()->select(path);
+	eventListener->applyAction();
+	this->hide();
 }
 
 std::list<Entry*> View_Gtk_Trash::getSelectedEntries(){

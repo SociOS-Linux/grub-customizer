@@ -39,6 +39,7 @@ public:
 	View_Gtk_Trash();
 	void setEventListener(TrashController& eventListener);
 	void signal_entryAddDlg_response(int response_id);
+	void signal_item_dblClick(Gtk::TreeModel::Path const& path, Gtk::TreeViewColumn* column);
 	void clear();
 	std::list<Entry*> getSelectedEntries();
 	void addItem(View_Model_ListItem<Entry, Script> const& listItem);
