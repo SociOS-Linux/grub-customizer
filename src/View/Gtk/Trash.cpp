@@ -38,7 +38,7 @@ View_Gtk_Trash::View_Gtk_Trash()
 
 	this->signal_response().connect(sigc::mem_fun(this, &View_Gtk_Trash::signal_entryAddDlg_response));
 
-	list.set_tooltip_column(0);
+	list.set_tooltip_column(1);
 
 	list.ellipsizeMode = Pango::ELLIPSIZE_END;
 }
