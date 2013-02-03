@@ -56,8 +56,7 @@ public:
 
 	TrashControllerImpl(Model_Env& env);
 	
-	void showAction();
-	void updateAction();
+	void updateAction(std::map<ViewOption, bool> const& viewOptions);
 	void applyAction();
 	
 	void showAboutDialog();

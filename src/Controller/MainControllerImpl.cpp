@@ -886,7 +886,7 @@ void MainControllerImpl::syncLoadStateAction() {
 
 		if (progress == 1){
 			this->getAllControllers().settingsController->updateSettingsDataAction();
-			this->getAllControllers().trashController->updateAction();
+			this->getAllControllers().trashController->updateAction(this->view->getOptions());
 
 			this->view->setTrashPaneVisibility(this->grublistCfg->getRemovedEntries().size() >= 1);
 			this->view->setLockState(0);
@@ -921,16 +921,6 @@ void MainControllerImpl::showEnvEditorAction(bool resetPartitionChooser) {
 		this->view->hide();
 
 		this->getAllControllers().envEditController->showAction();
-	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
-	}
-	this->logActionEnd();
-}
-
-void MainControllerImpl::showTrashAction() {
-	this->logActionBegin("show-trash");
-	try {
-		this->getAllControllers().trashController->showAction();
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}

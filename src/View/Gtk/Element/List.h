@@ -22,6 +22,7 @@
 #include "../../../lib/Type.h"
 #include "../../../lib/Exception.h"
 #include "../../Model/ListItem.h"
+#include "../../../lib/str_replace.h"
 #include <libintl.h>
 
 template<typename TItem, typename TWrapper>
@@ -64,8 +65,11 @@ public:
 	Gtk::CellRendererToggle toggleRenderer;
 	Gtk::CellRendererText textRenderer;
 	Gtk::TreeViewColumn mainColumn;
+	Pango::EllipsizeMode ellipsizeMode;
 
-	View_Gtk_Element_List(){
+	View_Gtk_Element_List()
+		: ellipsizeMode(Pango::ELLIPSIZE_NONE)
+	{
 		refTreeStore = Gtk::TreeStore::create(treeModel);
 		this->set_model(refTreeStore);
 
@@ -163,7 +167,7 @@ public:
 		(*entryRow)[this->treeModel.is_sensitive] = listItem.scriptPtr == NULL;
 		(*entryRow)[this->treeModel.is_toplevel] = listItem.parentEntry == NULL;
 		(*entryRow)[this->treeModel.icon] = icon;
-		(*entryRow)[this->treeModel.ellipsize] = Pango::ELLIPSIZE_NONE;
+		(*entryRow)[this->treeModel.ellipsize] = ellipsizeMode;
 	}
 
 	Gtk::TreeModel::iterator getIterByRulePtr(TItem* rulePtr, const Gtk::TreeRow* parentRow = NULL) const {

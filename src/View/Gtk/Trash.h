@@ -34,18 +34,20 @@ class View_Gtk_Trash : public Gtk::Dialog, public View_Trash, public CommonClass
 	Gtk::Frame frmList;
 
 	TrashController* eventListener;
+	std::map<ViewOption, bool> options;
 public:
 	View_Gtk_Trash();
 	void setEventListener(TrashController& eventListener);
 	void signal_entryAddDlg_response(int response_id);
 	void clear();
 	std::list<Entry*> getSelectedEntries();
-	void addItem(std::string const& name, bool isPlaceholder, std::string const& scriptName, Entry* relatedRule);
+	void addItem(View_Model_ListItem<Entry, Script> const& listItem);
 	void setDeleteButtonEnabled(bool val);
 	void show();
 	void hide();
 	void askForDeletion(std::list<std::string> const& names);
 	Gtk::Widget& getList();
+	void setOptions(std::map<ViewOption, bool> const& viewOptions);
 };
 
 #endif

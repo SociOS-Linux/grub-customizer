@@ -140,7 +140,6 @@ public:
 	void syncLoadStateAction();
 
 	void showSettingsAction();
-	void showTrashAction();
 	void initModeAction(bool burgChosen);
 	void addEntriesAction(std::list<Entry*> entries);
 	void activateSettingsAction();

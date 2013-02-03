@@ -39,7 +39,16 @@ void TrashControllerImpl::_refreshView() {
 		std::string name = (*iter)->name;
 		name = this->entryNameMapper->map(&**iter, name, script->name);
 
-		this->view->addItem(name, (*iter)->type != Model_Entry::MENUENTRY, script->name, *iter);
+		View_Model_ListItem<Entry, Script> listItem;
+		listItem.name = name;
+		listItem.entryPtr = *iter;
+		listItem.scriptPtr = NULL;
+		listItem.is_placeholder = (*iter)->type == Model_Entry::PLAINTEXT;
+		listItem.is_submenu = (*iter)->type == Model_Entry::SUBMENU;
+		listItem.scriptName = script->name;
+		listItem.isVisible = true;
+
+		this->view->addItem(listItem);
 	}
 
 	this->view->setDeleteButtonEnabled(this->_getDeletableEntries().size());
@@ -75,21 +84,10 @@ void TrashControllerImpl::setEntryNameMapper(Mapper_EntryName& mapper) {
 	this->entryNameMapper = &mapper;
 }
 
-void TrashControllerImpl::showAction(){
-	this->logActionBegin("show");
-	try {
-		this->updateAction();
-
-		view->show();
-	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
-	}
-	this->logActionEnd();
-}
-
-void TrashControllerImpl::updateAction(){
+void TrashControllerImpl::updateAction(std::map<ViewOption, bool> const& viewOptions){
 	this->logActionBegin("update");
 	try {
+		this->view->setOptions(viewOptions);
 		this->_refreshView();
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);

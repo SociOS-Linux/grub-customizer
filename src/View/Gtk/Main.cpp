@@ -749,10 +749,6 @@ void View_Gtk_Main::signal_entry_create_click() {
 	eventListener->showEntryCreatorAction();
 }
 
-void View_Gtk_Main::signal_add_click(){
-	eventListener->showTrashAction();
-}
-
 void View_Gtk_Main::signal_remove_click() {
 	eventListener->removeRulesAction(this->getSelectedRules());
 }
