@@ -488,7 +488,9 @@ void View_Gtk_Main::setLockState(int state){
 	bttAdvancedSettings1.set_sensitive((state & 8) == 0);
 
 	tvConfList.set_sensitive((state & 1) == 0);
-	
+	if (this->trashList) {
+		this->trashList->set_sensitive((state & 1) == 0);
+	}
 
 	miCreateEntry.set_sensitive((state & 1) == 0);
 	tbttCreateEntry.set_sensitive((state & 1) == 0);
