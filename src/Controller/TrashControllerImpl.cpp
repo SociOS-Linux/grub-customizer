@@ -55,26 +55,22 @@ void TrashControllerImpl::_refreshView() {
 
 		this->view->addItem(listItem);
 	}
-
-	this->view->setDeleteButtonEnabled(this->_getDeletableEntries().size());
 }
 
-std::list<Model_Entry*> TrashControllerImpl::_getDeletableEntries() {
-	std::list<Model_Entry*> result;
-
-	std::list<Model_Entry*> removedEntries = this->grublistCfg->getRemovedEntries();
-	for (std::list<Model_Entry*>::iterator iter = removedEntries.begin(); iter != removedEntries.end(); iter++) {
-		if ((*iter)->type != Model_Entry::MENUENTRY) {
+// returns true, all selected entries are deletable
+bool TrashControllerImpl::_isDeletable(std::list<Entry*> const& selectedEntries) {
+	for (std::list<Entry*>::const_iterator iter = selectedEntries.begin(); iter != selectedEntries.end(); iter++) {
+		if (Model_Entry::fromPtr(*iter).type != Model_Entry::MENUENTRY) {
 			continue;
 		}
-		Model_Script* script = this->grublistCfg->repository.getScriptByEntry(**iter);
+		Model_Script* script = this->grublistCfg->repository.getScriptByEntry(Model_Entry::fromPtr(*iter));
 		assert(script != NULL);
-		if (script->isCustomScript) {
-			result.push_back(*iter);
+		if (!script->isCustomScript) {
+			return false;
 		}
 	}
 
-	return result;
+	return true;
 }
 
 void TrashControllerImpl::setListCfg(Model_ListCfg& grublistCfg){
@@ -130,29 +126,12 @@ void TrashControllerImpl::hideAction() {
 	this->logActionEnd();
 }
 
-void TrashControllerImpl::askForDeletionAction() {
-	this->logActionBegin("ask-for-deletion");
-	try {
-		std::list<Model_Entry*> deletableEntries = this->_getDeletableEntries();
-		std::list<std::string> deletableEntryNames;
-		for (std::list<Model_Entry*>::iterator iter = deletableEntries.begin(); iter != deletableEntries.end(); iter++) {
-			Model_Script* script = this->grublistCfg->repository.getScriptByEntry(**iter);
-			assert(script != NULL);
-			deletableEntryNames.push_back(this->entryNameMapper->map(&**iter, (*iter)->name, script->name));
-		}
-		this->view->askForDeletion(deletableEntryNames);
-	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
-	}
-	this->logActionEnd();
-}
-
 void TrashControllerImpl::deleteCustomEntriesAction() {
 	this->logActionBegin("delete-custom-entries");
 	try {
-		std::list<Model_Entry*> deletableEntries = this->_getDeletableEntries();
-		for (std::list<Model_Entry*>::iterator iter = deletableEntries.begin(); iter != deletableEntries.end(); iter++) {
-			this->grublistCfg->deleteEntry(**iter);
+		std::list<Entry*> deletableEntries = this->view->getSelectedEntries();
+		for (std::list<Entry*>::iterator iter = deletableEntries.begin(); iter != deletableEntries.end(); iter++) {
+			this->grublistCfg->deleteEntry(Model_Entry::fromPtr(*iter));
 		}
 		this->_refreshView();
 	} catch (Exception const& e) {
@@ -177,8 +156,10 @@ void TrashControllerImpl::updateSelectionAction(std::list<Entry*> const& selecte
 		if (selectedEntries.size()) {
 			this->getAllControllers().mainController->selectRulesAction(std::list<Rule*>());
 			this->view->setRestoreButtonSensitivity(true);
+			this->view->setDeleteButtonVisibility(this->_isDeletable(selectedEntries));
 		} else {
 			this->view->setRestoreButtonSensitivity(false);
+			this->view->setDeleteButtonVisibility(false);
 		}
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);

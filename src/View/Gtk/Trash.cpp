@@ -19,17 +19,21 @@
 #include "Trash.h"
 
 View_Gtk_Trash::View_Gtk_Trash()
-	: deleteButton(NULL), micRestore(Gtk::Stock::ADD), bttRestore(Gtk::Stock::UNDELETE) {
+	: micRestore(Gtk::Stock::ADD),
+	  bttRestore(Gtk::Stock::UNDELETE),
+	  bttDelete(Gtk::Stock::DELETE),
+	  micDelete(Gtk::Stock::DELETE) {
 	this->set_title(gettext("Add entry from trash"));
 	this->set_icon_name("grub-customizer");
 	this->set_default_size(650, 500);
-	Gtk::Box* vbEntryAddDlg = this->get_vbox();
-	vbEntryAddDlg->pack_start(frmList);
+	this->add(frmList);
 	frmList.set_label(gettext("Removed items"));
 	frmList.set_shadow_type(Gtk::SHADOW_NONE);
 	frmList.add(vbList);
 	vbList.pack_start(scrEntryBox);
-	vbList.pack_start(bttRestore, Gtk::PACK_SHRINK);
+	vbList.pack_start(hbList, Gtk::PACK_SHRINK);
+	hbList.pack_start(bttRestore);
+	hbList.pack_start(bttDelete);
 	scrEntryBox.add(list);
 	scrEntryBox.set_min_content_width(250);
 	
@@ -39,25 +43,29 @@ View_Gtk_Trash::View_Gtk_Trash()
 	bttRestore.set_border_width(5);
 	bttRestore.set_sensitive(false);
 
-	deleteButton = this->add_button(gettext("Delete custom entries"), Gtk::RESPONSE_REJECT);
-	deleteButton->set_no_show_all(true);
-	this->add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
-	this->add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
+	bttDelete.set_border_width(5);
+	bttDelete.set_tooltip_text(gettext("permanently delete selected entries"));
+	bttDelete.set_no_show_all(true);
 
-	this->signal_response().connect(sigc::mem_fun(this, &View_Gtk_Trash::signal_entryAddDlg_response));
+	list.set_tooltip_column(1);
+
+	list.ellipsizeMode = Pango::ELLIPSIZE_END;
+
+	this->micDelete.set_sensitive(false);
+	this->micDelete.set_tooltip_text(gettext("delete entries permanently - this action is available on custom entries only"));
+
+	this->miContext.set_submenu(this->contextMenu);
+	this->contextMenu.attach(this->micRestore, 0, 1, 0, 1);
+	this->contextMenu.attach(this->micDelete, 0, 1, 1, 2);
+
 	this->list.get_selection()->signal_changed().connect(sigc::mem_fun(this, &View_Gtk_Trash::signal_treeview_selection_changed));
 	this->list.signal_row_activated().connect(sigc::mem_fun(this, &View_Gtk_Trash::signal_item_dblClick));
 	this->list.signal_button_press_event().connect_notify(sigc::mem_fun(this, &View_Gtk_Trash::signal_button_press));
 	this->list.signal_popup_menu().connect(sigc::mem_fun(this, &View_Gtk_Trash::signal_popup));
 	this->micRestore.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Trash::restore_button_click));
 	this->bttRestore.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Trash::restore_button_click));
-
-	list.set_tooltip_column(1);
-
-	list.ellipsizeMode = Pango::ELLIPSIZE_END;
-
-	this->miContext.set_submenu(this->contextMenu);
-	this->contextMenu.attach(this->micRestore, 0, 1, 0, 1);
+	this->micDelete.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Trash::delete_button_click));
+	this->bttDelete.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Trash::delete_button_click));
 }
 
 void View_Gtk_Trash::setEventListener(TrashController& eventListener){
@@ -66,21 +74,6 @@ void View_Gtk_Trash::setEventListener(TrashController& eventListener){
 
 void View_Gtk_Trash::clear(){
 	list.refTreeStore->clear();
-}
-
-void View_Gtk_Trash::signal_entryAddDlg_response(int response_id){
-	switch (response_id) {
-	case Gtk::RESPONSE_OK:
-		this->eventListener->applyAction();
-		this->hide();
-		break;
-	case Gtk::RESPONSE_CANCEL:
-		this->hide();
-		break;
-	case Gtk::RESPONSE_REJECT:
-		this->eventListener->askForDeletionAction();
-		break;
-	}
 }
 
 void View_Gtk_Trash::signal_item_dblClick(Gtk::TreeModel::Path const& path, Gtk::TreeViewColumn* column) {
@@ -92,6 +85,10 @@ void View_Gtk_Trash::signal_item_dblClick(Gtk::TreeModel::Path const& path, Gtk:
 
 void View_Gtk_Trash::restore_button_click() {
 	eventListener->applyAction();
+}
+
+void View_Gtk_Trash::delete_button_click() {
+	eventListener->deleteCustomEntriesAction();
 }
 
 std::list<Entry*> View_Gtk_Trash::getSelectedEntries(){
@@ -109,7 +106,7 @@ void View_Gtk_Trash::addItem(View_Model_ListItem<Entry, Script> const& listItem)
 }
 
 void View_Gtk_Trash::setDeleteButtonEnabled(bool val) {
-	this->deleteButton->set_visible(val);
+	this->bttDelete.set_visible(val);
 }
 
 void View_Gtk_Trash::show(){
@@ -118,7 +115,7 @@ void View_Gtk_Trash::show(){
 }
 
 void View_Gtk_Trash::hide(){
-	this->Gtk::Dialog::hide();
+	this->Gtk::Window::hide();
 }
 
 void View_Gtk_Trash::askForDeletion(std::list<std::string> const& names) {
@@ -135,9 +132,13 @@ void View_Gtk_Trash::askForDeletion(std::list<std::string> const& names) {
 }
 
 Gtk::Widget& View_Gtk_Trash::getList() {
-	Gtk::Box* vbEntryAddDlg = this->get_vbox();
-	vbEntryAddDlg->remove(this->frmList);
+	this->remove();
 	return this->frmList;
+}
+
+void View_Gtk_Trash::setDeleteButtonVisibility(bool visibility) {
+	bttDelete.set_visible(visibility);
+	micDelete.set_sensitive(visibility);
 }
 
 void View_Gtk_Trash::setOptions(std::map<ViewOption, bool> const& viewOptions) {

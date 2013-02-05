@@ -26,14 +26,14 @@
 #include "../../lib/Type.h"
 #include "Element/List.h"
 
-class View_Gtk_Trash : public Gtk::Dialog, public View_Trash, public CommonClass {
-	Gtk::Dialog scriptAddDlg;
+class View_Gtk_Trash : public Gtk::Window, public View_Trash, public CommonClass {
 	Gtk::ScrolledWindow scrEntryBox;
 	View_Gtk_Element_List<Entry, Script> list;
-	Gtk::Button* deleteButton;
 	Gtk::Frame frmList;
 	Gtk::VBox vbList;
+	Gtk::HBox hbList;
 	Gtk::Button bttRestore;
+	Gtk::Button bttDelete;
 
 	TrashController* eventListener;
 	std::map<ViewOption, bool> options;
@@ -41,12 +41,13 @@ class View_Gtk_Trash : public Gtk::Dialog, public View_Trash, public CommonClass
 	Gtk::MenuItem miContext;
 	Gtk::Menu contextMenu;
 	Gtk::ImageMenuItem micRestore;
+	Gtk::ImageMenuItem micDelete;
 public:
 	View_Gtk_Trash();
 	void setEventListener(TrashController& eventListener);
-	void signal_entryAddDlg_response(int response_id);
 	void signal_item_dblClick(Gtk::TreeModel::Path const& path, Gtk::TreeViewColumn* column);
 	void restore_button_click();
+	void delete_button_click();
 	void clear();
 	std::list<Entry*> getSelectedEntries();
 	void addItem(View_Model_ListItem<Entry, Script> const& listItem);
@@ -55,6 +56,7 @@ public:
 	void hide();
 	void askForDeletion(std::list<std::string> const& names);
 	Gtk::Widget& getList();
+	void setDeleteButtonVisibility(bool visibility);
 	void setOptions(std::map<ViewOption, bool> const& viewOptions);
 	void selectEntries(std::list<Entry*> const& entries);
 	void setRestoreButtonSensitivity(bool sensitivity);

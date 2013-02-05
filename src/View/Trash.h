@@ -51,6 +51,8 @@ public:
 	virtual void selectEntries(std::list<Entry*> const& entries) = 0;
 
 	virtual void setRestoreButtonSensitivity(bool sensitivity) = 0;
+
+	virtual void setDeleteButtonVisibility(bool visibility) = 0;
 };
 
 #endif

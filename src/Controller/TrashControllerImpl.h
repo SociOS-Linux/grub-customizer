@@ -53,7 +53,7 @@ class TrashControllerImpl : public ControllerAbstract, public TrashController {
 	ContentParserFactory* contentParserFactory;
 
 	void _refreshView();
-	std::list<Model_Entry*> _getDeletableEntries();
+	bool _isDeletable(std::list<Entry*> const& selectedEntries);
 public:
 	void setListCfg(Model_ListCfg& grublistCfg);
 	void setView(View_Trash& scriptAddDlg);
@@ -70,7 +70,6 @@ public:
 
 	void hideAction();
 
-	void askForDeletionAction();
 	void deleteCustomEntriesAction();
 
 	void selectEntriesAction(std::list<Entry*> const& entries);
