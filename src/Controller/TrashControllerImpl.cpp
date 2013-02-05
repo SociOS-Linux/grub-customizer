@@ -23,11 +23,16 @@ TrashControllerImpl::TrashControllerImpl(Model_Env& env)
 	  grublistCfg(NULL),
 	  view(NULL),
 	 env(env),
-	 entryNameMapper(NULL)
+	 entryNameMapper(NULL),
+	 deviceDataList(NULL),
+	 contentParserFactory(NULL)
 {
 }
 
 void TrashControllerImpl::_refreshView() {
+	assert(this->contentParserFactory != NULL);
+	assert(this->deviceDataList != NULL);
+
 	this->view->clear();
 
 	std::list<Model_Entry*> removedEntries = this->grublistCfg->getRemovedEntries();
@@ -46,6 +51,7 @@ void TrashControllerImpl::_refreshView() {
 		listItem.is_placeholder = (*iter)->type == Model_Entry::PLAINTEXT || (*iter)->type == Model_Entry::SUBMENU || (*iter)->type == Model_Entry::SCRIPT_ROOT;
 		listItem.scriptName = script->name;
 		listItem.isVisible = true;
+		listItem.options = Controller_Helper_DeviceInfo::fetch((*iter)->content, *this->contentParserFactory, *this->deviceDataList);
 
 		this->view->addItem(listItem);
 	}
@@ -81,6 +87,14 @@ void TrashControllerImpl::setView(View_Trash& scriptAddDlg){
 
 void TrashControllerImpl::setEntryNameMapper(Mapper_EntryName& mapper) {
 	this->entryNameMapper = &mapper;
+}
+
+void TrashControllerImpl::setDeviceDataList(Model_DeviceDataListInterface& deviceDataList){
+	this->deviceDataList = &deviceDataList;
+}
+
+void TrashControllerImpl::setContentParserFactory(ContentParserFactory& contentParserFactory) {
+	this->contentParserFactory = &contentParserFactory;
 }
 
 void TrashControllerImpl::updateAction(std::map<ViewOption, bool> const& viewOptions){

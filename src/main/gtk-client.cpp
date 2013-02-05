@@ -123,6 +123,8 @@ int main(int argc, char** argv){
 		TrashControllerImpl trashController(env);
 		trashController.setEntryNameMapper(entryNameMapper);
 		trashController.setListCfg(listcfg);
+		trashController.setDeviceDataList(deviceDataList);
+		trashController.setContentParserFactory(contentParserFactory);
 		trashController.setView(trashView);
 
 		InstallerControllerImpl installController(env);

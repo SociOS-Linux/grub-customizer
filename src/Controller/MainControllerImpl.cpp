@@ -410,20 +410,7 @@ void MainControllerImpl::_rAppendRule(Model_Rule& rule, Model_Rule* parentRule){
 		// parse content to show additional informations
 		std::map<std::string, std::string> options;
 		if (rule.dataSource) {
-			try {
-				options = this->contentParserFactory->create(rule.dataSource->content)->getOptions();
-				if (options.find("partition_uuid") != options.end()) {
-					// add device path
-					for (Model_DeviceDataListInterface::const_iterator iter = deviceDataList->begin(); iter != deviceDataList->end(); iter++) {
-						if (iter->second.find("UUID") != iter->second.end() && iter->second.at("UUID") == options["partition_uuid"]) {
-							options["_deviceName"] = iter->first;
-							break;
-						}
-					}
-				}
-			} catch (ParserNotFoundException const& e) {
-				// nothing to do
-			}
+			options = Controller_Helper_DeviceInfo::fetch(rule.dataSource->content, *this->contentParserFactory, *deviceDataList);
 		}
 
 		Model_Proxy* proxy = this->grublistCfg->proxies.getProxyByRule(&rule);

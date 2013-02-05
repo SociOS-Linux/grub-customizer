@@ -43,6 +43,8 @@
 #include "../lib/Exception.h"
 #include "../View/Model/ListItem.h"
 
+#include "Helper/DeviceInfo.h"
+
 #include "MainController.h"
 
 /**

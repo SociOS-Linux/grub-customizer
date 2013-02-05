@@ -58,6 +58,8 @@ src/Controller/ErrorControllerImpl.cpp -text
 src/Controller/ErrorControllerImpl.h -text
 src/Controller/GLib/ThreadController.cpp -text
 src/Controller/GLib/ThreadController.h -text
+src/Controller/Helper/DeviceInfo.cpp -text
+src/Controller/Helper/DeviceInfo.h -text
 src/Controller/InstallerController.h -text
 src/Controller/InstallerControllerImpl.cpp -text
 src/Controller/InstallerControllerImpl.h -text
