@@ -162,6 +162,9 @@ void TrashControllerImpl::updateSelectionAction(std::list<Entry*> const& selecte
 	try {
 		if (selectedEntries.size()) {
 			this->getAllControllers().mainController->selectRulesAction(std::list<Rule*>());
+			this->view->setRestoreButtonSensitivity(true);
+		} else {
+			this->view->setRestoreButtonSensitivity(false);
 		}
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);

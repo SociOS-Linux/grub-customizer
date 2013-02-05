@@ -19,7 +19,7 @@
 #include "Trash.h"
 
 View_Gtk_Trash::View_Gtk_Trash()
-	: deleteButton(NULL), micRestore(Gtk::Stock::ADD) {
+	: deleteButton(NULL), micRestore(Gtk::Stock::ADD), bttRestore(Gtk::Stock::UNDELETE) {
 	this->set_title(gettext("Add entry from trash"));
 	this->set_icon_name("grub-customizer");
 	this->set_default_size(650, 500);
@@ -27,10 +27,17 @@ View_Gtk_Trash::View_Gtk_Trash()
 	vbEntryAddDlg->pack_start(frmList);
 	frmList.set_label(gettext("Removed items"));
 	frmList.set_shadow_type(Gtk::SHADOW_NONE);
-	frmList.add(scrEntryBox);
+	frmList.add(vbList);
+	vbList.pack_start(scrEntryBox);
+	vbList.pack_start(bttRestore, Gtk::PACK_SHRINK);
 	scrEntryBox.add(list);
 	scrEntryBox.set_min_content_width(250);
 	
+	bttRestore.set_label(gettext("Restore"));
+	bttRestore.set_tooltip_text(gettext("Restore selected entries"));
+	bttRestore.set_border_width(5);
+	bttRestore.set_sensitive(false);
+
 	deleteButton = this->add_button(gettext("Delete custom entries"), Gtk::RESPONSE_REJECT);
 	deleteButton->set_no_show_all(true);
 	this->add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
@@ -42,6 +49,7 @@ View_Gtk_Trash::View_Gtk_Trash()
 	this->list.signal_button_press_event().connect_notify(sigc::mem_fun(this, &View_Gtk_Trash::signal_button_press));
 	this->list.signal_popup_menu().connect(sigc::mem_fun(this, &View_Gtk_Trash::signal_popup));
 	this->micRestore.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Trash::restore_button_click));
+	this->bttRestore.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Trash::restore_button_click));
 
 	list.set_tooltip_column(1);
 
@@ -137,6 +145,10 @@ void View_Gtk_Trash::setOptions(std::map<ViewOption, bool> const& viewOptions) {
 
 void View_Gtk_Trash::selectEntries(std::list<Entry*> const& entries) {
 	this->list.selectRules(entries);
+}
+
+void View_Gtk_Trash::setRestoreButtonSensitivity(bool sensitivity) {
+	this->bttRestore.set_sensitive(sensitivity);
 }
 
 void View_Gtk_Trash::signal_treeview_selection_changed() {

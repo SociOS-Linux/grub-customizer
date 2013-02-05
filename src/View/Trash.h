@@ -49,6 +49,8 @@ public:
 	virtual void setOptions(std::map<ViewOption, bool> const& viewOptions) = 0;
 
 	virtual void selectEntries(std::list<Entry*> const& entries) = 0;
+
+	virtual void setRestoreButtonSensitivity(bool sensitivity) = 0;
 };
 
 #endif

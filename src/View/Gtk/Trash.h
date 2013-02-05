@@ -32,6 +32,8 @@ class View_Gtk_Trash : public Gtk::Dialog, public View_Trash, public CommonClass
 	View_Gtk_Element_List<Entry, Script> list;
 	Gtk::Button* deleteButton;
 	Gtk::Frame frmList;
+	Gtk::VBox vbList;
+	Gtk::Button bttRestore;
 
 	TrashController* eventListener;
 	std::map<ViewOption, bool> options;
@@ -55,6 +57,7 @@ public:
 	Gtk::Widget& getList();
 	void setOptions(std::map<ViewOption, bool> const& viewOptions);
 	void selectEntries(std::list<Entry*> const& entries);
+	void setRestoreButtonSensitivity(bool sensitivity);
 private:
 	void signal_treeview_selection_changed();
 	void signal_button_press(GdkEventButton *event);
