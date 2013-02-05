@@ -42,7 +42,8 @@ View_Gtk_Main::View_Gtk_Main()
 	lock_state(~0), burgSwitcher(gettext("BURG found!"), false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO),
 	bttAdvancedSettings1(gettext("advanced settings")), bttAdvancedSettings2(gettext("advanced settings")),
 	bbxAdvancedSettings1(Gtk::BUTTONBOX_END), bbxAdvancedSettings2(Gtk::BUTTONBOX_END),
-	lblReloadRequired(gettext("The modifications you've done affects the visible entries. Please reload!"), Pango::ALIGN_LEFT)
+	lblReloadRequired(gettext("The modifications you've done affects the visible entries. Please reload!"), Pango::ALIGN_LEFT),
+	trashList(NULL)
 {
 	win.set_icon_name("grub-customizer");
 
@@ -366,6 +367,7 @@ bool View_Gtk_Main::isVisible(){
 void View_Gtk_Main::show(){
 	win.show_all();
 	miContext.show_all();
+	assert(trashList != NULL);
 	trashList->hide();
 }
 
