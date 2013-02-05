@@ -144,6 +144,7 @@ bool Model_SettingsStore::isActive(std::string const& name, bool checkValueToo){
 		if (name == iter->name)
 			return iter->isActive && (!checkValueToo || iter->value != "false");
 	}
+	return false;
 }
 bool Model_SettingsStore::setIsActive(std::string const& name, bool value){
 	for (std::list<Model_SettingsStore_Row>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
