@@ -123,6 +123,8 @@ int main(int argc, char** argv){
 		TrashControllerImpl trashController(env);
 		trashController.setEntryNameMapper(entryNameMapper);
 		trashController.setListCfg(listcfg);
+		trashController.setDeviceDataList(deviceDataList);
+		trashController.setContentParserFactory(contentParserFactory);
 		trashController.setView(trashView);
 
 		InstallerControllerImpl installController(env);
@@ -162,6 +164,7 @@ int main(int argc, char** argv){
 		entryEditController.setThreadController(threadC);
 
 		listCfgView.putSettingsDialog(settingsDlg.getCommonSettingsPane(), settingsDlg.getAppearanceSettingsPane());
+		listCfgView.putTrashList(trashView.getList());
 
 		//assign event listener
 		listCfgView.setEventListener(mainController);

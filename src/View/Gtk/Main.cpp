@@ -23,17 +23,17 @@ ImageMenuItemOwnKey::ImageMenuItemOwnKey(const Gtk::StockID& id, const Gtk::Acce
 }
 
 View_Gtk_Main::View_Gtk_Main()
-	: tbttAdd(Gtk::Stock::UNDELETE), tbttRemove(Gtk::Stock::DELETE), tbttUp(Gtk::Stock::GO_UP), tbttDown(Gtk::Stock::GO_DOWN),
+	: tbttRemove(Gtk::Stock::REMOVE), tbttUp(Gtk::Stock::GO_UP), tbttDown(Gtk::Stock::GO_DOWN),
 	tbttLeft(Gtk::Stock::GO_BACK), tbttRight(Gtk::Stock::GO_FORWARD),
 	tbttSave(Gtk::Stock::SAVE), tbttEditEntry(Gtk::Stock::EDIT),
 	miFile(gettext("_File"), true), miExit(Gtk::Stock::QUIT), tbttReload(Gtk::Stock::REFRESH),
 	tbttRevert(Gtk::Stock::REVERT_TO_SAVED), tbttCreateEntry(Gtk::Stock::NEW),
 	miEdit(gettext("_Edit"), true), miView(gettext("_View"), true), miHelp(gettext("_Help"), true),
 	miInstallGrub(gettext("_Install to MBR …"), true),
-	miAdd(Gtk::Stock::UNDELETE, Gtk::AccelKey('+', Gdk::CONTROL_MASK)), miRemove(Gtk::Stock::DELETE, Gtk::AccelKey('-', Gdk::CONTROL_MASK)), miUp(Gtk::Stock::GO_UP, Gtk::AccelKey('u', Gdk::CONTROL_MASK)), miDown(Gtk::Stock::GO_DOWN, Gtk::AccelKey('d', Gdk::CONTROL_MASK)),
+	miRemove(Gtk::Stock::REMOVE, Gtk::AccelKey('-', Gdk::CONTROL_MASK)), miUp(Gtk::Stock::GO_UP, Gtk::AccelKey('u', Gdk::CONTROL_MASK)), miDown(Gtk::Stock::GO_DOWN, Gtk::AccelKey('d', Gdk::CONTROL_MASK)),
 	miLeft(Gtk::Stock::GO_BACK, Gtk::AccelKey('l', Gdk::CONTROL_MASK)), miRight(Gtk::Stock::GO_FORWARD, Gtk::AccelKey('r', Gdk::CONTROL_MASK)),
 	miEditEntry(Gtk::Stock::EDIT, Gtk::AccelKey('e', Gdk::CONTROL_MASK)),
-	miCRemove(Gtk::Stock::DELETE), miCUp(Gtk::Stock::GO_UP), miCDown(Gtk::Stock::GO_DOWN),
+	miCRemove(Gtk::Stock::REMOVE), miCUp(Gtk::Stock::GO_UP), miCDown(Gtk::Stock::GO_DOWN),
 	miCLeft(Gtk::Stock::GO_BACK), miCRight(Gtk::Stock::GO_FORWARD), miCRename(Gtk::Stock::EDIT), miCEditEntry(Gtk::Stock::EDIT),
 	miReload(Gtk::Stock::REFRESH, Gtk::AccelKey("F5")), miSave(Gtk::Stock::SAVE),
 	miAbout(Gtk::Stock::ABOUT), miModifyEnvironment(Gtk::Stock::OPEN), miRevert(Gtk::Stock::REVERT_TO_SAVED),
@@ -42,7 +42,8 @@ View_Gtk_Main::View_Gtk_Main()
 	lock_state(~0), burgSwitcher(gettext("BURG found!"), false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO),
 	bttAdvancedSettings1(gettext("advanced settings")), bttAdvancedSettings2(gettext("advanced settings")),
 	bbxAdvancedSettings1(Gtk::BUTTONBOX_END), bbxAdvancedSettings2(Gtk::BUTTONBOX_END),
-	lblReloadRequired(gettext("The modifications you've done affects the visible entries. Please reload!"), Pango::ALIGN_LEFT)
+	lblReloadRequired(gettext("The modifications you've done affects the visible entries. Please reload!"), Pango::ALIGN_LEFT),
+	trashList(NULL)
 {
 	win.set_icon_name("grub-customizer");
 
@@ -54,7 +55,9 @@ View_Gtk_Main::View_Gtk_Main()
 	vbMainSplit.pack_start(notebook);
 	vbMainSplit.pack_start(statusbar, Gtk::PACK_SHRINK);
 
-	notebook.append_page(vbEntryList, gettext("_List configuration"), true);
+	notebook.append_page(hpLists, gettext("_List configuration"), true);
+	hpLists.pack1(vbEntryList, Gtk::FILL | Gtk::EXPAND);
+
 	vbEntryList.pack_start(infoReloadRequired, Gtk::PACK_SHRINK);
 	vbEntryList.pack_start(scrEntryList);
 	scrEntryList.add(tvConfList);
@@ -83,10 +86,6 @@ View_Gtk_Main::View_Gtk_Main()
 	toolbar.append(tbttRemove);
 	tbttRemove.set_tooltip_text(gettext("Remove selected entries (you can restore them from trash)"));
 	tbttRemove.set_is_important(true);
-	toolbar.append(tbttAdd);
-	tbttAdd.set_tooltip_text(gettext("restore entries from trash"));
-	tbttAdd.set_is_important(true);
-	tbttAdd.set_label(gettext("Trash"));
 	
 	toolbar.append(tbttEditEntry);
 	toolbar.append(tbttCreateEntry);
@@ -134,7 +133,6 @@ View_Gtk_Main::View_Gtk_Main()
 	menu.append(miEdit);
 	menu.append(miView);
 	menu.append(miHelp);
-	menu.append(miContext);
 	
 	miFile.set_submenu(subFile);
 	miEdit.set_submenu(subEdit);
@@ -147,7 +145,6 @@ View_Gtk_Main::View_Gtk_Main()
 	subFile.attach(miInstallGrub, 0,1,2,3);
 	subFile.attach(miExit, 0,1,3,4);
 	
-	subEdit.attach(miAdd, 0,1,0,1);
 	subEdit.attach(miRemove, 0,1,1,2);
 	subEdit.attach(miUp, 0,1,2,3);
 	subEdit.attach(miDown, 0,1,3,4);
@@ -166,7 +163,6 @@ View_Gtk_Main::View_Gtk_Main()
 	contextMenu.attach(miCLeft, 0,1,5,6);
 	contextMenu.attach(miCRight, 0,1,6,7);
 
-	miAdd.set_label(gettext("Restore entry"));
 	miCRename.set_label(gettext("Rename"));
 	miUp.set_label(gettext("Move up"));
 	miCUp.set_label(gettext("Move up"));
@@ -211,7 +207,6 @@ View_Gtk_Main::View_Gtk_Main()
 	tvConfList.signal_popup_menu().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_popup));
 	tvConfList.signal_key_press_event().connect_notify(sigc::mem_fun(this, &View_Gtk_Main::signal_key_press));
 	tbttSave.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Main::saveConfig));
-	tbttAdd.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_add_click));
 	tbttRemove.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_remove_click));
 	tbttLeft.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_move_left_click));
 	tbttRight.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_move_right_click));
@@ -231,7 +226,6 @@ View_Gtk_Main::View_Gtk_Main()
 	miRight.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_move_right_click));
 	miCRight.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_move_right_click));
 	miSave.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::saveConfig));
-	miAdd.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_add_click));
 	miEditEntry.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_entry_edit_click));
 	miCEditEntry.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_entry_edit_click));
 	miCreateEntry.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_entry_create_click));
@@ -274,6 +268,11 @@ void View_Gtk_Main::putSettingsDialog(Gtk::VBox& commonSettingsPane, Gtk::VBox& 
 	notebook.append_page(appearanceSettingsPane, gettext("_Appearance settings"), true);
 	appearanceSettingsPane.pack_end(bbxAdvancedSettings2, false, false);
 	bbxAdvancedSettings2.pack_end(bttAdvancedSettings2);
+}
+
+void View_Gtk_Main::putTrashList(Gtk::Widget& trashList) {
+	hpLists.pack2(trashList, Gtk::FILL);
+	this->trashList = &trashList;
 }
 
 void View_Gtk_Main::signal_edit_name(Gtk::CellEditable* editable, const Glib::ustring& path) {
@@ -367,6 +366,9 @@ bool View_Gtk_Main::isVisible(){
 
 void View_Gtk_Main::show(){
 	win.show_all();
+	miContext.show_all();
+	assert(trashList != NULL);
+	trashList->hide();
 }
 
 void View_Gtk_Main::hide() {
@@ -406,82 +408,8 @@ void View_Gtk_Main::setStatusText(std::string const& name, int pos, int max){
 	}
 }
 
-void View_Gtk_Main::appendEntry(std::string const& name, Rule* entryPtr, Proxy* scriptPtr, bool is_placeholder, bool is_submenu, std::string const& scriptName, std::string const& defaultName, bool isEditable, bool isModified, std::map<std::string, std::string> const& options, bool isVisible, Rule* parentEntry, Proxy* parentScript){
-	if (!isVisible && !this->options[VIEW_SHOW_HIDDEN_ENTRIES]) {
-		return;
-	}
-	if (entryPtr == NULL && !this->options[VIEW_GROUP_BY_SCRIPT]) {
-		return;
-	}
-	if (is_placeholder && !this->options[VIEW_SHOW_PLACEHOLDERS]) {
-		return;
-	}
-	Gtk::TreeIter entryRow;
-	if (parentEntry) {
-		entryRow = tvConfList.refTreeStore->append(this->getIterByRulePtr(parentEntry)->children());
-	} else if (parentScript && this->options[VIEW_GROUP_BY_SCRIPT]) {
-		entryRow = tvConfList.refTreeStore->append(this->getIterByScriptPtr(parentScript)->children());
-	} else {
-		entryRow = tvConfList.refTreeStore->append();
-	}
-
-	Glib::RefPtr<Gdk::Pixbuf> icon;
-	std::string outputName = escapeXml(name);
-	if (!is_placeholder) {
-		outputName = "<b>" + outputName + "</b>";
-	}
-	if (this->options[VIEW_SHOW_DETAILS]) {
-		outputName += "\n<small>";
-		if (scriptPtr != NULL) {
-			outputName += gettext("script");
-		} else if (is_submenu) {
-			outputName += gettext("submenu");
-		} else if (is_placeholder) {
-			outputName += gettext("placeholder");
-		} else {
-			outputName += gettext("menuentry");
-		}
-		if (scriptName != "") {
-			outputName += std::string(" / ") + gettext("script: ") + escapeXml(scriptName);
-		}
-
-		if (defaultName != "" && name != defaultName) {
-			outputName += std::string(" / ") + gettext("default name: ") + escapeXml(defaultName);
-		}
-
-		if (options.find("_deviceName") != options.end()) {
-			outputName += escapeXml(Glib::ustring(" / ") + gettext("Partition: ") + options.at("_deviceName"));
-		}
-
-		outputName += "</small>";
-	}
-
-	if (scriptPtr != NULL) {
-		icon = this->win.render_icon_pixbuf(Gtk::Stock::FILE, this->options[VIEW_SHOW_DETAILS] ? Gtk::ICON_SIZE_LARGE_TOOLBAR : Gtk::ICON_SIZE_MENU);
-	} else if (is_submenu) {
-		icon = this->win.render_icon_pixbuf(Gtk::Stock::DIRECTORY, this->options[VIEW_SHOW_DETAILS] ? Gtk::ICON_SIZE_LARGE_TOOLBAR : Gtk::ICON_SIZE_MENU);
-	} else if (is_placeholder) {
-		icon = this->win.render_icon_pixbuf(Gtk::Stock::FIND, this->options[VIEW_SHOW_DETAILS] ? Gtk::ICON_SIZE_LARGE_TOOLBAR : Gtk::ICON_SIZE_MENU);
-	} else {
-		icon = this->win.render_icon_pixbuf(Gtk::Stock::EXECUTE, this->options[VIEW_SHOW_DETAILS] ? Gtk::ICON_SIZE_LARGE_TOOLBAR : Gtk::ICON_SIZE_MENU);
-	}
-
-	if (isModified) {
-		outputName = "<i>" + outputName + "</i>";
-	}
-
-	(*entryRow)[tvConfList.treeModel.name] = name;
-	(*entryRow)[tvConfList.treeModel.text] = outputName;
-	(*entryRow)[tvConfList.treeModel.is_activated] = isVisible;
-	(*entryRow)[tvConfList.treeModel.relatedRule] = (Rule*)entryPtr;
-	(*entryRow)[tvConfList.treeModel.relatedScript] = (Proxy*)scriptPtr;
-	(*entryRow)[tvConfList.treeModel.is_renamable] = false;
-	(*entryRow)[tvConfList.treeModel.is_renamable_real] = !is_placeholder && scriptPtr == NULL;
-	(*entryRow)[tvConfList.treeModel.is_editable] = isEditable;
-	(*entryRow)[tvConfList.treeModel.is_sensitive] = scriptPtr == NULL;
-	(*entryRow)[tvConfList.treeModel.is_toplevel] = parentEntry == NULL;
-	(*entryRow)[tvConfList.treeModel.icon] = icon;
-
+void View_Gtk_Main::appendEntry(View_Model_ListItem<Rule, Proxy> const& listItem){
+	this->tvConfList.addListItem(listItem, this->options, this->win);
 
 	tvConfList.expand_all();
 }
@@ -545,8 +473,6 @@ void View_Gtk_Main::setLockState(int state){
 	miEditEntry.set_sensitive((state & 1) == 0);
 	miCEditEntry.set_sensitive((state & 1) == 0);
 
-	tbttAdd.set_sensitive((state & 1) == 0);
-	miAdd.set_sensitive((state & 1) == 0);
 	tbttRemove.set_sensitive((state & 1) == 0);
 	miRemove.set_sensitive((state & 1) == 0);
 	miCRemove.set_sensitive((state & 1) == 0);
@@ -564,7 +490,9 @@ void View_Gtk_Main::setLockState(int state){
 	bttAdvancedSettings1.set_sensitive((state & 8) == 0);
 
 	tvConfList.set_sensitive((state & 1) == 0);
-	
+	if (this->trashList) {
+		this->trashList->set_sensitive((state & 1) == 0);
+	}
 
 	miCreateEntry.set_sensitive((state & 1) == 0);
 	tbttCreateEntry.set_sensitive((state & 1) == 0);
@@ -644,14 +572,7 @@ bool View_Gtk_Main::selectedEntriesAreSubsequent() {
 }
 
 std::list<Rule*> View_Gtk_Main::getSelectedRules() {
-	std::list<Rule*> rules;
-	std::vector<Gtk::TreeModel::Path> pathes = tvConfList.get_selection()->get_selected_rows();
-	for (std::vector<Gtk::TreeModel::Path>::iterator iter = pathes.begin(); iter != pathes.end(); iter++) {
-		Rule* rptr = (*tvConfList.refTreeStore->get_iter(*iter))[tvConfList.treeModel.relatedRule];
-		rules.push_back(rptr);
-	}
-
-	return rules;
+	return this->tvConfList.getSelectedRules();
 }
 
 
@@ -667,30 +588,6 @@ void View_Gtk_Main::_rDisableRules(Gtk::TreeNodeChildren const& list) {
 
 void View_Gtk_Main::signal_reload_click(){
 	eventListener->reloadAction();
-}
-
-Gtk::TreeModel::iterator View_Gtk_Main::getIterByRulePtr(Rule* rulePtr, const Gtk::TreeRow* parentRow) const {
-	const Gtk::TreeNodeChildren children = parentRow ? parentRow->children() : tvConfList.refTreeStore->children();
-	for (Gtk::TreeModel::const_iterator iter = children.begin(); iter != children.end(); iter++) {
-		if ((*iter)[tvConfList.treeModel.relatedRule] == rulePtr)
-			return iter;
-		try {
-			return this->getIterByRulePtr(rulePtr, &**iter); //recursively search for the treeview item
-		} catch (ItemNotFoundException const& e) {
-			//(ignore ItemNotFoundException exception)
-		}
-	}
-	throw ItemNotFoundException("rule not found", __FILE__, __LINE__);
-}
-
-Gtk::TreeModel::iterator View_Gtk_Main::getIterByScriptPtr(Proxy* scriptPtr) const {
-	const Gtk::TreeNodeChildren children = tvConfList.refTreeStore->children();
-	for (Gtk::TreeModel::const_iterator iter = children.begin(); iter != children.end(); iter++) {
-		if ((*iter)[tvConfList.treeModel.relatedScript] == scriptPtr) {
-			return iter;
-		}
-	}
-	throw ItemNotFoundException("script not found", __FILE__, __LINE__);
 }
 
 void View_Gtk_Main::signal_checkbox_toggled(Glib::ustring const& path) {
@@ -715,37 +612,23 @@ void View_Gtk_Main::signal_show_envEditor(){
 
 
 
-std::string View_Gtk_Main::getRuleName(Rule* rule){
-	Gtk::TreeModel::iterator iter = this->getIterByRulePtr(rule);
-	return (Glib::ustring)(*iter)[tvConfList.treeModel.text];
-}
 void View_Gtk_Main::setRuleName(Rule* rule, std::string const& newName){
-	Gtk::TreeModel::iterator iter = this->getIterByRulePtr(rule);
 	this->setLockState(~0);
-	(*iter)[tvConfList.treeModel.name] = newName;
+	this->tvConfList.setRuleName(rule, newName);
 	this->setLockState(0);
 }
 
 
 void View_Gtk_Main::selectRule(Rule* rule, bool startEdit) {
-	try {
-		this->tvConfList.get_selection()->select(this->getIterByRulePtr(rule));
-		if (startEdit) {
-			this->tvConfList.set_cursor(this->tvConfList.refTreeStore->get_path(this->getIterByRulePtr(rule)), *this->tvConfList.get_column(0), true);
-		}
-	} catch (ItemNotFoundException const& e) {
-		// do nothing
-	}
+	this->tvConfList.selectRule(rule, startEdit);
 }
 
 void View_Gtk_Main::selectRules(std::list<Rule*> rules) {
-	for (std::list<Rule*>::iterator iter = rules.begin(); iter != rules.end(); iter++) {
-		this->tvConfList.get_selection()->select(this->getIterByRulePtr(*iter));
-	}
+	this->tvConfList.selectRules(rules);
 }
 
-void View_Gtk_Main::setTrashCounter(int count) {
-	this->tbttAdd.set_label(Glib::ustring::compose(gettext("Trash (%1)"), count));
+void View_Gtk_Main::setTrashPaneVisibility(bool value) {
+	this->trashList->set_visible(value);
 }
 
 void View_Gtk_Main::showReloadRecommendation() {
@@ -803,7 +686,7 @@ void View_Gtk_Main::setOptions(std::map<ViewOption, bool> const& options) {
 }
 
 void View_Gtk_Main::setEntryVisibility(Rule* entry, bool value) {
-	(*this->getIterByRulePtr(entry))[tvConfList.treeModel.is_activated] = value;
+	this->tvConfList.setEntryVisibility(entry, value);
 }
 
 void View_Gtk_Main::signal_move_click(int direction){
@@ -849,6 +732,8 @@ void View_Gtk_Main::signal_treeview_selection_changed(){
 			}
 		}
 
+		this->eventListener->updateSelectionAction(this->getSelectedRules());
+
 		this->updateButtonsState();
 	}
 }
@@ -861,10 +746,6 @@ void View_Gtk_Main::signal_entry_edit_click() {
 
 void View_Gtk_Main::signal_entry_create_click() {
 	eventListener->showEntryCreatorAction();
-}
-
-void View_Gtk_Main::signal_add_click(){
-	eventListener->showTrashAction();
 }
 
 void View_Gtk_Main::signal_remove_click() {
@@ -1032,38 +913,3 @@ void View_Gtk_Main::signal_burg_switcher_response(int response_id){
 		eventListener->initModeAction(response_id == Gtk::RESPONSE_YES);
 }
 
-View_Gtk_Main_List::View_Gtk_Main_List(){
-	refTreeStore = Gtk::TreeStore::create(treeModel);
-	this->set_model(refTreeStore);
-
-	this->append_column(this->mainColumn);
-	this->mainColumn.pack_start(pixbufRenderer, false);
-	this->mainColumn.add_attribute(pixbufRenderer.property_pixbuf(), treeModel.icon);
-	this->mainColumn.pack_start(toggleRenderer, false);
-	this->mainColumn.add_attribute(toggleRenderer.property_sensitive(), treeModel.is_sensitive);
-	toggleRenderer.set_visible(false);
-	this->mainColumn.add_attribute(toggleRenderer.property_active(), treeModel.is_activated);
-	this->mainColumn.pack_start(this->textRenderer, true);
-	this->mainColumn.add_attribute(this->textRenderer.property_markup(), treeModel.text);
-	this->mainColumn.add_attribute(this->textRenderer.property_editable(), treeModel.is_renamable);
-	this->mainColumn.set_spacing(10);
-
-	this->set_headers_visible(false);
-	this->get_selection()->set_mode(Gtk::SELECTION_MULTIPLE);
-	this->set_rubber_banding(true);
-}
-
-View_Gtk_Main_List::TreeModel::TreeModel(){
-	this->add(name);
-	this->add(text);
-	this->add(relatedRule);
-	this->add(relatedScript);
-	this->add(is_other_entries_marker);
-	this->add(is_renamable);
-	this->add(is_renamable_real);
-	this->add(is_editable);
-	this->add(is_activated);
-	this->add(is_sensitive);
-	this->add(is_toplevel);
-	this->add(icon);
-}

@@ -97,6 +97,7 @@ add_executable(grub-customizer
 	src/lib/assert.cpp
 	src/lib/ArrayStructure.cpp
 	src/lib/trim.cpp
+	src/Controller/Helper/DeviceInfo.cpp
 )
 
 

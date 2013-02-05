@@ -58,6 +58,8 @@ src/Controller/ErrorControllerImpl.cpp -text
 src/Controller/ErrorControllerImpl.h -text
 src/Controller/GLib/ThreadController.cpp -text
 src/Controller/GLib/ThreadController.h -text
+src/Controller/Helper/DeviceInfo.cpp -text
+src/Controller/Helper/DeviceInfo.h -text
 src/Controller/InstallerController.h -text
 src/Controller/InstallerControllerImpl.cpp -text
 src/Controller/InstallerControllerImpl.h -text
@@ -122,6 +124,7 @@ src/View/EnvEditor.h -text
 src/View/Error.h -text
 src/View/Gtk/About.cpp -text
 src/View/Gtk/About.h -text
+src/View/Gtk/Element/List.h -text
 src/View/Gtk/Element/PartitionChooser.cpp -text
 src/View/Gtk/Element/PartitionChooser.h -text
 src/View/Gtk/EntryEditor.cpp -text
@@ -140,6 +143,7 @@ src/View/Gtk/Trash.cpp -text
 src/View/Gtk/Trash.h -text
 src/View/Installer.h -text
 src/View/Main.h -text
+src/View/Model/ListItem.h -text
 src/View/Settings.h -text
 src/View/Trash.h -text
 src/lib/ArrayStructure.cpp -text

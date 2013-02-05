@@ -93,7 +93,13 @@ void MainControllerImpl::updateList() {
 	for (std::list<Model_Proxy>::iterator iter = this->grublistCfg->proxies.begin(); iter != this->grublistCfg->proxies.end(); iter++){
 		std::string name = iter->getScriptName();
 		if ((name != "header" && name != "debian_theme" && name != "grub-customizer_menu_color_helper") || iter->isModified()) {
-			this->view->appendEntry(name, NULL, &*iter, false, true, "", name, false, false, std::map<std::string, std::string>(), true, NULL);
+			View_Model_ListItem<Rule, Proxy> listItem;
+			listItem.name = name;
+			listItem.scriptPtr = &*iter;
+			listItem.is_submenu = true;
+			listItem.defaultName = name;
+			listItem.isVisible = true;
+			this->view->appendEntry(listItem);
 			for (std::list<Model_Rule>::iterator ruleIter = iter->rules.begin(); ruleIter != iter->rules.end(); ruleIter++){
 				this->_rAppendRule(*ruleIter);
 			}
@@ -404,25 +410,25 @@ void MainControllerImpl::_rAppendRule(Model_Rule& rule, Model_Rule* parentRule){
 		// parse content to show additional informations
 		std::map<std::string, std::string> options;
 		if (rule.dataSource) {
-			try {
-				options = this->contentParserFactory->create(rule.dataSource->content)->getOptions();
-				if (options.find("partition_uuid") != options.end()) {
-					// add device path
-					for (Model_DeviceDataListInterface::const_iterator iter = deviceDataList->begin(); iter != deviceDataList->end(); iter++) {
-						if (iter->second.find("UUID") != iter->second.end() && iter->second.at("UUID") == options["partition_uuid"]) {
-							options["_deviceName"] = iter->first;
-							break;
-						}
-					}
-				}
-			} catch (ParserNotFoundException const& e) {
-				// nothing to do
-			}
+			options = Controller_Helper_DeviceInfo::fetch(rule.dataSource->content, *this->contentParserFactory, *deviceDataList);
 		}
 
 		Model_Proxy* proxy = this->grublistCfg->proxies.getProxyByRule(&rule);
 
-		this->view->appendEntry(name, &rule, NULL, is_other_entries_ph || is_plaintext, isSubmenu, scriptName, defaultName, isEditable, isModified, options, rule.isVisible, parentRule, proxy);
+		View_Model_ListItem<Rule, Proxy> listItem;
+		listItem.name = name;
+		listItem.entryPtr = &rule;
+		listItem.is_placeholder = is_other_entries_ph || is_plaintext;
+		listItem.is_submenu = isSubmenu;
+		listItem.scriptName = scriptName;
+		listItem.defaultName = defaultName;
+		listItem.isEditable = isEditable;
+		listItem.isModified = isModified;
+		listItem.options = options;
+		listItem.isVisible = rule.isVisible;
+		listItem.parentEntry = parentRule;
+		listItem.parentScript = proxy;
+		this->view->appendEntry(listItem);
 
 		for (std::list<Model_Rule>::iterator subruleIter = rule.subRules.begin(); subruleIter != rule.subRules.end(); subruleIter++) {
 			this->_rAppendRule(*subruleIter, &rule);
@@ -592,10 +598,12 @@ void MainControllerImpl::removeRulesAction(std::list<Rule*> rules, bool force){
 		} else if (!force && this->_listHasPlaintextRules(rules)) {
 			this->view->showPlaintextRemoveWarning();
 		} else {
+			std::list<Entry*> entriesOfRemovedRules;
 			std::map<Model_Proxy*, Nothing> emptyProxies;
 			for (std::list<Rule*>::iterator iter = rules.begin(); iter != rules.end(); iter++) {
 				Model_Rule* rule = &Model_Rule::fromPtr(*iter);
 				rule->setVisibility(false);
+				entriesOfRemovedRules.push_back(rule->dataSource);
 				if (!this->grublistCfg->proxies.getProxyByRule(rule)->hasVisibleRules()) {
 					emptyProxies[this->grublistCfg->proxies.getProxyByRule(rule)] = Nothing();
 				}
@@ -607,6 +615,7 @@ void MainControllerImpl::removeRulesAction(std::list<Rule*> rules, bool force){
 			}
 
 			this->syncLoadStateAction();
+			this->getAllControllers().trashController->selectEntriesAction(entriesOfRemovedRules);
 			this->env.modificationsUnsaved = true;
 			this->getAllControllers().settingsController->updateSettingsDataAction();
 		}
@@ -867,8 +876,13 @@ void MainControllerImpl::syncLoadStateAction() {
 
 		if (progress == 1){
 			this->getAllControllers().settingsController->updateSettingsDataAction();
+			this->getAllControllers().trashController->updateAction(this->view->getOptions());
 
-			this->view->setTrashCounter(this->grublistCfg->getRemovedEntries().size());
+			bool placeholdersVisible = this->view->getOptions().at(VIEW_SHOW_PLACEHOLDERS);
+			bool hiddenEntriesVisible = this->view->getOptions().at(VIEW_SHOW_HIDDEN_ENTRIES);
+			this->view->setTrashPaneVisibility(
+				this->grublistCfg->getRemovedEntries(NULL, !placeholdersVisible).size() >= 1 && !hiddenEntriesVisible
+			);
 			this->view->setLockState(0);
 		}
 		this->log("MainControllerImpl::syncListView_load completed", Logger::INFO);
@@ -901,16 +915,6 @@ void MainControllerImpl::showEnvEditorAction(bool resetPartitionChooser) {
 		this->view->hide();
 
 		this->getAllControllers().envEditController->showAction();
-	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
-	}
-	this->logActionEnd();
-}
-
-void MainControllerImpl::showTrashAction() {
-	this->logActionBegin("show-trash");
-	try {
-		this->getAllControllers().trashController->showAction();
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
@@ -1022,7 +1026,19 @@ void MainControllerImpl::entryStateToggledAction(Rule* entry, bool state) {
 	this->logActionBegin("entry-state-toggled");
 	try {
 		Model_Rule::fromPtr(entry).setVisibility(state);
-		this->view->setEntryVisibility(entry, state);
+		this->syncLoadStateAction();
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
+	this->logActionEnd();
+}
+
+void MainControllerImpl::updateSelectionAction(std::list<Rule*> selectedRules) {
+	this->logActionBegin("update-selection");
+	try {
+		if (selectedRules.size()) {
+			this->getAllControllers().trashController->selectEntriesAction(std::list<Entry*>());
+		}
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}

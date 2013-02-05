@@ -41,6 +41,9 @@
 #include "../Mapper/EntryName.h"
 
 #include "../lib/Exception.h"
+#include "../View/Model/ListItem.h"
+
+#include "Helper/DeviceInfo.h"
 
 #include "MainController.h"
 
@@ -139,7 +142,6 @@ public:
 	void syncLoadStateAction();
 
 	void showSettingsAction();
-	void showTrashAction();
 	void initModeAction(bool burgChosen);
 	void addEntriesAction(std::list<Entry*> entries);
 	void activateSettingsAction();
@@ -149,6 +151,7 @@ public:
 	void refreshTabAction(unsigned int pos);
 	void setViewOptionAction(ViewOption option, bool value);
 	void entryStateToggledAction(Rule* entry, bool state);
+	void updateSelectionAction(std::list<Rule*> selectedRules);
 };
 
 #endif

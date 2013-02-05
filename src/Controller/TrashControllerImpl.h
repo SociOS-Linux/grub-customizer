@@ -39,6 +39,9 @@
 #include "../Controller/ControllerAbstract.h"
 
 #include "TrashController.h"
+#include "../Model/DeviceDataListInterface.h"
+#include "../lib/ContentParserFactory.h"
+#include "Helper/DeviceInfo.h"
 
 
 class TrashControllerImpl : public ControllerAbstract, public TrashController {
@@ -46,25 +49,31 @@ class TrashControllerImpl : public ControllerAbstract, public TrashController {
 	Model_ListCfg* grublistCfg;
 	View_Trash* view;
 	Mapper_EntryName* entryNameMapper;
+	Model_DeviceDataListInterface* deviceDataList;
+	ContentParserFactory* contentParserFactory;
 
 	void _refreshView();
-	std::list<Model_Entry*> _getDeletableEntries();
+	bool _isDeletable(std::list<Entry*> const& selectedEntries);
 public:
 	void setListCfg(Model_ListCfg& grublistCfg);
 	void setView(View_Trash& scriptAddDlg);
 	void setEntryNameMapper(Mapper_EntryName& mapper);
+	void setDeviceDataList(Model_DeviceDataListInterface& deviceDataList);
+	void setContentParserFactory(ContentParserFactory& contentParserFactory);
 
 	TrashControllerImpl(Model_Env& env);
 	
-	void showAction();
+	void updateAction(std::map<ViewOption, bool> const& viewOptions);
 	void applyAction();
 	
 	void showAboutDialog();
 
 	void hideAction();
 
-	void askForDeletionAction();
 	void deleteCustomEntriesAction();
+
+	void selectEntriesAction(std::list<Entry*> const& entries);
+	void updateSelectionAction(std::list<Entry*> const& selectedEntries);
 };
 
 #endif

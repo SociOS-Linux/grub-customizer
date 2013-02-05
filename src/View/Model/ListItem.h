@@ -16,21 +16,39 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef TRASHCONTROLLER_H_
-#define TRASHCONTROLLER_H_
-#include "../lib/Type.h"
+#ifndef MODEL_VIEW_LISTITEM_H_INCLUDED
+#define MODEL_VIEW_LISTITEM_H_INCLUDED
+#include <string>
 #include <map>
 
-class TrashController {
-public:
-	virtual inline ~TrashController(){}
-	virtual void applyAction() = 0;
-	virtual void updateAction(std::map<ViewOption, bool> const& viewOptions) = 0;
-	virtual void hideAction() = 0;
-	virtual void deleteCustomEntriesAction() = 0;
-	virtual void selectEntriesAction(std::list<Entry*> const& entries) = 0;
-	virtual void updateSelectionAction(std::list<Entry*> const& selectedEntries) = 0;
+template <typename TItem, typename TWrapper>
+struct View_Model_ListItem {
+	std::string name;
+	TItem* entryPtr;
+	TWrapper* scriptPtr;
+	bool is_placeholder;
+	bool is_submenu;
+	std::string scriptName;
+	std::string defaultName;
+	bool isEditable;
+	bool isModified;
+	std::map<std::string, std::string> options;
+	bool isVisible;
+	TItem* parentEntry;
+	TWrapper* parentScript;
+
+	View_Model_ListItem() :
+		entryPtr(NULL),
+		scriptPtr(NULL),
+		parentEntry(NULL),
+		parentScript(NULL),
+		is_placeholder(false),
+		is_submenu(false),
+		isEditable(false),
+		isModified(false),
+		isVisible(false)
+	{}
 };
 
 
-#endif /* TRASHCONTROLLER_H_ */
+#endif /* MODEL_VIEW_LISTITEM_H_INCLUDED */

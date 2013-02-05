@@ -28,32 +28,7 @@
 #include "../../lib/assert.h"
 #include "../../Controller/MainController.h"
 #include "../../lib/Type.h"
-
-class View_Gtk_Main_List : public Gtk::TreeView {
-public:
-	struct TreeModel : public Gtk::TreeModelColumnRecord {
-		Gtk::TreeModelColumn<Glib::ustring> name;
-		Gtk::TreeModelColumn<Glib::ustring> text;
-		Gtk::TreeModelColumn<Rule*> relatedRule;
-		Gtk::TreeModelColumn<Proxy*> relatedScript;
-		Gtk::TreeModelColumn<bool> is_other_entries_marker;
-		Gtk::TreeModelColumn<bool> is_renamable;
-		Gtk::TreeModelColumn<bool> is_renamable_real;
-		Gtk::TreeModelColumn<bool> is_editable;
-		Gtk::TreeModelColumn<bool> is_sensitive;
-		Gtk::TreeModelColumn<bool> is_activated;
-		Gtk::TreeModelColumn<bool> is_toplevel;
-		Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > icon;
-		TreeModel();
-	};
-	TreeModel treeModel;
-	Glib::RefPtr<Gtk::TreeStore> refTreeStore;
-	Gtk::CellRendererPixbuf pixbufRenderer;
-	Gtk::CellRendererToggle toggleRenderer;
-	Gtk::CellRendererText textRenderer;
-	Gtk::TreeViewColumn mainColumn;
-	View_Gtk_Main_List();
-};
+#include "Element/List.h"
 
 class ImageMenuItemOwnKey : public Gtk::ImageMenuItem {
 	public:
@@ -74,10 +49,12 @@ class View_Gtk_Main : public View_Main, public CommonClass {
 	Gtk::VBox vbEntryList;
 	Gtk::Statusbar statusbar;
 	
-	View_Gtk_Main_List tvConfList;
+	View_Gtk_Element_List<Rule, Proxy> tvConfList;
 	Gtk::ProgressBar progressBar;
+	Gtk::HPaned hpLists;
+	Gtk::Widget* trashList;
 
-	Gtk::ToolButton tbttAdd, tbttRemove, tbttUp, tbttDown, tbttSave, tbttReload, tbttLeft, tbttRight, tbttEditEntry, tbttRevert, tbttCreateEntry;
+	Gtk::ToolButton tbttRemove, tbttUp, tbttDown, tbttSave, tbttReload, tbttLeft, tbttRight, tbttEditEntry, tbttRevert, tbttCreateEntry;
 	Gtk::ToolItem ti_sep1;
 	Gtk::VSeparator vs_sep1;
 	Gtk::ToolItem ti_sep2;
@@ -90,7 +67,7 @@ class View_Gtk_Main : public View_Main, public CommonClass {
 	
 	Gtk::MenuItem miFile, miEdit, miView, miHelp, miInstallGrub, miContext;
 	Gtk::ImageMenuItem miExit, miSave, miAbout, miModifyEnvironment, miRevert, miCreateEntry;
-	ImageMenuItemOwnKey miReload, miAdd, miRemove, miUp, miDown, miLeft, miRight, miEditEntry;
+	ImageMenuItemOwnKey miReload, miRemove, miUp, miDown, miLeft, miRight, miEditEntry;
 	Gtk::ImageMenuItem miCRemove, miCUp, miCDown, miCLeft, miCRight, miCRename, miCEditEntry;
 	Gtk::CheckMenuItem miShowDetails, miShowHiddenEntries, miGroupByScript, miShowPlaceholders;
 	Gtk::Menu subFile, subEdit, subView, subHelp, contextMenu;
@@ -107,8 +84,6 @@ class View_Gtk_Main : public View_Main, public CommonClass {
 	Gtk::HButtonBox bbxAdvancedSettings1, bbxAdvancedSettings2;
 
 
-	Gtk::TreeModel::iterator getIterByRulePtr(Rule* rulePtr, const Gtk::TreeRow* parentRow = NULL) const;
-	Gtk::TreeModel::iterator getIterByScriptPtr(Proxy* scriptPtr) const;
 	void update_move_buttons();
 	void update_remove_button();
 	void saveConfig();
@@ -122,6 +97,7 @@ public:
 	void setEventListener(MainController& eventListener);
 	void putSettingsDialog(Gtk::VBox& commonSettingsPane, Gtk::VBox& appearanceSettingsPane);
 	void putEnvEditor(Gtk::Widget& envEditor);
+	void putTrashList(Gtk::Widget& trashList);
 	void show();
 	void hide();
 	void run();
@@ -139,7 +115,7 @@ public:
 	void hideProgressBar();
 	void setStatusText(std::string const& new_status_text);
 	void setStatusText(std::string const& name, int pos, int max);
-	void appendEntry(std::string const& name, Rule* entryPtr, Proxy* scriptPtr, bool is_placeholder, bool is_submenu, std::string const& scriptName, std::string const& defaultName, bool isEditable, bool isModified, std::map<std::string, std::string> const& options, bool isVisible, Rule* parentEntry = NULL, Proxy* parentScript = NULL);
+	void appendEntry(View_Model_ListItem<Rule, Proxy> const& listItem);
 	void showProxyNotFoundMessage();
 	std::string createNewEntriesPlaceholderString(std::string const& parentMenu = "", std::string const& sourceScriptName = "");
 	std::string createPlaintextString(std::string const& scriptName) const;
@@ -150,14 +126,13 @@ public:
 	void clear();
 	bool confirmUnsavedSwitch();
 	
-	std::string getRuleName(Rule* rule);
 	void setRuleName(Rule* rule, std::string const& newName);
 
 	void selectRule(Rule* rule, bool startEdit = false);
 
 	void selectRules(std::list<Rule*> rules);
 
-	void setTrashCounter(int count);
+	void setTrashPaneVisibility(bool value);
 
 	void showReloadRecommendation();
 	void hideReloadRecommendation();
@@ -174,7 +149,6 @@ private:
 	void signal_checkbox_toggled(Glib::ustring const& path);
 	void signal_edit_name_finished(const Glib::ustring& path, const Glib::ustring& new_text);
 	void signal_move_click(int direction); //direction: -1: one position up, 1: one p. down
-	void signal_add_click();
 	void signal_remove_click();
 	void signal_rename_click();
 	void signal_reload_click();

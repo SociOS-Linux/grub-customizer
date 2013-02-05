@@ -42,7 +42,6 @@ public:
 	virtual void showInstallerAction() = 0;
 	virtual void createSubmenuAction(std::list<Rule*> childItems) = 0;
 	virtual void removeSubmenuAction(std::list<Rule*> childItems) = 0;
-	virtual void showTrashAction() = 0;
 	virtual void showEntryEditorAction(Rule* rule) = 0;
 	virtual void showEntryCreatorAction() = 0;
 	virtual void showAboutAction() = 0;
@@ -64,6 +63,7 @@ public:
 	virtual void refreshTabAction(unsigned int pos) = 0;
 	virtual void setViewOptionAction(ViewOption option, bool value) = 0;
 	virtual void entryStateToggledAction(Rule* entry, bool state) = 0;
+	virtual void updateSelectionAction(std::list<Rule*> selectedRules) = 0;
 };
 
 

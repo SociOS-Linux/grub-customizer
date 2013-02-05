@@ -115,7 +115,7 @@ public:
 
 	void addColorHelper();
 
-	std::list<Model_Entry*> getRemovedEntries(Model_Entry* parent = NULL);
+	std::list<Model_Entry*> getRemovedEntries(Model_Entry* parent = NULL, bool ignorePlaceholders = false);
 	Model_Rule* addEntry(Model_Entry& entry);
 
 	void deleteEntry(Model_Entry const& entry);

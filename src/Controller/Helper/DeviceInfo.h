@@ -16,21 +16,16 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef TRASHCONTROLLER_H_
-#define TRASHCONTROLLER_H_
-#include "../lib/Type.h"
-#include <map>
+#ifndef DEVICEINFO_H_
+#define DEVICEINFO_H_
 
-class TrashController {
+#include "../../lib/ContentParserFactory.h"
+#include "../../Model/DeviceDataListInterface.h"
+
+class Controller_Helper_DeviceInfo {
 public:
-	virtual inline ~TrashController(){}
-	virtual void applyAction() = 0;
-	virtual void updateAction(std::map<ViewOption, bool> const& viewOptions) = 0;
-	virtual void hideAction() = 0;
-	virtual void deleteCustomEntriesAction() = 0;
-	virtual void selectEntriesAction(std::list<Entry*> const& entries) = 0;
-	virtual void updateSelectionAction(std::list<Entry*> const& selectedEntries) = 0;
+	static std::map<std::string, std::string> fetch(std::string const& menuEntryData, ContentParserFactory& contentParserFactory, Model_DeviceDataListInterface const& deviceDataList);
 };
 
 
-#endif /* TRASHCONTROLLER_H_ */
+#endif /* DEVICEINFO_H_ */

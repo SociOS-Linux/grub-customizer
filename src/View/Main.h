@@ -24,6 +24,7 @@
 #include <vector>
 #include <map>
 #include "../lib/Type.h"
+#include "Model/ListItem.h"
 
 /**
  * Interface for dialogs which lets the user control the grub list
@@ -62,7 +63,7 @@ public:
 	virtual void setStatusText(std::string const& new_status_text)=0;
 	virtual void setStatusText(std::string const& name, int pos, int max)=0;
 	//add entry to the end of the last script of the list
-	virtual void appendEntry(std::string const& name, Rule* entryPtr, Proxy* scriptPtr, bool is_placeholder, bool is_submenu, std::string const& scriptName, std::string const& defaultName, bool isEditable, bool isModified, std::map<std::string, std::string> const& options, bool isVisible, Rule* parentEntry = NULL, Proxy* parentScript = NULL)=0;
+	virtual void appendEntry(View_Model_ListItem<Rule, Proxy> const& listItem)=0;
 	//notifies the user about the problem that no grublistcfg_proxy has been found
 	virtual void showProxyNotFoundMessage()=0;
 	//creates a string for an other entry placeholder
@@ -83,8 +84,6 @@ public:
 	//asks the user whether the current config should be dropped while another action is started
 	virtual bool confirmUnsavedSwitch() = 0;
 
-	//reads the name of a rule item
-	virtual std::string getRuleName(Rule* rule)=0;
 	//assigns a new name to the rule item
 	virtual void setRuleName(Rule* rule, std::string const& newName)=0;
 
@@ -94,8 +93,8 @@ public:
 	// select multiple rules
 	virtual void selectRules(std::list<Rule*> rules)=0;
 
-	// set the number of removed rules
-	virtual void setTrashCounter(int count) = 0;
+	// set whether the trash pane should be visible
+	virtual void setTrashPaneVisibility(bool value) = 0;
 
 	// show the warning that config has changed to propose a reload
 	virtual void showReloadRecommendation() = 0;

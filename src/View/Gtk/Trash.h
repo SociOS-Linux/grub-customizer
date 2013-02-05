@@ -23,34 +23,48 @@
 #include "../Trash.h"
 #include <libintl.h>
 #include "../../lib/CommonClass.h"
+#include "../../lib/Type.h"
+#include "Element/List.h"
 
-class View_Gtk_Trash : public Gtk::Dialog, public View_Trash, public CommonClass {
-	Gtk::Dialog scriptAddDlg;
+class View_Gtk_Trash : public Gtk::Window, public View_Trash, public CommonClass {
 	Gtk::ScrolledWindow scrEntryBox;
-	Gtk::IconView iconBox;
-	Gtk::Button* deleteButton;
+	View_Gtk_Element_List<Entry, Script> list;
+	Gtk::Frame frmList;
+	Gtk::VBox vbList;
+	Gtk::HBox hbList;
+	Gtk::Button bttRestore;
+	Gtk::Button bttDelete;
 
 	TrashController* eventListener;
+	std::map<ViewOption, bool> options;
+
+	Gtk::MenuItem miContext;
+	Gtk::Menu contextMenu;
+	Gtk::ImageMenuItem micRestore;
+	Gtk::ImageMenuItem micDelete;
 public:
-	struct IconModel : public Gtk::TreeModelColumnRecord {
-		Gtk::TreeModelColumn<Glib::ustring> name;
-		Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > icon;
-		Gtk::TreeModelColumn<Glib::ustring> description;
-		Gtk::TreeModelColumn<Entry*> relatedRule;
-		IconModel();
-	} iconModel;
-	Glib::RefPtr<Gtk::ListStore> listStore;
 	View_Gtk_Trash();
 	void setEventListener(TrashController& eventListener);
-	void signal_entryAddDlg_response(int response_id);
-	void signal_icon_dblClick(Gtk::TreeModel::Path path);
+	void signal_item_dblClick(Gtk::TreeModel::Path const& path, Gtk::TreeViewColumn* column);
+	void restore_button_click();
+	void delete_button_click();
 	void clear();
 	std::list<Entry*> getSelectedEntries();
-	void addItem(std::string const& name, bool isPlaceholder, std::string const& scriptName, Entry* relatedRule);
+	void addItem(View_Model_ListItem<Entry, Script> const& listItem);
 	void setDeleteButtonEnabled(bool val);
 	void show();
 	void hide();
 	void askForDeletion(std::list<std::string> const& names);
+	Gtk::Widget& getList();
+	void setDeleteButtonVisibility(bool visibility);
+	void setOptions(std::map<ViewOption, bool> const& viewOptions);
+	void selectEntries(std::list<Entry*> const& entries);
+	void setRestoreButtonSensitivity(bool sensitivity);
+private:
+	void signal_treeview_selection_changed();
+	void signal_button_press(GdkEventButton *event);
+	bool signal_popup();
+
 };
 
 #endif

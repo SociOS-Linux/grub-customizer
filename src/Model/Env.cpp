@@ -170,15 +170,23 @@ std::map<ViewOption, bool> Model_Env::loadViewOptions() {
 	std::map<ViewOption, bool> result;
 	if (ds.getValue("SHOW_DETAILS") != "") {
 		result[VIEW_SHOW_DETAILS] = ds.getValue("SHOW_DETAILS") == "true";
+	} else {
+		result[VIEW_SHOW_DETAILS] = true;
 	}
 	if (ds.getValue("SHOW_HIDDEN_ENTRIES") != "") {
 		result[VIEW_SHOW_HIDDEN_ENTRIES] = ds.getValue("SHOW_HIDDEN_ENTRIES") == "true";
+	} else {
+		result[VIEW_SHOW_HIDDEN_ENTRIES] = false;
 	}
 	if (ds.getValue("GROUP_BY_SCRIPT") != "") {
 		result[VIEW_GROUP_BY_SCRIPT] = ds.getValue("GROUP_BY_SCRIPT") == "true";
+	} else {
+		result[VIEW_GROUP_BY_SCRIPT] = false;
 	}
 	if (ds.getValue("SHOW_PLACEHOLDERS") != "") {
 		result[VIEW_SHOW_PLACEHOLDERS] = ds.getValue("SHOW_PLACEHOLDERS") == "true";
+	} else {
+		result[VIEW_SHOW_PLACEHOLDERS] = false;
 	}
 	return result;
 }

@@ -22,6 +22,7 @@
 #include <list>
 #include <string>
 #include "../lib/Type.h"
+#include "Model/ListItem.h"
 
 /**
  * Interface to be implemented by dialogs which lets the user adding scripts
@@ -35,7 +36,7 @@ public:
 	//gets the index of the selected script item
 	virtual std::list<Entry*> getSelectedEntries()=0;
 	//adds a new item
-	virtual void addItem(std::string const& name, bool isPlaceholder, std::string const& scriptName, Entry* relatedEntry)=0;
+	virtual void addItem(View_Model_ListItem<Entry, Script> const& listItem)=0;
 	//whether to active the delete button
 	virtual void setDeleteButtonEnabled(bool val) = 0;
 	//show this dialog
@@ -44,6 +45,14 @@ public:
 	virtual void hide()=0;
 
 	virtual void askForDeletion(std::list<std::string> const& names) = 0;
+
+	virtual void setOptions(std::map<ViewOption, bool> const& viewOptions) = 0;
+
+	virtual void selectEntries(std::list<Entry*> const& entries) = 0;
+
+	virtual void setRestoreButtonSensitivity(bool sensitivity) = 0;
+
+	virtual void setDeleteButtonVisibility(bool visibility) = 0;
 };
 
 #endif
