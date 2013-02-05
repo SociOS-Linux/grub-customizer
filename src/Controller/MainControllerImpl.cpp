@@ -611,14 +611,17 @@ void MainControllerImpl::removeRulesAction(std::list<Rule*> rules, bool force){
 		} else if (!force && this->_listHasPlaintextRules(rules)) {
 			this->view->showPlaintextRemoveWarning();
 		} else {
+			std::list<Entry*> entriesOfRemovedRules;
 			std::map<Model_Proxy*, Nothing> emptyProxies;
 			for (std::list<Rule*>::iterator iter = rules.begin(); iter != rules.end(); iter++) {
 				Model_Rule* rule = &Model_Rule::fromPtr(*iter);
 				rule->setVisibility(false);
+				entriesOfRemovedRules.push_back(rule->dataSource);
 				if (!this->grublistCfg->proxies.getProxyByRule(rule)->hasVisibleRules()) {
 					emptyProxies[this->grublistCfg->proxies.getProxyByRule(rule)] = Nothing();
 				}
 			}
+			entriesOfRemovedRules.push_back(NULL);
 
 			for (std::map<Model_Proxy*, Nothing>::iterator iter = emptyProxies.begin(); iter != emptyProxies.end(); iter++) {
 				this->grublistCfg->proxies.deleteProxy(iter->first);
@@ -626,6 +629,7 @@ void MainControllerImpl::removeRulesAction(std::list<Rule*> rules, bool force){
 			}
 
 			this->syncLoadStateAction();
+			this->getAllControllers().trashController->selectEntriesAction(entriesOfRemovedRules);
 			this->env.modificationsUnsaved = true;
 			this->getAllControllers().settingsController->updateSettingsDataAction();
 		}

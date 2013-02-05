@@ -214,7 +214,11 @@ public:
 	void selectRules(std::list<TItem*> rules) {
 		this->get_selection()->unselect_all();
 		for (typename std::list<TItem*>::iterator iter = rules.begin(); iter != rules.end(); iter++) {
-			this->get_selection()->select(this->getIterByRulePtr(*iter));
+			try {
+				this->get_selection()->select(this->getIterByRulePtr(*iter));
+			} catch (ItemNotFoundException const& e) {
+				// be fault-tolerant
+			}
 		}
 	}
 
