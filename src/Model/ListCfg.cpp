@@ -978,19 +978,19 @@ fi\n\
 	}
 }
 
-std::list<Model_Entry*> Model_ListCfg::getRemovedEntries(Model_Entry* parent) {
+std::list<Model_Entry*> Model_ListCfg::getRemovedEntries(Model_Entry* parent, bool ignorePlaceholders) {
 	std::list<Model_Entry*> result;
 	if (parent == NULL) {
 		for (std::list<Model_Script>::iterator iter = this->repository.begin(); iter != this->repository.end(); iter++) {
-			std::list<Model_Entry*> subResult = this->getRemovedEntries(&iter->root);
+			std::list<Model_Entry*> subResult = this->getRemovedEntries(&iter->root, ignorePlaceholders);
 			result.insert(result.end(), subResult.begin(), subResult.end());
 		}
 	} else {
-		if (!this->proxies.getVisibleRuleForEntry(*parent)) {
+		if ((parent->type == Model_Entry::MENUENTRY || !ignorePlaceholders) && !this->proxies.getVisibleRuleForEntry(*parent)) {
 			result.push_back(parent);
 		}
 		for (std::list<Model_Entry>::iterator entryIter = parent->subEntries.begin(); entryIter != parent->subEntries.end(); entryIter++) {
-			std::list<Model_Entry*> subResult = this->getRemovedEntries(&*entryIter);
+			std::list<Model_Entry*> subResult = this->getRemovedEntries(&*entryIter, ignorePlaceholders);
 			result.insert(result.end(), subResult.begin(), subResult.end());
 		}
 	}
