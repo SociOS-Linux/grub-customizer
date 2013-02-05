@@ -132,7 +132,6 @@ View_Gtk_Main::View_Gtk_Main()
 	menu.append(miEdit);
 	menu.append(miView);
 	menu.append(miHelp);
-	menu.append(miContext);
 	
 	miFile.set_submenu(subFile);
 	miEdit.set_submenu(subEdit);
@@ -366,6 +365,7 @@ bool View_Gtk_Main::isVisible(){
 
 void View_Gtk_Main::show(){
 	win.show_all();
+	miContext.show_all();
 	trashList->hide();
 }
 
