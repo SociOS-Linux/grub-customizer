@@ -33,7 +33,8 @@ View_Gtk_Trash::View_Gtk_Trash()
 	scrEntryBox.add(list);
 	scrEntryBox.set_min_content_width(250);
 	
-	bttRestore.set_label(gettext("Restore"));
+	bttRestore.set_label(gettext("_Restore"));
+	bttRestore.set_use_underline(true);
 	bttRestore.set_tooltip_text(gettext("Restore selected entries"));
 	bttRestore.set_border_width(5);
 	bttRestore.set_sensitive(false);
