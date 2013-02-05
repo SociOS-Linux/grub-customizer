@@ -76,7 +76,6 @@ add_executable(grub-customizer
 	src/lib/Logger/Stream.cpp
 	src/lib/regex.cpp
 	src/View/Gtk/Element/PartitionChooser.cpp
-	src/View/Gtk/Element/List.cpp
 	src/View/Gtk/About.cpp
 	src/View/Gtk/EntryEditor.cpp
 	src/View/Gtk/EnvEditor.cpp
