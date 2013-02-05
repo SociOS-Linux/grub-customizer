@@ -23,7 +23,7 @@ void Model_Repository::load(std::string const& directory, bool is_proxifiedScrip
 	if (dir){
 		struct dirent *entry;
 		struct stat fileProperties;
-		while (entry = readdir(dir)){
+		while ((entry = readdir(dir))) {
 			stat((directory+"/"+entry->d_name).c_str(), &fileProperties);
 			if ((fileProperties.st_mode & S_IFMT) != S_IFDIR){ //ignore directories
 				bool scriptAdded = false;
