@@ -19,7 +19,7 @@
 #include "Trash.h"
 
 View_Gtk_Trash::View_Gtk_Trash()
-	: deleteButton(NULL) {
+	: deleteButton(NULL), micRestore(Gtk::Stock::ADD) {
 	this->set_title(gettext("Add entry from trash"));
 	this->set_icon_name("grub-customizer");
 	this->set_default_size(650, 500);
@@ -39,10 +39,16 @@ View_Gtk_Trash::View_Gtk_Trash()
 	this->signal_response().connect(sigc::mem_fun(this, &View_Gtk_Trash::signal_entryAddDlg_response));
 	this->list.get_selection()->signal_changed().connect(sigc::mem_fun(this, &View_Gtk_Trash::signal_treeview_selection_changed));
 	this->list.signal_row_activated().connect(sigc::mem_fun(this, &View_Gtk_Trash::signal_item_dblClick));
+	this->list.signal_button_press_event().connect_notify(sigc::mem_fun(this, &View_Gtk_Trash::signal_button_press));
+	this->list.signal_popup_menu().connect(sigc::mem_fun(this, &View_Gtk_Trash::signal_popup));
+	this->micRestore.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Trash::restore_button_click));
 
 	list.set_tooltip_column(1);
 
 	list.ellipsizeMode = Pango::ELLIPSIZE_END;
+
+	this->miContext.set_submenu(this->contextMenu);
+	this->contextMenu.attach(this->micRestore, 0, 1, 0, 1);
 }
 
 void View_Gtk_Trash::setEventListener(TrashController& eventListener){
@@ -75,6 +81,10 @@ void View_Gtk_Trash::signal_item_dblClick(Gtk::TreeModel::Path const& path, Gtk:
 	this->hide();
 }
 
+void View_Gtk_Trash::restore_button_click() {
+	eventListener->applyAction();
+}
+
 std::list<Entry*> View_Gtk_Trash::getSelectedEntries(){
 	std::list<Entry*> result;
 	std::vector<Gtk::TreePath> pathes = list.get_selection()->get_selected_rows();
@@ -95,6 +105,7 @@ void View_Gtk_Trash::setDeleteButtonEnabled(bool val) {
 
 void View_Gtk_Trash::show(){
 	this->show_all();
+	this->miContext.show_all();
 }
 
 void View_Gtk_Trash::hide(){
@@ -130,4 +141,17 @@ void View_Gtk_Trash::selectEntries(std::list<Entry*> const& entries) {
 
 void View_Gtk_Trash::signal_treeview_selection_changed() {
 	this->eventListener->updateSelectionAction(this->list.getSelectedRules());
+}
+
+void View_Gtk_Trash::signal_button_press(GdkEventButton *event) {
+	if (event->type == GDK_BUTTON_PRESS && event->button == 3) {
+		contextMenu.show_all();
+		contextMenu.popup(event->button, event->time);
+	}
+}
+
+bool View_Gtk_Trash::signal_popup() {
+	contextMenu.show_all();
+	contextMenu.popup(0, gdk_event_get_time(NULL));
+	return true;
 }

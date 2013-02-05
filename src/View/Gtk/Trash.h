@@ -35,11 +35,16 @@ class View_Gtk_Trash : public Gtk::Dialog, public View_Trash, public CommonClass
 
 	TrashController* eventListener;
 	std::map<ViewOption, bool> options;
+
+	Gtk::MenuItem miContext;
+	Gtk::Menu contextMenu;
+	Gtk::ImageMenuItem micRestore;
 public:
 	View_Gtk_Trash();
 	void setEventListener(TrashController& eventListener);
 	void signal_entryAddDlg_response(int response_id);
 	void signal_item_dblClick(Gtk::TreeModel::Path const& path, Gtk::TreeViewColumn* column);
+	void restore_button_click();
 	void clear();
 	std::list<Entry*> getSelectedEntries();
 	void addItem(View_Model_ListItem<Entry, Script> const& listItem);
@@ -50,7 +55,11 @@ public:
 	Gtk::Widget& getList();
 	void setOptions(std::map<ViewOption, bool> const& viewOptions);
 	void selectEntries(std::list<Entry*> const& entries);
+private:
 	void signal_treeview_selection_changed();
+	void signal_button_press(GdkEventButton *event);
+	bool signal_popup();
+
 };
 
 #endif
