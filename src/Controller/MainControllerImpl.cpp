@@ -621,7 +621,6 @@ void MainControllerImpl::removeRulesAction(std::list<Rule*> rules, bool force){
 					emptyProxies[this->grublistCfg->proxies.getProxyByRule(rule)] = Nothing();
 				}
 			}
-			entriesOfRemovedRules.push_back(NULL);
 
 			for (std::map<Model_Proxy*, Nothing>::iterator iter = emptyProxies.begin(); iter != emptyProxies.end(); iter++) {
 				this->grublistCfg->proxies.deleteProxy(iter->first);
