@@ -74,7 +74,7 @@ class MainControllerImpl : public ControllerAbstract, public MainController {
 	bool _listHasPlaintextRules(std::list<Rule*> const& rules);
 	bool _listHasCurrentSystemRules(std::list<Rule*> const& rules);
 	std::list<Rule*> _populateSelection(std::list<Rule*> rules);
-	void _populateSelection(std::list<Rule*>& rules, Model_Rule* currentRule, int direction);
+	void _populateSelection(std::list<Rule*>& rules, Model_Rule* currentRule, int direction, bool checkScript);
 	int _countRulesUntilNextRealRule(Model_Rule* baseRule, int direction);
 	std::list<Rule*> _removePlaceholdersFromSelection(std::list<Rule*> rules);
 

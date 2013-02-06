@@ -462,9 +462,9 @@ bool MainControllerImpl::_listHasCurrentSystemRules(std::list<Rule*> const& rule
 std::list<Rule*> MainControllerImpl::_populateSelection(std::list<Rule*> rules) {
 	std::list<Rule*> result;
 	for (std::list<Rule*>::iterator ruleIter = rules.begin(); ruleIter != rules.end(); ruleIter++) {
-		this->_populateSelection(result, &Model_Rule::fromPtr(*ruleIter), -1);
+		this->_populateSelection(result, &Model_Rule::fromPtr(*ruleIter), -1, *ruleIter == rules.front());
 		result.push_back(*ruleIter);
-		this->_populateSelection(result, &Model_Rule::fromPtr(*ruleIter), 1);
+		this->_populateSelection(result, &Model_Rule::fromPtr(*ruleIter), 1, *ruleIter == rules.back());
 	}
 	// remove duplicates
 	std::list<Rule*> result2;
@@ -478,7 +478,7 @@ std::list<Rule*> MainControllerImpl::_populateSelection(std::list<Rule*> rules) 
 	return result2;
 }
 
-void MainControllerImpl::_populateSelection(std::list<Rule*>& rules, Model_Rule* baseRule, int direction) {
+void MainControllerImpl::_populateSelection(std::list<Rule*>& rules, Model_Rule* baseRule, int direction, bool checkScript) {
 	assert(direction == 1 || direction == -1);
 	bool placeholderFound = false;
 	Model_Rule* currentRule = baseRule;
@@ -491,7 +491,7 @@ void MainControllerImpl::_populateSelection(std::list<Rule*>& rules, Model_Rule*
 			Model_Script* scriptCurrent = this->grublistCfg->repository.getScriptByEntry(*currentRule->dataSource);
 			Model_Script* scriptBase    = this->grublistCfg->repository.getScriptByEntry(*baseRule->dataSource);
 
-			if (scriptCurrent == scriptBase && (currentRule->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER || currentRule->type == Model_Rule::PLAINTEXT)) {
+			if ((scriptCurrent == scriptBase || !checkScript) && (currentRule->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER || currentRule->type == Model_Rule::PLAINTEXT)) {
 				if (direction == 1) {
 					rules.push_back(currentRule);
 				} else {
@@ -656,8 +656,10 @@ void MainControllerImpl::moveAction(std::list<Rule*> rules, int direction){
 			int distance = 1;
 			if (stickyPlaceholders) {
 				rules = this->_populateSelection(rules);
+				rules = this->grublistCfg->getNormalizedRuleOrder(rules);
 				distance = this->_countRulesUntilNextRealRule(&Model_Rule::fromPtr(direction == -1 ? rules.front() : rules.back()), direction);
 			}
+
 			std::list<Rule*> movedRules;
 
 			for (int j = 0; j < distance; j++) { // move the range multiple times
@@ -692,6 +694,8 @@ void MainControllerImpl::moveAction(std::list<Rule*> rules, int direction){
 				for (int i = 1; i < ruleCount; i++) {
 					movedRules.push_back(&*this->grublistCfg->proxies.getNextVisibleRule(&Model_Rule::fromPtr(movedRules.back()), direction));
 				}
+				movedRules = this->grublistCfg->getNormalizedRuleOrder(movedRules);
+
 				rules = movedRules;
 			}
 

@@ -1039,6 +1039,42 @@ void Model_ListCfg::deleteEntry(Model_Entry const& entry) {
 	this->repository.getScriptByEntry(entry)->deleteEntry(entry);
 }
 
+/**
+ * sorts the gives rules so that it matches the real order
+ */
+std::list<Rule*> Model_ListCfg::getNormalizedRuleOrder(std::list<Rule*> rules) {
+	if (rules.size() == 0 || rules.size() == 1) {
+		return rules;
+	}
+	std::list<Rule*> result;
+
+	Model_Rule* firstRuleOfList = &Model_Rule::fromPtr(rules.front());
+	std::list<Model_Rule>::iterator currentRule;
+
+	Model_Rule* parentRule = this->proxies.getProxyByRule(firstRuleOfList)->getParentRule(firstRuleOfList);
+	if (parentRule) {
+		currentRule = parentRule->subRules.begin();
+	} else {
+		currentRule = this->proxies.front().rules.begin();
+	}
+
+	try {
+		while (true) {
+			for (std::list<Rule*>::iterator iter = rules.begin(); iter != rules.end(); iter++) {
+				if (&*currentRule == *iter) {
+					result.push_back(*iter);
+					break;
+				}
+			}
+			currentRule = this->proxies.getNextVisibleRule(currentRule, 1);
+		}
+	} catch (NoMoveTargetException const& e) {
+		// loop finished
+	}
+
+	return result;
+}
+
 Model_ListCfg::operator ArrayStructure() const {
 	ArrayStructure result;
 	result["eventListener"] = this->eventListener;

@@ -120,6 +120,8 @@ public:
 
 	void deleteEntry(Model_Entry const& entry);
 
+	std::list<Rule*> getNormalizedRuleOrder(std::list<Rule*> rules);
+
 	operator ArrayStructure() const;
 };
 
