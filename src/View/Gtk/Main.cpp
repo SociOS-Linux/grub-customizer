@@ -765,6 +765,8 @@ void View_Gtk_Main::update_move_buttons(){
 	bool is_toplevel = false;
 	bool sameLevel = false;
 	bool subsequent = false;
+	bool isOnTop = false;
+	bool isOnBottom = false;
 
 	if (selectedRowsCount >= 1) {
 		sameLevel = this->selectedEntriesAreOnSameLevel();
@@ -775,16 +777,24 @@ void View_Gtk_Main::update_move_buttons(){
 
 	if (selectedRowsCount >= 1 && sameLevel) {
 		std::vector<Gtk::TreeModel::Path> pathes = tvConfList.get_selection()->get_selected_rows();
-		Gtk::TreeModel::iterator iter = this->tvConfList.refTreeStore->get_iter(pathes[0]);
+		Gtk::TreeModel::iterator iter = this->tvConfList.refTreeStore->get_iter(pathes.front());
+		Gtk::TreeModel::iterator lastIter = this->tvConfList.refTreeStore->get_iter(pathes.back());
 		is_toplevel = (*iter)[this->tvConfList.treeModel.is_toplevel];
+
+		if (iter == tvConfList.refTreeStore->children().begin()) {
+			isOnTop = true;
+		}
+		if (lastIter == --tvConfList.refTreeStore->children().end()) {
+			isOnBottom = true;
+		}
 	}
 
-	tbttUp.set_sensitive(selectedRowsCount >= 1 && sameLevel && subsequent);
-	miUp.set_sensitive(selectedRowsCount >= 1 && sameLevel && subsequent);
-	miCUp.set_sensitive(selectedRowsCount >= 1 && sameLevel && subsequent);
-	tbttDown.set_sensitive(selectedRowsCount >= 1 && sameLevel && subsequent);
-	miDown.set_sensitive(selectedRowsCount >= 1 && sameLevel && subsequent);
-	miCDown.set_sensitive(selectedRowsCount >= 1 && sameLevel && subsequent);
+	tbttUp.set_sensitive(selectedRowsCount >= 1 && sameLevel && subsequent && !isOnTop);
+	miUp.set_sensitive(selectedRowsCount >= 1 && sameLevel && subsequent && !isOnTop);
+	miCUp.set_sensitive(selectedRowsCount >= 1 && sameLevel && subsequent && !isOnTop);
+	tbttDown.set_sensitive(selectedRowsCount >= 1 && sameLevel && subsequent && !isOnBottom);
+	miDown.set_sensitive(selectedRowsCount >= 1 && sameLevel && subsequent && !isOnBottom);
+	miCDown.set_sensitive(selectedRowsCount >= 1 && sameLevel && subsequent && !isOnBottom);
 	tbttLeft.set_sensitive(selectedRowsCount >= 1 && sameLevel && subsequent && !is_toplevel); //selected entry must be inside a submenu
 	miLeft.set_sensitive(selectedRowsCount >= 1 && sameLevel && subsequent && !is_toplevel); //selected entry must be inside a submenu
 	miCLeft.set_sensitive(selectedRowsCount >= 1 && sameLevel && subsequent && !is_toplevel); //selected entry must be inside a submenu
