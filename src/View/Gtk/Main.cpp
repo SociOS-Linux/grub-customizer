@@ -648,6 +648,7 @@ void View_Gtk_Main::hideReloadRecommendation() {
 
 void View_Gtk_Main::showPlaintextRemoveWarning() {
 	Gtk::MessageDialog dlg(gettext("Removing Script Code can cause problems when trying to boot entries relying on it. Are you sure you want to do it anyway?"), false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO);
+	dlg.set_default_response(Gtk::RESPONSE_OK);
 	int result = dlg.run();
 	if (result == Gtk::RESPONSE_YES) {
 		eventListener->removeRulesAction(this->getSelectedRules(), true);
@@ -656,6 +657,7 @@ void View_Gtk_Main::showPlaintextRemoveWarning() {
 
 void View_Gtk_Main::showSystemRuleRemoveWarning() {
 	Gtk::MessageDialog dlg(gettext("You're trying to remove an entry of the currently running system. Make sure there are other working entries of this system!\nIf you just want to remove old kernels: The better way is uninstalling them instead of just hiding them in boot menu."), false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_OK_CANCEL);
+	dlg.set_default_response(Gtk::RESPONSE_OK);
 	int result = dlg.run();
 	if (result == Gtk::RESPONSE_OK) {
 		eventListener->removeRulesAction(this->getSelectedRules(), true);
