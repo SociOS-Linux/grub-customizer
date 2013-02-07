@@ -22,7 +22,8 @@ View_Gtk_Trash::View_Gtk_Trash()
 	: micRestore(Gtk::Stock::ADD),
 	  bttRestore(Gtk::Stock::UNDELETE),
 	  bttDelete(Gtk::Stock::DELETE),
-	  micDelete(Gtk::Stock::DELETE) {
+	  micDelete(Gtk::Stock::DELETE),
+	  event_lock(false) {
 	this->set_title(gettext("Add entry from trash"));
 	this->set_icon_name("grub-customizer");
 	this->set_default_size(650, 500);
@@ -73,7 +74,9 @@ void View_Gtk_Trash::setEventListener(TrashController& eventListener){
 }
 
 void View_Gtk_Trash::clear(){
+	event_lock = true;
 	list.refTreeStore->clear();
+	event_lock = false;
 }
 
 void View_Gtk_Trash::signal_item_dblClick(Gtk::TreeModel::Path const& path, Gtk::TreeViewColumn* column) {
@@ -154,7 +157,9 @@ void View_Gtk_Trash::setRestoreButtonSensitivity(bool sensitivity) {
 }
 
 void View_Gtk_Trash::signal_treeview_selection_changed() {
-	this->eventListener->updateSelectionAction(this->list.getSelectedRules());
+	if (!event_lock) {
+		this->eventListener->updateSelectionAction(this->list.getSelectedRules());
+	}
 }
 
 void View_Gtk_Trash::signal_button_press(GdkEventButton *event) {

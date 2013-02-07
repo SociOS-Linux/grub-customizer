@@ -42,6 +42,8 @@ class View_Gtk_Trash : public Gtk::Window, public View_Trash, public CommonClass
 	Gtk::Menu contextMenu;
 	Gtk::ImageMenuItem micRestore;
 	Gtk::ImageMenuItem micDelete;
+
+	bool event_lock;
 public:
 	View_Gtk_Trash();
 	void setEventListener(TrashController& eventListener);
