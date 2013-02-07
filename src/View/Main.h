@@ -52,6 +52,7 @@ public:
 	virtual void setIsBurgMode(bool isBurgMode)=0;
 	//determines what users should be able to do and what not
 	virtual void setLockState(int state)=0;
+	virtual void updateLockState() = 0;
 
 	//set the progress of the actual action (loading/saving) to be showed as progress bar for example
 	virtual void setProgress(double progress)=0;

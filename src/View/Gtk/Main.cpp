@@ -454,36 +454,44 @@ void View_Gtk_Main::setLockState(int state){
 	//	2: lock grub-install
 	//	4: lock partition chooser
 	//  8: lock settings dialog
+	this->lock_state = state;
+	this->updateLockState();
+}
+
+void View_Gtk_Main::updateLockState() {
+	int state = this->lock_state;
+	bool isListView = this->notebook.get_current_page() == 0;
+
 	tbttSave.set_sensitive((state & 1) == 0);
 	miSave.set_sensitive((state & 1) == 0);
 
-	tbttUp.set_sensitive((state & 1) == 0);
-	miUp.set_sensitive((state & 1) == 0);
-	miCUp.set_sensitive((state & 1) == 0);
-	tbttDown.set_sensitive((state & 1) == 0);
-	miDown.set_sensitive((state & 1) == 0);
-	miCDown.set_sensitive((state & 1) == 0);
-	tbttLeft.set_sensitive((state & 1) == 0);
-	miLeft.set_sensitive((state & 1) == 0);
-	miCLeft.set_sensitive((state & 1) == 0);
-	tbttRight.set_sensitive((state & 1) == 0);
-	miRight.set_sensitive((state & 1) == 0);
-	miCRight.set_sensitive((state & 1) == 0);
-	tbttEditEntry.set_sensitive((state & 1) == 0);
-	miEditEntry.set_sensitive((state & 1) == 0);
-	miCEditEntry.set_sensitive((state & 1) == 0);
+	tbttUp.set_sensitive((state & 1) == 0 && isListView);
+	miUp.set_sensitive((state & 1) == 0 && isListView);
+	miCUp.set_sensitive((state & 1) == 0 && isListView);
+	tbttDown.set_sensitive((state & 1) == 0 && isListView);
+	miDown.set_sensitive((state & 1) == 0 && isListView);
+	miCDown.set_sensitive((state & 1) == 0 && isListView);
+	tbttLeft.set_sensitive((state & 1) == 0 && isListView);
+	miLeft.set_sensitive((state & 1) == 0 && isListView);
+	miCLeft.set_sensitive((state & 1) == 0 && isListView);
+	tbttRight.set_sensitive((state & 1) == 0 && isListView);
+	miRight.set_sensitive((state & 1) == 0 && isListView);
+	miCRight.set_sensitive((state & 1) == 0 && isListView);
+	tbttEditEntry.set_sensitive((state & 1) == 0 && isListView);
+	miEditEntry.set_sensitive((state & 1) == 0 && isListView);
+	miCEditEntry.set_sensitive((state & 1) == 0 && isListView);
 
-	tbttRemove.set_sensitive((state & 1) == 0);
-	miRemove.set_sensitive((state & 1) == 0);
-	miCRemove.set_sensitive((state & 1) == 0);
+	tbttRemove.set_sensitive((state & 1) == 0 && isListView);
+	miRemove.set_sensitive((state & 1) == 0 && isListView);
+	miCRemove.set_sensitive((state & 1) == 0 && isListView);
 
-	miCRename.set_sensitive((state & 1) == 0);
+	miCRename.set_sensitive((state & 1) == 0 && isListView);
 	
 	tbttReload.set_sensitive((state & 1) == 0);
 	miReload.set_sensitive((state & 1) == 0);
 
-	tbttRevert.set_sensitive((state & 1) == 0);
-	miRevert.set_sensitive((state & 1) == 0);
+	tbttRevert.set_sensitive((state & 1) == 0 && isListView);
+	miRevert.set_sensitive((state & 1) == 0 && isListView);
 
 	miModifyEnvironment.set_sensitive((state & 4) == 0);
 	bttAdvancedSettings1.set_sensitive((state & 8) == 0);
@@ -494,16 +502,14 @@ void View_Gtk_Main::setLockState(int state){
 		this->trashList->set_sensitive((state & 1) == 0);
 	}
 
-	miCreateEntry.set_sensitive((state & 1) == 0);
-	tbttCreateEntry.set_sensitive((state & 1) == 0);
+	miCreateEntry.set_sensitive((state & 1) == 0 && isListView);
+	tbttCreateEntry.set_sensitive((state & 1) == 0 && isListView);
 
 	miInstallGrub.set_sensitive((state & 2) == 0);
 	
-	if ((state & 1) == 0) {
+	if ((state & 1) == 0 && isListView) {
 		this->updateButtonsState();
 	}
-
-	this->lock_state = state;
 }
 
 

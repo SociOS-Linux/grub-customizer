@@ -107,8 +107,9 @@ public:
 	bool isVisible();
 	
 	void setIsBurgMode(bool isBurgMode);
-	
+
 	void setLockState(int state);
+	void updateLockState();
 	
 	void setProgress(double progress);
 	void progress_pulse();

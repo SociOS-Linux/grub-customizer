@@ -1003,6 +1003,7 @@ void MainControllerImpl::refreshTabAction(unsigned int pos) {
 		if (pos != 0) { // list
 			this->getAllControllers().settingsController->syncAction();
 		}
+		this->view->updateLockState();
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
