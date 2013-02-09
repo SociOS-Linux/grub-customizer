@@ -137,8 +137,12 @@ std::list<Model_Proxylist_Item> Model_Proxylist::generateEntryTitleList(std::lis
 			std::ostringstream currentLabelNumPath;
 			currentLabelNumPath << numericPathLabelPrefix << (i+1);
 
+			bool addedSomething = true;
 			if (rule_iter->type == Model_Rule::SUBMENU) {
 				std::list<Model_Proxylist_Item> subList = Model_Proxylist::generateEntryTitleList(rule_iter->subRules, labelPathPrefix + rule_iter->outputName + ">", currentNumPath.str() + ">", currentLabelNumPath.str() + ">");
+				if (subList.size() == 0) {
+					addedSomething = false;
+				}
 				result.splice(result.end(), subList);
 			} else {
 				Model_Proxylist_Item newItem;
@@ -148,7 +152,9 @@ std::list<Model_Proxylist_Item> Model_Proxylist::generateEntryTitleList(std::lis
 				newItem.numericPathValue = currentNumPath.str();
 				result.push_back(newItem);
 			}
-			i++;
+			if (addedSomething) {
+				i++;
+			}
 		}
 	}
 	if (offset != NULL) {
