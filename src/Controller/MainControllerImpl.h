@@ -77,6 +77,8 @@ class MainControllerImpl : public ControllerAbstract, public MainController {
 	void _populateSelection(std::list<Rule*>& rules, Model_Rule* currentRule, int direction, bool checkScript);
 	int _countRulesUntilNextRealRule(Model_Rule* baseRule, int direction);
 	std::list<Rule*> _removePlaceholdersFromSelection(std::list<Rule*> rules);
+	bool _ruleAffectsCurrentDefaultOs(Model_Rule* rule, std::string const& currentRulePath, std::string const& currentDefaultRulePath);
+	void _updateCurrentDefaultOs(Model_Rule* rule, std::string const& currentRulePath, std::string currentDefaultRulePath);
 
 public:
 	void setListCfg(Model_ListCfg& grublistCfg);
@@ -109,6 +111,7 @@ public:
 	void saveThreadedAction();
 	MainControllerImpl(Model_Env& env);
 	
+public:
 	void renameEntry(Model_Rule* rule, std::string const& newName);
 	void reset();
 	

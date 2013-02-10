@@ -329,9 +329,16 @@ void MainControllerImpl::saveThreadedAction(){
 
 void MainControllerImpl::renameEntry(Model_Rule* rule, std::string const& newName){
 	if (rule->type != Model_Rule::PLAINTEXT) {
-		if (this->settings->getValue("GRUB_DEFAULT") == rule->outputName)
-			this->settings->setValue("GRUB_DEFAULT", newName);
+
+		std::string currentRulePath = this->grublistCfg->getRulePath(*rule);
+		std::string currentDefaultRulePath = this->settings->getValue("GRUB_DEFAULT");
+		bool updateDefault = this->_ruleAffectsCurrentDefaultOs(rule, currentRulePath, currentDefaultRulePath);
+
 		this->grublistCfg->renameRule(rule, newName);
+
+		if (updateDefault) {
+			this->_updateCurrentDefaultOs(rule, currentRulePath, currentDefaultRulePath);
+		}
 
 		if (rule->dataSource && this->grublistCfg->repository.getScriptByEntry(*rule->dataSource)->isCustomScript) {
 			rule->dataSource->name = newName;
@@ -539,6 +546,26 @@ std::list<Rule*> MainControllerImpl::_removePlaceholdersFromSelection(std::list<
 	return result;
 }
 
+bool MainControllerImpl::_ruleAffectsCurrentDefaultOs(Model_Rule* rule, std::string const& currentRulePath, std::string const& currentDefaultRulePath) {
+	bool result = false;
+
+	if (rule->type == Model_Rule::SUBMENU) {
+		if (currentDefaultRulePath.substr(0, currentRulePath.length() + 1) == currentRulePath + ">") {
+			result = true;
+		}
+	} else {
+		if (this->settings->getValue("GRUB_DEFAULT") == currentRulePath) {
+			result = true;
+		}
+	}
+	return result;
+}
+
+void MainControllerImpl::_updateCurrentDefaultOs(Model_Rule* rule, std::string const& oldRulePath, std::string oldDefaultRulePath) {
+	oldDefaultRulePath.replace(0, oldRulePath.length(), this->grublistCfg->getRulePath(*rule));
+	this->settings->setValue("GRUB_DEFAULT", oldDefaultRulePath);
+}
+
 void MainControllerImpl::dieAction(){
 	this->logActionBegin("die");
 	try {
@@ -666,7 +693,16 @@ void MainControllerImpl::moveAction(std::list<Rule*> rules, int direction){
 				int ruleCount = rules.size();
 				Model_Rule* rulePtr = &Model_Rule::fromPtr(direction == -1 ? rules.front() : rules.back());
 				for (int i = 0; i < ruleCount; i++) { // move multiple rules
+					std::string currentRulePath = this->grublistCfg->getRulePath(*rulePtr);
+					std::string currentDefaultRulePath = this->settings->getValue("GRUB_DEFAULT");
+					bool updateDefault = this->_ruleAffectsCurrentDefaultOs(rulePtr, currentRulePath, currentDefaultRulePath);
+
 					rulePtr = &this->grublistCfg->moveRule(rulePtr, direction);
+
+					if (updateDefault) {
+						this->_updateCurrentDefaultOs(rulePtr, currentRulePath, currentDefaultRulePath);
+					}
+
 					if (i < ruleCount - 1) {
 						bool isEndOfList = false;
 						bool targetFound = false;

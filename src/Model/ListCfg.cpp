@@ -536,6 +536,25 @@ void Model_ListCfg::renameRule(Model_Rule* rule, std::string const& newName){
 	rule->outputName = newName;
 }
 
+std::string Model_ListCfg::getRulePath(Model_Rule& rule) {
+	Model_Proxy* proxy = this->proxies.getProxyByRule(&rule);
+	std::stack<std::string> ruleNameStack;
+	ruleNameStack.push(rule.outputName);
+
+	Model_Rule* currentRule = &rule;
+	while ((currentRule = proxy->getParentRule(currentRule))) {
+		ruleNameStack.push(currentRule->outputName);
+	}
+
+	std::string output = ruleNameStack.top();
+	ruleNameStack.pop();
+	while (ruleNameStack.size()) {
+		output += ">" + ruleNameStack.top();
+		ruleNameStack.pop();
+	}
+	return output;
+}
+
 std::string Model_ListCfg::getGrubErrorMessage() const {
 	FILE* errorLogFile = fopen(this->errorLogFile.c_str(), "r");
 	std::string errorMessage;

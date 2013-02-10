@@ -47,6 +47,7 @@
 #include "../lib/Exception.h"
 #include "../lib/ArrayStructure.h"
 #include "../lib/trim.h"
+#include <stack>
 
 
 class Model_ListCfg : public CommonClass {
@@ -109,8 +110,9 @@ public:
 	bool compare(Model_ListCfg const& other) const;
 	static std::list<Model_Rule const*> getComparableRules(std::list<Model_Rule> const& list);
 	static bool compareLists(std::list<Model_Rule const*> a, std::list<Model_Rule const*> b);
-	
+
 	void renameRule(Model_Rule* rule, std::string const& newName);
+	std::string getRulePath(Model_Rule& rule);
 	std::string getGrubErrorMessage() const;
 
 	void addColorHelper();
