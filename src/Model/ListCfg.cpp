@@ -726,7 +726,7 @@ Model_Rule& Model_ListCfg::moveRule(Model_Rule* rule, int direction){
 						targetProxy->rules.push_front(*rule);
 						newRule = &targetProxy->rules.front();
 					}
-					rule->isVisible = false;
+					rule->setVisibility(false);
 
 					try {
 						std::list<Model_Rule>::iterator previousRule = this->proxies.getNextVisibleRule(proxy->getListIterator(*rule, proxy->getRuleList(parent)), -direction);
@@ -737,7 +737,7 @@ Model_Rule& Model_ListCfg::moveRule(Model_Rule* rule, int direction){
 							} else {
 								this->proxies.getProxyByRule(&*previousRule)->rules.push_front(*nextRule);
 							}
-							nextRule->isVisible = false;
+							nextRule->setVisibility(false);
 							if (!this->proxies.getProxyByRule(&*nextRule)->hasVisibleRules()) {
 								this->proxies.deleteProxy(this->proxies.getProxyByRule(&*nextRule));
 							}
@@ -772,7 +772,7 @@ Model_Rule& Model_ListCfg::moveRule(Model_Rule* rule, int direction){
 							} else {
 								prevprev->rules.push_front(*movedRule2);
 							}
-							movedRule2->isVisible = false;
+							movedRule2->setVisibility(false);
 							if (!this->proxies.getProxyByRule(&*movedRule2)->hasVisibleRules()) {
 								this->proxies.deleteProxy(this->proxies.getProxyByRule(&*movedRule2));
 							}
@@ -798,7 +798,7 @@ Model_Rule& Model_ListCfg::moveRule(Model_Rule* rule, int direction){
 						proxy->removeForeignChildRules(*rule);
 					}
 					if ((rule->type == Model_Rule::SUBMENU && rule->subRules.size() != 0) || (rule->type != Model_Rule::SUBMENU && proxy->ruleIsFromOwnScript(*rule))) {
-						rule->isVisible = false;
+						rule->setVisibility(false);
 					} else {
 						proxy->rules.pop_front();
 					}
@@ -814,7 +814,7 @@ Model_Rule& Model_ListCfg::moveRule(Model_Rule* rule, int direction){
 						proxy->removeForeignChildRules(*rule);
 					}
 					if ((rule->type == Model_Rule::SUBMENU && rule->subRules.size() != 0) || (rule->type != Model_Rule::SUBMENU && proxy->ruleIsFromOwnScript(*rule))) {
-						rule->isVisible = false;
+						rule->setVisibility(false);
 					} else {
 						proxy->rules.pop_back();
 					}

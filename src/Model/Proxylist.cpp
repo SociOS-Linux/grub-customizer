@@ -203,7 +203,7 @@ std::list<Model_Rule>::iterator Model_Proxylist::moveRuleToNewProxy(Model_Rule& 
 	std::list<Model_Proxy>::iterator newProxy = this->insert(proxyIter, Model_Proxy(*dataSource, false));
 	newProxy->removeEquivalentRules(rule);
 	std::list<Model_Rule>::iterator movedRule = newProxy->rules.insert(direction == -1 ? newProxy->rules.end() : newProxy->rules.begin(), rule);
-	rule.isVisible = false;
+	rule.setVisibility(false);
 
 	if (!currentProxy->hasVisibleRules()) {
 		this->deleteProxy(currentProxy);
