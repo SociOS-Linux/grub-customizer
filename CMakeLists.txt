@@ -98,6 +98,8 @@ add_executable(grub-customizer
 	src/lib/ArrayStructure.cpp
 	src/lib/trim.cpp
 	src/Controller/Helper/DeviceInfo.cpp
+	src/lib/csv.cpp
+	src/Model/ScriptSourceMap.cpp
 )
 
 
