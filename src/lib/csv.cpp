@@ -40,13 +40,14 @@ std::list<std::string> CsvReader::_parseRow() {
 					quotesFound = true;
 				}
 			}
-		} else if (c == ';' && (!inString || quotesFound)) {
+		} else if ((c == ';' || c == '\n') && (!inString || quotesFound)) {
 			quotesFound = false;
 			inString = false;
 			dataRow.push_back(field);
 			field = "";
-		} else if (c == '\n' && (!inString || quotesFound)) {
-			break;
+			if (c == '\n') {
+				break;
+			}
 		} else if (inString) {
 			field += char(c);
 			quotesFound = false;
