@@ -22,7 +22,8 @@ Model_ListCfg::Model_ListCfg(Model_Env& env)
  : error_proxy_not_found(false),
  progress(0),
  cancelThreadsRequested(false), verbose(true), env(env), eventListener(NULL),
- mutex(NULL), errorLogFile(ERROR_LOG_FILE), ignoreLock(false), progress_pos(0), progress_max(0)
+ mutex(NULL), errorLogFile(ERROR_LOG_FILE), ignoreLock(false), progress_pos(0), progress_max(0),
+ scriptSourceMap(env)
 {}
 
 void Model_ListCfg::setEventListener(MainController& eventListener) {
@@ -111,6 +112,8 @@ std::string Model_ListCfg::readScriptForwarder(std::string const& scriptForwarde
 void Model_ListCfg::load(bool preserveConfig){
 	if (!preserveConfig){
 		send_new_load_progress(0);
+
+		this->scriptSourceMap.load();
 
 		DIR* hGrubCfgDir = opendir(this->env.cfg_dir.c_str());
 
@@ -342,6 +345,11 @@ void Model_ListCfg::save(){
 	proxies.deleteAllProxyscriptFiles();  //delete all proxies to get a clean file system
 	proxies.clearTrash(); //delete all files of removed proxies
 	
+	std::map<Model_Script*, std::string> scriptFilenameMap; // stores original filenames
+	for (std::list<Model_Script>::iterator scriptIter = this->repository.begin(); scriptIter != this->repository.end(); scriptIter++) {
+		scriptFilenameMap[&*scriptIter] = scriptIter->fileName;
+	}
+
 	// create virtual custom scripts on file system
 	for (std::list<Model_Script>::iterator scriptIter = this->repository.begin(); scriptIter != this->repository.end(); scriptIter++) {
 		if (scriptIter->isCustomScript && scriptIter->fileName == "") {
@@ -397,6 +405,11 @@ void Model_ListCfg::save(){
 	}
 	send_new_save_progress(0.2);
 
+	// register in script source map
+	for (std::map<Model_Script*, std::string>::iterator sMapIter = scriptFilenameMap.begin(); sMapIter != scriptFilenameMap.end(); sMapIter++) {
+		this->scriptSourceMap.registerMove(sMapIter->second, sMapIter->first->fileName);
+	}
+	this->scriptSourceMap.save();
 
 	//remove "proxifiedScripts" dir, if empty
 	

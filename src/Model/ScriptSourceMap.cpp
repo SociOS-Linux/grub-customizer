@@ -18,16 +18,16 @@
 
 #include "ScriptSourceMap.h"
 
-ScriptSourceMap::ScriptSourceMap(Model_Env& env)
+Model_ScriptSourceMap::Model_ScriptSourceMap(Model_Env& env)
 	: env(env)
 {
 }
 
-std::string ScriptSourceMap::_getFilePath() {
+std::string Model_ScriptSourceMap::_getFilePath() {
 	return this->env.cfg_dir + "/.script_sources.txt";
 }
 
-void ScriptSourceMap::load() {
+void Model_ScriptSourceMap::load() {
 	this->clear();
 
 	FILE* file = fopen(this->_getFilePath().c_str(), "r");
@@ -38,10 +38,32 @@ void ScriptSourceMap::load() {
 			(*this)[dataRow["default_name"]] = dataRow["current_name"];
 		}
 		fclose(file);
+
+		if (this->size() == 1) {
+			std::map<std::string, std::string>::iterator iter = this->begin();
+			std::cout << "load: the only element is: " << iter->first << ": " << iter->second << std::endl;
+		}
 	}
 }
 
-void ScriptSourceMap::save() {
+void Model_ScriptSourceMap::registerMove(std::string const& sourceName, std::string const& destinationName) {
+	if (sourceName == destinationName) {
+		return;
+	}
+	if (this->has(destinationName)) { // script has been renamed to default name
+		this->erase(destinationName);
+		return;
+	}
+
+	std::string originalSourceName = this->getSourceName(sourceName);
+	if (originalSourceName != "") { // update existing script entry
+		(*this)[originalSourceName] = destinationName;
+	} else {
+		(*this)[sourceName] = destinationName;
+	}
+}
+
+void Model_ScriptSourceMap::save() {
 	FILE* file = fopen(this->_getFilePath().c_str(), "w");
 	assert(file != NULL);
 	CsvWriter csv(file);
@@ -53,5 +75,19 @@ void ScriptSourceMap::save() {
 	}
 	fclose(file);
 }
+
+bool Model_ScriptSourceMap::has(std::string const& sourceName) {
+	return this->find(sourceName) != this->end();
+}
+
+std::string Model_ScriptSourceMap::getSourceName(std::string const& destinationName) {
+	for (std::map<std::string, std::string>::iterator iter = this->begin(); iter != this->end(); iter++) {
+		if (iter->second == destinationName) {
+			return iter->first;
+		}
+	}
+	return "";
+}
+
 
 

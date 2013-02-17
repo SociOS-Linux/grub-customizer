@@ -47,6 +47,7 @@
 #include "../lib/Exception.h"
 #include "../lib/ArrayStructure.h"
 #include "../lib/trim.h"
+#include "ScriptSourceMap.h"
 #include <stack>
 
 
@@ -58,6 +59,8 @@ class Model_ListCfg : public CommonClass {
 	int progress_pos, progress_max;
 	Mutex* mutex;
 	std::string errorLogFile;
+
+	Model_ScriptSourceMap scriptSourceMap;
 public:
 	Model_ListCfg(Model_Env& env);
 	void setEventListener(MainController& eventListener);

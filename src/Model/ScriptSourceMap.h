@@ -26,14 +26,16 @@
 #include <dirent.h>
 #include "../lib/assert.h"
 
-class ScriptSourceMap : public std::map<std::string, std::string> {
+class Model_ScriptSourceMap : public std::map<std::string, std::string> {
 	Model_Env& env;
 	std::string _getFilePath();
 public:
-	ScriptSourceMap(Model_Env& env);
+	Model_ScriptSourceMap(Model_Env& env);
 	void load();
-	void update();
+	void registerMove(std::string const& sourceName, std::string const& destinationName);
 	void save();
+	bool has(std::string const& sourceName);
+	std::string getSourceName(std::string const& destinationName);
 };
 
 
