@@ -603,7 +603,7 @@ bool Model_ListCfg::compare(Model_ListCfg const& other) const {
 std::list<Model_Rule const*> Model_ListCfg::getComparableRules(std::list<Model_Rule> const& list) {
 	std::list<Model_Rule const*> result;
 	for (std::list<Model_Rule>::const_iterator riter = list.begin(); riter != list.end(); riter++){
-		if (((riter->type == Model_Rule::NORMAL && riter->dataSource) || riter->type == Model_Rule::SUBMENU) && riter->isVisible){
+		if (((riter->type == Model_Rule::NORMAL && riter->dataSource) || (riter->type == Model_Rule::SUBMENU && riter->hasRealSubrules())) && riter->isVisible){
 			result.push_back(&*riter);
 		}
 	}
@@ -611,8 +611,9 @@ std::list<Model_Rule const*> Model_ListCfg::getComparableRules(std::list<Model_R
 }
 
 bool Model_ListCfg::compareLists(std::list<Model_Rule const*> a, std::list<Model_Rule const*> b) {
-	if (a.size() != b.size())
+	if (a.size() != b.size()) {
 		return false;
+	}
 
 	std::list<const Model_Rule*>::iterator self_iter = a.begin(), other_iter = b.begin();
 	while (self_iter != a.end() && other_iter != b.end()){
