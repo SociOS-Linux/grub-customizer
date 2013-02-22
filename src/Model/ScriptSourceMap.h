@@ -25,10 +25,12 @@
 #include "../lib/csv.h"
 #include <dirent.h>
 #include "../lib/assert.h"
+#include "../lib/CommonClass.h"
 
-class Model_ScriptSourceMap : public std::map<std::string, std::string> {
+class Model_ScriptSourceMap : public std::map<std::string, std::string>, public CommonClass {
 	Model_Env& env;
 	std::string _getFilePath();
+	bool _fileExists;
 public:
 	Model_ScriptSourceMap(Model_Env& env);
 	void load();
@@ -36,6 +38,7 @@ public:
 	void save();
 	bool has(std::string const& sourceName);
 	std::string getSourceName(std::string const& destinationName);
+	bool fileExists();
 };
 
 

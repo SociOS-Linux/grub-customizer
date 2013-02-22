@@ -19,7 +19,7 @@
 #include "ScriptSourceMap.h"
 
 Model_ScriptSourceMap::Model_ScriptSourceMap(Model_Env& env)
-	: env(env)
+	: env(env), _fileExists(false)
 {
 }
 
@@ -29,27 +29,21 @@ std::string Model_ScriptSourceMap::_getFilePath() {
 
 void Model_ScriptSourceMap::load() {
 	this->clear();
+	this->_fileExists = false;
 
 	FILE* file = fopen(this->_getFilePath().c_str(), "r");
 	if (file) {
+		this->_fileExists = true;
 		CsvReader csv(file);
 		std::map<std::string, std::string> dataRow;
 		while ((dataRow = csv.read()).size()) {
-			(*this)[dataRow["default_name"]] = dataRow["current_name"];
+			(*this)[this->env.cfg_dir + "/" + dataRow["default_name"]] = this->env.cfg_dir + "/" + dataRow["current_name"];
 		}
 		fclose(file);
 	}
 }
 
 void Model_ScriptSourceMap::registerMove(std::string const& sourceName, std::string const& destinationName) {
-	if (sourceName == destinationName) {
-		return;
-	}
-	if (this->has(destinationName)) { // script has been renamed to default name
-		this->erase(destinationName);
-		return;
-	}
-
 	std::string originalSourceName = this->getSourceName(sourceName);
 	if (originalSourceName != "") { // update existing script entry
 		(*this)[originalSourceName] = destinationName;
@@ -63,9 +57,19 @@ void Model_ScriptSourceMap::save() {
 	assert(file != NULL);
 	CsvWriter csv(file);
 	for (std::map<std::string, std::string>::iterator iter = this->begin(); iter != this->end(); iter++) {
+		if (iter->first == iter->second) {
+			continue;
+		}
+		if (iter->first.substr(0, this->env.cfg_dir.length()) != this->env.cfg_dir
+		 || iter->second.substr(0, this->env.cfg_dir.length()) != this->env.cfg_dir) {
+			this->log("invalid script prefix found: script wont be added to source map", Logger::ERROR);
+			continue; // ignore, if path doesn't start with cfg_dir
+		}
+		std::string defaultName = iter->first.substr(this->env.cfg_dir.length() + 1);
+		std::string currentName = iter->second.substr(this->env.cfg_dir.length() + 1);
 		std::map<std::string, std::string> dataRow;
-		dataRow["default_name"] = iter->first;
-		dataRow["current_name"] = iter->second;
+		dataRow["default_name"] = defaultName;
+		dataRow["current_name"] = currentName;
 		csv.write(dataRow);
 	}
 	fclose(file);
@@ -82,6 +86,10 @@ std::string Model_ScriptSourceMap::getSourceName(std::string const& destinationN
 		}
 	}
 	return "";
+}
+
+bool Model_ScriptSourceMap::fileExists() {
+	return this->_fileExists;
 }
 
 

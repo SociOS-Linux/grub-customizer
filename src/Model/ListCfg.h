@@ -127,6 +127,10 @@ public:
 
 	std::list<Rule*> getNormalizedRuleOrder(std::list<Rule*> rules);
 
+	std::list<Model_Script*> getProxifiedScripts();
+	void generateScriptSourceMap();
+	void populateScriptSourceMap();
+
 	operator ArrayStructure() const;
 };
 

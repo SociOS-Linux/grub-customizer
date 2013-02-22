@@ -38,6 +38,7 @@ void Model_ListCfg::setLogger(Logger& logger) {
 	this->CommonClass::setLogger(logger);
 	this->proxies.setLogger(logger);
 	this->repository.setLogger(logger);
+	this->scriptSourceMap.setLogger(logger);
 }
 
 void Model_ListCfg::lock(){
@@ -113,8 +114,6 @@ void Model_ListCfg::load(bool preserveConfig){
 	if (!preserveConfig){
 		send_new_load_progress(0);
 
-		this->scriptSourceMap.load();
-
 		DIR* hGrubCfgDir = opendir(this->env.cfg_dir.c_str());
 
 		if (!hGrubCfgDir){
@@ -189,6 +188,15 @@ void Model_ListCfg::load(bool preserveConfig){
 	}
 	this->unlock();
 	send_new_load_progress(0.1);
+
+
+	//load script map
+	this->scriptSourceMap.load();
+	if (!this->scriptSourceMap.fileExists() && this->getProxifiedScripts().size() > 0) {
+		this->generateScriptSourceMap();
+	} else {
+		this->populateScriptSourceMap();
+	}
 
 	//run mkconfig
 	this->log("running " + this->env.mkconfig_cmd, Logger::EVENT);
@@ -1106,6 +1114,63 @@ std::list<Rule*> Model_ListCfg::getNormalizedRuleOrder(std::list<Rule*> rules) {
 	}
 
 	return result;
+}
+
+std::list<Model_Script*> Model_ListCfg::getProxifiedScripts() {
+	std::list<Model_Script*> result;
+
+	for (std::list<Model_Script>::iterator iter = this->repository.begin(); iter != this->repository.end(); iter++) {
+		if (this->proxies.proxyRequired(*iter)) {
+			result.push_back(&*iter);
+		}
+	}
+
+	return result;
+}
+
+void Model_ListCfg::generateScriptSourceMap() {
+	std::map<std::string, int> defaultScripts; // only for non-static scripts - so 40_custom is ignored
+	defaultScripts["header"]                            =  0;
+	defaultScripts["debian_theme"]                      =  5;
+	defaultScripts["grub-customizer_menu_color_helper"] =  6;
+	defaultScripts["linux"]                             = 10;
+	defaultScripts["linux_xen"]                         = 20;
+	defaultScripts["memtest86+"]                        = 20;
+	defaultScripts["os-prober"]                         = 30;
+	defaultScripts["custom"]                            = 41;
+
+	std::string proxyfiedScriptPath = this->env.cfg_dir + "/proxifiedScripts";
+
+	for (std::list<Model_Script>::iterator scriptIter = this->repository.begin(); scriptIter != this->repository.end(); scriptIter++) {
+		std::string currentPath = scriptIter->fileName;
+		std::string defaultPath;
+		int pos = -1;
+
+		if (scriptIter->isCustomScript) {
+			defaultPath = this->env.cfg_dir + "/40_custom";
+		} else if (defaultScripts.find(scriptIter->name) != defaultScripts.end()) {
+			pos = defaultScripts[scriptIter->name];
+			std::ostringstream str;
+			str << this->env.cfg_dir << "/" << std::setw(2) << std::setfill('0') << pos << "_" << scriptIter->name;
+			defaultPath = str.str();
+		} else if (currentPath.substr(0, proxyfiedScriptPath.length()) != proxyfiedScriptPath) { // not in /proxfiedScripts
+			defaultPath = currentPath;
+		}
+
+		if (defaultPath != "") {
+			this->scriptSourceMap[defaultPath] = currentPath;
+		}
+	}
+}
+
+void Model_ListCfg::populateScriptSourceMap() {
+	std::string proxyfiedScriptPath = this->env.cfg_dir + "/proxifiedScripts";
+	for (std::list<Model_Script>::iterator scriptIter = this->repository.begin(); scriptIter != this->repository.end(); scriptIter++) {
+		if (scriptIter->fileName.substr(0, proxyfiedScriptPath.length()) != proxyfiedScriptPath
+				&& this->scriptSourceMap.getSourceName(scriptIter->fileName) == "") {
+			this->scriptSourceMap[scriptIter->fileName] = scriptIter->fileName;
+		}
+	}
 }
 
 Model_ListCfg::operator ArrayStructure() const {
