@@ -38,11 +38,6 @@ void Model_ScriptSourceMap::load() {
 			(*this)[dataRow["default_name"]] = dataRow["current_name"];
 		}
 		fclose(file);
-
-		if (this->size() == 1) {
-			std::map<std::string, std::string>::iterator iter = this->begin();
-			std::cout << "load: the only element is: " << iter->first << ": " << iter->second << std::endl;
-		}
 	}
 }
 
