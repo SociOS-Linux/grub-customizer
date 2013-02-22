@@ -31,14 +31,18 @@ class Model_ScriptSourceMap : public std::map<std::string, std::string>, public 
 	Model_Env& env;
 	std::string _getFilePath();
 	bool _fileExists;
+	std::list<std::string> _newSources;
 public:
 	Model_ScriptSourceMap(Model_Env& env);
 	void load();
 	void registerMove(std::string const& sourceName, std::string const& destinationName);
+	void addScript(std::string const& sourceName);
 	void save();
 	bool has(std::string const& sourceName);
 	std::string getSourceName(std::string const& destinationName);
 	bool fileExists();
+	std::list<std::string> getUpdates();
+	void deleteUpdates();
 };
 
 

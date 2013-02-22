@@ -1168,7 +1168,7 @@ void Model_ListCfg::populateScriptSourceMap() {
 	for (std::list<Model_Script>::iterator scriptIter = this->repository.begin(); scriptIter != this->repository.end(); scriptIter++) {
 		if (scriptIter->fileName.substr(0, proxyfiedScriptPath.length()) != proxyfiedScriptPath
 				&& this->scriptSourceMap.getSourceName(scriptIter->fileName) == "") {
-			this->scriptSourceMap[scriptIter->fileName] = scriptIter->fileName;
+			this->scriptSourceMap.addScript(scriptIter->fileName);
 		}
 	}
 }

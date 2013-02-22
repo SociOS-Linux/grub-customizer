@@ -30,6 +30,7 @@ std::string Model_ScriptSourceMap::_getFilePath() {
 void Model_ScriptSourceMap::load() {
 	this->clear();
 	this->_fileExists = false;
+	this->_newSources.clear();
 
 	FILE* file = fopen(this->_getFilePath().c_str(), "r");
 	if (file) {
@@ -49,6 +50,14 @@ void Model_ScriptSourceMap::registerMove(std::string const& sourceName, std::str
 		(*this)[originalSourceName] = destinationName;
 	} else {
 		(*this)[sourceName] = destinationName;
+	}
+}
+
+void Model_ScriptSourceMap::addScript(std::string const& sourceName) {
+	if (this->has(sourceName)) {
+		this->_newSources.push_back(sourceName);
+	} else {
+		(*this)[sourceName] = sourceName;
 	}
 }
 
@@ -92,5 +101,11 @@ bool Model_ScriptSourceMap::fileExists() {
 	return this->_fileExists;
 }
 
+std::list<std::string> Model_ScriptSourceMap::getUpdates() {
+	return this->_newSources;
+}
 
+void Model_ScriptSourceMap::deleteUpdates() {
+	this->_newSources.clear();
+}
 
