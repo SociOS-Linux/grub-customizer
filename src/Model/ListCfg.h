@@ -130,6 +130,8 @@ public:
 	std::list<Model_Script*> getProxifiedScripts();
 	void generateScriptSourceMap();
 	void populateScriptSourceMap();
+	bool hasScriptUpdates() const;
+	void applyScriptUpdates();
 
 	operator ArrayStructure() const;
 };

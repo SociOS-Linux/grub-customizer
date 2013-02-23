@@ -917,6 +917,9 @@ void MainControllerImpl::syncLoadStateAction() {
 		if (progress == 1){
 			this->getAllControllers().settingsController->updateSettingsDataAction();
 			this->getAllControllers().trashController->updateAction(this->view->getOptions());
+			if (this->grublistCfg->hasScriptUpdates()) {
+				this->view->showScriptUpdateRecommendation();
+			}
 
 			bool placeholdersVisible = this->view->getOptions().at(VIEW_SHOW_PLACEHOLDERS);
 			bool hiddenEntriesVisible = this->view->getOptions().at(VIEW_SHOW_HIDDEN_ENTRIES);

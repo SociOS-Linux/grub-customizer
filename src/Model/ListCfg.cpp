@@ -194,9 +194,8 @@ void Model_ListCfg::load(bool preserveConfig){
 	this->scriptSourceMap.load();
 	if (!this->scriptSourceMap.fileExists() && this->getProxifiedScripts().size() > 0) {
 		this->generateScriptSourceMap();
-	} else {
-		this->populateScriptSourceMap();
 	}
+	this->populateScriptSourceMap();
 
 	//run mkconfig
 	this->log("running " + this->env.mkconfig_cmd, Logger::EVENT);
@@ -1153,8 +1152,6 @@ void Model_ListCfg::generateScriptSourceMap() {
 			std::ostringstream str;
 			str << this->env.cfg_dir << "/" << std::setw(2) << std::setfill('0') << pos << "_" << scriptIter->name;
 			defaultPath = str.str();
-		} else if (currentPath.substr(0, proxyfiedScriptPath.length()) != proxyfiedScriptPath) { // not in /proxfiedScripts
-			defaultPath = currentPath;
 		}
 
 		if (defaultPath != "") {
@@ -1171,6 +1168,14 @@ void Model_ListCfg::populateScriptSourceMap() {
 			this->scriptSourceMap.addScript(scriptIter->fileName);
 		}
 	}
+}
+
+bool Model_ListCfg::hasScriptUpdates() const {
+	return this->scriptSourceMap.getUpdates().size() > 0;
+}
+
+void Model_ListCfg::applyScriptUpdates() {
+	// @todo: add functionality
 }
 
 Model_ListCfg::operator ArrayStructure() const {

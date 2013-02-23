@@ -101,7 +101,7 @@ bool Model_ScriptSourceMap::fileExists() {
 	return this->_fileExists;
 }
 
-std::list<std::string> Model_ScriptSourceMap::getUpdates() {
+std::list<std::string> Model_ScriptSourceMap::getUpdates() const {
 	return this->_newSources;
 }
 

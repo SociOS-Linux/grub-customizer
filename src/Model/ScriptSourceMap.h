@@ -41,7 +41,7 @@ public:
 	bool has(std::string const& sourceName);
 	std::string getSourceName(std::string const& destinationName);
 	bool fileExists();
-	std::list<std::string> getUpdates();
+	std::list<std::string> getUpdates() const;
 	void deleteUpdates();
 };
 
