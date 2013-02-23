@@ -214,6 +214,16 @@ void Model_Script::deleteEntry(Model_Entry const& entry, Model_Entry* parent) {
 	throw ItemNotFoundException("entry for deletion not found");
 }
 
+bool Model_Script::deleteFile() {
+	int success = unlink(this->fileName.c_str());
+	if (success == 0){
+		this->fileName = "";
+		return true;
+	}
+	else
+		return false;
+}
+
 Model_Script::operator ArrayStructure() const {
 	ArrayStructure result;
 

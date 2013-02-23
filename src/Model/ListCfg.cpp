@@ -351,6 +351,7 @@ void Model_ListCfg::save(){
 	std::map<std::string, int> samename_counter;
 	proxies.deleteAllProxyscriptFiles();  //delete all proxies to get a clean file system
 	proxies.clearTrash(); //delete all files of removed proxies
+	repository.clearTrash();
 	
 	std::map<Model_Script*, std::string> scriptFilenameMap; // stores original filenames
 	for (std::list<Model_Script>::iterator scriptIter = this->repository.begin(); scriptIter != this->repository.end(); scriptIter++) {
@@ -681,7 +682,9 @@ void Model_ListCfg::cancelThreads(){
 void Model_ListCfg::reset(){
 	this->lock();
 	this->repository.clear();
+	this->repository.trash.clear();
 	this->proxies.clear();
+	this->proxies.trash.clear();
 	this->unlock();
 }
 
@@ -1154,7 +1157,7 @@ void Model_ListCfg::generateScriptSourceMap() {
 			defaultPath = str.str();
 		}
 
-		if (defaultPath != "") {
+		if (defaultPath != "" && defaultPath != currentPath) {
 			this->scriptSourceMap[defaultPath] = currentPath;
 		}
 	}
@@ -1175,7 +1178,33 @@ bool Model_ListCfg::hasScriptUpdates() const {
 }
 
 void Model_ListCfg::applyScriptUpdates() {
-	// @todo: add functionality
+	std::list<std::string> newScriptPathes = this->scriptSourceMap.getUpdates();
+	for (std::list<std::string>::iterator newScriptPathIter = newScriptPathes.begin(); newScriptPathIter != newScriptPathes.end(); newScriptPathIter++) {
+		std::string oldScriptPath = this->scriptSourceMap[*newScriptPathIter];
+		Model_Script* oldScript = this->repository.getScriptByFilename(oldScriptPath);
+		Model_Script* newScript = this->repository.getScriptByFilename(*newScriptPathIter);
+		if (!oldScript || !newScript) {
+			this->log("applyScriptUpdates failed for " + *newScriptPathIter, Logger::ERROR);
+			continue;
+		}
+
+		// unsync proxies of newScript
+		std::list<Model_Proxy*> newProxies = this->proxies.getProxiesByScript(*newScript);
+		for (std::list<Model_Proxy*>::iterator newProxyIter = newProxies.begin(); newProxyIter != newProxies.end(); newProxyIter++) {
+			(*newProxyIter)->unsync();
+			this->proxies.deleteProxy(&**newProxyIter);
+		}
+
+		// connect proxies of oldScript with newScript, resync
+		std::list<Model_Proxy*> oldProxies = this->proxies.getProxiesByScript(*oldScript);
+		for (std::list<Model_Proxy*>::iterator oldProxyIter = oldProxies.begin(); oldProxyIter != oldProxies.end(); oldProxyIter++) {
+			(*oldProxyIter)->unsync();
+			(*oldProxyIter)->dataSource = newScript;
+			(*oldProxyIter)->sync();
+		}
+
+		this->repository.removeScript(*oldScript);
+	}
 }
 
 Model_ListCfg::operator ArrayStructure() const {
