@@ -54,6 +54,7 @@ struct Model_Script : public Model_EntryPathFollower, public CommonClass, public
 	operator ArrayStructure() const;
 	static Model_Script& fromPtr(Script* script);
 	static Model_Script const& fromPtr(Script const* script);
+	static int extractIndexFromPath(std::string const& path, std::string const& cfgDirPath);
 };
 
 #endif

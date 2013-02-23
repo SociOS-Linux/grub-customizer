@@ -49,6 +49,7 @@
 #include "../lib/trim.h"
 #include "ScriptSourceMap.h"
 #include <stack>
+#include <algorithm>
 
 
 class Model_ListCfg : public CommonClass {
@@ -132,6 +133,8 @@ public:
 	void populateScriptSourceMap();
 	bool hasScriptUpdates() const;
 	void applyScriptUpdates();
+
+	void revert();
 
 	operator ArrayStructure() const;
 };

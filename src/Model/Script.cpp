@@ -255,3 +255,15 @@ Model_Script const& Model_Script::fromPtr(Script const* script) {
 	throw BadCastException("Model_Script::fromPtr [const] failed");
 }
 
+int Model_Script::extractIndexFromPath(std::string const& path, std::string const& cfgDirPath) {
+	if (path.substr(0, cfgDirPath.length()) == cfgDirPath) {
+		std::string subPath = path.substr(cfgDirPath.length() + 1); // remove path
+		std::string prefix = subPath.substr(0, 2);
+		if (prefix.length() == 2 && prefix[0] >= '0' && prefix[0] <= '9' && prefix[1] >= '0' && prefix[1] <= '9') {
+			int prefixNum = (prefix[0] - '0') * 10 + (prefix[1] - '0');
+			return prefixNum;
+		}
+	}
+	throw InvalidStringFormatException("unable to parse index from " + path, __FILE__, __LINE__);
+}
+

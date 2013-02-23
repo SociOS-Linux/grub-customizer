@@ -708,16 +708,14 @@ void Model_ListCfg::renumerate(bool favorDefaultOrder){
 		bool isDefaultNumber = false;
 		if (favorDefaultOrder && iter->dataSource) {
 			std::string sourceFileName = this->scriptSourceMap.getSourceName(iter->dataSource->fileName);
-			if (sourceFileName.substr(0, this->env.cfg_dir.length()) == this->env.cfg_dir) {
-				sourceFileName = sourceFileName.substr(this->env.cfg_dir.length() + 1); // remove path
-				std::string prefix = sourceFileName.substr(0, 2);
-				if (prefix.length() == 2 && prefix[0] >= '0' && prefix[0] <= '9' && prefix[1] >= '0' && prefix[1] <= '9') {
-					int prefixNum = (prefix[0] - '0') * 10 + (prefix[1] - '0');
-					if (prefixNum >= i) {
-						i = prefixNum;
-						isDefaultNumber = true;
-					}
+			try {
+				int prefixNum = Model_Script::extractIndexFromPath(sourceFileName, this->env.cfg_dir);
+				if (prefixNum >= i) {
+					i = prefixNum;
+					isDefaultNumber = true;
 				}
+			} catch (InvalidStringFormatException const& e) {
+				this->log(e, Logger::ERROR);
 			}
 		}
 
@@ -1237,6 +1235,40 @@ void Model_ListCfg::applyScriptUpdates() {
 
 		this->repository.removeScript(*oldScript);
 	}
+}
+
+void Model_ListCfg::revert() {
+	int remaining = this->proxies.size();
+	while (remaining) {
+		this->proxies.deleteProxy(&this->proxies.front());
+		assert(this->proxies.size() < remaining); // make sure that the proxy has really been deleted to prevent an endless loop
+		remaining = this->proxies.size();
+	}
+	std::list<std::string> usedIndices;
+	int i = 50; // unknown scripts starting at position 50
+	for (std::list<Model_Script>::iterator iter = this->repository.begin(); iter != this->repository.end(); iter++) {
+		Model_Proxy newProxy(*iter);
+		std::string sourceFileName = this->scriptSourceMap.getSourceName(iter->fileName);
+		try {
+			newProxy.index = Model_Script::extractIndexFromPath(sourceFileName, this->env.cfg_dir);
+		} catch (InvalidStringFormatException const& e) {
+			newProxy.index = i++;
+			this->log(e, Logger::ERROR);
+		}
+
+		// avoid duplicates
+		std::ostringstream uniqueIndex;
+		uniqueIndex << newProxy.index << iter->name;
+
+		if (std::find(usedIndices.begin(), usedIndices.end(), uniqueIndex.str()) != usedIndices.end()) {
+			newProxy.index = i++;
+		}
+
+		usedIndices.push_back(uniqueIndex.str());
+
+		this->proxies.push_back(newProxy);
+	}
+	this->proxies.sort();
 }
 
 Model_ListCfg::operator ArrayStructure() const {
