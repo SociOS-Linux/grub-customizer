@@ -43,7 +43,7 @@ View_Gtk_Main::View_Gtk_Main()
 	bttAdvancedSettings1(gettext("advanced settings")), bttAdvancedSettings2(gettext("advanced settings")),
 	bbxAdvancedSettings1(Gtk::BUTTONBOX_END), bbxAdvancedSettings2(Gtk::BUTTONBOX_END),
 	lblReloadRequired(gettext("The modifications you've done affects the visible entries. Please reload!"), Pango::ALIGN_LEFT),
-	lblScriptUpdatesFound(gettext("Script updates found! This causes duplicate entries. Fix it?"), Pango::ALIGN_LEFT),
+	lblScriptUpdatesFound(gettext("Script updates found. Click save to apply the changes!"), Pango::ALIGN_LEFT),
 	trashList(NULL)
 {
 	win.set_icon_name("grub-customizer");
@@ -73,8 +73,8 @@ View_Gtk_Main::View_Gtk_Main()
 	dynamic_cast<Gtk::Container&>(*infoReloadRequired.get_content_area()).add(lblReloadRequired);
 	infoReloadRequired.set_no_show_all(true);
 
-	infoScriptUpdatesFound.set_message_type(Gtk::MESSAGE_WARNING);
-	infoScriptUpdatesFound.add_button(Gtk::Stock::APPLY, Gtk::RESPONSE_APPLY);
+	infoScriptUpdatesFound.set_message_type(Gtk::MESSAGE_INFO);
+	lblScriptUpdatesFound.set_line_wrap(true);
 	dynamic_cast<Gtk::Container&>(*infoScriptUpdatesFound.get_content_area()).add(lblScriptUpdatesFound);
 	infoScriptUpdatesFound.set_no_show_all(true);
 
@@ -653,12 +653,12 @@ void View_Gtk_Main::hideReloadRecommendation() {
 	this->infoReloadRequired.hide();
 }
 
-void View_Gtk_Main::showScriptUpdateRecommendation() {
+void View_Gtk_Main::showScriptUpdateInfo() {
 	this->infoScriptUpdatesFound.show();
 	this->lblScriptUpdatesFound.show();
 }
 
-void View_Gtk_Main::hideScriptUpdateRecommendation() {
+void View_Gtk_Main::hideScriptUpdateInfo() {
 	this->infoScriptUpdatesFound.hide();
 }
 

@@ -105,8 +105,8 @@ public:
 
 	virtual void showPlaintextRemoveWarning() = 0;
 
-	virtual void showScriptUpdateRecommendation() = 0;
-	virtual void hideScriptUpdateRecommendation() = 0;
+	virtual void showScriptUpdateInfo() = 0;
+	virtual void hideScriptUpdateInfo() = 0;
 
 	virtual void showSystemRuleRemoveWarning() = 0;
 

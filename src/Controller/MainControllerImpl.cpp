@@ -300,6 +300,7 @@ void MainControllerImpl::saveAction(){
 	try {
 		this->config_has_been_different_on_startup_but_unsaved = false;
 		this->env.modificationsUnsaved = false; //deprecated
+		this->view->hideScriptUpdateInfo();
 
 		this->view->setLockState(1|4|8);
 		this->env.activeThreadCount++; //not in save_thead() to be faster set
@@ -918,7 +919,9 @@ void MainControllerImpl::syncLoadStateAction() {
 			this->getAllControllers().settingsController->updateSettingsDataAction();
 			this->getAllControllers().trashController->updateAction(this->view->getOptions());
 			if (this->grublistCfg->hasScriptUpdates()) {
-				this->view->showScriptUpdateRecommendation();
+				this->grublistCfg->applyScriptUpdates();
+				this->env.modificationsUnsaved = true;
+				this->view->showScriptUpdateInfo();
 			}
 
 			bool placeholdersVisible = this->view->getOptions().at(VIEW_SHOW_PLACEHOLDERS);

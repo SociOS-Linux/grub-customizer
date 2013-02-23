@@ -141,8 +141,8 @@ public:
 	void showReloadRecommendation();
 	void hideReloadRecommendation();
 
-	void showScriptUpdateRecommendation();
-	void hideScriptUpdateRecommendation();
+	void showScriptUpdateInfo();
+	void hideScriptUpdateInfo();
 
 	void showPlaintextRemoveWarning();
 	void showSystemRuleRemoveWarning();
