@@ -705,6 +705,7 @@ int Model_ListCfg::getProgress_max() const {
 void Model_ListCfg::renumerate(bool favorDefaultOrder){
 	short int i = 0;
 	for (Model_Proxylist::iterator iter = this->proxies.begin(); iter != this->proxies.end(); iter++){
+		bool isDefaultNumber = false;
 		if (favorDefaultOrder && iter->dataSource) {
 			std::string sourceFileName = this->scriptSourceMap.getSourceName(iter->dataSource->fileName);
 			if (sourceFileName.substr(0, this->env.cfg_dir.length()) == this->env.cfg_dir) {
@@ -714,12 +715,30 @@ void Model_ListCfg::renumerate(bool favorDefaultOrder){
 					int prefixNum = (prefix[0] - '0') * 10 + (prefix[1] - '0');
 					if (prefixNum >= i) {
 						i = prefixNum;
+						isDefaultNumber = true;
 					}
 				}
 			}
 		}
 
-		iter->index = i++;
+		bool retry = false;
+		do {
+			retry = false;
+
+			iter->index = i;
+
+			if (!isDefaultNumber && iter->dataSource) {
+				// make sure that scripts never get a filePath that matches a script source (unless it's the source script)
+				std::ostringstream fullFileName;
+				fullFileName << this->env.cfg_dir << "/" << std::setw(2) << std::setfill('0') << i << "_" << iter->dataSource->name;
+				if (this->scriptSourceMap.has(fullFileName.str())) {
+					i++;
+					retry = true;
+				}
+			}
+		} while (retry);
+
+		i++;
 	}
 	this->proxies.sort();
 
