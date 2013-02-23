@@ -98,7 +98,7 @@ public:
 	int getProgress_max() const;
 
 	void increaseProxyPos(Model_Proxy* proxy);
-	void renumerate();
+	void renumerate(bool favorDefaultOrder = true);
 	
 	void swapRules(Model_Rule* a, Model_Rule* b);
 	Model_Rule& moveRule(Model_Rule* rule, int direction);

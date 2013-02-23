@@ -702,19 +702,30 @@ int Model_ListCfg::getProgress_max() const {
 	return progress_max;
 }
 
-void Model_ListCfg::renumerate(){
+void Model_ListCfg::renumerate(bool favorDefaultOrder){
 	short int i = 0;
 	for (Model_Proxylist::iterator iter = this->proxies.begin(); iter != this->proxies.end(); iter++){
-		if (i <= 0 && iter->dataSource && iter->dataSource->name == "header") {
-			i = 0;
-		} else if (i <= 5 && iter->dataSource && iter->dataSource->name == "debian_theme") {
-			i = 5;
-		} else if (i <= 10) {
-			i = 10;
+		if (favorDefaultOrder && iter->dataSource) {
+			std::string sourceFileName = this->scriptSourceMap.getSourceName(iter->dataSource->fileName);
+			if (sourceFileName.substr(0, this->env.cfg_dir.length()) == this->env.cfg_dir) {
+				sourceFileName = sourceFileName.substr(this->env.cfg_dir.length() + 1); // remove path
+				std::string prefix = sourceFileName.substr(0, 2);
+				if (prefix.length() == 2 && prefix[0] >= '0' && prefix[0] <= '9' && prefix[1] >= '0' && prefix[1] <= '9') {
+					int prefixNum = (prefix[0] - '0') * 10 + (prefix[1] - '0');
+					if (prefixNum >= i) {
+						i = prefixNum;
+					}
+				}
+			}
 		}
+
 		iter->index = i++;
 	}
 	this->proxies.sort();
+
+	if (favorDefaultOrder && i > 100) { // if positions are out of range...
+		this->renumerate(false); // retry without favorDefaultOrder
+	}
 }
 
 Model_Rule& Model_ListCfg::moveRule(Model_Rule* rule, int direction){
@@ -804,6 +815,7 @@ Model_Rule& Model_ListCfg::moveRule(Model_Rule* rule, int direction){
 					} catch (NoMoveTargetException const& e) {
 						// ignore NoMoveTargetException - occurs when prevPrevRule is not found. But this isn't a problem
 					}
+					this->renumerate();
 
 					return *movedRule;
 				}
@@ -918,6 +930,7 @@ void Model_ListCfg::swapProxies(Model_Proxy* a, Model_Proxy* b){
 	a->index = b->index;
 	b->index = index1;
 	this->proxies.sort();
+	this->renumerate();
 }
 
 Model_Rule* Model_ListCfg::createSubmenu(Model_Rule* position) {
