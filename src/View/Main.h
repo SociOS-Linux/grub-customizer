@@ -105,6 +105,9 @@ public:
 
 	virtual void showPlaintextRemoveWarning() = 0;
 
+	virtual void showScriptUpdateInfo() = 0;
+	virtual void hideScriptUpdateInfo() = 0;
+
 	virtual void showSystemRuleRemoveWarning() = 0;
 
 	virtual void setOption(ViewOption option, bool value) = 0;

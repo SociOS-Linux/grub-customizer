@@ -47,7 +47,9 @@
 #include "../lib/Exception.h"
 #include "../lib/ArrayStructure.h"
 #include "../lib/trim.h"
+#include "ScriptSourceMap.h"
 #include <stack>
+#include <algorithm>
 
 
 class Model_ListCfg : public CommonClass {
@@ -58,6 +60,8 @@ class Model_ListCfg : public CommonClass {
 	int progress_pos, progress_max;
 	Mutex* mutex;
 	std::string errorLogFile;
+
+	Model_ScriptSourceMap scriptSourceMap;
 public:
 	Model_ListCfg(Model_Env& env);
 	void setEventListener(MainController& eventListener);
@@ -95,7 +99,7 @@ public:
 	int getProgress_max() const;
 
 	void increaseProxyPos(Model_Proxy* proxy);
-	void renumerate();
+	void renumerate(bool favorDefaultOrder = true);
 	
 	void swapRules(Model_Rule* a, Model_Rule* b);
 	Model_Rule& moveRule(Model_Rule* rule, int direction);
@@ -123,6 +127,14 @@ public:
 	void deleteEntry(Model_Entry const& entry);
 
 	std::list<Rule*> getNormalizedRuleOrder(std::list<Rule*> rules);
+
+	std::list<Model_Script*> getProxifiedScripts();
+	void generateScriptSourceMap();
+	void populateScriptSourceMap();
+	bool hasScriptUpdates() const;
+	void applyScriptUpdates();
+
+	void revert();
 
 	operator ArrayStructure() const;
 };

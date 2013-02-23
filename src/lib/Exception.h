@@ -154,6 +154,11 @@ public: inline BadCastException(std::string const& message, std::string const& f
    : TechnicalException(message, file, line) {}
 };
 
+class InvalidStringFormatException : public LogicException {
+	public: inline InvalidStringFormatException(std::string const& message, std::string const& file = "", int line = -1)
+	   : LogicException(message, file, line) {}
+};
+
 // Template:
 //class CLASSNAME : public BASECLASS {
 //	public: inline CLASSNAME(std::string const& message, std::string const& file = "", int line = -1)

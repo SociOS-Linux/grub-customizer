@@ -46,6 +46,9 @@ class View_Gtk_Main : public View_Main, public CommonClass {
 	Gtk::ScrolledWindow scrEntryList;
 	Gtk::InfoBar infoReloadRequired;
 	Gtk::Label lblReloadRequired;
+	Gtk::InfoBar infoScriptUpdatesFound;
+	Gtk::Label lblScriptUpdatesFound;
+
 	Gtk::VBox vbEntryList;
 	Gtk::Statusbar statusbar;
 	
@@ -137,6 +140,9 @@ public:
 
 	void showReloadRecommendation();
 	void hideReloadRecommendation();
+
+	void showScriptUpdateInfo();
+	void hideScriptUpdateInfo();
 
 	void showPlaintextRemoveWarning();
 	void showSystemRuleRemoveWarning();

@@ -111,6 +111,8 @@ src/Model/Rule.cpp -text
 src/Model/Rule.h -text
 src/Model/Script.cpp -text
 src/Model/Script.h -text
+src/Model/ScriptSourceMap.cpp -text
+src/Model/ScriptSourceMap.h -text
 src/Model/SettingsManagerData.cpp -text
 src/Model/SettingsManagerData.h -text
 src/Model/SettingsStore.cpp -text
@@ -175,6 +177,8 @@ src/lib/Mutex/GLib.h -text
 src/lib/Type.h -text
 src/lib/assert.cpp -text
 src/lib/assert.h -text
+src/lib/csv.cpp -text
+src/lib/csv.h -text
 src/lib/md5.cpp -text
 src/lib/md5.h -text
 src/lib/regex.cpp -text

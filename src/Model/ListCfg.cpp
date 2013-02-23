@@ -22,7 +22,8 @@ Model_ListCfg::Model_ListCfg(Model_Env& env)
  : error_proxy_not_found(false),
  progress(0),
  cancelThreadsRequested(false), verbose(true), env(env), eventListener(NULL),
- mutex(NULL), errorLogFile(ERROR_LOG_FILE), ignoreLock(false), progress_pos(0), progress_max(0)
+ mutex(NULL), errorLogFile(ERROR_LOG_FILE), ignoreLock(false), progress_pos(0), progress_max(0),
+ scriptSourceMap(env)
 {}
 
 void Model_ListCfg::setEventListener(MainController& eventListener) {
@@ -37,6 +38,7 @@ void Model_ListCfg::setLogger(Logger& logger) {
 	this->CommonClass::setLogger(logger);
 	this->proxies.setLogger(logger);
 	this->repository.setLogger(logger);
+	this->scriptSourceMap.setLogger(logger);
 }
 
 void Model_ListCfg::lock(){
@@ -186,6 +188,14 @@ void Model_ListCfg::load(bool preserveConfig){
 	}
 	this->unlock();
 	send_new_load_progress(0.1);
+
+
+	//load script map
+	this->scriptSourceMap.load();
+	if (!this->scriptSourceMap.fileExists() && this->getProxifiedScripts().size() > 0) {
+		this->generateScriptSourceMap();
+	}
+	this->populateScriptSourceMap();
 
 	//run mkconfig
 	this->log("running " + this->env.mkconfig_cmd, Logger::EVENT);
@@ -341,7 +351,13 @@ void Model_ListCfg::save(){
 	std::map<std::string, int> samename_counter;
 	proxies.deleteAllProxyscriptFiles();  //delete all proxies to get a clean file system
 	proxies.clearTrash(); //delete all files of removed proxies
+	repository.clearTrash();
 	
+	std::map<Model_Script*, std::string> scriptFilenameMap; // stores original filenames
+	for (std::list<Model_Script>::iterator scriptIter = this->repository.begin(); scriptIter != this->repository.end(); scriptIter++) {
+		scriptFilenameMap[&*scriptIter] = scriptIter->fileName;
+	}
+
 	// create virtual custom scripts on file system
 	for (std::list<Model_Script>::iterator scriptIter = this->repository.begin(); scriptIter != this->repository.end(); scriptIter++) {
 		if (scriptIter->isCustomScript && scriptIter->fileName == "") {
@@ -397,6 +413,11 @@ void Model_ListCfg::save(){
 	}
 	send_new_save_progress(0.2);
 
+	// register in script source map
+	for (std::map<Model_Script*, std::string>::iterator sMapIter = scriptFilenameMap.begin(); sMapIter != scriptFilenameMap.end(); sMapIter++) {
+		this->scriptSourceMap.registerMove(sMapIter->second, sMapIter->first->fileName);
+	}
+	this->scriptSourceMap.save();
 
 	//remove "proxifiedScripts" dir, if empty
 	
@@ -661,7 +682,9 @@ void Model_ListCfg::cancelThreads(){
 void Model_ListCfg::reset(){
 	this->lock();
 	this->repository.clear();
+	this->repository.trash.clear();
 	this->proxies.clear();
+	this->proxies.trash.clear();
 	this->unlock();
 }
 
@@ -679,19 +702,47 @@ int Model_ListCfg::getProgress_max() const {
 	return progress_max;
 }
 
-void Model_ListCfg::renumerate(){
+void Model_ListCfg::renumerate(bool favorDefaultOrder){
 	short int i = 0;
 	for (Model_Proxylist::iterator iter = this->proxies.begin(); iter != this->proxies.end(); iter++){
-		if (i <= 0 && iter->dataSource && iter->dataSource->name == "header") {
-			i = 0;
-		} else if (i <= 5 && iter->dataSource && iter->dataSource->name == "debian_theme") {
-			i = 5;
-		} else if (i <= 10) {
-			i = 10;
+		bool isDefaultNumber = false;
+		if (favorDefaultOrder && iter->dataSource) {
+			std::string sourceFileName = this->scriptSourceMap.getSourceName(iter->dataSource->fileName);
+			try {
+				int prefixNum = Model_Script::extractIndexFromPath(sourceFileName, this->env.cfg_dir);
+				if (prefixNum >= i) {
+					i = prefixNum;
+					isDefaultNumber = true;
+				}
+			} catch (InvalidStringFormatException const& e) {
+				this->log(e, Logger::ERROR);
+			}
 		}
-		iter->index = i++;
+
+		bool retry = false;
+		do {
+			retry = false;
+
+			iter->index = i;
+
+			if (!isDefaultNumber && iter->dataSource) {
+				// make sure that scripts never get a filePath that matches a script source (unless it's the source script)
+				std::ostringstream fullFileName;
+				fullFileName << this->env.cfg_dir << "/" << std::setw(2) << std::setfill('0') << i << "_" << iter->dataSource->name;
+				if (this->scriptSourceMap.has(fullFileName.str())) {
+					i++;
+					retry = true;
+				}
+			}
+		} while (retry);
+
+		i++;
 	}
 	this->proxies.sort();
+
+	if (favorDefaultOrder && i > 100) { // if positions are out of range...
+		this->renumerate(false); // retry without favorDefaultOrder
+	}
 }
 
 Model_Rule& Model_ListCfg::moveRule(Model_Rule* rule, int direction){
@@ -781,6 +832,7 @@ Model_Rule& Model_ListCfg::moveRule(Model_Rule* rule, int direction){
 					} catch (NoMoveTargetException const& e) {
 						// ignore NoMoveTargetException - occurs when prevPrevRule is not found. But this isn't a problem
 					}
+					this->renumerate();
 
 					return *movedRule;
 				}
@@ -895,6 +947,7 @@ void Model_ListCfg::swapProxies(Model_Proxy* a, Model_Proxy* b){
 	a->index = b->index;
 	b->index = index1;
 	this->proxies.sort();
+	this->renumerate();
 }
 
 Model_Rule* Model_ListCfg::createSubmenu(Model_Rule* position) {
@@ -1093,6 +1146,129 @@ std::list<Rule*> Model_ListCfg::getNormalizedRuleOrder(std::list<Rule*> rules) {
 	}
 
 	return result;
+}
+
+std::list<Model_Script*> Model_ListCfg::getProxifiedScripts() {
+	std::list<Model_Script*> result;
+
+	for (std::list<Model_Script>::iterator iter = this->repository.begin(); iter != this->repository.end(); iter++) {
+		if (this->proxies.proxyRequired(*iter)) {
+			result.push_back(&*iter);
+		}
+	}
+
+	return result;
+}
+
+void Model_ListCfg::generateScriptSourceMap() {
+	std::map<std::string, int> defaultScripts; // only for non-static scripts - so 40_custom is ignored
+	defaultScripts["header"]                            =  0;
+	defaultScripts["debian_theme"]                      =  5;
+	defaultScripts["grub-customizer_menu_color_helper"] =  6;
+	defaultScripts["linux"]                             = 10;
+	defaultScripts["linux_xen"]                         = 20;
+	defaultScripts["memtest86+"]                        = 20;
+	defaultScripts["os-prober"]                         = 30;
+	defaultScripts["custom"]                            = 41;
+
+	std::string proxyfiedScriptPath = this->env.cfg_dir + "/proxifiedScripts";
+
+	for (std::list<Model_Script>::iterator scriptIter = this->repository.begin(); scriptIter != this->repository.end(); scriptIter++) {
+		std::string currentPath = scriptIter->fileName;
+		std::string defaultPath;
+		int pos = -1;
+
+		if (scriptIter->isCustomScript) {
+			defaultPath = this->env.cfg_dir + "/40_custom";
+		} else if (defaultScripts.find(scriptIter->name) != defaultScripts.end()) {
+			pos = defaultScripts[scriptIter->name];
+			std::ostringstream str;
+			str << this->env.cfg_dir << "/" << std::setw(2) << std::setfill('0') << pos << "_" << scriptIter->name;
+			defaultPath = str.str();
+		}
+
+		if (defaultPath != "" && defaultPath != currentPath) {
+			this->scriptSourceMap[defaultPath] = currentPath;
+		}
+	}
+}
+
+void Model_ListCfg::populateScriptSourceMap() {
+	std::string proxyfiedScriptPath = this->env.cfg_dir + "/proxifiedScripts";
+	for (std::list<Model_Script>::iterator scriptIter = this->repository.begin(); scriptIter != this->repository.end(); scriptIter++) {
+		if (scriptIter->fileName.substr(0, proxyfiedScriptPath.length()) != proxyfiedScriptPath
+				&& this->scriptSourceMap.getSourceName(scriptIter->fileName) == "") {
+			this->scriptSourceMap.addScript(scriptIter->fileName);
+		}
+	}
+}
+
+bool Model_ListCfg::hasScriptUpdates() const {
+	return this->scriptSourceMap.getUpdates().size() > 0;
+}
+
+void Model_ListCfg::applyScriptUpdates() {
+	std::list<std::string> newScriptPathes = this->scriptSourceMap.getUpdates();
+	for (std::list<std::string>::iterator newScriptPathIter = newScriptPathes.begin(); newScriptPathIter != newScriptPathes.end(); newScriptPathIter++) {
+		std::string oldScriptPath = this->scriptSourceMap[*newScriptPathIter];
+		Model_Script* oldScript = this->repository.getScriptByFilename(oldScriptPath);
+		Model_Script* newScript = this->repository.getScriptByFilename(*newScriptPathIter);
+		if (!oldScript || !newScript) {
+			this->log("applyScriptUpdates failed for " + *newScriptPathIter, Logger::ERROR);
+			continue;
+		}
+
+		// unsync proxies of newScript
+		std::list<Model_Proxy*> newProxies = this->proxies.getProxiesByScript(*newScript);
+		for (std::list<Model_Proxy*>::iterator newProxyIter = newProxies.begin(); newProxyIter != newProxies.end(); newProxyIter++) {
+			(*newProxyIter)->unsync();
+			this->proxies.deleteProxy(&**newProxyIter);
+		}
+
+		// connect proxies of oldScript with newScript, resync
+		std::list<Model_Proxy*> oldProxies = this->proxies.getProxiesByScript(*oldScript);
+		for (std::list<Model_Proxy*>::iterator oldProxyIter = oldProxies.begin(); oldProxyIter != oldProxies.end(); oldProxyIter++) {
+			(*oldProxyIter)->unsync();
+			(*oldProxyIter)->dataSource = newScript;
+			(*oldProxyIter)->sync();
+		}
+
+		this->repository.removeScript(*oldScript);
+	}
+}
+
+void Model_ListCfg::revert() {
+	int remaining = this->proxies.size();
+	while (remaining) {
+		this->proxies.deleteProxy(&this->proxies.front());
+		assert(this->proxies.size() < remaining); // make sure that the proxy has really been deleted to prevent an endless loop
+		remaining = this->proxies.size();
+	}
+	std::list<std::string> usedIndices;
+	int i = 50; // unknown scripts starting at position 50
+	for (std::list<Model_Script>::iterator iter = this->repository.begin(); iter != this->repository.end(); iter++) {
+		Model_Proxy newProxy(*iter);
+		std::string sourceFileName = this->scriptSourceMap.getSourceName(iter->fileName);
+		try {
+			newProxy.index = Model_Script::extractIndexFromPath(sourceFileName, this->env.cfg_dir);
+		} catch (InvalidStringFormatException const& e) {
+			newProxy.index = i++;
+			this->log(e, Logger::ERROR);
+		}
+
+		// avoid duplicates
+		std::ostringstream uniqueIndex;
+		uniqueIndex << newProxy.index << iter->name;
+
+		if (std::find(usedIndices.begin(), usedIndices.end(), uniqueIndex.str()) != usedIndices.end()) {
+			newProxy.index = i++;
+		}
+
+		usedIndices.push_back(uniqueIndex.str());
+
+		this->proxies.push_back(newProxy);
+	}
+	this->proxies.sort();
 }
 
 Model_ListCfg::operator ArrayStructure() const {
