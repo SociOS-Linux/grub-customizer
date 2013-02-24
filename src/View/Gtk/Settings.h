@@ -128,6 +128,9 @@ class View_Gtk_Settings : public Gtk::Dialog, public View_Settings, public Commo
 	Gtk::Label lblforegroundColor, lblBackgroundColor, lblNormalColor, lblHighlightColor;
 	GrubColorChooser gccNormalForeground, gccNormalBackground, gccHighlightForeground, gccHighlightBackground;
 
+	//font selection and background image group
+	Gtk::HBox hbFontAndBgImage;
+
 	//font selection
 	Gtk::Frame groupFont;
 	Gtk::Label lblFont;

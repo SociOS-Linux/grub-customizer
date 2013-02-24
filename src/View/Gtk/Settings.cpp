@@ -213,7 +213,7 @@ View_Gtk_Settings::View_Gtk_Settings()
 	hbResolution.pack_start(chkResolution, Gtk::PACK_SHRINK);
 	hbResolution.pack_start(cbResolution);
 	cbResolution.append("saved");
-	
+
 	//color chooser
 	vbAppearanceSettings.pack_start(groupColorChooser, Gtk::PACK_SHRINK);
 	groupColorChooser.add(alignColorChooser);
@@ -231,8 +231,13 @@ View_Gtk_Settings::View_Gtk_Settings()
 	tblColorChooser.attach(gccHighlightBackground, 2,3,2,3);
 	tblColorChooser.set_spacings(10);
 
+
+	//font selection and background image group
+	vbAppearanceSettings.pack_start(hbFontAndBgImage, Gtk::PACK_SHRINK);
+	hbFontAndBgImage.set_spacing(5);
+
 	//font selection
-	vbAppearanceSettings.pack_start(groupFont, Gtk::PACK_SHRINK);
+	hbFontAndBgImage.pack_start(groupFont);
 	groupFont.add(alignFont);
 	groupFont.set_label_widget(lblFont);
 	groupFont.set_shadow_type(Gtk::SHADOW_NONE);
@@ -245,9 +250,8 @@ View_Gtk_Settings::View_Gtk_Settings()
 	bttRemoveFont.set_tooltip_text(gettext("remove font"));
 	bttRemoveFont.set_no_show_all(true);
 
-
-	//background image
-	vbAppearanceSettings.pack_start(groupBackgroundImage);
+	//background selection
+	hbFontAndBgImage.pack_start(groupBackgroundImage);
 	groupBackgroundImage.set_shadow_type(Gtk::SHADOW_NONE);
 	groupBackgroundImage.add(alignBackgroundImage);
 	groupBackgroundImage.set_label_widget(lblBackgroundImage);
@@ -258,11 +262,10 @@ View_Gtk_Settings::View_Gtk_Settings()
 	hbBackgroundImage.pack_start(bttRemoveBackground, Gtk::PACK_SHRINK);
 	fcBackgroundImage.set_action(Gtk::FILE_CHOOSER_ACTION_OPEN);
 
-	vbBackgroundImage.pack_start(hbImgBtts);
-	vbBackgroundImage.pack_start(lblBackgroundRequiredInfo);
+	vbAppearanceSettings.pack_start(hbImgBtts);
+	vbAppearanceSettings.pack_start(lblBackgroundRequiredInfo);
 	hbImgBtts.pack_start(drwBackgroundPreview);
 
-	vbBackgroundImage.set_spacing(5);
 	hbImgBtts.set_spacing(5);
 	vbButtons.set_spacing(5);
 
