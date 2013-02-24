@@ -114,7 +114,8 @@ View_Gtk_Settings::View_Gtk_Settings()
 	lblColorChooser(gettext("menu colors")), lblBackgroundImage(gettext("background image")),
 	imgRemoveBackground(Gtk::Stock::REMOVE, Gtk::ICON_SIZE_BUTTON), imgRemoveFont(Gtk::Stock::REMOVE, Gtk::ICON_SIZE_BUTTON),
 	lblBackgroundRequiredInfo(gettext("To get the colors above working,\nyou have to select a background image!")),
-	gccNormalBackground(true), gccHighlightBackground(true), lblFont(gettext("_Font"), true), cbResolution(true)
+	gccNormalBackground(true), gccHighlightBackground(true), lblFont(gettext("_Font"), true), cbResolution(true),
+	lblTheme(gettext("_Theme: "), true)
 {
 	this->set_title("Grub Customizer - "+Glib::ustring(gettext("settings")));
 	this->set_icon_name("grub-customizer");
@@ -206,13 +207,25 @@ View_Gtk_Settings::View_Gtk_Settings()
 	vbKernelParams.add(chkGenerateRecovery);
 	vbKernelParams.set_spacing(5);
 	
+	//screen resolution and theme chooser
+	vbAppearanceSettings.pack_start(alignResolutionAndTheme, Gtk::PACK_SHRINK);
+	alignResolutionAndTheme.add(hbResolutionAndTheme);
+	alignResolutionAndTheme.set_padding(10, 0, 6, 0);
+	hbResolutionAndTheme.set_homogeneous(true);
+	hbResolutionAndTheme.set_spacing(15);
+
+	//theme chooser
+	hbResolutionAndTheme.pack_start(hbTheme, Gtk::PACK_EXPAND_WIDGET);
+	hbTheme.pack_start(lblTheme, Gtk::PACK_SHRINK);
+	hbTheme.pack_start(cbTheme);
+	lblTheme.set_mnemonic_widget(cbTheme);
+
 	//screen resolution
-	vbAppearanceSettings.pack_start(alignResolution, Gtk::PACK_SHRINK);
-	alignResolution.add(hbResolution);
-	alignResolution.set_padding(10, 0, 6, 0);
+	hbResolutionAndTheme.pack_start(hbResolution);
 	hbResolution.pack_start(chkResolution, Gtk::PACK_SHRINK);
-	hbResolution.pack_start(cbResolution);
+	hbResolution.pack_start(cbResolution, Gtk::PACK_EXPAND_WIDGET);
 	cbResolution.append("saved");
+
 
 	//color chooser
 	vbAppearanceSettings.pack_start(groupColorChooser, Gtk::PACK_SHRINK);
@@ -235,6 +248,7 @@ View_Gtk_Settings::View_Gtk_Settings()
 	//font selection and background image group
 	vbAppearanceSettings.pack_start(hbFontAndBgImage, Gtk::PACK_SHRINK);
 	hbFontAndBgImage.set_spacing(5);
+	hbFontAndBgImage.set_homogeneous(true);
 
 	//font selection
 	hbFontAndBgImage.pack_start(groupFont);

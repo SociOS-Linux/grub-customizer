@@ -115,11 +115,17 @@ class View_Gtk_Settings : public Gtk::Dialog, public View_Settings, public Commo
 	Gtk::CheckButton chkGenerateRecovery;
 	
 	//screen resolution
-	Gtk::Alignment alignResolution;
+	Gtk::Alignment alignResolutionAndTheme;
+	Gtk::HBox hbResolutionAndTheme;
 	Gtk::HBox hbResolution;
 	Gtk::CheckButton chkResolution;
 	Gtk::ComboBoxText cbResolution;
 	
+	//theme chooser
+	Gtk::HBox hbTheme;
+	Gtk::Label lblTheme;
+	Gtk::ComboBox cbTheme;
+
 	//color chooser
 	Gtk::Frame groupColorChooser;
 	Gtk::Alignment alignColorChooser;
