@@ -124,7 +124,7 @@ class View_Gtk_Settings : public Gtk::Dialog, public View_Settings, public Commo
 	//theme chooser
 	Gtk::HBox hbTheme;
 	Gtk::Label lblTheme;
-	Gtk::ComboBox cbTheme;
+	Gtk::ComboBoxText cbTheme;
 
 	//color chooser
 	Gtk::Frame groupColorChooser;

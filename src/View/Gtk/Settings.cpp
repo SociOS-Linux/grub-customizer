@@ -219,6 +219,9 @@ View_Gtk_Settings::View_Gtk_Settings()
 	hbTheme.pack_start(lblTheme, Gtk::PACK_SHRINK);
 	hbTheme.pack_start(cbTheme);
 	lblTheme.set_mnemonic_widget(cbTheme);
+	cbTheme.append(gettext("(Custom Settings)"));
+	cbTheme.append(gettext("(Install theme)"));
+	cbTheme.set_active(0);
 
 	//screen resolution
 	hbResolutionAndTheme.pack_start(hbResolution);
