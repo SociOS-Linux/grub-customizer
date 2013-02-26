@@ -21,9 +21,42 @@
 
 #include "../Theme.h"
 #include <gtkmm.h>
+#include <string>
+#include <libintl.h>
 
 class View_Gtk_Theme : public View_Theme, public Gtk::Dialog {
+	Gtk::HPaned hpMain;
+	Gtk::Toolbar toolbar;
+	Gtk::ToolButton tbttAdd, tbttRemove;
 
+	Gtk::VBox vbFiles;
+	Gtk::ScrolledWindow scrFiles;
+	Gtk::ListViewText lvFiles;
+	Gtk::VBox vbEdit, vbEditInner;
+	Gtk::ScrolledWindow scrEdit;
+	Gtk::TextView txtEdit;
+	Gtk::Image imgPreview;
+	Gtk::HBox hbFileSelection;
+	Gtk::Label lblFileSelection;
+	Gtk::FileChooserButton fcFileSelection;
+	Glib::RefPtr<Gtk::SizeGroup> sizeGroupFooter;
+
+	bool event_lock;
+public:
+	View_Gtk_Theme();
+	void addFile(std::string const& fileName);
+	void clear();
+	void setText(std::string const& text);
+	void setImage(std::string const& path);
+	void selectFile(std::string const& fileName, bool startEdit = false);
+	void show();
+private:
+	void signal_fileAddClick();
+	void signal_fileRemoveClick();
+	void signal_fileSelected();
+	void signal_fileRenamed(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter);
+	void signal_fileChosen();
+	void signal_textChanged();
 };
 
 

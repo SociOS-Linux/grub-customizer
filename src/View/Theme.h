@@ -18,10 +18,17 @@
 
 #ifndef THEME_H_
 #define THEME_H_
+#include <string>
 
 class View_Theme {
 public:
-
+	virtual void addFile(std::string const& fileName) = 0;
+	virtual void clear() = 0;
+	virtual void setText(std::string const& text) = 0;
+	virtual void setImage(std::string const& path) = 0;
+	virtual void selectFile(std::string const& fileName, bool startEdit = false) = 0;
+	virtual void show() = 0;
+	virtual inline ~View_Theme() {};
 };
 
 #endif /* THEME_H_ */
