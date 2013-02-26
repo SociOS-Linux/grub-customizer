@@ -25,6 +25,7 @@
 #include "../View/Gtk/Settings.h"
 #include "../View/Gtk/EnvEditor.h"
 #include "../View/Gtk/Error.h"
+#include "../View/Gtk/Theme.h"
 #include "../lib/Mutex/GLib.h"
 #include "../Controller/GLib/ThreadController.h"
 #include "../lib/Logger/Stream.h"
@@ -85,6 +86,7 @@ int main(int argc, char** argv){
 		View_Gtk_EnvEditor envEditor;
 		View_Gtk_Error errorView;
 		Mapper_EntryNameImpl entryNameMapper;
+		View_Gtk_Theme themeEditor;
 
 		entryNameMapper.setView(listCfgView);
 
@@ -239,9 +241,12 @@ int main(int argc, char** argv){
 		listcfg.setMutex(listCfgMutex1);
 		savedListCfg.setMutex(listCfgMutex2);
 
-		mainController.initAction();
-		errorController.setApplicationStarted(true);
-		app.run();
+		themeEditor.set_default_size(800, 600);
+		themeEditor.show_all();
+		app.run(themeEditor);
+//		mainController.initAction();
+//		errorController.setApplicationStarted(true);
+//		app.run();
 	} catch (Exception const& e) {
 		logger.log(e, Logger::ERROR);
 		return 1;
