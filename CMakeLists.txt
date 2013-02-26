@@ -100,6 +100,7 @@ add_executable(grub-customizer
 	src/Controller/Helper/DeviceInfo.cpp
 	src/lib/csv.cpp
 	src/Model/ScriptSourceMap.cpp
+	src/View/Gtk/Theme.cpp
 )
 
 
