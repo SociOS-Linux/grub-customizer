@@ -69,6 +69,9 @@ src/Controller/MainControllerImpl.h -text
 src/Controller/SettingsController.h -text
 src/Controller/SettingsControllerImpl.cpp -text
 src/Controller/SettingsControllerImpl.h -text
+src/Controller/ThemeController.h -text
+src/Controller/ThemeControllerImpl.cpp -text
+src/Controller/ThemeControllerImpl.h -text
 src/Controller/ThreadController.h -text
 src/Controller/TrashController.h -text
 src/Controller/TrashControllerImpl.cpp -text

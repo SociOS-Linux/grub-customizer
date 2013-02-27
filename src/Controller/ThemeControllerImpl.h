@@ -16,29 +16,27 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef CONTROLLERCOLLECTION_H_
-#define CONTROLLERCOLLECTION_H_
-#include "EntryEditController.h"
-#include "MainController.h"
-#include "SettingsController.h"
-#include "EnvEditorController.h"
-#include "TrashController.h"
-#include "InstallerController.h"
-#include "AboutController.h"
-#include "ErrorController.h"
+#ifndef THEMECONTROLLERIMPL_H_
+#define THEMECONTROLLERIMPL_H_
 #include "ThemeController.h"
+#include "../Model/Env.h"
+#include "../View/Theme.h"
+#include "ControllerAbstract.h"
 
-struct ControllerCollection {
-	EntryEditController* entryEditController;
-	MainController* mainController;
-	SettingsController* settingsController;
-	EnvEditorController* envEditController;
-	TrashController* trashController;
-	InstallerController* installerController;
-	AboutController* aboutController;
-	ErrorController* errorController;
-	ThemeController* themeController;
+class ThemeControllerImpl : public ThemeController, public ControllerAbstract {
+	Model_Env& env;
+	View_Theme* view;
+public:
+	ThemeControllerImpl(Model_Env& env);
+	void setView(View_Theme& view);
+
+	void addFileAction();
+	void removeFileAction(std::string const& file);
+	void updateEditAreaAction(std::string const& file);
+	void renameAction(std::string const& oldName, std::string const& newName);
+	void loadFileAction(std::string const& externalPath);
+	void saveTextAction(std::string const& newText);
 };
 
 
-#endif /* CONTROLLERCOLLECTION_H_ */
+#endif /* THEMECONTROLLERIMPL_H_ */

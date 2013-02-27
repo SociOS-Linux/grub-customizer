@@ -16,29 +16,20 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef CONTROLLERCOLLECTION_H_
-#define CONTROLLERCOLLECTION_H_
-#include "EntryEditController.h"
-#include "MainController.h"
-#include "SettingsController.h"
-#include "EnvEditorController.h"
-#include "TrashController.h"
-#include "InstallerController.h"
-#include "AboutController.h"
-#include "ErrorController.h"
-#include "ThemeController.h"
+#ifndef THEMECONTROLLER_H_
+#define THEMECONTROLLER_H_
+#include <string>
 
-struct ControllerCollection {
-	EntryEditController* entryEditController;
-	MainController* mainController;
-	SettingsController* settingsController;
-	EnvEditorController* envEditController;
-	TrashController* trashController;
-	InstallerController* installerController;
-	AboutController* aboutController;
-	ErrorController* errorController;
-	ThemeController* themeController;
+class ThemeController {
+public:
+	virtual void addFileAction() = 0;
+	virtual void removeFileAction(std::string const& file) = 0;
+	virtual void updateEditAreaAction(std::string const& file) = 0;
+	virtual void renameAction(std::string const& oldName, std::string const& newName) = 0;
+	virtual void loadFileAction(std::string const& externalPath) = 0;
+	virtual void saveTextAction(std::string const& newText) = 0;
+	virtual inline ~ThemeController() {}
 };
 
 
-#endif /* CONTROLLERCOLLECTION_H_ */
+#endif /* THEMECONTROLLER_H_ */

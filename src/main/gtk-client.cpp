@@ -44,6 +44,7 @@
 #include "../Controller/AboutControllerImpl.h"
 #include "../Controller/ControllerCollection.h"
 #include "../Controller/ErrorControllerImpl.h"
+#include "../Controller/ThemeControllerImpl.h"
 #include "../Mapper/EntryNameImpl.h"
 #include "../lib/assert.h"
 #include "../lib/ArrayStructure.h"
@@ -139,6 +140,9 @@ int main(int argc, char** argv){
 		ErrorControllerImpl errorController(env);
 		errorController.setView(errorView);
 
+		ThemeControllerImpl themeController(env);
+		themeController.setView(themeEditor);
+
 		ControllerCollection controllerCollection;
 		controllerCollection.entryEditController = &entryEditController;
 		controllerCollection.mainController = &mainController;
@@ -148,6 +152,7 @@ int main(int argc, char** argv){
 		controllerCollection.installerController = &installController;
 		controllerCollection.aboutController = &aboutController;
 		controllerCollection.errorController = &errorController;
+		controllerCollection.themeController = &themeController;
 
 		entryEditController.setControllerCollection(controllerCollection);
 		mainController.setControllerCollection(controllerCollection);
@@ -157,6 +162,7 @@ int main(int argc, char** argv){
 		installController.setControllerCollection(controllerCollection);
 		aboutController.setControllerCollection(controllerCollection);
 		errorController.setControllerCollection(controllerCollection);
+		themeController.setControllerCollection(controllerCollection);
 
 		GLib_ThreadController threadC(controllerCollection);
 		mainController.setThreadController(threadC);
@@ -179,6 +185,7 @@ int main(int argc, char** argv){
 		fbResolutionsGetter.setEventListener(settingsController);
 		envEditor.setEventListener(envEditController);
 		errorView.setEventListener(errorController);
+		themeEditor.setEventListener(themeController);
 
 		//assign logger
 		listcfg.setLogger(logger);
@@ -208,6 +215,8 @@ int main(int argc, char** argv){
 		errorController.setLogger(logger);
 		installController.setLogger(logger);
 		aboutController.setLogger(logger);
+		themeEditor.setLogger(logger);
+		themeController.setLogger(logger);
 
 		// configure logger
 		logger.setLogLevel(Logger_Stream::LOG_EVENT);
@@ -242,7 +251,11 @@ int main(int argc, char** argv){
 		savedListCfg.setMutex(listCfgMutex2);
 
 		themeEditor.set_default_size(800, 600);
-		themeEditor.show_all();
+		themeEditor.show();
+		themeEditor.addFile("text.txt");
+		themeEditor.addFile("image.jpg");
+		themeEditor.setImage("/home/daniel/Dokumente/backport_rules.txt");
+		themeEditor.setText("Ganz ganz viel Text");
 		app.run(themeEditor);
 //		mainController.initAction();
 //		errorController.setApplicationStarted(true);

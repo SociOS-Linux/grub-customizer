@@ -76,6 +76,21 @@ View_Gtk_Theme::View_Gtk_Theme()
 	txtEdit.get_buffer()->signal_changed().connect(sigc::mem_fun(this, &View_Gtk_Theme::signal_textChanged));
 }
 
+std::string View_Gtk_Theme::_getSelectedFileName() {
+	std::vector<int> selectedFiles = this->lvFiles.get_selected();
+	std::string result;
+	if (selectedFiles.size() == 1) {
+		result = this->lvFiles.get_text(selectedFiles[0]);
+	} else {
+		this->log("theme editor: invalid selection count", Logger::ERROR);
+	}
+	return result;
+}
+
+void View_Gtk_Theme::setEventListener(ThemeController& eventListener) {
+	this->eventListener = &eventListener;
+}
+
 
 void View_Gtk_Theme::addFile(std::string const& fileName) {
 	event_lock = true;
@@ -109,6 +124,7 @@ void View_Gtk_Theme::selectFile(std::string const& fileName, bool startEdit) {
 	int pos = 0;
 	for (Gtk::TreeModel::iterator iter = lvFiles.get_model()->get_iter("0"); iter; iter++) {
 		if (lvFiles.get_text(pos) == fileName) {
+			this->_selectedFileName = fileName;
 			lvFiles.set_cursor(lvFiles.get_model()->get_path(iter), *lvFiles.get_column(0), startEdit);
 			break;
 		}
@@ -122,36 +138,37 @@ void View_Gtk_Theme::show() {
 
 void View_Gtk_Theme::signal_fileAddClick() {
 	if (!event_lock) {
-		// TODO: call event Listener
+		this->eventListener->addFileAction();
 	}
 }
 
 void View_Gtk_Theme::signal_fileRemoveClick() {
 	if (!event_lock) {
-		// TODO: call event Listener
+		this->eventListener->removeFileAction(this->_getSelectedFileName());
 	}
 }
 
 void View_Gtk_Theme::signal_fileSelected() {
 	if (!event_lock) {
-		// TODO: call event Listener
+		this->_selectedFileName = this->_getSelectedFileName();
+		this->eventListener->updateEditAreaAction(this->_selectedFileName);
 	}
 }
 
 void View_Gtk_Theme::signal_fileRenamed(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter) {
 	if (!event_lock) {
-		// TODO: call event Listener
+		this->eventListener->renameAction(this->_selectedFileName, this->_getSelectedFileName());
 	}
 }
 
 void View_Gtk_Theme::signal_fileChosen() {
 	if (!event_lock) {
-		// TODO: call event Listener
+		this->eventListener->loadFileAction(fcFileSelection.get_filename());
 	}
 }
 
 void View_Gtk_Theme::signal_textChanged() {
 	if (!event_lock) {
-		// TODO: call event Listener
+		this->eventListener->saveTextAction(txtEdit.get_buffer()->get_text());
 	}
 }

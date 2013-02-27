@@ -23,8 +23,10 @@
 #include <gtkmm.h>
 #include <string>
 #include <libintl.h>
+#include "../../Controller/ThemeController.h"
+#include "../../lib/CommonClass.h"
 
-class View_Gtk_Theme : public View_Theme, public Gtk::Dialog {
+class View_Gtk_Theme : public View_Theme, public Gtk::Dialog, public CommonClass {
 	Gtk::HPaned hpMain;
 	Gtk::Toolbar toolbar;
 	Gtk::ToolButton tbttAdd, tbttRemove;
@@ -41,9 +43,14 @@ class View_Gtk_Theme : public View_Theme, public Gtk::Dialog {
 	Gtk::FileChooserButton fcFileSelection;
 	Glib::RefPtr<Gtk::SizeGroup> sizeGroupFooter;
 
+	ThemeController* eventListener;
 	bool event_lock;
+	Glib::ustring _selectedFileName;
+	std::string _getSelectedFileName();
 public:
 	View_Gtk_Theme();
+	void setEventListener(ThemeController& eventListener);
+
 	void addFile(std::string const& fileName);
 	void clear();
 	void setText(std::string const& text);

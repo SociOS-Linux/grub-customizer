@@ -93,6 +93,7 @@ add_executable(grub-customizer
 	src/Controller/InstallerControllerImpl.cpp
 	src/Controller/AboutControllerImpl.cpp
 	src/Controller/ErrorControllerImpl.cpp
+	src/Controller/ThemeControllerImpl.cpp
 	src/lib/Exception.cpp
 	src/lib/assert.cpp
 	src/lib/ArrayStructure.cpp
