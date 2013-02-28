@@ -23,11 +23,14 @@
 #include "../View/Theme.h"
 #include "ControllerAbstract.h"
 #include "../Model/ThemeManager.h"
+#include <algorithm>
 
 class ThemeControllerImpl : public ThemeController, public ControllerAbstract {
 	Model_Env& env;
 	View_Theme* view;
 	Model_ThemeManager* themeManager;
+	std::string currentTheme;
+	bool isImage(std::string const& fileName);
 public:
 	ThemeControllerImpl(Model_Env& env);
 	void setView(View_Theme& view);

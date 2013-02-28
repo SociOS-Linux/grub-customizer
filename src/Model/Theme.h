@@ -23,6 +23,7 @@
 #include <cstdio>
 #include <sys/stat.h>
 #include <dirent.h>
+#include <fstream>
 #include "../lib/Exception.h"
 
 struct Model_Theme {
@@ -32,7 +33,8 @@ struct Model_Theme {
 
 	Model_Theme(std::string const& directory, std::string const& name);
 	void load(std::string const& directory);
-	std::string getName();
+	std::string loadFileContent(std::string localFileName);
+	std::string getFullFileName(std::string localFileName);
 private:
 	std::string extractLocalPath(std::string fullPath);
 };

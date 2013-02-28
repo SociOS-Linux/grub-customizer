@@ -23,6 +23,24 @@ ThemeControllerImpl::ThemeControllerImpl(Model_Env& env)
 {
 }
 
+bool ThemeControllerImpl::isImage(std::string const& fileName) {
+	std::list<std::string> imageExtensions;
+	imageExtensions.push_back("png");
+	imageExtensions.push_back("jpg");
+	imageExtensions.push_back("bmp");
+	imageExtensions.push_back("gif");
+	imageExtensions.push_back("pf2"); // not really, but shouldn't be handled as text
+
+	if (fileName.find_last_of(".") != std::string::npos) {
+		int dotPos = fileName.find_last_of(".");
+		std::string extension = fileName.substr(dotPos + 1);
+		if (std::find(imageExtensions.begin(), imageExtensions.end(), extension) != imageExtensions.end()) {
+			return true;
+		}
+	}
+	return false;
+}
+
 void ThemeControllerImpl::setView(View_Theme& view) {
 	this->view = &view;
 }
@@ -44,6 +62,7 @@ void ThemeControllerImpl::loadThemesAction() {
 void ThemeControllerImpl::loadThemeAction(std::string const& name) {
 	this->logActionBegin("load-theme");
 	try {
+		this->currentTheme = name;
 		this->view->clear();
 		Model_Theme* theme = &this->themeManager->getTheme(name);
 		for (std::list<Model_ThemeFile>::iterator themeFileIter = theme->files.begin(); themeFileIter != theme->files.end(); themeFileIter++) {
@@ -78,7 +97,14 @@ void ThemeControllerImpl::removeFileAction(std::string const& file) {
 void ThemeControllerImpl::updateEditAreaAction(std::string const& file) {
 	this->logActionBegin("update-edit-area");
 	try {
-
+		bool isImage = this->isImage(file);
+		Model_Theme* theme = &this->themeManager->getTheme(this->currentTheme);
+		if (isImage) {
+			this->view->setImage(theme->getFullFileName(file));
+		} else {
+			std::string content = theme->loadFileContent(file);
+			this->view->setText(content);
+		}
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}

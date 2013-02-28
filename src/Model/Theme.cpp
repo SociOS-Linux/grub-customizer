@@ -48,6 +48,26 @@ void Model_Theme::load(std::string const& directory) {
 	}
 }
 
+std::string Model_Theme::loadFileContent(std::string localFileName) {
+	std::string data;
+	FILE* file = fopen((this->directory + "/" + localFileName).c_str(), "r");
+	if (file) {
+		data.reserve(10240);
+		int c;
+		while ((c = fgetc(file)) != EOF) {
+			data += char(c);
+		}
+		fclose(file);
+	} else {
+		throw FileReadException("cannot read file: " + localFileName, __FILE__, __LINE__);
+	}
+	return data;
+}
+
+std::string Model_Theme::getFullFileName(std::string localFileName) {
+	return this->directory + "/" + localFileName;
+}
+
 
 std::string Model_Theme::extractLocalPath(std::string fullPath) {
 	return fullPath.substr(this->directory.size() + 1);
