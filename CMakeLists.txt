@@ -102,6 +102,9 @@ add_executable(grub-customizer
 	src/lib/csv.cpp
 	src/Model/ScriptSourceMap.cpp
 	src/View/Gtk/Theme.cpp
+	src/Model/ThemeFile.cpp
+	src/Model/Theme.cpp
+	src/Model/ThemeManager.cpp
 )
 
 

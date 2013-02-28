@@ -19,12 +19,40 @@
 #include "ThemeControllerImpl.h"
 
 ThemeControllerImpl::ThemeControllerImpl(Model_Env& env)
-	: env(env), view(NULL), ControllerAbstract("theme")
+	: env(env), view(NULL), ControllerAbstract("theme"), themeManager(NULL)
 {
 }
 
 void ThemeControllerImpl::setView(View_Theme& view) {
 	this->view = &view;
+}
+
+void ThemeControllerImpl::setThemeManager(Model_ThemeManager& themeManager) {
+	this->themeManager = &themeManager;
+}
+
+void ThemeControllerImpl::loadThemesAction() {
+	this->logActionBegin("load-themes");
+	try {
+		this->themeManager->load();
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
+	this->logActionEnd();
+}
+
+void ThemeControllerImpl::loadThemeAction(std::string const& name) {
+	this->logActionBegin("load-theme");
+	try {
+		this->view->clear();
+		Model_Theme* theme = &this->themeManager->getTheme(name);
+		for (std::list<Model_ThemeFile>::iterator themeFileIter = theme->files.begin(); themeFileIter != theme->files.end(); themeFileIter++) {
+			this->view->addFile(themeFileIter->localFileName);
+		}
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
+	this->logActionEnd();
 }
 
 void ThemeControllerImpl::addFileAction() {

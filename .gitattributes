@@ -122,6 +122,12 @@ src/Model/SettingsStore.cpp -text
 src/Model/SettingsStore.h -text
 src/Model/SmartFileHandle.cpp -text
 src/Model/SmartFileHandle.h -text
+src/Model/Theme.cpp -text
+src/Model/Theme.h -text
+src/Model/ThemeFile.cpp -text
+src/Model/ThemeFile.h -text
+src/Model/ThemeManager.cpp -text
+src/Model/ThemeManager.h -text
 src/View/About.h -text
 src/View/ColorChooser.h -text
 src/View/EntryEditor.h -text

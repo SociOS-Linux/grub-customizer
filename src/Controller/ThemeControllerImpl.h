@@ -22,14 +22,19 @@
 #include "../Model/Env.h"
 #include "../View/Theme.h"
 #include "ControllerAbstract.h"
+#include "../Model/ThemeManager.h"
 
 class ThemeControllerImpl : public ThemeController, public ControllerAbstract {
 	Model_Env& env;
 	View_Theme* view;
+	Model_ThemeManager* themeManager;
 public:
 	ThemeControllerImpl(Model_Env& env);
 	void setView(View_Theme& view);
+	void setThemeManager(Model_ThemeManager& themeManager);
 
+	void loadThemesAction();
+	void loadThemeAction(std::string const& name);
 	void addFileAction();
 	void removeFileAction(std::string const& file);
 	void updateEditAreaAction(std::string const& file);

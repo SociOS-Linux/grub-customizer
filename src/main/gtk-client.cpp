@@ -48,6 +48,7 @@
 #include "../Mapper/EntryNameImpl.h"
 #include "../lib/assert.h"
 #include "../lib/ArrayStructure.h"
+#include "../Model/ThemeManager.h"
 
 
 int main(int argc, char** argv){
@@ -88,6 +89,7 @@ int main(int argc, char** argv){
 		View_Gtk_Error errorView;
 		Mapper_EntryNameImpl entryNameMapper;
 		View_Gtk_Theme themeEditor;
+		Model_ThemeManager themeManager(env);
 
 		entryNameMapper.setView(listCfgView);
 
@@ -142,6 +144,7 @@ int main(int argc, char** argv){
 
 		ThemeControllerImpl themeController(env);
 		themeController.setView(themeEditor);
+		themeController.setThemeManager(themeManager);
 
 		ControllerCollection controllerCollection;
 		controllerCollection.entryEditController = &entryEditController;
@@ -252,10 +255,13 @@ int main(int argc, char** argv){
 
 		themeEditor.set_default_size(800, 600);
 		themeEditor.show();
-		themeEditor.addFile("text.txt");
-		themeEditor.addFile("image.jpg");
-		themeEditor.setImage("/home/daniel/Dokumente/backport_rules.txt");
-		themeEditor.setText("Ganz ganz viel Text");
+//		themeEditor.addFile("text.txt");
+//		themeEditor.addFile("image.jpg");
+//		themeEditor.setImage("/home/daniel/Dokumente/backport_rules.txt");
+//		themeEditor.setText("Ganz ganz viel Text");
+		env.init(Model_Env::GRUB_MODE, "");
+		themeController.loadThemesAction();
+		themeController.loadThemeAction("ubuntuusers");
 		app.run(themeEditor);
 //		mainController.initAction();
 //		errorController.setApplicationStarted(true);
