@@ -114,8 +114,7 @@ View_Gtk_Settings::View_Gtk_Settings()
 	lblColorChooser(gettext("menu colors")), lblBackgroundImage(gettext("background image")),
 	imgRemoveBackground(Gtk::Stock::REMOVE, Gtk::ICON_SIZE_BUTTON), imgRemoveFont(Gtk::Stock::REMOVE, Gtk::ICON_SIZE_BUTTON),
 	lblBackgroundRequiredInfo(gettext("To get the colors above working,\nyou have to select a background image!")),
-	gccNormalBackground(true), gccHighlightBackground(true), lblFont(gettext("_Font"), true), cbResolution(true),
-	lblTheme(gettext("_Theme: "), true)
+	gccNormalBackground(true), gccHighlightBackground(true), lblFont(gettext("_Font"), true), cbResolution(true)
 {
 	this->set_title("Grub Customizer - "+Glib::ustring(gettext("settings")));
 	this->set_icon_name("grub-customizer");
@@ -215,13 +214,7 @@ View_Gtk_Settings::View_Gtk_Settings()
 	hbResolutionAndTheme.set_spacing(15);
 
 	//theme chooser
-	hbResolutionAndTheme.pack_start(hbTheme, Gtk::PACK_EXPAND_WIDGET);
-	hbTheme.pack_start(lblTheme, Gtk::PACK_SHRINK);
-	hbTheme.pack_start(cbTheme);
-	lblTheme.set_mnemonic_widget(cbTheme);
-	cbTheme.append(gettext("(Custom Settings)"));
-	cbTheme.append(gettext("(Install theme)"));
-	cbTheme.set_active(0);
+//	hbResolutionAndTheme.pack_start(hbTheme, Gtk::PACK_EXPAND_WIDGET); TODO: use widget from theme editor
 
 	//screen resolution
 	hbResolutionAndTheme.pack_start(hbResolution);

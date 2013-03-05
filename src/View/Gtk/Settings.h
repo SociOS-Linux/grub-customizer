@@ -120,11 +120,6 @@ class View_Gtk_Settings : public Gtk::Dialog, public View_Settings, public Commo
 	Gtk::HBox hbResolution;
 	Gtk::CheckButton chkResolution;
 	Gtk::ComboBoxText cbResolution;
-	
-	//theme chooser
-	Gtk::HBox hbTheme;
-	Gtk::Label lblTheme;
-	Gtk::ComboBoxText cbTheme;
 
 	//color chooser
 	Gtk::Frame groupColorChooser;
