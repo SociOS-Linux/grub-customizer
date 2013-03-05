@@ -1230,7 +1230,7 @@ void Model_ListCfg::applyScriptUpdates() {
 		for (std::list<Model_Proxy*>::iterator oldProxyIter = oldProxies.begin(); oldProxyIter != oldProxies.end(); oldProxyIter++) {
 			(*oldProxyIter)->unsync();
 			(*oldProxyIter)->dataSource = newScript;
-			(*oldProxyIter)->sync();
+			(*oldProxyIter)->sync(true, true, this->repository.getScriptPathMap());
 		}
 
 		this->repository.removeScript(*oldScript);
