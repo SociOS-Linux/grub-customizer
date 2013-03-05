@@ -60,6 +60,8 @@ public:
 	void setText(std::string const& text);
 	void setImage(std::string const& path);
 	void selectFile(std::string const& fileName, bool startEdit = false);
+	void addTheme(std::string const& name);
+	void clearThemeSelection();
 	void show();
 private:
 	void signal_fileAddClick();
@@ -68,6 +70,7 @@ private:
 	void signal_fileRenamed(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter);
 	void signal_fileChosen();
 	void signal_textChanged();
+	void signal_themeChosen();
 };
 
 

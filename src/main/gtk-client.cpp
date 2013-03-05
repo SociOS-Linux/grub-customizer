@@ -261,7 +261,6 @@ int main(int argc, char** argv){
 //		themeEditor.setText("Ganz ganz viel Text");
 		env.init(Model_Env::GRUB_MODE, "");
 		themeController.loadThemesAction();
-		themeController.loadThemeAction("ubuntuusers");
 		app.run(themeEditor);
 //		mainController.initAction();
 //		errorController.setApplicationStarted(true);

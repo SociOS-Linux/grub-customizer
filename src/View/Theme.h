@@ -27,6 +27,8 @@ public:
 	virtual void setText(std::string const& text) = 0;
 	virtual void setImage(std::string const& path) = 0;
 	virtual void selectFile(std::string const& fileName, bool startEdit = false) = 0;
+	virtual void addTheme(std::string const& name) = 0;
+	virtual void clearThemeSelection() = 0;
 	virtual void show() = 0;
 	virtual inline ~View_Theme() {};
 };

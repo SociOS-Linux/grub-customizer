@@ -38,6 +38,8 @@ public:
 
 	void loadThemesAction();
 	void loadThemeAction(std::string const& name);
+	void showThemeInstallerAction();
+	void showSimpleThemeConfigAction();
 	void addFileAction();
 	void removeFileAction(std::string const& file);
 	void updateEditAreaAction(std::string const& file);

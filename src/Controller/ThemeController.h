@@ -22,6 +22,10 @@
 
 class ThemeController {
 public:
+	virtual void loadThemesAction() = 0;
+	virtual void loadThemeAction(std::string const& name) = 0;
+	virtual void showThemeInstallerAction() = 0;
+	virtual void showSimpleThemeConfigAction() = 0;
 	virtual void addFileAction() = 0;
 	virtual void removeFileAction(std::string const& file) = 0;
 	virtual void updateEditAreaAction(std::string const& file) = 0;

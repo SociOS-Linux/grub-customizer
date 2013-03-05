@@ -57,9 +57,6 @@ View_Gtk_Theme::View_Gtk_Theme()
 
 
 	lblTheme.set_mnemonic_widget(cbTheme);
-	cbTheme.append(gettext("(Custom Settings)"));
-	cbTheme.append(gettext("(Install theme)"));
-	cbTheme.set_active(0);
 
 	tbttAdd.set_is_important(true);
 
@@ -86,6 +83,7 @@ View_Gtk_Theme::View_Gtk_Theme()
 	lvFiles.get_model()->signal_row_changed().connect(sigc::mem_fun(this, &View_Gtk_Theme::signal_fileRenamed));
 	fcFileSelection.signal_file_set().connect(sigc::mem_fun(this, &View_Gtk_Theme::signal_fileChosen));
 	txtEdit.get_buffer()->signal_changed().connect(sigc::mem_fun(this, &View_Gtk_Theme::signal_textChanged));
+	cbTheme.signal_changed().connect(sigc::mem_fun(this, &View_Gtk_Theme::signal_themeChosen));
 }
 
 std::string View_Gtk_Theme::_getSelectedFileName() {
@@ -144,6 +142,18 @@ void View_Gtk_Theme::selectFile(std::string const& fileName, bool startEdit) {
 	}
 }
 
+void View_Gtk_Theme::addTheme(std::string const& name) {
+	this->cbTheme.append(name);
+}
+
+void View_Gtk_Theme::clearThemeSelection() {
+	this->cbTheme.remove_all();
+
+	cbTheme.append(gettext("(Custom Settings)"));
+	cbTheme.append(gettext("(Install theme)"));
+	cbTheme.set_active(0);
+}
+
 void View_Gtk_Theme::show() {
 	this->show_all();
 }
@@ -182,5 +192,17 @@ void View_Gtk_Theme::signal_fileChosen() {
 void View_Gtk_Theme::signal_textChanged() {
 	if (!event_lock) {
 		this->eventListener->saveTextAction(txtEdit.get_buffer()->get_text());
+	}
+}
+
+void View_Gtk_Theme::signal_themeChosen() {
+	if (!event_lock) {
+		if (this->cbTheme.get_active_row_number() == 0) {
+			this->eventListener->showSimpleThemeConfigAction();
+		} else if (this->cbTheme.get_active_row_number() == 1) {
+			this->eventListener->showThemeInstallerAction();
+		} else {
+			this->eventListener->loadThemeAction(cbTheme.get_active_text());
+		}
 	}
 }

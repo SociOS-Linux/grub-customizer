@@ -53,6 +53,10 @@ void ThemeControllerImpl::loadThemesAction() {
 	this->logActionBegin("load-themes");
 	try {
 		this->themeManager->load();
+		this->view->clearThemeSelection();
+		for (std::list<Model_Theme>::iterator themeIter = this->themeManager->themes.begin(); themeIter != this->themeManager->themes.end(); themeIter++) {
+			this->view->addTheme(themeIter->name);
+		}
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
@@ -68,6 +72,26 @@ void ThemeControllerImpl::loadThemeAction(std::string const& name) {
 		for (std::list<Model_ThemeFile>::iterator themeFileIter = theme->files.begin(); themeFileIter != theme->files.end(); themeFileIter++) {
 			this->view->addFile(themeFileIter->localFileName);
 		}
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
+	this->logActionEnd();
+}
+
+void ThemeControllerImpl::showThemeInstallerAction() {
+	this->logActionBegin("show-theme-installer");
+	try {
+
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
+	this->logActionEnd();
+}
+
+void ThemeControllerImpl::showSimpleThemeConfigAction() {
+	this->logActionBegin("show-simple-theme-config");
+	try {
+
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
