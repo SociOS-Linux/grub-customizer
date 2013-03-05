@@ -255,10 +255,6 @@ int main(int argc, char** argv){
 
 		themeEditor.set_default_size(800, 600);
 		themeEditor.show();
-//		themeEditor.addFile("text.txt");
-//		themeEditor.addFile("image.jpg");
-//		themeEditor.setImage("/home/daniel/Dokumente/backport_rules.txt");
-//		themeEditor.setText("Ganz ganz viel Text");
 		env.init(Model_Env::GRUB_MODE, "");
 		themeController.loadThemesAction();
 		app.run(themeEditor);
