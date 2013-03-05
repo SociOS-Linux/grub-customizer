@@ -92,11 +92,7 @@ public:
 	void updateKernelParamsAction();
 	void updateRecoverySettingAction();
 	void updateCustomResolutionAction();
-	void updateColorSettingsAction();
-	void updateFontSettingsAction(bool removeFont);
-	void updateBackgroundImageAction();
 	void updateUseCustomResolutionAction();
-	void removeBackgroundImageAction();
 	void hideAction();
 	void showAction(bool burgMode);
 	void syncAction();

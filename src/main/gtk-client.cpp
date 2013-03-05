@@ -146,6 +146,7 @@ int main(int argc, char** argv){
 		themeController.setView(themeEditor);
 		themeController.setThemeManager(themeManager);
 		themeController.setSettingsManager(settings);
+		themeController.setListCfg(listcfg);
 
 		ControllerCollection controllerCollection;
 		controllerCollection.entryEditController = &entryEditController;
@@ -255,9 +256,10 @@ int main(int argc, char** argv){
 		savedListCfg.setMutex(listCfgMutex2);
 
 		themeEditor.set_default_size(800, 600);
-		themeEditor.show();
+		themeEditor.show(env.burgMode);
 		env.init(Model_Env::GRUB_MODE, "");
 		themeController.loadThemesAction();
+		themeController.syncAction();
 		settings.load();
 		app.run(themeEditor);
 //		mainController.initAction();

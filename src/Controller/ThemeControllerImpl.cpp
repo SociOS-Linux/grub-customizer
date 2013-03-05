@@ -19,8 +19,48 @@
 #include "ThemeControllerImpl.h"
 
 ThemeControllerImpl::ThemeControllerImpl(Model_Env& env)
-	: env(env), view(NULL), ControllerAbstract("theme"), themeManager(NULL), settings(NULL)
+	: env(env), view(NULL), ControllerAbstract("theme"), themeManager(NULL), settings(NULL), grublistCfg(NULL)
 {
+}
+
+void ThemeControllerImpl::syncSettings() {
+	std::string nColor = this->settings->getValue("GRUB_COLOR_NORMAL");
+	std::string hColor = this->settings->getValue("GRUB_COLOR_HIGHLIGHT");
+	if (nColor != ""){
+		this->view->getColorChooser(View_Theme::COLOR_CHOOSER_DEFAULT_FONT).selectColor(nColor.substr(0, nColor.find('/')));
+		this->view->getColorChooser(View_Theme::COLOR_CHOOSER_DEFAULT_BACKGROUND).selectColor(nColor.substr(nColor.find('/')+1));
+	}
+	else {
+		//default grub menu colors
+		this->view->getColorChooser(View_Theme::COLOR_CHOOSER_DEFAULT_FONT).selectColor("light-gray");
+		this->view->getColorChooser(View_Theme::COLOR_CHOOSER_DEFAULT_BACKGROUND).selectColor("black");
+	}
+	if (hColor != ""){
+		this->view->getColorChooser(View_Theme::COLOR_CHOOSER_HIGHLIGHT_FONT).selectColor(hColor.substr(0, hColor.find('/')));
+		this->view->getColorChooser(View_Theme::COLOR_CHOOSER_HIGHLIGHT_BACKGROUND).selectColor(hColor.substr(hColor.find('/')+1));
+	}
+	else {
+		//default grub menu colors
+		this->view->getColorChooser(View_Theme::COLOR_CHOOSER_HIGHLIGHT_FONT).selectColor("magenta");
+		this->view->getColorChooser(View_Theme::COLOR_CHOOSER_HIGHLIGHT_BACKGROUND).selectColor("black");
+	}
+
+	std::string wallpaper_key = this->env.useDirectBackgroundProps ? "GRUB_BACKGROUND" : "GRUB_MENU_PICTURE";
+	std::string menuPicturePath = this->settings->getValue(wallpaper_key);
+	bool menuPicIsInGrubDir = false;
+	if (menuPicturePath != "" && menuPicturePath[0] != '/'){
+		menuPicturePath = env.output_config_dir + "/" + menuPicturePath;
+		menuPicIsInGrubDir = true;
+	}
+
+	this->view->setFontName(this->settings->grubFont);
+
+	if (this->settings->isActive(wallpaper_key) && menuPicturePath != ""){
+		this->view->setBackgroundImagePreviewPath(menuPicturePath, menuPicIsInGrubDir);
+	}
+	else {
+		this->view->setBackgroundImagePreviewPath("", menuPicIsInGrubDir);
+	}
 }
 
 bool ThemeControllerImpl::isImage(std::string const& fileName) {
@@ -51,6 +91,10 @@ void ThemeControllerImpl::setThemeManager(Model_ThemeManager& themeManager) {
 
 void ThemeControllerImpl::setSettingsManager(Model_SettingsManagerData& settings) {
 	this->settings = &settings;
+}
+
+void ThemeControllerImpl::setListCfg(Model_ListCfg& grublistCfg) {
+	this->grublistCfg = &grublistCfg;
 }
 
 void ThemeControllerImpl::loadThemesAction() {
@@ -97,6 +141,7 @@ void ThemeControllerImpl::showSimpleThemeConfigAction() {
 	this->logActionBegin("show-simple-theme-config");
 	try {
 		this->view->setEditorType(View_Theme::EDITORTYPE_CUSTOM);
+		this->updateColorSettingsAction();
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
@@ -169,3 +214,103 @@ void ThemeControllerImpl::saveTextAction(std::string const& newText) {
 	}
 	this->logActionEnd();
 }
+
+void ThemeControllerImpl::updateBackgroundImageAction(){
+	this->logActionBegin("update-background-image");
+	try {
+		if (!this->env.useDirectBackgroundProps) {
+			this->settings->setValue("GRUB_MENU_PICTURE", this->view->getBackgroundImagePath());
+			this->settings->setIsActive("GRUB_MENU_PICTURE", true);
+			this->settings->setIsExport("GRUB_MENU_PICTURE", true);
+		} else {
+			this->settings->setValue("GRUB_BACKGROUND", this->view->getBackgroundImagePath());
+			this->settings->setIsActive("GRUB_BACKGROUND", true);
+		}
+		this->syncSettings();
+		this->env.modificationsUnsaved = true;
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
+	this->logActionEnd();
+}
+
+void ThemeControllerImpl::updateColorSettingsAction(){
+	this->logActionBegin("update-color-settings");
+	try {
+		if (this->view->getColorChooser(View_Theme::COLOR_CHOOSER_DEFAULT_FONT).getSelectedColor() != "" && this->view->getColorChooser(View_Theme::COLOR_CHOOSER_DEFAULT_BACKGROUND).getSelectedColor() != ""){
+			this->settings->setValue("GRUB_COLOR_NORMAL", this->view->getColorChooser(View_Theme::COLOR_CHOOSER_DEFAULT_FONT).getSelectedColor() + "/" + this->view->getColorChooser(View_Theme::COLOR_CHOOSER_DEFAULT_BACKGROUND).getSelectedColor());
+			this->settings->setIsActive("GRUB_COLOR_NORMAL", true);
+			this->settings->setIsExport("GRUB_COLOR_NORMAL", true);
+		}
+		if (this->view->getColorChooser(View_Theme::COLOR_CHOOSER_HIGHLIGHT_FONT).getSelectedColor() != "" && this->view->getColorChooser(View_Theme::COLOR_CHOOSER_HIGHLIGHT_BACKGROUND).getSelectedColor() != ""){
+			this->settings->setValue("GRUB_COLOR_HIGHLIGHT", this->view->getColorChooser(View_Theme::COLOR_CHOOSER_HIGHLIGHT_FONT).getSelectedColor() + "/" + this->view->getColorChooser(View_Theme::COLOR_CHOOSER_HIGHLIGHT_BACKGROUND).getSelectedColor());
+			this->settings->setIsActive("GRUB_COLOR_HIGHLIGHT", true);
+			this->settings->setIsExport("GRUB_COLOR_HIGHLIGHT", true);
+		}
+		this->syncSettings();
+		this->env.modificationsUnsaved = true;
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
+	this->logActionEnd();
+}
+
+void ThemeControllerImpl::updateFontSettingsAction(bool removeFont) {
+	this->logActionBegin("update-font-settings");
+	try {
+		std::string fontName;
+		int fontSize = -1;
+		if (!removeFont) {
+			fontName = this->view->getFontName();
+			fontSize = this->view->getFontSize();;
+		}
+		this->settings->grubFont = fontName;
+		this->settings->grubFontSize = fontSize;
+		this->syncSettings();
+		this->env.modificationsUnsaved = true;
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
+	this->logActionEnd();
+}
+
+void ThemeControllerImpl::removeBackgroundImageAction(){
+	this->logActionBegin("remove-background-image");
+	try {
+		if (!this->env.useDirectBackgroundProps) {
+			this->settings->setIsActive("GRUB_MENU_PICTURE", false);
+		} else {
+			this->settings->setIsActive("GRUB_BACKGROUND", false);
+		}
+		this->syncSettings();
+		this->env.modificationsUnsaved = true;
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
+	this->logActionEnd();
+}
+
+void ThemeControllerImpl::updateSettingsDataAction() {
+	this->logActionBegin("update-settings-data");
+	try {
+		std::list<std::string> labelListToplevel  = this->grublistCfg->proxies.getToplevelEntryTitles();
+
+		this->view->setPreviewEntryTitles(labelListToplevel);
+
+		this->syncSettings();
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
+	this->logActionEnd();
+}
+
+void ThemeControllerImpl::syncAction() {
+	this->logActionBegin("sync");
+	try {
+		this->syncSettings();
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
+	this->logActionEnd();
+}
+

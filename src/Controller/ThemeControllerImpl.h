@@ -24,6 +24,7 @@
 #include "../Model/SettingsManagerData.h"
 #include "ControllerAbstract.h"
 #include "../Model/ThemeManager.h"
+#include "../Model/ListCfg.h"
 #include <algorithm>
 
 class ThemeControllerImpl : public ThemeController, public ControllerAbstract {
@@ -31,13 +32,17 @@ class ThemeControllerImpl : public ThemeController, public ControllerAbstract {
 	View_Theme* view;
 	Model_ThemeManager* themeManager;
 	Model_SettingsManagerData* settings;
+	Model_ListCfg* grublistCfg;
 	std::string currentTheme;
 	bool isImage(std::string const& fileName);
+
+	void syncSettings();
 public:
 	ThemeControllerImpl(Model_Env& env);
 	void setView(View_Theme& view);
 	void setThemeManager(Model_ThemeManager& themeManager);
 	void setSettingsManager(Model_SettingsManagerData& settings);
+	void setListCfg(Model_ListCfg& grublistCfg);
 
 	void loadThemesAction();
 	void loadThemeAction(std::string const& name);
@@ -49,6 +54,14 @@ public:
 	void renameAction(std::string const& oldName, std::string const& newName);
 	void loadFileAction(std::string const& externalPath);
 	void saveTextAction(std::string const& newText);
+
+	void updateColorSettingsAction();
+	void updateFontSettingsAction(bool removeFont);
+	void updateBackgroundImageAction();
+	void removeBackgroundImageAction();
+	void updateSettingsDataAction();
+
+	void syncAction();
 };
 
 

@@ -222,6 +222,7 @@ void MainControllerImpl::reloadAction(){
 	this->logActionBegin("reload");
 	try {
 		this->getAllControllers().settingsController->syncAction();
+		this->getAllControllers().themeController->syncAction();
 		this->view->hideReloadRecommendation();
 		this->view->setLockState(1|4|8);
 		this->getThreadController().startLoadThread(true);
@@ -646,6 +647,7 @@ void MainControllerImpl::removeRulesAction(std::list<Rule*> rules, bool force){
 			this->getAllControllers().trashController->selectEntriesAction(entriesOfRemovedRules);
 			this->env.modificationsUnsaved = true;
 			this->getAllControllers().settingsController->updateSettingsDataAction();
+			this->getAllControllers().themeController->updateSettingsDataAction();
 		}
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
@@ -875,6 +877,8 @@ void MainControllerImpl::syncLoadStateAction() {
 
 		if (progress == 1){
 			this->getAllControllers().settingsController->updateSettingsDataAction();
+			this->getAllControllers().themeController->updateSettingsDataAction();
+
 			this->getAllControllers().trashController->updateAction(this->view->getOptions());
 			if (this->grublistCfg->hasScriptUpdates()) {
 				this->grublistCfg->applyScriptUpdates();
@@ -962,6 +966,7 @@ void MainControllerImpl::activateSettingsAction() {
 	try {
 		this->view->setLockState(1);
 		this->getAllControllers().settingsController->syncAction();
+		this->getAllControllers().themeController->syncAction();
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
@@ -1004,6 +1009,7 @@ void MainControllerImpl::refreshTabAction(unsigned int pos) {
 	try {
 		if (pos != 0) { // list
 			this->getAllControllers().settingsController->syncAction();
+			this->getAllControllers().themeController->syncAction();
 		}
 		this->view->updateLockState();
 	} catch (Exception const& e) {

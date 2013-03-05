@@ -19,6 +19,8 @@
 #ifndef THEME_H_
 #define THEME_H_
 #include <string>
+#include <list>
+#include "ColorChooser.h"
 
 class View_Theme {
 public:
@@ -27,6 +29,13 @@ public:
 		EDITORTYPE_INSTALL,
 		EDITORTYPE_THEME
 	};
+	enum ColorChooserType {
+		COLOR_CHOOSER_DEFAULT_FONT,
+		COLOR_CHOOSER_DEFAULT_BACKGROUND,
+		COLOR_CHOOSER_HIGHLIGHT_FONT,
+		COLOR_CHOOSER_HIGHLIGHT_BACKGROUND
+	};
+
 	virtual void addFile(std::string const& fileName) = 0;
 	virtual void clear() = 0;
 	virtual void setText(std::string const& text) = 0;
@@ -34,8 +43,26 @@ public:
 	virtual void selectFile(std::string const& fileName, bool startEdit = false) = 0;
 	virtual void addTheme(std::string const& name) = 0;
 	virtual void clearThemeSelection() = 0;
-	virtual void show() = 0;
+	virtual void show(bool burgMode) = 0;
 	virtual void setEditorType(EditorType type) = 0;
+
+	//returns an interface to the given color chooser
+	virtual View_ColorChooser& getColorChooser(ColorChooserType type)=0;
+	//get the name of the selected font
+	virtual std::string getFontName()=0;
+	//get the font size
+	virtual int getFontSize()=0;
+	//set the name of the selected font
+	virtual void setFontName(std::string const& value)=0;
+
+	//sets the background image, remove it, if empty string is given
+	virtual void setBackgroundImagePreviewPath(std::string const& menuPicturePath, bool isInGrubDir)=0;
+	//reads the selected background image path
+	virtual std::string getBackgroundImagePath()=0;
+
+	//set the entry titles to be viewed in the preview image
+	virtual void setPreviewEntryTitles(std::list<std::string> const& entries)=0;
+
 	virtual inline ~View_Theme() {};
 };
 

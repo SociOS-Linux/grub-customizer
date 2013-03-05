@@ -38,11 +38,7 @@ public:
 	virtual void updateKernelParamsAction() = 0;
 	virtual void updateRecoverySettingAction() = 0;
 	virtual void updateCustomResolutionAction() = 0;
-	virtual void updateColorSettingsAction() = 0;
-	virtual void updateFontSettingsAction(bool removeFont) = 0;
-	virtual void updateBackgroundImageAction() = 0;
 	virtual void updateUseCustomResolutionAction() = 0;
-	virtual void removeBackgroundImageAction() = 0;
 	virtual void hideAction() = 0;
 	virtual void showAction(bool burgMode) = 0;
 	virtual void syncAction() = 0;

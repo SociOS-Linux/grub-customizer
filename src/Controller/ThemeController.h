@@ -32,6 +32,15 @@ public:
 	virtual void renameAction(std::string const& oldName, std::string const& newName) = 0;
 	virtual void loadFileAction(std::string const& externalPath) = 0;
 	virtual void saveTextAction(std::string const& newText) = 0;
+
+	virtual void updateColorSettingsAction() = 0;
+	virtual void updateFontSettingsAction(bool removeFont) = 0;
+	virtual void updateBackgroundImageAction() = 0;
+	virtual void removeBackgroundImageAction() = 0;
+	virtual void updateSettingsDataAction() = 0;
+
+	virtual void syncAction() = 0;
+
 	virtual inline ~ThemeController() {}
 };
 
