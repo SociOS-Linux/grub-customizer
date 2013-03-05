@@ -22,6 +22,11 @@
 
 class View_Theme {
 public:
+	enum EditorType {
+		EDITORTYPE_CUSTOM,
+		EDITORTYPE_INSTALL,
+		EDITORTYPE_THEME
+	};
 	virtual void addFile(std::string const& fileName) = 0;
 	virtual void clear() = 0;
 	virtual void setText(std::string const& text) = 0;
@@ -30,6 +35,7 @@ public:
 	virtual void addTheme(std::string const& name) = 0;
 	virtual void clearThemeSelection() = 0;
 	virtual void show() = 0;
+	virtual void setEditorType(EditorType type) = 0;
 	virtual inline ~View_Theme() {};
 };
 

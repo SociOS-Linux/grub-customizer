@@ -23,19 +23,23 @@ View_Gtk_Theme::View_Gtk_Theme()
 	  tbttAdd(Gtk::Stock::ADD), tbttRemove(Gtk::Stock::REMOVE), event_lock(false),
 	  lblTheme(gettext("_Theme: "), true)
 {
-	Gtk::Box& main = *this->get_vbox();
+	Gtk::Box& dlgVBox = *this->get_vbox();
 
-	main.pack_start(hbTheme, Gtk::PACK_SHRINK);
+	dlgVBox.pack_start(hbTheme, Gtk::PACK_SHRINK);
 	hbTheme.pack_start(lblTheme, Gtk::PACK_SHRINK);
 	hbTheme.pack_start(cbTheme);
 
-	main.pack_start(hpMain);
+	dlgVBox.pack_start(vbMain);
+
+	vbMain.pack_start(hpThemeEditor);
+	vbMain.pack_start(vbInstallTheme);
+	vbMain.pack_start(vbCustomTheme);
 
 	toolbar.add(tbttAdd);
 	toolbar.add(tbttRemove);
 
-	hpMain.pack1(vbFiles, Gtk::FILL);
-	hpMain.pack2(vbEdit, Gtk::FILL, Gtk::EXPAND);
+	hpThemeEditor.pack1(vbFiles, Gtk::FILL);
+	hpThemeEditor.pack2(vbEdit, Gtk::FILL, Gtk::EXPAND);
 
 	vbFiles.pack_start(scrFiles);
 	vbFiles.pack_start(toolbar, Gtk::PACK_SHRINK);
@@ -156,6 +160,29 @@ void View_Gtk_Theme::clearThemeSelection() {
 
 void View_Gtk_Theme::show() {
 	this->show_all();
+}
+
+void View_Gtk_Theme::setEditorType(EditorType type) {
+	this->vbCustomTheme.hide();
+	this->vbInstallTheme.hide();
+	this->hpThemeEditor.hide();
+
+	switch (type) {
+	case EDITORTYPE_CUSTOM:
+		this->vbCustomTheme.show();
+		this->vbCustomTheme.show_all_children(true);
+		break;
+	case EDITORTYPE_INSTALL:
+		this->vbInstallTheme.show();
+		this->vbInstallTheme.show_all_children(true);
+		break;
+	case EDITORTYPE_THEME:
+		this->hpThemeEditor.show();
+		this->hpThemeEditor.show_all_children(true);
+		break;
+	default:
+		throw LogicException("unsupported type given", __FILE__, __LINE__);
+	}
 }
 
 void View_Gtk_Theme::signal_fileAddClick() {

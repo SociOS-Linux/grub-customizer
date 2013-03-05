@@ -70,6 +70,7 @@ void ThemeControllerImpl::loadThemesAction() {
 void ThemeControllerImpl::loadThemeAction(std::string const& name) {
 	this->logActionBegin("load-theme");
 	try {
+		this->view->setEditorType(View_Theme::EDITORTYPE_THEME);
 		this->currentTheme = name;
 		this->view->clear();
 		Model_Theme* theme = &this->themeManager->getTheme(name);
@@ -85,7 +86,7 @@ void ThemeControllerImpl::loadThemeAction(std::string const& name) {
 void ThemeControllerImpl::showThemeInstallerAction() {
 	this->logActionBegin("show-theme-installer");
 	try {
-
+		this->view->setEditorType(View_Theme::EDITORTYPE_INSTALL);
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
@@ -95,7 +96,7 @@ void ThemeControllerImpl::showThemeInstallerAction() {
 void ThemeControllerImpl::showSimpleThemeConfigAction() {
 	this->logActionBegin("show-simple-theme-config");
 	try {
-
+		this->view->setEditorType(View_Theme::EDITORTYPE_CUSTOM);
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}

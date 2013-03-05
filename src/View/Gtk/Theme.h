@@ -27,7 +27,11 @@
 #include "../../lib/CommonClass.h"
 
 class View_Gtk_Theme : public View_Theme, public Gtk::Dialog, public CommonClass {
-	Gtk::HPaned hpMain;
+	Gtk::VBox vbMain;
+
+	Gtk::VBox vbInstallTheme, vbCustomTheme;
+
+	Gtk::HPaned hpThemeEditor;
 	Gtk::Toolbar toolbar;
 	Gtk::ToolButton tbttAdd, tbttRemove;
 
@@ -63,6 +67,7 @@ public:
 	void addTheme(std::string const& name);
 	void clearThemeSelection();
 	void show();
+	void setEditorType(EditorType type);
 private:
 	void signal_fileAddClick();
 	void signal_fileRemoveClick();
