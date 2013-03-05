@@ -21,6 +21,7 @@
 #include "ThemeController.h"
 #include "../Model/Env.h"
 #include "../View/Theme.h"
+#include "../Model/SettingsManagerData.h"
 #include "ControllerAbstract.h"
 #include "../Model/ThemeManager.h"
 #include <algorithm>
@@ -29,12 +30,14 @@ class ThemeControllerImpl : public ThemeController, public ControllerAbstract {
 	Model_Env& env;
 	View_Theme* view;
 	Model_ThemeManager* themeManager;
+	Model_SettingsManagerData* settings;
 	std::string currentTheme;
 	bool isImage(std::string const& fileName);
 public:
 	ThemeControllerImpl(Model_Env& env);
 	void setView(View_Theme& view);
 	void setThemeManager(Model_ThemeManager& themeManager);
+	void setSettingsManager(Model_SettingsManagerData& settings);
 
 	void loadThemesAction();
 	void loadThemeAction(std::string const& name);

@@ -19,7 +19,7 @@
 #include "ThemeControllerImpl.h"
 
 ThemeControllerImpl::ThemeControllerImpl(Model_Env& env)
-	: env(env), view(NULL), ControllerAbstract("theme"), themeManager(NULL)
+	: env(env), view(NULL), ControllerAbstract("theme"), themeManager(NULL), settings(NULL)
 {
 }
 
@@ -47,6 +47,10 @@ void ThemeControllerImpl::setView(View_Theme& view) {
 
 void ThemeControllerImpl::setThemeManager(Model_ThemeManager& themeManager) {
 	this->themeManager = &themeManager;
+}
+
+void ThemeControllerImpl::setSettingsManager(Model_SettingsManagerData& settings) {
+	this->settings = &settings;
 }
 
 void ThemeControllerImpl::loadThemesAction() {

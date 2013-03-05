@@ -145,6 +145,7 @@ int main(int argc, char** argv){
 		ThemeControllerImpl themeController(env);
 		themeController.setView(themeEditor);
 		themeController.setThemeManager(themeManager);
+		themeController.setSettingsManager(settings);
 
 		ControllerCollection controllerCollection;
 		controllerCollection.entryEditController = &entryEditController;
@@ -257,6 +258,7 @@ int main(int argc, char** argv){
 		themeEditor.show();
 		env.init(Model_Env::GRUB_MODE, "");
 		themeController.loadThemesAction();
+		settings.load();
 		app.run(themeEditor);
 //		mainController.initAction();
 //		errorController.setApplicationStarted(true);
