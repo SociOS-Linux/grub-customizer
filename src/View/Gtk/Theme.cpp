@@ -20,9 +20,15 @@
 
 View_Gtk_Theme::View_Gtk_Theme()
 	: lvFiles(1, true), lblFileSelection(gettext("_Load file: "), true),
-	  tbttAdd(Gtk::Stock::ADD), tbttRemove(Gtk::Stock::REMOVE), event_lock(false)
+	  tbttAdd(Gtk::Stock::ADD), tbttRemove(Gtk::Stock::REMOVE), event_lock(false),
+	  lblTheme(gettext("_Theme: "), true)
 {
 	Gtk::Box& main = *this->get_vbox();
+
+	main.pack_start(hbTheme, Gtk::PACK_SHRINK);
+	hbTheme.pack_start(lblTheme, Gtk::PACK_SHRINK);
+	hbTheme.pack_start(cbTheme);
+
 	main.pack_start(hpMain);
 
 	toolbar.add(tbttAdd);
@@ -48,6 +54,12 @@ View_Gtk_Theme::View_Gtk_Theme()
 	sizeGroupFooter = Gtk::SizeGroup::create(Gtk::SIZE_GROUP_VERTICAL);
 	sizeGroupFooter->add_widget(toolbar);
 	sizeGroupFooter->add_widget(hbFileSelection);
+
+
+	lblTheme.set_mnemonic_widget(cbTheme);
+	cbTheme.append(gettext("(Custom Settings)"));
+	cbTheme.append(gettext("(Install theme)"));
+	cbTheme.set_active(0);
 
 	tbttAdd.set_is_important(true);
 

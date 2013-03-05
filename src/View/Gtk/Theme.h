@@ -31,6 +31,10 @@ class View_Gtk_Theme : public View_Theme, public Gtk::Dialog, public CommonClass
 	Gtk::Toolbar toolbar;
 	Gtk::ToolButton tbttAdd, tbttRemove;
 
+	Gtk::HBox hbTheme;
+	Gtk::Label lblTheme;
+	Gtk::ComboBoxText cbTheme;
+
 	Gtk::VBox vbFiles;
 	Gtk::ScrolledWindow scrFiles;
 	Gtk::ListViewText lvFiles;
