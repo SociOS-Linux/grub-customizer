@@ -26,7 +26,6 @@ class View_Theme {
 public:
 	enum EditorType {
 		EDITORTYPE_CUSTOM,
-		EDITORTYPE_INSTALL,
 		EDITORTYPE_THEME
 	};
 	enum ColorChooserType {
@@ -45,6 +44,7 @@ public:
 	virtual void clearThemeSelection() = 0;
 	virtual void show(bool burgMode) = 0;
 	virtual void setEditorType(EditorType type) = 0;
+	virtual void showThemeFileChooser() = 0;
 
 	//returns an interface to the given color chooser
 	virtual View_ColorChooser& getColorChooser(ColorChooserType type)=0;

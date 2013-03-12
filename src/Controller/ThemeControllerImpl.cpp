@@ -130,7 +130,7 @@ void ThemeControllerImpl::loadThemeAction(std::string const& name) {
 void ThemeControllerImpl::showThemeInstallerAction() {
 	this->logActionBegin("show-theme-installer");
 	try {
-		this->view->setEditorType(View_Theme::EDITORTYPE_INSTALL);
+		this->view->showThemeFileChooser();
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}

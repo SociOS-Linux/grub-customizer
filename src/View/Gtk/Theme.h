@@ -56,15 +56,11 @@ public:
 class View_Gtk_Theme : public View_Theme, public Gtk::Dialog, public CommonClass {
 	Gtk::VBox vbMain;
 
-	Gtk::VBox vbInstallTheme, vbCustomTheme;
+	Gtk::VBox vbCustomTheme;
 
 	Gtk::HPaned hpThemeEditor;
 	Gtk::Toolbar toolbar;
 	Gtk::ToolButton tbttAdd, tbttRemove;
-
-	Gtk::HBox hbTheme;
-	Gtk::Label lblTheme;
-	Gtk::ComboBoxText cbTheme;
 
 	Gtk::VBox vbFiles;
 	Gtk::ScrolledWindow scrFiles;
@@ -77,6 +73,14 @@ class View_Gtk_Theme : public View_Theme, public Gtk::Dialog, public CommonClass
 	Gtk::Label lblFileSelection;
 	Gtk::FileChooserButton fcFileSelection;
 	Glib::RefPtr<Gtk::SizeGroup> sizeGroupFooter;
+
+	Gtk::HBox hbTheme;
+	Gtk::Label lblTheme;
+	Gtk::ComboBoxText cbTheme;
+	Gtk::Button bttAddTheme;
+	Gtk::Image imgAddTheme;
+
+	Gtk::FileChooserDialog fcThemeFileChooser;
 
 	// simple theme editor
 
@@ -135,6 +139,7 @@ public:
 	void show(bool burgMode);
 
 	void setEditorType(EditorType type);
+	void showThemeFileChooser();
 	View_ColorChooser& getColorChooser(ColorChooserType type);
 	std::string getFontName();
 	int getFontSize();
@@ -152,6 +157,8 @@ private:
 	void signal_fileChosen();
 	void signal_textChanged();
 	void signal_themeChosen();
+	void signal_addThemeClicked();
+	void signal_themeFileChooserResponse(int response_id);
 
 	void signal_color_changed(View_Gtk_Theme_ColorChooser& caller);
 	void signal_font_changed();

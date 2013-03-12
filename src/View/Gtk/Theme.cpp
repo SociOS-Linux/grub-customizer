@@ -21,24 +21,27 @@
 View_Gtk_Theme::View_Gtk_Theme()
 	: lvFiles(1, true), lblFileSelection(gettext("_Load file: "), true),
 	  tbttAdd(Gtk::Stock::ADD), tbttRemove(Gtk::Stock::REMOVE), event_lock(false),
-	  lblTheme(gettext("_Theme: "), true),
+	  lblTheme(gettext("_Theme:"), true),
 	  lblforegroundColor(gettext("font color")), lblBackgroundColor(gettext("background")),
 	  lblNormalColor(gettext("normal:"), Pango::ALIGN_RIGHT, Pango::ALIGN_CENTER), lblHighlightColor(gettext("highlight:"), Pango::ALIGN_RIGHT, Pango::ALIGN_CENTER),
 	  lblColorChooser(gettext("menu colors")), lblBackgroundImage(gettext("background image")),
 	  imgRemoveBackground(Gtk::Stock::REMOVE, Gtk::ICON_SIZE_BUTTON), imgRemoveFont(Gtk::Stock::REMOVE, Gtk::ICON_SIZE_BUTTON),
 	  lblBackgroundRequiredInfo(gettext("To get the colors above working,\nyou have to select a background image!")),
-	  gccNormalBackground(true), gccHighlightBackground(true), lblFont(gettext("_Font"), true)
+	  gccNormalBackground(true), gccHighlightBackground(true), lblFont(gettext("_Font"), true),
+	  imgAddTheme(Gtk::Stock::ADD, Gtk::ICON_SIZE_BUTTON),
+	  fcThemeFileChooser(*this, gettext("choose theme file"), Gtk::FILE_CHOOSER_ACTION_OPEN)
 {
 	Gtk::Box& dlgVBox = *this->get_vbox();
 
 	dlgVBox.pack_start(hbTheme, Gtk::PACK_SHRINK);
 	hbTheme.pack_start(lblTheme, Gtk::PACK_SHRINK);
 	hbTheme.pack_start(cbTheme);
+	hbTheme.pack_start(bttAddTheme, Gtk::PACK_SHRINK);
+	bttAddTheme.add(imgAddTheme);
 
 	dlgVBox.pack_start(vbMain);
 
 	vbMain.pack_start(hpThemeEditor);
-	vbMain.pack_start(vbInstallTheme);
 	vbMain.pack_start(vbCustomTheme);
 
 	toolbar.add(tbttAdd);
@@ -85,6 +88,11 @@ View_Gtk_Theme::View_Gtk_Theme()
 	scrFiles.set_shadow_type(Gtk::SHADOW_IN);
 	scrFiles.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
 
+	//theme selection
+	hbTheme.set_spacing(5);
+	fcThemeFileChooser.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
+	fcThemeFileChooser.add_button(Gtk::Stock::OPEN, Gtk::RESPONSE_APPLY);
+
 	//color chooser
 	vbCustomTheme.pack_start(groupColorChooser, Gtk::PACK_SHRINK);
 	groupColorChooser.add(alignColorChooser);
@@ -100,7 +108,6 @@ View_Gtk_Theme::View_Gtk_Theme()
 	tblColorChooser.attach(gccHighlightForeground, 1,2,2,3);
 	tblColorChooser.attach(gccHighlightBackground, 2,3,2,3);
 	tblColorChooser.set_spacings(10);
-
 
 	//font selection and background image group
 	vbCustomTheme.pack_start(hbFontAndBgImage, Gtk::PACK_SHRINK);
@@ -154,6 +161,8 @@ View_Gtk_Theme::View_Gtk_Theme()
 	fcFileSelection.signal_file_set().connect(sigc::mem_fun(this, &View_Gtk_Theme::signal_fileChosen));
 	txtEdit.get_buffer()->signal_changed().connect(sigc::mem_fun(this, &View_Gtk_Theme::signal_textChanged));
 	cbTheme.signal_changed().connect(sigc::mem_fun(this, &View_Gtk_Theme::signal_themeChosen));
+	bttAddTheme.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Theme::signal_addThemeClicked));
+	fcThemeFileChooser.signal_response().connect(sigc::mem_fun(this, &View_Gtk_Theme::signal_themeFileChooserResponse));
 
 	gccNormalForeground.signal_changed().connect(sigc::bind<View_Gtk_Theme_ColorChooser&>(sigc::mem_fun(this, &View_Gtk_Theme::signal_color_changed), gccNormalForeground));
 	gccNormalBackground.signal_changed().connect(sigc::bind<View_Gtk_Theme_ColorChooser&>(sigc::mem_fun(this, &View_Gtk_Theme::signal_color_changed), gccNormalBackground));
@@ -309,7 +318,6 @@ void View_Gtk_Theme::clearThemeSelection() {
 	this->cbTheme.remove_all();
 
 	cbTheme.append(gettext("(Custom Settings)"));
-	cbTheme.append(gettext("(Install theme)"));
 	cbTheme.set_active(0);
 }
 
@@ -329,17 +337,12 @@ void View_Gtk_Theme::show(bool burgMode) {
 
 void View_Gtk_Theme::setEditorType(EditorType type) {
 	this->vbCustomTheme.hide();
-	this->vbInstallTheme.hide();
 	this->hpThemeEditor.hide();
 
 	switch (type) {
 	case EDITORTYPE_CUSTOM:
 		this->vbCustomTheme.show();
 		this->vbCustomTheme.show_all_children(true);
-		break;
-	case EDITORTYPE_INSTALL:
-		this->vbInstallTheme.show();
-		this->vbInstallTheme.show_all_children(true);
 		break;
 	case EDITORTYPE_THEME:
 		this->hpThemeEditor.show();
@@ -348,6 +351,10 @@ void View_Gtk_Theme::setEditorType(EditorType type) {
 	default:
 		throw LogicException("unsupported type given", __FILE__, __LINE__);
 	}
+}
+
+void View_Gtk_Theme::showThemeFileChooser() {
+	fcThemeFileChooser.show_all();
 }
 
 View_ColorChooser& View_Gtk_Theme::getColorChooser(ColorChooserType type){
@@ -535,10 +542,23 @@ void View_Gtk_Theme::signal_themeChosen() {
 	if (!event_lock) {
 		if (this->cbTheme.get_active_row_number() == 0) {
 			this->eventListener->showSimpleThemeConfigAction();
-		} else if (this->cbTheme.get_active_row_number() == 1) {
-			this->eventListener->showThemeInstallerAction();
 		} else {
 			this->eventListener->loadThemeAction(cbTheme.get_active_text());
+		}
+	}
+}
+
+void View_Gtk_Theme::signal_addThemeClicked() {
+	if (!event_lock) {
+		this->eventListener->showThemeInstallerAction();
+	}
+}
+
+void View_Gtk_Theme::signal_themeFileChooserResponse(int response_id) {
+	if (!event_lock) {
+		this->fcThemeFileChooser.hide();
+		if (response_id == Gtk::RESPONSE_APPLY) {
+			this->eventListener->addThemeFileAction(fcThemeFileChooser.get_filename());
 		}
 	}
 }
