@@ -35,6 +35,10 @@ public:
 		COLOR_CHOOSER_HIGHLIGHT_BACKGROUND
 	};
 
+	enum Error {
+		ERROR_INVALID_THEME_PACK_FORMAT
+	};
+
 	virtual void addFile(std::string const& fileName) = 0;
 	virtual void clear() = 0;
 	virtual void setText(std::string const& text) = 0;
@@ -45,6 +49,7 @@ public:
 	virtual void show(bool burgMode) = 0;
 	virtual void setEditorType(EditorType type) = 0;
 	virtual void showThemeFileChooser() = 0;
+	virtual void showError(Error const& e) = 0;
 
 	//returns an interface to the given color chooser
 	virtual View_ColorChooser& getColorChooser(ColorChooserType type)=0;

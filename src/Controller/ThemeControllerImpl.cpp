@@ -127,6 +127,21 @@ void ThemeControllerImpl::loadThemeAction(std::string const& name) {
 	this->logActionEnd();
 }
 
+void ThemeControllerImpl::addThemeFileAction(const std::string& filePath) {
+	this->logActionBegin("add-theme-file");
+	try {
+		try {
+			std::string themeName = this->themeManager->addThemeFile(filePath);
+			this->loadThemeAction(themeName);
+		} catch (InvalidFileTypeException const& e) {
+			this->view->showError(View_Theme::ERROR_INVALID_THEME_PACK_FORMAT);
+		}
+	} catch (const Exception& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
+	this->logActionEnd();
+}
+
 void ThemeControllerImpl::showThemeInstallerAction() {
 	this->logActionBegin("show-theme-installer");
 	try {

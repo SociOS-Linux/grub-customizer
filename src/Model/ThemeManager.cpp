@@ -51,3 +51,8 @@ Model_Theme& Model_ThemeManager::getTheme(std::string const& name) {
 	}
 	throw ItemNotFoundException("getTheme: Theme not found", __FILE__, __LINE__);
 }
+
+std::string Model_ThemeManager::addThemeFile(std::string const& fileName) {
+
+	throw InvalidFileTypeException("test");
+}

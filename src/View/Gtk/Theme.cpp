@@ -357,6 +357,16 @@ void View_Gtk_Theme::showThemeFileChooser() {
 	fcThemeFileChooser.show_all();
 }
 
+void View_Gtk_Theme::showError(Error const& e) {
+	switch (e) {
+	case ERROR_INVALID_THEME_PACK_FORMAT:
+		Gtk::MessageDialog(gettext("The chosen file cannot be loaded as theme")).run();
+		break;
+	default:
+		throw NotImplementedException("the current value of View_Theme::Error is not processed", __FILE__, __LINE__);
+	}
+}
+
 View_ColorChooser& View_Gtk_Theme::getColorChooser(ColorChooserType type){
 	View_ColorChooser* result = NULL;
 	switch (type){

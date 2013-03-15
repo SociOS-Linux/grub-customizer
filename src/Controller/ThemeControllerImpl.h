@@ -46,14 +46,7 @@ public:
 
 	void loadThemesAction();
 	void loadThemeAction(std::string const& name);
-	void addThemeFileAction(const std::string& filePath) {
-		this->logActionBegin("add-theme-file");
-		try {
-		} catch (const Exception& e) {
-			this->getAllControllers().errorController->errorAction(e);
-		}
-		this->logActionEnd();
-	}
+	void addThemeFileAction(const std::string& filePath);
 	void showThemeInstallerAction();
 	void showSimpleThemeConfigAction();
 	void addFileAction();

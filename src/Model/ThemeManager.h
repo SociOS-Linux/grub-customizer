@@ -31,6 +31,7 @@ public:
 	Model_ThemeManager(Model_Env& env);
 	void load();
 	Model_Theme& getTheme(std::string const& name);
+	std::string addThemeFile(std::string const& fileName);
 };
 
 
