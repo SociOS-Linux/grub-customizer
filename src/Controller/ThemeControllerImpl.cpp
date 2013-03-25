@@ -100,7 +100,11 @@ void ThemeControllerImpl::setListCfg(Model_ListCfg& grublistCfg) {
 void ThemeControllerImpl::loadThemesAction() {
 	this->logActionBegin("load-themes");
 	try {
-		this->themeManager->load();
+		try {
+			this->themeManager->load();
+		} catch (FileReadException const& e) {
+			this->log("Theme directory not found", Logger::INFO);
+		}
 		this->view->clearThemeSelection();
 		for (std::list<Model_Theme>::iterator themeIter = this->themeManager->themes.begin(); themeIter != this->themeManager->themes.end(); themeIter++) {
 			this->view->addTheme(themeIter->name);
