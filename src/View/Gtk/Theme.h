@@ -134,6 +134,8 @@ public:
 	void setText(std::string const& text);
 	void setImage(std::string const& path);
 	void selectFile(std::string const& fileName, bool startEdit = false);
+	void selectTheme(std::string const& name);
+	std::string getSelectedTheme();
 	void addTheme(std::string const& name);
 	void clearThemeSelection();
 	void show(bool burgMode);

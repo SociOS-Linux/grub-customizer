@@ -21,7 +21,9 @@
 Model_Theme::Model_Theme(std::string const& directory, std::string const& name)
 	: directory(directory), name(name)
 {
-	this->load(directory);
+	if (directory != "") {
+		this->load(directory);
+	}
 }
 
 void Model_Theme::load(std::string const& directory) {

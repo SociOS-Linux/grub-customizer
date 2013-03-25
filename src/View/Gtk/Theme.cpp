@@ -310,15 +310,27 @@ void View_Gtk_Theme::selectFile(std::string const& fileName, bool startEdit) {
 	}
 }
 
+void View_Gtk_Theme::selectTheme(std::string const& name) {
+	this->event_lock = true;
+	cbTheme.set_active_text(name);
+	this->event_lock = false;
+}
+
+std::string View_Gtk_Theme::getSelectedTheme() {
+	return cbTheme.get_active_text();
+}
+
 void View_Gtk_Theme::addTheme(std::string const& name) {
 	this->cbTheme.append(name);
 }
 
 void View_Gtk_Theme::clearThemeSelection() {
+	event_lock = true;
 	this->cbTheme.remove_all();
 
 	cbTheme.append(gettext("(Custom Settings)"));
 	cbTheme.set_active(0);
+	event_lock = false;
 }
 
 void View_Gtk_Theme::show(bool burgMode) {

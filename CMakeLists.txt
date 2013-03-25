@@ -7,6 +7,7 @@ find_package(PkgConfig)
 pkg_check_modules(GTKMM gtkmm-3.0)
 pkg_check_modules(GTHREAD gthread-2.0)
 pkg_check_modules(OPENSSL openssl)
+pkg_check_modules(LIBARCHIVE libarchive)
 
 if ( LIB_INSTALL_DIR )
 else()
@@ -35,7 +36,7 @@ endif()
 
 
 link_directories(
-    ${GTKMM_LIBRARY_DIRS} ${OPENSSL_LIBRARY_DIRS} )
+    ${GTKMM_LIBRARY_DIRS} ${OPENSSL_LIBRARY_DIRS} ${LIBARCHIVE_LIBRARY_DIRS} )
 
 include_directories(
     ${GTKMM_INCLUDE_DIRS}  )
@@ -136,7 +137,7 @@ add_executable(grubcfg-proxy
 )
 
 target_link_libraries(grub-customizer 
-    ${GTKMM_LIBRARIES} ${GTHREAD_LIBRARIES} ${OPENSSL_LIBRARIES})
+    ${GTKMM_LIBRARIES} ${GTHREAD_LIBRARIES} ${OPENSSL_LIBRARIES} ${LIBARCHIVE_LIBRARIES})
 
 target_link_libraries(grubcfg-proxy 
     ${OPENSSL_LIBRARIES})

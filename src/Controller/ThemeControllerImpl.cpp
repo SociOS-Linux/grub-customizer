@@ -61,6 +61,15 @@ void ThemeControllerImpl::syncSettings() {
 	else {
 		this->view->setBackgroundImagePreviewPath("", menuPicIsInGrubDir);
 	}
+
+	std::string selectedTheme = this->view->getSelectedTheme();
+
+	this->view->clearThemeSelection();
+	for (std::list<Model_Theme>::iterator themeIter = this->themeManager->themes.begin(); themeIter != this->themeManager->themes.end(); themeIter++) {
+		this->view->addTheme(themeIter->name);
+	}
+
+	this->view->selectTheme(selectedTheme);
 }
 
 bool ThemeControllerImpl::isImage(std::string const& fileName) {
@@ -105,10 +114,7 @@ void ThemeControllerImpl::loadThemesAction() {
 		} catch (FileReadException const& e) {
 			this->log("Theme directory not found", Logger::INFO);
 		}
-		this->view->clearThemeSelection();
-		for (std::list<Model_Theme>::iterator themeIter = this->themeManager->themes.begin(); themeIter != this->themeManager->themes.end(); themeIter++) {
-			this->view->addTheme(themeIter->name);
-		}
+		this->syncSettings();
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
@@ -130,13 +136,15 @@ void ThemeControllerImpl::loadThemeAction(std::string const& name) {
 	}
 	this->logActionEnd();
 }
-
+#include <iostream>
 void ThemeControllerImpl::addThemeFileAction(const std::string& filePath) {
 	this->logActionBegin("add-theme-file");
 	try {
 		try {
 			std::string themeName = this->themeManager->addThemeFile(filePath);
 			this->loadThemeAction(themeName);
+			this->syncSettings();
+			this->view->selectTheme(themeName);
 		} catch (InvalidFileTypeException const& e) {
 			this->view->showError(View_Theme::ERROR_INVALID_THEME_PACK_FORMAT);
 		}
