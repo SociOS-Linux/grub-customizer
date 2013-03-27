@@ -200,6 +200,7 @@ void ThemeControllerImpl::updateEditAreaAction(std::string const& file) {
 	try {
 		bool isImage = this->isImage(file);
 		Model_Theme* theme = &this->themeManager->getTheme(this->currentTheme);
+		this->currentThemeFile = file;
 		if (isImage) {
 			this->view->setImage(theme->getFullFileName(file));
 		} else {
@@ -235,7 +236,7 @@ void ThemeControllerImpl::loadFileAction(std::string const& externalPath) {
 void ThemeControllerImpl::saveTextAction(std::string const& newText) {
 	this->logActionBegin("save-text");
 	try {
-
+		this->themeManager->getTheme(this->currentTheme).getFile(this->currentThemeFile).content = newText;
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}

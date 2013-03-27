@@ -77,6 +77,10 @@ void Model_Theme::loadZipFile(std::string const& zipFile) {
 }
 
 std::string Model_Theme::loadFileContent(std::string localFileName) {
+	if (this->getFile(localFileName).content != "") {
+		return this->getFile(localFileName).content;
+	}
+
 	if (this->directory != "") {
 		return this->loadFileContentFromDirectory(localFileName);
 	} else if (this->zipFile != "") {
@@ -146,6 +150,15 @@ std::string Model_Theme::getFullFileName(std::string localFileName) {
 		fclose(file);
 		return "/tmp/grub-customizer_theme_preview";
 	}
+}
+
+Model_ThemeFile& Model_Theme::getFile(std::string localFileName) {
+	for (std::list<Model_ThemeFile>::iterator fileIter = this->files.begin(); fileIter != this->files.end(); fileIter++) {
+		if (fileIter->localFileName == localFileName) {
+			return *fileIter;
+		}
+	}
+	throw ItemNotFoundException("themefile " + localFileName + " not found!", __FILE__, __LINE__);
 }
 
 

@@ -33,7 +33,7 @@ class ThemeControllerImpl : public ThemeController, public ControllerAbstract {
 	Model_ThemeManager* themeManager;
 	Model_SettingsManagerData* settings;
 	Model_ListCfg* grublistCfg;
-	std::string currentTheme;
+	std::string currentTheme, currentThemeFile;
 	bool isImage(std::string const& fileName);
 
 	void syncSettings();

@@ -39,6 +39,7 @@ struct Model_Theme {
 	void loadZipFile(std::string const& zipFile);
 	std::string loadFileContent(std::string localFileName);
 	std::string getFullFileName(std::string localFileName);
+	Model_ThemeFile& getFile(std::string localFileName);
 private:
 	std::string extractLocalPath(std::string fullPath);
 	std::string loadFileContentFromDirectory(std::string localFileName);
