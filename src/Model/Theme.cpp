@@ -77,6 +77,16 @@ void Model_Theme::loadZipFile(std::string const& zipFile) {
 }
 
 std::string Model_Theme::loadFileContent(std::string localFileName) {
+	if (this->directory != "") {
+		return this->loadFileContentFromDirectory(localFileName);
+	} else if (this->zipFile != "") {
+		return this->loadFileContentFromZip(localFileName);
+	} else {
+		throw LogicException("neither directory nor zip file set", __FILE__, __LINE__);
+	}
+}
+
+std::string Model_Theme::loadFileContentFromDirectory(std::string localFileName) {
 	std::string data;
 	FILE* file = fopen((this->directory + "/" + localFileName).c_str(), "r");
 	if (file) {
@@ -90,6 +100,37 @@ std::string Model_Theme::loadFileContent(std::string localFileName) {
 		throw FileReadException("cannot read file: " + localFileName, __FILE__, __LINE__);
 	}
 	return data;
+}
+
+std::string Model_Theme::loadFileContentFromZip(std::string localFileName) {
+	struct archive *a;
+	struct archive_entry *entry;
+	int r;
+	std::string result;
+
+	a = archive_read_new();
+	archive_read_support_filter_all(a);
+	archive_read_support_format_all(a);
+	r = archive_read_open_filename(a, zipFile.c_str(), 10240);
+	if (r != ARCHIVE_OK) {
+		throw InvalidFileTypeException("archive not readable", __FILE__, __LINE__);
+	}
+	while (archive_read_next_header(a, &entry) == ARCHIVE_OK) {
+		if (std::string(archive_entry_pathname(entry)) == localFileName) {
+			ssize_t size = 0;
+			do {
+				char data[1024];
+				size = archive_read_data(a, data, 10);
+				result += std::string(data, size);
+			} while (size > 0);
+		}
+		archive_read_data_skip(a);
+	}
+	r = archive_read_free(a);
+	if (r != ARCHIVE_OK) {
+		throw InvalidFileTypeException("archive not readable", __FILE__, __LINE__);
+	}
+	return result;
 }
 
 std::string Model_Theme::getFullFileName(std::string localFileName) {
