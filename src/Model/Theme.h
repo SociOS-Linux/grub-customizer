@@ -25,14 +25,18 @@
 #include <dirent.h>
 #include <fstream>
 #include "../lib/Exception.h"
+#include <archive.h>
+#include <archive_entry.h>
 
 struct Model_Theme {
 	std::string directory;
+	std::string zipFile;
 	std::list<Model_ThemeFile> files;
 	std::string name;
 
-	Model_Theme(std::string const& directory, std::string const& name);
+	Model_Theme(std::string const& directory, std::string const& zipFile, std::string const& name);
 	void load(std::string const& directory);
+	void loadZipFile(std::string const& zipFile);
 	std::string loadFileContent(std::string localFileName);
 	std::string getFullFileName(std::string localFileName);
 private:

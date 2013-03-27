@@ -23,8 +23,6 @@
 #include "Theme.h"
 #include "Env.h"
 #include "../lib/Exception.h"
-#include <archive.h>
-#include <archive_entry.h>
 
 class Model_ThemeManager {
 	Model_Env& env;

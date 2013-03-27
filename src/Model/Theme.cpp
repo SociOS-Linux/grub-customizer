@@ -18,11 +18,15 @@
 
 #include "Theme.h"
 
-Model_Theme::Model_Theme(std::string const& directory, std::string const& name)
-	: directory(directory), name(name)
+Model_Theme::Model_Theme(std::string const& directory, std::string const& zipFile, std::string const& name)
+	: directory(directory), name(name), zipFile(zipFile)
 {
 	if (directory != "") {
 		this->load(directory);
+	}
+
+	if (zipFile != "") {
+		this->loadZipFile(zipFile);
 	}
 }
 
@@ -47,6 +51,28 @@ void Model_Theme::load(std::string const& directory) {
 		this->files.sort(&Model_ThemeFile::compareLocalPath);
 	} else {
 		throw FileReadException("cannot read the theme directory: " + this->directory);
+	}
+}
+
+void Model_Theme::loadZipFile(std::string const& zipFile) {
+	struct archive *a;
+	struct archive_entry *entry;
+	int r;
+
+	a = archive_read_new();
+	archive_read_support_filter_all(a);
+	archive_read_support_format_all(a);
+	r = archive_read_open_filename(a, zipFile.c_str(), 10240);
+	if (r != ARCHIVE_OK) {
+		throw InvalidFileTypeException("archive not readable", __FILE__, __LINE__);
+	}
+	while (archive_read_next_header(a, &entry) == ARCHIVE_OK) {
+		this->files.push_back(std::string(archive_entry_pathname(entry)));
+		archive_read_data_skip(a);
+	}
+	r = archive_read_free(a);
+	if (r != ARCHIVE_OK) {
+		throw InvalidFileTypeException("archive not readable", __FILE__, __LINE__);
 	}
 }
 

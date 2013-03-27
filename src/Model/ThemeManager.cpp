@@ -35,7 +35,7 @@ void Model_ThemeManager::load() {
 			}
 			std::string currentFileName = path + "/" + entry->d_name;
 			stat(currentFileName.c_str(), &fileProperties);
-			this->themes.push_back(Model_Theme(currentFileName, entry->d_name));
+			this->themes.push_back(Model_Theme(currentFileName, "", entry->d_name));
 		}
 		closedir(dir);
 	} else {
@@ -53,26 +53,6 @@ Model_Theme& Model_ThemeManager::getTheme(std::string const& name) {
 }
 
 std::string Model_ThemeManager::addThemeFile(std::string const& fileName) {
-	Model_Theme theme("", fileName);
-	struct archive *a;
-	struct archive_entry *entry;
-	int r;
-
-	a = archive_read_new();
-	archive_read_support_filter_all(a);
-	archive_read_support_format_all(a);
-	r = archive_read_open_filename(a, fileName.c_str(), 10240);
-	if (r != ARCHIVE_OK) {
-		throw InvalidFileTypeException("archive not readable", __FILE__, __LINE__);
-	}
-	while (archive_read_next_header(a, &entry) == ARCHIVE_OK) {
-		theme.files.push_back(std::string(archive_entry_pathname(entry)));
-		archive_read_data_skip(a);
-	}
-	r = archive_read_free(a);
-	if (r != ARCHIVE_OK) {
-		throw InvalidFileTypeException("archive not readable", __FILE__, __LINE__);
-	}
-	this->themes.push_back(theme);
+	this->themes.push_back(Model_Theme("", fileName, fileName));
 	return fileName;
 }
