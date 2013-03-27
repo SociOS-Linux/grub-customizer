@@ -120,7 +120,7 @@ std::string Model_Theme::loadFileContentFromZip(std::string localFileName) {
 			ssize_t size = 0;
 			do {
 				char data[1024];
-				size = archive_read_data(a, data, 10);
+				size = archive_read_data(a, data, 1024);
 				result += std::string(data, size);
 			} while (size > 0);
 		}
@@ -134,7 +134,18 @@ std::string Model_Theme::loadFileContentFromZip(std::string localFileName) {
 }
 
 std::string Model_Theme::getFullFileName(std::string localFileName) {
-	return this->directory + "/" + localFileName;
+	if (this->directory != "") {
+		return this->directory + "/" + localFileName;
+	} else {
+		std::string fileContent = this->loadFileContentFromZip(localFileName);
+		FILE* file = fopen("/tmp/grub-customizer_theme_preview", "w");
+		if (!file) {
+			throw FileSaveException("cannot write preview file to " + localFileName, __FILE__, __LINE__);
+		}
+		fwrite(fileContent.c_str(), fileContent.size(), fileContent.size(), file);
+		fclose(file);
+		return "/tmp/grub-customizer_theme_preview";
+	}
 }
 
 
