@@ -77,10 +77,6 @@ void Model_Theme::loadZipFile(std::string const& zipFile) {
 }
 
 std::string Model_Theme::loadFileContent(std::string localFileName) {
-	if (this->getFile(localFileName).content != "") {
-		return this->getFile(localFileName).content;
-	}
-
 	if (this->directory != "") {
 		return this->loadFileContentFromDirectory(localFileName);
 	} else if (this->zipFile != "") {
@@ -90,9 +86,9 @@ std::string Model_Theme::loadFileContent(std::string localFileName) {
 	}
 }
 
-std::string Model_Theme::loadFileContentFromDirectory(std::string localFileName) {
+std::string Model_Theme::loadFileContentExternal(std::string const& externalPath) {
 	std::string data;
-	FILE* file = fopen((this->directory + "/" + localFileName).c_str(), "r");
+	FILE* file = fopen(externalPath.c_str(), "r");
 	if (file) {
 		data.reserve(10240);
 		int c;
@@ -101,9 +97,13 @@ std::string Model_Theme::loadFileContentFromDirectory(std::string localFileName)
 		}
 		fclose(file);
 	} else {
-		throw FileReadException("cannot read file: " + localFileName, __FILE__, __LINE__);
+		throw FileReadException("cannot read file: " + externalPath, __FILE__, __LINE__);
 	}
 	return data;
+}
+
+std::string Model_Theme::loadFileContentFromDirectory(std::string localFileName) {
+	return this->loadFileContentExternal(this->directory + "/" + localFileName);
 }
 
 std::string Model_Theme::loadFileContentFromZip(std::string localFileName) {

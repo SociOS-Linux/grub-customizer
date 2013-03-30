@@ -207,15 +207,28 @@ void ThemeControllerImpl::updateEditAreaAction(std::string const& file) {
 	this->logActionBegin("update-edit-area");
 	try {
 		Model_Theme* theme = &this->themeManager->getTheme(this->currentTheme);
-		std::string originalFileName = theme->getFileByNewName(file).localFileName;
+		Model_ThemeFile* themeFile = &theme->getFileByNewName(file);
+		std::string originalFileName = themeFile->localFileName;
 		bool isImage = this->isImage(file);
 		this->currentThemeFile = originalFileName;
-		if (isImage) {
-			this->view->setImage(theme->getFullFileName(originalFileName));
+		if (themeFile->content != "") {
+			this->view->setText(themeFile->content);
+		} else if (themeFile->externalSource != "") {
+			if (isImage) {
+				this->view->setImage(themeFile->externalSource);
+			} else {
+				std::string content = theme->loadFileContentExternal(themeFile->externalSource);
+				this->view->setText(content);
+			}
 		} else {
-			std::string content = theme->loadFileContent(originalFileName);
-			this->view->setText(content);
+			if (isImage) {
+				this->view->setImage(theme->getFullFileName(originalFileName));
+			} else {
+				std::string content = theme->loadFileContent(originalFileName);
+				this->view->setText(content);
+			}
 		}
+		this->view->setCurrentExternalThemeFilePath(themeFile->externalSource);
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
@@ -240,7 +253,10 @@ void ThemeControllerImpl::renameAction(std::string const& oldName, std::string c
 void ThemeControllerImpl::loadFileAction(std::string const& externalPath) {
 	this->logActionBegin("load-file");
 	try {
-
+		Model_ThemeFile* file = &this->themeManager->getTheme(this->currentTheme).getFile(this->currentThemeFile);
+		file->externalSource = externalPath;
+		file->content = "";
+		this->updateEditAreaAction(file->newLocalFileName);
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
@@ -250,7 +266,10 @@ void ThemeControllerImpl::loadFileAction(std::string const& externalPath) {
 void ThemeControllerImpl::saveTextAction(std::string const& newText) {
 	this->logActionBegin("save-text");
 	try {
-		this->themeManager->getTheme(this->currentTheme).getFile(this->currentThemeFile).content = newText;
+		Model_ThemeFile* themeFile = &this->themeManager->getTheme(this->currentTheme).getFile(this->currentThemeFile);
+		themeFile->externalSource = "";
+		this->view->setCurrentExternalThemeFilePath(themeFile->externalSource);
+		themeFile->content = newText;
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}

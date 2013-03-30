@@ -27,6 +27,7 @@ struct Model_ThemeFile {
 	bool contentLoaded; // say whether the content is loaded (text only)
 	std::string content; // loaded content (text only)
 	bool isAddedByUser;
+	std::string externalSource;
 };
 
 

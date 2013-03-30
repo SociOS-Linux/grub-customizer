@@ -379,6 +379,17 @@ void View_Gtk_Theme::showError(Error const& e) {
 	}
 }
 
+void View_Gtk_Theme::setCurrentExternalThemeFilePath(std::string const& fileName) {
+	this->event_lock = true;
+	if (fileName == "") {
+		this->fcFileSelection.unselect_all();
+	} else {
+		this->fcFileSelection.set_filename(fileName);
+	}
+
+	this->event_lock = false;
+}
+
 View_ColorChooser& View_Gtk_Theme::getColorChooser(ColorChooserType type){
 	View_ColorChooser* result = NULL;
 	switch (type){
