@@ -40,6 +40,7 @@ struct Model_Theme {
 	std::string loadFileContent(std::string localFileName);
 	std::string getFullFileName(std::string localFileName);
 	Model_ThemeFile& getFile(std::string localFileName);
+	Model_ThemeFile& getFileByNewName(std::string localFileName);
 private:
 	std::string extractLocalPath(std::string fullPath);
 	std::string loadFileContentFromDirectory(std::string localFileName);

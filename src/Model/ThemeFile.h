@@ -23,10 +23,9 @@
 struct Model_ThemeFile {
 	Model_ThemeFile(std::string localFileName);
 	static bool compareLocalPath(Model_ThemeFile const& a, Model_ThemeFile const& b);
-	std::string localFileName; // path inside of the theme directory
+	std::string localFileName, newLocalFileName; // path inside of the theme directory
 	bool contentLoaded; // say whether the content is loaded (text only)
 	std::string content; // loaded content (text only)
-	std::string sourcePath; // path where it should load the file from (used if content is not loaded)
 };
 
 

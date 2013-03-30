@@ -129,14 +129,14 @@ void ThemeControllerImpl::loadThemeAction(std::string const& name) {
 		this->view->clear();
 		Model_Theme* theme = &this->themeManager->getTheme(name);
 		for (std::list<Model_ThemeFile>::iterator themeFileIter = theme->files.begin(); themeFileIter != theme->files.end(); themeFileIter++) {
-			this->view->addFile(themeFileIter->localFileName);
+			this->view->addFile(themeFileIter->newLocalFileName);
 		}
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
 	this->logActionEnd();
 }
-#include <iostream>
+
 void ThemeControllerImpl::addThemeFileAction(const std::string& filePath) {
 	this->logActionBegin("add-theme-file");
 	try {
@@ -198,13 +198,14 @@ void ThemeControllerImpl::removeFileAction(std::string const& file) {
 void ThemeControllerImpl::updateEditAreaAction(std::string const& file) {
 	this->logActionBegin("update-edit-area");
 	try {
-		bool isImage = this->isImage(file);
 		Model_Theme* theme = &this->themeManager->getTheme(this->currentTheme);
-		this->currentThemeFile = file;
+		std::string originalFileName = theme->getFileByNewName(file).localFileName;
+		bool isImage = this->isImage(file);
+		this->currentThemeFile = originalFileName;
 		if (isImage) {
-			this->view->setImage(theme->getFullFileName(file));
+			this->view->setImage(theme->getFullFileName(originalFileName));
 		} else {
-			std::string content = theme->loadFileContent(file);
+			std::string content = theme->loadFileContent(originalFileName);
 			this->view->setText(content);
 		}
 	} catch (Exception const& e) {
@@ -216,7 +217,7 @@ void ThemeControllerImpl::updateEditAreaAction(std::string const& file) {
 void ThemeControllerImpl::renameAction(std::string const& oldName, std::string const& newName) {
 	this->logActionBegin("rename");
 	try {
-
+		this->themeManager->getTheme(this->currentTheme).getFileByNewName(oldName).newLocalFileName = newName;
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}

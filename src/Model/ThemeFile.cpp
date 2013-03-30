@@ -19,7 +19,7 @@
 #include "ThemeFile.h"
 
 Model_ThemeFile::Model_ThemeFile(std::string localFileName)
-	: localFileName(localFileName), contentLoaded(false)
+	: localFileName(localFileName), contentLoaded(false), newLocalFileName(localFileName)
 {
 }
 
