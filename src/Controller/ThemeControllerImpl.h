@@ -37,6 +37,7 @@ class ThemeControllerImpl : public ThemeController, public ControllerAbstract {
 	bool isImage(std::string const& fileName);
 
 	void syncSettings();
+	void syncFiles();
 public:
 	ThemeControllerImpl(Model_Env& env);
 	void setView(View_Theme& view);

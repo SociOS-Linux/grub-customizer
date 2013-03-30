@@ -21,11 +21,12 @@
 #include <string>
 
 struct Model_ThemeFile {
-	Model_ThemeFile(std::string localFileName);
+	Model_ThemeFile(std::string localFileName, bool isAddedByUser = false);
 	static bool compareLocalPath(Model_ThemeFile const& a, Model_ThemeFile const& b);
 	std::string localFileName, newLocalFileName; // path inside of the theme directory
 	bool contentLoaded; // say whether the content is loaded (text only)
 	std::string content; // loaded content (text only)
+	bool isAddedByUser;
 };
 
 

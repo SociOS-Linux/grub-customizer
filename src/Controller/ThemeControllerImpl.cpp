@@ -72,6 +72,14 @@ void ThemeControllerImpl::syncSettings() {
 	this->view->selectTheme(selectedTheme);
 }
 
+void ThemeControllerImpl::syncFiles() {
+	this->view->clear();
+	Model_Theme* theme = &this->themeManager->getTheme(this->currentTheme);
+	for (std::list<Model_ThemeFile>::iterator themeFileIter = theme->files.begin(); themeFileIter != theme->files.end(); themeFileIter++) {
+		this->view->addFile(themeFileIter->newLocalFileName);
+	}
+}
+
 bool ThemeControllerImpl::isImage(std::string const& fileName) {
 	std::list<std::string> imageExtensions;
 	imageExtensions.push_back("png");
@@ -126,11 +134,7 @@ void ThemeControllerImpl::loadThemeAction(std::string const& name) {
 	try {
 		this->view->setEditorType(View_Theme::EDITORTYPE_THEME);
 		this->currentTheme = name;
-		this->view->clear();
-		Model_Theme* theme = &this->themeManager->getTheme(name);
-		for (std::list<Model_ThemeFile>::iterator themeFileIter = theme->files.begin(); themeFileIter != theme->files.end(); themeFileIter++) {
-			this->view->addFile(themeFileIter->newLocalFileName);
-		}
+		this->syncFiles();
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
@@ -178,7 +182,9 @@ void ThemeControllerImpl::showSimpleThemeConfigAction() {
 void ThemeControllerImpl::addFileAction() {
 	this->logActionBegin("add-file");
 	try {
-
+		this->themeManager->getTheme(this->currentTheme).files.push_back(Model_ThemeFile("", true));
+		this->syncFiles();
+		this->view->selectFile("", true);
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
@@ -217,7 +223,12 @@ void ThemeControllerImpl::updateEditAreaAction(std::string const& file) {
 void ThemeControllerImpl::renameAction(std::string const& oldName, std::string const& newName) {
 	this->logActionBegin("rename");
 	try {
-		this->themeManager->getTheme(this->currentTheme).getFileByNewName(oldName).newLocalFileName = newName;
+		Model_ThemeFile* themeFile = &this->themeManager->getTheme(this->currentTheme).getFileByNewName(oldName);
+		themeFile->newLocalFileName = newName;
+		if (themeFile->isAddedByUser) {
+			themeFile->localFileName = newName;
+			this->currentThemeFile = newName;
+		}
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}

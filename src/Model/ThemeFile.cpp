@@ -18,8 +18,8 @@
 
 #include "ThemeFile.h"
 
-Model_ThemeFile::Model_ThemeFile(std::string localFileName)
-	: localFileName(localFileName), contentLoaded(false), newLocalFileName(localFileName)
+Model_ThemeFile::Model_ThemeFile(std::string localFileName, bool isAddedByUser)
+	: localFileName(localFileName), contentLoaded(false), newLocalFileName(localFileName), isAddedByUser(isAddedByUser)
 {
 }
 
