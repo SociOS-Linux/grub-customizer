@@ -591,7 +591,7 @@ void View_Gtk_Theme::signal_themeFileChooserResponse(int response_id) {
 	if (!event_lock) {
 		this->fcThemeFileChooser.hide();
 		if (response_id == Gtk::RESPONSE_APPLY) {
-			this->eventListener->addThemeFileAction(fcThemeFileChooser.get_filename());
+			this->eventListener->addThemePackageAction(fcThemeFileChooser.get_filename());
 		}
 	}
 }

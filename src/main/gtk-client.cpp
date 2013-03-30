@@ -259,7 +259,7 @@ int main(int argc, char** argv){
 		themeEditor.show(env.burgMode);
 		env.init(Model_Env::GRUB_MODE, "");
 		themeController.loadThemesAction();
-		themeController.addThemeFileAction("/home/daniel/Downloads/descent.tar.gz");
+		themeController.addThemePackageAction("/home/daniel/Downloads/descent.tar.gz");
 		themeController.syncAction();
 		settings.load();
 		app.run(themeEditor);

@@ -52,7 +52,7 @@ Model_Theme& Model_ThemeManager::getTheme(std::string const& name) {
 	throw ItemNotFoundException("getTheme: Theme not found: " + name, __FILE__, __LINE__);
 }
 
-std::string Model_ThemeManager::addThemeFile(std::string const& fileName) {
+std::string Model_ThemeManager::addThemePackage(std::string const& fileName) {
 	this->themes.push_back(Model_Theme("", fileName, fileName));
 	return fileName;
 }

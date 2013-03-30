@@ -141,11 +141,11 @@ void ThemeControllerImpl::loadThemeAction(std::string const& name) {
 	this->logActionEnd();
 }
 
-void ThemeControllerImpl::addThemeFileAction(const std::string& filePath) {
-	this->logActionBegin("add-theme-file");
+void ThemeControllerImpl::addThemePackageAction(const std::string& filePath) {
+	this->logActionBegin("add-theme-package");
 	try {
 		try {
-			std::string themeName = this->themeManager->addThemeFile(filePath);
+			std::string themeName = this->themeManager->addThemePackage(filePath);
 			this->loadThemeAction(themeName);
 			this->syncSettings();
 			this->view->selectTheme(themeName);
