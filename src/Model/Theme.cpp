@@ -170,6 +170,16 @@ Model_ThemeFile& Model_Theme::getFileByNewName(std::string localFileName) {
 	throw ItemNotFoundException("themefile " + localFileName + " not found!", __FILE__, __LINE__);
 }
 
+void Model_Theme::removeFile(Model_ThemeFile const& file) {
+	for (std::list<Model_ThemeFile>::iterator fileIter = this->files.begin(); fileIter != this->files.end(); fileIter++) {
+		if (&*fileIter == &file) {
+			this->files.erase(fileIter);
+			return;
+		}
+	}
+	throw ItemNotFoundException("themefile " + file.localFileName + " not found!", __FILE__, __LINE__);
+}
+
 
 std::string Model_Theme::extractLocalPath(std::string fullPath) {
 	return fullPath.substr(this->directory.size() + 1);

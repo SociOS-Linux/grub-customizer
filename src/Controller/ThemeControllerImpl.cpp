@@ -194,7 +194,9 @@ void ThemeControllerImpl::addFileAction() {
 void ThemeControllerImpl::removeFileAction(std::string const& file) {
 	this->logActionBegin("remove-file");
 	try {
-
+		Model_ThemeFile* fileObj = &this->themeManager->getTheme(this->currentTheme).getFileByNewName(file);
+		this->themeManager->getTheme(this->currentTheme).removeFile(*fileObj);
+		this->syncFiles();
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
