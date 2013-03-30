@@ -52,7 +52,23 @@ Model_Theme& Model_ThemeManager::getTheme(std::string const& name) {
 	throw ItemNotFoundException("getTheme: Theme not found: " + name, __FILE__, __LINE__);
 }
 
+bool Model_ThemeManager::themeExists(std::string const& name) {
+	try {
+		this->getTheme(name);
+		return true;
+	} catch (ItemNotFoundException const& e) {
+	}
+	return false;
+}
+
 std::string Model_ThemeManager::addThemePackage(std::string const& fileName) {
-	this->themes.push_back(Model_Theme("", fileName, fileName));
-	return fileName;
+	int lastSlashPos = fileName.find_last_of('/');
+	std::string name = lastSlashPos != -1 ? fileName.substr(lastSlashPos + 1) : fileName;
+	int firstDotPos = name.find_first_of('.');
+	name = firstDotPos != -1 ? name.substr(0, firstDotPos) : name;
+	while (this->themeExists(name)) {
+		name += "-";
+	}
+	this->themes.push_back(Model_Theme("", fileName, name));
+	return name;
 }
