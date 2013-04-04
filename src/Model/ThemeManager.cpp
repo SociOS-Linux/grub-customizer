@@ -72,3 +72,12 @@ std::string Model_ThemeManager::addThemePackage(std::string const& fileName) {
 	this->themes.push_back(Model_Theme("", fileName, name));
 	return name;
 }
+
+void Model_ThemeManager::save() {
+	for (std::list<Model_Theme>::iterator themeIter = this->themes.begin(); themeIter != this->themes.end(); themeIter++) {
+		themeIter->save();
+	}
+}
+
+
+

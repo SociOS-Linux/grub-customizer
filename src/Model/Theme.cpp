@@ -180,6 +180,22 @@ void Model_Theme::removeFile(Model_ThemeFile const& file) {
 	throw ItemNotFoundException("themefile " + file.localFileName + " not found!", __FILE__, __LINE__);
 }
 
+void Model_Theme::save() {
+	// todo: extract contents [if zipfile]
+
+	for (std::list<Model_ThemeFile>::iterator fileIter = this->files.begin(); fileIter != this->files.end(); fileIter++) {
+		if (fileIter->contentLoaded) {
+			// todo: update file, unset content
+		} else if (fileIter->externalSource != "") {
+			// todo: copy from external source to path, unset externalPath
+		}
+
+		if (fileIter->newLocalFileName != fileIter->localFileName) {
+			// todo: rename
+		}
+	}
+}
+
 
 std::string Model_Theme::extractLocalPath(std::string fullPath) {
 	return fullPath.substr(this->directory.size() + 1);

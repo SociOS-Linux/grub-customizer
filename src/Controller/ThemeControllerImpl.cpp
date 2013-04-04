@@ -375,3 +375,14 @@ void ThemeControllerImpl::syncAction() {
 	this->logActionEnd();
 }
 
+
+void ThemeControllerImpl::saveAction() {
+	this->logActionBegin("save");
+	try {
+		this->themeManager->save();
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
+	this->logActionEnd();
+}
+

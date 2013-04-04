@@ -43,6 +43,7 @@ struct Model_Theme {
 	Model_ThemeFile& getFile(std::string localFileName);
 	Model_ThemeFile& getFileByNewName(std::string localFileName);
 	void removeFile(Model_ThemeFile const& file);
+	void save();
 private:
 	std::string extractLocalPath(std::string fullPath);
 	std::string loadFileContentFromDirectory(std::string localFileName);

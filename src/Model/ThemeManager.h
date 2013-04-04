@@ -33,6 +33,7 @@ public:
 	Model_Theme& getTheme(std::string const& name);
 	bool themeExists(std::string const& name);
 	std::string addThemePackage(std::string const& fileName);
+	void save();
 };
 
 

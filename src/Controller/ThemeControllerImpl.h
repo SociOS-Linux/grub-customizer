@@ -64,6 +64,7 @@ public:
 	void updateSettingsDataAction();
 
 	void syncAction();
+	void saveAction();
 };
 
 
