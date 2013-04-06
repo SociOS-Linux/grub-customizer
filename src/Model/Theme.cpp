@@ -160,6 +160,16 @@ bool Model_Theme::fileExists(std::string const& path) {
 	}
 }
 
+bool Model_Theme::isDir(std::string const& path) {
+	DIR* dir = opendir(path.c_str());
+	if (dir) {
+		closedir(dir);
+		return true;
+	} else {
+		return false;
+	}
+}
+
 void Model_Theme::createFilePath(std::string const& path) {
 	std::string currentPart = "";
 	for (std::string::const_iterator pathIter = path.begin(); pathIter != path.end(); pathIter++) {
@@ -201,6 +211,15 @@ int Model_Theme::deleteEmptyDirectories(std::string const& path) {
 		throw FileReadException("cannot read directory: " + path, __FILE__, __LINE__);
 	}
 	return remainingFileCount;
+}
+
+void Model_Theme::renameDirectory(std::string const& themePath, std::string const& localDirName, std::string const& newLocalDirName) {
+	rename((themePath + "/" + localDirName).c_str(), (themePath + "/" + newLocalDirName).c_str());
+	for (std::list<Model_ThemeFile>::iterator themeFileIter = this->files.begin(); themeFileIter != this->files.end(); themeFileIter++) {
+		if (themeFileIter->localFileName.substr(0, localDirName.length() + 1) == localDirName + "/") {
+			themeFileIter->localFileName.replace(0, localDirName.length(), newLocalDirName);
+		}
+	}
 }
 
 std::string Model_Theme::getFullFileName(std::string localFileName) {
@@ -270,9 +289,14 @@ void Model_Theme::save(std::string const& baseDirectory) {
 			std::string newPath = themeDir + "/" + fileIter->newLocalFileName;
 
 			if (this->fileExists(newPath)) {
-				std::string tmpDummyPath = newPath + ".__old";
-				this->getFile(fileIter->newLocalFileName).localFileName = tmpDummyPath;
-				this->renameFile(newPath, tmpDummyPath);
+				if (isDir(newPath)) {
+					this->renameDirectory(themeDir, fileIter->newLocalFileName, fileIter->newLocalFileName + ".__old_dirname");
+					oldPath = themeDir + "/" + fileIter->localFileName;
+				} else {
+					std::string tmpDummyPath = newPath + ".__old";
+					this->getFile(fileIter->newLocalFileName).localFileName = tmpDummyPath;
+					this->renameFile(newPath, tmpDummyPath);
+				}
 			}
 			this->renameFile(oldPath, newPath);
 			fileIter->localFileName = fileIter->newLocalFileName;
