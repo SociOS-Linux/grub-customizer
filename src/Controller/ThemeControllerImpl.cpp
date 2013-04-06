@@ -187,13 +187,19 @@ void ThemeControllerImpl::showSimpleThemeConfigAction() {
 void ThemeControllerImpl::addFileAction() {
 	this->logActionBegin("add-file");
 	try {
-		Model_ThemeFile newFile("", true);
-		newFile.content = "";
-		newFile.contentLoaded = true;
-		this->themeManager->getTheme(this->currentTheme).files.push_back(newFile);
-		this->themeManager->getTheme(this->currentTheme).isModified = true;
-		this->syncFiles();
-		this->threadController->startThemeFileEdit("");
+		std::string defaultName = this->view->getDefaultName();
+		Model_Theme* theme = &this->themeManager->getTheme(this->currentTheme);
+		if (!theme->hasConflicts(defaultName)) {
+			Model_ThemeFile newFile(defaultName, true);
+			newFile.content = "";
+			newFile.contentLoaded = true;
+			theme->files.push_back(newFile);
+			theme->isModified = true;
+			this->syncFiles();
+			this->threadController->startThemeFileEdit(defaultName);
+		} else {
+			this->view->showError(View_Theme::ERROR_RENAME_CONFLICT);
+		}
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
@@ -262,14 +268,21 @@ void ThemeControllerImpl::updateEditAreaAction(std::string const& file) {
 void ThemeControllerImpl::renameAction(std::string const& newName) {
 	this->logActionBegin("rename");
 	try {
-		this->themeManager->getTheme(this->currentTheme).isModified = true;
 		Model_ThemeFile* themeFile = &this->themeManager->getTheme(this->currentTheme).getFile(this->currentThemeFile);
-		themeFile->newLocalFileName = newName;
-		if (themeFile->isAddedByUser) {
-			themeFile->localFileName = newName;
-			this->currentThemeFile = newName;
+		if (themeFile->newLocalFileName == newName) {
+			// do nothing
+		} else if (!this->themeManager->getTheme(this->currentTheme).hasConflicts(newName)) {
+			this->themeManager->getTheme(this->currentTheme).isModified = true;
+			themeFile->newLocalFileName = newName;
+			if (themeFile->isAddedByUser) {
+				themeFile->localFileName = newName;
+				this->currentThemeFile = newName;
+			}
+			this->updateEditAreaAction(newName);
+		} else {
+			this->view->showError(View_Theme::ERROR_RENAME_CONFLICT);
+			this->syncFiles();
 		}
-		this->updateEditAreaAction(newName);
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}

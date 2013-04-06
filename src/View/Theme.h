@@ -36,7 +36,8 @@ public:
 	};
 
 	enum Error {
-		ERROR_INVALID_THEME_PACK_FORMAT
+		ERROR_INVALID_THEME_PACK_FORMAT,
+		ERROR_RENAME_CONFLICT
 	};
 
 	virtual void addFile(std::string const& fileName) = 0;
@@ -53,6 +54,7 @@ public:
 	virtual void showThemeFileChooser() = 0;
 	virtual void showError(Error const& e) = 0;
 	virtual void setCurrentExternalThemeFilePath(std::string const& fileName) = 0;
+	virtual std::string getDefaultName() const = 0;
 
 	//returns an interface to the given color chooser
 	virtual View_ColorChooser& getColorChooser(ColorChooserType type)=0;

@@ -286,6 +286,25 @@ void Model_Theme::renameFile(std::string const& oldName, std::string const& newN
 	}
 }
 
+bool Model_Theme::hasConflicts(std::string const& localFilename) {
+	try {
+		this->getFileByNewName(localFilename);
+		return true;
+	} catch (ItemNotFoundException const& e) {
+	}
+
+	for (std::list<Model_ThemeFile>::iterator fileIter = this->files.begin(); fileIter != this->files.end(); fileIter++) {
+		if (fileIter->newLocalFileName.substr(0, localFilename.length() + 1) == localFilename + "/") {
+			return true;
+		}
+		if (localFilename.substr(0, fileIter->newLocalFileName.length() + 1) == fileIter->newLocalFileName + "/") {
+			return true;
+		}
+	}
+
+	return false;
+}
+
 std::string Model_Theme::extractLocalPath(std::string fullPath) {
 	return fullPath.substr(this->directory.size() + 1);
 }

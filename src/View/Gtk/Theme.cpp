@@ -376,6 +376,9 @@ void View_Gtk_Theme::showError(Error const& e) {
 	case ERROR_INVALID_THEME_PACK_FORMAT:
 		Gtk::MessageDialog(gettext("The chosen file cannot be loaded as theme")).run();
 		break;
+	case ERROR_RENAME_CONFLICT:
+		Gtk::MessageDialog(gettext("The given filename cannot be used")).run();
+		break;
 	default:
 		throw NotImplementedException("the current value of View_Theme::Error is not processed", __FILE__, __LINE__);
 	}
@@ -390,6 +393,10 @@ void View_Gtk_Theme::setCurrentExternalThemeFilePath(std::string const& fileName
 	}
 
 	this->event_lock = false;
+}
+
+std::string View_Gtk_Theme::getDefaultName() const {
+	return "[" + std::string(gettext("filename")) + "]";
 }
 
 View_ColorChooser& View_Gtk_Theme::getColorChooser(ColorChooserType type){

@@ -143,6 +143,7 @@ public:
 	void showThemeFileChooser();
 	void showError(Error const& e);
 	void setCurrentExternalThemeFilePath(std::string const& fileName);
+	std::string getDefaultName() const;
 	View_ColorChooser& getColorChooser(ColorChooserType type);
 	std::string getFontName();
 	int getFontSize();
