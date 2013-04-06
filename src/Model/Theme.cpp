@@ -299,10 +299,15 @@ void Model_Theme::save(std::string const& baseDirectory) {
 }
 
 void Model_Theme::renameFile(std::string const& oldName, std::string const& newName) {
+	std::string tmpName = oldName + ".__tmp"; // solves problems when oldName is part of a new directory name
+	int successRenameToTmp = std::rename(oldName.c_str(), tmpName.c_str());
+	if (successRenameToTmp != 0) {
+		throw FileSaveException("rename failed: " + oldName + " -> " + tmpName, __FILE__, __LINE__);
+	}
 	this->createFilePath(newName);
-	int success = std::rename(oldName.c_str(), newName.c_str());
+	int success = std::rename(tmpName.c_str(), newName.c_str());
 	if (success != 0) {
-		throw FileSaveException("rename failed: " + oldName + " -> " + newName, __FILE__, __LINE__);
+		throw FileSaveException("rename failed: " + tmpName + " -> " + newName, __FILE__, __LINE__);
 	}
 }
 
