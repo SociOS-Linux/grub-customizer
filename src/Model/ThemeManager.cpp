@@ -23,6 +23,7 @@ Model_ThemeManager::Model_ThemeManager(Model_Env& env)
 {}
 
 void Model_ThemeManager::load() {
+	this->themes.clear();
 	std::string path = this->env.output_config_dir + "/" + "themes";
 
 	DIR* dir = opendir(path.c_str());
@@ -76,8 +77,15 @@ std::string Model_ThemeManager::addThemePackage(std::string const& fileName) {
 void Model_ThemeManager::save() {
 	std::string dirName = this->env.output_config_dir + "/themes";
 	mkdir(dirName.c_str(), 0755);
+	bool themesSaved = false;
 	for (std::list<Model_Theme>::iterator themeIter = this->themes.begin(); themeIter != this->themes.end(); themeIter++) {
-		themeIter->save(dirName);
+		if (themeIter->isModified) {
+			themeIter->save(dirName);
+			themesSaved = true;
+		}
+	}
+	if (themesSaved) {
+		this->load();
 	}
 }
 

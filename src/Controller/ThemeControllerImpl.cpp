@@ -150,6 +150,7 @@ void ThemeControllerImpl::addThemePackageAction(const std::string& filePath) {
 	try {
 		try {
 			std::string themeName = this->themeManager->addThemePackage(filePath);
+			this->themeManager->getTheme(themeName).isModified = true;
 			this->loadThemeAction(themeName);
 			this->syncSettings();
 			this->view->selectTheme(themeName);
@@ -190,6 +191,7 @@ void ThemeControllerImpl::addFileAction() {
 		newFile.content = "";
 		newFile.contentLoaded = true;
 		this->themeManager->getTheme(this->currentTheme).files.push_back(newFile);
+		this->themeManager->getTheme(this->currentTheme).isModified = true;
 		this->syncFiles();
 		this->threadController->startThemeFileEdit("");
 	} catch (Exception const& e) {
@@ -213,6 +215,7 @@ void ThemeControllerImpl::removeFileAction(std::string const& file) {
 	try {
 		Model_ThemeFile* fileObj = &this->themeManager->getTheme(this->currentTheme).getFileByNewName(file);
 		this->themeManager->getTheme(this->currentTheme).removeFile(*fileObj);
+		this->themeManager->getTheme(this->currentTheme).isModified = true;
 		this->syncFiles();
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
@@ -259,6 +262,7 @@ void ThemeControllerImpl::updateEditAreaAction(std::string const& file) {
 void ThemeControllerImpl::renameAction(std::string const& newName) {
 	this->logActionBegin("rename");
 	try {
+		this->themeManager->getTheme(this->currentTheme).isModified = true;
 		Model_ThemeFile* themeFile = &this->themeManager->getTheme(this->currentTheme).getFile(this->currentThemeFile);
 		themeFile->newLocalFileName = newName;
 		if (themeFile->isAddedByUser) {
@@ -289,6 +293,7 @@ void ThemeControllerImpl::loadFileAction(std::string const& externalPath) {
 void ThemeControllerImpl::saveTextAction(std::string const& newText) {
 	this->logActionBegin("save-text");
 	try {
+		this->themeManager->getTheme(this->currentTheme).isModified = true;
 		Model_ThemeFile* themeFile = &this->themeManager->getTheme(this->currentTheme).getFile(this->currentThemeFile);
 		themeFile->externalSource = "";
 		this->view->setCurrentExternalThemeFilePath(themeFile->externalSource);
@@ -404,6 +409,8 @@ void ThemeControllerImpl::saveAction() {
 	this->logActionBegin("save");
 	try {
 		this->themeManager->save();
+		this->syncSettings();
+		this->syncFiles();
 		this->currentThemeFile = "";
 		this->view->selectFile("");
 	} catch (Exception const& e) {

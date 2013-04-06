@@ -19,7 +19,7 @@
 #include "Theme.h"
 
 Model_Theme::Model_Theme(std::string const& directory, std::string const& zipFile, std::string const& name)
-	: directory(directory), name(name), zipFile(zipFile)
+	: directory(directory), name(name), zipFile(zipFile), isModified(false)
 {
 	if (directory != "") {
 		this->load(directory);

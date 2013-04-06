@@ -33,6 +33,7 @@ struct Model_Theme {
 	std::string zipFile;
 	std::list<Model_ThemeFile> files;
 	std::string name;
+	bool isModified;
 
 	Model_Theme(std::string const& directory, std::string const& zipFile, std::string const& name);
 	void load(std::string const& directory);
