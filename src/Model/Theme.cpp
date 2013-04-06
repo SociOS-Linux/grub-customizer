@@ -71,7 +71,10 @@ void Model_Theme::loadZipFile(std::string const& zipFile) {
 		throw InvalidFileTypeException("archive not readable", __FILE__, __LINE__);
 	}
 	while (archive_read_next_header(a, &entry) == ARCHIVE_OK) {
-		this->files.push_back(std::string(archive_entry_pathname(entry)));
+		std::string path = archive_entry_pathname(entry);
+		if (path.size() && path[path.size() - 1] != '/') {
+			this->files.push_back(path);
+		}
 		archive_read_data_skip(a);
 	}
 	r = archive_read_free(a);
