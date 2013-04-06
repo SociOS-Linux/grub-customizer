@@ -181,6 +181,8 @@ void Model_Theme::createFilePath(std::string const& path) {
 }
 
 void Model_Theme::deleteDirectory(std::string const& path) {
+	assert(path != "" && path != "/");
+
 	DIR* dir = opendir(path.c_str());
 	if (dir) {
 		struct dirent *entry;
@@ -307,6 +309,10 @@ bool Model_Theme::hasConflicts(std::string const& localFilename) {
 	}
 
 	return false;
+}
+
+void Model_Theme::deleteThemeFiles(std::string const& baseDirectory) {
+	this->deleteDirectory(baseDirectory + "/" + this->name);
 }
 
 std::string Model_Theme::extractLocalPath(std::string fullPath) {

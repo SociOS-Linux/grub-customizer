@@ -78,9 +78,11 @@ void ThemeControllerImpl::syncSettings() {
 
 void ThemeControllerImpl::syncFiles() {
 	this->view->clear();
-	Model_Theme* theme = &this->themeManager->getTheme(this->currentTheme);
-	for (std::list<Model_ThemeFile>::iterator themeFileIter = theme->files.begin(); themeFileIter != theme->files.end(); themeFileIter++) {
-		this->view->addFile(themeFileIter->newLocalFileName);
+	if (this->currentTheme != "") {
+		Model_Theme* theme = &this->themeManager->getTheme(this->currentTheme);
+		for (std::list<Model_ThemeFile>::iterator themeFileIter = theme->files.begin(); themeFileIter != theme->files.end(); themeFileIter++) {
+			this->view->addFile(themeFileIter->newLocalFileName);
+		}
 	}
 }
 
@@ -137,6 +139,7 @@ void ThemeControllerImpl::loadThemeAction(std::string const& name) {
 	this->logActionBegin("load-theme");
 	try {
 		this->view->setEditorType(View_Theme::EDITORTYPE_THEME);
+		this->view->setRemoveFunctionalityEnabled(true);
 		this->currentTheme = name;
 		this->syncFiles();
 	} catch (Exception const& e) {
@@ -163,6 +166,20 @@ void ThemeControllerImpl::addThemePackageAction(const std::string& filePath) {
 	this->logActionEnd();
 }
 
+void ThemeControllerImpl::removeThemeAction(const std::string& name) {
+	this->logActionBegin("remove-theme");
+	try {
+		this->themeManager->removeTheme(this->themeManager->getTheme(name));
+		this->currentTheme = "";
+		this->currentThemeFile = "";
+		this->showSimpleThemeConfigAction();
+		this->syncSettings();
+	} catch (const Exception& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
+	this->logActionEnd();
+}
+
 void ThemeControllerImpl::showThemeInstallerAction() {
 	this->logActionBegin("show-theme-installer");
 	try {
@@ -177,6 +194,7 @@ void ThemeControllerImpl::showSimpleThemeConfigAction() {
 	this->logActionBegin("show-simple-theme-config");
 	try {
 		this->view->setEditorType(View_Theme::EDITORTYPE_CUSTOM);
+		this->view->setRemoveFunctionalityEnabled(false);
 		this->updateColorSettingsAction();
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);

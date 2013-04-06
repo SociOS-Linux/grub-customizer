@@ -50,6 +50,7 @@ public:
 	void loadThemesAction();
 	void loadThemeAction(std::string const& name);
 	void addThemePackageAction(const std::string& filePath);
+	void removeThemeAction(const std::string& name);
 	void showThemeInstallerAction();
 	void showSimpleThemeConfigAction();
 	void addFileAction();

@@ -25,6 +25,7 @@ public:
 	virtual void loadThemesAction() = 0;
 	virtual void loadThemeAction(std::string const& name) = 0;
 	virtual void addThemePackageAction(std::string const& filePath) = 0;
+	virtual void removeThemeAction(const std::string& name) = 0;
 	virtual void showThemeInstallerAction() = 0;
 	virtual void showSimpleThemeConfigAction() = 0;
 	virtual void addFileAction() = 0;

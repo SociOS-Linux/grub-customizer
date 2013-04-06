@@ -28,7 +28,7 @@ View_Gtk_Theme::View_Gtk_Theme()
 	  imgRemoveBackground(Gtk::Stock::REMOVE, Gtk::ICON_SIZE_BUTTON), imgRemoveFont(Gtk::Stock::REMOVE, Gtk::ICON_SIZE_BUTTON),
 	  lblBackgroundRequiredInfo(gettext("To get the colors above working,\nyou have to select a background image!")),
 	  gccNormalBackground(true), gccHighlightBackground(true), lblFont(gettext("_Font"), true),
-	  imgAddTheme(Gtk::Stock::ADD, Gtk::ICON_SIZE_BUTTON),
+	  imgAddTheme(Gtk::Stock::ADD, Gtk::ICON_SIZE_BUTTON), imgRemoveTheme(Gtk::Stock::DELETE, Gtk::ICON_SIZE_BUTTON),
 	  fcThemeFileChooser(*this, gettext("choose theme file"), Gtk::FILE_CHOOSER_ACTION_OPEN)
 {
 	Gtk::Box& dlgVBox = *this->get_vbox();
@@ -37,7 +37,9 @@ View_Gtk_Theme::View_Gtk_Theme()
 	hbTheme.pack_start(lblTheme, Gtk::PACK_SHRINK);
 	hbTheme.pack_start(cbTheme);
 	hbTheme.pack_start(bttAddTheme, Gtk::PACK_SHRINK);
+	hbTheme.pack_start(bttRemoveTheme, Gtk::PACK_SHRINK);
 	bttAddTheme.add(imgAddTheme);
+	bttRemoveTheme.add(imgRemoveTheme);
 
 	dlgVBox.pack_start(vbMain);
 
@@ -87,6 +89,9 @@ View_Gtk_Theme::View_Gtk_Theme()
 	scrFiles.set_min_content_width(200);
 	scrFiles.set_shadow_type(Gtk::SHADOW_IN);
 	scrFiles.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
+
+	bttAddTheme.set_tooltip_text(gettext("add theme"));
+	bttRemoveTheme.set_tooltip_text(gettext("delete this theme"));
 
 	//theme selection
 	hbTheme.set_spacing(5);
@@ -150,6 +155,8 @@ View_Gtk_Theme::View_Gtk_Theme()
 	bttRemoveBackground.set_no_show_all(true);
 	lblBackgroundRequiredInfo.set_no_show_all(true);
 
+	bttRemoveTheme.set_sensitive(false);
+
 
 
 	this->add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
@@ -163,6 +170,7 @@ View_Gtk_Theme::View_Gtk_Theme()
 	txtEdit.get_buffer()->signal_changed().connect(sigc::mem_fun(this, &View_Gtk_Theme::signal_textChanged));
 	cbTheme.signal_changed().connect(sigc::mem_fun(this, &View_Gtk_Theme::signal_themeChosen));
 	bttAddTheme.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Theme::signal_addThemeClicked));
+	bttRemoveTheme.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Theme::signal_removeThemeClicked));
 	fcThemeFileChooser.signal_response().connect(sigc::mem_fun(this, &View_Gtk_Theme::signal_themeFileChooserResponse));
 	this->signal_response().connect(sigc::mem_fun(this, &View_Gtk_Theme::signal_dialogResponse));
 
@@ -315,6 +323,9 @@ void View_Gtk_Theme::selectFile(std::string const& fileName, bool startEdit) {
 void View_Gtk_Theme::selectTheme(std::string const& name) {
 	this->event_lock = true;
 	cbTheme.set_active_text(name);
+	if (cbTheme.get_active_row_number() == -1 && cbTheme.get_children().size()) {
+		cbTheme.set_active(0);
+	}
 	this->event_lock = false;
 }
 
@@ -346,7 +357,10 @@ void View_Gtk_Theme::show(bool burgMode) {
 		groupColorChooser.show();
 		groupBackgroundImage.show();
 	}
+}
 
+void View_Gtk_Theme::setRemoveFunctionalityEnabled(bool value) {
+	this->bttRemoveTheme.set_sensitive(value);
 }
 
 void View_Gtk_Theme::setEditorType(EditorType type) {
@@ -604,6 +618,16 @@ void View_Gtk_Theme::signal_themeChosen() {
 void View_Gtk_Theme::signal_addThemeClicked() {
 	if (!event_lock) {
 		this->eventListener->showThemeInstallerAction();
+	}
+}
+
+void View_Gtk_Theme::signal_removeThemeClicked() {
+	if (!event_lock) {
+		Gtk::MessageDialog confirmDlg(gettext("Are you sure you want to remove this theme"), false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO, true);
+		confirmDlg.set_default_response(Gtk::RESPONSE_YES);
+		if (confirmDlg.run() == Gtk::RESPONSE_YES) {
+			this->eventListener->removeThemeAction(cbTheme.get_active_text());
+		}
 	}
 }
 

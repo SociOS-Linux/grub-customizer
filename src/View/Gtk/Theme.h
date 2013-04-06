@@ -77,8 +77,8 @@ class View_Gtk_Theme : public View_Theme, public Gtk::Dialog, public CommonClass
 	Gtk::HBox hbTheme;
 	Gtk::Label lblTheme;
 	Gtk::ComboBoxText cbTheme;
-	Gtk::Button bttAddTheme;
-	Gtk::Image imgAddTheme;
+	Gtk::Button bttAddTheme, bttRemoveTheme;
+	Gtk::Image imgAddTheme, imgRemoveTheme;
 
 	Gtk::FileChooserDialog fcThemeFileChooser;
 
@@ -138,6 +138,7 @@ public:
 	void addTheme(std::string const& name);
 	void clearThemeSelection();
 	void show(bool burgMode);
+	void setRemoveFunctionalityEnabled(bool value);
 
 	void setEditorType(EditorType type);
 	void showThemeFileChooser();
@@ -162,6 +163,7 @@ private:
 	void signal_textChanged();
 	void signal_themeChosen();
 	void signal_addThemeClicked();
+	void signal_removeThemeClicked();
 	void signal_themeFileChooserResponse(int response_id);
 	void signal_dialogResponse(int response_id);
 

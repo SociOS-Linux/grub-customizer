@@ -28,11 +28,13 @@ class Model_ThemeManager {
 	Model_Env& env;
 public:
 	std::list<Model_Theme> themes;
+	std::list<Model_Theme> removedThemes;
 	Model_ThemeManager(Model_Env& env);
 	void load();
 	Model_Theme& getTheme(std::string const& name);
 	bool themeExists(std::string const& name);
 	std::string addThemePackage(std::string const& fileName);
+	void removeTheme(Model_Theme const& theme);
 	void save();
 };
 

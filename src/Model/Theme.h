@@ -27,6 +27,7 @@
 #include "../lib/Exception.h"
 #include <archive.h>
 #include <archive_entry.h>
+#include "../lib/assert.h"
 
 struct Model_Theme {
 	std::string directory;
@@ -47,6 +48,7 @@ struct Model_Theme {
 	void save(std::string const& baseDirectory);
 	void renameFile(std::string const& oldName, std::string const& newName);
 	bool hasConflicts(std::string const& localFilename);
+	void deleteThemeFiles(std::string const& baseDirectory);
 private:
 	std::string extractLocalPath(std::string fullPath);
 	std::string loadFileContentFromDirectory(std::string localFileName);

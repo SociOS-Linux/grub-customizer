@@ -50,6 +50,7 @@ public:
 	virtual void addTheme(std::string const& name) = 0;
 	virtual void clearThemeSelection() = 0;
 	virtual void show(bool burgMode) = 0;
+	virtual void setRemoveFunctionalityEnabled(bool value) = 0;
 	virtual void setEditorType(EditorType type) = 0;
 	virtual void showThemeFileChooser() = 0;
 	virtual void showError(Error const& e) = 0;

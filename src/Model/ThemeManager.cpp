@@ -74,9 +74,26 @@ std::string Model_ThemeManager::addThemePackage(std::string const& fileName) {
 	return name;
 }
 
+void Model_ThemeManager::removeTheme(Model_Theme const& theme) {
+	for (std::list<Model_Theme>::iterator themeIter = this->themes.begin(); themeIter != this->themes.end(); themeIter++) {
+		if (&*themeIter == &theme) {
+			if (themeIter->directory != "") {
+				this->removedThemes.push_back(*themeIter);
+			}
+			this->themes.erase(themeIter);
+			break;
+		}
+	}
+}
+
 void Model_ThemeManager::save() {
 	std::string dirName = this->env.output_config_dir + "/themes";
 	mkdir(dirName.c_str(), 0755);
+	for (std::list<Model_Theme>::iterator themeIter = this->removedThemes.begin(); themeIter != this->removedThemes.end(); themeIter++) {
+		themeIter->deleteThemeFiles(dirName);
+	}
+	this->removedThemes.clear();
+
 	bool themesSaved = false;
 	for (std::list<Model_Theme>::iterator themeIter = this->themes.begin(); themeIter != this->themes.end(); themeIter++) {
 		if (themeIter->isModified) {
