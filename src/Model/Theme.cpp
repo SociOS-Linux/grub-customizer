@@ -246,7 +246,18 @@ void Model_Theme::save(std::string const& baseDirectory) {
 		}
 		fileIter->isAddedByUser = false;
 	}
-	// TODO: delete removed files
+
+	// delete removed files
+	std::list<std::string> removedFiles;
+	Model_Theme currentTheme(themeDir, "", ""); // also contains files which have been deleted in current theme
+	for (std::list<Model_ThemeFile>::iterator themeFileIter = currentTheme.files.begin(); themeFileIter != currentTheme.files.end(); themeFileIter++) {
+		try {
+			this->getFile(themeFileIter->localFileName);
+		} catch (ItemNotFoundException const& e) {
+			this->deleteFile(themeDir, themeFileIter->localFileName);
+		}
+	}
+
 	this->zipFile = "";
 	this->directory = themeDir;
 }
@@ -257,6 +268,10 @@ void Model_Theme::renameFile(std::string const& oldName, std::string const& newN
 	if (success != 0) {
 		throw FileSaveException("rename failed: " + oldName + " -> " + newName, __FILE__, __LINE__);
 	}
+}
+
+void Model_Theme::deleteFile(std::string const& themePath, std::string const& localFileName) {
+	unlink((themePath + "/" + localFileName).c_str());
 }
 
 std::string Model_Theme::extractLocalPath(std::string fullPath) {
