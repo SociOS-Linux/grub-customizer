@@ -170,6 +170,39 @@ void Model_Theme::createFilePath(std::string const& path) {
 	}
 }
 
+/**
+ * @return int remaining file count
+ */
+int Model_Theme::deleteEmptyDirectories(std::string const& path) {
+	int remainingFileCount = 0;
+	DIR* dir = opendir(path.c_str());
+	if (dir) {
+		struct dirent *entry;
+		struct stat fileProperties;
+		while ((entry = readdir(dir))) {
+			if (std::string(entry->d_name) == "." || std::string(entry->d_name) == "..") {
+				continue;
+			}
+			std::string currentFileName = path + "/" + entry->d_name;
+			stat(currentFileName.c_str(), &fileProperties);
+			if (S_ISDIR(fileProperties.st_mode)) {
+				int remainingFileCountSubDir = this->deleteEmptyDirectories(currentFileName);
+				if (remainingFileCountSubDir == 0) {
+					rmdir(currentFileName.c_str());
+				} else {
+					remainingFileCount++;
+				}
+			} else {
+				remainingFileCount++;
+			}
+		}
+		closedir(dir);
+	} else {
+		throw FileReadException("cannot read directory: " + path, __FILE__, __LINE__);
+	}
+	return remainingFileCount;
+}
+
 std::string Model_Theme::getFullFileName(std::string localFileName) {
 	if (this->directory != "") {
 		return this->directory + "/" + localFileName;
@@ -257,6 +290,9 @@ void Model_Theme::save(std::string const& baseDirectory) {
 			this->deleteFile(themeDir, themeFileIter->localFileName);
 		}
 	}
+
+	// delete empty directories
+	this->deleteEmptyDirectories(themeDir);
 
 	this->zipFile = "";
 	this->directory = themeDir;

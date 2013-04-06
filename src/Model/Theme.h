@@ -53,6 +53,7 @@ private:
 	void writeFile(Model_ThemeFile& file, std::string const& path);
 	bool fileExists(std::string const& path);
 	void createFilePath(std::string const& path);
+	int deleteEmptyDirectories(std::string const& path);
 };
 
 
