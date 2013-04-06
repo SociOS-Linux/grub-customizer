@@ -180,11 +180,7 @@ void Model_Theme::createFilePath(std::string const& path) {
 	}
 }
 
-/**
- * @return int remaining file count
- */
-int Model_Theme::deleteEmptyDirectories(std::string const& path) {
-	int remainingFileCount = 0;
+void Model_Theme::deleteDirectory(std::string const& path) {
 	DIR* dir = opendir(path.c_str());
 	if (dir) {
 		struct dirent *entry;
@@ -196,29 +192,15 @@ int Model_Theme::deleteEmptyDirectories(std::string const& path) {
 			std::string currentFileName = path + "/" + entry->d_name;
 			stat(currentFileName.c_str(), &fileProperties);
 			if (S_ISDIR(fileProperties.st_mode)) {
-				int remainingFileCountSubDir = this->deleteEmptyDirectories(currentFileName);
-				if (remainingFileCountSubDir == 0) {
-					rmdir(currentFileName.c_str());
-				} else {
-					remainingFileCount++;
-				}
+				deleteDirectory(currentFileName.c_str());
 			} else {
-				remainingFileCount++;
+				unlink(currentFileName.c_str());
 			}
 		}
 		closedir(dir);
+		rmdir(path.c_str());
 	} else {
 		throw FileReadException("cannot read directory: " + path, __FILE__, __LINE__);
-	}
-	return remainingFileCount;
-}
-
-void Model_Theme::renameDirectory(std::string const& themePath, std::string const& localDirName, std::string const& newLocalDirName) {
-	rename((themePath + "/" + localDirName).c_str(), (themePath + "/" + newLocalDirName).c_str());
-	for (std::list<Model_ThemeFile>::iterator themeFileIter = this->files.begin(); themeFileIter != this->files.end(); themeFileIter++) {
-		if (themeFileIter->localFileName.substr(0, localDirName.length() + 1) == localDirName + "/") {
-			themeFileIter->localFileName.replace(0, localDirName.length(), newLocalDirName);
-		}
 	}
 }
 
@@ -266,8 +248,9 @@ void Model_Theme::removeFile(Model_ThemeFile const& file) {
 }
 
 void Model_Theme::save(std::string const& baseDirectory) {
-	std::string themeDir = baseDirectory + "/" + this->name;
-	mkdir(themeDir.c_str(), 0755);
+	std::string sourceThemeDir = baseDirectory + "/" + this->name;
+	std::string destThemeDir = baseDirectory + "/" + this->name + ".__new";
+	mkdir(destThemeDir.c_str(), 0755);
 	for (std::list<Model_ThemeFile>::iterator fileIter = this->files.begin(); fileIter != this->files.end(); fileIter++) {
 		if (this->zipFile != "" && !fileIter->contentLoaded) {
 			fileIter->content = this->loadFileContentFromZip(fileIter->localFileName);
@@ -281,62 +264,26 @@ void Model_Theme::save(std::string const& baseDirectory) {
 		}
 
 		if (fileIter->contentLoaded) {
-			this->writeFile(*fileIter, themeDir + "/" + fileIter->localFileName);
-		}
+			this->writeFile(*fileIter, destThemeDir + "/" + fileIter->newLocalFileName);
+		} else {
+			std::string oldPath = sourceThemeDir + "/" + fileIter->localFileName;
+			std::string newPath = destThemeDir + "/" + fileIter->newLocalFileName;
 
-		if (fileIter->newLocalFileName != fileIter->localFileName) {
-			std::string oldPath = themeDir + "/" + fileIter->localFileName;
-			std::string newPath = themeDir + "/" + fileIter->newLocalFileName;
-
-			if (this->fileExists(newPath)) {
-				if (isDir(newPath)) {
-					this->renameDirectory(themeDir, fileIter->newLocalFileName, fileIter->newLocalFileName + ".__old_dirname");
-					oldPath = themeDir + "/" + fileIter->localFileName;
-				} else {
-					std::string tmpDummyPath = newPath + ".__old";
-					this->getFile(fileIter->newLocalFileName).localFileName = tmpDummyPath;
-					this->renameFile(newPath, tmpDummyPath);
-				}
-			}
 			this->renameFile(oldPath, newPath);
-			fileIter->localFileName = fileIter->newLocalFileName;
-		}
-		fileIter->isAddedByUser = false;
-	}
-
-	// delete removed files
-	std::list<std::string> removedFiles;
-	Model_Theme currentTheme(themeDir, "", ""); // also contains files which have been deleted in current theme
-	for (std::list<Model_ThemeFile>::iterator themeFileIter = currentTheme.files.begin(); themeFileIter != currentTheme.files.end(); themeFileIter++) {
-		try {
-			this->getFile(themeFileIter->localFileName);
-		} catch (ItemNotFoundException const& e) {
-			this->deleteFile(themeDir, themeFileIter->localFileName);
 		}
 	}
+	rename(sourceThemeDir.c_str(), (baseDirectory + "/" + this->name + ".__old").c_str());
+	rename(destThemeDir.c_str(), sourceThemeDir.c_str());
 
-	// delete empty directories
-	this->deleteEmptyDirectories(themeDir);
-
-	this->zipFile = "";
-	this->directory = themeDir;
+	this->deleteDirectory(baseDirectory + "/" + this->name + ".__old"); // delete old theme directory recursively
 }
 
 void Model_Theme::renameFile(std::string const& oldName, std::string const& newName) {
-	std::string tmpName = oldName + ".__tmp"; // solves problems when oldName is part of a new directory name
-	int successRenameToTmp = std::rename(oldName.c_str(), tmpName.c_str());
-	if (successRenameToTmp != 0) {
-		throw FileSaveException("rename failed: " + oldName + " -> " + tmpName, __FILE__, __LINE__);
-	}
 	this->createFilePath(newName);
-	int success = std::rename(tmpName.c_str(), newName.c_str());
+	int success = std::rename(oldName.c_str(), newName.c_str());
 	if (success != 0) {
-		throw FileSaveException("rename failed: " + tmpName + " -> " + newName, __FILE__, __LINE__);
+		throw FileSaveException("rename failed: " + oldName + " -> " + newName, __FILE__, __LINE__);
 	}
-}
-
-void Model_Theme::deleteFile(std::string const& themePath, std::string const& localFileName) {
-	unlink((themePath + "/" + localFileName).c_str());
 }
 
 std::string Model_Theme::extractLocalPath(std::string fullPath) {

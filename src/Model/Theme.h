@@ -46,7 +46,6 @@ struct Model_Theme {
 	void removeFile(Model_ThemeFile const& file);
 	void save(std::string const& baseDirectory);
 	void renameFile(std::string const& oldName, std::string const& newName);
-	void deleteFile(std::string const& themePath, std::string const& localFileName);
 private:
 	std::string extractLocalPath(std::string fullPath);
 	std::string loadFileContentFromDirectory(std::string localFileName);
@@ -55,8 +54,7 @@ private:
 	bool fileExists(std::string const& path);
 	bool isDir(std::string const& path);
 	void createFilePath(std::string const& path);
-	int deleteEmptyDirectories(std::string const& path);
-	void renameDirectory(std::string const& themePath, std::string const& localDirName, std::string const& newLocalDirName);
+	void deleteDirectory(std::string const& path);
 };
 
 
