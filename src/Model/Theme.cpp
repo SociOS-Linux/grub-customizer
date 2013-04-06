@@ -137,6 +137,28 @@ std::string Model_Theme::loadFileContentFromZip(std::string localFileName) {
 	return result;
 }
 
+void Model_Theme::writeFile(Model_ThemeFile& file, std::string const& path) {
+	FILE* outFile = fopen(path.c_str(), "w");
+	if (outFile) {
+		fwrite(file.content.c_str(), file.content.size(), 1, outFile);
+		fclose(outFile);
+		file.content = "";
+		file.contentLoaded = false;
+	} else {
+		throw FileSaveException("failed saving file to " + path, __FILE__, __LINE__);
+	}
+}
+
+bool Model_Theme::fileExists(std::string const& path) {
+	FILE* file = fopen(path.c_str(), "r");
+	if (file) {
+		fclose(file);
+		return true;
+	} else {
+		return false;
+	}
+}
+
 std::string Model_Theme::getFullFileName(std::string localFileName) {
 	if (this->directory != "") {
 		return this->directory + "/" + localFileName;
@@ -146,7 +168,7 @@ std::string Model_Theme::getFullFileName(std::string localFileName) {
 		if (!file) {
 			throw FileSaveException("cannot write preview file to " + localFileName, __FILE__, __LINE__);
 		}
-		fwrite(fileContent.c_str(), fileContent.size(), fileContent.size(), file);
+		fwrite(fileContent.c_str(), fileContent.size(), 1, file);
 		fclose(file);
 		return "/tmp/grub-customizer_theme_preview";
 	}
@@ -180,22 +202,50 @@ void Model_Theme::removeFile(Model_ThemeFile const& file) {
 	throw ItemNotFoundException("themefile " + file.localFileName + " not found!", __FILE__, __LINE__);
 }
 
-void Model_Theme::save() {
-	// todo: extract contents [if zipfile]
-
+void Model_Theme::save(std::string const& baseDirectory) {
+	std::string themeDir = baseDirectory + "/" + this->name;
+	mkdir(themeDir.c_str(), 0755);
 	for (std::list<Model_ThemeFile>::iterator fileIter = this->files.begin(); fileIter != this->files.end(); fileIter++) {
+		if (this->zipFile != "" && !fileIter->contentLoaded) {
+			fileIter->content = this->loadFileContentFromZip(fileIter->localFileName);
+			fileIter->contentLoaded = true;
+		}
+
+		if (fileIter->externalSource != "") {
+			fileIter->content = this->loadFileContentExternal(fileIter->externalSource);
+			fileIter->contentLoaded = true;
+			fileIter->externalSource = "";
+		}
+
 		if (fileIter->contentLoaded) {
-			// todo: update file, unset content
-		} else if (fileIter->externalSource != "") {
-			// todo: copy from external source to path, unset externalPath
+			this->writeFile(*fileIter, themeDir + "/" + fileIter->localFileName);
+			// todo: directory support
 		}
 
 		if (fileIter->newLocalFileName != fileIter->localFileName) {
-			// todo: rename
+			std::string oldPath = themeDir + "/" + fileIter->localFileName;
+			std::string newPath = themeDir + "/" + fileIter->newLocalFileName;
+
+			if (this->fileExists(newPath)) {
+				std::string tmpDummyPath = newPath + ".__old";
+				this->getFile(fileIter->newLocalFileName).localFileName = tmpDummyPath;
+				this->renameFile(newPath, tmpDummyPath);
+			}
+			this->renameFile(oldPath, newPath);
+			fileIter->localFileName = fileIter->newLocalFileName;
 		}
 	}
+	// TODO: delete removed files
+	this->zipFile = "";
+	this->directory = themeDir;
 }
 
+void Model_Theme::renameFile(std::string const& oldName, std::string const& newName) {
+	int success = std::rename(oldName.c_str(), newName.c_str());
+	if (success != 0) {
+		throw FileSaveException("rename failed: " + oldName + " -> " + newName, __FILE__, __LINE__);
+	}
+}
 
 std::string Model_Theme::extractLocalPath(std::string fullPath) {
 	return fullPath.substr(this->directory.size() + 1);

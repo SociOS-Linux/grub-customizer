@@ -30,7 +30,7 @@ public:
 	virtual void addFileAction() = 0;
 	virtual void removeFileAction(std::string const& file) = 0;
 	virtual void updateEditAreaAction(std::string const& file) = 0;
-	virtual void renameAction(std::string const& oldName, std::string const& newName) = 0;
+	virtual void renameAction(std::string const& newName) = 0;
 	virtual void loadFileAction(std::string const& externalPath) = 0;
 	virtual void saveTextAction(std::string const& newText) = 0;
 

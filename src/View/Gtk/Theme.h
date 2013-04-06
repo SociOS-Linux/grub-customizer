@@ -123,7 +123,6 @@ class View_Gtk_Theme : public View_Theme, public Gtk::Dialog, public CommonClass
 
 	ThemeController* eventListener;
 	bool event_lock;
-	Glib::ustring _selectedFileName;
 	std::string _getSelectedFileName();
 public:
 	View_Gtk_Theme();
@@ -163,6 +162,7 @@ private:
 	void signal_themeChosen();
 	void signal_addThemeClicked();
 	void signal_themeFileChooserResponse(int response_id);
+	void signal_dialogResponse(int response_id);
 
 	void signal_color_changed(View_Gtk_Theme_ColorChooser& caller);
 	void signal_font_changed();
@@ -170,7 +170,6 @@ private:
 	void signal_other_image_chosen();
 	void signal_bttRemoveBackground_clicked();
 	bool signal_redraw_preview(const Cairo::RefPtr<Cairo::Context>& cr);
-
 };
 
 

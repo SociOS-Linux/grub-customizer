@@ -235,15 +235,16 @@ void ThemeControllerImpl::updateEditAreaAction(std::string const& file) {
 	this->logActionEnd();
 }
 
-void ThemeControllerImpl::renameAction(std::string const& oldName, std::string const& newName) {
+void ThemeControllerImpl::renameAction(std::string const& newName) {
 	this->logActionBegin("rename");
 	try {
-		Model_ThemeFile* themeFile = &this->themeManager->getTheme(this->currentTheme).getFileByNewName(oldName);
+		Model_ThemeFile* themeFile = &this->themeManager->getTheme(this->currentTheme).getFile(this->currentThemeFile);
 		themeFile->newLocalFileName = newName;
 		if (themeFile->isAddedByUser) {
 			themeFile->localFileName = newName;
 			this->currentThemeFile = newName;
 		}
+		this->updateEditAreaAction(newName);
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
@@ -256,6 +257,7 @@ void ThemeControllerImpl::loadFileAction(std::string const& externalPath) {
 		Model_ThemeFile* file = &this->themeManager->getTheme(this->currentTheme).getFile(this->currentThemeFile);
 		file->externalSource = externalPath;
 		file->content = "";
+		file->contentLoaded = false;
 		this->updateEditAreaAction(file->newLocalFileName);
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
@@ -270,6 +272,7 @@ void ThemeControllerImpl::saveTextAction(std::string const& newText) {
 		themeFile->externalSource = "";
 		this->view->setCurrentExternalThemeFilePath(themeFile->externalSource);
 		themeFile->content = newText;
+		themeFile->contentLoaded = true;
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
@@ -380,6 +383,8 @@ void ThemeControllerImpl::saveAction() {
 	this->logActionBegin("save");
 	try {
 		this->themeManager->save();
+		this->currentThemeFile = "";
+		this->view->selectFile("");
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}

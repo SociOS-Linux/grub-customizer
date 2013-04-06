@@ -53,7 +53,7 @@ public:
 	void addFileAction();
 	void removeFileAction(std::string const& file);
 	void updateEditAreaAction(std::string const& file);
-	void renameAction(std::string const& oldName, std::string const& newName);
+	void renameAction(std::string const& newName);
 	void loadFileAction(std::string const& externalPath);
 	void saveTextAction(std::string const& newText);
 

@@ -153,6 +153,7 @@ View_Gtk_Theme::View_Gtk_Theme()
 
 
 	this->add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
+	this->add_button(Gtk::Stock::SAVE, Gtk::RESPONSE_APPLY);
 
 	tbttAdd.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Theme::signal_fileAddClick));
 	tbttRemove.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Theme::signal_fileRemoveClick));
@@ -163,6 +164,7 @@ View_Gtk_Theme::View_Gtk_Theme()
 	cbTheme.signal_changed().connect(sigc::mem_fun(this, &View_Gtk_Theme::signal_themeChosen));
 	bttAddTheme.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Theme::signal_addThemeClicked));
 	fcThemeFileChooser.signal_response().connect(sigc::mem_fun(this, &View_Gtk_Theme::signal_themeFileChooserResponse));
+	this->signal_response().connect(sigc::mem_fun(this, &View_Gtk_Theme::signal_dialogResponse));
 
 	gccNormalForeground.signal_changed().connect(sigc::bind<View_Gtk_Theme_ColorChooser&>(sigc::mem_fun(this, &View_Gtk_Theme::signal_color_changed), gccNormalForeground));
 	gccNormalBackground.signal_changed().connect(sigc::bind<View_Gtk_Theme_ColorChooser&>(sigc::mem_fun(this, &View_Gtk_Theme::signal_color_changed), gccNormalBackground));
@@ -260,7 +262,7 @@ std::string View_Gtk_Theme::_getSelectedFileName() {
 	if (selectedFiles.size() == 1) {
 		result = this->lvFiles.get_text(selectedFiles[0]);
 	} else {
-		this->log("theme editor: invalid selection count", Logger::ERROR);
+		throw ItemNotFoundException("theme editor: invalid selection count", __FILE__, __LINE__);
 	}
 	return result;
 }
@@ -299,10 +301,10 @@ void View_Gtk_Theme::setImage(std::string const& path) {
 }
 
 void View_Gtk_Theme::selectFile(std::string const& fileName, bool startEdit) {
+	lvFiles.get_selection()->unselect_all();
 	int pos = 0;
 	for (Gtk::TreeModel::iterator iter = lvFiles.get_model()->get_iter("0"); iter; iter++) {
 		if (lvFiles.get_text(pos) == fileName) {
-			this->_selectedFileName = fileName;
 			lvFiles.set_cursor(lvFiles.get_model()->get_path(iter), *lvFiles.get_column(0), startEdit);
 			break;
 		}
@@ -542,20 +544,31 @@ void View_Gtk_Theme::signal_fileAddClick() {
 
 void View_Gtk_Theme::signal_fileRemoveClick() {
 	if (!event_lock) {
-		this->eventListener->removeFileAction(this->_getSelectedFileName());
+		try {
+			this->eventListener->removeFileAction(this->_getSelectedFileName());
+		} catch (ItemNotFoundException const& e) {
+			this->log("no file selected - ignoring event", Logger::ERROR);
+		}
 	}
 }
 
 void View_Gtk_Theme::signal_fileSelected() {
 	if (!event_lock) {
-		this->_selectedFileName = this->_getSelectedFileName();
-		this->eventListener->updateEditAreaAction(this->_selectedFileName);
+		try {
+			this->eventListener->updateEditAreaAction(this->_getSelectedFileName());
+		} catch (ItemNotFoundException const& e) {
+			this->log("no file selected - ignoring event", Logger::INFO);
+		}
 	}
 }
 
 void View_Gtk_Theme::signal_fileRenamed(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter) {
 	if (!event_lock) {
-		this->eventListener->renameAction(this->_selectedFileName, this->_getSelectedFileName());
+		try {
+			this->eventListener->renameAction(this->_getSelectedFileName());
+		} catch (ItemNotFoundException const& e) {
+			this->log("no file selected - ignoring event", Logger::ERROR);
+		}
 	}
 }
 
@@ -592,6 +605,22 @@ void View_Gtk_Theme::signal_themeFileChooserResponse(int response_id) {
 		this->fcThemeFileChooser.hide();
 		if (response_id == Gtk::RESPONSE_APPLY) {
 			this->eventListener->addThemePackageAction(fcThemeFileChooser.get_filename());
+		}
+	}
+}
+
+void View_Gtk_Theme::signal_dialogResponse(int response_id) {
+	if (!event_lock) {
+		switch (response_id) {
+		case Gtk::RESPONSE_DELETE_EVENT:
+		case Gtk::RESPONSE_CLOSE:
+			this->hide();
+			break;
+		case Gtk::RESPONSE_APPLY:
+			this->eventListener->saveAction();
+			break;
+		default:
+			throw NotImplementedException("the given response id is not supported", __FILE__, __LINE__);
 		}
 	}
 }
