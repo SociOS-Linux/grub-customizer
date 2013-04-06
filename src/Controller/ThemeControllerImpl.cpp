@@ -292,6 +292,7 @@ void ThemeControllerImpl::renameAction(std::string const& newName) {
 void ThemeControllerImpl::loadFileAction(std::string const& externalPath) {
 	this->logActionBegin("load-file");
 	try {
+		this->themeManager->getTheme(this->currentTheme).isModified = true;
 		Model_ThemeFile* file = &this->themeManager->getTheme(this->currentTheme).getFile(this->currentThemeFile);
 		file->externalSource = externalPath;
 		file->content = "";
