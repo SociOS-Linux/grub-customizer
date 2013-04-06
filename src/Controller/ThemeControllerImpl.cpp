@@ -19,8 +19,12 @@
 #include "ThemeControllerImpl.h"
 
 ThemeControllerImpl::ThemeControllerImpl(Model_Env& env)
-	: env(env), view(NULL), ControllerAbstract("theme"), themeManager(NULL), settings(NULL), grublistCfg(NULL)
+	: env(env), view(NULL), ControllerAbstract("theme"), themeManager(NULL), settings(NULL), grublistCfg(NULL), threadController(NULL)
 {
+}
+
+void ThemeControllerImpl::setThreadController(ThreadController& threadController) {
+	this->threadController = &threadController;
 }
 
 void ThemeControllerImpl::syncSettings() {
@@ -184,7 +188,17 @@ void ThemeControllerImpl::addFileAction() {
 	try {
 		this->themeManager->getTheme(this->currentTheme).files.push_back(Model_ThemeFile("", true));
 		this->syncFiles();
-		this->view->selectFile("", true);
+		this->threadController->startThemeFileEdit("");
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
+	this->logActionEnd();
+}
+
+void ThemeControllerImpl::startFileEditAction(std::string const& file) {
+	this->logActionBegin("select-file");
+	try {
+		this->view->selectFile(file, true);
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
@@ -220,12 +234,16 @@ void ThemeControllerImpl::updateEditAreaAction(std::string const& file) {
 				std::string content = theme->loadFileContentExternal(themeFile->externalSource);
 				this->view->setText(content);
 			}
-		} else {
+		} else if (!themeFile->isAddedByUser) {
 			if (isImage) {
 				this->view->setImage(theme->getFullFileName(originalFileName));
 			} else {
 				std::string content = theme->loadFileContent(originalFileName);
 				this->view->setText(content);
+			}
+		} else {
+			if (!isImage) {
+				this->view->setText("");
 			}
 		}
 		this->view->setCurrentExternalThemeFilePath(themeFile->externalSource);
@@ -390,4 +408,5 @@ void ThemeControllerImpl::saveAction() {
 	}
 	this->logActionEnd();
 }
+
 

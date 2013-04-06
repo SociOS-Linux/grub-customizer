@@ -55,6 +55,11 @@ void GLib_ThreadController::startEdit(Rule* rule) {
 	Glib::signal_timeout().connect_once(sigc::mem_fun(this, &GLib_ThreadController::_execRuleEdit), 10);
 }
 
+void GLib_ThreadController::startThemeFileEdit(std::string const& fileName) {
+	this->_cachedThemeFileName = fileName;
+	Glib::signal_timeout().connect_once(sigc::mem_fun(this, &GLib_ThreadController::_execThemeFileEdit), 10);
+}
+
 void GLib_ThreadController::startLoadThread(bool preserveConfig) {
 	Glib::Thread::create(sigc::bind(sigc::mem_fun(this, &GLib_ThreadController::_execLoad), preserveConfig), false);
 }
@@ -125,4 +130,8 @@ void GLib_ThreadController::_execRuleEdit() {
 		this->_controllers.mainController->selectRuleAction(this->_cachedRulePtr, true);
 		this->_cachedRulePtr = NULL;
 	}
+}
+
+void GLib_ThreadController::_execThemeFileEdit() {
+	this->_controllers.themeController->startFileEditAction(this->_cachedThemeFileName);
 }

@@ -34,6 +34,7 @@ class GLib_ThreadController : public ThreadController, public CommonClass {
 
 	Exception _cachedException;
 	Rule* _cachedRulePtr;
+	std::string _cachedThemeFileName;
 public:
 	GLib_ThreadController(ControllerCollection& controllers);
 	void syncEntryList();
@@ -48,6 +49,7 @@ public:
 	void stopApplication();
 	void showException(Exception const& e);
 	void startEdit(Rule* rule);
+	void startThemeFileEdit(std::string const& fileName);
 private:
 	void _execLoadSync();
 	void _execSaveSync();
@@ -60,6 +62,7 @@ private:
 	void _execInstallGrub(std::string const& device);
 	void _execShowException();
 	void _execRuleEdit();
+	void _execThemeFileEdit();
 };
 
 #endif

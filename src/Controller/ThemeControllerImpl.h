@@ -34,12 +34,14 @@ class ThemeControllerImpl : public ThemeController, public ControllerAbstract {
 	Model_SettingsManagerData* settings;
 	Model_ListCfg* grublistCfg;
 	std::string currentTheme, currentThemeFile;
+	ThreadController* threadController;
 	bool isImage(std::string const& fileName);
 
 	void syncSettings();
 	void syncFiles();
 public:
 	ThemeControllerImpl(Model_Env& env);
+	void setThreadController(ThreadController& threadController);
 	void setView(View_Theme& view);
 	void setThemeManager(Model_ThemeManager& themeManager);
 	void setSettingsManager(Model_SettingsManagerData& settings);
@@ -51,6 +53,7 @@ public:
 	void showThemeInstallerAction();
 	void showSimpleThemeConfigAction();
 	void addFileAction();
+	void startFileEditAction(std::string const& file);
 	void removeFileAction(std::string const& file);
 	void updateEditAreaAction(std::string const& file);
 	void renameAction(std::string const& newName);
