@@ -95,6 +95,21 @@ View_Gtk_Theme::View_Gtk_Theme()
 
 	hpThemeEditor.set_no_show_all(true);
 
+	Glib::RefPtr<Gtk::FileFilter> fileFilter = Gtk::FileFilter::create();
+	fileFilter->add_mime_type("application/x-gzip");
+	fileFilter->add_mime_type("application/x-tar");
+	fileFilter->add_mime_type("application/x-bzip2");
+	fileFilter->add_pattern("*.tar.gz");
+	fileFilter->add_pattern("*.tar");
+	fileFilter->add_pattern("*.tar.bz2");
+	fileFilter->set_name(gettext("Archive files"));
+	fcThemeFileChooser.add_filter(fileFilter);
+
+	Glib::RefPtr<Gtk::FileFilter> fileFilterAll = Gtk::FileFilter::create();
+	fileFilterAll->add_pattern("*");
+	fileFilterAll->set_name(gettext("All files"));
+	fcThemeFileChooser.add_filter(fileFilterAll);
+
 	//theme selection
 	hbTheme.set_spacing(5);
 	fcThemeFileChooser.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
