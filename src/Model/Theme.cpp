@@ -230,7 +230,6 @@ void Model_Theme::save(std::string const& baseDirectory) {
 
 		if (fileIter->contentLoaded) {
 			this->writeFile(*fileIter, themeDir + "/" + fileIter->localFileName);
-			// todo: directory support
 		}
 
 		if (fileIter->newLocalFileName != fileIter->localFileName) {
