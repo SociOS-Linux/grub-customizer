@@ -138,6 +138,7 @@ std::string Model_Theme::loadFileContentFromZip(std::string localFileName) {
 }
 
 void Model_Theme::writeFile(Model_ThemeFile& file, std::string const& path) {
+	this->createFilePath(path);
 	FILE* outFile = fopen(path.c_str(), "w");
 	if (outFile) {
 		fwrite(file.content.c_str(), file.content.size(), 1, outFile);
@@ -156,6 +157,16 @@ bool Model_Theme::fileExists(std::string const& path) {
 		return true;
 	} else {
 		return false;
+	}
+}
+
+void Model_Theme::createFilePath(std::string const& path) {
+	std::string currentPart = "";
+	for (std::string::const_iterator pathIter = path.begin(); pathIter != path.end(); pathIter++) {
+		if (*pathIter == '/') {
+			mkdir(currentPart.c_str(), 0755);
+		}
+		currentPart += *pathIter;
 	}
 }
 
@@ -234,6 +245,7 @@ void Model_Theme::save(std::string const& baseDirectory) {
 			this->renameFile(oldPath, newPath);
 			fileIter->localFileName = fileIter->newLocalFileName;
 		}
+		fileIter->isAddedByUser = false;
 	}
 	// TODO: delete removed files
 	this->zipFile = "";
@@ -241,6 +253,7 @@ void Model_Theme::save(std::string const& baseDirectory) {
 }
 
 void Model_Theme::renameFile(std::string const& oldName, std::string const& newName) {
+	this->createFilePath(newName);
 	int success = std::rename(oldName.c_str(), newName.c_str());
 	if (success != 0) {
 		throw FileSaveException("rename failed: " + oldName + " -> " + newName, __FILE__, __LINE__);

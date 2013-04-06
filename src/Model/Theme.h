@@ -51,6 +51,7 @@ private:
 	std::string loadFileContentFromZip(std::string localFileName);
 	void writeFile(Model_ThemeFile& file, std::string const& path);
 	bool fileExists(std::string const& path);
+	void createFilePath(std::string const& path);
 };
 
 
