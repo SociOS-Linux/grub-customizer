@@ -93,6 +93,8 @@ View_Gtk_Theme::View_Gtk_Theme()
 	bttAddTheme.set_tooltip_text(gettext("add theme"));
 	bttRemoveTheme.set_tooltip_text(gettext("delete this theme"));
 
+	hpThemeEditor.set_no_show_all(true);
+
 	//theme selection
 	hbTheme.set_spacing(5);
 	fcThemeFileChooser.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
