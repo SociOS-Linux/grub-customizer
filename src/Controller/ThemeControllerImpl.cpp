@@ -186,7 +186,10 @@ void ThemeControllerImpl::showSimpleThemeConfigAction() {
 void ThemeControllerImpl::addFileAction() {
 	this->logActionBegin("add-file");
 	try {
-		this->themeManager->getTheme(this->currentTheme).files.push_back(Model_ThemeFile("", true));
+		Model_ThemeFile newFile("", true);
+		newFile.content = "";
+		newFile.contentLoaded = true;
+		this->themeManager->getTheme(this->currentTheme).files.push_back(newFile);
 		this->syncFiles();
 		this->threadController->startThemeFileEdit("");
 	} catch (Exception const& e) {
