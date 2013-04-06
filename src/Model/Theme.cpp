@@ -272,10 +272,14 @@ void Model_Theme::save(std::string const& baseDirectory) {
 			this->renameFile(oldPath, newPath);
 		}
 	}
-	rename(sourceThemeDir.c_str(), (baseDirectory + "/" + this->name + ".__old").c_str());
+	if (this->zipFile == "") {
+		rename(sourceThemeDir.c_str(), (baseDirectory + "/" + this->name + ".__old").c_str());
+	}
 	rename(destThemeDir.c_str(), sourceThemeDir.c_str());
 
-	this->deleteDirectory(baseDirectory + "/" + this->name + ".__old"); // delete old theme directory recursively
+	if (this->zipFile == "") {
+		this->deleteDirectory(baseDirectory + "/" + this->name + ".__old"); // delete old theme directory recursively
+	}
 }
 
 void Model_Theme::renameFile(std::string const& oldName, std::string const& newName) {
