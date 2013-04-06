@@ -83,6 +83,9 @@ void ThemeControllerImpl::syncFiles() {
 		for (std::list<Model_ThemeFile>::iterator themeFileIter = theme->files.begin(); themeFileIter != theme->files.end(); themeFileIter++) {
 			this->view->addFile(themeFileIter->newLocalFileName);
 		}
+		if (this->currentThemeFile != "") {
+			this->view->selectFile(theme->getFile(this->currentThemeFile).newLocalFileName);
+		}
 	}
 }
 
@@ -213,6 +216,7 @@ void ThemeControllerImpl::addFileAction() {
 			newFile.contentLoaded = true;
 			theme->files.push_back(newFile);
 			theme->isModified = true;
+			theme->sort();
 			this->syncFiles();
 			this->threadController->startThemeFileEdit(defaultName);
 		} else {
@@ -299,8 +303,10 @@ void ThemeControllerImpl::renameAction(std::string const& newName) {
 			this->updateEditAreaAction(newName);
 		} else {
 			this->view->showError(View_Theme::ERROR_RENAME_CONFLICT);
-			this->syncFiles();
 		}
+
+		this->themeManager->getTheme(this->currentTheme).sort();
+		this->syncFiles();
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}

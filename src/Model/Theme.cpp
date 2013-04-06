@@ -48,10 +48,14 @@ void Model_Theme::load(std::string const& directory) {
 			}
 		}
 		closedir(dir);
-		this->files.sort(&Model_ThemeFile::compareLocalPath);
+		this->sort();
 	} else {
 		throw FileReadException("cannot read the theme directory: " + this->directory);
 	}
+}
+
+void Model_Theme::sort() {
+	this->files.sort(&Model_ThemeFile::compareLocalPath);
 }
 
 void Model_Theme::loadZipFile(std::string const& zipFile) {

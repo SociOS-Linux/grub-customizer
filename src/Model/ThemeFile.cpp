@@ -24,5 +24,5 @@ Model_ThemeFile::Model_ThemeFile(std::string localFileName, bool isAddedByUser)
 }
 
 bool Model_ThemeFile::compareLocalPath(Model_ThemeFile const& a, Model_ThemeFile const& b) {
-	return a.localFileName < b.localFileName;
+	return a.newLocalFileName < b.newLocalFileName;
 }
