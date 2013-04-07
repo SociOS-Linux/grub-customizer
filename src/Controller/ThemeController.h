@@ -45,6 +45,8 @@ public:
 	virtual void syncAction() = 0;
 	virtual void saveAction() = 0;
 
+	virtual void postSaveAction() = 0;
+
 	virtual inline ~ThemeController() {}
 };
 

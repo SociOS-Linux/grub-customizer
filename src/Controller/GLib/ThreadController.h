@@ -30,7 +30,7 @@
 class GLib_ThreadController : public ThreadController, public CommonClass {
 	ControllerCollection& _controllers;
 
-	Glib::Dispatcher disp_sync_load, disp_sync_save, disp_thread_died, disp_updateSettingsDlgResolutionList, disp_settings_loaded, disp_exception;
+	Glib::Dispatcher disp_sync_load, disp_sync_save, disp_thread_died, disp_updateSettingsDlgResolutionList, disp_settings_loaded, disp_exception, disp_postSaveActions;
 
 	Exception _cachedException;
 	Rule* _cachedRulePtr;
@@ -63,6 +63,7 @@ private:
 	void _execShowException();
 	void _execRuleEdit();
 	void _execThemeFileEdit();
+	void _execPostSaveActions();
 };
 
 #endif

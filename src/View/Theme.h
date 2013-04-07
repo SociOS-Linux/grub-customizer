@@ -38,7 +38,8 @@ public:
 	enum Error {
 		ERROR_INVALID_THEME_PACK_FORMAT,
 		ERROR_RENAME_CONFLICT,
-		ERROR_THEMEFILE_NOT_FOUND
+		ERROR_THEMEFILE_NOT_FOUND,
+		ERROR_SAVE_FAILED
 	};
 
 	virtual void addFile(std::string const& fileName) = 0;
@@ -54,7 +55,7 @@ public:
 	virtual void setRemoveFunctionalityEnabled(bool value) = 0;
 	virtual void setEditorType(EditorType type) = 0;
 	virtual void showThemeFileChooser() = 0;
-	virtual void showError(Error const& e) = 0;
+	virtual void showError(Error const& e, std::string const& info = "") = 0;
 	virtual void setCurrentExternalThemeFilePath(std::string const& fileName) = 0;
 	virtual std::string getDefaultName() const = 0;
 

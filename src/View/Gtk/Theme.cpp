@@ -406,7 +406,7 @@ void View_Gtk_Theme::showThemeFileChooser() {
 	fcThemeFileChooser.show_all();
 }
 
-void View_Gtk_Theme::showError(Error const& e) {
+void View_Gtk_Theme::showError(Error const& e, std::string const& info) {
 	switch (e) {
 	case ERROR_INVALID_THEME_PACK_FORMAT:
 		Gtk::MessageDialog(gettext("The chosen file cannot be loaded as theme"), false, Gtk::MESSAGE_ERROR).run();
@@ -416,6 +416,9 @@ void View_Gtk_Theme::showError(Error const& e) {
 		break;
 	case ERROR_THEMEFILE_NOT_FOUND:
 		Gtk::MessageDialog(gettext("This theme doesn't contain a theme.txt. Please look for the config file and rename it to \"theme.txt\"!"), false, Gtk::MESSAGE_WARNING).run();
+		break;
+	case ERROR_SAVE_FAILED:
+		Gtk::MessageDialog(Glib::ustring(gettext("Saving of themes didn't succeed completely!")) + "\n" + info, false, Gtk::MESSAGE_WARNING).run();
 		break;
 	default:
 		throw NotImplementedException("the current value of View_Theme::Error is not processed", __FILE__, __LINE__);

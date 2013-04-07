@@ -69,6 +69,7 @@ public:
 
 	void syncAction();
 	void saveAction();
+	void postSaveAction();
 };
 
 

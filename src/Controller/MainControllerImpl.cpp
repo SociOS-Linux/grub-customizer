@@ -322,6 +322,7 @@ void MainControllerImpl::saveThreadedAction(){
 		}
 		this->log("writing grub list configuration", Logger::IMPORTANT_EVENT);
 		this->grublistCfg->save();
+		this->getAllControllers().themeController->saveAction();
 		this->env.activeThreadCount--;
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorThreadedAction(e);

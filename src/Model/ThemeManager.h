@@ -26,6 +26,8 @@
 
 class Model_ThemeManager {
 	Model_Env& env;
+	bool gotSaveErrors;
+	std::string saveErrors;
 public:
 	std::list<Model_Theme> themes;
 	std::list<Model_Theme> removedThemes;
@@ -37,6 +39,8 @@ public:
 	void removeTheme(Model_Theme const& theme);
 	void save();
 	std::string getThemePath();
+	std::string hasSaveErrors();
+	std::string getSaveErrors();
 };
 
 

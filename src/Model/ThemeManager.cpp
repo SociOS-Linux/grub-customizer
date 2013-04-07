@@ -19,7 +19,7 @@
 #include "ThemeManager.h"
 
 Model_ThemeManager::Model_ThemeManager(Model_Env& env)
-	: env(env)
+	: env(env), gotSaveErrors(false)
 {}
 
 void Model_ThemeManager::load() {
@@ -87,6 +87,9 @@ void Model_ThemeManager::removeTheme(Model_Theme const& theme) {
 }
 
 void Model_ThemeManager::save() {
+	this->saveErrors = "";
+	this->gotSaveErrors = false;
+
 	std::string dirName = this->env.output_config_dir + "/themes";
 	mkdir(dirName.c_str(), 0755);
 	for (std::list<Model_Theme>::iterator themeIter = this->removedThemes.begin(); themeIter != this->removedThemes.end(); themeIter++) {
@@ -97,7 +100,12 @@ void Model_ThemeManager::save() {
 	bool themesSaved = false;
 	for (std::list<Model_Theme>::iterator themeIter = this->themes.begin(); themeIter != this->themes.end(); themeIter++) {
 		if (themeIter->isModified) {
-			themeIter->save(dirName);
+			try {
+				themeIter->save(dirName);
+			} catch (Exception const& e) {
+				this->saveErrors += e + "\n";
+				this->gotSaveErrors = true;
+			}
 			themesSaved = true;
 		}
 	}
@@ -110,3 +118,10 @@ std::string Model_ThemeManager::getThemePath() {
 	return this->env.output_config_dir + "/themes";
 }
 
+std::string Model_ThemeManager::hasSaveErrors() {
+	return this->gotSaveErrors;
+}
+
+std::string Model_ThemeManager::getSaveErrors() {
+	return this->saveErrors;
+}

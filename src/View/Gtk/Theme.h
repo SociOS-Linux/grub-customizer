@@ -143,7 +143,7 @@ public:
 
 	void setEditorType(EditorType type);
 	void showThemeFileChooser();
-	void showError(Error const& e);
+	void showError(Error const& e, std::string const& info = "");
 	void setCurrentExternalThemeFilePath(std::string const& fileName);
 	std::string getDefaultName() const;
 	View_ColorChooser& getColorChooser(ColorChooserType type);

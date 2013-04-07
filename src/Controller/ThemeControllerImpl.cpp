@@ -452,11 +452,26 @@ void ThemeControllerImpl::syncAction() {
 	this->logActionEnd();
 }
 
-
+/**
+ * Threaded
+ */
 void ThemeControllerImpl::saveAction() {
 	this->logActionBegin("save");
 	try {
 		this->themeManager->save();
+		this->threadController->doPostSaveActions();
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
+	this->logActionEnd();
+}
+
+void ThemeControllerImpl::postSaveAction() {
+	this->logActionBegin("post-save");
+	try {
+		if (this->themeManager->hasSaveErrors()) {
+			this->view->showError(View_Theme::ERROR_SAVE_FAILED, this->themeManager->getSaveErrors());
+		}
 		this->syncSettings();
 		this->syncFiles();
 		this->currentThemeFile = "";
