@@ -63,6 +63,7 @@ class View_Gtk_Theme : public View_Theme, public Gtk::Dialog, public CommonClass
 	Gtk::ToolButton tbttAdd, tbttRemove;
 
 	Gtk::VBox vbFiles;
+	Gtk::Frame frmThemeEditor;
 	Gtk::ScrolledWindow scrFiles;
 	Gtk::ListViewText lvFiles;
 	Gtk::VBox vbEdit, vbEditInner;

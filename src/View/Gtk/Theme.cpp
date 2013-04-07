@@ -29,7 +29,8 @@ View_Gtk_Theme::View_Gtk_Theme()
 	  lblBackgroundRequiredInfo(gettext("To get the colors above working,\nyou have to select a background image!")),
 	  gccNormalBackground(true), gccHighlightBackground(true), lblFont(gettext("_Font"), true),
 	  imgAddTheme(Gtk::Stock::ADD, Gtk::ICON_SIZE_BUTTON), imgRemoveTheme(Gtk::Stock::DELETE, Gtk::ICON_SIZE_BUTTON),
-	  fcThemeFileChooser(*this, gettext("choose theme file"), Gtk::FILE_CHOOSER_ACTION_OPEN)
+	  fcThemeFileChooser(*this, gettext("choose theme file"), Gtk::FILE_CHOOSER_ACTION_OPEN),
+	  frmThemeEditor(gettext("Theme contents"))
 {
 	Gtk::Box& dlgVBox = *this->get_vbox();
 
@@ -43,8 +44,10 @@ View_Gtk_Theme::View_Gtk_Theme()
 
 	dlgVBox.pack_start(vbMain);
 
-	vbMain.pack_start(hpThemeEditor);
+	vbMain.pack_start(frmThemeEditor);
 	vbMain.pack_start(vbCustomTheme);
+
+	frmThemeEditor.add(hpThemeEditor);
 
 	toolbar.add(tbttAdd);
 	toolbar.add(tbttRemove);
@@ -93,7 +96,8 @@ View_Gtk_Theme::View_Gtk_Theme()
 	bttAddTheme.set_tooltip_text(gettext("add theme"));
 	bttRemoveTheme.set_tooltip_text(gettext("delete this theme"));
 
-	hpThemeEditor.set_no_show_all(true);
+	frmThemeEditor.set_no_show_all(true);
+	hpThemeEditor.set_border_width(5);
 
 	Glib::RefPtr<Gtk::FileFilter> fileFilter = Gtk::FileFilter::create();
 	fileFilter->add_mime_type("application/x-gzip");
@@ -382,7 +386,7 @@ void View_Gtk_Theme::setRemoveFunctionalityEnabled(bool value) {
 
 void View_Gtk_Theme::setEditorType(EditorType type) {
 	this->vbCustomTheme.hide();
-	this->hpThemeEditor.hide();
+	this->frmThemeEditor.hide();
 
 	switch (type) {
 	case EDITORTYPE_CUSTOM:
@@ -390,8 +394,8 @@ void View_Gtk_Theme::setEditorType(EditorType type) {
 		this->vbCustomTheme.show_all_children(true);
 		break;
 	case EDITORTYPE_THEME:
-		this->hpThemeEditor.show();
-		this->hpThemeEditor.show_all_children(true);
+		this->frmThemeEditor.show();
+		this->frmThemeEditor.show_all_children(true);
 		break;
 	default:
 		throw LogicException("unsupported type given", __FILE__, __LINE__);
