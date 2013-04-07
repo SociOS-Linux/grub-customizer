@@ -179,6 +179,8 @@ int main(int argc, char** argv){
 
 		listCfgView.putSettingsDialog(settingsDlg.getCommonSettingsPane(), settingsDlg.getAppearanceSettingsPane());
 		listCfgView.putTrashList(trashView.getList());
+		settingsDlg.putThemeSelector(themeEditor.getThemeSelector());
+		settingsDlg.putThemeEditArea(themeEditor.getEditorBox());
 
 		//assign event listener
 		listCfgView.setEventListener(mainController);
@@ -256,17 +258,9 @@ int main(int argc, char** argv){
 		listcfg.setMutex(listCfgMutex1);
 		savedListCfg.setMutex(listCfgMutex2);
 
-		themeEditor.set_default_size(800, 600);
-		themeEditor.show(env.burgMode);
-		env.init(Model_Env::GRUB_MODE, "");
-		themeController.loadThemesAction();
-		//themeController.addThemePackageAction("/home/daniel/Downloads/descent.tar.gz");
-		themeController.syncAction();
-		settings.load();
-		app.run(themeEditor);
-//		mainController.initAction();
-//		errorController.setApplicationStarted(true);
-//		app.run();
+		mainController.initAction();
+		errorController.setApplicationStarted(true);
+		app.run();
 	} catch (Exception const& e) {
 		logger.log(e, Logger::ERROR);
 		return 1;

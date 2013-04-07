@@ -57,7 +57,7 @@ View_Gtk_Settings::View_Gtk_Settings()
 	tvAllEntries.append_column_editable(gettext("value"), asTreeModel.value);
 	refAsListStore->signal_row_changed().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_setting_row_changed));
 	vbCommonSettings.set_spacing(15);
-	vbAppearanceSettings.set_spacing(15);
+	vbAppearanceSettings.set_spacing(5);
 	
 	//default entry group
 	vbCommonSettings.pack_start(groupDefaultEntry, Gtk::PACK_SHRINK);
@@ -441,6 +441,13 @@ std::string View_Gtk_Settings::getResolution(){
 	return cbResolution.get_entry()->get_text();
 }
 
+void View_Gtk_Settings::putThemeSelector(Gtk::Widget& themeSelector) {
+	this->hbResolutionAndTheme.pack_start(themeSelector);
+}
+
+void View_Gtk_Settings::putThemeEditArea(Gtk::Widget& themeEditArea) {
+	this->vbAppearanceSettings.pack_start(themeEditArea);
+}
 
 void View_Gtk_Settings::signal_resolution_selected(){
 	if (!event_lock){

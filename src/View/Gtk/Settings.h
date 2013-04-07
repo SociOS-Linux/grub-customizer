@@ -146,6 +146,8 @@ class View_Gtk_Settings : public Gtk::Dialog, public View_Settings, public Commo
 	bool getResolutionCheckboxState();
 	void setResolution(std::string const& resolution);
 	std::string getResolution();
+	void putThemeSelector(Gtk::Widget& themeSelector);
+	void putThemeEditArea(Gtk::Widget& themeSelector);
 };
 
 #endif

@@ -155,6 +155,9 @@ public:
 	void redraw(std::string const& menuPicturePath, bool isInGrubDir, Cairo::RefPtr<Cairo::Context> const* cr = NULL);
 	std::string getBackgroundImagePath();
 	void setPreviewEntryTitles(std::list<std::string> const& entries);
+
+	Gtk::Widget& getThemeSelector();
+	Gtk::Widget& getEditorBox();
 private:
 	void signal_fileAddClick();
 	void signal_fileRemoveClick();

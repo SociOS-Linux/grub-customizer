@@ -570,6 +570,16 @@ void View_Gtk_Theme::setPreviewEntryTitles(std::list<std::string> const& entries
 	this->previewEntryTitles_mutex.unlock();
 }
 
+Gtk::Widget& View_Gtk_Theme::getThemeSelector() {
+	this->get_vbox()->remove(this->hbTheme);
+	return this->hbTheme;
+}
+
+Gtk::Widget& View_Gtk_Theme::getEditorBox() {
+	this->get_vbox()->remove(this->vbMain);
+	return this->vbMain;
+}
+
 bool View_Gtk_Theme::signal_redraw_preview(const Cairo::RefPtr<Cairo::Context>& cr) {
 	if (!event_lock) {
 		this->redraw(this->backgroundImagePath, false, &cr);

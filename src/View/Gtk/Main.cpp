@@ -271,7 +271,7 @@ void View_Gtk_Main::putSettingsDialog(Gtk::VBox& commonSettingsPane, Gtk::VBox& 
 	commonSettingsPane.pack_end(bbxAdvancedSettings1, false, false);
 	bbxAdvancedSettings1.pack_end(bttAdvancedSettings1);
 
-	appearanceSettingsPane.set_border_width(20);
+	appearanceSettingsPane.set_border_width(5);
 	notebook.append_page(appearanceSettingsPane, gettext("_Appearance settings"), true);
 	appearanceSettingsPane.pack_end(bbxAdvancedSettings2, false, false);
 	bbxAdvancedSettings2.pack_end(bttAdvancedSettings2);
