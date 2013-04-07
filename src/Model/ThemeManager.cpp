@@ -106,5 +106,7 @@ void Model_ThemeManager::save() {
 	}
 }
 
-
+std::string Model_ThemeManager::getThemePath() {
+	return this->env.output_config_dir + "/themes";
+}
 

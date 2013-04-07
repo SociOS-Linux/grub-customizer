@@ -36,6 +36,7 @@ public:
 	std::string addThemePackage(std::string const& fileName);
 	void removeTheme(Model_Theme const& theme);
 	void save();
+	std::string getThemePath();
 };
 
 

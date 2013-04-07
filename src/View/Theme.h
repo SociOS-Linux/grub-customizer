@@ -37,7 +37,8 @@ public:
 
 	enum Error {
 		ERROR_INVALID_THEME_PACK_FORMAT,
-		ERROR_RENAME_CONFLICT
+		ERROR_RENAME_CONFLICT,
+		ERROR_THEMEFILE_NOT_FOUND
 	};
 
 	virtual void addFile(std::string const& fileName) = 0;

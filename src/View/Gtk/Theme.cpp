@@ -409,10 +409,13 @@ void View_Gtk_Theme::showThemeFileChooser() {
 void View_Gtk_Theme::showError(Error const& e) {
 	switch (e) {
 	case ERROR_INVALID_THEME_PACK_FORMAT:
-		Gtk::MessageDialog(gettext("The chosen file cannot be loaded as theme")).run();
+		Gtk::MessageDialog(gettext("The chosen file cannot be loaded as theme"), false, Gtk::MESSAGE_ERROR).run();
 		break;
 	case ERROR_RENAME_CONFLICT:
-		Gtk::MessageDialog(gettext("The given filename cannot be used")).run();
+		Gtk::MessageDialog(gettext("The given filename cannot be used"), false, Gtk::MESSAGE_ERROR).run();
+		break;
+	case ERROR_THEMEFILE_NOT_FOUND:
+		Gtk::MessageDialog(gettext("This theme doesn't contain a theme.txt. Please look for the config file and rename it to \"theme.txt\"!"), false, Gtk::MESSAGE_WARNING).run();
 		break;
 	default:
 		throw NotImplementedException("the current value of View_Theme::Error is not processed", __FILE__, __LINE__);

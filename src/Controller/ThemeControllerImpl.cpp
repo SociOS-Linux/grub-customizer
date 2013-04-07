@@ -74,6 +74,8 @@ void ThemeControllerImpl::syncSettings() {
 	}
 
 	this->view->selectTheme(selectedTheme);
+
+	this->getAllControllers().settingsController->syncAction();
 }
 
 void ThemeControllerImpl::syncFiles() {
@@ -144,7 +146,15 @@ void ThemeControllerImpl::loadThemeAction(std::string const& name) {
 		this->view->setEditorType(View_Theme::EDITORTYPE_THEME);
 		this->view->setRemoveFunctionalityEnabled(true);
 		this->currentTheme = name;
+		try {
+			this->themeManager->getTheme(name).getFile("theme.txt");
+		} catch (ItemNotFoundException const& e) {
+			this->view->showError(View_Theme::ERROR_THEMEFILE_NOT_FOUND);
+		}
+		this->settings->setValue("GRUB_THEME", this->themeManager->getThemePath() + "/" + name + "/theme.txt");
+
 		this->syncFiles();
+		this->syncSettings();
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
