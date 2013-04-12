@@ -320,9 +320,9 @@ void MainControllerImpl::saveThreadedAction(){
 		if (this->settings->color_helper_required) {
 			this->grublistCfg->addColorHelper();
 		}
+		this->getAllControllers().themeController->saveAction();
 		this->log("writing grub list configuration", Logger::IMPORTANT_EVENT);
 		this->grublistCfg->save();
-		this->getAllControllers().themeController->saveAction();
 		this->env.activeThreadCount--;
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorThreadedAction(e);
