@@ -78,8 +78,8 @@ class View_Gtk_Theme : public View_Theme, public Gtk::Dialog, public CommonClass
 	Gtk::HBox hbTheme;
 	Gtk::Label lblTheme;
 	Gtk::ComboBoxText cbTheme;
-	Gtk::Button bttAddTheme, bttRemoveTheme;
-	Gtk::Image imgAddTheme, imgRemoveTheme;
+	Gtk::Button bttAddTheme, bttRemoveTheme, bttThemeHelp;
+	Gtk::Image imgAddTheme, imgRemoveTheme, imgThemeHelp;
 
 	Gtk::FileChooserDialog fcThemeFileChooser;
 
@@ -175,6 +175,7 @@ private:
 	void signal_font_changed();
 	void signal_font_removed();
 	void signal_other_image_chosen();
+	void signal_help_click();
 	void signal_bttRemoveBackground_clicked();
 	bool signal_redraw_preview(const Cairo::RefPtr<Cairo::Context>& cr);
 };

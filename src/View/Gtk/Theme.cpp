@@ -26,6 +26,7 @@ View_Gtk_Theme::View_Gtk_Theme()
 	  lblNormalColor(gettext("normal:"), Pango::ALIGN_RIGHT, Pango::ALIGN_CENTER), lblHighlightColor(gettext("highlight:"), Pango::ALIGN_RIGHT, Pango::ALIGN_CENTER),
 	  lblColorChooser(gettext("menu colors")), lblBackgroundImage(gettext("background image")),
 	  imgRemoveBackground(Gtk::Stock::REMOVE, Gtk::ICON_SIZE_BUTTON), imgRemoveFont(Gtk::Stock::REMOVE, Gtk::ICON_SIZE_BUTTON),
+	  imgThemeHelp(Gtk::Stock::HELP, Gtk::ICON_SIZE_BUTTON),
 	  lblBackgroundRequiredInfo(gettext("To get the colors above working,\nyou have to select a background image!")),
 	  gccNormalBackground(true), gccHighlightBackground(true), lblFont(gettext("_Font"), true),
 	  imgAddTheme(Gtk::Stock::ADD, Gtk::ICON_SIZE_BUTTON), imgRemoveTheme(Gtk::Stock::DELETE, Gtk::ICON_SIZE_BUTTON),
@@ -39,8 +40,10 @@ View_Gtk_Theme::View_Gtk_Theme()
 	hbTheme.pack_start(cbTheme);
 	hbTheme.pack_start(bttAddTheme, Gtk::PACK_SHRINK);
 	hbTheme.pack_start(bttRemoveTheme, Gtk::PACK_SHRINK);
+	hbTheme.pack_start(bttThemeHelp, Gtk::PACK_SHRINK);
 	bttAddTheme.add(imgAddTheme);
 	bttRemoveTheme.add(imgRemoveTheme);
+	bttThemeHelp.add(imgThemeHelp);
 
 	dlgVBox.pack_start(vbMain);
 
@@ -192,6 +195,7 @@ View_Gtk_Theme::View_Gtk_Theme()
 	cbTheme.signal_changed().connect(sigc::mem_fun(this, &View_Gtk_Theme::signal_themeChosen));
 	bttAddTheme.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Theme::signal_addThemeClicked));
 	bttRemoveTheme.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Theme::signal_removeThemeClicked));
+	bttThemeHelp.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Theme::signal_help_click));
 	fcThemeFileChooser.signal_response().connect(sigc::mem_fun(this, &View_Gtk_Theme::signal_themeFileChooserResponse));
 	this->signal_response().connect(sigc::mem_fun(this, &View_Gtk_Theme::signal_dialogResponse));
 
@@ -721,6 +725,28 @@ void View_Gtk_Theme::signal_bttRemoveBackground_clicked(){
 void View_Gtk_Theme::signal_other_image_chosen(){
 	if (!event_lock){
 		this->eventListener->updateBackgroundImageAction();
+	}
+}
+
+void View_Gtk_Theme::signal_help_click() {
+	if (!event_lock){
+		Gtk::MessageDialog helpDlg(
+			Glib::ustring::compose(
+			gettext("Alternatively to the simple theme method which provides some options like color, wallpaper and font you can install complex theme packages to get an even better looking boot menu.\n\n"
+				"There are several download sources like this thread at ubuntuforums.org:\n<a href='%1'>%1</a> (needs account)\n"
+				"or search for '%2' at <a href='%3'>%3</a>\n\n"
+				"Just download such a package (which is in tar.gz format in most cases) and add it to the list of available themes by using the add button next to the theme chooser.\n\n"
+				"After changing the theme you'll see a simple editor which gives a preview of images and allows some file management. Modified theme contents will be saved when you're pressing the save button."),
+			"http://ubuntuforums.org/showthread.php?t=1823915",
+			"grub",
+			"http://gnome-look.org"
+			),
+			true,
+			Gtk::MESSAGE_INFO,
+			Gtk::BUTTONS_OK,
+			false
+		);
+		helpDlg.run();
 	}
 }
 
