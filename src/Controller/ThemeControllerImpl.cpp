@@ -19,7 +19,7 @@
 #include "ThemeControllerImpl.h"
 
 ThemeControllerImpl::ThemeControllerImpl(Model_Env& env)
-	: env(env), view(NULL), ControllerAbstract("theme"), themeManager(NULL), settings(NULL), grublistCfg(NULL), threadController(NULL)
+	: env(env), view(NULL), ControllerAbstract("theme"), themeManager(NULL), settings(NULL), grublistCfg(NULL), threadController(NULL), syncActive(false)
 {
 }
 
@@ -28,6 +28,10 @@ void ThemeControllerImpl::setThreadController(ThreadController& threadController
 }
 
 void ThemeControllerImpl::syncSettings() {
+	if (this->syncActive) {
+		return;
+	}
+	this->syncActive = true;
 	std::string nColor = this->settings->getValue("GRUB_COLOR_NORMAL");
 	std::string hColor = this->settings->getValue("GRUB_COLOR_HIGHLIGHT");
 	if (nColor != ""){
@@ -72,10 +76,31 @@ void ThemeControllerImpl::syncSettings() {
 	for (std::list<Model_Theme>::iterator themeIter = this->themeManager->themes.begin(); themeIter != this->themeManager->themes.end(); themeIter++) {
 		this->view->addTheme(themeIter->name);
 	}
-
 	this->view->selectTheme(selectedTheme);
 
+	std::string themeName;
+	if (this->settings->isActive("GRUB_THEME")) {
+		try {
+			themeName = this->themeManager->extractThemeName(this->settings->getValue("GRUB_THEME"));
+		} catch (InvalidStringFormatException const& e) {
+			this->log(e, Logger::ERROR);
+		}
+	}
+
+	if (this->currentTheme != themeName) {
+		if (this->settings->isActive("GRUB_THEME")) {
+			if (this->themeManager->themeExists(themeName)) {
+				this->loadThemeAction(themeName);
+			} else {
+				this->log("theme " + themeName + " not found!", Logger::ERROR);
+			}
+		} else if (!this->settings->isActive("GRUB_THEME")) {
+			this->showSimpleThemeConfigAction();
+		}
+	}
+
 	this->getAllControllers().settingsController->syncAction();
+	this->syncActive = false;
 }
 
 void ThemeControllerImpl::syncFiles() {
@@ -145,6 +170,7 @@ void ThemeControllerImpl::loadThemeAction(std::string const& name) {
 	try {
 		this->view->setEditorType(View_Theme::EDITORTYPE_THEME);
 		this->view->setRemoveFunctionalityEnabled(true);
+		this->view->selectTheme(name);
 		this->currentTheme = name;
 		try {
 			this->themeManager->getTheme(name).getFile("theme.txt");
@@ -152,6 +178,7 @@ void ThemeControllerImpl::loadThemeAction(std::string const& name) {
 			this->view->showError(View_Theme::ERROR_THEMEFILE_NOT_FOUND);
 		}
 		this->settings->setValue("GRUB_THEME", this->themeManager->getThemePath() + "/" + name + "/theme.txt");
+		this->settings->setIsActive("GRUB_THEME", true);
 
 		this->syncFiles();
 		this->syncSettings();
@@ -183,8 +210,6 @@ void ThemeControllerImpl::removeThemeAction(const std::string& name) {
 	this->logActionBegin("remove-theme");
 	try {
 		this->themeManager->removeTheme(this->themeManager->getTheme(name));
-		this->currentTheme = "";
-		this->currentThemeFile = "";
 		this->showSimpleThemeConfigAction();
 		this->syncSettings();
 	} catch (const Exception& e) {
@@ -208,7 +233,12 @@ void ThemeControllerImpl::showSimpleThemeConfigAction() {
 	try {
 		this->view->setEditorType(View_Theme::EDITORTYPE_CUSTOM);
 		this->view->setRemoveFunctionalityEnabled(false);
+		this->view->selectTheme("");
 		this->updateColorSettingsAction();
+		this->settings->setIsActive("GRUB_THEME", false);
+		this->currentTheme = "";
+		this->currentThemeFile = "";
+		this->syncSettings();
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}

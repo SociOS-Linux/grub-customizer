@@ -35,6 +35,7 @@ class ThemeControllerImpl : public ThemeController, public ControllerAbstract {
 	Model_ListCfg* grublistCfg;
 	std::string currentTheme, currentThemeFile;
 	ThreadController* threadController;
+	bool syncActive; // should only be controlled by syncSettings()
 	bool isImage(std::string const& fileName);
 
 	void syncSettings();

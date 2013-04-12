@@ -62,6 +62,21 @@ bool Model_ThemeManager::themeExists(std::string const& name) {
 	return false;
 }
 
+std::string Model_ThemeManager::extractThemeName(std::string const& indexFile) {
+	std::string themePath = this->env.output_config_dir + "/themes";
+	if (indexFile.substr(0, themePath.size()) != themePath) {
+		throw InvalidStringFormatException("theme index file path must contain '" + themePath + "' given path: '" + indexFile + "'", __FILE__, __LINE__);
+	}
+	int slashPos = indexFile.find('/', themePath.size() + 1);
+	if (slashPos == -1) {
+		throw InvalidStringFormatException("theme index file path incomplete", __FILE__, __LINE__);
+	}
+
+	int themeNameSize = slashPos - themePath.size() - 1;
+
+	return indexFile.substr(themePath.size() + 1, themeNameSize);
+}
+
 std::string Model_ThemeManager::addThemePackage(std::string const& fileName) {
 	int lastSlashPos = fileName.find_last_of('/');
 	std::string name = lastSlashPos != -1 ? fileName.substr(lastSlashPos + 1) : fileName;
@@ -118,7 +133,7 @@ std::string Model_ThemeManager::getThemePath() {
 	return this->env.output_config_dir + "/themes";
 }
 
-std::string Model_ThemeManager::hasSaveErrors() {
+bool Model_ThemeManager::hasSaveErrors() {
 	return this->gotSaveErrors;
 }
 

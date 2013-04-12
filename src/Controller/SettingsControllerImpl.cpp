@@ -24,7 +24,8 @@ SettingsControllerImpl::SettingsControllerImpl(Model_Env& env)
 	  settingsOnDisk(NULL),
 	  fbResolutionsGetter(NULL),
 	 env(env),
-	 threadController(NULL)
+	 threadController(NULL),
+	 syncActive(false)
 {
 }
 
@@ -120,6 +121,10 @@ void SettingsControllerImpl::updateResolutionlistThreadedAction() {
 }
 
 void SettingsControllerImpl::syncSettings(){
+	if (this->syncActive) {
+		return;
+	}
+	this->syncActive = true;
 	std::string sel = this->view->getSelectedCustomOption();
 	this->view->removeAllSettingRows();
 	for (std::list<Model_SettingsStore_Row>::iterator iter = this->settings->begin(); iter != this->settings->end(); this->settings->iter_to_next_setting(iter)){
@@ -161,6 +166,8 @@ void SettingsControllerImpl::syncSettings(){
 	if (this->settings->reloadRequired()) {
 		this->getAllControllers().mainController->showReloadRecommendationAction();
 	}
+	this->getAllControllers().themeController->syncAction();
+	this->syncActive = false;
 }
 
 void SettingsControllerImpl::updateDefaultSystemAction(){

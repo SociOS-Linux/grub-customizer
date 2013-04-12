@@ -50,6 +50,7 @@ public:
 	void showException(Exception const& e);
 	void startEdit(Rule* rule);
 	void startThemeFileEdit(std::string const& fileName);
+	void doPostSaveActions();
 private:
 	void _execLoadSync();
 	void _execSaveSync();

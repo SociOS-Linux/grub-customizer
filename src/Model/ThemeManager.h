@@ -35,11 +35,12 @@ public:
 	void load();
 	Model_Theme& getTheme(std::string const& name);
 	bool themeExists(std::string const& name);
+	std::string extractThemeName(std::string const& indexFile);
 	std::string addThemePackage(std::string const& fileName);
 	void removeTheme(Model_Theme const& theme);
 	void save();
 	std::string getThemePath();
-	std::string hasSaveErrors();
+	bool hasSaveErrors();
 	std::string getSaveErrors();
 };
 
