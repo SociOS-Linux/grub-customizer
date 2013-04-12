@@ -967,7 +967,7 @@ void MainControllerImpl::activateSettingsAction() {
 	try {
 		this->view->setLockState(1);
 		this->getAllControllers().settingsController->syncAction();
-		this->getAllControllers().themeController->syncAction();
+		this->getAllControllers().themeController->loadThemesAction();
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
