@@ -56,7 +56,12 @@ public:
 class View_Gtk_Theme : public View_Theme, public Gtk::Dialog, public CommonClass {
 	Gtk::VBox vbMain;
 
-	Gtk::VBox vbCustomTheme;
+	Gtk::Frame frmCustomTheme;
+	Gtk::HPaned hpCustomTheme;
+	Gtk::Frame frmCustomThemeSettings;
+	Gtk::VBox vbCustomThemeSettings;
+	Gtk::Frame frmCustomThemePreview;
+	Gtk::VBox vbCustomThemePreview;
 
 	Gtk::HPaned hpThemeEditor;
 	Gtk::Toolbar toolbar;
@@ -86,15 +91,11 @@ class View_Gtk_Theme : public View_Theme, public Gtk::Dialog, public CommonClass
 	// simple theme editor
 
 	//color chooser
-	Gtk::Frame groupColorChooser;
-	Gtk::Alignment alignColorChooser;
-	Gtk::Label lblColorChooser;
-	Gtk::Table tblColorChooser;
-	Gtk::Label lblforegroundColor, lblBackgroundColor, lblNormalColor, lblHighlightColor;
+	Gtk::VBox vbColorChoosers;
 	GrubColorChooser gccNormalForeground, gccNormalBackground, gccHighlightForeground, gccHighlightBackground;
-
-	//font selection and background image group
-	Gtk::HBox hbFontAndBgImage;
+	Gtk::Label lblNormalForeground, lblNormalBackground, lblHighlightForeground, lblHighlightBackground;
+	Gtk::VBox vbNormalForeground, vbNormalBackground, vbHighlightForeground, vbHighlightBackground;
+	Gtk::Frame groupNormalForeground, groupNormalBackground, groupHighlightForeground, groupHighlightBackground;
 
 	//font selection
 	Gtk::Frame groupFont;

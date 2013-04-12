@@ -21,17 +21,18 @@
 View_Gtk_Theme::View_Gtk_Theme()
 	: lvFiles(1, true), lblFileSelection(gettext("_Load file: "), true),
 	  tbttAdd(Gtk::Stock::ADD), tbttRemove(Gtk::Stock::REMOVE), event_lock(false),
-	  lblTheme(gettext("_Theme:"), true),
-	  lblforegroundColor(gettext("font color")), lblBackgroundColor(gettext("background")),
-	  lblNormalColor(gettext("normal:"), Pango::ALIGN_RIGHT, Pango::ALIGN_CENTER), lblHighlightColor(gettext("highlight:"), Pango::ALIGN_RIGHT, Pango::ALIGN_CENTER),
-	  lblColorChooser(gettext("menu colors")), lblBackgroundImage(gettext("background image")),
+	  lblTheme(gettext("_Theme:"), true), lblBackgroundImage(gettext("background image")),
 	  imgRemoveBackground(Gtk::Stock::REMOVE, Gtk::ICON_SIZE_BUTTON), imgRemoveFont(Gtk::Stock::REMOVE, Gtk::ICON_SIZE_BUTTON),
 	  imgThemeHelp(Gtk::Stock::HELP, Gtk::ICON_SIZE_BUTTON),
-	  lblBackgroundRequiredInfo(gettext("To get the colors above working,\nyou have to select a background image!")),
+	  lblBackgroundRequiredInfo(gettext("Please choose a background image!")),
 	  gccNormalBackground(true), gccHighlightBackground(true), lblFont(gettext("_Font"), true),
 	  imgAddTheme(Gtk::Stock::ADD, Gtk::ICON_SIZE_BUTTON), imgRemoveTheme(Gtk::Stock::DELETE, Gtk::ICON_SIZE_BUTTON),
 	  fcThemeFileChooser(*this, gettext("choose theme file"), Gtk::FILE_CHOOSER_ACTION_OPEN),
-	  frmThemeEditor(gettext("Theme contents"))
+	  frmThemeEditor(gettext("Theme contents")), frmCustomTheme(gettext("Custom Theme settings")),
+	  lblNormalForeground(gettext("Normal: Font"), Pango::ALIGN_LEFT, Pango::ALIGN_CENTER, false),
+	  lblNormalBackground(gettext("Normal: Background"), Pango::ALIGN_LEFT, Pango::ALIGN_CENTER, false),
+	  lblHighlightForeground(gettext("Highlighted: Font"), Pango::ALIGN_LEFT, Pango::ALIGN_CENTER, false),
+	  lblHighlightBackground(gettext("Highlighted: Background"), Pango::ALIGN_LEFT, Pango::ALIGN_CENTER, false)
 {
 	Gtk::Box& dlgVBox = *this->get_vbox();
 
@@ -48,9 +49,10 @@ View_Gtk_Theme::View_Gtk_Theme()
 	dlgVBox.pack_start(vbMain);
 
 	vbMain.pack_start(frmThemeEditor);
-	vbMain.pack_start(vbCustomTheme);
+	vbMain.pack_start(frmCustomTheme);
 
 	frmThemeEditor.add(hpThemeEditor);
+	frmCustomTheme.add(hpCustomTheme);
 
 	toolbar.add(tbttAdd);
 	toolbar.add(tbttRemove);
@@ -76,6 +78,22 @@ View_Gtk_Theme::View_Gtk_Theme()
 	sizeGroupFooter->add_widget(toolbar);
 	sizeGroupFooter->add_widget(hbFileSelection);
 
+	hpCustomTheme.pack1(frmCustomThemeSettings, Gtk::FILL);
+	hpCustomTheme.pack2(frmCustomThemePreview, Gtk::FILL, Gtk::EXPAND);
+	hpCustomTheme.set_position(200);
+
+	frmCustomThemeSettings.add(vbCustomThemeSettings);
+	frmCustomThemePreview.add(vbCustomThemePreview);
+
+	vbCustomThemeSettings.set_border_width(5);
+	vbCustomThemePreview.set_border_width(5);
+
+	vbCustomThemeSettings.set_spacing(10);
+
+	hpCustomTheme.set_border_width(5);
+
+	frmCustomThemeSettings.set_shadow_type(Gtk::SHADOW_IN);
+	frmCustomThemePreview.set_shadow_type(Gtk::SHADOW_IN);
 
 	lblTheme.set_mnemonic_widget(cbTheme);
 
@@ -123,28 +141,38 @@ View_Gtk_Theme::View_Gtk_Theme()
 	fcThemeFileChooser.add_button(Gtk::Stock::OPEN, Gtk::RESPONSE_APPLY);
 
 	//color chooser
-	vbCustomTheme.pack_start(groupColorChooser, Gtk::PACK_SHRINK);
-	groupColorChooser.add(alignColorChooser);
-	groupColorChooser.set_label_widget(lblColorChooser);
-	groupColorChooser.set_shadow_type(Gtk::SHADOW_NONE);
-	alignColorChooser.add(tblColorChooser);
-	tblColorChooser.attach(lblforegroundColor, 1,2,0,1);
-	tblColorChooser.attach(lblBackgroundColor, 2,3,0,1);
-	tblColorChooser.attach(lblNormalColor, 0,1,1,2);
-	tblColorChooser.attach(lblHighlightColor, 0,1,2,3);
-	tblColorChooser.attach(gccNormalForeground, 1,2,1,2);
-	tblColorChooser.attach(gccNormalBackground, 2,3,1,2);
-	tblColorChooser.attach(gccHighlightForeground, 1,2,2,3);
-	tblColorChooser.attach(gccHighlightBackground, 2,3,2,3);
-	tblColorChooser.set_spacings(10);
+	vbCustomThemeSettings.pack_start(vbColorChoosers, Gtk::PACK_SHRINK);
 
-	//font selection and background image group
-	vbCustomTheme.pack_start(hbFontAndBgImage, Gtk::PACK_SHRINK);
-	hbFontAndBgImage.set_spacing(5);
-	hbFontAndBgImage.set_homogeneous(true);
+	vbColorChoosers.set_spacing(10);
+
+	vbColorChoosers.pack_start(groupNormalForeground, Gtk::PACK_SHRINK);
+	vbColorChoosers.pack_start(groupNormalBackground, Gtk::PACK_SHRINK);
+	vbColorChoosers.pack_start(groupHighlightForeground, Gtk::PACK_SHRINK);
+	vbColorChoosers.pack_start(groupHighlightBackground, Gtk::PACK_SHRINK);
+
+	groupNormalForeground.add(vbNormalForeground);
+	groupNormalBackground.add(vbNormalBackground);
+	groupHighlightForeground.add(vbHighlightForeground);
+	groupHighlightBackground.add(vbHighlightBackground);
+
+	groupNormalForeground.set_label_widget(lblNormalForeground);
+	groupNormalBackground.set_label_widget(lblNormalBackground);
+	groupHighlightForeground.set_label_widget(lblHighlightForeground);
+	groupHighlightBackground.set_label_widget(lblHighlightBackground);
+
+	groupNormalForeground.set_shadow_type(Gtk::SHADOW_NONE);
+	groupNormalBackground.set_shadow_type(Gtk::SHADOW_NONE);
+	groupHighlightForeground.set_shadow_type(Gtk::SHADOW_NONE);
+	groupHighlightBackground.set_shadow_type(Gtk::SHADOW_NONE);
+
+	vbNormalForeground.pack_start(gccNormalForeground, Gtk::PACK_SHRINK);
+	vbNormalBackground.pack_start(gccNormalBackground, Gtk::PACK_SHRINK);
+	vbHighlightForeground.pack_start(gccHighlightForeground, Gtk::PACK_SHRINK);
+	vbHighlightBackground.pack_start(gccHighlightBackground, Gtk::PACK_SHRINK);
+
 
 	//font selection
-	hbFontAndBgImage.pack_start(groupFont);
+	vbCustomThemeSettings.pack_start(groupFont, Gtk::PACK_SHRINK);
 	groupFont.add(alignFont);
 	groupFont.set_label_widget(lblFont);
 	groupFont.set_shadow_type(Gtk::SHADOW_NONE);
@@ -157,7 +185,7 @@ View_Gtk_Theme::View_Gtk_Theme()
 	bttRemoveFont.set_no_show_all(true);
 
 	//background selection
-	hbFontAndBgImage.pack_start(groupBackgroundImage);
+	vbCustomThemeSettings.pack_start(groupBackgroundImage, Gtk::PACK_SHRINK);
 	groupBackgroundImage.set_shadow_type(Gtk::SHADOW_NONE);
 	groupBackgroundImage.add(alignBackgroundImage);
 	groupBackgroundImage.set_label_widget(lblBackgroundImage);
@@ -167,8 +195,8 @@ View_Gtk_Theme::View_Gtk_Theme()
 	hbBackgroundImage.pack_start(bttRemoveBackground, Gtk::PACK_SHRINK);
 	fcBackgroundImage.set_action(Gtk::FILE_CHOOSER_ACTION_OPEN);
 
-	vbCustomTheme.pack_start(hbImgBtts);
-	vbCustomTheme.pack_start(lblBackgroundRequiredInfo);
+	vbCustomThemePreview.pack_start(hbImgBtts);
+	vbCustomThemePreview.pack_start(lblBackgroundRequiredInfo);
 	hbImgBtts.pack_start(drwBackgroundPreview);
 
 	hbImgBtts.set_spacing(5);
@@ -375,11 +403,11 @@ void View_Gtk_Theme::show(bool burgMode) {
 	this->show_all();
 
 	if (burgMode){
-		groupColorChooser.hide();
+		vbColorChoosers.hide();
 		groupBackgroundImage.hide();
 	}
 	else {
-		groupColorChooser.show();
+		vbColorChoosers.show();
 		groupBackgroundImage.show();
 	}
 }
@@ -389,13 +417,13 @@ void View_Gtk_Theme::setRemoveFunctionalityEnabled(bool value) {
 }
 
 void View_Gtk_Theme::setEditorType(EditorType type) {
-	this->vbCustomTheme.hide();
+	this->frmCustomTheme.hide();
 	this->frmThemeEditor.hide();
 
 	switch (type) {
 	case EDITORTYPE_CUSTOM:
-		this->vbCustomTheme.show();
-		this->vbCustomTheme.show_all_children(true);
+		this->frmCustomTheme.show();
+		this->frmCustomTheme.show_all_children(true);
 		break;
 	case EDITORTYPE_THEME:
 		this->frmThemeEditor.show();
