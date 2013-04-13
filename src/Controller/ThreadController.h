@@ -38,6 +38,8 @@ public:
 	virtual void stopApplication() = 0;
 	virtual void showException(Exception const& e) = 0;
 	virtual void startEdit(Rule* rule) = 0;
+	virtual void startThemeFileEdit(std::string const& fileName) = 0;
+	virtual void doPostSaveActions() = 0;
 };
 
 #endif

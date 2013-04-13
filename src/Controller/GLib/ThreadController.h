@@ -30,10 +30,11 @@
 class GLib_ThreadController : public ThreadController, public CommonClass {
 	ControllerCollection& _controllers;
 
-	Glib::Dispatcher disp_sync_load, disp_sync_save, disp_thread_died, disp_updateSettingsDlgResolutionList, disp_settings_loaded, disp_exception;
+	Glib::Dispatcher disp_sync_load, disp_sync_save, disp_thread_died, disp_updateSettingsDlgResolutionList, disp_settings_loaded, disp_exception, disp_postSaveActions;
 
 	Exception _cachedException;
 	Rule* _cachedRulePtr;
+	std::string _cachedThemeFileName;
 public:
 	GLib_ThreadController(ControllerCollection& controllers);
 	void syncEntryList();
@@ -48,6 +49,8 @@ public:
 	void stopApplication();
 	void showException(Exception const& e);
 	void startEdit(Rule* rule);
+	void startThemeFileEdit(std::string const& fileName);
+	void doPostSaveActions();
 private:
 	void _execLoadSync();
 	void _execSaveSync();
@@ -60,6 +63,8 @@ private:
 	void _execInstallGrub(std::string const& device);
 	void _execShowException();
 	void _execRuleEdit();
+	void _execThemeFileEdit();
+	void _execPostSaveActions();
 };
 
 #endif

@@ -16,29 +16,33 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef CONTROLLERCOLLECTION_H_
-#define CONTROLLERCOLLECTION_H_
-#include "EntryEditController.h"
-#include "MainController.h"
-#include "SettingsController.h"
-#include "EnvEditorController.h"
-#include "TrashController.h"
-#include "InstallerController.h"
-#include "AboutController.h"
-#include "ErrorController.h"
-#include "ThemeController.h"
+#ifndef THEMEMANAGER_H_
+#define THEMEMANAGER_H_
 
-struct ControllerCollection {
-	EntryEditController* entryEditController;
-	MainController* mainController;
-	SettingsController* settingsController;
-	EnvEditorController* envEditController;
-	TrashController* trashController;
-	InstallerController* installerController;
-	AboutController* aboutController;
-	ErrorController* errorController;
-	ThemeController* themeController;
+#include <list>
+#include "Theme.h"
+#include "Env.h"
+#include "../lib/Exception.h"
+
+class Model_ThemeManager {
+	Model_Env& env;
+	bool gotSaveErrors;
+	std::string saveErrors;
+public:
+	std::list<Model_Theme> themes;
+	std::list<Model_Theme> removedThemes;
+	Model_ThemeManager(Model_Env& env);
+	void load();
+	Model_Theme& getTheme(std::string const& name);
+	bool themeExists(std::string const& name);
+	std::string extractThemeName(std::string const& indexFile);
+	std::string addThemePackage(std::string const& fileName);
+	void removeTheme(Model_Theme const& theme);
+	void save();
+	std::string getThemePath();
+	bool hasSaveErrors();
+	std::string getSaveErrors();
 };
 
 
-#endif /* CONTROLLERCOLLECTION_H_ */
+#endif /* THEMEMANAGER_H_ */

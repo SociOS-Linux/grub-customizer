@@ -16,29 +16,19 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef CONTROLLERCOLLECTION_H_
-#define CONTROLLERCOLLECTION_H_
-#include "EntryEditController.h"
-#include "MainController.h"
-#include "SettingsController.h"
-#include "EnvEditorController.h"
-#include "TrashController.h"
-#include "InstallerController.h"
-#include "AboutController.h"
-#include "ErrorController.h"
-#include "ThemeController.h"
+#ifndef THEMEFILE_H_
+#define THEMEFILE_H_
+#include <string>
 
-struct ControllerCollection {
-	EntryEditController* entryEditController;
-	MainController* mainController;
-	SettingsController* settingsController;
-	EnvEditorController* envEditController;
-	TrashController* trashController;
-	InstallerController* installerController;
-	AboutController* aboutController;
-	ErrorController* errorController;
-	ThemeController* themeController;
+struct Model_ThemeFile {
+	Model_ThemeFile(std::string localFileName, bool isAddedByUser = false);
+	static bool compareLocalPath(Model_ThemeFile const& a, Model_ThemeFile const& b);
+	std::string localFileName, newLocalFileName; // path inside of the theme directory
+	bool contentLoaded; // say whether the content is loaded (text only)
+	std::string content; // loaded content (text only)
+	bool isAddedByUser;
+	std::string externalSource;
 };
 
 
-#endif /* CONTROLLERCOLLECTION_H_ */
+#endif /* THEMEFILE_H_ */

@@ -25,6 +25,7 @@
 #include "../View/Gtk/Settings.h"
 #include "../View/Gtk/EnvEditor.h"
 #include "../View/Gtk/Error.h"
+#include "../View/Gtk/Theme.h"
 #include "../lib/Mutex/GLib.h"
 #include "../Controller/GLib/ThreadController.h"
 #include "../lib/Logger/Stream.h"
@@ -43,9 +44,11 @@
 #include "../Controller/AboutControllerImpl.h"
 #include "../Controller/ControllerCollection.h"
 #include "../Controller/ErrorControllerImpl.h"
+#include "../Controller/ThemeControllerImpl.h"
 #include "../Mapper/EntryNameImpl.h"
 #include "../lib/assert.h"
 #include "../lib/ArrayStructure.h"
+#include "../Model/ThemeManager.h"
 
 
 int main(int argc, char** argv){
@@ -85,6 +88,8 @@ int main(int argc, char** argv){
 		View_Gtk_EnvEditor envEditor;
 		View_Gtk_Error errorView;
 		Mapper_EntryNameImpl entryNameMapper;
+		View_Gtk_Theme themeEditor;
+		Model_ThemeManager themeManager(env);
 
 		entryNameMapper.setView(listCfgView);
 
@@ -137,6 +142,12 @@ int main(int argc, char** argv){
 		ErrorControllerImpl errorController(env);
 		errorController.setView(errorView);
 
+		ThemeControllerImpl themeController(env);
+		themeController.setView(themeEditor);
+		themeController.setThemeManager(themeManager);
+		themeController.setSettingsManager(settings);
+		themeController.setListCfg(listcfg);
+
 		ControllerCollection controllerCollection;
 		controllerCollection.entryEditController = &entryEditController;
 		controllerCollection.mainController = &mainController;
@@ -146,6 +157,7 @@ int main(int argc, char** argv){
 		controllerCollection.installerController = &installController;
 		controllerCollection.aboutController = &aboutController;
 		controllerCollection.errorController = &errorController;
+		controllerCollection.themeController = &themeController;
 
 		entryEditController.setControllerCollection(controllerCollection);
 		mainController.setControllerCollection(controllerCollection);
@@ -155,6 +167,7 @@ int main(int argc, char** argv){
 		installController.setControllerCollection(controllerCollection);
 		aboutController.setControllerCollection(controllerCollection);
 		errorController.setControllerCollection(controllerCollection);
+		themeController.setControllerCollection(controllerCollection);
 
 		GLib_ThreadController threadC(controllerCollection);
 		mainController.setThreadController(threadC);
@@ -162,9 +175,12 @@ int main(int argc, char** argv){
 		installController.setThreadController(threadC);
 		errorController.setThreadController(threadC);
 		entryEditController.setThreadController(threadC);
+		themeController.setThreadController(threadC);
 
 		listCfgView.putSettingsDialog(settingsDlg.getCommonSettingsPane(), settingsDlg.getAppearanceSettingsPane());
 		listCfgView.putTrashList(trashView.getList());
+		settingsDlg.putThemeSelector(themeEditor.getThemeSelector());
+		settingsDlg.putThemeEditArea(themeEditor.getEditorBox());
 
 		//assign event listener
 		listCfgView.setEventListener(mainController);
@@ -177,6 +193,7 @@ int main(int argc, char** argv){
 		fbResolutionsGetter.setEventListener(settingsController);
 		envEditor.setEventListener(envEditController);
 		errorView.setEventListener(errorController);
+		themeEditor.setEventListener(themeController);
 
 		//assign logger
 		listcfg.setLogger(logger);
@@ -206,6 +223,8 @@ int main(int argc, char** argv){
 		errorController.setLogger(logger);
 		installController.setLogger(logger);
 		aboutController.setLogger(logger);
+		themeEditor.setLogger(logger);
+		themeController.setLogger(logger);
 
 		// configure logger
 		logger.setLogLevel(Logger_Stream::LOG_EVENT);
