@@ -76,7 +76,7 @@ class View_Gtk_Settings : public Gtk::Dialog, public View_Settings, public Commo
 	Gtk::VBox vbView;
 	Gtk::CheckButton chkShowMenu, chkOsProber;
 	Gtk::HBox hbTimeout;
-	Gtk::Label lblTimeout;
+	Gtk::CheckButton chkTimeout;
 	Gtk::SpinButton spTimeout;
 	Gtk::Label lblTimeout2;
 	
@@ -105,6 +105,7 @@ class View_Gtk_Settings : public Gtk::Dialog, public View_Settings, public Commo
 	void signal_showMenu_toggled();
 	void signal_osProber_toggled();
 	void signal_timeout_changed();
+	void signal_timeout_checkbox_toggled();
 	void signal_kernelparams_changed();
 	void signal_recovery_toggled();
 	void signal_chkResolution_toggled();
@@ -136,8 +137,10 @@ class View_Gtk_Settings : public Gtk::Dialog, public View_Settings, public Commo
 	bool getOsProberCheckboxState();
 	void showHiddenMenuOsProberConflictMessage();
 	void setTimeoutValue(int value);
+	void setTimeoutActive(bool active);
 	int getTimeoutValue();
 	std::string getTimeoutValueString();
+	bool getTimeoutActive();
 	void setKernelParams(std::string const& params);
 	std::string getKernelParams();
 	void setRecoveryCheckboxState(bool isActive);

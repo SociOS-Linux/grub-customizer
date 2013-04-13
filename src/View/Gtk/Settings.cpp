@@ -29,7 +29,7 @@ View_Gtk_Settings::View_Gtk_Settings()
 	: event_lock(false), bttAddCustomEntry(Gtk::Stock::ADD), bttRemoveCustomEntry(Gtk::Stock::REMOVE),
 	rbDefPredefined(gettext("pre_defined: "), true), rbDefSaved(gettext("previously _booted entry"), true),
 	lblDefaultEntry(gettext("default entry")), lblView(gettext("visibility")), chkShowMenu(gettext("show menu")),
-	lblTimeout(gettext("Timeout")), lblTimeout2(gettext("Seconds")), lblKernelParams(gettext("kernel parameters")),
+	lblKernelParams(gettext("kernel parameters")),
 	chkGenerateRecovery(gettext("generate recovery entries")), chkOsProber(gettext("look for other operating systems")),
 	chkResolution(gettext("custom resolution: ")), cbResolution(true)
 {
@@ -103,7 +103,18 @@ View_Gtk_Settings::View_Gtk_Settings()
 	vbView.add(chkOsProber);
 	vbView.add(hbTimeout);
 	hbTimeout.set_spacing(5);
-	hbTimeout.pack_start(lblTimeout, Gtk::PACK_SHRINK);
+
+	Glib::ustring defaultEntryLabelText = gettext("Boot default entry after %1 Seconds");
+	int timeoutInputPos = defaultEntryLabelText.find("%1");
+
+	if (timeoutInputPos != -1) {
+		chkTimeout.set_label(defaultEntryLabelText.substr(0, timeoutInputPos));
+		lblTimeout2.set_text(defaultEntryLabelText.substr(timeoutInputPos + 2));
+	} else {
+		chkTimeout.set_label(defaultEntryLabelText);
+	}
+
+	hbTimeout.pack_start(chkTimeout, Gtk::PACK_SHRINK);
 	hbTimeout.pack_start(spTimeout, Gtk::PACK_SHRINK);
 	hbTimeout.pack_start(lblTimeout2, Gtk::PACK_SHRINK);
 	
@@ -147,6 +158,7 @@ View_Gtk_Settings::View_Gtk_Settings()
 	chkShowMenu.signal_toggled().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_showMenu_toggled));
 	chkOsProber.signal_toggled().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_osProber_toggled));
 	spTimeout.signal_value_changed().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_timeout_changed));
+	chkTimeout.signal_toggled().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_timeout_checkbox_toggled));
 	txtKernelParams.signal_changed().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_kernelparams_changed));
 	chkGenerateRecovery.signal_toggled().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_recovery_toggled));
 	chkResolution.signal_toggled().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_chkResolution_toggled));
@@ -284,6 +296,10 @@ void View_Gtk_Settings::setDefEntry(std::string const& defEntry){
 void View_Gtk_Settings::setShowMenuCheckboxState(bool isActive){
 	this->event_lock = true;
 	chkShowMenu.set_active(isActive);
+	chkTimeout.set_sensitive(isActive);
+	if (!isActive) {
+		chkTimeout.set_active(true);
+	}
 	this->event_lock = false;
 }
 
@@ -296,6 +312,13 @@ void View_Gtk_Settings::setOsProberCheckboxState(bool isActive){
 void View_Gtk_Settings::setTimeoutValue(int value){
 	this->event_lock = true;
 	spTimeout.set_value(value);
+	this->event_lock = false;
+}
+
+void View_Gtk_Settings::setTimeoutActive(bool active) {
+	this->event_lock = true;
+	chkTimeout.set_active(active);
+	spTimeout.set_sensitive(active);
 	this->event_lock = false;
 }
 
@@ -398,7 +421,17 @@ std::string View_Gtk_Settings::getTimeoutValueString() {
 	return Glib::ustring::format(this->getTimeoutValue());
 }
 
+bool View_Gtk_Settings::getTimeoutActive() {
+	return this->chkTimeout.get_active();
+}
+
 void View_Gtk_Settings::signal_timeout_changed(){
+	if (!event_lock){
+		this->eventListener->updateTimeoutSettingAction();
+	}
+}
+
+void View_Gtk_Settings::signal_timeout_checkbox_toggled() {
 	if (!event_lock){
 		this->eventListener->updateTimeoutSettingAction();
 	}

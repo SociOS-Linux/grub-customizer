@@ -149,13 +149,14 @@ void SettingsControllerImpl::syncSettings(){
 	else
 		timeoutStr = this->settings->getValue("GRUB_HIDDEN_TIMEOUT");
 
-	if (timeoutStr == "" || timeoutStr.find_first_not_of("0123456789") != -1) {
+	if (timeoutStr == "" || (timeoutStr.find_first_not_of("0123456789") != -1 && timeoutStr != "-1")) {
 		timeoutStr = "10"; //default value
 	}
 	std::istringstream in(timeoutStr);
 	int timeout;
 	in >> timeout;
-	this->view->setTimeoutValue(timeout);
+	this->view->setTimeoutValue(timeout == -1 ? 10 : timeout);
+	this->view->setTimeoutActive(timeout != -1);
 
 	this->view->setKernelParams(this->settings->getValue("GRUB_CMDLINE_LINUX_DEFAULT"));
 	this->view->setRecoveryCheckboxState(!this->settings->isActive("GRUB_DISABLE_RECOVERY", true));
@@ -309,8 +310,13 @@ void SettingsControllerImpl::showAction(bool burgMode) {
 void SettingsControllerImpl::updateTimeoutSettingAction(){
 	this->logActionBegin("update-timeout-setting");
 	try {
+		std::string timeoutValue = this->view->getTimeoutValueString();
+		if (!this->view->getTimeoutActive() && timeoutValue != "-1") {
+			timeoutValue = "-1";
+		}
+
 		if (this->view->getShowMenuCheckboxState()){
-			this->settings->setValue("GRUB_TIMEOUT", this->view->getTimeoutValueString());
+			this->settings->setValue("GRUB_TIMEOUT", timeoutValue);
 		}
 		else {
 			this->settings->setValue("GRUB_HIDDEN_TIMEOUT", this->view->getTimeoutValueString());

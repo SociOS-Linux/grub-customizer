@@ -76,10 +76,14 @@ public:
 	virtual void showHiddenMenuOsProberConflictMessage()=0;
 	//sets the grub menu timeout
 	virtual void setTimeoutValue(int value)=0;
+	//sets weather the grub menu timeout is active
+	virtual void setTimeoutActive(bool active)=0;
 	//reads the grub menu timeout
 	virtual int getTimeoutValue()=0;
 	//reads the grub menu timeout as string
 	virtual std::string getTimeoutValueString()=0;
+	//says wheather the timeout checkbox is activates
+	virtual bool getTimeoutActive()=0;
 	//sets kernel params
 	virtual void setKernelParams(std::string const& params)=0;
 	//reads kernel params
