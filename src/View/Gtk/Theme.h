@@ -117,7 +117,6 @@ class View_Gtk_Theme : public View_Theme, public Gtk::Dialog, public CommonClass
 	Glib::ustring backgroundImagePath;
 	std::list<std::string> previewEntryTitles;
 	Glib::Mutex previewEntryTitles_mutex;
-	Gtk::HBox hbImgBtts;
 	Gtk::VBox vbButtons;
 	Gtk::Button bttCopyBackground, bttRemoveBackground;
 	Gtk::Image imgRemoveBackground;

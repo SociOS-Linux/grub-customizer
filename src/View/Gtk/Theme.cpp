@@ -195,11 +195,9 @@ View_Gtk_Theme::View_Gtk_Theme()
 	hbBackgroundImage.pack_start(bttRemoveBackground, Gtk::PACK_SHRINK);
 	fcBackgroundImage.set_action(Gtk::FILE_CHOOSER_ACTION_OPEN);
 
-	vbCustomThemePreview.pack_start(hbImgBtts);
 	vbCustomThemePreview.pack_start(lblBackgroundRequiredInfo);
-	hbImgBtts.pack_start(drwBackgroundPreview);
+	vbCustomThemePreview.pack_start(drwBackgroundPreview);
 
-	hbImgBtts.set_spacing(5);
 	vbButtons.set_spacing(5);
 
 	bttRemoveBackground.set_tooltip_text(gettext("remove background"));
