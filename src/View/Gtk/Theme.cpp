@@ -150,10 +150,10 @@ View_Gtk_Theme::View_Gtk_Theme()
 	vbColorChoosers.pack_start(groupHighlightForeground, Gtk::PACK_SHRINK);
 	vbColorChoosers.pack_start(groupHighlightBackground, Gtk::PACK_SHRINK);
 
-	groupNormalForeground.add(vbNormalForeground);
-	groupNormalBackground.add(vbNormalBackground);
-	groupHighlightForeground.add(vbHighlightForeground);
-	groupHighlightBackground.add(vbHighlightBackground);
+	groupNormalForeground.add(gccNormalForeground);
+	groupNormalBackground.add(gccNormalBackground);
+	groupHighlightForeground.add(gccHighlightForeground);
+	groupHighlightBackground.add(gccHighlightBackground);
 
 	groupNormalForeground.set_label_widget(lblNormalForeground);
 	groupNormalBackground.set_label_widget(lblNormalBackground);
@@ -164,11 +164,6 @@ View_Gtk_Theme::View_Gtk_Theme()
 	groupNormalBackground.set_shadow_type(Gtk::SHADOW_NONE);
 	groupHighlightForeground.set_shadow_type(Gtk::SHADOW_NONE);
 	groupHighlightBackground.set_shadow_type(Gtk::SHADOW_NONE);
-
-	vbNormalForeground.pack_start(gccNormalForeground, Gtk::PACK_SHRINK);
-	vbNormalBackground.pack_start(gccNormalBackground, Gtk::PACK_SHRINK);
-	vbHighlightForeground.pack_start(gccHighlightForeground, Gtk::PACK_SHRINK);
-	vbHighlightBackground.pack_start(gccHighlightBackground, Gtk::PACK_SHRINK);
 
 
 	//font selection
