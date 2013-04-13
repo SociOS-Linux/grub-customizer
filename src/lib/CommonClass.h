@@ -20,24 +20,9 @@
 #define COMMONCLASS_H_
 #include "../lib/Logger.h"
 #include "Exception.h"
+#include "Trait/ActionLoggerAware.h"
 
-class CommonClass {
-	mutable Logger* logger;
-	std::string _controllerName;
-public:
-	CommonClass();
-	void setLogger(Logger& logger);
-	Logger const& getLogger() const;
-	Logger& getLogger();
-	Logger* getLoggerPtr();
-	bool hasLogger() const;
-protected:
-	void setControllerName(std::string const& name);
-	void log(std::string const& message, Logger::Priority prio) const;
-	void logActionBegin(std::string const& action) const;
-	void logActionEnd() const;
-	void logActionBeginThreaded(std::string const& action) const;
-	void logActionEndThreaded() const;
+class CommonClass : public Trait_ActionLoggerAware {
 };
 
 #endif
