@@ -22,11 +22,11 @@
 #include "../../Controller/TrashController.h"
 #include "../Trash.h"
 #include <libintl.h>
-#include "../../lib/CommonClass.h"
+#include "../../lib/Trait/LoggerAware.h"
 #include "../../lib/Type.h"
 #include "Element/List.h"
 
-class View_Gtk_Trash : public Gtk::Window, public View_Trash, public CommonClass {
+class View_Gtk_Trash : public Gtk::Window, public View_Trash, public Trait_LoggerAware {
 	Gtk::ScrolledWindow scrEntryBox;
 	View_Gtk_Element_List<Entry, Script> list;
 	Gtk::Frame frmList;

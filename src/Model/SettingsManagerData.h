@@ -20,13 +20,13 @@
 #define SETTING_MANAGER_DATASTORE_INCLUDED
 #include <sys/stat.h> //mkdir
 #include "Env.h"
-#include "../lib/CommonClass.h"
+#include "../lib/Trait/LoggerAware.h"
 #include "SettingsStore.h"
 #include <sstream>
 #include "../lib/str_replace.h"
 #include <map>
 
-class Model_SettingsManagerData : public Model_SettingsStore, public CommonClass {
+class Model_SettingsManagerData : public Model_SettingsStore, public Trait_LoggerAware {
 	bool _reloadRequired;
 	Model_Env& env;
 public:

@@ -24,7 +24,7 @@
 #include <string>
 #include <libintl.h>
 #include "../../Controller/ThemeController.h"
-#include "../../lib/CommonClass.h"
+#include "../../lib/Trait/LoggerAware.h"
 #include "../../lib/assert.h"
 
 //a gtkmm combobox with colorful foreground and background. useful to choose an item of a predefined color set
@@ -53,7 +53,7 @@ public:
 	GrubColorChooser(bool blackIsTransparent = false);
 };
 
-class View_Gtk_Theme : public View_Theme, public Gtk::Dialog, public CommonClass {
+class View_Gtk_Theme : public View_Theme, public Gtk::Dialog, public Trait_LoggerAware {
 	Gtk::VBox vbMain;
 
 	Gtk::Frame frmCustomTheme;

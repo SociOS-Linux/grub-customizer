@@ -21,9 +21,9 @@
 #include <map>
 #include <string>
 #include "../../lib/ContentParser.h"
-#include "../../lib/CommonClass.h"
+#include "../../lib/Trait/LoggerAware.h"
 
-class ContentParser_Abstract : public ContentParser, public CommonClass {
+class ContentParser_Abstract : public ContentParser, public Trait_LoggerAware {
 protected:
 	std::map<std::string, std::string> options;
 public:

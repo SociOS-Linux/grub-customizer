@@ -22,7 +22,7 @@
 #include <libintl.h>
 #include "../../config.h"
 #include "../Main.h"
-#include "../../lib/CommonClass.h"
+#include "../../lib/Trait/LoggerAware.h"
 #include "Settings.h"
 #include "../../lib/str_replace.h"
 #include "../../lib/assert.h"
@@ -35,7 +35,7 @@ class ImageMenuItemOwnKey : public Gtk::ImageMenuItem {
 	ImageMenuItemOwnKey(const Gtk::StockID& id, const Gtk::AccelKey& accel_key);
 };
 
-class View_Gtk_Main : public View_Main, public CommonClass {
+class View_Gtk_Main : public View_Main, public Trait_LoggerAware {
 	MainController* eventListener;
 	Gtk::Window win;
 	Gtk::VBox vbMainSplit;

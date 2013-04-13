@@ -20,13 +20,13 @@
 #define GRUBENVEDITORGTK_H_
 #include <gtkmm.h>
 #include <libintl.h>
-#include "../../lib/CommonClass.h"
+#include "../../lib/Trait/LoggerAware.h"
 #include "../EnvEditor.h"
 #include "Element/PartitionChooser.h"
 #include "../../Model/DeviceDataListInterface.h"
 #include "../../Controller/EnvEditorController.h"
 
-class View_Gtk_EnvEditor : public Gtk::Dialog, public View_EnvEditor, public CommonClass {
+class View_Gtk_EnvEditor : public Gtk::Dialog, public View_EnvEditor, public Trait_LoggerAware {
 	EnvEditorController* eventListener;
 	Gtk::VBox vbContent;
 	Gtk::Table tblLayout;

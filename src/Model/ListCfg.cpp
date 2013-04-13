@@ -35,7 +35,7 @@ void Model_ListCfg::setMutex(Mutex& mutex) {
 }
 
 void Model_ListCfg::setLogger(Logger& logger) {
-	this->CommonClass::setLogger(logger);
+	this->Trait_LoggerAware::setLogger(logger);
 	this->proxies.setLogger(logger);
 	this->repository.setLogger(logger);
 	this->scriptSourceMap.setLogger(logger);

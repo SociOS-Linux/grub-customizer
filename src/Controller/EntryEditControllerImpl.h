@@ -36,7 +36,7 @@
 #include "../Model/DeviceDataList.h"
 #include "../lib/ContentParserFactory.h"
 
-#include "../lib/CommonClass.h"
+#include "../lib/Trait/LoggerAware.h"
 #include "../Controller/ControllerAbstract.h"
 
 #include "../lib/Exception.h"

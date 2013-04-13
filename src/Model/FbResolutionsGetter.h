@@ -22,9 +22,9 @@
 #include <list>
 #include <cstdio>
 #include "../Controller/SettingsController.h"
-#include "../lib/CommonClass.h"
+#include "../lib/Trait/LoggerAware.h"
 
-class Model_FbResolutionsGetter : public CommonClass {
+class Model_FbResolutionsGetter : public Trait_LoggerAware {
 	std::list<std::string> data;
 	SettingsController* eventListener;
 	bool _isLoading;

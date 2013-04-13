@@ -25,9 +25,9 @@
 #include "../lib/csv.h"
 #include <dirent.h>
 #include "../lib/assert.h"
-#include "../lib/CommonClass.h"
+#include "../lib/Trait/LoggerAware.h"
 
-class Model_ScriptSourceMap : public std::map<std::string, std::string>, public CommonClass {
+class Model_ScriptSourceMap : public std::map<std::string, std::string>, public Trait_LoggerAware {
 	Model_Env& env;
 	std::string _getFilePath();
 	bool _fileExists;

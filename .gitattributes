@@ -163,8 +163,6 @@ src/View/Trait/ViewAware.h -text
 src/View/Trash.h -text
 src/lib/ArrayStructure.cpp -text
 src/lib/ArrayStructure.h -text
-src/lib/CommonClass.cpp -text
-src/lib/CommonClass.h -text
 src/lib/ContentParser.h -text
 src/lib/ContentParser/Abstract.cpp -text
 src/lib/ContentParser/Abstract.h -text

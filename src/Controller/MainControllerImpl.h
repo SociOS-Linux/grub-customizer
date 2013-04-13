@@ -38,7 +38,7 @@
 
 #include "../Controller/ControllerAbstract.h"
 
-#include "../lib/CommonClass.h"
+#include "../lib/Trait/LoggerAware.h"
 #include "../Mapper/EntryName.h"
 
 #include "../lib/Exception.h"

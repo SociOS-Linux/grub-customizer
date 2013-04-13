@@ -21,9 +21,9 @@
 
 #include "ControllerCollection.h"
 #include "../lib/assert.h"
-#include "../lib/CommonClass.h"
+#include "../lib/Trait/ActionLoggerAware.h"
 
-class ControllerAbstract : public CommonClass {
+class ControllerAbstract : public Trait_ActionLoggerAware {
 	ControllerCollection* _controllerCollection;
 public:
 	ControllerAbstract(std::string const& controllerName);

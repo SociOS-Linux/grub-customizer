@@ -22,9 +22,9 @@
 #include "../../Controller/InstallerController.h"
 #include <libintl.h>
 #include "../Installer.h"
-#include "../../lib/CommonClass.h"
+#include "../../lib/Trait/LoggerAware.h"
 
-class View_Gtk_Installer : public Gtk::Dialog, public View_Installer, public CommonClass {
+class View_Gtk_Installer : public Gtk::Dialog, public View_Installer, public Trait_LoggerAware {
 	Gtk::Label lblDescription;
 	Gtk::HBox hbDevice;
 	Gtk::Label lblDevice, lblInstallInfo;

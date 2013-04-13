@@ -19,7 +19,7 @@
 #ifndef ENTRYEDITDLGGTK_H_
 #define ENTRYEDITDLGGTK_H_
 #include "../EntryEditor.h"
-#include "../../lib/CommonClass.h"
+#include "../../lib/Trait/LoggerAware.h"
 #include "../../lib/str_replace.h"
 #include <libintl.h>
 #include <gtkmm.h>
@@ -28,7 +28,7 @@
 #include "../../Model/DeviceDataListInterface.h"
 #include "Element/PartitionChooser.h"
 
-class View_Gtk_EntryEditor : public View_EntryEditor, public Gtk::Dialog, public CommonClass {
+class View_Gtk_EntryEditor : public View_EntryEditor, public Gtk::Dialog, public Trait_LoggerAware {
 	Gtk::Notebook tabbox;
 	Gtk::TextView tvSource;
 	Gtk::ScrolledWindow scrSource;

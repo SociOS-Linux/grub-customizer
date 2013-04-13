@@ -21,9 +21,9 @@
 #include <string>
 #include "Env.h"
 #include "../Controller/InstallerController.h"
-#include "../lib/CommonClass.h"
+#include "../lib/Trait/LoggerAware.h"
 
-class Model_Installer : public CommonClass {
+class Model_Installer : public Trait_LoggerAware {
 	Model_Env& env;
 	std::string install_result;
 	InstallerController* eventListener;

@@ -22,9 +22,9 @@
 #include <cstdio>
 #include <string>
 #include "../Model/DeviceDataListInterface.h"
-#include "../lib/CommonClass.h"
+#include "../lib/Trait/LoggerAware.h"
 
-class Model_DeviceDataList : public Model_DeviceDataListInterface, public CommonClass {
+class Model_DeviceDataList : public Model_DeviceDataListInterface, public Trait_LoggerAware {
 public:
 	Model_DeviceDataList(FILE* blkidOutput);
 	Model_DeviceDataList();

@@ -42,7 +42,7 @@
 #include "../lib/assert.h"
 
 #include "../lib/Mutex.h"
-#include "../lib/CommonClass.h"
+#include "../lib/Trait/LoggerAware.h"
 
 #include "../lib/Exception.h"
 #include "../lib/ArrayStructure.h"
@@ -52,7 +52,7 @@
 #include <algorithm>
 
 
-class Model_ListCfg : public CommonClass {
+class Model_ListCfg : public Trait_LoggerAware {
 	MainController* eventListener;
 	
 	double progress;

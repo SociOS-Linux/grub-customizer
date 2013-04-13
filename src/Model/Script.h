@@ -24,14 +24,14 @@
 #include <sys/stat.h>
 #include "Entry.h"
 #include "../Model/EntryPathFollower.h"
-#include "../lib/CommonClass.h"
+#include "../lib/Trait/LoggerAware.h"
 #include "../lib/md5.h"
 #include "../config.h"
 #include "../lib/Exception.h"
 #include "../lib/ArrayStructure.h"
 #include "../lib/Type.h"
 
-struct Model_Script : public Model_EntryPathFollower, public CommonClass, public Script {
+struct Model_Script : public Model_EntryPathFollower, public Trait_LoggerAware, public Script {
 	std::string name, fileName;
 	bool isCustomScript;
 	Model_Entry root;

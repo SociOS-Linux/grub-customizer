@@ -26,13 +26,13 @@
 #include <dirent.h>
 #include <map>
 #include <sys/stat.h>
-#include "../lib/CommonClass.h"
+#include "../lib/Trait/LoggerAware.h"
 #include "SettingsStore.h"
 #include "../lib/Exception.h"
 #include "../lib/ArrayStructure.h"
 #include "../lib/Type.h"
 
-struct Model_Env : public CommonClass {
+struct Model_Env : public Trait_LoggerAware {
 public:
 	enum Mode {
 		GRUB_MODE,
