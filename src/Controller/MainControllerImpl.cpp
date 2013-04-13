@@ -20,7 +20,7 @@
 
 MainControllerImpl::MainControllerImpl(Model_Env& env)
 	: ControllerAbstract("main"),
-	  grublistCfg(NULL), view(NULL), settings(NULL),
+	  grublistCfg(NULL), View_Trait_ViewAware<View_Main>(), settings(NULL),
 	  settingsOnDisk(NULL),
 	  savedListCfg(NULL),
 	  fbResolutionsGetter(NULL), deviceDataList(NULL),
@@ -36,10 +36,6 @@ MainControllerImpl::MainControllerImpl(Model_Env& env)
 void MainControllerImpl::setListCfg(Model_ListCfg& grublistCfg){
 	this->grublistCfg = &grublistCfg;
 }
-void MainControllerImpl::setView(View_Main& listCfgDlg){
-	this->view = &listCfgDlg;
-}
-
 void MainControllerImpl::setSettingsManager(Model_SettingsManagerData& settings){
 	this->settings = &settings;
 }

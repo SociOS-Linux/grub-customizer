@@ -21,6 +21,7 @@
 
 #include "../Model/ListCfg.h"
 #include "../View/Main.h"
+#include "../View/Trait/ViewAware.h"
 #include <libintl.h>
 #include <locale.h>
 #include <sstream>
@@ -51,10 +52,9 @@
  * This controller operates on the entry list
  */
 
-class MainControllerImpl : public ControllerAbstract, public MainController {
+class MainControllerImpl : public ControllerAbstract, public MainController, public View_Trait_ViewAware<View_Main> {
 	Model_Env& env;
 	Model_ListCfg* grublistCfg;
-	View_Main* view;
 	Model_SettingsManagerData* settings;
 	Model_SettingsManagerData* settingsOnDisk; //buffer for the existing settings
 	Model_ListCfg* savedListCfg;
@@ -82,7 +82,6 @@ class MainControllerImpl : public ControllerAbstract, public MainController {
 
 public:
 	void setListCfg(Model_ListCfg& grublistCfg);
-	void setView(View_Main& listCfgDlg);
 	void setSettingsDialog(View_Settings& settingsDlg);
 	void setSettingsManager(Model_SettingsManagerData& settings);
 	void setSettingsBuffer(Model_SettingsManagerData& settings);

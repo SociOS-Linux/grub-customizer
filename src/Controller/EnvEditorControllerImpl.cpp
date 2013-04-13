@@ -22,16 +22,12 @@ EnvEditorControllerImpl::EnvEditorControllerImpl(Model_Env& env)
 	: ControllerAbstract("env-editor"),
 	 mountTable(NULL),
 	 env(env),
-	 view(NULL)
+	 View_Trait_ViewAware<View_EnvEditor>()
 {
 }
 
 void EnvEditorControllerImpl::setMountTable(Model_MountTable& mountTable){
 	this->mountTable = &mountTable;
-}
-
-void EnvEditorControllerImpl::setView(View_EnvEditor& view) {
-	this->view = &view;
 }
 
 void EnvEditorControllerImpl::showAction(bool resetPartitionChooser) {

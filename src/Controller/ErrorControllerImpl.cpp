@@ -21,15 +21,11 @@
 
 ErrorControllerImpl::ErrorControllerImpl(Model_Env& env)
 	: ControllerAbstract("error"),
-	 view(NULL), threadController(NULL),
-	 env(env), applicationStarted(false)
+	  View_Trait_ViewAware<View_Error>(), threadController(NULL),
+	  env(env), applicationStarted(false)
 {
 }
 
-
-void ErrorControllerImpl::setView(View_Error& aboutDialog){
-	this->view = &aboutDialog;
-}
 
 void ErrorControllerImpl::setThreadController(ThreadController& threadController) {
 	this->threadController = &threadController;

@@ -21,15 +21,15 @@
 #include "ThemeController.h"
 #include "../Model/Env.h"
 #include "../View/Theme.h"
+#include "../View/Trait/ViewAware.h"
 #include "../Model/SettingsManagerData.h"
 #include "ControllerAbstract.h"
 #include "../Model/ThemeManager.h"
 #include "../Model/ListCfg.h"
 #include <algorithm>
 
-class ThemeControllerImpl : public ThemeController, public ControllerAbstract {
+class ThemeControllerImpl : public ThemeController, public ControllerAbstract, public View_Trait_ViewAware<View_Theme> {
 	Model_Env& env;
-	View_Theme* view;
 	Model_ThemeManager* themeManager;
 	Model_SettingsManagerData* settings;
 	Model_ListCfg* grublistCfg;
@@ -43,7 +43,6 @@ class ThemeControllerImpl : public ThemeController, public ControllerAbstract {
 public:
 	ThemeControllerImpl(Model_Env& env);
 	void setThreadController(ThreadController& threadController);
-	void setView(View_Theme& view);
 	void setThemeManager(Model_ThemeManager& themeManager);
 	void setSettingsManager(Model_SettingsManagerData& settings);
 	void setListCfg(Model_ListCfg& grublistCfg);

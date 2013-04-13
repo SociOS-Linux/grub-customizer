@@ -28,6 +28,7 @@
 
 #include "../Model/Installer.h"
 #include "../View/Installer.h"
+#include "../View/Trait/ViewAware.h"
 
 #include "ThreadController.h"
 
@@ -38,15 +39,13 @@
 #include "InstallerController.h"
 
 
-class InstallerControllerImpl : public ControllerAbstract, public InstallerController {
+class InstallerControllerImpl : public ControllerAbstract, public InstallerController, public View_Trait_ViewAware<View_Installer> {
 	Model_Env& env;
 	Model_Installer* installer;
-	View_Installer* view;
 	ThreadController* threadController;
 
 public:
 	void setInstaller(Model_Installer& installer);
-	void setView(View_Installer& installDlg);
 	void setThreadController(ThreadController& threadController);
 
 	ThreadController& getThreadController();

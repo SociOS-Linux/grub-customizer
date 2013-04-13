@@ -19,7 +19,14 @@
 #include "ThemeControllerImpl.h"
 
 ThemeControllerImpl::ThemeControllerImpl(Model_Env& env)
-	: env(env), view(NULL), ControllerAbstract("theme"), themeManager(NULL), settings(NULL), grublistCfg(NULL), threadController(NULL), syncActive(false)
+	: env(env),
+	  View_Trait_ViewAware<View_Theme>(),
+	  ControllerAbstract("theme"),
+	  themeManager(NULL),
+	  settings(NULL),
+	  grublistCfg(NULL),
+	  threadController(NULL),
+	  syncActive(false)
 {
 }
 
@@ -132,10 +139,6 @@ bool ThemeControllerImpl::isImage(std::string const& fileName) {
 		}
 	}
 	return false;
-}
-
-void ThemeControllerImpl::setView(View_Theme& view) {
-	this->view = &view;
 }
 
 void ThemeControllerImpl::setThemeManager(Model_ThemeManager& themeManager) {

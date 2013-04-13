@@ -20,14 +20,9 @@
 
 AboutControllerImpl::AboutControllerImpl(Model_Env& env)
 	: ControllerAbstract("about"),
-	  view(NULL),
+	  View_Trait_ViewAware<View_About>(),
 	  env(env)
 {
-}
-
-
-void AboutControllerImpl::setView(View_About& aboutDialog){
-	this->view = &aboutDialog;
 }
 
 void AboutControllerImpl::showAction(){

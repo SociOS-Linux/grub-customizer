@@ -22,7 +22,8 @@ EntryEditControllerImpl::EntryEditControllerImpl(Model_Env& env)
 	: ControllerAbstract("entry-edit"),
 	  grublistCfg(NULL),
 	 env(env), contentParserFactory(NULL), currentContentParser(NULL),
-	 deviceDataList(NULL), view(NULL), threadController(NULL)
+	 deviceDataList(NULL), threadController(NULL),
+	 View_Trait_ViewAware<View_EntryEditor>()
 {
 }
 
@@ -36,10 +37,6 @@ void EntryEditControllerImpl::setContentParserFactory(ContentParserFactory& cont
 
 void EntryEditControllerImpl::setDeviceDataList(Model_DeviceDataList& deviceDataList){
 	this->deviceDataList = &deviceDataList;
-}
-
-void EntryEditControllerImpl::setView(View_EntryEditor& view) {
-	this->view = &view;
 }
 
 void EntryEditControllerImpl::setThreadController(ThreadController& threadController) {

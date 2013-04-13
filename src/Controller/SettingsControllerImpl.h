@@ -33,6 +33,7 @@
 
 #include "../Model/ListCfg.h"
 #include "../View/Settings.h"
+#include "../View/Trait/ViewAware.h"
 #include "../Model/FbResolutionsGetter.h"
 #include "../Model/DeviceDataList.h"
 #include "ThreadController.h"
@@ -48,10 +49,9 @@
 #include "SettingsController.h"
 
 
-class SettingsControllerImpl : public ControllerAbstract, public SettingsController {
+class SettingsControllerImpl : public ControllerAbstract, public SettingsController, public View_Trait_ViewAware<View_Settings> {
 	Model_Env& env;
 	Model_ListCfg* grublistCfg;
-	View_Settings* view;
 	Model_SettingsManagerData* settings;
 	Model_SettingsManagerData* settingsOnDisk; //buffer for the existing settings
 	Model_FbResolutionsGetter* fbResolutionsGetter;
@@ -60,7 +60,6 @@ class SettingsControllerImpl : public ControllerAbstract, public SettingsControl
 
 public:
 	void setListCfg(Model_ListCfg& grublistCfg);
-	void setView(View_Settings& settingsDlg);
 	void setSettingsManager(Model_SettingsManagerData& settings);
 	void setSettingsBuffer(Model_SettingsManagerData& settings);
 	void setFbResolutionsGetter(Model_FbResolutionsGetter& fbResolutionsGetter);

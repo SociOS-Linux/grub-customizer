@@ -30,6 +30,7 @@
 
 #include "../Model/Installer.h"
 #include "../View/EntryEditor.h"
+#include "../View/Trait/ViewAware.h"
 
 #include "../Model/ListCfg.h"
 #include "../Model/DeviceDataList.h"
@@ -41,10 +42,9 @@
 #include "../lib/Exception.h"
 
 
-class EntryEditControllerImpl : public EntryEditController, public ControllerAbstract {
+class EntryEditControllerImpl : public EntryEditController, public ControllerAbstract, public View_Trait_ViewAware<View_EntryEditor> {
 	Model_Env& env;
 	Model_ListCfg* grublistCfg;
-	View_EntryEditor* view;
 	ContentParserFactory* contentParserFactory;
 	ContentParser* currentContentParser;
 	Model_DeviceDataListInterface* deviceDataList;
@@ -56,7 +56,6 @@ public:
 	void setDeviceDataList(Model_DeviceDataList& deviceDataList);
 	void setContentParserFactory(ContentParserFactory& contentParserFactory);
 	void setListCfg(Model_ListCfg& grublistCfg);
-	void setView(View_EntryEditor& view);
 	void setThreadController(ThreadController& threadController);
 
 	void showAction(Rule* rule);

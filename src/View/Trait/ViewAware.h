@@ -16,36 +16,18 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef ERRORCONTROLLERIMPL_H_
-#define ERRORCONTROLLERIMPL_H_
+#ifndef VIEW_VIEWAWARE_H_
+#define VIEW_VIEWAWARE_H_
 
-#include <libintl.h>
-#include <locale.h>
-#include <sstream>
-#include "../config.h"
-
-#include "../Model/Env.h"
-
-#include "../View/Error.h"
-#include "../View/Trait/ViewAware.h"
-
-#include "../Controller/ControllerAbstract.h"
-
-#include "ErrorController.h"
-
-class ErrorControllerImpl : public ControllerAbstract, public ErrorController, public View_Trait_ViewAware<View_Error> {
-	Model_Env& env;
-	ThreadController* threadController;
-	bool applicationStarted;
+template <typename T>
+class View_Trait_ViewAware {
+protected:
+	T* view;
 public:
-	void setThreadController(ThreadController& threadController);
-	void setApplicationStarted(bool val);
-
-	ErrorControllerImpl(Model_Env& env);
-	
-	void errorAction(Exception const& e);
-	void errorThreadedAction(Exception const& e);
-	void quitAction();
+	View_Trait_ViewAware() : view(NULL) {}
+	void setView(T& view) {
+		this->view = &view;
+	}
 };
 
-#endif
+#endif /* VIEW_VIEWAWARE_H_ */

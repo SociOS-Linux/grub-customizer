@@ -34,6 +34,7 @@
 
 #include "ThreadController.h"
 #include "../View/EnvEditor.h"
+#include "../View/Trait/ViewAware.h"
 #include "../Mapper/EntryName.h"
 
 #include "../Controller/ControllerAbstract.h"
@@ -44,10 +45,9 @@
 #include "Helper/DeviceInfo.h"
 
 
-class TrashControllerImpl : public ControllerAbstract, public TrashController {
+class TrashControllerImpl : public ControllerAbstract, public TrashController, public View_Trait_ViewAware<View_Trash> {
 	Model_Env& env;
 	Model_ListCfg* grublistCfg;
-	View_Trash* view;
 	Mapper_EntryName* entryNameMapper;
 	Model_DeviceDataListInterface* deviceDataList;
 	ContentParserFactory* contentParserFactory;
@@ -56,7 +56,6 @@ class TrashControllerImpl : public ControllerAbstract, public TrashController {
 	bool _isDeletable(std::list<Entry*> const& selectedEntries);
 public:
 	void setListCfg(Model_ListCfg& grublistCfg);
-	void setView(View_Trash& scriptAddDlg);
 	void setEntryNameMapper(Mapper_EntryName& mapper);
 	void setDeviceDataList(Model_DeviceDataListInterface& deviceDataList);
 	void setContentParserFactory(ContentParserFactory& contentParserFactory);

@@ -21,11 +21,11 @@
 TrashControllerImpl::TrashControllerImpl(Model_Env& env)
 	: ControllerAbstract("trash"),
 	  grublistCfg(NULL),
-	  view(NULL),
-	 env(env),
-	 entryNameMapper(NULL),
-	 deviceDataList(NULL),
-	 contentParserFactory(NULL)
+	  View_Trait_ViewAware<View_Trash>(),
+	  env(env),
+	  entryNameMapper(NULL),
+	  deviceDataList(NULL),
+	  contentParserFactory(NULL)
 {
 }
 
@@ -75,10 +75,6 @@ bool TrashControllerImpl::_isDeletable(std::list<Entry*> const& selectedEntries)
 
 void TrashControllerImpl::setListCfg(Model_ListCfg& grublistCfg){
 	this->grublistCfg = &grublistCfg;
-}
-
-void TrashControllerImpl::setView(View_Trash& scriptAddDlg){
-	this->view = &scriptAddDlg;
 }
 
 void TrashControllerImpl::setEntryNameMapper(Mapper_EntryName& mapper) {
