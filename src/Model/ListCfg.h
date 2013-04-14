@@ -52,17 +52,19 @@
 #include <stack>
 #include <algorithm>
 
-class Model_ListCfg : public Trait_LoggerAware, public Trait_ControllerAware<MainController> {
+class Model_ListCfg :
+	public Trait_LoggerAware,
+	public Trait_ControllerAware<MainController>,
+	public Mutex_Connection
+{
 	double progress;
 	std::string progress_name;
 	int progress_pos, progress_max;
-	Mutex* mutex;
 	std::string errorLogFile;
 
 	Model_ScriptSourceMap scriptSourceMap;
 public:
 	Model_ListCfg(Model_Env& env);
-	void setMutex(Mutex& mutex);
 	void setLogger(Logger& logger);
 
 	Model_Proxylist proxies;

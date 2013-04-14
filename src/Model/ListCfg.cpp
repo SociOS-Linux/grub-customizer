@@ -22,13 +22,9 @@ Model_ListCfg::Model_ListCfg(Model_Env& env)
  : error_proxy_not_found(false),
  progress(0),
  cancelThreadsRequested(false), verbose(true), env(env),
- mutex(NULL), errorLogFile(ERROR_LOG_FILE), ignoreLock(false), progress_pos(0), progress_max(0),
+ errorLogFile(ERROR_LOG_FILE), ignoreLock(false), progress_pos(0), progress_max(0),
  scriptSourceMap(env)
 {}
-
-void Model_ListCfg::setMutex(Mutex& mutex) {
-	this->mutex = &mutex;
-}
 
 void Model_ListCfg::setLogger(Logger& logger) {
 	this->Trait_LoggerAware::setLogger(logger);

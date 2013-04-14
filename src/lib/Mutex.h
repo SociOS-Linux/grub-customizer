@@ -28,4 +28,15 @@ public:
 	virtual void unlock() = 0;
 };
 
+class Mutex_Connection {
+protected:
+	Mutex* mutex;
+public:
+	Mutex_Connection() : mutex(NULL) {}
+
+	void setMutex(Mutex& mutex) {
+		this->mutex = &mutex;
+	}
+};
+
 #endif
