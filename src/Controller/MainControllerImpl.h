@@ -52,7 +52,11 @@
  * This controller operates on the entry list
  */
 
-class MainControllerImpl : public ControllerAbstract, public MainController, public View_Trait_ViewAware<View_Main> {
+class MainControllerImpl :
+	public ControllerAbstract,
+	public MainController,
+	public View_Trait_ViewAware<View_Main>
+{
 	Model_Env& env;
 	Model_ListCfg* grublistCfg;
 	Model_SettingsManagerData* settings;

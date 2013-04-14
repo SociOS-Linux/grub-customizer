@@ -42,7 +42,11 @@
 #include "../lib/Exception.h"
 
 
-class EntryEditControllerImpl : public EntryEditController, public ControllerAbstract, public View_Trait_ViewAware<View_EntryEditor> {
+class EntryEditControllerImpl :
+	public EntryEditController,
+	public ControllerAbstract,
+	public View_Trait_ViewAware<View_EntryEditor>
+{
 	Model_Env& env;
 	Model_ListCfg* grublistCfg;
 	ContentParserFactory* contentParserFactory;
