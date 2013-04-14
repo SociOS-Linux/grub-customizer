@@ -33,20 +33,24 @@
 #include "ThreadController.h"
 
 #include "../Controller/ControllerAbstract.h"
+#include "../Controller/Trait/ThreadControllerAware.h"
 
 #include "../lib/Exception.h"
 
 #include "InstallerController.h"
 
 
-class InstallerControllerImpl : public ControllerAbstract, public InstallerController, public View_Trait_ViewAware<View_Installer> {
+class InstallerControllerImpl :
+	public ControllerAbstract,
+	public InstallerController,
+	public View_Trait_ViewAware<View_Installer>,
+	public Trait_ThreadControllerAware
+{
 	Model_Env& env;
 	Model_Installer* installer;
-	ThreadController* threadController;
 
 public:
 	void setInstaller(Model_Installer& installer);
-	void setThreadController(ThreadController& threadController);
 
 	ThreadController& getThreadController();
 

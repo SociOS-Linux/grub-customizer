@@ -36,7 +36,11 @@
 #include "EnvEditorController.h"
 
 
-class EnvEditorControllerImpl : public ControllerAbstract, public EnvEditorController, public View_Trait_ViewAware<View_EnvEditor> {
+class EnvEditorControllerImpl :
+	public ControllerAbstract,
+	public EnvEditorController,
+	public View_Trait_ViewAware<View_EnvEditor>
+{
 	Model_Env& env;
 	Model_MountTable* mountTable;
 

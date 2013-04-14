@@ -38,6 +38,7 @@
 
 #include "../lib/Trait/LoggerAware.h"
 #include "../Controller/ControllerAbstract.h"
+#include "../Controller/Trait/ThreadControllerAware.h"
 
 #include "../lib/Exception.h"
 
@@ -45,14 +46,14 @@
 class EntryEditControllerImpl :
 	public EntryEditController,
 	public ControllerAbstract,
-	public View_Trait_ViewAware<View_EntryEditor>
+	public View_Trait_ViewAware<View_EntryEditor>,
+	public Trait_ThreadControllerAware
 {
 	Model_Env& env;
 	Model_ListCfg* grublistCfg;
 	ContentParserFactory* contentParserFactory;
 	ContentParser* currentContentParser;
 	Model_DeviceDataListInterface* deviceDataList;
-	ThreadController* threadController;
 	Model_Script* _createCustomScript();
 public:
 	EntryEditControllerImpl(Model_Env& env);
@@ -60,7 +61,6 @@ public:
 	void setDeviceDataList(Model_DeviceDataList& deviceDataList);
 	void setContentParserFactory(ContentParserFactory& contentParserFactory);
 	void setListCfg(Model_ListCfg& grublistCfg);
-	void setThreadController(ThreadController& threadController);
 
 	void showAction(Rule* rule);
 	void showCreatorAction();

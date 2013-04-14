@@ -21,15 +21,10 @@
 
 ErrorControllerImpl::ErrorControllerImpl(Model_Env& env)
 	: ControllerAbstract("error"),
-	  threadController(NULL),
 	  env(env), applicationStarted(false)
 {
 }
 
-
-void ErrorControllerImpl::setThreadController(ThreadController& threadController) {
-	this->threadController = &threadController;
-}
 
 void ErrorControllerImpl::setApplicationStarted(bool val) {
 	this->applicationStarted = val;

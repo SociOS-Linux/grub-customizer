@@ -21,17 +21,13 @@
 InstallerControllerImpl::InstallerControllerImpl(Model_Env& env)
 	: ControllerAbstract("installer"),
 	  installer(NULL),
-	  env(env),
-	 threadController(NULL)
+	  env(env)
 {
 }
 
 
 void InstallerControllerImpl::setInstaller(Model_Installer& installer){
 	this->installer = &installer;
-}
-void InstallerControllerImpl::setThreadController(ThreadController& threadController) {
-	this->threadController = &threadController;
 }
 
 ThreadController& InstallerControllerImpl::getThreadController() {

@@ -16,40 +16,18 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef ERRORCONTROLLERIMPL_H_
-#define ERRORCONTROLLERIMPL_H_
+#ifndef TRAIT_THREADCONTROLLERAWARE_H_
+#define TRAIT_THREADCONTROLLERAWARE_H_
 
-#include <libintl.h>
-#include <locale.h>
-#include <sstream>
-#include "../config.h"
-
-#include "../Model/Env.h"
-
-#include "../View/Error.h"
-#include "../View/Trait/ViewAware.h"
-
-#include "../Controller/ControllerAbstract.h"
-#include "../Controller/Trait/ThreadControllerAware.h"
-
-#include "ErrorController.h"
-
-class ErrorControllerImpl :
-	public ControllerAbstract,
-	public ErrorController,
-	public View_Trait_ViewAware<View_Error>,
-	public Trait_ThreadControllerAware
-{
-	Model_Env& env;
-	bool applicationStarted;
+class Trait_ThreadControllerAware {
+protected:
+	ThreadController* threadController;
 public:
-	void setApplicationStarted(bool val);
+	Trait_ThreadControllerAware() : threadController(NULL) {}
 
-	ErrorControllerImpl(Model_Env& env);
-	
-	void errorAction(Exception const& e);
-	void errorThreadedAction(Exception const& e);
-	void quitAction();
+	void setThreadController(ThreadController& threadController) {
+		this->threadController = &threadController;
+	}
 };
 
-#endif
+#endif /* TRAIT_THREADCONTROLLERAWARE_H_ */

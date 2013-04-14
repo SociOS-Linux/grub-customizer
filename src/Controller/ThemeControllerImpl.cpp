@@ -24,13 +24,8 @@ ThemeControllerImpl::ThemeControllerImpl(Model_Env& env)
 	  themeManager(NULL),
 	  settings(NULL),
 	  grublistCfg(NULL),
-	  threadController(NULL),
 	  syncActive(false)
 {
-}
-
-void ThemeControllerImpl::setThreadController(ThreadController& threadController) {
-	this->threadController = &threadController;
 }
 
 void ThemeControllerImpl::syncSettings() {

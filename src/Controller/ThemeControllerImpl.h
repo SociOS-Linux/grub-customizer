@@ -24,17 +24,22 @@
 #include "../View/Trait/ViewAware.h"
 #include "../Model/SettingsManagerData.h"
 #include "ControllerAbstract.h"
+#include "Trait/ThreadControllerAware.h"
 #include "../Model/ThemeManager.h"
 #include "../Model/ListCfg.h"
 #include <algorithm>
 
-class ThemeControllerImpl : public ThemeController, public ControllerAbstract, public View_Trait_ViewAware<View_Theme> {
+class ThemeControllerImpl :
+	public ThemeController,
+	public ControllerAbstract,
+	public View_Trait_ViewAware<View_Theme>,
+	public Trait_ThreadControllerAware
+{
 	Model_Env& env;
 	Model_ThemeManager* themeManager;
 	Model_SettingsManagerData* settings;
 	Model_ListCfg* grublistCfg;
 	std::string currentTheme, currentThemeFile;
-	ThreadController* threadController;
 	bool syncActive; // should only be controlled by syncSettings()
 	bool isImage(std::string const& fileName);
 
@@ -42,7 +47,6 @@ class ThemeControllerImpl : public ThemeController, public ControllerAbstract, p
 	void syncFiles();
 public:
 	ThemeControllerImpl(Model_Env& env);
-	void setThreadController(ThreadController& threadController);
 	void setThemeManager(Model_ThemeManager& themeManager);
 	void setSettingsManager(Model_SettingsManagerData& settings);
 	void setListCfg(Model_ListCfg& grublistCfg);

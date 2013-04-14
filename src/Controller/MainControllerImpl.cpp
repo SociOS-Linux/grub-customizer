@@ -27,7 +27,7 @@ MainControllerImpl::MainControllerImpl(Model_Env& env)
 	  mountTable(NULL),
 	 env(env), config_has_been_different_on_startup_but_unsaved(false),
 	 is_loading(false), contentParserFactory(NULL), currentContentParser(NULL),
-	 threadController(NULL), thrownException(""),
+	 thrownException(""),
 	 entryNameMapper(NULL)
 {
 }
@@ -58,10 +58,6 @@ void MainControllerImpl::setDeviceDataList(Model_DeviceDataList& deviceDataList)
 
 void MainControllerImpl::setMountTable(Model_MountTable& mountTable){
 	this->mountTable = &mountTable;
-}
-
-void MainControllerImpl::setThreadController(ThreadController& threadController) {
-	this->threadController = &threadController;
 }
 
 void MainControllerImpl::setContentParserFactory(ContentParserFactory& contentParserFactory) {

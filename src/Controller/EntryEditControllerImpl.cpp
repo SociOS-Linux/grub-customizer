@@ -22,7 +22,7 @@ EntryEditControllerImpl::EntryEditControllerImpl(Model_Env& env)
 	: ControllerAbstract("entry-edit"),
 	  grublistCfg(NULL),
 	 env(env), contentParserFactory(NULL), currentContentParser(NULL),
-	 deviceDataList(NULL), threadController(NULL)
+	 deviceDataList(NULL)
 {
 }
 
@@ -36,10 +36,6 @@ void EntryEditControllerImpl::setContentParserFactory(ContentParserFactory& cont
 
 void EntryEditControllerImpl::setDeviceDataList(Model_DeviceDataList& deviceDataList){
 	this->deviceDataList = &deviceDataList;
-}
-
-void EntryEditControllerImpl::setThreadController(ThreadController& threadController) {
-	this->threadController = &threadController;
 }
 
 Model_Script* EntryEditControllerImpl::_createCustomScript() {

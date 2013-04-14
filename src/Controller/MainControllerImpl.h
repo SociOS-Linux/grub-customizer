@@ -37,6 +37,7 @@
 #include "../lib/ContentParserFactory.h"
 
 #include "../Controller/ControllerAbstract.h"
+#include "../Controller/Trait/ThreadControllerAware.h"
 
 #include "../lib/Trait/LoggerAware.h"
 #include "../Mapper/EntryName.h"
@@ -55,7 +56,8 @@
 class MainControllerImpl :
 	public ControllerAbstract,
 	public MainController,
-	public View_Trait_ViewAware<View_Main>
+	public View_Trait_ViewAware<View_Main>,
+	public Trait_ThreadControllerAware
 {
 	Model_Env& env;
 	Model_ListCfg* grublistCfg;
@@ -65,7 +67,6 @@ class MainControllerImpl :
 	Model_FbResolutionsGetter* fbResolutionsGetter;
 	Model_DeviceDataList* deviceDataList;
 	Model_MountTable* mountTable;
-	ThreadController* threadController;
 	ContentParserFactory* contentParserFactory;
 	ContentParser* currentContentParser;
 	Mapper_EntryName* entryNameMapper;
@@ -93,7 +94,6 @@ public:
 	void setFbResolutionsGetter(Model_FbResolutionsGetter& fbResolutionsGetter);
 	void setDeviceDataList(Model_DeviceDataList& deviceDataList);
 	void setMountTable(Model_MountTable& mountTable);
-	void setThreadController(ThreadController& threadController);
 	void setContentParserFactory(ContentParserFactory& contentParserFactory);
 	void setEntryNameMapper(Mapper_EntryName& mapper);
 
