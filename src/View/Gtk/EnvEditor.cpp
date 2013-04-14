@@ -19,7 +19,7 @@
 #include "EnvEditor.h"
 
 View_Gtk_EnvEditor::View_Gtk_EnvEditor()
-	: pChooser(NULL), lblPartition(gettext("_Partition:"), true), deviceDataList(NULL),
+	: pChooser(NULL), lblPartition(gettext("_Partition:"), true),
 	  lblType(gettext("_Type:"), true), eventLock(true), lblSubmountpoints(gettext("Submountpoints:")),
 	  cbSaveConfig(gettext("save this configuration"))
 {
@@ -76,10 +76,6 @@ View_Gtk_EnvEditor::~View_Gtk_EnvEditor() {
 		delete this->pChooser;
 		this->pChooser = NULL;
 	}
-}
-
-void View_Gtk_EnvEditor::setDeviceDataList(Model_DeviceDataListInterface& deviceDataList) {
-	this->deviceDataList = &deviceDataList;
 }
 
 void View_Gtk_EnvEditor::setRootDeviceName(std::string const& rootDeviceName) {

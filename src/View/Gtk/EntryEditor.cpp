@@ -49,10 +49,6 @@ View_Gtk_EntryEditor::View_Gtk_EntryEditor()
 	this->tvSource.signal_key_release_event().connect(sigc::mem_fun(this, &View_Gtk_EntryEditor::signal_sourceModified));
 }
 
-void View_Gtk_EntryEditor::setDeviceDataList(Model_DeviceDataListInterface& deviceDataList) {
-	this->deviceDataList = &deviceDataList;
-}
-
 std::string View_Gtk_EntryEditor::mapOptionName(std::string const& name) {
 	if (name == "partition_uuid")
 		return gettext("_Partition");

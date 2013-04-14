@@ -33,12 +33,12 @@ class View_Gtk_EntryEditor :
 	public View_EntryEditor,
 	public Gtk::Dialog,
 	public Trait_LoggerAware,
-	public Trait_ControllerAware<EntryEditController>
+	public Trait_ControllerAware<EntryEditController>,
+	public Model_DeviceDataListInterface_Connection
 {
 	Gtk::Notebook tabbox;
 	Gtk::TextView tvSource;
 	Gtk::ScrolledWindow scrSource;
-	Model_DeviceDataListInterface* deviceDataList;
 	Gtk::ScrolledWindow scrOptions;
 	Gtk::Table tblOptions;
 	std::map<std::string, Gtk::Widget*> optionMap;
@@ -52,7 +52,6 @@ protected:
 	virtual std::string mapOptionName(std::string const& name);
 public:
 	View_Gtk_EntryEditor();
-	void setDeviceDataList(Model_DeviceDataListInterface& deviceDataList);
 	void setSourcecode(std::string const& source);
 	std::string getSourcecode();
 	void addOption(std::string const& name, std::string const& value);

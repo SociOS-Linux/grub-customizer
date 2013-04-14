@@ -31,7 +31,8 @@ class View_Gtk_EnvEditor :
 	public Gtk::Dialog,
 	public View_EnvEditor,
 	public Trait_LoggerAware,
-	public Trait_ControllerAware<EnvEditorController>
+	public Trait_ControllerAware<EnvEditorController>,
+	public Model_DeviceDataListInterface_Connection
 {
 	Gtk::VBox vbContent;
 	Gtk::Table tblLayout;
@@ -56,7 +57,6 @@ class View_Gtk_EnvEditor :
 public:
 	View_Gtk_EnvEditor();
 	~View_Gtk_EnvEditor();
-	void setDeviceDataList(Model_DeviceDataListInterface& deviceDataList);
 	void setRootDeviceName(std::string const& rootDeviceName);
 	void setEnvSettings(std::map<std::string, std::string> const& props, std::list<std::string> const& requiredProps, std::list<std::string> const& validProps);
 	std::map<std::string, std::string> getEnvSettings();
