@@ -41,7 +41,6 @@ class View_Gtk_Trash :
 	Gtk::Button bttRestore;
 	Gtk::Button bttDelete;
 
-	TrashController* controller;
 	std::map<ViewOption, bool> options;
 
 	Gtk::MenuItem miContext;
