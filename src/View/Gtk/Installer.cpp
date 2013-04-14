@@ -20,7 +20,7 @@
 
 View_Gtk_Installer::View_Gtk_Installer()
 	: lblDescription(gettext("Install the bootloader to MBR and put some\nfiles to the bootloaders data directory\n(if they don't already exist)."), Pango::ALIGN_LEFT)
-	, lblDevice(gettext("_Device: "), Pango::ALIGN_LEFT, Pango::ALIGN_CENTER, true), Trait_ControllerAware<InstallerController>()
+	, lblDevice(gettext("_Device: "), Pango::ALIGN_LEFT, Pango::ALIGN_CENTER, true)
 {
 	Gtk::Box* vbDialog = this->get_vbox();
 	this->set_icon_name("grub-customizer");

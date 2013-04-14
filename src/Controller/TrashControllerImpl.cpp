@@ -21,7 +21,6 @@
 TrashControllerImpl::TrashControllerImpl(Model_Env& env)
 	: ControllerAbstract("trash"),
 	  grublistCfg(NULL),
-	  View_Trait_ViewAware<View_Trash>(),
 	  env(env),
 	  entryNameMapper(NULL),
 	  deviceDataList(NULL),

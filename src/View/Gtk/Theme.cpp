@@ -32,8 +32,7 @@ View_Gtk_Theme::View_Gtk_Theme()
 	  lblNormalForeground(gettext("Normal: Font"), Pango::ALIGN_LEFT, Pango::ALIGN_CENTER, false),
 	  lblNormalBackground(gettext("Normal: Background"), Pango::ALIGN_LEFT, Pango::ALIGN_CENTER, false),
 	  lblHighlightForeground(gettext("Highlighted: Font"), Pango::ALIGN_LEFT, Pango::ALIGN_CENTER, false),
-	  lblHighlightBackground(gettext("Highlighted: Background"), Pango::ALIGN_LEFT, Pango::ALIGN_CENTER, false),
-	  Trait_ControllerAware<ThemeController>()
+	  lblHighlightBackground(gettext("Highlighted: Background"), Pango::ALIGN_LEFT, Pango::ALIGN_CENTER, false)
 {
 	Gtk::Box& dlgVBox = *this->get_vbox();
 

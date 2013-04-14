@@ -21,8 +21,7 @@
 EnvEditorControllerImpl::EnvEditorControllerImpl(Model_Env& env)
 	: ControllerAbstract("env-editor"),
 	 mountTable(NULL),
-	 env(env),
-	 View_Trait_ViewAware<View_EnvEditor>()
+	 env(env)
 {
 }
 

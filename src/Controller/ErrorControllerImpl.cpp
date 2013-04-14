@@ -21,7 +21,7 @@
 
 ErrorControllerImpl::ErrorControllerImpl(Model_Env& env)
 	: ControllerAbstract("error"),
-	  View_Trait_ViewAware<View_Error>(), threadController(NULL),
+	  threadController(NULL),
 	  env(env), applicationStarted(false)
 {
 }

@@ -20,7 +20,7 @@
 
 MainControllerImpl::MainControllerImpl(Model_Env& env)
 	: ControllerAbstract("main"),
-	  grublistCfg(NULL), View_Trait_ViewAware<View_Main>(), settings(NULL),
+	  grublistCfg(NULL), settings(NULL),
 	  settingsOnDisk(NULL),
 	  savedListCfg(NULL),
 	  fbResolutionsGetter(NULL), deviceDataList(NULL),

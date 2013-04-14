@@ -22,8 +22,7 @@ EntryEditControllerImpl::EntryEditControllerImpl(Model_Env& env)
 	: ControllerAbstract("entry-edit"),
 	  grublistCfg(NULL),
 	 env(env), contentParserFactory(NULL), currentContentParser(NULL),
-	 deviceDataList(NULL), threadController(NULL),
-	 View_Trait_ViewAware<View_EntryEditor>()
+	 deviceDataList(NULL), threadController(NULL)
 {
 }
 

@@ -23,8 +23,7 @@ View_Gtk_Trash::View_Gtk_Trash()
 	  bttRestore(Gtk::Stock::UNDELETE),
 	  bttDelete(Gtk::Stock::DELETE),
 	  micDelete(Gtk::Stock::DELETE),
-	  event_lock(false),
-	  Trait_ControllerAware<TrashController>()
+	  event_lock(false)
 {
 	this->set_title(gettext("Add entry from trash"));
 	this->set_icon_name("grub-customizer");

@@ -19,7 +19,7 @@
 #include "EntryEditor.h"
 
 View_Gtk_EntryEditor::View_Gtk_EntryEditor()
-	: rulePtr(NULL), lblType(gettext("_Type:"), true), lock_state(false), Trait_ControllerAware<EntryEditController>()
+	: rulePtr(NULL), lblType(gettext("_Type:"), true), lock_state(false)
 {
 	this->add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
 	this->add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);

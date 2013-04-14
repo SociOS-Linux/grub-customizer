@@ -21,7 +21,7 @@
 View_Gtk_EnvEditor::View_Gtk_EnvEditor()
 	: pChooser(NULL), lblPartition(gettext("_Partition:"), true), deviceDataList(NULL),
 	  lblType(gettext("_Type:"), true), eventLock(true), lblSubmountpoints(gettext("Submountpoints:")),
-	  cbSaveConfig(gettext("save this configuration")), Trait_ControllerAware<EnvEditorController>()
+	  cbSaveConfig(gettext("save this configuration"))
 {
 	this->set_title("Grub Customizer environment setup");
 	this->set_icon_name("grub-customizer");

@@ -20,7 +20,7 @@
 
 InstallerControllerImpl::InstallerControllerImpl(Model_Env& env)
 	: ControllerAbstract("installer"),
-	  installer(NULL), View_Trait_ViewAware<View_Installer>(),
+	  installer(NULL),
 	  env(env),
 	 threadController(NULL)
 {

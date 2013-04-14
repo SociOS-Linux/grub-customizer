@@ -31,7 +31,7 @@ View_Gtk_Settings::View_Gtk_Settings()
 	lblDefaultEntry(gettext("default entry")), lblView(gettext("visibility")), chkShowMenu(gettext("show menu")),
 	lblKernelParams(gettext("kernel parameters")),
 	chkGenerateRecovery(gettext("generate recovery entries")), chkOsProber(gettext("look for other operating systems")),
-	chkResolution(gettext("custom resolution: ")), cbResolution(true), Trait_ControllerAware<SettingsController>()
+	chkResolution(gettext("custom resolution: ")), cbResolution(true)
 {
 	this->set_title("Grub Customizer - "+Glib::ustring(gettext("settings")));
 	this->set_icon_name("grub-customizer");

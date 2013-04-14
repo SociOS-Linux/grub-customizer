@@ -20,7 +20,6 @@
 
 AboutControllerImpl::AboutControllerImpl(Model_Env& env)
 	: ControllerAbstract("about"),
-	  View_Trait_ViewAware<View_About>(),
 	  env(env)
 {
 }

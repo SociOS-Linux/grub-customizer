@@ -20,7 +20,7 @@
 
 SettingsControllerImpl::SettingsControllerImpl(Model_Env& env)
 	: ControllerAbstract("settings"),
-	  grublistCfg(NULL), View_Trait_ViewAware<View_Settings>(), settings(NULL),
+	  grublistCfg(NULL), settings(NULL),
 	  settingsOnDisk(NULL),
 	  fbResolutionsGetter(NULL),
 	 env(env),

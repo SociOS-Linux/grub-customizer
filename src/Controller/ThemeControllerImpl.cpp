@@ -20,7 +20,6 @@
 
 ThemeControllerImpl::ThemeControllerImpl(Model_Env& env)
 	: env(env),
-	  View_Trait_ViewAware<View_Theme>(),
 	  ControllerAbstract("theme"),
 	  themeManager(NULL),
 	  settings(NULL),

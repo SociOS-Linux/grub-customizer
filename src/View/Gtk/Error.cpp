@@ -19,7 +19,6 @@
 #include "Error.h"
 
 View_Gtk_Error::View_Gtk_Error()
-	: Trait_ControllerAware<ErrorController>()
 {
 }
 

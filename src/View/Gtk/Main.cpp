@@ -44,7 +44,7 @@ View_Gtk_Main::View_Gtk_Main()
 	bbxAdvancedSettings1(Gtk::BUTTONBOX_END), bbxAdvancedSettings2(Gtk::BUTTONBOX_END),
 	lblReloadRequired(gettext("The modifications you've done affects the visible entries. Please reload!"), Pango::ALIGN_LEFT),
 	lblScriptUpdatesFound(gettext("Script updates found. Click save to apply the changes!"), Pango::ALIGN_LEFT),
-	trashList(NULL), Trait_ControllerAware<MainController>()
+	trashList(NULL)
 {
 	win.set_icon_name("grub-customizer");
 
