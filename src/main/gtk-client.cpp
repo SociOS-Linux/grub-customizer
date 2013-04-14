@@ -118,7 +118,6 @@ int main(int argc, char** argv){
 		settingsController.setListCfg(listcfg);
 		settingsController.setView(settingsDlg);
 		settingsController.setSettingsManager(settings);
-		settingsController.setSettingsBuffer(settingsOnDisk);
 		settingsController.setFbResolutionsGetter(fbResolutionsGetter);
 
 		EnvEditorControllerImpl envEditController(env);

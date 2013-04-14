@@ -21,7 +21,6 @@
 SettingsControllerImpl::SettingsControllerImpl(Model_Env& env)
 	: ControllerAbstract("settings"),
 	  grublistCfg(NULL), settings(NULL),
-	  settingsOnDisk(NULL),
 	  fbResolutionsGetter(NULL),
 	 env(env),
 	 threadController(NULL),
@@ -36,10 +35,6 @@ void SettingsControllerImpl::setListCfg(Model_ListCfg& grublistCfg){
 
 void SettingsControllerImpl::setSettingsManager(Model_SettingsManagerData& settings){
 	this->settings = &settings;
-}
-
-void SettingsControllerImpl::setSettingsBuffer(Model_SettingsManagerData& settings){
-	this->settingsOnDisk = &settings;
 }
 
 void SettingsControllerImpl::setFbResolutionsGetter(Model_FbResolutionsGetter& fbResolutionsGetter){

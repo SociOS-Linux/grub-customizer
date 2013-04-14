@@ -53,7 +53,6 @@ class SettingsControllerImpl : public ControllerAbstract, public SettingsControl
 	Model_Env& env;
 	Model_ListCfg* grublistCfg;
 	Model_SettingsManagerData* settings;
-	Model_SettingsManagerData* settingsOnDisk; //buffer for the existing settings
 	Model_FbResolutionsGetter* fbResolutionsGetter;
 	ThreadController* threadController;
 	bool syncActive; // should only be controlled by syncSettings()
@@ -61,7 +60,6 @@ class SettingsControllerImpl : public ControllerAbstract, public SettingsControl
 public:
 	void setListCfg(Model_ListCfg& grublistCfg);
 	void setSettingsManager(Model_SettingsManagerData& settings);
-	void setSettingsBuffer(Model_SettingsManagerData& settings);
 	void setFbResolutionsGetter(Model_FbResolutionsGetter& fbResolutionsGetter);
 	void setThreadController(ThreadController& threadController);
 
