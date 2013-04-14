@@ -87,7 +87,6 @@ class MainControllerImpl :
 
 public:
 	void setListCfg(Model_ListCfg& grublistCfg);
-	void setSettingsDialog(View_Settings& settingsDlg);
 	void setSettingsManager(Model_SettingsManagerData& settings);
 	void setSettingsBuffer(Model_SettingsManagerData& settings);
 	void setSavedListCfg(Model_ListCfg& savedListCfg);
