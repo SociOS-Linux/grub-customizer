@@ -20,25 +20,15 @@
 
 MainControllerImpl::MainControllerImpl(Model_Env& env)
 	: ControllerAbstract("main"),
-	  grublistCfg(NULL), settings(NULL),
 	  settingsOnDisk(NULL),
 	  savedListCfg(NULL),
-	  fbResolutionsGetter(NULL), deviceDataList(NULL),
-	  mountTable(NULL),
 	 env(env), config_has_been_different_on_startup_but_unsaved(false),
-	 is_loading(false), contentParserFactory(NULL), currentContentParser(NULL),
-	 thrownException(""),
-	 entryNameMapper(NULL)
+	 is_loading(false),
+	 currentContentParser(NULL),
+	 thrownException("")
 {
 }
 
-
-void MainControllerImpl::setListCfg(Model_ListCfg& grublistCfg){
-	this->grublistCfg = &grublistCfg;
-}
-void MainControllerImpl::setSettingsManager(Model_SettingsManagerData& settings){
-	this->settings = &settings;
-}
 
 void MainControllerImpl::setSettingsBuffer(Model_SettingsManagerData& settings){
 	this->settingsOnDisk = &settings;
@@ -46,26 +36,6 @@ void MainControllerImpl::setSettingsBuffer(Model_SettingsManagerData& settings){
 
 void MainControllerImpl::setSavedListCfg(Model_ListCfg& savedListCfg){
 	this->savedListCfg = &savedListCfg;
-}
-
-void MainControllerImpl::setFbResolutionsGetter(Model_FbResolutionsGetter& fbResolutionsGetter){
-	this->fbResolutionsGetter = &fbResolutionsGetter;
-}
-
-void MainControllerImpl::setDeviceDataList(Model_DeviceDataList& deviceDataList){
-	this->deviceDataList = &deviceDataList;
-}
-
-void MainControllerImpl::setMountTable(Model_MountTable& mountTable){
-	this->mountTable = &mountTable;
-}
-
-void MainControllerImpl::setContentParserFactory(ContentParserFactory& contentParserFactory) {
-	this->contentParserFactory = &contentParserFactory;
-}
-
-void MainControllerImpl::setEntryNameMapper(Mapper_EntryName& mapper) {
-	this->entryNameMapper = &mapper;
 }
 
 ThreadController& MainControllerImpl::getThreadController() {

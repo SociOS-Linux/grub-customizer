@@ -29,4 +29,15 @@ public:
 	virtual void clear()=0;
 };
 
+class Model_DeviceDataListInterface_Connection {
+protected:
+	Model_DeviceDataListInterface* deviceDataList;
+public:
+	Model_DeviceDataListInterface_Connection() : deviceDataList(NULL) {}
+
+	void setDeviceDataList(Model_DeviceDataListInterface& deviceDataList){
+		this->deviceDataList = &deviceDataList;
+	}
+};
+
 #endif

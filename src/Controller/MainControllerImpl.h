@@ -57,19 +57,19 @@ class MainControllerImpl :
 	public ControllerAbstract,
 	public MainController,
 	public View_Trait_ViewAware<View_Main>,
-	public Trait_ThreadControllerAware
+	public Trait_ThreadControllerAware,
+	public Model_ListCfg_Connection,
+	public Model_SettingsManagerData_Connection,
+	public Model_FbResolutionsGetter_Connection,
+	public Model_DeviceDataList_Connection,
+	public Model_MountTable_Connection,
+	public ContentParserFactory_Connection,
+	public Mapper_EntryName_Connection
 {
 	Model_Env& env;
-	Model_ListCfg* grublistCfg;
-	Model_SettingsManagerData* settings;
 	Model_SettingsManagerData* settingsOnDisk; //buffer for the existing settings
 	Model_ListCfg* savedListCfg;
-	Model_FbResolutionsGetter* fbResolutionsGetter;
-	Model_DeviceDataList* deviceDataList;
-	Model_MountTable* mountTable;
-	ContentParserFactory* contentParserFactory;
 	ContentParser* currentContentParser;
-	Mapper_EntryName* entryNameMapper;
 
 	bool config_has_been_different_on_startup_but_unsaved;
 	bool is_loading;
@@ -86,15 +86,8 @@ class MainControllerImpl :
 	void _updateCurrentDefaultOs(Model_Rule* rule, std::string const& currentRulePath, std::string currentDefaultRulePath);
 
 public:
-	void setListCfg(Model_ListCfg& grublistCfg);
-	void setSettingsManager(Model_SettingsManagerData& settings);
 	void setSettingsBuffer(Model_SettingsManagerData& settings);
 	void setSavedListCfg(Model_ListCfg& savedListCfg);
-	void setFbResolutionsGetter(Model_FbResolutionsGetter& fbResolutionsGetter);
-	void setDeviceDataList(Model_DeviceDataList& deviceDataList);
-	void setMountTable(Model_MountTable& mountTable);
-	void setContentParserFactory(ContentParserFactory& contentParserFactory);
-	void setEntryNameMapper(Mapper_EntryName& mapper);
 
 	ThreadController& getThreadController();
 	Model_FbResolutionsGetter& getFbResolutionsGetter();

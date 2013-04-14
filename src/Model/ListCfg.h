@@ -51,7 +51,6 @@
 #include <stack>
 #include <algorithm>
 
-
 class Model_ListCfg : public Trait_LoggerAware {
 	MainController* eventListener;
 	
@@ -138,5 +137,17 @@ public:
 
 	operator ArrayStructure() const;
 };
+
+class Model_ListCfg_Connection {
+protected:
+	Model_ListCfg* grublistCfg;
+public:
+	Model_ListCfg_Connection() : grublistCfg(NULL) {}
+
+	void setListCfg(Model_ListCfg& grublistCfg){
+		this->grublistCfg = &grublistCfg;
+	}
+};
+
 
 #endif

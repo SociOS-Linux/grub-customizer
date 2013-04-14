@@ -53,19 +53,15 @@ class SettingsControllerImpl :
 	public ControllerAbstract,
 	public SettingsController,
 	public View_Trait_ViewAware<View_Settings>,
-	public Trait_ThreadControllerAware
+	public Trait_ThreadControllerAware,
+	public Model_ListCfg_Connection,
+	public Model_SettingsManagerData_Connection,
+	public Model_FbResolutionsGetter_Connection
 {
 	Model_Env& env;
-	Model_ListCfg* grublistCfg;
-	Model_SettingsManagerData* settings;
-	Model_FbResolutionsGetter* fbResolutionsGetter;
 	bool syncActive; // should only be controlled by syncSettings()
 
 public:
-	void setListCfg(Model_ListCfg& grublistCfg);
-	void setSettingsManager(Model_SettingsManagerData& settings);
-	void setFbResolutionsGetter(Model_FbResolutionsGetter& fbResolutionsGetter);
-
 	ThreadController& getThreadController();
 	Model_FbResolutionsGetter& getFbResolutionsGetter();
 

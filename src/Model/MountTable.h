@@ -58,5 +58,17 @@ class Model_MountTable : public std::list<Model_MountTable_Mountpoint>, public T
 	void mountRootFs(std::string const& device, std::string const& mountpoint);
 	operator std::string() const;
 };
+
+class Model_MountTable_Connection {
+protected:
+	Model_MountTable* mountTable;
+public:
+	Model_MountTable_Connection() : mountTable(NULL) {}
+
+	void setMountTable(Model_MountTable& mountTable){
+		this->mountTable = &mountTable;
+	}
+};
+
 #endif
 

@@ -20,24 +20,9 @@
 
 SettingsControllerImpl::SettingsControllerImpl(Model_Env& env)
 	: ControllerAbstract("settings"),
-	  grublistCfg(NULL), settings(NULL),
-	  fbResolutionsGetter(NULL),
 	 env(env),
 	 syncActive(false)
 {
-}
-
-
-void SettingsControllerImpl::setListCfg(Model_ListCfg& grublistCfg){
-	this->grublistCfg = &grublistCfg;
-}
-
-void SettingsControllerImpl::setSettingsManager(Model_SettingsManagerData& settings){
-	this->settings = &settings;
-}
-
-void SettingsControllerImpl::setFbResolutionsGetter(Model_FbResolutionsGetter& fbResolutionsGetter){
-	this->fbResolutionsGetter = &fbResolutionsGetter;
 }
 
 ThreadController& SettingsControllerImpl::getThreadController() {

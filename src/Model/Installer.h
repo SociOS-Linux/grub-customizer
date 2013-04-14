@@ -34,4 +34,15 @@ public:
 	void setEventListener(InstallerController& eventListener);
 };
 
+class Model_Installer_Connection {
+protected:
+	Model_Installer* installer;
+public:
+	Model_Installer_Connection() : installer(NULL) {}
+
+	void setInstaller(Model_Installer& installer){
+		this->installer = &installer;
+	}
+};
+
 #endif

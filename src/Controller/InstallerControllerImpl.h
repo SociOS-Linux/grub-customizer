@@ -44,14 +44,11 @@ class InstallerControllerImpl :
 	public ControllerAbstract,
 	public InstallerController,
 	public View_Trait_ViewAware<View_Installer>,
-	public Trait_ThreadControllerAware
+	public Trait_ThreadControllerAware,
+	public Model_Installer_Connection
 {
 	Model_Env& env;
-	Model_Installer* installer;
-
 public:
-	void setInstaller(Model_Installer& installer);
-
 	ThreadController& getThreadController();
 
 	InstallerControllerImpl(Model_Env& env);

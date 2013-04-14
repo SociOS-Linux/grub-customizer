@@ -35,4 +35,15 @@ public:
 	void setEventListener(SettingsController& eventListener);
 };
 
+class Model_FbResolutionsGetter_Connection {
+protected:
+	Model_FbResolutionsGetter* fbResolutionsGetter;
+public:
+	Model_FbResolutionsGetter_Connection() : fbResolutionsGetter(NULL) {}
+
+	void setFbResolutionsGetter(Model_FbResolutionsGetter& fbResolutionsGetter){
+		this->fbResolutionsGetter = &fbResolutionsGetter;
+	}
+};
+
 #endif

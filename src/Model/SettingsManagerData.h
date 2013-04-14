@@ -43,4 +43,14 @@ public:
 	bool setValue(std::string const& name, std::string const& value);
 	bool setIsActive(std::string const& name, bool value);
 };
+
+class Model_SettingsManagerData_Connection {
+protected:
+	Model_SettingsManagerData* settings;
+public:
+	Model_SettingsManagerData_Connection() : settings(NULL) {}
+	void setSettingsManager(Model_SettingsManagerData& settings){
+		this->settings = &settings;
+	}
+};
 #endif

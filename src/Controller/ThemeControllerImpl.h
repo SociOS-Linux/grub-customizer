@@ -33,12 +33,12 @@ class ThemeControllerImpl :
 	public ThemeController,
 	public ControllerAbstract,
 	public View_Trait_ViewAware<View_Theme>,
-	public Trait_ThreadControllerAware
+	public Trait_ThreadControllerAware,
+	public Model_ThemeManager_Connection,
+	public Model_SettingsManagerData_Connection,
+	public Model_ListCfg_Connection
 {
 	Model_Env& env;
-	Model_ThemeManager* themeManager;
-	Model_SettingsManagerData* settings;
-	Model_ListCfg* grublistCfg;
 	std::string currentTheme, currentThemeFile;
 	bool syncActive; // should only be controlled by syncSettings()
 	bool isImage(std::string const& fileName);
@@ -47,9 +47,6 @@ class ThemeControllerImpl :
 	void syncFiles();
 public:
 	ThemeControllerImpl(Model_Env& env);
-	void setThemeManager(Model_ThemeManager& themeManager);
-	void setSettingsManager(Model_SettingsManagerData& settings);
-	void setListCfg(Model_ListCfg& grublistCfg);
 
 	void loadThemesAction();
 	void loadThemeAction(std::string const& name);

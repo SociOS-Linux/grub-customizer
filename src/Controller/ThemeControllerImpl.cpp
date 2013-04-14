@@ -21,9 +21,6 @@
 ThemeControllerImpl::ThemeControllerImpl(Model_Env& env)
 	: env(env),
 	  ControllerAbstract("theme"),
-	  themeManager(NULL),
-	  settings(NULL),
-	  grublistCfg(NULL),
 	  syncActive(false)
 {
 }
@@ -133,18 +130,6 @@ bool ThemeControllerImpl::isImage(std::string const& fileName) {
 		}
 	}
 	return false;
-}
-
-void ThemeControllerImpl::setThemeManager(Model_ThemeManager& themeManager) {
-	this->themeManager = &themeManager;
-}
-
-void ThemeControllerImpl::setSettingsManager(Model_SettingsManagerData& settings) {
-	this->settings = &settings;
-}
-
-void ThemeControllerImpl::setListCfg(Model_ListCfg& grublistCfg) {
-	this->grublistCfg = &grublistCfg;
 }
 
 void ThemeControllerImpl::loadThemesAction() {

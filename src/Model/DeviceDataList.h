@@ -31,4 +31,15 @@ public:
 	void loadData(FILE* blkidOutput);
 	void clear();
 };
+
+class Model_DeviceDataList_Connection {
+protected:
+	Model_DeviceDataList* deviceDataList;
+public:
+	Model_DeviceDataList_Connection() : deviceDataList(NULL) {}
+
+	void setDeviceDataList(Model_DeviceDataList& deviceDataList){
+		this->deviceDataList = &deviceDataList;
+	}
+};
 #endif

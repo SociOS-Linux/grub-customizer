@@ -44,5 +44,16 @@ public:
 	std::string getSaveErrors();
 };
 
+class Model_ThemeManager_Connection {
+protected:
+	Model_ThemeManager* themeManager;
+public:
+	Model_ThemeManager_Connection() : themeManager(NULL) {}
+
+	void setThemeManager(Model_ThemeManager& themeManager) {
+		this->themeManager = &themeManager;
+	}
+};
+
 
 #endif /* THEMEMANAGER_H_ */

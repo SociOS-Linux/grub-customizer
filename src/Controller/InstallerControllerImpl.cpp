@@ -20,15 +20,10 @@
 
 InstallerControllerImpl::InstallerControllerImpl(Model_Env& env)
 	: ControllerAbstract("installer"),
-	  installer(NULL),
 	  env(env)
 {
 }
 
-
-void InstallerControllerImpl::setInstaller(Model_Installer& installer){
-	this->installer = &installer;
-}
 
 ThreadController& InstallerControllerImpl::getThreadController() {
 	if (this->threadController == NULL) {

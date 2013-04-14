@@ -20,22 +20,9 @@
 
 EntryEditControllerImpl::EntryEditControllerImpl(Model_Env& env)
 	: ControllerAbstract("entry-edit"),
-	  grublistCfg(NULL),
-	 env(env), contentParserFactory(NULL), currentContentParser(NULL),
-	 deviceDataList(NULL)
+	 env(env),
+	 currentContentParser(NULL)
 {
-}
-
-void EntryEditControllerImpl::setListCfg(Model_ListCfg& grublistCfg){
-	this->grublistCfg = &grublistCfg;
-}
-
-void EntryEditControllerImpl::setContentParserFactory(ContentParserFactory& contentParserFactory) {
-	this->contentParserFactory = &contentParserFactory;
-}
-
-void EntryEditControllerImpl::setDeviceDataList(Model_DeviceDataList& deviceDataList){
-	this->deviceDataList = &deviceDataList;
 }
 
 Model_Script* EntryEditControllerImpl::_createCustomScript() {

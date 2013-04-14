@@ -45,21 +45,20 @@
 #include "Helper/DeviceInfo.h"
 
 
-class TrashControllerImpl : public ControllerAbstract, public TrashController, public View_Trait_ViewAware<View_Trash> {
+class TrashControllerImpl :
+	public ControllerAbstract,
+	public TrashController,
+	public View_Trait_ViewAware<View_Trash>,
+	public Model_ListCfg_Connection,
+	public Mapper_EntryName_Connection,
+	public Model_DeviceDataListInterface_Connection,
+	public ContentParserFactory_Connection
+{
 	Model_Env& env;
-	Model_ListCfg* grublistCfg;
-	Mapper_EntryName* entryNameMapper;
-	Model_DeviceDataListInterface* deviceDataList;
-	ContentParserFactory* contentParserFactory;
 
 	void _refreshView();
 	bool _isDeletable(std::list<Entry*> const& selectedEntries);
 public:
-	void setListCfg(Model_ListCfg& grublistCfg);
-	void setEntryNameMapper(Mapper_EntryName& mapper);
-	void setDeviceDataList(Model_DeviceDataListInterface& deviceDataList);
-	void setContentParserFactory(ContentParserFactory& contentParserFactory);
-
 	TrashControllerImpl(Model_Env& env);
 	
 	void updateAction(std::map<ViewOption, bool> const& viewOptions);
