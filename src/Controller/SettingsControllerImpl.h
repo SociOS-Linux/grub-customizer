@@ -56,9 +56,9 @@ class SettingsControllerImpl :
 	public Trait_ThreadControllerAware,
 	public Model_ListCfg_Connection,
 	public Model_SettingsManagerData_Connection,
-	public Model_FbResolutionsGetter_Connection
+	public Model_FbResolutionsGetter_Connection,
+	public Model_Env_Connection
 {
-	Model_Env& env;
 	bool syncActive; // should only be controlled by syncSettings()
 
 public:
@@ -66,7 +66,7 @@ public:
 	Model_FbResolutionsGetter& getFbResolutionsGetter();
 
 	void showSettingsDlg();
-	SettingsControllerImpl(Model_Env& env);
+	SettingsControllerImpl();
 
 	//dispatchers
 	void updateSettingsDataAction();

@@ -18,9 +18,8 @@
 
 #include "EntryEditControllerImpl.h"
 
-EntryEditControllerImpl::EntryEditControllerImpl(Model_Env& env)
+EntryEditControllerImpl::EntryEditControllerImpl()
 	: ControllerAbstract("entry-edit"),
-	 env(env),
 	 currentContentParser(NULL)
 {
 }
@@ -103,7 +102,7 @@ void EntryEditControllerImpl::applyAction() {
 		rulePtr->dataSource->content = newCode;
 		rulePtr->dataSource->isModified = true;
 
-		this->env.modificationsUnsaved = true;
+		this->env->modificationsUnsaved = true;
 		this->getAllControllers().mainController->syncLoadStateAction();
 
 		assert(this->threadController != NULL);

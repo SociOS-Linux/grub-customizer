@@ -19,9 +19,9 @@
 #include "ErrorControllerImpl.h"
 #include "ThreadController.h"
 
-ErrorControllerImpl::ErrorControllerImpl(Model_Env& env)
+ErrorControllerImpl::ErrorControllerImpl()
 	: ControllerAbstract("error"),
-	  env(env), applicationStarted(false)
+	  applicationStarted(false)
 {
 }
 

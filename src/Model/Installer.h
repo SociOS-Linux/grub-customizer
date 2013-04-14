@@ -24,11 +24,13 @@
 #include "../Controller/Trait/ControllerAware.h"
 #include "../lib/Trait/LoggerAware.h"
 
-class Model_Installer : public Trait_LoggerAware, public Trait_ControllerAware<InstallerController> {
-	Model_Env& env;
+class Model_Installer :
+	public Trait_LoggerAware,
+	public Trait_ControllerAware<InstallerController>,
+	public Model_Env_Connection
+{
 	std::string install_result;
 public:
-	Model_Installer(Model_Env& env);
 	void threadable_install(std::string const& device);
 	std::string install(std::string const& device);
 };

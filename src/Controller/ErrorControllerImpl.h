@@ -40,12 +40,11 @@ class ErrorControllerImpl :
 	public View_Trait_ViewAware<View_Error>,
 	public Trait_ThreadControllerAware
 {
-	Model_Env& env;
 	bool applicationStarted;
 public:
 	void setApplicationStarted(bool val);
 
-	ErrorControllerImpl(Model_Env& env);
+	ErrorControllerImpl();
 	
 	void errorAction(Exception const& e);
 	void errorThreadedAction(Exception const& e);

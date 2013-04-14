@@ -55,7 +55,8 @@
 class Model_ListCfg :
 	public Trait_LoggerAware,
 	public Trait_ControllerAware<MainController>,
-	public Mutex_Connection
+	public Mutex_Connection,
+	public Model_Env_Connection
 {
 	double progress;
 	std::string progress_name;
@@ -64,15 +65,15 @@ class Model_ListCfg :
 
 	Model_ScriptSourceMap scriptSourceMap;
 public:
-	Model_ListCfg(Model_Env& env);
+	Model_ListCfg();
 	void setLogger(Logger& logger);
+	void setEnv(Model_Env& env);
 
 	Model_Proxylist proxies;
 	Model_Repository repository;
 	
 	bool verbose;
 	bool error_proxy_not_found;
-	Model_Env& env;
 	void lock();
 	bool lock_if_free();
 	void unlock();

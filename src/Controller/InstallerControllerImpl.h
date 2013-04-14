@@ -45,13 +45,13 @@ class InstallerControllerImpl :
 	public InstallerController,
 	public View_Trait_ViewAware<View_Installer>,
 	public Trait_ThreadControllerAware,
-	public Model_Installer_Connection
+	public Model_Installer_Connection,
+	public Model_Env_Connection
 {
-	Model_Env& env;
 public:
 	ThreadController& getThreadController();
 
-	InstallerControllerImpl(Model_Env& env);
+	InstallerControllerImpl();
 	
 	void showAction();
 	void installGrubAction(std::string device);

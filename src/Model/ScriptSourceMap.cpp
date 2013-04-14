@@ -18,13 +18,13 @@
 
 #include "ScriptSourceMap.h"
 
-Model_ScriptSourceMap::Model_ScriptSourceMap(Model_Env& env)
-	: env(env), _fileExists(false)
+Model_ScriptSourceMap::Model_ScriptSourceMap()
+	: _fileExists(false)
 {
 }
 
 std::string Model_ScriptSourceMap::_getFilePath() {
-	return this->env.cfg_dir + "/.script_sources.txt";
+	return this->env->cfg_dir + "/.script_sources.txt";
 }
 
 void Model_ScriptSourceMap::load() {
@@ -38,7 +38,7 @@ void Model_ScriptSourceMap::load() {
 		CsvReader csv(file);
 		std::map<std::string, std::string> dataRow;
 		while ((dataRow = csv.read()).size()) {
-			(*this)[this->env.cfg_dir + "/" + dataRow["default_name"]] = this->env.cfg_dir + "/" + dataRow["current_name"];
+			(*this)[this->env->cfg_dir + "/" + dataRow["default_name"]] = this->env->cfg_dir + "/" + dataRow["current_name"];
 		}
 		fclose(file);
 	}
@@ -69,13 +69,13 @@ void Model_ScriptSourceMap::save() {
 		if (iter->first == iter->second) {
 			continue;
 		}
-		if (iter->first.substr(0, this->env.cfg_dir.length()) != this->env.cfg_dir
-		 || iter->second.substr(0, this->env.cfg_dir.length()) != this->env.cfg_dir) {
+		if (iter->first.substr(0, this->env->cfg_dir.length()) != this->env->cfg_dir
+		 || iter->second.substr(0, this->env->cfg_dir.length()) != this->env->cfg_dir) {
 			this->log("invalid script prefix found: script wont be added to source map", Logger::ERROR);
 			continue; // ignore, if path doesn't start with cfg_dir
 		}
-		std::string defaultName = iter->first.substr(this->env.cfg_dir.length() + 1);
-		std::string currentName = iter->second.substr(this->env.cfg_dir.length() + 1);
+		std::string defaultName = iter->first.substr(this->env->cfg_dir.length() + 1);
+		std::string currentName = iter->second.substr(this->env->cfg_dir.length() + 1);
 		std::map<std::string, std::string> dataRow;
 		dataRow["default_name"] = defaultName;
 		dataRow["current_name"] = currentName;

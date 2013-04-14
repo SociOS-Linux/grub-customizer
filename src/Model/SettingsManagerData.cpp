@@ -18,8 +18,8 @@
 
 #include "SettingsManagerData.h"
 
-Model_SettingsManagerData::Model_SettingsManagerData(Model_Env& env)
-	: _reloadRequired(false), env(env), color_helper_required(false), grubFontSize(-1)
+Model_SettingsManagerData::Model_SettingsManagerData()
+	: _reloadRequired(false), color_helper_required(false), grubFontSize(-1)
 {
 }
 
@@ -79,8 +79,8 @@ std::string Model_SettingsManagerData::mkFont(std::string fontFile) {
 			return ""; // fehler
 		}
 	}
-	std::string output = this->env.output_config_dir + "/unicode.pf2";
-	FILE* mkfont_proc = popen((this->env.mkfont_cmd + " --output='" + str_replace("'", "\\'", output) + "'" + sizeParam + " '" + str_replace("'", "\\'", fontFile) + "' 2>&1").c_str(), "r");
+	std::string output = this->env->output_config_dir + "/unicode.pf2";
+	FILE* mkfont_proc = popen((this->env->mkfont_cmd + " --output='" + str_replace("'", "\\'", output) + "'" + sizeParam + " '" + str_replace("'", "\\'", fontFile) + "' 2>&1").c_str(), "r");
 	int c;
 //	std::string row = "";
 	while ((c = fgetc(mkfont_proc)) != EOF) {
@@ -92,7 +92,7 @@ std::string Model_SettingsManagerData::mkFont(std::string fontFile) {
 	}
 	int result = pclose(mkfont_proc);
 	if (result != 0) {
-		this->log("error running " + this->env.mkfont_cmd, Logger::ERROR);
+		this->log("error running " + this->env->mkfont_cmd, Logger::ERROR);
 		return "";
 	}
 	this->setValue("GRUB_FONT", output);
@@ -102,7 +102,7 @@ std::string Model_SettingsManagerData::mkFont(std::string fontFile) {
 bool Model_SettingsManagerData::load(){
 	settings.clear();
 
-	FILE* file = fopen(this->env.settings_file.c_str(), "r");
+	FILE* file = fopen(this->env->settings_file.c_str(), "r");
 	if (file){
 		Model_SettingsStore::load(file);
 		this->grubFontSize = -1;
@@ -137,7 +137,7 @@ if [ \"${GRUB_MENU_PICTURE}\" ] ; then\n\
    WALLPAPER=\"${GRUB_MENU_PICTURE}\"\n\
 fi\n";
 
-	FILE* outFile = fopen(this->env.settings_file.c_str(), "w");
+	FILE* outFile = fopen(this->env->settings_file.c_str(), "w");
 	if (outFile){
 		if (this->oldFontFile != "") {
 			remove(this->oldFontFile.c_str());
@@ -157,29 +157,29 @@ fi\n";
 			}
 			fputs((iter->getOutput()).c_str(), outFile);
 
-			if (!background_script_required && !this->env.useDirectBackgroundProps && (iter->name == "GRUB_MENU_PICTURE" || iter->name == "GRUB_COLOR_NORMAL" || iter->name == "GRUB_COLOR_HIGHLIGHT")) {
+			if (!background_script_required && !this->env->useDirectBackgroundProps && (iter->name == "GRUB_MENU_PICTURE" || iter->name == "GRUB_COLOR_NORMAL" || iter->name == "GRUB_COLOR_HIGHLIGHT")) {
 				background_script_required = true;
 				isGraphical = true;
 			}
-			if (this->env.useDirectBackgroundProps && (iter->name == "GRUB_COLOR_NORMAL" || iter->name == "GRUB_COLOR_HIGHLIGHT")) {
+			if (this->env->useDirectBackgroundProps && (iter->name == "GRUB_COLOR_NORMAL" || iter->name == "GRUB_COLOR_HIGHLIGHT")) {
 				this->color_helper_required = true;
 				isGraphical = true;
 			}
-			if (iter->name == "GRUB_BACKGROUND" && this->env.useDirectBackgroundProps) {
+			if (iter->name == "GRUB_BACKGROUND" && this->env->useDirectBackgroundProps) {
 				isGraphical = true;
 			}
 		}
 		fclose(outFile);
 		if (background_script_required){
-			mkdir((env.cfg_dir_prefix+"/usr/share/desktop-base").c_str(), 0755);
-			FILE* bgScriptFile = fopen((env.cfg_dir_prefix+"/usr/share/desktop-base/grub_background.sh").c_str(), "w");
-			chmod((env.cfg_dir_prefix+"/usr/share/desktop-base/grub_background.sh").c_str(), 0755);
+			mkdir((env->cfg_dir_prefix+"/usr/share/desktop-base").c_str(), 0755);
+			FILE* bgScriptFile = fopen((env->cfg_dir_prefix+"/usr/share/desktop-base/grub_background.sh").c_str(), "w");
+			chmod((env->cfg_dir_prefix+"/usr/share/desktop-base/grub_background.sh").c_str(), 0755);
 			fputs(background_script, bgScriptFile);
 			fclose(bgScriptFile);
 		}
 
 		if (isGraphical && generatedFont == "") {
-			FILE* fontFile = fopen((this->env.output_config_dir + "/unicode.pf2").c_str(), "r");
+			FILE* fontFile = fopen((this->env->output_config_dir + "/unicode.pf2").c_str(), "r");
 			if (fontFile) {
 				this->log("font file exists", Logger::INFO);
 				fclose(fontFile);

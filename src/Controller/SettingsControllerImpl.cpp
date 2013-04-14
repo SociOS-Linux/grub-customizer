@@ -18,9 +18,8 @@
 
 #include "SettingsControllerImpl.h"
 
-SettingsControllerImpl::SettingsControllerImpl(Model_Env& env)
+SettingsControllerImpl::SettingsControllerImpl()
 	: ControllerAbstract("settings"),
-	 env(env),
 	 syncActive(false)
 {
 }
@@ -64,7 +63,7 @@ void SettingsControllerImpl::updateSettingsDataAction(){
 }
 
 void SettingsControllerImpl::showSettingsDlg(){
-	this->view->show(env.burgMode);
+	this->view->show(env->burgMode);
 }
 
 void SettingsControllerImpl::updateResolutionlistAction(){
@@ -155,7 +154,7 @@ void SettingsControllerImpl::updateDefaultSystemAction(){
 			this->settings->setValue("GRUB_SAVEDEFAULT", "false");
 		}
 		this->syncSettings();
-		this->env.modificationsUnsaved = true;
+		this->env->modificationsUnsaved = true;
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
@@ -170,7 +169,7 @@ void SettingsControllerImpl::updateCustomSettingAction(std::string const& name){
 		this->settings->setValue(c.name, c.value);
 		this->settings->setIsActive(c.name, c.isActive);
 		this->syncSettings();
-		this->env.modificationsUnsaved = true;
+		this->env->modificationsUnsaved = true;
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
@@ -192,7 +191,7 @@ void SettingsControllerImpl::removeCustomSettingAction(std::string const& name){
 	try {
 		this->settings->removeItem(name);
 		this->syncSettings();
-		this->env.modificationsUnsaved = true;
+		this->env->modificationsUnsaved = true;
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
@@ -211,7 +210,7 @@ void SettingsControllerImpl::updateShowMenuSettingAction(){
 			this->view->showHiddenMenuOsProberConflictMessage();
 		}
 		this->syncSettings();
-		this->env.modificationsUnsaved = true;
+		this->env->modificationsUnsaved = true;
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
@@ -224,7 +223,7 @@ void SettingsControllerImpl::updateOsProberSettingAction(){
 		this->settings->setValue("GRUB_DISABLE_OS_PROBER", this->view->getOsProberCheckboxState() ? "false" : "true");
 		this->settings->setIsActive("GRUB_DISABLE_OS_PROBER", !this->view->getOsProberCheckboxState());
 		this->syncSettings();
-		this->env.modificationsUnsaved = true;
+		this->env->modificationsUnsaved = true;
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
@@ -236,7 +235,7 @@ void SettingsControllerImpl::updateKernelParamsAction(){
 	try {
 		this->settings->setValue("GRUB_CMDLINE_LINUX_DEFAULT", this->view->getKernelParams());
 		this->syncSettings();
-		this->env.modificationsUnsaved = true;
+		this->env->modificationsUnsaved = true;
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
@@ -251,7 +250,7 @@ void SettingsControllerImpl::updateUseCustomResolutionAction(){
 		}
 		this->settings->setIsActive("GRUB_GFXMODE", this->view->getResolutionCheckboxState());
 		this->syncSettings();
-		this->env.modificationsUnsaved = true;
+		this->env->modificationsUnsaved = true;
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
@@ -293,7 +292,7 @@ void SettingsControllerImpl::updateTimeoutSettingAction(){
 			this->settings->setValue("GRUB_HIDDEN_TIMEOUT", this->view->getTimeoutValueString());
 		}
 		this->syncSettings();
-		this->env.modificationsUnsaved = true;
+		this->env->modificationsUnsaved = true;
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
@@ -305,7 +304,7 @@ void SettingsControllerImpl::updateCustomResolutionAction(){
 	try {
 		this->settings->setValue("GRUB_GFXMODE", this->view->getResolution());
 		this->syncSettings();
-		this->env.modificationsUnsaved = true;
+		this->env->modificationsUnsaved = true;
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
@@ -328,7 +327,7 @@ void SettingsControllerImpl::updateRecoverySettingAction(){
 		this->settings->setIsActive("GRUB_DISABLE_RECOVERY", !this->view->getRecoveryCheckboxState());
 
 		this->syncSettings();
-		this->env.modificationsUnsaved = true;
+		this->env->modificationsUnsaved = true;
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}

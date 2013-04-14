@@ -18,9 +18,8 @@
 
 #include "AboutControllerImpl.h"
 
-AboutControllerImpl::AboutControllerImpl(Model_Env& env)
-	: ControllerAbstract("about"),
-	  env(env)
+AboutControllerImpl::AboutControllerImpl()
+	: ControllerAbstract("about")
 {
 }
 

@@ -64,9 +64,9 @@ class MainControllerImpl :
 	public Model_DeviceDataList_Connection,
 	public Model_MountTable_Connection,
 	public ContentParserFactory_Connection,
-	public Mapper_EntryName_Connection
+	public Mapper_EntryName_Connection,
+	public Model_Env_Connection
 {
-	Model_Env& env;
 	Model_SettingsManagerData* settingsOnDisk; //buffer for the existing settings
 	Model_ListCfg* savedListCfg;
 	ContentParser* currentContentParser;
@@ -104,7 +104,7 @@ public:
 	void loadThreadedAction(bool preserveConfig = false);
 	void saveAction();
 	void saveThreadedAction();
-	MainControllerImpl(Model_Env& env);
+	MainControllerImpl();
 	
 public:
 	void renameEntry(Model_Rule* rule, std::string const& newName);

@@ -67,4 +67,15 @@ public:
 	operator ArrayStructure();
 };
 
+class Model_Env_Connection {
+protected:
+	Model_Env* env;
+public:
+	Model_Env_Connection() : env(NULL) {}
+
+	void setEnv(Model_Env& env) {
+		this->env = &env;
+	}
+};
+
 #endif

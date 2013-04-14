@@ -36,9 +36,9 @@ class ThemeControllerImpl :
 	public Trait_ThreadControllerAware,
 	public Model_ThemeManager_Connection,
 	public Model_SettingsManagerData_Connection,
-	public Model_ListCfg_Connection
+	public Model_ListCfg_Connection,
+	public Model_Env_Connection
 {
-	Model_Env& env;
 	std::string currentTheme, currentThemeFile;
 	bool syncActive; // should only be controlled by syncSettings()
 	bool isImage(std::string const& fileName);
@@ -46,7 +46,7 @@ class ThemeControllerImpl :
 	void syncSettings();
 	void syncFiles();
 public:
-	ThemeControllerImpl(Model_Env& env);
+	ThemeControllerImpl();
 
 	void loadThemesAction();
 	void loadThemeAction(std::string const& name);

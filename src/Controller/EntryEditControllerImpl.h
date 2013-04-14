@@ -50,13 +50,13 @@ class EntryEditControllerImpl :
 	public Trait_ThreadControllerAware,
 	public Model_ListCfg_Connection,
 	public ContentParserFactory_Connection,
-	public Model_DeviceDataListInterface_Connection
+	public Model_DeviceDataListInterface_Connection,
+	public Model_Env_Connection
 {
-	Model_Env& env;
 	ContentParser* currentContentParser;
 	Model_Script* _createCustomScript();
 public:
-	EntryEditControllerImpl(Model_Env& env);
+	EntryEditControllerImpl();
 
 	void showAction(Rule* rule);
 	void showCreatorAction();

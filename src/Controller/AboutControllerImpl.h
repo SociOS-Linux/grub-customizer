@@ -33,10 +33,13 @@
 
 #include "AboutController.h"
 
-class AboutControllerImpl : public ControllerAbstract, public AboutController, public View_Trait_ViewAware<View_About> {
-	Model_Env& env;
+class AboutControllerImpl :
+	public ControllerAbstract,
+	public AboutController,
+	public View_Trait_ViewAware<View_About>
+{
 public:
-	AboutControllerImpl(Model_Env& env);
+	AboutControllerImpl();
 	
 	void showAction();
 };

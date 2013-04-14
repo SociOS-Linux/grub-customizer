@@ -39,9 +39,9 @@
 class EnvEditorControllerImpl :
 	public ControllerAbstract,
 	public EnvEditorController,
-	public View_Trait_ViewAware<View_EnvEditor>
+	public View_Trait_ViewAware<View_EnvEditor>,
+	public Model_Env_Connection
 {
-	Model_Env& env;
 	Model_MountTable* mountTable;
 
 public:
@@ -49,7 +49,7 @@ public:
 
 	void showAction(bool resetPartitionChooser = false);
 
-	EnvEditorControllerImpl(Model_Env& env);
+	EnvEditorControllerImpl();
 	
 	//partition chooser
 	void mountSubmountpointAction(std::string const& submountpoint);

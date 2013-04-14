@@ -18,9 +18,8 @@
 
 #include "TrashControllerImpl.h"
 
-TrashControllerImpl::TrashControllerImpl(Model_Env& env)
-	: ControllerAbstract("trash"),
-	  env(env)
+TrashControllerImpl::TrashControllerImpl()
+	: ControllerAbstract("trash")
 {
 }
 

@@ -52,14 +52,13 @@ class TrashControllerImpl :
 	public Model_ListCfg_Connection,
 	public Mapper_EntryName_Connection,
 	public Model_DeviceDataListInterface_Connection,
-	public ContentParserFactory_Connection
+	public ContentParserFactory_Connection,
+	public Model_Env_Connection
 {
-	Model_Env& env;
-
 	void _refreshView();
 	bool _isDeletable(std::list<Entry*> const& selectedEntries);
 public:
-	TrashControllerImpl(Model_Env& env);
+	TrashControllerImpl();
 	
 	void updateAction(std::map<ViewOption, bool> const& viewOptions);
 	void applyAction();
