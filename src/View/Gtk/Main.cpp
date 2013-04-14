@@ -44,7 +44,7 @@ View_Gtk_Main::View_Gtk_Main()
 	bbxAdvancedSettings1(Gtk::BUTTONBOX_END), bbxAdvancedSettings2(Gtk::BUTTONBOX_END),
 	lblReloadRequired(gettext("The modifications you've done affects the visible entries. Please reload!"), Pango::ALIGN_LEFT),
 	lblScriptUpdatesFound(gettext("Script updates found. Click save to apply the changes!"), Pango::ALIGN_LEFT),
-	trashList(NULL)
+	trashList(NULL), Trait_ControllerAware<MainController>()
 {
 	win.set_icon_name("grub-customizer");
 
@@ -260,10 +260,6 @@ View_Gtk_Main::View_Gtk_Main()
 	notebook.signal_switch_page().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_tab_changed));
 }
 
-void View_Gtk_Main::setEventListener(MainController& eventListener) {
-	this->eventListener = &eventListener;
-}
-
 void View_Gtk_Main::putSettingsDialog(Gtk::VBox& commonSettingsPane, Gtk::VBox& appearanceSettingsPane) {
 //	notebook.append_page(this->settingsHBox, "_settings", true);
 	commonSettingsPane.set_border_width(20);
@@ -310,7 +306,7 @@ bool View_Gtk_Main::signal_popup() {
 
 void View_Gtk_Main::signal_key_press(GdkEventKey* key) {
 	if (key->keyval == GDK_KEY_Delete) {
-		this->eventListener->removeRulesAction(this->getSelectedRules());
+		this->controller->removeRulesAction(this->getSelectedRules());
 	}
 }
 
@@ -319,43 +315,43 @@ void View_Gtk_Main::signal_revert() {
 	msgDlg.set_secondary_text(gettext("This removes all your list modifications of the bootloader menu!"));
 	int response = msgDlg.run();
 	if (response == Gtk::RESPONSE_OK) {
-		this->eventListener->revertAction();
+		this->controller->revertAction();
 	}
 }
 
 void View_Gtk_Main::signal_reload_recommendation_response(int response_id) {
 	if (response_id == Gtk::RESPONSE_APPLY) {
-		this->eventListener->reloadAction();
+		this->controller->reloadAction();
 	}
 }
 
 void View_Gtk_Main::signal_tab_changed(Gtk::Widget* page, guint page_num) {
-	if (this->eventListener && this->lock_state == 0) { // this->eventListener must be called because this event may be propagated from bootstrap
-		this->eventListener->refreshTabAction(page_num);
+	if (this->controller && this->lock_state == 0) { // this->eventListener must be called because this event may be propagated from bootstrap
+		this->controller->refreshTabAction(page_num);
 	}
 }
 
 void View_Gtk_Main::signal_viewopt_details_toggled() {
-	if (this->eventListener) {
-		this->eventListener->setViewOptionAction(VIEW_SHOW_DETAILS, this->miShowDetails.get_active());
+	if (this->controller) {
+		this->controller->setViewOptionAction(VIEW_SHOW_DETAILS, this->miShowDetails.get_active());
 	}
 }
 
 void View_Gtk_Main::signal_viewopt_checkboxes_toggled() {
-	if (this->eventListener) {
-		this->eventListener->setViewOptionAction(VIEW_SHOW_HIDDEN_ENTRIES, this->miShowHiddenEntries.get_active());
+	if (this->controller) {
+		this->controller->setViewOptionAction(VIEW_SHOW_HIDDEN_ENTRIES, this->miShowHiddenEntries.get_active());
 	}
 }
 
 void View_Gtk_Main::signal_viewopt_script_toggled() {
-	if (this->eventListener) {
-		this->eventListener->setViewOptionAction(VIEW_GROUP_BY_SCRIPT, this->miGroupByScript.get_active());
+	if (this->controller) {
+		this->controller->setViewOptionAction(VIEW_GROUP_BY_SCRIPT, this->miGroupByScript.get_active());
 	}
 }
 
 void View_Gtk_Main::signal_viewopt_placeholders_toggled() {
-	if (this->eventListener) {
-		this->eventListener->setViewOptionAction(VIEW_SHOW_PLACEHOLDERS, this->miShowPlaceholders.get_active());
+	if (this->controller) {
+		this->controller->setViewOptionAction(VIEW_SHOW_PLACEHOLDERS, this->miShowPlaceholders.get_active());
 	}
 }
 
@@ -450,7 +446,7 @@ std::string View_Gtk_Main::createPlaintextString(std::string const& scriptName) 
 }
 
 void View_Gtk_Main::saveConfig(){
-	eventListener->saveAction();
+	controller->saveAction();
 }
 
 
@@ -600,12 +596,12 @@ void View_Gtk_Main::_rDisableRules(Gtk::TreeNodeChildren const& list) {
 
 
 void View_Gtk_Main::signal_reload_click(){
-	eventListener->reloadAction();
+	controller->reloadAction();
 }
 
 void View_Gtk_Main::signal_checkbox_toggled(Glib::ustring const& path) {
 	if (!this->lock_state) {
-		this->eventListener->entryStateToggledAction(
+		this->controller->entryStateToggledAction(
 			(*this->tvConfList.refTreeStore->get_iter(path))[this->tvConfList.treeModel.relatedRule],
 			!(*this->tvConfList.refTreeStore->get_iter(path))[this->tvConfList.treeModel.is_activated]
 		);
@@ -615,12 +611,12 @@ void View_Gtk_Main::signal_checkbox_toggled(Glib::ustring const& path) {
 void View_Gtk_Main::signal_edit_name_finished(const Glib::ustring& path, const Glib::ustring& new_text){
 	if (this->lock_state == 0){
 		Gtk::TreeModel::iterator iter = this->tvConfList.refTreeStore->get_iter(path);
-		eventListener->renameRuleAction((Rule*)(*iter)[tvConfList.treeModel.relatedRule], new_text);
+		controller->renameRuleAction((Rule*)(*iter)[tvConfList.treeModel.relatedRule], new_text);
 	}
 }
 
 void View_Gtk_Main::signal_show_envEditor(){
-	eventListener->showEnvEditorAction();
+	controller->showEnvEditorAction();
 }
 
 
@@ -667,7 +663,7 @@ void View_Gtk_Main::showPlaintextRemoveWarning() {
 	dlg.set_default_response(Gtk::RESPONSE_OK);
 	int result = dlg.run();
 	if (result == Gtk::RESPONSE_YES) {
-		eventListener->removeRulesAction(this->getSelectedRules(), true);
+		controller->removeRulesAction(this->getSelectedRules(), true);
 	}
 }
 
@@ -676,7 +672,7 @@ void View_Gtk_Main::showSystemRuleRemoveWarning() {
 	dlg.set_default_response(Gtk::RESPONSE_OK);
 	int result = dlg.run();
 	if (result == Gtk::RESPONSE_OK) {
-		eventListener->removeRulesAction(this->getSelectedRules(), true);
+		controller->removeRulesAction(this->getSelectedRules(), true);
 	}
 }
 
@@ -718,7 +714,7 @@ void View_Gtk_Main::signal_move_click(int direction){
 		assert(direction == 1 || direction == -1);
 
 		//if rule swap
-		eventListener->moveAction(this->getSelectedRules(), direction);
+		controller->moveAction(this->getSelectedRules(), direction);
 	}
 }
 
@@ -756,7 +752,7 @@ void View_Gtk_Main::signal_treeview_selection_changed(){
 			}
 		}
 
-		this->eventListener->updateSelectionAction(this->getSelectedRules());
+		this->controller->updateSelectionAction(this->getSelectedRules());
 
 		this->updateButtonsState();
 	}
@@ -765,15 +761,15 @@ void View_Gtk_Main::signal_treeview_selection_changed(){
 void View_Gtk_Main::signal_entry_edit_click() {
 	std::list<Rule*> rules = this->getSelectedRules();
 	assert(rules.size() == 1);
-	eventListener->showEntryEditorAction(rules.front());
+	controller->showEntryEditorAction(rules.front());
 }
 
 void View_Gtk_Main::signal_entry_create_click() {
-	eventListener->showEntryCreatorAction();
+	controller->showEntryCreatorAction();
 }
 
 void View_Gtk_Main::signal_remove_click() {
-	eventListener->removeRulesAction(this->getSelectedRules());
+	controller->removeRulesAction(this->getSelectedRules());
 }
 
 void View_Gtk_Main::signal_rename_click() {
@@ -781,7 +777,7 @@ void View_Gtk_Main::signal_rename_click() {
 }
 
 void View_Gtk_Main::signal_preference_click(){
-	eventListener->showSettingsAction();
+	controller->showSettingsAction();
 }
 
 void View_Gtk_Main::update_move_buttons(){
@@ -877,25 +873,25 @@ int View_Gtk_Main::showExitConfirmDialog(int type){
 }
 
 bool View_Gtk_Main::signal_delete_event(GdkEventAny* event){ //return value: keep window open
-	eventListener->exitAction();
+	controller->exitAction();
 	return true;
 }
 
 void View_Gtk_Main::signal_quit_click(){
-	eventListener->exitAction();
+	controller->exitAction();
 }
 
 
 void View_Gtk_Main::signal_show_grub_install_dialog_click(){
-	eventListener->showInstallerAction();
+	controller->showInstallerAction();
 }
 
 void View_Gtk_Main::signal_move_left_click() {
-	eventListener->removeSubmenuAction(this->getSelectedRules());
+	controller->removeSubmenuAction(this->getSelectedRules());
 }
 
 void View_Gtk_Main::signal_move_right_click() {
-	eventListener->createSubmenuAction(this->getSelectedRules());
+	controller->createSubmenuAction(this->getSelectedRules());
 }
 
 void View_Gtk_Main::showErrorMessage(std::string const& msg, std::vector<std::string> const& values = std::vector<std::string>()){
@@ -937,13 +933,13 @@ bool View_Gtk_Main::confirmUnsavedSwitch() {
 }
 
 void View_Gtk_Main::signal_info_click(){
-	eventListener->showAboutAction();
+	controller->showAboutAction();
 }
 
 void View_Gtk_Main::signal_burg_switcher_response(int response_id){
 	if (response_id == Gtk::RESPONSE_DELETE_EVENT)
-		eventListener->cancelBurgSwitcherAction();
+		controller->cancelBurgSwitcherAction();
 	else
-		eventListener->initModeAction(response_id == Gtk::RESPONSE_YES);
+		controller->initModeAction(response_id == Gtk::RESPONSE_YES);
 }
 

@@ -16,22 +16,18 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#include "Error.h"
+#ifndef TRAIT_CONTROLLERAWARE_H_
+#define TRAIT_CONTROLLERAWARE_H_
 
-View_Gtk_Error::View_Gtk_Error()
-	: Trait_ControllerAware<ErrorController>()
-{
-}
+template <typename T>
+class Trait_ControllerAware {
+protected:
+	T* controller;
+public:
+	Trait_ControllerAware() : controller(NULL) {}
+	void setController(T& controller) {
+		this->controller = &controller;
+	}
+};
 
-void View_Gtk_Error::showErrorMessage(std::string const& errorMessage, bool allowContinue) {
-	Gtk::MessageDialog msgDlg(gettext("An error occurred"), false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_NONE, true);
-	msgDlg.set_secondary_text(gettext("please Inform the author about this problem. The following information could be helpful:") + std::string("\n\n") + errorMessage);
-	msgDlg.set_title(gettext("An error occurred"));
-	msgDlg.add_button(Gtk::Stock::QUIT, Gtk::RESPONSE_CLOSE);
-	if (allowContinue) {
-		msgDlg.add_button(gettext("continue (risk data loss)"), Gtk::RESPONSE_CANCEL);
-	}
-	if (msgDlg.run() == Gtk::RESPONSE_CLOSE) {
-		this->controller->quitAction();
-	}
-}
+#endif /* TRAIT_CONTROLLERAWARE_H_ */

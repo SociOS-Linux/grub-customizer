@@ -27,6 +27,7 @@
 #include "../../lib/str_replace.h"
 #include "../../lib/assert.h"
 #include "../../Controller/MainController.h"
+#include "../../Controller/Trait/ControllerAware.h"
 #include "../../lib/Type.h"
 #include "Element/List.h"
 
@@ -35,8 +36,7 @@ class ImageMenuItemOwnKey : public Gtk::ImageMenuItem {
 	ImageMenuItemOwnKey(const Gtk::StockID& id, const Gtk::AccelKey& accel_key);
 };
 
-class View_Gtk_Main : public View_Main, public Trait_LoggerAware {
-	MainController* eventListener;
+class View_Gtk_Main : public View_Main, public Trait_LoggerAware, public Trait_ControllerAware<MainController> {
 	Gtk::Window win;
 	Gtk::VBox vbMainSplit;
 	Gtk::Notebook notebook;
@@ -97,7 +97,6 @@ class View_Gtk_Main : public View_Main, public Trait_LoggerAware {
 	void _rDisableRules(Gtk::TreeNodeChildren const& list);
 public:
 	View_Gtk_Main();
-	void setEventListener(MainController& eventListener);
 	void putSettingsDialog(Gtk::VBox& commonSettingsPane, Gtk::VBox& appearanceSettingsPane);
 	void putEnvEditor(Gtk::Widget& envEditor);
 	void putTrashList(Gtk::Widget& trashList);

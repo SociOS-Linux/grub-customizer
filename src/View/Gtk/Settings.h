@@ -25,10 +25,16 @@
 #include <string>
 #include "../../lib/Trait/LoggerAware.h"
 #include "../../Controller/SettingsController.h"
+#include "../../Controller/Trait/ControllerAware.h"
 #include "../../lib/assert.h"
 
 
-class View_Gtk_Settings : public Gtk::Dialog, public View_Settings, public Trait_LoggerAware {
+class View_Gtk_Settings :
+	public Gtk::Dialog,
+	public View_Settings,
+	public Trait_LoggerAware,
+	public Trait_ControllerAware<SettingsController>
+{
 	struct AdvancedSettingsTreeModel : public Gtk::TreeModelColumnRecord {
 		Gtk::TreeModelColumn<bool> active;
 		Gtk::TreeModelColumn<Glib::ustring> name;
@@ -42,7 +48,6 @@ class View_Gtk_Settings : public Gtk::Dialog, public View_Settings, public Trait
 	AdvancedSettingsTreeModel asTreeModel;
 	Glib::RefPtr<Gtk::ListStore> refAsListStore;
 	bool event_lock;
-	SettingsController* eventListener;
 	
 	Gtk::Notebook tabbox;
 	Gtk::ScrolledWindow scrAllEntries;
@@ -113,7 +118,6 @@ class View_Gtk_Settings : public Gtk::Dialog, public View_Settings, public Trait
 	void on_response(int response_id);
 	public:
 	View_Gtk_Settings();
-	void setEventListener(SettingsController& eventListener);
 	Gtk::VBox& getCommonSettingsPane();
 	Gtk::VBox& getAppearanceSettingsPane();
 	void show(bool burgMode);

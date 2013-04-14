@@ -20,13 +20,19 @@
 #define ENTRY_ADD_DLG_INCLUDED
 #include <gtkmm.h>
 #include "../../Controller/TrashController.h"
+#include "../../Controller/Trait/ControllerAware.h"
 #include "../Trash.h"
 #include <libintl.h>
 #include "../../lib/Trait/LoggerAware.h"
 #include "../../lib/Type.h"
 #include "Element/List.h"
 
-class View_Gtk_Trash : public Gtk::Window, public View_Trash, public Trait_LoggerAware {
+class View_Gtk_Trash :
+	public Gtk::Window,
+	public View_Trash,
+	public Trait_LoggerAware,
+	public Trait_ControllerAware<TrashController>
+{
 	Gtk::ScrolledWindow scrEntryBox;
 	View_Gtk_Element_List<Entry, Script> list;
 	Gtk::Frame frmList;
@@ -35,7 +41,7 @@ class View_Gtk_Trash : public Gtk::Window, public View_Trash, public Trait_Logge
 	Gtk::Button bttRestore;
 	Gtk::Button bttDelete;
 
-	TrashController* eventListener;
+	TrashController* controller;
 	std::map<ViewOption, bool> options;
 
 	Gtk::MenuItem miContext;
@@ -46,7 +52,6 @@ class View_Gtk_Trash : public Gtk::Window, public View_Trash, public Trait_Logge
 	bool event_lock;
 public:
 	View_Gtk_Trash();
-	void setEventListener(TrashController& eventListener);
 	void signal_item_dblClick(Gtk::TreeModel::Path const& path, Gtk::TreeViewColumn* column);
 	void restore_button_click();
 	void delete_button_click();

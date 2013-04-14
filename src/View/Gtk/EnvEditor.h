@@ -21,13 +21,18 @@
 #include <gtkmm.h>
 #include <libintl.h>
 #include "../../lib/Trait/LoggerAware.h"
+#include "../../Controller/Trait/ControllerAware.h"
 #include "../EnvEditor.h"
 #include "Element/PartitionChooser.h"
 #include "../../Model/DeviceDataListInterface.h"
 #include "../../Controller/EnvEditorController.h"
 
-class View_Gtk_EnvEditor : public Gtk::Dialog, public View_EnvEditor, public Trait_LoggerAware {
-	EnvEditorController* eventListener;
+class View_Gtk_EnvEditor :
+	public Gtk::Dialog,
+	public View_EnvEditor,
+	public Trait_LoggerAware,
+	public Trait_ControllerAware<EnvEditorController>
+{
 	Gtk::VBox vbContent;
 	Gtk::Table tblLayout;
 	Gtk::Label lblPartition;
@@ -51,7 +56,6 @@ class View_Gtk_EnvEditor : public Gtk::Dialog, public View_EnvEditor, public Tra
 public:
 	View_Gtk_EnvEditor();
 	~View_Gtk_EnvEditor();
-	void setEventListener(EnvEditorController& eventListener);
 	void setDeviceDataList(Model_DeviceDataListInterface& deviceDataList);
 	void setRootDeviceName(std::string const& rootDeviceName);
 	void setEnvSettings(std::map<std::string, std::string> const& props, std::list<std::string> const& requiredProps, std::list<std::string> const& validProps);

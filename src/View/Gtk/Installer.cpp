@@ -20,7 +20,7 @@
 
 View_Gtk_Installer::View_Gtk_Installer()
 	: lblDescription(gettext("Install the bootloader to MBR and put some\nfiles to the bootloaders data directory\n(if they don't already exist)."), Pango::ALIGN_LEFT)
-	, lblDevice(gettext("_Device: "), Pango::ALIGN_LEFT, Pango::ALIGN_CENTER, true)
+	, lblDevice(gettext("_Device: "), Pango::ALIGN_LEFT, Pango::ALIGN_CENTER, true), Trait_ControllerAware<InstallerController>()
 {
 	Gtk::Box* vbDialog = this->get_vbox();
 	this->set_icon_name("grub-customizer");
@@ -70,7 +70,7 @@ void View_Gtk_Installer::signal_grub_install_dialog_response(int response_id){
 			txtDevice.set_sensitive(false);
 			lblInstallInfo.set_text(gettext("installing the bootloader…"));
 			
-			eventListener->installGrubAction(txtDevice.get_text());
+			controller->installGrubAction(txtDevice.get_text());
 		}
 		else
 			Gtk::MessageDialog(gettext("Please type a device string!")).run();
@@ -82,10 +82,6 @@ void View_Gtk_Installer::signal_grub_install_dialog_response(int response_id){
 void View_Gtk_Installer::showMessageGrubInstallCompleted(std::string const& msg){
 	this->install_result = msg;
 	disp_grub_install_ready();
-}
-
-void View_Gtk_Installer::setEventListener(InstallerController& eventListener) {
-	this->eventListener = &eventListener;
 }
 
 void View_Gtk_Installer::show(){

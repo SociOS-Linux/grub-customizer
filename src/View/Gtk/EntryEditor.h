@@ -24,15 +24,20 @@
 #include <libintl.h>
 #include <gtkmm.h>
 #include "../../Controller/EntryEditController.h"
+#include "../../Controller/Trait/ControllerAware.h"
 #include "EntryEditor.h"
 #include "../../Model/DeviceDataListInterface.h"
 #include "Element/PartitionChooser.h"
 
-class View_Gtk_EntryEditor : public View_EntryEditor, public Gtk::Dialog, public Trait_LoggerAware {
+class View_Gtk_EntryEditor :
+	public View_EntryEditor,
+	public Gtk::Dialog,
+	public Trait_LoggerAware,
+	public Trait_ControllerAware<EntryEditController>
+{
 	Gtk::Notebook tabbox;
 	Gtk::TextView tvSource;
 	Gtk::ScrolledWindow scrSource;
-	EntryEditController* eventListener;
 	Model_DeviceDataListInterface* deviceDataList;
 	Gtk::ScrolledWindow scrOptions;
 	Gtk::Table tblOptions;
@@ -47,7 +52,6 @@ protected:
 	virtual std::string mapOptionName(std::string const& name);
 public:
 	View_Gtk_EntryEditor();
-	void setEventListener(EntryEditController& eventListener);
 	void setDeviceDataList(Model_DeviceDataListInterface& deviceDataList);
 	void setSourcecode(std::string const& source);
 	std::string getSourcecode();

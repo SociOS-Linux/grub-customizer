@@ -20,17 +20,22 @@
 #define GRUB_INSTALL_DLG_GTK_INCLUDED
 #include <gtkmm.h>
 #include "../../Controller/InstallerController.h"
+#include "../../Controller/Trait/ControllerAware.h"
 #include <libintl.h>
 #include "../Installer.h"
 #include "../../lib/Trait/LoggerAware.h"
 
-class View_Gtk_Installer : public Gtk::Dialog, public View_Installer, public Trait_LoggerAware {
+class View_Gtk_Installer :
+	public Gtk::Dialog,
+	public View_Installer,
+	public Trait_LoggerAware,
+	public Trait_ControllerAware<InstallerController>
+{
 	Gtk::Label lblDescription;
 	Gtk::HBox hbDevice;
 	Gtk::Label lblDevice, lblInstallInfo;
 	Gtk::Entry txtDevice;
 	Glib::Dispatcher disp_grub_install_ready;
-	InstallerController* eventListener;
 	void func_disp_grub_install_ready();
 	void signal_grub_install_dialog_response(int response_id);
 	Glib::ustring install_result;
@@ -38,6 +43,5 @@ class View_Gtk_Installer : public Gtk::Dialog, public View_Installer, public Tra
 	View_Gtk_Installer();
 	void show();
 	void showMessageGrubInstallCompleted(std::string const& msg);
-	void setEventListener(InstallerController& eventListener);
 };
 #endif

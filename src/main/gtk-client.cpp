@@ -183,17 +183,17 @@ int main(int argc, char** argv){
 		settingsDlg.putThemeEditArea(themeEditor.getEditorBox());
 
 		//assign event listener
-		listCfgView.setEventListener(mainController);
-		installDlg.setEventListener(installController);
-		trashView.setEventListener(trashController);
-		entryEditDlg.setEventListener(entryEditController);
-		settingsDlg.setEventListener(settingsController);
+		listCfgView.setController(mainController);
+		installDlg.setController(installController);
+		trashView.setController(trashController);
+		entryEditDlg.setController(entryEditController);
+		settingsDlg.setController(settingsController);
 		listcfg.setEventListener(mainController);
 		installer.setEventListener(installController);
 		fbResolutionsGetter.setEventListener(settingsController);
-		envEditor.setEventListener(envEditController);
-		errorView.setEventListener(errorController);
-		themeEditor.setEventListener(themeController);
+		envEditor.setController(envEditController);
+		errorView.setController(errorController);
+		themeEditor.setController(themeController);
 
 		//assign logger
 		listcfg.setLogger(logger);

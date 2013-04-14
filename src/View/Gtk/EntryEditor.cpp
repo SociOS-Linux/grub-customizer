@@ -19,7 +19,7 @@
 #include "EntryEditor.h"
 
 View_Gtk_EntryEditor::View_Gtk_EntryEditor()
-	: rulePtr(NULL), lblType(gettext("_Type:"), true), lock_state(false)
+	: rulePtr(NULL), lblType(gettext("_Type:"), true), lock_state(false), Trait_ControllerAware<EntryEditController>()
 {
 	this->add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
 	this->add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
@@ -47,10 +47,6 @@ View_Gtk_EntryEditor::View_Gtk_EntryEditor()
 	this->cbType.signal_changed().connect(sigc::mem_fun(this, &View_Gtk_EntryEditor::signal_typeModified));
 
 	this->tvSource.signal_key_release_event().connect(sigc::mem_fun(this, &View_Gtk_EntryEditor::signal_sourceModified));
-}
-
-void View_Gtk_EntryEditor::setEventListener(EntryEditController& eventListener) {
-	this->eventListener = &eventListener;
 }
 
 void View_Gtk_EntryEditor::setDeviceDataList(Model_DeviceDataListInterface& deviceDataList) {
@@ -194,26 +190,26 @@ std::string View_Gtk_EntryEditor::getSelectedType() const {
 
 void View_Gtk_EntryEditor::signal_response_action(int response_id) {
 	if (response_id == Gtk::RESPONSE_OK){
-		this->eventListener->applyAction();
+		this->controller->applyAction();
 	}
 	this->hide();
 }
 
 bool View_Gtk_EntryEditor::signal_sourceModified(GdkEventKey* event) {
 	if (!this->lock_state) {
-		this->eventListener->syncOptionsAction();
+		this->controller->syncOptionsAction();
 	}
 	return true;
 }
 
 void View_Gtk_EntryEditor::signal_optionsModified() {
 	if (!this->lock_state) {
-		this->eventListener->syncSourceAction();
+		this->controller->syncSourceAction();
 	}
 }
 
 void View_Gtk_EntryEditor::signal_typeModified() {
 	if (!this->lock_state) {
-		this->eventListener->switchTypeAction(this->cbType.get_active_text() != gettext("Other") ? this->cbType.get_active_text() : "");
+		this->controller->switchTypeAction(this->cbType.get_active_text() != gettext("Other") ? this->cbType.get_active_text() : "");
 	}
 }

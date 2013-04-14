@@ -24,6 +24,7 @@
 #include <string>
 #include <libintl.h>
 #include "../../Controller/ThemeController.h"
+#include "../../Controller/Trait/ControllerAware.h"
 #include "../../lib/Trait/LoggerAware.h"
 #include "../../lib/assert.h"
 
@@ -53,7 +54,12 @@ public:
 	GrubColorChooser(bool blackIsTransparent = false);
 };
 
-class View_Gtk_Theme : public View_Theme, public Gtk::Dialog, public Trait_LoggerAware {
+class View_Gtk_Theme :
+	public View_Theme,
+	public Gtk::Dialog,
+	public Trait_LoggerAware,
+	public Trait_ControllerAware<ThemeController>
+{
 	Gtk::VBox vbMain;
 
 	Gtk::Frame frmCustomTheme;
@@ -122,12 +128,10 @@ class View_Gtk_Theme : public View_Theme, public Gtk::Dialog, public Trait_Logge
 	Gtk::Image imgRemoveBackground;
 
 
-	ThemeController* eventListener;
 	bool event_lock;
 	std::string _getSelectedFileName();
 public:
 	View_Gtk_Theme();
-	void setEventListener(ThemeController& eventListener);
 
 	void addFile(std::string const& fileName);
 	void clear();
