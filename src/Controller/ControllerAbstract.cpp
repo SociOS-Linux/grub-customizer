@@ -18,18 +18,8 @@
 
 #include "ControllerAbstract.h"
 
-ControllerAbstract::ControllerAbstract(std::string const& controllerName)
-	: _controllerCollection(NULL)
-{
+ControllerAbstract::ControllerAbstract(std::string const& controllerName) {
 	this->setControllerName(controllerName);
 }
 
-void ControllerAbstract::setControllerCollection(ControllerCollection& controllerCollection) {
-	this->_controllerCollection = &controllerCollection;
-}
-
-ControllerCollection& ControllerAbstract::getAllControllers() {
-	assert(this->_controllerCollection != NULL);
-	return *this->_controllerCollection;
-}
 

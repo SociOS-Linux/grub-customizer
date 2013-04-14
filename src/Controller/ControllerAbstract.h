@@ -23,12 +23,9 @@
 #include "../lib/assert.h"
 #include "../lib/Trait/ActionLoggerAware.h"
 
-class ControllerAbstract : public Trait_ActionLoggerAware {
-	ControllerCollection* _controllerCollection;
+class ControllerAbstract : public Trait_ActionLoggerAware, public ControllerCollection_Connection {
 public:
 	ControllerAbstract(std::string const& controllerName);
-	void setControllerCollection(ControllerCollection& controllerCollection);
-	ControllerCollection& getAllControllers();
 };
 
 
