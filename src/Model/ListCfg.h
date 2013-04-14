@@ -38,6 +38,7 @@
 #include "SettingsManagerData.h"
 #include "Env.h"
 #include "../Controller/MainController.h"
+#include "../Controller/Trait/ControllerAware.h"
 
 #include "../lib/assert.h"
 
@@ -51,9 +52,7 @@
 #include <stack>
 #include <algorithm>
 
-class Model_ListCfg : public Trait_LoggerAware {
-	MainController* eventListener;
-	
+class Model_ListCfg : public Trait_LoggerAware, public Trait_ControllerAware<MainController> {
 	double progress;
 	std::string progress_name;
 	int progress_pos, progress_max;
@@ -63,7 +62,6 @@ class Model_ListCfg : public Trait_LoggerAware {
 	Model_ScriptSourceMap scriptSourceMap;
 public:
 	Model_ListCfg(Model_Env& env);
-	void setEventListener(MainController& eventListener);
 	void setMutex(Mutex& mutex);
 	void setLogger(Logger& logger);
 

@@ -19,14 +19,14 @@
 #include "Installer.h"
 
 Model_Installer::Model_Installer(Model_Env& env)
-	: env(env), eventListener(NULL)
+	: env(env)
 {
 }
 
 void Model_Installer::threadable_install(std::string const& device){
 	this->install_result = install(device);
-	if (eventListener)
-		eventListener->showMessageAction(this->install_result);
+	if (controller)
+		controller->showMessageAction(this->install_result);
 }
 
 std::string Model_Installer::install(std::string const& device){
@@ -43,6 +43,3 @@ std::string Model_Installer::install(std::string const& device){
 		return output;
 }
 
-void Model_Installer::setEventListener(InstallerController& eventListener) {
-	this->eventListener = &eventListener;
-}

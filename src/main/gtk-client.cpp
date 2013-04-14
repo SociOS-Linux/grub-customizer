@@ -187,9 +187,9 @@ int main(int argc, char** argv){
 		trashView.setController(trashController);
 		entryEditDlg.setController(entryEditController);
 		settingsDlg.setController(settingsController);
-		listcfg.setEventListener(mainController);
-		installer.setEventListener(installController);
-		fbResolutionsGetter.setEventListener(settingsController);
+		listcfg.setController(mainController);
+		installer.setController(installController);
+		fbResolutionsGetter.setController(settingsController);
 		envEditor.setController(envEditController);
 		errorView.setController(errorController);
 		themeEditor.setController(themeController);

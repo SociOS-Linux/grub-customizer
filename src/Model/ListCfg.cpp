@@ -21,14 +21,10 @@
 Model_ListCfg::Model_ListCfg(Model_Env& env)
  : error_proxy_not_found(false),
  progress(0),
- cancelThreadsRequested(false), verbose(true), env(env), eventListener(NULL),
+ cancelThreadsRequested(false), verbose(true), env(env),
  mutex(NULL), errorLogFile(ERROR_LOG_FILE), ignoreLock(false), progress_pos(0), progress_max(0),
  scriptSourceMap(env)
 {}
-
-void Model_ListCfg::setEventListener(MainController& eventListener) {
-	this->eventListener = &eventListener;
-}
 
 void Model_ListCfg::setMutex(Mutex& mutex) {
 	this->mutex = &mutex;
@@ -652,12 +648,12 @@ bool Model_ListCfg::compareLists(std::list<Model_Rule const*> a, std::list<Model
 
 
 void Model_ListCfg::send_new_load_progress(double newProgress, std::string scriptName, int current, int max){
-	if (this->eventListener != NULL){
+	if (this->controller != NULL){
 		this->progress = newProgress;
 		this->progress_name = scriptName;
 		this->progress_pos = current;
 		this->progress_max = max;
-		this->eventListener->syncLoadStateThreadedAction();
+		this->controller->syncLoadStateThreadedAction();
 	}
 	else if (this->verbose) {
 		this->log("cannot show updated load progress - no UI connected!", Logger::ERROR);
@@ -665,9 +661,9 @@ void Model_ListCfg::send_new_load_progress(double newProgress, std::string scrip
 }
 
 void Model_ListCfg::send_new_save_progress(double newProgress){
-	if (this->eventListener != NULL){
+	if (this->controller != NULL){
 		this->progress = newProgress;
-		this->eventListener->syncSaveStateThreadedAction();
+		this->controller->syncSaveStateThreadedAction();
 	}
 	else if (this->verbose) {
 		this->log("cannot show updated save progress - no UI connected!", Logger::ERROR);
@@ -1273,7 +1269,7 @@ void Model_ListCfg::revert() {
 
 Model_ListCfg::operator ArrayStructure() const {
 	ArrayStructure result;
-	result["eventListener"] = this->eventListener;
+	result["eventListener"] = this->controller;
 	result["proxies"] = ArrayStructure(this->proxies);
 	result["repository"] = ArrayStructure(this->repository);
 	result["progress"] = this->progress;
