@@ -18,6 +18,7 @@
 
 #ifndef MUTEX_H_INCLUDED
 #define MUTEX_H_INCLUDED
+#include <cstdlib>
 
 class Mutex {
 public:
