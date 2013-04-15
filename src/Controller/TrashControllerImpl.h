@@ -35,6 +35,7 @@
 #include "ThreadController.h"
 #include "../View/EnvEditor.h"
 #include "../View/Trait/ViewAware.h"
+#include "../lib/BootstrapInterface/Bootstrappable.h"
 #include "../Mapper/EntryName.h"
 
 #include "../Controller/ControllerAbstract.h"
@@ -53,7 +54,8 @@ class TrashControllerImpl :
 	public Mapper_EntryName_Connection,
 	public Model_DeviceDataListInterface_Connection,
 	public ContentParserFactory_Connection,
-	public Model_Env_Connection
+	public Model_Env_Connection,
+	public BootstrapInterface_Bootstrappable
 {
 	void _refreshView();
 	bool _isDeletable(std::list<Entry*> const& selectedEntries);

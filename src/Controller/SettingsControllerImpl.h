@@ -43,6 +43,7 @@
 #include "../Controller/Trait/ThreadControllerAware.h"
 
 #include "../lib/Trait/LoggerAware.h"
+#include "../lib/BootstrapInterface/Bootstrappable.h"
 
 #include "../lib/Exception.h"
 
@@ -57,7 +58,8 @@ class SettingsControllerImpl :
 	public Model_ListCfg_Connection,
 	public Model_SettingsManagerData_Connection,
 	public Model_FbResolutionsGetter_Connection,
-	public Model_Env_Connection
+	public Model_Env_Connection,
+	public BootstrapInterface_Bootstrappable
 {
 	bool syncActive; // should only be controlled by syncSettings()
 

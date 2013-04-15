@@ -105,6 +105,7 @@ add_executable(grub-customizer
 	src/Model/ThemeFile.cpp
 	src/Model/Theme.cpp
 	src/Model/ThemeManager.cpp
+	src/lib/Bootstrap.cpp
 )
 
 

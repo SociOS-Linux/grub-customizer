@@ -16,45 +16,15 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef TRAIT_LOGGERAWARE_INCLUDED
-#define TRAIT_LOGGERAWARE_INCLUDED
+#ifndef BOOTSTRAPINTERFACE_CONNECTOR_H_
+#define BOOTSTRAPINTERFACE_CONNECTOR_H_
+#include "Bootstrappable.h"
 
-#include "../Logger.h"
-#include "../Exception.h"
-#include "../AutoPtr.h"
-
-class Trait_LoggerAware {
-protected:
-	mutable AutoPtr<Logger> logger;
+class BootstrapInterface_Connector {
 public:
-	Trait_LoggerAware() {}
-
-	void setLogger(AutoPtr<Logger> logger) {
-		this->logger = logger;
-	}
-
-	AutoPtr<Logger> getLogger() {
-		return this->logger;
-	}
-
-	const AutoPtr<Logger> getLogger() const {
-		return this->logger;
-	}
-
-	AutoPtr<Logger> getLoggerPtr() {
-		return this->logger;
-	}
-
-	bool hasLogger() const {
-		return this->logger;
-	}
-protected:
-	void log(std::string const& message, Logger::Priority prio) const {
-		if (this->logger) {
-			this->logger->log(message, prio);
-		}
-	}
+	virtual void connect(BootstrapInterface_Bootstrappable& target) = 0;
+	virtual ~BootstrapInterface_Connector() {};
 };
 
 
-#endif /* TRAIT_LOGGERAWARE_INCLUDED */
+#endif /* BOOTSTRAPINTERFACE_CONNECTOR_H_ */

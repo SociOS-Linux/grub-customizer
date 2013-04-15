@@ -66,7 +66,7 @@ class Model_ListCfg :
 	Model_ScriptSourceMap scriptSourceMap;
 public:
 	Model_ListCfg();
-	void setLogger(Logger& logger);
+	void setLogger(AutoPtr<Logger> logger);
 	void setEnv(Model_Env& env);
 
 	Model_Proxylist proxies;

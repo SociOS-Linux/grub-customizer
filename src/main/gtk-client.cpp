@@ -49,7 +49,9 @@
 #include "../lib/assert.h"
 #include "../lib/ArrayStructure.h"
 #include "../Model/ThemeManager.h"
-
+#include "../lib/AutoPtr.h"
+#include "../lib/Bootstrap.h"
+#include "../lib/Trait/LoggerConnector.h"
 
 int main(int argc, char** argv){
 	if (getuid() != 0 && (argc == 1 || argv[1] != std::string("no-fork"))) {
@@ -59,12 +61,15 @@ int main(int argc, char** argv){
 	bindtextdomain( "grub-customizer", LOCALEDIR);
 	textdomain( "grub-customizer" );
 
-	Logger_Stream logger(std::cout);
+	Logger_Stream* logger = new Logger_Stream(std::cout);
 
 	try {
 		Gtk::Main app(argc, argv);
 
 		Glib::thread_init();
+
+		Bootstrap bootstrap;
+		bootstrap.pushRessource(new Logger_Connector(logger));
 
 		Model_Env env;
 
@@ -96,85 +101,94 @@ int main(int argc, char** argv){
 		entryEditDlg.setDeviceDataList(deviceDataList);
 		envEditor.setDeviceDataList(deviceDataList);
 
-		EntryEditControllerImpl entryEditController;
-		entryEditController.setContentParserFactory(contentParserFactory);
-		entryEditController.setView(entryEditDlg);
-		entryEditController.setDeviceDataList(deviceDataList);
-		entryEditController.setListCfg(listcfg);
+		EntryEditControllerImpl* entryEditController = new EntryEditControllerImpl;
+		bootstrap.push(entryEditController);
+		entryEditController->setContentParserFactory(contentParserFactory);
+		entryEditController->setView(entryEditDlg);
+		entryEditController->setDeviceDataList(deviceDataList);
+		entryEditController->setListCfg(listcfg);
 
-		MainControllerImpl mainController;
-		mainController.setListCfg(listcfg);
-		mainController.setSettingsManager(settings);
-		mainController.setSettingsBuffer(settingsOnDisk);
-		mainController.setSavedListCfg(savedListCfg);
-		mainController.setFbResolutionsGetter(fbResolutionsGetter);
-		mainController.setDeviceDataList(deviceDataList);
-		mainController.setMountTable(mountTable);
-		mainController.setContentParserFactory(contentParserFactory);
-		mainController.setView(listCfgView);
-		mainController.setEntryNameMapper(entryNameMapper);
+		MainControllerImpl* mainController = new MainControllerImpl;
+		bootstrap.push(mainController);
+		mainController->setListCfg(listcfg);
+		mainController->setSettingsManager(settings);
+		mainController->setSettingsBuffer(settingsOnDisk);
+		mainController->setSavedListCfg(savedListCfg);
+		mainController->setFbResolutionsGetter(fbResolutionsGetter);
+		mainController->setDeviceDataList(deviceDataList);
+		mainController->setMountTable(mountTable);
+		mainController->setContentParserFactory(contentParserFactory);
+		mainController->setView(listCfgView);
+		mainController->setEntryNameMapper(entryNameMapper);
 
-		SettingsControllerImpl settingsController;
-		settingsController.setListCfg(listcfg);
-		settingsController.setView(settingsDlg);
-		settingsController.setSettingsManager(settings);
-		settingsController.setFbResolutionsGetter(fbResolutionsGetter);
+		SettingsControllerImpl* settingsController = new SettingsControllerImpl;
+		bootstrap.push(settingsController);
+		settingsController->setListCfg(listcfg);
+		settingsController->setView(settingsDlg);
+		settingsController->setSettingsManager(settings);
+		settingsController->setFbResolutionsGetter(fbResolutionsGetter);
 
-		EnvEditorControllerImpl envEditController;
-		envEditController.setMountTable(mountTable);
-		envEditController.setView(envEditor);
+		EnvEditorControllerImpl* envEditController = new EnvEditorControllerImpl;
+		bootstrap.push(envEditController);
+		envEditController->setMountTable(mountTable);
+		envEditController->setView(envEditor);
 
-		TrashControllerImpl trashController;
-		trashController.setEntryNameMapper(entryNameMapper);
-		trashController.setListCfg(listcfg);
-		trashController.setDeviceDataList(deviceDataList);
-		trashController.setContentParserFactory(contentParserFactory);
-		trashController.setView(trashView);
+		TrashControllerImpl* trashController = new TrashControllerImpl;
+		bootstrap.push(trashController);
+		trashController->setEntryNameMapper(entryNameMapper);
+		trashController->setListCfg(listcfg);
+		trashController->setDeviceDataList(deviceDataList);
+		trashController->setContentParserFactory(contentParserFactory);
+		trashController->setView(trashView);
 
-		InstallerControllerImpl installController;
-		installController.setInstaller(installer);
-		installController.setView(installDlg);
+		InstallerControllerImpl* installController = new InstallerControllerImpl;
+		bootstrap.push(installController);
+		installController->setInstaller(installer);
+		installController->setView(installDlg);
 
-		AboutControllerImpl aboutController;
-		aboutController.setView(aboutDialog);
+		AboutControllerImpl* aboutController = new AboutControllerImpl;
+		bootstrap.push(aboutController);
+		aboutController->setView(aboutDialog);
 
-		ErrorControllerImpl errorController;
-		errorController.setView(errorView);
+		ErrorControllerImpl* errorController = new ErrorControllerImpl;
+		bootstrap.push(errorController);
+		errorController->setView(errorView);
 
-		ThemeControllerImpl themeController;
-		themeController.setView(themeEditor);
-		themeController.setThemeManager(themeManager);
-		themeController.setSettingsManager(settings);
-		themeController.setListCfg(listcfg);
+		ThemeControllerImpl* themeController = new ThemeControllerImpl;
+		bootstrap.push(themeController);
+		themeController->setView(themeEditor);
+		themeController->setThemeManager(themeManager);
+		themeController->setSettingsManager(settings);
+		themeController->setListCfg(listcfg);
 
 		ControllerCollection controllerCollection;
-		controllerCollection.entryEditController = &entryEditController;
-		controllerCollection.mainController = &mainController;
-		controllerCollection.settingsController = &settingsController;
-		controllerCollection.envEditController = &envEditController;
-		controllerCollection.trashController = &trashController;
-		controllerCollection.installerController = &installController;
-		controllerCollection.aboutController = &aboutController;
-		controllerCollection.errorController = &errorController;
-		controllerCollection.themeController = &themeController;
+		controllerCollection.entryEditController = entryEditController;
+		controllerCollection.mainController = mainController;
+		controllerCollection.settingsController = settingsController;
+		controllerCollection.envEditController = envEditController;
+		controllerCollection.trashController = trashController;
+		controllerCollection.installerController = installController;
+		controllerCollection.aboutController = aboutController;
+		controllerCollection.errorController = errorController;
+		controllerCollection.themeController = themeController;
 
-		entryEditController.setControllerCollection(controllerCollection);
-		mainController.setControllerCollection(controllerCollection);
-		settingsController.setControllerCollection(controllerCollection);
-		envEditController.setControllerCollection(controllerCollection);
-		trashController.setControllerCollection(controllerCollection);
-		installController.setControllerCollection(controllerCollection);
-		aboutController.setControllerCollection(controllerCollection);
-		errorController.setControllerCollection(controllerCollection);
-		themeController.setControllerCollection(controllerCollection);
+		entryEditController->setControllerCollection(controllerCollection);
+		mainController->setControllerCollection(controllerCollection);
+		settingsController->setControllerCollection(controllerCollection);
+		envEditController->setControllerCollection(controllerCollection);
+		trashController->setControllerCollection(controllerCollection);
+		installController->setControllerCollection(controllerCollection);
+		aboutController->setControllerCollection(controllerCollection);
+		errorController->setControllerCollection(controllerCollection);
+		themeController->setControllerCollection(controllerCollection);
 
 		GLib_ThreadController threadC(controllerCollection);
-		mainController.setThreadController(threadC);
-		settingsController.setThreadController(threadC);
-		installController.setThreadController(threadC);
-		errorController.setThreadController(threadC);
-		entryEditController.setThreadController(threadC);
-		themeController.setThreadController(threadC);
+		mainController->setThreadController(threadC);
+		settingsController->setThreadController(threadC);
+		installController->setThreadController(threadC);
+		errorController->setThreadController(threadC);
+		entryEditController->setThreadController(threadC);
+		themeController->setThreadController(threadC);
 
 		listCfgView.putSettingsDialog(settingsDlg.getCommonSettingsPane(), settingsDlg.getAppearanceSettingsPane());
 		listCfgView.putTrashList(trashView.getList());
@@ -182,17 +196,17 @@ int main(int argc, char** argv){
 		settingsDlg.putThemeEditArea(themeEditor.getEditorBox());
 
 		//assign event listener
-		listCfgView.setController(mainController);
-		installDlg.setController(installController);
-		trashView.setController(trashController);
-		entryEditDlg.setController(entryEditController);
-		settingsDlg.setController(settingsController);
-		listcfg.setController(mainController);
-		installer.setController(installController);
-		fbResolutionsGetter.setController(settingsController);
-		envEditor.setController(envEditController);
-		errorView.setController(errorController);
-		themeEditor.setController(themeController);
+		listCfgView.setController(*mainController);
+		installDlg.setController(*installController);
+		trashView.setController(*trashController);
+		entryEditDlg.setController(*entryEditController);
+		settingsDlg.setController(*settingsController);
+		listcfg.setController(*mainController);
+		installer.setController(*installController);
+		fbResolutionsGetter.setController(*settingsController);
+		envEditor.setController(*envEditController);
+		errorView.setController(*errorController);
+		themeEditor.setController(*themeController);
 
 		//assign logger
 		listcfg.setLogger(logger);
@@ -214,29 +228,20 @@ int main(int argc, char** argv){
 		threadC.setLogger(logger);
 		env.setLogger(logger);
 		envEditor.setLogger(logger);
-		mainController.setLogger(logger);
-		entryEditController.setLogger(logger);
-		settingsController.setLogger(logger);
-		envEditController.setLogger(logger);
-		trashController.setLogger(logger);
-		errorController.setLogger(logger);
-		installController.setLogger(logger);
-		aboutController.setLogger(logger);
 		themeEditor.setLogger(logger);
-		themeController.setLogger(logger);
 
 		// configure logger
-		logger.setLogLevel(Logger_Stream::LOG_EVENT);
+		logger->setLogLevel(Logger_Stream::LOG_EVENT);
 		if (argc > 1) {
 			std::string logParam = argv[1];
 			if (logParam == "debug") {
-				logger.setLogLevel(Logger_Stream::LOG_DEBUG_ONLY);
+				logger->setLogLevel(Logger_Stream::LOG_DEBUG_ONLY);
 			} else if (logParam == "log-important") {
-				logger.setLogLevel(Logger_Stream::LOG_IMPORTANT);
+				logger->setLogLevel(Logger_Stream::LOG_IMPORTANT);
 			} else if (logParam == "quiet") {
-				logger.setLogLevel(Logger_Stream::LOG_NOTHING);
+				logger->setLogLevel(Logger_Stream::LOG_NOTHING);
 			} else if (logParam == "verbose") {
-				logger.setLogLevel(Logger_Stream::LOG_VERBOSE);
+				logger->setLogLevel(Logger_Stream::LOG_VERBOSE);
 			}
 		}
 
@@ -261,24 +266,26 @@ int main(int argc, char** argv){
 		settingsOnDisk.setEnv(env);
 		installer.setEnv(env);
 		themeManager.setEnv(env);
-		entryEditController.setEnv(env);
-		mainController.setEnv(env);
-		settingsController.setEnv(env);
-		envEditController.setEnv(env);
-		trashController.setEnv(env);
-		installController.setEnv(env);
-		themeController.setEnv(env);
+		entryEditController->setEnv(env);
+		mainController->setEnv(env);
+		settingsController->setEnv(env);
+		envEditController->setEnv(env);
+		trashController->setEnv(env);
+		installController->setEnv(env);
+		themeController->setEnv(env);
 		deviceMap.setEnv(env);
 
 		//set mutex
 		listcfg.setMutex(listCfgMutex1);
 		savedListCfg.setMutex(listCfgMutex2);
 
-		mainController.initAction();
-		errorController.setApplicationStarted(true);
+		bootstrap.run();
+
+		mainController->initAction();
+		errorController->setApplicationStarted(true);
 		app.run();
 	} catch (Exception const& e) {
-		logger.log(e, Logger::ERROR);
+		logger->log(e, Logger::ERROR);
 		return 1;
 	}
 }

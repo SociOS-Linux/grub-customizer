@@ -25,6 +25,7 @@
 #include "../Model/SettingsManagerData.h"
 #include "ControllerAbstract.h"
 #include "Trait/ThreadControllerAware.h"
+#include "../lib/BootstrapInterface/Bootstrappable.h"
 #include "../Model/ThemeManager.h"
 #include "../Model/ListCfg.h"
 #include <algorithm>
@@ -37,7 +38,8 @@ class ThemeControllerImpl :
 	public Model_ThemeManager_Connection,
 	public Model_SettingsManagerData_Connection,
 	public Model_ListCfg_Connection,
-	public Model_Env_Connection
+	public Model_Env_Connection,
+	public BootstrapInterface_Bootstrappable
 {
 	std::string currentTheme, currentThemeFile;
 	bool syncActive; // should only be controlled by syncSettings()

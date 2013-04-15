@@ -16,45 +16,23 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef TRAIT_LOGGERAWARE_INCLUDED
-#define TRAIT_LOGGERAWARE_INCLUDED
+#ifndef BOOTSTRAP_H_
+#define BOOTSTRAP_H_
+#include "AutoPtr.h"
+#include <list>
+#include <typeinfo>
 
-#include "../Logger.h"
-#include "../Exception.h"
-#include "../AutoPtr.h"
+#include "BootstrapInterface/Bootstrappable.h"
+#include "BootstrapInterface/Connector.h"
 
-class Trait_LoggerAware {
-protected:
-	mutable AutoPtr<Logger> logger;
+class Bootstrap {
+	std::list<AutoPtr<BootstrapInterface_Bootstrappable> > bootstrappables;
+	std::list<AutoPtr<BootstrapInterface_Connector> > resourceConnectors;
 public:
-	Trait_LoggerAware() {}
-
-	void setLogger(AutoPtr<Logger> logger) {
-		this->logger = logger;
-	}
-
-	AutoPtr<Logger> getLogger() {
-		return this->logger;
-	}
-
-	const AutoPtr<Logger> getLogger() const {
-		return this->logger;
-	}
-
-	AutoPtr<Logger> getLoggerPtr() {
-		return this->logger;
-	}
-
-	bool hasLogger() const {
-		return this->logger;
-	}
-protected:
-	void log(std::string const& message, Logger::Priority prio) const {
-		if (this->logger) {
-			this->logger->log(message, prio);
-		}
-	}
+	AutoPtr<BootstrapInterface_Bootstrappable> push(AutoPtr<BootstrapInterface_Bootstrappable> const& object);
+	void pushRessource(AutoPtr<BootstrapInterface_Connector> const& resourceConnector);
+	void run();
 };
 
 
-#endif /* TRAIT_LOGGERAWARE_INCLUDED */
+#endif /* BOOTSTRAP_H_ */

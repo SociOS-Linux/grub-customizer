@@ -34,6 +34,7 @@
 
 #include "../Controller/ControllerAbstract.h"
 #include "../Controller/Trait/ThreadControllerAware.h"
+#include "../lib/BootstrapInterface/Bootstrappable.h"
 
 #include "../lib/Exception.h"
 
@@ -46,7 +47,8 @@ class InstallerControllerImpl :
 	public View_Trait_ViewAware<View_Installer>,
 	public Trait_ThreadControllerAware,
 	public Model_Installer_Connection,
-	public Model_Env_Connection
+	public Model_Env_Connection,
+	public BootstrapInterface_Bootstrappable
 {
 public:
 	ThreadController& getThreadController();

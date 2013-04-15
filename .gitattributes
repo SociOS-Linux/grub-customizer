@@ -165,6 +165,11 @@ src/View/Trait/ViewAware.h -text
 src/View/Trash.h -text
 src/lib/ArrayStructure.cpp -text
 src/lib/ArrayStructure.h -text
+src/lib/AutoPtr.h -text
+src/lib/Bootstrap.cpp -text
+src/lib/Bootstrap.h -text
+src/lib/BootstrapInterface/Bootstrappable.h -text
+src/lib/BootstrapInterface/Connector.h -text
 src/lib/ContentParser.h -text
 src/lib/ContentParser/Abstract.cpp -text
 src/lib/ContentParser/Abstract.h -text
@@ -189,6 +194,7 @@ src/lib/Mutex/GLib.cpp -text
 src/lib/Mutex/GLib.h -text
 src/lib/Trait/ActionLoggerAware.h -text
 src/lib/Trait/LoggerAware.h -text
+src/lib/Trait/LoggerConnector.h -text
 src/lib/Type.h -text
 src/lib/assert.cpp -text
 src/lib/assert.h -text
