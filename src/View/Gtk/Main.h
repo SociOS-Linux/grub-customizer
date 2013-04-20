@@ -36,7 +36,12 @@ class ImageMenuItemOwnKey : public Gtk::ImageMenuItem {
 	ImageMenuItemOwnKey(const Gtk::StockID& id, const Gtk::AccelKey& accel_key);
 };
 
-class View_Gtk_Main : public View_Main, public Trait_LoggerAware, public Trait_ControllerAware<MainController> {
+class View_Gtk_Main :
+	public View_Main,
+	public Trait_LoggerAware,
+	public Trait_ControllerAware<MainController>,
+	public BootstrapInterface_Bootstrappable
+{
 	Gtk::Window win;
 	Gtk::VBox vbMainSplit;
 	Gtk::Notebook notebook;

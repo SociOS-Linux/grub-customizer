@@ -56,7 +56,8 @@ class Model_ListCfg :
 	public Trait_LoggerAware,
 	public Trait_ControllerAware<MainController>,
 	public Mutex_Connection,
-	public Model_Env_Connection
+	public Model_Env_Connection,
+	public BootstrapInterface_Bootstrappable
 {
 	double progress;
 	std::string progress_name;

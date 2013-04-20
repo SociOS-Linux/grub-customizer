@@ -23,8 +23,13 @@
 #include "../View/Main.h"
 #include "../View/Trait/ViewAware.h"
 #include "../lib/assert.h"
+#include "../lib/BootstrapInterface/Bootstrappable.h"
 
-class Mapper_EntryNameImpl : public Mapper_EntryName, public View_Trait_ViewAware<View_Main> {
+class Mapper_EntryNameImpl :
+	public Mapper_EntryName,
+	public View_Trait_ViewAware<View_Main>,
+	public BootstrapInterface_Bootstrappable
+{
 public:
 	std::string map(Model_Entry const* sourceEntry, std::string const& defaultName, std::string const& scriptName = "");
 };

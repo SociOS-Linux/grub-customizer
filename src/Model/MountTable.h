@@ -24,6 +24,7 @@
 #include <cstdlib>
 #include "../lib/Trait/LoggerAware.h"
 #include "../lib/Exception.h"
+#include "../lib/BootstrapInterface/Bootstrappable.h"
 
 
 struct Model_MountTable_Mountpoint {
@@ -38,7 +39,11 @@ struct Model_MountTable_Mountpoint {
 	bool isLiveCdFs();
 };
 
-class Model_MountTable : public std::list<Model_MountTable_Mountpoint>, public Trait_LoggerAware {
+class Model_MountTable :
+	public std::list<Model_MountTable_Mountpoint>,
+	public Trait_LoggerAware,
+	public BootstrapInterface_Bootstrappable
+{
 	bool loaded;
 	public:
 	Model_MountTable(FILE* source, std::string const& rootDirectory, bool default_isMounted_flag = false);

@@ -24,12 +24,14 @@
 #include <libintl.h>
 #include "../Installer.h"
 #include "../../lib/Trait/LoggerAware.h"
+#include "../../lib/BootstrapInterface/Bootstrappable.h"
 
 class View_Gtk_Installer :
 	public Gtk::Dialog,
 	public View_Installer,
 	public Trait_LoggerAware,
-	public Trait_ControllerAware<InstallerController>
+	public Trait_ControllerAware<InstallerController>,
+	public BootstrapInterface_Bootstrappable
 {
 	Gtk::Label lblDescription;
 	Gtk::HBox hbDevice;

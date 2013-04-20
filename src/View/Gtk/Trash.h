@@ -26,12 +26,14 @@
 #include "../../lib/Trait/LoggerAware.h"
 #include "../../lib/Type.h"
 #include "Element/List.h"
+#include "../../lib/BootstrapInterface/Bootstrappable.h"
 
 class View_Gtk_Trash :
 	public Gtk::Window,
 	public View_Trash,
 	public Trait_LoggerAware,
-	public Trait_ControllerAware<TrashController>
+	public Trait_ControllerAware<TrashController>,
+	public BootstrapInterface_Bootstrappable
 {
 	Gtk::ScrolledWindow scrEntryBox;
 	View_Gtk_Element_List<Entry, Script> list;

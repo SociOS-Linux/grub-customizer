@@ -27,7 +27,8 @@
 class Model_Installer :
 	public Trait_LoggerAware,
 	public Trait_ControllerAware<InstallerController>,
-	public Model_Env_Connection
+	public Model_Env_Connection,
+	public BootstrapInterface_Bootstrappable
 {
 	std::string install_result;
 public:

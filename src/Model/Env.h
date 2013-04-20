@@ -33,7 +33,7 @@
 #include "../lib/Type.h"
 #include "../lib/BootstrapInterface/Bootstrappable.h"
 
-struct Model_Env : public Trait_LoggerAware {
+struct Model_Env : public Trait_LoggerAware, public BootstrapInterface_Bootstrappable {
 public:
 	enum Mode {
 		GRUB_MODE,

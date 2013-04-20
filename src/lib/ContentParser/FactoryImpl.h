@@ -23,8 +23,12 @@
 #include <list>
 #include "../../lib/assert.h"
 #include "../Exception.h"
+#include "../BootstrapInterface/Bootstrappable.h"
 
-class ContentParser_FactoryImpl : public ContentParserFactory {
+class ContentParser_FactoryImpl :
+	public ContentParserFactory,
+	public BootstrapInterface_Bootstrappable
+{
 	std::list<ContentParser*> parsers;
 	std::list<std::string> names;
 public:

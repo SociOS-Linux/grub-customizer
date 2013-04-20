@@ -74,6 +74,7 @@ int main(int argc, char** argv){
 		bootstrap.pushRessource(loggerConnector);
 
 		Model_Env env;
+		bootstrap << env;
 
 		Model_ListCfg listcfg;
 		View_Gtk_Main listCfgView;
@@ -97,6 +98,30 @@ int main(int argc, char** argv){
 		Mapper_EntryNameImpl entryNameMapper;
 		View_Gtk_Theme themeEditor;
 		Model_ThemeManager themeManager;
+
+
+		bootstrap << listcfg
+		          << listCfgView
+		          << settings
+		          << settingsOnDisk
+		          << installer
+		          << installDlg
+		          << trashView
+		          << entryEditDlg
+		          << mountTable
+		          << savedListCfg
+		          << fbResolutionsGetter
+		          << settingsDlg
+		          << deviceDataList
+		          << aboutDialog
+		          << listCfgMutex1
+		          << listCfgMutex2
+		          << contentParserFactory
+		          << envEditor
+		          << errorView
+		          << entryNameMapper
+		          << themeEditor
+		          << themeManager;
 
 		entryNameMapper.setView(listCfgView);
 
@@ -185,6 +210,7 @@ int main(int argc, char** argv){
 		themeController.setControllerCollection(controllerCollection);
 
 		GLib_ThreadController threadC(controllerCollection);
+		bootstrap << threadC;
 		mainController.setThreadController(threadC);
 		settingsController.setThreadController(threadC);
 		installController.setThreadController(threadC);
@@ -209,28 +235,6 @@ int main(int argc, char** argv){
 		envEditor.setController(envEditController);
 		errorView.setController(errorController);
 		themeEditor.setController(themeController);
-
-		//assign logger
-		listcfg.setLogger(logger);
-		listCfgView.setLogger(logger);
-		settings.setLogger(logger);
-		settingsOnDisk.setLogger(logger);
-		installer.setLogger(logger);
-		installDlg.setLogger(logger);
-		trashView.setLogger(logger);
-		entryEditDlg.setLogger(logger);
-		mountTable.setLogger(logger);
-		savedListCfg.setLogger(logger);
-		fbResolutionsGetter.setLogger(logger);
-		settingsDlg.setLogger(logger);
-		deviceDataList.setLogger(logger);
-		aboutDialog.setLogger(logger);
-		listCfgMutex1.setLogger(logger);
-		listCfgMutex2.setLogger(logger);
-		threadC.setLogger(logger);
-		env.setLogger(logger);
-		envEditor.setLogger(logger);
-		themeEditor.setLogger(logger);
 
 		// configure logger
 		logger.setLogLevel(Logger_Stream::LOG_EVENT);

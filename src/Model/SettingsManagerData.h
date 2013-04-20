@@ -29,7 +29,8 @@
 class Model_SettingsManagerData :
 	public Model_SettingsStore,
 	public Trait_LoggerAware,
-	public Model_Env_Connection
+	public Model_Env_Connection,
+	public BootstrapInterface_Bootstrappable
 {
 	bool _reloadRequired;
 public:
