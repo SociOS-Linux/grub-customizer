@@ -162,6 +162,7 @@ src/View/Model/ListItem.h -text
 src/View/Settings.h -text
 src/View/Theme.h -text
 src/View/Trait/ViewAware.h -text
+src/View/Trait/ViewConnector.h -text
 src/View/Trash.h -text
 src/lib/ArrayStructure.cpp -text
 src/lib/ArrayStructure.h -text
