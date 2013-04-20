@@ -20,15 +20,14 @@
 #define LOGGERCONNECTOR_H_
 #include "../Logger.h"
 #include "LoggerAware.h"
-#include "../AutoPtr.h"
 
 class Logger_Connector : public BootstrapInterface_Connector {
-	AutoPtr<Logger> logger;
+	Logger* logger;
 public:
-	Logger_Connector(AutoPtr<Logger> logger) : logger(logger) {}
+	Logger_Connector(Logger& logger) : logger(&logger) {}
 
 	void connect(BootstrapInterface_Bootstrappable& target) {
-		dynamic_cast<Trait_LoggerAware&>(target).setLogger(this->logger);
+		dynamic_cast<Trait_LoggerAware&>(target).setLogger(*this->logger);
 	}
 };
 

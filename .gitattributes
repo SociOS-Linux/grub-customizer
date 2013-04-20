@@ -165,7 +165,6 @@ src/View/Trait/ViewAware.h -text
 src/View/Trash.h -text
 src/lib/ArrayStructure.cpp -text
 src/lib/ArrayStructure.h -text
-src/lib/AutoPtr.h -text
 src/lib/Bootstrap.cpp -text
 src/lib/Bootstrap.h -text
 src/lib/BootstrapInterface/Bootstrappable.h -text

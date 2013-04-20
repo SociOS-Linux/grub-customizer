@@ -25,7 +25,7 @@ Model_ListCfg::Model_ListCfg()
  errorLogFile(ERROR_LOG_FILE), ignoreLock(false), progress_pos(0), progress_max(0)
 {}
 
-void Model_ListCfg::setLogger(AutoPtr<Logger> logger) {
+void Model_ListCfg::setLogger(Logger& logger) {
 	this->Trait_LoggerAware::setLogger(logger);
 	this->proxies.setLogger(logger);
 	this->repository.setLogger(logger);

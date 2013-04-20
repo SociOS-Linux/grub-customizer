@@ -21,32 +21,37 @@
 
 #include "../Logger.h"
 #include "../Exception.h"
-#include "../AutoPtr.h"
 
 class Trait_LoggerAware {
 protected:
-	mutable AutoPtr<Logger> logger;
+	mutable Logger* logger;
 public:
-	Trait_LoggerAware() {}
+	Trait_LoggerAware() : logger(NULL) {}
 
-	void setLogger(AutoPtr<Logger> logger) {
-		this->logger = logger;
+	void setLogger(Logger& logger) {
+		this->logger = &logger;
 	}
 
-	AutoPtr<Logger> getLogger() {
-		return this->logger;
+	Logger const& getLogger() const {
+		if (this->logger == NULL) {
+			throw ConfigException("missing logger");
+		}
+		return *this->logger;
 	}
 
-	const AutoPtr<Logger> getLogger() const {
-		return this->logger;
+	Logger& getLogger() {
+		if (this->logger == NULL) {
+			throw ConfigException("missing logger");
+		}
+		return *this->logger;
 	}
 
-	AutoPtr<Logger> getLoggerPtr() {
+	Logger* getLoggerPtr() {
 		return this->logger;
 	}
 
 	bool hasLogger() const {
-		return this->logger;
+		return this->logger != NULL;
 	}
 protected:
 	void log(std::string const& message, Logger::Priority prio) const {

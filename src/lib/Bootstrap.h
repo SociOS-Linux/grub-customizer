@@ -18,7 +18,6 @@
 
 #ifndef BOOTSTRAP_H_
 #define BOOTSTRAP_H_
-#include "AutoPtr.h"
 #include <list>
 #include <typeinfo>
 
@@ -26,12 +25,13 @@
 #include "BootstrapInterface/Connector.h"
 
 class Bootstrap {
-	std::list<AutoPtr<BootstrapInterface_Bootstrappable> > bootstrappables;
-	std::list<AutoPtr<BootstrapInterface_Connector> > resourceConnectors;
+	std::list<BootstrapInterface_Bootstrappable*> bootstrappables;
+	std::list<BootstrapInterface_Connector*> resourceConnectors;
 public:
-	AutoPtr<BootstrapInterface_Bootstrappable> push(AutoPtr<BootstrapInterface_Bootstrappable> const& object);
-	void pushRessource(AutoPtr<BootstrapInterface_Connector> const& resourceConnector);
+	void push(BootstrapInterface_Bootstrappable& object);
+	void pushRessource(BootstrapInterface_Connector& resourceConnector);
 	void run();
+	Bootstrap& operator<<(BootstrapInterface_Bootstrappable& object);
 };
 
 

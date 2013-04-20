@@ -26,7 +26,6 @@
 #include "../lib/ArrayStructure.h"
 #include "../lib/trim.h"
 #include "../lib/Type.h"
-#include "../lib/AutoPtr.h"
 
 struct Model_Entry_Row {
 	Model_Entry_Row(FILE* sourceFile);
@@ -50,7 +49,7 @@ struct Model_Entry : public Trait_LoggerAware, public Entry {
 	std::list<Model_Entry> subEntries;
 	Model_Entry();
 	Model_Entry(std::string name, std::string extension, std::string content = "", EntryType type = MENUENTRY);
-	Model_Entry(FILE* sourceFile, Model_Entry_Row firstRow = Model_Entry_Row(), AutoPtr<Logger> logger = AutoPtr<Logger>(), std::string* plaintextBuffer = NULL);
+	Model_Entry(FILE* sourceFile, Model_Entry_Row firstRow = Model_Entry_Row(), Logger* logger = NULL, std::string* plaintextBuffer = NULL);
 	std::list<Model_Entry>& getSubEntries();
 	operator bool() const;
 	operator ArrayStructure() const;

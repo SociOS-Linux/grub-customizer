@@ -31,6 +31,7 @@
 #include "../lib/Exception.h"
 #include "../lib/ArrayStructure.h"
 #include "../lib/Type.h"
+#include "../lib/BootstrapInterface/Bootstrappable.h"
 
 struct Model_Env : public Trait_LoggerAware {
 public:

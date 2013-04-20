@@ -18,21 +18,25 @@
 
 #include "Bootstrap.h"
 
-AutoPtr<BootstrapInterface_Bootstrappable> Bootstrap::push(AutoPtr<BootstrapInterface_Bootstrappable> const& object) {
-	this->bootstrappables.push_back(object);
-	return object;
+void Bootstrap::push(BootstrapInterface_Bootstrappable& object) {
+	this->bootstrappables.push_back(&object);
 }
 
-void Bootstrap::pushRessource(AutoPtr<BootstrapInterface_Connector> const& resourceConnector) {
-	this->resourceConnectors.push_back(resourceConnector);
+void Bootstrap::pushRessource(BootstrapInterface_Connector& resourceConnector) {
+	this->resourceConnectors.push_back(&resourceConnector);
 }
 
 void Bootstrap::run() {
-	for (std::list<AutoPtr<BootstrapInterface_Connector> >::iterator connectorIter = resourceConnectors.begin(); connectorIter != resourceConnectors.end(); connectorIter++) {
-		for (std::list<AutoPtr<BootstrapInterface_Bootstrappable> >::iterator bootstrappableIter = bootstrappables.begin(); bootstrappableIter != bootstrappables.end(); bootstrappableIter++) {
+	for (std::list<BootstrapInterface_Connector*>::iterator connectorIter = resourceConnectors.begin(); connectorIter != resourceConnectors.end(); connectorIter++) {
+		for (std::list<BootstrapInterface_Bootstrappable*>::iterator bootstrappableIter = bootstrappables.begin(); bootstrappableIter != bootstrappables.end(); bootstrappableIter++) {
 			try {
 				(*connectorIter)->connect(**bootstrappableIter);
 			} catch (std::bad_cast const& e) {}
 		}
 	}
+}
+
+Bootstrap& Bootstrap::operator<<(BootstrapInterface_Bootstrappable& object) {
+	this->bootstrappables.push_back(&object);
+	return *this;
 }

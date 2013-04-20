@@ -47,7 +47,7 @@ Model_Entry::Model_Entry()
 Model_Entry::Model_Entry(std::string name, std::string extension, std::string content, EntryType type)
 	: name(name), extension(extension), content(content), isValid(true), type(type), isModified(false), quote('\'')
 {}
-Model_Entry::Model_Entry(FILE* sourceFile, Model_Entry_Row firstRow, AutoPtr<Logger> logger, std::string* plaintextBuffer)
+Model_Entry::Model_Entry(FILE* sourceFile, Model_Entry_Row firstRow, Logger* logger, std::string* plaintextBuffer)
 	: isValid(false), type(MENUENTRY), quote('\''), isModified(false)
 {
 	Model_Entry_Row row;
@@ -85,7 +85,7 @@ Model_Entry::Model_Entry(FILE* sourceFile, Model_Entry_Row firstRow, AutoPtr<Log
 
 			*this = Model_Entry(entryName, "", "", SUBMENU);
 			if (logger) {
-				this->setLogger(logger);
+				this->setLogger(*logger);
 			}
 			inEntry = true;
 		} else {
