@@ -28,15 +28,13 @@
 #include "EntryEditor.h"
 #include "../../Model/DeviceDataListInterface.h"
 #include "Element/PartitionChooser.h"
-#include "../../lib/BootstrapInterface/Bootstrappable.h"
 
 class View_Gtk_EntryEditor :
 	public View_EntryEditor,
 	public Gtk::Dialog,
 	public Trait_LoggerAware,
 	public Trait_ControllerAware<EntryEditController>,
-	public Model_DeviceDataListInterface_Connection,
-	public BootstrapInterface_Bootstrappable
+	public Model_DeviceDataListInterface_Connection
 {
 	Gtk::Notebook tabbox;
 	Gtk::TextView tvSource;

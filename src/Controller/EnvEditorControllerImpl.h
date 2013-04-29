@@ -30,7 +30,6 @@
 
 #include "../View/EnvEditor.h"
 #include "../View/Trait/ViewAware.h"
-#include "../lib/BootstrapInterface/Bootstrappable.h"
 
 #include "ControllerAbstract.h"
 
@@ -41,8 +40,7 @@ class EnvEditorControllerImpl :
 	public ControllerAbstract,
 	public EnvEditorController,
 	public View_Trait_ViewAware<View_EnvEditor>,
-	public Model_Env_Connection,
-	public BootstrapInterface_Bootstrappable
+	public Model_Env_Connection
 {
 	Model_MountTable* mountTable;
 

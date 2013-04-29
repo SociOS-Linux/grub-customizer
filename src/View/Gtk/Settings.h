@@ -27,15 +27,13 @@
 #include "../../Controller/SettingsController.h"
 #include "../../Controller/Trait/ControllerAware.h"
 #include "../../lib/assert.h"
-#include "../../lib/BootstrapInterface/Bootstrappable.h"
 
 
 class View_Gtk_Settings :
 	public Gtk::Dialog,
 	public View_Settings,
 	public Trait_LoggerAware,
-	public Trait_ControllerAware<SettingsController>,
-	public BootstrapInterface_Bootstrappable
+	public Trait_ControllerAware<SettingsController>
 {
 	struct AdvancedSettingsTreeModel : public Gtk::TreeModelColumnRecord {
 		Gtk::TreeModelColumn<bool> active;

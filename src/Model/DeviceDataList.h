@@ -23,13 +23,8 @@
 #include <string>
 #include "../Model/DeviceDataListInterface.h"
 #include "../lib/Trait/LoggerAware.h"
-#include "../lib/BootstrapInterface/Bootstrappable.h"
 
-class Model_DeviceDataList :
-	public Model_DeviceDataListInterface,
-	public Trait_LoggerAware,
-	public BootstrapInterface_Bootstrappable
-{
+class Model_DeviceDataList : public Model_DeviceDataListInterface, public Trait_LoggerAware {
 public:
 	Model_DeviceDataList(FILE* blkidOutput);
 	Model_DeviceDataList();

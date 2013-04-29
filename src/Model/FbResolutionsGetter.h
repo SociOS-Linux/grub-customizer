@@ -24,13 +24,8 @@
 #include "../Controller/SettingsController.h"
 #include "../Controller/Trait/ControllerAware.h"
 #include "../lib/Trait/LoggerAware.h"
-#include "../lib/BootstrapInterface/Bootstrappable.h"
 
-class Model_FbResolutionsGetter :
-	public Trait_LoggerAware,
-	public Trait_ControllerAware<SettingsController>,
-	public BootstrapInterface_Bootstrappable
-{
+class Model_FbResolutionsGetter : public Trait_LoggerAware, public Trait_ControllerAware<SettingsController> {
 	std::list<std::string> data;
 	bool _isLoading;
 public:

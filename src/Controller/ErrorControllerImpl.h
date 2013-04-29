@@ -31,7 +31,6 @@
 
 #include "../Controller/ControllerAbstract.h"
 #include "../Controller/Trait/ThreadControllerAware.h"
-#include "../lib/BootstrapInterface/Bootstrappable.h"
 
 #include "ErrorController.h"
 
@@ -39,8 +38,7 @@ class ErrorControllerImpl :
 	public ControllerAbstract,
 	public ErrorController,
 	public View_Trait_ViewAware<View_Error>,
-	public Trait_ThreadControllerAware,
-	public BootstrapInterface_Bootstrappable
+	public Trait_ThreadControllerAware
 {
 	bool applicationStarted;
 public:

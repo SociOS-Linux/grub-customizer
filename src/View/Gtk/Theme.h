@@ -27,7 +27,6 @@
 #include "../../Controller/Trait/ControllerAware.h"
 #include "../../lib/Trait/LoggerAware.h"
 #include "../../lib/assert.h"
-#include "../../lib/BootstrapInterface/Bootstrappable.h"
 
 //a gtkmm combobox with colorful foreground and background. useful to choose an item of a predefined color set
 class View_Gtk_Theme_ColorChooser : public Gtk::ComboBox, public View_ColorChooser {
@@ -59,8 +58,7 @@ class View_Gtk_Theme :
 	public View_Theme,
 	public Gtk::Dialog,
 	public Trait_LoggerAware,
-	public Trait_ControllerAware<ThemeController>,
-	public BootstrapInterface_Bootstrappable
+	public Trait_ControllerAware<ThemeController>
 {
 	Gtk::VBox vbMain;
 

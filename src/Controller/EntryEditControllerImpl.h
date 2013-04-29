@@ -39,7 +39,6 @@
 #include "../lib/Trait/LoggerAware.h"
 #include "../Controller/ControllerAbstract.h"
 #include "../Controller/Trait/ThreadControllerAware.h"
-#include "../lib/BootstrapInterface/Bootstrappable.h"
 
 #include "../lib/Exception.h"
 
@@ -52,8 +51,7 @@ class EntryEditControllerImpl :
 	public Model_ListCfg_Connection,
 	public ContentParserFactory_Connection,
 	public Model_DeviceDataListInterface_Connection,
-	public Model_Env_Connection,
-	public BootstrapInterface_Bootstrappable
+	public Model_Env_Connection
 {
 	ContentParser* currentContentParser;
 	Model_Script* _createCustomScript();

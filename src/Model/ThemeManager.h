@@ -25,8 +25,7 @@
 #include "../lib/Exception.h"
 
 class Model_ThemeManager :
-	public Model_Env_Connection,
-	public BootstrapInterface_Bootstrappable
+	public Model_Env_Connection
 {
 	bool gotSaveErrors;
 	std::string saveErrors;

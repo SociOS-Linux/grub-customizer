@@ -26,15 +26,13 @@
 #include "Element/PartitionChooser.h"
 #include "../../Model/DeviceDataListInterface.h"
 #include "../../Controller/EnvEditorController.h"
-#include "../../lib/BootstrapInterface/Bootstrappable.h"
 
 class View_Gtk_EnvEditor :
 	public Gtk::Dialog,
 	public View_EnvEditor,
 	public Trait_LoggerAware,
 	public Trait_ControllerAware<EnvEditorController>,
-	public Model_DeviceDataListInterface_Connection,
-	public BootstrapInterface_Bootstrappable
+	public Model_DeviceDataListInterface_Connection
 {
 	Gtk::VBox vbContent;
 	Gtk::Table tblLayout;

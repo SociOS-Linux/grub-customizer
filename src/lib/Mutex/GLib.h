@@ -21,13 +21,8 @@
 #include "../Mutex.h"
 #include <glibmm/thread.h>
 #include "../Trait/LoggerAware.h"
-#include "../BootstrapInterface/Bootstrappable.h"
 
-class Mutex_GLib :
-	public Mutex,
-	public Trait_LoggerAware,
-	public BootstrapInterface_Bootstrappable
-{
+class Mutex_GLib : public Mutex, public Trait_LoggerAware {
 protected:
 	Glib::Mutex mutex;
 public:

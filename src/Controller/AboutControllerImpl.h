@@ -28,7 +28,6 @@
 
 #include "../View/About.h"
 #include "../View/Trait/ViewAware.h"
-#include "../lib/BootstrapInterface/Bootstrappable.h"
 
 #include "../Controller/ControllerAbstract.h"
 
@@ -37,8 +36,7 @@
 class AboutControllerImpl :
 	public ControllerAbstract,
 	public AboutController,
-	public View_Trait_ViewAware<View_About>,
-	public BootstrapInterface_Bootstrappable
+	public View_Trait_ViewAware<View_About>
 {
 public:
 	AboutControllerImpl();

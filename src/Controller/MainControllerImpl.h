@@ -40,7 +40,6 @@
 #include "../Controller/Trait/ThreadControllerAware.h"
 
 #include "../lib/Trait/LoggerAware.h"
-#include "../lib/BootstrapInterface/Bootstrappable.h"
 #include "../Mapper/EntryName.h"
 
 #include "../lib/Exception.h"
@@ -66,8 +65,7 @@ class MainControllerImpl :
 	public Model_MountTable_Connection,
 	public ContentParserFactory_Connection,
 	public Mapper_EntryName_Connection,
-	public Model_Env_Connection,
-	public BootstrapInterface_Bootstrappable
+	public Model_Env_Connection
 {
 	Model_SettingsManagerData* settingsOnDisk; //buffer for the existing settings
 	Model_ListCfg* savedListCfg;
