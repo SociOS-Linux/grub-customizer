@@ -18,19 +18,14 @@
 
 #include "Installer.h"
 
-Model_Installer::Model_Installer(Model_Env& env)
-	: env(env), eventListener(NULL)
-{
-}
-
 void Model_Installer::threadable_install(std::string const& device){
 	this->install_result = install(device);
-	if (eventListener)
-		eventListener->showMessageAction(this->install_result);
+	if (controller)
+		controller->showMessageAction(this->install_result);
 }
 
 std::string Model_Installer::install(std::string const& device){
-	FILE* install_proc = popen((this->env.install_cmd+" '"+device+"' 2>&1").c_str(), "r");
+	FILE* install_proc = popen((this->env->install_cmd+" '"+device+"' 2>&1").c_str(), "r");
 	std::string output;
 	int c;
 	while ((c = fgetc(install_proc)) != EOF){
@@ -43,6 +38,3 @@ std::string Model_Installer::install(std::string const& device){
 		return output;
 }
 
-void Model_Installer::setEventListener(InstallerController& eventListener) {
-	this->eventListener = &eventListener;
-}

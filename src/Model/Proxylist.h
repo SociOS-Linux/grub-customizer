@@ -21,7 +21,7 @@
 #include <list>
 #include <sstream>
 #include "Proxy.h"
-#include "../lib/CommonClass.h"
+#include "../lib/Trait/LoggerAware.h"
 #include "../lib/Exception.h"
 #include "../lib/ArrayStructure.h"
 
@@ -31,7 +31,7 @@ struct Model_Proxylist_Item {
 	std::string numericPathValue;
 	std::string numericPathLabel;
 };
-struct Model_Proxylist : public std::list<Model_Proxy>, public CommonClass {
+struct Model_Proxylist : public std::list<Model_Proxy>, public Trait_LoggerAware {
 	std::list<Model_Proxy> trash; //removed proxies
 	std::list<Model_Proxy*> getProxiesByScript(Model_Script const& script);
 	std::list<const Model_Proxy*> getProxiesByScript(Model_Script const& script) const;

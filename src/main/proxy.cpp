@@ -48,7 +48,8 @@ int main(int argc, char** argv){
 		return 0;
 	} else if (argc == 3 && std::string(argv[2]) == "multi") {
 		Model_Env env;
-		Model_ListCfg scriptSource(env);
+		Model_ListCfg scriptSource;
+		scriptSource.setEnv(env);
 		scriptSource.ignoreLock = true;
 		{ // this scope prevents access to the unused proxy variable - push_back takes a copy!
 			Model_Proxy proxy;

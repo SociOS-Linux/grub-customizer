@@ -24,14 +24,15 @@
 #include "Env.h"
 #include "../lib/Exception.h"
 
-class Model_ThemeManager {
-	Model_Env& env;
+class Model_ThemeManager :
+	public Model_Env_Connection
+{
 	bool gotSaveErrors;
 	std::string saveErrors;
 public:
 	std::list<Model_Theme> themes;
 	std::list<Model_Theme> removedThemes;
-	Model_ThemeManager(Model_Env& env);
+	Model_ThemeManager();
 	void load();
 	Model_Theme& getTheme(std::string const& name);
 	bool themeExists(std::string const& name);
@@ -42,6 +43,17 @@ public:
 	std::string getThemePath();
 	bool hasSaveErrors();
 	std::string getSaveErrors();
+};
+
+class Model_ThemeManager_Connection {
+protected:
+	Model_ThemeManager* themeManager;
+public:
+	Model_ThemeManager_Connection() : themeManager(NULL) {}
+
+	void setThemeManager(Model_ThemeManager& themeManager) {
+		this->themeManager = &themeManager;
+	}
 };
 
 

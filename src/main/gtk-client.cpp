@@ -68,16 +68,16 @@ int main(int argc, char** argv){
 
 		Model_Env env;
 
-		Model_ListCfg listcfg(env);
+		Model_ListCfg listcfg;
 		View_Gtk_Main listCfgView;
-		Model_SettingsManagerData settings(env);
-		Model_SettingsManagerData settingsOnDisk(env);
-		Model_Installer installer(env);
+		Model_SettingsManagerData settings;
+		Model_SettingsManagerData settingsOnDisk;
+		Model_Installer installer;
 		View_Gtk_Installer installDlg;
 		View_Gtk_Trash trashView;
 		View_Gtk_EntryEditor entryEditDlg;
 		Model_MountTable mountTable;
-		Model_ListCfg savedListCfg(env);
+		Model_ListCfg savedListCfg;
 		Model_FbResolutionsGetter fbResolutionsGetter;
 		View_Gtk_Settings settingsDlg;
 		Model_DeviceDataList deviceDataList;
@@ -89,20 +89,20 @@ int main(int argc, char** argv){
 		View_Gtk_Error errorView;
 		Mapper_EntryNameImpl entryNameMapper;
 		View_Gtk_Theme themeEditor;
-		Model_ThemeManager themeManager(env);
+		Model_ThemeManager themeManager;
 
 		entryNameMapper.setView(listCfgView);
 
 		entryEditDlg.setDeviceDataList(deviceDataList);
 		envEditor.setDeviceDataList(deviceDataList);
 
-		EntryEditControllerImpl entryEditController(env);
+		EntryEditControllerImpl entryEditController;
 		entryEditController.setContentParserFactory(contentParserFactory);
 		entryEditController.setView(entryEditDlg);
 		entryEditController.setDeviceDataList(deviceDataList);
 		entryEditController.setListCfg(listcfg);
 
-		MainControllerImpl mainController(env);
+		MainControllerImpl mainController;
 		mainController.setListCfg(listcfg);
 		mainController.setSettingsManager(settings);
 		mainController.setSettingsBuffer(settingsOnDisk);
@@ -114,35 +114,34 @@ int main(int argc, char** argv){
 		mainController.setView(listCfgView);
 		mainController.setEntryNameMapper(entryNameMapper);
 
-		SettingsControllerImpl settingsController(env);
+		SettingsControllerImpl settingsController;
 		settingsController.setListCfg(listcfg);
 		settingsController.setView(settingsDlg);
 		settingsController.setSettingsManager(settings);
-		settingsController.setSettingsBuffer(settingsOnDisk);
 		settingsController.setFbResolutionsGetter(fbResolutionsGetter);
 
-		EnvEditorControllerImpl envEditController(env);
+		EnvEditorControllerImpl envEditController;
 		envEditController.setMountTable(mountTable);
 		envEditController.setView(envEditor);
 
-		TrashControllerImpl trashController(env);
+		TrashControllerImpl trashController;
 		trashController.setEntryNameMapper(entryNameMapper);
 		trashController.setListCfg(listcfg);
 		trashController.setDeviceDataList(deviceDataList);
 		trashController.setContentParserFactory(contentParserFactory);
 		trashController.setView(trashView);
 
-		InstallerControllerImpl installController(env);
+		InstallerControllerImpl installController;
 		installController.setInstaller(installer);
 		installController.setView(installDlg);
 
-		AboutControllerImpl aboutController(env);
+		AboutControllerImpl aboutController;
 		aboutController.setView(aboutDialog);
 
-		ErrorControllerImpl errorController(env);
+		ErrorControllerImpl errorController;
 		errorController.setView(errorView);
 
-		ThemeControllerImpl themeController(env);
+		ThemeControllerImpl themeController;
 		themeController.setView(themeEditor);
 		themeController.setThemeManager(themeManager);
 		themeController.setSettingsManager(settings);
@@ -183,17 +182,17 @@ int main(int argc, char** argv){
 		settingsDlg.putThemeEditArea(themeEditor.getEditorBox());
 
 		//assign event listener
-		listCfgView.setEventListener(mainController);
-		installDlg.setEventListener(installController);
-		trashView.setEventListener(trashController);
-		entryEditDlg.setEventListener(entryEditController);
-		settingsDlg.setEventListener(settingsController);
-		listcfg.setEventListener(mainController);
-		installer.setEventListener(installController);
-		fbResolutionsGetter.setEventListener(settingsController);
-		envEditor.setEventListener(envEditController);
-		errorView.setEventListener(errorController);
-		themeEditor.setEventListener(themeController);
+		listCfgView.setController(mainController);
+		installDlg.setController(installController);
+		trashView.setController(trashController);
+		entryEditDlg.setController(entryEditController);
+		settingsDlg.setController(settingsController);
+		listcfg.setController(mainController);
+		installer.setController(installController);
+		fbResolutionsGetter.setController(settingsController);
+		envEditor.setController(envEditController);
+		errorView.setController(errorController);
+		themeEditor.setController(themeController);
 
 		//assign logger
 		listcfg.setLogger(logger);
@@ -242,7 +241,7 @@ int main(int argc, char** argv){
 		}
 
 		//configure contentParser factory
-		Model_DeviceMap deviceMap(env);
+		Model_DeviceMap deviceMap;
 		ContentParser_Linux linuxParser(deviceMap);
 		ContentParser_LinuxIso linuxIsoParser(deviceMap);
 		ContentParser_Chainloader chainloadParser(deviceMap);
@@ -255,6 +254,23 @@ int main(int argc, char** argv){
 
 		entryEditDlg.setAvailableEntryTypes(contentParserFactory.getNames());
 
+		//set env
+		listcfg.setEnv(env);
+		savedListCfg.setEnv(env);
+		settings.setEnv(env);
+		settingsOnDisk.setEnv(env);
+		installer.setEnv(env);
+		themeManager.setEnv(env);
+		entryEditController.setEnv(env);
+		mainController.setEnv(env);
+		settingsController.setEnv(env);
+		envEditController.setEnv(env);
+		trashController.setEnv(env);
+		installController.setEnv(env);
+		themeController.setEnv(env);
+		deviceMap.setEnv(env);
+
+		//set mutex
 		listcfg.setMutex(listCfgMutex1);
 		savedListCfg.setMutex(listCfgMutex2);
 

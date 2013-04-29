@@ -21,6 +21,7 @@
 
 #include "../Model/ListCfg.h"
 #include "../View/Main.h"
+#include "../View/Trait/ViewAware.h"
 #include <libintl.h>
 #include <locale.h>
 #include <sstream>
@@ -36,8 +37,9 @@
 #include "../lib/ContentParserFactory.h"
 
 #include "../Controller/ControllerAbstract.h"
+#include "../Controller/Trait/ThreadControllerAware.h"
 
-#include "../lib/CommonClass.h"
+#include "../lib/Trait/LoggerAware.h"
 #include "../Mapper/EntryName.h"
 
 #include "../lib/Exception.h"
@@ -51,20 +53,23 @@
  * This controller operates on the entry list
  */
 
-class MainControllerImpl : public ControllerAbstract, public MainController {
-	Model_Env& env;
-	Model_ListCfg* grublistCfg;
-	View_Main* view;
-	Model_SettingsManagerData* settings;
+class MainControllerImpl :
+	public ControllerAbstract,
+	public MainController,
+	public View_Trait_ViewAware<View_Main>,
+	public Trait_ThreadControllerAware,
+	public Model_ListCfg_Connection,
+	public Model_SettingsManagerData_Connection,
+	public Model_FbResolutionsGetter_Connection,
+	public Model_DeviceDataList_Connection,
+	public Model_MountTable_Connection,
+	public ContentParserFactory_Connection,
+	public Mapper_EntryName_Connection,
+	public Model_Env_Connection
+{
 	Model_SettingsManagerData* settingsOnDisk; //buffer for the existing settings
 	Model_ListCfg* savedListCfg;
-	Model_FbResolutionsGetter* fbResolutionsGetter;
-	Model_DeviceDataList* deviceDataList;
-	Model_MountTable* mountTable;
-	ThreadController* threadController;
-	ContentParserFactory* contentParserFactory;
 	ContentParser* currentContentParser;
-	Mapper_EntryName* entryNameMapper;
 
 	bool config_has_been_different_on_startup_but_unsaved;
 	bool is_loading;
@@ -81,18 +86,8 @@ class MainControllerImpl : public ControllerAbstract, public MainController {
 	void _updateCurrentDefaultOs(Model_Rule* rule, std::string const& currentRulePath, std::string currentDefaultRulePath);
 
 public:
-	void setListCfg(Model_ListCfg& grublistCfg);
-	void setView(View_Main& listCfgDlg);
-	void setSettingsDialog(View_Settings& settingsDlg);
-	void setSettingsManager(Model_SettingsManagerData& settings);
 	void setSettingsBuffer(Model_SettingsManagerData& settings);
 	void setSavedListCfg(Model_ListCfg& savedListCfg);
-	void setFbResolutionsGetter(Model_FbResolutionsGetter& fbResolutionsGetter);
-	void setDeviceDataList(Model_DeviceDataList& deviceDataList);
-	void setMountTable(Model_MountTable& mountTable);
-	void setThreadController(ThreadController& threadController);
-	void setContentParserFactory(ContentParserFactory& contentParserFactory);
-	void setEntryNameMapper(Mapper_EntryName& mapper);
 
 	ThreadController& getThreadController();
 	Model_FbResolutionsGetter& getFbResolutionsGetter();
@@ -109,7 +104,7 @@ public:
 	void loadThreadedAction(bool preserveConfig = false);
 	void saveAction();
 	void saveThreadedAction();
-	MainControllerImpl(Model_Env& env);
+	MainControllerImpl();
 	
 public:
 	void renameEntry(Model_Rule* rule, std::string const& newName);

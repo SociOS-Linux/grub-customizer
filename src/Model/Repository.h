@@ -24,10 +24,10 @@
 #include <sys/stat.h>
 #include <dirent.h>
 #include <map>
-#include "../lib/CommonClass.h"
+#include "../lib/Trait/LoggerAware.h"
 #include "../lib/ArrayStructure.h"
 
-struct Model_Repository : public std::list<Model_Script>, public CommonClass {
+struct Model_Repository : public std::list<Model_Script>, public Trait_LoggerAware {
 	std::list<Model_Script> trash;
 	void load(std::string const& directory, bool is_proxifiedScript_dir);
 	Model_Script* getScriptByFilename(std::string const& fileName, bool createScriptIfNotFound = false);

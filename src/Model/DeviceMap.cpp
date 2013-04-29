@@ -18,9 +18,6 @@
 
 #include "DeviceMap.h"
 
-Model_DeviceMap::Model_DeviceMap(Model_Env const& env) {
-	this->env = &env;
-}
 Model_SmartFileHandle Model_DeviceMap::getFileHandle() const {
 	Model_SmartFileHandle result;
 	try {

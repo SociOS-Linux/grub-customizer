@@ -21,7 +21,7 @@
 #include <cstdio>
 #include <string>
 #include <list>
-#include "../lib/CommonClass.h"
+#include "../lib/Trait/LoggerAware.h"
 #include "../lib/str_replace.h"
 #include "../lib/ArrayStructure.h"
 #include "../lib/trim.h"
@@ -36,7 +36,7 @@ struct Model_Entry_Row {
 	operator bool();
 };
 
-struct Model_Entry : public CommonClass, public Entry {
+struct Model_Entry : public Trait_LoggerAware, public Entry {
 	enum EntryType {
 		MENUENTRY,
 		SUBMENU,

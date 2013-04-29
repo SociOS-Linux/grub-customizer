@@ -23,11 +23,11 @@
 #include <glibmm/dispatcher.h>
 #include <gtkmm/main.h>
 #include "../ControllerCollection.h"
-#include "../../lib/CommonClass.h"
+#include "../../lib/Trait/LoggerAware.h"
 #include "../../lib/assert.h"
 #include "../../lib/Type.h"
 
-class GLib_ThreadController : public ThreadController, public CommonClass {
+class GLib_ThreadController : public ThreadController, public Trait_LoggerAware {
 	ControllerCollection& _controllers;
 
 	Glib::Dispatcher disp_sync_load, disp_sync_save, disp_thread_died, disp_updateSettingsDlgResolutionList, disp_settings_loaded, disp_exception, disp_postSaveActions;

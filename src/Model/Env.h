@@ -26,13 +26,13 @@
 #include <dirent.h>
 #include <map>
 #include <sys/stat.h>
-#include "../lib/CommonClass.h"
+#include "../lib/Trait/LoggerAware.h"
 #include "SettingsStore.h"
 #include "../lib/Exception.h"
 #include "../lib/ArrayStructure.h"
 #include "../lib/Type.h"
 
-struct Model_Env : public CommonClass {
+struct Model_Env : public Trait_LoggerAware {
 public:
 	enum Mode {
 		GRUB_MODE,
@@ -65,6 +65,17 @@ public:
 	bool useDirectBackgroundProps; // Whether background settings should be set directly or by creating a desktop-base script
 	std::list<Model_Env::Mode> getAvailableModes();
 	operator ArrayStructure();
+};
+
+class Model_Env_Connection {
+protected:
+	Model_Env* env;
+public:
+	Model_Env_Connection() : env(NULL) {}
+
+	void setEnv(Model_Env& env) {
+		this->env = &env;
+	}
 };
 
 #endif

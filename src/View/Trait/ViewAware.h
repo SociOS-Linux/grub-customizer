@@ -16,17 +16,18 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef CONTROLLER_ABSTRACT_H_
-#define CONTROLLER_ABSTRACT_H_
+#ifndef VIEW_VIEWAWARE_H_
+#define VIEW_VIEWAWARE_H_
 
-#include "ControllerCollection.h"
-#include "../lib/assert.h"
-#include "../lib/Trait/ActionLoggerAware.h"
-
-class ControllerAbstract : public Trait_ActionLoggerAware, public ControllerCollection_Connection {
+template <typename T>
+class View_Trait_ViewAware {
+protected:
+	T* view;
 public:
-	ControllerAbstract(std::string const& controllerName);
+	View_Trait_ViewAware() : view(NULL) {}
+	void setView(T& view) {
+		this->view = &view;
+	}
 };
 
-
-#endif /* ABSTRACT_H_ */
+#endif /* VIEW_VIEWAWARE_H_ */

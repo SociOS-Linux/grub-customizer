@@ -25,15 +25,18 @@
 #include "../lib/csv.h"
 #include <dirent.h>
 #include "../lib/assert.h"
-#include "../lib/CommonClass.h"
+#include "../lib/Trait/LoggerAware.h"
 
-class Model_ScriptSourceMap : public std::map<std::string, std::string>, public CommonClass {
-	Model_Env& env;
+class Model_ScriptSourceMap :
+	public std::map<std::string, std::string>,
+	public Trait_LoggerAware,
+	public Model_Env_Connection
+{
 	std::string _getFilePath();
 	bool _fileExists;
 	std::list<std::string> _newSources;
 public:
-	Model_ScriptSourceMap(Model_Env& env);
+	Model_ScriptSourceMap();
 	void load();
 	void registerMove(std::string const& sourceName, std::string const& destinationName);
 	void addScript(std::string const& sourceName);

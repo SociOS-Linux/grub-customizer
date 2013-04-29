@@ -73,6 +73,8 @@ src/Controller/ThemeController.h -text
 src/Controller/ThemeControllerImpl.cpp -text
 src/Controller/ThemeControllerImpl.h -text
 src/Controller/ThreadController.h -text
+src/Controller/Trait/ControllerAware.h -text
+src/Controller/Trait/ThreadControllerAware.h -text
 src/Controller/TrashController.h -text
 src/Controller/TrashControllerImpl.cpp -text
 src/Controller/TrashControllerImpl.h -text
@@ -159,11 +161,10 @@ src/View/Main.h -text
 src/View/Model/ListItem.h -text
 src/View/Settings.h -text
 src/View/Theme.h -text
+src/View/Trait/ViewAware.h -text
 src/View/Trash.h -text
 src/lib/ArrayStructure.cpp -text
 src/lib/ArrayStructure.h -text
-src/lib/CommonClass.cpp -text
-src/lib/CommonClass.h -text
 src/lib/ContentParser.h -text
 src/lib/ContentParser/Abstract.cpp -text
 src/lib/ContentParser/Abstract.h -text
@@ -186,6 +187,8 @@ src/lib/Logger/Stream.h -text
 src/lib/Mutex.h -text
 src/lib/Mutex/GLib.cpp -text
 src/lib/Mutex/GLib.h -text
+src/lib/Trait/ActionLoggerAware.h -text
+src/lib/Trait/LoggerAware.h -text
 src/lib/Type.h -text
 src/lib/assert.cpp -text
 src/lib/assert.h -text

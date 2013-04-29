@@ -18,16 +18,9 @@
 
 #include "AboutControllerImpl.h"
 
-AboutControllerImpl::AboutControllerImpl(Model_Env& env)
-	: ControllerAbstract("about"),
-	  view(NULL),
-	  env(env)
+AboutControllerImpl::AboutControllerImpl()
+	: ControllerAbstract("about")
 {
-}
-
-
-void AboutControllerImpl::setView(View_About& aboutDialog){
-	this->view = &aboutDialog;
 }
 
 void AboutControllerImpl::showAction(){

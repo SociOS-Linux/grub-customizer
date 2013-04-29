@@ -21,32 +21,32 @@
 #include "ThemeController.h"
 #include "../Model/Env.h"
 #include "../View/Theme.h"
+#include "../View/Trait/ViewAware.h"
 #include "../Model/SettingsManagerData.h"
 #include "ControllerAbstract.h"
+#include "Trait/ThreadControllerAware.h"
 #include "../Model/ThemeManager.h"
 #include "../Model/ListCfg.h"
 #include <algorithm>
 
-class ThemeControllerImpl : public ThemeController, public ControllerAbstract {
-	Model_Env& env;
-	View_Theme* view;
-	Model_ThemeManager* themeManager;
-	Model_SettingsManagerData* settings;
-	Model_ListCfg* grublistCfg;
+class ThemeControllerImpl :
+	public ThemeController,
+	public ControllerAbstract,
+	public View_Trait_ViewAware<View_Theme>,
+	public Trait_ThreadControllerAware,
+	public Model_ThemeManager_Connection,
+	public Model_SettingsManagerData_Connection,
+	public Model_ListCfg_Connection,
+	public Model_Env_Connection
+{
 	std::string currentTheme, currentThemeFile;
-	ThreadController* threadController;
 	bool syncActive; // should only be controlled by syncSettings()
 	bool isImage(std::string const& fileName);
 
 	void syncSettings();
 	void syncFiles();
 public:
-	ThemeControllerImpl(Model_Env& env);
-	void setThreadController(ThreadController& threadController);
-	void setView(View_Theme& view);
-	void setThemeManager(Model_ThemeManager& themeManager);
-	void setSettingsManager(Model_SettingsManagerData& settings);
-	void setListCfg(Model_ListCfg& grublistCfg);
+	ThemeControllerImpl();
 
 	void loadThemesAction();
 	void loadThemeAction(std::string const& name);

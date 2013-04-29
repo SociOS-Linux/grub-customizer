@@ -18,13 +18,13 @@
 
 #include "ThemeManager.h"
 
-Model_ThemeManager::Model_ThemeManager(Model_Env& env)
-	: env(env), gotSaveErrors(false)
+Model_ThemeManager::Model_ThemeManager()
+	: gotSaveErrors(false)
 {}
 
 void Model_ThemeManager::load() {
 	this->themes.clear();
-	std::string path = this->env.output_config_dir + "/" + "themes";
+	std::string path = this->env->output_config_dir + "/" + "themes";
 
 	DIR* dir = opendir(path.c_str());
 	if (dir) {
@@ -63,7 +63,7 @@ bool Model_ThemeManager::themeExists(std::string const& name) {
 }
 
 std::string Model_ThemeManager::extractThemeName(std::string const& indexFile) {
-	std::string themePath = this->env.output_config_dir + "/themes";
+	std::string themePath = this->env->output_config_dir + "/themes";
 	if (indexFile.substr(0, themePath.size()) != themePath) {
 		throw InvalidStringFormatException("theme index file path must contain '" + themePath + "' given path: '" + indexFile + "'", __FILE__, __LINE__);
 	}
@@ -105,7 +105,7 @@ void Model_ThemeManager::save() {
 	this->saveErrors = "";
 	this->gotSaveErrors = false;
 
-	std::string dirName = this->env.output_config_dir + "/themes";
+	std::string dirName = this->env->output_config_dir + "/themes";
 	mkdir(dirName.c_str(), 0755);
 	for (std::list<Model_Theme>::iterator themeIter = this->removedThemes.begin(); themeIter != this->removedThemes.end(); themeIter++) {
 		themeIter->deleteThemeFiles(dirName);
@@ -130,7 +130,7 @@ void Model_ThemeManager::save() {
 }
 
 std::string Model_ThemeManager::getThemePath() {
-	return this->env.output_config_dir + "/themes";
+	return this->env->output_config_dir + "/themes";
 }
 
 bool Model_ThemeManager::hasSaveErrors() {

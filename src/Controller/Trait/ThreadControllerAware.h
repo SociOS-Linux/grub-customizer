@@ -16,17 +16,18 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef CONTROLLER_ABSTRACT_H_
-#define CONTROLLER_ABSTRACT_H_
+#ifndef TRAIT_THREADCONTROLLERAWARE_H_
+#define TRAIT_THREADCONTROLLERAWARE_H_
 
-#include "ControllerCollection.h"
-#include "../lib/assert.h"
-#include "../lib/Trait/ActionLoggerAware.h"
-
-class ControllerAbstract : public Trait_ActionLoggerAware, public ControllerCollection_Connection {
+class Trait_ThreadControllerAware {
+protected:
+	ThreadController* threadController;
 public:
-	ControllerAbstract(std::string const& controllerName);
+	Trait_ThreadControllerAware() : threadController(NULL) {}
+
+	void setThreadController(ThreadController& threadController) {
+		this->threadController = &threadController;
+	}
 };
 
-
-#endif /* ABSTRACT_H_ */
+#endif /* TRAIT_THREADCONTROLLERAWARE_H_ */

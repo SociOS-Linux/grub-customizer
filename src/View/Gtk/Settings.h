@@ -23,12 +23,18 @@
 #include <libintl.h>
 #include "../ColorChooser.h"
 #include <string>
-#include "../../lib/CommonClass.h"
+#include "../../lib/Trait/LoggerAware.h"
 #include "../../Controller/SettingsController.h"
+#include "../../Controller/Trait/ControllerAware.h"
 #include "../../lib/assert.h"
 
 
-class View_Gtk_Settings : public Gtk::Dialog, public View_Settings, public CommonClass {
+class View_Gtk_Settings :
+	public Gtk::Dialog,
+	public View_Settings,
+	public Trait_LoggerAware,
+	public Trait_ControllerAware<SettingsController>
+{
 	struct AdvancedSettingsTreeModel : public Gtk::TreeModelColumnRecord {
 		Gtk::TreeModelColumn<bool> active;
 		Gtk::TreeModelColumn<Glib::ustring> name;
@@ -42,7 +48,6 @@ class View_Gtk_Settings : public Gtk::Dialog, public View_Settings, public Commo
 	AdvancedSettingsTreeModel asTreeModel;
 	Glib::RefPtr<Gtk::ListStore> refAsListStore;
 	bool event_lock;
-	SettingsController* eventListener;
 	
 	Gtk::Notebook tabbox;
 	Gtk::ScrolledWindow scrAllEntries;
@@ -113,7 +118,6 @@ class View_Gtk_Settings : public Gtk::Dialog, public View_Settings, public Commo
 	void on_response(int response_id);
 	public:
 	View_Gtk_Settings();
-	void setEventListener(SettingsController& eventListener);
 	Gtk::VBox& getCommonSettingsPane();
 	Gtk::VBox& getAppearanceSettingsPane();
 	void show(bool burgMode);

@@ -73,7 +73,6 @@ add_executable(grub-customizer
 	src/lib/ContentParser/Abstract.cpp
 	src/lib/Mutex/GLib.cpp
 	src/Controller/GLib/ThreadController.cpp
-	src/lib/CommonClass.cpp
 	src/lib/Logger/Stream.cpp
 	src/lib/regex.cpp
 	src/View/Gtk/Element/PartitionChooser.cpp
@@ -115,7 +114,6 @@ add_executable(grubcfg-proxy
 	src/Model/Script.cpp
 	src/Model/Proxy.cpp
 	src/main/proxy.cpp
-	src/lib/CommonClass.cpp
 	src/lib/md5.cpp
 	src/lib/str_replace.cpp
 	# multi:

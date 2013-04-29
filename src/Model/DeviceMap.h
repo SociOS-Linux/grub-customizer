@@ -29,11 +29,11 @@ struct Model_DeviceMap_PartitionIndex {
 	operator std::string();
 };
 
-class Model_DeviceMap {
-	Model_Env const * env;
+class Model_DeviceMap :
+	public Model_Env_Connection
+{
 	mutable std::map<std::string, Model_DeviceMap_PartitionIndex> _cache;
 public:
-	Model_DeviceMap(Model_Env const& env);
 	Model_SmartFileHandle getFileHandle() const;
 	Model_DeviceMap_PartitionIndex getHarddriveIndexByPartitionUuid(std::string partitionUuid) const;
 };

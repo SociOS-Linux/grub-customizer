@@ -30,34 +30,33 @@
 
 #include "../Model/Installer.h"
 #include "../View/EntryEditor.h"
+#include "../View/Trait/ViewAware.h"
 
 #include "../Model/ListCfg.h"
 #include "../Model/DeviceDataList.h"
 #include "../lib/ContentParserFactory.h"
 
-#include "../lib/CommonClass.h"
+#include "../lib/Trait/LoggerAware.h"
 #include "../Controller/ControllerAbstract.h"
+#include "../Controller/Trait/ThreadControllerAware.h"
 
 #include "../lib/Exception.h"
 
 
-class EntryEditControllerImpl : public EntryEditController, public ControllerAbstract {
-	Model_Env& env;
-	Model_ListCfg* grublistCfg;
-	View_EntryEditor* view;
-	ContentParserFactory* contentParserFactory;
+class EntryEditControllerImpl :
+	public EntryEditController,
+	public ControllerAbstract,
+	public View_Trait_ViewAware<View_EntryEditor>,
+	public Trait_ThreadControllerAware,
+	public Model_ListCfg_Connection,
+	public ContentParserFactory_Connection,
+	public Model_DeviceDataListInterface_Connection,
+	public Model_Env_Connection
+{
 	ContentParser* currentContentParser;
-	Model_DeviceDataListInterface* deviceDataList;
-	ThreadController* threadController;
 	Model_Script* _createCustomScript();
 public:
-	EntryEditControllerImpl(Model_Env& env);
-
-	void setDeviceDataList(Model_DeviceDataList& deviceDataList);
-	void setContentParserFactory(ContentParserFactory& contentParserFactory);
-	void setListCfg(Model_ListCfg& grublistCfg);
-	void setView(View_EntryEditor& view);
-	void setThreadController(ThreadController& threadController);
+	EntryEditControllerImpl();
 
 	void showAction(Rule* rule);
 	void showCreatorAction();

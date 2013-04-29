@@ -33,4 +33,15 @@ public:
 	virtual std::string getNameByInstance(ContentParser const& instance) const = 0;
 };
 
+class ContentParserFactory_Connection {
+protected:
+	ContentParserFactory* contentParserFactory;
+public:
+	ContentParserFactory_Connection() : contentParserFactory(NULL) {}
+
+	void setContentParserFactory(ContentParserFactory& contentParserFactory) {
+		this->contentParserFactory = &contentParserFactory;
+	}
+};
+
 #endif /* CONTENTPARSERFACTORY_H_ */

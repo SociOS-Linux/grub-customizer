@@ -38,11 +38,12 @@
 #include "SettingsManagerData.h"
 #include "Env.h"
 #include "../Controller/MainController.h"
+#include "../Controller/Trait/ControllerAware.h"
 
 #include "../lib/assert.h"
 
 #include "../lib/Mutex.h"
-#include "../lib/CommonClass.h"
+#include "../lib/Trait/LoggerAware.h"
 
 #include "../lib/Exception.h"
 #include "../lib/ArrayStructure.h"
@@ -51,29 +52,28 @@
 #include <stack>
 #include <algorithm>
 
-
-class Model_ListCfg : public CommonClass {
-	MainController* eventListener;
-	
+class Model_ListCfg :
+	public Trait_LoggerAware,
+	public Trait_ControllerAware<MainController>,
+	public Mutex_Connection,
+	public Model_Env_Connection
+{
 	double progress;
 	std::string progress_name;
 	int progress_pos, progress_max;
-	Mutex* mutex;
 	std::string errorLogFile;
 
 	Model_ScriptSourceMap scriptSourceMap;
 public:
-	Model_ListCfg(Model_Env& env);
-	void setEventListener(MainController& eventListener);
-	void setMutex(Mutex& mutex);
+	Model_ListCfg();
 	void setLogger(Logger& logger);
+	void setEnv(Model_Env& env);
 
 	Model_Proxylist proxies;
 	Model_Repository repository;
 	
 	bool verbose;
 	bool error_proxy_not_found;
-	Model_Env& env;
 	void lock();
 	bool lock_if_free();
 	void unlock();
@@ -138,5 +138,17 @@ public:
 
 	operator ArrayStructure() const;
 };
+
+class Model_ListCfg_Connection {
+protected:
+	Model_ListCfg* grublistCfg;
+public:
+	Model_ListCfg_Connection() : grublistCfg(NULL) {}
+
+	void setListCfg(Model_ListCfg& grublistCfg){
+		this->grublistCfg = &grublistCfg;
+	}
+};
+
 
 #endif

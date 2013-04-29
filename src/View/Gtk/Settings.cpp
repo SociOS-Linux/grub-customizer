@@ -170,10 +170,6 @@ View_Gtk_Settings::View_Gtk_Settings()
 	this->set_default_size(500, 600);
 }
 
-void View_Gtk_Settings::setEventListener(SettingsController& eventListener){
-	this->eventListener = &eventListener;
-}
-
 Gtk::VBox& View_Gtk_Settings::getCommonSettingsPane() {
 	tabbox.remove(alignCommonSettings);
 	alignCommonSettings.remove();
@@ -195,7 +191,7 @@ void View_Gtk_Settings::hide(){
 
 
 void View_Gtk_Settings::on_response(int response_id) {
-	this->eventListener->hideAction();
+	this->controller->hideAction();
 }
 
 void View_Gtk_Settings::addEntryToDefaultEntryChooser(std::string const& labelPathValue, std::string const& labelPathLabel, std::string const& numericPathValue, std::string const& numericPathLabel){
@@ -361,13 +357,13 @@ View_Gtk_Settings::CustomOption View_Gtk_Settings::getCustomOption(std::string c
 
 void View_Gtk_Settings::signal_setting_row_changed(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter){
 	if (!event_lock){
-		this->eventListener->updateCustomSettingAction((Glib::ustring)(*iter)[asTreeModel.old_name]);
+		this->controller->updateCustomSettingAction((Glib::ustring)(*iter)[asTreeModel.old_name]);
 	}
 }
 
 void View_Gtk_Settings::signal_default_entry_predefined_toggeled(){
 	if (!event_lock){
-		this->eventListener->updateDefaultSystemAction();
+		this->controller->updateDefaultSystemAction();
 	}
 }
 
@@ -377,13 +373,13 @@ View_Gtk_Settings::DefEntryType View_Gtk_Settings::getActiveDefEntryOption(){
 
 void View_Gtk_Settings::signal_default_entry_saved_toggeled(){
 	if (!event_lock){
-		this->eventListener->updateDefaultSystemAction();
+		this->controller->updateDefaultSystemAction();
 	}
 }
 
 void View_Gtk_Settings::signal_default_entry_changed(){
 	if (!event_lock){
-		this->eventListener->updateDefaultSystemAction();
+		this->controller->updateDefaultSystemAction();
 	}
 }
 
@@ -402,14 +398,14 @@ void View_Gtk_Settings::showHiddenMenuOsProberConflictMessage(){
 
 void View_Gtk_Settings::signal_showMenu_toggled(){
 	if (!event_lock){
-		this->eventListener->updateShowMenuSettingAction();
+		this->controller->updateShowMenuSettingAction();
 	}
 }
 
 
 void View_Gtk_Settings::signal_osProber_toggled(){
 	if (!event_lock){
-		this->eventListener->updateOsProberSettingAction();
+		this->controller->updateOsProberSettingAction();
 	}
 }
 
@@ -427,13 +423,13 @@ bool View_Gtk_Settings::getTimeoutActive() {
 
 void View_Gtk_Settings::signal_timeout_changed(){
 	if (!event_lock){
-		this->eventListener->updateTimeoutSettingAction();
+		this->controller->updateTimeoutSettingAction();
 	}
 }
 
 void View_Gtk_Settings::signal_timeout_checkbox_toggled() {
 	if (!event_lock){
-		this->eventListener->updateTimeoutSettingAction();
+		this->controller->updateTimeoutSettingAction();
 	}
 }
 
@@ -444,7 +440,7 @@ std::string View_Gtk_Settings::getKernelParams(){
 
 void View_Gtk_Settings::signal_kernelparams_changed(){
 	if (!event_lock){
-		this->eventListener->updateKernelParamsAction();
+		this->controller->updateKernelParamsAction();
 	}
 }
 
@@ -455,7 +451,7 @@ bool View_Gtk_Settings::getRecoveryCheckboxState(){
 
 void View_Gtk_Settings::signal_recovery_toggled(){
 	if (!event_lock){
-		this->eventListener->updateRecoverySettingAction();
+		this->controller->updateRecoverySettingAction();
 	}
 }
 
@@ -466,7 +462,7 @@ bool View_Gtk_Settings::getResolutionCheckboxState(){
 
 void View_Gtk_Settings::signal_chkResolution_toggled(){
 	if (!event_lock){
-		this->eventListener->updateUseCustomResolutionAction();
+		this->controller->updateUseCustomResolutionAction();
 	}
 }
 
@@ -484,17 +480,17 @@ void View_Gtk_Settings::putThemeEditArea(Gtk::Widget& themeEditArea) {
 
 void View_Gtk_Settings::signal_resolution_selected(){
 	if (!event_lock){
-		this->eventListener->updateCustomResolutionAction();
+		this->controller->updateCustomResolutionAction();
 	}
 }
 
 void View_Gtk_Settings::signal_add_row_button_clicked(){
 	if (!event_lock)
-		this->eventListener->addCustomSettingAction();
+		this->controller->addCustomSettingAction();
 }
 void View_Gtk_Settings::signal_remove_row_button_clicked(){
 	if (!event_lock)
-		this->eventListener->removeCustomSettingAction((Glib::ustring)(*tvAllEntries.get_selection()->get_selected())[asTreeModel.name]);
+		this->controller->removeCustomSettingAction((Glib::ustring)(*tvAllEntries.get_selection()->get_selected())[asTreeModel.name]);
 }
 
 

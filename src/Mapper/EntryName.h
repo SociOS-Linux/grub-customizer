@@ -28,5 +28,14 @@ public:
 	virtual std::string map(Model_Entry const* sourceEntry, std::string const& defaultName, std::string const& scriptName = "") = 0;
 };
 
+class Mapper_EntryName_Connection {
+protected:
+	Mapper_EntryName* entryNameMapper;
+public:
+	Mapper_EntryName_Connection() : entryNameMapper(NULL) {}
+	void setEntryNameMapper(Mapper_EntryName& mapper) {
+		this->entryNameMapper = &mapper;
+	}
+};
 
 #endif /* ENTRYNAME_H_ */

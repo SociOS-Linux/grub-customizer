@@ -28,30 +28,30 @@
 
 #include "../Model/Installer.h"
 #include "../View/Installer.h"
+#include "../View/Trait/ViewAware.h"
 
 #include "ThreadController.h"
 
 #include "../Controller/ControllerAbstract.h"
+#include "../Controller/Trait/ThreadControllerAware.h"
 
 #include "../lib/Exception.h"
 
 #include "InstallerController.h"
 
 
-class InstallerControllerImpl : public ControllerAbstract, public InstallerController {
-	Model_Env& env;
-	Model_Installer* installer;
-	View_Installer* view;
-	ThreadController* threadController;
-
+class InstallerControllerImpl :
+	public ControllerAbstract,
+	public InstallerController,
+	public View_Trait_ViewAware<View_Installer>,
+	public Trait_ThreadControllerAware,
+	public Model_Installer_Connection,
+	public Model_Env_Connection
+{
 public:
-	void setInstaller(Model_Installer& installer);
-	void setView(View_Installer& installDlg);
-	void setThreadController(ThreadController& threadController);
-
 	ThreadController& getThreadController();
 
-	InstallerControllerImpl(Model_Env& env);
+	InstallerControllerImpl();
 	
 	void showAction();
 	void installGrubAction(std::string device);

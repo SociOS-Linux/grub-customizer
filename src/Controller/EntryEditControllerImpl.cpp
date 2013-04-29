@@ -18,32 +18,10 @@
 
 #include "EntryEditControllerImpl.h"
 
-EntryEditControllerImpl::EntryEditControllerImpl(Model_Env& env)
+EntryEditControllerImpl::EntryEditControllerImpl()
 	: ControllerAbstract("entry-edit"),
-	  grublistCfg(NULL),
-	 env(env), contentParserFactory(NULL), currentContentParser(NULL),
-	 deviceDataList(NULL), view(NULL), threadController(NULL)
+	 currentContentParser(NULL)
 {
-}
-
-void EntryEditControllerImpl::setListCfg(Model_ListCfg& grublistCfg){
-	this->grublistCfg = &grublistCfg;
-}
-
-void EntryEditControllerImpl::setContentParserFactory(ContentParserFactory& contentParserFactory) {
-	this->contentParserFactory = &contentParserFactory;
-}
-
-void EntryEditControllerImpl::setDeviceDataList(Model_DeviceDataList& deviceDataList){
-	this->deviceDataList = &deviceDataList;
-}
-
-void EntryEditControllerImpl::setView(View_EntryEditor& view) {
-	this->view = &view;
-}
-
-void EntryEditControllerImpl::setThreadController(ThreadController& threadController) {
-	this->threadController = &threadController;
 }
 
 Model_Script* EntryEditControllerImpl::_createCustomScript() {
@@ -124,7 +102,7 @@ void EntryEditControllerImpl::applyAction() {
 		rulePtr->dataSource->content = newCode;
 		rulePtr->dataSource->isModified = true;
 
-		this->env.modificationsUnsaved = true;
+		this->env->modificationsUnsaved = true;
 		this->getAllControllers().mainController->syncLoadStateAction();
 
 		assert(this->threadController != NULL);

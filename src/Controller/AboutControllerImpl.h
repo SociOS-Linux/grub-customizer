@@ -27,18 +27,19 @@
 #include "../Model/Env.h"
 
 #include "../View/About.h"
+#include "../View/Trait/ViewAware.h"
 
 #include "../Controller/ControllerAbstract.h"
 
 #include "AboutController.h"
 
-class AboutControllerImpl : public ControllerAbstract, public AboutController {
-	Model_Env& env;
-	View_About* view;
+class AboutControllerImpl :
+	public ControllerAbstract,
+	public AboutController,
+	public View_Trait_ViewAware<View_About>
+{
 public:
-	void setView(View_About& aboutDialog);
-
-	AboutControllerImpl(Model_Env& env);
+	AboutControllerImpl();
 	
 	void showAction();
 };

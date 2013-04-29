@@ -22,7 +22,7 @@
 #include <cstdio>
 #include <string>
 #include <cstdlib>
-#include "../lib/CommonClass.h"
+#include "../lib/Trait/LoggerAware.h"
 #include "../lib/Exception.h"
 
 
@@ -38,7 +38,7 @@ struct Model_MountTable_Mountpoint {
 	bool isLiveCdFs();
 };
 
-class Model_MountTable : public std::list<Model_MountTable_Mountpoint>, public CommonClass {
+class Model_MountTable : public std::list<Model_MountTable_Mountpoint>, public Trait_LoggerAware {
 	bool loaded;
 	public:
 	Model_MountTable(FILE* source, std::string const& rootDirectory, bool default_isMounted_flag = false);
@@ -58,5 +58,17 @@ class Model_MountTable : public std::list<Model_MountTable_Mountpoint>, public C
 	void mountRootFs(std::string const& device, std::string const& mountpoint);
 	operator std::string() const;
 };
+
+class Model_MountTable_Connection {
+protected:
+	Model_MountTable* mountTable;
+public:
+	Model_MountTable_Connection() : mountTable(NULL) {}
+
+	void setMountTable(Model_MountTable& mountTable){
+		this->mountTable = &mountTable;
+	}
+};
+
 #endif
 

@@ -23,7 +23,8 @@ View_Gtk_Trash::View_Gtk_Trash()
 	  bttRestore(Gtk::Stock::UNDELETE),
 	  bttDelete(Gtk::Stock::DELETE),
 	  micDelete(Gtk::Stock::DELETE),
-	  event_lock(false) {
+	  event_lock(false)
+{
 	this->set_title(gettext("Add entry from trash"));
 	this->set_icon_name("grub-customizer");
 	this->set_default_size(650, 500);
@@ -69,10 +70,6 @@ View_Gtk_Trash::View_Gtk_Trash()
 	this->bttDelete.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Trash::delete_button_click));
 }
 
-void View_Gtk_Trash::setEventListener(TrashController& eventListener){
-	this->eventListener = &eventListener;
-}
-
 void View_Gtk_Trash::clear(){
 	event_lock = true;
 	list.refTreeStore->clear();
@@ -82,16 +79,16 @@ void View_Gtk_Trash::clear(){
 void View_Gtk_Trash::signal_item_dblClick(Gtk::TreeModel::Path const& path, Gtk::TreeViewColumn* column) {
 	this->list.get_selection()->unselect_all();
 	this->list.get_selection()->select(path);
-	eventListener->applyAction();
+	controller->applyAction();
 	this->hide();
 }
 
 void View_Gtk_Trash::restore_button_click() {
-	eventListener->applyAction();
+	controller->applyAction();
 }
 
 void View_Gtk_Trash::delete_button_click() {
-	eventListener->deleteCustomEntriesAction();
+	controller->deleteCustomEntriesAction();
 }
 
 std::list<Entry*> View_Gtk_Trash::getSelectedEntries(){
@@ -130,7 +127,7 @@ void View_Gtk_Trash::askForDeletion(std::list<std::string> const& names) {
 
 	int response = Gtk::MessageDialog(question, false, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_OK_CANCEL).run();
 	if (response == Gtk::RESPONSE_OK) {
-		this->eventListener->deleteCustomEntriesAction();
+		this->controller->deleteCustomEntriesAction();
 	}
 }
 
@@ -158,7 +155,7 @@ void View_Gtk_Trash::setRestoreButtonSensitivity(bool sensitivity) {
 
 void View_Gtk_Trash::signal_treeview_selection_changed() {
 	if (!event_lock) {
-		this->eventListener->updateSelectionAction(this->list.getSelectedRules());
+		this->controller->updateSelectionAction(this->list.getSelectedRules());
 	}
 }
 

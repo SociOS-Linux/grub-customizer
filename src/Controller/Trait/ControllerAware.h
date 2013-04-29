@@ -16,28 +16,18 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef COMMONCLASS_H_
-#define COMMONCLASS_H_
-#include "../lib/Logger.h"
-#include "Exception.h"
+#ifndef TRAIT_CONTROLLERAWARE_H_
+#define TRAIT_CONTROLLERAWARE_H_
 
-class CommonClass {
-	mutable Logger* logger;
-	std::string _controllerName;
-public:
-	CommonClass();
-	void setLogger(Logger& logger);
-	Logger const& getLogger() const;
-	Logger& getLogger();
-	Logger* getLoggerPtr();
-	bool hasLogger() const;
+template <typename T>
+class Trait_ControllerAware {
 protected:
-	void setControllerName(std::string const& name);
-	void log(std::string const& message, Logger::Priority prio) const;
-	void logActionBegin(std::string const& action) const;
-	void logActionEnd() const;
-	void logActionBeginThreaded(std::string const& action) const;
-	void logActionEndThreaded() const;
+	T* controller;
+public:
+	Trait_ControllerAware() : controller(NULL) {}
+	void setController(T& controller) {
+		this->controller = &controller;
+	}
 };
 
-#endif
+#endif /* TRAIT_CONTROLLERAWARE_H_ */

@@ -22,13 +22,24 @@
 #include <cstdio>
 #include <string>
 #include "../Model/DeviceDataListInterface.h"
-#include "../lib/CommonClass.h"
+#include "../lib/Trait/LoggerAware.h"
 
-class Model_DeviceDataList : public Model_DeviceDataListInterface, public CommonClass {
+class Model_DeviceDataList : public Model_DeviceDataListInterface, public Trait_LoggerAware {
 public:
 	Model_DeviceDataList(FILE* blkidOutput);
 	Model_DeviceDataList();
 	void loadData(FILE* blkidOutput);
 	void clear();
+};
+
+class Model_DeviceDataList_Connection {
+protected:
+	Model_DeviceDataList* deviceDataList;
+public:
+	Model_DeviceDataList_Connection() : deviceDataList(NULL) {}
+
+	void setDeviceDataList(Model_DeviceDataList& deviceDataList){
+		this->deviceDataList = &deviceDataList;
+	}
 };
 #endif

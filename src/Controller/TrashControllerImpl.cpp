@@ -18,14 +18,8 @@
 
 #include "TrashControllerImpl.h"
 
-TrashControllerImpl::TrashControllerImpl(Model_Env& env)
-	: ControllerAbstract("trash"),
-	  grublistCfg(NULL),
-	  view(NULL),
-	 env(env),
-	 entryNameMapper(NULL),
-	 deviceDataList(NULL),
-	 contentParserFactory(NULL)
+TrashControllerImpl::TrashControllerImpl()
+	: ControllerAbstract("trash")
 {
 }
 
@@ -71,26 +65,6 @@ bool TrashControllerImpl::_isDeletable(std::list<Entry*> const& selectedEntries)
 	}
 
 	return true;
-}
-
-void TrashControllerImpl::setListCfg(Model_ListCfg& grublistCfg){
-	this->grublistCfg = &grublistCfg;
-}
-
-void TrashControllerImpl::setView(View_Trash& scriptAddDlg){
-	this->view = &scriptAddDlg;
-}
-
-void TrashControllerImpl::setEntryNameMapper(Mapper_EntryName& mapper) {
-	this->entryNameMapper = &mapper;
-}
-
-void TrashControllerImpl::setDeviceDataList(Model_DeviceDataListInterface& deviceDataList){
-	this->deviceDataList = &deviceDataList;
-}
-
-void TrashControllerImpl::setContentParserFactory(ContentParserFactory& contentParserFactory) {
-	this->contentParserFactory = &contentParserFactory;
 }
 
 void TrashControllerImpl::updateAction(std::map<ViewOption, bool> const& viewOptions){

@@ -18,27 +18,23 @@
 
 #include "ListCfg.h"
 
-Model_ListCfg::Model_ListCfg(Model_Env& env)
+Model_ListCfg::Model_ListCfg()
  : error_proxy_not_found(false),
  progress(0),
- cancelThreadsRequested(false), verbose(true), env(env), eventListener(NULL),
- mutex(NULL), errorLogFile(ERROR_LOG_FILE), ignoreLock(false), progress_pos(0), progress_max(0),
- scriptSourceMap(env)
+ cancelThreadsRequested(false), verbose(true),
+ errorLogFile(ERROR_LOG_FILE), ignoreLock(false), progress_pos(0), progress_max(0)
 {}
 
-void Model_ListCfg::setEventListener(MainController& eventListener) {
-	this->eventListener = &eventListener;
-}
-
-void Model_ListCfg::setMutex(Mutex& mutex) {
-	this->mutex = &mutex;
-}
-
 void Model_ListCfg::setLogger(Logger& logger) {
-	this->CommonClass::setLogger(logger);
+	this->Trait_LoggerAware::setLogger(logger);
 	this->proxies.setLogger(logger);
 	this->repository.setLogger(logger);
 	this->scriptSourceMap.setLogger(logger);
+}
+
+void Model_ListCfg::setEnv(Model_Env& env) {
+	this->Model_Env_Connection::setEnv(env);
+	this->scriptSourceMap.setEnv(env);
 }
 
 void Model_ListCfg::lock(){
@@ -65,15 +61,15 @@ void Model_ListCfg::unlock(){
 
 bool Model_ListCfg::createScriptForwarder(std::string const& scriptName) const {
 	//replace: $cfg_dir/proxifiedScripts/ -> $cfg_dir/LS_
-	std::string scriptNameNoPath = scriptName.substr((this->env.cfg_dir+"/proxifiedScripts/").length());
-	std::string outputFilePath = this->env.cfg_dir+"/LS_"+scriptNameNoPath;
+	std::string scriptNameNoPath = scriptName.substr((this->env->cfg_dir+"/proxifiedScripts/").length());
+	std::string outputFilePath = this->env->cfg_dir+"/LS_"+scriptNameNoPath;
 	FILE* existingScript = fopen(outputFilePath.c_str(), "r");
 	if (existingScript == NULL){
 		assert_filepath_empty(outputFilePath, __FILE__, __LINE__);
 		FILE* fwdScript = fopen(outputFilePath.c_str(), "w");
 		if (fwdScript){
 			fputs("#!/bin/sh\n", fwdScript);
-			fputs(("'"+scriptName.substr(env.cfg_dir_prefix.length())+"'").c_str(), fwdScript);
+			fputs(("'"+scriptName.substr(env->cfg_dir_prefix.length())+"'").c_str(), fwdScript);
 			fclose(fwdScript);
 			chmod(outputFilePath.c_str(), 0755);
 			return true;
@@ -88,8 +84,8 @@ bool Model_ListCfg::createScriptForwarder(std::string const& scriptName) const {
 }
 
 bool Model_ListCfg::removeScriptForwarder(std::string const& scriptName) const {
-	std::string scriptNameNoPath = scriptName.substr((this->env.cfg_dir+"/proxifiedScripts/").length());
-	std::string filePath = this->env.cfg_dir+"/LS_"+scriptNameNoPath;
+	std::string scriptNameNoPath = scriptName.substr((this->env->cfg_dir+"/proxifiedScripts/").length());
+	std::string filePath = this->env->cfg_dir+"/LS_"+scriptNameNoPath;
 	return unlink(filePath.c_str()) == 0;
 }
 
@@ -114,7 +110,7 @@ void Model_ListCfg::load(bool preserveConfig){
 	if (!preserveConfig){
 		send_new_load_progress(0);
 
-		DIR* hGrubCfgDir = opendir(this->env.cfg_dir.c_str());
+		DIR* hGrubCfgDir = opendir(this->env->cfg_dir.c_str());
 
 		if (!hGrubCfgDir){
 			throw DirectoryNotFoundException("grub cfg dir not found", __FILE__, __LINE__);
@@ -123,8 +119,8 @@ void Model_ListCfg::load(bool preserveConfig){
 		//load scripts
 		this->log("loading scripts…", Logger::EVENT);
 		this->lock();
-		repository.load(this->env.cfg_dir, false);
-		repository.load(this->env.cfg_dir+"/proxifiedScripts", true);
+		repository.load(this->env->cfg_dir, false);
+		repository.load(this->env->cfg_dir+"/proxifiedScripts", true);
 		this->unlock();
 		send_new_load_progress(0.05);
 	
@@ -135,23 +131,23 @@ void Model_ListCfg::load(bool preserveConfig){
 		struct dirent *entry;
 		struct stat fileProperties;
 		while ((entry = readdir(hGrubCfgDir))){
-			stat((this->env.cfg_dir+"/"+entry->d_name).c_str(), &fileProperties);
+			stat((this->env->cfg_dir+"/"+entry->d_name).c_str(), &fileProperties);
 			if ((fileProperties.st_mode & S_IFMT) != S_IFDIR){ //ignore directories
 				if (entry->d_name[2] == '_'){ //check whether it's an script (they should be named XX_scriptname)…
 					this->proxies.push_back(Model_Proxy());
-					this->proxies.back().fileName = this->env.cfg_dir+"/"+entry->d_name;
+					this->proxies.back().fileName = this->env->cfg_dir+"/"+entry->d_name;
 					this->proxies.back().index = (entry->d_name[0]-'0')*10 + (entry->d_name[1]-'0');
 					this->proxies.back().permissions = fileProperties.st_mode & ~S_IFMT;
 				
-					FILE* proxyFile = fopen((this->env.cfg_dir+"/"+entry->d_name).c_str(), "r");
+					FILE* proxyFile = fopen((this->env->cfg_dir+"/"+entry->d_name).c_str(), "r");
 					Model_ProxyScriptData data(proxyFile);
 					fclose(proxyFile);
 					if (data){
-						this->proxies.back().dataSource = repository.getScriptByFilename(this->env.cfg_dir_prefix+data.scriptCmd);
+						this->proxies.back().dataSource = repository.getScriptByFilename(this->env->cfg_dir_prefix+data.scriptCmd);
 						this->proxies.back().importRuleString(data.ruleString.c_str());
 					}
 					else {
-						this->proxies.back().dataSource = repository.getScriptByFilename(this->env.cfg_dir+"/"+entry->d_name);
+						this->proxies.back().dataSource = repository.getScriptByFilename(this->env->cfg_dir+"/"+entry->d_name);
 						this->proxies.back().importRuleString("+*"); //it's no proxy, so accept all
 					}
 				
@@ -174,7 +170,7 @@ void Model_ListCfg::load(bool preserveConfig){
 
 	this->lock();
 	for (Model_Repository::iterator iter = this->repository.begin(); iter != this->repository.end(); iter++){
-		if (iter->isInScriptDir(env.cfg_dir)){
+		if (iter->isInScriptDir(env->cfg_dir)){
 			//createScriptForwarder & disable proxies
 			createScriptForwarder(iter->fileName);
 			std::list<Model_Proxy*> relatedProxies = proxies.getProxiesByScript(*iter);
@@ -198,13 +194,13 @@ void Model_ListCfg::load(bool preserveConfig){
 	this->populateScriptSourceMap();
 
 	//run mkconfig
-	this->log("running " + this->env.mkconfig_cmd, Logger::EVENT);
-	FILE* mkconfigProc = popen((this->env.mkconfig_cmd + " 2> " + this->errorLogFile).c_str(), "r");
+	this->log("running " + this->env->mkconfig_cmd, Logger::EVENT);
+	FILE* mkconfigProc = popen((this->env->mkconfig_cmd + " 2> " + this->errorLogFile).c_str(), "r");
 	readGeneratedFile(mkconfigProc);
 	
 	int success = pclose(mkconfigProc);
 	if (success != 0 && !cancelThreadsRequested){
-		throw CmdExecException("failed running " + this->env.mkconfig_cmd, __FILE__, __LINE__);
+		throw CmdExecException("failed running " + this->env->mkconfig_cmd, __FILE__, __LINE__);
 	} else {
 		remove(errorLogFile.c_str()); //remove file, if everything was ok
 	}
@@ -214,8 +210,8 @@ void Model_ListCfg::load(bool preserveConfig){
 
 	mkconfigProc = NULL;
 	
-	this->env.useDirectBackgroundProps = this->repository.getScriptByName("debian_theme") == NULL;
-	if (this->env.useDirectBackgroundProps) {
+	this->env->useDirectBackgroundProps = this->repository.getScriptByName("debian_theme") == NULL;
+	if (this->env->useDirectBackgroundProps) {
 		this->log("using simple background image settings", Logger::INFO);
 	} else {
 		this->log("using /usr/share/desktop-base/grub_background.sh to configure colors and the background image", Logger::INFO);
@@ -226,7 +222,7 @@ void Model_ListCfg::load(bool preserveConfig){
 	this->log("restoring grub configuration", Logger::EVENT);
 	this->lock();
 	for (Model_Repository::iterator iter = this->repository.begin(); iter != this->repository.end(); iter++){
-		if (iter->isInScriptDir(env.cfg_dir)){
+		if (iter->isInScriptDir(env->cfg_dir)){
 			//removeScriptForwarder & reset proxy permissions
 			bool result = removeScriptForwarder(iter->fileName);
 			if (!result) {
@@ -290,9 +286,9 @@ void Model_ListCfg::readGeneratedFile(FILE* source, bool createScriptIfNotFound,
 			}
 			plaintextBuffer = "";
 			std::string scriptName = rowText.substr(10, rowText.length()-14);
-			std::string prefix = this->env.cfg_dir_prefix;
+			std::string prefix = this->env->cfg_dir_prefix;
 			std::string realScriptName = prefix+scriptName;
-			if (realScriptName.substr(0, (this->env.cfg_dir+"/LS_").length()) == this->env.cfg_dir+"/LS_"){
+			if (realScriptName.substr(0, (this->env->cfg_dir+"/LS_").length()) == this->env->cfg_dir+"/LS_"){
 				realScriptName = prefix+readScriptForwarder(realScriptName);
 			}
 			script = repository.getScriptByFilename(realScriptName, createScriptIfNotFound);
@@ -361,29 +357,29 @@ void Model_ListCfg::save(){
 	// create virtual custom scripts on file system
 	for (std::list<Model_Script>::iterator scriptIter = this->repository.begin(); scriptIter != this->repository.end(); scriptIter++) {
 		if (scriptIter->isCustomScript && scriptIter->fileName == "") {
-			scriptIter->fileName = this->env.cfg_dir + "/IN_" + scriptIter->name;
+			scriptIter->fileName = this->env->cfg_dir + "/IN_" + scriptIter->name;
 			this->repository.createScript(*scriptIter, "");
 		}
 	}
 
 	for (Model_Repository::iterator script_iter = repository.begin(); script_iter != repository.end(); script_iter++)
-		script_iter->moveToBasedir(this->env.cfg_dir);
+		script_iter->moveToBasedir(this->env->cfg_dir);
 
 	send_new_save_progress(0.1);
 
-	int mkdir_result = mkdir((this->env.cfg_dir+"/proxifiedScripts").c_str(), 0755); //create this directory if it doesn't already exist
+	int mkdir_result = mkdir((this->env->cfg_dir+"/proxifiedScripts").c_str(), 0755); //create this directory if it doesn't already exist
 
 	// get new script locations
 	std::map<Model_Script const*, std::string> scriptTargetMap; // scripts and their target directories
 	for (Model_Repository::iterator script_iter = repository.begin(); script_iter != repository.end(); script_iter++) {
 		std::list<Model_Proxy*> relatedProxies = proxies.getProxiesByScript(*script_iter);
 		if (proxies.proxyRequired(*script_iter)){
-			scriptTargetMap[&*script_iter] = this->env.cfg_dir+"/proxifiedScripts/"+Model_PscriptnameTranslator::encode(script_iter->name, samename_counter[script_iter->name]++);
+			scriptTargetMap[&*script_iter] = this->env->cfg_dir+"/proxifiedScripts/"+Model_PscriptnameTranslator::encode(script_iter->name, samename_counter[script_iter->name]++);
 		} else {
 			std::ostringstream nameStream;
 			nameStream << std::setw(2) << std::setfill('0') << relatedProxies.front()->index << "_" << script_iter->name;
 			std::list<Model_Proxy*> relatedProxies = proxies.getProxiesByScript(*script_iter);
-			scriptTargetMap[&*script_iter] = this->env.cfg_dir+"/"+nameStream.str();
+			scriptTargetMap[&*script_iter] = this->env->cfg_dir+"/"+nameStream.str();
 		}
 	}
 
@@ -397,7 +393,7 @@ void Model_ListCfg::save(){
 				std::map<Model_Entry const*, Model_Script const*> entrySourceMap = this->getEntrySources(**proxy_iter);
 				std::ostringstream nameStream;
 				nameStream << std::setw(2) << std::setfill('0') << (*proxy_iter)->index << "_" << script_iter->name << "_proxy";
-				(*proxy_iter)->generateFile(this->env.cfg_dir+"/"+nameStream.str(), this->env.cfg_dir_prefix.length(), this->env.cfg_dir_noprefix, entrySourceMap, scriptTargetMap);
+				(*proxy_iter)->generateFile(this->env->cfg_dir+"/"+nameStream.str(), this->env->cfg_dir_prefix.length(), this->env->cfg_dir_noprefix, entrySourceMap, scriptTargetMap);
 				proxyCount++;
 			}
 		}
@@ -425,7 +421,7 @@ void Model_ListCfg::save(){
 		int proxifiedScriptCount = 0;
 		struct dirent *entry;
 		struct stat fileProperties;
-		DIR* hScriptDir = opendir((this->env.cfg_dir+"/proxifiedScripts").c_str());
+		DIR* hScriptDir = opendir((this->env->cfg_dir+"/proxifiedScripts").c_str());
 		while ((entry = readdir(hScriptDir))) {
 			if (std::string(entry->d_name) != "." && std::string(entry->d_name) != ".."){
 				proxifiedScriptCount++;
@@ -434,12 +430,12 @@ void Model_ListCfg::save(){
 		closedir(hScriptDir);
 		
 		if (proxifiedScriptCount == 0)
-			rmdir((this->env.cfg_dir+"/proxifiedScripts").c_str());
+			rmdir((this->env->cfg_dir+"/proxifiedScripts").c_str());
 	}
 
 	//add or remove proxy binary
 	
-	FILE* proxyBin = fopen((this->env.cfg_dir+"/bin/grubcfg_proxy").c_str(), "r");
+	FILE* proxyBin = fopen((this->env->cfg_dir+"/bin/grubcfg_proxy").c_str(), "r");
 	bool proxybin_exists = proxyBin != NULL;
 	std::string dummyproxy_code = "#!/bin/sh\ncat\n";
 	
@@ -448,31 +444,31 @@ void Model_ListCfg::save(){
 	 */
 	if (proxyCount != 0){
 		// create the bin subdirectory - may already exist
-		int bin_mk_success = mkdir((this->env.cfg_dir+"/bin").c_str(), 0755);
+		int bin_mk_success = mkdir((this->env->cfg_dir+"/bin").c_str(), 0755);
 
 		FILE* proxyBinSource = fopen((std::string(LIBDIR)+"/grubcfg-proxy").c_str(), "r");
 		
 		if (proxyBinSource){
-			FILE* proxyBinTarget = fopen((this->env.cfg_dir+"/bin/grubcfg_proxy").c_str(), "w");
+			FILE* proxyBinTarget = fopen((this->env->cfg_dir+"/bin/grubcfg_proxy").c_str(), "w");
 			if (proxyBinTarget){
 				int c;
 				while ((c = fgetc(proxyBinSource)) != EOF){
 					fputc(c, proxyBinTarget);
 				}
 				fclose(proxyBinTarget);
-				chmod((this->env.cfg_dir+"/bin/grubcfg_proxy").c_str(), 0755);
+				chmod((this->env->cfg_dir+"/bin/grubcfg_proxy").c_str(), 0755);
 			} else {
 				this->log("could not open proxy output file!", Logger::ERROR);
 			}
 			fclose(proxyBinSource);
 		} else {
 			this->log("proxy could not be copied, generating dummy!", Logger::ERROR);
-			FILE* proxyBinTarget = fopen((this->env.cfg_dir+"/bin/grubcfg_proxy").c_str(), "w");
+			FILE* proxyBinTarget = fopen((this->env->cfg_dir+"/bin/grubcfg_proxy").c_str(), "w");
 			if (proxyBinTarget){
 				fputs(dummyproxy_code.c_str(), proxyBinTarget);
 				error_proxy_not_found = true;
 				fclose(proxyBinTarget);
-				chmod((this->env.cfg_dir+"/bin/grubcfg_proxy").c_str(), 0755);
+				chmod((this->env->cfg_dir+"/bin/grubcfg_proxy").c_str(), 0755);
 			} else {
 				this->log("coundn't create proxy!", Logger::ERROR);
 			}
@@ -480,8 +476,8 @@ void Model_ListCfg::save(){
 	}
 	else if (proxyCount == 0 && proxybin_exists){
 		//the following commands are only cleanup… no problem, when they fail
-		unlink((this->env.cfg_dir+"/bin/grubcfg_proxy").c_str());
-		rmdir((this->env.cfg_dir+"/bin").c_str());
+		unlink((this->env->cfg_dir+"/bin/grubcfg_proxy").c_str());
+		rmdir((this->env->cfg_dir+"/bin").c_str());
 	}
 
 	//update modified "custom" scripts
@@ -503,7 +499,7 @@ void Model_ListCfg::save(){
 
 
 	//run update-grub
-	FILE* saveProc = popen((env.update_cmd+" 2>&1").c_str(), "r");
+	FILE* saveProc = popen((env->update_cmd+" 2>&1").c_str(), "r");
 	if (saveProc) {
 		int c;
 		std::string row = "";
@@ -544,7 +540,7 @@ std::map<Model_Entry const*, Model_Script const*> Model_ListCfg::getEntrySources
 }
 
 bool Model_ListCfg::loadStaticCfg(){
-	FILE* oldConfigFile = fopen(env.output_config_file.c_str(), "r");
+	FILE* oldConfigFile = fopen(env->output_config_file.c_str(), "r");
 	if (oldConfigFile){
 		this->readGeneratedFile(oldConfigFile, true, true);
 		fclose(oldConfigFile);
@@ -597,7 +593,7 @@ bool Model_ListCfg::compare(Model_ListCfg const& other) const {
 				if (piter->dataSource->fileName == "") { // if the associated file isn't found
 					return false;
 				}
-				std::string fname = piter->dataSource->fileName.substr(other.env.cfg_dir.length()+1);
+				std::string fname = piter->dataSource->fileName.substr(other.env->cfg_dir.length()+1);
 				if (i == 0 || (fname[0] >= '1' && fname[0] <= '9' && fname[1] >= '0' && fname[1] <= '9' && fname[2] == '_')) {
 					std::list<Model_Rule const*> comparableRules = this->getComparableRules(piter->rules);
 					rlist[i].splice(rlist[i].end(), comparableRules);
@@ -652,12 +648,12 @@ bool Model_ListCfg::compareLists(std::list<Model_Rule const*> a, std::list<Model
 
 
 void Model_ListCfg::send_new_load_progress(double newProgress, std::string scriptName, int current, int max){
-	if (this->eventListener != NULL){
+	if (this->controller != NULL){
 		this->progress = newProgress;
 		this->progress_name = scriptName;
 		this->progress_pos = current;
 		this->progress_max = max;
-		this->eventListener->syncLoadStateThreadedAction();
+		this->controller->syncLoadStateThreadedAction();
 	}
 	else if (this->verbose) {
 		this->log("cannot show updated load progress - no UI connected!", Logger::ERROR);
@@ -665,9 +661,9 @@ void Model_ListCfg::send_new_load_progress(double newProgress, std::string scrip
 }
 
 void Model_ListCfg::send_new_save_progress(double newProgress){
-	if (this->eventListener != NULL){
+	if (this->controller != NULL){
 		this->progress = newProgress;
-		this->eventListener->syncSaveStateThreadedAction();
+		this->controller->syncSaveStateThreadedAction();
 	}
 	else if (this->verbose) {
 		this->log("cannot show updated save progress - no UI connected!", Logger::ERROR);
@@ -709,7 +705,7 @@ void Model_ListCfg::renumerate(bool favorDefaultOrder){
 		if (favorDefaultOrder && iter->dataSource) {
 			std::string sourceFileName = this->scriptSourceMap.getSourceName(iter->dataSource->fileName);
 			try {
-				int prefixNum = Model_Script::extractIndexFromPath(sourceFileName, this->env.cfg_dir);
+				int prefixNum = Model_Script::extractIndexFromPath(sourceFileName, this->env->cfg_dir);
 				if (prefixNum >= i) {
 					i = prefixNum;
 					isDefaultNumber = true;
@@ -728,7 +724,7 @@ void Model_ListCfg::renumerate(bool favorDefaultOrder){
 			if (!isDefaultNumber && iter->dataSource) {
 				// make sure that scripts never get a filePath that matches a script source (unless it's the source script)
 				std::ostringstream fullFileName;
-				fullFileName << this->env.cfg_dir << "/" << std::setw(2) << std::setfill('0') << i << "_" << iter->dataSource->name;
+				fullFileName << this->env->cfg_dir << "/" << std::setw(2) << std::setfill('0') << i << "_" << iter->dataSource->name;
 				if (this->scriptSourceMap.has(fullFileName.str())) {
 					i++;
 					retry = true;
@@ -959,7 +955,7 @@ Model_Rule* Model_ListCfg::splitSubmenu(Model_Rule* child) {
 }
 
 bool Model_ListCfg::cfgDirIsClean(){
-	DIR* hGrubCfgDir = opendir(this->env.cfg_dir.c_str());
+	DIR* hGrubCfgDir = opendir(this->env->cfg_dir.c_str());
 	if (hGrubCfgDir){
 		struct dirent *entry;
 		struct stat fileProperties;
@@ -975,7 +971,7 @@ bool Model_ListCfg::cfgDirIsClean(){
 void Model_ListCfg::cleanupCfgDir(){
 	this->log("cleaning up cfg dir!", Logger::IMPORTANT_EVENT);
 	
-	DIR* hGrubCfgDir = opendir(this->env.cfg_dir.c_str());
+	DIR* hGrubCfgDir = opendir(this->env->cfg_dir.c_str());
 	if (hGrubCfgDir){
 		struct dirent *entry;
 		struct stat fileProperties;
@@ -999,20 +995,20 @@ void Model_ListCfg::cleanupCfgDir(){
 		
 		for (std::list<std::string>::iterator iter = lsfiles.begin(); iter != lsfiles.end(); iter++){
 			this->log("deleting " + *iter, Logger::EVENT);
-			unlink((this->env.cfg_dir+"/"+(*iter)).c_str());
+			unlink((this->env->cfg_dir+"/"+(*iter)).c_str());
 		}
 		//proxyscripts will be disabled before loading the config. While the provious mode will only be saved on the objects, every script should be made executable
 		for (std::list<std::string>::iterator iter = proxyscripts.begin(); iter != proxyscripts.end(); iter++){
 			this->log("re-activating " + *iter, Logger::EVENT);
-			chmod((this->env.cfg_dir+"/"+(*iter)).c_str(), 0755);
+			chmod((this->env->cfg_dir+"/"+(*iter)).c_str(), 0755);
 		}
 
 		//remove the DS_ prefix  (DS_10_foo -> 10_foo)
 		for (std::list<std::string>::iterator iter = dsfiles.begin(); iter != dsfiles.end(); iter++) {
 			this->log("renaming " + *iter, Logger::EVENT);
-			std::string newPath = this->env.cfg_dir+"/"+iter->substr(3);
+			std::string newPath = this->env->cfg_dir+"/"+iter->substr(3);
 			assert_filepath_empty(newPath, __FILE__, __LINE__);
-			rename((this->env.cfg_dir+"/"+(*iter)).c_str(), newPath.c_str());
+			rename((this->env->cfg_dir+"/"+(*iter)).c_str(), newPath.c_str());
 		}
 
 		//remove the PS_ prefix and add index prefix (PS_foo -> 10_foo)
@@ -1021,9 +1017,9 @@ void Model_ListCfg::cleanupCfgDir(){
 			this->log("renaming " + *iter, Logger::EVENT);
 			std::string out = *iter;
 			out.replace(0, 2, (std::string("") + char('0' + (i/10)%10) + char('0' + i%10)));
-			std::string newPath = this->env.cfg_dir+"/"+out;
+			std::string newPath = this->env->cfg_dir+"/"+out;
 			assert_filepath_empty(newPath, __FILE__, __LINE__);
-			rename((this->env.cfg_dir+"/"+(*iter)).c_str(), newPath.c_str());
+			rename((this->env->cfg_dir+"/"+(*iter)).c_str(), newPath.c_str());
 			i++;
 		}
 	}
@@ -1032,7 +1028,7 @@ void Model_ListCfg::cleanupCfgDir(){
 void Model_ListCfg::addColorHelper() {
 	Model_Script* newScript = NULL;
 	if (this->repository.getScriptByName("grub-customizer_menu_color_helper") == NULL) {
-		Model_Script* newScript = this->repository.createScript("grub-customizer_menu_color_helper", this->env.cfg_dir + "06_grub-customizer_menu_color_helper", "#!/bin/sh\n\
+		Model_Script* newScript = this->repository.createScript("grub-customizer_menu_color_helper", this->env->cfg_dir + "06_grub-customizer_menu_color_helper", "#!/bin/sh\n\
 \n\
 if [ \"x${GRUB_BACKGROUND}\" != \"x\" ] ; then\n\
 	if [ \"x${GRUB_COLOR_NORMAL}\" != \"x\" ] ; then\n\
@@ -1171,7 +1167,7 @@ void Model_ListCfg::generateScriptSourceMap() {
 	defaultScripts["os-prober"]                         = 30;
 	defaultScripts["custom"]                            = 41;
 
-	std::string proxyfiedScriptPath = this->env.cfg_dir + "/proxifiedScripts";
+	std::string proxyfiedScriptPath = this->env->cfg_dir + "/proxifiedScripts";
 
 	for (std::list<Model_Script>::iterator scriptIter = this->repository.begin(); scriptIter != this->repository.end(); scriptIter++) {
 		std::string currentPath = scriptIter->fileName;
@@ -1179,11 +1175,11 @@ void Model_ListCfg::generateScriptSourceMap() {
 		int pos = -1;
 
 		if (scriptIter->isCustomScript) {
-			defaultPath = this->env.cfg_dir + "/40_custom";
+			defaultPath = this->env->cfg_dir + "/40_custom";
 		} else if (defaultScripts.find(scriptIter->name) != defaultScripts.end()) {
 			pos = defaultScripts[scriptIter->name];
 			std::ostringstream str;
-			str << this->env.cfg_dir << "/" << std::setw(2) << std::setfill('0') << pos << "_" << scriptIter->name;
+			str << this->env->cfg_dir << "/" << std::setw(2) << std::setfill('0') << pos << "_" << scriptIter->name;
 			defaultPath = str.str();
 		}
 
@@ -1194,7 +1190,7 @@ void Model_ListCfg::generateScriptSourceMap() {
 }
 
 void Model_ListCfg::populateScriptSourceMap() {
-	std::string proxyfiedScriptPath = this->env.cfg_dir + "/proxifiedScripts";
+	std::string proxyfiedScriptPath = this->env->cfg_dir + "/proxifiedScripts";
 	for (std::list<Model_Script>::iterator scriptIter = this->repository.begin(); scriptIter != this->repository.end(); scriptIter++) {
 		if (scriptIter->fileName.substr(0, proxyfiedScriptPath.length()) != proxyfiedScriptPath
 				&& this->scriptSourceMap.getSourceName(scriptIter->fileName) == "") {
@@ -1250,7 +1246,7 @@ void Model_ListCfg::revert() {
 		Model_Proxy newProxy(*iter);
 		std::string sourceFileName = this->scriptSourceMap.getSourceName(iter->fileName);
 		try {
-			newProxy.index = Model_Script::extractIndexFromPath(sourceFileName, this->env.cfg_dir);
+			newProxy.index = Model_Script::extractIndexFromPath(sourceFileName, this->env->cfg_dir);
 		} catch (InvalidStringFormatException const& e) {
 			newProxy.index = i++;
 			this->log(e, Logger::ERROR);
@@ -1273,7 +1269,7 @@ void Model_ListCfg::revert() {
 
 Model_ListCfg::operator ArrayStructure() const {
 	ArrayStructure result;
-	result["eventListener"] = this->eventListener;
+	result["eventListener"] = this->controller;
 	result["proxies"] = ArrayStructure(this->proxies);
 	result["repository"] = ArrayStructure(this->repository);
 	result["progress"] = this->progress;
@@ -1284,7 +1280,11 @@ Model_ListCfg::operator ArrayStructure() const {
 	result["errorLogFile"] = this->errorLogFile;
 	result["verbose"] = this->verbose;
 	result["error_proxy_not_found"] = this->error_proxy_not_found;
-	result["env"] = ArrayStructure(this->env);
+	if (this->env) {
+		result["env"] = ArrayStructure(*this->env);
+	} else {
+		result["env"] = ArrayStructureItem(NULL);
+	}
 	result["ignoreLock"] = this->ignoreLock;
 	result["cancelThreadsRequested"] = this->cancelThreadsRequested;
 	return result;

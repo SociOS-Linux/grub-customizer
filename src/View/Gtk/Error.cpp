@@ -19,11 +19,7 @@
 #include "Error.h"
 
 View_Gtk_Error::View_Gtk_Error()
-	: eventListener(NULL)
 {
-}
-void View_Gtk_Error::setEventListener(ErrorController& eventListener) {
-	this->eventListener = &eventListener;
 }
 
 void View_Gtk_Error::showErrorMessage(std::string const& errorMessage, bool allowContinue) {
@@ -35,6 +31,6 @@ void View_Gtk_Error::showErrorMessage(std::string const& errorMessage, bool allo
 		msgDlg.add_button(gettext("continue (risk data loss)"), Gtk::RESPONSE_CANCEL);
 	}
 	if (msgDlg.run() == Gtk::RESPONSE_CLOSE) {
-		this->eventListener->quitAction();
+		this->controller->quitAction();
 	}
 }

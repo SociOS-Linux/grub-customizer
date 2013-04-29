@@ -18,10 +18,6 @@
 
 #include "EntryNameImpl.h"
 
-void Mapper_EntryNameImpl::setView(View_Main& view) {
-	this->view = &view;
-}
-
 std::string Mapper_EntryNameImpl::map(Model_Entry const* sourceEntry, std::string const& defaultName, std::string const& scriptName) {
 	assert(this->view != NULL);
 	std::string name;

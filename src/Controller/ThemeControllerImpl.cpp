@@ -18,13 +18,10 @@
 
 #include "ThemeControllerImpl.h"
 
-ThemeControllerImpl::ThemeControllerImpl(Model_Env& env)
-	: env(env), view(NULL), ControllerAbstract("theme"), themeManager(NULL), settings(NULL), grublistCfg(NULL), threadController(NULL), syncActive(false)
+ThemeControllerImpl::ThemeControllerImpl()
+	: ControllerAbstract("theme"),
+	  syncActive(false)
 {
-}
-
-void ThemeControllerImpl::setThreadController(ThreadController& threadController) {
-	this->threadController = &threadController;
 }
 
 void ThemeControllerImpl::syncSettings() {
@@ -53,11 +50,11 @@ void ThemeControllerImpl::syncSettings() {
 		this->view->getColorChooser(View_Theme::COLOR_CHOOSER_HIGHLIGHT_BACKGROUND).selectColor("black");
 	}
 
-	std::string wallpaper_key = this->env.useDirectBackgroundProps ? "GRUB_BACKGROUND" : "GRUB_MENU_PICTURE";
+	std::string wallpaper_key = this->env->useDirectBackgroundProps ? "GRUB_BACKGROUND" : "GRUB_MENU_PICTURE";
 	std::string menuPicturePath = this->settings->getValue(wallpaper_key);
 	bool menuPicIsInGrubDir = false;
 	if (menuPicturePath != "" && menuPicturePath[0] != '/'){
-		menuPicturePath = env.output_config_dir + "/" + menuPicturePath;
+		menuPicturePath = env->output_config_dir + "/" + menuPicturePath;
 		menuPicIsInGrubDir = true;
 	}
 
@@ -132,22 +129,6 @@ bool ThemeControllerImpl::isImage(std::string const& fileName) {
 		}
 	}
 	return false;
-}
-
-void ThemeControllerImpl::setView(View_Theme& view) {
-	this->view = &view;
-}
-
-void ThemeControllerImpl::setThemeManager(Model_ThemeManager& themeManager) {
-	this->themeManager = &themeManager;
-}
-
-void ThemeControllerImpl::setSettingsManager(Model_SettingsManagerData& settings) {
-	this->settings = &settings;
-}
-
-void ThemeControllerImpl::setListCfg(Model_ListCfg& grublistCfg) {
-	this->grublistCfg = &grublistCfg;
 }
 
 void ThemeControllerImpl::loadThemesAction() {
@@ -386,7 +367,7 @@ void ThemeControllerImpl::saveTextAction(std::string const& newText) {
 void ThemeControllerImpl::updateBackgroundImageAction(){
 	this->logActionBegin("update-background-image");
 	try {
-		if (!this->env.useDirectBackgroundProps) {
+		if (!this->env->useDirectBackgroundProps) {
 			this->settings->setValue("GRUB_MENU_PICTURE", this->view->getBackgroundImagePath());
 			this->settings->setIsActive("GRUB_MENU_PICTURE", true);
 			this->settings->setIsExport("GRUB_MENU_PICTURE", true);
@@ -395,7 +376,7 @@ void ThemeControllerImpl::updateBackgroundImageAction(){
 			this->settings->setIsActive("GRUB_BACKGROUND", true);
 		}
 		this->syncSettings();
-		this->env.modificationsUnsaved = true;
+		this->env->modificationsUnsaved = true;
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
@@ -416,7 +397,7 @@ void ThemeControllerImpl::updateColorSettingsAction(){
 			this->settings->setIsExport("GRUB_COLOR_HIGHLIGHT", true);
 		}
 		this->syncSettings();
-		this->env.modificationsUnsaved = true;
+		this->env->modificationsUnsaved = true;
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
@@ -435,7 +416,7 @@ void ThemeControllerImpl::updateFontSettingsAction(bool removeFont) {
 		this->settings->grubFont = fontName;
 		this->settings->grubFontSize = fontSize;
 		this->syncSettings();
-		this->env.modificationsUnsaved = true;
+		this->env->modificationsUnsaved = true;
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
@@ -445,13 +426,13 @@ void ThemeControllerImpl::updateFontSettingsAction(bool removeFont) {
 void ThemeControllerImpl::removeBackgroundImageAction(){
 	this->logActionBegin("remove-background-image");
 	try {
-		if (!this->env.useDirectBackgroundProps) {
+		if (!this->env->useDirectBackgroundProps) {
 			this->settings->setIsActive("GRUB_MENU_PICTURE", false);
 		} else {
 			this->settings->setIsActive("GRUB_BACKGROUND", false);
 		}
 		this->syncSettings();
-		this->env.modificationsUnsaved = true;
+		this->env->modificationsUnsaved = true;
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}

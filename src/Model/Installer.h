@@ -21,17 +21,29 @@
 #include <string>
 #include "Env.h"
 #include "../Controller/InstallerController.h"
-#include "../lib/CommonClass.h"
+#include "../Controller/Trait/ControllerAware.h"
+#include "../lib/Trait/LoggerAware.h"
 
-class Model_Installer : public CommonClass {
-	Model_Env& env;
+class Model_Installer :
+	public Trait_LoggerAware,
+	public Trait_ControllerAware<InstallerController>,
+	public Model_Env_Connection
+{
 	std::string install_result;
-	InstallerController* eventListener;
 public:
-	Model_Installer(Model_Env& env);
 	void threadable_install(std::string const& device);
 	std::string install(std::string const& device);
-	void setEventListener(InstallerController& eventListener);
+};
+
+class Model_Installer_Connection {
+protected:
+	Model_Installer* installer;
+public:
+	Model_Installer_Connection() : installer(NULL) {}
+
+	void setInstaller(Model_Installer& installer){
+		this->installer = &installer;
+	}
 };
 
 #endif
