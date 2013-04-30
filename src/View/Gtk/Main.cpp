@@ -124,6 +124,15 @@ View_Gtk_Main::View_Gtk_Main()
 	ti_sep5.set_expand(true);
 	ti_sep5.set_draw(false);
 
+	vs_sep1.set_margin_top(5);
+	vs_sep1.set_margin_bottom(5);
+	vs_sep2.set_margin_top(5);
+	vs_sep2.set_margin_bottom(5);
+	vs_sep3.set_margin_top(5);
+	vs_sep3.set_margin_bottom(5);
+	vs_sep4.set_margin_top(5);
+	vs_sep4.set_margin_bottom(5);
+
 	toolbar.append(tbttRevert);
 	tbttRevert.set_is_important(true);
 	tbttRevert.set_tooltip_text(gettext("Reverts the list to the default order"));
