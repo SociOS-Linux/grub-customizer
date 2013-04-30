@@ -23,6 +23,7 @@
 #include <cstdlib>
 #include <sys/stat.h>
 #include "Entry.h"
+#include <unistd.h>
 #include "../Model/EntryPathFollower.h"
 #include "../lib/Trait/LoggerAware.h"
 #include "../lib/md5.h"
