@@ -141,9 +141,6 @@ View_Gtk_Settings::View_Gtk_Settings()
 	hbResolutionAndTheme.set_homogeneous(true);
 	hbResolutionAndTheme.set_spacing(15);
 
-	//theme chooser
-//	hbResolutionAndTheme.pack_start(hbTheme, Gtk::PACK_EXPAND_WIDGET); TODO: use widget from theme editor
-
 	//screen resolution
 	hbResolutionAndTheme.pack_start(hbResolution);
 	hbResolution.pack_start(chkResolution, Gtk::PACK_SHRINK);
