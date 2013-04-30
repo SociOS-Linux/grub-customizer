@@ -134,6 +134,7 @@ View_Gtk_Main::View_Gtk_Main()
 	this->options[VIEW_SHOW_DETAILS] = true;
 	this->options[VIEW_SHOW_HIDDEN_ENTRIES] = false;
 	this->options[VIEW_SHOW_PLACEHOLDERS] = false;
+	this->options[VIEW_GROUP_BY_SCRIPT] = false;
 
 	//menu
 	menu.append(miFile);
