@@ -141,7 +141,7 @@ public:
 
 	void showSettingsAction();
 	void initModeAction(bool burgChosen);
-	void addEntriesAction(std::list<Entry*> entries);
+	void addEntriesAction(std::list<Rule*> entries);
 	void activateSettingsAction();
 	void showReloadRecommendationAction();
 	void selectRulesAction(std::list<Rule*> rules);

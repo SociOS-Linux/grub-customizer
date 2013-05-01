@@ -29,7 +29,7 @@ public:
 	virtual void hideAction() = 0;
 	virtual void deleteCustomEntriesAction() = 0;
 	virtual void selectEntriesAction(std::list<Entry*> const& entries) = 0;
-	virtual void updateSelectionAction(std::list<Entry*> const& selectedEntries) = 0;
+	virtual void updateSelectionAction(std::list<Rule*> const& selectedEntries) = 0;
 };
 
 

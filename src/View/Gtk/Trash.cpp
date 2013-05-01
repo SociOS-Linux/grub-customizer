@@ -91,8 +91,8 @@ void View_Gtk_Trash::delete_button_click() {
 	controller->deleteCustomEntriesAction();
 }
 
-std::list<Entry*> View_Gtk_Trash::getSelectedEntries(){
-	std::list<Entry*> result;
+std::list<Rule*> View_Gtk_Trash::getSelectedEntries(){
+	std::list<Rule*> result;
 	std::vector<Gtk::TreePath> pathes = list.get_selection()->get_selected_rows();
 	for (std::vector<Gtk::TreePath>::iterator pathIter = pathes.begin(); pathIter != pathes.end(); pathIter++) {
 		Gtk::TreeModel::iterator elementIter = list.refTreeStore->get_iter(*pathIter);
@@ -101,7 +101,7 @@ std::list<Entry*> View_Gtk_Trash::getSelectedEntries(){
 	return result;
 }
 
-void View_Gtk_Trash::addItem(View_Model_ListItem<Entry, Script> const& listItem){
+void View_Gtk_Trash::addItem(View_Model_ListItem<Rule, Script> const& listItem){
 	this->list.addListItem(listItem, this->options, *this);
 }
 
@@ -145,7 +145,7 @@ void View_Gtk_Trash::setOptions(std::map<ViewOption, bool> const& viewOptions) {
 	this->options = viewOptions;
 }
 
-void View_Gtk_Trash::selectEntries(std::list<Entry*> const& entries) {
+void View_Gtk_Trash::selectEntries(std::list<Rule*> const& entries) {
 	this->list.selectRules(entries);
 }
 

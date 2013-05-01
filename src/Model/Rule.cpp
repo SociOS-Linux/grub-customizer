@@ -91,6 +91,10 @@ Model_Rule::Model_Rule(RuleType type, std::list<std::string> path, bool isVisibl
 	: type(type), isVisible(isVisible), __idpath(path), outputName(path.back()), dataSource(NULL)
 {}
 
+Model_Rule::Model_Rule()
+	: type(Model_Rule::NORMAL), isVisible(false), dataSource(NULL)
+{}
+
 std::string Model_Rule::getEntryName() const {
 	if (this->dataSource)
 		return this->dataSource->name;

@@ -904,13 +904,14 @@ void MainControllerImpl::initModeAction(bool burgChosen) {
 	this->logActionEnd();
 }
 
-void MainControllerImpl::addEntriesAction(std::list<Entry*> entries) {
+void MainControllerImpl::addEntriesAction(std::list<Rule*> entries) {
 	this->logActionBegin("add-entries");
 	try {
 		std::list<Rule*> addedRules;
-		for (std::list<Entry*>::iterator iter = entries.begin(); iter != entries.end(); iter++) {
-			Model_Entry* entry = &Model_Entry::fromPtr(*iter);
-			addedRules.push_back(this->grublistCfg->addEntry(*entry));
+		for (std::list<Rule*>::iterator iter = entries.begin(); iter != entries.end(); iter++) {
+			Model_Entry* entry = Model_Rule::fromPtr(*iter).dataSource;
+			assert(entry != NULL);
+			addedRules.push_back(this->grublistCfg->addEntry(*entry, Model_Rule::fromPtr(*iter).type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER));
 		}
 
 		this->syncLoadStateAction();

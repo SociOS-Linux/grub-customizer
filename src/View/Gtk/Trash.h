@@ -34,7 +34,7 @@ class View_Gtk_Trash :
 	public Trait_ControllerAware<TrashController>
 {
 	Gtk::ScrolledWindow scrEntryBox;
-	View_Gtk_Element_List<Entry, Script> list;
+	View_Gtk_Element_List<Rule, Script> list;
 	Gtk::Frame frmList;
 	Gtk::VBox vbList;
 	Gtk::HBox hbList;
@@ -55,8 +55,8 @@ public:
 	void restore_button_click();
 	void delete_button_click();
 	void clear();
-	std::list<Entry*> getSelectedEntries();
-	void addItem(View_Model_ListItem<Entry, Script> const& listItem);
+	std::list<Rule*> getSelectedEntries();
+	void addItem(View_Model_ListItem<Rule, Script> const& listItem);
 	void setDeleteButtonEnabled(bool val);
 	void show();
 	void hide();
@@ -64,7 +64,7 @@ public:
 	Gtk::Widget& getList();
 	void setDeleteButtonVisibility(bool visibility);
 	void setOptions(std::map<ViewOption, bool> const& viewOptions);
-	void selectEntries(std::list<Entry*> const& entries);
+	void selectEntries(std::list<Rule*> const& entries);
 	void setRestoreButtonSensitivity(bool sensitivity);
 private:
 	void signal_treeview_selection_changed();

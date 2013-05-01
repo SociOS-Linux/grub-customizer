@@ -55,8 +55,10 @@ class TrashControllerImpl :
 	public ContentParserFactory_Connection,
 	public Model_Env_Connection
 {
-	void _refreshView();
-	bool _isDeletable(std::list<Entry*> const& selectedEntries);
+	void _refresh();
+	void _refreshView(Model_Rule* parent);
+	bool _isDeletable(std::list<Rule*> const& selectedEntries);
+	std::list<Model_Rule> data;
 public:
 	TrashControllerImpl();
 	
@@ -70,7 +72,7 @@ public:
 	void deleteCustomEntriesAction();
 
 	void selectEntriesAction(std::list<Entry*> const& entries);
-	void updateSelectionAction(std::list<Entry*> const& selectedEntries);
+	void updateSelectionAction(std::list<Rule*> const& selectedEntries);
 };
 
 #endif

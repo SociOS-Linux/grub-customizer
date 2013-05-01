@@ -34,9 +34,9 @@ public:
 	//clear the script menu
 	virtual void clear()=0;
 	//gets the index of the selected script item
-	virtual std::list<Entry*> getSelectedEntries()=0;
+	virtual std::list<Rule*> getSelectedEntries()=0;
 	//adds a new item
-	virtual void addItem(View_Model_ListItem<Entry, Script> const& listItem)=0;
+	virtual void addItem(View_Model_ListItem<Rule, Script> const& listItem)=0;
 	//whether to active the delete button
 	virtual void setDeleteButtonEnabled(bool val) = 0;
 	//show this dialog
@@ -48,7 +48,7 @@ public:
 
 	virtual void setOptions(std::map<ViewOption, bool> const& viewOptions) = 0;
 
-	virtual void selectEntries(std::list<Entry*> const& entries) = 0;
+	virtual void selectEntries(std::list<Rule*> const& entries) = 0;
 
 	virtual void setRestoreButtonSensitivity(bool sensitivity) = 0;
 
