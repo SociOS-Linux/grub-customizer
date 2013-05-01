@@ -67,9 +67,13 @@ void TrashControllerImpl::_refreshView(Model_Rule* parent) {
 
 // returns true, all selected entries are deletable
 bool TrashControllerImpl::_isDeletable(std::list<Rule*> const& selectedEntries) {
+	if (selectedEntries.size() == 0) {
+		return false;
+	}
+
 	for (std::list<Rule*>::const_iterator iter = selectedEntries.begin(); iter != selectedEntries.end(); iter++) {
 		if (Model_Rule::fromPtr(*iter).type != Model_Rule::NORMAL || Model_Rule::fromPtr(*iter).dataSource == NULL) {
-			continue;
+			return false;
 		}
 		Model_Script* script = this->grublistCfg->repository.getScriptByEntry(*Model_Rule::fromPtr(*iter).dataSource);
 		assert(script != NULL);
