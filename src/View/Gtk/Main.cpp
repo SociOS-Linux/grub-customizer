@@ -220,7 +220,7 @@ View_Gtk_Main::View_Gtk_Main()
 	tvConfList.textRenderer.signal_editing_started().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_edit_name));
 	tvConfList.textRenderer.signal_edited().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_edit_name_finished));
 	tvConfList.toggleRenderer.signal_toggled().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_checkbox_toggled));
-	tvConfList.signal_button_press_event().connect_notify(sigc::mem_fun(this, &View_Gtk_Main::signal_button_press));
+	tvConfList.signal_button_press_event().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_button_press), false);
 	tvConfList.signal_popup_menu().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_popup));
 	tvConfList.signal_key_press_event().connect_notify(sigc::mem_fun(this, &View_Gtk_Main::signal_key_press));
 	tbttSave.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Main::saveConfig));
@@ -303,10 +303,16 @@ void View_Gtk_Main::setIsBurgMode(bool isBurgMode){
 	tbttSave.set_tooltip_text(Glib::ustring(gettext("Save configuration and generate a new "))+(isBurgMode?"burg.cfg":"grub.cfg"));
 }
 
-void View_Gtk_Main::signal_button_press(GdkEventButton *event) {
+bool View_Gtk_Main::signal_button_press(GdkEventButton *event) {
 	if (event->type == GDK_BUTTON_PRESS && event->button == 3) {
 		contextMenu.popup(event->button, event->time);
+		if (this->tvConfList.get_selection()->count_selected_rows() > 1) {
+			return true; // prevent re-selection
+		} else {
+			return false;
+		}
 	}
+	return false;
 }
 
 bool View_Gtk_Main::signal_popup() {

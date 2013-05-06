@@ -170,7 +170,7 @@ private:
 	void signal_info_click();
 	void signal_burg_switcher_response(int response_id);
 	void signal_edit_name(Gtk::CellEditable* editable, const Glib::ustring& path);
-	void signal_button_press(GdkEventButton *event);
+	bool signal_button_press(GdkEventButton *event);
 	bool signal_popup();
 	void signal_key_press(GdkEventKey* key);
 	void signal_revert();
