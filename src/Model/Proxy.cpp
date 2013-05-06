@@ -733,6 +733,25 @@ Model_Rule* Model_Proxy::getVisibleRuleForEntry(Model_Entry const& entry, Model_
 	return NULL;
 }
 
+std::list<Model_Rule*> Model_Proxy::getVisibleRulesByType(Model_Rule::RuleType type, Model_Rule* parent) {
+	std::list<Model_Rule*> result;
+	std::list<Model_Rule>& list = parent ? parent->subRules : this->rules;
+
+	for (std::list<Model_Rule>::iterator iter = list.begin(); iter != list.end(); iter++) {
+		if (iter->isVisible) {
+			if (iter->type == type) {
+				result.push_back(&*iter);
+			}
+			if (iter->subRules.size()) {
+				std::list<Model_Rule*> subResult = this->getVisibleRulesByType(type, &*iter);
+				result.splice(result.end(), subResult);
+			}
+		}
+	}
+
+	return result;
+}
+
 Model_Proxy::operator ArrayStructure() const {
 	ArrayStructure result;
 	result["rules"].isArray = true;

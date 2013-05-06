@@ -418,16 +418,40 @@ bool MainControllerImpl::_listHasPlaintextRules(std::list<Rule*> const& rules) {
 	return false;
 }
 
-bool MainControllerImpl::_listHasCurrentSystemRules(std::list<Rule*> const& rules) {
+bool MainControllerImpl::_listHasAllCurrentSystemRules(std::list<Rule*> const& rules) {
+	int visibleSystemRulesCount = 0;
+	int selectedSystemRulesCount = 0;
+
+	Model_Script* linuxScript = NULL;
+
+	// count selected entries related to linux script
 	for (std::list<Rule*>::const_iterator iter = rules.begin(); iter != rules.end(); iter++) {
 		const Model_Rule* rule = &Model_Rule::fromPtr(*iter);
 		if (rule->type == Model_Rule::NORMAL) {
 			assert(rule->dataSource != NULL);
-			if (this->grublistCfg->repository.getScriptByEntry(*rule->dataSource)->name == "linux") {
-				return true;
+			Model_Script* script = this->grublistCfg->repository.getScriptByEntry(*rule->dataSource);
+			if (script->name == "linux") {
+				selectedSystemRulesCount++;
+
+				linuxScript = script;
 			}
 		}
 	}
+
+	// count all entries and compare counters if there are linux entries
+	if (linuxScript != NULL) {
+		// check whether it's the last remaining entry
+		std::list<Model_Proxy*> proxies = this->grublistCfg->proxies.getProxiesByScript(*linuxScript);
+		bool visibleRulesFound = false;
+		for (std::list<Model_Proxy*>::iterator proxyIter = proxies.begin(); proxyIter != proxies.end(); proxyIter++) {
+			visibleSystemRulesCount += (*proxyIter)->getVisibleRulesByType(Model_Rule::NORMAL).size();
+		}
+
+		if (selectedSystemRulesCount == visibleSystemRulesCount) {
+			return true;
+		}
+	}
+
 	return false;
 }
 
@@ -585,7 +609,7 @@ void MainControllerImpl::exitAction(bool force){
 void MainControllerImpl::removeRulesAction(std::list<Rule*> rules, bool force){
 	this->logActionBegin("remove-rules");
 	try {
-		if (!force && this->_listHasCurrentSystemRules(rules)) {
+		if (!force && this->_listHasAllCurrentSystemRules(rules)) {
 			this->view->showSystemRuleRemoveWarning();
 		} else if (!force && this->_listHasPlaintextRules(rules)) {
 			this->view->showPlaintextRemoveWarning();
