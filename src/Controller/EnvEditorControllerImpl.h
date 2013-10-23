@@ -34,6 +34,7 @@
 #include "ControllerAbstract.h"
 
 #include "EnvEditorController.h"
+#include "../Model/DeviceMap.h"
 
 
 class EnvEditorControllerImpl :
@@ -43,9 +44,11 @@ class EnvEditorControllerImpl :
 	public Model_Env_Connection
 {
 	Model_MountTable* mountTable;
+	Model_DeviceMap* deviceMap;
 
 public:
 	void setMountTable(Model_MountTable& mountTable);
+	void setDeviceMap(Model_DeviceMap& deviceMap);
 
 	void showAction(bool resetPartitionChooser = false);
 

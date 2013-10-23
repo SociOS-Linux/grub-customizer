@@ -36,6 +36,7 @@ class Model_DeviceMap :
 public:
 	Model_SmartFileHandle getFileHandle() const;
 	Model_DeviceMap_PartitionIndex getHarddriveIndexByPartitionUuid(std::string partitionUuid) const;
+	void clearCache();
 };
 
 #endif

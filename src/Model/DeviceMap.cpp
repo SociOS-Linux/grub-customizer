@@ -107,3 +107,7 @@ Model_DeviceMap_PartitionIndex Model_DeviceMap::getHarddriveIndexByPartitionUuid
 	this->_cache[partitionUuid] = result;
 	return result;
 }
+
+void Model_DeviceMap::clearCache() {
+	this->_cache.clear();
+}

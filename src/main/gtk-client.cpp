@@ -90,6 +90,7 @@ int main(int argc, char** argv){
 		Mapper_EntryNameImpl entryNameMapper;
 		View_Gtk_Theme themeEditor;
 		Model_ThemeManager themeManager;
+		Model_DeviceMap deviceMap;
 
 		entryNameMapper.setView(listCfgView);
 
@@ -123,6 +124,7 @@ int main(int argc, char** argv){
 		EnvEditorControllerImpl envEditController;
 		envEditController.setMountTable(mountTable);
 		envEditController.setView(envEditor);
+		envEditController.setDeviceMap(deviceMap);
 
 		TrashControllerImpl trashController;
 		trashController.setEntryNameMapper(entryNameMapper);
@@ -241,7 +243,6 @@ int main(int argc, char** argv){
 		}
 
 		//configure contentParser factory
-		Model_DeviceMap deviceMap;
 		ContentParser_Linux linuxParser(deviceMap);
 		ContentParser_LinuxIso linuxIsoParser(deviceMap);
 		ContentParser_Chainloader chainloadParser(deviceMap);

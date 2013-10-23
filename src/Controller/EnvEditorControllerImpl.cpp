@@ -20,12 +20,17 @@
 
 EnvEditorControllerImpl::EnvEditorControllerImpl()
 	: ControllerAbstract("env-editor"),
-	 mountTable(NULL)
+	 mountTable(NULL),
+	 deviceMap(NULL)
 {
 }
 
 void EnvEditorControllerImpl::setMountTable(Model_MountTable& mountTable){
 	this->mountTable = &mountTable;
+}
+
+void EnvEditorControllerImpl::setDeviceMap(Model_DeviceMap& deviceMap) {
+	this->deviceMap = &deviceMap;
 }
 
 void EnvEditorControllerImpl::showAction(bool resetPartitionChooser) {
@@ -118,8 +123,6 @@ void EnvEditorControllerImpl::updateGrubEnvOptionsAction() {
 void EnvEditorControllerImpl::applyAction(bool saveConfig){
 	this->logActionBegin("apply");
 	try {
-		//	listCfgDlg->setLockState(1|2|8);
-		//	this->syncSettings();
 		this->getAllControllers().settingsController->hideAction();
 		this->getAllControllers().trashController->hideAction();
 		bool isBurgMode = this->view->getBootloaderType() == 1;
@@ -128,6 +131,7 @@ void EnvEditorControllerImpl::applyAction(bool saveConfig){
 		if (saveConfig) {
 			this->env->save();
 		}
+		this->deviceMap->clearCache();
 		this->getAllControllers().mainController->reInitAction(isBurgMode);
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
