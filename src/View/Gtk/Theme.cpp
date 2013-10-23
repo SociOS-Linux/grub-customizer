@@ -488,6 +488,23 @@ void View_Gtk_Theme::setFontName(std::string const& value) {
 	imgRemoveFont.set_visible(value != "");
 }
 
+void View_Gtk_Theme::showFontWarning() {
+	Gtk::MessageDialog dialog(gettext("please note: large fonts on low boot screen resolutions can corrupt the boot screen\n\
+Because this problem depends on chosen font, it isn't possible to define a general maximum. \
+When you're trying to select a larger font, please do it in small steps (rebooting and checking the results).\n\
+The problem occurs when the grub gui elements (borders, description) wont fit into screen. \
+So while there's enough vertical space you can try a larger font. \
+The mass of menuentries is not a problem - they are scrolled if required.\n\n\
+The corruption results in a endless loading time of grub2. You need a live cd to fix this:\n\
+ * delete the font from (MOUNT)/boot/grub/unicode.pf2\n\
+ * reboot your system (menu should show up with default fonts)\n\
+ * open /etc/default/grub with root permissions and place a '#' in front of the line containing GRUB_FONT\n\
+ * then run grub customizer to choose the font used before"
+	), false, Gtk::MESSAGE_INFO);
+	dialog.set_title(gettext("Grub fonts can be harmful (Info)"));
+	dialog.run();
+}
+
 Glib::RefPtr<Pango::Layout> View_Gtk_Theme::createFormattedText(Cairo::RefPtr<Cairo::Context>& context, Glib::ustring const& text, std::string const& format, int r, int g, int b, int r_b, int g_b, int b_b, bool black_bg_is_transparent) {
 	Glib::RefPtr<Pango::Layout> layout = Pango::Layout::create(context);
 	layout->set_text(text);

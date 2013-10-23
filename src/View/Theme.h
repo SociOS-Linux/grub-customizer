@@ -68,6 +68,9 @@ public:
 	//set the name of the selected font
 	virtual void setFontName(std::string const& value)=0;
 
+	//shows a warning message about very large fonts
+	virtual void showFontWarning() = 0;
+
 	//sets the background image, remove it, if empty string is given
 	virtual void setBackgroundImagePreviewPath(std::string const& menuPicturePath, bool isInGrubDir)=0;
 	//reads the selected background image path

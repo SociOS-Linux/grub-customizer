@@ -154,6 +154,7 @@ public:
 	std::string getFontName();
 	int getFontSize();
 	void setFontName(std::string const& value);
+	void showFontWarning();
 	Glib::RefPtr<Pango::Layout> createFormattedText(Cairo::RefPtr<Cairo::Context>& context, Glib::ustring const& text, std::string const& format, int r, int g, int b, int r_b, int g_b, int b_b, bool black_bg_is_transparent = true);
 	void setBackgroundImagePreviewPath(std::string const& menuPicturePath, bool isInGrubDir);
 	void redraw(std::string const& menuPicturePath, bool isInGrubDir, Cairo::RefPtr<Cairo::Context> const* cr = NULL);

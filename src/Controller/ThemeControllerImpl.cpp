@@ -57,7 +57,6 @@ void ThemeControllerImpl::syncSettings() {
 		menuPicturePath = env->output_config_dir + "/" + menuPicturePath;
 		menuPicIsInGrubDir = true;
 	}
-
 	this->view->setFontName(this->settings->grubFont);
 
 	if (this->settings->isActive(wallpaper_key) && menuPicturePath != ""){
@@ -413,8 +412,12 @@ void ThemeControllerImpl::updateFontSettingsAction(bool removeFont) {
 			fontName = this->view->getFontName();
 			fontSize = this->view->getFontSize();;
 		}
+		if (fontName != "" && this->settings->grubFont == "") {
+			this->view->showFontWarning();
+		}
 		this->settings->grubFont = fontName;
 		this->settings->grubFontSize = fontSize;
+
 		this->syncSettings();
 		this->env->modificationsUnsaved = true;
 	} catch (Exception const& e) {
