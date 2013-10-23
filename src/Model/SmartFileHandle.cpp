@@ -19,59 +19,98 @@
 #include "SmartFileHandle.h"
 
 Model_SmartFileHandle::Model_SmartFileHandle()
-	: isCmd(false), proc_or_file(NULL)
+	: type(TYPE_STRING), proc_or_file(NULL)
 {
 }
 
 char Model_SmartFileHandle::getChar() {
-	int c = fgetc(this->proc_or_file);
-	if (c != EOF)
-		return c;
-	else
-		throw EndOfFileException("end of file", __FILE__, __LINE__);
+	if (type == TYPE_STRING) {
+		if (this->string.size()) {
+			int c = (int) this->string[0];
+			this->string = this->string.substr(1);
+			return c;
+		} else {
+			throw EndOfFileException("end of file", __FILE__, __LINE__);
+		}
+	} else {
+		int c = fgetc(this->proc_or_file);
+		if (c != EOF)
+			return c;
+		else
+			throw EndOfFileException("end of file", __FILE__, __LINE__);
+	}
 }
 std::string Model_SmartFileHandle::getRow() {
 	std::string result;
 	int c;
-	while ((c = fgetc(this->proc_or_file)) != EOF && c != '\n'){
-		result += c;
+	try {
+		while ((c = this->getChar()) != EOF && c != '\n'){
+			result += c;
+		}
+	} catch (EndOfFileException const& e) {
+		if (result == "") {
+			throw e;
+		}
 	}
-	if (result == "" && c == EOF)
-		throw EndOfFileException("end of file", __FILE__, __LINE__);
 	return result;
 }
 std::string Model_SmartFileHandle::getAll() {
 	std::string result;
 	int c;
-	while ((c = fgetc(this->proc_or_file)) != EOF){
-		result += c;
+	try {
+		while ((c = this->getChar()) != EOF){
+			result += c;
+		}
+	} catch (EndOfFileException const& e) {
+		if (result == "") {
+			throw e;
+		}
 	}
-	if (result == "" && c == EOF)
-		throw EndOfFileException("end of file", __FILE__, __LINE__);
 	return result;
 }
 
 
 void Model_SmartFileHandle::open(std::string const& cmd_or_file, std::string const& mode, Type type) {
-	if (this->proc_or_file)
+	if (this->proc_or_file || this->string != "")
 		throw HandleNotClosedException("handle not closed - cannot open", __FILE__, __LINE__);
 
-	if (type == TYPE_COMMAND)
-		this->proc_or_file = popen(cmd_or_file.c_str(), mode.c_str());
-	else if (type == TYPE_FILE)
-		this->proc_or_file = fopen(cmd_or_file.c_str(), mode.c_str());
+	this->proc_or_file = NULL;
+	this->string = "";
 
-	if (this->proc_or_file)
-		this->isCmd = type == TYPE_COMMAND;
+	switch (type) {
+		case TYPE_STRING:
+			this->string = cmd_or_file;
+			break;
+		case TYPE_COMMAND:
+			this->proc_or_file = popen(cmd_or_file.c_str(), mode.c_str());
+			break;
+		case TYPE_FILE:
+			this->proc_or_file = fopen(cmd_or_file.c_str(), mode.c_str());
+			break;
+		default:
+			throw LogicException("unexpected type given");
+	}
+
+	if (this->proc_or_file || type == TYPE_STRING)
+		this->type = type;
 	else
-		throw FileReadException("Cannot rad the file", __FILE__, __LINE__);
+		throw FileReadException("Cannot read the file/cmd: " + cmd_or_file, __FILE__, __LINE__);
 }
 void Model_SmartFileHandle::close() {
-	if (!this->proc_or_file)
+	if (this->type != TYPE_STRING && !this->proc_or_file)
 		throw HandleNotOpenedException("handle not opened - cannot close", __FILE__, __LINE__);
 
-	if (isCmd)
-		pclose(this->proc_or_file);
-	else
-		fclose(this->proc_or_file);
+	switch (type) {
+		case TYPE_STRING:
+			this->string = "";
+			break;
+		case TYPE_COMMAND:
+			pclose(this->proc_or_file);
+			break;
+		case TYPE_FILE:
+			fclose(this->proc_or_file);
+			break;
+		default:
+			throw LogicException("unexpected type given");
+	}
 }
