@@ -44,7 +44,6 @@ class View_Gtk_EnvEditor :
 	Gtk::VBox vbSubmountpoints;
 	Gtk::Label lblSubmountpoints;
 	View_Gtk_Element_PartitionChooser* pChooser;
-	Model_DeviceDataListInterface* deviceDataList;
 	std::map<std::string, Gtk::Entry*> optionMap;
 	std::map<std::string, Gtk::Label*> labelMap;
 	std::map<std::string, Gtk::Image*> imageMap;
