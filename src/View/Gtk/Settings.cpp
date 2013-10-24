@@ -31,7 +31,8 @@ View_Gtk_Settings::View_Gtk_Settings()
 	lblDefaultEntry(gettext("default entry")), lblView(gettext("visibility")), chkShowMenu(gettext("show menu")),
 	lblKernelParams(gettext("kernel parameters")),
 	chkGenerateRecovery(gettext("generate recovery entries")), chkOsProber(gettext("look for other operating systems")),
-	chkResolution(gettext("custom resolution: ")), cbResolution(true)
+	chkResolution(gettext("custom resolution: ")), cbResolution(true),
+	imgDefaultEntryHelp(Gtk::Stock::HELP, Gtk::ICON_SIZE_BUTTON)
 {
 	this->set_title("Grub Customizer - "+Glib::ustring(gettext("settings")));
 	this->set_icon_name("grub-customizer");
@@ -71,9 +72,13 @@ View_Gtk_Settings::View_Gtk_Settings()
 	vbDefaultEntry.add(hbDefPredefined);
 	vbDefaultEntry.add(rbDefSaved);
 	
+	bttDefaultEntryHelp.add(imgDefaultEntryHelp);
+
 	hbDefPredefined.pack_start(rbDefPredefined, Gtk::PACK_SHRINK);
 	hbDefPredefined.pack_start(cbDefEntry);
-	
+	hbDefPredefined.pack_start(bttDefaultEntryHelp, Gtk::PACK_SHRINK);
+
+	hbDefPredefined.set_spacing(5);
 	vbDefaultEntry.set_spacing(5);
 	groupDefaultEntry.set_shadow_type(Gtk::SHADOW_NONE);
 	alignDefaultEntry.set_padding(2, 2, 25, 2);
@@ -162,6 +167,7 @@ View_Gtk_Settings::View_Gtk_Settings()
 	cbResolution.get_entry()->signal_changed().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_resolution_selected));
 	bttAddCustomEntry.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_add_row_button_clicked));
 	bttRemoveCustomEntry.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_remove_row_button_clicked));
+	bttDefaultEntryHelp.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_defEntryHelpClick));
 
 	this->add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
 	this->set_default_size(500, 600);
@@ -478,6 +484,27 @@ void View_Gtk_Settings::putThemeEditArea(Gtk::Widget& themeEditArea) {
 void View_Gtk_Settings::signal_resolution_selected(){
 	if (!event_lock){
 		this->controller->updateCustomResolutionAction();
+	}
+}
+
+void View_Gtk_Settings::signal_defEntryHelpClick() {
+	if (!event_lock){
+		Gtk::MessageDialog helpDlg(
+			gettext("This option allows choosing the operating system which should be selected when booting. "
+			"By default this always is the first one.\n\nThere are two columns because "
+			"there are two ways of selecting the default operating system. "
+			"The first way is to say \"always select the operating system at position X\". This means when a new menuentry appears, "
+			"the default menuentry may change (because there's another one at Position X).\n\n"
+			"The other way is to say \"use the operating system named Linux 123\". "
+			"Then it will always point to the same operating system - the position doesn't matter. "
+			"When changing the name of an entry using Grub Customizer this option will be updated automatically. "
+			"So you won't have to re-select the default entry."),
+			true,
+			Gtk::MESSAGE_INFO,
+			Gtk::BUTTONS_OK,
+			false
+		);
+		helpDlg.run();
 	}
 }
 

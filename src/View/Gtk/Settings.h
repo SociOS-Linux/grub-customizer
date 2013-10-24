@@ -73,6 +73,8 @@ class View_Gtk_Settings :
 	//Gtk::SpinButton spDefPosition;
 	Gtk::ComboBoxText cbDefEntry;
 	std::map<int, std::string> defEntryValueMapping;
+	Gtk::Button bttDefaultEntryHelp;
+	Gtk::Image imgDefaultEntryHelp;
 	
 	//view group
 	Gtk::Frame groupView;
@@ -115,6 +117,7 @@ class View_Gtk_Settings :
 	void signal_recovery_toggled();
 	void signal_chkResolution_toggled();
 	void signal_resolution_selected();
+	void signal_defEntryHelpClick();
 	void on_response(int response_id);
 	public:
 	View_Gtk_Settings();
