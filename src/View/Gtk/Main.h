@@ -68,7 +68,7 @@ class View_Gtk_Main : public View_Main, public Trait_LoggerAware, public Trait_C
 	Gtk::VSeparator vs_sep4;
 	Gtk::SeparatorToolItem ti_sep5;
 	
-	Gtk::MenuItem miFile, miEdit, miView, miHelp, miInstallGrub, miContext;
+	Gtk::MenuItem miFile, miEdit, miView, miHelp, miInstallGrub, miContext, miCAboutEntryTypes, miAboutEntryTypes;
 	Gtk::ImageMenuItem miExit, miSave, miAbout, miModifyEnvironment, miRevert, miCreateEntry;
 	ImageMenuItemOwnKey miReload, miRemove, miUp, miDown, miLeft, miRight, miEditEntry;
 	Gtk::ImageMenuItem miCRemove, miCUp, miCDown, miCLeft, miCRight, miCRename, miCEditEntry;
@@ -167,6 +167,7 @@ private:
 	bool signal_delete_event(GdkEventAny* event);
 	void signal_quit_click();
 	void signal_preference_click();
+	void signal_entry_type_help_click();
 	void signal_info_click();
 	void signal_burg_switcher_response(int response_id);
 	void signal_edit_name(Gtk::CellEditable* editable, const Glib::ustring& path);
