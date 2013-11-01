@@ -420,8 +420,10 @@ void ThemeControllerImpl::updateFontSettingsAction(bool removeFont) {
 		this->settings->grubFont = fontName;
 		this->settings->grubFontSize = fontSize;
 
-		this->settings->mkFont("", "/tmp/grub_customizer_chosen_font_test.pf2");
-		this->settings->grubFont = this->settings->parsePf2("/tmp/grub_customizer_chosen_font_test.pf2")["NAME"];
+		if (fontName != "") {
+			this->settings->mkFont("", "/tmp/grub_customizer_chosen_font_test.pf2");
+			this->settings->grubFont = this->settings->parsePf2("/tmp/grub_customizer_chosen_font_test.pf2")["NAME"];
+		}
 
 		this->syncSettings();
 		this->env->modificationsUnsaved = true;
