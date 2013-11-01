@@ -54,7 +54,8 @@ std::map<std::string, std::string> Model_SettingsManagerData::parsePf2(std::stri
 
 std::string Model_SettingsManagerData::getFontFileByName(std::string const& name) {
 	std::string result;
-	FILE* proc = popen(("fc-match -f '%{file[0]}' '" + str_replace(" ", ":", name) + "'").c_str(), "r");
+	std::string cmd = "fc-match -f '%{file[0]}' '" + str_replace(" ", ":", name) + "'";
+	FILE* proc = popen(cmd.c_str(), "r");
 	int c;
 	while ((c = getc(proc)) != EOF) {
 		result += char(c);
@@ -63,7 +64,7 @@ std::string Model_SettingsManagerData::getFontFileByName(std::string const& name
 	return result;
 }
 
-std::string Model_SettingsManagerData::mkFont(std::string fontFile) {
+std::string Model_SettingsManagerData::mkFont(std::string fontFile, std::string outputPath) {
 	int fontSize = -1;
 	if (fontFile == "") {
 		fontFile = Model_SettingsManagerData::getFontFileByName(this->grubFont);
@@ -79,8 +80,8 @@ std::string Model_SettingsManagerData::mkFont(std::string fontFile) {
 			return ""; // fehler
 		}
 	}
-	std::string output = this->env->output_config_dir + "/unicode.pf2";
-	FILE* mkfont_proc = popen((this->env->mkfont_cmd + " --output='" + str_replace("'", "\\'", output) + "'" + sizeParam + " '" + str_replace("'", "\\'", fontFile) + "' 2>&1").c_str(), "r");
+	outputPath = outputPath != "" ? outputPath : this->env->output_config_dir + "/unicode.pf2";
+	FILE* mkfont_proc = popen((this->env->mkfont_cmd + " --output='" + str_replace("'", "\\'", outputPath) + "'" + sizeParam + " '" + str_replace("'", "\\'", fontFile) + "' 2>&1").c_str(), "r");
 	int c;
 //	std::string row = "";
 	while ((c = fgetc(mkfont_proc)) != EOF) {
@@ -95,8 +96,8 @@ std::string Model_SettingsManagerData::mkFont(std::string fontFile) {
 		this->log("error running " + this->env->mkfont_cmd, Logger::ERROR);
 		return "";
 	}
-	this->setValue("GRUB_FONT", output);
-	return output;
+	this->setValue("GRUB_FONT", outputPath);
+	return outputPath;
 }
 
 bool Model_SettingsManagerData::load(){

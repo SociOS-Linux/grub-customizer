@@ -408,15 +408,20 @@ void ThemeControllerImpl::updateFontSettingsAction(bool removeFont) {
 	try {
 		std::string fontName;
 		int fontSize = -1;
+
 		if (!removeFont) {
 			fontName = this->view->getFontName();
-			fontSize = this->view->getFontSize();;
+			fontSize = this->view->getFontSize();
 		}
 		if (fontName != "" && this->settings->grubFont == "") {
 			this->view->showFontWarning();
 		}
+
 		this->settings->grubFont = fontName;
 		this->settings->grubFontSize = fontSize;
+
+		this->settings->mkFont("", "/tmp/grub_customizer_chosen_font_test.pf2");
+		this->settings->grubFont = this->settings->parsePf2("/tmp/grub_customizer_chosen_font_test.pf2")["NAME"];
 
 		this->syncSettings();
 		this->env->modificationsUnsaved = true;

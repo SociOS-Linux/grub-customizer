@@ -40,7 +40,7 @@ public:
 	bool reloadRequired() const;
 	static std::map<std::string, std::string> parsePf2(std::string const& fileName);
 	static std::string getFontFileByName(std::string const& name);
-	std::string mkFont(std::string fontFile = "");
+	std::string mkFont(std::string fontFile = "", std::string outputDir = "");
 	bool load();
 	bool save();
 	bool setValue(std::string const& name, std::string const& value);
