@@ -54,7 +54,17 @@ std::map<std::string, std::string> Model_SettingsManagerData::parsePf2(std::stri
 
 std::string Model_SettingsManagerData::getFontFileByName(std::string const& name) {
 	std::string result;
-	std::string cmd = "fc-match -f '%{file[0]}' '" + str_replace(" ", ":", name) + "'";
+	std::string translatedName = name;
+	int lastWhitespacePos = translatedName.find_last_of(' ');
+	if (lastWhitespacePos != -1) {
+		translatedName[lastWhitespacePos] = ':';
+	}
+	translatedName = str_replace(" Bold", ":Bold", translatedName);
+	translatedName = str_replace(" Italic", ":Italic", translatedName);
+	translatedName = str_replace(" Medium", ":Medium", translatedName);
+	translatedName = str_replace(" Oblique", ":Oblique", translatedName);
+
+	std::string cmd = "fc-match -f '%{file[0]}' '" + translatedName + "'";
 	FILE* proc = popen(cmd.c_str(), "r");
 	int c;
 	while ((c = getc(proc)) != EOF) {
