@@ -140,7 +140,7 @@ void ThemeControllerImpl::loadThemesAction() {
 		}
 		this->syncSettings();
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -163,7 +163,7 @@ void ThemeControllerImpl::loadThemeAction(std::string const& name) {
 		this->syncFiles();
 		this->syncSettings();
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -181,7 +181,7 @@ void ThemeControllerImpl::addThemePackageAction(const std::string& filePath) {
 			this->view->showError(View_Theme::ERROR_INVALID_THEME_PACK_FORMAT);
 		}
 	} catch (const Exception& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -193,7 +193,7 @@ void ThemeControllerImpl::removeThemeAction(const std::string& name) {
 		this->showSimpleThemeConfigAction();
 		this->syncSettings();
 	} catch (const Exception& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -203,7 +203,7 @@ void ThemeControllerImpl::showThemeInstallerAction() {
 	try {
 		this->view->showThemeFileChooser();
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -220,7 +220,7 @@ void ThemeControllerImpl::showSimpleThemeConfigAction() {
 		this->currentThemeFile = "";
 		this->syncSettings();
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -243,7 +243,7 @@ void ThemeControllerImpl::addFileAction() {
 			this->view->showError(View_Theme::ERROR_RENAME_CONFLICT);
 		}
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -253,7 +253,7 @@ void ThemeControllerImpl::startFileEditAction(std::string const& file) {
 	try {
 		this->view->selectFile(file, true);
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -266,7 +266,7 @@ void ThemeControllerImpl::removeFileAction(std::string const& file) {
 		this->themeManager->getTheme(this->currentTheme).isModified = true;
 		this->syncFiles();
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -302,7 +302,7 @@ void ThemeControllerImpl::updateEditAreaAction(std::string const& file) {
 		}
 		this->view->setCurrentExternalThemeFilePath(themeFile->externalSource);
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -328,7 +328,7 @@ void ThemeControllerImpl::renameAction(std::string const& newName) {
 		this->themeManager->getTheme(this->currentTheme).sort();
 		this->syncFiles();
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -343,7 +343,7 @@ void ThemeControllerImpl::loadFileAction(std::string const& externalPath) {
 		file->contentLoaded = false;
 		this->updateEditAreaAction(file->newLocalFileName);
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -358,7 +358,7 @@ void ThemeControllerImpl::saveTextAction(std::string const& newText) {
 		themeFile->content = newText;
 		themeFile->contentLoaded = true;
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -377,7 +377,7 @@ void ThemeControllerImpl::updateBackgroundImageAction(){
 		this->syncSettings();
 		this->env->modificationsUnsaved = true;
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -398,7 +398,7 @@ void ThemeControllerImpl::updateColorSettingsAction(){
 		this->syncSettings();
 		this->env->modificationsUnsaved = true;
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -428,7 +428,7 @@ void ThemeControllerImpl::updateFontSettingsAction(bool removeFont) {
 		this->syncSettings();
 		this->env->modificationsUnsaved = true;
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -444,7 +444,7 @@ void ThemeControllerImpl::removeBackgroundImageAction(){
 		this->syncSettings();
 		this->env->modificationsUnsaved = true;
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -458,7 +458,7 @@ void ThemeControllerImpl::updateSettingsDataAction() {
 
 		this->syncSettings();
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -468,7 +468,7 @@ void ThemeControllerImpl::syncAction() {
 	try {
 		this->syncSettings();
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -482,7 +482,7 @@ void ThemeControllerImpl::saveAction() {
 		this->themeManager->save();
 		this->threadController->doPostSaveActions();
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -498,7 +498,7 @@ void ThemeControllerImpl::postSaveAction() {
 		this->currentThemeFile = "";
 		this->view->selectFile("");
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }

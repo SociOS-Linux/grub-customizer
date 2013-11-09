@@ -40,7 +40,7 @@ void SettingsControllerImpl::loadResolutionsAction() {
 	try {
 		this->fbResolutionsGetter->load();
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -57,7 +57,7 @@ void SettingsControllerImpl::updateSettingsDataAction(){
 
 		this->syncSettings();
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -75,7 +75,7 @@ void SettingsControllerImpl::updateResolutionlistAction(){
 			this->view->addResolution(*iter);
 		}
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -85,7 +85,7 @@ void SettingsControllerImpl::updateResolutionlistThreadedAction() {
 	try {
 		this->threadController->updateSettingsDlgResolutionList();
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorThreadedAction(e);
+		this->handleException(e, THREADED);
 	}
 	this->logActionEndThreaded();
 }
@@ -156,7 +156,7 @@ void SettingsControllerImpl::updateDefaultSystemAction(){
 		this->syncSettings();
 		this->env->modificationsUnsaved = true;
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -171,7 +171,7 @@ void SettingsControllerImpl::updateCustomSettingAction(std::string const& name){
 		this->syncSettings();
 		this->env->modificationsUnsaved = true;
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -182,7 +182,7 @@ void SettingsControllerImpl::addCustomSettingAction(){
 		std::string newSettingName = this->settings->addNewItem();
 		this->syncSettings();
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -193,7 +193,7 @@ void SettingsControllerImpl::removeCustomSettingAction(std::string const& name){
 		this->syncSettings();
 		this->env->modificationsUnsaved = true;
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -212,7 +212,7 @@ void SettingsControllerImpl::updateShowMenuSettingAction(){
 		this->syncSettings();
 		this->env->modificationsUnsaved = true;
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -225,7 +225,7 @@ void SettingsControllerImpl::updateOsProberSettingAction(){
 		this->syncSettings();
 		this->env->modificationsUnsaved = true;
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -237,7 +237,7 @@ void SettingsControllerImpl::updateKernelParamsAction(){
 		this->syncSettings();
 		this->env->modificationsUnsaved = true;
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -252,7 +252,7 @@ void SettingsControllerImpl::updateUseCustomResolutionAction(){
 		this->syncSettings();
 		this->env->modificationsUnsaved = true;
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -262,7 +262,7 @@ void SettingsControllerImpl::hideAction(){
 	try {
 		this->view->hide();
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -272,7 +272,7 @@ void SettingsControllerImpl::showAction(bool burgMode) {
 	try {
 		this->view->show(burgMode);
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -294,7 +294,7 @@ void SettingsControllerImpl::updateTimeoutSettingAction(){
 		this->syncSettings();
 		this->env->modificationsUnsaved = true;
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -306,7 +306,7 @@ void SettingsControllerImpl::updateCustomResolutionAction(){
 		this->syncSettings();
 		this->env->modificationsUnsaved = true;
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -329,7 +329,7 @@ void SettingsControllerImpl::updateRecoverySettingAction(){
 		this->syncSettings();
 		this->env->modificationsUnsaved = true;
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -339,7 +339,7 @@ void SettingsControllerImpl::syncAction() {
 	try {
 		this->syncSettings();
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }

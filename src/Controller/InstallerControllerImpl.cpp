@@ -36,7 +36,7 @@ void InstallerControllerImpl::showAction(){
 	try {
 		view->show();
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -46,7 +46,7 @@ void InstallerControllerImpl::installGrubAction(std::string device){
 	try {
 		this->getThreadController().startGrubInstallThread(device);
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -61,7 +61,7 @@ void InstallerControllerImpl::installGrubThreadedAction(std::string device) {
 			this->getAllControllers().mainController->exitAction(true);
 		}
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorThreadedAction(e);
+		this->handleException(e, THREADED);
 	}
 	this->logActionEndThreaded();
 }
@@ -71,7 +71,7 @@ void InstallerControllerImpl::showMessageAction(std::string const& msg){
 	try {
 		view->showMessageGrubInstallCompleted(msg);
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }

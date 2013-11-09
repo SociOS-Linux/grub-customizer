@@ -78,6 +78,7 @@ src/Controller/ThemeControllerImpl.cpp -text
 src/Controller/ThemeControllerImpl.h -text
 src/Controller/ThreadController.h -text
 src/Controller/Trait/ControllerAware.h -text
+src/Controller/Trait/ErrorControllerAware.h -text
 src/Controller/Trait/ThreadControllerAware.h -text
 src/Controller/TrashController.h -text
 src/Controller/TrashControllerImpl.cpp -text

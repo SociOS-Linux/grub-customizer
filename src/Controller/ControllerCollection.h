@@ -37,7 +37,6 @@ struct ControllerCollection {
 	TrashController* trashController;
 	InstallerController* installerController;
 	AboutController* aboutController;
-	ErrorController* errorController;
 	ThemeController* themeController;
 };
 

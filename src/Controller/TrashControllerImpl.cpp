@@ -91,7 +91,7 @@ void TrashControllerImpl::updateAction(std::map<ViewOption, bool> const& viewOpt
 		this->view->setOptions(viewOptions);
 		this->_refresh();
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -102,7 +102,7 @@ void TrashControllerImpl::applyAction(){
 		std::list<Rule*> entries = view->getSelectedEntries();
 		this->getAllControllers().mainController->addEntriesAction(entries);
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -113,7 +113,7 @@ void TrashControllerImpl::hideAction() {
 	try {
 		this->view->hide();
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -128,7 +128,7 @@ void TrashControllerImpl::deleteCustomEntriesAction() {
 		}
 		this->_refresh();
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -147,7 +147,7 @@ void TrashControllerImpl::selectEntriesAction(std::list<Entry*> const& entries) 
 		}
 		this->view->selectEntries(rules);
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -164,7 +164,7 @@ void TrashControllerImpl::updateSelectionAction(std::list<Rule*> const& selected
 			this->view->setDeleteButtonVisibility(false);
 		}
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }

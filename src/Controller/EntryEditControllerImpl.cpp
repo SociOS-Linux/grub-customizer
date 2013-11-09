@@ -115,7 +115,7 @@ void EntryEditControllerImpl::applyAction() {
 
 		this->currentContentParser = NULL;
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -128,7 +128,7 @@ void EntryEditControllerImpl::showAction(Rule* rule) {
 		this->syncEntryEditDlg(false);
 		this->view->show();
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -156,7 +156,7 @@ void EntryEditControllerImpl::syncOptionsAction() {
 	try {
 		this->syncEntryEditDlg(false);
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -165,7 +165,7 @@ void EntryEditControllerImpl::syncSourceAction() {
 	try {
 		this->syncEntryEditDlg(true);
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -193,7 +193,7 @@ void EntryEditControllerImpl::switchTypeAction(std::string const& newType) {
 			this->view->setSourcecode("");
 		}
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -207,7 +207,7 @@ void EntryEditControllerImpl::showCreatorAction() {
 		this->view->setOptions(std::map<std::string, std::string>());
 		this->view->show();
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }

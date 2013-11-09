@@ -127,7 +127,7 @@ void GLib_ThreadController::_execInstallGrub(std::string const& device) {
 }
 
 void GLib_ThreadController::_execShowException() {
-	this->_controllers.errorController->errorAction(this->_cachedException);
+	this->handleException(this->_cachedException);
 }
 
 void GLib_ThreadController::_execRuleEdit() {

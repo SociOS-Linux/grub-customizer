@@ -40,7 +40,7 @@ void EnvEditorControllerImpl::showAction(bool resetPartitionChooser) {
 		this->view->setRootDeviceName(this->env->rootDeviceName);
 		this->view->show(resetPartitionChooser);
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -93,7 +93,7 @@ void EnvEditorControllerImpl::switchPartitionAction(std::string const& newPartit
 			this->showAction(true);
 		}
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -104,7 +104,7 @@ void EnvEditorControllerImpl::switchBootloaderTypeAction(int newTypeIndex) {
 		this->env->init(newTypeIndex == 0 ? Model_Env::GRUB_MODE : Model_Env::BURG_MODE, this->env->cfg_dir_prefix);
 		this->showAction();
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -115,7 +115,7 @@ void EnvEditorControllerImpl::updateGrubEnvOptionsAction() {
 		this->env->setProperties(this->view->getEnvSettings());
 		this->showAction();
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -134,7 +134,7 @@ void EnvEditorControllerImpl::applyAction(bool saveConfig){
 		this->deviceMap->clearCache();
 		this->getAllControllers().mainController->reInitAction(isBurgMode);
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -144,7 +144,7 @@ void EnvEditorControllerImpl::exitAction() {
 	try {
 		this->getAllControllers().mainController->exitAction(true);
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -163,7 +163,7 @@ void EnvEditorControllerImpl::mountSubmountpointAction(std::string const& submou
 			this->view->show();
 		}
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -182,7 +182,7 @@ void EnvEditorControllerImpl::umountSubmountpointAction(std::string const& submo
 			this->view->show();
 		}
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }

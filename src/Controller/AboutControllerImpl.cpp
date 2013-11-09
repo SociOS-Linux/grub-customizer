@@ -28,7 +28,7 @@ void AboutControllerImpl::showAction(){
 	try {
 		this->view->show();
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }

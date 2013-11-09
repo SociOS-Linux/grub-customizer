@@ -99,11 +99,15 @@ int main(int argc, char** argv){
 		entryEditDlg.setDeviceDataList(deviceDataList);
 		envEditor.setDeviceDataList(deviceDataList);
 
+		ErrorControllerImpl errorController;
+		errorController.setView(errorView);
+
 		EntryEditControllerImpl entryEditController;
 		entryEditController.setContentParserFactory(contentParserFactory);
 		entryEditController.setView(entryEditDlg);
 		entryEditController.setDeviceDataList(deviceDataList);
 		entryEditController.setListCfg(listcfg);
+		entryEditController.setErrorController(errorController);
 
 		MainControllerImpl mainController;
 		mainController.setListCfg(listcfg);
@@ -116,17 +120,20 @@ int main(int argc, char** argv){
 		mainController.setContentParserFactory(contentParserFactory);
 		mainController.setView(listCfgView);
 		mainController.setEntryNameMapper(entryNameMapper);
+		mainController.setErrorController(errorController);
 
 		SettingsControllerImpl settingsController;
 		settingsController.setListCfg(listcfg);
 		settingsController.setView(settingsDlg);
 		settingsController.setSettingsManager(settings);
 		settingsController.setFbResolutionsGetter(fbResolutionsGetter);
+		settingsController.setErrorController(errorController);
 
 		EnvEditorControllerImpl envEditController;
 		envEditController.setMountTable(mountTable);
 		envEditController.setView(envEditor);
 		envEditController.setDeviceMap(deviceMap);
+		envEditController.setErrorController(errorController);
 
 		TrashControllerImpl trashController;
 		trashController.setEntryNameMapper(entryNameMapper);
@@ -134,22 +141,23 @@ int main(int argc, char** argv){
 		trashController.setDeviceDataList(deviceDataList);
 		trashController.setContentParserFactory(contentParserFactory);
 		trashController.setView(trashView);
+		trashController.setErrorController(errorController);
 
 		InstallerControllerImpl installController;
 		installController.setInstaller(installer);
 		installController.setView(installDlg);
+		installController.setErrorController(errorController);
 
 		AboutControllerImpl aboutController;
 		aboutController.setView(aboutDialog);
-
-		ErrorControllerImpl errorController;
-		errorController.setView(errorView);
+		aboutController.setErrorController(errorController);
 
 		ThemeControllerImpl themeController;
 		themeController.setView(themeEditor);
 		themeController.setThemeManager(themeManager);
 		themeController.setSettingsManager(settings);
 		themeController.setListCfg(listcfg);
+		themeController.setErrorController(errorController);
 
 		ControllerCollection controllerCollection;
 		controllerCollection.entryEditController = &entryEditController;
@@ -159,7 +167,6 @@ int main(int argc, char** argv){
 		controllerCollection.trashController = &trashController;
 		controllerCollection.installerController = &installController;
 		controllerCollection.aboutController = &aboutController;
-		controllerCollection.errorController = &errorController;
 		controllerCollection.themeController = &themeController;
 
 		entryEditController.setControllerCollection(controllerCollection);
@@ -179,6 +186,8 @@ int main(int argc, char** argv){
 		errorController.setThreadController(threadC);
 		entryEditController.setThreadController(threadC);
 		themeController.setThreadController(threadC);
+
+		threadC.setErrorController(errorController);
 
 		listCfgView.putSettingsDialog(settingsDlg.getCommonSettingsPane(), settingsDlg.getAppearanceSettingsPane());
 		listCfgView.putTrashList(trashView.getList());

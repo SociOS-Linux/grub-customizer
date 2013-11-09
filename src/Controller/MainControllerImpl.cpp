@@ -152,7 +152,7 @@ void MainControllerImpl::initAction() {
 	try {
 		this->init();
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -163,7 +163,7 @@ void MainControllerImpl::reInitAction(bool burgMode) {
 		Model_Env::Mode mode = burgMode ? Model_Env::BURG_MODE : Model_Env::GRUB_MODE;
 		this->init(mode, false);
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -175,7 +175,7 @@ void MainControllerImpl::cancelBurgSwitcherAction(){
 			this->getThreadController().stopApplication();
 		}
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -189,7 +189,7 @@ void MainControllerImpl::reloadAction(){
 		this->view->setLockState(1|4|8);
 		this->getThreadController().startLoadThread(true);
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -253,7 +253,7 @@ void MainControllerImpl::loadThreadedAction(bool preserveConfig){
 			this->log("ignoring load request (only one load thread allowed at the same time)", Logger::WARNING);
 		}
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorThreadedAction(e);
+		this->handleException(e, THREADED);
 	}
 	this->logActionEndThreaded();
 }
@@ -269,7 +269,7 @@ void MainControllerImpl::saveAction(){
 		this->env->activeThreadCount++; //not in save_thead() to be faster set
 		this->getThreadController().startSaveThread();
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -287,7 +287,7 @@ void MainControllerImpl::saveThreadedAction(){
 		this->grublistCfg->save();
 		this->env->activeThreadCount--;
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorThreadedAction(e);
+		this->handleException(e, THREADED);
 	}
 	this->logActionEndThreaded();
 }
@@ -329,7 +329,7 @@ void MainControllerImpl::showAboutAction(){
 	try {
 		this->getAllControllers().aboutController->showAction();
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -339,7 +339,7 @@ void MainControllerImpl::showInstallerAction(){
 	try {
 		this->getAllControllers().installerController->showAction();
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -349,7 +349,7 @@ void MainControllerImpl::showEntryEditorAction(Rule* rule) {
 	try {
 		this->getAllControllers().entryEditController->showAction(rule);
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -359,7 +359,7 @@ void MainControllerImpl::showEntryCreatorAction() {
 	try {
 		this->getAllControllers().entryEditController->showCreatorAction();
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -474,7 +474,7 @@ void MainControllerImpl::dieAction(){
 			this->exitAction(true); //exit
 		}
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -505,7 +505,7 @@ void MainControllerImpl::exitAction(bool force){
 			}
 		}
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -541,7 +541,7 @@ void MainControllerImpl::removeRulesAction(std::list<Rule*> rules, bool force){
 			this->getAllControllers().themeController->updateSettingsDataAction();
 		}
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -562,7 +562,7 @@ void MainControllerImpl::renameRuleAction(Rule* entry, std::string const& newTex
 		}
 		this->env->modificationsUnsaved = true;
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -585,7 +585,7 @@ void MainControllerImpl::moveAction(std::list<Rule*> rules, int direction){
 
 		ruleMover.move(rules, direction);
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -615,7 +615,7 @@ void MainControllerImpl::createSubmenuAction(std::list<Rule*> childItems) {
 		this->getSubmenuRuleMoveHelper().move(childItems, -1);
 		this->threadController->startEdit(newItem);
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -632,7 +632,7 @@ void MainControllerImpl::removeSubmenuAction(std::list<Rule*> childItems) {
 
 		this->getSubmenuRuleMoveHelper().move(movedRules, -1);
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -644,7 +644,7 @@ void MainControllerImpl::revertAction() {
 		this->syncLoadStateAction();
 		this->env->modificationsUnsaved = true;
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -659,7 +659,7 @@ void MainControllerImpl::syncLoadStateThreadedAction() {
 	try {
 		this->getThreadController().syncEntryList();
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorThreadedAction(e);
+		this->handleException(e, THREADED);
 	}
 	this->logActionEndThreaded();
 }
@@ -668,7 +668,7 @@ void MainControllerImpl::syncSaveStateThreadedAction() {
 	try {
 		this->getThreadController().updateSaveProgress();
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorThreadedAction(e);
+		this->handleException(e, THREADED);
 	}
 	this->logActionEndThreaded();
 }
@@ -698,7 +698,7 @@ void MainControllerImpl::syncSaveStateAction(){
 		}
 		this->log("MainControllerImpl::syncListView_save completed", Logger::INFO);
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -748,7 +748,7 @@ void MainControllerImpl::syncLoadStateAction() {
 		}
 		this->log("MainControllerImpl::syncListView_load completed", Logger::INFO);
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -758,7 +758,7 @@ void MainControllerImpl::showSettingsAction() {
 	try {
 		this->getAllControllers().settingsController->showAction(env->burgMode);
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -777,7 +777,7 @@ void MainControllerImpl::showEnvEditorAction(bool resetPartitionChooser) {
 
 		this->getAllControllers().envEditController->showAction();
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -787,7 +787,7 @@ void MainControllerImpl::initModeAction(bool burgChosen) {
 	try {
 		this->init(burgChosen ? Model_Env::BURG_MODE : Model_Env::GRUB_MODE);
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -808,7 +808,7 @@ void MainControllerImpl::addEntriesAction(std::list<Rule*> entries) {
 
 		this->env->modificationsUnsaved = true;
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -820,7 +820,7 @@ void MainControllerImpl::activateSettingsAction() {
 		this->getAllControllers().settingsController->syncAction();
 		this->getAllControllers().themeController->loadThemesAction();
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -831,7 +831,7 @@ void MainControllerImpl::showReloadRecommendationAction() {
 	try {
 		this->view->showReloadRecommendation();
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -841,7 +841,7 @@ void MainControllerImpl::selectRulesAction(std::list<Rule*> rules) {
 	try {
 		this->view->selectRules(rules);
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -851,7 +851,7 @@ void MainControllerImpl::selectRuleAction(Rule* rule, bool startEdit) {
 	try {
 		this->view->selectRule(rule, startEdit);
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -865,7 +865,7 @@ void MainControllerImpl::refreshTabAction(unsigned int pos) {
 		}
 		this->view->updateLockState();
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -881,7 +881,7 @@ void MainControllerImpl::setViewOptionAction(ViewOption option, bool value) {
 		}
 		this->syncLoadStateAction();
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -893,7 +893,7 @@ void MainControllerImpl::entryStateToggledAction(Rule* entry, bool state) {
 		Model_Rule::fromPtr(entry).setVisibility(state);
 		this->syncLoadStateAction();
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }
@@ -905,7 +905,7 @@ void MainControllerImpl::updateSelectionAction(std::list<Rule*> selectedRules) {
 			this->getAllControllers().trashController->selectEntriesAction(std::list<Entry*>());
 		}
 	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->handleException(e);
 	}
 	this->logActionEnd();
 }

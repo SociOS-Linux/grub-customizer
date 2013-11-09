@@ -26,8 +26,9 @@
 #include "../../lib/Trait/LoggerAware.h"
 #include "../../lib/assert.h"
 #include "../../lib/Type.h"
+#include "../Trait/ErrorControllerAware.h"
 
-class GLib_ThreadController : public ThreadController, public Trait_LoggerAware {
+class GLib_ThreadController : public ThreadController, public Trait_LoggerAware, public Trait_ErrorControllerAware {
 	ControllerCollection& _controllers;
 
 	Glib::Dispatcher disp_sync_load, disp_sync_save, disp_thread_died, disp_updateSettingsDlgResolutionList, disp_settings_loaded, disp_exception, disp_postSaveActions;
