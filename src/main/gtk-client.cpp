@@ -49,6 +49,7 @@
 #include "../lib/assert.h"
 #include "../lib/ArrayStructure.h"
 #include "../Model/ThemeManager.h"
+#include "../lib/EventQueue/SenderImpl.h"
 
 
 int main(int argc, char** argv){
@@ -91,6 +92,7 @@ int main(int argc, char** argv){
 		View_Gtk_Theme themeEditor;
 		Model_ThemeManager themeManager;
 		Model_DeviceMap deviceMap;
+		EventQueue::SenderImpl eventSender;
 
 		entryNameMapper.setView(listCfgView);
 
@@ -188,13 +190,16 @@ int main(int argc, char** argv){
 		installDlg.setController(installController);
 		trashView.setController(trashController);
 		entryEditDlg.setController(entryEditController);
+		listcfg.setEventSender(eventSender);
 		settingsDlg.setController(settingsController);
-		listcfg.setController(mainController);
 		installer.setController(installController);
-		fbResolutionsGetter.setController(settingsController);
+		fbResolutionsGetter.setEventSender(eventSender);
 		envEditor.setController(envEditController);
 		errorView.setController(errorController);
 		themeEditor.setController(themeController);
+
+		eventSender.addReceiver(mainController);
+		eventSender.addReceiver(settingsController);
 
 		//assign logger
 		listcfg.setLogger(logger);

@@ -38,7 +38,7 @@
 #include "SettingsManagerData.h"
 #include "Env.h"
 #include "../Controller/MainController.h"
-#include "../Controller/Trait/ControllerAware.h"
+#include "../lib/Trait/EventSenderAware.h"
 
 #include "../lib/assert.h"
 
@@ -54,7 +54,7 @@
 
 class Model_ListCfg :
 	public Trait_LoggerAware,
-	public Trait_ControllerAware<MainController>,
+	public Trait_EventSenderAware,
 	public Mutex_Connection,
 	public Model_Env_Connection
 {

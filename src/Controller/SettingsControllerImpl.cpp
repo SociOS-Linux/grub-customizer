@@ -343,3 +343,11 @@ void SettingsControllerImpl::syncAction() {
 	}
 	this->logActionEnd();
 }
+
+void SettingsControllerImpl::receive(EventQueue::EventType type) {
+	switch (type) {
+	case EventQueue::EVENT_RESOLUTION_LOADING_FINISHED:
+		this->updateResolutionlistThreadedAction();
+		break;
+	}
+}

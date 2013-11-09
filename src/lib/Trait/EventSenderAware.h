@@ -16,36 +16,21 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef FB_RESOLUTIONS_GETTER
-#define FB_RESOLUTIONS_GETTER
-#include <string>
-#include <list>
-#include <cstdio>
-#include "../Controller/SettingsController.h"
-#include "../lib/Trait/EventSenderAware.h"
-#include "../lib/Trait/LoggerAware.h"
+#ifndef EVENTSENDERAWARE_H_
+#define EVENTSENDERAWARE_H_
 
-class Model_FbResolutionsGetter :
-	public Trait_LoggerAware,
-	public Trait_EventSenderAware
-{
-	std::list<std::string> data;
-	bool _isLoading;
-public:
-	Model_FbResolutionsGetter();
-	const std::list<std::string>& getData() const;
-	void load();
-};
+#include "../EventQueue/Sender.h"
+#include <cstdlib>
 
-class Model_FbResolutionsGetter_Connection {
+class Trait_EventSenderAware {
 protected:
-	Model_FbResolutionsGetter* fbResolutionsGetter;
+	EventQueue::Sender* eventSender;
 public:
-	Model_FbResolutionsGetter_Connection() : fbResolutionsGetter(NULL) {}
+	Trait_EventSenderAware() : eventSender(NULL) {}
 
-	void setFbResolutionsGetter(Model_FbResolutionsGetter& fbResolutionsGetter){
-		this->fbResolutionsGetter = &fbResolutionsGetter;
+	void setEventSender(EventQueue::Sender& eventSender) {
+		this->eventSender = &eventSender;
 	}
 };
 
-#endif
+#endif /* EVENTSENDERAWARE_H_ */

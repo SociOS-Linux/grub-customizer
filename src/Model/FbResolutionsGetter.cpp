@@ -54,8 +54,9 @@ void Model_FbResolutionsGetter::load(){
 					row = "";
 				}
 			}
-			if (pclose(hwinfo_proc) == 0 && this->controller)
-				this->controller->updateResolutionlistThreadedAction();
+			if (pclose(hwinfo_proc) == 0 && this->eventSender) {
+				this->eventSender->send(EventQueue::EVENT_RESOLUTION_LOADING_FINISHED);
+			}
 		}
 		_isLoading = false;
 	}

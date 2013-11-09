@@ -47,6 +47,7 @@
 #include "../lib/Exception.h"
 
 #include "SettingsController.h"
+#include "../lib/EventQueue/Receiver.h"
 
 
 class SettingsControllerImpl :
@@ -57,7 +58,8 @@ class SettingsControllerImpl :
 	public Model_ListCfg_Connection,
 	public Model_SettingsManagerData_Connection,
 	public Model_FbResolutionsGetter_Connection,
-	public Model_Env_Connection
+	public Model_Env_Connection,
+	public EventQueue::Receiver
 {
 	bool syncActive; // should only be controlled by syncSettings()
 
@@ -93,6 +95,7 @@ public:
 	void hideAction();
 	void showAction(bool burgMode);
 	void syncAction();
+	void receive(EventQueue::EventType type);
 };
 
 #endif

@@ -909,3 +909,14 @@ void MainControllerImpl::updateSelectionAction(std::list<Rule*> selectedRules) {
 	}
 	this->logActionEnd();
 }
+
+void MainControllerImpl::receive(EventQueue::EventType type) {
+	switch (type) {
+	case EventQueue::EVENT_LOAD_STATE_CHANGED:
+		this->syncLoadStateThreadedAction();
+		break;
+	case EventQueue::EVENT_SAVE_STATE_CHANGED:
+		this->syncSaveStateThreadedAction();
+		break;
+	}
+}

@@ -48,6 +48,8 @@
 #include "Helper/DeviceInfo.h"
 #include "Helper/RuleMove.h"
 
+#include "../lib/EventQueue/Receiver.h"
+
 #include "MainController.h"
 
 /**
@@ -66,7 +68,8 @@ class MainControllerImpl :
 	public Model_MountTable_Connection,
 	public ContentParserFactory_Connection,
 	public Mapper_EntryName_Connection,
-	public Model_Env_Connection
+	public Model_Env_Connection,
+	public EventQueue::Receiver
 {
 	Model_SettingsManagerData* settingsOnDisk; //buffer for the existing settings
 	Model_ListCfg* savedListCfg;
@@ -147,6 +150,7 @@ public:
 	void setViewOptionAction(ViewOption option, bool value);
 	void entryStateToggledAction(Rule* entry, bool state);
 	void updateSelectionAction(std::list<Rule*> selectedRules);
+	void receive(EventQueue::EventType type);
 };
 
 #endif

@@ -16,36 +16,16 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef FB_RESOLUTIONS_GETTER
-#define FB_RESOLUTIONS_GETTER
-#include <string>
-#include <list>
-#include <cstdio>
-#include "../Controller/SettingsController.h"
-#include "../lib/Trait/EventSenderAware.h"
-#include "../lib/Trait/LoggerAware.h"
+#ifndef RECEIVER_H_
+#define RECEIVER_H_
+#include "EventType.h"
+namespace EventQueue {
 
-class Model_FbResolutionsGetter :
-	public Trait_LoggerAware,
-	public Trait_EventSenderAware
-{
-	std::list<std::string> data;
-	bool _isLoading;
+class Receiver {
 public:
-	Model_FbResolutionsGetter();
-	const std::list<std::string>& getData() const;
-	void load();
+	virtual void receive(EventType type) = 0;
+	virtual ~Receiver(){}
 };
 
-class Model_FbResolutionsGetter_Connection {
-protected:
-	Model_FbResolutionsGetter* fbResolutionsGetter;
-public:
-	Model_FbResolutionsGetter_Connection() : fbResolutionsGetter(NULL) {}
-
-	void setFbResolutionsGetter(Model_FbResolutionsGetter& fbResolutionsGetter){
-		this->fbResolutionsGetter = &fbResolutionsGetter;
-	}
-};
-
-#endif
+}
+#endif /* RECEIVER_H_ */
