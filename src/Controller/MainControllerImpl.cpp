@@ -295,14 +295,18 @@ void MainControllerImpl::saveThreadedAction(){
 void MainControllerImpl::renameEntry(Model_Rule* rule, std::string const& newName){
 	if (rule->type != Model_Rule::PLAINTEXT) {
 
+		Controller_Helper_DefaultOsUpdater defaultOsUpdater;
+		defaultOsUpdater.setListCfg(*this->grublistCfg);
+		defaultOsUpdater.setSettingsManager(*this->settings);
+
 		std::string currentRulePath = this->grublistCfg->getRulePath(*rule);
 		std::string currentDefaultRulePath = this->settings->getValue("GRUB_DEFAULT");
-		bool updateDefault = this->_ruleAffectsCurrentDefaultOs(rule, currentRulePath, currentDefaultRulePath);
+		bool updateDefault = defaultOsUpdater.ruleAffectsCurrentDefaultOs(rule, currentRulePath, currentDefaultRulePath);
 
 		this->grublistCfg->renameRule(rule, newName);
 
 		if (updateDefault) {
-			this->_updateCurrentDefaultOs(rule, currentRulePath, currentDefaultRulePath);
+			defaultOsUpdater.updateCurrentDefaultOs(rule, currentRulePath, currentDefaultRulePath);
 		}
 
 		if (rule->dataSource && this->grublistCfg->repository.getScriptByEntry(*rule->dataSource)->isCustomScript) {
@@ -455,106 +459,6 @@ bool MainControllerImpl::_listHasAllCurrentSystemRules(std::list<Rule*> const& r
 	return false;
 }
 
-std::list<Rule*> MainControllerImpl::_populateSelection(std::list<Rule*> rules) {
-	std::list<Rule*> result;
-	for (std::list<Rule*>::iterator ruleIter = rules.begin(); ruleIter != rules.end(); ruleIter++) {
-		this->_populateSelection(result, &Model_Rule::fromPtr(*ruleIter), -1, *ruleIter == rules.front());
-		result.push_back(*ruleIter);
-		this->_populateSelection(result, &Model_Rule::fromPtr(*ruleIter), 1, *ruleIter == rules.back());
-	}
-	// remove duplicates
-	std::list<Rule*> result2;
-	std::map<Rule*, Rule*> duplicateIndex; // key: pointer to the rule, value: always NULL
-	for (std::list<Rule*>::iterator ruleIter = result.begin(); ruleIter != result.end(); ruleIter++) {
-		if (duplicateIndex.find(*ruleIter) == duplicateIndex.end()) {
-			duplicateIndex[*ruleIter] = NULL;
-			result2.push_back(*ruleIter);
-		}
-	}
-	return result2;
-}
-
-void MainControllerImpl::_populateSelection(std::list<Rule*>& rules, Model_Rule* baseRule, int direction, bool checkScript) {
-	assert(direction == 1 || direction == -1);
-	bool placeholderFound = false;
-	Model_Rule* currentRule = baseRule;
-	do {
-		try {
-			currentRule = &*this->grublistCfg->proxies.getNextVisibleRule(currentRule, direction);
-			if (currentRule->dataSource == NULL || baseRule->dataSource == NULL) {
-				break;
-			}
-			Model_Script* scriptCurrent = this->grublistCfg->repository.getScriptByEntry(*currentRule->dataSource);
-			Model_Script* scriptBase    = this->grublistCfg->repository.getScriptByEntry(*baseRule->dataSource);
-
-			if ((scriptCurrent == scriptBase || !checkScript) && (currentRule->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER || currentRule->type == Model_Rule::PLAINTEXT)) {
-				if (direction == 1) {
-					rules.push_back(currentRule);
-				} else {
-					rules.push_front(currentRule);
-				}
-				placeholderFound = true;
-			} else {
-				placeholderFound = false;
-			}
-		} catch (NoMoveTargetException const& e) {
-			placeholderFound = false;
-		}
-	} while (placeholderFound);
-}
-
-int MainControllerImpl::_countRulesUntilNextRealRule(Model_Rule* baseRule, int direction) {
-	int result = 1;
-	bool placeholderFound = false;
-	Model_Rule* currentRule = baseRule;
-	do {
-		try {
-			currentRule = &*this->grublistCfg->proxies.getNextVisibleRule(currentRule, direction);
-
-			if (currentRule->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER || currentRule->type == Model_Rule::PLAINTEXT) {
-				result++;
-				placeholderFound = true;
-			} else {
-				placeholderFound = false;
-			}
-		} catch (NoMoveTargetException const& e) {
-			placeholderFound = false;
-		}
-	} while (placeholderFound);
-	return result;
-}
-
-std::list<Rule*> MainControllerImpl::_removePlaceholdersFromSelection(std::list<Rule*> rules) {
-	std::list<Rule*> result;
-	for (std::list<Rule*>::iterator ruleIter = rules.begin(); ruleIter != rules.end(); ruleIter++) {
-		Model_Rule* rule = &Model_Rule::fromPtr(*ruleIter);
-		if (!(rule->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER || rule->type == Model_Rule::PLAINTEXT)) {
-			result.push_back(rule);
-		}
-	}
-	return result;
-}
-
-bool MainControllerImpl::_ruleAffectsCurrentDefaultOs(Model_Rule* rule, std::string const& currentRulePath, std::string const& currentDefaultRulePath) {
-	bool result = false;
-
-	if (rule->type == Model_Rule::SUBMENU) {
-		if (currentDefaultRulePath.substr(0, currentRulePath.length() + 1) == currentRulePath + ">") {
-			result = true;
-		}
-	} else {
-		if (this->settings->getValue("GRUB_DEFAULT") == currentRulePath) {
-			result = true;
-		}
-	}
-	return result;
-}
-
-void MainControllerImpl::_updateCurrentDefaultOs(Model_Rule* rule, std::string const& oldRulePath, std::string oldDefaultRulePath) {
-	oldDefaultRulePath.replace(0, oldRulePath.length(), this->grublistCfg->getRulePath(*rule));
-	this->settings->setValue("GRUB_DEFAULT", oldDefaultRulePath);
-}
-
 void MainControllerImpl::dieAction(){
 	this->logActionBegin("die");
 	try {
@@ -667,80 +571,40 @@ void MainControllerImpl::renameRuleAction(Rule* entry, std::string const& newTex
 void MainControllerImpl::moveAction(std::list<Rule*> rules, int direction){
 	this->logActionBegin("move");
 	try {
-		bool stickyPlaceholders = !this->view->getOptions().at(VIEW_SHOW_PLACEHOLDERS);
-		try {
-			assert(direction == -1 || direction == 1);
-			int distance = 1;
-			if (stickyPlaceholders) {
-				rules = this->_populateSelection(rules);
-				rules = this->grublistCfg->getNormalizedRuleOrder(rules);
-				distance = this->_countRulesUntilNextRealRule(&Model_Rule::fromPtr(direction == -1 ? rules.front() : rules.back()), direction);
-			}
+		Controller_Helper_RuleMove ruleMover;
+		ruleMover.setView(*this->view);
+		ruleMover.setListCfg(*this->grublistCfg);
+		ruleMover.setController(*this);
+		ruleMover.setEnv(*this->env);
+		ruleMover.setSettingsManager(*this->settings);
 
-			std::list<Rule*> movedRules;
+		Controller_Helper_DefaultOsUpdater defaultOsUpdater;
+		defaultOsUpdater.setListCfg(*this->grublistCfg);
+		defaultOsUpdater.setSettingsManager(*this->settings);
+		ruleMover.setDefaultOsUpdater(defaultOsUpdater);
 
-			for (int j = 0; j < distance; j++) { // move the range multiple times
-				int ruleCount = rules.size();
-				Model_Rule* rulePtr = &Model_Rule::fromPtr(direction == -1 ? rules.front() : rules.back());
-				for (int i = 0; i < ruleCount; i++) { // move multiple rules
-					std::string currentRulePath = this->grublistCfg->getRulePath(*rulePtr);
-					std::string currentDefaultRulePath = this->settings->getValue("GRUB_DEFAULT");
-					bool updateDefault = this->_ruleAffectsCurrentDefaultOs(rulePtr, currentRulePath, currentDefaultRulePath);
-
-					rulePtr = &this->grublistCfg->moveRule(rulePtr, direction);
-
-					if (updateDefault) {
-						this->_updateCurrentDefaultOs(rulePtr, currentRulePath, currentDefaultRulePath);
-					}
-
-					if (i < ruleCount - 1) {
-						bool isEndOfList = false;
-						bool targetFound = false;
-						try {
-							rulePtr = &*this->grublistCfg->proxies.getNextVisibleRule(rulePtr, -direction);
-						} catch (NoMoveTargetException const& e) {
-							isEndOfList = true;
-							rulePtr = this->grublistCfg->proxies.getProxyByRule(rulePtr)->getParentRule(rulePtr);
-						}
-						if (!isEndOfList && rulePtr->type == Model_Rule::SUBMENU) {
-							rulePtr = direction == -1 ? &rulePtr->subRules.front() : &rulePtr->subRules.back();
-							if (rulePtr->isVisible) {
-								targetFound = true;
-							}
-						}
-
-						if (!targetFound) {
-							rulePtr = &*this->grublistCfg->proxies.getNextVisibleRule(rulePtr, -direction);
-						}
-					}
-				}
-
-				movedRules.clear();
-				movedRules.push_back(rulePtr);
-				for (int i = 1; i < ruleCount; i++) {
-					movedRules.push_back(&*this->grublistCfg->proxies.getNextVisibleRule(&Model_Rule::fromPtr(movedRules.back()), direction));
-				}
-				movedRules = this->grublistCfg->getNormalizedRuleOrder(movedRules);
-
-				rules = movedRules;
-			}
-
-			this->syncLoadStateAction();
-			if (stickyPlaceholders) {
-				movedRules = this->_removePlaceholdersFromSelection(movedRules);
-			}
-			this->view->selectRules(movedRules);
-			this->env->modificationsUnsaved = true;
-		} catch (NoMoveTargetException const& e) {
-			this->view->showErrorMessage(gettext("cannot move this entry"));
-			this->syncLoadStateAction();
-		}
+		ruleMover.move(rules, direction);
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
 	this->logActionEnd();
 }
 
+Controller_Helper_RuleMove MainControllerImpl::getSubmenuRuleMoveHelper() {
+	Controller_Helper_RuleMove ruleMover;
+	ruleMover.setView(*this->view);
+	ruleMover.setListCfg(*this->grublistCfg);
+	ruleMover.setController(*this);
+	ruleMover.setEnv(*this->env);
+	ruleMover.setSettingsManager(*this->settings);
+
+	Controller_Helper_DefaultOsUpdater defaultOsUpdater;
+	defaultOsUpdater.setListCfg(*this->grublistCfg);
+	defaultOsUpdater.setSettingsManager(*this->settings);
+	ruleMover.setDefaultOsUpdater(defaultOsUpdater);
+
+	return ruleMover;
+}
 
 void MainControllerImpl::createSubmenuAction(std::list<Rule*> childItems) {
 	this->logActionBegin("create-submenu");
@@ -748,7 +612,7 @@ void MainControllerImpl::createSubmenuAction(std::list<Rule*> childItems) {
 		Model_Rule* firstRule = &Model_Rule::fromPtr(childItems.front());
 		Model_Rule* newItem = this->grublistCfg->createSubmenu(firstRule);
 		this->syncLoadStateAction();
-		this->moveAction(childItems, -1);
+		this->getSubmenuRuleMoveHelper().move(childItems, -1);
 		this->threadController->startEdit(newItem);
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
@@ -766,7 +630,7 @@ void MainControllerImpl::removeSubmenuAction(std::list<Rule*> childItems) {
 			movedRules.push_back(&*this->grublistCfg->proxies.getNextVisibleRule(&Model_Rule::fromPtr(movedRules.back()), 1));
 		}
 
-		this->moveAction(movedRules, -1);
+		this->getSubmenuRuleMoveHelper().move(movedRules, -1);
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}

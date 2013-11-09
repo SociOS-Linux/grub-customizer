@@ -23,6 +23,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <list>
 #include "../lib/Type.h"
 #include "Model/ListItem.h"
 

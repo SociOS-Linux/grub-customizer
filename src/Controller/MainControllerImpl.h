@@ -46,6 +46,7 @@
 #include "../View/Model/ListItem.h"
 
 #include "Helper/DeviceInfo.h"
+#include "Helper/RuleMove.h"
 
 #include "MainController.h"
 
@@ -78,13 +79,6 @@ class MainControllerImpl :
 	void _rAppendRule(Model_Rule& rule, Model_Rule* parentRule = NULL);
 	bool _listHasPlaintextRules(std::list<Rule*> const& rules);
 	bool _listHasAllCurrentSystemRules(std::list<Rule*> const& rules);
-	std::list<Rule*> _populateSelection(std::list<Rule*> rules);
-	void _populateSelection(std::list<Rule*>& rules, Model_Rule* currentRule, int direction, bool checkScript);
-	int _countRulesUntilNextRealRule(Model_Rule* baseRule, int direction);
-	std::list<Rule*> _removePlaceholdersFromSelection(std::list<Rule*> rules);
-	bool _ruleAffectsCurrentDefaultOs(Model_Rule* rule, std::string const& currentRulePath, std::string const& currentDefaultRulePath);
-	void _updateCurrentDefaultOs(Model_Rule* rule, std::string const& currentRulePath, std::string currentDefaultRulePath);
-
 public:
 	void setSettingsBuffer(Model_SettingsManagerData& settings);
 	void setSavedListCfg(Model_ListCfg& savedListCfg);
@@ -124,6 +118,9 @@ public:
 	void removeRulesAction(std::list<Rule*> rules, bool force = false);
 	void renameRuleAction(Rule* entry, std::string const& newText);
 	void moveAction(std::list<Rule*> rules, int direction);
+private:
+	Controller_Helper_RuleMove getSubmenuRuleMoveHelper();
+public:
 	void createSubmenuAction(std::list<Rule*> childItems);
 	void removeSubmenuAction(std::list<Rule*> childItems);
 	
