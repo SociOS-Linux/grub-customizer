@@ -23,13 +23,25 @@
 #include <cstdlib>
 
 class Trait_EventSenderAware {
-protected:
+private:
 	EventQueue::Sender* eventSender;
 public:
 	Trait_EventSenderAware() : eventSender(NULL) {}
 
 	void setEventSender(EventQueue::Sender& eventSender) {
 		this->eventSender = &eventSender;
+	}
+
+	void sendEvent(EventQueue::EventType type) {
+		if (this->eventSender) {
+			this->eventSender->send(type);
+		} else {
+			throw NullPointerException("sendEvent failed - eventSender == NULL", __FILE__, __LINE__);
+		}
+	}
+
+	bool hasEventSender(){
+		return this->eventSender != NULL;
 	}
 };
 

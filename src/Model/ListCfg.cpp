@@ -648,24 +648,22 @@ bool Model_ListCfg::compareLists(std::list<Model_Rule const*> a, std::list<Model
 
 
 void Model_ListCfg::send_new_load_progress(double newProgress, std::string scriptName, int current, int max){
-	if (this->eventSender != NULL){
+	if (this->hasEventSender()){
 		this->progress = newProgress;
 		this->progress_name = scriptName;
 		this->progress_pos = current;
 		this->progress_max = max;
-		this->eventSender->send(EventQueue::EVENT_LOAD_STATE_CHANGED);
-	}
-	else if (this->verbose) {
+		this->sendEvent(EventQueue::EVENT_LOAD_STATE_CHANGED);
+	} else if (this->verbose) {
 		this->log("cannot show updated load progress - no UI connected!", Logger::ERROR);
 	}
 }
 
 void Model_ListCfg::send_new_save_progress(double newProgress){
-	if (this->eventSender != NULL){
+	if (this->hasEventSender()){
 		this->progress = newProgress;
-		this->eventSender->send(EventQueue::EVENT_SAVE_STATE_CHANGED);
-	}
-	else if (this->verbose) {
+		this->sendEvent(EventQueue::EVENT_SAVE_STATE_CHANGED);
+	} else if (this->verbose) {
 		this->log("cannot show updated save progress - no UI connected!", Logger::ERROR);
 	}
 }
@@ -1293,7 +1291,6 @@ void Model_ListCfg::revert() {
 
 Model_ListCfg::operator ArrayStructure() const {
 	ArrayStructure result;
-	result["eventSender"] = this->eventSender;
 	result["proxies"] = ArrayStructure(this->proxies);
 	result["repository"] = ArrayStructure(this->repository);
 	result["progress"] = this->progress;
