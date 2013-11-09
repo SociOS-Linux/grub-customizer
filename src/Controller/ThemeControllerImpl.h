@@ -28,6 +28,7 @@
 #include "../Model/ThemeManager.h"
 #include "../Model/ListCfg.h"
 #include <algorithm>
+#include "ControllerCollection.h"
 
 class ThemeControllerImpl :
 	public ThemeController,
@@ -37,7 +38,8 @@ class ThemeControllerImpl :
 	public Model_ThemeManager_Connection,
 	public Model_SettingsManagerData_Connection,
 	public Model_ListCfg_Connection,
-	public Model_Env_Connection
+	public Model_Env_Connection,
+	public ControllerCollection_Connection
 {
 	std::string currentTheme, currentThemeFile;
 	bool syncActive; // should only be controlled by syncSettings()

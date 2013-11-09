@@ -49,6 +49,7 @@
 #include "Helper/RuleMove.h"
 
 #include "../lib/EventQueue/Receiver.h"
+#include "ControllerCollection.h"
 
 #include "MainController.h"
 
@@ -69,7 +70,8 @@ class MainControllerImpl :
 	public ContentParserFactory_Connection,
 	public Mapper_EntryName_Connection,
 	public Model_Env_Connection,
-	public EventQueue::Receiver
+	public EventQueue::Receiver,
+	public ControllerCollection_Connection
 {
 	Model_SettingsManagerData* settingsOnDisk; //buffer for the existing settings
 	Model_ListCfg* savedListCfg;

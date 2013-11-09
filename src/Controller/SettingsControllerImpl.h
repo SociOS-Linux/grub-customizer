@@ -45,9 +45,10 @@
 #include "../lib/Trait/LoggerAware.h"
 
 #include "../lib/Exception.h"
+#include "../lib/EventQueue/Receiver.h"
+#include "ControllerCollection.h"
 
 #include "SettingsController.h"
-#include "../lib/EventQueue/Receiver.h"
 
 
 class SettingsControllerImpl :
@@ -59,7 +60,8 @@ class SettingsControllerImpl :
 	public Model_SettingsManagerData_Connection,
 	public Model_FbResolutionsGetter_Connection,
 	public Model_Env_Connection,
-	public EventQueue::Receiver
+	public EventQueue::Receiver,
+	public ControllerCollection_Connection
 {
 	bool syncActive; // should only be controlled by syncSettings()
 

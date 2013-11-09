@@ -35,13 +35,15 @@
 
 #include "EnvEditorController.h"
 #include "../Model/DeviceMap.h"
+#include "ControllerCollection.h"
 
 
 class EnvEditorControllerImpl :
 	public ControllerAbstract,
 	public EnvEditorController,
 	public View_Trait_ViewAware<View_EnvEditor>,
-	public Model_Env_Connection
+	public Model_Env_Connection,
+	public ControllerCollection_Connection
 {
 	Model_MountTable* mountTable;
 	Model_DeviceMap* deviceMap;

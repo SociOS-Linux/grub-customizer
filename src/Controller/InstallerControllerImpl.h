@@ -36,6 +36,7 @@
 #include "../Controller/Trait/ThreadControllerAware.h"
 
 #include "../lib/Exception.h"
+#include "ControllerCollection.h"
 
 #include "InstallerController.h"
 
@@ -46,7 +47,8 @@ class InstallerControllerImpl :
 	public View_Trait_ViewAware<View_Installer>,
 	public Trait_ThreadControllerAware,
 	public Model_Installer_Connection,
-	public Model_Env_Connection
+	public Model_Env_Connection,
+	public ControllerCollection_Connection
 {
 public:
 	ThreadController& getThreadController();

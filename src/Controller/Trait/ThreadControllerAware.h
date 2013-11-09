@@ -18,6 +18,7 @@
 
 #ifndef TRAIT_THREADCONTROLLERAWARE_H_
 #define TRAIT_THREADCONTROLLERAWARE_H_
+#include "../ThreadController.h"
 
 class Trait_ThreadControllerAware {
 protected:

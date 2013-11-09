@@ -43,6 +43,7 @@
 #include "../Model/DeviceDataListInterface.h"
 #include "../lib/ContentParserFactory.h"
 #include "Helper/DeviceInfo.h"
+#include "ControllerCollection.h"
 
 
 class TrashControllerImpl :
@@ -53,7 +54,8 @@ class TrashControllerImpl :
 	public Mapper_EntryName_Connection,
 	public Model_DeviceDataListInterface_Connection,
 	public ContentParserFactory_Connection,
-	public Model_Env_Connection
+	public Model_Env_Connection,
+	public ControllerCollection_Connection
 {
 	void _refresh();
 	void _refreshView(Model_Rule* parent);
