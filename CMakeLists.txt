@@ -105,6 +105,7 @@ add_executable(grub-customizer
 	src/Model/ThemeFile.cpp
 	src/Model/Theme.cpp
 	src/Model/ThemeManager.cpp
+	src/lib/FileSystem.cpp
 )
 
 
@@ -132,6 +133,7 @@ add_executable(grubcfg-proxy
 	src/lib/trim.cpp
 	src/Model/ScriptSourceMap.cpp
 	src/lib/csv.cpp
+	src/lib/FileSystem.cpp
 )
 
 target_link_libraries(grub-customizer 

@@ -324,6 +324,36 @@ std::list<Model_Env::Mode> Model_Env::getAvailableModes(){
 	return result;
 }
 
+void Model_Env::createBackup() {
+	std::string backupDir = this->cfg_dir + "/backup";
+	DIR* dirChk = opendir(backupDir.c_str());
+	if (dirChk) {
+		// if backup already exists - dont't create or update. Should only contain the initial config.
+		closedir(dirChk);
+	} else {
+		mkdir(backupDir.c_str(), 0755);
+
+		std::list<std::string> ignoreList;
+		ignoreList.push_back(backupDir);
+
+		FileSystem fileSystem;
+		fileSystem.copy(this->cfg_dir, backupDir + "/etc_grub_d", true, ignoreList);
+		fileSystem.copy(this->output_config_dir, backupDir + "/boot_grub", true, ignoreList);
+		fileSystem.copy(this->settings_file, backupDir + "/default_grub", true, ignoreList);
+
+		FILE* restoreHowto = fopen((backupDir + "/RESTORE_INSTRUCTIONS").c_str(), "w");
+		fputs("How to restore this backup\n", restoreHowto);
+		fputs("--------------------------\n", restoreHowto);
+		fputs(" * make sure you have root permissions (`gksu nautilus` or `sudo -s` on command line) otherwise you won't be able to copy the files\n", restoreHowto);
+		fputs(" * to fix an unbootable configuration, just copy:\n", restoreHowto);
+		fputs(("     * '" + backupDir + "/boot_grub' to '" + this->output_config_dir + "'\n").c_str(), restoreHowto);
+		fputs(" * to reset the whole configuration (if it cannot be fixed by using grub customizer), also copy these files:\n", restoreHowto);
+		fputs(("     * '" + backupDir + "/etc_grub_d' to '" + this->cfg_dir + "'\n").c_str(), restoreHowto);
+		fputs(("     * '" + backupDir + "/default_grub' to '" + this->settings_file + "'\n").c_str(), restoreHowto);
+		fclose(restoreHowto);
+	}
+}
+
 Model_Env::operator ArrayStructure() {
 	ArrayStructure result;
 	result["cfg_dir"] = this->cfg_dir;

@@ -31,6 +31,7 @@
 #include "../lib/Exception.h"
 #include "../lib/ArrayStructure.h"
 #include "../lib/Type.h"
+#include "../lib/FileSystem.h"
 
 struct Model_Env : public Trait_LoggerAware {
 public:
@@ -64,6 +65,7 @@ public:
 	bool burgMode;
 	bool useDirectBackgroundProps; // Whether background settings should be set directly or by creating a desktop-base script
 	std::list<Model_Env::Mode> getAvailableModes();
+	void createBackup();
 	operator ArrayStructure();
 };
 

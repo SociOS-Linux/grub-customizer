@@ -277,6 +277,7 @@ void MainControllerImpl::saveAction(){
 void MainControllerImpl::saveThreadedAction(){
 	this->logActionBeginThreaded("save-threaded");
 	try {
+		this->env->createBackup();
 		this->log("writing settings file", Logger::IMPORTANT_EVENT);
 		this->settings->save();
 		if (this->settings->color_helper_required) {
