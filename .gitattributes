@@ -225,6 +225,8 @@ translation/translation-de.mo -text svneol=unset#unset
 translation/translation-de.po -text
 translation/translation-el.mo -text svneol=unset#unset
 translation/translation-el.po -text
+translation/translation-en_GB.mo -text
+translation/translation-en_GB.po -text
 translation/translation-es.mo -text svneol=unset#unset
 translation/translation-es.po -text
 translation/translation-et.mo -text
@@ -243,6 +245,8 @@ translation/translation-hu.mo -text svneol=unset#unset
 translation/translation-hu.po -text
 translation/translation-it.mo -text svneol=unset#unset
 translation/translation-it.po -text
+translation/translation-ja.mo -text
+translation/translation-ja.po -text
 translation/translation-kk.mo -text svneol=unset#unset
 translation/translation-kk.po -text
 translation/translation-lt.mo -text svneol=unset#unset

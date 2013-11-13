@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-08-30 22:28+0200\n"
-"PO-Revision-Date: 2012-09-04 19:33+0000\n"
-"Last-Translator: Emre AYTAÇ <Unknown>\n"
+"PO-Revision-Date: 2013-10-26 12:44+0000\n"
+"Last-Translator: Şâkir Aşçı <Unknown>\n"
 "Language-Team: Turkish <tr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-09-10 18:16+0000\n"
-"X-Generator: Launchpad (build 15924)\n"
+"X-Launchpad-Export-Date: 2013-11-13 17:48+0000\n"
+"X-Generator: Launchpad (build 16820)\n"
 
 #: ../src/Controller/MainControllerImpl.cpp:533
 msgid "Name the Entry"
@@ -110,7 +110,7 @@ msgstr "Disk bölümü:"
 
 #: ../src/View/Gtk/EnvEditor.cpp:23
 msgid "Submountpoints:"
-msgstr ""
+msgstr "Altbağlamanoktaları:"
 
 #: ../src/View/Gtk/EnvEditor.cpp:24
 msgid "save this configuration"
@@ -226,6 +226,8 @@ msgstr "gelişmiş ayarlar"
 msgid ""
 "The modifications you've done affects the visible entries. Please reload!"
 msgstr ""
+"Yaptığınız değişiklikler görünür girdileri etkiliyor. Lütfen yeniden "
+"yükleyin!"
 
 #: ../src/View/Gtk/Main.cpp:56
 msgid "_List configuration"

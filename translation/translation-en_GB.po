@@ -1,16 +1,16 @@
-# French translation for grub-customizer
-# Copyright (c) 2010 Rosetta Contributors and Canonical Ltd 2010
+# English (United Kingdom) translation for grub-customizer
+# Copyright (c) 2012 Rosetta Contributors and Canonical Ltd 2012
 # This file is distributed under the same license as the grub-customizer package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2012.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-08-30 22:28+0200\n"
-"PO-Revision-Date: 2013-03-31 07:04+0000\n"
-"Last-Translator: londumas <helion331990@gmail.com>\n"
-"Language-Team: French <fr@li.org>\n"
+"PO-Revision-Date: 2012-09-19 01:26+0000\n"
+"Last-Translator: David Jones <Unknown>\n"
+"Language-Team: English (United Kingdom) <en_GB@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -19,19 +19,19 @@ msgstr ""
 
 #: ../src/Controller/MainControllerImpl.cpp:533
 msgid "Name the Entry"
-msgstr "Nommer l'entrée"
+msgstr "Name the Entry"
 
 #: ../src/Controller/MainControllerImpl.cpp:589
 msgid "cannot move this entry"
-msgstr "Cette entrée ne peut être déplacée"
+msgstr "cannot move this entry"
 
 #: ../src/Controller/MainControllerImpl.cpp:727
 msgid "Configuration has been saved"
-msgstr "La configuration a été enregistrée"
+msgstr "Configuration has been saved"
 
 #: ../src/Controller/MainControllerImpl.cpp:732
 msgid "updating configuration"
-msgstr "mise à jour de la configuration"
+msgstr "updating configuration"
 
 #: ../src/main/gtk-client.cpp:229
 msgid "Linux"
@@ -39,11 +39,11 @@ msgstr "Linux"
 
 #: ../src/main/gtk-client.cpp:230
 msgid "Linux-ISO"
-msgstr "ISO-Linux"
+msgstr "Linux-ISO"
 
 #: ../src/main/gtk-client.cpp:231
 msgid "Chainloader"
-msgstr "Chargeur en chaîne"
+msgstr "Chainloader"
 
 #: ../src/main/gtk-client.cpp:232
 msgid "Memtest"
@@ -53,20 +53,19 @@ msgstr "Memtest"
 msgid ""
 "Grub Customizer is a graphical interface to configure the grub2/burg settings"
 msgstr ""
-"Grub Customizer est une interface graphique de configuration des paramètres "
-"de grub2/burg"
+"Grub Customizer is a graphical interface to configure the grub2/burg settings"
 
 #: ../src/View/Gtk/EntryEditor.cpp:22 ../src/View/Gtk/EnvEditor.cpp:23
 msgid "_Type:"
-msgstr "_Type :"
+msgstr "_Type:"
 
 #: ../src/View/Gtk/EntryEditor.cpp:28
 msgid "Entry editor"
-msgstr "Éditeur d'entrée"
+msgstr "Entry editor"
 
 #: ../src/View/Gtk/EntryEditor.cpp:34
 msgid "Options"
-msgstr "Paramètres"
+msgstr "Options"
 
 #: ../src/View/Gtk/EntryEditor.cpp:35
 msgid "Source"
@@ -78,44 +77,44 @@ msgstr "_Partition"
 
 #: ../src/View/Gtk/EntryEditor.cpp:64
 msgid "_Initial ramdisk"
-msgstr "Disque virtuel _initial"
+msgstr "_Initial ramdisk"
 
 #: ../src/View/Gtk/EntryEditor.cpp:66
 msgid "_Linux image"
-msgstr "Image _Linux"
+msgstr "_Linux image"
 
 #: ../src/View/Gtk/EntryEditor.cpp:68
 msgid "_Memtest image"
-msgstr "Image _Memtest"
+msgstr "_Memtest image"
 
 #: ../src/View/Gtk/EntryEditor.cpp:70
 msgid "Path to iso file"
-msgstr "Chemin vers le fichier iso"
+msgstr "Path to iso file"
 
 #: ../src/View/Gtk/EntryEditor.cpp:72
 msgid "Locale"
-msgstr "Langage"
+msgstr "Locale"
 
 #: ../src/View/Gtk/EntryEditor.cpp:74
 msgid "Kernel params"
-msgstr "Paramètres du noyau"
+msgstr "Kernel params"
 
 #: ../src/View/Gtk/EntryEditor.cpp:177 ../src/View/Gtk/EntryEditor.cpp:183
 #: ../src/View/Gtk/EntryEditor.cpp:217
 msgid "Other"
-msgstr "Autre"
+msgstr "Other"
 
 #: ../src/View/Gtk/EnvEditor.cpp:22
 msgid "_Partition:"
-msgstr "_Partition :"
+msgstr "_Partition:"
 
 #: ../src/View/Gtk/EnvEditor.cpp:23
 msgid "Submountpoints:"
-msgstr "Points de sous-montage:"
+msgstr "Submountpoints:"
 
 #: ../src/View/Gtk/EnvEditor.cpp:24
 msgid "save this configuration"
-msgstr "enregister cette configuration"
+msgstr "save this configuration"
 
 #: ../src/View/Gtk/EnvEditor.cpp:53
 msgid "Grub 2"
@@ -127,39 +126,39 @@ msgstr "BURG"
 
 #: ../src/View/Gtk/EnvEditor.cpp:216
 msgid "Mount failed!"
-msgstr "Le montage a échoué !"
+msgstr "Mount failed!"
 
 #: ../src/View/Gtk/EnvEditor.cpp:217
 msgid "umount failed!"
-msgstr "Le démontage a échoué !"
+msgstr "umount failed!"
 
 #: ../src/View/Gtk/EnvEditor.cpp:218
 msgid "This seems not to be a root file system (no fstab found)"
-msgstr "Cela ne semble pas être un fichier système root (fstab non trouvé)"
+msgstr "This seems not to be a root file system (no fstab found)"
 
 #: ../src/View/Gtk/EnvEditor.cpp:219
 msgid "Couldn't mount the selected partition"
-msgstr "Impossible de monter la partition sélectionnée"
+msgstr "Couldn't mount the selected partition"
 
 #: ../src/View/Gtk/EnvEditor.cpp:220
 msgid "Couldn't umount the selected partition"
-msgstr "Impossible de démonter la partition sélectionnée"
+msgstr "Couldn't umount the selected partition"
 
 #: ../src/View/Gtk/Error.cpp:31
 msgid ""
 "please Inform the author about this problem. The following information could "
 "be helpful:"
 msgstr ""
-"merci d'informer l'auteur de ce problème. Les informations suivantes "
-"pourraient être utiles :"
+"please Inform the author about this problem. The following information could "
+"be helpful:"
 
 #: ../src/View/Gtk/Error.cpp:32
 msgid "An error occurred"
-msgstr "Une erreur est survenue"
+msgstr "An error occurred"
 
 #: ../src/View/Gtk/Error.cpp:35
 msgid "continue (risk data loss)"
-msgstr "continuer (risque de perte de données)"
+msgstr "continue (risk data loss)"
 
 #: ../src/View/Gtk/Installer.cpp:22
 msgid ""
@@ -167,251 +166,242 @@ msgid ""
 "files to the bootloaders data directory\n"
 "(if they don't already exist)."
 msgstr ""
-"Installe le programme de démarrage dans le MBR et copie quelques\n"
-"fichiers dans son répertoire de données\n"
-"(s'ils ne sont pas présents)."
+"Install the bootloader to MBR and put some\n"
+"files to the bootloaders data directory\n"
+"(if they don't already exist)."
 
 #: ../src/View/Gtk/Installer.cpp:23
 msgid "_Device: "
-msgstr "_Périphérique : "
+msgstr "_Device: "
 
 #: ../src/View/Gtk/Installer.cpp:33
 msgid "Install to MBR"
-msgstr "Installer sur le MBR"
+msgstr "Install to MBR"
 
 #: ../src/View/Gtk/Installer.cpp:50
 msgid "The bootloader has been installed successfully"
-msgstr "Le programme de démarrage a été installé avec succès"
+msgstr "The bootloader has been installed successfully"
 
 #: ../src/View/Gtk/Installer.cpp:55
 msgid "Error while installing the bootloader"
-msgstr "Erreur durant l'installation du programme de démarrage"
+msgstr "Error while installing the bootloader"
 
 #: ../src/View/Gtk/Installer.cpp:71
 msgid "installing the bootloader…"
-msgstr "Installation du programme de démarrage..."
+msgstr "installing the bootloader…"
 
 #: ../src/View/Gtk/Installer.cpp:76
 msgid "Please type a device string!"
-msgstr "Veuillez introduire une chaîne de périphérique !"
+msgstr "Please type a device string!"
 
 #: ../src/View/Gtk/Main.cpp:29
 msgid "_File"
-msgstr "_Fichier"
+msgstr "_File"
 
 #: ../src/View/Gtk/Main.cpp:31
 msgid "_Edit"
-msgstr "_Éditer"
+msgstr "_Edit"
 
 #: ../src/View/Gtk/Main.cpp:31
 msgid "_View"
-msgstr "_Affichage"
+msgstr "_View"
 
 #: ../src/View/Gtk/Main.cpp:31
 msgid "_Help"
-msgstr "_Aide"
+msgstr "_Help"
 
 #: ../src/View/Gtk/Main.cpp:32
 msgid "_Install to MBR …"
-msgstr "_Installation dans le MBR"
+msgstr "_Install to MBR …"
 
 #: ../src/View/Gtk/Main.cpp:41
 msgid "BURG found!"
-msgstr "BURG trouvé !"
+msgstr "BURG found!"
 
 #: ../src/View/Gtk/Main.cpp:42
 msgid "advanced settings"
-msgstr "Paramètres avancés"
+msgstr "advanced settings"
 
 #: ../src/View/Gtk/Main.cpp:44
 msgid ""
 "The modifications you've done affects the visible entries. Please reload!"
 msgstr ""
-"Les modifications effectuées ont une incidence sur les entrées visibles. "
-"Merci de réactualiser !"
 
 #: ../src/View/Gtk/Main.cpp:56
 msgid "_List configuration"
-msgstr "Configuration de _Liste"
+msgstr "_List configuration"
 
 #: ../src/View/Gtk/Main.cpp:80
 msgid "Remove selected entries (you can restore them from trash)"
-msgstr ""
-"Supprimer les entrées séléctionnées (vous pouvez les restaurer à partir de "
-"la corbeille)"
+msgstr "Remove selected entries (you can restore them from trash)"
 
 #: ../src/View/Gtk/Main.cpp:83
 msgid "restore entries from trash"
-msgstr "restaurer les entrées à partir de la corbeille"
+msgstr "restore entries from trash"
 
 #: ../src/View/Gtk/Main.cpp:85
 msgid "Trash"
-msgstr "Corbeille"
+msgstr "Trash"
 
 #: ../src/View/Gtk/Main.cpp:94
 msgid "Move up the selected entry or script"
-msgstr "Déplacer vers le haut l'entrée ou le script sélectionné"
+msgstr ""
 
 #: ../src/View/Gtk/Main.cpp:96
 msgid "Move down the selected entry or script"
-msgstr "Déplacer vers le bas l'entrée ou le script sélectionné"
+msgstr ""
 
 #: ../src/View/Gtk/Main.cpp:102
 msgid "remove this entry from the current submenu"
-msgstr "supprimer cette entrée du sous-menu courant"
+msgstr "remove this entry from the current submenu"
 
 #: ../src/View/Gtk/Main.cpp:105
 msgid "add this entry to a new submenu"
-msgstr "ajouter cette entrée à un nouveau sous-menu"
+msgstr "add this entry to a new submenu"
 
 #: ../src/View/Gtk/Main.cpp:119
 msgid "Reverts the list to the default order"
-msgstr "Replace la liste selon l'ordre par défaut"
+msgstr "Reverts the list to the default order"
 
 #: ../src/View/Gtk/Main.cpp:121
 msgid "reloads the configuration. Unsaved changes will be preserved."
-msgstr ""
-"Actualise la configuration. Les changements non enregistrés seront conservés."
+msgstr "reloads the configuration. Unsaved changes will be preserved."
 
 #: ../src/View/Gtk/Main.cpp:161
 msgid "Restore entry"
-msgstr "Restaurer l'entrée"
+msgstr "Restore entry"
 
 #: ../src/View/Gtk/Main.cpp:162
 msgid "Rename"
-msgstr "Renommer"
+msgstr "Rename"
 
 #: ../src/View/Gtk/Main.cpp:163 ../src/View/Gtk/Main.cpp:164
 msgid "Move up"
-msgstr "Déplacer vers le haut"
+msgstr "Move up"
 
 #: ../src/View/Gtk/Main.cpp:165 ../src/View/Gtk/Main.cpp:166
 msgid "Move down"
-msgstr "Déplacer vers le bas"
+msgstr "Move down"
 
 #: ../src/View/Gtk/Main.cpp:167 ../src/View/Gtk/Main.cpp:168
 msgid "Remove from submenu"
-msgstr "Supprimer du sous-menu"
+msgstr "Remove from submenu"
 
 #: ../src/View/Gtk/Main.cpp:169 ../src/View/Gtk/Main.cpp:170
 msgid "Create submenu"
-msgstr "Créer un sous-menu"
+msgstr "Create submenu"
 
 #: ../src/View/Gtk/Main.cpp:177
 msgid "_Change Environment …"
-msgstr "_Changer d'Environnement..."
+msgstr "_Change Environment …"
 
 #: ../src/View/Gtk/Main.cpp:184
 msgid "Do you want to configure BURG instead of grub2?"
-msgstr "Voulez-vous configurer BURG à la place de grub2 ?"
+msgstr "Do you want to configure BURG instead of grub2?"
 
 #: ../src/View/Gtk/Main.cpp:248
 msgid "_General settings"
-msgstr "Paramètres _Généraux"
+msgstr "_General settings"
 
 #: ../src/View/Gtk/Main.cpp:253
 msgid "_Appearance settings"
-msgstr "Paramètres d'_Apparence"
+msgstr "_Appearance settings"
 
 #: ../src/View/Gtk/Main.cpp:266
 msgid "BURG Mode"
-msgstr "mode BURG"
+msgstr "BURG Mode"
 
 #: ../src/View/Gtk/Main.cpp:270
 msgid "Save configuration and generate a new "
-msgstr "Enregistrer la configuration et en générer une nouvelle "
+msgstr "Save configuration and generate a new "
 
 #: ../src/View/Gtk/Main.cpp:291
 msgid "Are you sure?"
-msgstr "Êtes-vous sûr(e) ?"
+msgstr "Are you sure?"
 
 #: ../src/View/Gtk/Main.cpp:292
 msgid "This removes all your list modifications of the bootloader menu!"
 msgstr ""
-"Ceci supprime l'ensemble des modifications de la liste appartenant au menu "
-"du chargeur d'amorçage !"
 
 #: ../src/View/Gtk/Main.cpp:352
 msgid "loading configuration…"
-msgstr "chargement de la configuration..."
+msgstr "loading configuration…"
 
 #: ../src/View/Gtk/Main.cpp:354
 msgid "loading script %2/%3 (%1)"
-msgstr "chargement du script %2/%3 (%1)"
+msgstr "loading script %2/%3 (%1)"
 
 #: ../src/View/Gtk/Main.cpp:373
 msgid "submenu"
-msgstr "sous-menu"
+msgstr "submenu"
 
 #: ../src/View/Gtk/Main.cpp:376 ../src/View/Gtk/Trash.cpp:92
 msgid "placeholder"
-msgstr "espace réservé"
+msgstr "placeholder"
 
 #: ../src/View/Gtk/Main.cpp:379 ../src/View/Gtk/Trash.cpp:92
 msgid "menuentry"
-msgstr "entrée de menu"
+msgstr "menuentry"
 
 #: ../src/View/Gtk/Main.cpp:383 ../src/View/Gtk/Trash.cpp:92
 msgid "script: "
-msgstr "script : "
+msgstr "script: "
 
 #: ../src/View/Gtk/Main.cpp:387
 msgid "default name: "
-msgstr "nom par défaut : "
+msgstr "default name: "
 
 #: ../src/View/Gtk/Main.cpp:391
 msgid "Partition: "
-msgstr "Partition : "
+msgstr "Partition: "
 
 #: ../src/View/Gtk/Main.cpp:415
 msgid "Proxy binary not found!"
-msgstr "Binaire du proxy non trouvé !"
+msgstr "Proxy binary not found!"
 
 #: ../src/View/Gtk/Main.cpp:416
 msgid ""
 "You will see all entries (uncustomized) when you run grub. This error accurs "
 "(in most cases), when you didn't install grub gustomizer currectly."
 msgstr ""
-"Vous verrez toutes les entrées (non personnalisées) quand vous lancerez "
-"grub. Cette erreur apparaît (dans la plupart des cas), lorsque vous n'avez "
-"pas installé grub customizer correctement."
+"You will see all entries (uncustomised) when you run grub. This error occurs "
+"(in most cases), when you didn't install grub customizer currectly."
 
 #: ../src/View/Gtk/Main.cpp:422
 msgid "(incoming Entries of %1, Script: %2)"
-msgstr "(Entrées entrantes provenant de %1, Script : %2)"
+msgstr "(incoming Entries of %1, Script: %2)"
 
 #: ../src/View/Gtk/Main.cpp:424
 msgid "(incoming Entries of %1)"
-msgstr "(Entrées entrantes de %1)"
+msgstr "(incoming Entries of %1)"
 
 #: ../src/View/Gtk/Main.cpp:426
 msgid "(incoming Entries of Script: %1)"
-msgstr "(Entrées entrantes provenant du Script : %1)"
+msgstr "(incoming Entries of Script: %1)"
 
 #: ../src/View/Gtk/Main.cpp:428
 msgid "(incoming Entries)"
-msgstr "(Entrées entrantes)"
+msgstr "(incoming Entries)"
 
 #: ../src/View/Gtk/Main.cpp:434
 msgid "(script code)"
-msgstr "(script du code)"
+msgstr "(script code)"
 
 #: ../src/View/Gtk/Main.cpp:436
 msgid "(script code of %1)"
-msgstr "(code de script de %1)"
+msgstr "(script code of %1)"
 
 #: ../src/View/Gtk/Main.cpp:636
 msgid "Trash (%1)"
-msgstr "Corbeille (%1)"
+msgstr "Trash (%1)"
 
 #: ../src/View/Gtk/Main.cpp:649
 msgid ""
 "Removing Script Code can cause problems when trying to boot entries relying "
 "on it. Are you sure you want to do it anyway?"
 msgstr ""
-"Supprimer le code de script peut occasionner des problèmes lorsque l'on "
-"tente de démarrer les entrées s'appuyant sur celui-ci. Êtes-vous certain de "
-"vouloir faire cela?"
+"Removing Script Code can cause problems when trying to boot entries relying "
+"on it. Are you sure you want to do it anyway?"
 
 #: ../src/View/Gtk/Main.cpp:657
 msgid ""
@@ -420,20 +410,14 @@ msgid ""
 "If you just want to remove old kernels: The better way is uninstalling them "
 "instead of just hiding them in boot menu."
 msgstr ""
-"Vous essayez de supprimer une entrée provenant du système en cours "
-"d'utilisation. Assurez-vous qu'il y ait d'autres entrées fonctionnant sur ce "
-"système !\n"
-"Si vous voulez uniquement supprimer d'anciens noyaux : la meilleure façon "
-"est de les désinstaller plutôt que de seulement les masquer du menu de "
-"démarrage."
 
 #: ../src/View/Gtk/Main.cpp:686
 msgid "Default title: "
-msgstr "Titre par défaut : "
+msgstr "Default title: "
 
 #: ../src/View/Gtk/Main.cpp:779
 msgid "The saved configuration is not up to date!"
-msgstr "La configuration enregistrée n'est pas à jour !"
+msgstr "The saved configuration is not up to date!"
 
 #: ../src/View/Gtk/Main.cpp:780
 msgid ""
@@ -441,68 +425,62 @@ msgid ""
 "startup. So what you see now may not be what you see when you restart your "
 "pc. To fix this, click update!"
 msgstr ""
-"La configuration générée n'est pas identique à la configuration enregistrée "
-"au démarrage. Ainsi ce que vous voyez maintenant peut ne pas être ce que "
-"vous verrez lorsque vous redémarrerez votre ordinateur. Pour corrigez ceci, "
-"cliquez sur mettre à jour !"
 
 #: ../src/View/Gtk/Main.cpp:783
 msgid "_Quit without update"
-msgstr "_Quitter sans mettre à jour"
+msgstr "_Quit without update"
 
 #: ../src/View/Gtk/Main.cpp:786
 msgid "_Update & Quit"
-msgstr "_Mettre à jour & Quitter"
+msgstr "_Update & Quit"
 
 #: ../src/View/Gtk/Main.cpp:790
 msgid "Do you want to save your modifications?"
-msgstr "Voulez-vous enregistrer vos modifications ?"
+msgstr "Do you want to save your modifications?"
 
 #: ../src/View/Gtk/Main.cpp:793
 msgid "_Quit without saving"
-msgstr "_Quitter sans enregistrer"
+msgstr "_Quit without saving"
 
 #: ../src/View/Gtk/Main.cpp:796
 msgid "_Save & Quit"
-msgstr "_Enregistrer & Quitter"
+msgstr "_Save & Quit"
 
 #: ../src/View/Gtk/Main.cpp:799
 msgid "AND: your modifications are still unsaved, update will save them too!"
 msgstr ""
-"AND : Vos modifications ne sont pas enregistrées, la mise à jour le fera "
-"automatiquement !"
 
 #: ../src/View/Gtk/Main.cpp:852
 msgid ""
 "%1 couldn't be executed successfully. error message:\n"
 " %2"
 msgstr ""
-"%1 ne peut pas s’exécuter correctement. Message d'erreur :\n"
+"%1 couldn't be executed successfully. error message:\n"
 " %2"
 
 #: ../src/View/Gtk/Main.cpp:854
 msgid "Environment settings"
-msgstr "Paramètres d'environnement"
+msgstr "Environment settings"
 
 #: ../src/View/Gtk/Main.cpp:866
 msgid "Do you want to proceed without saving the current configuration?"
-msgstr "Voulez-vous continuer sans enregistrer la configuration actuelle ?"
+msgstr "Do you want to proceed without saving the current configuration?"
 
 #: ../src/View/Gtk/Main.cpp:867
 msgid "There are unsaved modifications!"
-msgstr "Il y a des modifications non enregistrées !"
+msgstr "There are unsaved modifications!"
 
 #: ../src/View/Gtk/Settings.cpp:80
 msgid "white"
-msgstr "blanc"
+msgstr "white"
 
 #: ../src/View/Gtk/Settings.cpp:81
 msgid "yellow"
-msgstr "jaune"
+msgstr "yellow"
 
 #: ../src/View/Gtk/Settings.cpp:82
 msgid "light-cyan"
-msgstr "cyan clair"
+msgstr "light-cyan"
 
 #: ../src/View/Gtk/Settings.cpp:83
 msgid "cyan"
@@ -510,23 +488,23 @@ msgstr "cyan"
 
 #: ../src/View/Gtk/Settings.cpp:84
 msgid "light-blue"
-msgstr "bleu clair"
+msgstr "light-blue"
 
 #: ../src/View/Gtk/Settings.cpp:85
 msgid "blue"
-msgstr "bleu"
+msgstr "blue"
 
 #: ../src/View/Gtk/Settings.cpp:86
 msgid "light-green"
-msgstr "vert clair"
+msgstr "light-green"
 
 #: ../src/View/Gtk/Settings.cpp:87
 msgid "green"
-msgstr "vert"
+msgstr "green"
 
 #: ../src/View/Gtk/Settings.cpp:88
 msgid "light-magenta"
-msgstr "magenta clair"
+msgstr "light-magenta"
 
 #: ../src/View/Gtk/Settings.cpp:89
 msgid "magenta"
@@ -534,23 +512,23 @@ msgstr "magenta"
 
 #: ../src/View/Gtk/Settings.cpp:90
 msgid "light-red"
-msgstr "rouge clair"
+msgstr "light-red"
 
 #: ../src/View/Gtk/Settings.cpp:91
 msgid "red"
-msgstr "rouge"
+msgstr "red"
 
 #: ../src/View/Gtk/Settings.cpp:92
 msgid "brown"
-msgstr "marron"
+msgstr "brown"
 
 #: ../src/View/Gtk/Settings.cpp:93
 msgid "light-gray"
-msgstr "gris clair"
+msgstr "light-gray"
 
 #: ../src/View/Gtk/Settings.cpp:94
 msgid "dark-gray"
-msgstr "gris foncé"
+msgstr "dark-gray"
 
 #: ../src/View/Gtk/Settings.cpp:95
 msgid "transparent"
@@ -558,149 +536,148 @@ msgstr "transparent"
 
 #: ../src/View/Gtk/Settings.cpp:95
 msgid "black"
-msgstr "noir"
+msgstr "black"
 
 #: ../src/View/Gtk/Settings.cpp:107
 msgid "pre_defined: "
-msgstr "pré_défini : "
+msgstr "pre_defined: "
 
 #: ../src/View/Gtk/Settings.cpp:107
 msgid "previously _booted entry"
-msgstr "entrée précédemment _amorcée"
+msgstr "previously _booted entry"
 
 #: ../src/View/Gtk/Settings.cpp:108
 msgid "default entry"
-msgstr "entrée par défaut"
+msgstr "default entry"
 
 #: ../src/View/Gtk/Settings.cpp:108
 msgid "visibility"
-msgstr "visibilité"
+msgstr "visibility"
 
 #: ../src/View/Gtk/Settings.cpp:108
 msgid "show menu"
-msgstr "afficher le menu"
+msgstr "show menu"
 
 #: ../src/View/Gtk/Settings.cpp:109
 msgid "Timeout"
-msgstr "Délai d'expiration"
+msgstr "Timeout"
 
 #: ../src/View/Gtk/Settings.cpp:109
 msgid "Seconds"
-msgstr "Secondes"
+msgstr "Seconds"
 
 #: ../src/View/Gtk/Settings.cpp:109
 msgid "kernel parameters"
-msgstr "paramètres du noyau"
+msgstr "kernel parameters"
 
 #: ../src/View/Gtk/Settings.cpp:110
 msgid "generate recovery entries"
-msgstr "génère les entrées de récupération"
+msgstr "generate recovery entries"
 
 #: ../src/View/Gtk/Settings.cpp:110
 msgid "look for other operating systems"
-msgstr "recherche d'autres systèmes d'exploitation"
+msgstr "look for other operating systems"
 
 #: ../src/View/Gtk/Settings.cpp:111
 msgid "custom resolution: "
-msgstr "résolution personnalisée : "
+msgstr "custom resolution: "
 
 #: ../src/View/Gtk/Settings.cpp:112
 msgid "font color"
-msgstr "couleur de la police"
+msgstr "font colour"
 
 #: ../src/View/Gtk/Settings.cpp:112
 msgid "background"
-msgstr "arrière-plan"
+msgstr "background"
 
 #: ../src/View/Gtk/Settings.cpp:113
 msgid "normal:"
-msgstr "normal :"
+msgstr "normal:"
 
 #: ../src/View/Gtk/Settings.cpp:113
 msgid "highlight:"
-msgstr "éclairé:"
+msgstr "highlight:"
 
 #: ../src/View/Gtk/Settings.cpp:114
 msgid "menu colors"
-msgstr "couleur des menus"
+msgstr "menu colours"
 
 #: ../src/View/Gtk/Settings.cpp:114
 msgid "background image"
-msgstr "Image de fond"
+msgstr "background image"
 
 #: ../src/View/Gtk/Settings.cpp:116
 msgid ""
 "To get the colors above working,\n"
 "you have to select a background image!"
 msgstr ""
-"Pour que les couleurs ci-dessus fonctionnent,\n"
-"vous devez sélectionner une image de fond !"
+"To get the colours above working,\n"
+"you have to select a background image!"
 
 #: ../src/View/Gtk/Settings.cpp:119
 msgid "settings"
-msgstr "paramètres"
+msgstr "settings"
 
 #: ../src/View/Gtk/Settings.cpp:123
 msgid "_General"
-msgstr "_Général"
+msgstr "_General"
 
 #: ../src/View/Gtk/Settings.cpp:124
 msgid "A_ppearance"
-msgstr "A_pparence"
+msgstr "A_ppearance"
 
 #: ../src/View/Gtk/Settings.cpp:125
 msgid "_Advanced"
-msgstr "_Avancé"
+msgstr "_Advanced"
 
 #: ../src/View/Gtk/Settings.cpp:138
 msgid "is active"
-msgstr "est actif"
+msgstr "is active"
 
 #: ../src/View/Gtk/Settings.cpp:139
 msgid "name"
-msgstr "Nom"
+msgstr "name"
 
 #: ../src/View/Gtk/Settings.cpp:140
 msgid "value"
-msgstr "valeur"
+msgstr "value"
 
 #: ../src/View/Gtk/Settings.cpp:245
 msgid "remove font"
-msgstr "supprimer la police"
+msgstr "remove font"
 
 #: ../src/View/Gtk/Settings.cpp:269
 msgid "remove background"
-msgstr "supprime l'image de fond"
+msgstr "remove background"
 
 #: ../src/View/Gtk/Settings.cpp:340
 msgid "Entry %1 (by position)"
-msgstr "Entrée %1 (par emplacement)"
+msgstr "Entry %1 (by position)"
 
 #: ../src/View/Gtk/Settings.cpp:642
 msgid ""
 "This option doesn't work when the \"os-prober\" script finds other operating "
 "systems. Disable \"%1\" if you don't need to boot other operating systems."
 msgstr ""
-"Cette option ne fonctionne pas lorsque le script de « détection de système » "
-"trouve d'autres systèmes d'exploitation. Désactiver « %1 » si vous n'avez "
-"pas besoin de démarrer d'autres systèmes d'exploitation."
+"This option doesn't work when the \"os-prober\" script finds other operating "
+"systems. Disable \"%1\" if you don't need to boot other operating systems."
 
 #: ../src/View/Gtk/Trash.cpp:22
 msgid "Add entry from trash"
-msgstr "Ajouter une entrée à partir de la corbeille"
+msgstr "Add entry from trash"
 
 #: ../src/View/Gtk/Trash.cpp:41
 msgid "Delete custom entries"
-msgstr "Supprimer les entrées personnalisées"
+msgstr "Delete custom entries"
 
 #: ../src/View/Gtk/Trash.cpp:92
 msgid "type: "
-msgstr "type : "
+msgstr "type: "
 
 #: ../src/View/Gtk/Trash.cpp:109
 msgid "This deletes the following entries:"
-msgstr "Ceci supprime les entrées suivantes :"
+msgstr "This deletes the following entries:"
 
 #: ../src/View/Gtk/Element/PartitionChooser.cpp:30
 msgid "current"
-msgstr "actuel"
+msgstr "current"

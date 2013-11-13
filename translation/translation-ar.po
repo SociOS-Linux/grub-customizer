@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-08-30 22:28+0200\n"
-"PO-Revision-Date: 2012-08-30 21:30+0000\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2013-05-25 23:47+0000\n"
+"Last-Translator: Mohamed Mohsen <linuxer9@gmail.com>\n"
 "Language-Team: Arabic <ar@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-09-10 18:16+0000\n"
-"X-Generator: Launchpad (build 15924)\n"
+"X-Launchpad-Export-Date: 2013-11-13 17:48+0000\n"
+"X-Generator: Launchpad (build 16820)\n"
 
 #: ../src/Controller/MainControllerImpl.cpp:533
 msgid "Name the Entry"
@@ -27,19 +27,19 @@ msgstr ""
 
 #: ../src/Controller/MainControllerImpl.cpp:727
 msgid "Configuration has been saved"
-msgstr ""
+msgstr "تم حفظ الإعداد"
 
 #: ../src/Controller/MainControllerImpl.cpp:732
 msgid "updating configuration"
-msgstr ""
+msgstr "تحديث الإعداد"
 
 #: ../src/main/gtk-client.cpp:229
 msgid "Linux"
-msgstr ""
+msgstr "لينكس"
 
 #: ../src/main/gtk-client.cpp:230
 msgid "Linux-ISO"
-msgstr ""
+msgstr "لينكس-آيسو"
 
 #: ../src/main/gtk-client.cpp:231
 msgid "Chainloader"
@@ -52,27 +52,27 @@ msgstr ""
 #: ../src/View/Gtk/About.cpp:36
 msgid ""
 "Grub Customizer is a graphical interface to configure the grub2/burg settings"
-msgstr ""
+msgstr "مُعدّل GRUB هو واجهة رسومية لإعداد GRUB2\\burg"
 
 #: ../src/View/Gtk/EntryEditor.cpp:22 ../src/View/Gtk/EnvEditor.cpp:23
 msgid "_Type:"
-msgstr ""
+msgstr "ال_نوع:"
 
 #: ../src/View/Gtk/EntryEditor.cpp:28
 msgid "Entry editor"
-msgstr ""
+msgstr "محرر المدخلات"
 
 #: ../src/View/Gtk/EntryEditor.cpp:34
 msgid "Options"
-msgstr ""
+msgstr "الخيارات"
 
 #: ../src/View/Gtk/EntryEditor.cpp:35
 msgid "Source"
-msgstr ""
+msgstr "المصدر"
 
 #: ../src/View/Gtk/EntryEditor.cpp:62
 msgid "_Partition"
-msgstr ""
+msgstr "_قسم"
 
 #: ../src/View/Gtk/EntryEditor.cpp:64
 msgid "_Initial ramdisk"
@@ -88,11 +88,11 @@ msgstr ""
 
 #: ../src/View/Gtk/EntryEditor.cpp:70
 msgid "Path to iso file"
-msgstr ""
+msgstr "المسار لملف الآيسو"
 
 #: ../src/View/Gtk/EntryEditor.cpp:72
 msgid "Locale"
-msgstr ""
+msgstr "المحلية"
 
 #: ../src/View/Gtk/EntryEditor.cpp:74
 msgid "Kernel params"
@@ -101,61 +101,61 @@ msgstr ""
 #: ../src/View/Gtk/EntryEditor.cpp:177 ../src/View/Gtk/EntryEditor.cpp:183
 #: ../src/View/Gtk/EntryEditor.cpp:217
 msgid "Other"
-msgstr ""
+msgstr "أخرى"
 
 #: ../src/View/Gtk/EnvEditor.cpp:22
 msgid "_Partition:"
-msgstr ""
+msgstr "_قسم:"
 
 #: ../src/View/Gtk/EnvEditor.cpp:23
 msgid "Submountpoints:"
-msgstr ""
+msgstr "نقاط الضم الفرعية:"
 
 #: ../src/View/Gtk/EnvEditor.cpp:24
 msgid "save this configuration"
-msgstr ""
+msgstr "حفظ هذه الإعدادات"
 
 #: ../src/View/Gtk/EnvEditor.cpp:53
 msgid "Grub 2"
-msgstr ""
+msgstr "GRUB2"
 
 #: ../src/View/Gtk/EnvEditor.cpp:54
 msgid "BURG"
-msgstr ""
+msgstr "BURG"
 
 #: ../src/View/Gtk/EnvEditor.cpp:216
 msgid "Mount failed!"
-msgstr ""
+msgstr "فشل في الضم !"
 
 #: ../src/View/Gtk/EnvEditor.cpp:217
 msgid "umount failed!"
-msgstr ""
+msgstr "فشل إلغاء الضم !"
 
 #: ../src/View/Gtk/EnvEditor.cpp:218
 msgid "This seems not to be a root file system (no fstab found)"
-msgstr ""
+msgstr "يبدو أنه ليس نظام الجذر (لم يُعثرعلى fstab)"
 
 #: ../src/View/Gtk/EnvEditor.cpp:219
 msgid "Couldn't mount the selected partition"
-msgstr ""
+msgstr "غير قادر على ضم القسم المحدد"
 
 #: ../src/View/Gtk/EnvEditor.cpp:220
 msgid "Couldn't umount the selected partition"
-msgstr ""
+msgstr "غير قادر على إلغاء ضم القسم المحدد"
 
 #: ../src/View/Gtk/Error.cpp:31
 msgid ""
 "please Inform the author about this problem. The following information could "
 "be helpful:"
-msgstr ""
+msgstr "الرجاء إبلاغ المؤلف عن هذه المشكلة. قد تكون المعلومات الأتية مفيدة :"
 
 #: ../src/View/Gtk/Error.cpp:32
 msgid "An error occurred"
-msgstr ""
+msgstr "حدث خطأ ما"
 
 #: ../src/View/Gtk/Error.cpp:35
 msgid "continue (risk data loss)"
-msgstr ""
+msgstr "استمر (مخاطرة لفقد البيانات)"
 
 #: ../src/View/Gtk/Installer.cpp:22
 msgid ""
@@ -163,26 +163,29 @@ msgid ""
 "files to the bootloaders data directory\n"
 "(if they don't already exist)."
 msgstr ""
+"ثبّت محمل الإقلاع إلى MBR \n"
+"وضع بعض الملفات في مجلد بيانات\n"
+" محمل الإقلاع (لو لم تكن موجودة)"
 
 #: ../src/View/Gtk/Installer.cpp:23
 msgid "_Device: "
-msgstr ""
+msgstr "ال_جهاز: "
 
 #: ../src/View/Gtk/Installer.cpp:33
 msgid "Install to MBR"
-msgstr ""
+msgstr "ثبت إلى MBR"
 
 #: ../src/View/Gtk/Installer.cpp:50
 msgid "The bootloader has been installed successfully"
-msgstr ""
+msgstr "تم تثبيت محمل الإقلاع بنجاح"
 
 #: ../src/View/Gtk/Installer.cpp:55
 msgid "Error while installing the bootloader"
-msgstr ""
+msgstr "حدث خطأ أثناء تثبيت محمل الإقلاع"
 
 #: ../src/View/Gtk/Installer.cpp:71
 msgid "installing the bootloader…"
-msgstr ""
+msgstr "تثبيت محمل الإقلاع..."
 
 #: ../src/View/Gtk/Installer.cpp:76
 msgid "Please type a device string!"
@@ -190,19 +193,19 @@ msgstr ""
 
 #: ../src/View/Gtk/Main.cpp:29
 msgid "_File"
-msgstr ""
+msgstr "_ملف"
 
 #: ../src/View/Gtk/Main.cpp:31
 msgid "_Edit"
-msgstr ""
+msgstr "_تحرير"
 
 #: ../src/View/Gtk/Main.cpp:31
 msgid "_View"
-msgstr ""
+msgstr "_عرض"
 
 #: ../src/View/Gtk/Main.cpp:31
 msgid "_Help"
-msgstr ""
+msgstr "_مساعدة"
 
 #: ../src/View/Gtk/Main.cpp:32
 msgid "_Install to MBR …"
@@ -235,7 +238,7 @@ msgstr ""
 
 #: ../src/View/Gtk/Main.cpp:85
 msgid "Trash"
-msgstr ""
+msgstr "المحذوفات"
 
 #: ../src/View/Gtk/Main.cpp:94
 msgid "Move up the selected entry or script"
