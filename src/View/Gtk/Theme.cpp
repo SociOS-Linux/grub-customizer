@@ -440,6 +440,9 @@ void View_Gtk_Theme::showError(Error const& e, std::string const& info) {
 	case ERROR_SAVE_FAILED:
 		Gtk::MessageDialog(Glib::ustring(gettext("Saving of themes didn't succeed completely!")) + "\n" + info, false, Gtk::MESSAGE_WARNING).run();
 		break;
+	case ERROR_NO_FILE_SELECTED:
+		Gtk::MessageDialog(gettext("File replacement failed. Please select a theme file first!"), false, Gtk::MESSAGE_ERROR).run();
+		break;
 	default:
 		throw NotImplementedException("the current value of View_Theme::Error is not processed", __FILE__, __LINE__);
 	}
