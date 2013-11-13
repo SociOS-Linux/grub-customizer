@@ -282,6 +282,14 @@ install(FILES translation/translation-eu.mo
 	DESTINATION share/locale/eu/LC_MESSAGES/
 	RENAME grub-customizer.mo)
 
+install(FILES translation/translation-en_GB.mo
+	DESTINATION share/locale/en_GB/LC_MESSAGES/
+	RENAME grub-customizer.mo)
+
+install(FILES translation/translation-ja_GB.mo
+	DESTINATION share/locale/ja/LC_MESSAGES/
+	RENAME grub-customizer.mo)
+
 install(FILES misc/grub-customizer.desktop
 	DESTINATION /usr/share/applications
 )
@@ -305,4 +313,3 @@ configure_file(
 
 add_custom_target(uninstall
     COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
-
