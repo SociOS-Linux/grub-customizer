@@ -1,9 +1,14 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-13 21:27+0100\n"
+"POT-Creation-Date: 2013-11-13 22:24+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -380,17 +385,17 @@ msgid ""
 "instead of just hiding them in boot menu."
 msgstr ""
 
-#: src/View/Gtk/Main.cpp:806
+#: src/View/Gtk/Main.cpp:806 src/View/Gtk/Element/List.h:128
 msgid "menuentry"
 msgstr ""
 
 #: src/View/Gtk/Main.cpp:807
 msgid ""
-"An operating system which is visible at the grub menu and boots an operating "
-"system when activated."
+"An menuentry which is visible at the grub menu and boots an operating system "
+"when activated."
 msgstr ""
 
-#: src/View/Gtk/Main.cpp:808
+#: src/View/Gtk/Main.cpp:808 src/View/Gtk/Element/List.h:124
 msgid "submenu"
 msgstr ""
 
@@ -401,7 +406,7 @@ msgid ""
 "one the the containing menuentries."
 msgstr ""
 
-#: src/View/Gtk/Main.cpp:811
+#: src/View/Gtk/Main.cpp:811 src/View/Gtk/Element/List.h:126
 msgid "placeholder"
 msgstr ""
 
@@ -415,7 +420,7 @@ msgid ""
 "Placeholders are hidden by default."
 msgstr ""
 
-#: src/View/Gtk/Main.cpp:817
+#: src/View/Gtk/Main.cpp:817 src/View/Gtk/Element/List.h:122
 msgid "script"
 msgstr ""
 
@@ -827,4 +832,16 @@ msgstr ""
 
 #: src/View/Gtk/Trash.cpp:122
 msgid "This deletes the following entries:"
+msgstr ""
+
+#: src/View/Gtk/Element/List.h:131
+msgid "script: "
+msgstr ""
+
+#: src/View/Gtk/Element/List.h:135
+msgid "default name: "
+msgstr ""
+
+#: src/View/Gtk/Element/List.h:139
+msgid "Partition: "
 msgstr ""
