@@ -804,7 +804,7 @@ void View_Gtk_Main::signal_preference_click(){
 void View_Gtk_Main::signal_entry_type_help_click() {
 	Gtk::MessageDialog helpDlg(
 		Glib::ustring() + gettext("menuentry") + "\n" + gettext(
-			"An operating system which is visible at the grub menu and boots an operating system when activated.")
+			"An menuentry which is visible at the grub menu and boots an operating system when activated.")
 		+ "\n\n" + gettext("submenu") + "\n" + gettext(
 			"A group of other operating systems. Grub shows it as a normal menuentry however when clicking it, it loads "
 			"another menu which allows you to choose one the the containing menuentries.")
