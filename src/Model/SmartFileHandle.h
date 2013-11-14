@@ -23,14 +23,17 @@
 #include "../lib/Exception.h"
 
 class Model_SmartFileHandle {
-private:
-	FILE* proc_or_file;
-	bool isCmd;
 public:
 	enum Type {
 		TYPE_FILE,
-		TYPE_COMMAND
+		TYPE_COMMAND,
+		TYPE_STRING
 	};
+private:
+	FILE* proc_or_file;
+	Model_SmartFileHandle::Type type;
+	std::string string; // content for TYPE_STRING
+public:
 	Model_SmartFileHandle();
 	char getChar();
 	std::string getRow();

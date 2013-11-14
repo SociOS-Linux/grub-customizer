@@ -313,11 +313,18 @@ bool Model_Proxy::isModified(Model_Rule const* parentRule, Model_Entry const* pa
 		if (ruleIter->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER){ //the first element is the OTHER_ENTRIES_PLACEHOLDER by default.
 			result = !ruleIter->isVisible; //If not visible, it's modified…
 			ruleIter++;
+		} else {
+			result = true;
 		}
 		while (!result && ruleIter != rlist.end() && entryIter != elist.end()){
-			if (ruleIter->outputName != entryIter->name || !ruleIter->isVisible) {
+			// type compare
+			if ((ruleIter->type == Model_Rule::NORMAL && entryIter->type != Model_Entry::MENUENTRY)
+				|| (ruleIter->type == Model_Rule::PLAINTEXT && entryIter->type != Model_Entry::PLAINTEXT)
+				|| (ruleIter->type == Model_Rule::SUBMENU && entryIter->type != Model_Entry::SUBMENU)) {
 				result = true;
-			} else if (ruleIter->type == Model_Rule::SUBMENU) {
+			} else if (ruleIter->outputName != entryIter->name || !ruleIter->isVisible) { // data compare
+				result = true;
+			} else if (ruleIter->type == Model_Rule::SUBMENU) { // submenu check
 				result = this->isModified(&*ruleIter, &*entryIter);
 			}
 
@@ -342,13 +349,13 @@ bool Model_Proxy::deleteFile(){
 }
 
 std::list<std::string> Model_Proxy::getScriptList(std::map<Model_Entry const*, Model_Script const*> const& entrySourceMap, std::map<Model_Script const*, std::string> const& scriptTargetMap) const {
-	std::map<std::string, void*> uniqueList; // the pointer (value) is just a dummy
+	std::map<std::string, Nothing> uniqueList; // the pointer (value) is just a dummy
 	for (std::map<Model_Entry const*, Model_Script const*>::const_iterator iter = entrySourceMap.begin(); iter != entrySourceMap.end(); iter++) {
-		uniqueList[scriptTargetMap.find(iter->second)->second] = NULL;
+		uniqueList[scriptTargetMap.find(iter->second)->second] = Nothing();
 	}
 	std::list<std::string> result;
 	result.push_back(scriptTargetMap.find(this->dataSource)->second); // the own script must be the first entry
-	for (std::map<std::string, void*>::iterator iter = uniqueList.begin(); iter != uniqueList.end(); iter++) {
+	for (std::map<std::string, Nothing>::iterator iter = uniqueList.begin(); iter != uniqueList.end(); iter++) {
 		result.push_back(iter->first);
 	}
 	return result;
@@ -726,6 +733,25 @@ Model_Rule* Model_Proxy::getVisibleRuleForEntry(Model_Entry const& entry, Model_
 	return NULL;
 }
 
+std::list<Model_Rule*> Model_Proxy::getVisibleRulesByType(Model_Rule::RuleType type, Model_Rule* parent) {
+	std::list<Model_Rule*> result;
+	std::list<Model_Rule>& list = parent ? parent->subRules : this->rules;
+
+	for (std::list<Model_Rule>::iterator iter = list.begin(); iter != list.end(); iter++) {
+		if (iter->isVisible) {
+			if (iter->type == type) {
+				result.push_back(&*iter);
+			}
+			if (iter->subRules.size()) {
+				std::list<Model_Rule*> subResult = this->getVisibleRulesByType(type, &*iter);
+				result.splice(result.end(), subResult);
+			}
+		}
+	}
+
+	return result;
+}
+
 Model_Proxy::operator ArrayStructure() const {
 	ArrayStructure result;
 	result["rules"].isArray = true;
@@ -762,5 +788,25 @@ Model_Proxy::operator ArrayStructure() const {
 	}
 
 	return result;
+}
+
+
+Model_Proxy& Model_Proxy::fromPtr(Proxy* proxy) {
+	if (proxy != NULL) {
+		try {
+			return dynamic_cast<Model_Proxy&>(*proxy);
+		} catch (std::bad_cast const& e) {
+		}
+	}
+	throw BadCastException("Model_Proxy::fromPtr failed");
+}
+Model_Proxy const& Model_Proxy::fromPtr(Proxy const* proxy) {
+	if (proxy != NULL) {
+		try {
+			return dynamic_cast<Model_Proxy const&>(*proxy);
+		} catch (std::bad_cast const& e) {
+		}
+	}
+	throw BadCastException("Model_Proxy::fromPtr [const] failed");
 }
 

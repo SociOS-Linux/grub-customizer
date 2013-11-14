@@ -29,24 +29,30 @@
 #include "../Model/MountTable.h"
 
 #include "../View/EnvEditor.h"
+#include "../View/Trait/ViewAware.h"
 
 #include "ControllerAbstract.h"
 
 #include "EnvEditorController.h"
+#include "../Model/DeviceMap.h"
 
 
-class EnvEditorControllerImpl : public ControllerAbstract, public EnvEditorController {
-	Model_Env& env;
+class EnvEditorControllerImpl :
+	public ControllerAbstract,
+	public EnvEditorController,
+	public View_Trait_ViewAware<View_EnvEditor>,
+	public Model_Env_Connection
+{
 	Model_MountTable* mountTable;
-	View_EnvEditor* view;
+	Model_DeviceMap* deviceMap;
 
 public:
 	void setMountTable(Model_MountTable& mountTable);
-	void setView(View_EnvEditor& view);
+	void setDeviceMap(Model_DeviceMap& deviceMap);
 
 	void showAction(bool resetPartitionChooser = false);
 
-	EnvEditorControllerImpl(Model_Env& env);
+	EnvEditorControllerImpl();
 	
 	//partition chooser
 	void mountSubmountpointAction(std::string const& submountpoint);

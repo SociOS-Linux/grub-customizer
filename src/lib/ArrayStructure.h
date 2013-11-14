@@ -50,12 +50,12 @@ public:
  * 	ArrayStructure test;
  *  test["x"] = "Model_Proxy";
  *  test["x"]["y"];
- *  test["x"]["z"] = (void*)NULL;
+ *  test["x"]["z"] = (Foo*)NULL;
  *  test["x"]["a"] = 10.4;
  *  test["x"]["bool1"] = true;
  *  test["x"]["bool2"] = false;
  *  test["a"] = "eins";
- *  test["null-test"] = (void*)NULL;
+ *  test["null-test"] = (Foo*)NULL;
 
  *  ArrayStructure subStructure;
  *  subStructure["BLUBB"] = true;

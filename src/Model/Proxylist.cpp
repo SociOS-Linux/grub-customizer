@@ -68,8 +68,11 @@ bool Model_Proxylist::compare_proxies(Model_Proxy const& a, Model_Proxy const& b
 	if (a.index != b.index) {
 		return a.index < b.index;
 	} else {
-		assert(a.dataSource != NULL && b.dataSource != NULL);
-		return a.dataSource->name < b.dataSource->name;
+		if (a.dataSource != NULL && b.dataSource != NULL) {
+			return a.dataSource->name < b.dataSource->name;
+		} else {
+			return true;
+		}
 	}
 }
 
@@ -134,8 +137,12 @@ std::list<Model_Proxylist_Item> Model_Proxylist::generateEntryTitleList(std::lis
 			std::ostringstream currentLabelNumPath;
 			currentLabelNumPath << numericPathLabelPrefix << (i+1);
 
+			bool addedSomething = true;
 			if (rule_iter->type == Model_Rule::SUBMENU) {
 				std::list<Model_Proxylist_Item> subList = Model_Proxylist::generateEntryTitleList(rule_iter->subRules, labelPathPrefix + rule_iter->outputName + ">", currentNumPath.str() + ">", currentLabelNumPath.str() + ">");
+				if (subList.size() == 0) {
+					addedSomething = false;
+				}
 				result.splice(result.end(), subList);
 			} else {
 				Model_Proxylist_Item newItem;
@@ -145,7 +152,9 @@ std::list<Model_Proxylist_Item> Model_Proxylist::generateEntryTitleList(std::lis
 				newItem.numericPathValue = currentNumPath.str();
 				result.push_back(newItem);
 			}
-			i++;
+			if (addedSomething) {
+				i++;
+			}
 		}
 	}
 	if (offset != NULL) {
@@ -194,7 +203,7 @@ std::list<Model_Rule>::iterator Model_Proxylist::moveRuleToNewProxy(Model_Rule& 
 	std::list<Model_Proxy>::iterator newProxy = this->insert(proxyIter, Model_Proxy(*dataSource, false));
 	newProxy->removeEquivalentRules(rule);
 	std::list<Model_Rule>::iterator movedRule = newProxy->rules.insert(direction == -1 ? newProxy->rules.end() : newProxy->rules.begin(), rule);
-	rule.isVisible = false;
+	rule.setVisibility(false);
 
 	if (!currentProxy->hasVisibleRules()) {
 		this->deleteProxy(currentProxy);
@@ -309,6 +318,15 @@ Model_Rule* Model_Proxylist::getVisibleRuleForEntry(Model_Entry const& entry) {
 		}
 	}
 	return NULL;
+}
+
+bool Model_Proxylist::hasProxy(Model_Proxy* proxy) {
+	for (std::list<Model_Proxy>::iterator proxyIter = this->begin(); proxyIter != this->end(); proxyIter++) {
+		if (&*proxyIter == proxy) {
+			return true;
+		}
+	}
+	return false;
 }
 
 Model_Proxylist::operator ArrayStructure() const {

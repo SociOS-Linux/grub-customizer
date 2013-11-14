@@ -26,6 +26,8 @@
 #include "InstallerController.h"
 #include "AboutController.h"
 #include "ErrorController.h"
+#include "ThemeController.h"
+#include "../lib/assert.h"
 
 struct ControllerCollection {
 	EntryEditController* entryEditController;
@@ -36,6 +38,23 @@ struct ControllerCollection {
 	InstallerController* installerController;
 	AboutController* aboutController;
 	ErrorController* errorController;
+	ThemeController* themeController;
+};
+
+class ControllerCollection_Connection {
+private:
+	ControllerCollection* _controllerCollection;
+protected:
+	ControllerCollection& getAllControllers() {
+		assert(this->_controllerCollection != NULL);
+		return *this->_controllerCollection;
+	}
+public:
+	ControllerCollection_Connection() : _controllerCollection(NULL) {}
+
+	void setControllerCollection(ControllerCollection& controllerCollection) {
+		this->_controllerCollection = &controllerCollection;
+	}
 };
 
 

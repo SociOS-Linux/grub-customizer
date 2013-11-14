@@ -149,6 +149,26 @@ class MissingFstabException : public SystemException {
 	   : SystemException(message, file, line) {}
 };
 
+class BadCastException : public TechnicalException {
+public: inline BadCastException(std::string const& message, std::string const& file = "", int line = -1)
+   : TechnicalException(message, file, line) {}
+};
+
+class InvalidStringFormatException : public LogicException {
+	public: inline InvalidStringFormatException(std::string const& message, std::string const& file = "", int line = -1)
+	   : LogicException(message, file, line) {}
+};
+
+class InvalidFileTypeException : public LogicException {
+	public: inline InvalidFileTypeException(std::string const& message, std::string const& file = "", int line = -1)
+	   : LogicException(message, file, line) {}
+};
+
+class NotImplementedException : public LogicException {
+	public: inline NotImplementedException(std::string const& message, std::string const& file = "", int line = -1)
+	   : LogicException(message, file, line) {}
+};
+
 // Template:
 //class CLASSNAME : public BASECLASS {
 //	public: inline CLASSNAME(std::string const& message, std::string const& file = "", int line = -1)

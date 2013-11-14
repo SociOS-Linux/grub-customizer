@@ -16,28 +16,39 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef COMMONCLASS_H_
-#define COMMONCLASS_H_
-#include "../lib/Logger.h"
-#include "Exception.h"
+#ifndef MODEL_VIEW_LISTITEM_H_INCLUDED
+#define MODEL_VIEW_LISTITEM_H_INCLUDED
+#include <string>
+#include <map>
 
-class CommonClass {
-	mutable Logger* logger;
-	std::string _controllerName;
-public:
-	CommonClass();
-	void setLogger(Logger& logger);
-	Logger const& getLogger() const;
-	Logger& getLogger();
-	Logger* getLoggerPtr();
-	bool hasLogger() const;
-protected:
-	void setControllerName(std::string const& name);
-	void log(std::string const& message, Logger::Priority prio) const;
-	void logActionBegin(std::string const& action) const;
-	void logActionEnd() const;
-	void logActionBeginThreaded(std::string const& action) const;
-	void logActionEndThreaded() const;
+template <typename TItem, typename TWrapper>
+struct View_Model_ListItem {
+	std::string name;
+	TItem* entryPtr;
+	TWrapper* scriptPtr;
+	bool is_placeholder;
+	bool is_submenu;
+	std::string scriptName;
+	std::string defaultName;
+	bool isEditable;
+	bool isModified;
+	std::map<std::string, std::string> options;
+	bool isVisible;
+	TItem* parentEntry;
+	TWrapper* parentScript;
+
+	View_Model_ListItem() :
+		entryPtr(NULL),
+		scriptPtr(NULL),
+		parentEntry(NULL),
+		parentScript(NULL),
+		is_placeholder(false),
+		is_submenu(false),
+		isEditable(false),
+		isModified(false),
+		isVisible(false)
+	{}
 };
 
-#endif
+
+#endif /* MODEL_VIEW_LISTITEM_H_INCLUDED */

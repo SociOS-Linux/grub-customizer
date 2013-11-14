@@ -23,14 +23,16 @@
 #include <cstdlib>
 #include <sys/stat.h>
 #include "Entry.h"
+#include <unistd.h>
 #include "../Model/EntryPathFollower.h"
-#include "../lib/CommonClass.h"
+#include "../lib/Trait/LoggerAware.h"
 #include "../lib/md5.h"
 #include "../config.h"
 #include "../lib/Exception.h"
 #include "../lib/ArrayStructure.h"
+#include "../lib/Type.h"
 
-struct Model_Script : public Model_EntryPathFollower, public CommonClass {
+struct Model_Script : public Model_EntryPathFollower, public Trait_LoggerAware, public Script {
 	std::string name, fileName;
 	bool isCustomScript;
 	Model_Entry root;
@@ -49,7 +51,11 @@ struct Model_Script : public Model_EntryPathFollower, public CommonClass {
 	std::string buildPathString(Model_Entry const& entry, bool withOtherEntriesPlaceholder = false) const;
 	bool hasEntry(Model_Entry const& entry, Model_Entry const * parent = NULL) const;
 	void deleteEntry(Model_Entry const& entry, Model_Entry* parent = NULL);
+	bool deleteFile();
 	operator ArrayStructure() const;
+	static Model_Script& fromPtr(Script* script);
+	static Model_Script const& fromPtr(Script const* script);
+	static int extractIndexFromPath(std::string const& path, std::string const& cfgDirPath);
 };
 
 #endif

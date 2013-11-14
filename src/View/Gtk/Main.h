@@ -22,41 +22,21 @@
 #include <libintl.h>
 #include "../../config.h"
 #include "../Main.h"
-#include "../../lib/CommonClass.h"
+#include "../../lib/Trait/LoggerAware.h"
 #include "Settings.h"
 #include "../../lib/str_replace.h"
 #include "../../lib/assert.h"
 #include "../../Controller/MainController.h"
+#include "../../Controller/Trait/ControllerAware.h"
 #include "../../lib/Type.h"
-
-class View_Gtk_Main_List : public Gtk::TreeView {
-public:
-	struct TreeModel : public Gtk::TreeModelColumnRecord {
-		Gtk::TreeModelColumn<Glib::ustring> name;
-		Gtk::TreeModelColumn<Glib::ustring> text;
-		Gtk::TreeModelColumn<void*> relatedRule;
-		Gtk::TreeModelColumn<bool> is_other_entries_marker;
-		Gtk::TreeModelColumn<bool> is_renamable;
-		Gtk::TreeModelColumn<bool> is_editable;
-		Gtk::TreeModelColumn<bool> is_sensitive;
-		Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > icon;
-		TreeModel();
-	};
-	TreeModel treeModel;
-	Glib::RefPtr<Gtk::TreeStore> refTreeStore;
-	Gtk::CellRendererPixbuf pixbufRenderer;
-	Gtk::CellRendererText textRenderer;
-	Gtk::TreeViewColumn mainColumn;
-	View_Gtk_Main_List();
-};
+#include "Element/List.h"
 
 class ImageMenuItemOwnKey : public Gtk::ImageMenuItem {
 	public:
 	ImageMenuItemOwnKey(const Gtk::StockID& id, const Gtk::AccelKey& accel_key);
 };
 
-class View_Gtk_Main : public View_Main, public CommonClass {
-	MainController* eventListener;
+class View_Gtk_Main : public View_Main, public Trait_LoggerAware, public Trait_ControllerAware<MainController> {
 	Gtk::Window win;
 	Gtk::VBox vbMainSplit;
 	Gtk::Notebook notebook;
@@ -66,13 +46,18 @@ class View_Gtk_Main : public View_Main, public CommonClass {
 	Gtk::ScrolledWindow scrEntryList;
 	Gtk::InfoBar infoReloadRequired;
 	Gtk::Label lblReloadRequired;
+	Gtk::InfoBar infoScriptUpdatesFound;
+	Gtk::Label lblScriptUpdatesFound;
+
 	Gtk::VBox vbEntryList;
 	Gtk::Statusbar statusbar;
 	
-	View_Gtk_Main_List tvConfList;
+	View_Gtk_Element_List<Rule, Proxy> tvConfList;
 	Gtk::ProgressBar progressBar;
+	Gtk::HPaned hpLists;
+	Gtk::Widget* trashList;
 
-	Gtk::ToolButton tbttAdd, tbttRemove, tbttUp, tbttDown, tbttSave, tbttReload, tbttLeft, tbttRight, tbttEditEntry, tbttRevert, tbttCreateEntry;
+	Gtk::ToolButton tbttRemove, tbttUp, tbttDown, tbttSave, tbttReload, tbttLeft, tbttRight, tbttEditEntry, tbttRevert, tbttCreateEntry;
 	Gtk::ToolItem ti_sep1;
 	Gtk::VSeparator vs_sep1;
 	Gtk::ToolItem ti_sep2;
@@ -83,11 +68,11 @@ class View_Gtk_Main : public View_Main, public CommonClass {
 	Gtk::VSeparator vs_sep4;
 	Gtk::SeparatorToolItem ti_sep5;
 	
-	Gtk::MenuItem miFile, miEdit, miView, miHelp, miInstallGrub, miContext;
+	Gtk::MenuItem miFile, miEdit, miView, miHelp, miInstallGrub, miContext, miCAboutEntryTypes, miAboutEntryTypes;
 	Gtk::ImageMenuItem miExit, miSave, miAbout, miModifyEnvironment, miRevert, miCreateEntry;
-	ImageMenuItemOwnKey miReload, miAdd, miRemove, miUp, miDown, miLeft, miRight, miEditEntry;
+	ImageMenuItemOwnKey miReload, miRemove, miUp, miDown, miLeft, miRight, miEditEntry;
 	Gtk::ImageMenuItem miCRemove, miCUp, miCDown, miCLeft, miCRight, miCRename, miCEditEntry;
-	Gtk::CheckMenuItem miShowDetails;
+	Gtk::CheckMenuItem miShowDetails, miShowHiddenEntries, miGroupByScript, miShowPlaceholders;
 	Gtk::Menu subFile, subEdit, subView, subHelp, contextMenu;
 	
 	Gtk::VBox settingsHBox;
@@ -102,19 +87,19 @@ class View_Gtk_Main : public View_Main, public CommonClass {
 	Gtk::HButtonBox bbxAdvancedSettings1, bbxAdvancedSettings2;
 
 
-	Gtk::TreeModel::iterator getIterByRulePtr(void* rulePtr, const Gtk::TreeRow* parentRow = NULL) const;
 	void update_move_buttons();
 	void update_remove_button();
 	void saveConfig();
 	void updateButtonsState();
 	bool selectedEntriesAreOnSameLevel();
 	bool selectedEntriesAreSubsequent();
-	std::list<void*> getSelectedRules();
+	std::list<Rule*> getSelectedRules();
+	void _rDisableRules(Gtk::TreeNodeChildren const& list);
 public:
 	View_Gtk_Main();
-	void setEventListener(MainController& eventListener);
 	void putSettingsDialog(Gtk::VBox& commonSettingsPane, Gtk::VBox& appearanceSettingsPane);
 	void putEnvEditor(Gtk::Widget& envEditor);
+	void putTrashList(Gtk::Widget& trashList);
 	void show();
 	void hide();
 	void run();
@@ -124,20 +109,19 @@ public:
 	bool isVisible();
 	
 	void setIsBurgMode(bool isBurgMode);
-	
+
 	void setLockState(int state);
+	void updateLockState();
 	
 	void setProgress(double progress);
 	void progress_pulse();
 	void hideProgressBar();
 	void setStatusText(std::string const& new_status_text);
 	void setStatusText(std::string const& name, int pos, int max);
-	void appendEntry(std::string const& name, void* entryPtr, bool is_placeholder, bool is_submenu, std::string const& scriptName, std::string const& defaultName, bool isEditable, bool isModified, std::map<std::string, std::string> const& options, void* parentEntry = NULL);
+	void appendEntry(View_Model_ListItem<Rule, Proxy> const& listItem);
 	void showProxyNotFoundMessage();
 	std::string createNewEntriesPlaceholderString(std::string const& parentMenu = "", std::string const& sourceScriptName = "");
 	std::string createPlaintextString(std::string const& scriptName) const;
-	
-	void setDefaultTitleStatusText(std::string const& str);
 	
 	int showExitConfirmDialog(int type);
 	void showErrorMessage(std::string const& msg, std::vector<std::string> const& values);
@@ -145,29 +129,32 @@ public:
 	void clear();
 	bool confirmUnsavedSwitch();
 	
-	std::string getRuleName(void* rule);
-	void setRuleName(void* rule, std::string const& newName);
+	void setRuleName(Rule* rule, std::string const& newName);
 
-	void selectRule(void* rule, bool startEdit = false);
+	void selectRule(Rule* rule, bool startEdit = false);
 
-	void selectRules(std::list<void*> rules);
+	void selectRules(std::list<Rule*> rules);
 
-	void setTrashCounter(int count);
+	void setTrashPaneVisibility(bool value);
 
 	void showReloadRecommendation();
 	void hideReloadRecommendation();
+
+	void showScriptUpdateInfo();
+	void hideScriptUpdateInfo();
 
 	void showPlaintextRemoveWarning();
 	void showSystemRuleRemoveWarning();
 	void setOption(ViewOption option, bool value);
 	std::map<ViewOption, bool> const& getOptions();
 	void setOptions(std::map<ViewOption, bool> const& options);
+	void setEntryVisibility(Rule* entry, bool value);
 private:
 	//event handlers
 	void signal_show_envEditor();
+	void signal_checkbox_toggled(Glib::ustring const& path);
 	void signal_edit_name_finished(const Glib::ustring& path, const Glib::ustring& new_text);
 	void signal_move_click(int direction); //direction: -1: one position up, 1: one p. down
-	void signal_add_click();
 	void signal_remove_click();
 	void signal_rename_click();
 	void signal_reload_click();
@@ -180,16 +167,20 @@ private:
 	bool signal_delete_event(GdkEventAny* event);
 	void signal_quit_click();
 	void signal_preference_click();
+	void signal_entry_type_help_click();
 	void signal_info_click();
 	void signal_burg_switcher_response(int response_id);
 	void signal_edit_name(Gtk::CellEditable* editable, const Glib::ustring& path);
-	void signal_button_press(GdkEventButton *event);
+	bool signal_button_press(GdkEventButton *event);
 	bool signal_popup();
 	void signal_key_press(GdkEventKey* key);
 	void signal_revert();
 	void signal_reload_recommendation_response(int response_id);
 	void signal_tab_changed(GtkNotebookPage* page, guint page_num);
 	void signal_viewopt_details_toggled();
+	void signal_viewopt_checkboxes_toggled();
+	void signal_viewopt_script_toggled();
+	void signal_viewopt_placeholders_toggled();
 };
 
 #endif

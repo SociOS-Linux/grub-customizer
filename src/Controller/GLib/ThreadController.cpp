@@ -27,6 +27,7 @@ GLib_ThreadController::GLib_ThreadController(ControllerCollection& controllers)
 	disp_settings_loaded.connect(sigc::mem_fun(this, &GLib_ThreadController::_execActivateSettings));
 	disp_updateSettingsDlgResolutionList.connect(sigc::mem_fun(this, &GLib_ThreadController::_execResolutionListUpdate));
 	disp_exception.connect(sigc::mem_fun(this, &GLib_ThreadController::_execShowException));
+	disp_postSaveActions.connect(sigc::mem_fun(this, &GLib_ThreadController::_execPostSaveActions));
 }
 
 void GLib_ThreadController::syncEntryList(){
@@ -47,6 +48,21 @@ void GLib_ThreadController::showThreadDiedError() {
 
 void GLib_ThreadController::enableSettings() {
 	this->disp_settings_loaded();
+}
+
+void GLib_ThreadController::startEdit(Rule* rule) {
+	this->_cachedRulePtr = rule;
+
+	Glib::signal_timeout().connect_once(sigc::mem_fun(this, &GLib_ThreadController::_execRuleEdit), 10);
+}
+
+void GLib_ThreadController::startThemeFileEdit(std::string const& fileName) {
+	this->_cachedThemeFileName = fileName;
+	Glib::signal_timeout().connect_once(sigc::mem_fun(this, &GLib_ThreadController::_execThemeFileEdit), 10);
+}
+
+void GLib_ThreadController::doPostSaveActions() {
+	this->disp_postSaveActions();
 }
 
 void GLib_ThreadController::startLoadThread(bool preserveConfig) {
@@ -112,4 +128,19 @@ void GLib_ThreadController::_execInstallGrub(std::string const& device) {
 
 void GLib_ThreadController::_execShowException() {
 	this->_controllers.errorController->errorAction(this->_cachedException);
+}
+
+void GLib_ThreadController::_execRuleEdit() {
+	if (this->_cachedRulePtr != NULL) {
+		this->_controllers.mainController->selectRuleAction(this->_cachedRulePtr, true);
+		this->_cachedRulePtr = NULL;
+	}
+}
+
+void GLib_ThreadController::_execThemeFileEdit() {
+	this->_controllers.themeController->startFileEditAction(this->_cachedThemeFileName);
+}
+
+void GLib_ThreadController::_execPostSaveActions() {
+	this->_controllers.themeController->postSaveAction();
 }

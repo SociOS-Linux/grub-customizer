@@ -23,7 +23,7 @@ void Model_Repository::load(std::string const& directory, bool is_proxifiedScrip
 	if (dir){
 		struct dirent *entry;
 		struct stat fileProperties;
-		while (entry = readdir(dir)){
+		while ((entry = readdir(dir))) {
 			stat((directory+"/"+entry->d_name).c_str(), &fileProperties);
 			if ((fileProperties.st_mode & S_IFMT) != S_IFDIR){ //ignore directories
 				bool scriptAdded = false;
@@ -147,6 +147,23 @@ std::map<std::string, Model_Script*> Model_Repository::getScriptPathMap() {
 		map[iter->fileName] = &*iter;
 	}
 	return map;
+}
+
+void Model_Repository::removeScript(Model_Script const& script) {
+	for (std::list<Model_Script>::iterator scriptIter = this->begin(); scriptIter != this->end(); scriptIter++) {
+		if (&*scriptIter == &script) {
+			this->trash.push_back(*scriptIter);
+			this->erase(scriptIter);
+			return;
+		}
+	}
+}
+
+void Model_Repository::clearTrash() {
+	for (std::list<Model_Script>::iterator scriptIter = this->trash.begin(); scriptIter != this->trash.end(); scriptIter++) {
+		scriptIter->deleteFile();
+	}
+	this->trash.clear();
 }
 
 Model_Repository::operator ArrayStructure() const {

@@ -18,25 +18,11 @@
 
 #include "InstallerControllerImpl.h"
 
-InstallerControllerImpl::InstallerControllerImpl(Model_Env& env)
-	: ControllerAbstract("installer"),
-	  installer(NULL), view(NULL),
-	  env(env),
-	 threadController(NULL)
+InstallerControllerImpl::InstallerControllerImpl()
+	: ControllerAbstract("installer")
 {
 }
 
-
-void InstallerControllerImpl::setInstaller(Model_Installer& installer){
-	this->installer = &installer;
-}
-void InstallerControllerImpl::setView(View_Installer& installDlg){
-	this->view = &installDlg;
-}
-
-void InstallerControllerImpl::setThreadController(ThreadController& threadController) {
-	this->threadController = &threadController;
-}
 
 ThreadController& InstallerControllerImpl::getThreadController() {
 	if (this->threadController == NULL) {
@@ -68,10 +54,10 @@ void InstallerControllerImpl::installGrubAction(std::string device){
 void InstallerControllerImpl::installGrubThreadedAction(std::string device) {
 	this->logActionBeginThreaded("install-grub-threaded");
 	try {
-		this->env.activeThreadCount++;
+		this->env->activeThreadCount++;
 		installer->threadable_install(device);
-		this->env.activeThreadCount--;
-		if (this->env.activeThreadCount == 0 && this->env.quit_requested) {
+		this->env->activeThreadCount--;
+		if (this->env->activeThreadCount == 0 && this->env->quit_requested) {
 			this->getAllControllers().mainController->exitAction(true);
 		}
 	} catch (Exception const& e) {

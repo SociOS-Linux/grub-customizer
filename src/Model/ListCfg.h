@@ -38,36 +38,42 @@
 #include "SettingsManagerData.h"
 #include "Env.h"
 #include "../Controller/MainController.h"
+#include "../Controller/Trait/ControllerAware.h"
 
 #include "../lib/assert.h"
 
 #include "../lib/Mutex.h"
-#include "../lib/CommonClass.h"
+#include "../lib/Trait/LoggerAware.h"
 
 #include "../lib/Exception.h"
 #include "../lib/ArrayStructure.h"
+#include "../lib/trim.h"
+#include "ScriptSourceMap.h"
+#include <stack>
+#include <algorithm>
 
-
-class Model_ListCfg : public CommonClass {
-	MainController* eventListener;
-	
+class Model_ListCfg :
+	public Trait_LoggerAware,
+	public Trait_ControllerAware<MainController>,
+	public Mutex_Connection,
+	public Model_Env_Connection
+{
 	double progress;
 	std::string progress_name;
 	int progress_pos, progress_max;
-	Mutex* mutex;
 	std::string errorLogFile;
+
+	Model_ScriptSourceMap scriptSourceMap;
 public:
-	Model_ListCfg(Model_Env& env);
-	void setEventListener(MainController& eventListener);
-	void setMutex(Mutex& mutex);
+	Model_ListCfg();
 	void setLogger(Logger& logger);
+	void setEnv(Model_Env& env);
 
 	Model_Proxylist proxies;
 	Model_Repository repository;
 	
 	bool verbose;
 	bool error_proxy_not_found;
-	Model_Env& env;
 	void lock();
 	bool lock_if_free();
 	void unlock();
@@ -93,7 +99,7 @@ public:
 	int getProgress_max() const;
 
 	void increaseProxyPos(Model_Proxy* proxy);
-	void renumerate();
+	void renumerate(bool favorDefaultOrder = true);
 	
 	void swapRules(Model_Rule* a, Model_Rule* b);
 	Model_Rule& moveRule(Model_Rule* rule, int direction);
@@ -108,18 +114,41 @@ public:
 	bool compare(Model_ListCfg const& other) const;
 	static std::list<Model_Rule const*> getComparableRules(std::list<Model_Rule> const& list);
 	static bool compareLists(std::list<Model_Rule const*> a, std::list<Model_Rule const*> b);
-	
+
 	void renameRule(Model_Rule* rule, std::string const& newName);
+	std::string getRulePath(Model_Rule& rule);
 	std::string getGrubErrorMessage() const;
 
 	void addColorHelper();
 
-	std::list<Model_Entry*> getRemovedEntries(Model_Entry* parent = NULL);
-	Model_Rule* addEntry(Model_Entry& entry);
+	std::list<Model_Rule> getRemovedEntries(Model_Entry* parent = NULL, bool ignorePlaceholders = false);
+	Model_Rule* addEntry(Model_Entry& entry, bool insertAsOtherEntriesPlaceholder = false);
 
 	void deleteEntry(Model_Entry const& entry);
 
+	std::list<Rule*> getNormalizedRuleOrder(std::list<Rule*> rules);
+
+	std::list<Model_Script*> getProxifiedScripts();
+	void generateScriptSourceMap();
+	void populateScriptSourceMap();
+	bool hasScriptUpdates() const;
+	void applyScriptUpdates();
+
+	void revert();
+
 	operator ArrayStructure() const;
 };
+
+class Model_ListCfg_Connection {
+protected:
+	Model_ListCfg* grublistCfg;
+public:
+	Model_ListCfg_Connection() : grublistCfg(NULL) {}
+
+	void setListCfg(Model_ListCfg& grublistCfg){
+		this->grublistCfg = &grublistCfg;
+	}
+};
+
 
 #endif

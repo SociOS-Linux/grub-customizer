@@ -19,21 +19,12 @@
 #include "ErrorControllerImpl.h"
 #include "ThreadController.h"
 
-ErrorControllerImpl::ErrorControllerImpl(Model_Env& env)
+ErrorControllerImpl::ErrorControllerImpl()
 	: ControllerAbstract("error"),
-	 view(NULL), threadController(NULL),
-	 env(env), applicationStarted(false)
+	  applicationStarted(false)
 {
 }
 
-
-void ErrorControllerImpl::setView(View_Error& aboutDialog){
-	this->view = &aboutDialog;
-}
-
-void ErrorControllerImpl::setThreadController(ThreadController& threadController) {
-	this->threadController = &threadController;
-}
 
 void ErrorControllerImpl::setApplicationStarted(bool val) {
 	this->applicationStarted = val;

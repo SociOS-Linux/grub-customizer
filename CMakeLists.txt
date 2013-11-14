@@ -7,6 +7,7 @@ find_package(PkgConfig)
 pkg_check_modules(GTKMM gtkmm-2.4)
 pkg_check_modules(GTHREAD gthread-2.0)
 pkg_check_modules(OPENSSL openssl)
+pkg_check_modules(LIBARCHIVE libarchive)
 
 if ( LIB_INSTALL_DIR )
 else()
@@ -35,7 +36,7 @@ endif()
 
 
 link_directories(
-    ${GTKMM_LIBRARY_DIRS} ${OPENSSL_LIBRARY_DIRS} )
+    ${GTKMM_LIBRARY_DIRS} ${OPENSSL_LIBRARY_DIRS} ${LIBARCHIVE_LIBRARY_DIRS} )
 
 include_directories(
     ${GTKMM_INCLUDE_DIRS}  )
@@ -72,7 +73,6 @@ add_executable(grub-customizer
 	src/lib/ContentParser/Abstract.cpp
 	src/lib/Mutex/GLib.cpp
 	src/Controller/GLib/ThreadController.cpp
-	src/lib/CommonClass.cpp
 	src/lib/Logger/Stream.cpp
 	src/lib/regex.cpp
 	src/View/Gtk/Element/PartitionChooser.cpp
@@ -93,9 +93,19 @@ add_executable(grub-customizer
 	src/Controller/InstallerControllerImpl.cpp
 	src/Controller/AboutControllerImpl.cpp
 	src/Controller/ErrorControllerImpl.cpp
+	src/Controller/ThemeControllerImpl.cpp
 	src/lib/Exception.cpp
 	src/lib/assert.cpp
 	src/lib/ArrayStructure.cpp
+	src/lib/trim.cpp
+	src/Controller/Helper/DeviceInfo.cpp
+	src/lib/csv.cpp
+	src/Model/ScriptSourceMap.cpp
+	src/View/Gtk/Theme.cpp
+	src/Model/ThemeFile.cpp
+	src/Model/Theme.cpp
+	src/Model/ThemeManager.cpp
+	src/lib/FileSystem.cpp
 )
 
 
@@ -105,7 +115,6 @@ add_executable(grubcfg-proxy
 	src/Model/Script.cpp
 	src/Model/Proxy.cpp
 	src/main/proxy.cpp
-	src/lib/CommonClass.cpp
 	src/lib/md5.cpp
 	src/lib/str_replace.cpp
 	# multi:
@@ -121,10 +130,14 @@ add_executable(grubcfg-proxy
 	src/lib/Exception.cpp
 	src/lib/assert.cpp
 	src/lib/ArrayStructure.cpp
+	src/lib/trim.cpp
+	src/Model/ScriptSourceMap.cpp
+	src/lib/csv.cpp
+	src/lib/FileSystem.cpp
 )
 
 target_link_libraries(grub-customizer 
-    ${GTKMM_LIBRARIES} ${GTHREAD_LIBRARIES} ${OPENSSL_LIBRARIES})
+    ${GTKMM_LIBRARIES} ${GTHREAD_LIBRARIES} ${OPENSSL_LIBRARIES} ${LIBARCHIVE_LIBRARIES})
 
 target_link_libraries(grubcfg-proxy 
     ${OPENSSL_LIBRARIES})
@@ -269,6 +282,14 @@ install(FILES translation/translation-eu.mo
 	DESTINATION share/locale/eu/LC_MESSAGES/
 	RENAME grub-customizer.mo)
 
+install(FILES translation/translation-en_GB.mo
+	DESTINATION share/locale/en_GB/LC_MESSAGES/
+	RENAME grub-customizer.mo)
+
+install(FILES translation/translation-ja_GB.mo
+	DESTINATION share/locale/ja/LC_MESSAGES/
+	RENAME grub-customizer.mo)
+
 install(FILES misc/grub-customizer.desktop
 	DESTINATION /usr/share/applications
 )
@@ -292,4 +313,3 @@ configure_file(
 
 add_custom_target(uninstall
     COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
-

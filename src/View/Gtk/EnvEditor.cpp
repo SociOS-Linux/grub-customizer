@@ -19,7 +19,7 @@
 #include "EnvEditor.h"
 
 View_Gtk_EnvEditor::View_Gtk_EnvEditor()
-	: eventListener(NULL), pChooser(NULL), lblPartition(gettext("_Partition:"), true), deviceDataList(NULL),
+	: pChooser(NULL), lblPartition(gettext("_Partition:"), true),
 	  lblType(gettext("_Type:"), true), eventLock(true), lblSubmountpoints(gettext("Submountpoints:")),
 	  cbSaveConfig(gettext("save this configuration"))
 {
@@ -76,14 +76,6 @@ View_Gtk_EnvEditor::~View_Gtk_EnvEditor() {
 		delete this->pChooser;
 		this->pChooser = NULL;
 	}
-}
-
-void View_Gtk_EnvEditor::setEventListener(EnvEditorController& eventListener) {
-	this->eventListener = &eventListener;
-}
-
-void View_Gtk_EnvEditor::setDeviceDataList(Model_DeviceDataListInterface& deviceDataList) {
-	this->deviceDataList = &deviceDataList;
 }
 
 void View_Gtk_EnvEditor::setRootDeviceName(std::string const& rootDeviceName) {
@@ -234,36 +226,36 @@ void View_Gtk_EnvEditor::signal_partitionChanged() {
 		if (selectedUuid != "") {
 			selectedUuid = "UUID=" + selectedUuid;
 		}
-		this->eventListener->switchPartitionAction(selectedUuid);
+		this->controller->switchPartitionAction(selectedUuid);
 	}
 }
 
 void View_Gtk_EnvEditor::signal_bootloaderType_changed() {
 	if (!this->eventLock) {
-		this->eventListener->switchBootloaderTypeAction(this->cbType.get_active_row_number());
+		this->controller->switchBootloaderTypeAction(this->cbType.get_active_row_number());
 	}
 }
 
 void View_Gtk_EnvEditor::signal_optionModified() {
 	if (!this->eventLock) {
-		this->eventListener->updateGrubEnvOptionsAction();
+		this->controller->updateGrubEnvOptionsAction();
 	}
 }
 
 void View_Gtk_EnvEditor::signal_response_action(int response_id) {
 	if (response_id == Gtk::RESPONSE_CLOSE || response_id == Gtk::RESPONSE_DELETE_EVENT) {
-		this->eventListener->exitAction();
+		this->controller->exitAction();
 	} else if (response_id == Gtk::RESPONSE_APPLY) {
-		this->eventListener->applyAction(this->cbSaveConfig.get_active());
+		this->controller->applyAction(this->cbSaveConfig.get_active());
 	}
 }
 
 void View_Gtk_EnvEditor::signal_submountpointToggled(Gtk::CheckButton& sender) {
 	if (!eventLock) {
 		if (sender.get_active()) {
-			this->eventListener->mountSubmountpointAction(sender.get_label());
+			this->controller->mountSubmountpointAction(sender.get_label());
 		} else {
-			this->eventListener->umountSubmountpointAction(sender.get_label());
+			this->controller->umountSubmountpointAction(sender.get_label());
 		}
 	}
 }

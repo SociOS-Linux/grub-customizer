@@ -14,8 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-09-10 18:16+0000\n"
-"X-Generator: Launchpad (build 15924)\n"
+"X-Launchpad-Export-Date: 2013-11-13 17:48+0000\n"
+"X-Generator: Launchpad (build 16820)\n"
 
 #: ../src/Controller/MainControllerImpl.cpp:533
 msgid "Name the Entry"
@@ -27,7 +27,7 @@ msgstr "Nun pue ximelgase esta entrada"
 
 #: ../src/Controller/MainControllerImpl.cpp:727
 msgid "Configuration has been saved"
-msgstr "Los axustes foron atroxaos"
+msgstr "Guardáronse los axustes"
 
 #: ../src/Controller/MainControllerImpl.cpp:732
 msgid "updating configuration"
@@ -126,15 +126,15 @@ msgstr ""
 
 #: ../src/View/Gtk/EnvEditor.cpp:216
 msgid "Mount failed!"
-msgstr "¡Montax fallicu!"
+msgstr "¡Montaxe fallíu!"
 
 #: ../src/View/Gtk/EnvEditor.cpp:217
 msgid "umount failed!"
-msgstr "¡Desmotax fallicu!"
+msgstr "¡Desmontaxe fallíu!"
 
 #: ../src/View/Gtk/EnvEditor.cpp:218
 msgid "This seems not to be a root file system (no fstab found)"
-msgstr "Esto nun paez ser un sistema d'archivos (fstab nun atopáu)"
+msgstr "Esto nun paez ser un sistema de ficheros (fstab non atopáu)"
 
 #: ../src/View/Gtk/EnvEditor.cpp:219
 msgid "Couldn't mount the selected partition"
@@ -164,8 +164,8 @@ msgid ""
 "files to the bootloaders data directory\n"
 "(if they don't already exist)."
 msgstr ""
-"Allugar el bootloader a MBR ya poner dalgunos\n"
-"archivos a los cartafueyos los bootloaders\n"
+"Instalar el bootloader a MBR y poner dalgunos\n"
+"ficheros nel direutoriu de datos de bootloaders\n"
 "(si nun esisten yá)."
 
 #: ../src/View/Gtk/Installer.cpp:23
@@ -174,19 +174,19 @@ msgstr "_Preséu: "
 
 #: ../src/View/Gtk/Installer.cpp:33
 msgid "Install to MBR"
-msgstr "Allugar a MBR"
+msgstr "Instalar a MBR"
 
 #: ../src/View/Gtk/Installer.cpp:50
 msgid "The bootloader has been installed successfully"
-msgstr "El bootloader foi allugáu"
+msgstr "El bootloader instalóse correutamente"
 
 #: ../src/View/Gtk/Installer.cpp:55
 msgid "Error while installing the bootloader"
-msgstr "Erru entrín s'allugaba'l bootloader"
+msgstr "Fallu mientres s'instalaba'l bootloader"
 
 #: ../src/View/Gtk/Installer.cpp:71
 msgid "installing the bootloader…"
-msgstr "allugando'l bootloader"
+msgstr "instalando'l bootloader"
 
 #: ../src/View/Gtk/Installer.cpp:76
 msgid "Please type a device string!"
@@ -198,19 +198,19 @@ msgstr "_Ficheru"
 
 #: ../src/View/Gtk/Main.cpp:31
 msgid "_Edit"
-msgstr "_Remanar"
+msgstr "_Editar"
 
 #: ../src/View/Gtk/Main.cpp:31
 msgid "_View"
-msgstr "_Güeyar"
+msgstr "_Ver"
 
 #: ../src/View/Gtk/Main.cpp:31
 msgid "_Help"
-msgstr "_Aida"
+msgstr "_Ayuda"
 
 #: ../src/View/Gtk/Main.cpp:32
 msgid "_Install to MBR …"
-msgstr "_Allugar a MBR..."
+msgstr "_Instalar a MBR..."
 
 #: ../src/View/Gtk/Main.cpp:41
 msgid "BURG found!"
@@ -295,7 +295,7 @@ msgstr ""
 
 #: ../src/View/Gtk/Main.cpp:184
 msgid "Do you want to configure BURG instead of grub2?"
-msgstr "¿Quiés configurar BURG en cuentes de grub2?"
+msgstr "¿Quies configurar BURG en cuentes de grub2?"
 
 #: ../src/View/Gtk/Main.cpp:248
 msgid "_General settings"
@@ -311,7 +311,7 @@ msgstr "Mou BURG"
 
 #: ../src/View/Gtk/Main.cpp:270
 msgid "Save configuration and generate a new "
-msgstr "Atroxar axustes ya xenerar unu nuevu "
+msgstr "Guardar axustes y xenerar ún nuevu "
 
 #: ../src/View/Gtk/Main.cpp:291
 msgid "Are you sure?"
@@ -355,15 +355,16 @@ msgstr ""
 
 #: ../src/View/Gtk/Main.cpp:415
 msgid "Proxy binary not found!"
-msgstr "¡Proxy binariu nun atopáu!"
+msgstr "¡Proxy binariu non atopáu!"
 
 #: ../src/View/Gtk/Main.cpp:416
 msgid ""
 "You will see all entries (uncustomized) when you run grub. This error accurs "
 "(in most cases), when you didn't install grub gustomizer currectly."
 msgstr ""
-"Güeyarás toles entraes (non customizaes) cuando anicies Grub. Esti erru sal "
-"(na meyoría casos), cuando nun allugasti Grub Customizer correutamente"
+"Vas ver toles entraes (non personalizaes) cuando anicies Grub. Esti fallu "
+"sal (na mayoría de los casos), cuando nun instalaste Grub Customizer "
+"correutamente."
 
 #: ../src/View/Gtk/Main.cpp:422
 msgid "(incoming Entries of %1, Script: %2)"
@@ -409,11 +410,11 @@ msgstr ""
 
 #: ../src/View/Gtk/Main.cpp:686
 msgid "Default title: "
-msgstr "Títulu per defeutu: "
+msgstr "Títulu por defeutu: "
 
 #: ../src/View/Gtk/Main.cpp:779
 msgid "The saved configuration is not up to date!"
-msgstr "¡La configuración atroxada nun ta anovada!"
+msgstr "¡La configuración guardada nun ta anovada!"
 
 #: ../src/View/Gtk/Main.cpp:780
 msgid ""
@@ -421,34 +422,35 @@ msgid ""
 "startup. So what you see now may not be what you see when you restart your "
 "pc. To fix this, click update!"
 msgstr ""
-"Los axustes xeneraos nun tan iguaos a los atroxaos nel aniciu. Asina que lo "
-"que güeyes agora nun sedrá lo mesmo cuando reanicies el PC. Pa esclariar "
+"Los axustes xeneraos nun son iguales a los guardaos nel aniciu. Asina que lo "
+"que güeyes agora nun va ser lo mesmo cuando reanicies el PC. Pa esclariar "
 "esti problema, ¡Primi n'anovar!"
 
 #: ../src/View/Gtk/Main.cpp:783
 msgid "_Quit without update"
-msgstr "_Colar ensín anovar"
+msgstr "_Colar ensin anovar"
 
 #: ../src/View/Gtk/Main.cpp:786
 msgid "_Update & Quit"
-msgstr "_Anovar ya Colar"
+msgstr "_Anovar y Colar"
 
 #: ../src/View/Gtk/Main.cpp:790
 msgid "Do you want to save your modifications?"
-msgstr "¿Quiés atroxar los tos cambeos?"
+msgstr "¿Quies guardar los tos cambeos?"
 
 #: ../src/View/Gtk/Main.cpp:793
 msgid "_Quit without saving"
-msgstr "_Colar ensín atroxar"
+msgstr "_Colar ensin guardar"
 
 #: ../src/View/Gtk/Main.cpp:796
 msgid "_Save & Quit"
-msgstr "_Atoldar a Colar"
+msgstr "_Guardar y Quitar"
 
 #: ../src/View/Gtk/Main.cpp:799
 msgid "AND: your modifications are still unsaved, update will save them too!"
 msgstr ""
-"YA: Les tos camudancies nun tan atoldaes enaina, ¡anovar atroxaralos tamién!"
+"Y: Les tos modificaciones entá nun se guardaron. Al anovar van guardase "
+"tamién!"
 
 #: ../src/View/Gtk/Main.cpp:852
 msgid ""
@@ -480,7 +482,7 @@ msgstr "mariellu"
 
 #: ../src/View/Gtk/Settings.cpp:82
 msgid "light-cyan"
-msgstr "cian claro"
+msgstr "cian claru"
 
 #: ../src/View/Gtk/Settings.cpp:83
 msgid "cyan"
@@ -488,7 +490,7 @@ msgstr "cian"
 
 #: ../src/View/Gtk/Settings.cpp:84
 msgid "light-blue"
-msgstr "azul claro"
+msgstr "azul claru"
 
 #: ../src/View/Gtk/Settings.cpp:85
 msgid "blue"
@@ -496,7 +498,7 @@ msgstr "azul"
 
 #: ../src/View/Gtk/Settings.cpp:86
 msgid "light-green"
-msgstr "verde claro"
+msgstr "verde claru"
 
 #: ../src/View/Gtk/Settings.cpp:87
 msgid "green"
@@ -504,7 +506,7 @@ msgstr "verde"
 
 #: ../src/View/Gtk/Settings.cpp:88
 msgid "light-magenta"
-msgstr "maxenta claro"
+msgstr "maxenta claru"
 
 #: ../src/View/Gtk/Settings.cpp:89
 msgid "magenta"
@@ -512,7 +514,7 @@ msgstr "maxenta"
 
 #: ../src/View/Gtk/Settings.cpp:90
 msgid "light-red"
-msgstr "bermeyu claro"
+msgstr "bermeyu claru"
 
 #: ../src/View/Gtk/Settings.cpp:91
 msgid "red"
@@ -524,11 +526,11 @@ msgstr "castañu"
 
 #: ../src/View/Gtk/Settings.cpp:93
 msgid "light-gray"
-msgstr "grai claro"
+msgstr "buxu claru"
 
 #: ../src/View/Gtk/Settings.cpp:94
 msgid "dark-gray"
-msgstr "grai escuro"
+msgstr "buxu escuru"
 
 #: ../src/View/Gtk/Settings.cpp:95
 msgid "transparent"
@@ -548,7 +550,7 @@ msgstr "Entrada aniciada _postreramente"
 
 #: ../src/View/Gtk/Settings.cpp:108
 msgid "default entry"
-msgstr "entrada per defeutu"
+msgstr "entrada por defeutu"
 
 #: ../src/View/Gtk/Settings.cpp:108
 msgid "visibility"
@@ -560,7 +562,7 @@ msgstr "amosar menú"
 
 #: ../src/View/Gtk/Settings.cpp:109
 msgid "Timeout"
-msgstr "Tiempu llímite"
+msgstr "Tiempu escosáu"
 
 #: ../src/View/Gtk/Settings.cpp:109
 msgid "Seconds"
@@ -568,7 +570,7 @@ msgstr "Segundos"
 
 #: ../src/View/Gtk/Settings.cpp:109
 msgid "kernel parameters"
-msgstr "Parametros kernel"
+msgstr "Parámetros kernel"
 
 #: ../src/View/Gtk/Settings.cpp:110
 msgid "generate recovery entries"
@@ -576,11 +578,11 @@ msgstr "xenerar entraes recuperaes"
 
 #: ../src/View/Gtk/Settings.cpp:110
 msgid "look for other operating systems"
-msgstr "restolar per otros sistemas"
+msgstr "restolar por otros sistemes"
 
 #: ../src/View/Gtk/Settings.cpp:111
 msgid "custom resolution: "
-msgstr "otra resolución: "
+msgstr "resolución personalizada: "
 
 #: ../src/View/Gtk/Settings.cpp:112
 msgid "font color"
@@ -596,7 +598,7 @@ msgstr "normal:"
 
 #: ../src/View/Gtk/Settings.cpp:113
 msgid "highlight:"
-msgstr "señalar:"
+msgstr "resaltar:"
 
 #: ../src/View/Gtk/Settings.cpp:114
 msgid "menu colors"
@@ -611,7 +613,7 @@ msgid ""
 "To get the colors above working,\n"
 "you have to select a background image!"
 msgstr ""
-"¡Pa consiguir colores enriba que trabayen\n"
+"¡Pa consiguir colores esbillaos enriba\n"
 "tienes qu'esbillar una semeya de fondu!"
 
 #: ../src/View/Gtk/Settings.cpp:119
@@ -632,15 +634,15 @@ msgstr "_Avanzao"
 
 #: ../src/View/Gtk/Settings.cpp:138
 msgid "is active"
-msgstr "Ta activu"
+msgstr "ta activu"
 
 #: ../src/View/Gtk/Settings.cpp:139
 msgid "name"
-msgstr "viesu"
+msgstr "nome"
 
 #: ../src/View/Gtk/Settings.cpp:140
 msgid "value"
-msgstr "Valor"
+msgstr "valor"
 
 #: ../src/View/Gtk/Settings.cpp:245
 msgid "remove font"
@@ -648,11 +650,11 @@ msgstr "esniciar fonte"
 
 #: ../src/View/Gtk/Settings.cpp:269
 msgid "remove background"
-msgstr "esniciar fondu"
+msgstr "desaniciar fondu"
 
 #: ../src/View/Gtk/Settings.cpp:340
 msgid "Entry %1 (by position)"
-msgstr "Entrada %1 (per posición)"
+msgstr "Entrada %1 (por posición)"
 
 #: ../src/View/Gtk/Settings.cpp:642
 msgid ""
@@ -660,7 +662,7 @@ msgid ""
 "systems. Disable \"%1\" if you don't need to boot other operating systems."
 msgstr ""
 "Esta opción nun furrula cuando'l script \"os-prober\" atopa otros sistemes. "
-"Desanicia \"%1\" si necesites aniciar otros sistemes."
+"Desactiva \"%1\" si nun necesites aniciar otros sistemes."
 
 #: ../src/View/Gtk/Trash.cpp:22
 msgid "Add entry from trash"

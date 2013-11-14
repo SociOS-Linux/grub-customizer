@@ -28,8 +28,9 @@
 #include "../lib/Exception.h"
 #include "../lib/ArrayStructure.h"
 #include "ProxyScriptData.h"
+#include "../lib/Type.h"
 
-struct Model_Proxy {
+struct Model_Proxy : public Proxy {
 	std::list<Model_Rule> rules;
 	int index;
 	short int permissions;
@@ -70,7 +71,10 @@ struct Model_Proxy {
 	std::list<Model_Rule>& getRuleList(Model_Rule* parentElement);
 	bool hasVisibleRules(Model_Rule const* parent = NULL) const;
 	Model_Rule* getVisibleRuleForEntry(Model_Entry const& entry, Model_Rule* parent = NULL);
+	std::list<Model_Rule*> getVisibleRulesByType(Model_Rule::RuleType type, Model_Rule* parent = NULL);
 	operator ArrayStructure() const;
+	static Model_Proxy& fromPtr(Proxy* proxy);
+	static Model_Proxy const& fromPtr(Proxy const* proxy);
 private:
 	static void adjustIterator(std::list<Model_Rule>::iterator& iter, int adjustment);
 };

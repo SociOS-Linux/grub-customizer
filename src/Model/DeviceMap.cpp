@@ -18,15 +18,43 @@
 
 #include "DeviceMap.h"
 
-Model_DeviceMap::Model_DeviceMap(Model_Env const& env) {
-	this->env = &env;
-}
 Model_SmartFileHandle Model_DeviceMap::getFileHandle() const {
 	Model_SmartFileHandle result;
 	try {
 		result.open(env->devicemap_file, "r", Model_SmartFileHandle::TYPE_FILE);
 	} catch (FileReadException const& e) {
-		result.open(env->mkdevicemap_cmd, "r", Model_SmartFileHandle::TYPE_COMMAND);
+		if (env->check_cmd(env->mkdevicemap_cmd, env->cmd_prefix)) {
+			result.open(env->mkdevicemap_cmd, "r", Model_SmartFileHandle::TYPE_COMMAND);
+		} else {
+			std::string staticMap = std::string() +
+								 + "(hd0)\t/dev/sda\n"
+								 + "(hd1)\t/dev/sdb\n"
+								 + "(hd2)\t/dev/sdc\n"
+								 + "(hd3)\t/dev/sdd\n"
+								 + "(hd4)\t/dev/sde\n"
+								 + "(hd5)\t/dev/sdf\n"
+								 + "(hd6)\t/dev/sdg\n"
+								 + "(hd7)\t/dev/sdh\n"
+								 + "(hd8)\t/dev/sdi\n"
+								 + "(hd9)\t/dev/sdj\n"
+								 + "(hd10)\t/dev/sdk\n"
+								 + "(hd11)\t/dev/sdl\n"
+								 + "(hd12)\t/dev/sdm\n"
+								 + "(hd13)\t/dev/sdn\n"
+								 + "(hd14)\t/dev/sdo\n"
+								 + "(hd15)\t/dev/sdp\n"
+								 + "(hd16)\t/dev/sdq\n"
+								 + "(hd17)\t/dev/sdr\n"
+								 + "(hd18)\t/dev/sds\n"
+								 + "(hd19)\t/dev/sdt\n"
+								 + "(hd20)\t/dev/sdu\n"
+								 + "(hd21)\t/dev/sdv\n"
+								 + "(hd22)\t/dev/sdw\n"
+								 + "(hd23)\t/dev/sdx\n"
+								 + "(hd24)\t/dev/sdy\n"
+								 + "(hd25)\t/dev/sdz\n";
+			result.open(staticMap, "r", Model_SmartFileHandle::TYPE_STRING);
+		}
 	}
 	return result;
 }
@@ -60,7 +88,7 @@ Model_DeviceMap_PartitionIndex Model_DeviceMap::getHarddriveIndexByPartitionUuid
 	try {
 		while (result.hddNum == "") {
 			std::string row = handle.getRow();
-			std::vector<std::string> rowMatch = Regex::match("^\\(hd([0-9]+)\\)\t(.*)$", row);
+			std::vector<std::string> rowMatch = Regex::match("^\\(hd([0-9]+)\\)[\t ]*(.*)$", row);
 			if (row.find(diskDevice) != -1) {
 				result.hddNum = rowMatch[1];
 				break;
@@ -78,4 +106,8 @@ Model_DeviceMap_PartitionIndex Model_DeviceMap::getHarddriveIndexByPartitionUuid
 
 	this->_cache[partitionUuid] = result;
 	return result;
+}
+
+void Model_DeviceMap::clearCache() {
+	this->_cache.clear();
 }

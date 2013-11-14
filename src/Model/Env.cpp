@@ -150,6 +150,9 @@ void Model_Env::saveViewOptions(std::map<ViewOption, bool> const& options) {
 		std::string optionText = "";
 		switch (iter->first) {
 		case VIEW_SHOW_DETAILS: optionText = "SHOW_DETAILS"; break;
+		case VIEW_SHOW_HIDDEN_ENTRIES: optionText = "SHOW_HIDDEN_ENTRIES"; break;
+		case VIEW_GROUP_BY_SCRIPT: optionText = "GROUP_BY_SCRIPT"; break;
+		case VIEW_SHOW_PLACEHOLDERS: optionText = "SHOW_PLACEHOLDERS"; break;
 		default: throw LogicException("option mapping failed");
 		}
 		ds.setValue(optionText, iter->second ? "true" : "false");
@@ -167,6 +170,23 @@ std::map<ViewOption, bool> Model_Env::loadViewOptions() {
 	std::map<ViewOption, bool> result;
 	if (ds.getValue("SHOW_DETAILS") != "") {
 		result[VIEW_SHOW_DETAILS] = ds.getValue("SHOW_DETAILS") == "true";
+	} else {
+		result[VIEW_SHOW_DETAILS] = true;
+	}
+	if (ds.getValue("SHOW_HIDDEN_ENTRIES") != "") {
+		result[VIEW_SHOW_HIDDEN_ENTRIES] = ds.getValue("SHOW_HIDDEN_ENTRIES") == "true";
+	} else {
+		result[VIEW_SHOW_HIDDEN_ENTRIES] = false;
+	}
+	if (ds.getValue("GROUP_BY_SCRIPT") != "") {
+		result[VIEW_GROUP_BY_SCRIPT] = ds.getValue("GROUP_BY_SCRIPT") == "true";
+	} else {
+		result[VIEW_GROUP_BY_SCRIPT] = false;
+	}
+	if (ds.getValue("SHOW_PLACEHOLDERS") != "") {
+		result[VIEW_SHOW_PLACEHOLDERS] = ds.getValue("SHOW_PLACEHOLDERS") == "true";
+	} else {
+		result[VIEW_SHOW_PLACEHOLDERS] = false;
 	}
 	return result;
 }
@@ -174,7 +194,6 @@ std::map<ViewOption, bool> Model_Env::loadViewOptions() {
 std::map<std::string, std::string> Model_Env::getProperties() {
 	std::map<std::string, std::string> result;
 	result["MKCONFIG_CMD"] = this->mkconfig_cmd.substr(this->cmd_prefix.size());
-	result["UPDATE_CMD"] = this->update_cmd.substr(this->cmd_prefix.size());
 	result["INSTALL_CMD"] = this->install_cmd.substr(this->cmd_prefix.size());
 	result["MKFONT_CMD"] = this->mkfont_cmd.substr(this->cmd_prefix.size());
 	result["MKDEVICEMAP_CMD"] = this->mkdevicemap_cmd.substr(this->cmd_prefix.size());
@@ -189,7 +208,6 @@ std::map<std::string, std::string> Model_Env::getProperties() {
 
 void Model_Env::setProperties(std::map<std::string, std::string> const& props) {
 	this->mkconfig_cmd = this->cmd_prefix + props.at("MKCONFIG_CMD");
-	this->update_cmd = this->cmd_prefix + props.at("UPDATE_CMD");
 	this->install_cmd = this->cmd_prefix + props.at("INSTALL_CMD");
 	this->mkfont_cmd = this->cmd_prefix + props.at("MKFONT_CMD");
 	this->mkdevicemap_cmd = this->cmd_prefix + props.at("MKDEVICEMAP_CMD");
@@ -204,7 +222,6 @@ void Model_Env::setProperties(std::map<std::string, std::string> const& props) {
 std::list<std::string> Model_Env::getRequiredProperties() {
 	std::list<std::string> result;
 	result.push_back("MKCONFIG_CMD");
-	result.push_back("UPDATE_CMD");
 	result.push_back("INSTALL_CMD");
 	result.push_back("CFG_DIR");
 	return result;
@@ -214,9 +231,6 @@ std::list<std::string> Model_Env::getValidProperties() {
 	std::list<std::string> result;
 	if (this->check_cmd(this->mkconfig_cmd.substr(this->cmd_prefix.size()), this->cmd_prefix)) {
 		result.push_back("MKCONFIG_CMD");
-	}
-	if (this->check_cmd(this->update_cmd.substr(this->cmd_prefix.size()), this->cmd_prefix)) {
-		result.push_back("UPDATE_CMD");
 	}
 	if (this->check_cmd(this->install_cmd.substr(this->cmd_prefix.size()), this->cmd_prefix)) {
 		result.push_back("INSTALL_CMD");
@@ -310,6 +324,36 @@ std::list<Model_Env::Mode> Model_Env::getAvailableModes(){
 	return result;
 }
 
+void Model_Env::createBackup() {
+	std::string backupDir = this->cfg_dir + "/backup";
+	DIR* dirChk = opendir(backupDir.c_str());
+	if (dirChk) {
+		// if backup already exists - dont't create or update. Should only contain the initial config.
+		closedir(dirChk);
+	} else {
+		mkdir(backupDir.c_str(), 0755);
+
+		std::list<std::string> ignoreList;
+		ignoreList.push_back(backupDir);
+
+		FileSystem fileSystem;
+		fileSystem.copy(this->cfg_dir, backupDir + "/etc_grub_d", true, ignoreList);
+		fileSystem.copy(this->output_config_dir, backupDir + "/boot_grub", true, ignoreList);
+		fileSystem.copy(this->settings_file, backupDir + "/default_grub", true, ignoreList);
+
+		FILE* restoreHowto = fopen((backupDir + "/RESTORE_INSTRUCTIONS").c_str(), "w");
+		fputs("How to restore this backup\n", restoreHowto);
+		fputs("--------------------------\n", restoreHowto);
+		fputs(" * make sure you have root permissions (`gksu nautilus` or `sudo -s` on command line) otherwise you won't be able to copy the files\n", restoreHowto);
+		fputs(" * to fix an unbootable configuration, just copy:\n", restoreHowto);
+		fputs(("     * '" + backupDir + "/boot_grub' to '" + this->output_config_dir + "'\n").c_str(), restoreHowto);
+		fputs(" * to reset the whole configuration (if it cannot be fixed by using grub customizer), also copy these files:\n", restoreHowto);
+		fputs(("     * '" + backupDir + "/etc_grub_d' to '" + this->cfg_dir + "'\n").c_str(), restoreHowto);
+		fputs(("     * '" + backupDir + "/default_grub' to '" + this->settings_file + "'\n").c_str(), restoreHowto);
+		fclose(restoreHowto);
+	}
+}
+
 Model_Env::operator ArrayStructure() {
 	ArrayStructure result;
 	result["cfg_dir"] = this->cfg_dir;
@@ -317,7 +361,6 @@ Model_Env::operator ArrayStructure() {
 	result["mkconfig_cmd"] = this->mkconfig_cmd;
 	result["mkfont_cmd"] = this->mkfont_cmd;
 	result["cfg_dir_prefix"] = this->cfg_dir_prefix;
-	result["update_cmd"] = this->update_cmd;
 	result["install_cmd"] = this->install_cmd;
 	result["output_config_file"] = this->output_config_file;
 	result["output_config_dir"] = this->output_config_dir;

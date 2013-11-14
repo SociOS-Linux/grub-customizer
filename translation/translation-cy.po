@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-08-30 22:28+0200\n"
-"PO-Revision-Date: 2012-09-03 17:04+0000\n"
+"PO-Revision-Date: 2012-09-19 01:18+0000\n"
 "Last-Translator: David Jones <Unknown>\n"
 "Language-Team: Welsh <cy@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-09-10 18:16+0000\n"
-"X-Generator: Launchpad (build 15924)\n"
+"X-Launchpad-Export-Date: 2013-11-13 17:48+0000\n"
+"X-Generator: Launchpad (build 16820)\n"
 
 #: ../src/Controller/MainControllerImpl.cpp:533
 msgid "Name the Entry"
@@ -64,7 +64,7 @@ msgstr ""
 
 #: ../src/View/Gtk/EntryEditor.cpp:34
 msgid "Options"
-msgstr ""
+msgstr "Dewisiadau"
 
 #: ../src/View/Gtk/EntryEditor.cpp:35
 msgid "Source"
@@ -418,11 +418,11 @@ msgstr ""
 
 #: ../src/View/Gtk/Main.cpp:783
 msgid "_Quit without update"
-msgstr ""
+msgstr "Cadael heb ddiweddaru"
 
 #: ../src/View/Gtk/Main.cpp:786
 msgid "_Update & Quit"
-msgstr ""
+msgstr "Diwedd a gadael"
 
 #: ../src/View/Gtk/Main.cpp:790
 msgid "Do you want to save your modifications?"
@@ -434,7 +434,7 @@ msgstr "Gadael heb gadw"
 
 #: ../src/View/Gtk/Main.cpp:796
 msgid "_Save & Quit"
-msgstr ""
+msgstr "Cadw a gadael"
 
 #: ../src/View/Gtk/Main.cpp:799
 msgid "AND: your modifications are still unsaved, update will save them too!"
@@ -472,7 +472,7 @@ msgstr ""
 
 #: ../src/View/Gtk/Settings.cpp:83
 msgid "cyan"
-msgstr ""
+msgstr "gwyrddlas"
 
 #: ../src/View/Gtk/Settings.cpp:84
 msgid "light-blue"
@@ -496,7 +496,7 @@ msgstr ""
 
 #: ../src/View/Gtk/Settings.cpp:89
 msgid "magenta"
-msgstr ""
+msgstr "magenta"
 
 #: ../src/View/Gtk/Settings.cpp:90
 msgid "light-red"
@@ -508,7 +508,7 @@ msgstr "coch"
 
 #: ../src/View/Gtk/Settings.cpp:92
 msgid "brown"
-msgstr ""
+msgstr "brown"
 
 #: ../src/View/Gtk/Settings.cpp:93
 msgid "light-gray"
@@ -520,7 +520,7 @@ msgstr ""
 
 #: ../src/View/Gtk/Settings.cpp:95
 msgid "transparent"
-msgstr ""
+msgstr "tryloyw"
 
 #: ../src/View/Gtk/Settings.cpp:95
 msgid "black"
@@ -540,7 +540,7 @@ msgstr ""
 
 #: ../src/View/Gtk/Settings.cpp:108
 msgid "visibility"
-msgstr ""
+msgstr "gwelededd"
 
 #: ../src/View/Gtk/Settings.cpp:108
 msgid "show menu"
@@ -576,7 +576,7 @@ msgstr ""
 
 #: ../src/View/Gtk/Settings.cpp:112
 msgid "background"
-msgstr ""
+msgstr "cefndir"
 
 #: ../src/View/Gtk/Settings.cpp:113
 msgid "normal:"
@@ -584,7 +584,7 @@ msgstr ""
 
 #: ../src/View/Gtk/Settings.cpp:113
 msgid "highlight:"
-msgstr ""
+msgstr "amlygu:"
 
 #: ../src/View/Gtk/Settings.cpp:114
 msgid "menu colors"
@@ -592,7 +592,7 @@ msgstr ""
 
 #: ../src/View/Gtk/Settings.cpp:114
 msgid "background image"
-msgstr ""
+msgstr "llun cefndir"
 
 #: ../src/View/Gtk/Settings.cpp:116
 msgid ""
@@ -602,7 +602,7 @@ msgstr ""
 
 #: ../src/View/Gtk/Settings.cpp:119
 msgid "settings"
-msgstr ""
+msgstr "gosodiadau"
 
 #: ../src/View/Gtk/Settings.cpp:123
 msgid "_General"
@@ -614,7 +614,7 @@ msgstr ""
 
 #: ../src/View/Gtk/Settings.cpp:125
 msgid "_Advanced"
-msgstr ""
+msgstr "Uwch"
 
 #: ../src/View/Gtk/Settings.cpp:138
 msgid "is active"
@@ -634,7 +634,7 @@ msgstr ""
 
 #: ../src/View/Gtk/Settings.cpp:269
 msgid "remove background"
-msgstr ""
+msgstr "tynnu cefndir"
 
 #: ../src/View/Gtk/Settings.cpp:340
 msgid "Entry %1 (by position)"
@@ -664,4 +664,4 @@ msgstr ""
 
 #: ../src/View/Gtk/Element/PartitionChooser.cpp:30
 msgid "current"
-msgstr ""
+msgstr "cyfredol"

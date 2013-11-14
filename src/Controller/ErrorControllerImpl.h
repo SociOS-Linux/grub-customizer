@@ -27,22 +27,24 @@
 #include "../Model/Env.h"
 
 #include "../View/Error.h"
+#include "../View/Trait/ViewAware.h"
 
 #include "../Controller/ControllerAbstract.h"
+#include "../Controller/Trait/ThreadControllerAware.h"
 
 #include "ErrorController.h"
 
-class ErrorControllerImpl : public ControllerAbstract, public ErrorController {
-	Model_Env& env;
-	View_Error* view;
-	ThreadController* threadController;
+class ErrorControllerImpl :
+	public ControllerAbstract,
+	public ErrorController,
+	public View_Trait_ViewAware<View_Error>,
+	public Trait_ThreadControllerAware
+{
 	bool applicationStarted;
 public:
-	void setView(View_Error& view);
-	void setThreadController(ThreadController& threadController);
 	void setApplicationStarted(bool val);
 
-	ErrorControllerImpl(Model_Env& env);
+	ErrorControllerImpl();
 	
 	void errorAction(Exception const& e);
 	void errorThreadedAction(Exception const& e);

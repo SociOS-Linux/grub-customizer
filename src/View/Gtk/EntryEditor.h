@@ -19,21 +19,26 @@
 #ifndef ENTRYEDITDLGGTK_H_
 #define ENTRYEDITDLGGTK_H_
 #include "../EntryEditor.h"
-#include "../../lib/CommonClass.h"
+#include "../../lib/Trait/LoggerAware.h"
 #include "../../lib/str_replace.h"
 #include <libintl.h>
 #include <gtkmm.h>
 #include "../../Controller/EntryEditController.h"
+#include "../../Controller/Trait/ControllerAware.h"
 #include "EntryEditor.h"
 #include "../../Model/DeviceDataListInterface.h"
 #include "Element/PartitionChooser.h"
 
-class View_Gtk_EntryEditor : public View_EntryEditor, public Gtk::Dialog, public CommonClass {
+class View_Gtk_EntryEditor :
+	public View_EntryEditor,
+	public Gtk::Dialog,
+	public Trait_LoggerAware,
+	public Trait_ControllerAware<EntryEditController>,
+	public Model_DeviceDataListInterface_Connection
+{
 	Gtk::Notebook tabbox;
 	Gtk::TextView tvSource;
 	Gtk::ScrolledWindow scrSource;
-	EntryEditController* eventListener;
-	Model_DeviceDataListInterface* deviceDataList;
 	Gtk::ScrolledWindow scrOptions;
 	Gtk::Table tblOptions;
 	std::map<std::string, Gtk::Widget*> optionMap;
@@ -42,21 +47,19 @@ class View_Gtk_EntryEditor : public View_EntryEditor, public Gtk::Dialog, public
 	Gtk::Label lblType;
 	bool lock_state;
 
-	void* rulePtr;
+	Rule* rulePtr;
 protected:
 	virtual std::string mapOptionName(std::string const& name);
 public:
 	View_Gtk_EntryEditor();
-	void setEventListener(EntryEditController& eventListener);
-	void setDeviceDataList(Model_DeviceDataListInterface& deviceDataList);
 	void setSourcecode(std::string const& source);
 	std::string getSourcecode();
 	void addOption(std::string const& name, std::string const& value);
 	void setOptions(std::map<std::string, std::string> options);
 	std::map<std::string, std::string> getOptions() const;
 	void removeOptions();
-	void setRulePtr(void* rulePtr);
-	void* getRulePtr();
+	void setRulePtr(Rule* rulePtr);
+	Rule* getRulePtr();
 	void show();
 	void hide();
 

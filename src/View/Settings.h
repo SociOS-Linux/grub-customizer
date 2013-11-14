@@ -19,8 +19,6 @@
 #ifndef SETTINGSDLG_H_
 #define SETTINGSDLG_H_
 
-#include "ColorChooser.h"
-
 /**
  * Interface to be implemented by settings dialogs
  */
@@ -32,12 +30,6 @@ public:
 		DEF_ENTRY_PREDEFINED,
 		DEF_ENTRY_SAVED
 	};
-	enum ColorChooserType {
-		COLOR_CHOOSER_DEFAULT_FONT,
-		COLOR_CHOOSER_DEFAULT_BACKGROUND,
-		COLOR_CHOOSER_HIGHLIGHT_FONT,
-		COLOR_CHOOSER_HIGHLIGHT_BACKGROUND
-	};
 	struct CustomOption {
 		std::string name, old_name, value;
 		bool isActive;
@@ -46,20 +38,10 @@ public:
 	virtual void show(bool burgMode)=0;
 	//hide this dialog
 	virtual void hide()=0;
-	//returns an interface to the given color chooser
-	virtual View_ColorChooser& getColorChooser(ColorChooserType type)=0;
-	//get the name of the selected font
-	virtual std::string getFontName()=0;
-	//get the font size
-	virtual int getFontSize()=0;
-	//set the name of the selected font
-	virtual void setFontName(std::string const& value)=0;
 	//reads the selection row from the custom options list
 	virtual std::string getSelectedCustomOption()=0;
 	//adds an entry to the end of the default entry chooser
 	virtual void addEntryToDefaultEntryChooser(std::string const& labelPathValue, std::string const& labelPathLabel, std::string const& numericPathValue, std::string const& numericPathLabel)=0;
-	//set the entry titles to be viewed in the preview image
-	virtual void setPreviewEntryTitles(std::list<std::string> const& entries)=0;
 	//removes all items from the default entry chooser
 	virtual void clearDefaultEntryChooser()=0;
 	//removes all item from the resolution chooser
@@ -94,10 +76,14 @@ public:
 	virtual void showHiddenMenuOsProberConflictMessage()=0;
 	//sets the grub menu timeout
 	virtual void setTimeoutValue(int value)=0;
+	//sets weather the grub menu timeout is active
+	virtual void setTimeoutActive(bool active)=0;
 	//reads the grub menu timeout
 	virtual int getTimeoutValue()=0;
 	//reads the grub menu timeout as string
 	virtual std::string getTimeoutValueString()=0;
+	//says wheather the timeout checkbox is activates
+	virtual bool getTimeoutActive()=0;
 	//sets kernel params
 	virtual void setKernelParams(std::string const& params)=0;
 	//reads kernel params
@@ -114,10 +100,6 @@ public:
 	virtual void setResolution(std::string const& resolution)=0;
 	//reads the selected resolution
 	virtual std::string getResolution()=0;
-	//sets the background image, remove it, if empty string is given
-	virtual void setBackgroundImagePreviewPath(std::string const& menuPicturePath, bool isInGrubDir)=0;
-	//reads the selected background image path
-	virtual std::string getBackgroundImagePath()=0;
 };
 
 #endif

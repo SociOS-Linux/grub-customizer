@@ -19,12 +19,8 @@
 #include "FbResolutionsGetter.h"
 
 Model_FbResolutionsGetter::Model_FbResolutionsGetter()
-	: eventListener(NULL), _isLoading(false)
+	: _isLoading(false)
 {}
-
-void Model_FbResolutionsGetter::setEventListener(SettingsController& eventListener){
-	this->eventListener = &eventListener;
-}
 
 const std::list<std::string>& Model_FbResolutionsGetter::getData() const {
 	return data;
@@ -58,8 +54,8 @@ void Model_FbResolutionsGetter::load(){
 					row = "";
 				}
 			}
-			if (pclose(hwinfo_proc) == 0 && this->eventListener)
-				this->eventListener->updateResolutionlistThreadedAction();
+			if (pclose(hwinfo_proc) == 0 && this->controller)
+				this->controller->updateResolutionlistThreadedAction();
 		}
 		_isLoading = false;
 	}

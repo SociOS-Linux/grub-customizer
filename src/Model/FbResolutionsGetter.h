@@ -22,17 +22,27 @@
 #include <list>
 #include <cstdio>
 #include "../Controller/SettingsController.h"
-#include "../lib/CommonClass.h"
+#include "../Controller/Trait/ControllerAware.h"
+#include "../lib/Trait/LoggerAware.h"
 
-class Model_FbResolutionsGetter : public CommonClass {
+class Model_FbResolutionsGetter : public Trait_LoggerAware, public Trait_ControllerAware<SettingsController> {
 	std::list<std::string> data;
-	SettingsController* eventListener;
 	bool _isLoading;
 public:
 	Model_FbResolutionsGetter();
 	const std::list<std::string>& getData() const;
 	void load();
-	void setEventListener(SettingsController& eventListener);
+};
+
+class Model_FbResolutionsGetter_Connection {
+protected:
+	Model_FbResolutionsGetter* fbResolutionsGetter;
+public:
+	Model_FbResolutionsGetter_Connection() : fbResolutionsGetter(NULL) {}
+
+	void setFbResolutionsGetter(Model_FbResolutionsGetter& fbResolutionsGetter){
+		this->fbResolutionsGetter = &fbResolutionsGetter;
+	}
 };
 
 #endif

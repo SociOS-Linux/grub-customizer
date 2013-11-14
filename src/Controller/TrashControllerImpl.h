@@ -34,37 +34,45 @@
 
 #include "ThreadController.h"
 #include "../View/EnvEditor.h"
+#include "../View/Trait/ViewAware.h"
 #include "../Mapper/EntryName.h"
 
 #include "../Controller/ControllerAbstract.h"
 
 #include "TrashController.h"
+#include "../Model/DeviceDataListInterface.h"
+#include "../lib/ContentParserFactory.h"
+#include "Helper/DeviceInfo.h"
 
 
-class TrashControllerImpl : public ControllerAbstract, public TrashController {
-	Model_Env& env;
-	Model_ListCfg* grublistCfg;
-	View_Trash* view;
-	Mapper_EntryName* entryNameMapper;
-
-	void _refreshView();
-	std::list<Model_Entry*> _getDeletableEntries();
+class TrashControllerImpl :
+	public ControllerAbstract,
+	public TrashController,
+	public View_Trait_ViewAware<View_Trash>,
+	public Model_ListCfg_Connection,
+	public Mapper_EntryName_Connection,
+	public Model_DeviceDataListInterface_Connection,
+	public ContentParserFactory_Connection,
+	public Model_Env_Connection
+{
+	void _refresh();
+	void _refreshView(Model_Rule* parent);
+	bool _isDeletable(std::list<Rule*> const& selectedEntries);
+	std::list<Model_Rule> data;
 public:
-	void setListCfg(Model_ListCfg& grublistCfg);
-	void setView(View_Trash& scriptAddDlg);
-	void setEntryNameMapper(Mapper_EntryName& mapper);
-
-	TrashControllerImpl(Model_Env& env);
+	TrashControllerImpl();
 	
-	void showAction();
+	void updateAction(std::map<ViewOption, bool> const& viewOptions);
 	void applyAction();
 	
 	void showAboutDialog();
 
 	void hideAction();
 
-	void askForDeletionAction();
 	void deleteCustomEntriesAction();
+
+	void selectEntriesAction(std::list<Entry*> const& entries);
+	void updateSelectionAction(std::list<Rule*> const& selectedEntries);
 };
 
 #endif

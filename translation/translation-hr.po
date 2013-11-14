@@ -1,21 +1,21 @@
 # Croatian translation for grub-customizer
 # Copyright (c) 2010 Rosetta Contributors and Canonical Ltd 2010
 # This file is distributed under the same license as the grub-customizer package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+# gogo <trebelnik2@gmail.com>, 2012.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: grub-customizer\n"
-"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"Report-Msgid-Bugs-To: gogo <trebelnik2@gmail.com>>\n"
 "POT-Creation-Date: 2012-08-30 22:28+0200\n"
-"PO-Revision-Date: 2012-08-30 21:30+0000\n"
-"Last-Translator: Tomislav Krznar <tomislav.krznar@gmail.com>\n"
+"PO-Revision-Date: 2013-04-23 17:39+0000\n"
+"Last-Translator: gogo <trebelnik2@gmail.com>\n"
 "Language-Team: Croatian <hr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-09-10 18:16+0000\n"
-"X-Generator: Launchpad (build 15924)\n"
+"X-Launchpad-Export-Date: 2013-11-13 17:48+0000\n"
+"X-Generator: Launchpad (build 16820)\n"
 
 #: ../src/Controller/MainControllerImpl.cpp:533
 msgid "Name the Entry"
@@ -35,19 +35,19 @@ msgstr "Ažuriranje postavki"
 
 #: ../src/main/gtk-client.cpp:229
 msgid "Linux"
-msgstr ""
+msgstr "Linux"
 
 #: ../src/main/gtk-client.cpp:230
 msgid "Linux-ISO"
-msgstr ""
+msgstr "Linux-ISO"
 
 #: ../src/main/gtk-client.cpp:231
 msgid "Chainloader"
-msgstr ""
+msgstr "Chainloader"
 
 #: ../src/main/gtk-client.cpp:232
 msgid "Memtest"
-msgstr ""
+msgstr "Memtest"
 
 #: ../src/View/Gtk/About.cpp:36
 msgid ""
@@ -57,72 +57,72 @@ msgstr ""
 
 #: ../src/View/Gtk/EntryEditor.cpp:22 ../src/View/Gtk/EnvEditor.cpp:23
 msgid "_Type:"
-msgstr ""
+msgstr "_Vrsta:"
 
 #: ../src/View/Gtk/EntryEditor.cpp:28
 msgid "Entry editor"
-msgstr ""
+msgstr "Uređivač unosa"
 
 #: ../src/View/Gtk/EntryEditor.cpp:34
 msgid "Options"
-msgstr ""
+msgstr "Mogućnosti"
 
 #: ../src/View/Gtk/EntryEditor.cpp:35
 msgid "Source"
-msgstr ""
+msgstr "Izvor"
 
 #: ../src/View/Gtk/EntryEditor.cpp:62
 msgid "_Partition"
-msgstr ""
+msgstr "_Particija"
 
 #: ../src/View/Gtk/EntryEditor.cpp:64
 msgid "_Initial ramdisk"
-msgstr ""
+msgstr "_Ramdisk pokretanja"
 
 #: ../src/View/Gtk/EntryEditor.cpp:66
 msgid "_Linux image"
-msgstr ""
+msgstr "_Linux slika"
 
 #: ../src/View/Gtk/EntryEditor.cpp:68
 msgid "_Memtest image"
-msgstr ""
+msgstr "_Memtest slika"
 
 #: ../src/View/Gtk/EntryEditor.cpp:70
 msgid "Path to iso file"
-msgstr ""
+msgstr "Putanja do iso datoteke"
 
 #: ../src/View/Gtk/EntryEditor.cpp:72
 msgid "Locale"
-msgstr ""
+msgstr "Lokalno"
 
 #: ../src/View/Gtk/EntryEditor.cpp:74
 msgid "Kernel params"
-msgstr ""
+msgstr "Parametri kernela"
 
 #: ../src/View/Gtk/EntryEditor.cpp:177 ../src/View/Gtk/EntryEditor.cpp:183
 #: ../src/View/Gtk/EntryEditor.cpp:217
 msgid "Other"
-msgstr ""
+msgstr "Ostalo"
 
 #: ../src/View/Gtk/EnvEditor.cpp:22
 msgid "_Partition:"
-msgstr ""
+msgstr "_Particija:"
 
 #: ../src/View/Gtk/EnvEditor.cpp:23
 msgid "Submountpoints:"
-msgstr ""
+msgstr "Točke-podmontiranja:"
 
 #: ../src/View/Gtk/EnvEditor.cpp:24
 msgid "save this configuration"
-msgstr ""
+msgstr "spremi ova podešavanja"
 
 #: ../src/View/Gtk/EnvEditor.cpp:53
 msgid "Grub 2"
-msgstr ""
+msgstr "Grub 2"
 
 #: ../src/View/Gtk/EnvEditor.cpp:54
 msgid "BURG"
-msgstr ""
+msgstr "BURG"
 
 #: ../src/View/Gtk/EnvEditor.cpp:216
 msgid "Mount failed!"
@@ -130,7 +130,7 @@ msgstr "Montiranje nije uspjelo!"
 
 #: ../src/View/Gtk/EnvEditor.cpp:217
 msgid "umount failed!"
-msgstr "demontiranje nije uspjelo!"
+msgstr "Demontiranje nije uspjelo!"
 
 #: ../src/View/Gtk/EnvEditor.cpp:218
 msgid "This seems not to be a root file system (no fstab found)"
@@ -150,14 +150,15 @@ msgid ""
 "please Inform the author about this problem. The following information could "
 "be helpful:"
 msgstr ""
+"Obavijestite autora o ovom problemu. Sljedeće informacije bi mogle pomoći:"
 
 #: ../src/View/Gtk/Error.cpp:32
 msgid "An error occurred"
-msgstr ""
+msgstr "Došlo je do greške"
 
 #: ../src/View/Gtk/Error.cpp:35
 msgid "continue (risk data loss)"
-msgstr ""
+msgstr "nastavi (rizik gubitka podataka)"
 
 #: ../src/View/Gtk/Installer.cpp:22
 msgid ""
@@ -219,28 +220,29 @@ msgstr "BURG pronađen!"
 
 #: ../src/View/Gtk/Main.cpp:42
 msgid "advanced settings"
-msgstr ""
+msgstr "napredne postavke"
 
 #: ../src/View/Gtk/Main.cpp:44
 msgid ""
 "The modifications you've done affects the visible entries. Please reload!"
 msgstr ""
+"Promjene koje ste učinili zahvaćaju vidljive unose. Ponovno učitajte!"
 
 #: ../src/View/Gtk/Main.cpp:56
 msgid "_List configuration"
-msgstr ""
+msgstr "_Popis podešavanja"
 
 #: ../src/View/Gtk/Main.cpp:80
 msgid "Remove selected entries (you can restore them from trash)"
-msgstr ""
+msgstr "Ukloni odabrane unose (možete ih vratiti iz smeća)"
 
 #: ../src/View/Gtk/Main.cpp:83
 msgid "restore entries from trash"
-msgstr ""
+msgstr "Vrati unose iz smeća"
 
 #: ../src/View/Gtk/Main.cpp:85
 msgid "Trash"
-msgstr ""
+msgstr "Smeće"
 
 #: ../src/View/Gtk/Main.cpp:94
 msgid "Move up the selected entry or script"
@@ -252,47 +254,47 @@ msgstr "Pomaknite dolje odabrani unos ili skriptu"
 
 #: ../src/View/Gtk/Main.cpp:102
 msgid "remove this entry from the current submenu"
-msgstr "ukloni ovaj unos iz trenutnog podizbornika"
+msgstr "Ukloni ovaj unos iz trenutnog podizbornika"
 
 #: ../src/View/Gtk/Main.cpp:105
 msgid "add this entry to a new submenu"
-msgstr "dodaj ovaj unos na novi podizbornik"
+msgstr "Dodaj ovaj unos na novi podizbornik"
 
 #: ../src/View/Gtk/Main.cpp:119
 msgid "Reverts the list to the default order"
-msgstr ""
+msgstr "Vraća popis na zadani redoslijed"
 
 #: ../src/View/Gtk/Main.cpp:121
 msgid "reloads the configuration. Unsaved changes will be preserved."
-msgstr ""
+msgstr "Ponovno učitaj podešavanje. Nespremljene promjene će biti sačuvane."
 
 #: ../src/View/Gtk/Main.cpp:161
 msgid "Restore entry"
-msgstr ""
+msgstr "Vrati unos"
 
 #: ../src/View/Gtk/Main.cpp:162
 msgid "Rename"
-msgstr ""
+msgstr "Preimenuj"
 
 #: ../src/View/Gtk/Main.cpp:163 ../src/View/Gtk/Main.cpp:164
 msgid "Move up"
-msgstr ""
+msgstr "Pomakni gore"
 
 #: ../src/View/Gtk/Main.cpp:165 ../src/View/Gtk/Main.cpp:166
 msgid "Move down"
-msgstr ""
+msgstr "Pomakni dolje"
 
 #: ../src/View/Gtk/Main.cpp:167 ../src/View/Gtk/Main.cpp:168
 msgid "Remove from submenu"
-msgstr ""
+msgstr "Ukloni iz podizbornika"
 
 #: ../src/View/Gtk/Main.cpp:169 ../src/View/Gtk/Main.cpp:170
 msgid "Create submenu"
-msgstr ""
+msgstr "Stvori podizbornik"
 
 #: ../src/View/Gtk/Main.cpp:177
 msgid "_Change Environment …"
-msgstr ""
+msgstr "_Promjeni okruženje …"
 
 #: ../src/View/Gtk/Main.cpp:184
 msgid "Do you want to configure BURG instead of grub2?"
@@ -300,11 +302,11 @@ msgstr "Želite li podesiti BURG umjesto Grub2?"
 
 #: ../src/View/Gtk/Main.cpp:248
 msgid "_General settings"
-msgstr ""
+msgstr "_Opće postavke"
 
 #: ../src/View/Gtk/Main.cpp:253
 msgid "_Appearance settings"
-msgstr ""
+msgstr "_Postavke izgleda"
 
 #: ../src/View/Gtk/Main.cpp:266
 msgid "BURG Mode"
@@ -316,11 +318,11 @@ msgstr "Spremi postavke i generiraj novi "
 
 #: ../src/View/Gtk/Main.cpp:291
 msgid "Are you sure?"
-msgstr ""
+msgstr "Jeste li sigurni?"
 
 #: ../src/View/Gtk/Main.cpp:292
 msgid "This removes all your list modifications of the bootloader menu!"
-msgstr ""
+msgstr "Ovo će ukloniti sve vaše promjene popisa bootloader izbornika!"
 
 #: ../src/View/Gtk/Main.cpp:352
 msgid "loading configuration…"
@@ -328,31 +330,31 @@ msgstr "Učitavanje postavki..."
 
 #: ../src/View/Gtk/Main.cpp:354
 msgid "loading script %2/%3 (%1)"
-msgstr ""
+msgstr "Učitavanje skripte %2/%3 (%1)"
 
 #: ../src/View/Gtk/Main.cpp:373
 msgid "submenu"
-msgstr ""
+msgstr "podizbornik"
 
 #: ../src/View/Gtk/Main.cpp:376 ../src/View/Gtk/Trash.cpp:92
 msgid "placeholder"
-msgstr ""
+msgstr "rezervirano-mjesto"
 
 #: ../src/View/Gtk/Main.cpp:379 ../src/View/Gtk/Trash.cpp:92
 msgid "menuentry"
-msgstr ""
+msgstr "unos-izbornika"
 
 #: ../src/View/Gtk/Main.cpp:383 ../src/View/Gtk/Trash.cpp:92
 msgid "script: "
-msgstr ""
+msgstr "skripta: "
 
 #: ../src/View/Gtk/Main.cpp:387
 msgid "default name: "
-msgstr ""
+msgstr "zadani naziv: "
 
 #: ../src/View/Gtk/Main.cpp:391
 msgid "Partition: "
-msgstr ""
+msgstr "Particija: "
 
 #: ../src/View/Gtk/Main.cpp:415
 msgid "Proxy binary not found!"
@@ -364,41 +366,43 @@ msgid ""
 "(in most cases), when you didn't install grub gustomizer currectly."
 msgstr ""
 "Vidjet ćete sve unose (neprilagođene) kada pokrenete Grub. Ova greška "
-"nastaje (u većini slučaja), kada ne instalirate Grub Prilagoditelja ispravno."
+"nastaje (u većini slučaja), kada Grub prilagoditelj nije ispravno instaliran."
 
 #: ../src/View/Gtk/Main.cpp:422
 msgid "(incoming Entries of %1, Script: %2)"
-msgstr ""
+msgstr "(nadolazeći Unos od %1, Skripta: %2)"
 
 #: ../src/View/Gtk/Main.cpp:424
 msgid "(incoming Entries of %1)"
-msgstr ""
+msgstr "(nadolazeći Unos od %1)"
 
 #: ../src/View/Gtk/Main.cpp:426
 msgid "(incoming Entries of Script: %1)"
-msgstr ""
+msgstr "(nadolazeći Unos od Skripte: %1)"
 
 #: ../src/View/Gtk/Main.cpp:428
 msgid "(incoming Entries)"
-msgstr ""
+msgstr "(nadolazeći Unos)"
 
 #: ../src/View/Gtk/Main.cpp:434
 msgid "(script code)"
-msgstr "(kod skripte)"
+msgstr "(kôd skripte)"
 
 #: ../src/View/Gtk/Main.cpp:436
 msgid "(script code of %1)"
-msgstr ""
+msgstr "(kôd skripte od %1)"
 
 #: ../src/View/Gtk/Main.cpp:636
 msgid "Trash (%1)"
-msgstr ""
+msgstr "Smeće (%1)"
 
 #: ../src/View/Gtk/Main.cpp:649
 msgid ""
 "Removing Script Code can cause problems when trying to boot entries relying "
 "on it. Are you sure you want to do it anyway?"
 msgstr ""
+"Uklanjanje kôda skripte može prouzročiti probleme kada pokušavate pokrenuti "
+"unose koji ovise o toj skripti. Sigurno to želite učiniti?"
 
 #: ../src/View/Gtk/Main.cpp:657
 msgid ""
@@ -407,10 +411,14 @@ msgid ""
 "If you just want to remove old kernels: The better way is uninstalling them "
 "instead of just hiding them in boot menu."
 msgstr ""
+"Pokušavate ukloniti unos trenutno pokrenutog sustava. Budite sigurni da "
+"postoje drugi radni unosi ovog sustava!\n"
+"Ako samo želite ukloniti stare kernele, najbolji način je da ih "
+"deinstalirate umjesto da ih samo sakrijete u boot izborniku."
 
 #: ../src/View/Gtk/Main.cpp:686
 msgid "Default title: "
-msgstr "Uobičajeni naslov: "
+msgstr "Zadani naslov: "
 
 #: ../src/View/Gtk/Main.cpp:779
 msgid "The saved configuration is not up to date!"
@@ -424,7 +432,7 @@ msgid ""
 msgstr ""
 "Generirane postavke nisu jednake spremljenim postavkama prilikom pokretanja. "
 "Stoga ono što vidite sada možda nećete vidjeti nakon ponovnog pokretanja "
-"računala. Da bi to popravili, kliknite ažuriraj!"
+"računala. Da bi to popravili, kliknite na ažuriranje!"
 
 #: ../src/View/Gtk/Main.cpp:783
 msgid "_Quit without update"
@@ -461,15 +469,15 @@ msgstr ""
 
 #: ../src/View/Gtk/Main.cpp:854
 msgid "Environment settings"
-msgstr ""
+msgstr "Postavke okruženja"
 
 #: ../src/View/Gtk/Main.cpp:866
 msgid "Do you want to proceed without saving the current configuration?"
-msgstr ""
+msgstr "Želite li nastaviti bez spremanja trenutnih podešavanja?"
 
 #: ../src/View/Gtk/Main.cpp:867
 msgid "There are unsaved modifications!"
-msgstr ""
+msgstr "Postoje nespremljene izmjene!"
 
 #: ../src/View/Gtk/Settings.cpp:80
 msgid "white"
@@ -505,11 +513,11 @@ msgstr "zelena"
 
 #: ../src/View/Gtk/Settings.cpp:88
 msgid "light-magenta"
-msgstr "svijetlo-ljubičastocrvena"
+msgstr "svijetlo-ljubičasta"
 
 #: ../src/View/Gtk/Settings.cpp:89
 msgid "magenta"
-msgstr "ljubičastocrvena"
+msgstr "ljubičasta"
 
 #: ../src/View/Gtk/Settings.cpp:90
 msgid "light-red"
@@ -553,7 +561,7 @@ msgstr "Uobičajeni unos"
 
 #: ../src/View/Gtk/Settings.cpp:108
 msgid "visibility"
-msgstr "Vidljivost"
+msgstr "Prikaz"
 
 #: ../src/View/Gtk/Settings.cpp:108
 msgid "show menu"
@@ -581,7 +589,7 @@ msgstr "potraži druge operativne sustave"
 
 #: ../src/View/Gtk/Settings.cpp:111
 msgid "custom resolution: "
-msgstr "prilagođena rezolucija: "
+msgstr "prilagođena razlučivost: "
 
 #: ../src/View/Gtk/Settings.cpp:112
 msgid "font color"
@@ -645,7 +653,7 @@ msgstr "Vrijednost"
 
 #: ../src/View/Gtk/Settings.cpp:245
 msgid "remove font"
-msgstr "ukloni pismo"
+msgstr "ukloni slova"
 
 #: ../src/View/Gtk/Settings.cpp:269
 msgid "remove background"
@@ -665,20 +673,20 @@ msgstr ""
 
 #: ../src/View/Gtk/Trash.cpp:22
 msgid "Add entry from trash"
-msgstr ""
+msgstr "Dodaj unos iz smeća"
 
 #: ../src/View/Gtk/Trash.cpp:41
 msgid "Delete custom entries"
-msgstr ""
+msgstr "Obriši prilagođene unose"
 
 #: ../src/View/Gtk/Trash.cpp:92
 msgid "type: "
-msgstr ""
+msgstr "vrsta: "
 
 #: ../src/View/Gtk/Trash.cpp:109
 msgid "This deletes the following entries:"
-msgstr ""
+msgstr "Ovo briše sljedeće unose:"
 
 #: ../src/View/Gtk/Element/PartitionChooser.cpp:30
 msgid "current"
-msgstr ""
+msgstr "trenutno"

@@ -18,28 +18,10 @@
 
 #include "EntryEditControllerImpl.h"
 
-EntryEditControllerImpl::EntryEditControllerImpl(Model_Env& env)
+EntryEditControllerImpl::EntryEditControllerImpl()
 	: ControllerAbstract("entry-edit"),
-	  grublistCfg(NULL),
-	 env(env), contentParserFactory(NULL), currentContentParser(NULL),
-	 deviceDataList(NULL), view(NULL)
+	 currentContentParser(NULL)
 {
-}
-
-void EntryEditControllerImpl::setListCfg(Model_ListCfg& grublistCfg){
-	this->grublistCfg = &grublistCfg;
-}
-
-void EntryEditControllerImpl::setContentParserFactory(ContentParserFactory& contentParserFactory) {
-	this->contentParserFactory = &contentParserFactory;
-}
-
-void EntryEditControllerImpl::setDeviceDataList(Model_DeviceDataList& deviceDataList){
-	this->deviceDataList = &deviceDataList;
-}
-
-void EntryEditControllerImpl::setView(View_EntryEditor& view) {
-	this->view = &view;
 }
 
 Model_Script* EntryEditControllerImpl::_createCustomScript() {
@@ -53,7 +35,10 @@ Model_Script* EntryEditControllerImpl::_createCustomScript() {
 void EntryEditControllerImpl::applyAction() {
 	this->logActionBegin("apply");
 	try {
-		Model_Rule* rulePtr = static_cast<Model_Rule*>(this->view->getRulePtr());
+		Model_Rule* rulePtr = NULL;
+		if (this->view->getRulePtr() != NULL) {
+			rulePtr = &Model_Rule::fromPtr(this->view->getRulePtr());
+		}
 		bool isAdded = false;
 		if (rulePtr == NULL) { // insert
 			Model_Script* script = this->grublistCfg->repository.getCustomScript();
@@ -66,11 +51,16 @@ void EntryEditControllerImpl::applyAction() {
 			Model_Rule newRule(script->entries().back(), true, *script);
 
 			std::list<Model_Proxy*> proxies = this->grublistCfg->proxies.getProxiesByScript(*script);
+			if (proxies.size() == 0) {
+				this->grublistCfg->proxies.push_back(Model_Proxy(*script, false));
+				proxies = this->grublistCfg->proxies.getProxiesByScript(*script);
+			}
+			assert(proxies.size() != 0);
+
 			for (std::list<Model_Proxy*>::iterator proxyIter = proxies.begin(); proxyIter != proxies.end(); proxyIter++) {
 				(*proxyIter)->rules.push_back(newRule);
 				newRule.isVisible = false; // if there are more rules of this type, add them invisible
 			}
-			assert(proxies.size() != 0); // there should at least one proxy related to the custom script
 			rulePtr = &proxies.front()->rules.back();
 			isAdded = true;
 		} else { // update
@@ -112,10 +102,16 @@ void EntryEditControllerImpl::applyAction() {
 		rulePtr->dataSource->content = newCode;
 		rulePtr->dataSource->isModified = true;
 
-		this->env.modificationsUnsaved = true;
+		this->env->modificationsUnsaved = true;
 		this->getAllControllers().mainController->syncLoadStateAction();
 
-		this->getAllControllers().mainController->selectRuleAction(rulePtr, isAdded);
+		assert(this->threadController != NULL);
+		if (isAdded) {
+			this->threadController->startEdit(rulePtr);
+		} else {
+			this->getAllControllers().mainController->selectRuleAction(rulePtr, isAdded);
+		}
+
 
 		this->currentContentParser = NULL;
 	} catch (Exception const& e) {
@@ -124,11 +120,11 @@ void EntryEditControllerImpl::applyAction() {
 	this->logActionEnd();
 }
 
-void EntryEditControllerImpl::showAction(void* rule) {
+void EntryEditControllerImpl::showAction(Rule* rule) {
 	this->logActionBegin("show");
 	try {
 		this->view->setRulePtr(rule);
-		this->view->setSourcecode(((Model_Rule*)rule)->dataSource->content);
+		this->view->setSourcecode(Model_Rule::fromPtr(rule).dataSource->content);
 		this->syncEntryEditDlg(false);
 		this->view->show();
 	} catch (Exception const& e) {

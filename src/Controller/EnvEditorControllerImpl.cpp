@@ -18,11 +18,10 @@
 
 #include "EnvEditorControllerImpl.h"
 
-EnvEditorControllerImpl::EnvEditorControllerImpl(Model_Env& env)
+EnvEditorControllerImpl::EnvEditorControllerImpl()
 	: ControllerAbstract("env-editor"),
 	 mountTable(NULL),
-	 env(env),
-	 view(NULL)
+	 deviceMap(NULL)
 {
 }
 
@@ -30,15 +29,15 @@ void EnvEditorControllerImpl::setMountTable(Model_MountTable& mountTable){
 	this->mountTable = &mountTable;
 }
 
-void EnvEditorControllerImpl::setView(View_EnvEditor& view) {
-	this->view = &view;
+void EnvEditorControllerImpl::setDeviceMap(Model_DeviceMap& deviceMap) {
+	this->deviceMap = &deviceMap;
 }
 
 void EnvEditorControllerImpl::showAction(bool resetPartitionChooser) {
 	this->logActionBegin("show");
 	try {
-		this->view->setEnvSettings(this->env.getProperties(), this->env.getRequiredProperties(), this->env.getValidProperties());
-		this->view->setRootDeviceName(this->env.rootDeviceName);
+		this->view->setEnvSettings(this->env->getProperties(), this->env->getRequiredProperties(), this->env->getValidProperties());
+		this->view->setRootDeviceName(this->env->rootDeviceName);
 		this->view->show(resetPartitionChooser);
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
@@ -76,7 +75,7 @@ void EnvEditorControllerImpl::switchPartitionAction(std::string const& newPartit
 			try {
 				mountTable->clear(PARTCHOOSER_MOUNTPOINT);
 				mountTable->mountRootFs(selectedDevice, PARTCHOOSER_MOUNTPOINT);
-				this->env.init(env.burgMode ? Model_Env::BURG_MODE : Model_Env::GRUB_MODE, PARTCHOOSER_MOUNTPOINT);
+				this->env->init(env->burgMode ? Model_Env::BURG_MODE : Model_Env::GRUB_MODE, PARTCHOOSER_MOUNTPOINT);
 				this->generateSubmountpointSelection(PARTCHOOSER_MOUNTPOINT);
 				this->showAction();
 			}
@@ -90,7 +89,7 @@ void EnvEditorControllerImpl::switchPartitionAction(std::string const& newPartit
 				this->switchPartitionAction("");
 			}
 		} else {
-			this->env.init(env.burgMode ? Model_Env::BURG_MODE : Model_Env::GRUB_MODE, selectedDevice);
+			this->env->init(env->burgMode ? Model_Env::BURG_MODE : Model_Env::GRUB_MODE, selectedDevice);
 			this->showAction(true);
 		}
 	} catch (Exception const& e) {
@@ -102,7 +101,7 @@ void EnvEditorControllerImpl::switchPartitionAction(std::string const& newPartit
 void EnvEditorControllerImpl::switchBootloaderTypeAction(int newTypeIndex) {
 	this->logActionBegin("switch-bootloader-type");
 	try {
-		this->env.init(newTypeIndex == 0 ? Model_Env::GRUB_MODE : Model_Env::BURG_MODE, this->env.cfg_dir_prefix);
+		this->env->init(newTypeIndex == 0 ? Model_Env::GRUB_MODE : Model_Env::BURG_MODE, this->env->cfg_dir_prefix);
 		this->showAction();
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
@@ -113,7 +112,7 @@ void EnvEditorControllerImpl::switchBootloaderTypeAction(int newTypeIndex) {
 void EnvEditorControllerImpl::updateGrubEnvOptionsAction() {
 	this->logActionBegin("update-grub-env-options");
 	try {
-		this->env.setProperties(this->view->getEnvSettings());
+		this->env->setProperties(this->view->getEnvSettings());
 		this->showAction();
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
@@ -124,16 +123,15 @@ void EnvEditorControllerImpl::updateGrubEnvOptionsAction() {
 void EnvEditorControllerImpl::applyAction(bool saveConfig){
 	this->logActionBegin("apply");
 	try {
-		//	listCfgDlg->setLockState(1|2|8);
-		//	this->syncSettings();
 		this->getAllControllers().settingsController->hideAction();
 		this->getAllControllers().trashController->hideAction();
 		bool isBurgMode = this->view->getBootloaderType() == 1;
 		view->hide();
 
 		if (saveConfig) {
-			this->env.save();
+			this->env->save();
 		}
+		this->deviceMap->clearCache();
 		this->getAllControllers().mainController->reInitAction(isBurgMode);
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);

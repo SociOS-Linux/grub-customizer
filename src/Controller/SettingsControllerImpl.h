@@ -33,43 +33,40 @@
 
 #include "../Model/ListCfg.h"
 #include "../View/Settings.h"
+#include "../View/Trait/ViewAware.h"
 #include "../Model/FbResolutionsGetter.h"
 #include "../Model/DeviceDataList.h"
-#include "ThreadController.h"
 #include "../lib/ContentParserFactory.h"
 #include "../Mapper/EntryName.h"
 
 #include "../Controller/ControllerAbstract.h"
+#include "../Controller/Trait/ThreadControllerAware.h"
 
-#include "../lib/CommonClass.h"
+#include "../lib/Trait/LoggerAware.h"
 
 #include "../lib/Exception.h"
 
 #include "SettingsController.h"
 
 
-class SettingsControllerImpl : public ControllerAbstract, public SettingsController {
-	Model_Env& env;
-	Model_ListCfg* grublistCfg;
-	View_Settings* view;
-	Model_SettingsManagerData* settings;
-	Model_SettingsManagerData* settingsOnDisk; //buffer for the existing settings
-	Model_FbResolutionsGetter* fbResolutionsGetter;
-	ThreadController* threadController;
+class SettingsControllerImpl :
+	public ControllerAbstract,
+	public SettingsController,
+	public View_Trait_ViewAware<View_Settings>,
+	public Trait_ThreadControllerAware,
+	public Model_ListCfg_Connection,
+	public Model_SettingsManagerData_Connection,
+	public Model_FbResolutionsGetter_Connection,
+	public Model_Env_Connection
+{
+	bool syncActive; // should only be controlled by syncSettings()
 
 public:
-	void setListCfg(Model_ListCfg& grublistCfg);
-	void setView(View_Settings& settingsDlg);
-	void setSettingsManager(Model_SettingsManagerData& settings);
-	void setSettingsBuffer(Model_SettingsManagerData& settings);
-	void setFbResolutionsGetter(Model_FbResolutionsGetter& fbResolutionsGetter);
-	void setThreadController(ThreadController& threadController);
-
 	ThreadController& getThreadController();
 	Model_FbResolutionsGetter& getFbResolutionsGetter();
 
 	void showSettingsDlg();
-	SettingsControllerImpl(Model_Env& env);
+	SettingsControllerImpl();
 
 	//dispatchers
 	void updateSettingsDataAction();
@@ -92,11 +89,7 @@ public:
 	void updateKernelParamsAction();
 	void updateRecoverySettingAction();
 	void updateCustomResolutionAction();
-	void updateColorSettingsAction();
-	void updateFontSettingsAction(bool removeFont);
-	void updateBackgroundImageAction();
 	void updateUseCustomResolutionAction();
-	void removeBackgroundImageAction();
 	void hideAction();
 	void showAction(bool burgMode);
 	void syncAction();

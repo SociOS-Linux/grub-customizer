@@ -58,6 +58,8 @@ src/Controller/ErrorControllerImpl.cpp -text
 src/Controller/ErrorControllerImpl.h -text
 src/Controller/GLib/ThreadController.cpp -text
 src/Controller/GLib/ThreadController.h -text
+src/Controller/Helper/DeviceInfo.cpp -text
+src/Controller/Helper/DeviceInfo.h -text
 src/Controller/InstallerController.h -text
 src/Controller/InstallerControllerImpl.cpp -text
 src/Controller/InstallerControllerImpl.h -text
@@ -67,7 +69,12 @@ src/Controller/MainControllerImpl.h -text
 src/Controller/SettingsController.h -text
 src/Controller/SettingsControllerImpl.cpp -text
 src/Controller/SettingsControllerImpl.h -text
+src/Controller/ThemeController.h -text
+src/Controller/ThemeControllerImpl.cpp -text
+src/Controller/ThemeControllerImpl.h -text
 src/Controller/ThreadController.h -text
+src/Controller/Trait/ControllerAware.h -text
+src/Controller/Trait/ThreadControllerAware.h -text
 src/Controller/TrashController.h -text
 src/Controller/TrashControllerImpl.cpp -text
 src/Controller/TrashControllerImpl.h -text
@@ -109,12 +116,20 @@ src/Model/Rule.cpp -text
 src/Model/Rule.h -text
 src/Model/Script.cpp -text
 src/Model/Script.h -text
+src/Model/ScriptSourceMap.cpp -text
+src/Model/ScriptSourceMap.h -text
 src/Model/SettingsManagerData.cpp -text
 src/Model/SettingsManagerData.h -text
 src/Model/SettingsStore.cpp -text
 src/Model/SettingsStore.h -text
 src/Model/SmartFileHandle.cpp -text
 src/Model/SmartFileHandle.h -text
+src/Model/Theme.cpp -text
+src/Model/Theme.h -text
+src/Model/ThemeFile.cpp -text
+src/Model/ThemeFile.h -text
+src/Model/ThemeManager.cpp -text
+src/Model/ThemeManager.h -text
 src/View/About.h -text
 src/View/ColorChooser.h -text
 src/View/EntryEditor.h -text
@@ -122,6 +137,7 @@ src/View/EnvEditor.h -text
 src/View/Error.h -text
 src/View/Gtk/About.cpp -text
 src/View/Gtk/About.h -text
+src/View/Gtk/Element/List.h -text
 src/View/Gtk/Element/PartitionChooser.cpp -text
 src/View/Gtk/Element/PartitionChooser.h -text
 src/View/Gtk/EntryEditor.cpp -text
@@ -136,16 +152,19 @@ src/View/Gtk/Main.cpp -text
 src/View/Gtk/Main.h -text
 src/View/Gtk/Settings.cpp -text
 src/View/Gtk/Settings.h -text
+src/View/Gtk/Theme.cpp -text
+src/View/Gtk/Theme.h -text
 src/View/Gtk/Trash.cpp -text
 src/View/Gtk/Trash.h -text
 src/View/Installer.h -text
 src/View/Main.h -text
+src/View/Model/ListItem.h -text
 src/View/Settings.h -text
+src/View/Theme.h -text
+src/View/Trait/ViewAware.h -text
 src/View/Trash.h -text
 src/lib/ArrayStructure.cpp -text
 src/lib/ArrayStructure.h -text
-src/lib/CommonClass.cpp -text
-src/lib/CommonClass.h -text
 src/lib/ContentParser.h -text
 src/lib/ContentParser/Abstract.cpp -text
 src/lib/ContentParser/Abstract.h -text
@@ -162,21 +181,29 @@ src/lib/ContentParser/Memtest.h -text
 src/lib/ContentParserFactory.h -text
 src/lib/Exception.cpp -text
 src/lib/Exception.h -text
+src/lib/FileSystem.cpp -text
+src/lib/FileSystem.h -text
 src/lib/Logger.h -text
 src/lib/Logger/Stream.cpp -text
 src/lib/Logger/Stream.h -text
 src/lib/Mutex.h -text
 src/lib/Mutex/GLib.cpp -text
 src/lib/Mutex/GLib.h -text
+src/lib/Trait/ActionLoggerAware.h -text
+src/lib/Trait/LoggerAware.h -text
 src/lib/Type.h -text
 src/lib/assert.cpp -text
 src/lib/assert.h -text
+src/lib/csv.cpp -text
+src/lib/csv.h -text
 src/lib/md5.cpp -text
 src/lib/md5.h -text
 src/lib/regex.cpp -text
 src/lib/regex.h -text
 src/lib/str_replace.cpp -text
 src/lib/str_replace.h -text
+src/lib/trim.cpp -text
+src/lib/trim.h -text
 src/main/gtk-client.cpp -text
 src/main/proxy.cpp -text
 translation/compile_all.sh -text
@@ -198,6 +225,8 @@ translation/translation-de.mo -text svneol=unset#unset
 translation/translation-de.po -text
 translation/translation-el.mo -text svneol=unset#unset
 translation/translation-el.po -text
+translation/translation-en_GB.mo -text
+translation/translation-en_GB.po -text
 translation/translation-es.mo -text svneol=unset#unset
 translation/translation-es.po -text
 translation/translation-et.mo -text
@@ -216,6 +245,8 @@ translation/translation-hu.mo -text svneol=unset#unset
 translation/translation-hu.po -text
 translation/translation-it.mo -text svneol=unset#unset
 translation/translation-it.po -text
+translation/translation-ja.mo -text
+translation/translation-ja.po -text
 translation/translation-kk.mo -text svneol=unset#unset
 translation/translation-kk.po -text
 translation/translation-lt.mo -text svneol=unset#unset

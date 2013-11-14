@@ -21,12 +21,11 @@
 
 #include "EntryName.h"
 #include "../View/Main.h"
+#include "../View/Trait/ViewAware.h"
 #include "../lib/assert.h"
 
-class Mapper_EntryNameImpl : public Mapper_EntryName {
-	View_Main* view;
+class Mapper_EntryNameImpl : public Mapper_EntryName, public View_Trait_ViewAware<View_Main> {
 public:
-	void setView(View_Main& view);
 	std::string map(Model_Entry const* sourceEntry, std::string const& defaultName, std::string const& scriptName = "");
 };
 

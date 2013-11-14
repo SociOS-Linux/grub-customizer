@@ -77,9 +77,13 @@ Model_Entry* Model_Script::getEntryByPath(std::list<std::string> const& path){
 }
 
 Model_Entry* Model_Script::getEntryByName(std::string const& name, std::list<Model_Entry>& parentList) {
+	std::list<Model_Entry*> results;
 	for (std::list<Model_Entry>::iterator iter = parentList.begin(); iter != parentList.end(); iter++){
 		if (iter->name == name)
-			return &*iter;
+			results.push_back(&*iter);
+	}
+	if (results.size() == 1) {
+		return results.front();
 	}
 	return NULL;
 }
@@ -210,6 +214,16 @@ void Model_Script::deleteEntry(Model_Entry const& entry, Model_Entry* parent) {
 	throw ItemNotFoundException("entry for deletion not found");
 }
 
+bool Model_Script::deleteFile() {
+	int success = unlink(this->fileName.c_str());
+	if (success == 0){
+		this->fileName = "";
+		return true;
+	}
+	else
+		return false;
+}
+
 Model_Script::operator ArrayStructure() const {
 	ArrayStructure result;
 
@@ -221,5 +235,35 @@ Model_Script::operator ArrayStructure() const {
 	return result;
 }
 
+Model_Script& Model_Script::fromPtr(Script* script) {
+	if (script != NULL) {
+		try {
+			return dynamic_cast<Model_Script&>(*script);
+		} catch (std::bad_cast const& e) {
+		}
+	}
+	throw BadCastException("Model_Script::fromPtr failed");
+}
 
+Model_Script const& Model_Script::fromPtr(Script const* script) {
+	if (script != NULL) {
+		try {
+			return dynamic_cast<Model_Script const&>(*script);
+		} catch (std::bad_cast const& e) {
+		}
+	}
+	throw BadCastException("Model_Script::fromPtr [const] failed");
+}
+
+int Model_Script::extractIndexFromPath(std::string const& path, std::string const& cfgDirPath) {
+	if (path.substr(0, cfgDirPath.length()) == cfgDirPath) {
+		std::string subPath = path.substr(cfgDirPath.length() + 1); // remove path
+		std::string prefix = subPath.substr(0, 2);
+		if (prefix.length() == 2 && prefix[0] >= '0' && prefix[0] <= '9' && prefix[1] >= '0' && prefix[1] <= '9') {
+			int prefixNum = (prefix[0] - '0') * 10 + (prefix[1] - '0');
+			return prefixNum;
+		}
+	}
+	throw InvalidStringFormatException("unable to parse index from " + path, __FILE__, __LINE__);
+}
 

@@ -24,6 +24,7 @@
 #include <vector>
 #include <map>
 #include "../lib/Type.h"
+#include "Model/ListItem.h"
 
 /**
  * Interface for dialogs which lets the user control the grub list
@@ -51,6 +52,7 @@ public:
 	virtual void setIsBurgMode(bool isBurgMode)=0;
 	//determines what users should be able to do and what not
 	virtual void setLockState(int state)=0;
+	virtual void updateLockState() = 0;
 
 	//set the progress of the actual action (loading/saving) to be showed as progress bar for example
 	virtual void setProgress(double progress)=0;
@@ -62,16 +64,13 @@ public:
 	virtual void setStatusText(std::string const& new_status_text)=0;
 	virtual void setStatusText(std::string const& name, int pos, int max)=0;
 	//add entry to the end of the last script of the list
-	virtual void appendEntry(std::string const& name, void* entryPtr, bool is_placeholder, bool is_submenu, std::string const& scriptName, std::string const& defaultName, bool isEditable, bool isModified, std::map<std::string, std::string> const& options, void* parentEntry = NULL)=0;
+	virtual void appendEntry(View_Model_ListItem<Rule, Proxy> const& listItem)=0;
 	//notifies the user about the problem that no grublistcfg_proxy has been found
 	virtual void showProxyNotFoundMessage()=0;
 	//creates a string for an other entry placeholder
 	virtual std::string createNewEntriesPlaceholderString(std::string const& parentMenu = "", std::string const& sourceScriptName = "")=0;
 	//creates the string for plaintexts
 	virtual std::string createPlaintextString(std::string const& scriptName) const=0;
-
-	//sets the given title to be showed as default title inside the status bar
-	virtual void setDefaultTitleStatusText(std::string const& str)=0;
 
 	//asks the user if he wants to exit the whole application
 	virtual int showExitConfirmDialog(int type)=0;
@@ -86,19 +85,17 @@ public:
 	//asks the user whether the current config should be dropped while another action is started
 	virtual bool confirmUnsavedSwitch() = 0;
 
-	//reads the name of a rule item
-	virtual std::string getRuleName(void* rule)=0;
 	//assigns a new name to the rule item
-	virtual void setRuleName(void* rule, std::string const& newName)=0;
+	virtual void setRuleName(Rule* rule, std::string const& newName)=0;
 
 	//select the given rule
-	virtual void selectRule(void* rule, bool startEdit = false)=0;
+	virtual void selectRule(Rule* rule, bool startEdit = false)=0;
 
 	// select multiple rules
-	virtual void selectRules(std::list<void*> rules)=0;
+	virtual void selectRules(std::list<Rule*> rules)=0;
 
-	// set the number of removed rules
-	virtual void setTrashCounter(int count) = 0;
+	// set whether the trash pane should be visible
+	virtual void setTrashPaneVisibility(bool value) = 0;
 
 	// show the warning that config has changed to propose a reload
 	virtual void showReloadRecommendation() = 0;
@@ -108,12 +105,17 @@ public:
 
 	virtual void showPlaintextRemoveWarning() = 0;
 
+	virtual void showScriptUpdateInfo() = 0;
+	virtual void hideScriptUpdateInfo() = 0;
+
 	virtual void showSystemRuleRemoveWarning() = 0;
 
 	virtual void setOption(ViewOption option, bool value) = 0;
 
 	virtual std::map<ViewOption, bool> const& getOptions() = 0;
 	virtual void setOptions(std::map<ViewOption, bool> const& options) = 0;
+
+	virtual void setEntryVisibility(Rule* entry, bool value) = 0;
 };
 
 #endif

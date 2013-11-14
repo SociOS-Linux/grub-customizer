@@ -18,15 +18,18 @@
 
 #ifndef TRASHCONTROLLER_H_
 #define TRASHCONTROLLER_H_
+#include "../lib/Type.h"
+#include <map>
 
 class TrashController {
 public:
 	virtual inline ~TrashController(){}
 	virtual void applyAction() = 0;
-	virtual void showAction() = 0;
+	virtual void updateAction(std::map<ViewOption, bool> const& viewOptions) = 0;
 	virtual void hideAction() = 0;
-	virtual void askForDeletionAction() = 0;
 	virtual void deleteCustomEntriesAction() = 0;
+	virtual void selectEntriesAction(std::list<Entry*> const& entries) = 0;
+	virtual void updateSelectionAction(std::list<Rule*> const& selectedEntries) = 0;
 };
 
 

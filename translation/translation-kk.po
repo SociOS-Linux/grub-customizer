@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2012-08-30 22:28+0200\n"
-"PO-Revision-Date: 2012-08-30 21:30+0000\n"
+"PO-Revision-Date: 2012-10-31 16:06+0000\n"
 "Last-Translator: jmb_kz <Unknown>\n"
 "Language-Team: Kazakh <kk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2012-09-10 18:16+0000\n"
-"X-Generator: Launchpad (build 15924)\n"
+"X-Launchpad-Export-Date: 2013-11-13 17:48+0000\n"
+"X-Generator: Launchpad (build 16820)\n"
 
 #: ../src/Controller/MainControllerImpl.cpp:533
 msgid "Name the Entry"
@@ -23,7 +23,7 @@ msgstr "Мәзір пунктың аты"
 
 #: ../src/Controller/MainControllerImpl.cpp:589
 msgid "cannot move this entry"
-msgstr ""
+msgstr "осы мәзір пунктын жылжыту мүмкін емес"
 
 #: ../src/Controller/MainControllerImpl.cpp:727
 msgid "Configuration has been saved"
@@ -35,19 +35,19 @@ msgstr "баптауламаны жаңарту"
 
 #: ../src/main/gtk-client.cpp:229
 msgid "Linux"
-msgstr ""
+msgstr "Linux"
 
 #: ../src/main/gtk-client.cpp:230
 msgid "Linux-ISO"
-msgstr ""
+msgstr "Linux ISO"
 
 #: ../src/main/gtk-client.cpp:231
 msgid "Chainloader"
-msgstr ""
+msgstr "Chainloader"
 
 #: ../src/main/gtk-client.cpp:232
 msgid "Memtest"
-msgstr ""
+msgstr "Memtest"
 
 #: ../src/View/Gtk/About.cpp:36
 msgid ""
@@ -74,7 +74,7 @@ msgstr ""
 
 #: ../src/View/Gtk/EntryEditor.cpp:62
 msgid "_Partition"
-msgstr ""
+msgstr "_Бөлім"
 
 #: ../src/View/Gtk/EntryEditor.cpp:64
 msgid "_Initial ramdisk"
@@ -115,15 +115,15 @@ msgstr ""
 
 #: ../src/View/Gtk/EnvEditor.cpp:24
 msgid "save this configuration"
-msgstr ""
+msgstr "осы баптауламаны сақтау"
 
 #: ../src/View/Gtk/EnvEditor.cpp:53
 msgid "Grub 2"
-msgstr ""
+msgstr "Grub 2"
 
 #: ../src/View/Gtk/EnvEditor.cpp:54
 msgid "BURG"
-msgstr ""
+msgstr "BURG"
 
 #: ../src/View/Gtk/EnvEditor.cpp:216
 msgid "Mount failed!"
@@ -153,7 +153,7 @@ msgstr ""
 
 #: ../src/View/Gtk/Error.cpp:32
 msgid "An error occurred"
-msgstr ""
+msgstr "Қате пайда болды"
 
 #: ../src/View/Gtk/Error.cpp:35
 msgid "continue (risk data loss)"
@@ -233,11 +233,11 @@ msgstr ""
 
 #: ../src/View/Gtk/Main.cpp:83
 msgid "restore entries from trash"
-msgstr ""
+msgstr "жойылған пунктарды қоқыс шелегінен орнына қайтару"
 
 #: ../src/View/Gtk/Main.cpp:85
 msgid "Trash"
-msgstr ""
+msgstr "Қоқыс шелегі"
 
 #: ../src/View/Gtk/Main.cpp:94
 msgid "Move up the selected entry or script"
@@ -265,19 +265,19 @@ msgstr ""
 
 #: ../src/View/Gtk/Main.cpp:161
 msgid "Restore entry"
-msgstr ""
+msgstr "Мәзір пунктын бастапқы қалыпқа келтіру"
 
 #: ../src/View/Gtk/Main.cpp:162
 msgid "Rename"
-msgstr ""
+msgstr "Атын өзгерту"
 
 #: ../src/View/Gtk/Main.cpp:163 ../src/View/Gtk/Main.cpp:164
 msgid "Move up"
-msgstr ""
+msgstr "Жоғары жылжыту"
 
 #: ../src/View/Gtk/Main.cpp:165 ../src/View/Gtk/Main.cpp:166
 msgid "Move down"
-msgstr ""
+msgstr "Төмен жылжыту"
 
 #: ../src/View/Gtk/Main.cpp:167 ../src/View/Gtk/Main.cpp:168
 msgid "Remove from submenu"
@@ -297,11 +297,11 @@ msgstr "Grub2 орнына BURG қалыпқа келтіруін қалайсы
 
 #: ../src/View/Gtk/Main.cpp:248
 msgid "_General settings"
-msgstr ""
+msgstr "Ба_сты баптаулар"
 
 #: ../src/View/Gtk/Main.cpp:253
 msgid "_Appearance settings"
-msgstr ""
+msgstr "Сыртқы бейнелену баптаулары"
 
 #: ../src/View/Gtk/Main.cpp:266
 msgid "BURG Mode"
