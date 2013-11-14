@@ -610,6 +610,9 @@ void View_Gtk_Main::signal_reload_click(){
 
 void View_Gtk_Main::signal_checkbox_toggled(Glib::ustring const& path) {
 	if (!this->lock_state) {
+		if ((*this->tvConfList.refTreeStore->get_iter(path))[this->tvConfList.treeModel.is_sensitive] == false) {
+			return;
+		}
 		this->controller->entryStateToggledAction(
 			(*this->tvConfList.refTreeStore->get_iter(path))[this->tvConfList.treeModel.relatedRule],
 			!(*this->tvConfList.refTreeStore->get_iter(path))[this->tvConfList.treeModel.is_activated]
