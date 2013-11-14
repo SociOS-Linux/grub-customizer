@@ -320,7 +320,7 @@ std::string View_Gtk_Theme::_getSelectedFileName() {
 
 void View_Gtk_Theme::addFile(std::string const& fileName) {
 	event_lock = true;
-	lvFiles.append(fileName);
+	lvFiles.append_text(fileName);
 	event_lock = false;
 }
 
@@ -372,14 +372,14 @@ std::string View_Gtk_Theme::getSelectedTheme() {
 }
 
 void View_Gtk_Theme::addTheme(std::string const& name) {
-	this->cbTheme.append(name);
+	this->cbTheme.append_text(name);
 }
 
 void View_Gtk_Theme::clearThemeSelection() {
 	event_lock = true;
-	this->cbTheme.remove_all();
+	this->cbTheme.clear_items();
 
-	cbTheme.append(gettext("(Custom Settings)"));
+	cbTheme.append_text(gettext("(Custom Settings)"));
 	cbTheme.set_active(0);
 	event_lock = false;
 }
@@ -544,7 +544,7 @@ void View_Gtk_Theme::redraw(std::string const& menuPicturePath, bool isInGrubDir
 				Cairo::RefPtr<Cairo::Context> context = cr ? *cr : drwBackgroundPreview.get_window()->create_cairo_context();
 
 				drwBackgroundPreview.show();
-				Gdk::Cairo::set_source_pixbuf(context, buf);
+				Gdk::Cairo::set_source_pixbuf(context, buf, 0, 0);
 				context->rectangle(0, 0, buf->get_width(), buf->get_height());
 				context->fill();
 
@@ -581,7 +581,7 @@ void View_Gtk_Theme::redraw(std::string const& menuPicturePath, bool isInGrubDir
 			Cairo::RefPtr<Cairo::Context> context = cr ? *cr : drwBackgroundPreview.get_window()->create_cairo_context();
 			Glib::RefPtr<Gdk::Pixbuf> buf = drwBackgroundPreview.render_icon(Gtk::Stock::MISSING_IMAGE, Gtk::ICON_SIZE_DIALOG);
 
-			Gdk::Cairo::set_source_pixbuf(context, buf);
+			Gdk::Cairo::set_source_pixbuf(context, buf, 0, 0);
 			context->rectangle(0, 0, buf->get_width(), buf->get_height());
 			context->fill();
 		}
