@@ -64,7 +64,7 @@ void Model_Theme::loadZipFile(std::string const& zipFile) {
 	int r;
 
 	a = archive_read_new();
-	archive_read_support_filter_all(a);
+	archive_read_support_compression_all(a);
 	archive_read_support_format_all(a);
 	r = archive_read_open_filename(a, zipFile.c_str(), 10240);
 	if (r != ARCHIVE_OK) {
@@ -76,10 +76,6 @@ void Model_Theme::loadZipFile(std::string const& zipFile) {
 			this->files.push_back(path);
 		}
 		archive_read_data_skip(a);
-	}
-	r = archive_read_free(a);
-	if (r != ARCHIVE_OK) {
-		throw InvalidFileTypeException("archive not readable", __FILE__, __LINE__);
 	}
 }
 
@@ -120,7 +116,7 @@ std::string Model_Theme::loadFileContentFromZip(std::string localFileName) {
 	std::string result;
 
 	a = archive_read_new();
-	archive_read_support_filter_all(a);
+	archive_read_support_compression_all(a);
 	archive_read_support_format_all(a);
 	r = archive_read_open_filename(a, zipFile.c_str(), 10240);
 	if (r != ARCHIVE_OK) {
@@ -136,10 +132,6 @@ std::string Model_Theme::loadFileContentFromZip(std::string localFileName) {
 			} while (size > 0);
 		}
 		archive_read_data_skip(a);
-	}
-	r = archive_read_free(a);
-	if (r != ARCHIVE_OK) {
-		throw InvalidFileTypeException("archive not readable", __FILE__, __LINE__);
 	}
 	return result;
 }
