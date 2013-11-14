@@ -697,6 +697,7 @@ void View_Gtk_Main::setOption(ViewOption option, bool value) {
 	case VIEW_SHOW_HIDDEN_ENTRIES:
 		this->miShowHiddenEntries.set_active(value);
 		this->tvConfList.toggleRenderer.set_visible(value);
+		this->tvConfList.setToggleColumnVisible(value);
 		this->tvConfList.pixbufRenderer.set_visible(!value);
 		break;
 	case VIEW_GROUP_BY_SCRIPT: this->miGroupByScript.set_active(value); break;

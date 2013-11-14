@@ -65,10 +65,12 @@ public:
 	Gtk::CellRendererToggle toggleRenderer;
 	Gtk::CellRendererText textRenderer;
 	Gtk::TreeViewColumn mainColumn;
+	Gtk::TreeViewColumn toggleColumn;
 	Pango::EllipsizeMode ellipsizeMode;
+	bool toggleColumnVisible;
 
 	View_Gtk_Element_List()
-		: ellipsizeMode(Pango::ELLIPSIZE_NONE)
+		: ellipsizeMode(Pango::ELLIPSIZE_NONE), toggleColumnVisible(false)
 	{
 		refTreeStore = Gtk::TreeStore::create(treeModel);
 		this->set_model(refTreeStore);
@@ -76,10 +78,10 @@ public:
 		this->append_column(this->mainColumn);
 		this->mainColumn.pack_start(pixbufRenderer, false);
 		this->mainColumn.add_attribute(pixbufRenderer.property_pixbuf(), treeModel.icon);
-		this->mainColumn.pack_start(toggleRenderer, false);
-		this->mainColumn.add_attribute(toggleRenderer.property_sensitive(), treeModel.is_sensitive);
+		this->toggleColumn.pack_start(toggleRenderer, false);
+		this->toggleColumn.add_attribute(toggleRenderer.property_sensitive(), treeModel.is_sensitive);
 		toggleRenderer.set_visible(false);
-		this->mainColumn.add_attribute(toggleRenderer.property_active(), treeModel.is_activated);
+		this->toggleColumn.add_attribute(toggleRenderer.property_active(), treeModel.is_activated);
 		this->mainColumn.pack_start(this->textRenderer, true);
 		this->mainColumn.add_attribute(this->textRenderer.property_markup(), treeModel.text);
 		this->mainColumn.add_attribute(this->textRenderer.property_editable(), treeModel.is_renamable);
@@ -90,6 +92,20 @@ public:
 		this->set_headers_visible(false);
 		this->get_selection()->set_mode(Gtk::SELECTION_MULTIPLE);
 		this->set_rubber_banding(true);
+	}
+
+	void setToggleColumnVisible(bool value) {
+		if (value == true && !this->toggleColumnVisible) {
+			this->remove_column(this->mainColumn);
+			this->append_column(this->toggleColumn);
+			this->append_column(this->mainColumn);
+		}
+
+		if (value == false && this->toggleColumnVisible) {
+			this->remove_column(this->toggleColumn);
+		}
+
+		this->toggleColumnVisible = value;
 	}
 
 	void addListItem(View_Model_ListItem<TItem, TWrapper> const& listItem, std::map<ViewOption, bool> const& options, Gtk::Window& window) {
