@@ -19,11 +19,11 @@
 #ifndef GRUBLISTCFGDLG_H_
 #define GRUBLISTCFGDLG_H_
 
-#include "../Controller/MainController.h"
 #include "Settings.h"
 #include <string>
 #include <vector>
 #include <map>
+#include "../lib/Type.h"
 
 /**
  * Interface for dialogs which lets the user control the grub list
@@ -32,8 +32,6 @@ class View_Main {
 public:
 	virtual inline ~View_Main() {};
 
-	//function to assign the event listener
-	virtual void setEventListener(MainController& eventListener)=0;
 	//show this dialog without waiting
 	virtual void show()=0;
 	//hide this dialog
@@ -111,6 +109,11 @@ public:
 	virtual void showPlaintextRemoveWarning() = 0;
 
 	virtual void showSystemRuleRemoveWarning() = 0;
+
+	virtual void setOption(ViewOption option, bool value) = 0;
+
+	virtual std::map<ViewOption, bool> const& getOptions() = 0;
+	virtual void setOptions(std::map<ViewOption, bool> const& options) = 0;
 };
 
 #endif

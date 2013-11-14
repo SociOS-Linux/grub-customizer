@@ -130,6 +130,47 @@ void Model_Env::save() {
 	fclose(cfg_file);
 }
 
+void Model_Env::saveViewOptions(std::map<ViewOption, bool> const& options) {
+	FILE* cfg_file = NULL;
+	DIR* dir = opendir((cfg_dir_prefix + "/etc/grub-customizer").c_str());
+	if (dir) {
+		closedir(dir);
+	} else {
+		int res = mkdir((cfg_dir_prefix + "/etc/grub-customizer").c_str(), 0755);
+		if (res != 0) {
+			throw FileSaveException("cannot save the view config file (directory creation)", __FILE__, __LINE__);
+		}
+	}
+	cfg_file = fopen((cfg_dir_prefix + "/etc/grub-customizer/viewOptions.cfg").c_str(), "w");
+	if (!cfg_file) {
+		throw FileSaveException("cannot save the view config file (file creation)", __FILE__, __LINE__);
+	}
+	Model_SettingsStore ds;
+	for (std::map<ViewOption, bool>::const_iterator iter = options.begin(); iter != options.end(); iter++) {
+		std::string optionText = "";
+		switch (iter->first) {
+		case VIEW_SHOW_DETAILS: optionText = "SHOW_DETAILS"; break;
+		default: throw LogicException("option mapping failed");
+		}
+		ds.setValue(optionText, iter->second ? "true" : "false");
+	}
+	ds.save(cfg_file);
+	fclose(cfg_file);
+}
+
+std::map<ViewOption, bool> Model_Env::loadViewOptions() {
+	FILE* file = fopen((cfg_dir_prefix + "/etc/grub-customizer/viewOptions.cfg").c_str(), "r");
+	if (file == NULL) {
+		throw FileReadException("viewOptions not found");
+	}
+	Model_SettingsStore ds(file);
+	std::map<ViewOption, bool> result;
+	if (ds.getValue("SHOW_DETAILS") != "") {
+		result[VIEW_SHOW_DETAILS] = ds.getValue("SHOW_DETAILS") == "true";
+	}
+	return result;
+}
+
 std::map<std::string, std::string> Model_Env::getProperties() {
 	std::map<std::string, std::string> result;
 	result["MKCONFIG_CMD"] = this->mkconfig_cmd.substr(this->cmd_prefix.size());

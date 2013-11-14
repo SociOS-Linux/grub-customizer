@@ -26,6 +26,8 @@
 #include "Settings.h"
 #include "../../lib/str_replace.h"
 #include "../../lib/assert.h"
+#include "../../Controller/MainController.h"
+#include "../../lib/Type.h"
 
 class View_Gtk_Main_List : public Gtk::TreeView {
 public:
@@ -85,11 +87,14 @@ class View_Gtk_Main : public View_Main, public CommonClass {
 	Gtk::ImageMenuItem miExit, miSave, miAbout, miModifyEnvironment, miRevert, miCreateEntry;
 	ImageMenuItemOwnKey miReload, miAdd, miRemove, miUp, miDown, miLeft, miRight, miEditEntry;
 	Gtk::ImageMenuItem miCRemove, miCUp, miCDown, miCLeft, miCRight, miCRename, miCEditEntry;
+	Gtk::CheckMenuItem miShowDetails;
 	Gtk::Menu subFile, subEdit, subView, subHelp, contextMenu;
 	
 	Gtk::VBox settingsHBox;
 
 	bool lock_state;
+
+	std::map<ViewOption, bool> options;
 
 	Gtk::MessageDialog burgSwitcher;
 
@@ -154,6 +159,9 @@ public:
 
 	void showPlaintextRemoveWarning();
 	void showSystemRuleRemoveWarning();
+	void setOption(ViewOption option, bool value);
+	std::map<ViewOption, bool> const& getOptions();
+	void setOptions(std::map<ViewOption, bool> const& options);
 private:
 	//event handlers
 	void signal_show_envEditor();
@@ -181,6 +189,7 @@ private:
 	void signal_revert();
 	void signal_reload_recommendation_response(int response_id);
 	void signal_tab_changed(GtkNotebookPage* page, guint page_num);
+	void signal_viewopt_details_toggled();
 };
 
 #endif

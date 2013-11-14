@@ -30,6 +30,7 @@
 #include "SettingsStore.h"
 #include "../lib/Exception.h"
 #include "../lib/ArrayStructure.h"
+#include "../lib/Type.h"
 
 struct Model_Env : public CommonClass {
 public:
@@ -48,6 +49,8 @@ public:
 	bool init(Model_Env::Mode mode, std::string const& dir_prefix);
 	void loadFromFile(FILE* cfg_file, std::string const& dir_prefix);
 	void save();
+	void saveViewOptions(std::map<ViewOption, bool> const& options);
+	std::map<ViewOption, bool> loadViewOptions();
 	std::map<std::string, std::string> getProperties();
 	void setProperties(std::map<std::string, std::string> const& props);
 	std::list<std::string> getRequiredProperties();

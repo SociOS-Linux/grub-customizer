@@ -37,7 +37,7 @@ View_Gtk_Main::View_Gtk_Main()
 	miCLeft(Gtk::Stock::GO_BACK), miCRight(Gtk::Stock::GO_FORWARD), miCRename(Gtk::Stock::EDIT), miCEditEntry(Gtk::Stock::EDIT),
 	miReload(Gtk::Stock::REFRESH, Gtk::AccelKey("F5")), miSave(Gtk::Stock::SAVE),
 	miAbout(Gtk::Stock::ABOUT), miModifyEnvironment(Gtk::Stock::OPEN), miRevert(Gtk::Stock::REVERT_TO_SAVED),
-	miCreateEntry(Gtk::Stock::NEW),
+	miCreateEntry(Gtk::Stock::NEW), miShowDetails(gettext("_Show details"), true),
 	lock_state(~0), burgSwitcher(gettext("BURG found!"), false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO),
 	bttAdvancedSettings1(gettext("advanced settings")), bttAdvancedSettings2(gettext("advanced settings")),
 	bbxAdvancedSettings1(Gtk::BUTTONBOX_END), bbxAdvancedSettings2(Gtk::BUTTONBOX_END),
@@ -121,6 +121,8 @@ View_Gtk_Main::View_Gtk_Main()
 	tbttReload.set_tooltip_text(gettext("reloads the configuration. Unsaved changes will be preserved."));
 	
 	this->setLockState(3);
+	this->options[VIEW_SHOW_DETAILS] = true;
+
 	//menu
 	menu.append(miFile);
 	menu.append(miEdit);
@@ -171,7 +173,10 @@ View_Gtk_Main::View_Gtk_Main()
 
 
 	subView.attach(miReload, 0,1,0,1);
+	subView.attach(miShowDetails, 0, 1, 1, 2);
 	
+	miShowDetails.set_active(true);
+
 	subHelp.attach(miAbout, 0,1,0,1);
 	
 	miModifyEnvironment.set_label(gettext("_Change Environment …"));
@@ -226,6 +231,7 @@ View_Gtk_Main::View_Gtk_Main()
 	miInstallGrub.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_show_grub_install_dialog_click));
 	miModifyEnvironment.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_show_envEditor));
 	miRevert.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_revert));
+	miShowDetails.signal_toggled().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_viewopt_details_toggled));
 
 	miExit.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_quit_click));
 	miAbout.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_info_click));
@@ -309,6 +315,12 @@ void View_Gtk_Main::signal_tab_changed(GtkNotebookPage* page, guint page_num) {
 	}
 }
 
+void View_Gtk_Main::signal_viewopt_details_toggled() {
+	if (this->eventListener) {
+		this->eventListener->setViewOptionAction(VIEW_SHOW_DETAILS, this->miShowDetails.get_active());
+	}
+}
+
 void View_Gtk_Main::showBurgSwitcher(){
 	burgSwitcher.show();
 }
@@ -375,30 +387,37 @@ void View_Gtk_Main::appendEntry(std::string const& name, void* entryPtr, bool is
 	if (!is_placeholder) {
 		outputName = "<b>" + outputName + "</b>";
 	}
-	outputName += "\n<small>";
+	if (this->options[VIEW_SHOW_DETAILS]) {
+		outputName += "\n<small>";
+		if (is_submenu) {
+			outputName += gettext("submenu");
+		} else if (is_placeholder) {
+			outputName += gettext("placeholder");
+		} else {
+			outputName += gettext("menuentry");
+		}
+		if (scriptName != "") {
+			outputName += std::string(" / ") + gettext("script: ") + escapeXml(scriptName);
+		}
+
+		if (defaultName != "" && name != defaultName) {
+			outputName += std::string(" / ") + gettext("default name: ") + escapeXml(defaultName);
+		}
+
+		if (options.find("_deviceName") != options.end()) {
+			outputName += escapeXml(Glib::ustring(" / ") + gettext("Partition: ") + options.at("_deviceName"));
+		}
+
+		outputName += "</small>";
+	}
+
 	if (is_submenu) {
-		outputName += gettext("submenu");
 		icon = this->win.render_icon(Gtk::Stock::DIRECTORY, Gtk::ICON_SIZE_LARGE_TOOLBAR);
 	} else if (is_placeholder) {
-		outputName += gettext("placeholder");
 		icon = this->win.render_icon(Gtk::Stock::FIND, Gtk::ICON_SIZE_LARGE_TOOLBAR);
 	} else {
-		outputName += gettext("menuentry");
 		icon = this->win.render_icon(Gtk::Stock::EXECUTE, Gtk::ICON_SIZE_LARGE_TOOLBAR);
 	}
-	if (scriptName != "") {
-		outputName += std::string(" / ") + gettext("script: ") + escapeXml(scriptName);
-	}
-
-	if (defaultName != "" && name != defaultName) {
-		outputName += std::string(" / ") + gettext("default name: ") + escapeXml(defaultName);
-	}
-
-	if (options.find("_deviceName") != options.end()) {
-		outputName += escapeXml(Glib::ustring(" / ") + gettext("Partition: ") + options.at("_deviceName"));
-	}
-
-	outputName += "</small>";
 
 	if (isModified) {
 		outputName = "<i>" + outputName + "</i>";
@@ -665,6 +684,28 @@ void View_Gtk_Main::showSystemRuleRemoveWarning() {
 	int result = dlg.run();
 	if (result == Gtk::RESPONSE_OK) {
 		eventListener->removeRulesAction(this->getSelectedRules(), true);
+	}
+}
+
+void View_Gtk_Main::setOption(ViewOption option, bool value) {
+	int oldLockState = this->lock_state;
+	this->setLockState(~0);
+	this->options[option] = value;
+	switch (option) {
+	case VIEW_SHOW_DETAILS: this->miShowDetails.set_active(value); break;
+	default:
+		throw LogicException("unexpected option");
+	}
+	this->setLockState(oldLockState);
+}
+
+std::map<ViewOption, bool> const& View_Gtk_Main::getOptions() {
+	return this->options;
+}
+
+void View_Gtk_Main::setOptions(std::map<ViewOption, bool> const& options) {
+	for (std::map<ViewOption, bool>::const_iterator iter = options.begin(); iter != options.end(); iter++) {
+		this->setOption(iter->first, iter->second);
 	}
 }
 
