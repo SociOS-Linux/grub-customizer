@@ -3,7 +3,7 @@ Section: admin
 Priority: optional
 Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
 XSBC-Original-Maintainer: Daniel Richter <danielrichter2007@web.de>
-Build-Depends: debhelper (>= 7.3), libgtkmm-2.4-dev (>= 2.20.0), libssl-dev, cmake (>=2.6.2), gettext (>=0.17), dpatch
+Build-Depends: debhelper (>= 7.3), libgtkmm-2.4-dev (>= 2.20.0), libssl-dev, cmake (>=2.6.2), gettext (>=0.17), dpatch, libarchive-dev
 Standards-Version: 3.9.2
 Homepage: https://launchpad.net/grub-customizer
 
