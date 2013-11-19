@@ -685,7 +685,7 @@ msgstr "Einstellungen des benutzerdefinierteb Themas"
 
 #: src/View/Gtk/Theme.cpp:32
 msgid "Normal: Font"
-msgstr "normal: Scriptart"
+msgstr "normal: Schriftart"
 
 #: src/View/Gtk/Theme.cpp:33
 msgid "Normal: Background"
@@ -693,7 +693,7 @@ msgstr "Normal: Hintergrund"
 
 #: src/View/Gtk/Theme.cpp:34
 msgid "Highlighted: Font"
-msgstr "Hervorgehoben: Scriptart"
+msgstr "Hervorgehoben: Schriftart"
 
 #: src/View/Gtk/Theme.cpp:35
 msgid "Highlighted: Background"
