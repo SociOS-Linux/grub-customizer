@@ -427,6 +427,13 @@ void ThemeControllerImpl::updateFontSettingsAction(bool removeFont) {
 		if (fontName != "") {
 			this->settings->mkFont("", "/tmp/grub_customizer_chosen_font_test.pf2");
 			this->settings->grubFont = this->settings->parsePf2("/tmp/grub_customizer_chosen_font_test.pf2")["NAME"];
+
+			// must be done again to check the font returned by parsePf2
+			this->settings->mkFont("", "/tmp/grub_customizer_chosen_font_test.pf2");
+			this->settings->grubFont = this->settings->parsePf2("/tmp/grub_customizer_chosen_font_test.pf2")["NAME"];
+
+			// to prevent usage of the temporary font file
+			this->settings->removeItem("GRUB_FONT");
 		}
 
 		this->syncSettings();

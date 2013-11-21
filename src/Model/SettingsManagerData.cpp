@@ -63,6 +63,7 @@ std::string Model_SettingsManagerData::getFontFileByName(std::string const& name
 	translatedName = str_replace(" Italic", ":Italic", translatedName);
 	translatedName = str_replace(" Medium", ":Medium", translatedName);
 	translatedName = str_replace(" Oblique", ":Oblique", translatedName);
+	translatedName = str_replace(" Regular", ":Regular", translatedName);
 
 	std::string cmd = "fc-match -f '%{file[0]}' '" + translatedName + "'";
 	FILE* proc = popen(cmd.c_str(), "r");
