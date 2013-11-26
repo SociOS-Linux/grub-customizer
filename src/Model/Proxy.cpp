@@ -159,10 +159,6 @@ void Model_Proxy::sync_connectExisting(Model_Rule* parent, std::map<std::string,
 			if (iter->__sourceScriptPath == "") { // main dataSource
 				script = this->dataSource;
 			} else if (scriptMap.size()) {
-				std::cout << "scriptMapSize: " << scriptMap.size() << std::endl;
-				std::cout << "looking for: " << iter->__sourceScriptPath << std::endl;
-				std::cout << "first item: " << scriptMap.begin()->first << std::endl;
-
 				assert(scriptMap.find(iter->__sourceScriptPath) != scriptMap.end()); // expecting that the script exists on the map
 				script = scriptMap[iter->__sourceScriptPath];
 			} else {
