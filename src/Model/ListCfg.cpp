@@ -437,6 +437,7 @@ void Model_ListCfg::save(){
 	
 	FILE* proxyBin = fopen((this->env->cfg_dir+"/bin/grubcfg_proxy").c_str(), "r");
 	bool proxybin_exists = proxyBin != NULL;
+	fclose(proxyBin);
 	std::string dummyproxy_code = "#!/bin/sh\ncat\n";
 	
 	/**
