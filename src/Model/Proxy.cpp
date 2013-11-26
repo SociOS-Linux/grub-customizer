@@ -51,7 +51,7 @@ std::list<Model_Rule> Model_Proxy::parseRuleString(const char** ruleString, std:
 					if (inAlias) {
 						rules.back().outputName = name;
 					} else if (inFromClause) {
-						rules.back().__sourceScriptPath = (cfgDirPrefix != "" ? cfgDirPrefix : "") + name;
+						rules.back().__sourceScriptPath = cfgDirPrefix + name;
 					} else {
 						path.push_back(name);
 						rules.push_back(Model_Rule(Model_Rule::NORMAL, path, visible));
