@@ -144,11 +144,11 @@ void Model_ListCfg::load(bool preserveConfig){
 					fclose(proxyFile);
 					if (data){
 						this->proxies.back().dataSource = repository.getScriptByFilename(this->env->cfg_dir_prefix+data.scriptCmd);
-						this->proxies.back().importRuleString(data.ruleString.c_str());
+						this->proxies.back().importRuleString(data.ruleString.c_str(), this->env->cfg_dir_prefix);
 					}
 					else {
 						this->proxies.back().dataSource = repository.getScriptByFilename(this->env->cfg_dir+"/"+entry->d_name);
-						this->proxies.back().importRuleString("+*"); //it's no proxy, so accept all
+						this->proxies.back().importRuleString("+*", this->env->cfg_dir_prefix); //it's no proxy, so accept all
 					}
 				
 				}

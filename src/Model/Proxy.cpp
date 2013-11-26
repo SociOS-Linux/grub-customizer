@@ -30,7 +30,7 @@ Model_Proxy::Model_Proxy(Model_Script& dataSource, bool activateRules)
 	sync(true, true);
 }
 
-std::list<Model_Rule> Model_Proxy::parseRuleString(const char** ruleString) {
+std::list<Model_Rule> Model_Proxy::parseRuleString(const char** ruleString, std::string const& cfgDirPrefix) {
 	std::list<Model_Rule> rules;
 
 	bool inString = false, inAlias = false, inHash = false, inFromClause = false;
@@ -51,7 +51,7 @@ std::list<Model_Rule> Model_Proxy::parseRuleString(const char** ruleString) {
 					if (inAlias) {
 						rules.back().outputName = name;
 					} else if (inFromClause) {
-						rules.back().__sourceScriptPath = name;
+						rules.back().__sourceScriptPath = (cfgDirPrefix != "" ? cfgDirPrefix : "") + name;
 					} else {
 						path.push_back(name);
 						rules.push_back(Model_Rule(Model_Rule::NORMAL, path, visible));
@@ -85,7 +85,7 @@ std::list<Model_Rule> Model_Proxy::parseRuleString(const char** ruleString) {
 			name = "";
 		} else if (!inString && !inAlias && !inFromClause && *iter == '{') {
 			iter++;
-			rules.back().subRules = Model_Proxy::parseRuleString(&iter);
+			rules.back().subRules = Model_Proxy::parseRuleString(&iter, cfgDirPrefix);
 			rules.back().type = Model_Rule::SUBMENU;
 		} else if (!inString && *iter == '~') {
 			inHash = !inHash;
@@ -99,8 +99,8 @@ std::list<Model_Rule> Model_Proxy::parseRuleString(const char** ruleString) {
 	return rules;
 }
 
-void Model_Proxy::importRuleString(const char* ruleString){
-	rules = Model_Proxy::parseRuleString(&ruleString);
+void Model_Proxy::importRuleString(const char* ruleString, std::string const& cfgDirPrefix){
+	rules = Model_Proxy::parseRuleString(&ruleString, cfgDirPrefix);
 }
 
 Model_Rule* Model_Proxy::getRuleByEntry(Model_Entry const& entry, std::list<Model_Rule>& list, Model_Rule::RuleType ruletype) {
@@ -159,6 +159,10 @@ void Model_Proxy::sync_connectExisting(Model_Rule* parent, std::map<std::string,
 			if (iter->__sourceScriptPath == "") { // main dataSource
 				script = this->dataSource;
 			} else if (scriptMap.size()) {
+				std::cout << "scriptMapSize: " << scriptMap.size() << std::endl;
+				std::cout << "looking for: " << iter->__sourceScriptPath << std::endl;
+				std::cout << "first item: " << scriptMap.begin()->first << std::endl;
+
 				assert(scriptMap.find(iter->__sourceScriptPath) != scriptMap.end()); // expecting that the script exists on the map
 				script = scriptMap[iter->__sourceScriptPath];
 			} else {
