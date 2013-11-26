@@ -167,6 +167,7 @@ std::map<ViewOption, bool> Model_Env::loadViewOptions() {
 		throw FileReadException("viewOptions not found");
 	}
 	Model_SettingsStore ds(file);
+	fclose(file);
 	std::map<ViewOption, bool> result;
 	if (ds.getValue("SHOW_DETAILS") != "") {
 		result[VIEW_SHOW_DETAILS] = ds.getValue("SHOW_DETAILS") == "true";
