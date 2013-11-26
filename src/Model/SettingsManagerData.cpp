@@ -91,7 +91,7 @@ std::string Model_SettingsManagerData::mkFont(std::string fontFile, std::string 
 			return ""; // fehler
 		}
 	}
-	outputPath = outputPath != "" ? outputPath : this->env->output_config_dir + "/unicode.pf2";
+	outputPath = outputPath != "" ? outputPath : this->env->output_config_dir_noprefix + "/unicode.pf2";
 	FILE* mkfont_proc = popen((this->env->mkfont_cmd + " --output='" + str_replace("'", "\\'", outputPath) + "'" + sizeParam + " '" + str_replace("'", "\\'", fontFile) + "' 2>&1").c_str(), "r");
 	int c;
 //	std::string row = "";
@@ -121,7 +121,7 @@ bool Model_SettingsManagerData::load(){
 		if (this->getValue("GRUB_FONT") != "") {
 			this->oldFontFile = this->getValue("GRUB_FONT");
 			this->log("parsing " + this->getValue("GRUB_FONT"), Logger::INFO);
-			this->grubFont = Model_SettingsManagerData::parsePf2(this->getValue("GRUB_FONT"))["NAME"];
+			this->grubFont = Model_SettingsManagerData::parsePf2(this->env->cfg_dir_prefix + this->getValue("GRUB_FONT"))["NAME"];
 			this->log("result " + this->grubFont, Logger::INFO);
 			this->removeItem("GRUB_FONT");
 		}

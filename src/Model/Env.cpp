@@ -214,6 +214,7 @@ void Model_Env::setProperties(std::map<std::string, std::string> const& props) {
 	this->mkdevicemap_cmd = this->cmd_prefix + props.at("MKDEVICEMAP_CMD");
 	this->cfg_dir_noprefix = props.at("CFG_DIR");
 	this->cfg_dir = this->cfg_dir_prefix + props.at("CFG_DIR");
+	this->output_config_dir_noprefix = props.at("OUTPUT_DIR");
 	this->output_config_dir = this->cfg_dir_prefix + props.at("OUTPUT_DIR");
 	this->output_config_file = this->cfg_dir_prefix + props.at("OUTPUT_FILE");
 	this->settings_file = this->cfg_dir_prefix + props.at("SETTINGS_FILE");
