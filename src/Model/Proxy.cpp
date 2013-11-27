@@ -388,6 +388,7 @@ bool Model_Proxy::generateFile(std::string const& path, int cfg_dir_prefix_lengt
 				Model_EntryPathBuilderImpl entryPathBuilder(*this->dataSource);
 				entryPathBuilder.setScriptTargetMap(scriptTargetMap);
 				entryPathBuilder.setEntrySourceMap(entrySourceMap);
+				entryPathBuilder.setPrefixLength(cfg_dir_prefix_length);
 				fputs((ruleIter->toString(entryPathBuilder)+"\n").c_str(), proxyFile); //write rule
 			}
 			fputs("\"", proxyFile);

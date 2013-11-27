@@ -18,7 +18,9 @@
 
 #include "EntryPathBuilderImpl.h"
 
-Model_EntryPathBuilderImpl::Model_EntryPathBuilderImpl(Model_Script const& mainScript) {
+Model_EntryPathBuilderImpl::Model_EntryPathBuilderImpl(Model_Script const& mainScript)
+	: prefixLength(0), mainScript(NULL)
+{
 	this->setMainScript(mainScript);
 }
 
@@ -33,6 +35,10 @@ void Model_EntryPathBuilderImpl::setScriptTargetMap(std::map<Model_Script const*
 	this->scriptTargetMap = scriptTargetMap;
 }
 
+void Model_EntryPathBuilderImpl::setPrefixLength(int length) {
+	this->prefixLength = length;
+}
+
 std::list<std::string> Model_EntryPathBuilderImpl::buildPath(Model_Entry const& entry) const {
 	Model_Script const* script = entrySourceMap.find(&entry) != entrySourceMap.end() ? entrySourceMap.find(&entry)->second : this->mainScript;
 	return script->buildPath(entry);
@@ -44,5 +50,5 @@ std::string Model_EntryPathBuilderImpl::buildPathString(Model_Entry const& entry
 
 std::string Model_EntryPathBuilderImpl::buildScriptPath(Model_Entry const& entry) const {
 	Model_Script const* script = entrySourceMap.find(&entry) != entrySourceMap.end() ? entrySourceMap.find(&entry)->second : NULL;
-	return script ? this->scriptTargetMap.find(script)->second : "";
+	return script ? this->scriptTargetMap.find(script)->second.substr(this->prefixLength) : "";
 }
