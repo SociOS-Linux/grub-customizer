@@ -46,7 +46,8 @@ bool Model_Env::init(Model_Env::Mode mode, std::string const& dir_prefix){
 			this->mkdevicemap_cmd = "burg-mkdevicemap --device-map=/dev/stdout";
 			this->cfg_dir = dir_prefix+"/etc/burg.d";
 			this->cfg_dir_noprefix = "/etc/burg.d";
-			this->output_config_dir =  dir_prefix+"/boot/burg";
+			this->output_config_dir = dir_prefix+"/boot/burg";
+			this->output_config_dir_noprefix = "/boot/burg";
 			this->output_config_file = dir_prefix+"/boot/burg/burg.cfg";
 			this->settings_file = dir_prefix+"/etc/default/burg";
 			this->devicemap_file = dir_prefix+"/boot/burg/device.map";
@@ -66,7 +67,8 @@ bool Model_Env::init(Model_Env::Mode mode, std::string const& dir_prefix){
 			this->mkdevicemap_cmd = "grub-mkdevicemap --device-map=/dev/stdout";
 			this->cfg_dir = dir_prefix+"/etc/grub.d";
 			this->cfg_dir_noprefix = "/etc/grub.d";
-			this->output_config_dir =  dir_prefix+"/boot/grub";
+			this->output_config_dir = dir_prefix+"/boot/grub";
+			this->output_config_dir_noprefix = "/boot/grub";
 			this->output_config_file = dir_prefix+"/boot/grub/grub.cfg";
 			this->settings_file = dir_prefix+"/etc/default/grub";
 			this->devicemap_file = dir_prefix+"/boot/grub/device.map";
@@ -96,7 +98,8 @@ void Model_Env::loadFromFile(FILE* cfg_file, std::string const& dir_prefix) {
 	this->mkdevicemap_cmd = ds.getValue("MKDEVICEMAP_CMD");
 	this->cfg_dir = dir_prefix + ds.getValue("CFG_DIR");
 	this->cfg_dir_noprefix = ds.getValue("CFG_DIR");
-	this->output_config_dir =  dir_prefix + ds.getValue("OUTPUT_DIR");
+	this->output_config_dir = dir_prefix + ds.getValue("OUTPUT_DIR");
+	this->output_config_dir_noprefix = ds.getValue("OUTPUT_DIR");
 	this->output_config_file = dir_prefix + ds.getValue("OUTPUT_FILE");
 	this->settings_file = dir_prefix + ds.getValue("SETTINGS_FILE");
 	this->devicemap_file = dir_prefix + ds.getValue("DEVICEMAP_FILE");

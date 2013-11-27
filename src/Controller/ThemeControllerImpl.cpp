@@ -446,6 +446,19 @@ void ThemeControllerImpl::updateFontSettingsAction(bool removeFont) {
 	this->logActionEnd();
 }
 
+/**
+ * sync font size from view back to model. should be called on startup
+ */
+void ThemeControllerImpl::updateFontSizeAction() {
+	this->logActionBegin("update-font-size");
+	try {
+		this->settings->grubFontSize = this->view->getFontSize();
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
+	this->logActionEnd();
+}
+
 void ThemeControllerImpl::removeBackgroundImageAction(){
 	this->logActionBegin("remove-background-image");
 	try {

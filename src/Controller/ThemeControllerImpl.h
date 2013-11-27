@@ -64,6 +64,7 @@ public:
 
 	void updateColorSettingsAction();
 	void updateFontSettingsAction(bool removeFont);
+	void updateFontSizeAction();
 	void updateBackgroundImageAction();
 	void removeBackgroundImageAction();
 	void updateSettingsDataAction();

@@ -92,7 +92,9 @@ std::string Model_SettingsManagerData::mkFont(std::string fontFile, std::string 
 		}
 	}
 	outputPath = outputPath != "" ? outputPath : this->env->output_config_dir_noprefix + "/unicode.pf2";
-	FILE* mkfont_proc = popen((this->env->mkfont_cmd + " --output='" + str_replace("'", "\\'", outputPath) + "'" + sizeParam + " '" + str_replace("'", "\\'", fontFile) + "' 2>&1").c_str(), "r");
+	std::string cmd = this->env->mkfont_cmd + " --output='" + str_replace("'", "\\'", outputPath) + "'" + sizeParam + " '" + str_replace("'", "\\'", fontFile) + "' 2>&1";
+	this->log("running " + cmd, Logger::INFO);
+	FILE* mkfont_proc = popen(cmd.c_str(), "r");
 	int c;
 //	std::string row = "";
 	while ((c = fgetc(mkfont_proc)) != EOF) {

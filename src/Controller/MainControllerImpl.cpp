@@ -956,6 +956,7 @@ void MainControllerImpl::activateSettingsAction() {
 		this->view->setLockState(1);
 		this->getAllControllers().settingsController->syncAction();
 		this->getAllControllers().themeController->loadThemesAction();
+		this->getAllControllers().themeController->updateFontSizeAction();
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
