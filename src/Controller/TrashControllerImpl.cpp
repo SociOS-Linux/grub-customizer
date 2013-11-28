@@ -41,7 +41,7 @@ void TrashControllerImpl::_refreshView(Model_Rule* parent) {
 
 		std::string name = iter->outputName;
 		if (iter->dataSource && script) {
-			name = this->entryNameMapper->map(iter->dataSource, name, script->name);
+			name = this->entryNameMapper->map(iter->dataSource, name, iter->type != Model_Rule::SUBMENU);
 		}
 
 		View_Model_ListItem<Rule, Script> listItem;

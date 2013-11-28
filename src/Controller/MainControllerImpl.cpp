@@ -367,7 +367,7 @@ void MainControllerImpl::_rAppendRule(Model_Rule& rule, Model_Rule* parentRule){
 	bool is_submenu = rule.type == Model_Rule::SUBMENU;
 
 	if (rule.dataSource || is_submenu){
-		std::string name = this->entryNameMapper->map(rule.dataSource, rule.outputName);
+		std::string name = this->entryNameMapper->map(rule.dataSource, rule.outputName, true);
 
 		bool isSubmenu = rule.type == Model_Rule::SUBMENU;
 		std::string scriptName = "", defaultName = "";

@@ -18,19 +18,19 @@
 
 #include "EntryNameImpl.h"
 
-std::string Mapper_EntryNameImpl::map(Model_Entry const* sourceEntry, std::string const& defaultName, std::string const& scriptName) {
+std::string Mapper_EntryNameImpl::map(Model_Entry const* sourceEntry, std::string const& defaultName, bool treatSubmenuAsPlaceholder) {
 	assert(this->view != NULL);
 	std::string name;
-	bool is_other_entries_ph = sourceEntry ? sourceEntry->type == Model_Entry::SUBMENU || sourceEntry->type == Model_Entry::SCRIPT_ROOT : false;
+	bool is_other_entries_ph = sourceEntry && treatSubmenuAsPlaceholder ? sourceEntry->type == Model_Entry::SUBMENU || sourceEntry->type == Model_Entry::SCRIPT_ROOT : false;
 	bool is_plaintext = sourceEntry ? sourceEntry->type == Model_Entry::PLAINTEXT : false;
 	if (is_other_entries_ph) {
 		if (sourceEntry->type != Model_Entry::SCRIPT_ROOT) {
-			name = this->view->createNewEntriesPlaceholderString(sourceEntry->name, scriptName);
+			name = this->view->createNewEntriesPlaceholderString(sourceEntry->name);
 		} else {
-			name = this->view->createNewEntriesPlaceholderString("", scriptName);
+			name = this->view->createNewEntriesPlaceholderString("");
 		}
 	} else if (is_plaintext) {
-		name = this->view->createPlaintextString(scriptName);
+		name = this->view->createPlaintextString();
 	} else {
 		name = defaultName;
 	}
