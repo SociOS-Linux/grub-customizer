@@ -69,8 +69,6 @@ cd $basedir/releases/$subdir/launchpad-source
 tar xzf grub-customizer_$version.tar.gz
 cd grub-customizer-4.0
 cp -r $releasedir/grub-customizer-$version/debian debian
-dpatch apply 01su-to-root.dpatch
-if [ "$?" -ne 0 ] ; then echo 'fail'; exit; fi
 dpatch apply 02_gtkmm24.dpatch
 if [ "$?" -ne 0 ] ; then echo 'fail'; exit; fi
 dpatch apply 03_libarchive_old.dpatch
