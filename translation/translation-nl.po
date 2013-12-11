@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2013-11-13 22:24+0100\n"
-"PO-Revision-Date: 2013-11-16 21:27+0000\n"
+"PO-Revision-Date: 2013-12-01 20:19+0000\n"
 "Last-Translator: rob <linuxned@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-11-27 22:20+0000\n"
-"X-Generator: Launchpad (build 16847)\n"
+"X-Launchpad-Export-Date: 2013-12-11 20:52+0000\n"
+"X-Generator: Launchpad (build 16869)\n"
 
 #: src/Controller/MainControllerImpl.cpp:654
 msgid "Name the Entry"
@@ -921,7 +921,7 @@ msgstr "Opstartkeuze vanuit de prullenbak toevoegen"
 
 #: src/View/Gtk/Trash.cpp:32
 msgid "Removed items"
-msgstr ""
+msgstr "Verwijderde items"
 
 #: src/View/Gtk/Trash.cpp:42
 msgid "_Restore"
