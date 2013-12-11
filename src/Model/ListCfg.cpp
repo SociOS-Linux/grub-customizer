@@ -157,6 +157,26 @@ void Model_ListCfg::load(bool preserveConfig){
 		closedir(hGrubCfgDir);
 		this->proxies.sort();
 		this->unlock();
+
+
+		//clean up proxy configuration
+		this->log("cleaning up proxy configuration…", Logger::EVENT);
+		this->lock();
+
+		bool proxyRemoved = false;
+		do {
+			for (std::list<Model_Proxy>::iterator pIter = this->proxies.begin(); pIter != this->proxies.end(); pIter++) {
+				if (!pIter->isExecutable() || !pIter->hasVisibleRules()) {
+					this->log(pIter->fileName + " has no visible entries and will be removed / disabled", Logger::INFO);
+					this->proxies.deleteProxy(&*pIter);
+					proxyRemoved = true;
+					break;
+				}
+			}
+			proxyRemoved = false;
+		} while (proxyRemoved);
+
+		this->unlock();
 	}
 	else {
 		this->lock();
