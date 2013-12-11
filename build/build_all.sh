@@ -64,6 +64,24 @@ mkdir $basedir/releases/$subdir/launchpad-source
 cp $basedir/releases/$subdir/grub-customizer_$version.orig.tar.gz $basedir/releases/$subdir/launchpad-source/grub-customizer_$version.tar.gz
 gpg --armor --sign --detach-sig $basedir/releases/$subdir/launchpad-source/grub-customizer_$version.tar.gz
 
+olddir=`pwd`
+cd $basedir/releases/$subdir/launchpad-source
+tar xzf grub-customizer_$version.tar.gz
+cd grub-customizer-4.0
+cp -r $releasedir/grub-customizer-$version/debian debian
+dpatch apply 01su-to-root.dpatch
+if [ "$?" -ne 0 ] ; then echo 'fail'; exit; fi
+dpatch apply 02_gtkmm24.dpatch
+if [ "$?" -ne 0 ] ; then echo 'fail'; exit; fi
+dpatch apply 03_libarchive_old.dpatch
+if [ "$?" -ne 0 ] ; then echo 'fail'; exit; fi
+rm -rf debian
+cd ..
+tar -c grub-customizer-$version | gzip > $basedir/releases/$subdir/launchpad-source/grub-customizer_$version.gtk2.tar.gz
+rm -rf grub-customizer-$version
+gpg --armor --sign --detach-sig $basedir/releases/$subdir/launchpad-source/grub-customizer_$version.gtk2.tar.gz
+cd "$olddir"
+
 echo 7 > debian/compat
 echo "01su-to-root.dpatch\n02_gtkmm24.dpatch\n03_libarchive_old.dpatch" > debian/patches/00list
 cp debian/control debian/control.ori
