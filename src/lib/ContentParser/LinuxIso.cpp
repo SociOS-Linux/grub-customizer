@@ -84,7 +84,7 @@ std::string ContentParser_LinuxIso::buildSource() const {
 void ContentParser_LinuxIso::buildDefaultEntry(std::string const& partition_uuid) {
 	std::string defaultEntry = "\
 	set root='(hd0,0)'\n\
-	search --no-floppy --fs-uuid --set 000000000000000000\n\
+	search --no-floppy --fs-uuid --set=root 000000000000000000\n\
 	loopback loop /xxx.iso\n\
 	linux (loop)/casper/vmlinuz boot=casper iso-scan/filename=/xxx.iso quiet splash locale=en_US bootkbd=us console-setup/layoutcode=us noeject --\n\
 	initrd (loop)/casper/initrd.lz\n";
