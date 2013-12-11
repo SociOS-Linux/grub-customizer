@@ -127,6 +127,7 @@ void TrashControllerImpl::deleteCustomEntriesAction() {
 			this->grublistCfg->deleteEntry(*Model_Rule::fromPtr(*iter).dataSource);
 		}
 		this->_refresh();
+		this->updateSelectionAction(std::list<Rule*>());
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}
