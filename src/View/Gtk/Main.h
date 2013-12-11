@@ -49,6 +49,8 @@ class View_Gtk_Main : public View_Main, public Trait_LoggerAware, public Trait_C
 	Gtk::InfoBar infoScriptUpdatesFound;
 	Gtk::Label lblScriptUpdatesFound;
 
+	Gtk::ScrolledWindow scrCommonSettings, scrAppearanceSettings;
+
 	Gtk::VBox vbEntryList;
 	Gtk::Statusbar statusbar;
 	

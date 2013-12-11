@@ -49,7 +49,7 @@ View_Gtk_Main::View_Gtk_Main()
 {
 	win.set_icon_name("grub-customizer");
 
-	win.set_default_size(800,600);
+	win.set_default_size(900,600);
 	win.add(vbMainSplit);
 	
 	vbMainSplit.pack_start(menu, Gtk::PACK_SHRINK);
@@ -278,12 +278,16 @@ View_Gtk_Main::View_Gtk_Main()
 void View_Gtk_Main::putSettingsDialog(Gtk::VBox& commonSettingsPane, Gtk::VBox& appearanceSettingsPane) {
 //	notebook.append_page(this->settingsHBox, "_settings", true);
 	commonSettingsPane.set_border_width(20);
-	notebook.append_page(commonSettingsPane, gettext("_General settings"), true);
+	notebook.append_page(scrCommonSettings, gettext("_General settings"), true);
+	scrCommonSettings.add(commonSettingsPane);
+	scrCommonSettings.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
 	commonSettingsPane.pack_end(bbxAdvancedSettings1, false, false);
 	bbxAdvancedSettings1.pack_end(bttAdvancedSettings1);
 
 	appearanceSettingsPane.set_border_width(5);
-	notebook.append_page(appearanceSettingsPane, gettext("_Appearance settings"), true);
+	notebook.append_page(scrAppearanceSettings, gettext("_Appearance settings"), true);
+	scrAppearanceSettings.add(appearanceSettingsPane);
+	scrAppearanceSettings.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
 	appearanceSettingsPane.pack_end(bbxAdvancedSettings2, false, false);
 	bbxAdvancedSettings2.pack_end(bttAdvancedSettings2);
 }
