@@ -85,19 +85,6 @@ echo "01su-to-root.dpatch\n02_gtkmm24.dpatch\n03_libarchive_old.dpatch" > debian
 cp debian/control debian/control.ori
 cat debian/control.ori | sed 's/libgtkmm-3.0-dev/libgtkmm-2.4-dev/' > debian/control
 
-# <karmic>
-cp $basedir/releases/$subdir/grub-customizer_$version.orig.tar.gz $basedir/release/grub-customizer_$version.orig.tar.gz
-$sourcedir/debian/changelog.d k karmic > debian/changelog
-debuild -S;
-mkdir $basedir/releases/$subdir/karmic
-mv $basedir/release/grub-customizer_* $basedir/releases/$subdir/karmic
-echo '#!/bin/sh
-dput ppa:danielrichter2007/grub-customizer '$basedir'/releases/'$subdir'/karmic/grub-customizer_'$version'-0ubuntu1~ppa'$rev'k_source.changes' > $basedir/releases/$subdir/karmic/upload.sh
-echo '#!/bin/sh
-cd '$basedir/releases/$subdir/karmic' && export BD=build_`date +%s` && mkdir $BD && sudo mount none $BD -t tmpfs && tar -xzf *.orig.tar.gz -C $BD && tar -xzf *.debian.tar.gz -C $BD/* && cp *.orig.tar.gz $BD/ && cd $BD/* && dpkg-buildpackage && cd ../.. && mv $BD/*.deb ./ && sudo umount $BD && rm -rf $BD' > $basedir/releases/$subdir/karmic/compile.sh
-chmod +x $basedir/releases/$subdir/karmic/*.sh
-# </karmic>
-
 
 # <lucid>
 cp $basedir/releases/$subdir/grub-customizer_$version.orig.tar.gz $basedir/release/grub-customizer_$version.orig.tar.gz
@@ -114,48 +101,11 @@ chmod +x $basedir/releases/$subdir/lucid/*.sh
 
 echo 8 > debian/compat
 
-# <maverick>
-cp $basedir/releases/$subdir/grub-customizer_$version.orig.tar.gz $basedir/release/grub-customizer_$version.orig.tar.gz
-$sourcedir/debian/changelog.d m maverick > debian/changelog
-debuild -S;
-mkdir $basedir/releases/$subdir/maverick
-mv $basedir/release/grub-customizer_* $basedir/releases/$subdir/maverick
-echo '#!/bin/sh
-dput ppa:danielrichter2007/grub-customizer '$basedir'/releases/'$subdir'/maverick/grub-customizer_'$version'-0ubuntu1~ppa'$rev'm_source.changes' > $basedir/releases/$subdir/maverick/upload.sh
-echo '#!/bin/sh
-cd '$basedir/releases/$subdir/maverick' && export BD=build_`date +%s` && mkdir $BD && sudo mount none $BD -t tmpfs && tar -xzf *.orig.tar.gz -C $BD && tar -xzf *.debian.tar.gz -C $BD/* && cp *.orig.tar.gz $BD/ && cd $BD/* && dpkg-buildpackage && cd ../.. && mv $BD/*.deb ./ && sudo umount $BD && rm -rf $BD' > $basedir/releases/$subdir/maverick/compile.sh
-chmod +x $basedir/releases/$subdir/maverick/*.sh
-# </maverick>
-
-# <natty>
-cp $basedir/releases/$subdir/grub-customizer_$version.orig.tar.gz $basedir/release/grub-customizer_$version.orig.tar.gz
-$sourcedir/debian/changelog.d n natty > debian/changelog
-debuild -S;
-mkdir $basedir/releases/$subdir/natty
-mv $basedir/release/grub-customizer_* $basedir/releases/$subdir/natty
-echo '#!/bin/sh
-dput ppa:danielrichter2007/grub-customizer '$basedir'/releases/'$subdir'/natty/grub-customizer_'$version'-0ubuntu1~ppa'$rev'n_source.changes' > $basedir/releases/$subdir/natty/upload.sh
-echo '#!/bin/sh
-cd '$basedir/releases/$subdir/natty' && export BD=build_`date +%s` && mkdir $BD && sudo mount none $BD -t tmpfs && tar -xzf *.orig.tar.gz -C $BD && tar -xzf *.debian.tar.gz -C $BD/* && cp *.orig.tar.gz $BD/ && cd $BD/* && dpkg-buildpackage && cd ../.. && mv $BD/*.deb ./ && sudo umount $BD && rm -rf $BD' > $basedir/releases/$subdir/natty/compile.sh
-chmod +x $basedir/releases/$subdir/natty/*.sh
-# </natty>
 
 dpatch deapply-all
 echo -n "" > debian/patches/00list
 mv debian/control.ori debian/control
 
-# <oneiric>
-cp $basedir/releases/$subdir/grub-customizer_$version.orig.tar.gz $basedir/release/grub-customizer_$version.orig.tar.gz
-$sourcedir/debian/changelog.d o oneiric > debian/changelog
-debuild -S;
-mkdir $basedir/releases/$subdir/oneiric
-mv $basedir/release/grub-customizer_* $basedir/releases/$subdir/oneiric
-echo '#!/bin/sh
-dput ppa:danielrichter2007/grub-customizer '$basedir'/releases/'$subdir'/oneiric/grub-customizer_'$version'-0ubuntu1~ppa'$rev'o_source.changes' > $basedir/releases/$subdir/oneiric/upload.sh
-echo '#!/bin/sh
-cd '$basedir/releases/$subdir/oneiric' && export BD=build_`date +%s` && mkdir $BD && sudo mount none $BD -t tmpfs && tar -xzf *.orig.tar.gz -C $BD && tar -xzf *.debian.tar.gz -C $BD/* && cp *.orig.tar.gz $BD/ && cd $BD/* && dpkg-buildpackage && cd ../.. && mv $BD/*.deb ./ && sudo umount $BD && rm -rf $BD' > $basedir/releases/$subdir/oneiric/compile.sh
-chmod +x $basedir/releases/$subdir/oneiric/*.sh
-# </oneiric>
 
 # <precise>
 cp $basedir/releases/$subdir/grub-customizer_$version.orig.tar.gz $basedir/release/grub-customizer_$version.orig.tar.gz
@@ -210,11 +160,7 @@ chmod +x $basedir/releases/$subdir/saucy/*.sh
 # </saucy>
 
 echo '#!/bin/sh
-'$basedir'/releases/'$subdir'/karmic/upload.sh
 '$basedir'/releases/'$subdir'/lucid/upload.sh
-'$basedir'/releases/'$subdir'/maverick/upload.sh
-'$basedir'/releases/'$subdir'/natty/upload.sh
-'$basedir'/releases/'$subdir'/oneiric/upload.sh
 '$basedir'/releases/'$subdir'/precise/upload.sh
 '$basedir'/releases/'$subdir'/quantal/upload.sh
 '$basedir'/releases/'$subdir'/raring/upload.sh
