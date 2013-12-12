@@ -653,7 +653,7 @@ msgstr ""
 
 #: src/View/Gtk/Theme.cpp:22
 msgid "_Load file: "
-msgstr "Thema _laden: "
+msgstr "Datei _laden: "
 
 #: src/View/Gtk/Theme.cpp:24
 msgid "_Theme:"
