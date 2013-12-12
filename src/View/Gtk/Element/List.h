@@ -120,7 +120,11 @@ public:
 		}
 		Gtk::TreeIter entryRow;
 		if (listItem.parentEntry) {
-			entryRow = this->refTreeStore->append(this->getIterByRulePtr(listItem.parentEntry)->children());
+			try {
+				entryRow = this->refTreeStore->append(this->getIterByRulePtr(listItem.parentEntry)->children());
+			} catch (ItemNotFoundException const& e) {
+				return; // this usually happens when there's a visible entry below a hidden submenu. Just don't show it in this case.
+			}
 		} else if (listItem.parentScript && options.at(VIEW_GROUP_BY_SCRIPT)) {
 			entryRow = this->refTreeStore->append(this->getIterByScriptPtr(listItem.parentScript)->children());
 		} else {

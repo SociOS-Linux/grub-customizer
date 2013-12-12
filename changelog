@@ -1,3 +1,18 @@
+v 4.0.1
+	* error when there's a visible menuentry below a hidden submenu - fixed
+
+v 4.0
+	* hiding placeholders
+	* view options
+	* improved trash view
+	* GTKmm 3.0
+	* Theming
+	* improved appearance settings
+	* script replacement detection (no more duplicates when grub scripts are replaced by an update of grub)
+	* backup creation on first run (allows simple restoring of the default config)
+	* more help texts
+	* fallback on systems without grub-mkdevicemap/device.map (better compatibility)
+
 v 3.0.2
 	* crash if blkid prints devices without UUID... fixed
 	* translation updates

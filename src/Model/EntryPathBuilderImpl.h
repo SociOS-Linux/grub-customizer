@@ -27,11 +27,13 @@ class Model_EntryPathBuilderImpl : public Model_EntryPathBilder {
 	Model_Script const* mainScript;
 	std::map<Model_Entry const*, Model_Script const*> entrySourceMap;
 	std::map<Model_Script const*, std::string> scriptTargetMap;
+	int prefixLength;
 public:
 	Model_EntryPathBuilderImpl(Model_Script const& mainScript);
 	void setMainScript(Model_Script const& mainScript);
 	void setEntrySourceMap(std::map<Model_Entry const*, Model_Script const*> const& entrySourceMap);
 	void setScriptTargetMap(std::map<Model_Script const*, std::string> const& scriptTargetMap);
+	void setPrefixLength(int length);
 	std::list<std::string> buildPath(Model_Entry const& entry) const;
 	std::string buildPathString(Model_Entry const& entry, bool withOtherEntriesPlaceholder = false) const;
 	std::string buildScriptPath(Model_Entry const& entry) const;

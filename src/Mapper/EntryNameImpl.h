@@ -26,7 +26,7 @@
 
 class Mapper_EntryNameImpl : public Mapper_EntryName, public View_Trait_ViewAware<View_Main> {
 public:
-	std::string map(Model_Entry const* sourceEntry, std::string const& defaultName, std::string const& scriptName = "");
+	std::string map(Model_Entry const* sourceEntry, std::string const& defaultName, bool treatSubmenuAsPlaceholder);
 };
 
 

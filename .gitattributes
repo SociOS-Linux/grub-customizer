@@ -14,6 +14,8 @@
 /CMakeLists.txt -text
 /COPYING -text
 /README -text
+build/README -text
+build/build_all.sh -text
 /changelog -text
 /cmake_uninstall.cmake.in -text
 /config.h.in -text

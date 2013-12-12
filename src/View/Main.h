@@ -70,7 +70,7 @@ public:
 	//creates a string for an other entry placeholder
 	virtual std::string createNewEntriesPlaceholderString(std::string const& parentMenu = "", std::string const& sourceScriptName = "")=0;
 	//creates the string for plaintexts
-	virtual std::string createPlaintextString(std::string const& scriptName) const=0;
+	virtual std::string createPlaintextString(std::string const& scriptName = "") const=0;
 
 	//asks the user if he wants to exit the whole application
 	virtual int showExitConfirmDialog(int type)=0;

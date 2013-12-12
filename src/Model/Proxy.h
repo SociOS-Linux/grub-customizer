@@ -42,8 +42,8 @@ struct Model_Proxy : public Proxy {
 	Model_Proxy(Model_Script& dataSource, bool activateRules = true);
 	bool isExecutable() const;
 	void set_isExecutable(bool value);
-	static std::list<Model_Rule> parseRuleString(const char** ruleString);
-	void importRuleString(const char* ruleString);
+	static std::list<Model_Rule> parseRuleString(const char** ruleString, std::string const& cfgDirPrefix);
+	void importRuleString(const char* ruleString, std::string const& cfgDirPrefix);
 	Model_Rule* getRuleByEntry(Model_Entry const& entry, std::list<Model_Rule>& list, Model_Rule::RuleType ruletype);
 	void unsync(Model_Rule* parent = NULL);
 	bool sync(bool deleteInvalidRules = true, bool expand = true, std::map<std::string, Model_Script*> scriptMap = std::map<std::string, Model_Script*>());

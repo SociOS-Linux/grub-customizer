@@ -17,6 +17,7 @@ diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' 
  pkg_check_modules(GTHREAD gthread-2.0)
  pkg_check_modules(OPENSSL openssl)
  pkg_check_modules(LIBARCHIVE libarchive)
+
 diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' 4x~/debian/patches/02gtkmm-2.4.dpatch 4x/debian/patches/02gtkmm-2.4.dpatch
 --- 4x~/debian/patches/02gtkmm-2.4.dpatch	1970-01-01 01:00:00.000000000 +0100
 +++ 4x/debian/patches/02gtkmm-2.4.dpatch	2012-09-17 00:36:13.832000000 +0200
