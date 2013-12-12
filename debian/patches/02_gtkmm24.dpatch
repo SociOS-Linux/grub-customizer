@@ -5,9 +5,9 @@
 ## DP: No description.
 
 @DPATCH@
-diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' 4x~/CMakeLists.txt 4x/CMakeLists.txt
---- 4x~/CMakeLists.txt	2013-11-15 00:19:13.000000000 +0100
-+++ 4x/CMakeLists.txt	2013-11-14 21:29:04.993000000 +0100
+diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' GrubCustomizer~/CMakeLists.txt GrubCustomizer/CMakeLists.txt
+--- GrubCustomizer~/CMakeLists.txt	2013-11-14 21:25:49.000000000 +0100
++++ GrubCustomizer/CMakeLists.txt	2013-11-14 21:29:04.993000000 +0100
 @@ -4,7 +4,7 @@
  
  find_package(PkgConfig)
@@ -17,10 +17,9 @@ diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' 
  pkg_check_modules(GTHREAD gthread-2.0)
  pkg_check_modules(OPENSSL openssl)
  pkg_check_modules(LIBARCHIVE libarchive)
-
-diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' 4x~/debian/patches/02gtkmm-2.4.dpatch 4x/debian/patches/02gtkmm-2.4.dpatch
---- 4x~/debian/patches/02gtkmm-2.4.dpatch	1970-01-01 01:00:00.000000000 +0100
-+++ 4x/debian/patches/02gtkmm-2.4.dpatch	2012-09-17 00:36:13.832000000 +0200
+diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' GrubCustomizer~/debian/patches/02gtkmm-2.4.dpatch GrubCustomizer/debian/patches/02gtkmm-2.4.dpatch
+--- GrubCustomizer~/debian/patches/02gtkmm-2.4.dpatch	1970-01-01 01:00:00.000000000 +0100
++++ GrubCustomizer/debian/patches/02gtkmm-2.4.dpatch	2012-09-17 00:36:13.832000000 +0200
 @@ -0,0 +1,322 @@
 +#! /bin/sh /usr/share/dpatch/dpatch-run
 +## 02gtkmm_combobox_legacy.dpatch by  <daniel@daniel-laptop>
@@ -344,9 +343,9 @@ diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' 
 + 	(*iter)[iconModel.description] = name + "\n" + gettext("type: ") + (isPlaceholder ? gettext("placeholder") : gettext("menuentry")) + "\n" + gettext("script: ") + scriptName;
 + 	(*iter)[iconModel.relatedRule] = relatedEntry;
 + }
-diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' 4x~/src/View/Gtk/Element/List.h 4x/src/View/Gtk/Element/List.h
---- 4x~/src/View/Gtk/Element/List.h	2013-11-13 18:25:44.000000000 +0100
-+++ 4x/src/View/Gtk/Element/List.h	2013-11-14 22:14:20.016000000 +0100
+diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' GrubCustomizer~/src/View/Gtk/Element/List.h GrubCustomizer/src/View/Gtk/Element/List.h
+--- GrubCustomizer~/src/View/Gtk/Element/List.h	2013-12-12 21:46:44.000000000 +0100
++++ GrubCustomizer/src/View/Gtk/Element/List.h	2013-12-12 21:55:44.025000000 +0100
 @@ -65,10 +65,12 @@
  	Gtk::CellRendererToggle toggleRenderer;
  	Gtk::CellRendererText textRenderer;
@@ -396,7 +395,7 @@ diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' 
  	void addListItem(View_Model_ListItem<TItem, TWrapper> const& listItem, std::map<ViewOption, bool> const& options, Gtk::Window& window) {
  		if (!listItem.isVisible && !options.at(VIEW_SHOW_HIDDEN_ENTRIES)) {
  			return;
-@@ -143,13 +159,13 @@
+@@ -147,13 +163,13 @@
  		}
  
  		if (listItem.scriptPtr != NULL) {
@@ -414,9 +413,9 @@ diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' 
  		}
  
  		if (listItem.isModified) {
-diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' 4x~/src/View/Gtk/Element/PartitionChooser.cpp 4x/src/View/Gtk/Element/PartitionChooser.cpp
---- 4x~/src/View/Gtk/Element/PartitionChooser.cpp	2013-11-13 18:25:44.000000000 +0100
-+++ 4x/src/View/Gtk/Element/PartitionChooser.cpp	2012-09-17 00:07:28.742000000 +0200
+diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' GrubCustomizer~/src/View/Gtk/Element/PartitionChooser.cpp GrubCustomizer/src/View/Gtk/Element/PartitionChooser.cpp
+--- GrubCustomizer~/src/View/Gtk/Element/PartitionChooser.cpp	2013-11-07 21:53:24.000000000 +0100
++++ GrubCustomizer/src/View/Gtk/Element/PartitionChooser.cpp	2012-09-17 00:07:28.742000000 +0200
 @@ -43,16 +43,16 @@
  }
  
@@ -437,9 +436,9 @@ diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' 
  			if (strToLower(iter->second.at("UUID")) == strToLower(activePartition_uuid) || (activePartition_uuid == "" && iter == deviceDataList->begin() && !prependCurrentPartition)) {
  				this->set_active_text(text);
  			}
-diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' 4x~/src/View/Gtk/EntryEditor.cpp 4x/src/View/Gtk/EntryEditor.cpp
---- 4x~/src/View/Gtk/EntryEditor.cpp	2013-11-13 18:25:44.000000000 +0100
-+++ 4x/src/View/Gtk/EntryEditor.cpp	2013-11-14 21:17:11.959000000 +0100
+diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' GrubCustomizer~/src/View/Gtk/EntryEditor.cpp GrubCustomizer/src/View/Gtk/EntryEditor.cpp
+--- GrubCustomizer~/src/View/Gtk/EntryEditor.cpp	2013-11-07 21:53:24.000000000 +0100
++++ GrubCustomizer/src/View/Gtk/EntryEditor.cpp	2013-11-14 21:17:11.959000000 +0100
 @@ -162,11 +162,11 @@
  }
  
@@ -455,9 +454,9 @@ diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' 
  }
  
  void View_Gtk_EntryEditor::selectType(std::string const& name) {
-diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' 4x~/src/View/Gtk/EnvEditor.cpp 4x/src/View/Gtk/EnvEditor.cpp
---- 4x~/src/View/Gtk/EnvEditor.cpp	2013-11-13 18:25:44.000000000 +0100
-+++ 4x/src/View/Gtk/EnvEditor.cpp	2013-11-14 21:17:11.959000000 +0100
+diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' GrubCustomizer~/src/View/Gtk/EnvEditor.cpp GrubCustomizer/src/View/Gtk/EnvEditor.cpp
+--- GrubCustomizer~/src/View/Gtk/EnvEditor.cpp	2013-11-07 21:53:23.000000000 +0100
++++ GrubCustomizer/src/View/Gtk/EnvEditor.cpp	2013-11-14 21:17:11.959000000 +0100
 @@ -50,8 +50,8 @@
  	this->lblSubmountpoints.set_no_show_all(true);
  	this->scrSubmountpoints.set_no_show_all(true);
@@ -484,9 +483,9 @@ diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' 
  		}
  
  		img->set(icon);
-diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' 4x~/src/View/Gtk/Main.cpp 4x/src/View/Gtk/Main.cpp
---- 4x~/src/View/Gtk/Main.cpp	2013-11-13 22:52:05.000000000 +0100
-+++ 4x/src/View/Gtk/Main.cpp	2013-11-15 00:13:35.606000000 +0100
+diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' GrubCustomizer~/src/View/Gtk/Main.cpp GrubCustomizer/src/View/Gtk/Main.cpp
+--- GrubCustomizer~/src/View/Gtk/Main.cpp	2013-12-11 21:42:10.000000000 +0100
++++ GrubCustomizer/src/View/Gtk/Main.cpp	2013-12-12 21:55:44.025000000 +0100
 @@ -83,8 +83,6 @@
  	
  	//toolbar
@@ -513,7 +512,7 @@ diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' 
  
  	toolbar.append(tbttRevert);
  	tbttRevert.set_is_important(true);
-@@ -326,7 +314,7 @@
+@@ -330,7 +318,7 @@
  }
  
  void View_Gtk_Main::signal_key_press(GdkEventKey* key) {
@@ -522,7 +521,7 @@ diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' 
  		this->controller->removeRulesAction(this->getSelectedRules());
  	}
  }
-@@ -346,7 +334,7 @@
+@@ -350,7 +338,7 @@
  	}
  }
  
@@ -531,7 +530,7 @@ diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' 
  	if (this->controller && this->lock_state == 0) { // this->eventListener must be called because this event may be propagated from bootstrap
  		this->controller->refreshTabAction(page_num);
  	}
-@@ -622,6 +610,9 @@
+@@ -626,6 +614,9 @@
  
  void View_Gtk_Main::signal_checkbox_toggled(Glib::ustring const& path) {
  	if (!this->lock_state) {
@@ -541,7 +540,7 @@ diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' 
  		this->controller->entryStateToggledAction(
  			(*this->tvConfList.refTreeStore->get_iter(path))[this->tvConfList.treeModel.relatedRule],
  			!(*this->tvConfList.refTreeStore->get_iter(path))[this->tvConfList.treeModel.is_activated]
-@@ -706,6 +697,7 @@
+@@ -710,6 +701,7 @@
  	case VIEW_SHOW_HIDDEN_ENTRIES:
  		this->miShowHiddenEntries.set_active(value);
  		this->tvConfList.toggleRenderer.set_visible(value);
@@ -549,10 +548,10 @@ diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' 
  		this->tvConfList.pixbufRenderer.set_visible(!value);
  		break;
  	case VIEW_GROUP_BY_SCRIPT: this->miGroupByScript.set_active(value); break;
-diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' 4x~/src/View/Gtk/Main.h 4x/src/View/Gtk/Main.h
---- 4x~/src/View/Gtk/Main.h	2013-11-13 18:25:44.000000000 +0100
-+++ 4x/src/View/Gtk/Main.h	2013-11-14 21:17:11.959000000 +0100
-@@ -176,7 +176,7 @@
+diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' GrubCustomizer~/src/View/Gtk/Main.h GrubCustomizer/src/View/Gtk/Main.h
+--- GrubCustomizer~/src/View/Gtk/Main.h	2013-12-11 21:38:55.000000000 +0100
++++ GrubCustomizer/src/View/Gtk/Main.h	2013-12-12 21:55:44.025000000 +0100
+@@ -178,7 +178,7 @@
  	void signal_key_press(GdkEventKey* key);
  	void signal_revert();
  	void signal_reload_recommendation_response(int response_id);
@@ -561,9 +560,9 @@ diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' 
  	void signal_viewopt_details_toggled();
  	void signal_viewopt_checkboxes_toggled();
  	void signal_viewopt_script_toggled();
-diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' 4x~/src/View/Gtk/Settings.cpp 4x/src/View/Gtk/Settings.cpp
---- 4x~/src/View/Gtk/Settings.cpp	2013-11-13 18:25:44.000000000 +0100
-+++ 4x/src/View/Gtk/Settings.cpp	2013-11-14 21:17:11.959000000 +0100
+diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' GrubCustomizer~/src/View/Gtk/Settings.cpp GrubCustomizer/src/View/Gtk/Settings.cpp
+--- GrubCustomizer~/src/View/Gtk/Settings.cpp	2013-12-11 21:37:20.000000000 +0100
++++ GrubCustomizer/src/View/Gtk/Settings.cpp	2013-11-14 21:17:11.959000000 +0100
 @@ -31,7 +31,7 @@
  	lblDefaultEntry(gettext("default entry")), lblView(gettext("visibility")), chkShowMenu(gettext("show menu")),
  	lblKernelParams(gettext("kernel parameters")),
@@ -621,9 +620,9 @@ diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' 
  
  
 -
-diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' 4x~/src/View/Gtk/Settings.h 4x/src/View/Gtk/Settings.h
---- 4x~/src/View/Gtk/Settings.h	2013-11-13 18:25:44.000000000 +0100
-+++ 4x/src/View/Gtk/Settings.h	2013-11-14 21:17:11.959000000 +0100
+diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' GrubCustomizer~/src/View/Gtk/Settings.h GrubCustomizer/src/View/Gtk/Settings.h
+--- GrubCustomizer~/src/View/Gtk/Settings.h	2013-12-11 21:37:20.000000000 +0100
++++ GrubCustomizer/src/View/Gtk/Settings.h	2013-11-14 21:17:11.959000000 +0100
 @@ -71,7 +71,7 @@
  	Gtk::VBox vbDefaultEntry;
  	Gtk::HBox hbDefPredefined;
@@ -642,9 +641,9 @@ diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' 
  
  
  	void signal_setting_row_changed(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter);
-diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' 4x~/src/View/Gtk/Theme.cpp 4x/src/View/Gtk/Theme.cpp
---- 4x~/src/View/Gtk/Theme.cpp	2013-11-13 18:33:21.000000000 +0100
-+++ 4x/src/View/Gtk/Theme.cpp	2013-11-15 00:13:35.606000000 +0100
+diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' GrubCustomizer~/src/View/Gtk/Theme.cpp GrubCustomizer/src/View/Gtk/Theme.cpp
+--- GrubCustomizer~/src/View/Gtk/Theme.cpp	2013-11-26 23:02:43.000000000 +0100
++++ GrubCustomizer/src/View/Gtk/Theme.cpp	2013-11-15 00:13:35.606000000 +0100
 @@ -110,7 +110,6 @@
  	hbFileSelection.set_border_width(5);
  	hbFileSelection.set_spacing(5);
@@ -751,9 +750,9 @@ diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' 
  	}
  	return true;
  }
-diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' 4x~/src/View/Gtk/Theme.h 4x/src/View/Gtk/Theme.h
---- 4x~/src/View/Gtk/Theme.h	2013-11-13 18:25:44.000000000 +0100
-+++ 4x/src/View/Gtk/Theme.h	2013-11-14 21:17:11.959000000 +0100
+diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' GrubCustomizer~/src/View/Gtk/Theme.h GrubCustomizer/src/View/Gtk/Theme.h
+--- GrubCustomizer~/src/View/Gtk/Theme.h	2013-11-07 21:53:23.000000000 +0100
++++ GrubCustomizer/src/View/Gtk/Theme.h	2013-11-14 21:17:11.959000000 +0100
 @@ -127,6 +127,8 @@
  	Gtk::Button bttCopyBackground, bttRemoveBackground;
  	Gtk::Image imgRemoveBackground;
@@ -772,9 +771,9 @@ diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' 
  };
  
  
-diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' 4x~/src/View/Gtk/Trash.cpp 4x/src/View/Gtk/Trash.cpp
---- 4x~/src/View/Gtk/Trash.cpp	2013-11-13 18:25:44.000000000 +0100
-+++ 4x/src/View/Gtk/Trash.cpp	2013-11-14 21:17:11.959000000 +0100
+diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' GrubCustomizer~/src/View/Gtk/Trash.cpp GrubCustomizer/src/View/Gtk/Trash.cpp
+--- GrubCustomizer~/src/View/Gtk/Trash.cpp	2013-11-07 21:53:23.000000000 +0100
++++ GrubCustomizer/src/View/Gtk/Trash.cpp	2013-11-14 21:17:11.959000000 +0100
 @@ -37,7 +37,6 @@
  	hbList.pack_start(bttRestore);
  	hbList.pack_start(bttDelete);
