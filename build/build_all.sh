@@ -67,7 +67,7 @@ gpg --armor --sign --detach-sig $basedir/releases/$subdir/launchpad-source/grub-
 olddir=`pwd`
 cd $basedir/releases/$subdir/launchpad-source
 tar xzf grub-customizer_$version.tar.gz
-cd grub-customizer-4.0
+cd grub-customizer-$version
 cp -r $releasedir/grub-customizer-$version/debian debian
 dpatch apply 02_gtkmm24.dpatch
 if [ "$?" -ne 0 ] ; then echo 'fail'; exit; fi
