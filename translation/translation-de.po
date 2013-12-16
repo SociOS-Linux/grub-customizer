@@ -681,7 +681,7 @@ msgstr "Inhalte des Themas"
 
 #: src/View/Gtk/Theme.cpp:31
 msgid "Custom Theme settings"
-msgstr "Einstellungen des benutzerdefinierteb Themas"
+msgstr "Einstellungen des benutzerdefinierten Themas"
 
 #: src/View/Gtk/Theme.cpp:32
 msgid "Normal: Font"
