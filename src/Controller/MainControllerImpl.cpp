@@ -872,8 +872,6 @@ void MainControllerImpl::syncLoadStateAction() {
 				this->grublistCfg->applyScriptUpdates();
 				this->env->modificationsUnsaved = true;
 				this->view->showScriptUpdateInfo();
-			} else {
-				this->view->hideScriptUpdateInfo();
 			}
 
 			bool placeholdersVisible = this->view->getOptions().at(VIEW_SHOW_PLACEHOLDERS);

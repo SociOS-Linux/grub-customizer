@@ -1257,7 +1257,7 @@ void Model_ListCfg::applyScriptUpdates() {
 		Model_Script* oldScript = this->repository.getScriptByFilename(oldScriptPath);
 		Model_Script* newScript = this->repository.getScriptByFilename(*newScriptPathIter);
 		if (!oldScript || !newScript) {
-			this->log("applyScriptUpdates failed for " + *newScriptPathIter, Logger::ERROR);
+			this->log("applyScriptUpdates failed for " + oldScriptPath + " (" + *newScriptPathIter + ")", Logger::ERROR);
 			continue;
 		}
 
@@ -1273,11 +1273,15 @@ void Model_ListCfg::applyScriptUpdates() {
 		for (std::list<Model_Proxy*>::iterator oldProxyIter = oldProxies.begin(); oldProxyIter != oldProxies.end(); oldProxyIter++) {
 			(*oldProxyIter)->unsync();
 			(*oldProxyIter)->dataSource = newScript;
+			if ((*oldProxyIter)->fileName == oldScript->fileName) {
+				(*oldProxyIter)->fileName = newScript->fileName; // set the new fileName
+			}
 			(*oldProxyIter)->sync(true, true, this->repository.getScriptPathMap());
 		}
 
 		this->repository.removeScript(*oldScript);
 	}
+	this->scriptSourceMap.deleteUpdates();
 }
 
 void Model_ListCfg::revert() {
