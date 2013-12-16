@@ -136,6 +136,7 @@ void MainControllerImpl::init(Model_Env::Mode mode, bool initEnv){
 	this->view->setIsBurgMode(mode == Model_Env::BURG_MODE);
 	this->view->show();
 	this->view->hideBurgSwitcher();
+	this->view->hideScriptUpdateInfo();
 
 	this->log("Checking if the config directory is clean", Logger::EVENT);
 	if (this->grublistCfg->cfgDirIsClean() == false) {
@@ -186,6 +187,7 @@ void MainControllerImpl::reloadAction(){
 		this->getAllControllers().settingsController->syncAction();
 		this->getAllControllers().themeController->syncAction();
 		this->view->hideReloadRecommendation();
+		this->view->hideScriptUpdateInfo();
 		this->view->setLockState(1|4|8);
 		this->getThreadController().startLoadThread(true);
 	} catch (Exception const& e) {
