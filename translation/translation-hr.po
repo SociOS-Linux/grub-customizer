@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2013-11-13 22:24+0100\n"
-"PO-Revision-Date: 2013-11-13 22:00+0000\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2013-12-14 10:35+0000\n"
+"Last-Translator: gogo <trebelnik2@gmail.com>\n"
 "Language-Team: Croatian <hr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-12-11 20:52+0000\n"
+"X-Launchpad-Export-Date: 2013-12-16 16:04+0000\n"
 "X-Generator: Launchpad (build 16869)\n"
 
 #: src/Controller/MainControllerImpl.cpp:654
@@ -220,19 +220,19 @@ msgstr "_Instaliraj u MBR …"
 
 #: src/View/Gtk/Main.cpp:41
 msgid "_Show details"
-msgstr ""
+msgstr "_Prikaži pojedinosti"
 
 #: src/View/Gtk/Main.cpp:41
 msgid "Show _hidden entries"
-msgstr ""
+msgstr "Prikaži _skrivene unose"
 
 #: src/View/Gtk/Main.cpp:42
 msgid "_Group by Script"
-msgstr ""
+msgstr "_Razvrstaj prema skripti"
 
 #: src/View/Gtk/Main.cpp:42
 msgid "Show _Placeholders"
-msgstr ""
+msgstr "Prikaži _rezervirana mjesta"
 
 #: src/View/Gtk/Main.cpp:43
 msgid "BURG found!"
@@ -251,6 +251,8 @@ msgstr ""
 #: src/View/Gtk/Main.cpp:47
 msgid "Script updates found. Click save to apply the changes!"
 msgstr ""
+"Ažuriranja skripte su pronađena. Kliknite 'Spremi' za primjenjivanje "
+"promjena!"
 
 #: src/View/Gtk/Main.cpp:60
 msgid "_List configuration"
@@ -402,13 +404,15 @@ msgstr ""
 
 #: src/View/Gtk/Main.cpp:806 src/View/Gtk/Element/List.h:128
 msgid "menuentry"
-msgstr "unos-izbornika"
+msgstr "unos izbornika"
 
 #: src/View/Gtk/Main.cpp:807
 msgid ""
 "An menuentry which is visible at the grub menu and boots an operating system "
 "when activated."
 msgstr ""
+"Unos izbornika koji je vidljiv u grub izborniku i koji pokreće operativni "
+"sustav kada je aktivan."
 
 #: src/View/Gtk/Main.cpp:808 src/View/Gtk/Element/List.h:124
 msgid "submenu"
@@ -420,10 +424,13 @@ msgid ""
 "however when clicking it, it loads another menu which allows you to choose "
 "one the the containing menuentries."
 msgstr ""
+"Grupa operativnih sustava. Grub ih prikazuje kao normalne unose izbornika, "
+"ali kada kliknete na njih otvara se drugi izbornik koji vam dopušta izbor "
+"pojedinog unosa izbornika."
 
 #: src/View/Gtk/Main.cpp:811 src/View/Gtk/Element/List.h:126
 msgid "placeholder"
-msgstr "rezervirano-mjesto"
+msgstr "rezervirano mjesto"
 
 #: src/View/Gtk/Main.cpp:812
 msgid ""
