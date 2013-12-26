@@ -6,7 +6,7 @@ Make sure your grub2 contains the grub-mkconfig script (included since version 1
 
  * cmake
  * g++ OR gcc-c++
- * libgtkmm-3.0-dev OR gtkmm3-devel [when using the gtk-2 version you need libgtkmm-2.4-dev OR gtkmm24-devel]
+ * libgtkmm-3.0-dev OR gtkmm30-devel [when using the gtk-2 version you need libgtkmm-2.4-dev OR gtkmm24-devel]
  * gettext
  * libssl-dev OR openssl-devel
  * libarchive-dev OR libarchive-devel
