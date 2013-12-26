@@ -144,11 +144,11 @@ void Model_ListCfg::load(bool preserveConfig){
 					fclose(proxyFile);
 					if (data){
 						this->proxies.back().dataSource = repository.getScriptByFilename(this->env->cfg_dir_prefix+data.scriptCmd);
-						this->proxies.back().importRuleString(data.ruleString.c_str());
+						this->proxies.back().importRuleString(data.ruleString.c_str(), this->env->cfg_dir_prefix);
 					}
 					else {
 						this->proxies.back().dataSource = repository.getScriptByFilename(this->env->cfg_dir+"/"+entry->d_name);
-						this->proxies.back().importRuleString("+*"); //it's no proxy, so accept all
+						this->proxies.back().importRuleString("+*", this->env->cfg_dir_prefix); //it's no proxy, so accept all
 					}
 				
 				}
@@ -156,6 +156,26 @@ void Model_ListCfg::load(bool preserveConfig){
 		}
 		closedir(hGrubCfgDir);
 		this->proxies.sort();
+		this->unlock();
+
+
+		//clean up proxy configuration
+		this->log("cleaning up proxy configuration…", Logger::EVENT);
+		this->lock();
+
+		bool proxyRemoved = false;
+		do {
+			for (std::list<Model_Proxy>::iterator pIter = this->proxies.begin(); pIter != this->proxies.end(); pIter++) {
+				if (!pIter->isExecutable() || !pIter->hasVisibleRules()) {
+					this->log(pIter->fileName + " has no visible entries and will be removed / disabled", Logger::INFO);
+					this->proxies.deleteProxy(&*pIter);
+					proxyRemoved = true;
+					break;
+				}
+			}
+			proxyRemoved = false;
+		} while (proxyRemoved);
+
 		this->unlock();
 	}
 	else {
@@ -437,6 +457,9 @@ void Model_ListCfg::save(){
 	
 	FILE* proxyBin = fopen((this->env->cfg_dir+"/bin/grubcfg_proxy").c_str(), "r");
 	bool proxybin_exists = proxyBin != NULL;
+	if (proxyBin) {
+		fclose(proxyBin);
+	}
 	std::string dummyproxy_code = "#!/bin/sh\ncat\n";
 	
 	/**
@@ -1234,7 +1257,7 @@ void Model_ListCfg::applyScriptUpdates() {
 		Model_Script* oldScript = this->repository.getScriptByFilename(oldScriptPath);
 		Model_Script* newScript = this->repository.getScriptByFilename(*newScriptPathIter);
 		if (!oldScript || !newScript) {
-			this->log("applyScriptUpdates failed for " + *newScriptPathIter, Logger::ERROR);
+			this->log("applyScriptUpdates failed for " + oldScriptPath + " (" + *newScriptPathIter + ")", Logger::ERROR);
 			continue;
 		}
 
@@ -1250,11 +1273,15 @@ void Model_ListCfg::applyScriptUpdates() {
 		for (std::list<Model_Proxy*>::iterator oldProxyIter = oldProxies.begin(); oldProxyIter != oldProxies.end(); oldProxyIter++) {
 			(*oldProxyIter)->unsync();
 			(*oldProxyIter)->dataSource = newScript;
+			if ((*oldProxyIter)->fileName == oldScript->fileName) {
+				(*oldProxyIter)->fileName = newScript->fileName; // set the new fileName
+			}
 			(*oldProxyIter)->sync(true, true, this->repository.getScriptPathMap());
 		}
 
 		this->repository.removeScript(*oldScript);
 	}
+	this->scriptSourceMap.deleteUpdates();
 }
 
 void Model_ListCfg::revert() {

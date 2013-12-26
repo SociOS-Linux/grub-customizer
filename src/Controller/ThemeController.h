@@ -38,6 +38,7 @@ public:
 
 	virtual void updateColorSettingsAction() = 0;
 	virtual void updateFontSettingsAction(bool removeFont) = 0;
+	virtual void updateFontSizeAction() = 0;
 	virtual void updateBackgroundImageAction() = 0;
 	virtual void removeBackgroundImageAction() = 0;
 	virtual void updateSettingsDataAction() = 0;

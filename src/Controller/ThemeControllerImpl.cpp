@@ -153,7 +153,7 @@ void ThemeControllerImpl::loadThemeAction(std::string const& name) {
 		this->view->selectTheme(name);
 		this->currentTheme = name;
 		try {
-			this->themeManager->getTheme(name).getFile("theme.txt");
+			this->themeManager->getTheme(name).getFileByNewName("theme.txt");
 		} catch (ItemNotFoundException const& e) {
 			this->view->showError(View_Theme::ERROR_THEMEFILE_NOT_FOUND);
 		}
@@ -425,12 +425,34 @@ void ThemeControllerImpl::updateFontSettingsAction(bool removeFont) {
 		this->settings->grubFontSize = fontSize;
 
 		if (fontName != "") {
+			std::string fullTmpFontPath = this->env->cfg_dir_prefix + "/tmp/grub_customizer_chosen_font_test.pf2";
+
 			this->settings->mkFont("", "/tmp/grub_customizer_chosen_font_test.pf2");
-			this->settings->grubFont = this->settings->parsePf2("/tmp/grub_customizer_chosen_font_test.pf2")["NAME"];
+			this->settings->grubFont = this->settings->parsePf2(fullTmpFontPath)["NAME"];
+
+			// must be done again to check the font returned by parsePf2
+			this->settings->mkFont("", "/tmp/grub_customizer_chosen_font_test.pf2");
+			this->settings->grubFont = this->settings->parsePf2(fullTmpFontPath)["NAME"];
+
+			// to prevent usage of the temporary font file
+			this->settings->removeItem("GRUB_FONT");
 		}
 
 		this->syncSettings();
 		this->env->modificationsUnsaved = true;
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorAction(e);
+	}
+	this->logActionEnd();
+}
+
+/**
+ * sync font size from view back to model. should be called on startup
+ */
+void ThemeControllerImpl::updateFontSizeAction() {
+	this->logActionBegin("update-font-size");
+	try {
+		this->settings->grubFontSize = this->view->getFontSize();
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorAction(e);
 	}

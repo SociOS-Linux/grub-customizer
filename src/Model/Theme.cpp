@@ -77,6 +77,27 @@ void Model_Theme::loadZipFile(std::string const& zipFile) {
 		}
 		archive_read_data_skip(a);
 	}
+
+	this->removeSubdir();
+}
+
+/**
+ * some zip files having all files packed into a subdirectory. This is detected and replaced here
+ */
+void Model_Theme::removeSubdir() {
+	std::map<std::string, int> toplevelFileCount;
+	for (std::list<Model_ThemeFile>::iterator themeFileIter = this->files.begin(); themeFileIter != this->files.end(); themeFileIter++) {
+		int slashPos = themeFileIter->localFileName.find("/");
+		toplevelFileCount[themeFileIter->localFileName.substr(0, slashPos)]++;
+	}
+
+	if (toplevelFileCount.size() == 1) { // subdir found
+		std::string subdir = toplevelFileCount.begin()->first;
+
+		for (std::list<Model_ThemeFile>::iterator themeFileIter = this->files.begin(); themeFileIter != this->files.end(); themeFileIter++) {
+			themeFileIter->newLocalFileName = themeFileIter->localFileName.substr(subdir.length() + 1);
+		}
+	}
 }
 
 std::string Model_Theme::loadFileContent(std::string localFileName) {

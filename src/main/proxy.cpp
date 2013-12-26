@@ -35,9 +35,9 @@ int main(int argc, char** argv){
 		if (plaintextBuffer.size()) {
 			script.entries().push_front(Model_Entry("#text", "", plaintextBuffer, Model_Entry::PLAINTEXT));
 		}
-		
+
 		Model_Proxy proxy;
-		proxy.importRuleString(argv[1]);
+		proxy.importRuleString(argv[1], "");
 
 		proxy.dataSource = &script;
 		proxy.sync(true, true);
@@ -53,7 +53,7 @@ int main(int argc, char** argv){
 		scriptSource.ignoreLock = true;
 		{ // this scope prevents access to the unused proxy variable - push_back takes a copy!
 			Model_Proxy proxy;
-			proxy.importRuleString(argv[1]);
+			proxy.importRuleString(argv[1], env.cfg_dir_prefix);
 			scriptSource.proxies.push_back(proxy);
 		}
 		scriptSource.readGeneratedFile(stdin, true, false);

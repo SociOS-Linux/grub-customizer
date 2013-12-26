@@ -80,7 +80,7 @@ std::string ContentParser_Linux::buildSource() const {
 void ContentParser_Linux::buildDefaultEntry(std::string const& partition_uuid) {
 	std::string defaultEntry = "\
 	set root='(hd0,0)'\n\
-	search --no-floppy --fs-uuid --set 000000000000\n\
+	search --no-floppy --fs-uuid --set=root 000000000000\n\
 	linux /vmlinuz root=UUID=000000000000 \n\
 	initrd /initrd.img";
 	Model_DeviceMap_PartitionIndex pIndex = this->deviceMap.getHarddriveIndexByPartitionUuid(partition_uuid);

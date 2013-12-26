@@ -27,6 +27,7 @@
 #include "../lib/Exception.h"
 #include <archive.h>
 #include <archive_entry.h>
+#include <map>
 #include "../lib/assert.h"
 #include <string>
 
@@ -52,6 +53,7 @@ struct Model_Theme {
 	bool hasConflicts(std::string const& localFilename);
 	void deleteThemeFiles(std::string const& baseDirectory);
 private:
+	void removeSubdir();
 	std::string extractLocalPath(std::string fullPath);
 	std::string loadFileContentFromDirectory(std::string localFileName);
 	std::string loadFileContentFromZip(std::string localFileName);

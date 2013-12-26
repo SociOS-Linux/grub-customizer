@@ -63,6 +63,7 @@ std::string Model_SettingsManagerData::getFontFileByName(std::string const& name
 	translatedName = str_replace(" Italic", ":Italic", translatedName);
 	translatedName = str_replace(" Medium", ":Medium", translatedName);
 	translatedName = str_replace(" Oblique", ":Oblique", translatedName);
+	translatedName = str_replace(" Regular", ":Regular", translatedName);
 
 	std::string cmd = "fc-match -f '%{file[0]}' '" + translatedName + "'";
 	FILE* proc = popen(cmd.c_str(), "r");
@@ -90,8 +91,10 @@ std::string Model_SettingsManagerData::mkFont(std::string fontFile, std::string 
 			return ""; // fehler
 		}
 	}
-	outputPath = outputPath != "" ? outputPath : this->env->output_config_dir + "/unicode.pf2";
-	FILE* mkfont_proc = popen((this->env->mkfont_cmd + " --output='" + str_replace("'", "\\'", outputPath) + "'" + sizeParam + " '" + str_replace("'", "\\'", fontFile) + "' 2>&1").c_str(), "r");
+	outputPath = outputPath != "" ? outputPath : this->env->output_config_dir_noprefix + "/unicode.pf2";
+	std::string cmd = this->env->mkfont_cmd + " --output='" + str_replace("'", "\\'", outputPath) + "'" + sizeParam + " '" + str_replace("'", "\\'", fontFile) + "' 2>&1";
+	this->log("running " + cmd, Logger::INFO);
+	FILE* mkfont_proc = popen(cmd.c_str(), "r");
 	int c;
 //	std::string row = "";
 	while ((c = fgetc(mkfont_proc)) != EOF) {
@@ -120,7 +123,7 @@ bool Model_SettingsManagerData::load(){
 		if (this->getValue("GRUB_FONT") != "") {
 			this->oldFontFile = this->getValue("GRUB_FONT");
 			this->log("parsing " + this->getValue("GRUB_FONT"), Logger::INFO);
-			this->grubFont = Model_SettingsManagerData::parsePf2(this->getValue("GRUB_FONT"))["NAME"];
+			this->grubFont = Model_SettingsManagerData::parsePf2(this->env->cfg_dir_prefix + this->getValue("GRUB_FONT"))["NAME"];
 			this->log("result " + this->grubFont, Logger::INFO);
 			this->removeItem("GRUB_FONT");
 		}

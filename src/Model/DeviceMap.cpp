@@ -89,14 +89,17 @@ Model_DeviceMap_PartitionIndex Model_DeviceMap::getHarddriveIndexByPartitionUuid
 		while (result.hddNum == "") {
 			std::string row = handle.getRow();
 			std::vector<std::string> rowMatch = Regex::match("^\\(hd([0-9]+)\\)[\t ]*(.*)$", row);
-			if (row.find(diskDevice) != -1) {
+			std::string diskFile = rowMatch[2];
+
+			int size = readlink(diskFile.c_str(), deviceBuf, 100); // if this is a link, follow it
+			if (size != -1) {
+				diskFile = std::string(deviceBuf, size);
+			}
+
+			int deviceStartPos = (int)diskFile.size() - diskDevice.size();
+			if (deviceStartPos > 1 && diskFile.substr(deviceStartPos - 1) == "/" + diskDevice) {
 				result.hddNum = rowMatch[1];
 				break;
-			} else { // the files contains a path to a symlink
-				int size = readlink(rowMatch[2].c_str(), deviceBuf, 100); // if this is a link, follow it
-				if (size != -1) {
-					result.hddNum = rowMatch[1];
-				}
 			}
 		}
 	} catch (EndOfFileException const& e) {

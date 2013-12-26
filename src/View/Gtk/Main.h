@@ -49,6 +49,8 @@ class View_Gtk_Main : public View_Main, public Trait_LoggerAware, public Trait_C
 	Gtk::InfoBar infoScriptUpdatesFound;
 	Gtk::Label lblScriptUpdatesFound;
 
+	Gtk::ScrolledWindow scrCommonSettings, scrAppearanceSettings;
+
 	Gtk::VBox vbEntryList;
 	Gtk::Statusbar statusbar;
 	
@@ -121,7 +123,7 @@ public:
 	void appendEntry(View_Model_ListItem<Rule, Proxy> const& listItem);
 	void showProxyNotFoundMessage();
 	std::string createNewEntriesPlaceholderString(std::string const& parentMenu = "", std::string const& sourceScriptName = "");
-	std::string createPlaintextString(std::string const& scriptName) const;
+	std::string createPlaintextString(std::string const& scriptName = "") const;
 	
 	int showExitConfirmDialog(int type);
 	void showErrorMessage(std::string const& msg, std::vector<std::string> const& values);

@@ -61,7 +61,7 @@ public:
 	bool check_file(std::string const& file) const;
 	std::string trim_cmd(std::string const& cmd) const;
 	std::string getRootDevice();
-	std::string cfg_dir, cfg_dir_noprefix, mkconfig_cmd, mkfont_cmd, cfg_dir_prefix, update_cmd, install_cmd, output_config_file, output_config_dir, settings_file, devicemap_file, mkdevicemap_cmd, cmd_prefix;
+	std::string cfg_dir, cfg_dir_noprefix, mkconfig_cmd, mkfont_cmd, cfg_dir_prefix, update_cmd, install_cmd, output_config_file, output_config_dir, output_config_dir_noprefix, settings_file, devicemap_file, mkdevicemap_cmd, cmd_prefix;
 	bool burgMode;
 	bool useDirectBackgroundProps; // Whether background settings should be set directly or by creating a desktop-base script
 	std::list<Model_Env::Mode> getAvailableModes();
