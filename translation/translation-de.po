@@ -545,7 +545,7 @@ msgstr "vor_definiert : "
 
 #: src/View/Gtk/Settings.cpp:30
 msgid "previously _booted entry"
-msgstr "vorher_gebooteter Eintrag"
+msgstr "vorher _gebooteter Eintrag"
 
 #: src/View/Gtk/Settings.cpp:31
 msgid "default entry"
