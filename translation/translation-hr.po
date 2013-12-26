@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2013-11-13 22:24+0100\n"
-"PO-Revision-Date: 2013-12-14 10:35+0000\n"
+"PO-Revision-Date: 2013-12-17 14:54+0000\n"
 "Last-Translator: gogo <trebelnik2@gmail.com>\n"
 "Language-Team: Croatian <hr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-12-16 16:04+0000\n"
-"X-Generator: Launchpad (build 16869)\n"
+"X-Launchpad-Export-Date: 2013-12-26 19:40+0000\n"
+"X-Generator: Launchpad (build 16877)\n"
 
 #: src/Controller/MainControllerImpl.cpp:654
 msgid "Name the Entry"
@@ -23,7 +23,7 @@ msgstr "Naziv unosa"
 
 #: src/Controller/MainControllerImpl.cpp:736
 msgid "cannot move this entry"
-msgstr "nemoguće je pomaknuti ovaj unos"
+msgstr "Nemoguće je pomaknuti ovaj unos"
 
 #: src/Controller/MainControllerImpl.cpp:829
 msgid "Configuration has been saved"
@@ -53,7 +53,7 @@ msgstr "Memtest"
 msgid ""
 "Grub Customizer is a graphical interface to configure the grub2/burg settings"
 msgstr ""
-"Grub Prilagoditelj je grafičko sučelje za podešavanje Grub2/Burg postavki"
+"Grub prilagoditelj je grafičko sučelje za podešavanje Grub2/Burg postavki"
 
 #: src/View/Gtk/Element/PartitionChooser.cpp:48
 msgid "current"
@@ -441,10 +441,16 @@ msgid ""
 "used to configure grub. You should only touch it when knowing what it does. "
 "Placeholders are hidden by default."
 msgstr ""
+"Postoje dvije vrste posebnih unosa: Nadolazeći unos je mjesto gdje Grub "
+"prilagoditelj smješta novi operativni sustav koji je pronašao grub ali još "
+"uvijek nije prilagođen pomoću Grub prilagoditelja. kôd skripte je kôd "
+"stvoren pomoću gruba koji ne izgleda kao unos izbornika. U većini slučajeva "
+"koristi se za prilagodbu gruba. Trebali bi ga koristiti samo kada znate čemu "
+"služi. Rezervirana mjesta su skrivena po zadanom."
 
 #: src/View/Gtk/Main.cpp:817 src/View/Gtk/Element/List.h:122
 msgid "script"
-msgstr ""
+msgstr "skripta"
 
 #: src/View/Gtk/Main.cpp:818
 msgid ""
@@ -452,10 +458,13 @@ msgid ""
 "They are shown as top level groups when activated. However in contrast to "
 "submenus they aren't shown at the boot menu."
 msgstr ""
+"Skripte stvaraju unose izbornika. Stoga svaki unos izbornika pripada "
+"skripti. Oni su prikazani kao i ostale grupe kada su aktivirane. Međutim u "
+"usporedbi s podizbornicima oni nisu prikazani u izborniku podizanja sustava."
 
 #: src/View/Gtk/Main.cpp:825
 msgid "About the entry types"
-msgstr ""
+msgstr "O vrsti unosa"
 
 #: src/View/Gtk/Main.cpp:887
 msgid "The saved configuration is not up to date!"
@@ -550,7 +559,7 @@ msgstr "potraži druge operativne sustave"
 
 #: src/View/Gtk/Settings.cpp:34
 msgid "custom resolution: "
-msgstr "prilagođena razlučivost: "
+msgstr "Prilagođena razlučivost: "
 
 #: src/View/Gtk/Settings.cpp:37
 msgid "settings"
@@ -582,7 +591,7 @@ msgstr "Vrijednost"
 
 #: src/View/Gtk/Settings.cpp:112
 msgid "Boot default entry after %1 Seconds"
-msgstr ""
+msgstr "Pokreni zadani unos nakon %1 sekunda"
 
 #: src/View/Gtk/Settings.cpp:203
 msgid "Entry %1 (by position)"
@@ -612,14 +621,27 @@ msgid ""
 "will be updated automatically. So you won't have to re-select the default "
 "entry."
 msgstr ""
+"Ova mogućnost omogućuje vam odabir operativnog sustava koji bi trebao biti "
+"odabran prilikom pokretanja sustava. Prema zadanom to bi uvijek trebao biti "
+"prvi.\n"
+"\n"
+"Postoje dva stupca zbog dva načina odabira zadanog operativnog sustava. Prvi "
+"način glasi \"uvijek odaberi operativni sustav na položaju X\". To znači "
+"kada se novi unos izbornika pojavi, zadani unos izbornika se možda promijeni "
+"(zato jer se još jedan nalazi na položaju X).\n"
+"\n"
+"Drugi način glasi \"koristi operativni sustav naziva Linux 123\". Tada će se "
+"uvijek pokretati isti operativni sustav - položaj nije važan. Prilikom "
+"promjene naziva unosa pomoću Grub prilagoditelja ova mogućnost će biti "
+"ažurirana automatski. Stoga nećete morati ponovno odabrati zadani unos."
 
 #: src/View/Gtk/Theme.cpp:22
 msgid "_Load file: "
-msgstr ""
+msgstr "_Učitaj datoteku: "
 
 #: src/View/Gtk/Theme.cpp:24
 msgid "_Theme:"
-msgstr ""
+msgstr "_Tema:"
 
 #: src/View/Gtk/Theme.cpp:24
 msgid "background image"
@@ -627,59 +649,59 @@ msgstr "Slika pozadine"
 
 #: src/View/Gtk/Theme.cpp:27
 msgid "Please choose a background image!"
-msgstr ""
+msgstr "Odaberite sliku pozadine!"
 
 #: src/View/Gtk/Theme.cpp:28
 msgid "_Font"
-msgstr "_Pismo"
+msgstr "_Slova"
 
 #: src/View/Gtk/Theme.cpp:30
 msgid "choose theme file"
-msgstr ""
+msgstr "Odaberi datoteku teme"
 
 #: src/View/Gtk/Theme.cpp:31
 msgid "Theme contents"
-msgstr ""
+msgstr "Sadržaj teme"
 
 #: src/View/Gtk/Theme.cpp:31
 msgid "Custom Theme settings"
-msgstr ""
+msgstr "Prilagođene postavke teme"
 
 #: src/View/Gtk/Theme.cpp:32
 msgid "Normal: Font"
-msgstr ""
+msgstr "Uobičajeno: slova"
 
 #: src/View/Gtk/Theme.cpp:33
 msgid "Normal: Background"
-msgstr ""
+msgstr "Uobičajeno: pozadina"
 
 #: src/View/Gtk/Theme.cpp:34
 msgid "Highlighted: Font"
-msgstr ""
+msgstr "Istaknuto: slova"
 
 #: src/View/Gtk/Theme.cpp:35
 msgid "Highlighted: Background"
-msgstr ""
+msgstr "Istaknuto: pozadina"
 
 #: src/View/Gtk/Theme.cpp:106
 msgid "File"
-msgstr ""
+msgstr "Datoteka"
 
 #: src/View/Gtk/Theme.cpp:117
 msgid "add theme"
-msgstr ""
+msgstr "Dodaj temu"
 
 #: src/View/Gtk/Theme.cpp:118
 msgid "delete this theme"
-msgstr ""
+msgstr "Obriši ovu temu"
 
 #: src/View/Gtk/Theme.cpp:130
 msgid "Archive files"
-msgstr ""
+msgstr "Arhivirane datoteke"
 
 #: src/View/Gtk/Theme.cpp:135
 msgid "All files"
-msgstr ""
+msgstr "Sve datoteke"
 
 #: src/View/Gtk/Theme.cpp:179
 msgid "remove font"
@@ -759,33 +781,35 @@ msgstr "crna"
 
 #: src/View/Gtk/Theme.cpp:385
 msgid "(Custom Settings)"
-msgstr ""
+msgstr "(Prilagođene postavke)"
 
 #: src/View/Gtk/Theme.cpp:432
 msgid "The chosen file cannot be loaded as theme"
-msgstr ""
+msgstr "Odabrana datoteka ne može biti učitana kao tema"
 
 #: src/View/Gtk/Theme.cpp:435
 msgid "The given filename cannot be used"
-msgstr ""
+msgstr "Zadani naziv datoteke ne može se koristiti"
 
 #: src/View/Gtk/Theme.cpp:438
 msgid ""
 "This theme doesn't contain a theme.txt. Please look for the config file and "
 "rename it to \"theme.txt\"!"
 msgstr ""
+"Ova tema ne sadrži theme.txt. Potražite datoteku podešavanja i preimenujte "
+"ju u \"theme.txt\"!"
 
 #: src/View/Gtk/Theme.cpp:441
 msgid "Saving of themes didn't succeed completely!"
-msgstr ""
+msgstr "Spremanje teme nije u potpunosti uspjelo!"
 
 #: src/View/Gtk/Theme.cpp:444
 msgid "File replacement failed. Please select a theme file first!"
-msgstr ""
+msgstr "Zamjena datoteke neuspjela. Odaberite prvo datoteku teme!"
 
 #: src/View/Gtk/Theme.cpp:463
 msgid "filename"
-msgstr ""
+msgstr "naziv datoteke"
 
 #: src/View/Gtk/Theme.cpp:495
 msgid ""
@@ -807,14 +831,33 @@ msgid ""
 "the line containing GRUB_FONT\n"
 " * then run grub customizer to choose the font used before"
 msgstr ""
+"Napomena: velika slova na niskoj razlučivosti zaslona pokretanja sustava "
+"mogu pokvariti zaslon pokretanja sustava\n"
+"Zbog toga što taj problem ovisi o odabranim slovima, nije moguće odrediti "
+"najviši maksimum. Kada pokušavate odabrati veća slova, učinite to postepeno "
+"(ponovnim pokretanjem sustava i provjerom rezultata).\n"
+"Problem nastaje kada elementi grub grafičkog sučelja (gui) (rubovi, opisi) "
+"ne pristaju na zaslon. Stoga dok postoji dovoljno okomitog prostora možete "
+"postaviti veća slova. Mnogobrojnost unosa izbornika nije problem - oni se "
+"pomiču ako je potrebno.\n"
+"\n"
+"Rezultati kvara beskonačnog učitavanja gruba2. Da bi to popravili potreban "
+"vam je live cd:\n"
+" * obrišite slova iz (MOUNT)/boot/grub/unicode.pf2\n"
+" * ponovno pokrenite vaš sustav (izbornik bi se trebao pojaviti sa "
+"uobičajenim slovima)\n"
+" * otvorite /etc/default/grub sa 'root' dozvolama i dodajte '#' na početak "
+"redka koji sadrži GRUB_FONT\n"
+" * zatim pokrenite Grub prilagoditelja za odabir slova koji ste koristili "
+"prije"
 
 #: src/View/Gtk/Theme.cpp:507
 msgid "Grub fonts can be harmful (Info)"
-msgstr ""
+msgstr "Grub slova mogu biti štetna (informacije)"
 
 #: src/View/Gtk/Theme.cpp:703
 msgid "Are you sure you want to remove this theme"
-msgstr ""
+msgstr "Sigurno želite ukloniti ovu temu?"
 
 #: src/View/Gtk/Theme.cpp:771
 msgid ""
@@ -834,6 +877,21 @@ msgid ""
 "images and allows some file management. Modified theme contents will be "
 "saved when you're pressing the save button."
 msgstr ""
+"Alternativno jednostavnom načinu odabira teme koja pruža neke mogućnosti "
+"poput boje, slike pozadine i slova, možete instalirati kompleksnije pakete "
+"tema da bi dobili bolji izgled izbornika pokretanja sustava.\n"
+"\n"
+"Postoji nekoliko izvora preuzimanja poput ovog na ubuntuforums.org:\n"
+"<a href='%1'>%1</a> (potreban je račun)\n"
+"ili potražite '%2' na <a href='%3'>%3</a>\n"
+"\n"
+"Jednostavno preuzmite paket (koji je u tar.gz formatu u većini slučajeva) i "
+"dodajte ga na popis dostupnih tema koristeći tipku za dodavanje koja se "
+"nalazi pokraj odabira tema.\n"
+"\n"
+"Nakon promjene teme vidjet ćete jednostavan uređivač koji vam daje pregled "
+"slika i omogućuje jednostavno upravljanje datotekama. Sadržaj promijenjene "
+"teme biti će spremljen kada pritisnete tipku spremanja."
 
 #: src/View/Gtk/Trash.cpp:28
 msgid "Add entry from trash"
@@ -841,24 +899,25 @@ msgstr "Dodaj unos iz smeća"
 
 #: src/View/Gtk/Trash.cpp:32
 msgid "Removed items"
-msgstr ""
+msgstr "Uklonjene stavke"
 
 #: src/View/Gtk/Trash.cpp:42
 msgid "_Restore"
-msgstr ""
+msgstr "_Vrati"
 
 #: src/View/Gtk/Trash.cpp:44
 msgid "Restore selected entries"
-msgstr ""
+msgstr "Vrati odabrane unose"
 
 #: src/View/Gtk/Trash.cpp:49
 msgid "permanently delete selected entries"
-msgstr ""
+msgstr "Trajno obriši odabrane unose"
 
 #: src/View/Gtk/Trash.cpp:57
 msgid ""
 "delete entries permanently - this action is available on custom entries only"
 msgstr ""
+"Obriši unose trajno - ova radnja je dostupna samo na prilagođenim unosima"
 
 #: src/View/Gtk/Trash.cpp:122
 msgid "This deletes the following entries:"

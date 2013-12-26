@@ -1,3 +1,7 @@
+v 4.0.3
+	* translation updates
+	* theme packages: correct import from subdirectories
+
 v 4.0.2
 	* fixed some scriptUpdate related problems
 
