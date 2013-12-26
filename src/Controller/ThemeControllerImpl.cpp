@@ -153,7 +153,7 @@ void ThemeControllerImpl::loadThemeAction(std::string const& name) {
 		this->view->selectTheme(name);
 		this->currentTheme = name;
 		try {
-			this->themeManager->getTheme(name).getFile("theme.txt");
+			this->themeManager->getTheme(name).getFileByNewName("theme.txt");
 		} catch (ItemNotFoundException const& e) {
 			this->view->showError(View_Theme::ERROR_THEMEFILE_NOT_FOUND);
 		}
