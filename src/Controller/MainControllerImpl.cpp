@@ -374,7 +374,9 @@ void MainControllerImpl::_rAppendRule(Model_Rule& rule, Model_Rule* parentRule){
 		bool isSubmenu = rule.type == Model_Rule::SUBMENU;
 		std::string scriptName = "", defaultName = "";
 		if (rule.dataSource) {
-			scriptName = this->grublistCfg->repository.getScriptByEntry(*rule.dataSource)->name;
+			Model_Script* script = this->grublistCfg->repository.getScriptByEntry(*rule.dataSource);
+			assert(script != NULL);
+			scriptName = script->name;
 			if (!is_other_entries_ph && !is_plaintext) {
 				defaultName = rule.dataSource->name;
 			}
@@ -405,8 +407,10 @@ void MainControllerImpl::_rAppendRule(Model_Rule& rule, Model_Rule* parentRule){
 		listItem.parentScript = proxy;
 		this->view->appendEntry(listItem);
 
-		for (std::list<Model_Rule>::iterator subruleIter = rule.subRules.begin(); subruleIter != rule.subRules.end(); subruleIter++) {
-			this->_rAppendRule(*subruleIter, &rule);
+		if (rule.type == Model_Rule::SUBMENU) {
+			for (std::list<Model_Rule>::iterator subruleIter = rule.subRules.begin(); subruleIter != rule.subRules.end(); subruleIter++) {
+				this->_rAppendRule(*subruleIter, &rule);
+			}
 		}
 	}
 }

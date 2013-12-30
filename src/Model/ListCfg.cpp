@@ -1078,36 +1078,38 @@ std::list<Model_Rule> Model_ListCfg::getRemovedEntries(Model_Entry* parent, bool
 			result.insert(result.end(), subResult.begin(), subResult.end());
 		}
 	} else {
-		for (std::list<Model_Entry>::iterator entryIter = parent->subEntries.begin(); entryIter != parent->subEntries.end(); entryIter++) {
-			std::list<Model_Rule> subResult = this->getRemovedEntries(&*entryIter, ignorePlaceholders);
-			Model_Rule* currentSubmenu = NULL;
-			if (subResult.size()) {
-				Model_Rule submenu(Model_Rule::SUBMENU, std::list<std::string>(), entryIter->name, true);
-				submenu.subRules = subResult;
-				submenu.dataSource = &*entryIter;
-				result.push_back(submenu);
-				currentSubmenu = &result.back();
-			}
-
-			if ((entryIter->type == Model_Entry::MENUENTRY || !ignorePlaceholders) && !this->proxies.getVisibleRuleForEntry(*entryIter)) {
-				Model_Rule::RuleType ruleType = Model_Rule::NORMAL;
-				switch (entryIter->type) {
-				case Model_Entry::MENUENTRY:
-					ruleType = Model_Rule::NORMAL;
-					break;
-				case Model_Entry::PLAINTEXT:
-					ruleType = Model_Rule::PLAINTEXT;
-					break;
-				case Model_Entry::SUBMENU:
-					ruleType = Model_Rule::OTHER_ENTRIES_PLACEHOLDER;
-					break;
+		if (parent->type == Model_Entry::SUBMENU || parent->type == Model_Entry::SCRIPT_ROOT) {
+			for (std::list<Model_Entry>::iterator entryIter = parent->subEntries.begin(); entryIter != parent->subEntries.end(); entryIter++) {
+				std::list<Model_Rule> subResult = this->getRemovedEntries(&*entryIter, ignorePlaceholders);
+				Model_Rule* currentSubmenu = NULL;
+				if (subResult.size()) {
+					Model_Rule submenu(Model_Rule::SUBMENU, std::list<std::string>(), entryIter->name, true);
+					submenu.subRules = subResult;
+					submenu.dataSource = &*entryIter;
+					result.push_back(submenu);
+					currentSubmenu = &result.back();
 				}
-				Model_Rule newRule(ruleType, std::list<std::string>(), entryIter->name, true);
-				newRule.dataSource = &*entryIter;
-				if (currentSubmenu) {
-					currentSubmenu->subRules.push_front(newRule);
-				} else {
-					result.push_back(newRule);
+
+				if ((entryIter->type == Model_Entry::MENUENTRY || !ignorePlaceholders) && !this->proxies.getVisibleRuleForEntry(*entryIter)) {
+					Model_Rule::RuleType ruleType = Model_Rule::NORMAL;
+					switch (entryIter->type) {
+					case Model_Entry::MENUENTRY:
+						ruleType = Model_Rule::NORMAL;
+						break;
+					case Model_Entry::PLAINTEXT:
+						ruleType = Model_Rule::PLAINTEXT;
+						break;
+					case Model_Entry::SUBMENU:
+						ruleType = Model_Rule::OTHER_ENTRIES_PLACEHOLDER;
+						break;
+					}
+					Model_Rule newRule(ruleType, std::list<std::string>(), entryIter->name, true);
+					newRule.dataSource = &*entryIter;
+					if (currentSubmenu) {
+						currentSubmenu->subRules.push_front(newRule);
+					} else {
+						result.push_back(newRule);
+					}
 				}
 			}
 		}
