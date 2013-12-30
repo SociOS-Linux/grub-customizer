@@ -50,6 +50,10 @@ struct Model_Entry : public Trait_LoggerAware, public Entry {
 	Model_Entry();
 	Model_Entry(std::string name, std::string extension, std::string content = "", EntryType type = MENUENTRY);
 	Model_Entry(FILE* sourceFile, Model_Entry_Row firstRow = Model_Entry_Row(), Logger* logger = NULL, std::string* plaintextBuffer = NULL);
+private:
+	void readSubmenu(FILE* sourceFile, Model_Entry_Row firstRow);
+	void readMenuEntry(FILE* sourceFile, Model_Entry_Row firstRow);
+public:
 	std::list<Model_Entry>& getSubEntries();
 	operator bool() const;
 	operator ArrayStructure() const;

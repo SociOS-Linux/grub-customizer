@@ -50,50 +50,94 @@ Model_Entry::Model_Entry(std::string name, std::string extension, std::string co
 Model_Entry::Model_Entry(FILE* sourceFile, Model_Entry_Row firstRow, Logger* logger, std::string* plaintextBuffer)
 	: isValid(false), type(MENUENTRY), quote('\''), isModified(false)
 {
+	if (logger) {
+		this->setLogger(*logger);
+	}
 	Model_Entry_Row row;
-	bool inEntry = false;
 	while ((row = firstRow) || (row = Model_Entry_Row(sourceFile))){
 		std::string rowText = ltrim(row.text);
-		if (inEntry && (rowText.substr(0, 10) == "menuentry " || rowText.substr(0, 8) == "submenu ")){
-			this->subEntries.push_back(Model_Entry(sourceFile, row));
-		} else if (inEntry && rowText != "}") {
-			this->content += row.text+"\n";
-		} else if (inEntry && rowText == "}") {
-			//std::cout << "end of entry!" << std::endl;
-			isValid = true;
-			inEntry = false;
-			break; //nur einen Eintrag lesen!
-		} else if (!inEntry && rowText.substr(0, 10) == "menuentry "){
-			char quote = '"';
-			int endOfEntryName = rowText.find('"', 12);
-			if (endOfEntryName == -1) {
-				endOfEntryName = rowText.find('\'', 12);
-				quote = '\'';
-			}
-			std::string entryName = rowText.substr(11, endOfEntryName-11);
 
-			std::string extension = rowText.substr(endOfEntryName+1, rowText.length()-(endOfEntryName+1)-1);
-
-			*this = Model_Entry(entryName, extension);
-			this->quote = quote;
-			inEntry = true;
-		} else if (!inEntry && rowText.substr(0, 8) == "submenu ") {
-			int endOfEntryName = rowText.find('"', 10);
-			if (endOfEntryName == -1)
-				endOfEntryName = rowText.find('\'', 10);
-			std::string entryName = rowText.substr(9, endOfEntryName-9);
-
-			*this = Model_Entry(entryName, "", "", SUBMENU);
-			if (logger) {
-				this->setLogger(*logger);
-			}
-			inEntry = true;
+		if (rowText.substr(0, 10) == "menuentry "){
+			this->readMenuEntry(sourceFile, row);
+			break;
+		} else if (rowText.substr(0, 8) == "submenu ") {
+			this->readSubmenu(sourceFile, row);
+			break;
 		} else {
 			if (plaintextBuffer) {
 				*plaintextBuffer += row.text + "\r\n";
 			}
 		}
 		firstRow.eof = true; //disable firstRow to read the following config from file
+	}
+}
+
+/**
+ * reading a complete submenu (including subentries)
+ */
+void Model_Entry::readSubmenu(FILE* sourceFile, Model_Entry_Row firstRow) {
+	std::string rowText = ltrim(firstRow.text);
+	int endOfEntryName = rowText.find('"', 10);
+	if (endOfEntryName == -1)
+		endOfEntryName = rowText.find('\'', 10);
+	std::string entryName = rowText.substr(9, endOfEntryName-9);
+
+	*this = Model_Entry(entryName, "", "", SUBMENU);
+	if (this->logger) {
+		this->setLogger(*this->logger);
+	}
+	Model_Entry_Row row;
+	while ((row = Model_Entry_Row(sourceFile))) {
+		std::string rowText = ltrim(row.text);
+
+		if (rowText.substr(0, 10) == "menuentry " || rowText.substr(0, 8) == "submenu "){
+			this->subEntries.push_back(Model_Entry(sourceFile, row));
+		} else if (trim(rowText) == "}") {
+			this->isValid = true;
+			break; //read only one submenu
+		}
+	}
+}
+
+/**
+ * reading a menuentry
+ */
+void Model_Entry::readMenuEntry(FILE* sourceFile, Model_Entry_Row firstRow) {
+	std::string rowText = ltrim(firstRow.text);
+	char quote = '"';
+	int endOfEntryName = rowText.find('"', 12);
+	if (endOfEntryName == -1) {
+		endOfEntryName = rowText.find('\'', 12);
+		quote = '\'';
+	}
+	std::string entryName = rowText.substr(11, endOfEntryName-11);
+
+	std::string extension = rowText.substr(endOfEntryName+1, rowText.length()-(endOfEntryName+1)-1);
+
+	*this = Model_Entry(entryName, extension);
+	if (this->logger) {
+		this->setLogger(*this->logger);
+	}
+	this->quote = quote;
+
+	// encapsulated menuentries must be ignored. This variable counts the encapsulation level.
+	// We're starting inside of a menuentry!
+	int depth = 1;
+
+
+	Model_Entry_Row row;
+	while ((row = Model_Entry_Row(sourceFile))){
+		std::string rowText = ltrim(row.text);
+
+		if (trim(rowText) == "}" && --depth == 0) {
+			this->isValid = true;
+			break; //read only one menuentry
+		} else {
+			if (rowText.substr(0, 10) == "menuentry ") {
+				depth++;
+			}
+			this->content += row.text+"\n";
+		}
 	}
 }
 
