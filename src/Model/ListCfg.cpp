@@ -277,6 +277,12 @@ void Model_ListCfg::load(bool preserveConfig){
 		this->log("found invalid proxies: " + rtrim(invalidProxies, ","), Logger::INFO);
 	}
 
+	//fix conflicts (same number, same name but one script with "-proxy" the other without
+	if (this->proxies.hasConflicts()) {
+		this->log("found conflicts - renumerating", Logger::INFO);
+		this->renumerate();
+	}
+
 	this->log("loading completed", Logger::EVENT);
 	send_new_load_progress(1);
 }

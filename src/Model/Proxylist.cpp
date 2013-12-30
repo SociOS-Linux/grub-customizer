@@ -320,6 +320,21 @@ Model_Rule* Model_Proxylist::getVisibleRuleForEntry(Model_Entry const& entry) {
 	return NULL;
 }
 
+bool Model_Proxylist::hasConflicts() const {
+	std::map<std::string, bool> resources; // key: combination of number, "_" and name. Value: true if used before
+	for (std::list<Model_Proxy>::const_iterator proxyIter = this->begin(); proxyIter != this->end(); proxyIter++) {
+		assert(proxyIter->dataSource); // assume all proxies are having a datasource
+		std::ostringstream resourceName;
+		resourceName << proxyIter->index << "_" << proxyIter->dataSource->name;
+		if (resources[resourceName.str()]) {
+			return true;
+		} else {
+			resources[resourceName.str()] = true;
+		}
+	}
+	return false;
+}
+
 bool Model_Proxylist::hasProxy(Model_Proxy* proxy) {
 	for (std::list<Model_Proxy>::iterator proxyIter = this->begin(); proxyIter != this->end(); proxyIter++) {
 		if (&*proxyIter == proxy) {

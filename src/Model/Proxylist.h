@@ -54,6 +54,7 @@ struct Model_Proxylist : public std::list<Model_Proxy>, public Trait_LoggerAware
 	std::list<Model_Proxy>::iterator getIter(Model_Proxy const* proxy);
 	void splitProxy(Model_Proxy const* proxyToSplit, Model_Rule const* firstRuleOfPart2, int direction);
 	Model_Rule* getVisibleRuleForEntry(Model_Entry const& entry);
+	bool hasConflicts() const;
 	bool hasProxy(Model_Proxy* proxy);
 	operator ArrayStructure() const;
 };
