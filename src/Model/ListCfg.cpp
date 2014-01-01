@@ -1279,6 +1279,12 @@ void Model_ListCfg::applyScriptUpdates() {
 		// connect proxies of oldScript with newScript, resync
 		std::list<Model_Proxy*> oldProxies = this->proxies.getProxiesByScript(*oldScript);
 		for (std::list<Model_Proxy*>::iterator oldProxyIter = oldProxies.begin(); oldProxyIter != oldProxies.end(); oldProxyIter++) {
+			// copy entries of custom scripts
+			if ((*oldProxyIter)->dataSource && (*oldProxyIter)->dataSource->isCustomScript && newScript->isCustomScript && (*oldProxyIter)->dataSource->entries().size()) {
+				newScript->entries().splice(newScript->entries().end(), (*oldProxyIter)->dataSource->entries());
+				newScript->root.isModified = true;
+			}
+			// connect old proxy to new script
 			(*oldProxyIter)->unsync();
 			(*oldProxyIter)->dataSource = newScript;
 			if ((*oldProxyIter)->fileName == oldScript->fileName) {
