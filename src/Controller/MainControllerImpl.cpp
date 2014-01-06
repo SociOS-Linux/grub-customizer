@@ -863,6 +863,12 @@ void MainControllerImpl::syncLoadStateAction() {
 			this->view->setStatusText("");
 		}
 
+		if (progress == 1 && this->grublistCfg->hasScriptUpdates()) {
+			this->grublistCfg->applyScriptUpdates();
+			this->env->modificationsUnsaved = true;
+			this->view->showScriptUpdateInfo();
+		}
+
 		//if grubConfig is locked, it will be cancelled as early as possible
 		if (this->grublistCfg->lock_if_free()) {
 			this->updateList();
@@ -874,11 +880,6 @@ void MainControllerImpl::syncLoadStateAction() {
 			this->getAllControllers().themeController->updateSettingsDataAction();
 
 			this->getAllControllers().trashController->updateAction(this->view->getOptions());
-			if (this->grublistCfg->hasScriptUpdates()) {
-				this->grublistCfg->applyScriptUpdates();
-				this->env->modificationsUnsaved = true;
-				this->view->showScriptUpdateInfo();
-			}
 
 			bool placeholdersVisible = this->view->getOptions().at(VIEW_SHOW_PLACEHOLDERS);
 			bool hiddenEntriesVisible = this->view->getOptions().at(VIEW_SHOW_HIDDEN_ENTRIES);
