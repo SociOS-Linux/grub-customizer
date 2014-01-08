@@ -35,6 +35,7 @@ struct Model_Proxylist : public std::list<Model_Proxy>, public Trait_LoggerAware
 	std::list<Model_Proxy> trash; //removed proxies
 	std::list<Model_Proxy*> getProxiesByScript(Model_Script const& script);
 	std::list<const Model_Proxy*> getProxiesByScript(Model_Script const& script) const;
+	std::list<Model_Rule*> getForeignRules();
 	void sync_all(bool deleteInvalidRules = true, bool expand = true, Model_Script* relatedScript = NULL, std::map<std::string, Model_Script*> scriptMap = std::map<std::string, Model_Script*>()); //relatedScript = NULL: sync all proxies, otherwise only sync proxies wich target the given Script
 	void unsync_all();
 	bool proxyRequired(Model_Script const& script) const;

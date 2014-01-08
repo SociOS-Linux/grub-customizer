@@ -1276,26 +1276,37 @@ void Model_ListCfg::applyScriptUpdates() {
 			this->proxies.deleteProxy(&**newProxyIter);
 		}
 
+		// copy entries of custom scripts
+		if (oldScript->isCustomScript && newScript->isCustomScript && oldScript->entries().size()) {
+			newScript->entries().splice(newScript->entries().end(), oldScript->entries());
+			newScript->root.isModified = true;
+		}
+
 		// connect proxies of oldScript with newScript, resync
 		std::list<Model_Proxy*> oldProxies = this->proxies.getProxiesByScript(*oldScript);
 		for (std::list<Model_Proxy*>::iterator oldProxyIter = oldProxies.begin(); oldProxyIter != oldProxies.end(); oldProxyIter++) {
-			// copy entries of custom scripts
-			if ((*oldProxyIter)->dataSource && (*oldProxyIter)->dataSource->isCustomScript && newScript->isCustomScript && (*oldProxyIter)->dataSource->entries().size()) {
-				newScript->entries().splice(newScript->entries().end(), (*oldProxyIter)->dataSource->entries());
-				newScript->root.isModified = true;
-			}
 			// connect old proxy to new script
 			(*oldProxyIter)->unsync();
 			(*oldProxyIter)->dataSource = newScript;
 			if ((*oldProxyIter)->fileName == oldScript->fileName) {
 				(*oldProxyIter)->fileName = newScript->fileName; // set the new fileName
 			}
-			(*oldProxyIter)->sync(true, true, this->repository.getScriptPathMap());
+		}
+
+		std::list<Model_Rule*> foreignRules = this->proxies.getForeignRules();
+
+		for (std::list<Model_Rule*>::iterator ruleIter = foreignRules.begin(); ruleIter != foreignRules.end(); ruleIter++) {
+			if (this->repository.getScriptByEntry(*(*ruleIter)->dataSource) == oldScript) {
+				(*ruleIter)->__sourceScriptPath = newScript->fileName;
+			}
 		}
 
 		this->repository.removeScript(*oldScript);
 	}
 	this->scriptSourceMap.deleteUpdates();
+
+	this->proxies.unsync_all();
+	this->proxies.sync_all(true, true, NULL, this->repository.getScriptPathMap());
 }
 
 void Model_ListCfg::revert() {

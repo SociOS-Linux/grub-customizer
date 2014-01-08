@@ -34,6 +34,17 @@ std::list<const Model_Proxy*> Model_Proxylist::getProxiesByScript(Model_Script c
 	}
 	return result;
 }
+std::list<Model_Rule*> Model_Proxylist::getForeignRules() {
+	std::list<Model_Rule*> result;
+
+	for (std::list<Model_Proxy>::iterator proxyIter = this->begin(); proxyIter != this->end(); proxyIter++) {
+		std::list<Model_Rule*> subResult = proxyIter->getForeignRules();
+		result.splice(result.end(), subResult);
+	}
+
+	return result;
+}
+
 void Model_Proxylist::sync_all(bool deleteInvalidRules, bool expand, Model_Script* relatedScript, std::map<std::string, Model_Script*> scriptMap){ //relatedScript = NULL: sync all proxies, otherwise only sync proxies wich target the given Script
 	for (Model_Proxylist::iterator proxy_iter = this->begin(); proxy_iter != this->end(); proxy_iter++){
 		if (relatedScript == NULL || proxy_iter->dataSource == relatedScript)

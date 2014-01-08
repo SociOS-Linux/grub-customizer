@@ -146,6 +146,9 @@ std::map<std::string, Model_Script*> Model_Repository::getScriptPathMap() {
 	for (Model_Repository::iterator iter = this->begin(); iter != this->end(); iter++){
 		map[iter->fileName] = &*iter;
 	}
+	for (Model_Repository::iterator iter = this->trash.begin(); iter != this->trash.end(); iter++){
+		map[iter->fileName] = &*iter;
+	}
 	return map;
 }
 

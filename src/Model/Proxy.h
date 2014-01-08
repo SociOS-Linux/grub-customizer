@@ -45,6 +45,7 @@ struct Model_Proxy : public Proxy {
 	static std::list<Model_Rule> parseRuleString(const char** ruleString, std::string const& cfgDirPrefix);
 	void importRuleString(const char* ruleString, std::string const& cfgDirPrefix);
 	Model_Rule* getRuleByEntry(Model_Entry const& entry, std::list<Model_Rule>& list, Model_Rule::RuleType ruletype);
+	std::list<Model_Rule*> getForeignRules(Model_Rule* parent = NULL);
 	void unsync(Model_Rule* parent = NULL);
 	bool sync(bool deleteInvalidRules = true, bool expand = true, std::map<std::string, Model_Script*> scriptMap = std::map<std::string, Model_Script*>());
 	void sync_connectExisting(Model_Rule* parent = NULL, std::map<std::string, Model_Script*> scriptMap = std::map<std::string, Model_Script*>());

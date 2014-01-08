@@ -159,6 +159,7 @@ Model_Entry::operator ArrayStructure() const {
 	result["content"] = this->content;
 	result["quote"] = this->quote;
 	result["subEntries"].isArray = true;
+	result["rulepointer"] = this;
 	int i = 0;
 	for (std::list<Model_Entry>::const_iterator iter = this->subEntries.begin(); iter != this->subEntries.end(); iter++) {
 		result["subEntries"][i] = ArrayStructure(*iter);

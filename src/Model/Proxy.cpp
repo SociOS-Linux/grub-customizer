@@ -116,6 +116,24 @@ Model_Rule* Model_Proxy::getRuleByEntry(Model_Entry const& entry, std::list<Mode
 	return NULL;
 }
 
+std::list<Model_Rule*> Model_Proxy::getForeignRules(Model_Rule* parent) {
+	assert(this->dataSource != NULL);
+
+	std::list<Model_Rule*> result;
+	std::list<Model_Rule>& list = parent ? parent->subRules : this->rules;
+
+	for (std::list<Model_Rule>::iterator ruleIter = list.begin(); ruleIter != list.end(); ruleIter++) {
+		if (ruleIter->dataSource && !this->dataSource->hasEntry(*ruleIter->dataSource)) {
+			result.push_back(&*ruleIter);
+		}
+		if (ruleIter->subRules.size()) {
+			std::list<Model_Rule*> subResult = this->getForeignRules(&*ruleIter);
+			result.splice(result.end(), subResult);
+		}
+	}
+	return result;
+}
+
 void Model_Proxy::unsync(Model_Rule* parent) {
 	std::list<Model_Rule>& list = parent ? parent->subRules : this->rules;
 	for (std::list<Model_Rule>::iterator iter = list.begin(); iter != list.end(); iter++) {
