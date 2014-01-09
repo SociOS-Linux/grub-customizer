@@ -206,12 +206,14 @@ void Model_ListCfg::load(bool preserveConfig){
 	send_new_load_progress(0.1);
 
 
-	//load script map
-	this->scriptSourceMap.load();
-	if (!this->scriptSourceMap.fileExists() && this->getProxifiedScripts().size() > 0) {
-		this->generateScriptSourceMap();
+	if (!preserveConfig){
+		//load script map
+		this->scriptSourceMap.load();
+		if (!this->scriptSourceMap.fileExists() && this->getProxifiedScripts().size() > 0) {
+			this->generateScriptSourceMap();
+		}
+		this->populateScriptSourceMap();
 	}
-	this->populateScriptSourceMap();
 
 	//run mkconfig
 	this->log("running " + this->env->mkconfig_cmd, Logger::EVENT);
@@ -335,7 +337,9 @@ void Model_ListCfg::readGeneratedFile(FILE* source, bool createScriptIfNotFound,
 				innerCount++;
 			}
 			Model_Entry newEntry(source, row, this->getLoggerPtr());
-			script->entries().push_back(newEntry);
+			if (!script->isModified()) {
+				script->entries().push_back(newEntry);
+			}
 			this->proxies.sync_all(false, false, script);
 			this->unlock();
 			this->send_new_load_progress(0.1 + (progressbarScriptSpace * i + (progressbarScriptSpace/10*innerCount)), script->name, i, this->repository.size());

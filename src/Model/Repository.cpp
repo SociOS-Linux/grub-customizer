@@ -107,8 +107,11 @@ Model_Script* Model_Repository::getNthScript(int pos){
 	return result;
 }
 
-void Model_Repository::deleteAllEntries(){
+void Model_Repository::deleteAllEntries(bool preserveModifiedScripts){
 	for (Model_Repository::iterator iter = this->begin(); iter != this->end(); iter++){
+		if (preserveModifiedScripts && iter->isModified()) {
+			continue;
+		}
 		iter->entries().clear();
 	}
 }
