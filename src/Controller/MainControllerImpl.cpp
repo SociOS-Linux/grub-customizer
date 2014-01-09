@@ -187,7 +187,6 @@ void MainControllerImpl::reloadAction(){
 		this->getAllControllers().settingsController->syncAction();
 		this->getAllControllers().themeController->syncAction();
 		this->view->hideReloadRecommendation();
-		this->view->hideScriptUpdateInfo();
 		this->view->setLockState(1|4|8);
 		this->getThreadController().startLoadThread(true);
 	} catch (Exception const& e) {
