@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2013-11-13 22:24+0100\n"
-"PO-Revision-Date: 2013-11-13 22:00+0000\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2013-12-29 16:41+0000\n"
+"Last-Translator: David Jones <Unknown>\n"
 "Language-Team: Welsh <cy@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2013-12-26 19:40+0000\n"
-"X-Generator: Launchpad (build 16877)\n"
+"X-Launchpad-Export-Date: 2014-01-09 19:20+0000\n"
+"X-Generator: Launchpad (build 16884)\n"
 
 #: src/Controller/MainControllerImpl.cpp:654
 msgid "Name the Entry"
@@ -39,7 +39,7 @@ msgstr "Linux"
 
 #: src/main/gtk-client.cpp:252
 msgid "Linux-ISO"
-msgstr ""
+msgstr "Linux-ISO"
 
 #: src/main/gtk-client.cpp:253
 msgid "Chainloader"
@@ -47,7 +47,7 @@ msgstr ""
 
 #: src/main/gtk-client.cpp:254
 msgid "Memtest"
-msgstr ""
+msgstr "Memtest"
 
 #: src/View/Gtk/About.cpp:36
 msgid ""
