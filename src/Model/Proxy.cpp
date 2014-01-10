@@ -310,7 +310,7 @@ void Model_Proxy::sync_cleanup(Model_Rule* parent, std::map<std::string, Model_S
 					listModified = true; //after ereasing something we have to create a new iterator
 				}
 			} else { //check contents
-				this->sync_cleanup(&*iter);
+				this->sync_cleanup(&*iter, scriptMap);
 			}
 		}
 
