@@ -547,6 +547,17 @@ void Model_ListCfg::save(){
 		}
 		pclose(saveProc);
 	}
+
+	// correct pathes of foreign rules (to make sure re-syncing works)
+	std::list<Model_Rule*> foreignRules = this->proxies.getForeignRules();
+	for (std::list<Model_Rule*>::iterator foreignRuleIter = foreignRules.begin(); foreignRuleIter != foreignRules.end(); foreignRuleIter++) {
+		Model_Entry* entry = (*foreignRuleIter)->dataSource;
+		assert(entry != NULL);
+		Model_Script* script = this->repository.getScriptByEntry(*entry);
+		assert(script != NULL);
+		(*foreignRuleIter)->__sourceScriptPath = script->fileName;
+	}
+
 	send_new_save_progress(1);
 }
 
@@ -1282,7 +1293,13 @@ void Model_ListCfg::applyScriptUpdates() {
 
 		// copy entries of custom scripts
 		if (oldScript->isCustomScript && newScript->isCustomScript && oldScript->entries().size()) {
-			newScript->entries().splice(newScript->entries().end(), oldScript->entries());
+			for (std::list<Model_Entry>::iterator entryIter = oldScript->entries().begin(); entryIter != oldScript->entries().end(); entryIter++) {
+				if (entryIter->type == Model_Entry::PLAINTEXT && newScript->getPlaintextEntry()) {
+					newScript->getPlaintextEntry()->content = entryIter->content; // copy plaintext instead of adding another entry
+				} else {
+					newScript->entries().push_back(*entryIter);
+				}
+			}
 			newScript->root.isModified = true;
 		}
 

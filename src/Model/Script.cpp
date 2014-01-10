@@ -102,6 +102,15 @@ Model_Entry* Model_Script::getEntryByHash(std::string const& hash, std::list<Mod
 	return NULL;
 }
 
+Model_Entry* Model_Script::getPlaintextEntry() {
+	for (std::list<Model_Entry>::iterator iter = this->entries().begin(); iter != this->entries().end(); iter++){
+		if (iter->type == Model_Entry::PLAINTEXT) {
+			return &*iter;
+		}
+	}
+	return NULL;
+}
+
 
 void Model_Script::moveToBasedir(std::string const& cfg_dir){
 	std::string newPath;

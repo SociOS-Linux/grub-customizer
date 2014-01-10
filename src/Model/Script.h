@@ -44,6 +44,7 @@ struct Model_Script : public Model_EntryPathFollower, public Trait_LoggerAware, 
 	Model_Entry* getEntryByPath(std::list<std::string> const& path);
 	Model_Entry* getEntryByName(std::string const& name, std::list<Model_Entry>& parentList);
 	Model_Entry* getEntryByHash(std::string const& hash, std::list<Model_Entry>& parentList);
+	Model_Entry* getPlaintextEntry();
 	void moveToBasedir(std::string const& cfg_dir); //moves the file from any location to grub.d and adds the prefix PS_ (proxified Script) or DS_ (default script)
 	bool moveFile(std::string const& newPath, short int permissions = -1);
 	std::list<std::string> buildPath(Model_Entry const& entry, Model_Entry const* parent) const;
