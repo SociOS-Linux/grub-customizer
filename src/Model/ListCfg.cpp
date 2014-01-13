@@ -1296,11 +1296,12 @@ void Model_ListCfg::applyScriptUpdates() {
 			for (std::list<Model_Entry>::iterator entryIter = oldScript->entries().begin(); entryIter != oldScript->entries().end(); entryIter++) {
 				if (entryIter->type == Model_Entry::PLAINTEXT && newScript->getPlaintextEntry()) {
 					newScript->getPlaintextEntry()->content = entryIter->content; // copy plaintext instead of adding another entry
+					newScript->getPlaintextEntry()->isModified = true;
 				} else {
 					newScript->entries().push_back(*entryIter);
+					newScript->entries().back().isModified = true;
 				}
 			}
-			newScript->root.isModified = true;
 		}
 
 		// connect proxies of oldScript with newScript, resync
