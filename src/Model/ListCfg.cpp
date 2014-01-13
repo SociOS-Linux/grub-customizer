@@ -303,7 +303,7 @@ void Model_ListCfg::readGeneratedFile(FILE* source, bool createScriptIfNotFound,
 		if (!inScript && rowText.substr(0,10) == ("### BEGIN ") && rowText.substr(rowText.length()-4,4) == " ###"){
 			this->lock();
 			if (script) {
-				if (plaintextBuffer != "") {
+				if (plaintextBuffer != "" && !script->isModified()) {
 					Model_Entry newEntry("#text", "", plaintextBuffer, Model_Entry::PLAINTEXT);
 					if (this->hasLogger()) {
 						newEntry.setLogger(this->getLogger());
@@ -356,7 +356,7 @@ void Model_ListCfg::readGeneratedFile(FILE* source, bool createScriptIfNotFound,
 	}
 	this->lock();
 	if (script) {
-		if (plaintextBuffer != "") {
+		if (plaintextBuffer != "" && !script->isModified()) {
 			Model_Entry newEntry("#text", "", plaintextBuffer, Model_Entry::PLAINTEXT);
 			if (this->hasLogger()) {
 				newEntry.setLogger(this->getLogger());
