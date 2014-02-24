@@ -31,6 +31,7 @@ public:
 	Exception(std::string const& message, std::string const& file = "", int line = -1);
 	virtual inline ~Exception(){}
 	virtual operator std::string() const;
+	virtual std::string getMessage() const;
 	virtual operator bool() const;
 };
 

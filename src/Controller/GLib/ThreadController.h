@@ -30,11 +30,12 @@
 class GLib_ThreadController : public ThreadController, public Trait_LoggerAware {
 	ControllerCollection& _controllers;
 
-	Glib::Dispatcher disp_sync_load, disp_sync_save, disp_thread_died, disp_updateSettingsDlgResolutionList, disp_settings_loaded, disp_exception, disp_postSaveActions;
+	Glib::Dispatcher disp_sync_load, disp_sync_save, disp_thread_died, disp_updateSettingsDlgResolutionList, disp_settings_loaded, disp_exception, disp_postSaveActions, disp_config_saving_error;
 
 	Exception _cachedException;
 	Rule* _cachedRulePtr;
 	std::string _cachedThemeFileName;
+	std::string _cachedConfigSavingError;
 public:
 	GLib_ThreadController(ControllerCollection& controllers);
 	void syncEntryList();
@@ -48,6 +49,7 @@ public:
 	void startGrubInstallThread(std::string const& device);
 	void stopApplication();
 	void showException(Exception const& e);
+	void showConfigSavingError(std::string const& message);
 	void startEdit(Rule* rule);
 	void startThemeFileEdit(std::string const& fileName);
 	void doPostSaveActions();
@@ -65,6 +67,7 @@ private:
 	void _execRuleEdit();
 	void _execThemeFileEdit();
 	void _execPostSaveActions();
+	void _execShowConfigSavingError();
 };
 
 #endif

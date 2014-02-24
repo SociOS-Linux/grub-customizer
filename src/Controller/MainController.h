@@ -55,6 +55,7 @@ public:
 	virtual void initModeAction(bool burgChosen) = 0;
 	virtual void loadThreadedAction(bool preserveConfig = false) = 0;
 	virtual void saveThreadedAction() = 0;
+	virtual void showConfigSavingErrorAction(std::string errorMessage) = 0;
 	virtual void addEntriesAction(std::list<Rule*> entries) = 0;
 	virtual void activateSettingsAction() = 0;
 	virtual void showReloadRecommendationAction() = 0;

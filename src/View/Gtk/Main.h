@@ -127,6 +127,7 @@ public:
 	
 	int showExitConfirmDialog(int type);
 	void showErrorMessage(std::string const& msg, std::vector<std::string> const& values);
+	void showConfigSavingError(std::string const& message);
 	bool askForEnvironmentSettings(std::string const& failedCmd, std::string const& errorMessage);
 	void clear();
 	bool confirmUnsavedSwitch();

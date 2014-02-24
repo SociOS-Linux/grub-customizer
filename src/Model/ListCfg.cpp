@@ -531,12 +531,16 @@ void Model_ListCfg::save(){
 	}
 
 
+	int saveProcSuccess = 0;
+	std::string saveProcOutput;
+
 	//run update-grub
-	FILE* saveProc = popen((env->update_cmd+" 2>&1").c_str(), "r");
+	FILE* saveProc = popen((env->update_cmd + " 2>&1").c_str(), "r");
 	if (saveProc) {
 		int c;
 		std::string row = "";
 		while ((c = fgetc(saveProc)) != EOF) {
+			saveProcOutput += char(c);
 			if (c == '\n') {
 				send_new_save_progress(0.5); //a gui should use pulse() instead of set_fraction
 				this->log(row, Logger::INFO);
@@ -545,7 +549,7 @@ void Model_ListCfg::save(){
 				row += char(c);
 			}
 		}
-		pclose(saveProc);
+		saveProcSuccess = pclose(saveProc);
 	}
 
 	// correct pathes of foreign rules (to make sure re-syncing works)
@@ -559,6 +563,10 @@ void Model_ListCfg::save(){
 	}
 
 	send_new_save_progress(1);
+
+	if ((saveProcSuccess != 0 || saveProcOutput.find("Syntax errors are detected in generated GRUB config file") != -1)){
+		throw CmdExecException("failed running '" + env->update_cmd + "' output:\n" + saveProcOutput, __FILE__, __LINE__);
+	}
 }
 
 std::map<Model_Entry const*, Model_Script const*> Model_ListCfg::getEntrySources(Model_Proxy const& proxy, Model_Rule const* parent) const {

@@ -104,6 +104,7 @@ public:
 	void loadThreadedAction(bool preserveConfig = false);
 	void saveAction();
 	void saveThreadedAction();
+	void showConfigSavingErrorAction(std::string errorMessage);
 	MainControllerImpl();
 	
 public:

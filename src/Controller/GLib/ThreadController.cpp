@@ -28,6 +28,7 @@ GLib_ThreadController::GLib_ThreadController(ControllerCollection& controllers)
 	disp_updateSettingsDlgResolutionList.connect(sigc::mem_fun(this, &GLib_ThreadController::_execResolutionListUpdate));
 	disp_exception.connect(sigc::mem_fun(this, &GLib_ThreadController::_execShowException));
 	disp_postSaveActions.connect(sigc::mem_fun(this, &GLib_ThreadController::_execPostSaveActions));
+	disp_config_saving_error.connect(sigc::mem_fun(this, &GLib_ThreadController::_execShowConfigSavingError));
 }
 
 void GLib_ThreadController::syncEntryList(){
@@ -90,6 +91,11 @@ void GLib_ThreadController::showException(Exception const& e) {
 	this->disp_exception();
 }
 
+void GLib_ThreadController::showConfigSavingError(std::string const& message) {
+	this->_cachedConfigSavingError = message;
+	this->disp_config_saving_error();
+}
+
 void GLib_ThreadController::_execLoadSync() {
 	this->_controllers.mainController->syncLoadStateAction();
 }
@@ -143,4 +149,8 @@ void GLib_ThreadController::_execThemeFileEdit() {
 
 void GLib_ThreadController::_execPostSaveActions() {
 	this->_controllers.themeController->postSaveAction();
+}
+
+void GLib_ThreadController::_execShowConfigSavingError() {
+	this->_controllers.mainController->showConfigSavingErrorAction(this->_cachedConfigSavingError);
 }

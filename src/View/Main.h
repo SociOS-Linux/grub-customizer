@@ -77,6 +77,8 @@ public:
 	//show the given error message
 	virtual void showErrorMessage(std::string const& msg, std::vector<std::string> const& values = std::vector<std::string>())=0;
 
+	virtual void showConfigSavingError(std::string const& message) = 0;
+
 	//shows an error message including an option for changing the environment
 	virtual bool askForEnvironmentSettings(std::string const& failedCmd, std::string const& errorMessage) = 0;
 	//remove everything from the list

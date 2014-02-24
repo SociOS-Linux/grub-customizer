@@ -33,6 +33,10 @@ Exception::operator std::string() const {
 	return out.str();
 }
 
+std::string Exception::getMessage() const {
+	return this->_message;
+}
+
 
 Exception::operator bool() const {
 	return this->_message != "";

@@ -286,8 +286,22 @@ void MainControllerImpl::saveThreadedAction(){
 		}
 		this->getAllControllers().themeController->saveAction();
 		this->log("writing grub list configuration", Logger::IMPORTANT_EVENT);
-		this->grublistCfg->save();
+		try {
+			this->grublistCfg->save();
+		} catch (CmdExecException const& e){
+			this->threadController->showConfigSavingError(e.getMessage());
+		}
 		this->env->activeThreadCount--;
+	} catch (Exception const& e) {
+		this->getAllControllers().errorController->errorThreadedAction(e);
+	}
+	this->logActionEndThreaded();
+}
+
+void MainControllerImpl::showConfigSavingErrorAction(std::string errorMessage) {
+	this->logActionBeginThreaded("show-config-saving-error");
+	try {
+		this->view->showConfigSavingError(errorMessage);
 	} catch (Exception const& e) {
 		this->getAllControllers().errorController->errorThreadedAction(e);
 	}
