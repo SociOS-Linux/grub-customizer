@@ -963,7 +963,7 @@ void View_Gtk_Main::showErrorMessage(std::string const& msg, std::vector<std::st
 void View_Gtk_Main::showConfigSavingError(std::string const& message) {
 	Gtk::MessageDialog dlg(gettext("Failed saving grub configuration!"), false, Gtk::MESSAGE_ERROR);
 	dlg.set_title(gettext("The grub configuration cannot be saved"));
-	dlg.set_secondary_text(std::string() + gettext("Please take a look at the command line output below. If you think this is a bug of Grub Customizer, please create one at https://launchpad.net/grub-customizer! Generally Grub Customizer should prevent errors like this.") + "\n\n" + message);
+	dlg.set_secondary_text(Glib::ustring::compose(gettext("Please take a look at the command line output below. If you think this is a bug of Grub Customizer, please create one at %1! Generally Grub Customizer should prevent errors like this."), "https://launchpad.net/grub-customizer") + "\n\n" + message);
 	dlg.run();
 }
 
