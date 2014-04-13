@@ -1,5 +1,11 @@
 #!/bin/sh
 cat << EOF
+grub-customizer (4.0.5-0ubuntu1~ppa1$1) $2; urgency=low
+
+   * new upstream release
+
+ -- Daniel Richter <danielrichter2007@web.de>  Mon, 14 Apr 2014 00:19:11 +0200
+
 grub-customizer (4.0.4-0ubuntu1~ppa1$1) $2; urgency=low
 
    * new upstream release

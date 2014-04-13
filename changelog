@@ -1,3 +1,6 @@
+v 4.0.5
+	* copyright fix: added OpenSSL exemption
+
 v 4.0.4
 	* improved grub-cfg parser - handling of encapsulated menuentries
 	* conflict resolution on startup (renumerate when there's something like 10_linux and 10_linux_proxy)
