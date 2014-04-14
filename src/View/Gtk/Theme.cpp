@@ -530,6 +530,14 @@ Glib::RefPtr<Pango::Layout> View_Gtk_Theme::createFormattedText(Cairo::RefPtr<Ca
 
 void View_Gtk_Theme::setBackgroundImagePreviewPath(std::string const& menuPicturePath, bool isInGrubDir){
 	this->redraw(menuPicturePath, isInGrubDir);
+
+	this->event_lock = true;
+	if (menuPicturePath != "") {
+		fcBackgroundImage.set_filename(menuPicturePath);
+	} else {
+		fcBackgroundImage.unselect_all();
+	}
+	this->event_lock = false;
 }
 
 void View_Gtk_Theme::redraw(std::string const& menuPicturePath, bool isInGrubDir, Cairo::RefPtr<Cairo::Context> const* cr){
@@ -579,8 +587,7 @@ void View_Gtk_Theme::redraw(std::string const& menuPicturePath, bool isInGrubDir
 			} else {
 				throw Glib::Error();
 			}
-		}
-		catch (Glib::Error const& e){
+		} catch (Glib::Error const& e){
 			Cairo::RefPtr<Cairo::Context> context = cr ? *cr : drwBackgroundPreview.get_window()->create_cairo_context();
 			Glib::RefPtr<Gdk::Pixbuf> buf = drwBackgroundPreview.render_icon_pixbuf(Gtk::Stock::MISSING_IMAGE, Gtk::ICON_SIZE_DIALOG);
 
@@ -592,10 +599,7 @@ void View_Gtk_Theme::redraw(std::string const& menuPicturePath, bool isInGrubDir
 		bttRemoveBackground.show();
 		imgRemoveBackground.show();
 		lblBackgroundRequiredInfo.hide();
-		fcBackgroundImage.set_filename(menuPicturePath);
-	}
-	else {
-		fcBackgroundImage.unselect_all();
+	} else {
 		bttRemoveBackground.hide();
 		imgRemoveBackground.hide();
 		drwBackgroundPreview.hide();
