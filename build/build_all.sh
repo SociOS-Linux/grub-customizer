@@ -159,6 +159,19 @@ cd '$basedir/releases/$subdir/saucy' && export BD=build_`date +%s` && mkdir $BD 
 chmod +x $basedir/releases/$subdir/saucy/*.sh
 # </saucy>
 
+# <trusty>
+cp $basedir/releases/$subdir/grub-customizer_$version.orig.tar.gz $basedir/release/grub-customizer_$version.orig.tar.gz
+$sourcedir/debian/changelog.d t trusty > debian/changelog
+debuild -S;
+mkdir $basedir/releases/$subdir/trusty
+mv $basedir/release/grub-customizer_* $basedir/releases/$subdir/trusty
+echo '#!/bin/sh
+dput ppa:danielrichter2007/grub-customizer '$basedir'/releases/'$subdir'/trusty/grub-customizer_'$version'-0ubuntu1~ppa'$rev't_source.changes' > $basedir/releases/$subdir/trusty/upload.sh
+echo '#!/bin/sh
+cd '$basedir/releases/$subdir/trusty' && export BD=build_`date +%s` && mkdir $BD && sudo mount none $BD -t tmpfs && tar -xzf *.orig.tar.gz -C $BD && tar -xzf *.debian.tar.gz -C $BD/* && cp *.orig.tar.gz $BD/ && cd $BD/* && dpkg-buildpackage && cd ../.. && mv $BD/*.deb ./ && sudo umount $BD && rm -rf $BD' > $basedir/releases/$subdir/trusty/compile.sh
+chmod +x $basedir/releases/$subdir/trusty/*.sh
+# </trusty>
+
 echo '#!/bin/sh
 '$basedir'/releases/'$subdir'/lucid/upload.sh
 '$basedir'/releases/'$subdir'/precise/upload.sh
