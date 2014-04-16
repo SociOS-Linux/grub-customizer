@@ -178,6 +178,7 @@ echo '#!/bin/sh
 '$basedir'/releases/'$subdir'/quantal/upload.sh
 '$basedir'/releases/'$subdir'/raring/upload.sh
 '$basedir'/releases/'$subdir'/saucy/upload.sh
+'$basedir'/releases/'$subdir'/trusty/upload.sh
 ' > $basedir/releases/$subdir/upload_ppas.sh
 chmod +x $basedir/releases/$subdir/upload_ppas.sh
 
