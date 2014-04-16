@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2013-11-13 22:24+0100\n"
-"PO-Revision-Date: 2013-11-13 22:00+0000\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2014-03-01 04:20+0000\n"
+"Last-Translator: Walter Cheuk <wwycheuk@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <zh_TW@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-01-13 21:41+0000\n"
-"X-Generator: Launchpad (build 16890)\n"
+"X-Launchpad-Export-Date: 2014-04-16 18:08+0000\n"
+"X-Generator: Launchpad (build 16985)\n"
 
 #: src/Controller/MainControllerImpl.cpp:654
 msgid "Name the Entry"
@@ -52,7 +52,7 @@ msgstr "記憶體檢測"
 #: src/View/Gtk/About.cpp:36
 msgid ""
 "Grub Customizer is a graphical interface to configure the grub2/burg settings"
-msgstr "Grub Customizer 是一個用來設置 grub2/burg 設定的圖形介面程式"
+msgstr "Grub Customizer 是用來設置 grub2/burg 設定的圖形介面程式"
 
 #: src/View/Gtk/Element/PartitionChooser.cpp:48
 msgid "current"
@@ -84,23 +84,23 @@ msgstr "虛擬檔案系統(_I)"
 
 #: src/View/Gtk/EntryEditor.cpp:58
 msgid "_Linux image"
-msgstr ""
+msgstr "_Linux 映像檔"
 
 #: src/View/Gtk/EntryEditor.cpp:60
 msgid "_Memtest image"
-msgstr ""
+msgstr "記憶體檢測映像檔(_M)"
 
 #: src/View/Gtk/EntryEditor.cpp:62
 msgid "Path to iso file"
-msgstr "到iso檔的路徑"
+msgstr "到 ISO 檔的路徑"
 
 #: src/View/Gtk/EntryEditor.cpp:64
 msgid "Locale"
-msgstr "本地"
+msgstr "地域"
 
 #: src/View/Gtk/EntryEditor.cpp:66
 msgid "Kernel params"
-msgstr "核心參數"
+msgstr "內核參數"
 
 #: src/View/Gtk/EntryEditor.cpp:169 src/View/Gtk/EntryEditor.cpp:175
 #: src/View/Gtk/EntryEditor.cpp:209
@@ -137,7 +137,7 @@ msgstr "卸載失敗！"
 
 #: src/View/Gtk/EnvEditor.cpp:212
 msgid "This seems not to be a root file system (no fstab found)"
-msgstr "這似乎不是一個根檔案系統( 沒有找到 fstab )"
+msgstr "這似乎不是根檔案系統 (找不到 fstab)"
 
 #: src/View/Gtk/EnvEditor.cpp:213
 msgid "Couldn't mount the selected partition"
@@ -159,7 +159,7 @@ msgstr "關於這個問題，請通知作者。下列資訊可能會有所幫助
 
 #: src/View/Gtk/Error.cpp:31
 msgid "continue (risk data loss)"
-msgstr "繼續 (冒險於資料遺失)"
+msgstr "繼續 (有可能遺失資料)"
 
 #: src/View/Gtk/Installer.cpp:22
 msgid ""
@@ -167,13 +167,13 @@ msgid ""
 "files to the bootloaders data directory\n"
 "(if they don't already exist)."
 msgstr ""
-"安裝開機選單至 MBR 及放一些\n"
-"檔案到開機選單資料目錄\n"
-"(如果它們不存在)。"
+"安裝開機載入程式至 MBR 及放一些\n"
+"檔案到開機載入程式資料目錄\n"
+"(如果還沒有的話)。"
 
 #: src/View/Gtk/Installer.cpp:23
 msgid "_Device: "
-msgstr "裝置(_V)： "
+msgstr "裝置(_D)： "
 
 #: src/View/Gtk/Installer.cpp:33
 msgid "Install to MBR"
@@ -193,7 +193,7 @@ msgstr "正在安裝開機載入程式..."
 
 #: src/View/Gtk/Installer.cpp:76
 msgid "Please type a device string!"
-msgstr "請輸入一個裝置字串！"
+msgstr "請輸入裝置字串！"
 
 #: src/View/Gtk/Main.cpp:29
 msgid "_File"
@@ -213,23 +213,23 @@ msgstr "求助(_H)"
 
 #: src/View/Gtk/Main.cpp:32
 msgid "_Install to MBR …"
-msgstr "安裝到MBR(_I)..."
+msgstr "安裝到 MBR(_I)..."
 
 #: src/View/Gtk/Main.cpp:41
 msgid "_Show details"
-msgstr ""
+msgstr "顯示詳情(_S)"
 
 #: src/View/Gtk/Main.cpp:41
 msgid "Show _hidden entries"
-msgstr ""
+msgstr "顯示隱藏項目(_H)"
 
 #: src/View/Gtk/Main.cpp:42
 msgid "_Group by Script"
-msgstr ""
+msgstr "依腳本分組(_G)"
 
 #: src/View/Gtk/Main.cpp:42
 msgid "Show _Placeholders"
-msgstr ""
+msgstr "顯示佔位符號(_P)"
 
 #: src/View/Gtk/Main.cpp:43
 msgid "BURG found!"
@@ -246,7 +246,7 @@ msgstr "您所做的修改影響可見的項目。 請重新載入！"
 
 #: src/View/Gtk/Main.cpp:47
 msgid "Script updates found. Click save to apply the changes!"
-msgstr ""
+msgstr "腳本有更新。按「儲存」套用變更！"
 
 #: src/View/Gtk/Main.cpp:60
 msgid "_List configuration"
@@ -254,15 +254,15 @@ msgstr "清單配置(_L)"
 
 #: src/View/Gtk/Main.cpp:95
 msgid "Remove selected entries (you can restore them from trash)"
-msgstr "移除選取的項目 (您可以將它們從回收筒復原)"
+msgstr "移除所選項目 (您可以將它們從回收筒還原)"
 
 #: src/View/Gtk/Main.cpp:105
 msgid "Move up the selected entry or script"
-msgstr "向上移動選定的項目或腳本"
+msgstr "將選定的項目或腳本向上移動"
 
 #: src/View/Gtk/Main.cpp:107
 msgid "Move down the selected entry or script"
-msgstr "向下移動選定的項目或腳本"
+msgstr "將選定的項目或腳本向下移動"
 
 #: src/View/Gtk/Main.cpp:113
 msgid "remove this entry from the current submenu"
@@ -372,13 +372,13 @@ msgstr "(腳本代碼)"
 
 #: src/View/Gtk/Main.cpp:465
 msgid "(script code of %1)"
-msgstr "(腳本代碼%1)"
+msgstr "(腳本代碼 %1)"
 
 #: src/View/Gtk/Main.cpp:683
 msgid ""
 "Removing Script Code can cause problems when trying to boot entries relying "
 "on it. Are you sure you want to do it anyway?"
-msgstr "移除腳本代碼可能會導致問題，當試圖啟動依賴於它的項目時。您確定您想這樣做嗎？"
+msgstr "移除腳本代碼可能會導致當試圖啟動依賴於它的項目時發生問題。確定想這樣做嗎？"
 
 #: src/View/Gtk/Main.cpp:692
 msgid ""
@@ -387,10 +387,12 @@ msgid ""
 "If you just want to remove old kernels: The better way is uninstalling them "
 "instead of just hiding them in boot menu."
 msgstr ""
+"正在移除正在運行的系統項目。請先確保本電腦有其他可正常運行的系統項目！\n"
+"如僅想移除舊內核，應將其解除安裝而非在開機選單隱藏。"
 
 #: src/View/Gtk/Main.cpp:806 src/View/Gtk/Element/List.h:128
 msgid "menuentry"
-msgstr ""
+msgstr "選單項目(menuentry)"
 
 #: src/View/Gtk/Main.cpp:807
 msgid ""
@@ -400,7 +402,7 @@ msgstr ""
 
 #: src/View/Gtk/Main.cpp:808 src/View/Gtk/Element/List.h:124
 msgid "submenu"
-msgstr "子選單"
+msgstr "子選單(submenu)"
 
 #: src/View/Gtk/Main.cpp:809
 msgid ""
@@ -411,7 +413,7 @@ msgstr ""
 
 #: src/View/Gtk/Main.cpp:811 src/View/Gtk/Element/List.h:126
 msgid "placeholder"
-msgstr ""
+msgstr "佔位符號"
 
 #: src/View/Gtk/Main.cpp:812
 msgid ""
@@ -422,10 +424,15 @@ msgid ""
 "used to configure grub. You should only touch it when knowing what it does. "
 "Placeholders are hidden by default."
 msgstr ""
+"此特殊項目有兩種：Incoming entries are the place where Grub Customizer places new "
+"operating systems which are found by grub but still not configured using "
+"Grub Customizer. The Script code is code generated by grub which doesn't "
+"look like an menuentry. In most cases it's used to configure grub. You "
+"should only touch it when knowing what it does. 預設會隱藏佔位符號。"
 
 #: src/View/Gtk/Main.cpp:817 src/View/Gtk/Element/List.h:122
 msgid "script"
-msgstr ""
+msgstr "腳本(script)"
 
 #: src/View/Gtk/Main.cpp:818
 msgid ""
@@ -436,7 +443,7 @@ msgstr ""
 
 #: src/View/Gtk/Main.cpp:825
 msgid "About the entry types"
-msgstr ""
+msgstr "有關項目類型"
 
 #: src/View/Gtk/Main.cpp:887
 msgid "The saved configuration is not up to date!"
@@ -451,7 +458,7 @@ msgstr ""
 
 #: src/View/Gtk/Main.cpp:891
 msgid "_Quit without update"
-msgstr "結束而不更新"
+msgstr "結束而不更新(_Q)"
 
 #: src/View/Gtk/Main.cpp:894
 msgid "_Update & Quit"
@@ -459,7 +466,7 @@ msgstr "更新及結束(_U)"
 
 #: src/View/Gtk/Main.cpp:898
 msgid "Do you want to save your modifications?"
-msgstr "您是否要儲存所做的修改？"
+msgstr "是否要儲存所做的修改？"
 
 #: src/View/Gtk/Main.cpp:901
 msgid "_Quit without saving"
@@ -487,7 +494,7 @@ msgstr "環境設定"
 
 #: src/View/Gtk/Main.cpp:974
 msgid "Do you want to proceed without saving the current configuration?"
-msgstr "您想繼續執行而不儲存目前配置嗎？"
+msgstr "想繼續執行而不儲存目前配置嗎？"
 
 #: src/View/Gtk/Main.cpp:975
 msgid "There are unsaved modifications!"
@@ -515,7 +522,7 @@ msgstr "顯示選單"
 
 #: src/View/Gtk/Settings.cpp:32
 msgid "kernel parameters"
-msgstr "核心參數"
+msgstr "內核參數"
 
 #: src/View/Gtk/Settings.cpp:33
 msgid "generate recovery entries"
@@ -539,7 +546,7 @@ msgstr "一般(_G)"
 
 #: src/View/Gtk/Settings.cpp:42
 msgid "A_ppearance"
-msgstr ""
+msgstr "外觀(_P)"
 
 #: src/View/Gtk/Settings.cpp:43
 msgid "_Advanced"
@@ -559,11 +566,11 @@ msgstr "值"
 
 #: src/View/Gtk/Settings.cpp:112
 msgid "Boot default entry after %1 Seconds"
-msgstr ""
+msgstr "在 %1 秒後以預設項目開機"
 
 #: src/View/Gtk/Settings.cpp:203
 msgid "Entry %1 (by position)"
-msgstr "項目%1(依位置)"
+msgstr "項目 %1 (依位置)"
 
 #: src/View/Gtk/Settings.cpp:398
 msgid ""
@@ -590,11 +597,11 @@ msgstr ""
 
 #: src/View/Gtk/Theme.cpp:22
 msgid "_Load file: "
-msgstr ""
+msgstr "載入檔案(_L)： "
 
 #: src/View/Gtk/Theme.cpp:24
 msgid "_Theme:"
-msgstr ""
+msgstr "佈景主題(_T)："
 
 #: src/View/Gtk/Theme.cpp:24
 msgid "background image"
@@ -602,59 +609,59 @@ msgstr "背景圖片"
 
 #: src/View/Gtk/Theme.cpp:27
 msgid "Please choose a background image!"
-msgstr ""
+msgstr "請選擇背景圖片！"
 
 #: src/View/Gtk/Theme.cpp:28
 msgid "_Font"
-msgstr ""
+msgstr "字型(_F)"
 
 #: src/View/Gtk/Theme.cpp:30
 msgid "choose theme file"
-msgstr ""
+msgstr "選擇佈景主題檔"
 
 #: src/View/Gtk/Theme.cpp:31
 msgid "Theme contents"
-msgstr ""
+msgstr "佈景主題內容"
 
 #: src/View/Gtk/Theme.cpp:31
 msgid "Custom Theme settings"
-msgstr ""
+msgstr "自訂佈景主題設定"
 
 #: src/View/Gtk/Theme.cpp:32
 msgid "Normal: Font"
-msgstr ""
+msgstr "正常：字型"
 
 #: src/View/Gtk/Theme.cpp:33
 msgid "Normal: Background"
-msgstr ""
+msgstr "正常：背景"
 
 #: src/View/Gtk/Theme.cpp:34
 msgid "Highlighted: Font"
-msgstr ""
+msgstr "突顯項目：字型"
 
 #: src/View/Gtk/Theme.cpp:35
 msgid "Highlighted: Background"
-msgstr ""
+msgstr "突顯項目：背景"
 
 #: src/View/Gtk/Theme.cpp:106
 msgid "File"
-msgstr ""
+msgstr "檔案"
 
 #: src/View/Gtk/Theme.cpp:117
 msgid "add theme"
-msgstr ""
+msgstr "加入佈景主題"
 
 #: src/View/Gtk/Theme.cpp:118
 msgid "delete this theme"
-msgstr ""
+msgstr "刪除此佈景主題"
 
 #: src/View/Gtk/Theme.cpp:130
 msgid "Archive files"
-msgstr ""
+msgstr "封存檔"
 
 #: src/View/Gtk/Theme.cpp:135
 msgid "All files"
-msgstr ""
+msgstr "全部檔案"
 
 #: src/View/Gtk/Theme.cpp:179
 msgid "remove font"
@@ -734,33 +741,33 @@ msgstr "黑色"
 
 #: src/View/Gtk/Theme.cpp:385
 msgid "(Custom Settings)"
-msgstr ""
+msgstr "(自訂設定)"
 
 #: src/View/Gtk/Theme.cpp:432
 msgid "The chosen file cannot be loaded as theme"
-msgstr ""
+msgstr "所選檔案不能以佈景主題方式載入"
 
 #: src/View/Gtk/Theme.cpp:435
 msgid "The given filename cannot be used"
-msgstr ""
+msgstr "不能使用給定的檔案名稱"
 
 #: src/View/Gtk/Theme.cpp:438
 msgid ""
 "This theme doesn't contain a theme.txt. Please look for the config file and "
 "rename it to \"theme.txt\"!"
-msgstr ""
+msgstr "此佈景主題未包含 theme.txt。請尋找設定檔並將之改名為「theme.txt」！"
 
 #: src/View/Gtk/Theme.cpp:441
 msgid "Saving of themes didn't succeed completely!"
-msgstr ""
+msgstr "未完全成功儲存佈景主題！"
 
 #: src/View/Gtk/Theme.cpp:444
 msgid "File replacement failed. Please select a theme file first!"
-msgstr ""
+msgstr "未能置換檔案。請先選取佈景主題檔！"
 
 #: src/View/Gtk/Theme.cpp:463
 msgid "filename"
-msgstr ""
+msgstr "檔案名稱"
 
 #: src/View/Gtk/Theme.cpp:495
 msgid ""
@@ -816,28 +823,28 @@ msgstr "從回收筒加入項目"
 
 #: src/View/Gtk/Trash.cpp:32
 msgid "Removed items"
-msgstr ""
+msgstr "已移除項目"
 
 #: src/View/Gtk/Trash.cpp:42
 msgid "_Restore"
-msgstr ""
+msgstr "還原(_R)"
 
 #: src/View/Gtk/Trash.cpp:44
 msgid "Restore selected entries"
-msgstr ""
+msgstr "還原所選項目"
 
 #: src/View/Gtk/Trash.cpp:49
 msgid "permanently delete selected entries"
-msgstr ""
+msgstr "永久刪除所選項目"
 
 #: src/View/Gtk/Trash.cpp:57
 msgid ""
 "delete entries permanently - this action is available on custom entries only"
-msgstr ""
+msgstr "永久刪除所選項目 - 此動作只在自訂項目提供"
 
 #: src/View/Gtk/Trash.cpp:122
 msgid "This deletes the following entries:"
-msgstr "這刪除了下列項目："
+msgstr "這會刪除以下項目："
 
 #: src/View/Gtk/Element/List.h:131
 msgid "script: "

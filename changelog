@@ -1,3 +1,7 @@
+v 4.0.6
+	* showing save errors
+	* fixed background image flicker bug in trusty (image was reset to previous one when choosing inside of image selection window)
+
 v 4.0.5
 	* copyright fix: added OpenSSL exemption
 

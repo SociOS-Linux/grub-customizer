@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2013-11-13 22:24+0100\n"
-"PO-Revision-Date: 2013-11-13 22:00+0000\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2014-02-06 23:39+0000\n"
+"Last-Translator: Timo Seppola <Unknown>\n"
 "Language-Team: Finnish <fi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-01-13 21:41+0000\n"
-"X-Generator: Launchpad (build 16890)\n"
+"X-Launchpad-Export-Date: 2014-04-16 18:08+0000\n"
+"X-Generator: Launchpad (build 16985)\n"
 
 #: src/Controller/MainControllerImpl.cpp:654
 msgid "Name the Entry"
@@ -220,19 +220,19 @@ msgstr "_Asenna MBR:lle"
 
 #: src/View/Gtk/Main.cpp:41
 msgid "_Show details"
-msgstr ""
+msgstr "_Näytä yksityiskohdat"
 
 #: src/View/Gtk/Main.cpp:41
 msgid "Show _hidden entries"
-msgstr ""
+msgstr "Näytä _piilotetut kohdat"
 
 #: src/View/Gtk/Main.cpp:42
 msgid "_Group by Script"
-msgstr ""
+msgstr "_Ryhmittele komentosarjan mukaan"
 
 #: src/View/Gtk/Main.cpp:42
 msgid "Show _Placeholders"
-msgstr ""
+msgstr "Näytä _paikkamerkit"
 
 #: src/View/Gtk/Main.cpp:43
 msgid "BURG found!"
@@ -250,6 +250,8 @@ msgstr "Tekemäsi muutokset vaikuttavat näkyviin valikoihin. Lataa uudelleen!"
 #: src/View/Gtk/Main.cpp:47
 msgid "Script updates found. Click save to apply the changes!"
 msgstr ""
+"_Komentosarjan päivityksiä löytyy.  Paina tallenna, jotta saat muutokset "
+"voimaan."
 
 #: src/View/Gtk/Main.cpp:60
 msgid "_List configuration"
@@ -335,7 +337,7 @@ msgstr "Oletko varma?"
 
 #: src/View/Gtk/Main.cpp:336
 msgid "This removes all your list modifications of the bootloader menu!"
-msgstr "Tämä poistaa kaikki sinun lista-muutokset boot-lataajan valikosta!"
+msgstr "Tämä poistaa kaikki sinun listaus muutokset boot-lataajan valikosta!"
 
 #: src/View/Gtk/Main.cpp:429
 msgid "loading configuration…"
@@ -387,7 +389,7 @@ msgid ""
 "Removing Script Code can cause problems when trying to boot entries relying "
 "on it. Are you sure you want to do it anyway?"
 msgstr ""
-"Komentosarjan poistaminen voi aiheuttaa ongelmia käynnistasvalikoihin, jotka "
+"Komentosarjan poistaminen voi aiheuttaa ongelmia käynnistysvalikoihin, jotka "
 "liittyvät tähän. Oletko varma, että haluat tehdä tämän poiston?"
 
 #: src/View/Gtk/Main.cpp:692
@@ -411,6 +413,8 @@ msgid ""
 "An menuentry which is visible at the grub menu and boots an operating system "
 "when activated."
 msgstr ""
+"Menu-valikko, joka on näkyvissä grub valikossa ja joka aktivoituna "
+"käynnistää käyttöjärjestelmän."
 
 #: src/View/Gtk/Main.cpp:808 src/View/Gtk/Element/List.h:124
 msgid "submenu"
@@ -422,6 +426,9 @@ msgid ""
 "however when clicking it, it loads another menu which allows you to choose "
 "one the the containing menuentries."
 msgstr ""
+"Ryhmä muita käyttöjärjestelmiä.  Grub näyttää sen normaalina menu-valikkona "
+"kun sitä klikataan, se lataa toisen valikon, joka antaa sinun valita yhden "
+"siellä olevista menu-valikoista."
 
 #: src/View/Gtk/Main.cpp:811 src/View/Gtk/Element/List.h:126
 msgid "placeholder"
@@ -436,10 +443,17 @@ msgid ""
 "used to configure grub. You should only touch it when knowing what it does. "
 "Placeholders are hidden by default."
 msgstr ""
+"On olemassa kahden tyyppisiä erityisiä valikoita: Sisääntulevat valikot ovat "
+"paikka, jossa  Grub Customizer sijoittaa uudet grubin löytämät "
+"käyttöjärjestelmät, mutta joiden asetuksia ei ole määritelty Grub "
+"Customizerilla. Grub tekee käskykoodin (script code), mikä ei näytä menu-"
+"valikolta. Useimmissa tapauksissa sitä käytetään grubin asetuksiin. Sinun ei "
+"tule koskea koodiin, ellet ole varma, mitä se koodi tekee. Paikkamerkit ovat "
+"oletusarvona piilotettuina."
 
 #: src/View/Gtk/Main.cpp:817 src/View/Gtk/Element/List.h:122
 msgid "script"
-msgstr ""
+msgstr "komentosarja"
 
 #: src/View/Gtk/Main.cpp:818
 msgid ""
@@ -447,10 +461,13 @@ msgid ""
 "They are shown as top level groups when activated. However in contrast to "
 "submenus they aren't shown at the boot menu."
 msgstr ""
+"Käskyrivit (scripts) tekevät menu-valikoita. Jokainen menu-valikko kuuluu "
+"johonkin käskyriviin. Nämä näytetään ylimmän tason ryhminä, kun ne on "
+"aktivoituna.  Verrattuna alavalikoihin, näitä ei näytetä käynnistysvalikossa."
 
 #: src/View/Gtk/Main.cpp:825
 msgid "About the entry types"
-msgstr ""
+msgstr "Valikkotyypeistä"
 
 #: src/View/Gtk/Main.cpp:887
 msgid "The saved configuration is not up to date!"
@@ -489,7 +506,7 @@ msgstr "_Tallenna ja lopeta"
 #: src/View/Gtk/Main.cpp:907
 msgid "AND: your modifications are still unsaved, update will save them too!"
 msgstr ""
-"JA: Muokkauksesi ovat vielä tallentamatta,nyt päivitys tallentaa nekin "
+"JA: Muokkauksesi ovat vielä tallentamatta, nyt päivitys tallentaa nekin "
 "samalla!"
 
 #: src/View/Gtk/Main.cpp:960
@@ -506,7 +523,7 @@ msgstr "Ympäristöasetukset"
 
 #: src/View/Gtk/Main.cpp:974
 msgid "Do you want to proceed without saving the current configuration?"
-msgstr "Haluatko edetä ilman että olet tallentanut nykyiset asetukset?"
+msgstr "Haluatko edetä ilman, että olet tallentanut nykyiset asetukset?"
 
 #: src/View/Gtk/Main.cpp:975
 msgid "There are unsaved modifications!"
@@ -578,7 +595,7 @@ msgstr "arvo"
 
 #: src/View/Gtk/Settings.cpp:112
 msgid "Boot default entry after %1 Seconds"
-msgstr ""
+msgstr "Käynnistyy oletusvalinnalla %1 sekunnin kuluttua"
 
 #: src/View/Gtk/Settings.cpp:203
 msgid "Entry %1 (by position)"
@@ -609,14 +626,28 @@ msgid ""
 "will be updated automatically. So you won't have to re-select the default "
 "entry."
 msgstr ""
+"Tämä vaihtoehto antaa valita käyttöjärjestelmän, joka valitaan "
+"käynnistyksessä. Oletusarvona on aina, että se on ensimmäinen.\n"
+"\n"
+"Tässä on kaksi saraketta, koska on kaksi tapaa valita "
+"oletuskäyttöjärjestelmä. Ensimmäinen tapa on \"valitse aina "
+"käyttöjärjestelmä sijainnissa X\". Tämä tarkoittaa, että kun tulee uusi menu-"
+"valikko, niin oletusvalikko voi muuttua  (koska X sijainnissa on joku muu "
+"valinta).\n"
+"\n"
+"Toinen tapa on sanoa \"käytä käyttöjärjestelmää nimeltä Linux 123\". Silloin "
+"tämä osoittaa aina samaan käytöjärjestelmään - sijainti ei vaikuta asiaan. "
+"Kun muutetaan valikkonimeä, jota Grub Customizer käyttää, niin tämä "
+"vaihtoehto päivitetään automaattisesti. Joten sinun ei tarvitse valita "
+"uudelleen oletusvalintaasi."
 
 #: src/View/Gtk/Theme.cpp:22
 msgid "_Load file: "
-msgstr ""
+msgstr "_Lataa tiedosto: "
 
 #: src/View/Gtk/Theme.cpp:24
 msgid "_Theme:"
-msgstr ""
+msgstr "_Teema:"
 
 #: src/View/Gtk/Theme.cpp:24
 msgid "background image"
@@ -624,59 +655,59 @@ msgstr "taustakuva"
 
 #: src/View/Gtk/Theme.cpp:27
 msgid "Please choose a background image!"
-msgstr ""
+msgstr "Ole hyvä ja valitse taustakuva!"
 
 #: src/View/Gtk/Theme.cpp:28
 msgid "_Font"
-msgstr ""
+msgstr "_Fontti"
 
 #: src/View/Gtk/Theme.cpp:30
 msgid "choose theme file"
-msgstr ""
+msgstr "valitse teema tiedosto"
 
 #: src/View/Gtk/Theme.cpp:31
 msgid "Theme contents"
-msgstr ""
+msgstr "Teeman sisältö"
 
 #: src/View/Gtk/Theme.cpp:31
 msgid "Custom Theme settings"
-msgstr ""
+msgstr "Säädä teeman asetuksia"
 
 #: src/View/Gtk/Theme.cpp:32
 msgid "Normal: Font"
-msgstr ""
+msgstr "Normaali: Fontti"
 
 #: src/View/Gtk/Theme.cpp:33
 msgid "Normal: Background"
-msgstr ""
+msgstr "Normaali: Tausta"
 
 #: src/View/Gtk/Theme.cpp:34
 msgid "Highlighted: Font"
-msgstr ""
+msgstr "Korostettuna: Fontti"
 
 #: src/View/Gtk/Theme.cpp:35
 msgid "Highlighted: Background"
-msgstr ""
+msgstr "Korostettuna: Tausta"
 
 #: src/View/Gtk/Theme.cpp:106
 msgid "File"
-msgstr ""
+msgstr "Tiedosto"
 
 #: src/View/Gtk/Theme.cpp:117
 msgid "add theme"
-msgstr ""
+msgstr "lisää teema"
 
 #: src/View/Gtk/Theme.cpp:118
 msgid "delete this theme"
-msgstr ""
+msgstr "poista tämä teema"
 
 #: src/View/Gtk/Theme.cpp:130
 msgid "Archive files"
-msgstr ""
+msgstr "Arkistotiedostot"
 
 #: src/View/Gtk/Theme.cpp:135
 msgid "All files"
-msgstr ""
+msgstr "Kaikki tiedostot"
 
 #: src/View/Gtk/Theme.cpp:179
 msgid "remove font"
@@ -720,7 +751,7 @@ msgstr "vihreä"
 
 #: src/View/Gtk/Theme.cpp:302
 msgid "light-magenta"
-msgstr "vaalea magenta"
+msgstr "vaalea violetti (magenta)"
 
 #: src/View/Gtk/Theme.cpp:303
 msgid "magenta"
@@ -756,33 +787,35 @@ msgstr "musta"
 
 #: src/View/Gtk/Theme.cpp:385
 msgid "(Custom Settings)"
-msgstr ""
+msgstr "Muokatut asetukset"
 
 #: src/View/Gtk/Theme.cpp:432
 msgid "The chosen file cannot be loaded as theme"
-msgstr ""
+msgstr "Valittua tiedostoa ei voida ladata teemaksi"
 
 #: src/View/Gtk/Theme.cpp:435
 msgid "The given filename cannot be used"
-msgstr ""
+msgstr "Annettua tiedostonimeä ei voi käyttää"
 
 #: src/View/Gtk/Theme.cpp:438
 msgid ""
 "This theme doesn't contain a theme.txt. Please look for the config file and "
 "rename it to \"theme.txt\"!"
 msgstr ""
+"Tämä teema ei sisällä theme.txt. Ole hyvä ja etsi config -asetustiedosto ja "
+"vaihda sille nimi  \"theme.txt\"!"
 
 #: src/View/Gtk/Theme.cpp:441
 msgid "Saving of themes didn't succeed completely!"
-msgstr ""
+msgstr "Teemojen tallennus ei onnistunut täydellisesti!"
 
 #: src/View/Gtk/Theme.cpp:444
 msgid "File replacement failed. Please select a theme file first!"
-msgstr ""
+msgstr "Tiedoston korvaaminen epäonnistui. Valitse ensin teema -tiedosto!"
 
 #: src/View/Gtk/Theme.cpp:463
 msgid "filename"
-msgstr ""
+msgstr "tiedostonimi"
 
 #: src/View/Gtk/Theme.cpp:495
 msgid ""
@@ -804,14 +837,33 @@ msgid ""
 "the line containing GRUB_FONT\n"
 " * then run grub customizer to choose the font used before"
 msgstr ""
+"Huomio: isot fontit voivat häiritä käynnistysnäyttöä pieniresoluutioisella "
+"käynnistysruudulla.\n"
+"Koska tämä ongelma on riippuvainen valitusta fontista, niin ei ole "
+"mahdollista määritellä yleistä suurinta kokoa. Kun yrität valita suuremman "
+"fontin, niin tee se pienin askelin (käynnistä kone aina uudelleen ja "
+"tarkista tulos).\n"
+"Tämä ongelma ilmenee, kun grub gui osat (rajat, määritykset) eivät sovi "
+"ruudulle. Joten, jos ruudulla on riittävästi vaakasuoraa tilaa, voit yrittää "
+"kokeilla suuremmalla fontilla. Valikkorivien lukumäärä ei ole ongelma - "
+"niitä voi tarvittaessa vierittää alaspäin.\n"
+"\n"
+"Valikoiden vaurio johtaa loputtomaan grub2 lataamiseen. Tällöin tarvitset "
+"asian korjaamiseen live CD:n :\n"
+" * pyyhi fontti  (MOUNT)/boot/grub/unicode.pf2 -tiedostosta.\n"
+" * käynnistä koneesi uudelleen (käynnistävalikko pitäisi näkyä "
+"oletusarvoisilla fonteilla)\n"
+" * avaa /etc/default/grub pääkäyttäjän (root) oikeuksilla ja kirjoita '#' "
+"GRUB_FONT -tekstiä sisältävän rivin alkuun.\n"
+" * käynnistä sitten grub customizer valitaksesi aiemmin käytetyn fontin."
 
 #: src/View/Gtk/Theme.cpp:507
 msgid "Grub fonts can be harmful (Info)"
-msgstr ""
+msgstr "Grubin fontit voivat olla haitallisia (info)"
 
 #: src/View/Gtk/Theme.cpp:703
 msgid "Are you sure you want to remove this theme"
-msgstr ""
+msgstr "Oletko varma, että haluat poistaa tämän teeman"
 
 #: src/View/Gtk/Theme.cpp:771
 msgid ""
@@ -831,6 +883,23 @@ msgid ""
 "images and allows some file management. Modified theme contents will be "
 "saved when you're pressing the save button."
 msgstr ""
+"Vaihtoehtona yksinkertaiseen teema-menetelmään, mikä mahdollistaa joitakin "
+"määrityksiä kuten värin, taustapaperin ja fontin, sinä voit asentaa "
+"monimutkaisen ja tiiviin teemapaketin saadaksesi paremmalta näyttävän "
+"käynnistysvalikon.\n"
+"\n"
+"On olemassa useita lähteitä näiden lataamiseen, kuten tässä "
+"ubuntuforums.org:ssa :\n"
+"<a href='%1'>%1</a> (tarvitsee käyttäjätunnuksen)\n"
+"tai etsi '%2' sijainnista  <a href='%3'>%3</a>\n"
+"\n"
+"Lataa sopiva paketti (joka on useimmissa tapauksissa tar.gz muodossa) ja "
+"lisää se mahdollisiin teemoihisi käyttämällä lisää nappia teema valitsijan "
+"vieressä.\n"
+"\n"
+"Kun olet muuttanut teeeman, näet yksinkertaisen editorin, jossa voit "
+"esikatsella kuvia ja joissa voit tehdä jotain tiedoston käsittelyä. Muokatun "
+"teeman sisältö tallennetaan kun painat tallenna nappia."
 
 #: src/View/Gtk/Trash.cpp:28
 msgid "Add entry from trash"
@@ -838,28 +907,30 @@ msgstr "Lisää käynnistysvalikko roskakorista"
 
 #: src/View/Gtk/Trash.cpp:32
 msgid "Removed items"
-msgstr ""
+msgstr "Poistetut kohdat"
 
 #: src/View/Gtk/Trash.cpp:42
 msgid "_Restore"
-msgstr ""
+msgstr "_Palauta"
 
 #: src/View/Gtk/Trash.cpp:44
 msgid "Restore selected entries"
-msgstr ""
+msgstr "Palauta valitut valikot"
 
 #: src/View/Gtk/Trash.cpp:49
 msgid "permanently delete selected entries"
-msgstr ""
+msgstr "Pyyhi lopullisesti valitut valikot"
 
 #: src/View/Gtk/Trash.cpp:57
 msgid ""
 "delete entries permanently - this action is available on custom entries only"
 msgstr ""
+"Pyyhi lopullisesti valitut valikot - tämä toiminto on käytössä vain "
+"mukautetuille valikoille"
 
 #: src/View/Gtk/Trash.cpp:122
 msgid "This deletes the following entries:"
-msgstr "Tämä poistaa seuraavat käynnistysvalikot"
+msgstr "Tämä poistaa seuraavat käynnistysvalikot:"
 
 #: src/View/Gtk/Element/List.h:131
 msgid "script: "
@@ -867,7 +938,7 @@ msgstr "komentosarja (script): "
 
 #: src/View/Gtk/Element/List.h:135
 msgid "default name: "
-msgstr "nykyinen nimi (oletus, default name): "
+msgstr "nykyinen nimi (oletusnimi): "
 
 #: src/View/Gtk/Element/List.h:139
 msgid "Partition: "

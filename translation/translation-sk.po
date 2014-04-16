@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2013-11-13 22:24+0100\n"
-"PO-Revision-Date: 2013-11-13 22:00+0000\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2014-02-20 12:29+0000\n"
+"Last-Translator: tibbi <tibbi@centrum.sk>\n"
 "Language-Team: Slovak <sk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-01-13 21:41+0000\n"
-"X-Generator: Launchpad (build 16890)\n"
+"X-Launchpad-Export-Date: 2014-04-16 18:08+0000\n"
+"X-Generator: Launchpad (build 16985)\n"
 
 #: src/Controller/MainControllerImpl.cpp:654
 msgid "Name the Entry"
@@ -23,7 +23,7 @@ msgstr "Pomenovať položku"
 
 #: src/Controller/MainControllerImpl.cpp:736
 msgid "cannot move this entry"
-msgstr "nebolo možné presunúť túto položku"
+msgstr "nedá sa presunúť položku"
 
 #: src/Controller/MainControllerImpl.cpp:829
 msgid "Configuration has been saved"
@@ -73,11 +73,11 @@ msgstr "Možnosti"
 
 #: src/View/Gtk/EntryEditor.cpp:35
 msgid "Source"
-msgstr "Zdrojový kód"
+msgstr "Zdroj"
 
 #: src/View/Gtk/EntryEditor.cpp:54
 msgid "_Partition"
-msgstr "_Oddiel"
+msgstr "_Diskový oddiel"
 
 #: src/View/Gtk/EntryEditor.cpp:56
 msgid "_Initial ramdisk"
@@ -97,7 +97,7 @@ msgstr "Cesta k ISO súboru"
 
 #: src/View/Gtk/EntryEditor.cpp:64
 msgid "Locale"
-msgstr "Národné prostredie"
+msgstr "Národné nastavenia"
 
 #: src/View/Gtk/EntryEditor.cpp:66
 msgid "Kernel params"
@@ -110,7 +110,7 @@ msgstr "Iné"
 
 #: src/View/Gtk/EnvEditor.cpp:22
 msgid "_Partition:"
-msgstr "_Oddiel"
+msgstr "_Diskový oddiel:"
 
 #: src/View/Gtk/EnvEditor.cpp:23
 msgid "Submountpoints:"
@@ -222,23 +222,23 @@ msgstr "_Nainštalovať do MBR..."
 
 #: src/View/Gtk/Main.cpp:41
 msgid "_Show details"
-msgstr ""
+msgstr "_Zobraziť podrobnosti"
 
 #: src/View/Gtk/Main.cpp:41
 msgid "Show _hidden entries"
-msgstr ""
+msgstr "Zobraziť _skryté položky"
 
 #: src/View/Gtk/Main.cpp:42
 msgid "_Group by Script"
-msgstr ""
+msgstr "_Zoskupiť podľa skriptu"
 
 #: src/View/Gtk/Main.cpp:42
 msgid "Show _Placeholders"
-msgstr ""
+msgstr "Zobraziť rezervované miesta"
 
 #: src/View/Gtk/Main.cpp:43
 msgid "BURG found!"
-msgstr "Bol nájdený Burg!"
+msgstr "Bol nájdený BURG!"
 
 #: src/View/Gtk/Main.cpp:44
 msgid "advanced settings"
@@ -254,6 +254,8 @@ msgstr ""
 #: src/View/Gtk/Main.cpp:47
 msgid "Script updates found. Click save to apply the changes!"
 msgstr ""
+"Boli nájdené aktualizácie pre skriptá. Kliknite na Uložiť pre aplikovanie "
+"zmien!"
 
 #: src/View/Gtk/Main.cpp:60
 msgid "_List configuration"
@@ -261,15 +263,15 @@ msgstr "Konfigurácia _zoznamu"
 
 #: src/View/Gtk/Main.cpp:95
 msgid "Remove selected entries (you can restore them from trash)"
-msgstr "Odstrániť vybrané položky (môžete ich neskôr obnoviť z koša)"
+msgstr "Odstrániť vybrané položky (môžete ich neskôr obnoviť z Koša)"
 
 #: src/View/Gtk/Main.cpp:105
 msgid "Move up the selected entry or script"
-msgstr "Posunie vybranú položku alebo skript hore"
+msgstr "Posunúť vybranú položku alebo skript nahor"
 
 #: src/View/Gtk/Main.cpp:107
 msgid "Move down the selected entry or script"
-msgstr "Posunie vybranú položku alebo skript dole"
+msgstr "Posunúť vybranú položku alebo skript nadol"
 
 #: src/View/Gtk/Main.cpp:113
 msgid "remove this entry from the current submenu"
@@ -277,11 +279,11 @@ msgstr "odobrať položku z aktuálneho podmenu"
 
 #: src/View/Gtk/Main.cpp:116
 msgid "add this entry to a new submenu"
-msgstr "pridať položku do nového podmenu"
+msgstr "pridať túto položku do nového podmenu"
 
 #: src/View/Gtk/Main.cpp:139
 msgid "Reverts the list to the default order"
-msgstr "Navráti zoznam do pôvodného poradia"
+msgstr "Navráti zoznam do predvoleného zoradenia"
 
 #: src/View/Gtk/Main.cpp:141
 msgid "reloads the configuration. Unsaved changes will be preserved."
@@ -293,11 +295,11 @@ msgstr "Premenovať"
 
 #: src/View/Gtk/Main.cpp:186 src/View/Gtk/Main.cpp:187
 msgid "Move up"
-msgstr "Posunúť vyššie"
+msgstr "Posunúť nahor"
 
 #: src/View/Gtk/Main.cpp:188 src/View/Gtk/Main.cpp:189
 msgid "Move down"
-msgstr "Posunúť nižšie"
+msgstr "Posunúť nadol"
 
 #: src/View/Gtk/Main.cpp:190 src/View/Gtk/Main.cpp:191
 msgid "Remove from submenu"
@@ -313,7 +315,7 @@ msgstr "Zmeniť _prostredie..."
 
 #: src/View/Gtk/Main.cpp:215
 msgid "Do you want to configure BURG instead of grub2?"
-msgstr "Želáte si nakonfigurovať Burg namiesto Grub2?"
+msgstr "Želáte si nakonfigurovať BURG namiesto grub2?"
 
 #: src/View/Gtk/Main.cpp:281
 msgid "_General settings"
@@ -325,11 +327,11 @@ msgstr "Nastavenia vz_hľadu"
 
 #: src/View/Gtk/Main.cpp:304
 msgid "BURG Mode"
-msgstr "Režim Burg"
+msgstr "Režim BURG"
 
 #: src/View/Gtk/Main.cpp:308
 msgid "Save configuration and generate a new "
-msgstr "Uloží konfiguráciu a vygeneruje nový súbor "
+msgstr "Uložiť konfiguráciu a vygenerovať nový súbor "
 
 #: src/View/Gtk/Main.cpp:335
 msgid "Are you sure?"
@@ -337,7 +339,7 @@ msgstr "Ste si istý?"
 
 #: src/View/Gtk/Main.cpp:336
 msgid "This removes all your list modifications of the bootloader menu!"
-msgstr "Týmto sa z menu spúšťača odstránia všetky vaše zmeny!"
+msgstr "Týmto sa z ponuky spúšťača odstránia všetky vaše zmeny!"
 
 #: src/View/Gtk/Main.cpp:429
 msgid "loading configuration…"
@@ -356,7 +358,7 @@ msgid ""
 "You will see all entries (uncustomized) when you run grub. This error accurs "
 "(in most cases), when you didn't install grub gustomizer currectly."
 msgstr ""
-"Uvidíte všetky položky (neprispôsobené) keď spúšťate Grub. Táto chyba sa "
+"Uvidíte všetky položky (neprispôsobené) keď spustíte grub. Táto chyba sa "
 "vyskytuje (vo väčšine prípadov), keď sa Grub Customizer nenainštaloval "
 "správne."
 
@@ -406,13 +408,15 @@ msgstr ""
 
 #: src/View/Gtk/Main.cpp:806 src/View/Gtk/Element/List.h:128
 msgid "menuentry"
-msgstr "položka menu"
+msgstr "položka ponuky"
 
 #: src/View/Gtk/Main.cpp:807
 msgid ""
 "An menuentry which is visible at the grub menu and boots an operating system "
 "when activated."
 msgstr ""
+"Položka ponuky, ktorá je v ponuke viditeľná a po aktivácií spustí operačný "
+"systém."
 
 #: src/View/Gtk/Main.cpp:808 src/View/Gtk/Element/List.h:124
 msgid "submenu"
@@ -424,10 +428,13 @@ msgid ""
 "however when clicking it, it loads another menu which allows you to choose "
 "one the the containing menuentries."
 msgstr ""
+"Skupina iných operačných systémov. Grub ju zobrazí ako normálne položky "
+"ponuky, ale po kliknutí na nich sa načíta ďalšia ponuka, z ktorej si môžete "
+"vybrať niektorú obsiahnutú položku."
 
 #: src/View/Gtk/Main.cpp:811 src/View/Gtk/Element/List.h:126
 msgid "placeholder"
-msgstr "placeholder"
+msgstr "rezervovanie miesta"
 
 #: src/View/Gtk/Main.cpp:812
 msgid ""
@@ -438,10 +445,16 @@ msgid ""
 "used to configure grub. You should only touch it when knowing what it does. "
 "Placeholders are hidden by default."
 msgstr ""
+"Existujú 2 typy tejto špeciálnej položky. Prichádzajúce položky sú miestom, "
+"kde Grub Customizer ukladá operačné systémy, ktoré ním boli nájdené, ale "
+"stále nie nakonfigurované použitím Grub Customizer. Kód skriptu je kód "
+"generovaný grubom, ktorý nevyzerá ako položka ponuky. Vo väčšine prípadov sa "
+"používa na konfiguráciu grubu. Mali by ste ho použiť len ak viete, čo robí. "
+"Rezervovania miest sú v predvolenom stave skryté."
 
 #: src/View/Gtk/Main.cpp:817 src/View/Gtk/Element/List.h:122
 msgid "script"
-msgstr ""
+msgstr "skript"
 
 #: src/View/Gtk/Main.cpp:818
 msgid ""
@@ -449,10 +462,13 @@ msgid ""
 "They are shown as top level groups when activated. However in contrast to "
 "submenus they aren't shown at the boot menu."
 msgstr ""
+"Skriptá generujú položky ponuky. Každá položka ponuky tak patrí niektorému "
+"skriptu. Po aktivácií sú zobrazené ako skupiny najvyššej úrovne. Na rozdiel "
+"od podmenu ale nie sú v spúšťacej ponuke zobrazené."
 
 #: src/View/Gtk/Main.cpp:825
 msgid "About the entry types"
-msgstr ""
+msgstr "O typoch položiek"
 
 #: src/View/Gtk/Main.cpp:887
 msgid "The saved configuration is not up to date!"
@@ -518,15 +534,15 @@ msgstr "pred_definovaná: "
 
 #: src/View/Gtk/Settings.cpp:30
 msgid "previously _booted entry"
-msgstr "predtým _použitá položka"
+msgstr "predošlá _použitá položka"
 
 #: src/View/Gtk/Settings.cpp:31
 msgid "default entry"
-msgstr "Predvolená položka"
+msgstr "predvolená položka"
 
 #: src/View/Gtk/Settings.cpp:31
 msgid "visibility"
-msgstr "Viditeľnosť"
+msgstr "viditeľnosť"
 
 #: src/View/Gtk/Settings.cpp:31
 msgid "show menu"
@@ -534,7 +550,7 @@ msgstr "zobraziť menu"
 
 #: src/View/Gtk/Settings.cpp:32
 msgid "kernel parameters"
-msgstr "Parametre jadra"
+msgstr "parametre jadra"
 
 #: src/View/Gtk/Settings.cpp:33
 msgid "generate recovery entries"
@@ -550,11 +566,11 @@ msgstr "vlastné rozlíšenie: "
 
 #: src/View/Gtk/Settings.cpp:37
 msgid "settings"
-msgstr "Nastavenia"
+msgstr "nastavenia"
 
 #: src/View/Gtk/Settings.cpp:41
 msgid "_General"
-msgstr "_Hlavné"
+msgstr "_Všeobecné"
 
 #: src/View/Gtk/Settings.cpp:42
 msgid "A_ppearance"
@@ -570,7 +586,7 @@ msgstr "aktívne"
 
 #: src/View/Gtk/Settings.cpp:57
 msgid "name"
-msgstr "meno"
+msgstr "názov"
 
 #: src/View/Gtk/Settings.cpp:58
 msgid "value"
@@ -578,7 +594,7 @@ msgstr "hodnota"
 
 #: src/View/Gtk/Settings.cpp:112
 msgid "Boot default entry after %1 Seconds"
-msgstr ""
+msgstr "Spustiť predvolenú položku za %1 sekúnd"
 
 #: src/View/Gtk/Settings.cpp:203
 msgid "Entry %1 (by position)"
@@ -590,7 +606,7 @@ msgid ""
 "systems. Disable \"%1\" if you don't need to boot other operating systems."
 msgstr ""
 "Táto voľba nefunguje, ak skript \"os-prober\" nájde iné operačné systémy. "
-"Zakážte \"%1\", ak nepotrebujete zavádzať iné operačné systémy."
+"Zakážte \"%1\", ak nepotrebujete spúšťať iné operačné systémy."
 
 #: src/View/Gtk/Settings.cpp:493
 msgid ""
@@ -608,14 +624,27 @@ msgid ""
 "will be updated automatically. So you won't have to re-select the default "
 "entry."
 msgstr ""
+"Táto voľba umožňuje voľbu operačného systému, ktorý by mal byť označený "
+"počas spúšťania. V predvolenom stave je ním stále prvá položka.\n"
+"\n"
+"Sú tu 2 stĺpce, pretože existujú dva spôsoby voľby predvoleného operačného "
+"systému. Prvým spôsobom je zadanie „stále vyber operačný systém na pozícií "
+"X“. To znamená, že ak sa objaví nová položka v ponuke, predvolený operačný "
+"systém môže byť zmenený (pretože na pozícií X sa už nachádza iný).\n"
+"\n"
+"Druhým spôsobom je zadanie „použiť operačný systém s názvom Linux 123“. V "
+"tomto prípade bude predvoleným stále ten istý operačný systém, na pozícií "
+"nezáleží. Pri zmene názvu operačného systému pomocou Grub Customizer bude "
+"táto možnosť automaticky aktualizovaná. Nebudete tak musieť ručne znova "
+"nastaviť predvolenú položku."
 
 #: src/View/Gtk/Theme.cpp:22
 msgid "_Load file: "
-msgstr ""
+msgstr "_Načítať súbor: "
 
 #: src/View/Gtk/Theme.cpp:24
 msgid "_Theme:"
-msgstr ""
+msgstr "_Téma:"
 
 #: src/View/Gtk/Theme.cpp:24
 msgid "background image"
@@ -623,59 +652,59 @@ msgstr "Obrázok pozadia"
 
 #: src/View/Gtk/Theme.cpp:27
 msgid "Please choose a background image!"
-msgstr ""
+msgstr "Prosím vyberte obrázok pozadia!"
 
 #: src/View/Gtk/Theme.cpp:28
 msgid "_Font"
-msgstr ""
+msgstr "_Písmo"
 
 #: src/View/Gtk/Theme.cpp:30
 msgid "choose theme file"
-msgstr ""
+msgstr "vybrať súbor s témou"
 
 #: src/View/Gtk/Theme.cpp:31
 msgid "Theme contents"
-msgstr ""
+msgstr "Obsah témy"
 
 #: src/View/Gtk/Theme.cpp:31
 msgid "Custom Theme settings"
-msgstr ""
+msgstr "Vlastné nastavenia témy"
 
 #: src/View/Gtk/Theme.cpp:32
 msgid "Normal: Font"
-msgstr ""
+msgstr "Normálne: Písmo"
 
 #: src/View/Gtk/Theme.cpp:33
 msgid "Normal: Background"
-msgstr ""
+msgstr "Normálne: Pozadie"
 
 #: src/View/Gtk/Theme.cpp:34
 msgid "Highlighted: Font"
-msgstr ""
+msgstr "Zvýraznené: Písmo"
 
 #: src/View/Gtk/Theme.cpp:35
 msgid "Highlighted: Background"
-msgstr ""
+msgstr "Zvýraznené: Pozadie"
 
 #: src/View/Gtk/Theme.cpp:106
 msgid "File"
-msgstr ""
+msgstr "Súbor"
 
 #: src/View/Gtk/Theme.cpp:117
 msgid "add theme"
-msgstr ""
+msgstr "pridať tému"
 
 #: src/View/Gtk/Theme.cpp:118
 msgid "delete this theme"
-msgstr ""
+msgstr "odstrániť túto tému"
 
 #: src/View/Gtk/Theme.cpp:130
 msgid "Archive files"
-msgstr ""
+msgstr "Súbory s archívmi"
 
 #: src/View/Gtk/Theme.cpp:135
 msgid "All files"
-msgstr ""
+msgstr "Všetky súbory"
 
 #: src/View/Gtk/Theme.cpp:179
 msgid "remove font"
@@ -755,33 +784,35 @@ msgstr "čierna"
 
 #: src/View/Gtk/Theme.cpp:385
 msgid "(Custom Settings)"
-msgstr ""
+msgstr "(Vlastné nastavenia)"
 
 #: src/View/Gtk/Theme.cpp:432
 msgid "The chosen file cannot be loaded as theme"
-msgstr ""
+msgstr "Nedá sa načítať vybraný súbor ako tému"
 
 #: src/View/Gtk/Theme.cpp:435
 msgid "The given filename cannot be used"
-msgstr ""
+msgstr "Nedá sa použiť daný názov súboru"
 
 #: src/View/Gtk/Theme.cpp:438
 msgid ""
 "This theme doesn't contain a theme.txt. Please look for the config file and "
 "rename it to \"theme.txt\"!"
 msgstr ""
+"Táto téma neobsahuje súbor theme.txt. Prosím pohľadajte súbor s nastaveniami "
+"a premenujte ho na „theme.txt“!"
 
 #: src/View/Gtk/Theme.cpp:441
 msgid "Saving of themes didn't succeed completely!"
-msgstr ""
+msgstr "Ukladanie tém nebolo úplne úspešné!"
 
 #: src/View/Gtk/Theme.cpp:444
 msgid "File replacement failed. Please select a theme file first!"
-msgstr ""
+msgstr "Nahradzovanie súboru zlyhalo. Prosím najprv vyberte súbor s témou!"
 
 #: src/View/Gtk/Theme.cpp:463
 msgid "filename"
-msgstr ""
+msgstr "názov súboru"
 
 #: src/View/Gtk/Theme.cpp:495
 msgid ""
@@ -803,14 +834,32 @@ msgid ""
 "the line containing GRUB_FONT\n"
 " * then run grub customizer to choose the font used before"
 msgstr ""
+"prosím uvedomte si: veľké písmo na malej spúšťacej obrazovke môže túto "
+"obrazovku pokaziť\n"
+"Keďže tento problém závisí od vybraného písma, nedá sa definovať všeobecné "
+"maximum. Ak sa pokúšate vybrať väčšie písmo, prosím zväčšujte ho len "
+"postupne (reštartujte počítač a pozrite sa na výsledok).\n"
+"Problém nastane ak sa prvky grui ui (ohraničenia, popisy) nezmestia na "
+"obrazovku. Kým je teda dostatok zvislého miesta, môžete skúsiť väčšie písmo. "
+"Počet položiek ponuky nie je problémom, v prípade potreby sa ich dá "
+"skrolovať.\n"
+"\n"
+"Nesprávne výsledky môžu viesť k nekončiacemu načítaniu grub2. Pre jeho "
+"opravenie potrebujete live cd:\n"
+" * odstráňte písmo z (MOUNT)/boot/grub/unicode.pf2\n"
+" * reštartujte váš systém (ponuka by sa mala objaviť s predvolenými "
+"písmami)\n"
+" * otvorte /etc/default/grub s oprávneniami root a zapíšte „#“ na začiatok "
+"riadka obsahujúceho GRUB_FONT\n"
+" * spustite grub customizer a vyberte písmo, ktoré ste používali pred tým"
 
 #: src/View/Gtk/Theme.cpp:507
 msgid "Grub fonts can be harmful (Info)"
-msgstr ""
+msgstr "Písma grub môžu byť škodlivé (info)"
 
 #: src/View/Gtk/Theme.cpp:703
 msgid "Are you sure you want to remove this theme"
-msgstr ""
+msgstr "Ste si istý, že chcete túto tému odstrániť"
 
 #: src/View/Gtk/Theme.cpp:771
 msgid ""
@@ -830,31 +879,47 @@ msgid ""
 "images and allows some file management. Modified theme contents will be "
 "saved when you're pressing the save button."
 msgstr ""
+"Ako alternatíva pre jednoduché úpravy tém zmenou farby, tapety a písma "
+"môžete nainštalovať pokročilejšie balíky tém, ktorými získate ešte lepšie "
+"vyzerajúcu štartovaciu ponuku.\n"
+"\n"
+"Existuje viacero zdrojov na stiahnutie, napr. táto téma na "
+"ubuntuforums.org:\n"
+"<a href='%1'>%1</a> (potrebujete mať účet)\n"
+"alebo vyhľadajte '%2' na <a href='%3'>%3</a>\n"
+"\n"
+"Iba stiahnite balík (väčšinou vo formáte tar.gz) a pridajte ho na zoznam "
+"dostupných tém použitím tlačidla Pridať vedľa tlačidla na výber témy.\n"
+"\n"
+"Po zmene témy budete vidieť jednoduchý editor, ktorý poskytuje aj náhľad "
+"obrázkov a umožňuje správu súborov. Upravené obsahy tém budú uložené po "
+"stlačení tlačidla Uložiť."
 
 #: src/View/Gtk/Trash.cpp:28
 msgid "Add entry from trash"
-msgstr "Pridať položku z koša"
+msgstr "Pridať položku z Koša"
 
 #: src/View/Gtk/Trash.cpp:32
 msgid "Removed items"
-msgstr ""
+msgstr "Odstránené položky"
 
 #: src/View/Gtk/Trash.cpp:42
 msgid "_Restore"
-msgstr ""
+msgstr "_Obnoviť"
 
 #: src/View/Gtk/Trash.cpp:44
 msgid "Restore selected entries"
-msgstr ""
+msgstr "Obnoviť vybrané položky"
 
 #: src/View/Gtk/Trash.cpp:49
 msgid "permanently delete selected entries"
-msgstr ""
+msgstr "trvale odstrániť vybrané položky"
 
 #: src/View/Gtk/Trash.cpp:57
 msgid ""
 "delete entries permanently - this action is available on custom entries only"
 msgstr ""
+"odstrániť položky trvale - táto operácia je dostupná iba na vlastné položky"
 
 #: src/View/Gtk/Trash.cpp:122
 msgid "This deletes the following entries:"
@@ -866,8 +931,8 @@ msgstr "skript: "
 
 #: src/View/Gtk/Element/List.h:135
 msgid "default name: "
-msgstr "východzí názov: "
+msgstr "predvolený názov: "
 
 #: src/View/Gtk/Element/List.h:139
 msgid "Partition: "
-msgstr "Oddiel: "
+msgstr "Diskový oddiel: "
