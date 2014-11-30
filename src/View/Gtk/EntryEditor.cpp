@@ -18,6 +18,8 @@
 
 #ifndef ENTRYEDITDLGGTK_H_
 #define ENTRYEDITDLGGTK_H_
+
+//LZZ: #hdr
 #include "../EntryEditor.h"
 #include "../../lib/Trait/LoggerAware.h"
 #include "../../lib/str_replace.cpp"
@@ -27,6 +29,7 @@
 #include "../../Controller/Trait/ControllerAware.h"
 #include "../../Model/DeviceDataListInterface.h"
 #include "Element/PartitionChooser.cpp"
+//LZZ: #end
 
 class View_Gtk_EntryEditor :
 	public View_EntryEditor,

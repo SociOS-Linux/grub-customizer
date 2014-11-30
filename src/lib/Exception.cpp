@@ -19,9 +19,11 @@
 #ifndef EXCEPTION_H_
 #define EXCEPTION_H_
 
+//LZZ: #hdr
 #include <string>
 #include <sstream>
 #include <typeinfo>
+//LZZ: #end
 
 class Exception {
 	std::string _message;

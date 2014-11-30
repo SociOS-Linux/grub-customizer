@@ -19,8 +19,10 @@
 #ifndef DEVICEINFO_H_
 #define DEVICEINFO_H_
 
+//LZZ: #hdr
 #include "../../lib/ContentParserFactory.h"
 #include "../../Model/DeviceDataListInterface.h"
+//LZZ: #end
 
 class Controller_Helper_DeviceInfo {
 public:

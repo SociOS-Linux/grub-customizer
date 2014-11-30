@@ -18,6 +18,7 @@
 
 #ifndef GRUB_CUSTOMIZER_SCRIPT_INCLUDED
 #define GRUB_CUSTOMIZER_SCRIPT_INCLUDED
+//LZZ: #hdr
 #include <string>
 #include <list>
 #include <cstdlib>
@@ -31,6 +32,7 @@
 #include "../lib/Exception.cpp"
 #include "../lib/ArrayStructure.cpp"
 #include "../lib/Type.h"
+//LZZ: #end
 
 struct Model_Script : public Model_EntryPathFollower, public Trait_LoggerAware, public Script {
 	std::string name, fileName;

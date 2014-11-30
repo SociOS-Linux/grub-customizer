@@ -18,12 +18,15 @@
 
 #ifndef GRUB_INSTALL_DLG_GTK_INCLUDED
 #define GRUB_INSTALL_DLG_GTK_INCLUDED
+
+//LZZ: #hdr
 #include <gtkmm.h>
 #include "../../Controller/InstallerController.h"
 #include "../../Controller/Trait/ControllerAware.h"
 #include <libintl.h>
 #include "../Installer.h"
 #include "../../lib/Trait/LoggerAware.h"
+//LZZ: #end
 
 class View_Gtk_Installer :
 	public Gtk::Dialog,

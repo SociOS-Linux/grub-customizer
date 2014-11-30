@@ -19,6 +19,7 @@
 #ifndef THEME_GTK_H_
 #define THEME_GTK_H_
 
+//LZZ: #hdr
 #include "../Theme.h"
 #include <gtkmm.h>
 #include <string>
@@ -27,6 +28,7 @@
 #include "../../Controller/Trait/ControllerAware.h"
 #include "../../lib/Trait/LoggerAware.h"
 #include "../../lib/assert.cpp"
+//LZZ: #end
 
 //a gtkmm combobox with colorful foreground and background. useful to choose an item of a predefined color set
 class View_Gtk_Theme_ColorChooser : public Gtk::ComboBox, public View_ColorChooser {

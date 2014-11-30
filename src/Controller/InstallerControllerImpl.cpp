@@ -19,6 +19,7 @@
 #ifndef INSTALLERCONTROLLERIMPL_H_
 #define INSTALLERCONTROLLERIMPL_H_
 
+//LZZ: #hdr
 #include <libintl.h>
 #include <locale.h>
 #include <sstream>
@@ -38,7 +39,7 @@
 #include "../lib/Exception.cpp"
 
 #include "InstallerController.h"
-
+//LZZ: #end
 
 class InstallerControllerImpl :
 	public ControllerAbstract,

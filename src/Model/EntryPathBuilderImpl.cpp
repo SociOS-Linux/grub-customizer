@@ -19,9 +19,11 @@
 
 #ifndef ENTRYPATHBUILDERIMPL_H_
 #define ENTRYPATHBUILDERIMPL_H_
+//LZZ: #hdr
 #include "../Model/EntryPathBuilder.h"
 #include "Script.cpp"
 #include <map>
+//LZZ: #end
 
 class Model_EntryPathBuilderImpl : public Model_EntryPathBilder {
 	Model_Script const* mainScript;

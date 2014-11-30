@@ -19,6 +19,7 @@
 #ifndef ENVEDITORCONTROLLERIMPL_H_
 #define ENVEDITORCONTROLLERIMPL_H_
 
+//LZZ: #hdr
 #include <libintl.h>
 #include <locale.h>
 #include <sstream>
@@ -35,6 +36,7 @@
 
 #include "EnvEditorController.h"
 #include "../Model/DeviceMap.cpp"
+//LZZ: #end
 
 
 class EnvEditorControllerImpl :

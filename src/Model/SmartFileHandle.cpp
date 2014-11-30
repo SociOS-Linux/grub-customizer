@@ -18,9 +18,11 @@
 
 #ifndef SMARTFILEHANDLE_H_
 #define SMARTFILEHANDLE_H_
+//LZZ: #hdr
 #include <cstdio>
 #include <string>
 #include "../lib/Exception.cpp"
+//LZZ: #end
 
 class Model_SmartFileHandle {
 public:

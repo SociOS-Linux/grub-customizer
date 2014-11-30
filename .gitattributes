@@ -16,6 +16,7 @@
 /README -text
 build/README -text
 build/build_all.sh -text
+build/lzzbuild.sh -text
 /changelog -text
 /cmake_uninstall.cmake.in -text
 /config.h.in -text

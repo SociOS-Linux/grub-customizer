@@ -19,6 +19,7 @@
 #ifndef ABOUTCONTROLLERIMPL_H_
 #define ABOUTCONTROLLERIMPL_H_
 
+//LZZ: #hdr
 #include <libintl.h>
 #include <locale.h>
 #include <sstream>
@@ -32,6 +33,7 @@
 #include "../Controller/ControllerAbstract.cpp"
 
 #include "AboutController.h"
+//LZZ: #end
 
 class AboutControllerImpl :
 	public ControllerAbstract,

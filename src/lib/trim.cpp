@@ -19,7 +19,9 @@
 #ifndef TRIM_H_
 #define TRIM_H_
 
+//LZZ: #hdr
 #include <string>
+//LZZ: #end
 
 std::string ltrim(std::string string, std::string const& chars = " \t\n\r") {
 	int first = string.find_first_not_of(chars);

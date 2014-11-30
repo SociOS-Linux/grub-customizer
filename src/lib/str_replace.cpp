@@ -18,7 +18,10 @@
 
 #ifndef STR_REPLACE_H_
 #define STR_REPLACE_H_
+
+//LZZ: #hdr
 #include <string>
+//LZZ: #end
 
 std::string str_replace(const std::string &search, const std::string &replace, std::string subject) {
 	size_t pos = 0;

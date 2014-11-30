@@ -18,12 +18,14 @@
 
 #ifndef GRUB_CUSTOMIZER_PROXYLIST_INCLUDED
 #define GRUB_CUSTOMIZER_PROXYLIST_INCLUDED
+//LZZ: #hdr
 #include <list>
 #include <sstream>
 #include "Proxy.cpp"
 #include "../lib/Trait/LoggerAware.h"
 #include "../lib/Exception.cpp"
 #include "../lib/ArrayStructure.cpp"
+//LZZ: #end
 
 struct Model_Proxylist_Item {
 	std::string labelPathValue;

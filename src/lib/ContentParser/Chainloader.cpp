@@ -19,9 +19,11 @@
 #ifndef CONTENT_PARSER_CHAINLOADER_H_
 #define CONTENT_PARSER_CHAINLOADER_H_
 
+//LZZ: #hdr
 #include "../Regex.cpp"
 #include "../../Model/DeviceMap.cpp"
 #include "Abstract.cpp"
+//LZZ: #end
 
 class ContentParser_Chainloader : public ContentParser_Abstract {
 	static const char* _regex;

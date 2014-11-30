@@ -18,6 +18,7 @@
 
 #ifndef GRUB_CUSTOMIZER_REPOSITORY_INCLUDED
 #define GRUB_CUSTOMIZER_REPOSITORY_INCLUDED
+//LZZ: #hdr
 #include "Script.cpp"
 #include "ProxyScriptData.cpp"
 #include "PscriptnameTranslator.cpp"
@@ -26,6 +27,7 @@
 #include <map>
 #include "../lib/Trait/LoggerAware.h"
 #include "../lib/ArrayStructure.cpp"
+//LZZ: #end
 
 struct Model_Repository : public std::list<Model_Script>, public Trait_LoggerAware {
 	std::list<Model_Script> trash;

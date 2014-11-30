@@ -18,6 +18,7 @@
 
 #ifndef GRUB_CUSTOMIZER_PROXY_INCLUDED
 #define GRUB_CUSTOMIZER_PROXY_INCLUDED
+//LZZ: #hdr
 #include "Rule.cpp"
 #include "Script.cpp"
 #include <sys/stat.h>
@@ -29,6 +30,7 @@
 #include "../lib/ArrayStructure.cpp"
 #include "ProxyScriptData.cpp"
 #include "../lib/Type.h"
+//LZZ: #end
 
 struct Model_Proxy : public Proxy {
 	std::list<Model_Rule> rules;
@@ -177,7 +179,7 @@ struct Model_Proxy : public Proxy {
 		}
 	}
 
-	bool sync(bool deleteInvalidRules = true, bool expand = true, std::map<std::string, Model_Script*> scriptMap = std::map<std::string, Model_Script*>() ) {
+	bool sync(bool deleteInvalidRules = true, bool expand = true, std::map<std::string, Model_Script * > scriptMap = std::map<std::string, Model_Script * >() ) {
 		if (this->dataSource){
 			this->sync_connectExisting(NULL, scriptMap);
 			this->sync_connectExistingByHash(NULL, scriptMap);

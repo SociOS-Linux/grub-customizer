@@ -19,6 +19,7 @@
 #ifndef ERRORCONTROLLERIMPL_H_
 #define ERRORCONTROLLERIMPL_H_
 
+//LZZ: #hdr
 #include <libintl.h>
 #include <locale.h>
 #include <sstream>
@@ -33,6 +34,7 @@
 #include "../Controller/Trait/ThreadControllerAware.h"
 
 #include "ErrorController.h"
+//LZZ: #end
 
 class ErrorControllerImpl :
 	public ControllerAbstract,

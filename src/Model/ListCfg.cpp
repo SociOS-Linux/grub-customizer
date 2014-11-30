@@ -18,6 +18,7 @@
 
 #ifndef GRUB_CUSTOMIZER_GrublistCfg_INCLUDED
 #define GRUB_CUSTOMIZER_GrublistCfg_INCLUDED
+//LZZ: #hdr
 #include <list>
 #include <string>
 #include <sys/stat.h>
@@ -51,6 +52,7 @@
 #include "ScriptSourceMap.cpp"
 #include <stack>
 #include <algorithm>
+//LZZ: #end
 
 class Model_ListCfg :
 	public Trait_LoggerAware,

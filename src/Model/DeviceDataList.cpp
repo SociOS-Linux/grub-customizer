@@ -18,11 +18,13 @@
 
 #ifndef DEVICE_DATALIST_INCLUDED
 #define DEVICE_DATALIST_INCLUDED
+//LZZ: #hdr
 #include <map>
 #include <cstdio>
 #include <string>
 #include "../Model/DeviceDataListInterface.h"
 #include "../lib/Trait/LoggerAware.h"
+//LZZ: #end
 
 class Model_DeviceDataList : public Model_DeviceDataListInterface, public Trait_LoggerAware {
 public:

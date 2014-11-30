@@ -18,10 +18,13 @@
 
 #ifndef PARTITIONCHOOSER_DROPDOWN_H_
 #define PARTITIONCHOOSER_DROPDOWN_H_
+
+//LZZ: #hdr
 #include <gtkmm.h>
 #include <string>
 #include "../../../Model/DeviceDataListInterface.h"
 #include <libintl.h>
+//LZZ: #end
 
 class View_Gtk_Element_PartitionChooser : public Gtk::ComboBoxText {
 	std::map<std::string, std::string> uuid_map;

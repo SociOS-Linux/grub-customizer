@@ -18,12 +18,15 @@
 
 #ifndef REGEX_H_INCLUDED
 #define REGEX_H_INCLUDED
+
+//LZZ: #hdr
 #include <string>
 #include <vector>
 #include <map>
 #include <glib.h>
 #include <iostream>
 #include "Exception.cpp"
+//LZZ: #end
 
 class Regex {
 public:

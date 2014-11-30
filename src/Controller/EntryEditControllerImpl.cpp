@@ -19,6 +19,7 @@
 #ifndef ENTRY_EDIT_CONTROLLER_INCLUDED
 #define ENTRY_EDIT_CONTROLLER_INCLUDED
 
+//LZZ: #hdr
 #include "../Model/ListCfg.cpp"
 #include "../View/Main.h"
 #include <libintl.h>
@@ -41,6 +42,7 @@
 #include "../Controller/Trait/ThreadControllerAware.h"
 
 #include "../lib/Exception.cpp"
+//LZZ: #end
 
 
 class EntryEditControllerImpl :

@@ -18,9 +18,11 @@
 
 #ifndef CONTENT_PARSER_LINUX_H_
 #define CONTENT_PARSER_LINUX_H_
+//LZZ: #hdr
 #include "../Regex.cpp"
 #include "../../Model/DeviceMap.cpp"
 #include "Abstract.cpp"
+//LZZ: #end
 
 class ContentParser_Linux : public ContentParser_Abstract {
 	static const char* _regex;

@@ -18,9 +18,11 @@
 
 #ifndef GLIBMUTEX_H_
 #define GLIBMUTEX_H_
+//LZZ: #hdr
 #include "../Mutex.h"
 #include <glibmm/thread.h>
 #include "../Trait/LoggerAware.h"
+//LZZ: #end
 
 class Mutex_GLib : public Mutex, public Trait_LoggerAware {
 protected:

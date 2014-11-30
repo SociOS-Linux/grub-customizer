@@ -18,11 +18,14 @@
 
 #ifndef ERRORGTK_H_
 #define ERRORGTK_H_
+
+//LZZ: #hdr
 #include <gtkmm.h>
 #include <libintl.h>
 #include "../Error.h"
 #include "../../Controller/ErrorController.h"
 #include "../../Controller/Trait/ControllerAware.h"
+//LZZ: #end
 
 class View_Gtk_Error : public View_Error, public Trait_ControllerAware<ErrorController> {
 public:

@@ -19,6 +19,7 @@
 #ifndef SETTINGSCONTROLLERIMPL_H_
 #define SETTINGSCONTROLLERIMPL_H_
 
+//LZZ: #hdr
 #include "../Model/ListCfg.cpp"
 #include <libintl.h>
 #include <locale.h>
@@ -47,7 +48,7 @@
 #include "../lib/Exception.cpp"
 
 #include "SettingsController.h"
-
+//LZZ: #end
 
 class SettingsControllerImpl :
 	public ControllerAbstract,

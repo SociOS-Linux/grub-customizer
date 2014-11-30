@@ -19,9 +19,11 @@
 #ifndef SETTINGSSTORE_H_
 #define SETTINGSSTORE_H_
 
+//LZZ: #hdr
 #include <list>
 #include <string>
 #include <cstdio>
+//LZZ: #end
 
 struct Model_SettingsStore_Row {
 	Model_SettingsStore_Row() : isActive(true), hasExportPrefix(false), isSetting(true) {}

@@ -19,6 +19,7 @@
 #ifndef TRASHCONTROLLERIMPL_H_
 #define TRASHCONTROLLERIMPL_H_
 
+//LZZ: #hdr
 #include "../Model/ListCfg.cpp"
 #include "../View/Main.h"
 #include <libintl.h>
@@ -43,7 +44,7 @@
 #include "../Model/DeviceDataListInterface.h"
 #include "../lib/ContentParserFactory.h"
 #include "Helper/DeviceInfo.cpp"
-
+//LZZ: #end
 
 class TrashControllerImpl :
 	public ControllerAbstract,

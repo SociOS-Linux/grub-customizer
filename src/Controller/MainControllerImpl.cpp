@@ -19,6 +19,7 @@
 #ifndef MAINCONNTROLLER_INCLUDED
 #define MAINCONNTROLLER_INCLUDED
 
+//LZZ: #hdr
 #include "../Model/ListCfg.cpp"
 #include "../View/Main.h"
 #include "../View/Trait/ViewAware.h"
@@ -48,6 +49,7 @@
 #include "Helper/DeviceInfo.cpp"
 
 #include "MainController.h"
+//LZZ: #end
 
 /**
  * This controller operates on the entry list

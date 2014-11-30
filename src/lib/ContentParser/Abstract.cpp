@@ -18,10 +18,12 @@
 
 #ifndef CONTENT_PARSER_ABSTRACT_H_
 #define CONTENT_PARSER_ABSTRACT_H_
+//LZZ: #hdr
 #include <map>
 #include <string>
 #include "../../lib/ContentParser.h"
 #include "../../lib/Trait/LoggerAware.h"
+//LZZ: #end
 
 class ContentParser_Abstract : public ContentParser, public Trait_LoggerAware {
 protected:

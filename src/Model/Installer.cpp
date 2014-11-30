@@ -18,12 +18,14 @@
 
 #ifndef GRUB_INSTALLER_INCLUDED
 #define GRUB_INSTALLER_INCLUDED
+//LZZ: #hdr
 #include <string>
 #include <cstdio>
 #include "Env.cpp"
 #include "../Controller/InstallerController.h"
 #include "../Controller/Trait/ControllerAware.h"
 #include "../lib/Trait/LoggerAware.h"
+//LZZ: #end
 
 class Model_Installer :
 	public Trait_LoggerAware,

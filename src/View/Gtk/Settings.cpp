@@ -18,6 +18,8 @@
 
 #ifndef SETTING_DLG_GTK_INCLUDED
 #define SETTING_DLG_GTK_INCLUDED
+
+//LZZ: #hdr
 #include <gtkmm.h>
 #include "../Settings.h"
 #include <libintl.h>
@@ -27,6 +29,7 @@
 #include "../../Controller/SettingsController.h"
 #include "../../Controller/Trait/ControllerAware.h"
 #include "../../lib/assert.cpp"
+//LZZ: #end
 
 
 class View_Gtk_Settings :

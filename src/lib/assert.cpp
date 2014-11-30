@@ -23,8 +23,10 @@
  * a custom assert implementation throwing exceptions instead of aborting directly
  */
 
+//LZZ: #hdr
 #include "Exception.cpp"
 #include <cstdio>
+//LZZ: #end
 
 # define ASSERT_VOID_CAST static_cast<void>
 

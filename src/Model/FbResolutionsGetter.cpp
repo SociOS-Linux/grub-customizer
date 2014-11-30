@@ -18,12 +18,14 @@
 
 #ifndef FB_RESOLUTIONS_GETTER
 #define FB_RESOLUTIONS_GETTER
+//LZZ: #hdr
 #include <string>
 #include <list>
 #include <cstdio>
 #include "../Controller/SettingsController.h"
 #include "../Controller/Trait/ControllerAware.h"
 #include "../lib/Trait/LoggerAware.h"
+//LZZ: #end
 
 class Model_FbResolutionsGetter : public Trait_LoggerAware, public Trait_ControllerAware<SettingsController> {
 	std::list<std::string> data;

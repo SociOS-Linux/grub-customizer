@@ -16,6 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
+//LZZ: #hdr
 #include "../Model/Script.cpp"
 #include "../Model/Proxy.cpp"
 #include "../Model/Entry.cpp"
@@ -23,6 +24,7 @@
 #include "../Model/ListCfg.cpp" // multi
 
 #include <iostream>
+//LZZ: #end
 
 int main(int argc, char** argv){
 	if (argc == 2) {

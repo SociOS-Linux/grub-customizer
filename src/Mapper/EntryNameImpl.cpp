@@ -19,10 +19,12 @@
 #ifndef ENTRYNAMEIMPL_H_
 #define ENTRYNAMEIMPL_H_
 
+//LZZ: #hdr
 #include "EntryName.h"
 #include "../View/Main.h"
 #include "../View/Trait/ViewAware.h"
 #include "../lib/assert.cpp"
+//LZZ: #end
 
 class Mapper_EntryNameImpl : public Mapper_EntryName, public View_Trait_ViewAware<View_Main> {
 public:

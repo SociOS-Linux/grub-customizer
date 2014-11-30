@@ -18,6 +18,8 @@
 
 #ifndef GRUBENVEDITORGTK_H_
 #define GRUBENVEDITORGTK_H_
+
+//LZZ: #hdr
 #include <gtkmm.h>
 #include <libintl.h>
 #include "../../lib/Trait/LoggerAware.h"
@@ -26,6 +28,7 @@
 #include "Element/PartitionChooser.cpp"
 #include "../../Model/DeviceDataListInterface.h"
 #include "../../Controller/EnvEditorController.h"
+//LZZ: #end
 
 class View_Gtk_EnvEditor :
 	public Gtk::Dialog,

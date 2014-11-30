@@ -18,6 +18,7 @@
 
 #ifndef THEMECONTROLLERIMPL_H_
 #define THEMECONTROLLERIMPL_H_
+//LZZ: #hdr
 #include "ThemeController.h"
 #include "../Model/Env.cpp"
 #include "../View/Theme.h"
@@ -28,6 +29,7 @@
 #include "../Model/ThemeManager.cpp"
 #include "../Model/ListCfg.cpp"
 #include <algorithm>
+//LZZ: #end
 
 class ThemeControllerImpl :
 	public ThemeController,

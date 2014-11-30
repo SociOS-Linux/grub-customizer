@@ -18,6 +18,7 @@
 
 #ifndef GRUB_CUSTOMIZER_ENTRY_INCLUDED
 #define GRUB_CUSTOMIZER_ENTRY_INCLUDED
+//LZZ: #hdr
 #include <cstdio>
 #include <string>
 #include <list>
@@ -26,6 +27,7 @@
 #include "../lib/ArrayStructure.cpp"
 #include "../lib/trim.cpp"
 #include "../lib/Type.h"
+//LZZ: #end
 
 struct Model_Entry_Row {
 	Model_Entry_Row(FILE* sourceFile) : eof(false), is_loaded(true)
@@ -60,7 +62,8 @@ struct Model_Entry : public Trait_LoggerAware, public Entry {
 		SUBMENU,
 		SCRIPT_ROOT,
 		PLAINTEXT
-	} type;
+	};
+	EntryType type;
 	bool isValid, isModified;
 	std::string name, extension, content;
 	char quote;

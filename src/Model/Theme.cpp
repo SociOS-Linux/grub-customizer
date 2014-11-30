@@ -18,6 +18,7 @@
 
 #ifndef MODEL_THEME_H_
 #define MODEL_THEME_H_
+//LZZ: #hdr
 #include <list>
 #include "ThemeFile.cpp"
 #include <cstdio>
@@ -29,6 +30,7 @@
 #include <archive_entry.h>
 #include <map>
 #include "../lib/assert.cpp"
+//LZZ: #end
 
 struct Model_Theme {
 	std::string directory;

@@ -18,6 +18,7 @@
 
 #ifndef GRUB_CUSTOMIZER_RULE_INCLUDED
 #define GRUB_CUSTOMIZER_RULE_INCLUDED
+//LZZ: #hdr
 #include <string>
 #include "Entry.cpp"
 #include "../Model/EntryPathBuilder.h"
@@ -26,6 +27,7 @@
 #include "../lib/md5.cpp"
 #include "../lib/ArrayStructure.cpp"
 #include "../lib/Type.h"
+//LZZ: #end
 
 struct Model_Rule : public Rule {
 	Model_Entry* dataSource; //assigned when using RuleType::OTHER_ENTRIES_PLACEHOLDER

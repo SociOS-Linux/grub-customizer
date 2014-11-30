@@ -18,12 +18,14 @@
 
 #ifndef ARRAYSTRUCTURE_H_
 #define ARRAYSTRUCTURE_H_
+//LZZ: #hdr
 #include <string>
 #include <map>
 #include <list>
 #include <sstream>
 #include <iostream>
 #include "str_replace.cpp"
+//LZZ: #end
 
 struct ArrayStructureItem {
 public:

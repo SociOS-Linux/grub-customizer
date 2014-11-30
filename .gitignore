@@ -1,3 +1,4 @@
 /.cproject
 /.project
+build/lzzbuild/*
 src/config.h

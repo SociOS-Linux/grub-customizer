@@ -19,9 +19,11 @@
 #ifndef CONTROLLER_ABSTRACT_H_
 #define CONTROLLER_ABSTRACT_H_
 
+//LZZ: #hdr
 #include "ControllerCollection.h"
 #include "../lib/assert.cpp"
 #include "../lib/Trait/ActionLoggerAware.h"
+//LZZ: #end
 
 class ControllerAbstract : public Trait_ActionLoggerAware, public ControllerCollection_Connection {
 public:

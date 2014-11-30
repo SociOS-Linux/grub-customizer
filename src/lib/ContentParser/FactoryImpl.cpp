@@ -18,11 +18,13 @@
 
 #ifndef CONTENTPARSERFACTORYIMPL_H_
 #define CONTENTPARSERFACTORYIMPL_H_
+//LZZ: #hdr
 #include "../../lib/ContentParserFactory.h"
 #include "../../lib/ContentParser.h"
 #include <list>
 #include "../../lib/assert.cpp"
 #include "../Exception.cpp"
+//LZZ: #end
 
 class ContentParser_FactoryImpl : public ContentParserFactory {
 	std::list<ContentParser*> parsers;

@@ -18,12 +18,14 @@
 
 #ifndef MOUNT_TABLE_INCLUDED
 #define MOUNT_TABLE_INCLUDED
+//LZZ: #hdr
 #include <list>
 #include <cstdio>
 #include <string>
 #include <cstdlib>
 #include "../lib/Trait/LoggerAware.h"
 #include "../lib/Exception.cpp"
+//LZZ: #end
 
 
 struct Model_MountTable_Mountpoint {

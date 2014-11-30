@@ -18,6 +18,8 @@
 
 #ifndef ENTRY_ADD_DLG_INCLUDED
 #define ENTRY_ADD_DLG_INCLUDED
+
+//LZZ: #hdr
 #include <gtkmm.h>
 #include "../../Controller/TrashController.h"
 #include "../../Controller/Trait/ControllerAware.h"
@@ -26,6 +28,7 @@
 #include "../../lib/Trait/LoggerAware.h"
 #include "../../lib/Type.h"
 #include "Element/List.h"
+//LZZ: #end
 
 class View_Gtk_Trash :
 	public Gtk::Window,

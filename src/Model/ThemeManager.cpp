@@ -19,10 +19,12 @@
 #ifndef THEMEMANAGER_H_
 #define THEMEMANAGER_H_
 
+//LZZ: #hdr
 #include <list>
 #include "Theme.cpp"
 #include "Env.cpp"
 #include "../lib/Exception.cpp"
+//LZZ: #end
 
 class Model_ThemeManager :
 	public Model_Env_Connection

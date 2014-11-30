@@ -19,9 +19,11 @@
 #ifndef CONTENT_PARSER_MEMTEST_H_
 #define CONTENT_PARSER_MEMTEST_H_
 
+//LZZ: #hdr
 #include "../Regex.cpp"
 #include "../../Model/DeviceMap.cpp"
 #include "Abstract.cpp"
+//LZZ: #end
 
 class ContentParser_Memtest : public ContentParser_Abstract {
 	static const char* _regex;

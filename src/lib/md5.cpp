@@ -18,9 +18,11 @@
 #ifndef MD5_H_INCLUDED
 #define MD5_H_INCLUDED
 
+//LZZ: #hdr
 #include <openssl/md5.h>
 #include <string>
 #include "assert.cpp"
+//LZZ: #end
 
 std::string md5(std::string const& input) {
 	unsigned char buf[16];

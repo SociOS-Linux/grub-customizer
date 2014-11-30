@@ -16,6 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
+//LZZ: #hdr
 #include "../Model/Env.cpp"
 #include "../View/Gtk/Main.cpp"
 #include "../View/Gtk/About.cpp"
@@ -49,6 +50,7 @@
 #include "../lib/assert.cpp"
 #include "../lib/ArrayStructure.cpp"
 #include "../Model/ThemeManager.cpp"
+//LZZ: #end
 
 
 int main(int argc, char** argv){

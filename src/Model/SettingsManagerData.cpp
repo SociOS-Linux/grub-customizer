@@ -18,6 +18,7 @@
 
 #ifndef SETTING_MANAGER_DATASTORE_INCLUDED
 #define SETTING_MANAGER_DATASTORE_INCLUDED
+//LZZ: #hdr
 #include <sys/stat.h> //mkdir
 #include "Env.cpp"
 #include "../lib/Trait/LoggerAware.h"
@@ -25,6 +26,7 @@
 #include <sstream>
 #include "../lib/str_replace.cpp"
 #include <map>
+//LZZ: #end
 
 class Model_SettingsManagerData :
 	public Model_SettingsStore,

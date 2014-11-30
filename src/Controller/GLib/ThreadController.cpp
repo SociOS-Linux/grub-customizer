@@ -18,6 +18,7 @@
 
 #ifndef GLIBTHREADCONTROLLER_H_INCLUDED
 #define GLIBTHREADCONTROLLER_H_INCLUDED
+//LZZ: #hdr
 #include "../ThreadController.h"
 #include <glibmm/thread.h>
 #include <glibmm/dispatcher.h>
@@ -26,6 +27,7 @@
 #include "../../lib/Trait/LoggerAware.h"
 #include "../../lib/assert.cpp"
 #include "../../lib/Type.h"
+//LZZ: #end
 
 class GLib_ThreadController : public ThreadController, public Trait_LoggerAware {
 	ControllerCollection& _controllers;

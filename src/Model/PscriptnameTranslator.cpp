@@ -19,8 +19,10 @@
 #ifndef PSCRIPTNAME_TRANSLATOR_INCLUDED
 #define PSCRIPTNAME_TRANSLATOR_INCLUDED
 
+//LZZ: #hdr
 #include <string>
 #include <sstream>
+//LZZ: #end
 
 class Model_PscriptnameTranslator {
 public:

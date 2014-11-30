@@ -19,6 +19,7 @@
 #ifndef SCRIPTSOURCEMAP_H_
 #define SCRIPTSOURCEMAP_H_
 
+//LZZ: #hdr
 #include <map>
 #include <string>
 #include "Env.cpp"
@@ -26,6 +27,7 @@
 #include <dirent.h>
 #include "../lib/assert.cpp"
 #include "../lib/Trait/LoggerAware.h"
+//LZZ: #end
 
 class Model_ScriptSourceMap :
 	public std::map<std::string, std::string>,

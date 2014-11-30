@@ -18,6 +18,8 @@
 
 #ifndef GRUBLIST_CFG_DLG_GTK_INCLUDED
 #define GRUBLIST_CFG_DLG_GTK_INCLUDED
+
+//LZZ: #hdr
 #include <gtkmm.h>
 #include <libintl.h>
 #include "../../config.h"
@@ -30,6 +32,7 @@
 #include "../../Controller/Trait/ControllerAware.h"
 #include "../../lib/Type.h"
 #include "Element/List.h"
+//LZZ: #end
 
 class ImageMenuItemOwnKey : public Gtk::ImageMenuItem {
 	public:

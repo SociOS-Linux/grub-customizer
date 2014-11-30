@@ -19,6 +19,7 @@
 #ifndef GRUBENV_INCLUDED
 #define GRUBENV_INCLUDED
 
+//LZZ: #hdr
 #include <string>
 #include <cstdio>
 #include "MountTable.cpp"
@@ -32,6 +33,7 @@
 #include "../lib/ArrayStructure.cpp"
 #include "../lib/Type.h"
 #include "../lib/FileSystem.cpp"
+//LZZ: #end
 
 struct Model_Env : public Trait_LoggerAware {
 public:

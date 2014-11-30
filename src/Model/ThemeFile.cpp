@@ -18,7 +18,9 @@
 
 #ifndef THEMEFILE_H_
 #define THEMEFILE_H_
+//LZZ: #hdr
 #include <string>
+//LZZ: #end
 
 struct Model_ThemeFile {
 	Model_ThemeFile(std::string localFileName, bool isAddedByUser = false) : localFileName(localFileName), contentLoaded(false), newLocalFileName(localFileName), isAddedByUser(isAddedByUser)

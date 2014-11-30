@@ -18,9 +18,11 @@
 
 #ifndef STREAM_LOGGER_H_
 #define STREAM_LOGGER_H_
+//LZZ: #hdr
 #include "../Logger.h"
 #include <ostream>
 #include <string>
+//LZZ: #end
 
 class Logger_Stream : public Logger {
 	std::ostream* stream;
@@ -32,7 +34,8 @@ public:
 		LOG_IMPORTANT,
 		LOG_EVENT,
 		LOG_VERBOSE
-	} logLevel;
+	};
+	LogLevel logLevel;
 	Logger_Stream(std::ostream& stream) : stream(&stream), actionStackDepth(0), logLevel(LOG_NOTHING) {}
 
 	void log(std::string const& message, Logger::Priority prio) {

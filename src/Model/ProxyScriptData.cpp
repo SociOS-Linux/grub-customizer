@@ -18,8 +18,10 @@
 
 #ifndef GRUB_CFG_LIBProxyScriptData_PARSER_INCLUDED
 #define GRUB_CFG_LIBProxyScriptData_PARSER_INCLUDED
+//LZZ: #hdr
 #include <cstdio>
 #include <string>
+//LZZ: #end
 
 struct Model_ProxyScriptData {
 	std::string scriptCmd, proxyCmd, ruleString;
