@@ -19,23 +19,23 @@
 #ifndef SETTINGSCONTROLLERIMPL_H_
 #define SETTINGSCONTROLLERIMPL_H_
 
-#include "../Model/ListCfg.h"
+#include "../Model/ListCfg.cpp"
 #include <libintl.h>
 #include <locale.h>
 #include <sstream>
 #include "../config.h"
 
-#include "../Model/Env.h"
+#include "../Model/Env.cpp"
 
-#include "../Model/MountTable.h"
+#include "../Model/MountTable.cpp"
 
-#include "../Model/Installer.h"
+#include "../Model/Installer.cpp"
 
-#include "../Model/ListCfg.h"
+#include "../Model/ListCfg.cpp"
 #include "../View/Settings.h"
 #include "../View/Trait/ViewAware.h"
-#include "../Model/FbResolutionsGetter.h"
-#include "../Model/DeviceDataList.h"
+#include "../Model/FbResolutionsGetter.cpp"
+#include "../Model/DeviceDataList.cpp"
 #include "../lib/ContentParserFactory.h"
 #include "../Mapper/EntryName.h"
 

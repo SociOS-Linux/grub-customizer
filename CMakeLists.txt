@@ -42,51 +42,12 @@ include_directories(
     ${GTKMM_INCLUDE_DIRS}  )
 
 add_executable(grub-customizer
-	src/Model/Entry.cpp
-	src/Model/ListCfg.cpp
-	src/Model/ProxyScriptData.cpp
-	src/Model/MountTable.cpp
-	src/Model/Proxy.cpp
-	src/Model/Proxylist.cpp
-	src/Model/PscriptnameTranslator.cpp
-	src/Model/Repository.cpp
-	src/Model/Rule.cpp
-	src/Model/Script.cpp
-	src/Model/DeviceDataList.cpp
-	src/Model/Env.cpp
-	src/Model/SettingsManagerData.cpp
-	src/Model/SettingsStore.cpp
-	src/Model/FbResolutionsGetter.cpp
-	src/Model/Installer.cpp
-	src/Model/EntryPathBuilderImpl.cpp
-	src/Model/DeviceMap.cpp
-	src/Model/SmartFileHandle.cpp
-	src/Mapper/EntryNameImpl.cpp
 	src/main/gtk-client.cpp
-	src/Model/ScriptSourceMap.cpp
-	src/Model/ThemeFile.cpp
-	src/Model/Theme.cpp
-	src/Model/ThemeManager.cpp
 )
 
 
 add_executable(grubcfg-proxy
-	src/Model/Entry.cpp
-	src/Model/Rule.cpp
-	src/Model/Script.cpp
-	src/Model/Proxy.cpp
 	src/main/proxy.cpp
-	# multi:
-	src/Model/ListCfg.cpp
-	src/Model/Env.cpp
-	src/Model/SettingsStore.cpp
-	src/Model/MountTable.cpp
-	src/Model/Proxylist.cpp
-	src/Model/Repository.cpp
-	src/Model/PscriptnameTranslator.cpp
-	src/Model/ProxyScriptData.cpp
-	src/Model/EntryPathBuilderImpl.cpp
-	src/Model/ScriptSourceMap.cpp
 )
 
 target_link_libraries(grub-customizer 

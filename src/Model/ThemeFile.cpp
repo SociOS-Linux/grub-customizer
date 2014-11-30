@@ -16,13 +16,25 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#include "ThemeFile.h"
+#ifndef THEMEFILE_H_
+#define THEMEFILE_H_
+#include <string>
 
-Model_ThemeFile::Model_ThemeFile(std::string localFileName, bool isAddedByUser)
-	: localFileName(localFileName), contentLoaded(false), newLocalFileName(localFileName), isAddedByUser(isAddedByUser)
-{
-}
+struct Model_ThemeFile {
+	Model_ThemeFile(std::string localFileName, bool isAddedByUser = false) : localFileName(localFileName), contentLoaded(false), newLocalFileName(localFileName), isAddedByUser(isAddedByUser)
+	{
+	}
 
-bool Model_ThemeFile::compareLocalPath(Model_ThemeFile const& a, Model_ThemeFile const& b) {
-	return a.newLocalFileName < b.newLocalFileName;
-}
+	static bool compareLocalPath(Model_ThemeFile const& a, Model_ThemeFile const& b) {
+		return a.newLocalFileName < b.newLocalFileName;
+	}
+
+	std::string localFileName, newLocalFileName; // path inside of the theme directory
+	bool contentLoaded; // say whether the content is loaded (text only)
+	std::string content; // loaded content (text only)
+	bool isAddedByUser;
+	std::string externalSource;
+};
+
+
+#endif /* THEMEFILE_H_ */

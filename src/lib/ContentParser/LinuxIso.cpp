@@ -20,7 +20,7 @@
 #define CONTENT_PARSER_LINUXISO_H_
 
 #include "../Regex.cpp"
-#include "../../Model/DeviceMap.h"
+#include "../../Model/DeviceMap.cpp"
 #include "Abstract.cpp"
 
 class ContentParser_LinuxIso : public ContentParser_Abstract {

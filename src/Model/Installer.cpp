@@ -16,25 +16,53 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#include "Installer.h"
+#ifndef GRUB_INSTALLER_INCLUDED
+#define GRUB_INSTALLER_INCLUDED
+#include <string>
+#include <cstdio>
+#include "Env.cpp"
+#include "../Controller/InstallerController.h"
+#include "../Controller/Trait/ControllerAware.h"
+#include "../lib/Trait/LoggerAware.h"
 
-void Model_Installer::threadable_install(std::string const& device){
-	this->install_result = install(device);
-	if (controller)
-		controller->showMessageAction(this->install_result);
-}
-
-std::string Model_Installer::install(std::string const& device){
-	FILE* install_proc = popen((this->env->install_cmd+" '"+device+"' 2>&1").c_str(), "r");
-	std::string output;
-	int c;
-	while ((c = fgetc(install_proc)) != EOF){
-		output += c;
+class Model_Installer :
+	public Trait_LoggerAware,
+	public Trait_ControllerAware<InstallerController>,
+	public Model_Env_Connection
+{
+	std::string install_result;
+public:
+	void threadable_install(std::string const& device) {
+		this->install_result = install(device);
+		if (controller)
+			controller->showMessageAction(this->install_result);
 	}
-	int success = pclose(install_proc);
-	if (success == 0)
-		return ""; //empty return string = no error
-	else
-		return output;
-}
 
+	std::string install(std::string const& device) {
+		FILE* install_proc = popen((this->env->install_cmd+" '"+device+"' 2>&1").c_str(), "r");
+		std::string output;
+		int c;
+		while ((c = fgetc(install_proc)) != EOF){
+			output += c;
+		}
+		int success = pclose(install_proc);
+		if (success == 0)
+			return ""; //empty return string = no error
+		else
+			return output;
+	}
+
+};
+
+class Model_Installer_Connection {
+protected:
+	Model_Installer* installer;
+public:
+	Model_Installer_Connection() : installer(NULL) {}
+
+	void setInstaller(Model_Installer& installer){
+		this->installer = &installer;
+	}
+};
+
+#endif

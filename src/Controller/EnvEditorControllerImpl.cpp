@@ -24,9 +24,9 @@
 #include <sstream>
 #include "../config.h"
 
-#include "../Model/Env.h"
+#include "../Model/Env.cpp"
 
-#include "../Model/MountTable.h"
+#include "../Model/MountTable.cpp"
 
 #include "../View/EnvEditor.h"
 #include "../View/Trait/ViewAware.h"
@@ -34,7 +34,7 @@
 #include "ControllerAbstract.cpp"
 
 #include "EnvEditorController.h"
-#include "../Model/DeviceMap.h"
+#include "../Model/DeviceMap.cpp"
 
 
 class EnvEditorControllerImpl :

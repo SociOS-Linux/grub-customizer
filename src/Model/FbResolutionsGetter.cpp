@@ -16,47 +16,73 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#include "FbResolutionsGetter.h"
+#ifndef FB_RESOLUTIONS_GETTER
+#define FB_RESOLUTIONS_GETTER
+#include <string>
+#include <list>
+#include <cstdio>
+#include "../Controller/SettingsController.h"
+#include "../Controller/Trait/ControllerAware.h"
+#include "../lib/Trait/LoggerAware.h"
 
-Model_FbResolutionsGetter::Model_FbResolutionsGetter()
-	: _isLoading(false)
-{}
+class Model_FbResolutionsGetter : public Trait_LoggerAware, public Trait_ControllerAware<SettingsController> {
+	std::list<std::string> data;
+	bool _isLoading;
+public:
+	Model_FbResolutionsGetter() : _isLoading(false)
+	{}
 
-const std::list<std::string>& Model_FbResolutionsGetter::getData() const {
-	return data;
-}
-void Model_FbResolutionsGetter::load(){
-	if (!_isLoading){ //make sure that only one thread is running this function at the same time
-		_isLoading = true;
-		data.clear();
-		FILE* hwinfo_proc = popen("hwinfo --framebuffer", "r");
-		if (hwinfo_proc){
-			int c;
-			std::string row;
-			//parses mode lines like "  Mode 0x0300: 640x400 (+640), 8 bits"
-			while ((c = fgetc(hwinfo_proc)) != EOF){
-				if (c != '\n')
-					row += char(c);
-				else {
-					if (row.substr(0,7) == "  Mode "){
-						int beginOfResulution = row.find(':')+2;
-						int endOfResulution = row.find(' ', beginOfResulution);
-
-						int beginOfColorDepth = row.find(' ', endOfResulution+1)+1;
-						int endOfColorDepth = row.find(' ', beginOfColorDepth);
-
-						data.push_back(
-							row.substr(beginOfResulution, endOfResulution-beginOfResulution)
-						  + "x"
-						  + row.substr(beginOfColorDepth, endOfColorDepth-beginOfColorDepth)
-						);
-					}
-					row = "";
-				}
-			}
-			if (pclose(hwinfo_proc) == 0 && this->controller)
-				this->controller->updateResolutionlistThreadedAction();
-		}
-		_isLoading = false;
+	const std::list<std::string>& getData() const {
+		return data;
 	}
-}
+
+	void load() {
+		if (!_isLoading){ //make sure that only one thread is running this function at the same time
+			_isLoading = true;
+			data.clear();
+			FILE* hwinfo_proc = popen("hwinfo --framebuffer", "r");
+			if (hwinfo_proc){
+				int c;
+				std::string row;
+				//parses mode lines like "  Mode 0x0300: 640x400 (+640), 8 bits"
+				while ((c = fgetc(hwinfo_proc)) != EOF){
+					if (c != '\n')
+						row += char(c);
+					else {
+						if (row.substr(0,7) == "  Mode "){
+							int beginOfResulution = row.find(':')+2;
+							int endOfResulution = row.find(' ', beginOfResulution);
+	
+							int beginOfColorDepth = row.find(' ', endOfResulution+1)+1;
+							int endOfColorDepth = row.find(' ', beginOfColorDepth);
+	
+							data.push_back(
+								row.substr(beginOfResulution, endOfResulution-beginOfResulution)
+							  + "x"
+							  + row.substr(beginOfColorDepth, endOfColorDepth-beginOfColorDepth)
+							);
+						}
+						row = "";
+					}
+				}
+				if (pclose(hwinfo_proc) == 0 && this->controller)
+					this->controller->updateResolutionlistThreadedAction();
+			}
+			_isLoading = false;
+		}
+	}
+
+};
+
+class Model_FbResolutionsGetter_Connection {
+protected:
+	Model_FbResolutionsGetter* fbResolutionsGetter;
+public:
+	Model_FbResolutionsGetter_Connection() : fbResolutionsGetter(NULL) {}
+
+	void setFbResolutionsGetter(Model_FbResolutionsGetter& fbResolutionsGetter){
+		this->fbResolutionsGetter = &fbResolutionsGetter;
+	}
+};
+
+#endif

@@ -16,39 +16,55 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#include "EntryPathBuilderImpl.h"
 
-Model_EntryPathBuilderImpl::Model_EntryPathBuilderImpl(Model_Script const& mainScript)
-	: prefixLength(0), mainScript(NULL)
-{
-	this->setMainScript(mainScript);
-}
+#ifndef ENTRYPATHBUILDERIMPL_H_
+#define ENTRYPATHBUILDERIMPL_H_
+#include "../Model/EntryPathBuilder.h"
+#include "Script.cpp"
+#include <map>
 
-void Model_EntryPathBuilderImpl::setMainScript(Model_Script const& mainScript) {
-	this->mainScript = &mainScript;
-}
+class Model_EntryPathBuilderImpl : public Model_EntryPathBilder {
+	Model_Script const* mainScript;
+	std::map<Model_Entry const*, Model_Script const*> entrySourceMap;
+	std::map<Model_Script const*, std::string> scriptTargetMap;
+	int prefixLength;
+public:
+	Model_EntryPathBuilderImpl(Model_Script const& mainScript) : prefixLength(0), mainScript(NULL)
+	{
+		this->setMainScript(mainScript);
+	}
 
-void Model_EntryPathBuilderImpl::setEntrySourceMap(std::map<Model_Entry const*, Model_Script const*> const& entrySourceMap) {
-	this->entrySourceMap = entrySourceMap;
-}
-void Model_EntryPathBuilderImpl::setScriptTargetMap(std::map<Model_Script const*, std::string> const& scriptTargetMap) {
-	this->scriptTargetMap = scriptTargetMap;
-}
+	void setMainScript(Model_Script const& mainScript) {
+		this->mainScript = &mainScript;
+	}
 
-void Model_EntryPathBuilderImpl::setPrefixLength(int length) {
-	this->prefixLength = length;
-}
+	void setEntrySourceMap(std::map<Model_Entry const*, Model_Script const*> const& entrySourceMap) {
+		this->entrySourceMap = entrySourceMap;
+	}
 
-std::list<std::string> Model_EntryPathBuilderImpl::buildPath(Model_Entry const& entry) const {
-	Model_Script const* script = entrySourceMap.find(&entry) != entrySourceMap.end() ? entrySourceMap.find(&entry)->second : this->mainScript;
-	return script->buildPath(entry);
-}
-std::string Model_EntryPathBuilderImpl::buildPathString(Model_Entry const& entry, bool withOtherEntriesPlaceholder) const {
-	Model_Script const* script = entrySourceMap.find(&entry) != entrySourceMap.end() ? entrySourceMap.find(&entry)->second : this->mainScript;
-	return script->buildPathString(entry, withOtherEntriesPlaceholder);
-}
+	void setScriptTargetMap(std::map<Model_Script const*, std::string> const& scriptTargetMap) {
+		this->scriptTargetMap = scriptTargetMap;
+	}
 
-std::string Model_EntryPathBuilderImpl::buildScriptPath(Model_Entry const& entry) const {
-	Model_Script const* script = entrySourceMap.find(&entry) != entrySourceMap.end() ? entrySourceMap.find(&entry)->second : NULL;
-	return script ? this->scriptTargetMap.find(script)->second.substr(this->prefixLength) : "";
-}
+	void setPrefixLength(int length) {
+		this->prefixLength = length;
+	}
+
+	std::list<std::string> buildPath(Model_Entry const& entry) const {
+		Model_Script const* script = entrySourceMap.find(&entry) != entrySourceMap.end() ? entrySourceMap.find(&entry)->second : this->mainScript;
+		return script->buildPath(entry);
+	}
+
+	std::string buildPathString(Model_Entry const& entry, bool withOtherEntriesPlaceholder = false) const {
+		Model_Script const* script = entrySourceMap.find(&entry) != entrySourceMap.end() ? entrySourceMap.find(&entry)->second : this->mainScript;
+		return script->buildPathString(entry, withOtherEntriesPlaceholder);
+	}
+
+	std::string buildScriptPath(Model_Entry const& entry) const {
+		Model_Script const* script = entrySourceMap.find(&entry) != entrySourceMap.end() ? entrySourceMap.find(&entry)->second : NULL;
+		return script ? this->scriptTargetMap.find(script)->second.substr(this->prefixLength) : "";
+	}
+
+};
+
+#endif

@@ -16,21 +16,31 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#include "PscriptnameTranslator.h"
+#ifndef PSCRIPTNAME_TRANSLATOR_INCLUDED
+#define PSCRIPTNAME_TRANSLATOR_INCLUDED
 
-std::string Model_PscriptnameTranslator::decode(std::string const& input){
-	std::string result = input;
-	int last_nonnum_pos = input.find_last_not_of("0123456789");
-	if (last_nonnum_pos != -1 && result[last_nonnum_pos] == '~' && last_nonnum_pos != input.length()-1)
-		result = result.substr(0, last_nonnum_pos);
-	return result;
-}
+#include <string>
+#include <sstream>
 
-std::string Model_PscriptnameTranslator::encode(std::string const& input, int x){
-	std::ostringstream out;
-	out << input;
-	int last_nonnum_pos = input.find_last_not_of("0123456789");
-	if (x != 0 || (last_nonnum_pos != -1 && input[last_nonnum_pos] == '~') && last_nonnum_pos != input.length()-1)
-		out << "~" << x;
-	return out.str();
-}
+class Model_PscriptnameTranslator {
+public:
+	static std::string decode(std::string const& input) {
+		std::string result = input;
+		int last_nonnum_pos = input.find_last_not_of("0123456789");
+		if (last_nonnum_pos != -1 && result[last_nonnum_pos] == '~' && last_nonnum_pos != input.length()-1)
+			result = result.substr(0, last_nonnum_pos);
+		return result;
+	}
+
+	static std::string encode(std::string const& input, int x) {
+		std::ostringstream out;
+		out << input;
+		int last_nonnum_pos = input.find_last_not_of("0123456789");
+		if (x != 0 || ((last_nonnum_pos != -1 && input[last_nonnum_pos] == '~') && last_nonnum_pos != input.length()-1))
+			out << "~" << x;
+		return out.str();
+	}
+
+};
+
+#endif

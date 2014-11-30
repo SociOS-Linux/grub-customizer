@@ -19,7 +19,7 @@
 #ifndef MAINCONNTROLLER_INCLUDED
 #define MAINCONNTROLLER_INCLUDED
 
-#include "../Model/ListCfg.h"
+#include "../Model/ListCfg.cpp"
 #include "../View/Main.h"
 #include "../View/Trait/ViewAware.h"
 #include <libintl.h>
@@ -28,11 +28,11 @@
 #include <algorithm>
 #include "../config.h"
 
-#include "../Model/Env.h"
+#include "../Model/Env.cpp"
 
-#include "../Model/ListCfg.h"
-#include "../Model/FbResolutionsGetter.h"
-#include "../Model/DeviceDataList.h"
+#include "../Model/ListCfg.cpp"
+#include "../Model/FbResolutionsGetter.cpp"
+#include "../Model/DeviceDataList.cpp"
 #include "ThreadController.h"
 #include "../lib/ContentParserFactory.h"
 

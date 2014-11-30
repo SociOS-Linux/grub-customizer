@@ -19,14 +19,14 @@
 #ifndef THEMECONTROLLERIMPL_H_
 #define THEMECONTROLLERIMPL_H_
 #include "ThemeController.h"
-#include "../Model/Env.h"
+#include "../Model/Env.cpp"
 #include "../View/Theme.h"
 #include "../View/Trait/ViewAware.h"
-#include "../Model/SettingsManagerData.h"
+#include "../Model/SettingsManagerData.cpp"
 #include "ControllerAbstract.cpp"
 #include "Trait/ThreadControllerAware.h"
-#include "../Model/ThemeManager.h"
-#include "../Model/ListCfg.h"
+#include "../Model/ThemeManager.cpp"
+#include "../Model/ListCfg.cpp"
 #include <algorithm>
 
 class ThemeControllerImpl :

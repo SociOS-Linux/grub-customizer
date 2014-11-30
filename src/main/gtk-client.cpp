@@ -16,7 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#include "../Model/Env.h"
+#include "../Model/Env.cpp"
 #include "../View/Gtk/Main.cpp"
 #include "../View/Gtk/About.cpp"
 #include "../View/Gtk/Installer.cpp"
@@ -45,10 +45,10 @@
 #include "../Controller/ControllerCollection.h"
 #include "../Controller/ErrorControllerImpl.cpp"
 #include "../Controller/ThemeControllerImpl.cpp"
-#include "../Mapper/EntryNameImpl.h"
+#include "../Mapper/EntryNameImpl.cpp"
 #include "../lib/assert.cpp"
 #include "../lib/ArrayStructure.cpp"
-#include "../Model/ThemeManager.h"
+#include "../Model/ThemeManager.cpp"
 
 
 int main(int argc, char** argv){

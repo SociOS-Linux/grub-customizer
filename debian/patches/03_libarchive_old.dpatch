@@ -101,11 +101,11 @@ diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' 
 + }
 + 
 + std::string Model_Theme::loadFileContent(std::string localFileName) {
-diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' B_GrubCustomizer_3~/src/Model/Theme.h B_GrubCustomizer_3/src/Model/Theme.h
---- B_GrubCustomizer_3~/src/Model/Theme.h	2013-12-26 20:54:15.000000000 +0100
-+++ B_GrubCustomizer_3/src/Model/Theme.h	2013-12-26 20:53:58.608000000 +0100
+diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' B_GrubCustomizer_3~/src/Model/Theme.cpp B_GrubCustomizer_3/src/Model/Theme.cpp
+--- B_GrubCustomizer_3~/src/Model/Theme.cpp	2013-12-26 20:54:15.000000000 +0100
++++ B_GrubCustomizer_3/src/Model/Theme.cpp	2013-12-26 20:53:58.608000000 +0100
 @@ -29,6 +29,7 @@
- #include <archive_entry.h>
+ #include <archive_Entry.cpp>
  #include <map>
  #include "../lib/assert.cpp"
 +#include <string>

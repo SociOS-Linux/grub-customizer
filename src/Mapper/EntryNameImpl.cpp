@@ -16,23 +16,36 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#include "EntryNameImpl.h"
+#ifndef ENTRYNAMEIMPL_H_
+#define ENTRYNAMEIMPL_H_
 
-std::string Mapper_EntryNameImpl::map(Model_Entry const* sourceEntry, std::string const& defaultName, bool treatSubmenuAsPlaceholder) {
-	assert(this->view != NULL);
-	std::string name;
-	bool is_other_entries_ph = sourceEntry && treatSubmenuAsPlaceholder ? sourceEntry->type == Model_Entry::SUBMENU || sourceEntry->type == Model_Entry::SCRIPT_ROOT : false;
-	bool is_plaintext = sourceEntry ? sourceEntry->type == Model_Entry::PLAINTEXT : false;
-	if (is_other_entries_ph) {
-		if (sourceEntry->type != Model_Entry::SCRIPT_ROOT) {
-			name = this->view->createNewEntriesPlaceholderString(sourceEntry->name);
+#include "EntryName.h"
+#include "../View/Main.h"
+#include "../View/Trait/ViewAware.h"
+#include "../lib/assert.cpp"
+
+class Mapper_EntryNameImpl : public Mapper_EntryName, public View_Trait_ViewAware<View_Main> {
+public:
+	std::string map(Model_Entry const* sourceEntry, std::string const& defaultName, bool treatSubmenuAsPlaceholder) {
+		assert(this->view != NULL);
+		std::string name;
+		bool is_other_entries_ph = sourceEntry && treatSubmenuAsPlaceholder ? sourceEntry->type == Model_Entry::SUBMENU || sourceEntry->type == Model_Entry::SCRIPT_ROOT : false;
+		bool is_plaintext = sourceEntry ? sourceEntry->type == Model_Entry::PLAINTEXT : false;
+		if (is_other_entries_ph) {
+			if (sourceEntry->type != Model_Entry::SCRIPT_ROOT) {
+				name = this->view->createNewEntriesPlaceholderString(sourceEntry->name);
+			} else {
+				name = this->view->createNewEntriesPlaceholderString("");
+			}
+		} else if (is_plaintext) {
+			name = this->view->createPlaintextString();
 		} else {
-			name = this->view->createNewEntriesPlaceholderString("");
+			name = defaultName;
 		}
-	} else if (is_plaintext) {
-		name = this->view->createPlaintextString();
-	} else {
-		name = defaultName;
+		return name;
 	}
-	return name;
-}
+
+};
+
+
+#endif /* ENTRYNAMEIMPL_H_ */

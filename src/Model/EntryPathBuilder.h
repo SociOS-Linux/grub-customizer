@@ -20,7 +20,7 @@
 #define ENTRY_PATH_BUILDER_INCLUDED
 #include <string>
 #include <list>
-#include "../Model/Entry.h"
+#include "../Model/Entry.cpp"
 
 class Model_EntryPathBilder {
 public:

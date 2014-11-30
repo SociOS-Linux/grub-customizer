@@ -24,7 +24,7 @@
 #include <sstream>
 #include "../config.h"
 
-#include "../Model/Env.h"
+#include "../Model/Env.cpp"
 
 #include "../View/Error.h"
 #include "../View/Trait/ViewAware.h"

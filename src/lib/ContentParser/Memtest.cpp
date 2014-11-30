@@ -20,7 +20,7 @@
 #define CONTENT_PARSER_MEMTEST_H_
 
 #include "../Regex.cpp"
-#include "../../Model/DeviceMap.h"
+#include "../../Model/DeviceMap.cpp"
 #include "Abstract.cpp"
 
 class ContentParser_Memtest : public ContentParser_Abstract {

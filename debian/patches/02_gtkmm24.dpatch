@@ -750,9 +750,9 @@ diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' 
  	}
  	return true;
  }
-diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' GrubCustomizer~/src/View/Gtk/Theme.h GrubCustomizer/src/View/Gtk/Theme.h
---- GrubCustomizer~/src/View/Gtk/Theme.h	2013-11-07 21:53:23.000000000 +0100
-+++ GrubCustomizer/src/View/Gtk/Theme.h	2013-11-14 21:17:11.959000000 +0100
+diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' GrubCustomizer~/src/View/Gtk/Theme.cpp GrubCustomizer/src/View/Gtk/Theme.cpp
+--- GrubCustomizer~/src/View/Gtk/Theme.cpp	2013-11-07 21:53:23.000000000 +0100
++++ GrubCustomizer/src/View/Gtk/Theme.cpp	2013-11-14 21:17:11.959000000 +0100
 @@ -127,6 +127,8 @@
  	Gtk::Button bttCopyBackground, bttRemoveBackground;
  	Gtk::Image imgRemoveBackground;

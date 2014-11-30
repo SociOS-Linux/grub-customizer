@@ -19,21 +19,21 @@
 #ifndef ENTRY_EDIT_CONTROLLER_INCLUDED
 #define ENTRY_EDIT_CONTROLLER_INCLUDED
 
-#include "../Model/ListCfg.h"
+#include "../Model/ListCfg.cpp"
 #include "../View/Main.h"
 #include <libintl.h>
 #include <locale.h>
 #include <sstream>
 #include "../config.h"
 
-#include "../Model/Env.h"
+#include "../Model/Env.cpp"
 
-#include "../Model/Installer.h"
+#include "../Model/Installer.cpp"
 #include "../View/EntryEditor.h"
 #include "../View/Trait/ViewAware.h"
 
-#include "../Model/ListCfg.h"
-#include "../Model/DeviceDataList.h"
+#include "../Model/ListCfg.cpp"
+#include "../Model/DeviceDataList.cpp"
 #include "../lib/ContentParserFactory.h"
 
 #include "../lib/Trait/LoggerAware.h"

@@ -16,127 +16,156 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#include "ThemeManager.h"
+#ifndef THEMEMANAGER_H_
+#define THEMEMANAGER_H_
 
-Model_ThemeManager::Model_ThemeManager()
-	: gotSaveErrors(false)
-{}
+#include <list>
+#include "Theme.cpp"
+#include "Env.cpp"
+#include "../lib/Exception.cpp"
 
-void Model_ThemeManager::load() {
-	this->themes.clear();
-	std::string path = this->env->output_config_dir + "/" + "themes";
+class Model_ThemeManager :
+	public Model_Env_Connection
+{
+	bool gotSaveErrors;
+	std::string saveErrors;
+public:
+	std::list<Model_Theme> themes;
+	std::list<Model_Theme> removedThemes;
+	Model_ThemeManager() : gotSaveErrors(false)
+	{}
 
-	DIR* dir = opendir(path.c_str());
-	if (dir) {
-		struct dirent *entry;
-		struct stat fileProperties;
-		while ((entry = readdir(dir))) {
-			if (std::string(entry->d_name) == "." || std::string(entry->d_name) == "..") {
-				continue;
+	void load() {
+		this->themes.clear();
+		std::string path = this->env->output_config_dir + "/" + "themes";
+	
+		DIR* dir = opendir(path.c_str());
+		if (dir) {
+			struct dirent *entry;
+			struct stat fileProperties;
+			while ((entry = readdir(dir))) {
+				if (std::string(entry->d_name) == "." || std::string(entry->d_name) == "..") {
+					continue;
+				}
+				std::string currentFileName = path + "/" + entry->d_name;
+				stat(currentFileName.c_str(), &fileProperties);
+				this->themes.push_back(Model_Theme(currentFileName, "", entry->d_name));
 			}
-			std::string currentFileName = path + "/" + entry->d_name;
-			stat(currentFileName.c_str(), &fileProperties);
-			this->themes.push_back(Model_Theme(currentFileName, "", entry->d_name));
-		}
-		closedir(dir);
-	} else {
-		throw FileReadException("cannot read the theme directory: " + path);
-	}
-}
-
-Model_Theme& Model_ThemeManager::getTheme(std::string const& name) {
-	for (std::list<Model_Theme>::iterator themeIter = this->themes.begin(); themeIter != this->themes.end(); themeIter++) {
-		if (themeIter->name == name) {
-			return *themeIter;
+			closedir(dir);
+		} else {
+			throw FileReadException("cannot read the theme directory: " + path);
 		}
 	}
-	throw ItemNotFoundException("getTheme: Theme not found: " + name, __FILE__, __LINE__);
-}
 
-bool Model_ThemeManager::themeExists(std::string const& name) {
-	try {
-		this->getTheme(name);
-		return true;
-	} catch (ItemNotFoundException const& e) {
-	}
-	return false;
-}
-
-std::string Model_ThemeManager::extractThemeName(std::string const& indexFile) {
-	std::string themePath = this->env->output_config_dir + "/themes";
-	if (indexFile.substr(0, themePath.size()) != themePath) {
-		throw InvalidStringFormatException("theme index file path must contain '" + themePath + "' given path: '" + indexFile + "'", __FILE__, __LINE__);
-	}
-	int slashPos = indexFile.find('/', themePath.size() + 1);
-	if (slashPos == -1) {
-		throw InvalidStringFormatException("theme index file path incomplete", __FILE__, __LINE__);
-	}
-
-	int themeNameSize = slashPos - themePath.size() - 1;
-
-	return indexFile.substr(themePath.size() + 1, themeNameSize);
-}
-
-std::string Model_ThemeManager::addThemePackage(std::string const& fileName) {
-	int lastSlashPos = fileName.find_last_of('/');
-	std::string name = lastSlashPos != -1 ? fileName.substr(lastSlashPos + 1) : fileName;
-	int firstDotPos = name.find_first_of('.');
-	name = firstDotPos != -1 ? name.substr(0, firstDotPos) : name;
-	while (this->themeExists(name)) {
-		name += "-";
-	}
-	this->themes.push_back(Model_Theme("", fileName, name));
-	return name;
-}
-
-void Model_ThemeManager::removeTheme(Model_Theme const& theme) {
-	for (std::list<Model_Theme>::iterator themeIter = this->themes.begin(); themeIter != this->themes.end(); themeIter++) {
-		if (&*themeIter == &theme) {
-			if (themeIter->directory != "") {
-				this->removedThemes.push_back(*themeIter);
+	Model_Theme& getTheme(std::string const& name) {
+		for (std::list<Model_Theme>::iterator themeIter = this->themes.begin(); themeIter != this->themes.end(); themeIter++) {
+			if (themeIter->name == name) {
+				return *themeIter;
 			}
-			this->themes.erase(themeIter);
-			break;
 		}
+		throw ItemNotFoundException("getTheme: Theme not found: " + name, __FILE__, __LINE__);
 	}
-}
 
-void Model_ThemeManager::save() {
-	this->saveErrors = "";
-	this->gotSaveErrors = false;
-
-	std::string dirName = this->env->output_config_dir + "/themes";
-	mkdir(dirName.c_str(), 0755);
-	for (std::list<Model_Theme>::iterator themeIter = this->removedThemes.begin(); themeIter != this->removedThemes.end(); themeIter++) {
-		themeIter->deleteThemeFiles(dirName);
+	bool themeExists(std::string const& name) {
+		try {
+			this->getTheme(name);
+			return true;
+		} catch (ItemNotFoundException const& e) {
+		}
+		return false;
 	}
-	this->removedThemes.clear();
 
-	bool themesSaved = false;
-	for (std::list<Model_Theme>::iterator themeIter = this->themes.begin(); themeIter != this->themes.end(); themeIter++) {
-		if (themeIter->isModified) {
-			try {
-				themeIter->save(dirName);
-			} catch (Exception const& e) {
-				this->saveErrors += e + "\n";
-				this->gotSaveErrors = true;
+	std::string extractThemeName(std::string const& indexFile) {
+		std::string themePath = this->env->output_config_dir + "/themes";
+		if (indexFile.substr(0, themePath.size()) != themePath) {
+			throw InvalidStringFormatException("theme index file path must contain '" + themePath + "' given path: '" + indexFile + "'", __FILE__, __LINE__);
+		}
+		int slashPos = indexFile.find('/', themePath.size() + 1);
+		if (slashPos == -1) {
+			throw InvalidStringFormatException("theme index file path incomplete", __FILE__, __LINE__);
+		}
+	
+		int themeNameSize = slashPos - themePath.size() - 1;
+	
+		return indexFile.substr(themePath.size() + 1, themeNameSize);
+	}
+
+	std::string addThemePackage(std::string const& fileName) {
+		int lastSlashPos = fileName.find_last_of('/');
+		std::string name = lastSlashPos != -1 ? fileName.substr(lastSlashPos + 1) : fileName;
+		int firstDotPos = name.find_first_of('.');
+		name = firstDotPos != -1 ? name.substr(0, firstDotPos) : name;
+		while (this->themeExists(name)) {
+			name += "-";
+		}
+		this->themes.push_back(Model_Theme("", fileName, name));
+		return name;
+	}
+
+	void removeTheme(Model_Theme const& theme) {
+		for (std::list<Model_Theme>::iterator themeIter = this->themes.begin(); themeIter != this->themes.end(); themeIter++) {
+			if (&*themeIter == &theme) {
+				if (themeIter->directory != "") {
+					this->removedThemes.push_back(*themeIter);
+				}
+				this->themes.erase(themeIter);
+				break;
 			}
-			themesSaved = true;
 		}
 	}
-	if (themesSaved) {
-		this->load();
+
+	void save() {
+		this->saveErrors = "";
+		this->gotSaveErrors = false;
+	
+		std::string dirName = this->env->output_config_dir + "/themes";
+		mkdir(dirName.c_str(), 0755);
+		for (std::list<Model_Theme>::iterator themeIter = this->removedThemes.begin(); themeIter != this->removedThemes.end(); themeIter++) {
+			themeIter->deleteThemeFiles(dirName);
+		}
+		this->removedThemes.clear();
+	
+		bool themesSaved = false;
+		for (std::list<Model_Theme>::iterator themeIter = this->themes.begin(); themeIter != this->themes.end(); themeIter++) {
+			if (themeIter->isModified) {
+				try {
+					themeIter->save(dirName);
+				} catch (Exception const& e) {
+					this->saveErrors += e + "\n";
+					this->gotSaveErrors = true;
+				}
+				themesSaved = true;
+			}
+		}
+		if (themesSaved) {
+			this->load();
+		}
 	}
-}
 
-std::string Model_ThemeManager::getThemePath() {
-	return this->env->output_config_dir + "/themes";
-}
+	std::string getThemePath() {
+		return this->env->output_config_dir + "/themes";
+	}
 
-bool Model_ThemeManager::hasSaveErrors() {
-	return this->gotSaveErrors;
-}
+	bool hasSaveErrors() {
+		return this->gotSaveErrors;
+	}
 
-std::string Model_ThemeManager::getSaveErrors() {
-	return this->saveErrors;
-}
+	std::string getSaveErrors() {
+		return this->saveErrors;
+	}
+
+};
+
+class Model_ThemeManager_Connection {
+protected:
+	Model_ThemeManager* themeManager;
+public:
+	Model_ThemeManager_Connection() : themeManager(NULL) {}
+
+	void setThemeManager(Model_ThemeManager& themeManager) {
+		this->themeManager = &themeManager;
+	}
+};
+
+
+#endif /* THEMEMANAGER_H_ */

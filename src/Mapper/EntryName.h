@@ -20,7 +20,7 @@
 #define ENTRYNAME_H_
 
 #include <string>
-#include "../Model/Entry.h"
+#include "../Model/Entry.cpp"
 
 class Mapper_EntryName {
 public:

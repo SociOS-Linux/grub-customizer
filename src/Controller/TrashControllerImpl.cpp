@@ -19,16 +19,16 @@
 #ifndef TRASHCONTROLLERIMPL_H_
 #define TRASHCONTROLLERIMPL_H_
 
-#include "../Model/ListCfg.h"
+#include "../Model/ListCfg.cpp"
 #include "../View/Main.h"
 #include <libintl.h>
 #include <locale.h>
 #include <sstream>
 #include "../config.h"
 
-#include "../Model/Env.h"
+#include "../Model/Env.cpp"
 
-#include "../Model/MountTable.h"
+#include "../Model/MountTable.cpp"
 
 #include "../View/Trash.h"
 
