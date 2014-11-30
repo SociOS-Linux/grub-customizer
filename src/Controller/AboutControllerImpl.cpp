@@ -16,20 +16,44 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#include "AboutControllerImpl.h"
+#ifndef ABOUTCONTROLLERIMPL_H_
+#define ABOUTCONTROLLERIMPL_H_
 
-AboutControllerImpl::AboutControllerImpl()
-	: ControllerAbstract("about")
+#include <libintl.h>
+#include <locale.h>
+#include <sstream>
+#include "../config.h"
+
+#include "../Model/Env.h"
+
+#include "../View/About.h"
+#include "../View/Trait/ViewAware.h"
+
+#include "../Controller/ControllerAbstract.cpp"
+
+#include "AboutController.h"
+
+class AboutControllerImpl :
+	public ControllerAbstract,
+	public AboutController,
+	public View_Trait_ViewAware<View_About>
 {
-}
-
-void AboutControllerImpl::showAction(){
-	this->logActionBegin("show");
-	try {
-		this->view->show();
-	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+public:
+	AboutControllerImpl() : ControllerAbstract("about")
+	{
 	}
-	this->logActionEnd();
-}
 
+	
+	void showAction() {
+		this->logActionBegin("show");
+		try {
+			this->view->show();
+		} catch (Exception const& e) {
+			this->getAllControllers().errorController->errorAction(e);
+		}
+		this->logActionEnd();
+	}
+
+};
+
+#endif

@@ -16,156 +16,196 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#include "TrashControllerImpl.h"
+#ifndef TRASHCONTROLLERIMPL_H_
+#define TRASHCONTROLLERIMPL_H_
 
-TrashControllerImpl::TrashControllerImpl()
-	: ControllerAbstract("trash")
+#include "../Model/ListCfg.h"
+#include "../View/Main.h"
+#include <libintl.h>
+#include <locale.h>
+#include <sstream>
+#include "../config.h"
+
+#include "../Model/Env.h"
+
+#include "../Model/MountTable.h"
+
+#include "../View/Trash.h"
+
+#include "ThreadController.h"
+#include "../View/EnvEditor.h"
+#include "../View/Trait/ViewAware.h"
+#include "../Mapper/EntryName.h"
+
+#include "../Controller/ControllerAbstract.cpp"
+
+#include "TrashController.h"
+#include "../Model/DeviceDataListInterface.h"
+#include "../lib/ContentParserFactory.h"
+#include "Helper/DeviceInfo.cpp"
+
+
+class TrashControllerImpl :
+	public ControllerAbstract,
+	public TrashController,
+	public View_Trait_ViewAware<View_Trash>,
+	public Model_ListCfg_Connection,
+	public Mapper_EntryName_Connection,
+	public Model_DeviceDataListInterface_Connection,
+	public ContentParserFactory_Connection,
+	public Model_Env_Connection
 {
-}
-
-void TrashControllerImpl::_refresh() {
-	assert(this->contentParserFactory != NULL);
-	assert(this->deviceDataList != NULL);
-
-	this->view->clear();
-
-	this->data = this->grublistCfg->getRemovedEntries();
-
-	this->_refreshView(NULL);
-}
-
-void TrashControllerImpl::_refreshView(Model_Rule* parent) {
-	std::list<Model_Rule>& list = parent ? parent->subRules : this->data;
-	for (std::list<Model_Rule>::iterator iter = list.begin(); iter != list.end(); iter++) {
-		Model_Script* script = iter->dataSource ? this->grublistCfg->repository.getScriptByEntry(*iter->dataSource) : NULL;
-
-		std::string name = iter->outputName;
-		if (iter->dataSource && script) {
-			name = this->entryNameMapper->map(iter->dataSource, name, iter->type != Model_Rule::SUBMENU);
-		}
-
-		View_Model_ListItem<Rule, Script> listItem;
-		listItem.name = name;
-		listItem.entryPtr = &*iter;
-		listItem.scriptPtr = NULL;
-		listItem.is_placeholder = iter->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER || iter->type == Model_Rule::PLAINTEXT;
-		listItem.is_submenu = iter->type == Model_Rule::SUBMENU;
-		listItem.scriptName = script ? script->name : "";
-		listItem.isVisible = true;
-		listItem.parentEntry = parent;
-		if (iter->dataSource) {
-			listItem.options = Controller_Helper_DeviceInfo::fetch(iter->dataSource->content, *this->contentParserFactory, *this->deviceDataList);
-		}
-
-		this->view->addItem(listItem);
-
-		if (iter->subRules.size()) {
-			this->_refreshView(&*iter);
-		}
-	}
-}
-
-// returns true, all selected entries are deletable
-bool TrashControllerImpl::_isDeletable(std::list<Rule*> const& selectedEntries) {
-	if (selectedEntries.size() == 0) {
-		return false;
+	void _refresh() {
+		assert(this->contentParserFactory != NULL);
+		assert(this->deviceDataList != NULL);
+	
+		this->view->clear();
+	
+		this->data = this->grublistCfg->getRemovedEntries();
+	
+		this->_refreshView(NULL);
 	}
 
-	for (std::list<Rule*>::const_iterator iter = selectedEntries.begin(); iter != selectedEntries.end(); iter++) {
-		if (Model_Rule::fromPtr(*iter).type != Model_Rule::NORMAL || Model_Rule::fromPtr(*iter).dataSource == NULL) {
-			return false;
-		}
-		Model_Script* script = this->grublistCfg->repository.getScriptByEntry(*Model_Rule::fromPtr(*iter).dataSource);
-		assert(script != NULL);
-		if (!script->isCustomScript) {
-			return false;
-		}
-	}
-
-	return true;
-}
-
-void TrashControllerImpl::updateAction(std::map<ViewOption, bool> const& viewOptions){
-	this->logActionBegin("update");
-	try {
-		this->view->setOptions(viewOptions);
-		this->_refresh();
-	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
-	}
-	this->logActionEnd();
-}
-
-void TrashControllerImpl::applyAction(){
-	this->logActionBegin("apply");
-	try {
-		std::list<Rule*> entries = view->getSelectedEntries();
-		this->getAllControllers().mainController->addEntriesAction(entries);
-	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
-	}
-	this->logActionEnd();
-}
-
-
-void TrashControllerImpl::hideAction() {
-	this->logActionBegin("hide");
-	try {
-		this->view->hide();
-	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
-	}
-	this->logActionEnd();
-}
-
-void TrashControllerImpl::deleteCustomEntriesAction() {
-	this->logActionBegin("delete-custom-entries");
-	try {
-		std::list<Rule*> deletableEntries = this->view->getSelectedEntries();
-		for (std::list<Rule*>::iterator iter = deletableEntries.begin(); iter != deletableEntries.end(); iter++) {
-			assert(Model_Rule::fromPtr(*iter).dataSource != NULL);
-			this->grublistCfg->deleteEntry(*Model_Rule::fromPtr(*iter).dataSource);
-		}
-		this->_refresh();
-		this->updateSelectionAction(std::list<Rule*>());
-	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
-	}
-	this->logActionEnd();
-}
-
-void TrashControllerImpl::selectEntriesAction(std::list<Entry*> const& entries) {
-	this->logActionBegin("select-entries");
-	try {
-		// first look for rules in local data, linking to the the given entries
-		std::list<Rule*> rules;
-		for (std::list<Entry*>::const_iterator entryIter = entries.begin(); entryIter != entries.end(); entryIter++) {
-			for (std::list<Model_Rule>::iterator ruleIter = this->data.begin(); ruleIter != this->data.end(); ruleIter++) {
-				if (*entryIter == ruleIter->dataSource) {
-					rules.push_back(&*ruleIter);
-				}
+	void _refreshView(Model_Rule* parent) {
+		std::list<Model_Rule>& list = parent ? parent->subRules : this->data;
+		for (std::list<Model_Rule>::iterator iter = list.begin(); iter != list.end(); iter++) {
+			Model_Script* script = iter->dataSource ? this->grublistCfg->repository.getScriptByEntry(*iter->dataSource) : NULL;
+	
+			std::string name = iter->outputName;
+			if (iter->dataSource && script) {
+				name = this->entryNameMapper->map(iter->dataSource, name, iter->type != Model_Rule::SUBMENU);
+			}
+	
+			View_Model_ListItem<Rule, Script> listItem;
+			listItem.name = name;
+			listItem.entryPtr = &*iter;
+			listItem.scriptPtr = NULL;
+			listItem.is_placeholder = iter->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER || iter->type == Model_Rule::PLAINTEXT;
+			listItem.is_submenu = iter->type == Model_Rule::SUBMENU;
+			listItem.scriptName = script ? script->name : "";
+			listItem.isVisible = true;
+			listItem.parentEntry = parent;
+			if (iter->dataSource) {
+				listItem.options = Controller_Helper_DeviceInfo::fetch(iter->dataSource->content, *this->contentParserFactory, *this->deviceDataList);
+			}
+	
+			this->view->addItem(listItem);
+	
+			if (iter->subRules.size()) {
+				this->_refreshView(&*iter);
 			}
 		}
-		this->view->selectEntries(rules);
-	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
 	}
-	this->logActionEnd();
-}
 
-void TrashControllerImpl::updateSelectionAction(std::list<Rule*> const& selectedEntries) {
-	this->logActionBegin("update-selection");
-	try {
-		if (selectedEntries.size()) {
-			this->getAllControllers().mainController->selectRulesAction(std::list<Rule*>());
-			this->view->setRestoreButtonSensitivity(true);
-			this->view->setDeleteButtonVisibility(this->_isDeletable(selectedEntries));
-		} else {
-			this->view->setRestoreButtonSensitivity(false);
-			this->view->setDeleteButtonVisibility(false);
+	bool _isDeletable(std::list<Rule*> const& selectedEntries) {
+		if (selectedEntries.size() == 0) {
+			return false;
 		}
-	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+	
+		for (std::list<Rule*>::const_iterator iter = selectedEntries.begin(); iter != selectedEntries.end(); iter++) {
+			if (Model_Rule::fromPtr(*iter).type != Model_Rule::NORMAL || Model_Rule::fromPtr(*iter).dataSource == NULL) {
+				return false;
+			}
+			Model_Script* script = this->grublistCfg->repository.getScriptByEntry(*Model_Rule::fromPtr(*iter).dataSource);
+			assert(script != NULL);
+			if (!script->isCustomScript) {
+				return false;
+			}
+		}
+	
+		return true;
 	}
-	this->logActionEnd();
-}
+
+	std::list<Model_Rule> data;
+public:
+	TrashControllerImpl() : ControllerAbstract("trash")
+	{
+	}
+
+	
+	void updateAction(std::map<ViewOption, bool> const& viewOptions) {
+		this->logActionBegin("update");
+		try {
+			this->view->setOptions(viewOptions);
+			this->_refresh();
+		} catch (Exception const& e) {
+			this->getAllControllers().errorController->errorAction(e);
+		}
+		this->logActionEnd();
+	}
+
+	void applyAction() {
+		this->logActionBegin("apply");
+		try {
+			std::list<Rule*> entries = view->getSelectedEntries();
+			this->getAllControllers().mainController->addEntriesAction(entries);
+		} catch (Exception const& e) {
+			this->getAllControllers().errorController->errorAction(e);
+		}
+		this->logActionEnd();
+	}
+
+	void hideAction() {
+		this->logActionBegin("hide");
+		try {
+			this->view->hide();
+		} catch (Exception const& e) {
+			this->getAllControllers().errorController->errorAction(e);
+		}
+		this->logActionEnd();
+	}
+
+	void deleteCustomEntriesAction() {
+		this->logActionBegin("delete-custom-entries");
+		try {
+			std::list<Rule*> deletableEntries = this->view->getSelectedEntries();
+			for (std::list<Rule*>::iterator iter = deletableEntries.begin(); iter != deletableEntries.end(); iter++) {
+				assert(Model_Rule::fromPtr(*iter).dataSource != NULL);
+				this->grublistCfg->deleteEntry(*Model_Rule::fromPtr(*iter).dataSource);
+			}
+			this->_refresh();
+			this->updateSelectionAction(std::list<Rule*>());
+		} catch (Exception const& e) {
+			this->getAllControllers().errorController->errorAction(e);
+		}
+		this->logActionEnd();
+	}
+
+	void selectEntriesAction(std::list<Entry*> const& entries) {
+		this->logActionBegin("select-entries");
+		try {
+			// first look for rules in local data, linking to the the given entries
+			std::list<Rule*> rules;
+			for (std::list<Entry*>::const_iterator entryIter = entries.begin(); entryIter != entries.end(); entryIter++) {
+				for (std::list<Model_Rule>::iterator ruleIter = this->data.begin(); ruleIter != this->data.end(); ruleIter++) {
+					if (*entryIter == ruleIter->dataSource) {
+						rules.push_back(&*ruleIter);
+					}
+				}
+			}
+			this->view->selectEntries(rules);
+		} catch (Exception const& e) {
+			this->getAllControllers().errorController->errorAction(e);
+		}
+		this->logActionEnd();
+	}
+
+	void updateSelectionAction(std::list<Rule*> const& selectedEntries) {
+		this->logActionBegin("update-selection");
+		try {
+			if (selectedEntries.size()) {
+				this->getAllControllers().mainController->selectRulesAction(std::list<Rule*>());
+				this->view->setRestoreButtonSensitivity(true);
+				this->view->setDeleteButtonVisibility(this->_isDeletable(selectedEntries));
+			} else {
+				this->view->setRestoreButtonSensitivity(false);
+				this->view->setDeleteButtonVisibility(false);
+			}
+		} catch (Exception const& e) {
+			this->getAllControllers().errorController->errorAction(e);
+		}
+		this->logActionEnd();
+	}
+};
+
+#endif

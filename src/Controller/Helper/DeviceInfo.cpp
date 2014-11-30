@@ -16,23 +16,34 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#include "DeviceInfo.h"
+#ifndef DEVICEINFO_H_
+#define DEVICEINFO_H_
 
-std::map<std::string, std::string> Controller_Helper_DeviceInfo::fetch(std::string const& menuEntryData, ContentParserFactory& contentParserFactory, Model_DeviceDataListInterface const& deviceDataList) {
-	std::map<std::string, std::string> options;
-	try {
-		options = contentParserFactory.create(menuEntryData)->getOptions();
-		if (options.find("partition_uuid") != options.end()) {
-			// add device path
-			for (Model_DeviceDataListInterface::const_iterator iter = deviceDataList.begin(); iter != deviceDataList.end(); iter++) {
-				if (iter->second.find("UUID") != iter->second.end() && iter->second.at("UUID") == options["partition_uuid"]) {
-					options["_deviceName"] = iter->first;
-					break;
+#include "../../lib/ContentParserFactory.h"
+#include "../../Model/DeviceDataListInterface.h"
+
+class Controller_Helper_DeviceInfo {
+public:
+	static std::map<std::string, std::string> fetch(std::string const& menuEntryData, ContentParserFactory& contentParserFactory, Model_DeviceDataListInterface const& deviceDataList) {
+		std::map<std::string, std::string> options;
+		try {
+			options = contentParserFactory.create(menuEntryData)->getOptions();
+			if (options.find("partition_uuid") != options.end()) {
+				// add device path
+				for (Model_DeviceDataListInterface::const_iterator iter = deviceDataList.begin(); iter != deviceDataList.end(); iter++) {
+					if (iter->second.find("UUID") != iter->second.end() && iter->second.at("UUID") == options["partition_uuid"]) {
+						options["_deviceName"] = iter->first;
+						break;
+					}
 				}
 			}
+		} catch (ParserNotFoundException const& e) {
+			// nothing to do
 		}
-	} catch (ParserNotFoundException const& e) {
-		// nothing to do
+		return options;
 	}
-	return options;
-}
+
+};
+
+
+#endif /* DEVICEINFO_H_ */

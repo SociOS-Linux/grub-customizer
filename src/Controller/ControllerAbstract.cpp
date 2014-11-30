@@ -16,10 +16,20 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#include "ControllerAbstract.h"
+#ifndef CONTROLLER_ABSTRACT_H_
+#define CONTROLLER_ABSTRACT_H_
 
-ControllerAbstract::ControllerAbstract(std::string const& controllerName) {
-	this->setControllerName(controllerName);
-}
+#include "ControllerCollection.h"
+#include "../lib/assert.h"
+#include "../lib/Trait/ActionLoggerAware.h"
+
+class ControllerAbstract : public Trait_ActionLoggerAware, public ControllerCollection_Connection {
+public:
+	ControllerAbstract(std::string const& controllerName) {
+		this->setControllerName(controllerName);
+	}
+
+};
 
 
+#endif /* ABSTRACT_H_ */

@@ -16,63 +16,97 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#include "InstallerControllerImpl.h"
+#ifndef INSTALLERCONTROLLERIMPL_H_
+#define INSTALLERCONTROLLERIMPL_H_
 
-InstallerControllerImpl::InstallerControllerImpl()
-	: ControllerAbstract("installer")
+#include <libintl.h>
+#include <locale.h>
+#include <sstream>
+#include "../config.h"
+
+#include "../Model/Env.h"
+
+#include "../Model/Installer.h"
+#include "../View/Installer.h"
+#include "../View/Trait/ViewAware.h"
+
+#include "ThreadController.h"
+
+#include "../Controller/ControllerAbstract.cpp"
+#include "../Controller/Trait/ThreadControllerAware.h"
+
+#include "../lib/Exception.h"
+
+#include "InstallerController.h"
+
+
+class InstallerControllerImpl :
+	public ControllerAbstract,
+	public InstallerController,
+	public View_Trait_ViewAware<View_Installer>,
+	public Trait_ThreadControllerAware,
+	public Model_Installer_Connection,
+	public Model_Env_Connection
 {
-}
-
-
-ThreadController& InstallerControllerImpl::getThreadController() {
-	if (this->threadController == NULL) {
-		throw ConfigException("missing ThreadController", __FILE__, __LINE__);
-	}
-	return *this->threadController;
-}
-
-void InstallerControllerImpl::showAction(){
-	this->logActionBegin("show");
-	try {
-		view->show();
-	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
-	}
-	this->logActionEnd();
-}
-
-void InstallerControllerImpl::installGrubAction(std::string device){
-	this->logActionBegin("install-grub");
-	try {
-		this->getThreadController().startGrubInstallThread(device);
-	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
-	}
-	this->logActionEnd();
-}
-
-void InstallerControllerImpl::installGrubThreadedAction(std::string device) {
-	this->logActionBeginThreaded("install-grub-threaded");
-	try {
-		this->env->activeThreadCount++;
-		installer->threadable_install(device);
-		this->env->activeThreadCount--;
-		if (this->env->activeThreadCount == 0 && this->env->quit_requested) {
-			this->getAllControllers().mainController->exitAction(true);
+public:
+	ThreadController& getThreadController() {
+		if (this->threadController == NULL) {
+			throw ConfigException("missing ThreadController", __FILE__, __LINE__);
 		}
-	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorThreadedAction(e);
+		return *this->threadController;
 	}
-	this->logActionEndThreaded();
-}
 
-void InstallerControllerImpl::showMessageAction(std::string const& msg){
-	this->logActionBegin("show-message");
-	try {
-		view->showMessageGrubInstallCompleted(msg);
-	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+
+	InstallerControllerImpl() : ControllerAbstract("installer")
+	{
 	}
-	this->logActionEnd();
-}
 
+	
+	void showAction() {
+		this->logActionBegin("show");
+		try {
+			view->show();
+		} catch (Exception const& e) {
+			this->getAllControllers().errorController->errorAction(e);
+		}
+		this->logActionEnd();
+	}
+
+	void installGrubAction(std::string device) {
+		this->logActionBegin("install-grub");
+		try {
+			this->getThreadController().startGrubInstallThread(device);
+		} catch (Exception const& e) {
+			this->getAllControllers().errorController->errorAction(e);
+		}
+		this->logActionEnd();
+	}
+
+	void installGrubThreadedAction(std::string device) {
+		this->logActionBeginThreaded("install-grub-threaded");
+		try {
+			this->env->activeThreadCount++;
+			installer->threadable_install(device);
+			this->env->activeThreadCount--;
+			if (this->env->activeThreadCount == 0 && this->env->quit_requested) {
+				this->getAllControllers().mainController->exitAction(true);
+			}
+		} catch (Exception const& e) {
+			this->getAllControllers().errorController->errorThreadedAction(e);
+		}
+		this->logActionEndThreaded();
+	}
+
+	void showMessageAction(std::string const& msg) {
+		this->logActionBegin("show-message");
+		try {
+			view->showMessageGrubInstallCompleted(msg);
+		} catch (Exception const& e) {
+			this->getAllControllers().errorController->errorAction(e);
+		}
+		this->logActionEnd();
+	}
+
+};
+
+#endif

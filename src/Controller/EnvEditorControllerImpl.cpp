@@ -16,173 +16,211 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#include "EnvEditorControllerImpl.h"
+#ifndef ENVEDITORCONTROLLERIMPL_H_
+#define ENVEDITORCONTROLLERIMPL_H_
 
-EnvEditorControllerImpl::EnvEditorControllerImpl()
-	: ControllerAbstract("env-editor"),
-	 mountTable(NULL),
-	 deviceMap(NULL)
+#include <libintl.h>
+#include <locale.h>
+#include <sstream>
+#include "../config.h"
+
+#include "../Model/Env.h"
+
+#include "../Model/MountTable.h"
+
+#include "../View/EnvEditor.h"
+#include "../View/Trait/ViewAware.h"
+
+#include "ControllerAbstract.cpp"
+
+#include "EnvEditorController.h"
+#include "../Model/DeviceMap.h"
+
+
+class EnvEditorControllerImpl :
+	public ControllerAbstract,
+	public EnvEditorController,
+	public View_Trait_ViewAware<View_EnvEditor>,
+	public Model_Env_Connection
 {
-}
+	Model_MountTable* mountTable;
+	Model_DeviceMap* deviceMap;
 
-void EnvEditorControllerImpl::setMountTable(Model_MountTable& mountTable){
-	this->mountTable = &mountTable;
-}
-
-void EnvEditorControllerImpl::setDeviceMap(Model_DeviceMap& deviceMap) {
-	this->deviceMap = &deviceMap;
-}
-
-void EnvEditorControllerImpl::showAction(bool resetPartitionChooser) {
-	this->logActionBegin("show");
-	try {
-		this->view->setEnvSettings(this->env->getProperties(), this->env->getRequiredProperties(), this->env->getValidProperties());
-		this->view->setRootDeviceName(this->env->rootDeviceName);
-		this->view->show(resetPartitionChooser);
-	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+public:
+	void setMountTable(Model_MountTable& mountTable) {
+		this->mountTable = &mountTable;
 	}
-	this->logActionEnd();
-}
 
-
-void EnvEditorControllerImpl::generateSubmountpointSelection(std::string const& prefix){
-	this->view->removeAllSubmountpoints();
-
-	//create new submountpoint checkbuttons
-	for (Model_MountTable::const_iterator iter = mountTable->begin(); iter != mountTable->end(); iter++){
-		if (iter->mountpoint.length() > prefix.length() && iter->mountpoint.substr(0, prefix.length()) == prefix
-		 && iter->mountpoint != prefix + "/dev"
-		 && iter->mountpoint != prefix + "/proc"
-		 && iter->mountpoint != prefix + "/sys"
-		) {
-			this->view->addSubmountpoint(iter->mountpoint.substr(prefix.length()), iter->isMounted);
-		}
+	void setDeviceMap(Model_DeviceMap& deviceMap) {
+		this->deviceMap = &deviceMap;
 	}
-}
 
-void EnvEditorControllerImpl::switchPartitionAction(std::string const& newPartition) {
-	this->logActionBegin("switch-partition");
-	try {
-		if (this->mountTable->getEntryByMountpoint(PARTCHOOSER_MOUNTPOINT).isMounted) {
-			this->mountTable->umountAll(PARTCHOOSER_MOUNTPOINT);
-			this->mountTable->clear(PARTCHOOSER_MOUNTPOINT);
+
+	void showAction(bool resetPartitionChooser = false) {
+		this->logActionBegin("show");
+		try {
+			this->view->setEnvSettings(this->env->getProperties(), this->env->getRequiredProperties(), this->env->getValidProperties());
+			this->view->setRootDeviceName(this->env->rootDeviceName);
+			this->view->show(resetPartitionChooser);
+		} catch (Exception const& e) {
+			this->getAllControllers().errorController->errorAction(e);
 		}
-		this->view->removeAllSubmountpoints();
-		std::string selectedDevice = newPartition;
-		if (newPartition != "") {
-			mkdir(PARTCHOOSER_MOUNTPOINT, 0755);
+		this->logActionEnd();
+	}
+
+
+	EnvEditorControllerImpl() : ControllerAbstract("env-editor"),
+		 mountTable(NULL),
+		 deviceMap(NULL)
+	{
+	}
+
+	
+	//partition chooser
+	void mountSubmountpointAction(std::string const& submountpoint) {
+		this->logActionBegin("mount-submountpoint");
+		try {
 			try {
-				mountTable->clear(PARTCHOOSER_MOUNTPOINT);
-				mountTable->mountRootFs(selectedDevice, PARTCHOOSER_MOUNTPOINT);
-				this->env->init(env->burgMode ? Model_Env::BURG_MODE : Model_Env::GRUB_MODE, PARTCHOOSER_MOUNTPOINT);
-				this->generateSubmountpointSelection(PARTCHOOSER_MOUNTPOINT);
-				this->showAction();
+				this->mountTable->getEntryRefByMountpoint(PARTCHOOSER_MOUNTPOINT + submountpoint).mount();
+			} catch (MountException const& e){
+				this->view->showErrorMessage(View_EnvEditor::SUB_MOUNT_FAILED);
+				this->view->setSubmountpointSelectionState(submountpoint, false);
+				this->view->show();
+			} catch (SystemException const& e){
+				this->view->setSubmountpointSelectionState(submountpoint, false);
+				this->view->show();
 			}
-			catch (MountException const& e) {
-				this->view->showErrorMessage(View_EnvEditor::MOUNT_FAILED);
-				this->switchPartitionAction("");
-			}
-			catch (MissingFstabException const& e) {
-				this->view->showErrorMessage(View_EnvEditor::MOUNT_ERR_NO_FSTAB);
-				mountTable->getEntryRefByMountpoint(PARTCHOOSER_MOUNTPOINT).umount();
-				this->switchPartitionAction("");
-			}
-		} else {
-			this->env->init(env->burgMode ? Model_Env::BURG_MODE : Model_Env::GRUB_MODE, selectedDevice);
-			this->showAction(true);
+		} catch (Exception const& e) {
+			this->getAllControllers().errorController->errorAction(e);
 		}
-	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->logActionEnd();
 	}
-	this->logActionEnd();
-}
 
-void EnvEditorControllerImpl::switchBootloaderTypeAction(int newTypeIndex) {
-	this->logActionBegin("switch-bootloader-type");
-	try {
-		this->env->init(newTypeIndex == 0 ? Model_Env::GRUB_MODE : Model_Env::BURG_MODE, this->env->cfg_dir_prefix);
-		this->showAction();
-	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
-	}
-	this->logActionEnd();
-}
-
-void EnvEditorControllerImpl::updateGrubEnvOptionsAction() {
-	this->logActionBegin("update-grub-env-options");
-	try {
-		this->env->setProperties(this->view->getEnvSettings());
-		this->showAction();
-	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
-	}
-	this->logActionEnd();
-}
-
-void EnvEditorControllerImpl::applyAction(bool saveConfig){
-	this->logActionBegin("apply");
-	try {
-		this->getAllControllers().settingsController->hideAction();
-		this->getAllControllers().trashController->hideAction();
-		bool isBurgMode = this->view->getBootloaderType() == 1;
-		view->hide();
-
-		if (saveConfig) {
-			this->env->save();
-		}
-		this->deviceMap->clearCache();
-		this->getAllControllers().mainController->reInitAction(isBurgMode);
-	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
-	}
-	this->logActionEnd();
-}
-
-void EnvEditorControllerImpl::exitAction() {
-	this->logActionBegin("exit");
-	try {
-		this->getAllControllers().mainController->exitAction(true);
-	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
-	}
-	this->logActionEnd();
-}
-
-void EnvEditorControllerImpl::mountSubmountpointAction(std::string const& submountpoint){
-	this->logActionBegin("mount-submountpoint");
-	try {
+	void umountSubmountpointAction(std::string const& submountpoint) {
+		this->logActionBegin("umount-submountpoint");
 		try {
-			this->mountTable->getEntryRefByMountpoint(PARTCHOOSER_MOUNTPOINT + submountpoint).mount();
-		} catch (MountException const& e){
-			this->view->showErrorMessage(View_EnvEditor::SUB_MOUNT_FAILED);
-			this->view->setSubmountpointSelectionState(submountpoint, false);
-			this->view->show();
-		} catch (SystemException const& e){
-			this->view->setSubmountpointSelectionState(submountpoint, false);
-			this->view->show();
+			try {
+				this->mountTable->getEntryRefByMountpoint(PARTCHOOSER_MOUNTPOINT + submountpoint).umount();
+			} catch (UMountException const& e){
+				this->view->showErrorMessage(View_EnvEditor::SUB_UMOUNT_FAILED);
+				this->view->setSubmountpointSelectionState(submountpoint, true);
+				this->view->show();
+			} catch (SystemException const& e){
+				this->view->setSubmountpointSelectionState(submountpoint, true);
+				this->view->show();
+			}
+		} catch (Exception const& e) {
+			this->getAllControllers().errorController->errorAction(e);
 		}
-	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
+		this->logActionEnd();
 	}
-	this->logActionEnd();
-}
 
-void EnvEditorControllerImpl::umountSubmountpointAction(std::string const& submountpoint){
-	this->logActionBegin("umount-submountpoint");
-	try {
-		try {
-			this->mountTable->getEntryRefByMountpoint(PARTCHOOSER_MOUNTPOINT + submountpoint).umount();
-		} catch (UMountException const& e){
-			this->view->showErrorMessage(View_EnvEditor::SUB_UMOUNT_FAILED);
-			this->view->setSubmountpointSelectionState(submountpoint, true);
-			this->view->show();
-		} catch (SystemException const& e){
-			this->view->setSubmountpointSelectionState(submountpoint, true);
-			this->view->show();
+	void generateSubmountpointSelection(std::string const& prefix) {
+		this->view->removeAllSubmountpoints();
+	
+		//create new submountpoint checkbuttons
+		for (Model_MountTable::const_iterator iter = mountTable->begin(); iter != mountTable->end(); iter++){
+			if (iter->mountpoint.length() > prefix.length() && iter->mountpoint.substr(0, prefix.length()) == prefix
+			 && iter->mountpoint != prefix + "/dev"
+			 && iter->mountpoint != prefix + "/proc"
+			 && iter->mountpoint != prefix + "/sys"
+			) {
+				this->view->addSubmountpoint(iter->mountpoint.substr(prefix.length()), iter->isMounted);
+			}
 		}
-	} catch (Exception const& e) {
-		this->getAllControllers().errorController->errorAction(e);
 	}
-	this->logActionEnd();
-}
+
+
+	// env editor
+	void switchPartitionAction(std::string const& newPartition) {
+		this->logActionBegin("switch-partition");
+		try {
+			if (this->mountTable->getEntryByMountpoint(PARTCHOOSER_MOUNTPOINT).isMounted) {
+				this->mountTable->umountAll(PARTCHOOSER_MOUNTPOINT);
+				this->mountTable->clear(PARTCHOOSER_MOUNTPOINT);
+			}
+			this->view->removeAllSubmountpoints();
+			std::string selectedDevice = newPartition;
+			if (newPartition != "") {
+				mkdir(PARTCHOOSER_MOUNTPOINT, 0755);
+				try {
+					mountTable->clear(PARTCHOOSER_MOUNTPOINT);
+					mountTable->mountRootFs(selectedDevice, PARTCHOOSER_MOUNTPOINT);
+					this->env->init(env->burgMode ? Model_Env::BURG_MODE : Model_Env::GRUB_MODE, PARTCHOOSER_MOUNTPOINT);
+					this->generateSubmountpointSelection(PARTCHOOSER_MOUNTPOINT);
+					this->showAction();
+				}
+				catch (MountException const& e) {
+					this->view->showErrorMessage(View_EnvEditor::MOUNT_FAILED);
+					this->switchPartitionAction("");
+				}
+				catch (MissingFstabException const& e) {
+					this->view->showErrorMessage(View_EnvEditor::MOUNT_ERR_NO_FSTAB);
+					mountTable->getEntryRefByMountpoint(PARTCHOOSER_MOUNTPOINT).umount();
+					this->switchPartitionAction("");
+				}
+			} else {
+				this->env->init(env->burgMode ? Model_Env::BURG_MODE : Model_Env::GRUB_MODE, selectedDevice);
+				this->showAction(true);
+			}
+		} catch (Exception const& e) {
+			this->getAllControllers().errorController->errorAction(e);
+		}
+		this->logActionEnd();
+	}
+
+	void switchBootloaderTypeAction(int newTypeIndex) {
+		this->logActionBegin("switch-bootloader-type");
+		try {
+			this->env->init(newTypeIndex == 0 ? Model_Env::GRUB_MODE : Model_Env::BURG_MODE, this->env->cfg_dir_prefix);
+			this->showAction();
+		} catch (Exception const& e) {
+			this->getAllControllers().errorController->errorAction(e);
+		}
+		this->logActionEnd();
+	}
+
+	void updateGrubEnvOptionsAction() {
+		this->logActionBegin("update-grub-env-options");
+		try {
+			this->env->setProperties(this->view->getEnvSettings());
+			this->showAction();
+		} catch (Exception const& e) {
+			this->getAllControllers().errorController->errorAction(e);
+		}
+		this->logActionEnd();
+	}
+
+	void applyAction(bool saveConfig) {
+		this->logActionBegin("apply");
+		try {
+			this->getAllControllers().settingsController->hideAction();
+			this->getAllControllers().trashController->hideAction();
+			bool isBurgMode = this->view->getBootloaderType() == 1;
+			view->hide();
+	
+			if (saveConfig) {
+				this->env->save();
+			}
+			this->deviceMap->clearCache();
+			this->getAllControllers().mainController->reInitAction(isBurgMode);
+		} catch (Exception const& e) {
+			this->getAllControllers().errorController->errorAction(e);
+		}
+		this->logActionEnd();
+	}
+
+
+	void exitAction() {
+		this->logActionBegin("exit");
+		try {
+			this->getAllControllers().mainController->exitAction(true);
+		} catch (Exception const& e) {
+			this->getAllControllers().errorController->errorAction(e);
+		}
+		this->logActionEnd();
+	}
+
+};
+
+#endif

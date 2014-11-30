@@ -16,38 +16,65 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#include "ErrorControllerImpl.h"
-#include "ThreadController.h"
+#ifndef ERRORCONTROLLERIMPL_H_
+#define ERRORCONTROLLERIMPL_H_
 
-ErrorControllerImpl::ErrorControllerImpl()
-	: ControllerAbstract("error"),
-	  applicationStarted(false)
+#include <libintl.h>
+#include <locale.h>
+#include <sstream>
+#include "../config.h"
+
+#include "../Model/Env.h"
+
+#include "../View/Error.h"
+#include "../View/Trait/ViewAware.h"
+
+#include "../Controller/ControllerAbstract.cpp"
+#include "../Controller/Trait/ThreadControllerAware.h"
+
+#include "ErrorController.h"
+
+class ErrorControllerImpl :
+	public ControllerAbstract,
+	public ErrorController,
+	public View_Trait_ViewAware<View_Error>,
+	public Trait_ThreadControllerAware
 {
-}
+	bool applicationStarted;
+public:
+	void setApplicationStarted(bool val) {
+		this->applicationStarted = val;
+	}
 
 
-void ErrorControllerImpl::setApplicationStarted(bool val) {
-	this->applicationStarted = val;
-}
+	ErrorControllerImpl() : ControllerAbstract("error"),
+		  applicationStarted(false)
+	{
+	}
 
-void ErrorControllerImpl::errorAction(Exception const& e){
-	this->log(e, Logger::EXCEPTION);
-	this->view->showErrorMessage(e, this->applicationStarted);
-}
-
-void ErrorControllerImpl::errorThreadedAction(Exception const& e) {
-	if (this->threadController) {
-		this->threadController->showException(e);
-	} else {
+	
+	void errorAction(Exception const& e) {
 		this->log(e, Logger::EXCEPTION);
-		exit(1);
+		this->view->showErrorMessage(e, this->applicationStarted);
 	}
-}
 
-void ErrorControllerImpl::quitAction() {
-	if (this->applicationStarted) {
-		this->getAllControllers().mainController->exitAction(true);
-	} else {
-		exit(2);
+	void errorThreadedAction(Exception const& e) {
+		if (this->threadController) {
+			this->threadController->showException(e);
+		} else {
+			this->log(e, Logger::EXCEPTION);
+			exit(1);
+		}
 	}
-}
+
+	void quitAction() {
+		if (this->applicationStarted) {
+			this->getAllControllers().mainController->exitAction(true);
+		} else {
+			exit(2);
+		}
+	}
+
+};
+
+#endif
