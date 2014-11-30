@@ -141,7 +141,6 @@ src/View/Error.h -text
 src/View/Gtk/About.cpp -text
 src/View/Gtk/Element/List.h -text
 src/View/Gtk/Element/PartitionChooser.cpp -text
-src/View/Gtk/Element/PartitionChooser.h -text
 src/View/Gtk/EntryEditor.cpp -text
 src/View/Gtk/EnvEditor.cpp -text
 src/View/Gtk/Error.cpp -text
@@ -149,9 +148,7 @@ src/View/Gtk/Installer.cpp -text
 src/View/Gtk/Main.cpp -text
 src/View/Gtk/Settings.cpp -text
 src/View/Gtk/Theme.cpp -text
-src/View/Gtk/Theme.h -text
 src/View/Gtk/Trash.cpp -text
-src/View/Gtk/Trash.h -text
 src/View/Installer.h -text
 src/View/Main.h -text
 src/View/Model/ListItem.h -text

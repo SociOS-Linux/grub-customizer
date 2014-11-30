@@ -26,7 +26,7 @@
 #include "../../Controller/EntryEditController.h"
 #include "../../Controller/Trait/ControllerAware.h"
 #include "../../Model/DeviceDataListInterface.h"
-#include "Element/PartitionChooser.h"
+#include "Element/PartitionChooser.cpp"
 
 class View_Gtk_EntryEditor :
 	public View_EntryEditor,

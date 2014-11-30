@@ -23,7 +23,7 @@
 #include "../../lib/Trait/LoggerAware.h"
 #include "../../Controller/Trait/ControllerAware.h"
 #include "../EnvEditor.h"
-#include "Element/PartitionChooser.h"
+#include "Element/PartitionChooser.cpp"
 #include "../../Model/DeviceDataListInterface.h"
 #include "../../Controller/EnvEditorController.h"
 
