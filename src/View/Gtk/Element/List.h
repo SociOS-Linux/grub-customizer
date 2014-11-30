@@ -20,9 +20,9 @@
 #define LIST_H_
 #include <gtkmm.h>
 #include "../../../lib/Type.h"
-#include "../../../lib/Exception.h"
+#include "../../../lib/Exception.cpp"
 #include "../../Model/ListItem.h"
-#include "../../../lib/str_replace.h"
+#include "../../../lib/str_replace.cpp"
 #include <libintl.h>
 
 template<typename TItem, typename TWrapper>

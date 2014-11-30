@@ -22,9 +22,9 @@
 #include <map>
 #include <string>
 #include "Env.h"
-#include "../lib/csv.h"
+#include "../lib/csv.cpp"
 #include <dirent.h>
-#include "../lib/assert.h"
+#include "../lib/assert.cpp"
 #include "../lib/Trait/LoggerAware.h"
 
 class Model_ScriptSourceMap :

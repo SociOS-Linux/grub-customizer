@@ -40,14 +40,14 @@
 #include "../Controller/MainController.h"
 #include "../Controller/Trait/ControllerAware.h"
 
-#include "../lib/assert.h"
+#include "../lib/assert.cpp"
 
 #include "../lib/Mutex.h"
 #include "../lib/Trait/LoggerAware.h"
 
-#include "../lib/Exception.h"
-#include "../lib/ArrayStructure.h"
-#include "../lib/trim.h"
+#include "../lib/Exception.cpp"
+#include "../lib/ArrayStructure.cpp"
+#include "../lib/trim.cpp"
 #include "ScriptSourceMap.h"
 #include <stack>
 #include <algorithm>

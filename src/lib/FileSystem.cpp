@@ -16,36 +16,50 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#include "FileSystem.h"
+#ifndef FILESYSTEM_H_
+#define FILESYSTEM_H_
+#include <sys/stat.h>
+#include <dirent.h>
+#include <string>
+#include "Exception.cpp"
+#include <fstream>
+#include <list>
+#include <algorithm>
 
-void FileSystem::copy(std::string const& srcPath, std::string const& destPath, bool recursive, std::list<std::string> ignoreList) {
-	if (std::find(ignoreList.begin(), ignoreList.end(), srcPath) != ignoreList.end()) {
-		return;
-	}
-	struct stat fileProperties;
-	stat(srcPath.c_str(), &fileProperties);
-
-	if (S_ISDIR(fileProperties.st_mode)) {
-		if (!recursive) {
-			throw LogicException(srcPath + " is an directory but copying shouldn't be recursive (recursive=false)", __FILE__, __LINE__);
+class FileSystem {
+public:
+	void copy(std::string const& srcPath, std::string const& destPath, bool recursive = false, std::list<std::string> ignoreList = std::list<std::string>() ) {
+		if (std::find(ignoreList.begin(), ignoreList.end(), srcPath) != ignoreList.end()) {
+			return;
 		}
-		DIR* dir = opendir(srcPath.c_str());
-		if (dir) {
-			struct dirent *entry;
-			mkdir(destPath.c_str(), fileProperties.st_mode);
-			while ((entry = readdir(dir))) {
-				if (std::string(entry->d_name) == "." || std::string(entry->d_name) == "..") {
-					continue;
-				}
-				this->copy(srcPath + "/" + entry->d_name, destPath + "/" + entry->d_name, recursive, ignoreList);
+		struct stat fileProperties;
+		stat(srcPath.c_str(), &fileProperties);
+	
+		if (S_ISDIR(fileProperties.st_mode)) {
+			if (!recursive) {
+				throw LogicException(srcPath + " is an directory but copying shouldn't be recursive (recursive=false)", __FILE__, __LINE__);
 			}
-			closedir(dir);
+			DIR* dir = opendir(srcPath.c_str());
+			if (dir) {
+				struct dirent *entry;
+				mkdir(destPath.c_str(), fileProperties.st_mode);
+				while ((entry = readdir(dir))) {
+					if (std::string(entry->d_name) == "." || std::string(entry->d_name) == "..") {
+						continue;
+					}
+					this->copy(srcPath + "/" + entry->d_name, destPath + "/" + entry->d_name, recursive, ignoreList);
+				}
+				closedir(dir);
+			} else {
+				throw FileReadException("cannot read directory: " + srcPath, __FILE__, __LINE__);
+			}
 		} else {
-			throw FileReadException("cannot read directory: " + srcPath, __FILE__, __LINE__);
+			std::ifstream src(srcPath.c_str(), std::ios::binary);
+			std::ofstream dst(destPath.c_str(), std::ios::binary);
+			dst << src.rdbuf();
 		}
-	} else {
-		std::ifstream src(srcPath.c_str(), std::ios::binary);
-		std::ofstream dst(destPath.c_str(), std::ios::binary);
-		dst << src.rdbuf();
 	}
-}
+
+};
+
+#endif /* FILESYSTEM_H_ */

@@ -19,7 +19,7 @@
 #ifndef THREADCONTROLLER_H_INCLUDED
 #define THREADCONTROLLER_H_INCLUDED
 #include <string>
-#include "../lib/Exception.h"
+#include "../lib/Exception.cpp"
 #include "../lib/Type.h"
 
 class ThreadController {

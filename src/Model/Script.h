@@ -26,10 +26,10 @@
 #include <unistd.h>
 #include "../Model/EntryPathFollower.h"
 #include "../lib/Trait/LoggerAware.h"
-#include "../lib/md5.h"
+#include "../lib/md5.cpp"
 #include "../config.h"
-#include "../lib/Exception.h"
-#include "../lib/ArrayStructure.h"
+#include "../lib/Exception.cpp"
+#include "../lib/ArrayStructure.cpp"
 #include "../lib/Type.h"
 
 struct Model_Script : public Model_EntryPathFollower, public Trait_LoggerAware, public Script {

@@ -24,7 +24,7 @@
 #include <gtkmm/main.h>
 #include "../ControllerCollection.h"
 #include "../../lib/Trait/LoggerAware.h"
-#include "../../lib/assert.h"
+#include "../../lib/assert.cpp"
 #include "../../lib/Type.h"
 
 class GLib_ThreadController : public ThreadController, public Trait_LoggerAware {

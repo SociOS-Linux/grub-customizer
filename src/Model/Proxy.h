@@ -21,12 +21,12 @@
 #include "Rule.h"
 #include "Script.h"
 #include <sys/stat.h>
-#include "../lib/assert.h"
+#include "../lib/assert.cpp"
 #include <unistd.h>
 #include <map>
 #include "EntryPathBuilderImpl.h"
-#include "../lib/Exception.h"
-#include "../lib/ArrayStructure.h"
+#include "../lib/Exception.cpp"
+#include "../lib/ArrayStructure.cpp"
 #include "ProxyScriptData.h"
 #include "../lib/Type.h"
 

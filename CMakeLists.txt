@@ -63,49 +63,10 @@ add_executable(grub-customizer
 	src/Model/SmartFileHandle.cpp
 	src/Mapper/EntryNameImpl.cpp
 	src/main/gtk-client.cpp
-	src/lib/md5.cpp
-	src/lib/str_replace.cpp
-	src/lib/ContentParser/FactoryImpl.cpp
-	src/lib/ContentParser/Linux.cpp
-	src/lib/ContentParser/Chainloader.cpp
-	src/lib/ContentParser/LinuxIso.cpp
-	src/lib/ContentParser/Memtest.cpp
-	src/lib/ContentParser/Abstract.cpp
-	src/lib/Mutex/GLib.cpp
-	src/Controller/GLib/ThreadController.cpp
-	src/lib/Logger/Stream.cpp
-	src/lib/regex.cpp
-	src/View/Gtk/Element/PartitionChooser.cpp
-	src/View/Gtk/About.cpp
-	src/View/Gtk/EntryEditor.cpp
-	src/View/Gtk/EnvEditor.cpp
-	src/View/Gtk/Installer.cpp
-	src/View/Gtk/Main.cpp
-	src/View/Gtk/Settings.cpp
-	src/View/Gtk/Trash.cpp
-	src/View/Gtk/Error.cpp
-	src/Controller/EntryEditControllerImpl.cpp
-	src/Controller/MainControllerImpl.cpp
-	src/Controller/ControllerAbstract.cpp
-	src/Controller/SettingsControllerImpl.cpp
-	src/Controller/EnvEditorControllerImpl.cpp
-	src/Controller/TrashControllerImpl.cpp
-	src/Controller/InstallerControllerImpl.cpp
-	src/Controller/AboutControllerImpl.cpp
-	src/Controller/ErrorControllerImpl.cpp
-	src/Controller/ThemeControllerImpl.cpp
-	src/lib/Exception.cpp
-	src/lib/assert.cpp
-	src/lib/ArrayStructure.cpp
-	src/lib/trim.cpp
-	src/Controller/Helper/DeviceInfo.cpp
-	src/lib/csv.cpp
 	src/Model/ScriptSourceMap.cpp
-	src/View/Gtk/Theme.cpp
 	src/Model/ThemeFile.cpp
 	src/Model/Theme.cpp
 	src/Model/ThemeManager.cpp
-	src/lib/FileSystem.cpp
 )
 
 
@@ -115,8 +76,6 @@ add_executable(grubcfg-proxy
 	src/Model/Script.cpp
 	src/Model/Proxy.cpp
 	src/main/proxy.cpp
-	src/lib/md5.cpp
-	src/lib/str_replace.cpp
 	# multi:
 	src/Model/ListCfg.cpp
 	src/Model/Env.cpp
@@ -127,13 +86,7 @@ add_executable(grubcfg-proxy
 	src/Model/PscriptnameTranslator.cpp
 	src/Model/ProxyScriptData.cpp
 	src/Model/EntryPathBuilderImpl.cpp
-	src/lib/Exception.cpp
-	src/lib/assert.cpp
-	src/lib/ArrayStructure.cpp
-	src/lib/trim.cpp
 	src/Model/ScriptSourceMap.cpp
-	src/lib/csv.cpp
-	src/lib/FileSystem.cpp
 )
 
 target_link_libraries(grub-customizer 

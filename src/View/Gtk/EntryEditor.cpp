@@ -20,7 +20,7 @@
 #define ENTRYEDITDLGGTK_H_
 #include "../EntryEditor.h"
 #include "../../lib/Trait/LoggerAware.h"
-#include "../../lib/str_replace.h"
+#include "../../lib/str_replace.cpp"
 #include <libintl.h>
 #include <gtkmm.h>
 #include "../../Controller/EntryEditController.h"

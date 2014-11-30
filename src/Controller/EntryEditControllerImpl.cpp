@@ -40,7 +40,7 @@
 #include "../Controller/ControllerAbstract.cpp"
 #include "../Controller/Trait/ThreadControllerAware.h"
 
-#include "../lib/Exception.h"
+#include "../lib/Exception.cpp"
 
 
 class EntryEditControllerImpl :

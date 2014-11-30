@@ -21,7 +21,7 @@
 #include "ContentParser.h"
 #include <list>
 #include <string>
-#include "Exception.h"
+#include "Exception.cpp"
 
 class ContentParserFactory {
 public:

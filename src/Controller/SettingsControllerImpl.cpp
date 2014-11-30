@@ -44,7 +44,7 @@
 
 #include "../lib/Trait/LoggerAware.h"
 
-#include "../lib/Exception.h"
+#include "../lib/Exception.cpp"
 
 #include "SettingsController.h"
 

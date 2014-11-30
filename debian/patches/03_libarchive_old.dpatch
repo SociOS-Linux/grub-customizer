@@ -107,7 +107,7 @@ diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' 
 @@ -29,6 +29,7 @@
  #include <archive_entry.h>
  #include <map>
- #include "../lib/assert.h"
+ #include "../lib/assert.cpp"
 +#include <string>
  
  struct Model_Theme {

@@ -16,9 +16,12 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#include "trim.h"
+#ifndef TRIM_H_
+#define TRIM_H_
 
-std::string ltrim(std::string string, std::string const& chars) {
+#include <string>
+
+std::string ltrim(std::string string, std::string const& chars = " \t\n\r") {
 	int first = string.find_first_not_of(chars);
 	if (first != -1) {
 		return string.substr(first);
@@ -27,13 +30,15 @@ std::string ltrim(std::string string, std::string const& chars) {
 	}
 }
 
-std::string rtrim(std::string string, std::string const& chars) {
+std::string rtrim(std::string string, std::string const& chars = " \t\n\r") {
 	string = std::string(string.rbegin(), string.rend());
 	string = ltrim(string, chars);
 	string = std::string(string.rbegin(), string.rend());
 	return string;
 }
 
-std::string trim(std::string string, std::string const& chars) {
+std::string trim(std::string string, std::string const& chars = " \t\n\r") {
 	return rtrim(ltrim(string, chars));
 }
+
+#endif /* TRIM_H_ */

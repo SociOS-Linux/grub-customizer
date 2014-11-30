@@ -27,7 +27,7 @@
 #include "AboutController.h"
 #include "ErrorController.h"
 #include "ThemeController.h"
-#include "../lib/assert.h"
+#include "../lib/assert.cpp"
 
 struct ControllerCollection {
 	EntryEditController* entryEditController;

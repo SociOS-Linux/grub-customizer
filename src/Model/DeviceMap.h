@@ -20,7 +20,7 @@
 #define GRUBDEVICEMAP_H_
 #include "SmartFileHandle.h"
 #include "Env.h"
-#include "../lib/regex.h"
+#include "../lib/Regex.cpp"
 #include <map>
 #include <unistd.h>
 

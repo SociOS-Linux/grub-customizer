@@ -22,9 +22,9 @@
 #include <string>
 #include <list>
 #include "../lib/Trait/LoggerAware.h"
-#include "../lib/str_replace.h"
-#include "../lib/ArrayStructure.h"
-#include "../lib/trim.h"
+#include "../lib/str_replace.cpp"
+#include "../lib/ArrayStructure.cpp"
+#include "../lib/trim.cpp"
 #include "../lib/Type.h"
 
 struct Model_Entry_Row {

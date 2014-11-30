@@ -16,16 +16,28 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#include "GLib.h"
+#ifndef GLIBMUTEX_H_
+#define GLIBMUTEX_H_
+#include "../Mutex.h"
+#include <glibmm/thread.h>
+#include "../Trait/LoggerAware.h"
 
-void Mutex_GLib::lock() {
-	this->mutex.lock();
-}
+class Mutex_GLib : public Mutex, public Trait_LoggerAware {
+protected:
+	Glib::Mutex mutex;
+public:
+	void lock() {
+		this->mutex.lock();
+	}
 
-bool Mutex_GLib::trylock() {
-	return this->mutex.trylock();
-}
+	bool trylock() {
+		return this->mutex.trylock();
+	}
 
-void Mutex_GLib::unlock() {
-	this->mutex.unlock();
-}
+	void unlock() {
+		this->mutex.unlock();
+	}
+
+};
+
+#endif /* GLIBMUTEX_H_ */

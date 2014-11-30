@@ -16,7 +16,9 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#include "str_replace.h"
+#ifndef STR_REPLACE_H_
+#define STR_REPLACE_H_
+#include <string>
 
 std::string str_replace(const std::string &search, const std::string &replace, std::string subject) {
 	size_t pos = 0;
@@ -30,3 +32,5 @@ std::string str_replace(const std::string &search, const std::string &replace, s
 std::string escapeXml(std::string const& input) {
 	return str_replace("<", "&lt;", str_replace("&", "&amp;", input));
 }
+
+#endif /* STR_REPLACE_H_ */

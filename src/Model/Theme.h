@@ -24,11 +24,11 @@
 #include <sys/stat.h>
 #include <dirent.h>
 #include <fstream>
-#include "../lib/Exception.h"
+#include "../lib/Exception.cpp"
 #include <archive.h>
 #include <archive_entry.h>
 #include <map>
-#include "../lib/assert.h"
+#include "../lib/assert.cpp"
 
 struct Model_Theme {
 	std::string directory;

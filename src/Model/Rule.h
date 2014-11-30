@@ -23,8 +23,8 @@
 #include "../Model/EntryPathBuilder.h"
 #include "../Model/EntryPathFollower.h"
 #include <ostream>
-#include "../lib/md5.h"
-#include "../lib/ArrayStructure.h"
+#include "../lib/md5.cpp"
+#include "../lib/ArrayStructure.cpp"
 #include "../lib/Type.h"
 
 struct Model_Rule : public Rule {

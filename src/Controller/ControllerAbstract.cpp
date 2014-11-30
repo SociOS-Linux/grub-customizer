@@ -20,7 +20,7 @@
 #define CONTROLLER_ABSTRACT_H_
 
 #include "ControllerCollection.h"
-#include "../lib/assert.h"
+#include "../lib/assert.cpp"
 #include "../lib/Trait/ActionLoggerAware.h"
 
 class ControllerAbstract : public Trait_ActionLoggerAware, public ControllerCollection_Connection {

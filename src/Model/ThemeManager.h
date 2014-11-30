@@ -22,7 +22,7 @@
 #include <list>
 #include "Theme.h"
 #include "Env.h"
-#include "../lib/Exception.h"
+#include "../lib/Exception.cpp"
 
 class Model_ThemeManager :
 	public Model_Env_Connection

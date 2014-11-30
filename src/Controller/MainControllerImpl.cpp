@@ -42,7 +42,7 @@
 #include "../lib/Trait/LoggerAware.h"
 #include "../Mapper/EntryName.h"
 
-#include "../lib/Exception.h"
+#include "../lib/Exception.cpp"
 #include "../View/Model/ListItem.h"
 
 #include "Helper/DeviceInfo.cpp"

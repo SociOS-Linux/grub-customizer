@@ -26,7 +26,7 @@
 #include "../../lib/Trait/LoggerAware.h"
 #include "../../Controller/SettingsController.h"
 #include "../../Controller/Trait/ControllerAware.h"
-#include "../../lib/assert.h"
+#include "../../lib/assert.cpp"
 
 
 class View_Gtk_Settings :

@@ -16,66 +16,85 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#include "Stream.h"
+#ifndef STREAM_LOGGER_H_
+#define STREAM_LOGGER_H_
+#include "../Logger.h"
+#include <ostream>
+#include <string>
 
-Logger_Stream::Logger_Stream(std::ostream& stream) : stream(&stream), actionStackDepth(0), logLevel(LOG_NOTHING) {}
+class Logger_Stream : public Logger {
+	std::ostream* stream;
+	int actionStackDepth;
+public:
+	enum LogLevel {
+		LOG_NOTHING,
+		LOG_DEBUG_ONLY,
+		LOG_IMPORTANT,
+		LOG_EVENT,
+		LOG_VERBOSE
+	} logLevel;
+	Logger_Stream(std::ostream& stream) : stream(&stream), actionStackDepth(0), logLevel(LOG_NOTHING) {}
 
-void Logger_Stream::log(std::string const& message, Logger::Priority prio) {
-	if (prio != ERROR && (
-		this->logLevel == LOG_NOTHING ||
-		(this->logLevel == LOG_DEBUG_ONLY && prio != Logger::DEBUG && prio != Logger::EXCEPTION) ||
-		(this->logLevel == LOG_IMPORTANT && prio != Logger::IMPORTANT_EVENT) ||
-		(this->logLevel == LOG_EVENT && prio != Logger::EVENT && prio != Logger::IMPORTANT_EVENT))) {
-		return;
-	}
-	if (prio == Logger::IMPORTANT_EVENT) {
-		*this->stream << " *** ";
-	} else if (prio == Logger::EVENT) {
-		*this->stream << "   * ";
-	} else {
-		*this->stream << "     ";
-	}
-
-	if (prio == Logger::INFO) {
-		*this->stream << "[";
-	}
-	*this->stream << message;
-	if (prio == Logger::INFO) {
-		*this->stream << "]";
-	}
-
-	*this->stream << std::endl;
-}
-
-void Logger_Stream::logActionBegin(std::string const& controller, std::string const& action) {
-	if (this->logLevel == LOG_DEBUG_ONLY || this->logLevel == LOG_VERBOSE) {
-		actionStackDepth++;
-		for (int i = 0; i < actionStackDepth; i++) {
-			*this->stream << " ";
+	void log(std::string const& message, Logger::Priority prio) {
+		if (prio != ERROR && (
+			this->logLevel == LOG_NOTHING ||
+			(this->logLevel == LOG_DEBUG_ONLY && prio != Logger::DEBUG && prio != Logger::EXCEPTION) ||
+			(this->logLevel == LOG_IMPORTANT && prio != Logger::IMPORTANT_EVENT) ||
+			(this->logLevel == LOG_EVENT && prio != Logger::EVENT && prio != Logger::IMPORTANT_EVENT))) {
+			return;
 		}
-		*this->stream << "-> " << controller << "/" << action << std::endl;
-	}
-}
-void Logger_Stream::logActionEnd() {
-	if (this->logLevel == LOG_DEBUG_ONLY || this->logLevel == LOG_VERBOSE) {
-		if (actionStackDepth) {
-			actionStackDepth--;
+		if (prio == Logger::IMPORTANT_EVENT) {
+			*this->stream << " *** ";
+		} else if (prio == Logger::EVENT) {
+			*this->stream << "   * ";
+		} else {
+			*this->stream << "     ";
 		}
-		if (actionStackDepth == 0) {
-			*this->stream << std::endl;
+	
+		if (prio == Logger::INFO) {
+			*this->stream << "[";
+		}
+		*this->stream << message;
+		if (prio == Logger::INFO) {
+			*this->stream << "]";
+		}
+	
+		*this->stream << std::endl;
+	}
+
+	void logActionBegin(std::string const& controller, std::string const& action) {
+		if (this->logLevel == LOG_DEBUG_ONLY || this->logLevel == LOG_VERBOSE) {
+			actionStackDepth++;
+			for (int i = 0; i < actionStackDepth; i++) {
+				*this->stream << " ";
+			}
+			*this->stream << "-> " << controller << "/" << action << std::endl;
 		}
 	}
-}
 
+	void logActionEnd() {
+		if (this->logLevel == LOG_DEBUG_ONLY || this->logLevel == LOG_VERBOSE) {
+			if (actionStackDepth) {
+				actionStackDepth--;
+			}
+			if (actionStackDepth == 0) {
+				*this->stream << std::endl;
+			}
+		}
+	}
 
-void Logger_Stream::logActionBeginThreaded(std::string const& controller, std::string const& action) {
-	// not yet implemented
-}
+	void logActionBeginThreaded(std::string const& controller, std::string const& action) {
+		// not yet implemented
+	}
 
-void Logger_Stream::logActionEndThreaded() {
-	// not yet implemented
-}
+	void logActionEndThreaded() {
+		// not yet implemented
+	}
 
-void Logger_Stream::setLogLevel(LogLevel level) {
-	this->logLevel = level;
-}
+	void setLogLevel(LogLevel level) {
+		this->logLevel = level;
+	}
+
+};
+
+#endif

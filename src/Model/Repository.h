@@ -25,7 +25,7 @@
 #include <dirent.h>
 #include <map>
 #include "../lib/Trait/LoggerAware.h"
-#include "../lib/ArrayStructure.h"
+#include "../lib/ArrayStructure.cpp"
 
 struct Model_Repository : public std::list<Model_Script>, public Trait_LoggerAware {
 	std::list<Model_Script> trash;

@@ -26,7 +26,7 @@
 #include "../../Controller/ThemeController.h"
 #include "../../Controller/Trait/ControllerAware.h"
 #include "../../lib/Trait/LoggerAware.h"
-#include "../../lib/assert.h"
+#include "../../lib/assert.cpp"
 
 //a gtkmm combobox with colorful foreground and background. useful to choose an item of a predefined color set
 class View_Gtk_Theme_ColorChooser : public Gtk::ComboBox, public View_ColorChooser {

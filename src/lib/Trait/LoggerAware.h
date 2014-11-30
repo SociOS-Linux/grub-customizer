@@ -20,7 +20,7 @@
 #define TRAIT_LOGGERAWARE_INCLUDED
 
 #include "../Logger.h"
-#include "../Exception.h"
+#include "../Exception.cpp"
 
 class Trait_LoggerAware {
 protected:

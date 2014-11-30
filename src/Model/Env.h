@@ -28,10 +28,10 @@
 #include <sys/stat.h>
 #include "../lib/Trait/LoggerAware.h"
 #include "SettingsStore.h"
-#include "../lib/Exception.h"
-#include "../lib/ArrayStructure.h"
+#include "../lib/Exception.cpp"
+#include "../lib/ArrayStructure.cpp"
 #include "../lib/Type.h"
-#include "../lib/FileSystem.h"
+#include "../lib/FileSystem.cpp"
 
 struct Model_Env : public Trait_LoggerAware {
 public:

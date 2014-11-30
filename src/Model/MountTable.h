@@ -23,7 +23,7 @@
 #include <string>
 #include <cstdlib>
 #include "../lib/Trait/LoggerAware.h"
-#include "../lib/Exception.h"
+#include "../lib/Exception.cpp"
 
 
 struct Model_MountTable_Mountpoint {

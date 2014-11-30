@@ -15,8 +15,12 @@
  * along with this program; if not, write to the Free Software
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
+#ifndef MD5_H_INCLUDED
+#define MD5_H_INCLUDED
 
-#include "md5.h"
+#include <openssl/md5.h>
+#include <string>
+#include "assert.cpp"
 
 std::string md5(std::string const& input) {
 	unsigned char buf[16];
@@ -44,3 +48,6 @@ std::string md5(std::string const& input) {
 	assert(result.length() == 32);
 	return result;
 }
+
+
+#endif /* MD5_H_ */

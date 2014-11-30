@@ -19,7 +19,7 @@
 #ifndef ERRORCONTROLLER_H_
 #define ERRORCONTROLLER_H_
 
-#include "../lib/Exception.h"
+#include "../lib/Exception.cpp"
 
 class ErrorController {
 public:

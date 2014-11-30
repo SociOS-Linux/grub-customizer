@@ -23,7 +23,7 @@
 #include "../lib/Trait/LoggerAware.h"
 #include "SettingsStore.h"
 #include <sstream>
-#include "../lib/str_replace.h"
+#include "../lib/str_replace.cpp"
 #include <map>
 
 class Model_SettingsManagerData :

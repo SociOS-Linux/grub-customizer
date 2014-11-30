@@ -22,7 +22,7 @@
 #include "EntryName.h"
 #include "../View/Main.h"
 #include "../View/Trait/ViewAware.h"
-#include "../lib/assert.h"
+#include "../lib/assert.cpp"
 
 class Mapper_EntryNameImpl : public Mapper_EntryName, public View_Trait_ViewAware<View_Main> {
 public:

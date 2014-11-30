@@ -16,103 +16,145 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#include "ArrayStructure.h"
+#ifndef ARRAYSTRUCTURE_H_
+#define ARRAYSTRUCTURE_H_
+#include <string>
+#include <map>
+#include <list>
+#include <sstream>
+#include <iostream>
+#include "str_replace.cpp"
 
-ArrayStructureItem::ArrayStructureItem(std::string const& value) : isArray(false), value(value), isString(true) {}
+struct ArrayStructureItem {
+public:
+	ArrayStructureItem(std::string const& value = "") : isArray(false), value(value), isString(true) {}
+	
+	bool isArray;
+	bool isString;
 
-std::string const& ArrayStructureItem::operator=(std::string const& value) {
-	this->isArray = false;
-	this->isString = true;
-	return this->value = value;
-}
+	std::string const& operator=(std::string const& value) {
+		this->isArray = false;
+		this->isString = true;
+		return this->value = value;
+	}
 
-std::string const& ArrayStructureItem::operator=(double const& value) {
-	std::ostringstream str;
-	str << value;
-	this->isArray = false;
-	this->isString = false;
-	this->value = str.str();
-	return this->value;
-}
-
-std::string const& ArrayStructureItem::operator=(bool const& value) {
-	this->isArray = false;
-	this->isString = false;
-	this->value = value ? "true" : "false";
-	return this->value;
-}
-
-std::string const& ArrayStructureItem::operator=(void const* value) {
-	this->isArray = false;
-	this->isString = false;
-	if (value == NULL) {
-		this->value = "NULL";
-	} else {
+	std::string const& operator=(double const& value) {
 		std::ostringstream str;
 		str << value;
+		this->isArray = false;
+		this->isString = false;
 		this->value = str.str();
+		return this->value;
 	}
-	return this->value;
-}
 
-std::string const& ArrayStructureItem::operator=(char const* value) {
-	this->isArray = false;
-	this->isString = true;
-	return this->value = value;
-}
+	std::string const& operator=(bool const& value) {
+		this->isArray = false;
+		this->isString = false;
+		this->value = value ? "true" : "false";
+		return this->value;
+	}
 
-std::string const& ArrayStructureItem::operator=(int value) {
-	std::ostringstream str;
-	str << value;
-	this->isArray = false;
-	this->isString = false;
-	this->value = str.str();
-	return this->value;
-}
+	std::string const& operator=(void const* value) {
+		this->isArray = false;
+		this->isString = false;
+		if (value == NULL) {
+			this->value = "NULL";
+		} else {
+			std::ostringstream str;
+			str << value;
+			this->value = str.str();
+		}
+		return this->value;
+	}
 
-std::map<std::string, ArrayStructureItem> const& ArrayStructureItem::operator=(std::map<std::string, ArrayStructureItem> const& value) {
-	this->isArray = true;
-	this->isString = false;
-	this->subItems = value;
-	return value;
-}
+	std::string const& operator=(char const* value) {
+		this->isArray = false;
+		this->isString = true;
+		return this->value = value;
+	}
 
-ArrayStructureItem& ArrayStructureItem::operator[] (std::string const& key) {
-	this->isArray = true;
-	this->isString = false;
-	return this->subItems[key];
-}
-
-ArrayStructureItem& ArrayStructureItem::operator[] (int const& key) {
-	std::ostringstream str;
-	str << key;
-	ArrayStructureItem newItem;
-	this->isArray = true;
-	this->isString = false;
-	return this->subItems[str.str()];
-}
-
-ArrayStructure::ArrayStructure() {}
-
-ArrayStructure::ArrayStructure(std::list<std::string> const& source) {
-	int i = 0;
-	for (std::list<std::string>::const_iterator iter = source.begin(); iter != source.end(); iter++) {
+	std::string const& operator=(int value) {
 		std::ostringstream str;
-		str << i;
+		str << value;
+		this->isArray = false;
+		this->isString = false;
+		this->value = str.str();
+		return this->value;
+	}
+
+	std::map<std::string, ArrayStructureItem> const& operator=(std::map<std::string, ArrayStructureItem> const& value) {
+		this->isArray = true;
+		this->isString = false;
+		this->subItems = value;
+		return value;
+	}
+
+	ArrayStructureItem& operator[] (std::string const& key) {
+		this->isArray = true;
+		this->isString = false;
+		return this->subItems[key];
+	}
+
+	ArrayStructureItem& operator[] (int const& key) {
+		std::ostringstream str;
+		str << key;
 		ArrayStructureItem newItem;
-		newItem.value = *iter;
-		(*this)[str.str()] = newItem;
-		i++;
+		this->isArray = true;
+		this->isString = false;
+		return this->subItems[str.str()];
 	}
-}
+	std::string value;
+	std::map<std::string, ArrayStructureItem> subItems;
+};
 
-ArrayStructure::ArrayStructure(std::map<std::string, std::string> const& source) {
-	for (std::map<std::string, std::string>::const_iterator iter = source.begin(); iter != source.end(); iter++) {
-		(*this)[iter->first] = iter->second;
+/**
+ * used to dump objects implementing a cast to ArrayStructure
+ *
+ * Example of usage:
+ * 	ArrayStructure test;
+ *  test["x"] = "Model_Proxy";
+ *  test["x"]["y"];
+ *  test["x"]["z"] = (Foo*)NULL;
+ *  test["x"]["a"] = 10.4;
+ *  test["x"]["bool1"] = true;
+ *  test["x"]["bool2"] = false;
+ *  test["a"] = "eins";
+ *  test["null-test"] = (Foo*)NULL;
+
+ *  ArrayStructure subStructure;
+ *  subStructure["BLUBB"] = true;
+ *  test["SUB"] = subStructure;
+
+ *  var_dump(test)
+
+ */
+
+class ArrayStructure : public std::map<std::string, ArrayStructureItem> {
+public:
+	ArrayStructure() {}
+
+	ArrayStructure(std::list<std::string> const& source) {
+		int i = 0;
+		for (std::list<std::string>::const_iterator iter = source.begin(); iter != source.end(); iter++) {
+			std::ostringstream str;
+			str << i;
+			ArrayStructureItem newItem;
+			newItem.value = *iter;
+			(*this)[str.str()] = newItem;
+			i++;
+		}
 	}
-}
 
-void var_dump(std::map<std::string, ArrayStructureItem> const& data, std::string prefix, unsigned int indent) {
+	ArrayStructure(std::map<std::string, std::string> const& source) {
+		for (std::map<std::string, std::string>::const_iterator iter = source.begin(); iter != source.end(); iter++) {
+			(*this)[iter->first] = iter->second;
+		}
+	}
+
+};
+
+// prefix "!" = use prefixes
+void var_dump(std::map<std::string, ArrayStructureItem> const& data, std::string prefix = "", unsigned int indent = 0) {
 	if (prefix[0] == '!') {
 		indent = 2;
 	}
@@ -150,3 +192,6 @@ void var_dump(std::map<std::string, ArrayStructureItem> const& data, std::string
 		}
 	}
 }
+
+
+#endif /* ARRAYSTRUCTURE_H_ */

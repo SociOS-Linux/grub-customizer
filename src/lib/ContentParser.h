@@ -20,7 +20,7 @@
 #define CONTENTPARSER_H_
 #include <map>
 #include <string>
-#include "Exception.h"
+#include "Exception.cpp"
 
 class ContentParser {
 public:
