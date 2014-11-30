@@ -16,21 +16,33 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#include "Error.h"
+#ifndef ERRORGTK_H_
+#define ERRORGTK_H_
+#include <gtkmm.h>
+#include <libintl.h>
+#include "../Error.h"
+#include "../../Controller/ErrorController.h"
+#include "../../Controller/Trait/ControllerAware.h"
 
-View_Gtk_Error::View_Gtk_Error()
-{
-}
+class View_Gtk_Error : public View_Error, public Trait_ControllerAware<ErrorController> {
+public:
+	View_Gtk_Error() {
 
-void View_Gtk_Error::showErrorMessage(std::string const& errorMessage, bool allowContinue) {
-	Gtk::MessageDialog msgDlg(gettext("An error occurred"), false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_NONE, true);
-	msgDlg.set_secondary_text(gettext("please Inform the author about this problem. The following information could be helpful:") + std::string("\n\n") + errorMessage);
-	msgDlg.set_title(gettext("An error occurred"));
-	msgDlg.add_button(Gtk::Stock::QUIT, Gtk::RESPONSE_CLOSE);
-	if (allowContinue) {
-		msgDlg.add_button(gettext("continue (risk data loss)"), Gtk::RESPONSE_CANCEL);
 	}
-	if (msgDlg.run() == Gtk::RESPONSE_CLOSE) {
-		this->controller->quitAction();
+
+	void showErrorMessage(std::string const& errorMessage, bool allowContinue) {
+		Gtk::MessageDialog msgDlg(gettext("An error occurred"), false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_NONE, true);
+		msgDlg.set_secondary_text(gettext("please Inform the author about this problem. The following information could be helpful:") + std::string("\n\n") + errorMessage);
+		msgDlg.set_title(gettext("An error occurred"));
+		msgDlg.add_button(Gtk::Stock::QUIT, Gtk::RESPONSE_CLOSE);
+		if (allowContinue) {
+			msgDlg.add_button(gettext("continue (risk data loss)"), Gtk::RESPONSE_CANCEL);
+		}
+		if (msgDlg.run() == Gtk::RESPONSE_CLOSE) {
+			this->controller->quitAction();
+		}
 	}
-}
+};
+
+
+#endif /* ERRORGTK_H_ */

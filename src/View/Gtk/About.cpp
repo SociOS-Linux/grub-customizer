@@ -16,29 +16,40 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#include "About.h"
+#ifndef GC_ABOUNTDIALOG_GTK_INCLUDED
+#define GC_ABOUNTDIALOG_GTK_INCLUDED
+#include <gtkmm.h>
+#include "../../config.h"
+#include <libintl.h>
+#include "../About.h"
+#include "../../lib/Trait/LoggerAware.h"
 
-void View_Gtk_About::signal_about_dlg_response(int response_id){
-	if (Gtk::RESPONSE_CLOSE)
-		this->hide();
-}
+class View_Gtk_About : public Gtk::AboutDialog, public View_About, public Trait_LoggerAware {
+	Glib::ustring appName, appVersion;
+	std::vector<Glib::ustring> authors;
+	std::vector<Glib::ustring> artists;
 
-View_Gtk_About::View_Gtk_About()
-	: appName("Grub Customizer"), appVersion(GC_VERSION)
-{
-	this->set_name(appName);
-	this->set_version(appVersion);
-	this->authors.push_back("Daniel Richter https://launchpad.net/~danielrichter2007");
-	this->set_authors(authors);
+	void signal_about_dlg_response(int response_id){
+		if (Gtk::RESPONSE_CLOSE)
+			this->hide();
+	}
+public:
+	View_Gtk_About()
+		: appName("Grub Customizer"), appVersion(GC_VERSION)
+	{
+		this->set_name(appName);
+		this->set_version(appVersion);
+		this->authors.push_back("Daniel Richter https://launchpad.net/~danielrichter2007");
+		this->set_authors(authors);
 
-	this->set_icon_name("grub-customizer");
-	this->set_logo_icon_name("grub-customizer");
-	this->set_comments(gettext("Grub Customizer is a graphical interface to configure the grub2/burg settings"));
+		this->set_icon_name("grub-customizer");
+		this->set_logo_icon_name("grub-customizer");
+		this->set_comments(gettext("Grub Customizer is a graphical interface to configure the grub2/burg settings"));
 
-	this->artists.push_back("Zelozelos");
-	this->set_artists(artists);
+		this->artists.push_back("Zelozelos");
+		this->set_artists(artists);
 
-	this->set_translator_credits(
+		this->set_translator_credits(
 "Adam Czabara https://launchpad.net/~adam-czabara\n\
 Adolfo Jayme Barrientos https://launchpad.net/~fitoschido\n\
 Alexander Gorishnyak https://launchpad.net/~kefir500\n\
@@ -149,10 +160,13 @@ Yuriy Oleksiychuk https://launchpad.net/~yurolex\n\
 Zbyněk Schwarz https://launchpad.net/~tsbook\n\
 zeugma https://launchpad.net/~sunder67\n\
 Юрій Олексійчук https://launchpad.net/~yurolex\
-");
-	this->signal_response().connect(sigc::mem_fun(this, &View_Gtk_About::signal_about_dlg_response));
-}
+	");
+		this->signal_response().connect(sigc::mem_fun(this, &View_Gtk_About::signal_about_dlg_response));
+	}
 
-void View_Gtk_About::show(){
-	Gtk::AboutDialog::show();
-}
+	void show(){
+		Gtk::AboutDialog::show();
+	}
+};
+
+#endif
