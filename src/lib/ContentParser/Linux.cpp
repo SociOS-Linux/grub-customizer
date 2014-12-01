@@ -18,11 +18,14 @@
 
 #ifndef CONTENT_PARSER_LINUX_H_
 #define CONTENT_PARSER_LINUX_H_
-#include "../Regex.cpp"
 #include "../../Model/DeviceMap.cpp"
+#include "../Regex.h"
 #include "Abstract.cpp"
 
-class ContentParser_Linux : public ContentParser_Abstract {
+class ContentParser_Linux :
+	public ContentParser_Abstract,
+	public Regex_RegexConnection
+{
 	static const char* _regex;
 	Model_DeviceMap& deviceMap;
 	std::string sourceCode;
@@ -33,7 +36,7 @@ public:
 	void parse(std::string const& sourceCode) {
 		this->sourceCode = sourceCode;
 		try {
-			std::vector<std::string> result = Regex::match(ContentParser_Linux::_regex, sourceCode);
+			std::vector<std::string> result = this->regexEngine->match(ContentParser_Linux::_regex, sourceCode);
 	
 			//check partition indices by uuid
 			Model_DeviceMap_PartitionIndex pIndex = deviceMap.getHarddriveIndexByPartitionUuid(result[6]);
@@ -64,11 +67,11 @@ public:
 		newValues[6] = this->options.at("partition_uuid");
 		newValues[8] = this->options.at("initramfs");
 	
-		std::string result = Regex::replace(ContentParser_Linux::_regex, this->sourceCode, newValues);
+		std::string result = this->regexEngine->replace(ContentParser_Linux::_regex, this->sourceCode, newValues);
 	
 		//check the new string. If they aren't matchable anymore (evil input), do a rollback
 		try {
-			Regex::match(ContentParser_Linux::_regex, result);
+			this->regexEngine->match(ContentParser_Linux::_regex, result);
 		} catch (RegExNotMatchedException const& e) {
 			this->log("Ignoring data - doesn't match", Logger::ERROR);
 			result = this->sourceCode;
@@ -89,7 +92,7 @@ public:
 		newValues[3] = partition_uuid;
 		newValues[6] = partition_uuid;
 	
-		this->parse(Regex::replace(ContentParser_Linux::_regex, defaultEntry, newValues));
+		this->parse(this->regexEngine->replace(ContentParser_Linux::_regex, defaultEntry, newValues));
 	}
 
 };

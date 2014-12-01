@@ -37,6 +37,7 @@
 #include "../Mapper/EntryNameImpl.cpp"
 #include "../lib/ArrayStructure.cpp"
 #include "../Model/ThemeManager.cpp"
+#include "../lib/Regex/GLib.cpp"
 
 #include "../Bootstrap/View.h"
 #include "../Bootstrap/Thread.h"
@@ -70,6 +71,10 @@ int main(int argc, char** argv){
 		Mapper_EntryNameImpl entryNameMapper;
 		Model_ThemeManager themeManager;
 		Model_DeviceMap deviceMap;
+
+		Regex_GLib glibRegex;
+
+		deviceMap.setRegexEngine(glibRegex);
 
 		entryNameMapper.setView(*view.main);
 
@@ -225,6 +230,11 @@ int main(int argc, char** argv){
 		contentParserFactory.registerParser(linuxIsoParser, gettext("Linux-ISO"));
 		contentParserFactory.registerParser(chainloadParser, gettext("Chainloader"));
 		contentParserFactory.registerParser(memtestParser, gettext("Memtest"));
+
+		linuxParser.setRegexEngine(glibRegex);
+		linuxIsoParser.setRegexEngine(glibRegex);
+		chainloadParser.setRegexEngine(glibRegex);
+		memtestParser.setRegexEngine(glibRegex);
 
 		view.entryEditor->setAvailableEntryTypes(contentParserFactory.getNames());
 

@@ -20,7 +20,7 @@
 #define GRUBDEVICEMAP_H_
 #include "SmartFileHandle.cpp"
 #include "Env.cpp"
-#include "../lib/Regex.cpp"
+#include "../lib/Regex.h"
 #include <map>
 #include <unistd.h>
 
@@ -29,7 +29,8 @@ struct Model_DeviceMap_PartitionIndex {
 };
 
 class Model_DeviceMap :
-	public Model_Env_Connection
+	public Model_Env_Connection,
+	public Regex_RegexConnection
 {
 	mutable std::map<std::string, Model_DeviceMap_PartitionIndex> _cache;
 public:
@@ -93,7 +94,7 @@ public:
 	
 		deviceBuf[size] = '\0';
 	
-		std::vector<std::string> regexResult = Regex::match("([^/.0-9]+)([0-9]+)$", deviceBuf);
+		std::vector<std::string> regexResult = this->regexEngine->match("([^/.0-9]+)([0-9]+)$", deviceBuf);
 		result.partNum = regexResult[2];
 	
 		std::string diskDevice = regexResult[1];
@@ -103,7 +104,7 @@ public:
 		try {
 			while (result.hddNum == "") {
 				std::string row = handle.getRow();
-				std::vector<std::string> rowMatch = Regex::match("^\\(hd([0-9]+)\\)[\t ]*(.*)$", row);
+				std::vector<std::string> rowMatch = this->regexEngine->match("^\\(hd([0-9]+)\\)[\t ]*(.*)$", row);
 				std::string diskFile = rowMatch[2];
 	
 				int size = readlink(diskFile.c_str(), deviceBuf, 100); // if this is a link, follow it

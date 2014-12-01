@@ -19,11 +19,14 @@
 #ifndef CONTENT_PARSER_MEMTEST_H_
 #define CONTENT_PARSER_MEMTEST_H_
 
-#include "../Regex.cpp"
+#include "../Regex.h"
 #include "../../Model/DeviceMap.cpp"
 #include "Abstract.cpp"
 
-class ContentParser_Memtest : public ContentParser_Abstract {
+class ContentParser_Memtest :
+	public ContentParser_Abstract,
+	public Regex_RegexConnection
+{
 	static const char* _regex;
 	Model_DeviceMap& deviceMap;
 	std::string sourceCode;
@@ -34,7 +37,7 @@ public:
 	void parse(std::string const& sourceCode) {
 		this->sourceCode = sourceCode;
 		try {
-			std::vector<std::string> result = Regex::match(ContentParser_Memtest::_regex, this->sourceCode);
+			std::vector<std::string> result = this->regexEngine->match(ContentParser_Memtest::_regex, this->sourceCode);
 	
 	
 			//check partition indices by uuid
@@ -58,11 +61,11 @@ public:
 		newValues[3] = this->options.at("partition_uuid");
 		newValues[4] = this->options.at("memtest_image");
 	
-		std::string result = Regex::replace(ContentParser_Memtest::_regex, this->sourceCode, newValues);
+		std::string result = this->regexEngine->replace(ContentParser_Memtest::_regex, this->sourceCode, newValues);
 	
 		//check the new string. If they aren't matchable anymore (evil input), do a rollback
 		try {
-			Regex::match(ContentParser_Memtest::_regex, result);
+			this->regexEngine->match(ContentParser_Memtest::_regex, result);
 		} catch (RegExNotMatchedException const& e) {
 			this->log("Ignoring data - doesn't match", Logger::ERROR);
 			result = this->sourceCode;
@@ -82,7 +85,7 @@ public:
 		newValues[2] = pIndex.partNum;
 		newValues[3] = partition_uuid;
 	
-		this->parse(Regex::replace(ContentParser_Memtest::_regex, defaultEntry, newValues));
+		this->parse(this->regexEngine->replace(ContentParser_Memtest::_regex, defaultEntry, newValues));
 	}
 
 };

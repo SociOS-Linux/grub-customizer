@@ -16,45 +16,47 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef REGEX_H_INCLUDED
-#define REGEX_H_INCLUDED
+#ifndef GLIBREGEX_H_
+#define GLIBREGEX_H_
+#include "../Regex.h"
+#include <glibmm/thread.h>
+
 #include <string>
 #include <vector>
 #include <map>
 #include <glib.h>
 #include <iostream>
-#include "Exception.cpp"
+#include "../Exception.cpp"
 
-class Regex {
-public:
-	static std::vector<std::string> match(std::string const& pattern, std::string const& str) {
+class Regex_GLib : public Regex {
+	public: std::vector<std::string> match(std::string const& pattern, std::string const& str) {
 		std::vector<std::string> result;
 		GMatchInfo* mi = NULL;
 		GRegex* gr = g_regex_new(pattern.c_str(), GRegexCompileFlags(0), GRegexMatchFlags(0), NULL);
 		bool success = g_regex_match(gr, str.c_str(), GRegexMatchFlags(0), &mi);
 		if (!success)
 			throw RegExNotMatchedException("RegEx doesn't match", __FILE__, __LINE__);
-	
+
 		gint match_count = g_match_info_get_match_count(mi);
 		for (gint i = 0; i < match_count; i++){
 			gchar* matched_string = g_match_info_fetch(mi, i);
 			result.push_back(std::string(matched_string));
 			delete matched_string;
 		}
-	
+
 		g_match_info_free(mi);
 		g_regex_unref(gr);
 		return result;
 	}
 
-	static std::string replace(std::string const& pattern, std::string const& str, std::map<int, std::string> const& newValues) {
+	public: std::string replace(std::string const& pattern, std::string const& str, std::map<int, std::string> const& newValues) {
 		std::string result = str;
 		GMatchInfo* mi = NULL;
 		GRegex* gr = g_regex_new(pattern.c_str(), GRegexCompileFlags(0), GRegexMatchFlags(0), NULL);
 		bool success = g_regex_match(gr, str.c_str(), GRegexMatchFlags(0), &mi);
 		if (!success)
 			throw RegExNotMatchedException("RegEx doesn't match", __FILE__, __LINE__);
-	
+
 		gint match_count = g_match_info_get_match_count(mi);
 		gint offset = 0;
 		for (std::map<int, std::string>::const_iterator iter = newValues.begin(); iter != newValues.end(); iter++){
@@ -65,12 +67,11 @@ public:
 				offset += iter->second.length() - (end_pos-start_pos);
 			}
 		}
-	
+
 		g_match_info_free(mi);
 		g_regex_unref(gr);
 		return result;
 	}
-
 };
 
-#endif
+#endif /* GLIBMUTEX_H_ */

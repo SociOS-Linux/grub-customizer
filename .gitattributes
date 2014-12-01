@@ -140,7 +140,8 @@ src/lib/Logger.h -text
 src/lib/Logger/Stream.cpp -text
 src/lib/Mutex.h -text
 src/lib/Mutex/GLib.cpp -text
-src/lib/Regex.cpp -text
+src/lib/Regex.h -text
+src/lib/Regex/GLib.cpp -text
 src/lib/Trait/ActionLoggerAware.h -text
 src/lib/Trait/LoggerAware.h -text
 src/lib/Type.h -text
