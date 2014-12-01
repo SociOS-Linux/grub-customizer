@@ -44,8 +44,10 @@ misc/icons/48x48.png -text svneol=unset#unset
 misc/icons/64x64.png -text svneol=unset#unset
 misc/manpage.gz -text svneol=unset#unset
 misc/pkexec_policy.in -text
+src/Bootstrap/GLibRegex.cpp -text
 src/Bootstrap/GlibThread.cpp -text
 src/Bootstrap/GtkView.cpp -text
+src/Bootstrap/Regex.h -text
 src/Bootstrap/Thread.h -text
 src/Bootstrap/View.h -text
 src/Controller/AboutController.h -text

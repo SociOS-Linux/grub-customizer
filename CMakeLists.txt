@@ -45,6 +45,7 @@ add_executable(grub-customizer
 	src/main/client.cpp
 	src/Bootstrap/GtkView.cpp
 	src/Bootstrap/GlibThread.cpp
+	src/Bootstrap/GLibRegex.cpp
 )
 
 

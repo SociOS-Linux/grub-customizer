@@ -37,10 +37,10 @@
 #include "../Mapper/EntryNameImpl.cpp"
 #include "../lib/ArrayStructure.cpp"
 #include "../Model/ThemeManager.cpp"
-#include "../lib/Regex/GLib.cpp"
 
 #include "../Bootstrap/View.h"
 #include "../Bootstrap/Thread.h"
+#include "../Bootstrap/Regex.h"
 
 
 int main(int argc, char** argv){
@@ -58,6 +58,7 @@ int main(int argc, char** argv){
 
 		Bootstrap_View view(argc, argv);
 		Bootstrap_Thread thread;
+		Bootstrap_Regex regex;
 
 		Model_ListCfg listcfg;
 		Model_SettingsManagerData settings;
@@ -72,9 +73,7 @@ int main(int argc, char** argv){
 		Model_ThemeManager themeManager;
 		Model_DeviceMap deviceMap;
 
-		Regex_GLib glibRegex;
-
-		deviceMap.setRegexEngine(glibRegex);
+		deviceMap.setRegexEngine(*regex.engine);
 
 		entryNameMapper.setView(*view.main);
 
@@ -231,10 +230,10 @@ int main(int argc, char** argv){
 		contentParserFactory.registerParser(chainloadParser, gettext("Chainloader"));
 		contentParserFactory.registerParser(memtestParser, gettext("Memtest"));
 
-		linuxParser.setRegexEngine(glibRegex);
-		linuxIsoParser.setRegexEngine(glibRegex);
-		chainloadParser.setRegexEngine(glibRegex);
-		memtestParser.setRegexEngine(glibRegex);
+		linuxParser.setRegexEngine(*regex.engine);
+		linuxIsoParser.setRegexEngine(*regex.engine);
+		chainloadParser.setRegexEngine(*regex.engine);
+		memtestParser.setRegexEngine(*regex.engine);
 
 		view.entryEditor->setAvailableEntryTypes(contentParserFactory.getNames());
 
