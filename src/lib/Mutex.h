@@ -19,8 +19,9 @@
 #ifndef MUTEX_H_INCLUDED
 #define MUTEX_H_INCLUDED
 #include <cstdlib>
+#include "Trait/LoggerAware.h"
 
-class Mutex {
+class Mutex : public Trait_LoggerAware {
 public:
 	virtual inline ~Mutex() {};
 

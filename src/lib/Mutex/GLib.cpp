@@ -20,9 +20,8 @@
 #define GLIBMUTEX_H_
 #include "../Mutex.h"
 #include <glibmm/thread.h>
-#include "../Trait/LoggerAware.h"
 
-class Mutex_GLib : public Mutex, public Trait_LoggerAware {
+class Mutex_GLib : public Mutex {
 protected:
 	Glib::Mutex mutex;
 public:

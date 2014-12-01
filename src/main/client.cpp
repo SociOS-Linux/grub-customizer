@@ -17,8 +17,6 @@
  */
 
 #include "../Model/Env.cpp"
-#include "../lib/Mutex/GLib.cpp"
-#include "../Controller/GLib/ThreadController.cpp"
 #include "../lib/Logger/Stream.cpp"
 #include <iostream>
 #include "../lib/ContentParser/FactoryImpl.cpp"
@@ -68,8 +66,6 @@ int main(int argc, char** argv){
 		Model_ListCfg savedListCfg;
 		Model_FbResolutionsGetter fbResolutionsGetter;
 		Model_DeviceDataList deviceDataList;
-		Mutex_GLib listCfgMutex1;
-		Mutex_GLib listCfgMutex2;
 		ContentParser_FactoryImpl contentParserFactory;
 		Mapper_EntryNameImpl entryNameMapper;
 		Model_ThemeManager themeManager;
@@ -188,8 +184,8 @@ int main(int argc, char** argv){
 		view.settings->setLogger(logger);
 		deviceDataList.setLogger(logger);
 		view.about->setLogger(logger);
-		listCfgMutex1.setLogger(logger);
-		listCfgMutex2.setLogger(logger);
+		thread.mutex1->setLogger(logger);
+		thread.mutex2->setLogger(logger);
 		thread.threadController->setLogger(logger);
 		env.setLogger(logger);
 		view.envEditor->setLogger(logger);
@@ -249,8 +245,8 @@ int main(int argc, char** argv){
 		deviceMap.setEnv(env);
 
 		//set mutex
-		listcfg.setMutex(listCfgMutex1);
-		savedListCfg.setMutex(listCfgMutex2);
+		listcfg.setMutex(*thread.mutex1);
+		savedListCfg.setMutex(*thread.mutex2);
 
 		mainController.initAction();
 		errorController.setApplicationStarted(true);
