@@ -21,7 +21,6 @@
 #include "../../lib/ContentParserFactory.h"
 #include "../../lib/ContentParser.h"
 #include <list>
-#include "../../lib/assert.cpp"
 #include "../Exception.cpp"
 
 class ContentParser_FactoryImpl : public ContentParserFactory {

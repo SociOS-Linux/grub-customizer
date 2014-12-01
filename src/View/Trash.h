@@ -23,11 +23,17 @@
 #include <string>
 #include "../lib/Type.h"
 #include "Model/ListItem.h"
+#include "../lib/Trait/LoggerAware.h"
+#include "../Controller/Trait/ControllerAware.h"
+#include "../Controller/TrashController.h"
 
 /**
  * Interface to be implemented by dialogs which lets the user adding scripts
  */
-class View_Trash {
+class View_Trash :
+	public Trait_LoggerAware,
+	public Trait_ControllerAware<TrashController>
+{
 public:
 	virtual inline ~View_Trash() {};
 

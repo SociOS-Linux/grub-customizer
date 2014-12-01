@@ -23,7 +23,7 @@
 #include "../Model/EntryPathBuilder.h"
 #include "../Model/EntryPathFollower.h"
 #include <ostream>
-#include "../lib/md5.cpp"
+#include "../lib/Helper.cpp"
 #include "../lib/ArrayStructure.cpp"
 #include "../lib/Type.h"
 
@@ -86,7 +86,7 @@ struct Model_Rule : public Rule {
 		} else if (dataSource) {
 			result += pathBuilder.buildPathString(*dataSource, this->type == OTHER_ENTRIES_PLACEHOLDER);
 			if (this->dataSource->content.size() && this->type != Model_Rule::OTHER_ENTRIES_PLACEHOLDER) {
-				result += "~" + md5(this->dataSource->content) + "~";
+				result += "~" + Helper::md5(this->dataSource->content) + "~";
 			}
 		} else if (type == Model_Rule::SUBMENU) {
 			result += "'SUBMENU'"; // dummy data source
@@ -94,7 +94,7 @@ struct Model_Rule : public Rule {
 			result += "???";
 		}
 		if (type == Model_Rule::SUBMENU || (type == Model_Rule::NORMAL && dataSource && dataSource->name != outputName)) {
-			result += " as '"+str_replace("'", "''", outputName)+"'";
+			result += " as '"+Helper::str_replace("'", "''", outputName)+"'";
 		}
 	
 		if (this->dataSource) {

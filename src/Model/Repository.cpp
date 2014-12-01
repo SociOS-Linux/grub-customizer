@@ -26,6 +26,7 @@
 #include <map>
 #include "../lib/Trait/LoggerAware.h"
 #include "../lib/ArrayStructure.cpp"
+#include "../lib/Helper.cpp"
 
 struct Model_Repository : public std::list<Model_Script>, public Trait_LoggerAware {
 	std::list<Model_Script> trash;
@@ -128,7 +129,7 @@ struct Model_Repository : public std::list<Model_Script>, public Trait_LoggerAwa
 	}
 
 	Model_Script* createScript(std::string const& name, std::string const& fileName, std::string const& content) {
-		assert_filepath_empty(fileName, __FILE__, __LINE__);
+		Helper::assert_filepath_empty(fileName, __FILE__, __LINE__);
 		FILE* script = fopen(fileName.c_str(), "w");
 		if (script) {
 			fputs(content.c_str(), script);
@@ -142,7 +143,7 @@ struct Model_Repository : public std::list<Model_Script>, public Trait_LoggerAwa
 	}
 
 	void createScript(Model_Script const& script, std::string const& content) {
-		assert_filepath_empty(script.fileName, __FILE__, __LINE__);
+		Helper::assert_filepath_empty(script.fileName, __FILE__, __LINE__);
 		FILE* scriptFile = fopen(script.fileName.c_str(), "w");
 		if (scriptFile) {
 			fputs(content.c_str(), scriptFile);

@@ -28,7 +28,6 @@
 #include <archive.h>
 #include <archive_entry.h>
 #include <map>
-#include "../lib/assert.cpp"
 
 struct Model_Theme {
 	std::string directory;

@@ -23,10 +23,6 @@
 #include <gtkmm.h>
 #include <string>
 #include <libintl.h>
-#include "../../Controller/ThemeController.h"
-#include "../../Controller/Trait/ControllerAware.h"
-#include "../../lib/Trait/LoggerAware.h"
-#include "../../lib/assert.cpp"
 
 //a gtkmm combobox with colorful foreground and background. useful to choose an item of a predefined color set
 class View_Gtk_Theme_ColorChooser : public Gtk::ComboBox, public View_ColorChooser {
@@ -127,9 +123,7 @@ public:
 
 class View_Gtk_Theme :
 	public View_Theme,
-	public Gtk::Dialog,
-	public Trait_LoggerAware,
-	public Trait_ControllerAware<ThemeController>
+	public Gtk::Dialog
 {
 	Gtk::VBox vbMain;
 

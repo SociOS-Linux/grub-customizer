@@ -18,11 +18,12 @@
 
 #ifndef ABOUTDIALOG_H_
 #define ABOUTDIALOG_H_
+#include "../lib/Trait/LoggerAware.h"
 
 /**
  * base class to be implemented by about dialogs
  */
-class View_About {
+class View_About : public Trait_LoggerAware {
 public:
 	virtual inline ~View_About() {};
 	//show the about dialog, don't block

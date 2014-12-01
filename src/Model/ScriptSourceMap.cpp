@@ -24,7 +24,6 @@
 #include "Env.cpp"
 #include "../lib/csv.cpp"
 #include <dirent.h>
-#include "../lib/assert.cpp"
 #include "../lib/Trait/LoggerAware.h"
 
 class Model_ScriptSourceMap :

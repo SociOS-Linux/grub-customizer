@@ -23,7 +23,7 @@
 #include "../lib/Trait/LoggerAware.h"
 #include "SettingsStore.cpp"
 #include <sstream>
-#include "../lib/str_replace.cpp"
+#include "../lib/Helper.cpp"
 #include <map>
 
 class Model_SettingsManagerData :
@@ -76,11 +76,11 @@ public:
 		if (lastWhitespacePos != -1) {
 			translatedName[lastWhitespacePos] = ':';
 		}
-		translatedName = str_replace(" Bold", ":Bold", translatedName);
-		translatedName = str_replace(" Italic", ":Italic", translatedName);
-		translatedName = str_replace(" Medium", ":Medium", translatedName);
-		translatedName = str_replace(" Oblique", ":Oblique", translatedName);
-		translatedName = str_replace(" Regular", ":Regular", translatedName);
+		translatedName = Helper::str_replace(" Bold", ":Bold", translatedName);
+		translatedName = Helper::str_replace(" Italic", ":Italic", translatedName);
+		translatedName = Helper::str_replace(" Medium", ":Medium", translatedName);
+		translatedName = Helper::str_replace(" Oblique", ":Oblique", translatedName);
+		translatedName = Helper::str_replace(" Regular", ":Regular", translatedName);
 	
 		std::string cmd = "fc-match -f '%{file[0]}' '" + translatedName + "'";
 		FILE* proc = popen(cmd.c_str(), "r");
@@ -109,7 +109,7 @@ public:
 			}
 		}
 		outputPath = outputPath != "" ? outputPath : this->env->output_config_dir_noprefix + "/unicode.pf2";
-		std::string cmd = this->env->mkfont_cmd + " --output='" + str_replace("'", "\\'", outputPath) + "'" + sizeParam + " '" + str_replace("'", "\\'", fontFile) + "' 2>&1";
+		std::string cmd = this->env->mkfont_cmd + " --output='" + Helper::str_replace("'", "\\'", outputPath) + "'" + sizeParam + " '" + Helper::str_replace("'", "\\'", fontFile) + "' 2>&1";
 		this->log("running " + cmd, Logger::INFO);
 		FILE* mkfont_proc = popen(cmd.c_str(), "r");
 		int c;

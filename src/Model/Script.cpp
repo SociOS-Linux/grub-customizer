@@ -26,7 +26,7 @@
 #include <unistd.h>
 #include "../Model/EntryPathFollower.h"
 #include "../lib/Trait/LoggerAware.h"
-#include "../lib/md5.cpp"
+#include "../lib/Helper.cpp"
 #include "../config.h"
 #include "../lib/Exception.cpp"
 #include "../lib/ArrayStructure.cpp"
@@ -108,7 +108,7 @@ struct Model_Script : public Model_EntryPathFollower, public Trait_LoggerAware, 
 
 	Model_Entry* getEntryByHash(std::string const& hash, std::list<Model_Entry>& parentList) {
 		for (std::list<Model_Entry>::iterator iter = parentList.begin(); iter != parentList.end(); iter++){
-			if (iter->type == Model_Entry::MENUENTRY && iter->content != "" && md5(iter->content) == hash) {
+			if (iter->type == Model_Entry::MENUENTRY && iter->content != "" && Helper::md5(iter->content) == hash) {
 				return &*iter;
 			} else if (iter->type == Model_Entry::SUBMENU) {
 				Model_Entry* result = this->getEntryByHash(hash, iter->subEntries);
@@ -137,14 +137,14 @@ struct Model_Script : public Model_EntryPathFollower, public Trait_LoggerAware, 
 		else {
 			newPath = cfg_dir+"/DS_"+this->fileName.substr(cfg_dir.length()+1);
 		}
-		assert_filepath_empty(newPath, __FILE__, __LINE__);
+		Helper::assert_filepath_empty(newPath, __FILE__, __LINE__);
 		int renameSuccess = rename(this->fileName.c_str(), newPath.c_str());
 		if (renameSuccess == 0)
 			this->fileName = newPath;
 	}
  //moves the file from any location to grub.d and adds the prefix PS_ (proxified Script) or DS_ (default script)
 	bool moveFile(std::string const& newPath, short int permissions = -1) {
-		assert_filepath_empty(newPath, __FILE__, __LINE__);
+		Helper::assert_filepath_empty(newPath, __FILE__, __LINE__);
 		int rename_success = rename(this->fileName.c_str(), newPath.c_str());
 		if (rename_success == 0){
 			this->fileName = newPath;
@@ -190,7 +190,7 @@ struct Model_Script : public Model_EntryPathFollower, public Trait_LoggerAware, 
 			if (result != "") {
 				result += "/";
 			}
-			result += "'"+str_replace("'", "''", *iter)+"'";
+			result += "'"+Helper::str_replace("'", "''", *iter)+"'";
 		}
 	
 		if (withOtherEntriesPlaceholder) {

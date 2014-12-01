@@ -22,9 +22,8 @@
 #include <string>
 #include <list>
 #include "../lib/Trait/LoggerAware.h"
-#include "../lib/str_replace.cpp"
+#include "../lib/Helper.cpp"
 #include "../lib/ArrayStructure.cpp"
-#include "../lib/trim.cpp"
 #include "../lib/Type.h"
 
 struct Model_Entry_Row {
@@ -82,7 +81,7 @@ struct Model_Entry : public Trait_LoggerAware, public Entry {
 		}
 		Model_Entry_Row row;
 		while ((row = firstRow) || (row = Model_Entry_Row(sourceFile))){
-			std::string rowText = ltrim(row.text);
+			std::string rowText = Helper::ltrim(row.text);
 	
 			if (rowText.substr(0, 10) == "menuentry "){
 				this->readMenuEntry(sourceFile, row);
@@ -101,7 +100,7 @@ struct Model_Entry : public Trait_LoggerAware, public Entry {
 	
 private:
 	void readSubmenu(FILE* sourceFile, Model_Entry_Row firstRow) {
-		std::string rowText = ltrim(firstRow.text);
+		std::string rowText = Helper::ltrim(firstRow.text);
 		int endOfEntryName = rowText.find('"', 10);
 		if (endOfEntryName == -1)
 			endOfEntryName = rowText.find('\'', 10);
@@ -113,11 +112,11 @@ private:
 		}
 		Model_Entry_Row row;
 		while ((row = Model_Entry_Row(sourceFile))) {
-			std::string rowText = ltrim(row.text);
+			std::string rowText = Helper::ltrim(row.text);
 	
 			if (rowText.substr(0, 10) == "menuentry " || rowText.substr(0, 8) == "submenu "){
 				this->subEntries.push_back(Model_Entry(sourceFile, row));
-			} else if (trim(rowText) == "}") {
+			} else if (Helper::trim(rowText) == "}") {
 				this->isValid = true;
 				break; //read only one submenu
 			}
@@ -125,7 +124,7 @@ private:
 	}
 
 	void readMenuEntry(FILE* sourceFile, Model_Entry_Row firstRow) {
-		std::string rowText = ltrim(firstRow.text);
+		std::string rowText = Helper::ltrim(firstRow.text);
 		char quote = '"';
 		int endOfEntryName = rowText.find('"', 12);
 		if (endOfEntryName == -1) {
@@ -149,9 +148,9 @@ private:
 	
 		Model_Entry_Row row;
 		while ((row = Model_Entry_Row(sourceFile))){
-			std::string rowText = ltrim(row.text);
+			std::string rowText = Helper::ltrim(row.text);
 	
-			if (trim(rowText) == "}" && --depth == 0) {
+			if (Helper::trim(rowText) == "}" && --depth == 0) {
 				this->isValid = true;
 				break; //read only one menuentry
 			} else {

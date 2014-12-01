@@ -23,17 +23,11 @@
 #include <libintl.h>
 #include "../ColorChooser.h"
 #include <string>
-#include "../../lib/Trait/LoggerAware.h"
-#include "../../Controller/SettingsController.h"
-#include "../../Controller/Trait/ControllerAware.h"
-#include "../../lib/assert.cpp"
 
 
 class View_Gtk_Settings :
 	public Gtk::Dialog,
-	public View_Settings,
-	public Trait_LoggerAware,
-	public Trait_ControllerAware<SettingsController>
+	public View_Settings
 {
 	struct AdvancedSettingsTreeModel : public Gtk::TreeModelColumnRecord {
 		Gtk::TreeModelColumn<bool> active;

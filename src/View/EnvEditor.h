@@ -19,8 +19,13 @@
 #ifndef GRUBENVEDITOR_H_
 #define GRUBENVEDITOR_H_
 #include <map>
+#include "../lib/Trait/LoggerAware.h"
+#include "../Controller/Trait/ControllerAware.h"
+#include "../Controller/EnvEditorController.h"
 
-class View_EnvEditor {
+class View_EnvEditor :
+	public Trait_LoggerAware,
+	public Trait_ControllerAware<EnvEditorController> {
 public:
 	virtual inline ~View_EnvEditor() {};
 

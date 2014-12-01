@@ -19,20 +19,15 @@
 #ifndef ENTRYEDITDLGGTK_H_
 #define ENTRYEDITDLGGTK_H_
 #include "../EntryEditor.h"
-#include "../../lib/Trait/LoggerAware.h"
-#include "../../lib/str_replace.cpp"
+#include "../../lib/Helper.cpp"
 #include <libintl.h>
 #include <gtkmm.h>
-#include "../../Controller/EntryEditController.h"
-#include "../../Controller/Trait/ControllerAware.h"
 #include "../../Model/DeviceDataListInterface.h"
 #include "Element/PartitionChooser.cpp"
 
 class View_Gtk_EntryEditor :
 	public View_EntryEditor,
 	public Gtk::Dialog,
-	public Trait_LoggerAware,
-	public Trait_ControllerAware<EntryEditController>,
 	public Model_DeviceDataListInterface_Connection
 {
 	Gtk::Notebook tabbox;
@@ -99,7 +94,7 @@ public:
 	}
 
 	void setSourcecode(std::string const& source) {
-		std::string optimizedSource = str_replace("\n\t", "\n", source);
+		std::string optimizedSource = Helper::str_replace("\n\t", "\n", source);
 		if (optimizedSource[0] == '\t') {
 			optimizedSource = optimizedSource.substr(1);
 		}
@@ -108,7 +103,7 @@ public:
 
 	std::string getSourcecode() {
 		std::string optimizedSourcecode = this->tvSource.get_buffer()->get_text();
-		std::string withIndent = str_replace("\n", "\n\t", optimizedSourcecode);
+		std::string withIndent = Helper::str_replace("\n", "\n\t", optimizedSourcecode);
 		if (withIndent.size() >= 2 && withIndent.substr(withIndent.size() - 2) == "\n\t") {
 			withIndent.replace(withIndent.size() - 2, 2, "\n");
 		} else if (withIndent.size() >= 1 && withIndent[withIndent.size() - 1] != '\n') {

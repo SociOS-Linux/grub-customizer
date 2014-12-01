@@ -42,7 +42,8 @@ include_directories(
     ${GTKMM_INCLUDE_DIRS}  )
 
 add_executable(grub-customizer
-	src/main/gtk-client.cpp
+	src/main/client.cpp
+	src/Bootstrap/GtkView.cpp
 )
 
 

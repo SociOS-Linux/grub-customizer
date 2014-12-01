@@ -21,8 +21,14 @@
 #include <string>
 #include <list>
 #include "ColorChooser.h"
+#include "../Controller/Trait/ControllerAware.h"
+#include "../lib/Trait/LoggerAware.h"
+#include "../Controller/ThemeController.h"
 
-class View_Theme {
+class View_Theme :
+	public Trait_LoggerAware,
+	public Trait_ControllerAware<ThemeController>
+{
 public:
 	enum EditorType {
 		EDITORTYPE_CUSTOM,

@@ -23,7 +23,7 @@
 #include <list>
 #include <sstream>
 #include <iostream>
-#include "str_replace.cpp"
+#include "Helper.cpp"
 
 struct ArrayStructureItem {
 public:
@@ -183,7 +183,7 @@ void var_dump(std::map<std::string, ArrayStructureItem> const& data, std::string
 				val = "\"" + val + "\"";
 			}
 
-			std::cout << "\"" << key << "\"" << " : " << str_replace("\n", "\n" + indentStr, val) << std::endl;
+			std::cout << "\"" << key << "\"" << " : " << Helper::str_replace("\n", "\n" + indentStr, val) << std::endl;
 		} else {
 			std::cout << "\"" << key << "\"" << " : Array(" << iter->second.subItems.size() << ")" << (iter->second.value != "" ? " [" + iter->second.value + "]" : "") << std::endl;
 			if (iter->second.subItems.size()) {

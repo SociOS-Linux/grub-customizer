@@ -24,7 +24,7 @@
 #include <string>
 #include <cstdio>
 #include <stdexcept>
-#include "str_replace.cpp"
+#include "Helper.cpp"
 
 class CsvReader {
 	FILE* _file;
@@ -87,7 +87,7 @@ class CsvWriter {
 	FILE* _file;
 	std::list<std::string> _keys;
 	void _writeValue(std::string const& value) {
-		fputs(("\"" + str_replace("\"", "\"\"", value) + "\"").c_str(), this->_file);
+		fputs(("\"" + Helper::str_replace("\"", "\"\"", value) + "\"").c_str(), this->_file);
 	}
 
 public:

@@ -22,9 +22,8 @@
 #include "../../config.h"
 #include <libintl.h>
 #include "../About.h"
-#include "../../lib/Trait/LoggerAware.h"
 
-class View_Gtk_About : public Gtk::AboutDialog, public View_About, public Trait_LoggerAware {
+class View_Gtk_About : public Gtk::AboutDialog, public View_About {
 	Glib::ustring appName, appVersion;
 	std::vector<Glib::ustring> authors;
 	std::vector<Glib::ustring> artists;

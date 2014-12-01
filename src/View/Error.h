@@ -20,8 +20,10 @@
 #define ERROR_H_
 
 #include <string>
+#include "../Controller/Trait/ControllerAware.h"
+#include "../Controller/ErrorController.h"
 
-class View_Error {
+class View_Error : public Trait_ControllerAware<ErrorController> {
 public:
 	virtual inline ~View_Error(){}
 	virtual void showErrorMessage(std::string const& errorMessage, bool allowContinue) = 0;

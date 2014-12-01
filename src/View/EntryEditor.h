@@ -22,8 +22,13 @@
 #include <map>
 #include <list>
 #include "../lib/Type.h"
+#include "../Controller/Trait/ControllerAware.h"
+#include "../lib/Trait/LoggerAware.h"
+#include "../Controller/EntryEditController.h"
 
-class View_EntryEditor {
+class View_EntryEditor :
+	public Trait_LoggerAware,
+	public Trait_ControllerAware<EntryEditController> {
 public:
 	virtual inline ~View_EntryEditor() {};
 

@@ -19,17 +19,12 @@
 #ifndef GRUB_INSTALL_DLG_GTK_INCLUDED
 #define GRUB_INSTALL_DLG_GTK_INCLUDED
 #include <gtkmm.h>
-#include "../../Controller/InstallerController.h"
-#include "../../Controller/Trait/ControllerAware.h"
 #include <libintl.h>
 #include "../Installer.h"
-#include "../../lib/Trait/LoggerAware.h"
 
 class View_Gtk_Installer :
 	public Gtk::Dialog,
-	public View_Installer,
-	public Trait_LoggerAware,
-	public Trait_ControllerAware<InstallerController>
+	public View_Installer
 {
 	Gtk::Label lblDescription;
 	Gtk::HBox hbDevice;

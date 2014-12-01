@@ -19,19 +19,14 @@
 #ifndef ENTRY_ADD_DLG_INCLUDED
 #define ENTRY_ADD_DLG_INCLUDED
 #include <gtkmm.h>
-#include "../../Controller/TrashController.h"
-#include "../../Controller/Trait/ControllerAware.h"
 #include "../Trash.h"
 #include <libintl.h>
-#include "../../lib/Trait/LoggerAware.h"
 #include "../../lib/Type.h"
 #include "Element/List.h"
 
 class View_Gtk_Trash :
 	public Gtk::Window,
-	public View_Trash,
-	public Trait_LoggerAware,
-	public Trait_ControllerAware<TrashController>
+	public View_Trash
 {
 	Gtk::ScrolledWindow scrEntryBox;
 	View_Gtk_Element_List<Rule, Script> list;

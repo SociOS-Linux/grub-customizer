@@ -25,11 +25,14 @@
 #include <map>
 #include "../lib/Type.h"
 #include "Model/ListItem.h"
+#include "../Controller/Trait/ControllerAware.h"
+#include "../lib/Trait/LoggerAware.h"
+#include "../Controller/MainController.h"
 
 /**
  * Interface for dialogs which lets the user control the grub list
  */
-class View_Main {
+class View_Main : public Trait_LoggerAware, public Trait_ControllerAware<MainController> {
 public:
 	virtual inline ~View_Main() {};
 

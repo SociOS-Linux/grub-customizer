@@ -22,12 +22,8 @@
 #include <libintl.h>
 #include "../../config.h"
 #include "../Main.h"
-#include "../../lib/Trait/LoggerAware.h"
 #include "Settings.cpp"
-#include "../../lib/str_replace.cpp"
-#include "../../lib/assert.cpp"
-#include "../../Controller/MainController.h"
-#include "../../Controller/Trait/ControllerAware.h"
+#include "../../lib/Helper.cpp"
 #include "../../lib/Type.h"
 #include "Element/List.h"
 
@@ -38,7 +34,7 @@ class ImageMenuItemOwnKey : public Gtk::ImageMenuItem {
 	}
 };
 
-class View_Gtk_Main : public View_Main, public Trait_LoggerAware, public Trait_ControllerAware<MainController> {
+class View_Gtk_Main : public View_Main {
 	Gtk::Window win;
 	Gtk::VBox vbMainSplit;
 	Gtk::Notebook notebook;

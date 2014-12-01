@@ -18,11 +18,16 @@
 
 #ifndef SETTINGSDLG_H_
 #define SETTINGSDLG_H_
+#include "../lib/Trait/LoggerAware.h"
+#include "../Controller/Trait/ControllerAware.h"
+#include "../Controller/SettingsController.h"
 
 /**
  * Interface to be implemented by settings dialogs
  */
-class View_Settings {
+class View_Settings :
+	public Trait_LoggerAware,
+	public Trait_ControllerAware<SettingsController> {
 public:
 	virtual inline ~View_Settings() {};
 

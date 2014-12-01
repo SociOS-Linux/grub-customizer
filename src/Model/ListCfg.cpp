@@ -40,14 +40,12 @@
 #include "../Controller/MainController.h"
 #include "../Controller/Trait/ControllerAware.h"
 
-#include "../lib/assert.cpp"
-
 #include "../lib/Mutex.h"
 #include "../lib/Trait/LoggerAware.h"
 
 #include "../lib/Exception.cpp"
 #include "../lib/ArrayStructure.cpp"
-#include "../lib/trim.cpp"
+#include "../lib/Helper.cpp"
 #include "ScriptSourceMap.cpp"
 #include <stack>
 #include <algorithm>
@@ -122,7 +120,7 @@ public:
 		std::string outputFilePath = this->env->cfg_dir+"/LS_"+scriptNameNoPath;
 		FILE* existingScript = fopen(outputFilePath.c_str(), "r");
 		if (existingScript == NULL){
-			assert_filepath_empty(outputFilePath, __FILE__, __LINE__);
+			Helper::assert_filepath_empty(outputFilePath, __FILE__, __LINE__);
 			FILE* fwdScript = fopen(outputFilePath.c_str(), "w");
 			if (fwdScript){
 				fputs("#!/bin/sh\n", fwdScript);
@@ -333,7 +331,7 @@ public:
 		} while (foundInvalidScript);
 	
 		if (invalidProxies != "") {
-			this->log("found invalid proxies: " + rtrim(invalidProxies, ","), Logger::INFO);
+			this->log("found invalid proxies: " + Helper::rtrim(invalidProxies, ","), Logger::INFO);
 		}
 	
 		//fix conflicts (same number, same name but one script with "-proxy" the other without
@@ -552,7 +550,7 @@ public:
 		int innerCount = 0;
 		double progressbarScriptSpace = 0.7 / this->repository.size();
 		while (!cancelThreadsRequested && (row = Model_Entry_Row(source))){
-			std::string rowText = ltrim(row.text);
+			std::string rowText = Helper::ltrim(row.text);
 			if (!inScript && rowText.substr(0,10) == ("### BEGIN ") && rowText.substr(rowText.length()-4,4) == " ###"){
 				this->lock();
 				if (script) {
@@ -1022,7 +1020,7 @@ public:
 			for (std::list<std::string>::iterator iter = dsfiles.begin(); iter != dsfiles.end(); iter++) {
 				this->log("renaming " + *iter, Logger::EVENT);
 				std::string newPath = this->env->cfg_dir+"/"+iter->substr(3);
-				assert_filepath_empty(newPath, __FILE__, __LINE__);
+				Helper::assert_filepath_empty(newPath, __FILE__, __LINE__);
 				rename((this->env->cfg_dir+"/"+(*iter)).c_str(), newPath.c_str());
 			}
 	
@@ -1033,7 +1031,7 @@ public:
 				std::string out = *iter;
 				out.replace(0, 2, (std::string("") + char('0' + (i/10)%10) + char('0' + i%10)));
 				std::string newPath = this->env->cfg_dir+"/"+out;
-				assert_filepath_empty(newPath, __FILE__, __LINE__);
+				Helper::assert_filepath_empty(newPath, __FILE__, __LINE__);
 				rename((this->env->cfg_dir+"/"+(*iter)).c_str(), newPath.c_str());
 				i++;
 			}

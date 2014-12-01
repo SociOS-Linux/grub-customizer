@@ -21,10 +21,8 @@
 #include <gtkmm.h>
 #include <libintl.h>
 #include "../Error.h"
-#include "../../Controller/ErrorController.h"
-#include "../../Controller/Trait/ControllerAware.h"
 
-class View_Gtk_Error : public View_Error, public Trait_ControllerAware<ErrorController> {
+class View_Gtk_Error : public View_Error {
 public:
 	View_Gtk_Error() {
 

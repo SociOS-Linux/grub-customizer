@@ -44,6 +44,8 @@ misc/icons/48x48.png -text svneol=unset#unset
 misc/icons/64x64.png -text svneol=unset#unset
 misc/manpage.gz -text svneol=unset#unset
 misc/pkexec_policy.in -text
+src/Bootstrap/GtkView.cpp -text
+src/Bootstrap/View.h -text
 src/Controller/AboutController.h -text
 src/Controller/AboutControllerImpl.cpp -text
 src/Controller/ControllerAbstract.cpp -text
@@ -131,6 +133,7 @@ src/lib/ContentParser/Memtest.cpp -text
 src/lib/ContentParserFactory.h -text
 src/lib/Exception.cpp -text
 src/lib/FileSystem.cpp -text
+src/lib/Helper.cpp -text
 src/lib/Logger.h -text
 src/lib/Logger/Stream.cpp -text
 src/lib/Mutex.h -text
@@ -139,12 +142,8 @@ src/lib/Regex.cpp -text
 src/lib/Trait/ActionLoggerAware.h -text
 src/lib/Trait/LoggerAware.h -text
 src/lib/Type.h -text
-src/lib/assert.cpp -text
 src/lib/csv.cpp -text
-src/lib/md5.cpp -text
-src/lib/str_replace.cpp -text
-src/lib/trim.cpp -text
-src/main/gtk-client.cpp -text
+src/main/client.cpp -text
 src/main/proxy.cpp -text
 translation/compile_all.sh -text
 translation/translation-ar.mo -text svneol=unset#unset

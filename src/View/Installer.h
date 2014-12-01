@@ -18,11 +18,17 @@
 
 #ifndef GRUBINSTALLDLG_H_
 #define GRUBINSTALLDLG_H_
+#include "../lib/Trait/LoggerAware.h"
+#include "../Controller/Trait/ControllerAware.h"
+#include "../Controller/InstallerController.h"
 
 /**
  * Interface for dialogs which helps users to install grub into the MBR
  */
-class View_Installer {
+class View_Installer :
+	public Trait_LoggerAware,
+	public Trait_ControllerAware<InstallerController>
+{
 public:
 	virtual inline ~View_Installer() {};
 

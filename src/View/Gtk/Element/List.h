@@ -22,7 +22,7 @@
 #include "../../../lib/Type.h"
 #include "../../../lib/Exception.cpp"
 #include "../../Model/ListItem.h"
-#include "../../../lib/str_replace.cpp"
+#include "../../../lib/Helper.cpp"
 #include <libintl.h>
 
 template<typename TItem, typename TWrapper>
@@ -116,7 +116,7 @@ public:
 		}
 
 		Glib::RefPtr<Gdk::Pixbuf> icon;
-		std::string outputName = escapeXml(listItem.name);
+		std::string outputName = Helper::escapeXml(listItem.name);
 		if (!listItem.is_placeholder) {
 			outputName = "<b>" + outputName + "</b>";
 		}
@@ -132,15 +132,15 @@ public:
 				outputName += gettext("menuentry");
 			}
 			if (listItem.scriptName != "") {
-				outputName += std::string(" / ") + gettext("script: ") + escapeXml(listItem.scriptName);
+				outputName += std::string(" / ") + gettext("script: ") + Helper::escapeXml(listItem.scriptName);
 			}
 
 			if (listItem.defaultName != "" && listItem.name != listItem.defaultName) {
-				outputName += std::string(" / ") + gettext("default name: ") + escapeXml(listItem.defaultName);
+				outputName += std::string(" / ") + gettext("default name: ") + Helper::escapeXml(listItem.defaultName);
 			}
 
 			if (listItem.options.find("_deviceName") != listItem.options.end()) {
-				outputName += escapeXml(Glib::ustring(" / ") + gettext("Partition: ") + listItem.options.at("_deviceName"));
+				outputName += Helper::escapeXml(Glib::ustring(" / ") + gettext("Partition: ") + listItem.options.at("_deviceName"));
 			}
 
 			outputName += "</small>";
