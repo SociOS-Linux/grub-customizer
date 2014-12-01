@@ -23,12 +23,9 @@
 #include <glibmm/dispatcher.h>
 #include <gtkmm/main.h>
 #include "../ControllerCollection.h"
-#include "../../lib/Trait/LoggerAware.h"
 #include "../../lib/Type.h"
 
-class GLib_ThreadController : public ThreadController, public Trait_LoggerAware {
-	ControllerCollection& _controllers;
-
+class GLib_ThreadController : public ThreadController, public ControllerCollection_Connection {
 	Glib::Dispatcher disp_sync_load, disp_sync_save, disp_thread_died, disp_updateSettingsDlgResolutionList, disp_settings_loaded, disp_exception, disp_postSaveActions, disp_config_saving_error;
 
 	Exception _cachedException;
@@ -36,7 +33,7 @@ class GLib_ThreadController : public ThreadController, public Trait_LoggerAware 
 	std::string _cachedThemeFileName;
 	std::string _cachedConfigSavingError;
 public:
-	GLib_ThreadController(ControllerCollection& controllers) : _controllers(controllers), _cachedException("")
+	GLib_ThreadController() : _cachedException("")
 	{
 		disp_sync_load.connect(sigc::mem_fun(this, &GLib_ThreadController::_execLoadSync));
 		disp_sync_save.connect(sigc::mem_fun(this, &GLib_ThreadController::_execSaveSync));
@@ -115,62 +112,62 @@ public:
 
 private:
 	void _execLoadSync() {
-		this->_controllers.mainController->syncLoadStateAction();
+		this->getAllControllers().mainController->syncLoadStateAction();
 	}
 
 	void _execSaveSync() {
-		this->_controllers.mainController->syncSaveStateAction();
+		this->getAllControllers().mainController->syncSaveStateAction();
 	}
 
 	void _execLoad(bool preserveConfig) {
-		this->_controllers.mainController->loadThreadedAction(preserveConfig);
+		this->getAllControllers().mainController->loadThreadedAction(preserveConfig);
 	}
 
 	void _execSave() {
-		this->_controllers.mainController->saveThreadedAction();
+		this->getAllControllers().mainController->saveThreadedAction();
 	}
 
 	void _execDie() {
-		this->_controllers.mainController->dieAction();
+		this->getAllControllers().mainController->dieAction();
 	}
 
 	void _execActivateSettings() {
-		this->_controllers.mainController->activateSettingsAction();
+		this->getAllControllers().mainController->activateSettingsAction();
 	}
 
 	void _execResolutionListUpdate() {
-		this->_controllers.settingsController->updateResolutionlistAction();
+		this->getAllControllers().settingsController->updateResolutionlistAction();
 	}
 
 	void _execFbResolutionsGetter() {
-		this->_controllers.settingsController->loadResolutionsAction();
+		this->getAllControllers().settingsController->loadResolutionsAction();
 	}
 
 	void _execInstallGrub(std::string const& device) {
-		this->_controllers.installerController->installGrubThreadedAction(device);
+		this->getAllControllers().installerController->installGrubThreadedAction(device);
 	}
 
 	void _execShowException() {
-		this->_controllers.errorController->errorAction(this->_cachedException);
+		this->getAllControllers().errorController->errorAction(this->_cachedException);
 	}
 
 	void _execRuleEdit() {
 		if (this->_cachedRulePtr != NULL) {
-			this->_controllers.mainController->selectRuleAction(this->_cachedRulePtr, true);
+			this->getAllControllers().mainController->selectRuleAction(this->_cachedRulePtr, true);
 			this->_cachedRulePtr = NULL;
 		}
 	}
 
 	void _execThemeFileEdit() {
-		this->_controllers.themeController->startFileEditAction(this->_cachedThemeFileName);
+		this->getAllControllers().themeController->startFileEditAction(this->_cachedThemeFileName);
 	}
 
 	void _execPostSaveActions() {
-		this->_controllers.themeController->postSaveAction();
+		this->getAllControllers().themeController->postSaveAction();
 	}
 
 	void _execShowConfigSavingError() {
-		this->_controllers.mainController->showConfigSavingErrorAction(this->_cachedConfigSavingError);
+		this->getAllControllers().mainController->showConfigSavingErrorAction(this->_cachedConfigSavingError);
 	}
 
 };

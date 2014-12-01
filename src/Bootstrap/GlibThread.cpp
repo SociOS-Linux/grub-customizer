@@ -16,18 +16,25 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef CONTROLLER_ABSTRACT_H_
-#define CONTROLLER_ABSTRACT_H_
+#include "Thread.h"
 
-#include "ControllerCollection.h"
-#include "../lib/Trait/ActionLoggerAware.h"
+#include "../lib/Mutex/GLib.cpp"
+#include "../Controller/GLib/ThreadController.cpp"
 
-class ControllerAbstract : public Trait_ActionLoggerAware, public ControllerCollection_Connection {
-public:
-	ControllerAbstract(std::string const& controllerName) {
-		this->setControllerName(controllerName);
-	}
-};
+Bootstrap_Thread::Bootstrap_Thread()
+	: mutex1(NULL)
+	, mutex2(NULL)
+	, threadController(NULL)
+{
+	Glib::thread_init();
 
+	this->mutex1 = new Mutex_GLib;
+	this->mutex2 = new Mutex_GLib;
+	this->threadController = new GLib_ThreadController;
+}
 
-#endif /* ABSTRACT_H_ */
+Bootstrap_Thread::~Bootstrap_Thread() {
+	delete this->mutex1;
+	delete this->mutex2;
+	delete this->threadController;
+}

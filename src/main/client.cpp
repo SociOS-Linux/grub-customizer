@@ -39,7 +39,9 @@
 #include "../Mapper/EntryNameImpl.cpp"
 #include "../lib/ArrayStructure.cpp"
 #include "../Model/ThemeManager.cpp"
+
 #include "../Bootstrap/View.h"
+#include "../Bootstrap/Thread.h"
 
 
 int main(int argc, char** argv){
@@ -56,6 +58,7 @@ int main(int argc, char** argv){
 		Model_Env env;
 
 		Bootstrap_View view(argc, argv);
+		Bootstrap_Thread thread;
 
 		Model_ListCfg listcfg;
 		Model_SettingsManagerData settings;
@@ -139,6 +142,7 @@ int main(int argc, char** argv){
 		controllerCollection.errorController = &errorController;
 		controllerCollection.themeController = &themeController;
 
+		dynamic_cast<ControllerCollection_Connection&>(*thread.threadController).setControllerCollection(controllerCollection);
 		entryEditController.setControllerCollection(controllerCollection);
 		mainController.setControllerCollection(controllerCollection);
 		settingsController.setControllerCollection(controllerCollection);
@@ -149,13 +153,12 @@ int main(int argc, char** argv){
 		errorController.setControllerCollection(controllerCollection);
 		themeController.setControllerCollection(controllerCollection);
 
-		GLib_ThreadController threadC(controllerCollection);
-		mainController.setThreadController(threadC);
-		settingsController.setThreadController(threadC);
-		installController.setThreadController(threadC);
-		errorController.setThreadController(threadC);
-		entryEditController.setThreadController(threadC);
-		themeController.setThreadController(threadC);
+		mainController.setThreadController(*thread.threadController);
+		settingsController.setThreadController(*thread.threadController);
+		installController.setThreadController(*thread.threadController);
+		errorController.setThreadController(*thread.threadController);
+		entryEditController.setThreadController(*thread.threadController);
+		themeController.setThreadController(*thread.threadController);
 
 		//assign event listener
 		view.main->setController(mainController);
@@ -187,7 +190,7 @@ int main(int argc, char** argv){
 		view.about->setLogger(logger);
 		listCfgMutex1.setLogger(logger);
 		listCfgMutex2.setLogger(logger);
-		threadC.setLogger(logger);
+		thread.threadController->setLogger(logger);
 		env.setLogger(logger);
 		view.envEditor->setLogger(logger);
 		mainController.setLogger(logger);

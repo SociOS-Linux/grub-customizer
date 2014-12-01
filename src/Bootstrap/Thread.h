@@ -16,18 +16,21 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef CONTROLLER_ABSTRACT_H_
-#define CONTROLLER_ABSTRACT_H_
+#ifndef SRC_BOOTSTRAP_THREAD_H_
+#define SRC_BOOTSTRAP_THREAD_H_
 
-#include "ControllerCollection.h"
-#include "../lib/Trait/ActionLoggerAware.h"
+#include "../Controller/ThreadController.h"
+#include "../lib/Mutex.h"
 
-class ControllerAbstract : public Trait_ActionLoggerAware, public ControllerCollection_Connection {
-public:
-	ControllerAbstract(std::string const& controllerName) {
-		this->setControllerName(controllerName);
-	}
+class Bootstrap_Thread
+{
+	public: Bootstrap_Thread();
+	public: ~Bootstrap_Thread();
+	public: ThreadController* threadController;
+	public: Mutex* mutex1;
+	public: Mutex* mutex2;
 };
 
 
-#endif /* ABSTRACT_H_ */
+
+#endif /* SRC_BOOTSTRAP_THREAD_H_ */

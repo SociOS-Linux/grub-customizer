@@ -21,8 +21,9 @@
 #include <string>
 #include "../lib/Exception.cpp"
 #include "../lib/Type.h"
+#include "../lib/Trait/LoggerAware.h"
 
-class ThreadController {
+class ThreadController : public Trait_LoggerAware {
 public:
 	virtual inline ~ThreadController() {};
 

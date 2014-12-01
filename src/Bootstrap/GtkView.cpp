@@ -39,7 +39,6 @@ Bootstrap_View::Bootstrap_View(int argc, char** argv)
 	, trash(NULL)
 {
 	new Gtk::Main(argc, argv); // stored at Gtk::Main::instance and deleted in destructor of this class
-	Glib::thread_init();
 
 	this->about = new View_Gtk_About;
 	this->entryEditor = new View_Gtk_EntryEditor;
@@ -67,8 +66,7 @@ void Bootstrap_View::setDeviceDataList(Model_DeviceDataListInterface& deviceData
 	dynamic_cast<View_Gtk_EnvEditor&>(*this->envEditor).setDeviceDataList(deviceDataList);
 }
 
-Bootstrap_View::~Bootstrap_View()
-{
+Bootstrap_View::~Bootstrap_View() {
 	delete about;
 	delete entryEditor;
 	delete envEditor;

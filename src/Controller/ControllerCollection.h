@@ -20,12 +20,13 @@
 #define CONTROLLERCOLLECTION_H_
 #include "EntryEditController.h"
 #include "MainController.h"
-#include "SettingsController.h"
 #include "EnvEditorController.h"
 #include "TrashController.h"
 #include "InstallerController.h"
 #include "AboutController.h"
 #include "ErrorController.h"
+#include "../lib/Helper.cpp"
+#include "SettingsController.h"
 #include "ThemeController.h"
 
 struct ControllerCollection {
