@@ -15,15 +15,19 @@
  * along with this program; if not, write to the Free Software
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
-#include "../lib/Regex/GLib.hpp"
-#include "Regex.hpp"
 
-Bootstrap_Regex::Bootstrap_Regex() :
-	engine(NULL)
-{
-	this->engine = new Regex_GLib;
-}
+#ifndef ABOUTDIALOG_H_
+#define ABOUTDIALOG_H_
+#include "../lib/Trait/LoggerAware.hpp"
 
-Bootstrap_Regex::~Bootstrap_Regex() {
-	delete this->engine;
-}
+/**
+ * base class to be implemented by about dialogs
+ */
+class View_About : public Trait_LoggerAware {
+public:
+	virtual inline ~View_About() {};
+	//show the about dialog, don't block
+	virtual void show()=0;
+};
+
+#endif

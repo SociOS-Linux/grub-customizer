@@ -15,15 +15,27 @@
  * along with this program; if not, write to the Free Software
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
-#include "../lib/Regex/GLib.hpp"
-#include "Regex.hpp"
 
-Bootstrap_Regex::Bootstrap_Regex() :
-	engine(NULL)
-{
-	this->engine = new Regex_GLib;
-}
+#ifndef ENTRYNAME_H_
+#define ENTRYNAME_H_
 
-Bootstrap_Regex::~Bootstrap_Regex() {
-	delete this->engine;
-}
+#include <string>
+#include "../Model/Entry.hpp"
+
+class Mapper_EntryName {
+public:
+	virtual inline ~Mapper_EntryName(){};
+	virtual std::string map(Model_Entry const* sourceEntry, std::string const& defaultName, bool treatSubmenuAsPlaceholder) = 0;
+};
+
+class Mapper_EntryName_Connection {
+protected:
+	Mapper_EntryName* entryNameMapper;
+public:
+	Mapper_EntryName_Connection() : entryNameMapper(NULL) {}
+	void setEntryNameMapper(Mapper_EntryName& mapper) {
+		this->entryNameMapper = &mapper;
+	}
+};
+
+#endif /* ENTRYNAME_H_ */

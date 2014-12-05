@@ -15,15 +15,23 @@
  * along with this program; if not, write to the Free Software
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
-#include "../lib/Regex/GLib.hpp"
-#include "Regex.hpp"
 
-Bootstrap_Regex::Bootstrap_Regex() :
-	engine(NULL)
-{
-	this->engine = new Regex_GLib;
-}
+#ifndef ENTRYEDITCONTROLLER_H_
+#define ENTRYEDITCONTROLLER_H_
 
-Bootstrap_Regex::~Bootstrap_Regex() {
-	delete this->engine;
-}
+#include <string>
+#include "../lib/Type.hpp"
+
+class EntryEditController {
+public:
+	virtual inline ~EntryEditController() {};
+	virtual void showAction(Rule* rule) = 0;
+	virtual void showCreatorAction() = 0;
+	virtual void applyAction() = 0;
+	virtual void syncOptionsAction() = 0;
+	virtual void syncSourceAction() = 0;
+	virtual void switchTypeAction(std::string const& newType) = 0;
+};
+
+
+#endif /* ENTRYEDITCONTROLLER_H_ */

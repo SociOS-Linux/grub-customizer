@@ -15,15 +15,27 @@
  * along with this program; if not, write to the Free Software
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
-#include "../lib/Regex/GLib.hpp"
-#include "Regex.hpp"
 
-Bootstrap_Regex::Bootstrap_Regex() :
-	engine(NULL)
+#ifndef GRUBINSTALLDLG_H_
+#define GRUBINSTALLDLG_H_
+#include "../Controller/InstallerController.hpp"
+#include "../lib/Trait/LoggerAware.hpp"
+#include "../Controller/Trait/ControllerAware.hpp"
+
+/**
+ * Interface for dialogs which helps users to install grub into the MBR
+ */
+class View_Installer :
+	public Trait_LoggerAware,
+	public Trait_ControllerAware<InstallerController>
 {
-	this->engine = new Regex_GLib;
-}
+public:
+	virtual inline ~View_Installer() {};
 
-Bootstrap_Regex::~Bootstrap_Regex() {
-	delete this->engine;
-}
+	//show this dialog
+	virtual void show()=0;
+	//show the information that grub has been installed completely
+	virtual void showMessageGrubInstallCompleted(std::string const& msg)=0;
+};
+
+#endif

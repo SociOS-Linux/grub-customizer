@@ -15,15 +15,22 @@
  * along with this program; if not, write to the Free Software
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
-#include "../lib/Regex/GLib.hpp"
-#include "Regex.hpp"
 
-Bootstrap_Regex::Bootstrap_Regex() :
-	engine(NULL)
-{
-	this->engine = new Regex_GLib;
-}
+#ifndef TRASHCONTROLLER_H_
+#define TRASHCONTROLLER_H_
+#include "../lib/Type.hpp"
+#include <map>
 
-Bootstrap_Regex::~Bootstrap_Regex() {
-	delete this->engine;
-}
+class TrashController {
+public:
+	virtual inline ~TrashController(){}
+	virtual void applyAction() = 0;
+	virtual void updateAction(std::map<ViewOption, bool> const& viewOptions) = 0;
+	virtual void hideAction() = 0;
+	virtual void deleteCustomEntriesAction() = 0;
+	virtual void selectEntriesAction(std::list<Entry*> const& entries) = 0;
+	virtual void updateSelectionAction(std::list<Rule*> const& selectedEntries) = 0;
+};
+
+
+#endif /* TRASHCONTROLLER_H_ */

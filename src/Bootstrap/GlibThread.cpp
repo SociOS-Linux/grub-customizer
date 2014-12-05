@@ -16,10 +16,9 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#include "Thread.h"
-
-#include "../lib/Mutex/GLib.cpp"
-#include "../Controller/GLib/ThreadController.cpp"
+#include "../Controller/GLib/ThreadController.hpp"
+#include "../lib/Mutex/GLib.hpp"
+#include "Thread.hpp"
 
 Bootstrap_Thread::Bootstrap_Thread()
 	: mutex1(NULL)

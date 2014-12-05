@@ -15,15 +15,28 @@
  * along with this program; if not, write to the Free Software
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
-#include "../lib/Regex/GLib.hpp"
-#include "Regex.hpp"
 
-Bootstrap_Regex::Bootstrap_Regex() :
-	engine(NULL)
-{
-	this->engine = new Regex_GLib;
-}
+#ifndef GLIBMUTEX_H_
+#define GLIBMUTEX_H_
+#include <glibmm/thread.h>
+#include "../Mutex.hpp"
 
-Bootstrap_Regex::~Bootstrap_Regex() {
-	delete this->engine;
-}
+class Mutex_GLib : public Mutex {
+protected:
+	Glib::Mutex mutex;
+public:
+	void lock() {
+		this->mutex.lock();
+	}
+
+	bool trylock() {
+		return this->mutex.trylock();
+	}
+
+	void unlock() {
+		this->mutex.unlock();
+	}
+
+};
+
+#endif /* GLIBMUTEX_H_ */

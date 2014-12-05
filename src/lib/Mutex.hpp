@@ -15,15 +15,31 @@
  * along with this program; if not, write to the Free Software
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
-#include "../lib/Regex/GLib.hpp"
-#include "Regex.hpp"
 
-Bootstrap_Regex::Bootstrap_Regex() :
-	engine(NULL)
-{
-	this->engine = new Regex_GLib;
-}
+#ifndef MUTEX_H_INCLUDED
+#define MUTEX_H_INCLUDED
+#include <cstdlib>
 
-Bootstrap_Regex::~Bootstrap_Regex() {
-	delete this->engine;
-}
+#include "Trait/LoggerAware.hpp"
+
+class Mutex : public Trait_LoggerAware {
+public:
+	virtual inline ~Mutex() {};
+
+	virtual void lock() = 0;
+	virtual bool trylock() = 0;
+	virtual void unlock() = 0;
+};
+
+class Mutex_Connection {
+protected:
+	Mutex* mutex;
+public:
+	Mutex_Connection() : mutex(NULL) {}
+
+	void setMutex(Mutex& mutex) {
+		this->mutex = &mutex;
+	}
+};
+
+#endif

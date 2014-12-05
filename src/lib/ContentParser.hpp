@@ -15,15 +15,25 @@
  * along with this program; if not, write to the Free Software
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
-#include "../lib/Regex/GLib.hpp"
-#include "Regex.hpp"
+ 
+#ifndef CONTENTPARSER_H_
+#define CONTENTPARSER_H_
+#include <map>
+#include <string>
 
-Bootstrap_Regex::Bootstrap_Regex() :
-	engine(NULL)
-{
-	this->engine = new Regex_GLib;
-}
+#include "Exception.hpp"
 
-Bootstrap_Regex::~Bootstrap_Regex() {
-	delete this->engine;
-}
+class ContentParser {
+public:
+	virtual inline ~ContentParser() {};
+	virtual void parse(std::string const& sourceCode) = 0;
+	virtual std::map<std::string, std::string> getOptions() const = 0;
+	virtual std::string getOption(std::string const& name) const = 0;
+	virtual void setOption(std::string const& name, std::string const& value) = 0;
+	virtual void setOptions(std::map<std::string, std::string> const& options) = 0;
+	virtual std::string buildSource() const = 0;
+	virtual void buildDefaultEntry(std::string const& partition_uuid) = 0;
+};
+
+#endif /* CONTENTPARSER_H_ */
+ 

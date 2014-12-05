@@ -15,15 +15,43 @@
  * along with this program; if not, write to the Free Software
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
-#include "../lib/Regex/GLib.hpp"
-#include "Regex.hpp"
 
-Bootstrap_Regex::Bootstrap_Regex() :
-	engine(NULL)
+#ifndef ABOUTCONTROLLERIMPL_H_
+#define ABOUTCONTROLLERIMPL_H_
+
+#include <libintl.h>
+#include <locale.h>
+#include <sstream>
+#include "../config.hpp"
+
+#include "../Model/Env.hpp"
+
+#include "../View/About.hpp"
+#include "../View/Trait/ViewAware.hpp"
+#include "AboutController.hpp"
+#include "ControllerAbstract.hpp"
+
+class AboutControllerImpl :
+	public ControllerAbstract,
+	public AboutController,
+	public View_Trait_ViewAware<View_About>
 {
-	this->engine = new Regex_GLib;
-}
+public:
+	AboutControllerImpl() : ControllerAbstract("about")
+	{
+	}
 
-Bootstrap_Regex::~Bootstrap_Regex() {
-	delete this->engine;
-}
+	
+	void showAction() {
+		this->logActionBegin("show");
+		try {
+			this->view->show();
+		} catch (Exception const& e) {
+			this->getAllControllers().errorController->errorAction(e);
+		}
+		this->logActionEnd();
+	}
+
+};
+
+#endif

@@ -59,7 +59,7 @@ target_link_libraries(grub-customizer
 target_link_libraries(grubcfg-proxy 
     ${OPENSSL_LIBRARIES})
 
-configure_file ("config.h.in" "${CMAKE_CURRENT_SOURCE_DIR}/src/config.h")
+configure_file ("config.hpp.in" "${CMAKE_CURRENT_SOURCE_DIR}/src/config.hpp")
 
 configure_file ("misc/pkexec_policy.in" "${CMAKE_CURRENT_BINARY_DIR}/net.launchpad.danielrichter2007.pkexec.grub-customizer.policy")
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/net.launchpad.danielrichter2007.pkexec.grub-customizer.policy

@@ -15,15 +15,18 @@
  * along with this program; if not, write to the Free Software
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
-#include "../lib/Regex/GLib.hpp"
-#include "Regex.hpp"
 
-Bootstrap_Regex::Bootstrap_Regex() :
-	engine(NULL)
-{
-	this->engine = new Regex_GLib;
-}
+#ifndef ENTRY_PATH_FOLLOWER_INCLUDED
+#define ENTRY_PATH_FOLLOWER_INCLUDED
+#include <string>
+#include <list>
+#include "../Model/Entry.hpp"
 
-Bootstrap_Regex::~Bootstrap_Regex() {
-	delete this->engine;
-}
+class Model_EntryPathFollower {
+public:
+	virtual inline ~Model_EntryPathFollower() {};
+
+	virtual Model_Entry* getEntryByPath(std::list<std::string> const& path)=0;
+};
+
+#endif

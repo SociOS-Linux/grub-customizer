@@ -15,17 +15,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
-#include "View.h"
-
-#include "../View/Gtk/Main.cpp"
-#include "../View/Gtk/About.cpp"
-#include "../View/Gtk/Installer.cpp"
-#include "../View/Gtk/Trash.cpp"
-#include "../View/Gtk/EntryEditor.cpp"
-#include "../View/Gtk/Settings.cpp"
-#include "../View/Gtk/EnvEditor.cpp"
-#include "../View/Gtk/Error.cpp"
-#include "../View/Gtk/Theme.cpp"
+#include "../View/Gtk/About.hpp"
+#include "../View/Gtk/EntryEditor.hpp"
+#include "../View/Gtk/EnvEditor.hpp"
+#include "../View/Gtk/Error.hpp"
+#include "../View/Gtk/Installer.hpp"
+#include "../View/Gtk/Main.hpp"
+#include "../View/Gtk/Settings.hpp"
+#include "../View/Gtk/Theme.hpp"
+#include "../View/Gtk/Trash.hpp"
+#include "View.hpp"
 
 Bootstrap_View::Bootstrap_View(int argc, char** argv)
 	: about(NULL)

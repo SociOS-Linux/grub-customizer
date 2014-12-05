@@ -15,15 +15,19 @@
  * along with this program; if not, write to the Free Software
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
-#include "../lib/Regex/GLib.hpp"
-#include "Regex.hpp"
 
-Bootstrap_Regex::Bootstrap_Regex() :
-	engine(NULL)
-{
-	this->engine = new Regex_GLib;
-}
+#ifndef CONTROLLER_ABSTRACT_H_
+#define CONTROLLER_ABSTRACT_H_
 
-Bootstrap_Regex::~Bootstrap_Regex() {
-	delete this->engine;
-}
+#include "../lib/Trait/ActionLoggerAware.hpp"
+#include "ControllerCollection.hpp"
+
+class ControllerAbstract : public Trait_ActionLoggerAware, public ControllerCollection_Connection {
+public:
+	ControllerAbstract(std::string const& controllerName) {
+		this->setControllerName(controllerName);
+	}
+};
+
+
+#endif /* ABSTRACT_H_ */

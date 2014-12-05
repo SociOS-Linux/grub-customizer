@@ -15,15 +15,20 @@
  * along with this program; if not, write to the Free Software
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
-#include "../lib/Regex/GLib.hpp"
-#include "Regex.hpp"
 
-Bootstrap_Regex::Bootstrap_Regex() :
-	engine(NULL)
-{
-	this->engine = new Regex_GLib;
-}
+#ifndef ERROR_H_
+#define ERROR_H_
 
-Bootstrap_Regex::~Bootstrap_Regex() {
-	delete this->engine;
-}
+#include <string>
+
+#include "../Controller/ErrorController.hpp"
+#include "../Controller/Trait/ControllerAware.hpp"
+
+class View_Error : public Trait_ControllerAware<ErrorController> {
+public:
+	virtual inline ~View_Error(){}
+	virtual void showErrorMessage(std::string const& errorMessage, bool allowContinue) = 0;
+};
+
+
+#endif /* ERROR_H_ */

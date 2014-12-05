@@ -15,15 +15,22 @@
  * along with this program; if not, write to the Free Software
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
-#include "../lib/Regex/GLib.hpp"
-#include "Regex.hpp"
 
-Bootstrap_Regex::Bootstrap_Regex() :
-	engine(NULL)
+#ifndef SRC_BOOTSTRAP_THREAD_HPP_
+#define SRC_BOOTSTRAP_THREAD_HPP_
+
+#include "../Controller/ThreadController.hpp"
+#include "../lib/Mutex.hpp"
+
+class Bootstrap_Thread
 {
-	this->engine = new Regex_GLib;
-}
+	public: Bootstrap_Thread();
+	public: ~Bootstrap_Thread();
+	public: ThreadController* threadController;
+	public: Mutex* mutex1;
+	public: Mutex* mutex2;
+};
 
-Bootstrap_Regex::~Bootstrap_Regex() {
-	delete this->engine;
-}
+
+
+#endif /* SRC_BOOTSTRAP_THREAD_HPP_ */

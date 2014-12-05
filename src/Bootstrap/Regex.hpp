@@ -15,15 +15,17 @@
  * along with this program; if not, write to the Free Software
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
-#include "../lib/Regex/GLib.hpp"
-#include "Regex.hpp"
+#ifndef SRC_BOOTSTRAP_REGEX_HPP_
+#define SRC_BOOTSTRAP_REGEX_HPP_
 
-Bootstrap_Regex::Bootstrap_Regex() :
-	engine(NULL)
-{
-	this->engine = new Regex_GLib;
-}
+#include "../lib/Regex.hpp"
 
-Bootstrap_Regex::~Bootstrap_Regex() {
-	delete this->engine;
-}
+class Bootstrap_Regex {
+	public: Regex* engine;
+	public: Bootstrap_Regex();
+	public: ~Bootstrap_Regex();
+};
+
+
+
+#endif /* SRC_BOOTSTRAP_REGEX_HPP_ */
