@@ -38,7 +38,7 @@
 
 #include "../Controller/ControllerAbstract.hpp"
 
-#include "../Model/Data/Mountpoints/DeviceDataList.hpp"
+#include "../Model/Data/Collection.hpp"
 #include "../lib/ContentParserFactory.hpp"
 #include "Helper/DeviceInfo.hpp"
 #include "ThreadController.hpp"
@@ -51,13 +51,13 @@ class TrashControllerImpl :
 	public View_Trait_ViewAware<View_Trash>,
 	public Model_ListCfg_Connection,
 	public Mapper_EntryName_Connection,
-	public Model_Data_Mountpoints_DeviceDataList_Connection,
+	public Model_Data_Collection_Connection,
 	public ContentParserFactory_Connection,
 	public Model_Env_Connection
 {
 	void _refresh() {
 		assert(this->contentParserFactory != NULL);
-		assert(this->deviceDataList != NULL);
+		assert(this->models != NULL);
 	
 		this->view->clear();
 	
@@ -86,7 +86,11 @@ class TrashControllerImpl :
 			listItem.isVisible = true;
 			listItem.parentEntry = parent;
 			if (iter->dataSource) {
-				listItem.options = Controller_Helper_DeviceInfo::fetch(iter->dataSource->content, *this->contentParserFactory, *this->deviceDataList);
+				listItem.options = Controller_Helper_DeviceInfo::fetch(
+					iter->dataSource->content,
+					*this->contentParserFactory,
+					this->models->deviceDataList
+				);
 			}
 	
 			this->view->addItem(listItem);

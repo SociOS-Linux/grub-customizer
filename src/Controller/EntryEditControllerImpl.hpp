@@ -35,7 +35,7 @@
 #include "../Controller/ControllerAbstract.hpp"
 #include "../lib/ContentParserFactory.hpp"
 #include "../lib/Exception.hpp"
-#include "../Model/Data/Mountpoints/DeviceDataList.hpp"
+#include "../Model/Data/Collection.hpp"
 #include "../Model/Installer.hpp"
 #include "../Model/ListCfg.hpp"
 #include "Trait/ThreadControllerAware.hpp"
@@ -48,8 +48,8 @@ class EntryEditControllerImpl :
 	public Trait_ThreadControllerAware,
 	public Model_ListCfg_Connection,
 	public ContentParserFactory_Connection,
-	public Model_Data_Mountpoints_DeviceDataList_Connection,
-	public Model_Env_Connection
+	public Model_Env_Connection,
+	public Model_Data_Collection_Connection
 {
 	ContentParser* currentContentParser;
 	Model_Script* _createCustomScript() {
@@ -134,8 +134,8 @@ public:
 		this->logActionBegin("switch-type");
 		try {
 			std::string partition;
-			if (this->deviceDataList->size()) {
-				partition = this->deviceDataList->getData().begin()->second["UUID"];
+			if (this->models->deviceDataList.size()) {
+				partition = this->models->deviceDataList.getData().begin()->second["UUID"];
 			}
 	
 			if ((this->currentContentParser || partition != "") && newType != "") {

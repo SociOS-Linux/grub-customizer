@@ -41,7 +41,6 @@
 #include "../Mapper/EntryNameImpl.hpp"
 #include "../Model/Env.hpp"
 #include "../Model/ThemeManager.hpp"
-#include "../Model/Data/Mountpoints/DeviceDataList.hpp"
 
 
 
@@ -69,11 +68,12 @@ int main(int argc, char** argv){
 		Model_MountTable mountTable;
 		Model_ListCfg savedListCfg;
 		Model_FbResolutionsGetter fbResolutionsGetter;
-		Model_Data_Mountpoints_DeviceDataList deviceDataList;
 		ContentParser_FactoryImpl contentParserFactory;
 		Mapper_EntryNameImpl entryNameMapper;
 		Model_ThemeManager themeManager;
 		Model_DeviceMap deviceMap;
+
+		Model_Data_Collection modelDataCollection;
 
 		deviceMap.setRegexEngine(*regex.engine);
 
@@ -82,7 +82,7 @@ int main(int argc, char** argv){
 		EntryEditControllerImpl entryEditController;
 		entryEditController.setContentParserFactory(contentParserFactory);
 		entryEditController.setView(*view.entryEditor);
-		entryEditController.setDeviceDataList(deviceDataList);
+		entryEditController.setModelDataCollection(modelDataCollection);
 		entryEditController.setListCfg(listcfg);
 
 		MainControllerImpl mainController;
@@ -91,7 +91,7 @@ int main(int argc, char** argv){
 		mainController.setSettingsBuffer(settingsOnDisk);
 		mainController.setSavedListCfg(savedListCfg);
 		mainController.setFbResolutionsGetter(fbResolutionsGetter);
-		mainController.setDeviceDataList(deviceDataList);
+		mainController.setModelDataCollection(modelDataCollection);
 		mainController.setMountTable(mountTable);
 		mainController.setContentParserFactory(contentParserFactory);
 		mainController.setView(*view.main);
@@ -102,6 +102,7 @@ int main(int argc, char** argv){
 		settingsController.setView(*view.settings);
 		settingsController.setSettingsManager(settings);
 		settingsController.setFbResolutionsGetter(fbResolutionsGetter);
+		settingsController.setModelDataCollection(modelDataCollection);
 
 		EnvEditorControllerImpl envEditController;
 		envEditController.setMountTable(mountTable);
@@ -111,16 +112,18 @@ int main(int argc, char** argv){
 		TrashControllerImpl trashController;
 		trashController.setEntryNameMapper(entryNameMapper);
 		trashController.setListCfg(listcfg);
-		trashController.setDeviceDataList(deviceDataList);
 		trashController.setContentParserFactory(contentParserFactory);
 		trashController.setView(*view.trash);
+		trashController.setModelDataCollection(modelDataCollection);
 
 		InstallerControllerImpl installController;
 		installController.setInstaller(installer);
 		installController.setView(*view.installer);
+		installController.setModelDataCollection(modelDataCollection);
 
 		AboutControllerImpl aboutController;
 		aboutController.setView(*view.about);
+		aboutController.setModelDataCollection(modelDataCollection);
 
 		ErrorControllerImpl errorController;
 		errorController.setView(*view.error);
@@ -130,6 +133,7 @@ int main(int argc, char** argv){
 		themeController.setThemeManager(themeManager);
 		themeController.setSettingsManager(settings);
 		themeController.setListCfg(listcfg);
+		themeController.setModelDataCollection(modelDataCollection);
 
 		ControllerCollection controllerCollection;
 		controllerCollection.entryEditController = &entryEditController;
@@ -204,8 +208,8 @@ int main(int argc, char** argv){
 		themeController.setLogger(logger);
 
 		// set deviceDataList
-		view.entryEditor->setDeviceDataList(deviceDataList);
-		view.envEditor->setDeviceDataList(deviceDataList);
+		view.entryEditor->setDeviceDataList(modelDataCollection.deviceDataList);
+		view.envEditor->setDeviceDataList(modelDataCollection.deviceDataList);
 
 		// configure logger
 		logger.setLogLevel(Logger_Stream::LOG_EVENT);

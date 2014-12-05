@@ -77,6 +77,7 @@ src/Controller/TrashController.hpp -text
 src/Controller/TrashControllerImpl.hpp -text
 src/Mapper/EntryName.hpp -text
 src/Mapper/EntryNameImpl.hpp -text
+src/Model/Data/Collection.hpp -text
 src/Model/Data/Mountpoints/DeviceDataList.hpp -text
 src/Model/DeviceMap.hpp -text
 src/Model/Entry.hpp -text

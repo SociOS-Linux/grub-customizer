@@ -32,12 +32,12 @@
 
 #include "../Controller/ControllerAbstract.hpp"
 #include "../Controller/Trait/ThreadControllerAware.hpp"
+#include "../Model/Data/Collection.hpp"
 
 #include "../lib/Exception.hpp"
 
 #include "InstallerController.hpp"
 #include "ThreadController.hpp"
-
 
 class InstallerControllerImpl :
 	public ControllerAbstract,
@@ -45,7 +45,8 @@ class InstallerControllerImpl :
 	public View_Trait_ViewAware<View_Installer>,
 	public Trait_ThreadControllerAware,
 	public Model_Installer_Connection,
-	public Model_Env_Connection
+	public Model_Env_Connection,
+	public Model_Data_Collection_Connection
 {
 public:
 	ThreadController& getThreadController() {

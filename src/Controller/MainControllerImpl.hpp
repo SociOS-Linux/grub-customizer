@@ -31,7 +31,6 @@
 #include "../Model/Env.hpp"
 
 #include "../Model/ListCfg.hpp"
-#include "../Model/Data/Mountpoints/DeviceDataList.hpp"
 #include "../lib/ContentParserFactory.hpp"
 
 #include "../Controller/ControllerAbstract.hpp"
@@ -60,7 +59,7 @@ class MainControllerImpl :
 	public Model_ListCfg_Connection,
 	public Model_SettingsManagerData_Connection,
 	public Model_FbResolutionsGetter_Connection,
-	public Model_Data_Mountpoints_DeviceDataList_Connection,
+	public Model_Data_Collection_Connection,
 	public Model_MountTable_Connection,
 	public ContentParserFactory_Connection,
 	public Mapper_EntryName_Connection,
@@ -98,7 +97,11 @@ class MainControllerImpl :
 			// parse content to show additional informations
 			std::map<std::string, std::string> options;
 			if (rule.dataSource) {
-				options = Controller_Helper_DeviceInfo::fetch(rule.dataSource->content, *this->contentParserFactory, *deviceDataList);
+				options = Controller_Helper_DeviceInfo::fetch(
+					rule.dataSource->content,
+					*this->contentParserFactory,
+					this->models->deviceDataList
+				);
 			}
 
 			Model_Proxy* proxy = this->grublistCfg->proxies.getProxyByRule(&rule);
@@ -304,7 +307,7 @@ public:
 			or !settingsOnDisk
 			or !savedListCfg
 			or !fbResolutionsGetter
-			or !deviceDataList
+			or !models
 			or !mountTable
 			or !contentParserFactory
 			or !threadController
@@ -317,7 +320,7 @@ public:
 
 		this->log("reading partition info…", Logger::EVENT);
 		try {
-			Model_Mapper_Process_BlkId().loadData(*this->deviceDataList);
+			Model_Mapper_Process_BlkId().loadData(this->models->deviceDataList);
 		} catch (CommandNotFoundException const& e) {
 			this->log(e, Logger::ERROR);
 		}

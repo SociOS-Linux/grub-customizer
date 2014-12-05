@@ -31,6 +31,7 @@
 
 #include "../Controller/ControllerAbstract.hpp"
 #include "../Controller/Trait/ThreadControllerAware.hpp"
+#include "../Model/Data/Collection.hpp"
 
 #include "ErrorController.hpp"
 
@@ -38,7 +39,8 @@ class ErrorControllerImpl :
 	public ControllerAbstract,
 	public ErrorController,
 	public View_Trait_ViewAware<View_Error>,
-	public Trait_ThreadControllerAware
+	public Trait_ThreadControllerAware,
+	public Model_Data_Collection_Connection
 {
 	bool applicationStarted;
 public:

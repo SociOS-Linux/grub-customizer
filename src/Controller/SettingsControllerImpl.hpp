@@ -44,6 +44,7 @@
 #include "../lib/Trait/LoggerAware.hpp"
 
 #include "../lib/Exception.hpp"
+#include "../Model/Data/Collection.hpp"
 
 #include "SettingsController.hpp"
 
@@ -56,7 +57,8 @@ class SettingsControllerImpl :
 	public Model_ListCfg_Connection,
 	public Model_SettingsManagerData_Connection,
 	public Model_FbResolutionsGetter_Connection,
-	public Model_Env_Connection
+	public Model_Env_Connection,
+	public Model_Data_Collection_Connection
 {
 	bool syncActive; // should only be controlled by syncSettings()
 

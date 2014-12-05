@@ -30,11 +30,13 @@
 #include "../View/Trait/ViewAware.hpp"
 #include "AboutController.hpp"
 #include "ControllerAbstract.hpp"
+#include "../Model/Data/Collection.hpp"
 
 class AboutControllerImpl :
 	public ControllerAbstract,
 	public AboutController,
-	public View_Trait_ViewAware<View_About>
+	public View_Trait_ViewAware<View_About>,
+	public Model_Data_Collection_Connection
 {
 public:
 	AboutControllerImpl() : ControllerAbstract("about")
