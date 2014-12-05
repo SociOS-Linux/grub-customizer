@@ -35,7 +35,7 @@
 #include "../Controller/ControllerAbstract.hpp"
 #include "../lib/ContentParserFactory.hpp"
 #include "../lib/Exception.hpp"
-#include "../Model/DeviceDataList.hpp"
+#include "../Model/Data/Mountpoints/DeviceDataList.hpp"
 #include "../Model/Installer.hpp"
 #include "../Model/ListCfg.hpp"
 #include "Trait/ThreadControllerAware.hpp"
@@ -48,7 +48,7 @@ class EntryEditControllerImpl :
 	public Trait_ThreadControllerAware,
 	public Model_ListCfg_Connection,
 	public ContentParserFactory_Connection,
-	public Model_DeviceDataListInterface_Connection,
+	public Model_Data_Mountpoints_DeviceDataList_Connection,
 	public Model_Env_Connection
 {
 	ContentParser* currentContentParser;
@@ -135,7 +135,7 @@ public:
 		try {
 			std::string partition;
 			if (this->deviceDataList->size()) {
-				partition = this->deviceDataList->begin()->second["UUID"];
+				partition = this->deviceDataList->getData().begin()->second["UUID"];
 			}
 	
 			if ((this->currentContentParser || partition != "") && newType != "") {

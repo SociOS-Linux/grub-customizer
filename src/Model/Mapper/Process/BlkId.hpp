@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Daniel Richter <danielrichter2007@web.de>
+ * Copyright (C) 2010-2014 Daniel Richter <danielrichter2007@web.de>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,30 +16,36 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef DEVICE_DATALIST_INCLUDED
-#define DEVICE_DATALIST_INCLUDED
+#ifndef SRC_MODEL_MAPPER_PROCESS_BLKID_HPP_
+#define SRC_MODEL_MAPPER_PROCESS_BLKID_HPP_
+
 #include <map>
 #include <cstdio>
 #include <string>
-#include "../Model/DeviceDataListInterface.hpp"
-#include "../lib/Trait/LoggerAware.hpp"
+#include "../../Data/Mountpoints/DeviceDataList.hpp"
 
-class Model_DeviceDataList : public Model_DeviceDataListInterface, public Trait_LoggerAware {
-public:
-	Model_DeviceDataList(FILE* blkidOutput){
-		loadData(blkidOutput);
-	}
+class Model_Mapper_Process_BlkId
+{
+	/**
+	 * loads data from blkid
+	 */
+	public: void loadData(Model_Data_Mountpoints_DeviceDataList& dest) const
+	{
+		FILE* blkidProc = popen("blkid", "r");
 
-	Model_DeviceDataList() {}
+		if (!blkidProc){
+			throw CommandNotFoundException("unable to run blkid");
+		}
 
-	void loadData(FILE* blkidOutput) {
+		dest.clear();
+
 		std::string deviceName, attributeName;
 		bool inAttributeValue = false;
 		bool deviceNameIsComplete = false, attributeNameIsComplete = false;
 		int c;
-		while ((c = fgetc(blkidOutput)) != EOF){
+		while ((c = fgetc(blkidProc)) != EOF){
 			if (inAttributeValue && c != '"'){
-				(*this)[deviceName][attributeName] += c;
+				dest.getProperty(deviceName, attributeName) += c;
 			}
 			else {
 				if (c == '\n'){
@@ -67,22 +73,9 @@ public:
 				}
 			}
 		}
-	}
 
-	void clear() {
-		this->std::map<std::string, std::map<std::string, std::string> >::clear();
-	}
-
-};
-
-class Model_DeviceDataList_Connection {
-protected:
-	Model_DeviceDataList* deviceDataList;
-public:
-	Model_DeviceDataList_Connection() : deviceDataList(NULL) {}
-
-	void setDeviceDataList(Model_DeviceDataList& deviceDataList){
-		this->deviceDataList = &deviceDataList;
+		pclose(blkidProc);
 	}
 };
-#endif
+
+#endif /* SRC_MODEL_MAPPER_PROCESS_BLKID_HPP_ */

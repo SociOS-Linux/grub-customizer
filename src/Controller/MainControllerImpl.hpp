@@ -31,7 +31,7 @@
 #include "../Model/Env.hpp"
 
 #include "../Model/ListCfg.hpp"
-#include "../Model/DeviceDataList.hpp"
+#include "../Model/Data/Mountpoints/DeviceDataList.hpp"
 #include "../lib/ContentParserFactory.hpp"
 
 #include "../Controller/ControllerAbstract.hpp"
@@ -43,6 +43,7 @@
 #include "../Model/FbResolutionsGetter.hpp"
 #include "../View/Model/ListItem.hpp"
 #include "Helper/DeviceInfo.hpp"
+#include "../Model/Mapper/Process/BlkId.hpp"
 
 #include "MainController.hpp"
 #include "ThreadController.hpp"
@@ -59,7 +60,7 @@ class MainControllerImpl :
 	public Model_ListCfg_Connection,
 	public Model_SettingsManagerData_Connection,
 	public Model_FbResolutionsGetter_Connection,
-	public Model_DeviceDataList_Connection,
+	public Model_Data_Mountpoints_DeviceDataList_Connection,
 	public Model_MountTable_Connection,
 	public ContentParserFactory_Connection,
 	public Mapper_EntryName_Connection,
@@ -315,11 +316,10 @@ public:
 		savedListCfg->verbose = false;
 
 		this->log("reading partition info…", Logger::EVENT);
-		FILE* blkidProc = popen("blkid", "r");
-		if (blkidProc){
-			deviceDataList->clear();
-			deviceDataList->loadData(blkidProc);
-			pclose(blkidProc);
+		try {
+			Model_Mapper_Process_BlkId().loadData(*this->deviceDataList);
+		} catch (CommandNotFoundException const& e) {
+			this->log(e, Logger::ERROR);
 		}
 
 		mountTable->loadData("");

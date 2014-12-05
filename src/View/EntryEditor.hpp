@@ -26,10 +26,13 @@
 #include "../lib/Type.hpp"
 #include "../Controller/Trait/ControllerAware.hpp"
 #include "../lib/Trait/LoggerAware.hpp"
+#include "../Model/Data/Mountpoints/DeviceDataList.hpp"
 
 class View_EntryEditor :
 	public Trait_LoggerAware,
-	public Trait_ControllerAware<EntryEditController> {
+	public Trait_ControllerAware<EntryEditController>,
+	public Model_Data_Mountpoints_DeviceDataList_Connection
+{
 public:
 	virtual inline ~View_EntryEditor() {};
 

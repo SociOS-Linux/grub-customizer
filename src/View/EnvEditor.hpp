@@ -23,10 +23,13 @@
 #include "../Controller/EnvEditorController.hpp"
 #include "../lib/Trait/LoggerAware.hpp"
 #include "../Controller/Trait/ControllerAware.hpp"
+#include "../Model/Data/Mountpoints/DeviceDataList.hpp"
 
 class View_EnvEditor :
 	public Trait_LoggerAware,
-	public Trait_ControllerAware<EnvEditorController> {
+	public Trait_ControllerAware<EnvEditorController>,
+	public Model_Data_Mountpoints_DeviceDataList_Connection
+{
 public:
 	virtual inline ~View_EnvEditor() {};
 

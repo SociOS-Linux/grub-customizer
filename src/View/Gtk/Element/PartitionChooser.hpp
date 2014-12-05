@@ -20,17 +20,26 @@
 #define PARTITIONCHOOSER_DROPDOWN_H_
 #include <gtkmm.h>
 #include <string>
-#include "../../../Model/DeviceDataListInterface.hpp"
+#include "../../../Model/Data/Mountpoints/DeviceDataList.hpp"
 #include <libintl.h>
 
 class View_Gtk_Element_PartitionChooser : public Gtk::ComboBoxText {
 	std::map<std::string, std::string> uuid_map;
 	Glib::ustring activePartition_uuid;
-	Model_DeviceDataListInterface const* deviceDataList;
+	Model_Data_Mountpoints_DeviceDataList const* deviceDataList;
 	bool prependCurrentPartition;
 	std::string currentPartitionName;
 public:
-	View_Gtk_Element_PartitionChooser(Glib::ustring const& activePartition_uuid, Model_DeviceDataListInterface const& deviceDataList, bool prependCurrentPartition = false, std::string const& currentPartitionName = "") : activePartition_uuid(activePartition_uuid), deviceDataList(&deviceDataList), prependCurrentPartition(prependCurrentPartition), currentPartitionName(currentPartitionName)
+	View_Gtk_Element_PartitionChooser(
+		Glib::ustring const& activePartition_uuid,
+		Model_Data_Mountpoints_DeviceDataList const& deviceDataList,
+		bool prependCurrentPartition = false,
+		std::string const& currentPartitionName = ""
+	) :
+		activePartition_uuid(activePartition_uuid),
+		deviceDataList(&deviceDataList),
+		prependCurrentPartition(prependCurrentPartition),
+		currentPartitionName(currentPartitionName)
 	{
 		load();
 	}
@@ -41,12 +50,12 @@ public:
 			this->append(currentPartitionName + "\n(" + gettext("current") + ")");
 			this->set_active(0);
 		}
-		for (Model_DeviceDataListInterface::const_iterator iter = deviceDataList->begin(); iter != deviceDataList->end(); iter++) {
+		for (ddl_value_map::const_iterator iter = deviceDataList->getData().begin(); iter != deviceDataList->getData().end(); iter++) {
 			if (iter->second.find("UUID") != iter->second.end()) {
 				Glib::ustring text = iter->first + "\n(" + (iter->second.find("LABEL") != iter->second.end() ? iter->second.at("LABEL") + ", " : "") + (iter->second.find("TYPE") != iter->second.end() ? iter->second.at("TYPE") : "") + ")";
 				uuid_map[text] = iter->second.at("UUID");
 				this->append(text);
-				if (strToLower(iter->second.at("UUID")) == strToLower(activePartition_uuid) || (activePartition_uuid == "" && iter == deviceDataList->begin() && !prependCurrentPartition)) {
+				if (strToLower(iter->second.at("UUID")) == strToLower(activePartition_uuid) || (activePartition_uuid == "" && iter == deviceDataList->getData().begin() && !prependCurrentPartition)) {
 					this->set_active_text(text);
 				}
 			}

@@ -24,13 +24,11 @@
 #include <libintl.h>
 #include <gtkmm.h>
 
-#include "../../Model/DeviceDataListInterface.hpp"
 #include "Element/PartitionChooser.hpp"
 
 class View_Gtk_EntryEditor :
 	public View_EntryEditor,
-	public Gtk::Dialog,
-	public Model_DeviceDataListInterface_Connection
+	public Gtk::Dialog
 {
 	Gtk::Notebook tabbox;
 	Gtk::TextView tvSource;

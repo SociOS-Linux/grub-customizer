@@ -38,7 +38,7 @@
 
 #include "../Controller/ControllerAbstract.hpp"
 
-#include "../Model/DeviceDataListInterface.hpp"
+#include "../Model/Data/Mountpoints/DeviceDataList.hpp"
 #include "../lib/ContentParserFactory.hpp"
 #include "Helper/DeviceInfo.hpp"
 #include "ThreadController.hpp"
@@ -51,7 +51,7 @@ class TrashControllerImpl :
 	public View_Trait_ViewAware<View_Trash>,
 	public Model_ListCfg_Connection,
 	public Mapper_EntryName_Connection,
-	public Model_DeviceDataListInterface_Connection,
+	public Model_Data_Mountpoints_DeviceDataList_Connection,
 	public ContentParserFactory_Connection,
 	public Model_Env_Connection
 {

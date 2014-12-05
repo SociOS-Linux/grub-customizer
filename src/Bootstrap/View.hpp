@@ -29,10 +29,7 @@
 #include "../View/Error.hpp"
 #include "../View/Theme.hpp"
 
-#include "../Model/DeviceDataListInterface.hpp"
-
-class Bootstrap_View :
-	public Model_DeviceDataListInterface_Connection
+class Bootstrap_View
 {
 	public: View_About* about;
 	public: View_EntryEditor* entryEditor;
@@ -43,8 +40,6 @@ class Bootstrap_View :
 	public: View_Settings* settings;
 	public: View_Theme* theme;
 	public: View_Trash* trash;
-
-	public: void setDeviceDataList(Model_DeviceDataListInterface& deviceDataList);
 
 	public: Bootstrap_View(int argc, char** argv);
 	public: ~Bootstrap_View();

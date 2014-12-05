@@ -147,6 +147,11 @@ class DirectoryNotFoundException : public SystemException {
 	   : SystemException(message, file, line) {}
 };
 
+class CommandNotFoundException : public SystemException {
+	public: inline CommandNotFoundException(std::string const& message, std::string const& file = "", int line = -1)
+	   : SystemException(message, file, line) {}
+};
+
 class CmdExecException : public SystemException {
 	public: inline CmdExecException(std::string const& message, std::string const& file = "", int line = -1)
 	   : SystemException(message, file, line) {}

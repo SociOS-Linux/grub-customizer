@@ -20,17 +20,17 @@
 #define DEVICEINFO_H_
 
 #include "../../lib/ContentParserFactory.hpp"
-#include "../../Model/DeviceDataListInterface.hpp"
+#include "../../Model/Data/Mountpoints/DeviceDataList.hpp"
 
 class Controller_Helper_DeviceInfo {
 public:
-	static std::map<std::string, std::string> fetch(std::string const& menuEntryData, ContentParserFactory& contentParserFactory, Model_DeviceDataListInterface const& deviceDataList) {
+	static std::map<std::string, std::string> fetch(std::string const& menuEntryData, ContentParserFactory& contentParserFactory, Model_Data_Mountpoints_DeviceDataList const& deviceDataList) {
 		std::map<std::string, std::string> options;
 		try {
 			options = contentParserFactory.create(menuEntryData)->getOptions();
 			if (options.find("partition_uuid") != options.end()) {
 				// add device path
-				for (Model_DeviceDataListInterface::const_iterator iter = deviceDataList.begin(); iter != deviceDataList.end(); iter++) {
+				for (ddl_value_map::const_iterator iter = deviceDataList.getData().begin(); iter != deviceDataList.getData().end(); iter++) {
 					if (iter->second.find("UUID") != iter->second.end() && iter->second.at("UUID") == options["partition_uuid"]) {
 						options["_deviceName"] = iter->first;
 						break;

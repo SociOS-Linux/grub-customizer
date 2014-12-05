@@ -35,7 +35,6 @@
 #include "../View/Settings.hpp"
 #include "../View/Trait/ViewAware.hpp"
 #include "../Model/FbResolutionsGetter.hpp"
-#include "../Model/DeviceDataList.hpp"
 #include "../lib/ContentParserFactory.hpp"
 #include "../Mapper/EntryName.hpp"
 

@@ -41,6 +41,7 @@
 #include "../Mapper/EntryNameImpl.hpp"
 #include "../Model/Env.hpp"
 #include "../Model/ThemeManager.hpp"
+#include "../Model/Data/Mountpoints/DeviceDataList.hpp"
 
 
 
@@ -68,7 +69,7 @@ int main(int argc, char** argv){
 		Model_MountTable mountTable;
 		Model_ListCfg savedListCfg;
 		Model_FbResolutionsGetter fbResolutionsGetter;
-		Model_DeviceDataList deviceDataList;
+		Model_Data_Mountpoints_DeviceDataList deviceDataList;
 		ContentParser_FactoryImpl contentParserFactory;
 		Mapper_EntryNameImpl entryNameMapper;
 		Model_ThemeManager themeManager;
@@ -77,8 +78,6 @@ int main(int argc, char** argv){
 		deviceMap.setRegexEngine(*regex.engine);
 
 		entryNameMapper.setView(*view.main);
-
-		view.setDeviceDataList(deviceDataList);
 
 		EntryEditControllerImpl entryEditController;
 		entryEditController.setContentParserFactory(contentParserFactory);
@@ -187,7 +186,6 @@ int main(int argc, char** argv){
 		savedListCfg.setLogger(logger);
 		fbResolutionsGetter.setLogger(logger);
 		view.settings->setLogger(logger);
-		deviceDataList.setLogger(logger);
 		view.about->setLogger(logger);
 		thread.mutex1->setLogger(logger);
 		thread.mutex2->setLogger(logger);
@@ -204,6 +202,10 @@ int main(int argc, char** argv){
 		aboutController.setLogger(logger);
 		view.theme->setLogger(logger);
 		themeController.setLogger(logger);
+
+		// set deviceDataList
+		view.entryEditor->setDeviceDataList(deviceDataList);
+		view.envEditor->setDeviceDataList(deviceDataList);
 
 		// configure logger
 		logger.setLogLevel(Logger_Stream::LOG_EVENT);
