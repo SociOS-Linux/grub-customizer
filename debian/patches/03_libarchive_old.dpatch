@@ -16,7 +16,7 @@ diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' 
 +## DP: No description.
 +
 +@DPATCH@
-+diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' 3x~/src/View/Gtk/EnvEditor.cpp 3x/src/View/Gtk/EnvEditor.cpp
++diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' 3x~/src/View/Gtk/EnvEditor.hpp 3x/src/View/Gtk/EnvEditor.hpp
 +--- 3x~/src/View/Gtk/EnvEditor.cpp	2012-08-31 18:27:59.000000000 +0200
 ++++ 3x/src/View/Gtk/EnvEditor.cpp	2012-09-07 23:25:54.000000000 +0200
 +@@ -50,8 +50,8 @@
@@ -30,7 +30,7 @@ diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' 
 + 	this->cbType.set_active(0);
 + 	this->cbType.signal_changed().connect(sigc::mem_fun(this, &View_Gtk_EnvEditor::signal_bootloaderType_changed));
 + 
-+diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' 3x~/src/View/Gtk/Main.cpp 3x/src/View/Gtk/Main.cpp
++diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' 3x~/src/View/Gtk/Main.hpp 3x/src/View/Gtk/Main.hpp
 +--- 3x~/src/View/Gtk/Main.cpp	2012-09-07 19:10:31.000000000 +0200
 ++++ 3x/src/View/Gtk/Main.cpp	2012-09-07 23:26:41.942131625 +0200
 +@@ -112,7 +112,6 @@
@@ -41,7 +41,7 @@ diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' 
 + 
 + 	toolbar.append(tbttRevert);
 + 	tbttRevert.set_is_important(true);
-diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' B_GrubCustomizer_3~/src/Model/Theme.cpp B_GrubCustomizer_3/src/Model/Theme.cpp
+diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' B_GrubCustomizer_3~/src/Model/Theme.hpp B_GrubCustomizer_3/src/Model/Theme.hpp
 --- B_GrubCustomizer_3~/src/Model/Theme.cpp	2013-12-26 20:54:15.000000000 +0100
 +++ B_GrubCustomizer_3/src/Model/Theme.cpp	2013-12-26 20:53:58.608000000 +0100
 @@ -64,7 +64,7 @@
@@ -84,7 +84,7 @@ diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' 
  	return result;
  }
  
-diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' B_GrubCustomizer_3~/src/Model/Theme.cpp.rej B_GrubCustomizer_3/src/Model/Theme.cpp.rej
+diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' B_GrubCustomizer_3~/src/Model/Theme.hpp.rej B_GrubCustomizer_3/src/Model/Theme.cpp.rej
 --- B_GrubCustomizer_3~/src/Model/Theme.cpp.rej	1970-01-01 01:00:00.000000000 +0100
 +++ B_GrubCustomizer_3/src/Model/Theme.cpp.rej	2013-12-26 20:55:30.799867686 +0100
 @@ -0,0 +1,13 @@
@@ -101,13 +101,13 @@ diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' 
 + }
 + 
 + std::string Model_Theme::loadFileContent(std::string localFileName) {
-diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' B_GrubCustomizer_3~/src/Model/Theme.h B_GrubCustomizer_3/src/Model/Theme.h
---- B_GrubCustomizer_3~/src/Model/Theme.h	2013-12-26 20:54:15.000000000 +0100
-+++ B_GrubCustomizer_3/src/Model/Theme.h	2013-12-26 20:53:58.608000000 +0100
+diff -urNad '--exclude=CVS' '--exclude=.svn' '--exclude=.git' '--exclude=.arch' '--exclude=.hg' '--exclude=_darcs' '--exclude=.bzr' B_GrubCustomizer_3~/src/Model/Theme.hpp B_GrubCustomizer_3/src/Model/Theme.hpp
+--- B_GrubCustomizer_3~/src/Model/Theme.cpp	2013-12-26 20:54:15.000000000 +0100
++++ B_GrubCustomizer_3/src/Model/Theme.cpp	2013-12-26 20:53:58.608000000 +0100
 @@ -29,6 +29,7 @@
- #include <archive_entry.h>
+ #include <archive_Entry.cpp>
  #include <map>
- #include "../lib/assert.h"
+ #include "../lib/assert.cpp"
 +#include <string>
  
  struct Model_Theme {

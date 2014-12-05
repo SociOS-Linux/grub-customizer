@@ -16,13 +16,12 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#include "../Model/Script.h"
-#include "../Model/Proxy.h"
-#include "../Model/Entry.h"
-#include "../Model/Rule.h"
-#include "../Model/ListCfg.h" // multi
-
+#include "../Model/Entry.hpp"
 #include <iostream>
+#include "../Model/ListCfg.hpp" // multi
+#include "../Model/Proxy.hpp"
+#include "../Model/Rule.hpp"
+#include "../Model/Script.hpp"
 
 int main(int argc, char** argv){
 	if (argc == 2) {
