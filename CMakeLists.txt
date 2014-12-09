@@ -1,6 +1,7 @@
 project(GrubCustomizer)
 cmake_minimum_required(VERSION 2.6.2) # may be lower
 
+ADD_DEFINITIONS(-std=c++11)
 
 find_package(PkgConfig)
 
