@@ -67,6 +67,13 @@ public:
 		this->view->onInstallClick = std::bind(std::mem_fn(&InstallerControllerImpl::installGrubAction), this, _1);
 	}
 
+	void init()
+	{
+		using namespace std::placeholders;
+
+		this->installer->onFinish = std::bind(std::mem_fn(&InstallerControllerImpl::showMessageAction), this, _1);
+	}
+
 	
 	void showAction() {
 		this->logActionBegin("show");

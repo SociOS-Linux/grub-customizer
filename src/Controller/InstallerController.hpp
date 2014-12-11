@@ -26,7 +26,6 @@ public:
 	virtual inline ~InstallerController(){};
 	virtual void showAction() = 0;
 	virtual void installGrubThreadedAction(std::string device) = 0;
-	virtual void showMessageAction(std::string const& msg) = 0;
 };
 
 

@@ -20,6 +20,7 @@
 #define GRUB_INSTALLER_INCLUDED
 #include <string>
 #include <cstdio>
+#include <functional>
 #include "../Controller/InstallerController.hpp"
 #include "../Controller/Trait/ControllerAware.hpp"
 #include "../lib/Trait/LoggerAware.hpp"
@@ -27,15 +28,17 @@
 
 class Model_Installer :
 	public Trait_LoggerAware,
-	public Trait_ControllerAware<InstallerController>,
 	public Model_Env_Connection
 {
 	std::string install_result;
 public:
+	std::function<void (std::string const& msg)> onFinish;
+
 	void threadable_install(std::string const& device) {
 		this->install_result = install(device);
-		if (controller)
-			controller->showMessageAction(this->install_result);
+		if (this->onFinish) {
+			this->onFinish(this->install_result);
+		}
 	}
 
 	std::string install(std::string const& device) {
@@ -54,14 +57,22 @@ public:
 
 };
 
-class Model_Installer_Connection {
-protected:
-	Model_Installer* installer;
-public:
-	Model_Installer_Connection() : installer(NULL) {}
+class Model_Installer_Connection
+{
+	protected: Model_Installer* installer;
 
-	void setInstaller(Model_Installer& installer){
+	public: Model_Installer_Connection() : installer(NULL) {}
+
+	public: virtual ~Model_Installer_Connection(){}
+
+	public: void setInstaller(Model_Installer& installer)
+	{
 		this->installer = &installer;
+	}
+
+	public: virtual void initInstallerEvents()
+	{
+		// override to initialize specific view events
 	}
 };
 
