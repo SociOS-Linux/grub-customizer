@@ -52,6 +52,13 @@ public:
 	{
 	}
 
+	void initViewEvents() override
+	{
+		using namespace std::placeholders;
+
+		this->view->onQuitClick = std::bind(std::mem_fn(&ErrorControllerImpl::quitAction), this);
+	}
+
 	
 	void errorAction(Exception const& e) {
 		this->log(e, Logger::EXCEPTION);

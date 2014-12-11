@@ -38,7 +38,7 @@ public:
 			msgDlg.add_button(gettext("continue (risk data loss)"), Gtk::RESPONSE_CANCEL);
 		}
 		if (msgDlg.run() == Gtk::RESPONSE_CLOSE) {
-			this->controller->quitAction();
+			this->onQuitClick();
 		}
 	}
 };

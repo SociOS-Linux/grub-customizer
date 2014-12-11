@@ -26,7 +26,6 @@ public:
 	virtual inline ~ErrorController(){}
 	virtual void errorAction(Exception const& e) = 0;
 	virtual void errorThreadedAction(Exception const& e) = 0;
-	virtual void quitAction() = 0;
 };
 
 

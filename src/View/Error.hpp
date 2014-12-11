@@ -20,12 +20,15 @@
 #define ERROR_H_
 
 #include <string>
+#include <functional>
 
 #include "../Controller/ErrorController.hpp"
 #include "../Controller/Trait/ControllerAware.hpp"
 
-class View_Error : public Trait_ControllerAware<ErrorController> {
+class View_Error {
 public:
+	std::function<void ()> onQuitClick;
+
 	virtual inline ~View_Error(){}
 	virtual void showErrorMessage(std::string const& errorMessage, bool allowContinue) = 0;
 };
