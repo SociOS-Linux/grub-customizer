@@ -60,6 +60,13 @@ public:
 	{
 	}
 
+	void initViewEvents() override
+	{
+		using namespace std::placeholders;
+
+		this->view->onInstallClick = std::bind(std::mem_fn(&InstallerControllerImpl::installGrubAction), this, _1);
+	}
+
 	
 	void showAction() {
 		this->logActionBegin("show");

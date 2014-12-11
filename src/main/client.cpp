@@ -163,7 +163,6 @@ int main(int argc, char** argv){
 		themeController.setThreadController(*thread.threadController);
 
 		//assign event listener
-		view.installer->setController(installController);
 		view.trash->setController(trashController);
 		view.settings->setController(settingsController);
 		listcfg.setController(mainController);
