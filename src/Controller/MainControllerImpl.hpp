@@ -26,6 +26,7 @@
 #include <locale.h>
 #include <sstream>
 #include <algorithm>
+#include <functional>
 #include "../config.hpp"
 
 #include "../Model/Env.hpp"
@@ -312,6 +313,12 @@ public:
 			throw ConfigException("init(): missing some objects", __FILE__, __LINE__);
 		}
 		this->log("initializing (w/o specified bootloader type)…", Logger::IMPORTANT_EVENT);
+
+		{
+			using namespace std::placeholders;
+			this->view->onRemoveRules = std::bind(std::mem_fn(&MainControllerImpl::removeRulesAction), this, _1, _2);
+		}
+
 		savedListCfg->verbose = false;
 
 		this->log("reading partition info…", Logger::EVENT);
@@ -396,7 +403,7 @@ public:
 		this->logActionEnd();
 	}
 
-	void showEnvEditorAction(bool resetPartitionChooser = false) {
+	void showEnvEditorAction() {
 		this->logActionBegin("show-env-editor");
 		try {
 			if (this->env->modificationsUnsaved) {
@@ -442,7 +449,7 @@ public:
 		this->logActionEnd();
 	}
 
-	void loadThreadedAction(bool preserveConfig = false) {
+	void loadThreadedAction(bool preserveConfig) {
 		this->logActionBeginThreaded("load-threaded");
 		try {
 			if (!is_loading){ //allow only one load thread at the same time!
@@ -668,7 +675,7 @@ public:
 	}
 
 
-	void exitAction(bool force = false) {
+	void exitAction(bool force) {
 		this->logActionBegin("exit");
 		try {
 			if (force){
@@ -700,7 +707,7 @@ public:
 	}
 
 
-	void removeRulesAction(std::list<Rule*> rules, bool force = false) {
+	void removeRulesAction(std::list<Rule*> rules, bool force) {
 		this->logActionBegin("remove-rules");
 		try {
 			if (!force && this->_listHasAllCurrentSystemRules(rules)) {
@@ -1069,7 +1076,7 @@ public:
 		this->logActionEnd();
 	}
 
-	void selectRuleAction(Rule* rule, bool startEdit = false) {
+	void selectRuleAction(Rule* rule, bool startEdit) {
 		this->logActionBegin("select-rule");
 		try {
 			this->view->selectRule(rule, startEdit);

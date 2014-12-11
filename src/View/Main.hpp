@@ -29,6 +29,7 @@
 #include "../lib/Trait/LoggerAware.hpp"
 #include "Model/ListItem.hpp"
 #include "Settings.hpp"
+#include <functional>
 
 /**
  * Interface for dialogs which lets the user control the grub list
@@ -36,6 +37,8 @@
 class View_Main : public Trait_LoggerAware, public Trait_ControllerAware<MainController> {
 public:
 	virtual inline ~View_Main() {};
+
+	std::function<void (std::list<Rule*> rules, bool force)> onRemoveRules = nullptr;
 
 	//show this dialog without waiting
 	virtual void show()=0;
@@ -72,14 +75,14 @@ public:
 	//notifies the user about the problem that no grublistcfg_proxy has been found
 	virtual void showProxyNotFoundMessage()=0;
 	//creates a string for an other entry placeholder
-	virtual std::string createNewEntriesPlaceholderString(std::string const& parentMenu = "", std::string const& sourceScriptName = "")=0;
+	virtual std::string createNewEntriesPlaceholderString(std::string const& parentMenu)=0;
 	//creates the string for plaintexts
-	virtual std::string createPlaintextString(std::string const& scriptName = "") const=0;
+	virtual std::string createPlaintextString() const=0;
 
 	//asks the user if he wants to exit the whole application
 	virtual int showExitConfirmDialog(int type)=0;
 	//show the given error message
-	virtual void showErrorMessage(std::string const& msg, std::vector<std::string> const& values = std::vector<std::string>())=0;
+	virtual void showErrorMessage(std::string const& msg)=0;
 
 	virtual void showConfigSavingError(std::string const& message) = 0;
 

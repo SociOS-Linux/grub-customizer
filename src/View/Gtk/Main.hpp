@@ -654,24 +654,16 @@ public:
 		msg.run();
 	}
 
-	std::string createNewEntriesPlaceholderString(std::string const& parentMenu = "", std::string const& sourceScriptName = "") {
-		if (sourceScriptName != "" && parentMenu != "") {
-			return Glib::ustring::compose(gettext("(incoming Entries of %1, Script: %2)"), parentMenu, sourceScriptName);
-		} else if (parentMenu != "") {
+	std::string createNewEntriesPlaceholderString(std::string const& parentMenu) {
+		if (parentMenu != "") {
 			return Glib::ustring::compose(gettext("(incoming Entries of %1)"), parentMenu);
-		} else if (sourceScriptName != "") {
-			return Glib::ustring::compose(gettext("(incoming Entries of Script: %1)"), sourceScriptName);
 		} else {
 			return gettext("(incoming Entries)");
 		}
 	}
 
-	std::string createPlaintextString(std::string const& scriptName = "") const {
-		if (scriptName == "") {
-			return gettext("(script code)");
-		} else {
-			return Glib::ustring::compose(gettext("(script code of %1)"), scriptName);
-		}
+	std::string createPlaintextString() const {
+		return gettext("(script code)");
 	}
 
 	/**
@@ -717,20 +709,8 @@ public:
 		}
 	}
 
-	void showErrorMessage(std::string const& msg, std::vector<std::string> const& values) {
-		Glib::ustring msg2 = msg;
-		switch (values.size()) {
-		case 1:	msg2 = Glib::ustring::compose(msg, values[0]); break;
-		case 2:	msg2 = Glib::ustring::compose(msg, values[0], values[1]); break;
-		case 3:	msg2 = Glib::ustring::compose(msg, values[0], values[1], values[2]); break;
-		case 4:	msg2 = Glib::ustring::compose(msg, values[0], values[1], values[2], values[3]); break;
-		case 5:	msg2 = Glib::ustring::compose(msg, values[0], values[1], values[2], values[3], values[4]); break;
-		case 6:	msg2 = Glib::ustring::compose(msg, values[0], values[1], values[2], values[3], values[4], values[5]); break;
-		case 7:	msg2 = Glib::ustring::compose(msg, values[0], values[1], values[2], values[3], values[4], values[5], values[6]); break;
-		case 8:	msg2 = Glib::ustring::compose(msg, values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7]); break;
-		case 9: msg2 = Glib::ustring::compose(msg, values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7], values[8]); break;
-		}
-		Gtk::MessageDialog(msg2, false, Gtk::MESSAGE_ERROR).run();
+	void showErrorMessage(std::string const& msg) {
+		Gtk::MessageDialog(msg, false, Gtk::MESSAGE_ERROR).run();
 	}
 
 	void showConfigSavingError(std::string const& message) {
@@ -803,7 +783,7 @@ public:
 		dlg.set_default_response(Gtk::RESPONSE_OK);
 		int result = dlg.run();
 		if (result == Gtk::RESPONSE_YES) {
-			controller->removeRulesAction(this->getSelectedRules(), true);
+			this->onRemoveRules(this->getSelectedRules(), true);
 		}
 	}
 
@@ -812,7 +792,7 @@ public:
 		dlg.set_default_response(Gtk::RESPONSE_OK);
 		int result = dlg.run();
 		if (result == Gtk::RESPONSE_OK) {
-			controller->removeRulesAction(this->getSelectedRules(), true);
+			this->onRemoveRules(this->getSelectedRules(), true);
 		}
 	}
 
@@ -881,7 +861,7 @@ private:
 	}
 
 	void signal_remove_click() {
-		controller->removeRulesAction(this->getSelectedRules());
+		this->onRemoveRules(this->getSelectedRules(), false);
 	}
 
 	void signal_rename_click() {
@@ -951,12 +931,12 @@ private:
 	}
 
 	bool signal_delete_event(GdkEventAny* event) { //return value: keep window open
-		controller->exitAction();
+		controller->exitAction(false);
 		return true;
 	}
 
 	void signal_quit_click() {
-		controller->exitAction();
+		controller->exitAction(false);
 	}
 
 	void signal_preference_click() {
@@ -1024,7 +1004,7 @@ private:
 
 	void signal_key_press(GdkEventKey* key) {
 		if (key->keyval == GDK_KEY_Delete) {
-			this->controller->removeRulesAction(this->getSelectedRules());
+			this->onRemoveRules(this->getSelectedRules(), false);
 		}
 	}
 
