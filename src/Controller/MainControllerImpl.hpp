@@ -322,6 +322,14 @@ public:
 		this->view->onSelectionChange = std::bind(std::mem_fn(&MainControllerImpl::updateSelectionAction), this, _1);
 	}
 
+	void initListCfgEvents() override
+	{
+		using namespace std::placeholders;
+
+		this->grublistCfg->onLoadStateChange = std::bind(std::mem_fn(&MainControllerImpl::syncLoadStateThreadedAction), this);
+		this->grublistCfg->onSaveStateChange = std::bind(std::mem_fn(&MainControllerImpl::syncSaveStateThreadedAction), this);
+	}
+
 	//init functions
 	void init() {
 		if ( !grublistCfg

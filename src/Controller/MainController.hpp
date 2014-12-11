@@ -27,9 +27,6 @@ class MainController {
 public:
 	virtual inline ~MainController(){};
 
-	virtual void syncLoadStateThreadedAction() = 0;
-	virtual void syncSaveStateThreadedAction() = 0;
-
 	virtual void syncLoadStateAction() = 0;
 	virtual void syncSaveStateAction() = 0;
 
