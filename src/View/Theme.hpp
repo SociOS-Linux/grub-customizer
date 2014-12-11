@@ -20,6 +20,7 @@
 #define THEME_H_
 #include <string>
 #include <list>
+#include <functional>
 
 #include "../Controller/ThemeController.hpp"
 #include "../Controller/Trait/ControllerAware.hpp"
@@ -27,8 +28,7 @@
 #include "ColorChooser.hpp"
 
 class View_Theme :
-	public Trait_LoggerAware,
-	public Trait_ControllerAware<ThemeController>
+	public Trait_LoggerAware
 {
 public:
 	enum EditorType {
@@ -49,6 +49,23 @@ public:
 		ERROR_SAVE_FAILED,
 		ERROR_NO_FILE_SELECTED
 	};
+
+	std::function<void (std::string const& name)> onThemeSelected;
+	std::function<void (std::string const& filePath)> onThemeFileApply;
+	std::function<void (const std::string& name)> onRemoveThemeClicked;
+	std::function<void ()> onAddThemeClicked;
+	std::function<void ()> onSimpleThemeSelected;
+	std::function<void ()> onAddFile;
+	std::function<void (std::string const& file)> onRemoveFile;
+	std::function<void (std::string const& file)> onSelect;
+	std::function<void (std::string const& newName)> onRename;
+	std::function<void (std::string const& externalPath)> onFileChoose;
+	std::function<void (std::string const& newText)> onTextChange;
+	std::function<void ()> onColorChange;
+	std::function<void (bool removeFont)> onFontChange;
+	std::function<void ()> onImageChange;
+	std::function<void ()> onImageRemove;
+	std::function<void ()> onSaveClick;
 
 	virtual void addFile(std::string const& fileName) = 0;
 	virtual void clear() = 0;

@@ -24,6 +24,7 @@
 #include "../Model/SettingsManagerData.hpp"
 #include "../Model/ListCfg.hpp"
 #include <algorithm>
+#include <functional>
 
 #include "../Model/ThemeManager.hpp"
 #include "ControllerAbstract.hpp"
@@ -153,6 +154,28 @@ public:
 	ThemeControllerImpl() : ControllerAbstract("theme"),
 		  syncActive(false)
 	{
+	}
+
+	void initViewEvents() override
+	{
+		using namespace std::placeholders;
+
+		this->view->onThemeSelected = std::bind(std::mem_fn(&ThemeControllerImpl::loadThemeAction), this, _1);
+		this->view->onThemeFileApply = std::bind(std::mem_fn(&ThemeControllerImpl::addThemePackageAction), this, _1);
+		this->view->onRemoveThemeClicked = std::bind(std::mem_fn(&ThemeControllerImpl::removeThemeAction), this, _1);
+		this->view->onAddThemeClicked = std::bind(std::mem_fn(&ThemeControllerImpl::showThemeInstallerAction), this);
+		this->view->onSimpleThemeSelected = std::bind(std::mem_fn(&ThemeControllerImpl::showSimpleThemeConfigAction), this);
+		this->view->onAddFile = std::bind(std::mem_fn(&ThemeControllerImpl::addFileAction), this);
+		this->view->onRemoveFile = std::bind(std::mem_fn(&ThemeControllerImpl::removeFileAction), this, _1);
+		this->view->onSelect = std::bind(std::mem_fn(&ThemeControllerImpl::updateEditAreaAction), this, _1);
+		this->view->onRename = std::bind(std::mem_fn(&ThemeControllerImpl::renameAction), this, _1);
+		this->view->onFileChoose = std::bind(std::mem_fn(&ThemeControllerImpl::loadFileAction), this, _1);
+		this->view->onTextChange = std::bind(std::mem_fn(&ThemeControllerImpl::saveTextAction), this, _1);
+		this->view->onColorChange = std::bind(std::mem_fn(&ThemeControllerImpl::updateColorSettingsAction), this);
+		this->view->onFontChange = std::bind(std::mem_fn(&ThemeControllerImpl::updateFontSettingsAction), this, _1);
+		this->view->onImageChange = std::bind(std::mem_fn(&ThemeControllerImpl::updateBackgroundImageAction), this);
+		this->view->onImageRemove = std::bind(std::mem_fn(&ThemeControllerImpl::removeBackgroundImageAction), this);
+		this->view->onSaveClick = std::bind(std::mem_fn(&ThemeControllerImpl::saveAction), this);
 	}
 
 

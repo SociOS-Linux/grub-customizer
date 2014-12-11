@@ -23,31 +23,12 @@
 class ThemeController {
 public:
 	virtual void loadThemesAction() = 0;
-	virtual void loadThemeAction(std::string const& name) = 0;
-	virtual void addThemePackageAction(std::string const& filePath) = 0;
-	virtual void removeThemeAction(const std::string& name) = 0;
-	virtual void showThemeInstallerAction() = 0;
-	virtual void showSimpleThemeConfigAction() = 0;
-	virtual void addFileAction() = 0;
 	virtual void startFileEditAction(std::string const& file) = 0;
-	virtual void removeFileAction(std::string const& file) = 0;
-	virtual void updateEditAreaAction(std::string const& file) = 0;
-	virtual void renameAction(std::string const& newName) = 0;
-	virtual void loadFileAction(std::string const& externalPath) = 0;
-	virtual void saveTextAction(std::string const& newText) = 0;
-
-	virtual void updateColorSettingsAction() = 0;
-	virtual void updateFontSettingsAction(bool removeFont) = 0;
 	virtual void updateFontSizeAction() = 0;
-	virtual void updateBackgroundImageAction() = 0;
-	virtual void removeBackgroundImageAction() = 0;
 	virtual void updateSettingsDataAction() = 0;
-
 	virtual void syncAction() = 0;
 	virtual void saveAction() = 0;
-
 	virtual void postSaveAction() = 0;
-
 	virtual inline ~ThemeController() {}
 };
 
