@@ -21,9 +21,7 @@
 #include <map>
 #include <functional>
 
-#include "../Controller/EnvEditorController.hpp"
 #include "../lib/Trait/LoggerAware.hpp"
-#include "../Controller/Trait/ControllerAware.hpp"
 
 class View_EnvEditor :
 	public Trait_LoggerAware

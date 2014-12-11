@@ -27,7 +27,6 @@ public:
 	virtual void loadResolutionsAction() = 0;
 	virtual void updateSettingsDataAction() = 0;
 	virtual void updateResolutionlistAction() = 0;
-	virtual void updateResolutionlistThreadedAction() = 0;
 
 	virtual void hideAction() = 0;
 	virtual void showAction(bool burgMode) = 0;

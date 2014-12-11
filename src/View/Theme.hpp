@@ -22,8 +22,6 @@
 #include <list>
 #include <functional>
 
-#include "../Controller/ThemeController.hpp"
-#include "../Controller/Trait/ControllerAware.hpp"
 #include "../lib/Trait/LoggerAware.hpp"
 #include "ColorChooser.hpp"
 

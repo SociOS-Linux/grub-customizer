@@ -20,9 +20,7 @@
 #define SETTINGSDLG_H_
 #include <functional>
 
-#include "../Controller/SettingsController.hpp"
 #include "../lib/Trait/LoggerAware.hpp"
-#include "../Controller/Trait/ControllerAware.hpp"
 
 /**
  * Interface to be implemented by settings dialogs

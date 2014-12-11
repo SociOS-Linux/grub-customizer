@@ -21,16 +21,17 @@
 #include <string>
 #include <list>
 #include <cstdio>
-#include "../Controller/SettingsController.hpp"
-#include "../Controller/Trait/ControllerAware.hpp"
+#include <functional>
 #include "../lib/Trait/LoggerAware.hpp"
 
-class Model_FbResolutionsGetter : public Trait_LoggerAware, public Trait_ControllerAware<SettingsController> {
+class Model_FbResolutionsGetter : public Trait_LoggerAware {
 	std::list<std::string> data;
 	bool _isLoading;
 public:
 	Model_FbResolutionsGetter() : _isLoading(false)
 	{}
+
+	std::function<void ()> onFinish;
 
 	const std::list<std::string>& getData() const {
 		return data;
@@ -65,8 +66,9 @@ public:
 						row = "";
 					}
 				}
-				if (pclose(hwinfo_proc) == 0 && this->controller)
-					this->controller->updateResolutionlistThreadedAction();
+				if (pclose(hwinfo_proc) == 0 && this->onFinish) {
+					this->onFinish();
+				}
 			}
 			_isLoading = false;
 		}
@@ -75,13 +77,20 @@ public:
 };
 
 class Model_FbResolutionsGetter_Connection {
-protected:
-	Model_FbResolutionsGetter* fbResolutionsGetter;
-public:
-	Model_FbResolutionsGetter_Connection() : fbResolutionsGetter(NULL) {}
+	protected: Model_FbResolutionsGetter* fbResolutionsGetter = nullptr;
+	public: Model_FbResolutionsGetter_Connection() {}
+	public: virtual ~Model_FbResolutionsGetter_Connection() {}
 
-	void setFbResolutionsGetter(Model_FbResolutionsGetter& fbResolutionsGetter){
+	public: void setFbResolutionsGetter(Model_FbResolutionsGetter& fbResolutionsGetter)
+	{
 		this->fbResolutionsGetter = &fbResolutionsGetter;
+
+		this->initFbResolutionsGetterEvents();
+	}
+
+	public: virtual void initFbResolutionsGetterEvents()
+	{
+		// override to initialize specific view events
 	}
 };
 

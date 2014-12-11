@@ -162,9 +162,6 @@ int main(int argc, char** argv){
 		entryEditController.setThreadController(*thread.threadController);
 		themeController.setThreadController(*thread.threadController);
 
-		//assign event listener
-		fbResolutionsGetter.setController(settingsController);
-
 		//assign logger
 		listcfg.setLogger(logger);
 		view.main->setLogger(logger);

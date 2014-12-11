@@ -22,9 +22,6 @@
 #include <string>
 #include <functional>
 
-#include "../Controller/ErrorController.hpp"
-#include "../Controller/Trait/ControllerAware.hpp"
-
 class View_Error {
 public:
 	std::function<void ()> onQuitClick;

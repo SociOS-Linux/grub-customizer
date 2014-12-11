@@ -73,7 +73,6 @@ src/Controller/SettingsControllerImpl.hpp -text
 src/Controller/ThemeController.hpp -text
 src/Controller/ThemeControllerImpl.hpp -text
 src/Controller/ThreadController.hpp -text
-src/Controller/Trait/ControllerAware.hpp -text
 src/Controller/Trait/ThreadControllerAware.hpp -text
 src/Controller/TrashController.hpp -text
 src/Controller/TrashControllerImpl.hpp -text

@@ -22,13 +22,11 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <list>
 
-#include "../Controller/MainController.hpp"
 #include "../lib/Type.hpp"
-#include "../Controller/Trait/ControllerAware.hpp"
 #include "../lib/Trait/LoggerAware.hpp"
 #include "Model/ListItem.hpp"
-#include "Settings.hpp"
 #include <functional>
 
 /**

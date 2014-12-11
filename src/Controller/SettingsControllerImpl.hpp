@@ -101,6 +101,10 @@ public:
 		this->view->onHide = std::bind(std::mem_fn(&SettingsControllerImpl::hideAction), this);
 	}
 
+	void initFbResolutionsGetterEvents() override
+	{
+		this->fbResolutionsGetter->onFinish = std::bind(std::mem_fn(&SettingsControllerImpl::updateResolutionlistThreadedAction), this);
+	}
 
 	//dispatchers
 	void updateSettingsDataAction() {

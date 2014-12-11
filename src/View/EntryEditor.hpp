@@ -23,9 +23,7 @@
 #include <list>
 #include <functional>
 
-#include "../Controller/EntryEditController.hpp"
 #include "../lib/Type.hpp"
-#include "../Controller/Trait/ControllerAware.hpp"
 #include "../lib/Trait/LoggerAware.hpp"
 
 class View_EntryEditor :

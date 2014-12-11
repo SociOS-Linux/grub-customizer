@@ -31,8 +31,6 @@
 #include <fstream>
 
 #include "../config.hpp"
-#include "../Controller/MainController.hpp"
-#include "../Controller/Trait/ControllerAware.hpp"
 
 #include "../lib/Mutex.hpp"
 #include "../lib/Trait/LoggerAware.hpp"

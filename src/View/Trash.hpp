@@ -24,8 +24,6 @@
 #include <functional>
 #include "../lib/Type.hpp"
 #include "../lib/Trait/LoggerAware.hpp"
-#include "../Controller/Trait/ControllerAware.hpp"
-#include "../Controller/TrashController.hpp"
 #include "Model/ListItem.hpp"
 
 /**
