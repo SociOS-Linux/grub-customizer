@@ -108,84 +108,86 @@ class View_Gtk_Settings :
 
 
 	void signal_setting_row_changed(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter) {
-		if (!event_lock){
-			this->controller->updateCustomSettingAction((Glib::ustring)(*iter)[asTreeModel.old_name]);
+		if (!event_lock) {
+			this->onCustomSettingChange((Glib::ustring)(*iter)[asTreeModel.old_name]);
 		}
 	}
 
 	void signal_add_row_button_clicked() {
-		if (!event_lock)
-			this->controller->addCustomSettingAction();
+		if (!event_lock) {
+			this->onAddCustomSettingClick();
+		}
 	}
 
 	void signal_remove_row_button_clicked() {
-		if (!event_lock)
-			this->controller->removeCustomSettingAction((Glib::ustring)(*tvAllEntries.get_selection()->get_selected())[asTreeModel.name]);
+		if (!event_lock) {
+			this->onRemoveCustomSettingClick((Glib::ustring)(*tvAllEntries.get_selection()->get_selected())[asTreeModel.name]);
+		}
 	}
 
 	void signal_default_entry_predefined_toggeled() {
 		if (!event_lock){
-			this->controller->updateDefaultSystemAction();
+			this->onDefaultSystemChange();
 		}
 	}
 
 	void signal_default_entry_saved_toggeled() {
 		if (!event_lock){
-			this->controller->updateDefaultSystemAction();
+			this->onDefaultSystemChange();
 		}
 	}
 
 	void signal_default_entry_changed() {
 		if (!event_lock){
-			this->controller->updateDefaultSystemAction();
+			this->onDefaultSystemChange();
 		}
 	}
 
 	void signal_showMenu_toggled() {
 		if (!event_lock){
-			this->controller->updateShowMenuSettingAction();
+			this->onShowMenuSettingChange();
 		}
 	}
 
 	void signal_osProber_toggled(){
 		if (!event_lock){
-			this->controller->updateOsProberSettingAction();
+			this->onOsProberSettingChange();
 		}
 	}
 
 	void signal_timeout_changed(){
 		if (!event_lock){
-			this->controller->updateTimeoutSettingAction();
+			this->onTimeoutSettingChange();
 		}
 	}
 
 	void signal_timeout_checkbox_toggled() {
 		if (!event_lock){
-			this->controller->updateTimeoutSettingAction();
+			this->onTimeoutSettingChange();
 		}
 	}
 
 	void signal_kernelparams_changed() {
 		if (!event_lock){
-			this->controller->updateKernelParamsAction();
+			this->onKernelParamsChange();
 		}
 	}
 
 	void signal_recovery_toggled() {
 		if (!event_lock){
-			this->controller->updateRecoverySettingAction();
+			this->onRecoverySettingChange();
 		}
 	}
 
 	void signal_chkResolution_toggled() {
 		if (!event_lock){
-			this->controller->updateUseCustomResolutionAction();
+			this->onUseCustomResolutionChange();
 		}
 	}
 
 	void signal_resolution_selected() {
 		if (!event_lock){
-			this->controller->updateCustomResolutionAction();
+			this->onCustomResolutionChange();
 		}
 	}
 
@@ -211,7 +213,7 @@ class View_Gtk_Settings :
 	}
 
 	void on_response(int response_id) {
-		this->controller->hideAction();
+		this->onHide();
 	}
 	public:
 	View_Gtk_Settings()

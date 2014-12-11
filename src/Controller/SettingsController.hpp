@@ -28,17 +28,7 @@ public:
 	virtual void updateSettingsDataAction() = 0;
 	virtual void updateResolutionlistAction() = 0;
 	virtual void updateResolutionlistThreadedAction() = 0;
-	virtual void updateDefaultSystemAction() = 0;
-	virtual void updateCustomSettingAction(std::string const& name) = 0;
-	virtual void addCustomSettingAction() = 0;
-	virtual void removeCustomSettingAction(std::string const& name) = 0;
-	virtual void updateShowMenuSettingAction() = 0;
-	virtual void updateOsProberSettingAction() = 0;
-	virtual void updateTimeoutSettingAction() = 0;
-	virtual void updateKernelParamsAction() = 0;
-	virtual void updateRecoverySettingAction() = 0;
-	virtual void updateCustomResolutionAction() = 0;
-	virtual void updateUseCustomResolutionAction() = 0;
+
 	virtual void hideAction() = 0;
 	virtual void showAction(bool burgMode) = 0;
 	virtual void syncAction() = 0;

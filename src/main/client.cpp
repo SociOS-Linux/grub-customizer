@@ -164,7 +164,6 @@ int main(int argc, char** argv){
 
 		//assign event listener
 		view.trash->setController(trashController);
-		view.settings->setController(settingsController);
 		listcfg.setController(mainController);
 		installer.setController(installController);
 		fbResolutionsGetter.setController(settingsController);

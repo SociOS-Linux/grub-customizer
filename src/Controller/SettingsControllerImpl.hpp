@@ -83,6 +83,24 @@ public:
 	{
 	}
 
+	void initViewEvents() override
+	{
+		using namespace std::placeholders;
+
+		this->view->onDefaultSystemChange = std::bind(std::mem_fn(&SettingsControllerImpl::updateDefaultSystemAction), this);
+		this->view->onCustomSettingChange = std::bind(std::mem_fn(&SettingsControllerImpl::updateCustomSettingAction), this, _1);
+		this->view->onAddCustomSettingClick = std::bind(std::mem_fn(&SettingsControllerImpl::addCustomSettingAction), this);
+		this->view->onRemoveCustomSettingClick = std::bind(std::mem_fn(&SettingsControllerImpl::removeCustomSettingAction), this, _1);
+		this->view->onShowMenuSettingChange = std::bind(std::mem_fn(&SettingsControllerImpl::updateShowMenuSettingAction), this);
+		this->view->onOsProberSettingChange = std::bind(std::mem_fn(&SettingsControllerImpl::updateOsProberSettingAction), this);
+		this->view->onTimeoutSettingChange = std::bind(std::mem_fn(&SettingsControllerImpl::updateTimeoutSettingAction), this);
+		this->view->onKernelParamsChange = std::bind(std::mem_fn(&SettingsControllerImpl::updateKernelParamsAction), this);
+		this->view->onRecoverySettingChange = std::bind(std::mem_fn(&SettingsControllerImpl::updateRecoverySettingAction), this);
+		this->view->onCustomResolutionChange = std::bind(std::mem_fn(&SettingsControllerImpl::updateCustomResolutionAction), this);
+		this->view->onUseCustomResolutionChange = std::bind(std::mem_fn(&SettingsControllerImpl::updateUseCustomResolutionAction), this);
+		this->view->onHide = std::bind(std::mem_fn(&SettingsControllerImpl::hideAction), this);
+	}
+
 
 	//dispatchers
 	void updateSettingsDataAction() {

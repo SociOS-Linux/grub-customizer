@@ -18,6 +18,8 @@
 
 #ifndef SETTINGSDLG_H_
 #define SETTINGSDLG_H_
+#include <functional>
+
 #include "../Controller/SettingsController.hpp"
 #include "../lib/Trait/LoggerAware.hpp"
 #include "../Controller/Trait/ControllerAware.hpp"
@@ -26,9 +28,21 @@
  * Interface to be implemented by settings dialogs
  */
 class View_Settings :
-	public Trait_LoggerAware,
-	public Trait_ControllerAware<SettingsController> {
+	public Trait_LoggerAware {
 public:
+	std::function<void ()> onDefaultSystemChange;
+	std::function<void (std::string const& name)> onCustomSettingChange;
+	std::function<void ()> onAddCustomSettingClick;
+	std::function<void (std::string const& name)> onRemoveCustomSettingClick;
+	std::function<void ()> onShowMenuSettingChange;
+	std::function<void ()> onOsProberSettingChange;
+	std::function<void ()> onTimeoutSettingChange;
+	std::function<void ()> onKernelParamsChange;
+	std::function<void ()> onRecoverySettingChange;
+	std::function<void ()> onCustomResolutionChange;
+	std::function<void ()> onUseCustomResolutionChange;
+	std::function<void ()> onHide;
+
 	virtual inline ~View_Settings() {};
 
 	enum DefEntryType {
