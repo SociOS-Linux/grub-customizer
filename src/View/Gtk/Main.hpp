@@ -152,7 +152,7 @@ class View_Gtk_Main : public View_Main {
 	}
 
 	void saveConfig() {
-		controller->saveAction();
+		this->onSaveClick();
 	}
 
 	void updateButtonsState() {
@@ -783,7 +783,7 @@ public:
 		dlg.set_default_response(Gtk::RESPONSE_OK);
 		int result = dlg.run();
 		if (result == Gtk::RESPONSE_YES) {
-			this->onRemoveRules(this->getSelectedRules(), true);
+			this->onRemoveRulesClick(this->getSelectedRules(), true);
 		}
 	}
 
@@ -792,7 +792,7 @@ public:
 		dlg.set_default_response(Gtk::RESPONSE_OK);
 		int result = dlg.run();
 		if (result == Gtk::RESPONSE_OK) {
-			this->onRemoveRules(this->getSelectedRules(), true);
+			this->onRemoveRulesClick(this->getSelectedRules(), true);
 		}
 	}
 
@@ -831,12 +831,12 @@ public:
 private:
 	//event handlers
 	void signal_show_envEditor() {
-		controller->showEnvEditorAction();
+		this->onShowEnvEditorClick();
 	}
 
 	void signal_checkbox_toggled(Glib::ustring const& path) {
 		if (!this->lock_state) {
-			this->controller->entryStateToggledAction(
+			this->onEntryStateChange(
 				(*this->tvConfList.refTreeStore->get_iter(path))[this->tvConfList.treeModel.relatedRule],
 				!(*this->tvConfList.refTreeStore->get_iter(path))[this->tvConfList.treeModel.is_activated]
 			);
@@ -846,7 +846,7 @@ private:
 	void signal_edit_name_finished(const Glib::ustring& path, const Glib::ustring& new_text) {
 		if (this->lock_state == 0){
 			Gtk::TreeModel::iterator iter = this->tvConfList.refTreeStore->get_iter(path);
-			controller->renameRuleAction((Rule*)(*iter)[tvConfList.treeModel.relatedRule], new_text);
+			this->onRenameClick((Rule*)(*iter)[tvConfList.treeModel.relatedRule], new_text);
 		}
 	}
 
@@ -856,12 +856,12 @@ private:
 			assert(direction == 1 || direction == -1);
 
 			//if rule swap
-			controller->moveAction(this->getSelectedRules(), direction);
+			this->onMoveClick(this->getSelectedRules(), direction);
 		}
 	}
 
 	void signal_remove_click() {
-		this->onRemoveRules(this->getSelectedRules(), false);
+		this->onRemoveRulesClick(this->getSelectedRules(), false);
 	}
 
 	void signal_rename_click() {
@@ -878,26 +878,26 @@ private:
 				}
 			}
 
-			this->controller->updateSelectionAction(this->getSelectedRules());
+			this->onSelectionChange(this->getSelectedRules());
 
 			this->updateButtonsState();
 		}
 	}
 
 	void signal_reload_click() {
-		controller->reloadAction();
+		this->onReloadClick();
 	}
 
 	void signal_show_grub_install_dialog_click() {
-		controller->showInstallerAction();
+		this->onShowInstallerClick();
 	}
 
 	void signal_move_left_click() {
-		controller->removeSubmenuAction(this->getSelectedRules());
+		this->onRemoveSubmenuClick(this->getSelectedRules());
 	}
 
 	void signal_move_right_click() {
-		controller->createSubmenuAction(this->getSelectedRules());
+		this->onCreateSubmenuClick(this->getSelectedRules());
 	}
 
 	void signal_treeview_selection_changed() {
@@ -914,7 +914,7 @@ private:
 				}
 			}
 
-			this->controller->updateSelectionAction(this->getSelectedRules());
+			this->onSelectionChange(this->getSelectedRules());
 
 			this->updateButtonsState();
 		}
@@ -923,24 +923,24 @@ private:
 	void signal_entry_edit_click() {
 		std::list<Rule*> rules = this->getSelectedRules();
 		assert(rules.size() == 1);
-		controller->showEntryEditorAction(rules.front());
+		this->onShowEntryEditorClick(rules.front());
 	}
 
 	void signal_entry_create_click() {
-		controller->showEntryCreatorAction();
+		this->onShowEntryCreatorClick();
 	}
 
 	bool signal_delete_event(GdkEventAny* event) { //return value: keep window open
-		controller->exitAction(false);
+		this->onExitClick();
 		return true;
 	}
 
 	void signal_quit_click() {
-		controller->exitAction(false);
+		this->onExitClick();
 	}
 
 	void signal_preference_click() {
-		controller->showSettingsAction();
+		this->onShowSettingsClick();
 	}
 
 	void signal_entry_type_help_click()  {
@@ -969,14 +969,14 @@ private:
 	}
 
 	void signal_info_click() {
-		controller->showAboutAction();
+		this->onShowAboutClick();
 	}
 
 	void signal_burg_switcher_response(int response_id) {
 		if (response_id == Gtk::RESPONSE_DELETE_EVENT)
-			controller->cancelBurgSwitcherAction();
+			this->onCancelBurgSwitcherClick();
 		else
-			controller->initModeAction(response_id == Gtk::RESPONSE_YES);
+			this->onInitModeClick(response_id == Gtk::RESPONSE_YES);
 	}
 
 	void signal_edit_name(Gtk::CellEditable* editable, const Glib::ustring& path) {
@@ -1004,7 +1004,7 @@ private:
 
 	void signal_key_press(GdkEventKey* key) {
 		if (key->keyval == GDK_KEY_Delete) {
-			this->onRemoveRules(this->getSelectedRules(), false);
+			this->onRemoveRulesClick(this->getSelectedRules(), false);
 		}
 	}
 
@@ -1013,43 +1013,43 @@ private:
 		msgDlg.set_secondary_text(gettext("This removes all your list modifications of the bootloader menu!"));
 		int response = msgDlg.run();
 		if (response == Gtk::RESPONSE_OK) {
-			this->controller->revertAction();
+			this->onRevertClick();
 		}
 	}
 
 	void signal_reload_recommendation_response(int response_id) {
 		if (response_id == Gtk::RESPONSE_APPLY) {
-			this->controller->reloadAction();
+			this->onReloadClick();
 		}
 	}
 
 	void signal_tab_changed(Gtk::Widget* page, guint page_num) {
-		if (this->controller && this->lock_state == 0) { // this->eventListener must be called because this event may be propagated from bootstrap
-			this->controller->refreshTabAction(page_num);
+		if (this->onTabChange && this->lock_state == 0) { // this->eventListener must be called because this event may be propagated from bootstrap
+			this->onTabChange(page_num);
 		}
 	}
 
 	void signal_viewopt_details_toggled() {
-		if (this->controller) {
-			this->controller->setViewOptionAction(VIEW_SHOW_DETAILS, this->miShowDetails.get_active());
+		if (this->onViewOptionChange) {
+			this->onViewOptionChange(VIEW_SHOW_DETAILS, this->miShowDetails.get_active());
 		}
 	}
 
 	void signal_viewopt_checkboxes_toggled() {
-		if (this->controller) {
-			this->controller->setViewOptionAction(VIEW_SHOW_HIDDEN_ENTRIES, this->miShowHiddenEntries.get_active());
+		if (this->onViewOptionChange) {
+			this->onViewOptionChange(VIEW_SHOW_HIDDEN_ENTRIES, this->miShowHiddenEntries.get_active());
 		}
 	}
 
 	void signal_viewopt_script_toggled() {
-		if (this->controller) {
-			this->controller->setViewOptionAction(VIEW_GROUP_BY_SCRIPT, this->miGroupByScript.get_active());
+		if (this->onViewOptionChange) {
+			this->onViewOptionChange(VIEW_GROUP_BY_SCRIPT, this->miGroupByScript.get_active());
 		}
 	}
 
 	void signal_viewopt_placeholders_toggled() {
-		if (this->controller) {
-			this->controller->setViewOptionAction(VIEW_SHOW_PLACEHOLDERS, this->miShowPlaceholders.get_active());
+		if (this->onViewOptionChange) {
+			this->onViewOptionChange(VIEW_SHOW_PLACEHOLDERS, this->miShowPlaceholders.get_active());
 		}
 	}
 };

@@ -34,11 +34,33 @@
 /**
  * Interface for dialogs which lets the user control the grub list
  */
-class View_Main : public Trait_LoggerAware, public Trait_ControllerAware<MainController> {
+class View_Main : public Trait_LoggerAware {
 public:
 	virtual inline ~View_Main() {};
 
-	std::function<void (std::list<Rule*> rules, bool force)> onRemoveRules = nullptr;
+	std::function<void (std::list<Rule*> rules, bool force)> onRemoveRulesClick = nullptr;
+	std::function<void ()> onShowSettingsClick = nullptr;
+	std::function<void ()> onReloadClick = nullptr;
+	std::function<void ()> onSaveClick = nullptr;
+	std::function<void ()> onShowEnvEditorClick = nullptr;
+	std::function<void ()> onShowInstallerClick = nullptr;
+	std::function<void (std::list<Rule*> childItems)> onCreateSubmenuClick = nullptr;
+	std::function<void (std::list<Rule*> childItems)> onRemoveSubmenuClick = nullptr;
+	std::function<void (Rule* rule)> onShowEntryEditorClick = nullptr;
+	std::function<void ()> onShowEntryCreatorClick = nullptr;
+	std::function<void ()> onShowAboutClick = nullptr;
+	std::function<void ()> onExitClick = nullptr;
+	std::function<void (Rule* entry, std::string const& newText)> onRenameClick = nullptr;
+	std::function<void ()> onRevertClick = nullptr;
+	std::function<void (std::list<Rule*> rules, int direction)> onMoveClick = nullptr;
+	std::function<void ()> onCancelBurgSwitcherClick = nullptr;
+	std::function<void (bool burgChosen)> onInitModeClick = nullptr;
+	std::function<void (Rule* rule, bool startEdit)> onRuleSelection = nullptr;
+	std::function<void (unsigned int pos)> onTabChange = nullptr;
+	std::function<void (ViewOption option, bool value)> onViewOptionChange = nullptr;
+	std::function<void (Rule* entry, bool state)> onEntryStateChange = nullptr;
+	std::function<void (std::list<Rule*> selectedRules)> onSelectionChange = nullptr;
+
 
 	//show this dialog without waiting
 	virtual void show()=0;

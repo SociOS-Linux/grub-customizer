@@ -33,25 +33,9 @@ public:
 	virtual void syncLoadStateAction() = 0;
 	virtual void syncSaveStateAction() = 0;
 
-	virtual void initAction() = 0;
 	virtual void reInitAction(bool burgMode) = 0;
-	virtual void showSettingsAction() = 0;
-	virtual void reloadAction() = 0;
-	virtual void saveAction() = 0;
-	virtual void showEnvEditorAction() = 0;
-	virtual void showInstallerAction() = 0;
-	virtual void createSubmenuAction(std::list<Rule*> childItems) = 0;
-	virtual void removeSubmenuAction(std::list<Rule*> childItems) = 0;
-	virtual void showEntryEditorAction(Rule* rule) = 0;
-	virtual void showEntryCreatorAction() = 0;
-	virtual void showAboutAction() = 0;
 	virtual void dieAction() = 0;
 	virtual void exitAction(bool force) = 0;
-	virtual void renameRuleAction(Rule* entry, std::string const& newText) = 0;
-	virtual void revertAction() = 0;
-	virtual void moveAction(std::list<Rule*> rules, int direction) = 0;
-	virtual void cancelBurgSwitcherAction() = 0;
-	virtual void initModeAction(bool burgChosen) = 0;
 	virtual void loadThreadedAction(bool preserveConfig) = 0;
 	virtual void saveThreadedAction() = 0;
 	virtual void showConfigSavingErrorAction(std::string errorMessage) = 0;
@@ -60,10 +44,6 @@ public:
 	virtual void showReloadRecommendationAction() = 0;
 	virtual void selectRulesAction(std::list<Rule*> rules) = 0;
 	virtual void selectRuleAction(Rule* rule, bool startEdit) = 0;
-	virtual void refreshTabAction(unsigned int pos) = 0;
-	virtual void setViewOptionAction(ViewOption option, bool value) = 0;
-	virtual void entryStateToggledAction(Rule* entry, bool state) = 0;
-	virtual void updateSelectionAction(std::list<Rule*> selectedRules) = 0;
 };
 
 

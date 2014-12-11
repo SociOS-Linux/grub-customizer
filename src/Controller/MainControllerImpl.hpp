@@ -316,7 +316,28 @@ public:
 
 		{
 			using namespace std::placeholders;
-			this->view->onRemoveRules = std::bind(std::mem_fn(&MainControllerImpl::removeRulesAction), this, _1, _2);
+			this->view->onRemoveRulesClick = std::bind(std::mem_fn(&MainControllerImpl::removeRulesAction), this, _1, _2);
+			this->view->onShowSettingsClick = std::bind(std::mem_fn(&MainControllerImpl::showSettingsAction), this);
+			this->view->onReloadClick = std::bind(std::mem_fn(&MainControllerImpl::reloadAction), this);
+			this->view->onSaveClick = std::bind(std::mem_fn(&MainControllerImpl::saveAction), this);
+			this->view->onShowEnvEditorClick = std::bind(std::mem_fn(&MainControllerImpl::showEnvEditorAction), this);
+			this->view->onShowInstallerClick = std::bind(std::mem_fn(&MainControllerImpl::showInstallerAction), this);
+			this->view->onCreateSubmenuClick = std::bind(std::mem_fn(&MainControllerImpl::createSubmenuAction), this, _1);
+			this->view->onRemoveSubmenuClick = std::bind(std::mem_fn(&MainControllerImpl::removeSubmenuAction), this, _1);
+			this->view->onShowEntryEditorClick = std::bind(std::mem_fn(&MainControllerImpl::showEntryEditorAction), this, _1);
+			this->view->onShowEntryCreatorClick = std::bind(std::mem_fn(&MainControllerImpl::showEntryCreatorAction), this);
+			this->view->onShowAboutClick = std::bind(std::mem_fn(&MainControllerImpl::showAboutAction), this);
+			this->view->onExitClick = std::bind(std::mem_fn(&MainControllerImpl::exitAction), this, false);
+			this->view->onRenameClick = std::bind(std::mem_fn(&MainControllerImpl::renameRuleAction), this, _1, _2);
+			this->view->onRevertClick = std::bind(std::mem_fn(&MainControllerImpl::revertAction), this);
+			this->view->onMoveClick = std::bind(std::mem_fn(&MainControllerImpl::moveAction), this, _1, _2);
+			this->view->onCancelBurgSwitcherClick = std::bind(std::mem_fn(&MainControllerImpl::cancelBurgSwitcherAction), this);
+			this->view->onInitModeClick = std::bind(std::mem_fn(&MainControllerImpl::initModeAction), this, _1);
+			this->view->onRuleSelection = std::bind(std::mem_fn(&MainControllerImpl::selectRuleAction), this, _1, _2);
+			this->view->onTabChange = std::bind(std::mem_fn(&MainControllerImpl::refreshTabAction), this, _1);
+			this->view->onViewOptionChange = std::bind(std::mem_fn(&MainControllerImpl::setViewOptionAction), this, _1, _2);
+			this->view->onEntryStateChange = std::bind(std::mem_fn(&MainControllerImpl::entryStateToggledAction), this, _1, _2);
+			this->view->onSelectionChange = std::bind(std::mem_fn(&MainControllerImpl::updateSelectionAction), this, _1);
 		}
 
 		savedListCfg->verbose = false;
