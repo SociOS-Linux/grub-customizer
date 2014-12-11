@@ -68,6 +68,8 @@ class Model_Installer_Connection
 	public: void setInstaller(Model_Installer& installer)
 	{
 		this->installer = &installer;
+
+		this->initInstallerEvents();
 	}
 
 	public: virtual void initInstallerEvents()
