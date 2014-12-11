@@ -21,6 +21,7 @@
 
 #include <list>
 #include <string>
+#include <functional>
 #include "../lib/Type.hpp"
 #include "../lib/Trait/LoggerAware.hpp"
 #include "../Controller/Trait/ControllerAware.hpp"
@@ -31,11 +32,14 @@
  * Interface to be implemented by dialogs which lets the user adding scripts
  */
 class View_Trash :
-	public Trait_LoggerAware,
-	public Trait_ControllerAware<TrashController>
+	public Trait_LoggerAware
 {
 public:
 	virtual inline ~View_Trash() {};
+
+	std::function<void ()> onRestore;
+	std::function<void ()> onDeleteClick;
+	std::function<void (std::list<Rule*> const& selectedEntries)> onSelectionChange;
 
 	//clear the script menu
 	virtual void clear()=0;

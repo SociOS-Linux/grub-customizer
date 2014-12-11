@@ -45,8 +45,8 @@ class View_Gtk_Trash :
 	Gtk::ImageMenuItem micDelete;
 
 	bool event_lock;
-public:
-	View_Gtk_Trash() : micRestore(Gtk::Stock::ADD),
+
+	public: View_Gtk_Trash() : micRestore(Gtk::Stock::ADD),
 		  bttRestore(Gtk::Stock::UNDELETE),
 		  bttDelete(Gtk::Stock::DELETE),
 		  micDelete(Gtk::Stock::DELETE),
@@ -97,28 +97,33 @@ public:
 		this->bttDelete.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Trash::delete_button_click));
 	}
 
-	void signal_item_dblClick(Gtk::TreeModel::Path const& path, Gtk::TreeViewColumn* column) {
+	private: void signal_item_dblClick(Gtk::TreeModel::Path const& path, Gtk::TreeViewColumn* column)
+	{
 		this->list.get_selection()->unselect_all();
 		this->list.get_selection()->select(path);
-		controller->applyAction();
+		this->onRestore();
 		this->hide();
 	}
 
-	void restore_button_click() {
-		controller->applyAction();
+	private: void restore_button_click()
+	{
+		this->onRestore();
 	}
 
-	void delete_button_click() {
-		controller->deleteCustomEntriesAction();
+	private: void delete_button_click()
+	{
+		this->onDeleteClick();
 	}
 
-	void clear() {
+	public: void clear()
+	{
 		event_lock = true;
 		list.refTreeStore->clear();
 		event_lock = false;
 	}
 
-	std::list<Rule*> getSelectedEntries() {
+	public: std::list<Rule*> getSelectedEntries()
+	{
 		std::list<Rule*> result;
 		std::vector<Gtk::TreePath> pathes = list.get_selection()->get_selected_rows();
 		for (std::vector<Gtk::TreePath>::iterator pathIter = pathes.begin(); pathIter != pathes.end(); pathIter++) {
@@ -128,24 +133,29 @@ public:
 		return result;
 	}
 
-	void addItem(View_Model_ListItem<Rule, Script> const& listItem) {
+	private: void addItem(View_Model_ListItem<Rule, Script> const& listItem)
+	{
 		this->list.addListItem(listItem, this->options, *this);
 	}
 
-	void setDeleteButtonEnabled(bool val) {
+	private: void setDeleteButtonEnabled(bool val)
+	{
 		this->bttDelete.set_visible(val);
 	}
 
-	void show() {
+	public: void show()
+	{
 		this->show_all();
 		this->miContext.show_all();
 	}
 
-	void hide() {
+	public: void hide()
+	{
 		this->Gtk::Window::hide();
 	}
 
-	void askForDeletion(std::list<std::string> const& names) {
+	public: void askForDeletion(std::list<std::string> const& names)
+	{
 		Glib::ustring question = gettext("This deletes the following entries:");
 		question += "\n";
 		for (std::list<std::string>::const_iterator iter = names.begin(); iter != names.end(); iter++) {
@@ -154,47 +164,54 @@ public:
 
 		int response = Gtk::MessageDialog(question, false, Gtk::MESSAGE_WARNING, Gtk::BUTTONS_OK_CANCEL).run();
 		if (response == Gtk::RESPONSE_OK) {
-			this->controller->deleteCustomEntriesAction();
+			this->onDeleteClick();
 		}
 	}
 
-	Gtk::Widget& getList() {
+	public: Gtk::Widget& getList()
+	{
 		this->remove();
 		return this->frmList;
 	}
 
-	void setDeleteButtonVisibility(bool visibility) {
+	public: void setDeleteButtonVisibility(bool visibility)
+	{
 		bttDelete.set_visible(visibility);
 		micDelete.set_sensitive(visibility);
 	}
 
-	void setOptions(std::map<ViewOption, bool> const& viewOptions) {
+	public: void setOptions(std::map<ViewOption, bool> const& viewOptions)
+	{
 		this->options = viewOptions;
 	}
 
-	void selectEntries(std::list<Rule*> const& entries) {
+	public: void selectEntries(std::list<Rule*> const& entries)
+	{
 		this->list.selectRules(entries);
 	}
 
-	void setRestoreButtonSensitivity(bool sensitivity) {
+	public: void setRestoreButtonSensitivity(bool sensitivity)
+	{
 		this->bttRestore.set_sensitive(sensitivity);
 	}
 
-private:
-	void signal_treeview_selection_changed() {
+	private: void signal_treeview_selection_changed()
+	{
 		if (!event_lock) {
-			this->controller->updateSelectionAction(this->list.getSelectedRules());
+			this->onSelectionChange(this->list.getSelectedRules());
 		}
 	}
 
-	void signal_button_press(GdkEventButton *event) {
+	private: void signal_button_press(GdkEventButton *event)
+	{
 		if (event->type == GDK_BUTTON_PRESS && event->button == 3) {
 			contextMenu.show_all();
 			contextMenu.popup(event->button, event->time);
 		}
 	}
 
-	bool signal_popup() {
+	private: bool signal_popup()
+	{
 		contextMenu.show_all();
 		contextMenu.popup(0, gdk_event_get_time(NULL));
 		return true;

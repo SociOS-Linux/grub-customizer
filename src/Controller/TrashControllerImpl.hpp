@@ -122,6 +122,15 @@ public:
 	{
 	}
 
+	void initViewEvents() override
+	{
+		using namespace std::placeholders;
+
+		this->view->onRestore = std::bind(std::mem_fn(&TrashControllerImpl::applyAction), this);
+		this->view->onDeleteClick = std::bind(std::mem_fn(&TrashControllerImpl::deleteCustomEntriesAction), this);
+		this->view->onSelectionChange = std::bind(std::mem_fn(&TrashControllerImpl::updateSelectionAction), this, _1);
+	}
+
 	
 	void updateAction(std::map<ViewOption, bool> const& viewOptions) {
 		this->logActionBegin("update");

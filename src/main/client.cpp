@@ -163,7 +163,6 @@ int main(int argc, char** argv){
 		themeController.setThreadController(*thread.threadController);
 
 		//assign event listener
-		view.trash->setController(trashController);
 		listcfg.setController(mainController);
 		installer.setController(installController);
 		fbResolutionsGetter.setController(settingsController);
