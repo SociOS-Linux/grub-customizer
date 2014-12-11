@@ -16,6 +16,8 @@
 /README -text
 build/README -text
 build/build_all.sh -text
+build/eclipse_gtkmm-3.0_includes.xml -text
+build/eclipse_setup.txt -text
 /changelog -text
 /cmake_uninstall.cmake.in -text
 /config.hpp.in -text

@@ -41,6 +41,7 @@
 #include "../Mapper/EntryNameImpl.hpp"
 #include "../Model/Env.hpp"
 #include "../Model/ThemeManager.hpp"
+#include "../config.hpp"
 
 
 
