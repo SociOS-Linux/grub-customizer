@@ -169,7 +169,6 @@ int main(int argc, char** argv){
 		listcfg.setController(mainController);
 		installer.setController(installController);
 		fbResolutionsGetter.setController(settingsController);
-		view.envEditor->setController(envEditController);
 		view.error->setController(errorController);
 		view.theme->setController(themeController);
 

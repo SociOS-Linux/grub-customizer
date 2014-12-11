@@ -24,14 +24,6 @@ public:
 	virtual inline ~EnvEditorController(){};
 
 	virtual void showAction(bool resetPartitionChooser = false) = 0;
-	virtual void mountSubmountpointAction(std::string const& submountpoint) = 0;
-	virtual void umountSubmountpointAction(std::string const& submountpoint) = 0;
-	virtual void switchPartitionAction(std::string const& newPartition) = 0;
-	virtual void switchBootloaderTypeAction(int newTypeIndex) = 0;
-	virtual void updateGrubEnvOptionsAction() = 0;
-	virtual void applyAction(bool saveConfig) = 0;
-
-	virtual void exitAction() = 0;
 };
 
 

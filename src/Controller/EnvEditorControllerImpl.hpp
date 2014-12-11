@@ -74,6 +74,19 @@ public:
 	{
 	}
 
+	void initViewEvents() override
+	{
+		using namespace std::placeholders;
+
+		this->view->onMountSubmountpointClick = std::bind(std::mem_fn(&EnvEditorControllerImpl::mountSubmountpointAction), this, _1);
+		this->view->onUmountSubmountpointClick = std::bind(std::mem_fn(&EnvEditorControllerImpl::umountSubmountpointAction), this, _1);
+		this->view->onSwitchPartition = std::bind(std::mem_fn(&EnvEditorControllerImpl::switchPartitionAction), this, _1);
+		this->view->onSwitchBootloaderType = std::bind(std::mem_fn(&EnvEditorControllerImpl::switchBootloaderTypeAction), this, _1);
+		this->view->onOptionChange = std::bind(std::mem_fn(&EnvEditorControllerImpl::updateGrubEnvOptionsAction), this);
+		this->view->onApplyClick = std::bind(std::mem_fn(&EnvEditorControllerImpl::applyAction), this, _1);
+		this->view->onExitClick = std::bind(std::mem_fn(&EnvEditorControllerImpl::exitAction), this);
+	}
+
 	
 	//partition chooser
 	void mountSubmountpointAction(std::string const& submountpoint) {

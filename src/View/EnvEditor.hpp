@@ -19,16 +19,25 @@
 #ifndef GRUBENVEDITOR_H_
 #define GRUBENVEDITOR_H_
 #include <map>
+#include <functional>
 
 #include "../Controller/EnvEditorController.hpp"
 #include "../lib/Trait/LoggerAware.hpp"
 #include "../Controller/Trait/ControllerAware.hpp"
 
 class View_EnvEditor :
-	public Trait_LoggerAware,
-	public Trait_ControllerAware<EnvEditorController> {
+	public Trait_LoggerAware
+{
 public:
 	virtual inline ~View_EnvEditor() {};
+
+	std::function<void (std::string const& submountpoint)> onMountSubmountpointClick;
+	std::function<void (std::string const& submountpoint)> onUmountSubmountpointClick;
+	std::function<void (std::string const& newPartition)> onSwitchPartition;
+	std::function<void (int newTypeIndex)> onSwitchBootloaderType;
+	std::function<void ()> onOptionChange;
+	std::function<void (bool saveConfig)> onApplyClick;
+	std::function<void ()> onExitClick;
 
 	enum MountExceptionType {
 		MOUNT_FAILED,
