@@ -165,7 +165,6 @@ int main(int argc, char** argv){
 		//assign event listener
 		view.installer->setController(installController);
 		view.trash->setController(trashController);
-		view.entryEditor->setController(entryEditController);
 		view.settings->setController(settingsController);
 		listcfg.setController(mainController);
 		installer.setController(installController);

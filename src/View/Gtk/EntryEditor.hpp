@@ -213,27 +213,27 @@ public:
 
 	void signal_response_action(int response_id) {
 		if (response_id == Gtk::RESPONSE_OK){
-			this->controller->applyAction();
+			this->onApplyClick();
 		}
 		this->hide();
 	}
 
 	bool signal_sourceModified(GdkEventKey* event) {
 		if (!this->lock_state) {
-			this->controller->syncOptionsAction();
+			this->onSourceModification();
 		}
 		return true;
 	}
 
 	void signal_optionsModified() {
 		if (!this->lock_state) {
-			this->controller->syncSourceAction();
+			this->onOptionModification();
 		}
 	}
 
 	void signal_typeModified() {
 		if (!this->lock_state) {
-			this->controller->switchTypeAction(this->cbType.get_active_text() != gettext("Other") ? this->cbType.get_active_text() : "");
+			this->onTypeSwitch(this->cbType.get_active_text() != gettext("Other") ? this->cbType.get_active_text() : "");
 		}
 	}
 };

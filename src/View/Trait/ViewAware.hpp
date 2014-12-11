@@ -21,12 +21,18 @@
 
 template <typename T>
 class View_Trait_ViewAware {
-protected:
-	T* view;
-public:
-	View_Trait_ViewAware() : view(NULL) {}
-	void setView(T& view) {
+	protected: T* view = nullptr;
+
+	public: virtual ~View_Trait_ViewAware(){}
+
+	public: void setView(T& view) {
 		this->view = &view;
+		this->initViewEvents();
+	}
+
+	public: virtual void initViewEvents()
+	{
+		// override to initialize specific view events
 	}
 };
 

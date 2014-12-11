@@ -65,6 +65,14 @@ public:
 	{
 	}
 
+	void initViewEvents() override
+	{
+		using namespace std::placeholders;
+		this->view->onApplyClick = std::bind(std::mem_fn(&EntryEditControllerImpl::applyAction), this);
+		this->view->onSourceModification = std::bind(std::mem_fn(&EntryEditControllerImpl::syncOptionsAction), this);
+		this->view->onOptionModification = std::bind(std::mem_fn(&EntryEditControllerImpl::syncSourceAction), this);
+		this->view->onTypeSwitch = std::bind(std::mem_fn(&EntryEditControllerImpl::switchTypeAction), this, _1);
+	}
 
 	void showAction(Rule* rule) {
 		this->logActionBegin("show");
