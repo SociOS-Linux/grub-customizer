@@ -881,23 +881,7 @@ private:
 	}
 
 	void signal_remove_click() {
-		bool scriptSelected = false;
-		std::vector<Gtk::TreeModel::Path> pathes = tvConfList.get_selection()->get_selected_rows();
-		for (std::vector<Gtk::TreeModel::Path>::iterator pathIter = pathes.begin(); pathIter != pathes.end(); pathIter++) {
-			if ((*this->tvConfList.refTreeStore->get_iter(*pathIter))[this->tvConfList.treeModel.relatedScript] != NULL) {
-				scriptSelected = true;
-			}
-		}
-
-		if (tvConfList.get_selection()->count_selected_rows() >= 1 && !scriptSelected){
-			tbttRemove.set_sensitive(true);
-			miRemove.set_sensitive(true);
-			miCRemove.set_sensitive(true);
-		} else {
-			tbttRemove.set_sensitive(false);
-			miRemove.set_sensitive(false);
-			miCRemove.set_sensitive(false);
-		}
+		controller->removeRulesAction(this->getSelectedRules());
 	}
 
 	void signal_rename_click() {
