@@ -38,28 +38,28 @@ class View_Main : public Trait_LoggerAware {
 public:
 	virtual inline ~View_Main() {};
 
-	std::function<void (std::list<Rule*> rules, bool force)> onRemoveRulesClick = nullptr;
-	std::function<void ()> onShowSettingsClick = nullptr;
-	std::function<void ()> onReloadClick = nullptr;
-	std::function<void ()> onSaveClick = nullptr;
-	std::function<void ()> onShowEnvEditorClick = nullptr;
-	std::function<void ()> onShowInstallerClick = nullptr;
-	std::function<void (std::list<Rule*> childItems)> onCreateSubmenuClick = nullptr;
-	std::function<void (std::list<Rule*> childItems)> onRemoveSubmenuClick = nullptr;
-	std::function<void (Rule* rule)> onShowEntryEditorClick = nullptr;
-	std::function<void ()> onShowEntryCreatorClick = nullptr;
-	std::function<void ()> onShowAboutClick = nullptr;
-	std::function<void ()> onExitClick = nullptr;
-	std::function<void (Rule* entry, std::string const& newText)> onRenameClick = nullptr;
-	std::function<void ()> onRevertClick = nullptr;
-	std::function<void (std::list<Rule*> rules, int direction)> onMoveClick = nullptr;
-	std::function<void ()> onCancelBurgSwitcherClick = nullptr;
-	std::function<void (bool burgChosen)> onInitModeClick = nullptr;
-	std::function<void (Rule* rule, bool startEdit)> onRuleSelection = nullptr;
-	std::function<void (unsigned int pos)> onTabChange = nullptr;
-	std::function<void (ViewOption option, bool value)> onViewOptionChange = nullptr;
-	std::function<void (Rule* entry, bool state)> onEntryStateChange = nullptr;
-	std::function<void (std::list<Rule*> selectedRules)> onSelectionChange = nullptr;
+	std::function<void (std::list<Rule*> rules, bool force)> onRemoveRulesClick;
+	std::function<void ()> onShowSettingsClick;
+	std::function<void ()> onReloadClick;
+	std::function<void ()> onSaveClick;
+	std::function<void ()> onShowEnvEditorClick;
+	std::function<void ()> onShowInstallerClick;
+	std::function<void (std::list<Rule*> childItems)> onCreateSubmenuClick;
+	std::function<void (std::list<Rule*> childItems)> onRemoveSubmenuClick;
+	std::function<void (Rule* rule)> onShowEntryEditorClick;
+	std::function<void ()> onShowEntryCreatorClick;
+	std::function<void ()> onShowAboutClick;
+	std::function<void ()> onExitClick;
+	std::function<void (Rule* entry, std::string const& newText)> onRenameClick;
+	std::function<void ()> onRevertClick;
+	std::function<void (std::list<Rule*> rules, int direction)> onMoveClick;
+	std::function<void ()> onCancelBurgSwitcherClick;
+	std::function<void (bool burgChosen)> onInitModeClick;
+	std::function<void (Rule* rule, bool startEdit)> onRuleSelection;
+	std::function<void (unsigned int pos)> onTabChange;
+	std::function<void (ViewOption option, bool value)> onViewOptionChange;
+	std::function<void (Rule* entry, bool state)> onEntryStateChange;
+	std::function<void (std::list<Rule*> selectedRules)> onSelectionChange;
 
 
 	//show this dialog without waiting
