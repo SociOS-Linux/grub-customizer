@@ -134,6 +134,7 @@ public:
 	void initApplicationEvents() override
 	{
 		this->applicationObject->onEnvChange.addHandler(std::bind(std::mem_fn(&TrashControllerImpl::hideAction), this));
+		this->applicationObject->onListModelChange.addHandler(std::bind(std::mem_fn(&TrashControllerImpl::_refresh), this));
 	}
 
 	
