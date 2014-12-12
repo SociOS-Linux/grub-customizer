@@ -52,7 +52,8 @@ class TrashControllerImpl :
 	public Mapper_EntryName_Connection,
 	public Model_DeviceDataListInterface_Connection,
 	public ContentParserFactory_Connection,
-	public Model_Env_Connection
+	public Model_Env_Connection,
+	public Bootstrap_Application_Object_Connection
 {
 	void _refresh() {
 		assert(this->contentParserFactory != NULL);
@@ -137,7 +138,7 @@ public:
 			this->view->setOptions(viewOptions);
 			this->_refresh();
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -148,7 +149,7 @@ public:
 			std::list<Rule*> entries = view->getSelectedEntries();
 			this->getAllControllers().mainController->addEntriesAction(entries);
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -158,7 +159,7 @@ public:
 		try {
 			this->view->hide();
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -174,7 +175,7 @@ public:
 			this->_refresh();
 			this->updateSelectionAction(std::list<Rule*>());
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -193,7 +194,7 @@ public:
 			}
 			this->view->selectEntries(rules);
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -210,7 +211,7 @@ public:
 				this->view->setDeleteButtonVisibility(false);
 			}
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}

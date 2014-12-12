@@ -73,7 +73,7 @@ public:
 		try {
 			view->show();
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -83,7 +83,7 @@ public:
 		try {
 			this->threadHelper->runAsThread(std::bind(std::mem_fn(&InstallerControllerImpl::installGrubThreadedAction), this, device));
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -98,7 +98,7 @@ public:
 				this->applicationObject->shutdown();
 			}
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorThreadedAction(e);
+			this->applicationObject->onThreadError.exec(e);
 		}
 		this->logActionEndThreaded();
 	}
@@ -108,7 +108,7 @@ public:
 		try {
 			view->showMessageGrubInstallCompleted(msg);
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}

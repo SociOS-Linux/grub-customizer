@@ -20,9 +20,32 @@
 #define SRC_BOOTSTRAP_APPLICATION_HPP_
 #include <memory>
 #include <functional>
+#include <list>
+#include "../lib/Exception.hpp"
+
+template <typename... Args>
+class Bootstrap_Application_Event
+{
+	private: std::list<std::function<void (Args...)>> eventHandlers;
+
+	public: void addHandler(std::function<void (Args...)> eventHandler)
+	{
+		this->eventHandlers.push_back(eventHandler);
+	}
+
+	public: void exec(Args... args)
+	{
+		for (auto func : this->eventHandlers) {
+			func(args...);
+		}
+	}
+};
 
 class Bootstrap_Application_Object
 {
+	public: Bootstrap_Application_Event<Exception> onError;
+	public: Bootstrap_Application_Event<Exception> onThreadError;
+
 	public: virtual void addShutdownHandler(std::function<void ()> callback) = 0;
 	public: virtual void shutdown() = 0;
 	public: virtual void run() = 0;

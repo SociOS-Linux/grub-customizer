@@ -19,13 +19,9 @@
 #ifndef ERRORCONTROLLER_H_
 #define ERRORCONTROLLER_H_
 
-#include "../lib/Exception.hpp"
-
 class ErrorController {
 public:
 	virtual inline ~ErrorController(){}
-	virtual void errorAction(Exception const& e) = 0;
-	virtual void errorThreadedAction(Exception const& e) = 0;
 };
 
 

@@ -34,7 +34,8 @@
 class AboutControllerImpl :
 	public ControllerAbstract,
 	public AboutController,
-	public View_Trait_ViewAware<View_About>
+	public View_Trait_ViewAware<View_About>,
+	public Bootstrap_Application_Object_Connection
 {
 public:
 	AboutControllerImpl() : ControllerAbstract("about")
@@ -47,7 +48,7 @@ public:
 		try {
 			this->view->show();
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}

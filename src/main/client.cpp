@@ -88,6 +88,7 @@ int main(int argc, char** argv){
 		entryEditController.setView(*view.entryEditor);
 		entryEditController.setDeviceDataList(deviceDataList);
 		entryEditController.setListCfg(listcfg);
+		entryEditController.setApplicationObject(application.applicationObject);
 
 		MainControllerImpl mainController;
 		mainController.setListCfg(listcfg);
@@ -107,6 +108,7 @@ int main(int argc, char** argv){
 		settingsController.setView(*view.settings);
 		settingsController.setSettingsManager(settings);
 		settingsController.setFbResolutionsGetter(fbResolutionsGetter);
+		settingsController.setApplicationObject(application.applicationObject);
 
 		EnvEditorControllerImpl envEditController;
 		envEditController.setMountTable(mountTable);
@@ -120,6 +122,7 @@ int main(int argc, char** argv){
 		trashController.setDeviceDataList(deviceDataList);
 		trashController.setContentParserFactory(contentParserFactory);
 		trashController.setView(*view.trash);
+		trashController.setApplicationObject(application.applicationObject);
 
 		InstallerControllerImpl installController;
 		installController.setInstaller(installer);
@@ -128,6 +131,7 @@ int main(int argc, char** argv){
 
 		AboutControllerImpl aboutController;
 		aboutController.setView(*view.about);
+		aboutController.setApplicationObject(application.applicationObject);
 
 		ErrorControllerImpl errorController;
 		errorController.setView(*view.error);
@@ -138,6 +142,7 @@ int main(int argc, char** argv){
 		themeController.setThemeManager(themeManager);
 		themeController.setSettingsManager(settings);
 		themeController.setListCfg(listcfg);
+		themeController.setApplicationObject(application.applicationObject);
 
 		ControllerCollection controllerCollection;
 		controllerCollection.entryEditController = &entryEditController;

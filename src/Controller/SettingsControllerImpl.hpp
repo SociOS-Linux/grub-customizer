@@ -57,7 +57,8 @@ class SettingsControllerImpl :
 	public Model_SettingsManagerData_Connection,
 	public Model_FbResolutionsGetter_Connection,
 	public Model_Env_Connection,
-	public Controller_Helper_Thread_Connection
+	public Controller_Helper_Thread_Connection,
+	public Bootstrap_Application_Object_Connection
 {
 	bool syncActive; // should only be controlled by syncSettings()
 
@@ -112,7 +113,7 @@ public:
 	
 			this->syncSettings();
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -123,7 +124,7 @@ public:
 		try {
 			this->fbResolutionsGetter->load();
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -139,7 +140,7 @@ public:
 				this->view->addResolution(*iter);
 			}
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -149,7 +150,7 @@ public:
 		try {
 			this->threadHelper->runDispatched(std::bind(std::mem_fn(&SettingsControllerImpl::updateResolutionlistAction), this));
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorThreadedAction(e);
+			this->applicationObject->onThreadError.exec(e);
 		}
 		this->logActionEndThreaded();
 	}
@@ -222,7 +223,7 @@ public:
 			this->syncSettings();
 			this->env->modificationsUnsaved = true;
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -237,7 +238,7 @@ public:
 			this->syncSettings();
 			this->env->modificationsUnsaved = true;
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -248,7 +249,7 @@ public:
 			std::string newSettingName = this->settings->addNewItem();
 			this->syncSettings();
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -260,7 +261,7 @@ public:
 			this->syncSettings();
 			this->env->modificationsUnsaved = true;
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -279,7 +280,7 @@ public:
 			this->syncSettings();
 			this->env->modificationsUnsaved = true;
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -292,7 +293,7 @@ public:
 			this->syncSettings();
 			this->env->modificationsUnsaved = true;
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -314,7 +315,7 @@ public:
 			this->syncSettings();
 			this->env->modificationsUnsaved = true;
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -326,7 +327,7 @@ public:
 			this->syncSettings();
 			this->env->modificationsUnsaved = true;
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -349,7 +350,7 @@ public:
 			this->syncSettings();
 			this->env->modificationsUnsaved = true;
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -361,7 +362,7 @@ public:
 			this->syncSettings();
 			this->env->modificationsUnsaved = true;
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -376,7 +377,7 @@ public:
 			this->syncSettings();
 			this->env->modificationsUnsaved = true;
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -386,7 +387,7 @@ public:
 		try {
 			this->view->hide();
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -396,7 +397,7 @@ public:
 		try {
 			this->view->show(burgMode);
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -406,7 +407,7 @@ public:
 		try {
 			this->syncSettings();
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}

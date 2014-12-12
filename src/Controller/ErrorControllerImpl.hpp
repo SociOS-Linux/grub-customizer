@@ -60,6 +60,14 @@ public:
 		this->view->onQuitClick = std::bind(std::mem_fn(&ErrorControllerImpl::quitAction), this);
 	}
 
+	void initApplicationEvents() override
+	{
+		using namespace std::placeholders;
+
+		this->applicationObject->onError.addHandler(std::bind(std::mem_fn(&ErrorControllerImpl::errorAction), this, _1));
+		this->applicationObject->onThreadError.addHandler(std::bind(std::mem_fn(&ErrorControllerImpl::errorThreadedAction), this, _1));
+	}
+
 	
 	void errorAction(Exception const& e) {
 		this->log(e, Logger::EXCEPTION);

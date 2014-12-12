@@ -424,7 +424,7 @@ public:
 		try {
 			this->init();
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -435,7 +435,7 @@ public:
 			Model_Env::Mode mode = burgMode ? Model_Env::BURG_MODE : Model_Env::GRUB_MODE;
 			this->init(mode, false);
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -454,7 +454,7 @@ public:
 
 			this->getAllControllers().envEditController->showAction();
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -466,7 +466,7 @@ public:
 				this->applicationObject->shutdown();
 			}
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -481,7 +481,7 @@ public:
 			this->view->setLockState(1|4|8);
 			this->threadHelper->runAsThread(std::bind(std::mem_fn(&MainControllerImpl::loadThreadedAction), this, true));
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -544,7 +544,7 @@ public:
 				this->log("ignoring load request (only one load thread allowed at the same time)", Logger::WARNING);
 			}
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorThreadedAction(e);
+			this->applicationObject->onThreadError.exec(e);
 		}
 		this->logActionEndThreaded();
 	}
@@ -560,7 +560,7 @@ public:
 			this->env->activeThreadCount++; //not in save_thead() to be faster set
 			this->threadHelper->runAsThread(std::bind(std::mem_fn(&MainControllerImpl::saveThreadedAction), this));
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -583,7 +583,7 @@ public:
 			}
 			this->env->activeThreadCount--;
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorThreadedAction(e);
+			this->applicationObject->onThreadError.exec(e);
 		}
 		this->logActionEndThreaded();
 	}
@@ -593,7 +593,7 @@ public:
 		try {
 			this->view->showConfigSavingError(errorMessage);
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorThreadedAction(e);
+			this->applicationObject->onThreadError.exec(e);
 		}
 		this->logActionEndThreaded();
 	}
@@ -643,7 +643,7 @@ public:
 		try {
 			this->getAllControllers().installerController->showAction();
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -654,7 +654,7 @@ public:
 		try {
 			this->getAllControllers().entryEditController->showAction(rule);
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -664,7 +664,7 @@ public:
 		try {
 			this->getAllControllers().entryEditController->showCreatorAction();
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -686,7 +686,7 @@ public:
 				this->applicationObject->shutdown();
 			}
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -730,7 +730,7 @@ public:
 				}
 			}
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -767,7 +767,7 @@ public:
 				this->getAllControllers().themeController->updateSettingsDataAction();
 			}
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -787,7 +787,7 @@ public:
 			}
 			this->env->modificationsUnsaved = true;
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -864,7 +864,7 @@ public:
 				this->syncLoadStateAction();
 			}
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -881,7 +881,7 @@ public:
 				10
 			);
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -898,7 +898,7 @@ public:
 
 			this->moveAction(movedRules, -1);
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -911,7 +911,7 @@ public:
 			this->syncLoadStateAction();
 			this->env->modificationsUnsaved = true;
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -927,7 +927,7 @@ public:
 		try {
 			this->getAllControllers().aboutController->showAction();
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -938,7 +938,7 @@ public:
 		try {
 			this->threadHelper->runDispatched(std::bind(std::mem_fn(&MainControllerImpl::syncLoadStateAction), this));
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorThreadedAction(e);
+			this->applicationObject->onThreadError.exec(e);
 		}
 		this->logActionEndThreaded();
 	}
@@ -948,7 +948,7 @@ public:
 		try {
 			this->threadHelper->runDispatched(std::bind(std::mem_fn(&MainControllerImpl::syncSaveStateAction), this));
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorThreadedAction(e);
+			this->applicationObject->onThreadError.exec(e);
 		}
 		this->logActionEndThreaded();
 	}
@@ -980,7 +980,7 @@ public:
 			}
 			this->log("MainControllerImpl::syncListView_save completed", Logger::INFO);
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -1029,7 +1029,7 @@ public:
 			}
 			this->log("MainControllerImpl::syncListView_load completed", Logger::INFO);
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -1040,7 +1040,7 @@ public:
 		try {
 			this->getAllControllers().settingsController->showAction(env->burgMode);
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -1050,7 +1050,7 @@ public:
 		try {
 			this->init(burgChosen ? Model_Env::BURG_MODE : Model_Env::GRUB_MODE);
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -1071,7 +1071,7 @@ public:
 
 			this->env->modificationsUnsaved = true;
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -1084,7 +1084,7 @@ public:
 			this->getAllControllers().themeController->loadThemesAction();
 			this->getAllControllers().themeController->updateFontSizeAction();
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -1094,7 +1094,7 @@ public:
 		try {
 			this->view->showReloadRecommendation();
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -1104,7 +1104,7 @@ public:
 		try {
 			this->view->selectRules(rules);
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -1114,7 +1114,7 @@ public:
 		try {
 			this->view->selectRule(rule, startEdit);
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -1128,7 +1128,7 @@ public:
 			}
 			this->view->updateLockState();
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -1144,7 +1144,7 @@ public:
 			}
 			this->syncLoadStateAction();
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -1155,7 +1155,7 @@ public:
 			Model_Rule::fromPtr(entry).setVisibility(state);
 			this->syncLoadStateAction();
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -1167,7 +1167,7 @@ public:
 				this->getAllControllers().trashController->selectEntriesAction(std::list<Entry*>());
 			}
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}

@@ -49,7 +49,8 @@ class EntryEditControllerImpl :
 	public ContentParserFactory_Connection,
 	public Model_DeviceDataListInterface_Connection,
 	public Model_Env_Connection,
-	public Controller_Helper_Thread_Connection
+	public Controller_Helper_Thread_Connection,
+	public Bootstrap_Application_Object_Connection
 {
 	ContentParser* currentContentParser;
 	Model_Script* _createCustomScript() {
@@ -82,7 +83,7 @@ public:
 			this->syncEntryEditDlg(false);
 			this->view->show();
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -96,7 +97,7 @@ public:
 			this->view->setOptions(std::map<std::string, std::string>());
 			this->view->show();
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -106,7 +107,7 @@ public:
 		try {
 			this->syncEntryEditDlg(false);
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -116,7 +117,7 @@ public:
 		try {
 			this->syncEntryEditDlg(true);
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -161,7 +162,7 @@ public:
 				this->view->setSourcecode("");
 			}
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
@@ -254,7 +255,7 @@ public:
 	
 			this->currentContentParser = NULL;
 		} catch (Exception const& e) {
-			this->getAllControllers().errorController->errorAction(e);
+			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
