@@ -250,7 +250,7 @@ public:
 			rulePtr->dataSource->isModified = true;
 	
 			this->env->modificationsUnsaved = true;
-			this->getAllControllers().mainController->syncLoadStateAction();
+			this->applicationObject->onListModelChange.exec();
 	
 			if (isAdded) {
 				this->threadHelper->runDelayed(

@@ -53,6 +53,10 @@ class Bootstrap_Application_Object
 	public: Bootstrap_Application_Event<> onInstallerShowRequest;
 	public: Bootstrap_Application_Event<> onSettingsShowRequest;
 
+	public: Bootstrap_Application_Event<> onListModelChange;
+	public: Bootstrap_Application_Event<bool> onEnvChange;
+	public: Bootstrap_Application_Event<> onListRelevantSettingChange;
+
 	public: virtual void addShutdownHandler(std::function<void ()> callback) = 0;
 	public: virtual void shutdown() = 0;
 	public: virtual void run() = 0;

@@ -26,11 +26,7 @@ class MainController {
 public:
 	virtual inline ~MainController(){};
 
-	virtual void syncLoadStateAction() = 0;
-
-	virtual void reInitAction(bool burgMode) = 0;
 	virtual void addEntriesAction(std::list<Rule*> entries) = 0;
-	virtual void showReloadRecommendationAction() = 0;
 	virtual void selectRulesAction(std::list<Rule*> rules) = 0;
 	virtual void selectRuleAction(Rule* rule, bool startEdit) = 0;
 };

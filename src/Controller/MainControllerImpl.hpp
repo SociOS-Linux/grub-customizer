@@ -316,6 +316,8 @@ public:
 
 	void initApplicationEvents() override
 	{
+		using namespace std::placeholders;
+
 		this->applicationObject->addShutdownHandler(
 			[this] () {
 				this->view->setLockState(~0);
@@ -323,6 +325,16 @@ public:
 					this->mountTable->umountAll(PARTCHOOSER_MOUNTPOINT);
 				}
 			}
+		);
+
+		this->applicationObject->onListModelChange.addHandler(
+			std::bind(std::mem_fn(&MainControllerImpl::syncLoadStateAction), this)
+		);
+		this->applicationObject->onEnvChange.addHandler(
+			std::bind(std::mem_fn(&MainControllerImpl::reInitAction), this, _1)
+		);
+		this->applicationObject->onListRelevantSettingChange.addHandler(
+			std::bind(std::mem_fn(&MainControllerImpl::showReloadRecommendationAction), this)
 		);
 	}
 

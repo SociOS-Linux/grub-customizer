@@ -206,7 +206,7 @@ public:
 		this->view->setResolution(this->settings->getValue("GRUB_GFXMODE"));
 	
 		if (this->settings->reloadRequired()) {
-			this->getAllControllers().mainController->showReloadRecommendationAction();
+			this->applicationObject->onListRelevantSettingChange.exec();
 		}
 		this->getAllControllers().themeController->syncAction();
 		this->syncActive = false;

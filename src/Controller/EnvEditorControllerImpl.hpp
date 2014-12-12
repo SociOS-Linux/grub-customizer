@@ -223,7 +223,7 @@ public:
 				this->env->save();
 			}
 			this->deviceMap->clearCache();
-			this->getAllControllers().mainController->reInitAction(isBurgMode);
+			this->applicationObject->onEnvChange.exec(isBurgMode);
 		} catch (Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
