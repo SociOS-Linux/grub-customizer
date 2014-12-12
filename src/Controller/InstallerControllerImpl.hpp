@@ -81,7 +81,7 @@ public:
 	void installGrubAction(std::string device) {
 		this->logActionBegin("install-grub");
 		try {
-			this->threadHelper->runAsThread(std::bind(std::mem_fn(&InstallerController::installGrubThreadedAction), this, device));
+			this->threadHelper->runAsThread(std::bind(std::mem_fn(&InstallerControllerImpl::installGrubThreadedAction), this, device));
 		} catch (Exception const& e) {
 			this->getAllControllers().errorController->errorAction(e);
 		}

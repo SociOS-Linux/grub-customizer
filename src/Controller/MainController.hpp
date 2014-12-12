@@ -27,15 +27,9 @@ public:
 	virtual inline ~MainController(){};
 
 	virtual void syncLoadStateAction() = 0;
-	virtual void syncSaveStateAction() = 0;
 
 	virtual void reInitAction(bool burgMode) = 0;
-	virtual void dieAction() = 0;
-	virtual void loadThreadedAction(bool preserveConfig) = 0;
-	virtual void saveThreadedAction() = 0;
-	virtual void showConfigSavingErrorAction(std::string errorMessage) = 0;
 	virtual void addEntriesAction(std::list<Rule*> entries) = 0;
-	virtual void activateSettingsAction() = 0;
 	virtual void showReloadRecommendationAction() = 0;
 	virtual void selectRulesAction(std::list<Rule*> rules) = 0;
 	virtual void selectRuleAction(Rule* rule, bool startEdit) = 0;

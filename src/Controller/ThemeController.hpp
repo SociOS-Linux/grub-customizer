@@ -23,12 +23,10 @@
 class ThemeController {
 public:
 	virtual void loadThemesAction() = 0;
-	virtual void startFileEditAction(std::string const& file) = 0;
 	virtual void updateFontSizeAction() = 0;
 	virtual void updateSettingsDataAction() = 0;
 	virtual void syncAction() = 0;
 	virtual void saveAction() = 0;
-	virtual void postSaveAction() = 0;
 	virtual inline ~ThemeController() {}
 };
 
