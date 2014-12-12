@@ -22,8 +22,6 @@
 class SettingsController {
 public:
 	virtual inline ~SettingsController(){};
-
-	virtual void syncAction() = 0;
 };
 
 

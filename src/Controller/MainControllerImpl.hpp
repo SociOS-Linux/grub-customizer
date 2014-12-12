@@ -492,8 +492,7 @@ public:
 	void reloadAction() {
 		this->logActionBegin("reload");
 		try {
-			this->getAllControllers().settingsController->syncAction();
-			this->getAllControllers().themeController->syncAction();
+			this->applicationObject->onSettingModelChange.exec();
 			this->view->hideReloadRecommendation();
 			this->view->setLockState(1|4|8);
 			this->threadHelper->runAsThread(std::bind(std::mem_fn(&MainControllerImpl::loadThreadedAction), this, true));
@@ -1095,9 +1094,7 @@ public:
 		this->logActionBegin("activate-settings");
 		try {
 			this->view->setLockState(1);
-			this->getAllControllers().settingsController->syncAction();
-			this->getAllControllers().themeController->loadThemesAction();
-			this->getAllControllers().themeController->updateFontSizeAction();
+			this->applicationObject->onSettingModelChange.exec();
 		} catch (Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
@@ -1138,8 +1135,7 @@ public:
 		this->logActionBegin("refresh-tab");
 		try {
 			if (pos != 0) { // list
-				this->getAllControllers().settingsController->syncAction();
-				this->getAllControllers().themeController->syncAction();
+				this->applicationObject->onSettingModelChange.exec();
 			}
 			this->view->updateLockState();
 		} catch (Exception const& e) {

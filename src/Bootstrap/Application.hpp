@@ -63,6 +63,7 @@ class Bootstrap_Application_Object
 	public: Bootstrap_Application_Event<std::list<Rule*>> onEntryInsertionRequest; // TODO: do just selection - not the insertion itself
 
 	public: Bootstrap_Application_Event<> onInit;
+	public: Bootstrap_Application_Event<> onSettingModelChange;
 
 	public: virtual void addShutdownHandler(std::function<void ()> callback) = 0;
 	public: virtual void shutdown() = 0;

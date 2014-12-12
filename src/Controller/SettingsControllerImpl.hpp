@@ -114,6 +114,8 @@ public:
 		);
 
 		this->applicationObject->onListModelChange.addHandler(std::bind(std::mem_fn(&SettingsControllerImpl::updateSettingsDataAction), this));
+
+		this->applicationObject->onSettingModelChange.addHandler(std::bind(std::mem_fn(&SettingsControllerImpl::syncAction), this));
 	}
 
 	//dispatchers
@@ -219,7 +221,7 @@ public:
 		if (this->settings->reloadRequired()) {
 			this->applicationObject->onListRelevantSettingChange.exec();
 		}
-		this->getAllControllers().themeController->syncAction();
+		this->applicationObject->onSettingModelChange.exec();
 		this->syncActive = false;
 	}
 

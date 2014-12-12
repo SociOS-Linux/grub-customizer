@@ -133,8 +133,8 @@ class ThemeControllerImpl :
 				this->showSimpleThemeConfigAction();
 			}
 		}
-	
-		this->getAllControllers().settingsController->syncAction();
+
+		this->applicationObject->onSettingModelChange.exec();
 		this->syncActive = false;
 	}
 
@@ -184,6 +184,9 @@ public:
 		using namespace std::placeholders;
 
 		this->applicationObject->onListModelChange.addHandler(std::bind(std::mem_fn(&ThemeControllerImpl::updateSettingsDataAction), this));
+
+		this->applicationObject->onSettingModelChange.addHandler(std::bind(std::mem_fn(&ThemeControllerImpl::loadThemesAction), this));
+		this->applicationObject->onSettingModelChange.addHandler(std::bind(std::mem_fn(&ThemeControllerImpl::updateFontSizeAction), this));
 	}
 
 
