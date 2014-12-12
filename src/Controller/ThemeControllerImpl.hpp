@@ -179,6 +179,13 @@ public:
 		this->view->onSaveClick = std::bind(std::mem_fn(&ThemeControllerImpl::saveAction), this);
 	}
 
+	void initApplicationEvents() override
+	{
+		using namespace std::placeholders;
+
+		this->applicationObject->onListModelChange.addHandler(std::bind(std::mem_fn(&ThemeControllerImpl::updateSettingsDataAction), this));
+	}
+
 
 	void loadThemesAction() {
 		this->logActionBegin("load-themes");

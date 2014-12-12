@@ -112,6 +112,8 @@ public:
 				this->threadHelper->runAsThread(std::bind(std::mem_fn(&SettingsControllerImpl::loadResolutionsAction), this));
 			}
 		);
+
+		this->applicationObject->onListModelChange.addHandler(std::bind(std::mem_fn(&SettingsControllerImpl::updateSettingsDataAction), this));
 	}
 
 	//dispatchers

@@ -328,7 +328,7 @@ public:
 		);
 
 		this->applicationObject->onListModelChange.addHandler(
-			std::bind(std::mem_fn(&MainControllerImpl::syncLoadStateAction), this)
+			std::bind(std::mem_fn(&MainControllerImpl::updateList), this)
 		);
 		this->applicationObject->onEnvChange.addHandler(
 			std::bind(std::mem_fn(&MainControllerImpl::reInitAction), this, _1)
@@ -644,7 +644,7 @@ public:
 				rule->dataSource->name = newName;
 			}
 
-			this->syncLoadStateAction();
+			this->applicationObject->onListModelChange.exec();
 			this->view->selectRule(rule);
 		}
 	}
@@ -777,11 +777,10 @@ public:
 					this->log("proxy removed", Logger::INFO);
 				}
 
-				this->syncLoadStateAction();
+				this->applicationObject->onListModelChange.exec();
+
 				this->getAllControllers().trashController->selectEntriesAction(entriesOfRemovedRules);
 				this->env->modificationsUnsaved = true;
-				this->getAllControllers().settingsController->updateSettingsDataAction();
-				this->getAllControllers().themeController->updateSettingsDataAction();
 			}
 		} catch (Exception const& e) {
 			this->applicationObject->onError.exec(e);
@@ -870,7 +869,7 @@ public:
 					rules = movedRules;
 				}
 
-				this->syncLoadStateAction();
+				this->applicationObject->onListModelChange.exec();
 				if (stickyPlaceholders) {
 					movedRules = this->_removePlaceholdersFromSelection(movedRules);
 				}
@@ -878,7 +877,7 @@ public:
 				this->env->modificationsUnsaved = true;
 			} catch (NoMoveTargetException const& e) {
 				this->view->showErrorMessage(gettext("cannot move this entry"));
-				this->syncLoadStateAction();
+				this->applicationObject->onListModelChange.exec();
 			}
 		} catch (Exception const& e) {
 			this->applicationObject->onError.exec(e);
@@ -891,7 +890,7 @@ public:
 		try {
 			Model_Rule* firstRule = &Model_Rule::fromPtr(childItems.front());
 			Model_Rule* newItem = this->grublistCfg->createSubmenu(firstRule);
-			this->syncLoadStateAction();
+			this->applicationObject->onListModelChange.exec();
 			this->moveAction(childItems, -1);
 			this->threadHelper->runDelayed(
 				std::bind(std::mem_fn(&MainControllerImpl::selectRuleAction), this, newItem, true),
@@ -925,7 +924,7 @@ public:
 		this->logActionBegin("revert");
 		try {
 			this->grublistCfg->revert();
-			this->syncLoadStateAction();
+			this->applicationObject->onListModelChange.exec();
 			this->env->modificationsUnsaved = true;
 		} catch (Exception const& e) {
 			this->applicationObject->onError.exec(e);
@@ -1032,9 +1031,6 @@ public:
 			}
 
 			if (progress == 1){
-				this->getAllControllers().settingsController->updateSettingsDataAction();
-				this->getAllControllers().themeController->updateSettingsDataAction();
-
 				this->getAllControllers().trashController->updateAction(this->view->getOptions());
 
 				bool placeholdersVisible = this->view->getOptions().at(VIEW_SHOW_PLACEHOLDERS);
@@ -1043,6 +1039,8 @@ public:
 					this->grublistCfg->getRemovedEntries(NULL, !placeholdersVisible).size() >= 1 && !hiddenEntriesVisible
 				);
 				this->view->setLockState(0);
+
+				this->applicationObject->onListModelChange.exec();
 			}
 			this->log("MainControllerImpl::syncListView_load completed", Logger::INFO);
 		} catch (Exception const& e) {
@@ -1082,7 +1080,7 @@ public:
 				addedRules.push_back(this->grublistCfg->addEntry(*entry, Model_Rule::fromPtr(*iter).type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER));
 			}
 
-			this->syncLoadStateAction();
+			this->applicationObject->onListModelChange.exec();
 
 			this->view->selectRules(addedRules);
 
@@ -1159,7 +1157,7 @@ public:
 			} catch (FileSaveException e) {
 				this->log("option saving failed", Logger::ERROR);
 			}
-			this->syncLoadStateAction();
+			this->applicationObject->onListModelChange.exec();
 		} catch (Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
@@ -1170,7 +1168,7 @@ public:
 		this->logActionBegin("entry-state-toggled");
 		try {
 			Model_Rule::fromPtr(entry).setVisibility(state);
-			this->syncLoadStateAction();
+			this->applicationObject->onListModelChange.exec();
 		} catch (Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}

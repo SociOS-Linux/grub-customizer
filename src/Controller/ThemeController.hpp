@@ -24,7 +24,6 @@ class ThemeController {
 public:
 	virtual void loadThemesAction() = 0;
 	virtual void updateFontSizeAction() = 0;
-	virtual void updateSettingsDataAction() = 0;
 	virtual void syncAction() = 0;
 	virtual void saveAction() = 0;
 	virtual inline ~ThemeController() {}
