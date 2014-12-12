@@ -131,6 +131,11 @@ public:
 		this->view->onSelectionChange = std::bind(std::mem_fn(&TrashControllerImpl::updateSelectionAction), this, _1);
 	}
 
+	void initApplicationEvents() override
+	{
+		this->applicationObject->onEnvChange.addHandler(std::bind(std::mem_fn(&TrashControllerImpl::hideAction), this));
+	}
+
 	
 	void updateAction(std::map<ViewOption, bool> const& viewOptions) {
 		this->logActionBegin("update");

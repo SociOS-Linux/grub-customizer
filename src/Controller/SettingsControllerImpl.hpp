@@ -103,6 +103,7 @@ public:
 	void initApplicationEvents() override
 	{
 		this->applicationObject->onSettingsShowRequest.addHandler(std::bind(std::mem_fn(&SettingsControllerImpl::showAction), this));
+		this->applicationObject->onEnvChange.addHandler(std::bind(std::mem_fn(&SettingsControllerImpl::hideAction), this));
 	}
 
 	//dispatchers

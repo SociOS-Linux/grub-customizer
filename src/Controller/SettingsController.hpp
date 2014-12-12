@@ -25,7 +25,6 @@ public:
 	virtual void loadResolutionsAction() = 0;
 	virtual void updateSettingsDataAction() = 0;
 
-	virtual void hideAction() = 0;
 	virtual void syncAction() = 0;
 };
 

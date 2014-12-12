@@ -214,8 +214,6 @@ public:
 	void applyAction(bool saveConfig) {
 		this->logActionBegin("apply");
 		try {
-			this->getAllControllers().settingsController->hideAction();
-			this->getAllControllers().trashController->hideAction();
 			bool isBurgMode = this->view->getBootloaderType() == 1;
 			view->hide();
 	
