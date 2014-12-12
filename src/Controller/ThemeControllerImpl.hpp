@@ -187,6 +187,8 @@ public:
 
 		this->applicationObject->onSettingModelChange.addHandler(std::bind(std::mem_fn(&ThemeControllerImpl::loadThemesAction), this));
 		this->applicationObject->onSettingModelChange.addHandler(std::bind(std::mem_fn(&ThemeControllerImpl::updateFontSizeAction), this));
+
+		this->applicationObject->onSave.addHandler(std::bind(std::mem_fn(&ThemeControllerImpl::saveAction), this));
 	}
 
 

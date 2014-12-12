@@ -590,7 +590,7 @@ public:
 			if (this->settings->color_helper_required) {
 				this->grublistCfg->addColorHelper();
 			}
-			this->getAllControllers().themeController->saveAction();
+			this->applicationObject->onSave.exec();
 			this->log("writing grub list configuration", Logger::IMPORTANT_EVENT);
 			try {
 				this->grublistCfg->save();

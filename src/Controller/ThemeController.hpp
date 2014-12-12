@@ -22,7 +22,6 @@
 
 class ThemeController {
 public:
-	virtual void saveAction() = 0;
 	virtual inline ~ThemeController() {}
 };
 
