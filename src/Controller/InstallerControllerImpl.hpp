@@ -44,7 +44,8 @@ class InstallerControllerImpl :
 	public View_Trait_ViewAware<View_Installer>,
 	public Model_Installer_Connection,
 	public Model_Env_Connection,
-	public Controller_Helper_Thread_Connection
+	public Controller_Helper_Thread_Connection,
+	public Bootstrap_Application_Object_Connection
 {
 public:
 	InstallerControllerImpl() : ControllerAbstract("installer")
@@ -94,7 +95,7 @@ public:
 			installer->threadable_install(device);
 			this->env->activeThreadCount--;
 			if (this->env->activeThreadCount == 0 && this->env->quit_requested) {
-				this->getAllControllers().mainController->exitAction(true);
+				this->applicationObject->shutdown();
 			}
 		} catch (Exception const& e) {
 			this->getAllControllers().errorController->errorThreadedAction(e);

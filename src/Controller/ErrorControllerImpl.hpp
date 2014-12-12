@@ -38,7 +38,8 @@ class ErrorControllerImpl :
 	public ControllerAbstract,
 	public ErrorController,
 	public View_Trait_ViewAware<View_Error>,
-	public Controller_Helper_Thread_Connection
+	public Controller_Helper_Thread_Connection,
+	public Bootstrap_Application_Object_Connection
 {
 	bool applicationStarted;
 public:
@@ -76,7 +77,7 @@ public:
 
 	void quitAction() {
 		if (this->applicationStarted) {
-			this->getAllControllers().mainController->exitAction(true);
+			this->applicationObject->shutdown();
 		} else {
 			exit(2);
 		}

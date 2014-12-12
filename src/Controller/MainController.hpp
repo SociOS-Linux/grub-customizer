@@ -31,7 +31,6 @@ public:
 
 	virtual void reInitAction(bool burgMode) = 0;
 	virtual void dieAction() = 0;
-	virtual void exitAction(bool force) = 0;
 	virtual void loadThreadedAction(bool preserveConfig) = 0;
 	virtual void saveThreadedAction() = 0;
 	virtual void showConfigSavingErrorAction(std::string errorMessage) = 0;

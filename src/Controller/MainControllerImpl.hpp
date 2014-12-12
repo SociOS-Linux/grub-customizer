@@ -301,7 +301,7 @@ public:
 		this->view->onShowEntryEditorClick = std::bind(std::mem_fn(&MainControllerImpl::showEntryEditorAction), this, _1);
 		this->view->onShowEntryCreatorClick = std::bind(std::mem_fn(&MainControllerImpl::showEntryCreatorAction), this);
 		this->view->onShowAboutClick = std::bind(std::mem_fn(&MainControllerImpl::showAboutAction), this);
-		this->view->onExitClick = std::bind(std::mem_fn(&MainControllerImpl::exitAction), this, false);
+		this->view->onExitClick = std::bind(std::mem_fn(&MainControllerImpl::exitAction), this);
 		this->view->onRenameClick = std::bind(std::mem_fn(&MainControllerImpl::renameRuleAction), this, _1, _2);
 		this->view->onRevertClick = std::bind(std::mem_fn(&MainControllerImpl::revertAction), this);
 		this->view->onMoveClick = std::bind(std::mem_fn(&MainControllerImpl::moveAction), this, _1, _2);
@@ -312,6 +312,18 @@ public:
 		this->view->onViewOptionChange = std::bind(std::mem_fn(&MainControllerImpl::setViewOptionAction), this, _1, _2);
 		this->view->onEntryStateChange = std::bind(std::mem_fn(&MainControllerImpl::entryStateToggledAction), this, _1, _2);
 		this->view->onSelectionChange = std::bind(std::mem_fn(&MainControllerImpl::updateSelectionAction), this, _1);
+	}
+
+	void initApplicationEvents() override
+	{
+		this->applicationObject->addShutdownHandler(
+			[this] () {
+				this->view->setLockState(~0);
+				if (this->mountTable->getEntryByMountpoint(PARTCHOOSER_MOUNTPOINT)) {
+					this->mountTable->umountAll(PARTCHOOSER_MOUNTPOINT);
+				}
+			}
+		);
 	}
 
 	void initListCfgEvents() override
@@ -451,7 +463,7 @@ public:
 		this->logActionBegin("cancel-burg-switcher");
 		try {
 			if (!this->view->isVisible()) {
-				this->applicationObject->quit();
+				this->applicationObject->shutdown();
 			}
 		} catch (Exception const& e) {
 			this->getAllControllers().errorController->errorAction(e);
@@ -671,7 +683,7 @@ public:
 			if (showEnvSettings) {
 				this->showEnvEditorAction();
 			} else {
-				this->exitAction(true); //exit
+				this->applicationObject->shutdown();
 			}
 		} catch (Exception const& e) {
 			this->getAllControllers().errorController->errorAction(e);
@@ -700,30 +712,21 @@ public:
 	}
 
 
-	void exitAction(bool force) {
+	void exitAction() {
 		this->logActionBegin("exit");
 		try {
-			if (force){
-				this->view->setLockState(~0);
-				if (this->mountTable->getEntryByMountpoint(PARTCHOOSER_MOUNTPOINT)) {
-					this->mountTable->umountAll(PARTCHOOSER_MOUNTPOINT);
-				}
-				this->applicationObject->quit();
+			int dlgResponse = this->view->showExitConfirmDialog(this->config_has_been_different_on_startup_but_unsaved*2 + this->env->modificationsUnsaved);
+			if (dlgResponse == 1){
+				this->saveAction(); //starts a thread that delays the application exiting
 			}
-			else {
-				int dlgResponse = this->view->showExitConfirmDialog(this->config_has_been_different_on_startup_but_unsaved*2 + this->env->modificationsUnsaved);
-				if (dlgResponse == 1){
-					this->saveAction(); //starts a thread that delays the application exiting
-				}
 
-				if (dlgResponse != 0){
-					if (this->env->activeThreadCount != 0){
-						this->env->quit_requested = true;
-						this->grublistCfg->cancelThreads();
-					}
-					else {
-						this->exitAction(true); //re-run with force option
-					}
+			if (dlgResponse != 0){
+				if (this->env->activeThreadCount != 0){
+					this->env->quit_requested = true;
+					this->grublistCfg->cancelThreads();
+				}
+				else {
+					this->applicationObject->shutdown();
 				}
 			}
 		} catch (Exception const& e) {
@@ -961,8 +964,9 @@ public:
 					this->view->showProxyNotFoundMessage();
 					this->grublistCfg->error_proxy_not_found = false;
 				}
-				if (this->env->quit_requested)
-					this->exitAction(true);
+				if (this->env->quit_requested) {
+					this->applicationObject->shutdown();
+				}
 
 				this->view->setLockState(0);
 
@@ -992,7 +996,7 @@ public:
 				this->view->setStatusText(this->grublistCfg->getProgress_name(), this->grublistCfg->getProgress_pos(), this->grublistCfg->getProgress_max());
 			} else {
 				if (this->env->quit_requested) {
-					this->exitAction(true);
+					this->applicationObject->shutdown();
 				}
 				this->view->hideProgressBar();
 				this->view->setStatusText("");

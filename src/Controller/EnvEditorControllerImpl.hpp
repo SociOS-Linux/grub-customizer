@@ -40,7 +40,8 @@ class EnvEditorControllerImpl :
 	public ControllerAbstract,
 	public EnvEditorController,
 	public View_Trait_ViewAware<View_EnvEditor>,
-	public Model_Env_Connection
+	public Model_Env_Connection,
+	public Bootstrap_Application_Object_Connection
 {
 	Model_MountTable* mountTable;
 	Model_DeviceMap* deviceMap;
@@ -226,7 +227,7 @@ public:
 	void exitAction() {
 		this->logActionBegin("exit");
 		try {
-			this->getAllControllers().mainController->exitAction(true);
+			this->applicationObject->shutdown();
 		} catch (Exception const& e) {
 			this->getAllControllers().errorController->errorAction(e);
 		}

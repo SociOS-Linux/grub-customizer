@@ -112,6 +112,7 @@ int main(int argc, char** argv){
 		envEditController.setMountTable(mountTable);
 		envEditController.setView(*view.envEditor);
 		envEditController.setDeviceMap(deviceMap);
+		envEditController.setApplicationObject(application.applicationObject);
 
 		TrashControllerImpl trashController;
 		trashController.setEntryNameMapper(entryNameMapper);
@@ -123,12 +124,14 @@ int main(int argc, char** argv){
 		InstallerControllerImpl installController;
 		installController.setInstaller(installer);
 		installController.setView(*view.installer);
+		installController.setApplicationObject(application.applicationObject);
 
 		AboutControllerImpl aboutController;
 		aboutController.setView(*view.about);
 
 		ErrorControllerImpl errorController;
 		errorController.setView(*view.error);
+		errorController.setApplicationObject(application.applicationObject);
 
 		ThemeControllerImpl themeController;
 		themeController.setView(*view.theme);

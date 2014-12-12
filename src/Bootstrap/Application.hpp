@@ -19,10 +19,12 @@
 #ifndef SRC_BOOTSTRAP_APPLICATION_HPP_
 #define SRC_BOOTSTRAP_APPLICATION_HPP_
 #include <memory>
+#include <functional>
 
 class Bootstrap_Application_Object
 {
-	public: virtual void quit() = 0;
+	public: virtual void addShutdownHandler(std::function<void ()> callback) = 0;
+	public: virtual void shutdown() = 0;
 	public: virtual void run() = 0;
 	public: virtual ~Bootstrap_Application_Object(){}
 };
@@ -33,8 +35,16 @@ class Bootstrap_Application_Object_Connection
 
 	public: virtual ~Bootstrap_Application_Object_Connection(){}
 
-	public: void setApplicationObject(std::shared_ptr<Bootstrap_Application_Object> applicationObject) {
+	public: void setApplicationObject(std::shared_ptr<Bootstrap_Application_Object> applicationObject)
+	{
 		this->applicationObject = applicationObject;
+
+		this->initApplicationEvents();
+	}
+
+	public: virtual void initApplicationEvents()
+	{
+		// override to initialize application events
 	}
 };
 

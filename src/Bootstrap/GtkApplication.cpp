@@ -18,10 +18,12 @@
 
 #include "Application.hpp"
 #include <gtkmm/main.h>
+#include <list>
 
 class Bootstrap_GtkApplicationObject : public Bootstrap_Application_Object
 {
 	private: Gtk::Main app;
+	private: std::list<std::function<void ()>> shutdownHandlers;
 
 	public: Bootstrap_GtkApplicationObject(int argc, char** argv)
 		: app(argc, argv)
@@ -33,8 +35,15 @@ class Bootstrap_GtkApplicationObject : public Bootstrap_Application_Object
 		this->app.run();
 	}
 
-	public: void quit() {
+	public: void shutdown() {
+		for (auto func : this->shutdownHandlers) {
+			func();
+		}
 		this->app.quit();
+	}
+
+	public: void addShutdownHandler(std::function<void ()> callback) {
+		this->shutdownHandlers.push_back(callback);
 	}
 };
 
