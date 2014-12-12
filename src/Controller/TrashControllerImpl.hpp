@@ -147,7 +147,7 @@ public:
 		this->logActionBegin("apply");
 		try {
 			std::list<Rule*> entries = view->getSelectedEntries();
-			this->getAllControllers().mainController->addEntriesAction(entries);
+			this->applicationObject->onEntryInsertionRequest.exec(entries);
 		} catch (Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
@@ -203,7 +203,7 @@ public:
 		this->logActionBegin("update-selection");
 		try {
 			if (selectedEntries.size()) {
-				this->getAllControllers().mainController->selectRulesAction(std::list<Rule*>());
+				this->applicationObject->onTrashEntrySelection.exec();
 				this->view->setRestoreButtonSensitivity(true);
 				this->view->setDeleteButtonVisibility(this->_isDeletable(selectedEntries));
 			} else {

@@ -57,6 +57,11 @@ class Bootstrap_Application_Object
 	public: Bootstrap_Application_Event<bool> onEnvChange;
 	public: Bootstrap_Application_Event<> onListRelevantSettingChange;
 
+	// param 1: the modified rule, param 2: whether it's a new rule
+	public: Bootstrap_Application_Event<Rule*, bool> onListRuleChange;
+	public: Bootstrap_Application_Event<> onTrashEntrySelection;
+	public: Bootstrap_Application_Event<std::list<Rule*>> onEntryInsertionRequest; // TODO: do just selection - not the insertion itself
+
 	public: virtual void addShutdownHandler(std::function<void ()> callback) = 0;
 	public: virtual void shutdown() = 0;
 	public: virtual void run() = 0;

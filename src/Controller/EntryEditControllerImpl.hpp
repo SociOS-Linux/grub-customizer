@@ -255,12 +255,12 @@ public:
 			if (isAdded) {
 				this->threadHelper->runDelayed(
 					[this, rulePtr] () {
-						this->getAllControllers().mainController->selectRuleAction(rulePtr, true);
+						this->applicationObject->onListRuleChange.exec(rulePtr, true);
 					},
 					10
 				);
 			} else {
-				this->getAllControllers().mainController->selectRuleAction(rulePtr, isAdded);
+				this->applicationObject->onListRuleChange.exec(rulePtr, isAdded);
 			}
 	
 	

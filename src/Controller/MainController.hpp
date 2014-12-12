@@ -25,10 +25,6 @@
 class MainController {
 public:
 	virtual inline ~MainController(){};
-
-	virtual void addEntriesAction(std::list<Rule*> entries) = 0;
-	virtual void selectRulesAction(std::list<Rule*> rules) = 0;
-	virtual void selectRuleAction(Rule* rule, bool startEdit) = 0;
 };
 
 

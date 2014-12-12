@@ -336,6 +336,18 @@ public:
 		this->applicationObject->onListRelevantSettingChange.addHandler(
 			std::bind(std::mem_fn(&MainControllerImpl::showReloadRecommendationAction), this)
 		);
+
+		this->applicationObject->onListRuleChange.addHandler(
+			std::bind(std::mem_fn(&MainControllerImpl::selectRuleAction), this, _1, _2)
+		);
+
+		this->applicationObject->onTrashEntrySelection.addHandler(
+			std::bind(std::mem_fn(&MainControllerImpl::selectRulesAction), this, std::list<Rule*>())
+		);
+
+		this->applicationObject->onEntryInsertionRequest.addHandler(
+			std::bind(std::mem_fn(&MainControllerImpl::addEntriesAction), this, _1)
+		);
 	}
 
 	void initListCfgEvents() override
