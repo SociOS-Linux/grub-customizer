@@ -22,7 +22,6 @@
 class SettingsController {
 public:
 	virtual inline ~SettingsController(){};
-	virtual void loadResolutionsAction() = 0;
 	virtual void updateSettingsDataAction() = 0;
 
 	virtual void syncAction() = 0;

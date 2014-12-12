@@ -62,6 +62,8 @@ class Bootstrap_Application_Object
 	public: Bootstrap_Application_Event<> onTrashEntrySelection;
 	public: Bootstrap_Application_Event<std::list<Rule*>> onEntryInsertionRequest; // TODO: do just selection - not the insertion itself
 
+	public: Bootstrap_Application_Event<> onInit;
+
 	public: virtual void addShutdownHandler(std::function<void ()> callback) = 0;
 	public: virtual void shutdown() = 0;
 	public: virtual void run() = 0;

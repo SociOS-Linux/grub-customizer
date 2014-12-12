@@ -392,14 +392,7 @@ public:
 
 		this->env->rootDeviceName = mountTable->getEntryByMountpoint("").device;
 
-
-		this->log("Loading Framebuffer resolutions (background process)", Logger::EVENT);
-		//loading the framebuffer resolutions in background…
-		this->threadHelper->runAsThread(
-			[this] () {
-				this->getAllControllers().settingsController->loadResolutionsAction();
-			}
-		);
+		this->applicationObject->onInit.exec();
 
 		//dir_prefix may be set by partition chooser (if not, the root partition is used)
 

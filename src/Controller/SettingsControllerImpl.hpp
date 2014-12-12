@@ -104,6 +104,14 @@ public:
 	{
 		this->applicationObject->onSettingsShowRequest.addHandler(std::bind(std::mem_fn(&SettingsControllerImpl::showAction), this));
 		this->applicationObject->onEnvChange.addHandler(std::bind(std::mem_fn(&SettingsControllerImpl::hideAction), this));
+
+		this->applicationObject->onInit.addHandler(
+			[this] () {
+				//loading the framebuffer resolutions in background…
+				this->log("Loading Framebuffer resolutions (background process)", Logger::EVENT);
+				this->threadHelper->runAsThread(std::bind(std::mem_fn(&SettingsControllerImpl::loadResolutionsAction), this));
+			}
+		);
 	}
 
 	//dispatchers
