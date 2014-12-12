@@ -67,7 +67,7 @@ public:
 
 	void errorThreadedAction(Exception const& e) {
 		if (this->threadHelper) {
-			this->threadHelper->runDispatched(std::bind(std::mem_fun(&ErrorControllerImpl::errorAction), this, Exception(e)));
+			this->threadHelper->runDispatched(std::bind(std::mem_fn(&ErrorControllerImpl::errorAction), this, Exception(e)));
 		} else {
 			this->log(e, Logger::EXCEPTION);
 			exit(1);

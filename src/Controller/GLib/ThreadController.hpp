@@ -27,11 +27,7 @@
 #include "../ControllerCollection.hpp"
 
 class GLib_ThreadController : public ThreadController, public ControllerCollection_Connection {
-	Rule* _cachedRulePtr;
-	std::string _cachedThemeFileName;
 public:
-	GLib_ThreadController() : _cachedRulePtr(nullptr) {}
-
 	void startLoadThread(bool preserveConfig) {
 		Glib::Thread::create(sigc::bind(sigc::mem_fun(this, &GLib_ThreadController::_execLoad), preserveConfig), false);
 	}
@@ -52,17 +48,6 @@ public:
 		Gtk::Main::quit();
 	}
 
-	void startEdit(Rule* rule) {
-		this->_cachedRulePtr = rule;
-	
-		Glib::signal_timeout().connect_once(sigc::mem_fun(this, &GLib_ThreadController::_execRuleEdit), 10);
-	}
-
-	void startThemeFileEdit(std::string const& fileName) {
-		this->_cachedThemeFileName = fileName;
-		Glib::signal_timeout().connect_once(sigc::mem_fun(this, &GLib_ThreadController::_execThemeFileEdit), 10);
-	}
-
 private:
 	void _execLoad(bool preserveConfig) {
 		this->getAllControllers().mainController->loadThreadedAction(preserveConfig);
@@ -78,17 +63,6 @@ private:
 
 	void _execInstallGrub(std::string const& device) {
 		this->getAllControllers().installerController->installGrubThreadedAction(device);
-	}
-
-	void _execRuleEdit() {
-		if (this->_cachedRulePtr != NULL) {
-			this->getAllControllers().mainController->selectRuleAction(this->_cachedRulePtr, true);
-			this->_cachedRulePtr = NULL;
-		}
-	}
-
-	void _execThemeFileEdit() {
-		this->getAllControllers().themeController->startFileEditAction(this->_cachedThemeFileName);
 	}
 };
 

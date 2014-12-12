@@ -878,7 +878,10 @@ public:
 			Model_Rule* newItem = this->grublistCfg->createSubmenu(firstRule);
 			this->syncLoadStateAction();
 			this->moveAction(childItems, -1);
-			this->threadController->startEdit(newItem);
+			this->threadHelper->runDelayed(
+				std::bind(std::mem_fn(&MainControllerImpl::selectRuleAction), this, newItem, true),
+				10
+			);
 		} catch (Exception const& e) {
 			this->getAllControllers().errorController->errorAction(e);
 		}

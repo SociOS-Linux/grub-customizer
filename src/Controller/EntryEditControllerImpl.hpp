@@ -39,14 +39,12 @@
 #include "../Model/Installer.hpp"
 #include "../Model/ListCfg.hpp"
 #include "Helper/Thread.hpp"
-#include "Trait/ThreadControllerAware.hpp"
 
 
 class EntryEditControllerImpl :
 	public EntryEditController,
 	public ControllerAbstract,
 	public View_Trait_ViewAware<View_EntryEditor>,
-	public Trait_ThreadControllerAware,
 	public Model_ListCfg_Connection,
 	public ContentParserFactory_Connection,
 	public Model_DeviceDataListInterface_Connection,
@@ -242,9 +240,13 @@ public:
 			this->env->modificationsUnsaved = true;
 			this->getAllControllers().mainController->syncLoadStateAction();
 	
-			assert(this->threadController != NULL);
 			if (isAdded) {
-				this->threadController->startEdit(rulePtr);
+				this->threadHelper->runDelayed(
+					[this, rulePtr] () {
+						this->getAllControllers().mainController->selectRuleAction(rulePtr, true);
+					},
+					10
+				);
 			} else {
 				this->getAllControllers().mainController->selectRuleAction(rulePtr, isAdded);
 			}

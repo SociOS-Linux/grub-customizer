@@ -147,7 +147,7 @@ public:
 	void updateResolutionlistThreadedAction() {
 		this->logActionBeginThreaded("update-resolutionlist-threaded");
 		try {
-			this->threadHelper->runDispatched(std::bind(std::mem_fun(&SettingsControllerImpl::updateResolutionlistAction), this));
+			this->threadHelper->runDispatched(std::bind(std::mem_fn(&SettingsControllerImpl::updateResolutionlistAction), this));
 		} catch (Exception const& e) {
 			this->getAllControllers().errorController->errorThreadedAction(e);
 		}

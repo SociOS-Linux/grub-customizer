@@ -157,8 +157,6 @@ int main(int argc, char** argv){
 
 		mainController.setThreadController(*thread.threadController);
 		installController.setThreadController(*thread.threadController);
-		entryEditController.setThreadController(*thread.threadController);
-		themeController.setThreadController(*thread.threadController);
 
 		mainController.setThreadHelper(*thread.threadHelper);
 		settingsController.setThreadHelper(*thread.threadHelper);

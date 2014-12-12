@@ -32,8 +32,6 @@ public:
 	virtual void startFramebufferResolutionLoader() = 0;
 	virtual void startGrubInstallThread(std::string const& device) = 0;
 	virtual void stopApplication() = 0;
-	virtual void startEdit(Rule* rule) = 0;
-	virtual void startThemeFileEdit(std::string const& fileName) = 0;
 };
 
 #endif

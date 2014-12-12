@@ -29,14 +29,12 @@
 #include "../Model/ThemeManager.hpp"
 #include "ControllerAbstract.hpp"
 #include "ThemeController.hpp"
-#include "Trait/ThreadControllerAware.hpp"
 #include "Helper/Thread.hpp"
 
 class ThemeControllerImpl :
 	public ThemeController,
 	public ControllerAbstract,
 	public View_Trait_ViewAware<View_Theme>,
-	public Trait_ThreadControllerAware,
 	public Model_ThemeManager_Connection,
 	public Model_SettingsManagerData_Connection,
 	public Model_ListCfg_Connection,
@@ -289,7 +287,10 @@ public:
 				theme->isModified = true;
 				theme->sort();
 				this->syncFiles();
-				this->threadController->startThemeFileEdit(defaultName);
+				this->threadHelper->runDelayed(
+					std::bind(std::mem_fn(&ThemeControllerImpl::startFileEditAction), this, defaultName),
+					10
+				);
 			} else {
 				this->view->showError(View_Theme::ERROR_RENAME_CONFLICT);
 			}
@@ -553,7 +554,7 @@ public:
 		this->logActionBegin("save");
 		try {
 			this->themeManager->save();
-			this->threadHelper->runDispatched(std::bind(std::mem_fun(&ThemeControllerImpl::postSaveAction), this));
+			this->threadHelper->runDispatched(std::bind(std::mem_fn(&ThemeControllerImpl::postSaveAction), this));
 		} catch (Exception const& e) {
 			this->getAllControllers().errorController->errorAction(e);
 		}
