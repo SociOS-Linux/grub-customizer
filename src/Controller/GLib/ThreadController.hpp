@@ -20,49 +20,11 @@
 #define GLIBTHREADCONTROLLER_H_INCLUDED
 #include "../ThreadController.hpp"
 
-#include <glibmm/thread.h>
-#include <glibmm/dispatcher.h>
 #include <gtkmm/main.h>
-#include "../../lib/Type.hpp"
-#include "../ControllerCollection.hpp"
 
-class GLib_ThreadController : public ThreadController, public ControllerCollection_Connection {
-public:
-	void startLoadThread(bool preserveConfig) {
-		Glib::Thread::create(sigc::bind(sigc::mem_fun(this, &GLib_ThreadController::_execLoad), preserveConfig), false);
-	}
-
-	void startSaveThread() {
-		Glib::Thread::create(sigc::mem_fun(this, &GLib_ThreadController::_execSave), false);
-	}
-
-	void startFramebufferResolutionLoader() {
-		Glib::Thread::create(sigc::mem_fun(this, &GLib_ThreadController::_execFbResolutionsGetter), false);
-	}
-
-	void startGrubInstallThread(std::string const& device) {
-		Glib::Thread::create(sigc::bind<std::string>(sigc::mem_fun(this, &GLib_ThreadController::_execInstallGrub), device), false);
-	}
-
-	void stopApplication() {
+class GLib_ThreadController : public ThreadController {
+	public: void stopApplication() {
 		Gtk::Main::quit();
-	}
-
-private:
-	void _execLoad(bool preserveConfig) {
-		this->getAllControllers().mainController->loadThreadedAction(preserveConfig);
-	}
-
-	void _execSave() {
-		this->getAllControllers().mainController->saveThreadedAction();
-	}
-
-	void _execFbResolutionsGetter() {
-		this->getAllControllers().settingsController->loadResolutionsAction();
-	}
-
-	void _execInstallGrub(std::string const& device) {
-		this->getAllControllers().installerController->installGrubThreadedAction(device);
 	}
 };
 

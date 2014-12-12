@@ -31,7 +31,6 @@
 #include "../View/Trait/ViewAware.hpp"
 
 #include "../Controller/ControllerAbstract.hpp"
-#include "../Controller/Trait/ThreadControllerAware.hpp"
 
 #include "../lib/Exception.hpp"
 
@@ -44,20 +43,11 @@ class InstallerControllerImpl :
 	public ControllerAbstract,
 	public InstallerController,
 	public View_Trait_ViewAware<View_Installer>,
-	public Trait_ThreadControllerAware,
 	public Model_Installer_Connection,
 	public Model_Env_Connection,
 	public Controller_Helper_Thread_Connection
 {
 public:
-	ThreadController& getThreadController() {
-		if (this->threadController == NULL) {
-			throw ConfigException("missing ThreadController", __FILE__, __LINE__);
-		}
-		return *this->threadController;
-	}
-
-
 	InstallerControllerImpl() : ControllerAbstract("installer")
 	{
 	}
@@ -91,7 +81,7 @@ public:
 	void installGrubAction(std::string device) {
 		this->logActionBegin("install-grub");
 		try {
-			this->getThreadController().startGrubInstallThread(device);
+			this->threadHelper->runAsThread(std::bind(std::mem_fn(&InstallerController::installGrubThreadedAction), this, device));
 		} catch (Exception const& e) {
 			this->getAllControllers().errorController->errorAction(e);
 		}

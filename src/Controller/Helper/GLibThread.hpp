@@ -53,6 +53,11 @@ class Controller_Helper_GLibThread : public Controller_Helper_Thread
 		Glib::signal_timeout().connect_once(function, delayInMilliSec);
 	}
 
+	public: void runAsThread(std::function<void ()> function)
+	{
+		Glib::Thread::create(function, false);
+	}
+
 	private: void dispatcherCallback()
 	{
 		Glib::Threads::Mutex::Lock lock(this->mutex);

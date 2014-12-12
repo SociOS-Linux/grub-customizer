@@ -18,19 +18,11 @@
 
 #ifndef THREADCONTROLLER_H_INCLUDED
 #define THREADCONTROLLER_H_INCLUDED
-#include <string>
-#include "../lib/Exception.hpp"
-#include "../lib/Type.hpp"
-#include "../lib/Trait/LoggerAware.hpp"
 
 class ThreadController : public Trait_LoggerAware {
 public:
 	virtual inline ~ThreadController() {};
 
-	virtual void startLoadThread(bool preserveConfig) = 0;
-	virtual void startSaveThread() = 0;
-	virtual void startFramebufferResolutionLoader() = 0;
-	virtual void startGrubInstallThread(std::string const& device) = 0;
 	virtual void stopApplication() = 0;
 };
 

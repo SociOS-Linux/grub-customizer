@@ -156,7 +156,6 @@ int main(int argc, char** argv){
 		themeController.setControllerCollection(controllerCollection);
 
 		mainController.setThreadController(*thread.threadController);
-		installController.setThreadController(*thread.threadController);
 
 		mainController.setThreadHelper(*thread.threadHelper);
 		settingsController.setThreadHelper(*thread.threadHelper);

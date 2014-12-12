@@ -26,6 +26,7 @@ class Controller_Helper_Thread : public Trait_LoggerAware
 	public: virtual inline ~Controller_Helper_Thread() {};
 	public: virtual void runDispatched(std::function<void ()> function) = 0;
 	public: virtual void runDelayed(std::function<void ()> function, int delayInMilliSec) = 0;
+	public: virtual void runAsThread(std::function<void ()> function) = 0;
 };
 
 class Controller_Helper_Thread_Connection

@@ -369,7 +369,11 @@ public:
 
 		this->log("Loading Framebuffer resolutions (background process)", Logger::EVENT);
 		//loading the framebuffer resolutions in background…
-		this->getThreadController().startFramebufferResolutionLoader();
+		this->threadHelper->runAsThread(
+			[this] () {
+				this->getAllControllers().settingsController->loadResolutionsAction();
+			}
+		);
 
 		//dir_prefix may be set by partition chooser (if not, the root partition is used)
 
@@ -410,7 +414,7 @@ public:
 		}
 
 		this->log("loading configuration", Logger::IMPORTANT_EVENT);
-		this->getThreadController().startLoadThread(false);
+		this->threadHelper->runAsThread(std::bind(std::mem_fn(&MainControllerImpl::loadThreadedAction), this, false));
 	}
 
 	void initAction() {
@@ -473,7 +477,7 @@ public:
 			this->getAllControllers().themeController->syncAction();
 			this->view->hideReloadRecommendation();
 			this->view->setLockState(1|4|8);
-			this->getThreadController().startLoadThread(true);
+			this->threadHelper->runAsThread(std::bind(std::mem_fn(&MainControllerImpl::loadThreadedAction), this, true));
 		} catch (Exception const& e) {
 			this->getAllControllers().errorController->errorAction(e);
 		}
@@ -552,7 +556,7 @@ public:
 
 			this->view->setLockState(1|4|8);
 			this->env->activeThreadCount++; //not in save_thead() to be faster set
-			this->getThreadController().startSaveThread();
+			this->threadHelper->runAsThread(std::bind(std::mem_fn(&MainControllerImpl::saveThreadedAction), this));
 		} catch (Exception const& e) {
 			this->getAllControllers().errorController->errorAction(e);
 		}
