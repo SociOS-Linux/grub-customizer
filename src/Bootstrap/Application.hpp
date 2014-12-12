@@ -61,7 +61,9 @@ class Bootstrap_Application_Object
 	// param 1: the modified rule, param 2: whether it's a new rule
 	public: Bootstrap_Application_Event<Rule*, bool> onListRuleChange;
 	public: Bootstrap_Application_Event<> onTrashEntrySelection;
+	public: Bootstrap_Application_Event<> onEntrySelection;
 	public: Bootstrap_Application_Event<std::list<Rule*>> onEntryInsertionRequest; // TODO: do just selection - not the insertion itself
+	public: Bootstrap_Application_Event<std::list<Entry*>> onEntryRemove;
 
 	public: Bootstrap_Application_Event<> onInit;
 	public: Bootstrap_Application_Event<> onSettingModelChange;

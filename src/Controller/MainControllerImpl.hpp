@@ -793,7 +793,7 @@ public:
 
 				this->applicationObject->onListModelChange.exec();
 
-				this->getAllControllers().trashController->selectEntriesAction(entriesOfRemovedRules);
+				this->applicationObject->onEntryRemove.exec(entriesOfRemovedRules);
 				this->env->modificationsUnsaved = true;
 			}
 		} catch (Exception const& e) {
@@ -1184,7 +1184,7 @@ public:
 		this->logActionBegin("update-selection");
 		try {
 			if (selectedRules.size()) {
-				this->getAllControllers().trashController->selectEntriesAction(std::list<Entry*>());
+				this->applicationObject->onEntrySelection.exec();
 			}
 		} catch (Exception const& e) {
 			this->applicationObject->onError.exec(e);

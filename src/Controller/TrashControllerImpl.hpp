@@ -133,8 +133,12 @@ public:
 
 	void initApplicationEvents() override
 	{
+		using namespace std::placeholders;
+
 		this->applicationObject->onEnvChange.addHandler(std::bind(std::mem_fn(&TrashControllerImpl::hideAction), this));
 		this->applicationObject->onListModelChange.addHandler(std::bind(std::mem_fn(&TrashControllerImpl::updateAction), this));
+		this->applicationObject->onEntryRemove.addHandler(std::bind(std::mem_fn(&TrashControllerImpl::selectEntriesAction), this, _1));
+		this->applicationObject->onEntrySelection.addHandler(std::bind(std::mem_fn(&TrashControllerImpl::selectEntriesAction), this, std::list<Entry*>()));
 	}
 
 	

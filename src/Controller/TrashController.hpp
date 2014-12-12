@@ -24,7 +24,6 @@
 class TrashController {
 public:
 	virtual inline ~TrashController(){}
-	virtual void selectEntriesAction(std::list<Entry*> const& entries) = 0;
 };
 
 
