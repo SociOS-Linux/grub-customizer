@@ -330,6 +330,11 @@ public:
 		this->applicationObject->onListModelChange.addHandler(
 			std::bind(std::mem_fn(&MainControllerImpl::updateList), this)
 		);
+
+		this->applicationObject->onListModelChange.addHandler(
+			std::bind(std::mem_fn(&MainControllerImpl::updateTrashView), this)
+		);
+
 		this->applicationObject->onEnvChange.addHandler(
 			std::bind(std::mem_fn(&MainControllerImpl::reInitAction), this, _1)
 		);
@@ -515,6 +520,7 @@ public:
 				} catch (FileReadException e) {
 					this->log("view options not found", Logger::INFO);
 				}
+				this->applicationObject->viewOptions = this->view->getOptions();
 
 				if (!preserveConfig){
 					this->log("unsetting saved config", Logger::EVENT);
@@ -725,6 +731,15 @@ public:
 				}
 			}
 		}
+	}
+
+	void updateTrashView()
+	{
+		bool placeholdersVisible = this->view->getOptions().at(VIEW_SHOW_PLACEHOLDERS);
+		bool hiddenEntriesVisible = this->view->getOptions().at(VIEW_SHOW_HIDDEN_ENTRIES);
+		this->view->setTrashPaneVisibility(
+			this->grublistCfg->getRemovedEntries(NULL, !placeholdersVisible).size() >= 1 && !hiddenEntriesVisible
+		);
 	}
 
 
@@ -1030,13 +1045,6 @@ public:
 			}
 
 			if (progress == 1){
-				this->getAllControllers().trashController->updateAction(this->view->getOptions());
-
-				bool placeholdersVisible = this->view->getOptions().at(VIEW_SHOW_PLACEHOLDERS);
-				bool hiddenEntriesVisible = this->view->getOptions().at(VIEW_SHOW_HIDDEN_ENTRIES);
-				this->view->setTrashPaneVisibility(
-					this->grublistCfg->getRemovedEntries(NULL, !placeholdersVisible).size() >= 1 && !hiddenEntriesVisible
-				);
 				this->view->setLockState(0);
 
 				this->applicationObject->onListModelChange.exec();
@@ -1149,6 +1157,7 @@ public:
 		try {
 			this->view->setOption(option, value);
 			try {
+				this->applicationObject->viewOptions = this->view->getOptions();
 				this->env->saveViewOptions(this->view->getOptions());
 			} catch (FileSaveException e) {
 				this->log("option saving failed", Logger::ERROR);

@@ -21,6 +21,7 @@
 #include <memory>
 #include <functional>
 #include <list>
+#include <map>
 #include "../lib/Exception.hpp"
 #include "../lib/Type.hpp"
 
@@ -65,6 +66,8 @@ class Bootstrap_Application_Object
 	public: Bootstrap_Application_Event<> onInit;
 	public: Bootstrap_Application_Event<> onSettingModelChange;
 	public: Bootstrap_Application_Event<> onSave;
+
+	public: std::map<ViewOption, bool> viewOptions;
 
 	public: virtual void addShutdownHandler(std::function<void ()> callback) = 0;
 	public: virtual void shutdown() = 0;

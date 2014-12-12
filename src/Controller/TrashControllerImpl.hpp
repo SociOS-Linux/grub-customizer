@@ -134,14 +134,14 @@ public:
 	void initApplicationEvents() override
 	{
 		this->applicationObject->onEnvChange.addHandler(std::bind(std::mem_fn(&TrashControllerImpl::hideAction), this));
-		this->applicationObject->onListModelChange.addHandler(std::bind(std::mem_fn(&TrashControllerImpl::_refresh), this));
+		this->applicationObject->onListModelChange.addHandler(std::bind(std::mem_fn(&TrashControllerImpl::updateAction), this));
 	}
 
 	
-	void updateAction(std::map<ViewOption, bool> const& viewOptions) {
+	void updateAction() {
 		this->logActionBegin("update");
 		try {
-			this->view->setOptions(viewOptions);
+			this->view->setOptions(this->applicationObject->viewOptions);
 			this->_refresh();
 		} catch (Exception const& e) {
 			this->applicationObject->onError.exec(e);
