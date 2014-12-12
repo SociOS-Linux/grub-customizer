@@ -375,7 +375,7 @@ class View_Gtk_Settings :
 		return vbAppearanceSettings;
 	}
 
-	void show(bool burgMode) {
+	void show() {
 		this->show_all();
 	}
 

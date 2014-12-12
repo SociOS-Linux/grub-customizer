@@ -69,7 +69,7 @@ public:
 
 
 	void showSettingsDlg() {
-		this->view->show(env->burgMode);
+		this->view->show();
 	}
 
 	SettingsControllerImpl() : ControllerAbstract("settings"),
@@ -98,6 +98,11 @@ public:
 	void initFbResolutionsGetterEvents() override
 	{
 		this->fbResolutionsGetter->onFinish = std::bind(std::mem_fn(&SettingsControllerImpl::updateResolutionlistThreadedAction), this);
+	}
+
+	void initApplicationEvents() override
+	{
+		this->applicationObject->onSettingsShowRequest.addHandler(std::bind(std::mem_fn(&SettingsControllerImpl::showAction), this));
 	}
 
 	//dispatchers
@@ -392,10 +397,10 @@ public:
 		this->logActionEnd();
 	}
 
-	void showAction(bool burgMode) {
+	void showAction() {
 		this->logActionBegin("show");
 		try {
-			this->view->show(burgMode);
+			this->view->show();
 		} catch (Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}

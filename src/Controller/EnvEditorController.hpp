@@ -22,8 +22,6 @@
 class EnvEditorController {
 public:
 	virtual inline ~EnvEditorController(){};
-
-	virtual void showAction(bool resetPartitionChooser = false) = 0;
 };
 
 

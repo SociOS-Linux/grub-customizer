@@ -52,7 +52,7 @@ public:
 		bool isActive;
 	};
 	//show this dialog
-	virtual void show(bool burgMode)=0;
+	virtual void show()=0;
 	//hide this dialog
 	virtual void hide()=0;
 	//reads the selection row from the custom options list

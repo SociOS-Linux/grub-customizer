@@ -42,6 +42,10 @@ public:
 	{
 	}
 
+	void initApplicationEvents() override
+	{
+		this->applicationObject->onAboutDlgShowRequest.addHandler(std::bind(std::mem_fn(&AboutControllerImpl::showAction), this));
+	}
 	
 	void showAction() {
 		this->logActionBegin("show");

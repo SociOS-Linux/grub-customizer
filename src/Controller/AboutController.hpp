@@ -22,7 +22,6 @@
 class AboutController {
 public:
 	virtual inline ~AboutController(){}
-	virtual void showAction() = 0;
 };
 
 

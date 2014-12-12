@@ -22,6 +22,7 @@
 #include <functional>
 #include <list>
 #include "../lib/Exception.hpp"
+#include "../lib/Type.hpp"
 
 template <typename... Args>
 class Bootstrap_Application_Event
@@ -45,6 +46,12 @@ class Bootstrap_Application_Object
 {
 	public: Bootstrap_Application_Event<Exception> onError;
 	public: Bootstrap_Application_Event<Exception> onThreadError;
+
+	public: Bootstrap_Application_Event<> onAboutDlgShowRequest;
+	public: Bootstrap_Application_Event<Rule*> onEntryEditorShowRequest;
+	public: Bootstrap_Application_Event<> onEnvEditorShowRequest;
+	public: Bootstrap_Application_Event<> onInstallerShowRequest;
+	public: Bootstrap_Application_Event<> onSettingsShowRequest;
 
 	public: virtual void addShutdownHandler(std::function<void ()> callback) = 0;
 	public: virtual void shutdown() = 0;

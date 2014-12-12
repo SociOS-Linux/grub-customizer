@@ -452,7 +452,7 @@ public:
 
 			this->view->hide();
 
-			this->getAllControllers().envEditController->showAction();
+			this->applicationObject->onEnvEditorShowRequest.exec();
 		} catch (Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
@@ -641,7 +641,7 @@ public:
 	void showInstallerAction() {
 		this->logActionBegin("show-installer");
 		try {
-			this->getAllControllers().installerController->showAction();
+			this->applicationObject->onInstallerShowRequest.exec();
 		} catch (Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
@@ -652,7 +652,7 @@ public:
 	void showEntryEditorAction(Rule* rule) {
 		this->logActionBegin("show-entry-editor");
 		try {
-			this->getAllControllers().entryEditController->showAction(rule);
+			this->applicationObject->onEntryEditorShowRequest.exec(rule);
 		} catch (Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
@@ -662,7 +662,7 @@ public:
 	void showEntryCreatorAction() {
 		this->logActionBegin("show-entry-creator");
 		try {
-			this->getAllControllers().entryEditController->showCreatorAction();
+			this->applicationObject->onEntryEditorShowRequest.exec(nullptr);
 		} catch (Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
@@ -925,7 +925,7 @@ public:
 	void showAboutAction() {
 		this->logActionBegin("show-about");
 		try {
-			this->getAllControllers().aboutController->showAction();
+			this->applicationObject->onAboutDlgShowRequest.exec();
 		} catch (Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
@@ -1038,7 +1038,7 @@ public:
 	void showSettingsAction() {
 		this->logActionBegin("show-settings");
 		try {
-			this->getAllControllers().settingsController->showAction(env->burgMode);
+			this->applicationObject->onSettingsShowRequest.exec();
 		} catch (Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}

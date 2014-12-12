@@ -61,7 +61,7 @@ public:
 		try {
 			this->view->setEnvSettings(this->env->getProperties(), this->env->getRequiredProperties(), this->env->getValidProperties());
 			this->view->setRootDeviceName(this->env->rootDeviceName);
-			this->view->show(resetPartitionChooser);
+			this->view->show(false);
 		} catch (Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
@@ -86,6 +86,13 @@ public:
 		this->view->onOptionChange = std::bind(std::mem_fn(&EnvEditorControllerImpl::updateGrubEnvOptionsAction), this);
 		this->view->onApplyClick = std::bind(std::mem_fn(&EnvEditorControllerImpl::applyAction), this, _1);
 		this->view->onExitClick = std::bind(std::mem_fn(&EnvEditorControllerImpl::exitAction), this);
+	}
+
+	void initApplicationEvents() override
+	{
+		using namespace std::placeholders;
+
+		this->applicationObject->onEnvEditorShowRequest.addHandler(std::bind(std::mem_fn(&EnvEditorControllerImpl::showAction), this, false));
 	}
 
 	

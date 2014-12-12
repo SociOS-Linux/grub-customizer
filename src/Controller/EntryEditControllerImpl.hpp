@@ -75,7 +75,18 @@ public:
 		this->view->onTypeSwitch = std::bind(std::mem_fn(&EntryEditControllerImpl::switchTypeAction), this, _1);
 	}
 
+	void initApplicationEvents() override
+	{
+		using namespace std::placeholders;
+		this->applicationObject->onEntryEditorShowRequest.addHandler(std::bind(std::mem_fn(&EntryEditControllerImpl::showAction), this, _1));
+	}
+
 	void showAction(Rule* rule) {
+		if (rule == nullptr) {
+			this->showCreatorAction();
+			return;
+		}
+
 		this->logActionBegin("show");
 		try {
 			this->view->setRulePtr(rule);

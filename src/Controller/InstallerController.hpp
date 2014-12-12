@@ -22,7 +22,6 @@
 class InstallerController {
 public:
 	virtual inline ~InstallerController(){};
-	virtual void showAction() = 0;
 };
 
 

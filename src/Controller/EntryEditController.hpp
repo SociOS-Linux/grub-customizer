@@ -25,8 +25,6 @@
 class EntryEditController {
 public:
 	virtual inline ~EntryEditController() {};
-	virtual void showAction(Rule* rule) = 0;
-	virtual void showCreatorAction() = 0;
 };
 
 
