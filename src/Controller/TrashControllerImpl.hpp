@@ -41,7 +41,6 @@
 #include "../Model/DeviceDataListInterface.hpp"
 #include "../lib/ContentParserFactory.hpp"
 #include "Helper/DeviceInfo.hpp"
-#include "ThreadController.hpp"
 #include "TrashController.hpp"
 
 

@@ -21,6 +21,7 @@
 #include "../Bootstrap/Regex.hpp"
 #include "../Bootstrap/Thread.hpp"
 #include "../Bootstrap/View.hpp"
+#include "../Bootstrap/Application.hpp"
 #include "../Controller/AboutControllerImpl.hpp"
 #include "../Controller/ControllerCollection.hpp"
 #include "../Controller/EntryEditControllerImpl.hpp"
@@ -58,7 +59,8 @@ int main(int argc, char** argv){
 	try {
 		Model_Env env;
 
-		Bootstrap_View view(argc, argv);
+		Bootstrap_Application application(argc, argv);
+		Bootstrap_View view;
 		Bootstrap_Thread thread;
 		Bootstrap_Regex regex;
 
@@ -98,6 +100,7 @@ int main(int argc, char** argv){
 		mainController.setContentParserFactory(contentParserFactory);
 		mainController.setView(*view.main);
 		mainController.setEntryNameMapper(entryNameMapper);
+		mainController.setApplicationObject(application.applicationObject);
 
 		SettingsControllerImpl settingsController;
 		settingsController.setListCfg(listcfg);
@@ -144,7 +147,6 @@ int main(int argc, char** argv){
 		controllerCollection.errorController = &errorController;
 		controllerCollection.themeController = &themeController;
 
-		dynamic_cast<ControllerCollection_Connection&>(*thread.threadController).setControllerCollection(controllerCollection);
 		entryEditController.setControllerCollection(controllerCollection);
 		mainController.setControllerCollection(controllerCollection);
 		settingsController.setControllerCollection(controllerCollection);
@@ -154,8 +156,6 @@ int main(int argc, char** argv){
 		aboutController.setControllerCollection(controllerCollection);
 		errorController.setControllerCollection(controllerCollection);
 		themeController.setControllerCollection(controllerCollection);
-
-		mainController.setThreadController(*thread.threadController);
 
 		mainController.setThreadHelper(*thread.threadHelper);
 		settingsController.setThreadHelper(*thread.threadHelper);
@@ -181,7 +181,6 @@ int main(int argc, char** argv){
 		view.about->setLogger(logger);
 		thread.mutex1->setLogger(logger);
 		thread.mutex2->setLogger(logger);
-		thread.threadController->setLogger(logger);
 		env.setLogger(logger);
 		view.envEditor->setLogger(logger);
 		mainController.setLogger(logger);
@@ -252,7 +251,7 @@ int main(int argc, char** argv){
 		mainController.initAction();
 		errorController.setApplicationStarted(true);
 
-		view.run();
+		application.applicationObject->run();
 	} catch (Exception const& e) {
 		logger.log(e, Logger::ERROR);
 		return 1;

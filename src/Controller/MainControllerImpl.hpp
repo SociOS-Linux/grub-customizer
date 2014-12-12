@@ -36,7 +36,6 @@
 #include "../lib/ContentParserFactory.hpp"
 
 #include "../Controller/ControllerAbstract.hpp"
-#include "../Controller/Trait/ThreadControllerAware.hpp"
 
 #include "../lib/Trait/LoggerAware.hpp"
 #include "../lib/Exception.hpp"
@@ -47,7 +46,6 @@
 #include "Helper/Thread.hpp"
 
 #include "MainController.hpp"
-#include "ThreadController.hpp"
 
 /**
  * This controller operates on the entry list
@@ -57,7 +55,6 @@ class MainControllerImpl :
 	public ControllerAbstract,
 	public MainController,
 	public View_Trait_ViewAware<View_Main>,
-	public Trait_ThreadControllerAware,
 	public Model_ListCfg_Connection,
 	public Model_SettingsManagerData_Connection,
 	public Model_FbResolutionsGetter_Connection,
@@ -66,7 +63,8 @@ class MainControllerImpl :
 	public ContentParserFactory_Connection,
 	public Mapper_EntryName_Connection,
 	public Model_Env_Connection,
-	public Controller_Helper_Thread_Connection
+	public Controller_Helper_Thread_Connection,
+	public Bootstrap_Application_Object_Connection
 {
 	Model_SettingsManagerData* settingsOnDisk; //buffer for the existing settings
 	Model_ListCfg* savedListCfg;
@@ -285,14 +283,6 @@ public:
 		this->savedListCfg = &savedListCfg;
 	}
 
-
-	ThreadController& getThreadController() {
-		if (this->threadController == NULL) {
-			throw ConfigException("missing ThreadController", __FILE__, __LINE__);
-		}
-		return *this->threadController;
-	}
-
 	Model_FbResolutionsGetter& getFbResolutionsGetter() {
 		return *this->fbResolutionsGetter;
 	}
@@ -343,7 +333,7 @@ public:
 			or !deviceDataList
 			or !mountTable
 			or !contentParserFactory
-			or !threadController
+			or !threadHelper
 			or !entryNameMapper
 		) {
 			throw ConfigException("init(): missing some objects", __FILE__, __LINE__);
@@ -461,7 +451,7 @@ public:
 		this->logActionBegin("cancel-burg-switcher");
 		try {
 			if (!this->view->isVisible()) {
-				this->getThreadController().stopApplication();
+				this->applicationObject->quit();
 			}
 		} catch (Exception const& e) {
 			this->getAllControllers().errorController->errorAction(e);
@@ -715,9 +705,10 @@ public:
 		try {
 			if (force){
 				this->view->setLockState(~0);
-				if (this->mountTable->getEntryByMountpoint(PARTCHOOSER_MOUNTPOINT))
+				if (this->mountTable->getEntryByMountpoint(PARTCHOOSER_MOUNTPOINT)) {
 					this->mountTable->umountAll(PARTCHOOSER_MOUNTPOINT);
-				this->getThreadController().stopApplication();
+				}
+				this->applicationObject->quit();
 			}
 			else {
 				int dlgResponse = this->view->showExitConfirmDialog(this->config_has_been_different_on_startup_but_unsaved*2 + this->env->modificationsUnsaved);

@@ -46,8 +46,10 @@ misc/icons/48x48.png -text svneol=unset#unset
 misc/icons/64x64.png -text svneol=unset#unset
 misc/manpage.gz -text svneol=unset#unset
 misc/pkexec_policy.in -text
+src/Bootstrap/Application.hpp -text
 src/Bootstrap/GLibRegex.cpp -text
 src/Bootstrap/GlibThread.cpp -text
+src/Bootstrap/GtkApplication.cpp -text
 src/Bootstrap/GtkView.cpp -text
 src/Bootstrap/Regex.hpp -text
 src/Bootstrap/Thread.hpp -text
@@ -62,7 +64,6 @@ src/Controller/EnvEditorController.hpp -text
 src/Controller/EnvEditorControllerImpl.hpp -text
 src/Controller/ErrorController.hpp -text
 src/Controller/ErrorControllerImpl.hpp -text
-src/Controller/GLib/ThreadController.hpp -text
 src/Controller/Helper/DeviceInfo.hpp -text
 src/Controller/Helper/GLibThread.hpp -text
 src/Controller/Helper/Thread.hpp -text
@@ -74,8 +75,6 @@ src/Controller/SettingsController.hpp -text
 src/Controller/SettingsControllerImpl.hpp -text
 src/Controller/ThemeController.hpp -text
 src/Controller/ThemeControllerImpl.hpp -text
-src/Controller/ThreadController.hpp -text
-src/Controller/Trait/ThreadControllerAware.hpp -text
 src/Controller/TrashController.hpp -text
 src/Controller/TrashControllerImpl.hpp -text
 src/Mapper/EntryName.hpp -text

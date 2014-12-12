@@ -19,8 +19,6 @@
 #ifndef SETTINGSCONTROLLER_H_
 #define SETTINGSCONTROLLER_H_
 
-#include "../Controller/ThreadController.hpp"
-
 class SettingsController {
 public:
 	virtual inline ~SettingsController(){};

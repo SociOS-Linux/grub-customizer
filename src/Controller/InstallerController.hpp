@@ -19,8 +19,6 @@
 #ifndef INSTALLERCONTROLLER_H_
 #define INSTALLERCONTROLLER_H_
 
-#include "ThreadController.hpp"
-
 class InstallerController {
 public:
 	virtual inline ~InstallerController(){};

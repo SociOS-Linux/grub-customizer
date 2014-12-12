@@ -35,7 +35,6 @@
 #include "../lib/Exception.hpp"
 
 #include "InstallerController.hpp"
-#include "ThreadController.hpp"
 #include "Helper/Thread.hpp"
 
 

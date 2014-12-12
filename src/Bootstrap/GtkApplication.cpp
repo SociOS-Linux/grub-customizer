@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Daniel Richter <danielrichter2007@web.de>
+ * Copyright (C) 2010-2014 Daniel Richter <danielrichter2007@web.de>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,16 +16,29 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef GLIBTHREADCONTROLLER_H_INCLUDED
-#define GLIBTHREADCONTROLLER_H_INCLUDED
-#include "../ThreadController.hpp"
-
+#include "Application.hpp"
 #include <gtkmm/main.h>
 
-class GLib_ThreadController : public ThreadController {
-	public: void stopApplication() {
-		Gtk::Main::quit();
+class Bootstrap_GtkApplicationObject : public Bootstrap_Application_Object
+{
+	private: Gtk::Main app;
+
+	public: Bootstrap_GtkApplicationObject(int argc, char** argv)
+		: app(argc, argv)
+	{
+	}
+
+	public: void run()
+	{
+		this->app.run();
+	}
+
+	public: void quit() {
+		this->app.quit();
 	}
 };
 
-#endif
+Bootstrap_Application::Bootstrap_Application(int argc, char** argv)
+{
+	this->applicationObject = std::make_shared<Bootstrap_GtkApplicationObject>(argc, argv);
+}

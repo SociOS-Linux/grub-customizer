@@ -21,7 +21,6 @@
 
 #include <list>
 #include "../lib/Type.hpp"
-#include "../Controller/ThreadController.hpp"
 
 class MainController {
 public:
