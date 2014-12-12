@@ -44,6 +44,7 @@
 #include "../Model/FbResolutionsGetter.hpp"
 #include "../View/Model/ListItem.hpp"
 #include "Helper/DeviceInfo.hpp"
+#include "Helper/Thread.hpp"
 
 #include "MainController.hpp"
 #include "ThreadController.hpp"
@@ -64,7 +65,8 @@ class MainControllerImpl :
 	public Model_MountTable_Connection,
 	public ContentParserFactory_Connection,
 	public Mapper_EntryName_Connection,
-	public Model_Env_Connection
+	public Model_Env_Connection,
+	public Controller_Helper_Thread_Connection
 {
 	Model_SettingsManagerData* settingsOnDisk; //buffer for the existing settings
 	Model_ListCfg* savedListCfg;
@@ -499,7 +501,7 @@ public:
 					//load the burg/grub settings file
 					this->log("loading settings", Logger::IMPORTANT_EVENT);
 					this->settings->load();
-					this->getThreadController().enableSettings();
+					this->threadHelper->runDispatched(std::bind(std::mem_fn(&MainControllerImpl::activateSettingsAction), this));
 				} else {
 					this->log("switching settings", Logger::IMPORTANT_EVENT);
 					this->settingsOnDisk->load();
@@ -513,7 +515,7 @@ public:
 				} catch (CmdExecException const& e){
 					this->log("error while loading the grub list", Logger::ERROR);
 					this->thrownException = e;
-					this->getThreadController().showThreadDiedError();
+					this->threadHelper->runDispatched(std::bind(std::mem_fn(&MainControllerImpl::dieAction), this));
 					return; //cancel
 				}
 
@@ -571,7 +573,7 @@ public:
 			try {
 				this->grublistCfg->save();
 			} catch (CmdExecException const& e){
-				this->threadController->showConfigSavingError(e.getMessage());
+				this->threadHelper->runDispatched(std::bind(std::mem_fn(&MainControllerImpl::showConfigSavingErrorAction), this, e.getMessage()));
 			}
 			this->env->activeThreadCount--;
 		} catch (Exception const& e) {
@@ -933,7 +935,7 @@ public:
 	void syncLoadStateThreadedAction() {
 		this->logActionBeginThreaded("sync-load-state-threaded");
 		try {
-			this->getThreadController().syncEntryList();
+			this->threadHelper->runDispatched(std::bind(std::mem_fn(&MainControllerImpl::syncLoadStateAction), this));
 		} catch (Exception const& e) {
 			this->getAllControllers().errorController->errorThreadedAction(e);
 		}
@@ -943,7 +945,7 @@ public:
 	void syncSaveStateThreadedAction() {
 		this->logActionBeginThreaded("sync-save-state-threaded");
 		try {
-			this->getThreadController().updateSaveProgress();
+			this->threadHelper->runDispatched(std::bind(std::mem_fn(&MainControllerImpl::syncSaveStateAction), this));
 		} catch (Exception const& e) {
 			this->getAllControllers().errorController->errorThreadedAction(e);
 		}

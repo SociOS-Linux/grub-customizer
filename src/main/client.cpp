@@ -156,11 +156,16 @@ int main(int argc, char** argv){
 		themeController.setControllerCollection(controllerCollection);
 
 		mainController.setThreadController(*thread.threadController);
-		settingsController.setThreadController(*thread.threadController);
 		installController.setThreadController(*thread.threadController);
-		errorController.setThreadController(*thread.threadController);
 		entryEditController.setThreadController(*thread.threadController);
 		themeController.setThreadController(*thread.threadController);
+
+		mainController.setThreadHelper(*thread.threadHelper);
+		settingsController.setThreadHelper(*thread.threadHelper);
+		installController.setThreadHelper(*thread.threadHelper);
+		errorController.setThreadHelper(*thread.threadHelper);
+		entryEditController.setThreadHelper(*thread.threadHelper);
+		themeController.setThreadHelper(*thread.threadHelper);
 
 		//assign logger
 		listcfg.setLogger(logger);
@@ -192,6 +197,7 @@ int main(int argc, char** argv){
 		aboutController.setLogger(logger);
 		view.theme->setLogger(logger);
 		themeController.setLogger(logger);
+		thread.threadHelper->setLogger(logger);
 
 		// configure logger
 		logger.setLogLevel(Logger_Stream::LOG_EVENT);

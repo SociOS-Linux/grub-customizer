@@ -16,23 +16,26 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#include "../Controller/GLib/ThreadController.hpp"
-#include "../Controller/Helper/GLibThread.hpp"
-#include "../lib/Mutex/GLib.hpp"
-#include "Thread.hpp"
+#ifndef HELPER_THREAD_H_INCLUDED
+#define HELPER_THREAD_H_INCLUDED
+#include "../../lib/Trait/LoggerAware.hpp"
+#include <functional>
 
-Bootstrap_Thread::Bootstrap_Thread() {
-	Glib::thread_init();
+class Controller_Helper_Thread : public Trait_LoggerAware
+{
+	public: virtual inline ~Controller_Helper_Thread() {};
+	public: virtual void runDispatched(std::function<void ()> function) = 0;
+};
 
-	this->mutex1 = new Mutex_GLib;
-	this->mutex2 = new Mutex_GLib;
-	this->threadController = new GLib_ThreadController;
-	this->threadHelper = new Controller_Helper_GLibThread;
-}
+class Controller_Helper_Thread_Connection
+{
+	protected: Controller_Helper_Thread* threadHelper = nullptr;
 
-Bootstrap_Thread::~Bootstrap_Thread() {
-	delete this->mutex1;
-	delete this->mutex2;
-	delete this->threadController;
-	delete this->threadHelper;
-}
+	public: virtual ~Controller_Helper_Thread_Connection(){}
+
+	public: void setThreadHelper(Controller_Helper_Thread& threadHelper) {
+		this->threadHelper = &threadHelper;
+	}
+};
+
+#endif /* HELPER_THREAD_H_INCLUDED */

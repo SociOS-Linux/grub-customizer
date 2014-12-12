@@ -38,6 +38,7 @@
 #include "../Model/DeviceDataList.hpp"
 #include "../Model/Installer.hpp"
 #include "../Model/ListCfg.hpp"
+#include "Helper/Thread.hpp"
 #include "Trait/ThreadControllerAware.hpp"
 
 
@@ -49,7 +50,8 @@ class EntryEditControllerImpl :
 	public Model_ListCfg_Connection,
 	public ContentParserFactory_Connection,
 	public Model_DeviceDataListInterface_Connection,
-	public Model_Env_Connection
+	public Model_Env_Connection,
+	public Controller_Helper_Thread_Connection
 {
 	ContentParser* currentContentParser;
 	Model_Script* _createCustomScript() {

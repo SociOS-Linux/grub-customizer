@@ -33,7 +33,7 @@ public:
 	std::function<void (std::string const& msg)> onFinish;
 
 	void threadable_install(std::string const& device) {
-		this->install_result = install(device);
+		this->install_result = this->install(device);
 		if (this->onFinish) {
 			this->onFinish(this->install_result);
 		}

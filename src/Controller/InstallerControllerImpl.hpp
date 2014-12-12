@@ -37,6 +37,7 @@
 
 #include "InstallerController.hpp"
 #include "ThreadController.hpp"
+#include "Helper/Thread.hpp"
 
 
 class InstallerControllerImpl :
@@ -45,7 +46,8 @@ class InstallerControllerImpl :
 	public View_Trait_ViewAware<View_Installer>,
 	public Trait_ThreadControllerAware,
 	public Model_Installer_Connection,
-	public Model_Env_Connection
+	public Model_Env_Connection,
+	public Controller_Helper_Thread_Connection
 {
 public:
 	ThreadController& getThreadController() {
@@ -71,10 +73,11 @@ public:
 	{
 		using namespace std::placeholders;
 
-		this->installer->onFinish = std::bind(std::mem_fn(&InstallerControllerImpl::showMessageAction), this, _1);
+		this->installer->onFinish = [this] (std::string message) {
+			this->threadHelper->runDispatched(std::bind(std::mem_fn(&InstallerControllerImpl::showMessageAction), this, message));
+		};
 	}
 
-	
 	void showAction() {
 		this->logActionBegin("show");
 		try {

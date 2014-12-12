@@ -27,21 +27,13 @@ class ThreadController : public Trait_LoggerAware {
 public:
 	virtual inline ~ThreadController() {};
 
-	virtual void syncEntryList() = 0;
-	virtual void updateSaveProgress() = 0;
-	virtual void updateSettingsDlgResolutionList() = 0;
-	virtual void showThreadDiedError() = 0;
-	virtual void enableSettings() = 0;
 	virtual void startLoadThread(bool preserveConfig) = 0;
 	virtual void startSaveThread() = 0;
 	virtual void startFramebufferResolutionLoader() = 0;
 	virtual void startGrubInstallThread(std::string const& device) = 0;
 	virtual void stopApplication() = 0;
-	virtual void showException(Exception const& e) = 0;
-	virtual void showConfigSavingError(std::string const& message) = 0;
 	virtual void startEdit(Rule* rule) = 0;
 	virtual void startThemeFileEdit(std::string const& fileName) = 0;
-	virtual void doPostSaveActions() = 0;
 };
 
 #endif

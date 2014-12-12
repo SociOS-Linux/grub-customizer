@@ -40,11 +40,11 @@
 #include "../Mapper/EntryName.hpp"
 
 #include "../Controller/ControllerAbstract.hpp"
-#include "../Controller/Trait/ThreadControllerAware.hpp"
 
 #include "../lib/Trait/LoggerAware.hpp"
 
 #include "../lib/Exception.hpp"
+#include "Helper/Thread.hpp"
 
 #include "SettingsController.hpp"
 
@@ -53,22 +53,15 @@ class SettingsControllerImpl :
 	public ControllerAbstract,
 	public SettingsController,
 	public View_Trait_ViewAware<View_Settings>,
-	public Trait_ThreadControllerAware,
 	public Model_ListCfg_Connection,
 	public Model_SettingsManagerData_Connection,
 	public Model_FbResolutionsGetter_Connection,
-	public Model_Env_Connection
+	public Model_Env_Connection,
+	public Controller_Helper_Thread_Connection
 {
 	bool syncActive; // should only be controlled by syncSettings()
 
 public:
-	ThreadController& getThreadController() {
-		if (this->threadController == NULL) {
-			throw ConfigException("missing ThreadController", __FILE__, __LINE__);
-		}
-		return *this->threadController;
-	}
-
 	Model_FbResolutionsGetter& getFbResolutionsGetter() {
 		return *this->fbResolutionsGetter;
 	}
@@ -154,7 +147,7 @@ public:
 	void updateResolutionlistThreadedAction() {
 		this->logActionBeginThreaded("update-resolutionlist-threaded");
 		try {
-			this->threadController->updateSettingsDlgResolutionList();
+			this->threadHelper->runDispatched(std::bind(std::mem_fun(&SettingsControllerImpl::updateResolutionlistAction), this));
 		} catch (Exception const& e) {
 			this->getAllControllers().errorController->errorThreadedAction(e);
 		}

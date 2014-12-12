@@ -64,6 +64,8 @@ src/Controller/ErrorController.hpp -text
 src/Controller/ErrorControllerImpl.hpp -text
 src/Controller/GLib/ThreadController.hpp -text
 src/Controller/Helper/DeviceInfo.hpp -text
+src/Controller/Helper/GLibThread.hpp -text
+src/Controller/Helper/Thread.hpp -text
 src/Controller/InstallerController.hpp -text
 src/Controller/InstallerControllerImpl.hpp -text
 src/Controller/MainController.hpp -text

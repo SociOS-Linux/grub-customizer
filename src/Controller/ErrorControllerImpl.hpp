@@ -30,7 +30,7 @@
 #include "../View/Trait/ViewAware.hpp"
 
 #include "../Controller/ControllerAbstract.hpp"
-#include "../Controller/Trait/ThreadControllerAware.hpp"
+#include "Helper/Thread.hpp"
 
 #include "ErrorController.hpp"
 
@@ -38,7 +38,7 @@ class ErrorControllerImpl :
 	public ControllerAbstract,
 	public ErrorController,
 	public View_Trait_ViewAware<View_Error>,
-	public Trait_ThreadControllerAware
+	public Controller_Helper_Thread_Connection
 {
 	bool applicationStarted;
 public:
@@ -66,8 +66,8 @@ public:
 	}
 
 	void errorThreadedAction(Exception const& e) {
-		if (this->threadController) {
-			this->threadController->showException(e);
+		if (this->threadHelper) {
+			this->threadHelper->runDispatched(std::bind(std::mem_fun(&ErrorControllerImpl::errorAction), this, Exception(e)));
 		} else {
 			this->log(e, Logger::EXCEPTION);
 			exit(1);

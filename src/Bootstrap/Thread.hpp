@@ -20,15 +20,17 @@
 #define SRC_BOOTSTRAP_THREAD_HPP_
 
 #include "../Controller/ThreadController.hpp"
+#include "../Controller/Helper/Thread.hpp"
 #include "../lib/Mutex.hpp"
 
 class Bootstrap_Thread
 {
 	public: Bootstrap_Thread();
 	public: ~Bootstrap_Thread();
-	public: ThreadController* threadController;
-	public: Mutex* mutex1;
-	public: Mutex* mutex2;
+	public: ThreadController* threadController = nullptr;
+	public: Controller_Helper_Thread* threadHelper = nullptr;
+	public: Mutex* mutex1 = nullptr;
+	public: Mutex* mutex2 = nullptr;
 };
 
 

@@ -30,6 +30,7 @@
 #include "ControllerAbstract.hpp"
 #include "ThemeController.hpp"
 #include "Trait/ThreadControllerAware.hpp"
+#include "Helper/Thread.hpp"
 
 class ThemeControllerImpl :
 	public ThemeController,
@@ -39,7 +40,8 @@ class ThemeControllerImpl :
 	public Model_ThemeManager_Connection,
 	public Model_SettingsManagerData_Connection,
 	public Model_ListCfg_Connection,
-	public Model_Env_Connection
+	public Model_Env_Connection,
+	public Controller_Helper_Thread_Connection
 {
 	std::string currentTheme, currentThemeFile;
 	bool syncActive; // should only be controlled by syncSettings()
@@ -551,7 +553,7 @@ public:
 		this->logActionBegin("save");
 		try {
 			this->themeManager->save();
-			this->threadController->doPostSaveActions();
+			this->threadHelper->runDispatched(std::bind(std::mem_fun(&ThemeControllerImpl::postSaveAction), this));
 		} catch (Exception const& e) {
 			this->getAllControllers().errorController->errorAction(e);
 		}
