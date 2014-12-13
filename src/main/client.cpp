@@ -22,6 +22,7 @@
 #include "../Bootstrap/Thread.hpp"
 #include "../Bootstrap/View.hpp"
 #include "../Bootstrap/Application.hpp"
+#include "../Bootstrap/Factory.hpp"
 #include "../lib/ArrayStructure.hpp"
 #include "../lib/ContentParser/Chainloader.hpp"
 #include "../lib/ContentParser/FactoryImpl.hpp"
@@ -60,6 +61,7 @@ int main(int argc, char** argv){
 		auto view                 = std::make_shared<Bootstrap_View>();
 		auto thread               = std::make_shared<Bootstrap_Thread>();
 		auto regex                = std::make_shared<Bootstrap_Regex>();
+		auto factory              = std::make_shared<Bootstrap_Factory>();
 
 		auto env                  = std::make_shared<Model_Env>();
 		auto listcfg              = std::make_shared<Model_ListCfg>();
@@ -82,73 +84,64 @@ int main(int argc, char** argv){
 		view->entryEditor->setDeviceDataList(deviceDataList);
 		view->envEditor->setDeviceDataList(deviceDataList);
 
-		EntryEditController entryEditController;
-		entryEditController.setContentParserFactory(contentParserFactory);
-		entryEditController.setView(view->entryEditor);
-		entryEditController.setDeviceDataList(deviceDataList);
-		entryEditController.setListCfg(listcfg);
-		entryEditController.setApplicationObject(application->applicationObject);
+		auto entryEditController = factory->createController<EntryEditController>(view->entryEditor);
+		entryEditController->setContentParserFactory(contentParserFactory);
+		entryEditController->setDeviceDataList(deviceDataList);
+		entryEditController->setListCfg(listcfg);
+		entryEditController->setApplicationObject(application->applicationObject);
 
-		MainController mainController;
-		mainController.setListCfg(listcfg);
-		mainController.setSettingsManager(settings);
-		mainController.setSettingsBuffer(settingsOnDisk);
-		mainController.setSavedListCfg(savedListCfg);
-		mainController.setFbResolutionsGetter(fbResolutionsGetter);
-		mainController.setDeviceDataList(deviceDataList);
-		mainController.setMountTable(mountTable);
-		mainController.setContentParserFactory(contentParserFactory);
-		mainController.setView(view->main);
-		mainController.setEntryNameMapper(entryNameMapper);
-		mainController.setApplicationObject(application->applicationObject);
+		auto mainController = factory->createController<MainController>(view->main);
+		mainController->setListCfg(listcfg);
+		mainController->setSettingsManager(settings);
+		mainController->setSettingsBuffer(settingsOnDisk);
+		mainController->setSavedListCfg(savedListCfg);
+		mainController->setFbResolutionsGetter(fbResolutionsGetter);
+		mainController->setDeviceDataList(deviceDataList);
+		mainController->setMountTable(mountTable);
+		mainController->setContentParserFactory(contentParserFactory);
+		mainController->setEntryNameMapper(entryNameMapper);
+		mainController->setApplicationObject(application->applicationObject);
 
-		SettingsController settingsController;
-		settingsController.setListCfg(listcfg);
-		settingsController.setView(view->settings);
-		settingsController.setSettingsManager(settings);
-		settingsController.setFbResolutionsGetter(fbResolutionsGetter);
-		settingsController.setApplicationObject(application->applicationObject);
+		auto settingsController = factory->createController<SettingsController>(view->settings);
+		settingsController->setListCfg(listcfg);
+		settingsController->setSettingsManager(settings);
+		settingsController->setFbResolutionsGetter(fbResolutionsGetter);
+		settingsController->setApplicationObject(application->applicationObject);
 
-		EnvEditorController envEditController;
-		envEditController.setMountTable(mountTable);
-		envEditController.setView(view->envEditor);
-		envEditController.setDeviceMap(deviceMap);
-		envEditController.setApplicationObject(application->applicationObject);
+		auto envEditController = factory->createController<EnvEditorController>(view->envEditor);
+		envEditController->setMountTable(mountTable);
+		envEditController->setDeviceMap(deviceMap);
+		envEditController->setApplicationObject(application->applicationObject);
 
-		TrashController trashController;
-		trashController.setEntryNameMapper(entryNameMapper);
-		trashController.setListCfg(listcfg);
-		trashController.setDeviceDataList(deviceDataList);
-		trashController.setContentParserFactory(contentParserFactory);
-		trashController.setView(view->trash);
-		trashController.setApplicationObject(application->applicationObject);
+		auto trashController = factory->createController<TrashController>(view->trash);
+		trashController->setEntryNameMapper(entryNameMapper);
+		trashController->setListCfg(listcfg);
+		trashController->setDeviceDataList(deviceDataList);
+		trashController->setContentParserFactory(contentParserFactory);
+		trashController->setApplicationObject(application->applicationObject);
 
-		InstallerController installController;
-		installController.setInstaller(installer);
-		installController.setView(view->installer);
-		installController.setApplicationObject(application->applicationObject);
+		auto installController = factory->createController<InstallerController>(view->installer);
+		installController->setInstaller(installer);
+		installController->setApplicationObject(application->applicationObject);
 
-		AboutController aboutController;
-		aboutController.setView(view->about);
-		aboutController.setApplicationObject(application->applicationObject);
+		auto aboutController = factory->createController<AboutController>(view->about);
+		aboutController->setApplicationObject(application->applicationObject);
 
-		ErrorController errorController;
-		errorController.setView(view->error);
-		errorController.setApplicationObject(application->applicationObject);
+		auto errorController = factory->createController<ErrorController>(view->error);
+		errorController->setApplicationObject(application->applicationObject);
 
-		ThemeController themeController;
-		themeController.setView(view->theme);
-		themeController.setThemeManager(themeManager);
-		themeController.setSettingsManager(settings);
-		themeController.setListCfg(listcfg);
-		themeController.setApplicationObject(application->applicationObject);
+		auto themeController = factory->createController<ThemeController>(view->theme);
+		themeController->setThemeManager(themeManager);
+		themeController->setSettingsManager(settings);
+		themeController->setListCfg(listcfg);
+		themeController->setApplicationObject(application->applicationObject);
 
-		mainController.setThreadHelper(thread->threadHelper);
-		settingsController.setThreadHelper(thread->threadHelper);
-		installController.setThreadHelper(thread->threadHelper);
-		errorController.setThreadHelper(thread->threadHelper);
-		entryEditController.setThreadHelper(thread->threadHelper);
-		themeController.setThreadHelper(thread->threadHelper);
+		mainController->setThreadHelper(thread->threadHelper);
+		settingsController->setThreadHelper(thread->threadHelper);
+		installController->setThreadHelper(thread->threadHelper);
+		errorController->setThreadHelper(thread->threadHelper);
+		entryEditController->setThreadHelper(thread->threadHelper);
+		themeController->setThreadHelper(thread->threadHelper);
 
 		//assign logger
 		listcfg->setLogger(logger);
@@ -169,16 +162,16 @@ int main(int argc, char** argv){
 		thread->mutex2->setLogger(logger);
 		env->setLogger(logger);
 		view->envEditor->setLogger(logger);
-		mainController.setLogger(logger);
-		entryEditController.setLogger(logger);
-		settingsController.setLogger(logger);
-		envEditController.setLogger(logger);
-		trashController.setLogger(logger);
-		errorController.setLogger(logger);
-		installController.setLogger(logger);
-		aboutController.setLogger(logger);
+		mainController->setLogger(logger);
+		entryEditController->setLogger(logger);
+		settingsController->setLogger(logger);
+		envEditController->setLogger(logger);
+		trashController->setLogger(logger);
+		errorController->setLogger(logger);
+		installController->setLogger(logger);
+		aboutController->setLogger(logger);
 		view->theme->setLogger(logger);
-		themeController.setLogger(logger);
+		themeController->setLogger(logger);
 		thread->threadHelper->setLogger(logger);
 
 		// configure logger
@@ -226,21 +219,21 @@ int main(int argc, char** argv){
 		settingsOnDisk->setEnv(env);
 		installer->setEnv(env);
 		themeManager->setEnv(env);
-		entryEditController.setEnv(env);
-		mainController.setEnv(env);
-		settingsController.setEnv(env);
-		envEditController.setEnv(env);
-		trashController.setEnv(env);
-		installController.setEnv(env);
-		themeController.setEnv(env);
+		entryEditController->setEnv(env);
+		mainController->setEnv(env);
+		settingsController->setEnv(env);
+		envEditController->setEnv(env);
+		trashController->setEnv(env);
+		installController->setEnv(env);
+		themeController->setEnv(env);
 		deviceMap->setEnv(env);
 
 		//set mutex
 		listcfg->setMutex(thread->mutex1);
 		savedListCfg->setMutex(thread->mutex2);
 
-		mainController.initAction();
-		errorController.setApplicationStarted(true);
+		mainController->initAction();
+		errorController->setApplicationStarted(true);
 
 		application->applicationObject->run();
 	} catch (Exception const& e) {
