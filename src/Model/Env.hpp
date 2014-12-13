@@ -415,14 +415,13 @@ public:
 
 };
 
-class Model_Env_Connection {
-protected:
-	Model_Env* env;
-public:
-	Model_Env_Connection() : env(NULL) {}
+class Model_Env_Connection
+{
+	protected: std::shared_ptr<Model_Env> env;
 
-	void setEnv(Model_Env& env) {
-		this->env = &env;
+	public: void setEnv(std::shared_ptr<Model_Env> env)
+	{
+		this->env = env;
 	}
 };
 

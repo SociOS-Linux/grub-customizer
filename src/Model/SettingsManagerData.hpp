@@ -267,13 +267,13 @@ public:
 
 };
 
-class Model_SettingsManagerData_Connection {
-protected:
-	Model_SettingsManagerData* settings;
-public:
-	Model_SettingsManagerData_Connection() : settings(NULL) {}
-	void setSettingsManager(Model_SettingsManagerData& settings){
-		this->settings = &settings;
+class Model_SettingsManagerData_Connection
+{
+	protected: std::shared_ptr<Model_SettingsManagerData> settings;
+
+	public: void setSettingsManager(std::shared_ptr<Model_SettingsManagerData> settings)
+	{
+		this->settings = settings;
 	}
 };
 #endif

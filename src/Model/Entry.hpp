@@ -73,11 +73,11 @@ struct Model_Entry : public Trait_LoggerAware, public Entry {
 		: name(name), extension(extension), content(content), isValid(true), type(type), isModified(false), quote('\'')
 	{}
 	
-	Model_Entry(FILE* sourceFile, Model_Entry_Row firstRow = Model_Entry_Row() , Logger* logger = NULL, std::string* plaintextBuffer = NULL)
+	Model_Entry(FILE* sourceFile, Model_Entry_Row firstRow = Model_Entry_Row(), std::shared_ptr<Logger> logger = nullptr, std::string* plaintextBuffer = NULL)
 		: isValid(false), type(MENUENTRY), quote('\''), isModified(false)
 	{
 		if (logger) {
-			this->setLogger(*logger);
+			this->setLogger(logger);
 		}
 		Model_Entry_Row row;
 		while ((row = firstRow) || (row = Model_Entry_Row(sourceFile))){
@@ -108,7 +108,7 @@ private:
 	
 		*this = Model_Entry(entryName, "", "", SUBMENU);
 		if (this->logger) {
-			this->setLogger(*this->logger);
+			this->setLogger(this->logger);
 		}
 		Model_Entry_Row row;
 		while ((row = Model_Entry_Row(sourceFile))) {
@@ -137,7 +137,7 @@ private:
 	
 		*this = Model_Entry(entryName, extension);
 		if (this->logger) {
-			this->setLogger(*this->logger);
+			this->setLogger(this->logger);
 		}
 		this->quote = quote;
 	

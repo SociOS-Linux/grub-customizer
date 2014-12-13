@@ -53,10 +53,5 @@ Bootstrap_View::Bootstrap_View() {
 	this->trash = trash;
 }
 
-void Bootstrap_View::setDeviceDataList(Model_DeviceDataListInterface& deviceDataList) {
-	dynamic_cast<View_Gtk_EntryEditor&>(*this->entryEditor).setDeviceDataList(deviceDataList);
-	dynamic_cast<View_Gtk_EnvEditor&>(*this->envEditor).setDeviceDataList(deviceDataList);
-}
-
 Bootstrap_View::~Bootstrap_View() {
 }

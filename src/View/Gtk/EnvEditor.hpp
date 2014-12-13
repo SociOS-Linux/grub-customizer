@@ -22,13 +22,11 @@
 
 #include <gtkmm.h>
 #include <libintl.h>
-#include "../../Model/DeviceDataListInterface.hpp"
 #include "Element/PartitionChooser.hpp"
 
 class View_Gtk_EnvEditor :
 	public Gtk::Dialog,
-	public View_EnvEditor,
-	public Model_DeviceDataListInterface_Connection
+	public View_EnvEditor
 {
 	Gtk::VBox vbContent;
 	Gtk::Table tblLayout;

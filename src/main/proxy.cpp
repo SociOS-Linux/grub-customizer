@@ -18,6 +18,7 @@
 
 #include "../Model/Entry.hpp"
 #include <iostream>
+#include <memory>
 #include "../Model/ListCfg.hpp" // multi
 #include "../Model/Proxy.hpp"
 #include "../Model/Rule.hpp"
@@ -28,7 +29,7 @@ int main(int argc, char** argv){
 		Model_Script script("noname", "");
 		Model_Entry newEntry;
 		std::string plaintextBuffer;
-		while (newEntry = Model_Entry(stdin, Model_Entry_Row(), NULL, &plaintextBuffer)) {
+		while ((newEntry = Model_Entry(stdin, Model_Entry_Row(), NULL, &plaintextBuffer))) {
 			script.entries().push_back(newEntry);
 		}
 		if (plaintextBuffer.size()) {
@@ -46,13 +47,13 @@ int main(int argc, char** argv){
 		}
 		return 0;
 	} else if (argc == 3 && std::string(argv[2]) == "multi") {
-		Model_Env env;
+		auto env = std::make_shared<Model_Env>();
 		Model_ListCfg scriptSource;
 		scriptSource.setEnv(env);
 		scriptSource.ignoreLock = true;
 		{ // this scope prevents access to the unused proxy variable - push_back takes a copy!
 			Model_Proxy proxy;
-			proxy.importRuleString(argv[1], env.cfg_dir_prefix);
+			proxy.importRuleString(argv[1], env->cfg_dir_prefix);
 			scriptSource.proxies.push_back(proxy);
 		}
 		scriptSource.readGeneratedFile(stdin, true, false);

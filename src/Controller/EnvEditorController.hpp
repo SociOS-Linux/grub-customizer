@@ -39,21 +39,12 @@ class EnvEditorController :
 	public Controller_Common_ControllerAbstract,
 	public View_Trait_ViewAware<View_EnvEditor>,
 	public Model_Env_Connection,
-	public Bootstrap_Application_Object_Connection
+	public Bootstrap_Application_Object_Connection,
+	public Model_MountTable_Connection,
+	public Model_DeviceMap_Connection
 {
-	Model_MountTable* mountTable;
-	Model_DeviceMap* deviceMap;
 
 public:
-	void setMountTable(Model_MountTable& mountTable) {
-		this->mountTable = &mountTable;
-	}
-
-	void setDeviceMap(Model_DeviceMap& deviceMap) {
-		this->deviceMap = &deviceMap;
-	}
-
-
 	void showAction(bool resetPartitionChooser = false) {
 		this->logActionBegin("show");
 		try {
@@ -67,9 +58,7 @@ public:
 	}
 
 
-	EnvEditorController() : Controller_Common_ControllerAbstract("env-editor"),
-		 mountTable(NULL),
-		 deviceMap(NULL)
+	EnvEditorController() : Controller_Common_ControllerAbstract("env-editor")
 	{
 	}
 

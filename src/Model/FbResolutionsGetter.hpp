@@ -76,14 +76,15 @@ public:
 
 };
 
-class Model_FbResolutionsGetter_Connection {
-	protected: Model_FbResolutionsGetter* fbResolutionsGetter = nullptr;
-	public: Model_FbResolutionsGetter_Connection() {}
+class Model_FbResolutionsGetter_Connection
+{
+	protected: std::shared_ptr<Model_FbResolutionsGetter> fbResolutionsGetter;
+
 	public: virtual ~Model_FbResolutionsGetter_Connection() {}
 
-	public: void setFbResolutionsGetter(Model_FbResolutionsGetter& fbResolutionsGetter)
+	public: void setFbResolutionsGetter(std::shared_ptr<Model_FbResolutionsGetter> fbResolutionsGetter)
 	{
-		this->fbResolutionsGetter = &fbResolutionsGetter;
+		this->fbResolutionsGetter = fbResolutionsGetter;
 
 		this->initFbResolutionsGetterEvents();
 	}

@@ -67,14 +67,14 @@ public:
 	 errorLogFile(ERROR_LOG_FILE), ignoreLock(false), progress_pos(0), progress_max(0)
 	{}
 
-	void setLogger(Logger& logger) {
+	void setLogger(std::shared_ptr<Logger> logger) {
 		this->Trait_LoggerAware::setLogger(logger);
 		this->proxies.setLogger(logger);
 		this->repository.setLogger(logger);
 		this->scriptSourceMap.setLogger(logger);
 	}
 
-	void setEnv(Model_Env& env) {
+	void setEnv(std::shared_ptr<Model_Env> env) {
 		this->Model_Env_Connection::setEnv(env);
 		this->scriptSourceMap.setEnv(env);
 	}
@@ -588,7 +588,7 @@ public:
 				if (innerCount < 10) {
 					innerCount++;
 				}
-				Model_Entry newEntry(source, row, this->getLoggerPtr());
+				Model_Entry newEntry(source, row, this->getLogger());
 				if (!script->isModified()) {
 					script->entries().push_back(newEntry);
 				}
@@ -597,7 +597,7 @@ public:
 				this->send_new_load_progress(0.1 + (progressbarScriptSpace * i + (progressbarScriptSpace/10*innerCount)), script->name, i, this->repository.size());
 			} else if (script != NULL && rowText.substr(0, 8) == "submenu ") {
 				this->lock();
-				Model_Entry newEntry(source, row, this->getLoggerPtr());
+				Model_Entry newEntry(source, row, this->getLogger());
 				script->entries().push_back(newEntry);
 				this->proxies.sync_all(false, false, script);
 				this->unlock();
@@ -1441,7 +1441,6 @@ public:
 		result["progress_name"] = this->progress_name;
 		result["progress_pos"] = this->progress_pos;
 		result["progress_max"] = this->progress_max;
-		result["mutex"] = this->mutex;
 		result["errorLogFile"] = this->errorLogFile;
 		result["verbose"] = this->verbose;
 		result["error_proxy_not_found"] = this->error_proxy_not_found;
@@ -1456,15 +1455,15 @@ public:
 	}
 };
 
-class Model_ListCfg_Connection {
-protected:
-	Model_ListCfg* grublistCfg;
-public:
-	Model_ListCfg_Connection() : grublistCfg(NULL) {}
-	virtual ~Model_ListCfg_Connection(){}
+class Model_ListCfg_Connection
+{
+	protected: std::shared_ptr<Model_ListCfg> grublistCfg;
 
-	void setListCfg(Model_ListCfg& grublistCfg){
-		this->grublistCfg = &grublistCfg;
+	public:	virtual ~Model_ListCfg_Connection(){}
+
+	public: void setListCfg(std::shared_ptr<Model_ListCfg> grublistCfg)
+	{
+		this->grublistCfg = grublistCfg;
 
 		this->initListCfgEvents();
 	}

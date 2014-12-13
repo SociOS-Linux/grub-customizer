@@ -21,9 +21,8 @@
 #include "../lib/Regex.hpp"
 
 class Bootstrap_Regex {
-	public: Regex* engine;
+	public: std::shared_ptr<Regex> engine;
 	public: Bootstrap_Regex();
-	public: ~Bootstrap_Regex();
 };
 
 

@@ -18,12 +18,7 @@
 #include "../lib/Regex/GLib.hpp"
 #include "Regex.hpp"
 
-Bootstrap_Regex::Bootstrap_Regex() :
-	engine(NULL)
+Bootstrap_Regex::Bootstrap_Regex()
 {
-	this->engine = new Regex_GLib;
-}
-
-Bootstrap_Regex::~Bootstrap_Regex() {
-	delete this->engine;
+	this->engine = std::make_shared<Regex_GLib>();
 }

@@ -25,9 +25,11 @@
 
 #include "../lib/Type.hpp"
 #include "../lib/Trait/LoggerAware.hpp"
+#include "../Model/DeviceDataListInterface.hpp"
 
 class View_EntryEditor :
-	public Trait_LoggerAware
+	public Trait_LoggerAware,
+	public Model_DeviceDataListInterface_Connection
 {
 public:
 	std::function<void ()> onApplyClick;
