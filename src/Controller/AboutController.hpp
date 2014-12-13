@@ -30,19 +30,19 @@
 #include "../View/Trait/ViewAware.hpp"
 #include "ControllerAbstract.hpp"
 
-class AboutControllerImpl :
+class AboutController :
 	public ControllerAbstract,
 	public View_Trait_ViewAware<View_About>,
 	public Bootstrap_Application_Object_Connection
 {
 public:
-	AboutControllerImpl() : ControllerAbstract("about")
+	AboutController() : ControllerAbstract("about")
 	{
 	}
 
 	void initApplicationEvents() override
 	{
-		this->applicationObject->onAboutDlgShowRequest.addHandler(std::bind(std::mem_fn(&AboutControllerImpl::showAction), this));
+		this->applicationObject->onAboutDlgShowRequest.addHandler(std::bind(std::mem_fn(&AboutController::showAction), this));
 	}
 	
 	void showAction() {

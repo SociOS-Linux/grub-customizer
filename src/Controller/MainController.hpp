@@ -49,7 +49,7 @@
  * This controller operates on the entry list
  */
 
-class MainControllerImpl :
+class MainController :
 	public ControllerAbstract,
 	public View_Trait_ViewAware<View_Main>,
 	public Model_ListCfg_Connection,
@@ -287,28 +287,28 @@ public:
 	void initViewEvents() override
 	{
 		using namespace std::placeholders;
-		this->view->onRemoveRulesClick = std::bind(std::mem_fn(&MainControllerImpl::removeRulesAction), this, _1, _2);
-		this->view->onShowSettingsClick = std::bind(std::mem_fn(&MainControllerImpl::showSettingsAction), this);
-		this->view->onReloadClick = std::bind(std::mem_fn(&MainControllerImpl::reloadAction), this);
-		this->view->onSaveClick = std::bind(std::mem_fn(&MainControllerImpl::saveAction), this);
-		this->view->onShowEnvEditorClick = std::bind(std::mem_fn(&MainControllerImpl::showEnvEditorAction), this);
-		this->view->onShowInstallerClick = std::bind(std::mem_fn(&MainControllerImpl::showInstallerAction), this);
-		this->view->onCreateSubmenuClick = std::bind(std::mem_fn(&MainControllerImpl::createSubmenuAction), this, _1);
-		this->view->onRemoveSubmenuClick = std::bind(std::mem_fn(&MainControllerImpl::removeSubmenuAction), this, _1);
-		this->view->onShowEntryEditorClick = std::bind(std::mem_fn(&MainControllerImpl::showEntryEditorAction), this, _1);
-		this->view->onShowEntryCreatorClick = std::bind(std::mem_fn(&MainControllerImpl::showEntryCreatorAction), this);
-		this->view->onShowAboutClick = std::bind(std::mem_fn(&MainControllerImpl::showAboutAction), this);
-		this->view->onExitClick = std::bind(std::mem_fn(&MainControllerImpl::exitAction), this);
-		this->view->onRenameClick = std::bind(std::mem_fn(&MainControllerImpl::renameRuleAction), this, _1, _2);
-		this->view->onRevertClick = std::bind(std::mem_fn(&MainControllerImpl::revertAction), this);
-		this->view->onMoveClick = std::bind(std::mem_fn(&MainControllerImpl::moveAction), this, _1, _2);
-		this->view->onCancelBurgSwitcherClick = std::bind(std::mem_fn(&MainControllerImpl::cancelBurgSwitcherAction), this);
-		this->view->onInitModeClick = std::bind(std::mem_fn(&MainControllerImpl::initModeAction), this, _1);
-		this->view->onRuleSelection = std::bind(std::mem_fn(&MainControllerImpl::selectRuleAction), this, _1, _2);
-		this->view->onTabChange = std::bind(std::mem_fn(&MainControllerImpl::refreshTabAction), this, _1);
-		this->view->onViewOptionChange = std::bind(std::mem_fn(&MainControllerImpl::setViewOptionAction), this, _1, _2);
-		this->view->onEntryStateChange = std::bind(std::mem_fn(&MainControllerImpl::entryStateToggledAction), this, _1, _2);
-		this->view->onSelectionChange = std::bind(std::mem_fn(&MainControllerImpl::updateSelectionAction), this, _1);
+		this->view->onRemoveRulesClick = std::bind(std::mem_fn(&MainController::removeRulesAction), this, _1, _2);
+		this->view->onShowSettingsClick = std::bind(std::mem_fn(&MainController::showSettingsAction), this);
+		this->view->onReloadClick = std::bind(std::mem_fn(&MainController::reloadAction), this);
+		this->view->onSaveClick = std::bind(std::mem_fn(&MainController::saveAction), this);
+		this->view->onShowEnvEditorClick = std::bind(std::mem_fn(&MainController::showEnvEditorAction), this);
+		this->view->onShowInstallerClick = std::bind(std::mem_fn(&MainController::showInstallerAction), this);
+		this->view->onCreateSubmenuClick = std::bind(std::mem_fn(&MainController::createSubmenuAction), this, _1);
+		this->view->onRemoveSubmenuClick = std::bind(std::mem_fn(&MainController::removeSubmenuAction), this, _1);
+		this->view->onShowEntryEditorClick = std::bind(std::mem_fn(&MainController::showEntryEditorAction), this, _1);
+		this->view->onShowEntryCreatorClick = std::bind(std::mem_fn(&MainController::showEntryCreatorAction), this);
+		this->view->onShowAboutClick = std::bind(std::mem_fn(&MainController::showAboutAction), this);
+		this->view->onExitClick = std::bind(std::mem_fn(&MainController::exitAction), this);
+		this->view->onRenameClick = std::bind(std::mem_fn(&MainController::renameRuleAction), this, _1, _2);
+		this->view->onRevertClick = std::bind(std::mem_fn(&MainController::revertAction), this);
+		this->view->onMoveClick = std::bind(std::mem_fn(&MainController::moveAction), this, _1, _2);
+		this->view->onCancelBurgSwitcherClick = std::bind(std::mem_fn(&MainController::cancelBurgSwitcherAction), this);
+		this->view->onInitModeClick = std::bind(std::mem_fn(&MainController::initModeAction), this, _1);
+		this->view->onRuleSelection = std::bind(std::mem_fn(&MainController::selectRuleAction), this, _1, _2);
+		this->view->onTabChange = std::bind(std::mem_fn(&MainController::refreshTabAction), this, _1);
+		this->view->onViewOptionChange = std::bind(std::mem_fn(&MainController::setViewOptionAction), this, _1, _2);
+		this->view->onEntryStateChange = std::bind(std::mem_fn(&MainController::entryStateToggledAction), this, _1, _2);
+		this->view->onSelectionChange = std::bind(std::mem_fn(&MainController::updateSelectionAction), this, _1);
 	}
 
 	void initApplicationEvents() override
@@ -325,30 +325,30 @@ public:
 		);
 
 		this->applicationObject->onListModelChange.addHandler(
-			std::bind(std::mem_fn(&MainControllerImpl::updateList), this)
+			std::bind(std::mem_fn(&MainController::updateList), this)
 		);
 
 		this->applicationObject->onListModelChange.addHandler(
-			std::bind(std::mem_fn(&MainControllerImpl::updateTrashView), this)
+			std::bind(std::mem_fn(&MainController::updateTrashView), this)
 		);
 
 		this->applicationObject->onEnvChange.addHandler(
-			std::bind(std::mem_fn(&MainControllerImpl::reInitAction), this, _1)
+			std::bind(std::mem_fn(&MainController::reInitAction), this, _1)
 		);
 		this->applicationObject->onListRelevantSettingChange.addHandler(
-			std::bind(std::mem_fn(&MainControllerImpl::showReloadRecommendationAction), this)
+			std::bind(std::mem_fn(&MainController::showReloadRecommendationAction), this)
 		);
 
 		this->applicationObject->onListRuleChange.addHandler(
-			std::bind(std::mem_fn(&MainControllerImpl::selectRuleAction), this, _1, _2)
+			std::bind(std::mem_fn(&MainController::selectRuleAction), this, _1, _2)
 		);
 
 		this->applicationObject->onTrashEntrySelection.addHandler(
-			std::bind(std::mem_fn(&MainControllerImpl::selectRulesAction), this, std::list<Rule*>())
+			std::bind(std::mem_fn(&MainController::selectRulesAction), this, std::list<Rule*>())
 		);
 
 		this->applicationObject->onEntryInsertionRequest.addHandler(
-			std::bind(std::mem_fn(&MainControllerImpl::addEntriesAction), this, _1)
+			std::bind(std::mem_fn(&MainController::addEntriesAction), this, _1)
 		);
 	}
 
@@ -356,8 +356,8 @@ public:
 	{
 		using namespace std::placeholders;
 
-		this->grublistCfg->onLoadStateChange = std::bind(std::mem_fn(&MainControllerImpl::syncLoadStateThreadedAction), this);
-		this->grublistCfg->onSaveStateChange = std::bind(std::mem_fn(&MainControllerImpl::syncSaveStateThreadedAction), this);
+		this->grublistCfg->onLoadStateChange = std::bind(std::mem_fn(&MainController::syncLoadStateThreadedAction), this);
+		this->grublistCfg->onSaveStateChange = std::bind(std::mem_fn(&MainController::syncSaveStateThreadedAction), this);
 	}
 
 	//init functions
@@ -435,7 +435,7 @@ public:
 		}
 
 		this->log("loading configuration", Logger::IMPORTANT_EVENT);
-		this->threadHelper->runAsThread(std::bind(std::mem_fn(&MainControllerImpl::loadThreadedAction), this, false));
+		this->threadHelper->runAsThread(std::bind(std::mem_fn(&MainController::loadThreadedAction), this, false));
 	}
 
 	void initAction() {
@@ -497,7 +497,7 @@ public:
 			this->applicationObject->onSettingModelChange.exec();
 			this->view->hideReloadRecommendation();
 			this->view->setLockState(1|4|8);
-			this->threadHelper->runAsThread(std::bind(std::mem_fn(&MainControllerImpl::loadThreadedAction), this, true));
+			this->threadHelper->runAsThread(std::bind(std::mem_fn(&MainController::loadThreadedAction), this, true));
 		} catch (Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
@@ -526,7 +526,7 @@ public:
 					//load the burg/grub settings file
 					this->log("loading settings", Logger::IMPORTANT_EVENT);
 					this->settings->load();
-					this->threadHelper->runDispatched(std::bind(std::mem_fn(&MainControllerImpl::activateSettingsAction), this));
+					this->threadHelper->runDispatched(std::bind(std::mem_fn(&MainController::activateSettingsAction), this));
 				} else {
 					this->log("switching settings", Logger::IMPORTANT_EVENT);
 					this->settingsOnDisk->load();
@@ -540,7 +540,7 @@ public:
 				} catch (CmdExecException const& e){
 					this->log("error while loading the grub list", Logger::ERROR);
 					this->thrownException = e;
-					this->threadHelper->runDispatched(std::bind(std::mem_fn(&MainControllerImpl::dieAction), this));
+					this->threadHelper->runDispatched(std::bind(std::mem_fn(&MainController::dieAction), this));
 					return; //cancel
 				}
 
@@ -577,7 +577,7 @@ public:
 
 			this->view->setLockState(1|4|8);
 			this->env->activeThreadCount++; //not in save_thead() to be faster set
-			this->threadHelper->runAsThread(std::bind(std::mem_fn(&MainControllerImpl::saveThreadedAction), this));
+			this->threadHelper->runAsThread(std::bind(std::mem_fn(&MainController::saveThreadedAction), this));
 		} catch (Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
@@ -598,7 +598,7 @@ public:
 			try {
 				this->grublistCfg->save();
 			} catch (CmdExecException const& e){
-				this->threadHelper->runDispatched(std::bind(std::mem_fn(&MainControllerImpl::showConfigSavingErrorAction), this, e.getMessage()));
+				this->threadHelper->runDispatched(std::bind(std::mem_fn(&MainController::showConfigSavingErrorAction), this, e.getMessage()));
 			}
 			this->env->activeThreadCount--;
 		} catch (Exception const& e) {
@@ -617,7 +617,7 @@ public:
 		this->logActionEndThreaded();
 	}
 
-	MainControllerImpl() : ControllerAbstract("main"),
+	MainController() : ControllerAbstract("main"),
 		  settingsOnDisk(NULL),
 		  savedListCfg(NULL),
 		 config_has_been_different_on_startup_but_unsaved(false),
@@ -904,7 +904,7 @@ public:
 			this->applicationObject->onListModelChange.exec();
 			this->moveAction(childItems, -1);
 			this->threadHelper->runDelayed(
-				std::bind(std::mem_fn(&MainControllerImpl::selectRuleAction), this, newItem, true),
+				std::bind(std::mem_fn(&MainController::selectRuleAction), this, newItem, true),
 				10
 			);
 		} catch (Exception const& e) {
@@ -963,7 +963,7 @@ public:
 	void syncLoadStateThreadedAction() {
 		this->logActionBeginThreaded("sync-load-state-threaded");
 		try {
-			this->threadHelper->runDispatched(std::bind(std::mem_fn(&MainControllerImpl::syncLoadStateAction), this));
+			this->threadHelper->runDispatched(std::bind(std::mem_fn(&MainController::syncLoadStateAction), this));
 		} catch (Exception const& e) {
 			this->applicationObject->onThreadError.exec(e);
 		}
@@ -973,7 +973,7 @@ public:
 	void syncSaveStateThreadedAction() {
 		this->logActionBeginThreaded("sync-save-state-threaded");
 		try {
-			this->threadHelper->runDispatched(std::bind(std::mem_fn(&MainControllerImpl::syncSaveStateAction), this));
+			this->threadHelper->runDispatched(std::bind(std::mem_fn(&MainController::syncSaveStateAction), this));
 		} catch (Exception const& e) {
 			this->applicationObject->onThreadError.exec(e);
 		}

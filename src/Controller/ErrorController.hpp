@@ -33,7 +33,7 @@
 #include "Helper/Thread.hpp"
 
 
-class ErrorControllerImpl :
+class ErrorController :
 	public ControllerAbstract,
 	public View_Trait_ViewAware<View_Error>,
 	public Controller_Helper_Thread_Connection,
@@ -46,7 +46,7 @@ public:
 	}
 
 
-	ErrorControllerImpl() : ControllerAbstract("error"),
+	ErrorController() : ControllerAbstract("error"),
 		  applicationStarted(false)
 	{
 	}
@@ -55,15 +55,15 @@ public:
 	{
 		using namespace std::placeholders;
 
-		this->view->onQuitClick = std::bind(std::mem_fn(&ErrorControllerImpl::quitAction), this);
+		this->view->onQuitClick = std::bind(std::mem_fn(&ErrorController::quitAction), this);
 	}
 
 	void initApplicationEvents() override
 	{
 		using namespace std::placeholders;
 
-		this->applicationObject->onError.addHandler(std::bind(std::mem_fn(&ErrorControllerImpl::errorAction), this, _1));
-		this->applicationObject->onThreadError.addHandler(std::bind(std::mem_fn(&ErrorControllerImpl::errorThreadedAction), this, _1));
+		this->applicationObject->onError.addHandler(std::bind(std::mem_fn(&ErrorController::errorAction), this, _1));
+		this->applicationObject->onThreadError.addHandler(std::bind(std::mem_fn(&ErrorController::errorThreadedAction), this, _1));
 	}
 
 	
@@ -74,7 +74,7 @@ public:
 
 	void errorThreadedAction(Exception const& e) {
 		if (this->threadHelper) {
-			this->threadHelper->runDispatched(std::bind(std::mem_fn(&ErrorControllerImpl::errorAction), this, Exception(e)));
+			this->threadHelper->runDispatched(std::bind(std::mem_fn(&ErrorController::errorAction), this, Exception(e)));
 		} else {
 			this->log(e, Logger::EXCEPTION);
 			exit(1);

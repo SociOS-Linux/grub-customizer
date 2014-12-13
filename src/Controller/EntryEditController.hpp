@@ -41,7 +41,7 @@
 #include "Helper/Thread.hpp"
 
 
-class EntryEditControllerImpl :
+class EntryEditController :
 	public ControllerAbstract,
 	public View_Trait_ViewAware<View_EntryEditor>,
 	public Model_ListCfg_Connection,
@@ -60,7 +60,7 @@ class EntryEditControllerImpl :
 	}
 
 public:
-	EntryEditControllerImpl() : ControllerAbstract("entry-edit"),
+	EntryEditController() : ControllerAbstract("entry-edit"),
 		 currentContentParser(NULL)
 	{
 	}
@@ -68,16 +68,16 @@ public:
 	void initViewEvents() override
 	{
 		using namespace std::placeholders;
-		this->view->onApplyClick = std::bind(std::mem_fn(&EntryEditControllerImpl::applyAction), this);
-		this->view->onSourceModification = std::bind(std::mem_fn(&EntryEditControllerImpl::syncOptionsAction), this);
-		this->view->onOptionModification = std::bind(std::mem_fn(&EntryEditControllerImpl::syncSourceAction), this);
-		this->view->onTypeSwitch = std::bind(std::mem_fn(&EntryEditControllerImpl::switchTypeAction), this, _1);
+		this->view->onApplyClick = std::bind(std::mem_fn(&EntryEditController::applyAction), this);
+		this->view->onSourceModification = std::bind(std::mem_fn(&EntryEditController::syncOptionsAction), this);
+		this->view->onOptionModification = std::bind(std::mem_fn(&EntryEditController::syncSourceAction), this);
+		this->view->onTypeSwitch = std::bind(std::mem_fn(&EntryEditController::switchTypeAction), this, _1);
 	}
 
 	void initApplicationEvents() override
 	{
 		using namespace std::placeholders;
-		this->applicationObject->onEntryEditorShowRequest.addHandler(std::bind(std::mem_fn(&EntryEditControllerImpl::showAction), this, _1));
+		this->applicationObject->onEntryEditorShowRequest.addHandler(std::bind(std::mem_fn(&EntryEditController::showAction), this, _1));
 	}
 
 	void showAction(Rule* rule) {

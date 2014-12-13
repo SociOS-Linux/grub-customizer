@@ -22,15 +22,6 @@
 #include "../Bootstrap/Thread.hpp"
 #include "../Bootstrap/View.hpp"
 #include "../Bootstrap/Application.hpp"
-#include "../Controller/AboutControllerImpl.hpp"
-#include "../Controller/EntryEditControllerImpl.hpp"
-#include "../Controller/EnvEditorControllerImpl.hpp"
-#include "../Controller/ErrorControllerImpl.hpp"
-#include "../Controller/InstallerControllerImpl.hpp"
-#include "../Controller/MainControllerImpl.hpp"
-#include "../Controller/SettingsControllerImpl.hpp"
-#include "../Controller/ThemeControllerImpl.hpp"
-#include "../Controller/TrashControllerImpl.hpp"
 #include "../lib/ArrayStructure.hpp"
 #include "../lib/ContentParser/Chainloader.hpp"
 #include "../lib/ContentParser/FactoryImpl.hpp"
@@ -42,6 +33,15 @@
 #include "../Model/Env.hpp"
 #include "../Model/ThemeManager.hpp"
 #include "../config.hpp"
+#include "../Controller/AboutController.hpp"
+#include "../Controller/EntryEditController.hpp"
+#include "../Controller/EnvEditorController.hpp"
+#include "../Controller/ErrorController.hpp"
+#include "../Controller/InstallerController.hpp"
+#include "../Controller/MainController.hpp"
+#include "../Controller/SettingsController.hpp"
+#include "../Controller/ThemeController.hpp"
+#include "../Controller/TrashController.hpp"
 
 
 
@@ -82,14 +82,14 @@ int main(int argc, char** argv){
 
 		view.setDeviceDataList(deviceDataList);
 
-		EntryEditControllerImpl entryEditController;
+		EntryEditController entryEditController;
 		entryEditController.setContentParserFactory(contentParserFactory);
 		entryEditController.setView(*view.entryEditor);
 		entryEditController.setDeviceDataList(deviceDataList);
 		entryEditController.setListCfg(listcfg);
 		entryEditController.setApplicationObject(application.applicationObject);
 
-		MainControllerImpl mainController;
+		MainController mainController;
 		mainController.setListCfg(listcfg);
 		mainController.setSettingsManager(settings);
 		mainController.setSettingsBuffer(settingsOnDisk);
@@ -102,20 +102,20 @@ int main(int argc, char** argv){
 		mainController.setEntryNameMapper(entryNameMapper);
 		mainController.setApplicationObject(application.applicationObject);
 
-		SettingsControllerImpl settingsController;
+		SettingsController settingsController;
 		settingsController.setListCfg(listcfg);
 		settingsController.setView(*view.settings);
 		settingsController.setSettingsManager(settings);
 		settingsController.setFbResolutionsGetter(fbResolutionsGetter);
 		settingsController.setApplicationObject(application.applicationObject);
 
-		EnvEditorControllerImpl envEditController;
+		EnvEditorController envEditController;
 		envEditController.setMountTable(mountTable);
 		envEditController.setView(*view.envEditor);
 		envEditController.setDeviceMap(deviceMap);
 		envEditController.setApplicationObject(application.applicationObject);
 
-		TrashControllerImpl trashController;
+		TrashController trashController;
 		trashController.setEntryNameMapper(entryNameMapper);
 		trashController.setListCfg(listcfg);
 		trashController.setDeviceDataList(deviceDataList);
@@ -123,20 +123,20 @@ int main(int argc, char** argv){
 		trashController.setView(*view.trash);
 		trashController.setApplicationObject(application.applicationObject);
 
-		InstallerControllerImpl installController;
+		InstallerController installController;
 		installController.setInstaller(installer);
 		installController.setView(*view.installer);
 		installController.setApplicationObject(application.applicationObject);
 
-		AboutControllerImpl aboutController;
+		AboutController aboutController;
 		aboutController.setView(*view.about);
 		aboutController.setApplicationObject(application.applicationObject);
 
-		ErrorControllerImpl errorController;
+		ErrorController errorController;
 		errorController.setView(*view.error);
 		errorController.setApplicationObject(application.applicationObject);
 
-		ThemeControllerImpl themeController;
+		ThemeController themeController;
 		themeController.setView(*view.theme);
 		themeController.setThemeManager(themeManager);
 		themeController.setSettingsManager(settings);

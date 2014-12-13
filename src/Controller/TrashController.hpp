@@ -42,7 +42,7 @@
 #include "../lib/ContentParserFactory.hpp"
 #include "Helper/DeviceInfo.hpp"
 
-class TrashControllerImpl :
+class TrashController :
 	public ControllerAbstract,
 	public View_Trait_ViewAware<View_Trash>,
 	public Model_ListCfg_Connection,
@@ -115,7 +115,7 @@ class TrashControllerImpl :
 
 	std::list<Model_Rule> data;
 public:
-	TrashControllerImpl() : ControllerAbstract("trash")
+	TrashController() : ControllerAbstract("trash")
 	{
 	}
 
@@ -123,19 +123,19 @@ public:
 	{
 		using namespace std::placeholders;
 
-		this->view->onRestore = std::bind(std::mem_fn(&TrashControllerImpl::applyAction), this);
-		this->view->onDeleteClick = std::bind(std::mem_fn(&TrashControllerImpl::deleteCustomEntriesAction), this);
-		this->view->onSelectionChange = std::bind(std::mem_fn(&TrashControllerImpl::updateSelectionAction), this, _1);
+		this->view->onRestore = std::bind(std::mem_fn(&TrashController::applyAction), this);
+		this->view->onDeleteClick = std::bind(std::mem_fn(&TrashController::deleteCustomEntriesAction), this);
+		this->view->onSelectionChange = std::bind(std::mem_fn(&TrashController::updateSelectionAction), this, _1);
 	}
 
 	void initApplicationEvents() override
 	{
 		using namespace std::placeholders;
 
-		this->applicationObject->onEnvChange.addHandler(std::bind(std::mem_fn(&TrashControllerImpl::hideAction), this));
-		this->applicationObject->onListModelChange.addHandler(std::bind(std::mem_fn(&TrashControllerImpl::updateAction), this));
-		this->applicationObject->onEntryRemove.addHandler(std::bind(std::mem_fn(&TrashControllerImpl::selectEntriesAction), this, _1));
-		this->applicationObject->onEntrySelection.addHandler(std::bind(std::mem_fn(&TrashControllerImpl::selectEntriesAction), this, std::list<Entry*>()));
+		this->applicationObject->onEnvChange.addHandler(std::bind(std::mem_fn(&TrashController::hideAction), this));
+		this->applicationObject->onListModelChange.addHandler(std::bind(std::mem_fn(&TrashController::updateAction), this));
+		this->applicationObject->onEntryRemove.addHandler(std::bind(std::mem_fn(&TrashController::selectEntriesAction), this, _1));
+		this->applicationObject->onEntrySelection.addHandler(std::bind(std::mem_fn(&TrashController::selectEntriesAction), this, std::list<Entry*>()));
 	}
 
 	

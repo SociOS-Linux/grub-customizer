@@ -46,7 +46,7 @@
 #include "../lib/Exception.hpp"
 #include "Helper/Thread.hpp"
 
-class SettingsControllerImpl :
+class SettingsController :
 	public ControllerAbstract,
 	public View_Trait_ViewAware<View_Settings>,
 	public Model_ListCfg_Connection,
@@ -68,7 +68,7 @@ public:
 		this->view->show();
 	}
 
-	SettingsControllerImpl() : ControllerAbstract("settings"),
+	SettingsController() : ControllerAbstract("settings"),
 		 syncActive(false)
 	{
 	}
@@ -77,41 +77,41 @@ public:
 	{
 		using namespace std::placeholders;
 
-		this->view->onDefaultSystemChange = std::bind(std::mem_fn(&SettingsControllerImpl::updateDefaultSystemAction), this);
-		this->view->onCustomSettingChange = std::bind(std::mem_fn(&SettingsControllerImpl::updateCustomSettingAction), this, _1);
-		this->view->onAddCustomSettingClick = std::bind(std::mem_fn(&SettingsControllerImpl::addCustomSettingAction), this);
-		this->view->onRemoveCustomSettingClick = std::bind(std::mem_fn(&SettingsControllerImpl::removeCustomSettingAction), this, _1);
-		this->view->onShowMenuSettingChange = std::bind(std::mem_fn(&SettingsControllerImpl::updateShowMenuSettingAction), this);
-		this->view->onOsProberSettingChange = std::bind(std::mem_fn(&SettingsControllerImpl::updateOsProberSettingAction), this);
-		this->view->onTimeoutSettingChange = std::bind(std::mem_fn(&SettingsControllerImpl::updateTimeoutSettingAction), this);
-		this->view->onKernelParamsChange = std::bind(std::mem_fn(&SettingsControllerImpl::updateKernelParamsAction), this);
-		this->view->onRecoverySettingChange = std::bind(std::mem_fn(&SettingsControllerImpl::updateRecoverySettingAction), this);
-		this->view->onCustomResolutionChange = std::bind(std::mem_fn(&SettingsControllerImpl::updateCustomResolutionAction), this);
-		this->view->onUseCustomResolutionChange = std::bind(std::mem_fn(&SettingsControllerImpl::updateUseCustomResolutionAction), this);
-		this->view->onHide = std::bind(std::mem_fn(&SettingsControllerImpl::hideAction), this);
+		this->view->onDefaultSystemChange = std::bind(std::mem_fn(&SettingsController::updateDefaultSystemAction), this);
+		this->view->onCustomSettingChange = std::bind(std::mem_fn(&SettingsController::updateCustomSettingAction), this, _1);
+		this->view->onAddCustomSettingClick = std::bind(std::mem_fn(&SettingsController::addCustomSettingAction), this);
+		this->view->onRemoveCustomSettingClick = std::bind(std::mem_fn(&SettingsController::removeCustomSettingAction), this, _1);
+		this->view->onShowMenuSettingChange = std::bind(std::mem_fn(&SettingsController::updateShowMenuSettingAction), this);
+		this->view->onOsProberSettingChange = std::bind(std::mem_fn(&SettingsController::updateOsProberSettingAction), this);
+		this->view->onTimeoutSettingChange = std::bind(std::mem_fn(&SettingsController::updateTimeoutSettingAction), this);
+		this->view->onKernelParamsChange = std::bind(std::mem_fn(&SettingsController::updateKernelParamsAction), this);
+		this->view->onRecoverySettingChange = std::bind(std::mem_fn(&SettingsController::updateRecoverySettingAction), this);
+		this->view->onCustomResolutionChange = std::bind(std::mem_fn(&SettingsController::updateCustomResolutionAction), this);
+		this->view->onUseCustomResolutionChange = std::bind(std::mem_fn(&SettingsController::updateUseCustomResolutionAction), this);
+		this->view->onHide = std::bind(std::mem_fn(&SettingsController::hideAction), this);
 	}
 
 	void initFbResolutionsGetterEvents() override
 	{
-		this->fbResolutionsGetter->onFinish = std::bind(std::mem_fn(&SettingsControllerImpl::updateResolutionlistThreadedAction), this);
+		this->fbResolutionsGetter->onFinish = std::bind(std::mem_fn(&SettingsController::updateResolutionlistThreadedAction), this);
 	}
 
 	void initApplicationEvents() override
 	{
-		this->applicationObject->onSettingsShowRequest.addHandler(std::bind(std::mem_fn(&SettingsControllerImpl::showAction), this));
-		this->applicationObject->onEnvChange.addHandler(std::bind(std::mem_fn(&SettingsControllerImpl::hideAction), this));
+		this->applicationObject->onSettingsShowRequest.addHandler(std::bind(std::mem_fn(&SettingsController::showAction), this));
+		this->applicationObject->onEnvChange.addHandler(std::bind(std::mem_fn(&SettingsController::hideAction), this));
 
 		this->applicationObject->onInit.addHandler(
 			[this] () {
 				//loading the framebuffer resolutions in background…
 				this->log("Loading Framebuffer resolutions (background process)", Logger::EVENT);
-				this->threadHelper->runAsThread(std::bind(std::mem_fn(&SettingsControllerImpl::loadResolutionsAction), this));
+				this->threadHelper->runAsThread(std::bind(std::mem_fn(&SettingsController::loadResolutionsAction), this));
 			}
 		);
 
-		this->applicationObject->onListModelChange.addHandler(std::bind(std::mem_fn(&SettingsControllerImpl::updateSettingsDataAction), this));
+		this->applicationObject->onListModelChange.addHandler(std::bind(std::mem_fn(&SettingsController::updateSettingsDataAction), this));
 
-		this->applicationObject->onSettingModelChange.addHandler(std::bind(std::mem_fn(&SettingsControllerImpl::syncAction), this));
+		this->applicationObject->onSettingModelChange.addHandler(std::bind(std::mem_fn(&SettingsController::syncAction), this));
 	}
 
 	//dispatchers
@@ -162,7 +162,7 @@ public:
 	void updateResolutionlistThreadedAction() {
 		this->logActionBeginThreaded("update-resolutionlist-threaded");
 		try {
-			this->threadHelper->runDispatched(std::bind(std::mem_fn(&SettingsControllerImpl::updateResolutionlistAction), this));
+			this->threadHelper->runDispatched(std::bind(std::mem_fn(&SettingsController::updateResolutionlistAction), this));
 		} catch (Exception const& e) {
 			this->applicationObject->onThreadError.exec(e);
 		}

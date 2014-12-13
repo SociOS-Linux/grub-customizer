@@ -35,7 +35,7 @@
 #include "ControllerAbstract.hpp"
 
 
-class EnvEditorControllerImpl :
+class EnvEditorController :
 	public ControllerAbstract,
 	public View_Trait_ViewAware<View_EnvEditor>,
 	public Model_Env_Connection,
@@ -67,7 +67,7 @@ public:
 	}
 
 
-	EnvEditorControllerImpl() : ControllerAbstract("env-editor"),
+	EnvEditorController() : ControllerAbstract("env-editor"),
 		 mountTable(NULL),
 		 deviceMap(NULL)
 	{
@@ -77,20 +77,20 @@ public:
 	{
 		using namespace std::placeholders;
 
-		this->view->onMountSubmountpointClick = std::bind(std::mem_fn(&EnvEditorControllerImpl::mountSubmountpointAction), this, _1);
-		this->view->onUmountSubmountpointClick = std::bind(std::mem_fn(&EnvEditorControllerImpl::umountSubmountpointAction), this, _1);
-		this->view->onSwitchPartition = std::bind(std::mem_fn(&EnvEditorControllerImpl::switchPartitionAction), this, _1);
-		this->view->onSwitchBootloaderType = std::bind(std::mem_fn(&EnvEditorControllerImpl::switchBootloaderTypeAction), this, _1);
-		this->view->onOptionChange = std::bind(std::mem_fn(&EnvEditorControllerImpl::updateGrubEnvOptionsAction), this);
-		this->view->onApplyClick = std::bind(std::mem_fn(&EnvEditorControllerImpl::applyAction), this, _1);
-		this->view->onExitClick = std::bind(std::mem_fn(&EnvEditorControllerImpl::exitAction), this);
+		this->view->onMountSubmountpointClick = std::bind(std::mem_fn(&EnvEditorController::mountSubmountpointAction), this, _1);
+		this->view->onUmountSubmountpointClick = std::bind(std::mem_fn(&EnvEditorController::umountSubmountpointAction), this, _1);
+		this->view->onSwitchPartition = std::bind(std::mem_fn(&EnvEditorController::switchPartitionAction), this, _1);
+		this->view->onSwitchBootloaderType = std::bind(std::mem_fn(&EnvEditorController::switchBootloaderTypeAction), this, _1);
+		this->view->onOptionChange = std::bind(std::mem_fn(&EnvEditorController::updateGrubEnvOptionsAction), this);
+		this->view->onApplyClick = std::bind(std::mem_fn(&EnvEditorController::applyAction), this, _1);
+		this->view->onExitClick = std::bind(std::mem_fn(&EnvEditorController::exitAction), this);
 	}
 
 	void initApplicationEvents() override
 	{
 		using namespace std::placeholders;
 
-		this->applicationObject->onEnvEditorShowRequest.addHandler(std::bind(std::mem_fn(&EnvEditorControllerImpl::showAction), this, false));
+		this->applicationObject->onEnvEditorShowRequest.addHandler(std::bind(std::mem_fn(&EnvEditorController::showAction), this, false));
 	}
 
 	
