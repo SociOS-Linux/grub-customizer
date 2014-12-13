@@ -31,7 +31,6 @@
 #include "../lib/ContentParser/Memtest.hpp"
 #include "../lib/Logger/Stream.hpp"
 #include "../Mapper/EntryNameImpl.hpp"
-#include "../Model/Env.hpp"
 #include "../Model/ThemeManager.hpp"
 #include "../config.hpp"
 #include "../Controller/AboutController.hpp"
@@ -61,80 +60,30 @@ int main(int argc, char** argv){
 		auto view                 = std::make_shared<Bootstrap_View>();
 		auto thread               = std::make_shared<Bootstrap_Thread>();
 		auto regex                = std::make_shared<Bootstrap_Regex>();
-		auto factory              = std::make_shared<Bootstrap_Factory>();
+		auto factory              = std::make_shared<Bootstrap_Factory>(application->applicationObject);
 
-		auto env                  = std::make_shared<Model_Env>();
-		auto listcfg              = std::make_shared<Model_ListCfg>();
-		auto settings             = std::make_shared<Model_SettingsManagerData>();
 		auto settingsOnDisk       = std::make_shared<Model_SettingsManagerData>();
-		auto installer            = std::make_shared<Model_Installer>();
-		auto mountTable           = std::make_shared<Model_MountTable>();
 		auto savedListCfg         = std::make_shared<Model_ListCfg>();
-		auto fbResolutionsGetter  = std::make_shared<Model_FbResolutionsGetter>();
-		auto deviceDataList       = std::make_shared<Model_DeviceDataList>();
-		auto contentParserFactory = std::make_shared<ContentParser_FactoryImpl>();
-		auto entryNameMapper      = std::make_shared<Mapper_EntryNameImpl>();
-		auto themeManager         = std::make_shared<Model_ThemeManager>();
-		auto deviceMap            = std::make_shared<Model_DeviceMap>();
 
-		deviceMap->setRegexEngine(regex->engine);
+		factory->deviceMap->setRegexEngine(regex->engine);
 
-		entryNameMapper->setView(view->main);
+		factory->entryNameMapper->setView(view->main);
 
-		view->entryEditor->setDeviceDataList(deviceDataList);
-		view->envEditor->setDeviceDataList(deviceDataList);
+		view->entryEditor->setDeviceDataList(factory->deviceDataList);
+		view->envEditor->setDeviceDataList(factory->deviceDataList);
 
 		auto entryEditController = factory->createController<EntryEditController>(view->entryEditor);
-		entryEditController->setContentParserFactory(contentParserFactory);
-		entryEditController->setDeviceDataList(deviceDataList);
-		entryEditController->setListCfg(listcfg);
-		entryEditController->setApplicationObject(application->applicationObject);
+		auto mainController      = factory->createController<MainController>(view->main);
+		auto settingsController  = factory->createController<SettingsController>(view->settings);
+		auto envEditController   = factory->createController<EnvEditorController>(view->envEditor);
+		auto trashController     = factory->createController<TrashController>(view->trash);
+		auto installController   = factory->createController<InstallerController>(view->installer);
+		auto aboutController     = factory->createController<AboutController>(view->about);
+		auto errorController     = factory->createController<ErrorController>(view->error);
+		auto themeController     = factory->createController<ThemeController>(view->theme);
 
-		auto mainController = factory->createController<MainController>(view->main);
-		mainController->setListCfg(listcfg);
-		mainController->setSettingsManager(settings);
 		mainController->setSettingsBuffer(settingsOnDisk);
 		mainController->setSavedListCfg(savedListCfg);
-		mainController->setFbResolutionsGetter(fbResolutionsGetter);
-		mainController->setDeviceDataList(deviceDataList);
-		mainController->setMountTable(mountTable);
-		mainController->setContentParserFactory(contentParserFactory);
-		mainController->setEntryNameMapper(entryNameMapper);
-		mainController->setApplicationObject(application->applicationObject);
-
-		auto settingsController = factory->createController<SettingsController>(view->settings);
-		settingsController->setListCfg(listcfg);
-		settingsController->setSettingsManager(settings);
-		settingsController->setFbResolutionsGetter(fbResolutionsGetter);
-		settingsController->setApplicationObject(application->applicationObject);
-
-		auto envEditController = factory->createController<EnvEditorController>(view->envEditor);
-		envEditController->setMountTable(mountTable);
-		envEditController->setDeviceMap(deviceMap);
-		envEditController->setApplicationObject(application->applicationObject);
-
-		auto trashController = factory->createController<TrashController>(view->trash);
-		trashController->setEntryNameMapper(entryNameMapper);
-		trashController->setListCfg(listcfg);
-		trashController->setDeviceDataList(deviceDataList);
-		trashController->setContentParserFactory(contentParserFactory);
-		trashController->setApplicationObject(application->applicationObject);
-
-		auto installController = factory->createController<InstallerController>(view->installer);
-		installController->setInstaller(installer);
-		installController->setApplicationObject(application->applicationObject);
-
-		auto aboutController = factory->createController<AboutController>(view->about);
-		aboutController->setApplicationObject(application->applicationObject);
-
-		auto errorController = factory->createController<ErrorController>(view->error);
-		errorController->setApplicationObject(application->applicationObject);
-
-		auto themeController = factory->createController<ThemeController>(view->theme);
-		themeController->setThemeManager(themeManager);
-		themeController->setSettingsManager(settings);
-		themeController->setListCfg(listcfg);
-		themeController->setApplicationObject(application->applicationObject);
 
 		mainController->setThreadHelper(thread->threadHelper);
 		settingsController->setThreadHelper(thread->threadHelper);
@@ -144,23 +93,23 @@ int main(int argc, char** argv){
 		themeController->setThreadHelper(thread->threadHelper);
 
 		//assign logger
-		listcfg->setLogger(logger);
+		factory->listcfg->setLogger(logger);
 		view->main->setLogger(logger);
-		settings->setLogger(logger);
+		factory->settings->setLogger(logger);
 		settingsOnDisk->setLogger(logger);
-		installer->setLogger(logger);
+		factory->installer->setLogger(logger);
 		view->installer->setLogger(logger);
 		view->trash->setLogger(logger);
 		view->entryEditor->setLogger(logger);
-		mountTable->setLogger(logger);
+		factory->mountTable->setLogger(logger);
 		savedListCfg->setLogger(logger);
-		fbResolutionsGetter->setLogger(logger);
+		factory->fbResolutionsGetter->setLogger(logger);
 		view->settings->setLogger(logger);
-		deviceDataList->setLogger(logger);
+		factory->deviceDataList->setLogger(logger);
 		view->about->setLogger(logger);
 		thread->mutex1->setLogger(logger);
 		thread->mutex2->setLogger(logger);
-		env->setLogger(logger);
+		factory->env->setLogger(logger);
 		view->envEditor->setLogger(logger);
 		mainController->setLogger(logger);
 		entryEditController->setLogger(logger);
@@ -195,41 +144,41 @@ int main(int argc, char** argv){
 		auto chainloadParser = std::make_shared<ContentParser_Chainloader>();
 		auto memtestParser = std::make_shared<ContentParser_Memtest>();
 
-		linuxParser->setDeviceMap(deviceMap);
-		linuxIsoParser->setDeviceMap(deviceMap);
-		chainloadParser->setDeviceMap(deviceMap);
-		memtestParser->setDeviceMap(deviceMap);
+		linuxParser->setDeviceMap(factory->deviceMap);
+		linuxIsoParser->setDeviceMap(factory->deviceMap);
+		chainloadParser->setDeviceMap(factory->deviceMap);
+		memtestParser->setDeviceMap(factory->deviceMap);
 
-		contentParserFactory->registerParser(linuxParser, gettext("Linux"));
-		contentParserFactory->registerParser(linuxIsoParser, gettext("Linux-ISO"));
-		contentParserFactory->registerParser(chainloadParser, gettext("Chainloader"));
-		contentParserFactory->registerParser(memtestParser, gettext("Memtest"));
+		factory->contentParserFactory->registerParser(linuxParser, gettext("Linux"));
+		factory->contentParserFactory->registerParser(linuxIsoParser, gettext("Linux-ISO"));
+		factory->contentParserFactory->registerParser(chainloadParser, gettext("Chainloader"));
+		factory->contentParserFactory->registerParser(memtestParser, gettext("Memtest"));
 
 		linuxParser->setRegexEngine(regex->engine);
 		linuxIsoParser->setRegexEngine(regex->engine);
 		chainloadParser->setRegexEngine(regex->engine);
 		memtestParser->setRegexEngine(regex->engine);
 
-		view->entryEditor->setAvailableEntryTypes(contentParserFactory->getNames());
+		view->entryEditor->setAvailableEntryTypes(factory->contentParserFactory->getNames());
 
 		//set env
-		listcfg->setEnv(env);
-		savedListCfg->setEnv(env);
-		settings->setEnv(env);
-		settingsOnDisk->setEnv(env);
-		installer->setEnv(env);
-		themeManager->setEnv(env);
-		entryEditController->setEnv(env);
-		mainController->setEnv(env);
-		settingsController->setEnv(env);
-		envEditController->setEnv(env);
-		trashController->setEnv(env);
-		installController->setEnv(env);
-		themeController->setEnv(env);
-		deviceMap->setEnv(env);
+		factory->listcfg->setEnv(factory->env);
+		savedListCfg->setEnv(factory->env);
+		factory->settings->setEnv(factory->env);
+		settingsOnDisk->setEnv(factory->env);
+		factory->installer->setEnv(factory->env);
+		factory->themeManager->setEnv(factory->env);
+		entryEditController->setEnv(factory->env);
+		mainController->setEnv(factory->env);
+		settingsController->setEnv(factory->env);
+		envEditController->setEnv(factory->env);
+		trashController->setEnv(factory->env);
+		installController->setEnv(factory->env);
+		themeController->setEnv(factory->env);
+		factory->deviceMap->setEnv(factory->env);
 
 		//set mutex
-		listcfg->setMutex(thread->mutex1);
+		factory->listcfg->setMutex(thread->mutex1);
 		savedListCfg->setMutex(thread->mutex2);
 
 		mainController->initAction();
