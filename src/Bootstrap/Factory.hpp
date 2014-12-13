@@ -81,51 +81,51 @@ class Bootstrap_Factory
 	{
 		{
 			std::shared_ptr<Model_Env_Connection> objc = std::dynamic_pointer_cast<Model_Env_Connection>(obj);
-			if (objc) {objc->setEnv(this->env);}
+			if (objc) {assert(this->env); objc->setEnv(this->env);}
 		}
 		{
 			std::shared_ptr<Model_ListCfg_Connection> objc = std::dynamic_pointer_cast<Model_ListCfg_Connection>(obj);
-			if (objc) {objc->setListCfg(this->listcfg);}
+			if (objc) {assert(this->listcfg); objc->setListCfg(this->listcfg);}
 		}
 		{
 			std::shared_ptr<Model_SettingsManagerData_Connection> objc = std::dynamic_pointer_cast<Model_SettingsManagerData_Connection>(obj);
-			if (objc) {objc->setSettingsManager(this->settings);}
+			if (objc) {assert(this->settings); objc->setSettingsManager(this->settings);}
 		}
 		{
 			std::shared_ptr<Model_Installer_Connection> objc = std::dynamic_pointer_cast<Model_Installer_Connection>(obj);
-			if (objc) {objc->setInstaller(this->installer);}
+			if (objc) {assert(this->installer); objc->setInstaller(this->installer);}
 		}
 		{
 			std::shared_ptr<Model_MountTable_Connection> objc = std::dynamic_pointer_cast<Model_MountTable_Connection>(obj);
-			if (objc) {objc->setMountTable(this->mountTable);}
+			if (objc) {assert(this->mountTable); objc->setMountTable(this->mountTable);}
 		}
 		{
 			std::shared_ptr<Model_FbResolutionsGetter_Connection> objc = std::dynamic_pointer_cast<Model_FbResolutionsGetter_Connection>(obj);
-			if (objc) {objc->setFbResolutionsGetter(this->fbResolutionsGetter);}
+			if (objc) {assert(this->fbResolutionsGetter); objc->setFbResolutionsGetter(this->fbResolutionsGetter);}
 		}
 		{
 			std::shared_ptr<Model_DeviceDataList_Connection> objc = std::dynamic_pointer_cast<Model_DeviceDataList_Connection>(obj);
-			if (objc) {objc->setDeviceDataList(this->deviceDataList);}
+			if (objc) {assert(this->deviceDataList); objc->setDeviceDataList(this->deviceDataList);}
 		}
 		{
 			std::shared_ptr<Model_DeviceDataListInterface_Connection> objc = std::dynamic_pointer_cast<Model_DeviceDataListInterface_Connection>(obj);
-			if (objc) {objc->setDeviceDataList(this->deviceDataList);}
+			if (objc) {assert(this->deviceDataList); objc->setDeviceDataList(this->deviceDataList);}
 		}
 		{
 			std::shared_ptr<ContentParserFactory_Connection> objc = std::dynamic_pointer_cast<ContentParserFactory_Connection>(obj);
-			if (objc) {objc->setContentParserFactory(this->contentParserFactory);}
+			if (objc) {assert(this->contentParserFactory); objc->setContentParserFactory(this->contentParserFactory);}
 		}
 		{
 			std::shared_ptr<Mapper_EntryName_Connection> objc = std::dynamic_pointer_cast<Mapper_EntryName_Connection>(obj);
-			if (objc) {objc->setEntryNameMapper(this->entryNameMapper);}
+			if (objc) {assert(this->entryNameMapper); objc->setEntryNameMapper(this->entryNameMapper);}
 		}
 		{
 			std::shared_ptr<Model_ThemeManager_Connection> objc = std::dynamic_pointer_cast<Model_ThemeManager_Connection>(obj);
-			if (objc) {objc->setThemeManager(this->themeManager);}
+			if (objc) {assert(this->themeManager); objc->setThemeManager(this->themeManager);}
 		}
 		{
 			std::shared_ptr<Model_DeviceMap_Connection> objc = std::dynamic_pointer_cast<Model_DeviceMap_Connection>(obj);
-			if (objc) {objc->setDeviceMap(this->deviceMap);}
+			if (objc) {assert(this->deviceMap); objc->setDeviceMap(this->deviceMap);}
 		}
 	}
 };
