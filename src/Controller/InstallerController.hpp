@@ -30,7 +30,7 @@
 #include "../View/Installer.hpp"
 #include "../View/Trait/ViewAware.hpp"
 
-#include "../Controller/ControllerAbstract.hpp"
+#include "Common/ControllerAbstract.hpp"
 
 #include "../lib/Exception.hpp"
 
@@ -38,7 +38,7 @@
 
 
 class InstallerController :
-	public ControllerAbstract,
+	public Controller_Common_ControllerAbstract,
 	public View_Trait_ViewAware<View_Installer>,
 	public Model_Installer_Connection,
 	public Model_Env_Connection,
@@ -46,7 +46,7 @@ class InstallerController :
 	public Bootstrap_Application_Object_Connection
 {
 public:
-	InstallerController() : ControllerAbstract("installer")
+	InstallerController() : Controller_Common_ControllerAbstract("installer")
 	{
 	}
 

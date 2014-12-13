@@ -55,7 +55,7 @@ src/Bootstrap/Regex.hpp -text
 src/Bootstrap/Thread.hpp -text
 src/Bootstrap/View.hpp -text
 src/Controller/AboutController.hpp -text
-src/Controller/ControllerAbstract.hpp -text
+src/Controller/Common/ControllerAbstract.hpp -text
 src/Controller/EntryEditController.hpp -text
 src/Controller/EnvEditorController.hpp -text
 src/Controller/ErrorController.hpp -text

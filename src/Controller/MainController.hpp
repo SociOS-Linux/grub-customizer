@@ -35,7 +35,7 @@
 #include "../Model/DeviceDataList.hpp"
 #include "../lib/ContentParserFactory.hpp"
 
-#include "../Controller/ControllerAbstract.hpp"
+#include "Common/ControllerAbstract.hpp"
 
 #include "../lib/Trait/LoggerAware.hpp"
 #include "../lib/Exception.hpp"
@@ -50,7 +50,7 @@
  */
 
 class MainController :
-	public ControllerAbstract,
+	public Controller_Common_ControllerAbstract,
 	public View_Trait_ViewAware<View_Main>,
 	public Model_ListCfg_Connection,
 	public Model_SettingsManagerData_Connection,
@@ -617,7 +617,7 @@ public:
 		this->logActionEndThreaded();
 	}
 
-	MainController() : ControllerAbstract("main"),
+	MainController() : Controller_Common_ControllerAbstract("main"),
 		  settingsOnDisk(NULL),
 		  savedListCfg(NULL),
 		 config_has_been_different_on_startup_but_unsaved(false),

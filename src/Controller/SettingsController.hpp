@@ -39,7 +39,7 @@
 #include "../lib/ContentParserFactory.hpp"
 #include "../Mapper/EntryName.hpp"
 
-#include "../Controller/ControllerAbstract.hpp"
+#include "Common/ControllerAbstract.hpp"
 
 #include "../lib/Trait/LoggerAware.hpp"
 
@@ -47,7 +47,7 @@
 #include "Helper/Thread.hpp"
 
 class SettingsController :
-	public ControllerAbstract,
+	public Controller_Common_ControllerAbstract,
 	public View_Trait_ViewAware<View_Settings>,
 	public Model_ListCfg_Connection,
 	public Model_SettingsManagerData_Connection,
@@ -68,7 +68,7 @@ public:
 		this->view->show();
 	}
 
-	SettingsController() : ControllerAbstract("settings"),
+	SettingsController() : Controller_Common_ControllerAbstract("settings"),
 		 syncActive(false)
 	{
 	}

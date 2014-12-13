@@ -32,11 +32,11 @@
 #include "../View/EnvEditor.hpp"
 #include "../View/Trait/ViewAware.hpp"
 
-#include "ControllerAbstract.hpp"
+#include "Common/ControllerAbstract.hpp"
 
 
 class EnvEditorController :
-	public ControllerAbstract,
+	public Controller_Common_ControllerAbstract,
 	public View_Trait_ViewAware<View_EnvEditor>,
 	public Model_Env_Connection,
 	public Bootstrap_Application_Object_Connection
@@ -67,7 +67,7 @@ public:
 	}
 
 
-	EnvEditorController() : ControllerAbstract("env-editor"),
+	EnvEditorController() : Controller_Common_ControllerAbstract("env-editor"),
 		 mountTable(NULL),
 		 deviceMap(NULL)
 	{

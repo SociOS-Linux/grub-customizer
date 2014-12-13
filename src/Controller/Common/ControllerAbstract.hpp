@@ -19,11 +19,11 @@
 #ifndef CONTROLLER_ABSTRACT_H_
 #define CONTROLLER_ABSTRACT_H_
 
-#include "../lib/Trait/ActionLoggerAware.hpp"
+#include "../../lib/Trait/ActionLoggerAware.hpp"
 
-class ControllerAbstract : public Trait_ActionLoggerAware {
+class Controller_Common_ControllerAbstract : public Trait_ActionLoggerAware {
 public:
-	ControllerAbstract(std::string const& controllerName) {
+	Controller_Common_ControllerAbstract(std::string const& controllerName) {
 		this->setControllerName(controllerName);
 	}
 };

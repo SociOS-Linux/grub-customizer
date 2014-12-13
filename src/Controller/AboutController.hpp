@@ -28,15 +28,15 @@
 
 #include "../View/About.hpp"
 #include "../View/Trait/ViewAware.hpp"
-#include "ControllerAbstract.hpp"
+#include "Common/ControllerAbstract.hpp"
 
 class AboutController :
-	public ControllerAbstract,
+	public Controller_Common_ControllerAbstract,
 	public View_Trait_ViewAware<View_About>,
 	public Bootstrap_Application_Object_Connection
 {
 public:
-	AboutController() : ControllerAbstract("about")
+	AboutController() : Controller_Common_ControllerAbstract("about")
 	{
 	}
 

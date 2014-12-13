@@ -27,11 +27,11 @@
 #include <functional>
 
 #include "../Model/ThemeManager.hpp"
-#include "ControllerAbstract.hpp"
+#include "Common/ControllerAbstract.hpp"
 #include "Helper/Thread.hpp"
 
 class ThemeController :
-	public ControllerAbstract,
+	public Controller_Common_ControllerAbstract,
 	public View_Trait_ViewAware<View_Theme>,
 	public Model_ThemeManager_Connection,
 	public Model_SettingsManagerData_Connection,
@@ -150,7 +150,7 @@ class ThemeController :
 	}
 
 public:
-	ThemeController() : ControllerAbstract("theme"),
+	ThemeController() : Controller_Common_ControllerAbstract("theme"),
 		  syncActive(false)
 	{
 	}

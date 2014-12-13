@@ -36,14 +36,14 @@
 #include "../View/Trait/ViewAware.hpp"
 #include "../Mapper/EntryName.hpp"
 
-#include "../Controller/ControllerAbstract.hpp"
+#include "Common/ControllerAbstract.hpp"
 
 #include "../Model/DeviceDataListInterface.hpp"
 #include "../lib/ContentParserFactory.hpp"
 #include "Helper/DeviceInfo.hpp"
 
 class TrashController :
-	public ControllerAbstract,
+	public Controller_Common_ControllerAbstract,
 	public View_Trait_ViewAware<View_Trash>,
 	public Model_ListCfg_Connection,
 	public Mapper_EntryName_Connection,
@@ -115,7 +115,7 @@ class TrashController :
 
 	std::list<Model_Rule> data;
 public:
-	TrashController() : ControllerAbstract("trash")
+	TrashController() : Controller_Common_ControllerAbstract("trash")
 	{
 	}
 

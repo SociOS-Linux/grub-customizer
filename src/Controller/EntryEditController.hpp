@@ -32,7 +32,7 @@
 
 #include "../Model/ListCfg.hpp"
 #include "../lib/Trait/LoggerAware.hpp"
-#include "../Controller/ControllerAbstract.hpp"
+#include "Common/ControllerAbstract.hpp"
 #include "../lib/ContentParserFactory.hpp"
 #include "../lib/Exception.hpp"
 #include "../Model/DeviceDataList.hpp"
@@ -42,7 +42,7 @@
 
 
 class EntryEditController :
-	public ControllerAbstract,
+	public Controller_Common_ControllerAbstract,
 	public View_Trait_ViewAware<View_EntryEditor>,
 	public Model_ListCfg_Connection,
 	public ContentParserFactory_Connection,
@@ -60,7 +60,7 @@ class EntryEditController :
 	}
 
 public:
-	EntryEditController() : ControllerAbstract("entry-edit"),
+	EntryEditController() : Controller_Common_ControllerAbstract("entry-edit"),
 		 currentContentParser(NULL)
 	{
 	}

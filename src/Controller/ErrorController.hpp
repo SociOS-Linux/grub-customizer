@@ -29,12 +29,12 @@
 #include "../View/Error.hpp"
 #include "../View/Trait/ViewAware.hpp"
 
-#include "../Controller/ControllerAbstract.hpp"
+#include "Common/ControllerAbstract.hpp"
 #include "Helper/Thread.hpp"
 
 
 class ErrorController :
-	public ControllerAbstract,
+	public Controller_Common_ControllerAbstract,
 	public View_Trait_ViewAware<View_Error>,
 	public Controller_Helper_Thread_Connection,
 	public Bootstrap_Application_Object_Connection
@@ -46,7 +46,7 @@ public:
 	}
 
 
-	ErrorController() : ControllerAbstract("error"),
+	ErrorController() : Controller_Common_ControllerAbstract("error"),
 		  applicationStarted(false)
 	{
 	}
