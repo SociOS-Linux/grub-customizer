@@ -23,7 +23,6 @@
 #include "../Bootstrap/View.hpp"
 #include "../Bootstrap/Application.hpp"
 #include "../Controller/AboutControllerImpl.hpp"
-#include "../Controller/ControllerCollection.hpp"
 #include "../Controller/EntryEditControllerImpl.hpp"
 #include "../Controller/EnvEditorControllerImpl.hpp"
 #include "../Controller/ErrorControllerImpl.hpp"
@@ -143,27 +142,6 @@ int main(int argc, char** argv){
 		themeController.setSettingsManager(settings);
 		themeController.setListCfg(listcfg);
 		themeController.setApplicationObject(application.applicationObject);
-
-		ControllerCollection controllerCollection;
-		controllerCollection.entryEditController = &entryEditController;
-		controllerCollection.mainController = &mainController;
-		controllerCollection.settingsController = &settingsController;
-		controllerCollection.envEditController = &envEditController;
-		controllerCollection.trashController = &trashController;
-		controllerCollection.installerController = &installController;
-		controllerCollection.aboutController = &aboutController;
-		controllerCollection.errorController = &errorController;
-		controllerCollection.themeController = &themeController;
-
-		entryEditController.setControllerCollection(controllerCollection);
-		mainController.setControllerCollection(controllerCollection);
-		settingsController.setControllerCollection(controllerCollection);
-		envEditController.setControllerCollection(controllerCollection);
-		trashController.setControllerCollection(controllerCollection);
-		installController.setControllerCollection(controllerCollection);
-		aboutController.setControllerCollection(controllerCollection);
-		errorController.setControllerCollection(controllerCollection);
-		themeController.setControllerCollection(controllerCollection);
 
 		mainController.setThreadHelper(*thread.threadHelper);
 		settingsController.setThreadHelper(*thread.threadHelper);

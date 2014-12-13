@@ -20,9 +20,8 @@
 #define CONTROLLER_ABSTRACT_H_
 
 #include "../lib/Trait/ActionLoggerAware.hpp"
-#include "ControllerCollection.hpp"
 
-class ControllerAbstract : public Trait_ActionLoggerAware, public ControllerCollection_Connection {
+class ControllerAbstract : public Trait_ActionLoggerAware {
 public:
 	ControllerAbstract(std::string const& controllerName) {
 		this->setControllerName(controllerName);

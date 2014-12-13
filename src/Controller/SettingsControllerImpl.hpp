@@ -46,12 +46,8 @@
 #include "../lib/Exception.hpp"
 #include "Helper/Thread.hpp"
 
-#include "SettingsController.hpp"
-
-
 class SettingsControllerImpl :
 	public ControllerAbstract,
-	public SettingsController,
 	public View_Trait_ViewAware<View_Settings>,
 	public Model_ListCfg_Connection,
 	public Model_SettingsManagerData_Connection,

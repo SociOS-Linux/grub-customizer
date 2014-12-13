@@ -41,12 +41,9 @@
 #include "../Model/DeviceDataListInterface.hpp"
 #include "../lib/ContentParserFactory.hpp"
 #include "Helper/DeviceInfo.hpp"
-#include "TrashController.hpp"
-
 
 class TrashControllerImpl :
 	public ControllerAbstract,
-	public TrashController,
 	public View_Trait_ViewAware<View_Trash>,
 	public Model_ListCfg_Connection,
 	public Mapper_EntryName_Connection,

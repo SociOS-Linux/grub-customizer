@@ -28,11 +28,9 @@
 
 #include "../Model/ThemeManager.hpp"
 #include "ControllerAbstract.hpp"
-#include "ThemeController.hpp"
 #include "Helper/Thread.hpp"
 
 class ThemeControllerImpl :
-	public ThemeController,
 	public ControllerAbstract,
 	public View_Trait_ViewAware<View_Theme>,
 	public Model_ThemeManager_Connection,

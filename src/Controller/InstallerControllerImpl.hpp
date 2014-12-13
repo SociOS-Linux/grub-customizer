@@ -34,13 +34,11 @@
 
 #include "../lib/Exception.hpp"
 
-#include "InstallerController.hpp"
 #include "Helper/Thread.hpp"
 
 
 class InstallerControllerImpl :
 	public ControllerAbstract,
-	public InstallerController,
 	public View_Trait_ViewAware<View_Installer>,
 	public Model_Installer_Connection,
 	public Model_Env_Connection,

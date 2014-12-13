@@ -45,15 +45,12 @@
 #include "Helper/DeviceInfo.hpp"
 #include "Helper/Thread.hpp"
 
-#include "MainController.hpp"
-
 /**
  * This controller operates on the entry list
  */
 
 class MainControllerImpl :
 	public ControllerAbstract,
-	public MainController,
 	public View_Trait_ViewAware<View_Main>,
 	public Model_ListCfg_Connection,
 	public Model_SettingsManagerData_Connection,

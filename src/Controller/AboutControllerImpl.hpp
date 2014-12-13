@@ -28,12 +28,10 @@
 
 #include "../View/About.hpp"
 #include "../View/Trait/ViewAware.hpp"
-#include "AboutController.hpp"
 #include "ControllerAbstract.hpp"
 
 class AboutControllerImpl :
 	public ControllerAbstract,
-	public AboutController,
 	public View_Trait_ViewAware<View_About>,
 	public Bootstrap_Application_Object_Connection
 {

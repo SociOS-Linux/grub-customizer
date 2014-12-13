@@ -33,12 +33,10 @@
 #include "../View/Trait/ViewAware.hpp"
 
 #include "ControllerAbstract.hpp"
-#include "EnvEditorController.hpp"
 
 
 class EnvEditorControllerImpl :
 	public ControllerAbstract,
-	public EnvEditorController,
 	public View_Trait_ViewAware<View_EnvEditor>,
 	public Model_Env_Connection,
 	public Bootstrap_Application_Object_Connection

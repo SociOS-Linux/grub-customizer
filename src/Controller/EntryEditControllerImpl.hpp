@@ -42,7 +42,6 @@
 
 
 class EntryEditControllerImpl :
-	public EntryEditController,
 	public ControllerAbstract,
 	public View_Trait_ViewAware<View_EntryEditor>,
 	public Model_ListCfg_Connection,
