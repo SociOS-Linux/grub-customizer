@@ -735,14 +735,14 @@ public:
 private:
 	void signal_fileAddClick() {
 		if (!event_lock) {
-			this->controller->addFileAction();
+			this->onAddFile();
 		}
 	}
 
 	void signal_fileRemoveClick() {
 		if (!event_lock) {
 			try {
-				this->controller->removeFileAction(this->_getSelectedFileName());
+				this->onRemoveFile(this->_getSelectedFileName());
 			} catch (ItemNotFoundException const& e) {
 				this->log("no file selected - ignoring event", Logger::ERROR);
 			}
@@ -752,7 +752,7 @@ private:
 	void signal_fileSelected() {
 		if (!event_lock) {
 			try {
-				this->controller->updateEditAreaAction(this->_getSelectedFileName());
+				this->onSelect(this->_getSelectedFileName());
 			} catch (ItemNotFoundException const& e) {
 				this->log("no file selected - ignoring event", Logger::INFO);
 			}
@@ -762,7 +762,7 @@ private:
 	void signal_fileRenamed(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter) {
 		if (!event_lock) {
 			try {
-				this->controller->renameAction(this->_getSelectedFileName());
+				this->onRename(this->_getSelectedFileName());
 			} catch (ItemNotFoundException const& e) {
 				this->log("no file selected - ignoring event", Logger::ERROR);
 			}
@@ -771,29 +771,29 @@ private:
 
 	void signal_fileChosen() {
 		if (!event_lock) {
-			this->controller->loadFileAction(fcFileSelection.get_filename());
+			this->onFileChoose(fcFileSelection.get_filename());
 		}
 	}
 
 	void signal_textChanged() {
 		if (!event_lock) {
-			this->controller->saveTextAction(txtEdit.get_buffer()->get_text());
+			this->onTextChange(txtEdit.get_buffer()->get_text());
 		}
 	}
 
 	void signal_themeChosen() {
 		if (!event_lock) {
 			if (this->cbTheme.get_active_row_number() == 0) {
-				this->controller->showSimpleThemeConfigAction();
+				this->onSimpleThemeSelected();
 			} else {
-				this->controller->loadThemeAction(cbTheme.get_active_text());
+				this->onThemeSelected(cbTheme.get_active_text());
 			}
 		}
 	}
 
 	void signal_addThemeClicked() {
 		if (!event_lock) {
-			this->controller->showThemeInstallerAction();
+			this->onAddThemeClicked();
 		}
 	}
 
@@ -802,7 +802,7 @@ private:
 			Gtk::MessageDialog confirmDlg(gettext("Are you sure you want to remove this theme"), false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO, true);
 			confirmDlg.set_default_response(Gtk::RESPONSE_YES);
 			if (confirmDlg.run() == Gtk::RESPONSE_YES) {
-				this->controller->removeThemeAction(cbTheme.get_active_text());
+				this->onRemoveThemeClicked(cbTheme.get_active_text());
 			}
 		}
 	}
@@ -811,7 +811,7 @@ private:
 		if (!event_lock) {
 			this->fcThemeFileChooser.hide();
 			if (response_id == Gtk::RESPONSE_APPLY) {
-				this->controller->addThemePackageAction(fcThemeFileChooser.get_filename());
+				this->onThemeFileApply(fcThemeFileChooser.get_filename());
 			}
 		}
 	}
@@ -824,7 +824,7 @@ private:
 				this->hide();
 				break;
 			case Gtk::RESPONSE_APPLY:
-				this->controller->saveAction();
+				this->onSaveClick();
 				break;
 			default:
 				throw NotImplementedException("the given response id is not supported", __FILE__, __LINE__);
@@ -835,25 +835,25 @@ private:
 
 	void signal_color_changed(View_Gtk_Theme_ColorChooser& caller) {
 		if (!event_lock && !caller.event_lock){
-			this->controller->updateColorSettingsAction();
+			this->onColorChange();
 		}
 	}
 
 	void signal_font_changed() {
 		if (!event_lock) {
-			this->controller->updateFontSettingsAction(false);
+			this->onFontChange(false);
 		}
 	}
 
 	void signal_font_removed() {
 		if (!event_lock) {
-			this->controller->updateFontSettingsAction(true);
+			this->onFontChange(true);
 		}
 	}
 
 	void signal_other_image_chosen() {
 		if (!event_lock){
-			this->controller->updateBackgroundImageAction();
+			this->onImageChange();
 		}
 	}
 
@@ -881,7 +881,7 @@ private:
 
 	void signal_bttRemoveBackground_clicked() {
 		if (!event_lock){
-			this->controller->removeBackgroundImageAction();
+			this->onImageRemove();
 		}
 	}
 

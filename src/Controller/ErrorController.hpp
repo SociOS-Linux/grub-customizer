@@ -16,18 +16,79 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef ERRORCONTROLLER_H_
-#define ERRORCONTROLLER_H_
+#ifndef ERRORCONTROLLERIMPL_H_
+#define ERRORCONTROLLERIMPL_H_
 
-#include "../lib/Exception.hpp"
+#include <libintl.h>
+#include <locale.h>
+#include <sstream>
+#include "../config.hpp"
 
-class ErrorController {
+#include "../Model/Env.hpp"
+
+#include "../View/Error.hpp"
+#include "../View/Trait/ViewAware.hpp"
+
+#include "Common/ControllerAbstract.hpp"
+#include "Helper/Thread.hpp"
+
+
+class ErrorController :
+	public Controller_Common_ControllerAbstract,
+	public View_Trait_ViewAware<View_Error>,
+	public Controller_Helper_Thread_Connection,
+	public Bootstrap_Application_Object_Connection
+{
+	bool applicationStarted;
 public:
-	virtual inline ~ErrorController(){}
-	virtual void errorAction(Exception const& e) = 0;
-	virtual void errorThreadedAction(Exception const& e) = 0;
-	virtual void quitAction() = 0;
+	void setApplicationStarted(bool val) {
+		this->applicationStarted = val;
+	}
+
+
+	ErrorController() : Controller_Common_ControllerAbstract("error"),
+		  applicationStarted(false)
+	{
+	}
+
+	void initViewEvents() override
+	{
+		using namespace std::placeholders;
+
+		this->view->onQuitClick = std::bind(std::mem_fn(&ErrorController::quitAction), this);
+	}
+
+	void initApplicationEvents() override
+	{
+		using namespace std::placeholders;
+
+		this->applicationObject->onError.addHandler(std::bind(std::mem_fn(&ErrorController::errorAction), this, _1));
+		this->applicationObject->onThreadError.addHandler(std::bind(std::mem_fn(&ErrorController::errorThreadedAction), this, _1));
+	}
+
+	
+	void errorAction(Exception const& e) {
+		this->log(e, Logger::EXCEPTION);
+		this->view->showErrorMessage(e, this->applicationStarted);
+	}
+
+	void errorThreadedAction(Exception const& e) {
+		if (this->threadHelper) {
+			this->threadHelper->runDispatched(std::bind(std::mem_fn(&ErrorController::errorAction), this, Exception(e)));
+		} else {
+			this->log(e, Logger::EXCEPTION);
+			exit(1);
+		}
+	}
+
+	void quitAction() {
+		if (this->applicationStarted) {
+			this->applicationObject->shutdown();
+		} else {
+			exit(2);
+		}
+	}
+
 };
 
-
-#endif /* ERRORCONTROLLER_H_ */
+#endif

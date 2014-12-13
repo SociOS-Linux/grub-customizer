@@ -26,38 +26,31 @@
 #include "../View/Gtk/Trash.hpp"
 #include "View.hpp"
 
-Bootstrap_View::Bootstrap_View(int argc, char** argv)
-	: about(NULL)
-	, entryEditor(NULL)
-	, envEditor(NULL)
-	, error(NULL)
-	, installer(NULL)
-	, main(NULL)
-	, settings(NULL)
-	, theme(NULL)
-	, trash(NULL)
-{
-	new Gtk::Main(argc, argv); // stored at Gtk::Main::instance and deleted in destructor of this class
-
-	this->about = new View_Gtk_About;
-	this->entryEditor = new View_Gtk_EntryEditor;
-	this->envEditor = new View_Gtk_EnvEditor;
-	this->error = new View_Gtk_Error;
-	this->installer = new View_Gtk_Installer;
-	this->main = new View_Gtk_Main;
-	this->settings = new View_Gtk_Settings;
-	this->theme = new View_Gtk_Theme;
-	this->trash = new View_Gtk_Trash;
-
-	View_Gtk_Main* main         = &dynamic_cast<View_Gtk_Main&>(*this->main);
-	View_Gtk_Settings* settings = &dynamic_cast<View_Gtk_Settings&>(*this->settings);
-	View_Gtk_Trash* trash       = &dynamic_cast<View_Gtk_Trash&>(*this->trash);
-	View_Gtk_Theme* theme       = &dynamic_cast<View_Gtk_Theme&>(*this->theme);
+Bootstrap_View::Bootstrap_View() {
+	auto about = std::make_shared<View_Gtk_About>();
+	auto entryEditor = std::make_shared<View_Gtk_EntryEditor>();
+	auto envEditor = std::make_shared<View_Gtk_EnvEditor>();
+	auto error = std::make_shared<View_Gtk_Error>();
+	auto installer = std::make_shared<View_Gtk_Installer>();
+	auto main = std::make_shared<View_Gtk_Main>();
+	auto settings = std::make_shared<View_Gtk_Settings>();
+	auto theme = std::make_shared<View_Gtk_Theme>();
+	auto trash = std::make_shared<View_Gtk_Trash>();
 
 	main->putSettingsDialog(settings->getCommonSettingsPane(), settings->getAppearanceSettingsPane());
 	main->putTrashList(trash->getList());
 	settings->putThemeSelector(theme->getThemeSelector());
 	settings->putThemeEditArea(theme->getEditorBox());
+
+	this->about = about;
+	this->entryEditor = entryEditor;
+	this->envEditor = envEditor;
+	this->error = error;
+	this->installer = installer;
+	this->main = main;
+	this->settings = settings;
+	this->theme = theme;
+	this->trash = trash;
 }
 
 void Bootstrap_View::setDeviceDataList(Model_DeviceDataListInterface& deviceDataList) {
@@ -66,19 +59,4 @@ void Bootstrap_View::setDeviceDataList(Model_DeviceDataListInterface& deviceData
 }
 
 Bootstrap_View::~Bootstrap_View() {
-	delete about;
-	delete entryEditor;
-	delete envEditor;
-	delete error;
-	delete installer;
-	delete main;
-	delete settings;
-	delete theme;
-	delete trash;
-
-	delete Gtk::Main::instance();
-}
-
-void Bootstrap_View::run() {
-	Gtk::Main::run();
 }

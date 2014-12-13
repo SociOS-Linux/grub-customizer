@@ -152,7 +152,7 @@ class View_Gtk_Main : public View_Main {
 	}
 
 	void saveConfig() {
-		controller->saveAction();
+		this->onSaveClick();
 	}
 
 	void updateButtonsState() {
@@ -654,24 +654,16 @@ public:
 		msg.run();
 	}
 
-	std::string createNewEntriesPlaceholderString(std::string const& parentMenu = "", std::string const& sourceScriptName = "") {
-		if (sourceScriptName != "" && parentMenu != "") {
-			return Glib::ustring::compose(gettext("(incoming Entries of %1, Script: %2)"), parentMenu, sourceScriptName);
-		} else if (parentMenu != "") {
+	std::string createNewEntriesPlaceholderString(std::string const& parentMenu) {
+		if (parentMenu != "") {
 			return Glib::ustring::compose(gettext("(incoming Entries of %1)"), parentMenu);
-		} else if (sourceScriptName != "") {
-			return Glib::ustring::compose(gettext("(incoming Entries of Script: %1)"), sourceScriptName);
 		} else {
 			return gettext("(incoming Entries)");
 		}
 	}
 
-	std::string createPlaintextString(std::string const& scriptName = "") const {
-		if (scriptName == "") {
-			return gettext("(script code)");
-		} else {
-			return Glib::ustring::compose(gettext("(script code of %1)"), scriptName);
-		}
+	std::string createPlaintextString() const {
+		return gettext("(script code)");
 	}
 
 	/**
@@ -717,20 +709,8 @@ public:
 		}
 	}
 
-	void showErrorMessage(std::string const& msg, std::vector<std::string> const& values) {
-		Glib::ustring msg2 = msg;
-		switch (values.size()) {
-		case 1:	msg2 = Glib::ustring::compose(msg, values[0]); break;
-		case 2:	msg2 = Glib::ustring::compose(msg, values[0], values[1]); break;
-		case 3:	msg2 = Glib::ustring::compose(msg, values[0], values[1], values[2]); break;
-		case 4:	msg2 = Glib::ustring::compose(msg, values[0], values[1], values[2], values[3]); break;
-		case 5:	msg2 = Glib::ustring::compose(msg, values[0], values[1], values[2], values[3], values[4]); break;
-		case 6:	msg2 = Glib::ustring::compose(msg, values[0], values[1], values[2], values[3], values[4], values[5]); break;
-		case 7:	msg2 = Glib::ustring::compose(msg, values[0], values[1], values[2], values[3], values[4], values[5], values[6]); break;
-		case 8:	msg2 = Glib::ustring::compose(msg, values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7]); break;
-		case 9: msg2 = Glib::ustring::compose(msg, values[0], values[1], values[2], values[3], values[4], values[5], values[6], values[7], values[8]); break;
-		}
-		Gtk::MessageDialog(msg2, false, Gtk::MESSAGE_ERROR).run();
+	void showErrorMessage(std::string const& msg) {
+		Gtk::MessageDialog(msg, false, Gtk::MESSAGE_ERROR).run();
 	}
 
 	void showConfigSavingError(std::string const& message) {
@@ -803,7 +783,7 @@ public:
 		dlg.set_default_response(Gtk::RESPONSE_OK);
 		int result = dlg.run();
 		if (result == Gtk::RESPONSE_YES) {
-			controller->removeRulesAction(this->getSelectedRules(), true);
+			this->onRemoveRulesClick(this->getSelectedRules(), true);
 		}
 	}
 
@@ -812,7 +792,7 @@ public:
 		dlg.set_default_response(Gtk::RESPONSE_OK);
 		int result = dlg.run();
 		if (result == Gtk::RESPONSE_OK) {
-			controller->removeRulesAction(this->getSelectedRules(), true);
+			this->onRemoveRulesClick(this->getSelectedRules(), true);
 		}
 	}
 
@@ -851,12 +831,12 @@ public:
 private:
 	//event handlers
 	void signal_show_envEditor() {
-		controller->showEnvEditorAction();
+		this->onShowEnvEditorClick();
 	}
 
 	void signal_checkbox_toggled(Glib::ustring const& path) {
 		if (!this->lock_state) {
-			this->controller->entryStateToggledAction(
+			this->onEntryStateChange(
 				(*this->tvConfList.refTreeStore->get_iter(path))[this->tvConfList.treeModel.relatedRule],
 				!(*this->tvConfList.refTreeStore->get_iter(path))[this->tvConfList.treeModel.is_activated]
 			);
@@ -866,7 +846,7 @@ private:
 	void signal_edit_name_finished(const Glib::ustring& path, const Glib::ustring& new_text) {
 		if (this->lock_state == 0){
 			Gtk::TreeModel::iterator iter = this->tvConfList.refTreeStore->get_iter(path);
-			controller->renameRuleAction((Rule*)(*iter)[tvConfList.treeModel.relatedRule], new_text);
+			this->onRenameClick((Rule*)(*iter)[tvConfList.treeModel.relatedRule], new_text);
 		}
 	}
 
@@ -876,12 +856,12 @@ private:
 			assert(direction == 1 || direction == -1);
 
 			//if rule swap
-			controller->moveAction(this->getSelectedRules(), direction);
+			this->onMoveClick(this->getSelectedRules(), direction);
 		}
 	}
 
 	void signal_remove_click() {
-		controller->removeRulesAction(this->getSelectedRules());
+		this->onRemoveRulesClick(this->getSelectedRules(), false);
 	}
 
 	void signal_rename_click() {
@@ -898,26 +878,26 @@ private:
 				}
 			}
 
-			this->controller->updateSelectionAction(this->getSelectedRules());
+			this->onSelectionChange(this->getSelectedRules());
 
 			this->updateButtonsState();
 		}
 	}
 
 	void signal_reload_click() {
-		controller->reloadAction();
+		this->onReloadClick();
 	}
 
 	void signal_show_grub_install_dialog_click() {
-		controller->showInstallerAction();
+		this->onShowInstallerClick();
 	}
 
 	void signal_move_left_click() {
-		controller->removeSubmenuAction(this->getSelectedRules());
+		this->onRemoveSubmenuClick(this->getSelectedRules());
 	}
 
 	void signal_move_right_click() {
-		controller->createSubmenuAction(this->getSelectedRules());
+		this->onCreateSubmenuClick(this->getSelectedRules());
 	}
 
 	void signal_treeview_selection_changed() {
@@ -934,7 +914,7 @@ private:
 				}
 			}
 
-			this->controller->updateSelectionAction(this->getSelectedRules());
+			this->onSelectionChange(this->getSelectedRules());
 
 			this->updateButtonsState();
 		}
@@ -943,24 +923,24 @@ private:
 	void signal_entry_edit_click() {
 		std::list<Rule*> rules = this->getSelectedRules();
 		assert(rules.size() == 1);
-		controller->showEntryEditorAction(rules.front());
+		this->onShowEntryEditorClick(rules.front());
 	}
 
 	void signal_entry_create_click() {
-		controller->showEntryCreatorAction();
+		this->onShowEntryCreatorClick();
 	}
 
 	bool signal_delete_event(GdkEventAny* event) { //return value: keep window open
-		controller->exitAction();
+		this->onExitClick();
 		return true;
 	}
 
 	void signal_quit_click() {
-		controller->exitAction();
+		this->onExitClick();
 	}
 
 	void signal_preference_click() {
-		controller->showSettingsAction();
+		this->onShowSettingsClick();
 	}
 
 	void signal_entry_type_help_click()  {
@@ -989,14 +969,14 @@ private:
 	}
 
 	void signal_info_click() {
-		controller->showAboutAction();
+		this->onShowAboutClick();
 	}
 
 	void signal_burg_switcher_response(int response_id) {
 		if (response_id == Gtk::RESPONSE_DELETE_EVENT)
-			controller->cancelBurgSwitcherAction();
+			this->onCancelBurgSwitcherClick();
 		else
-			controller->initModeAction(response_id == Gtk::RESPONSE_YES);
+			this->onInitModeClick(response_id == Gtk::RESPONSE_YES);
 	}
 
 	void signal_edit_name(Gtk::CellEditable* editable, const Glib::ustring& path) {
@@ -1024,7 +1004,7 @@ private:
 
 	void signal_key_press(GdkEventKey* key) {
 		if (key->keyval == GDK_KEY_Delete) {
-			this->controller->removeRulesAction(this->getSelectedRules());
+			this->onRemoveRulesClick(this->getSelectedRules(), false);
 		}
 	}
 
@@ -1033,43 +1013,43 @@ private:
 		msgDlg.set_secondary_text(gettext("This removes all your list modifications of the bootloader menu!"));
 		int response = msgDlg.run();
 		if (response == Gtk::RESPONSE_OK) {
-			this->controller->revertAction();
+			this->onRevertClick();
 		}
 	}
 
 	void signal_reload_recommendation_response(int response_id) {
 		if (response_id == Gtk::RESPONSE_APPLY) {
-			this->controller->reloadAction();
+			this->onReloadClick();
 		}
 	}
 
 	void signal_tab_changed(Gtk::Widget* page, guint page_num) {
-		if (this->controller && this->lock_state == 0) { // this->eventListener must be called because this event may be propagated from bootstrap
-			this->controller->refreshTabAction(page_num);
+		if (this->onTabChange && this->lock_state == 0) { // this->eventListener must be called because this event may be propagated from bootstrap
+			this->onTabChange(page_num);
 		}
 	}
 
 	void signal_viewopt_details_toggled() {
-		if (this->controller) {
-			this->controller->setViewOptionAction(VIEW_SHOW_DETAILS, this->miShowDetails.get_active());
+		if (this->onViewOptionChange) {
+			this->onViewOptionChange(VIEW_SHOW_DETAILS, this->miShowDetails.get_active());
 		}
 	}
 
 	void signal_viewopt_checkboxes_toggled() {
-		if (this->controller) {
-			this->controller->setViewOptionAction(VIEW_SHOW_HIDDEN_ENTRIES, this->miShowHiddenEntries.get_active());
+		if (this->onViewOptionChange) {
+			this->onViewOptionChange(VIEW_SHOW_HIDDEN_ENTRIES, this->miShowHiddenEntries.get_active());
 		}
 	}
 
 	void signal_viewopt_script_toggled() {
-		if (this->controller) {
-			this->controller->setViewOptionAction(VIEW_GROUP_BY_SCRIPT, this->miGroupByScript.get_active());
+		if (this->onViewOptionChange) {
+			this->onViewOptionChange(VIEW_GROUP_BY_SCRIPT, this->miGroupByScript.get_active());
 		}
 	}
 
 	void signal_viewopt_placeholders_toggled() {
-		if (this->controller) {
-			this->controller->setViewOptionAction(VIEW_SHOW_PLACEHOLDERS, this->miShowPlaceholders.get_active());
+		if (this->onViewOptionChange) {
+			this->onViewOptionChange(VIEW_SHOW_PLACEHOLDERS, this->miShowPlaceholders.get_active());
 		}
 	}
 };

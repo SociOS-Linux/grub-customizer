@@ -31,8 +31,6 @@
 #include <fstream>
 
 #include "../config.hpp"
-#include "../Controller/MainController.hpp"
-#include "../Controller/Trait/ControllerAware.hpp"
 
 #include "../lib/Mutex.hpp"
 #include "../lib/Trait/LoggerAware.hpp"
@@ -42,6 +40,7 @@
 #include "../lib/Helper.hpp"
 #include <stack>
 #include <algorithm>
+#include <functional>
 #include "Env.hpp"
 #include "MountTable.hpp"
 #include "Proxylist.hpp"
@@ -52,7 +51,6 @@
 
 class Model_ListCfg :
 	public Trait_LoggerAware,
-	public Trait_ControllerAware<MainController>,
 	public Mutex_Connection,
 	public Model_Env_Connection
 {
@@ -85,6 +83,9 @@ public:
 	Model_Proxylist proxies;
 	Model_Repository repository;
 	
+	std::function<void ()> onLoadStateChange;
+	std::function<void ()> onSaveStateChange;
+
 	bool verbose;
 	bool error_proxy_not_found;
 	void lock() {
@@ -657,25 +658,23 @@ public:
 
 
 	void send_new_load_progress(double newProgress, std::string scriptName = "", int current = 0, int max = 0) {
-		if (this->controller != NULL){
+		if (this->onLoadStateChange){
 			this->progress = newProgress;
 			this->progress_name = scriptName;
 			this->progress_pos = current;
 			this->progress_max = max;
-			this->controller->syncLoadStateThreadedAction();
-		}
-		else if (this->verbose) {
-			this->log("cannot show updated load progress - no UI connected!", Logger::ERROR);
+			this->onLoadStateChange();
+		} else if (this->verbose) {
+			this->log("cannot show updated load progress - no event handler assigned!", Logger::ERROR);
 		}
 	}
 
 	void send_new_save_progress(double newProgress) {
-		if (this->controller != NULL){
+		if (this->onSaveStateChange){
 			this->progress = newProgress;
-			this->controller->syncSaveStateThreadedAction();
-		}
-		else if (this->verbose) {
-			this->log("cannot show updated save progress - no UI connected!", Logger::ERROR);
+			this->onSaveStateChange();
+		} else if (this->verbose) {
+			this->log("cannot show updated save progress - no event handler assigned!", Logger::ERROR);
 		}
 	}
 
@@ -1436,7 +1435,6 @@ public:
 
 	operator ArrayStructure() const  {
 		ArrayStructure result;
-		result["eventListener"] = this->controller;
 		result["proxies"] = ArrayStructure(this->proxies);
 		result["repository"] = ArrayStructure(this->repository);
 		result["progress"] = this->progress;
@@ -1463,9 +1461,17 @@ protected:
 	Model_ListCfg* grublistCfg;
 public:
 	Model_ListCfg_Connection() : grublistCfg(NULL) {}
+	virtual ~Model_ListCfg_Connection(){}
 
 	void setListCfg(Model_ListCfg& grublistCfg){
 		this->grublistCfg = &grublistCfg;
+
+		this->initListCfgEvents();
+	}
+
+	public: virtual void initListCfgEvents()
+	{
+		// override to initialize specific view events
 	}
 };
 

@@ -16,24 +16,28 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef VIEW_VIEWAWARE_H_
-#define VIEW_VIEWAWARE_H_
+#ifndef HELPER_THREAD_H_INCLUDED
+#define HELPER_THREAD_H_INCLUDED
+#include "../../lib/Trait/LoggerAware.hpp"
+#include <functional>
 
-template <typename T>
-class View_Trait_ViewAware {
-	protected: T* view = nullptr;
+class Controller_Helper_Thread : public Trait_LoggerAware
+{
+	public: virtual inline ~Controller_Helper_Thread() {};
+	public: virtual void runDispatched(std::function<void ()> function) = 0;
+	public: virtual void runDelayed(std::function<void ()> function, int delayInMilliSec) = 0;
+	public: virtual void runAsThread(std::function<void ()> function) = 0;
+};
 
-	public: virtual ~View_Trait_ViewAware(){}
+class Controller_Helper_Thread_Connection
+{
+	protected: Controller_Helper_Thread* threadHelper = nullptr;
 
-	public: void setView(T& view) {
-		this->view = &view;
-		this->initViewEvents();
-	}
+	public: virtual ~Controller_Helper_Thread_Connection(){}
 
-	public: virtual void initViewEvents()
-	{
-		// override to initialize specific view events
+	public: void setThreadHelper(Controller_Helper_Thread& threadHelper) {
+		this->threadHelper = &threadHelper;
 	}
 };
 
-#endif /* VIEW_VIEWAWARE_H_ */
+#endif /* HELPER_THREAD_H_INCLUDED */

@@ -19,16 +19,17 @@
 #ifndef SRC_BOOTSTRAP_THREAD_HPP_
 #define SRC_BOOTSTRAP_THREAD_HPP_
 
-#include "../Controller/ThreadController.hpp"
+#include <memory>
+
+#include "../Controller/Helper/Thread.hpp"
 #include "../lib/Mutex.hpp"
 
 class Bootstrap_Thread
 {
 	public: Bootstrap_Thread();
-	public: ~Bootstrap_Thread();
-	public: ThreadController* threadController;
-	public: Mutex* mutex1;
-	public: Mutex* mutex2;
+	public: std::shared_ptr<Controller_Helper_Thread> threadHelper;
+	public: std::shared_ptr<Mutex> mutex1;
+	public: std::shared_ptr<Mutex> mutex2;
 };
 
 

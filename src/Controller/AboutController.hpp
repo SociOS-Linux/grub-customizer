@@ -16,14 +16,45 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef ABOUTCONTROLLER_H_
-#define ABOUTCONTROLLER_H_
+#ifndef ABOUTCONTROLLERIMPL_H_
+#define ABOUTCONTROLLERIMPL_H_
 
-class AboutController {
+#include <libintl.h>
+#include <locale.h>
+#include <sstream>
+#include "../config.hpp"
+
+#include "../Model/Env.hpp"
+
+#include "../View/About.hpp"
+#include "../View/Trait/ViewAware.hpp"
+#include "Common/ControllerAbstract.hpp"
+
+class AboutController :
+	public Controller_Common_ControllerAbstract,
+	public View_Trait_ViewAware<View_About>,
+	public Bootstrap_Application_Object_Connection
+{
 public:
-	virtual inline ~AboutController(){}
-	virtual void showAction() = 0;
+	AboutController() : Controller_Common_ControllerAbstract("about")
+	{
+	}
+
+	void initApplicationEvents() override
+	{
+		this->applicationObject->onAboutDlgShowRequest.addHandler(std::bind(std::mem_fn(&AboutController::showAction), this));
+	}
+	
+	void showAction() {
+		this->logActionBegin("show");
+		try {
+			this->view->show();
+		} catch (Exception const& e) {
+			this->applicationObject->onError.exec(e);
+		}
+		this->logActionEnd();
+	}
+
 };
 
-
-#endif /* ABOUTCONTROLLER_H_ */
+#endif

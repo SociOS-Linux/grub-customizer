@@ -59,7 +59,7 @@ class View_Gtk_Installer :
 				txtDevice.set_sensitive(false);
 				lblInstallInfo.set_text(gettext("installing the bootloader…"));
 
-				controller->installGrubAction(txtDevice.get_text());
+				this->onInstallClick(txtDevice.get_text());
 			}
 			else
 				Gtk::MessageDialog(gettext("Please type a device string!")).run();

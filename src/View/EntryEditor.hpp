@@ -21,16 +21,20 @@
 #include <string>
 #include <map>
 #include <list>
+#include <functional>
 
-#include "../Controller/EntryEditController.hpp"
 #include "../lib/Type.hpp"
-#include "../Controller/Trait/ControllerAware.hpp"
 #include "../lib/Trait/LoggerAware.hpp"
 
 class View_EntryEditor :
-	public Trait_LoggerAware,
-	public Trait_ControllerAware<EntryEditController> {
+	public Trait_LoggerAware
+{
 public:
+	std::function<void ()> onApplyClick;
+	std::function<void ()> onSourceModification;
+	std::function<void ()> onOptionModification;
+	std::function<void (std::string const& newType)> onTypeSwitch;
+
 	virtual inline ~View_EntryEditor() {};
 
 	virtual void show() = 0;

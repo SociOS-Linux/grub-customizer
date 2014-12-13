@@ -259,36 +259,36 @@ private:
 			if (selectedUuid != "") {
 				selectedUuid = "UUID=" + selectedUuid;
 			}
-			this->controller->switchPartitionAction(selectedUuid);
+			this->onSwitchPartition(selectedUuid);
 		}
 	}
 
 	void signal_bootloaderType_changed() {
 		if (!this->eventLock) {
-			this->controller->switchBootloaderTypeAction(this->cbType.get_active_row_number());
+			this->onSwitchBootloaderType(this->cbType.get_active_row_number());
 		}
 	}
 
 	void signal_optionModified() {
 		if (!this->eventLock) {
-			this->controller->updateGrubEnvOptionsAction();
+			this->onOptionChange();
 		}
 	}
 
 	void signal_response_action(int response_id) {
 		if (response_id == Gtk::RESPONSE_CLOSE || response_id == Gtk::RESPONSE_DELETE_EVENT) {
-			this->controller->exitAction();
+			this->onExitClick();
 		} else if (response_id == Gtk::RESPONSE_APPLY) {
-			this->controller->applyAction(this->cbSaveConfig.get_active());
+			this->onApplyClick(this->cbSaveConfig.get_active());
 		}
 	}
 
 	void signal_submountpointToggled(Gtk::CheckButton& sender) {
 		if (!eventLock) {
 			if (sender.get_active()) {
-				this->controller->mountSubmountpointAction(sender.get_label());
+				this->onMountSubmountpointClick(sender.get_label());
 			} else {
-				this->controller->umountSubmountpointAction(sender.get_label());
+				this->onUmountSubmountpointClick(sender.get_label());
 			}
 		}
 	}

@@ -21,16 +21,7 @@
 #include "../Bootstrap/Regex.hpp"
 #include "../Bootstrap/Thread.hpp"
 #include "../Bootstrap/View.hpp"
-#include "../Controller/AboutControllerImpl.hpp"
-#include "../Controller/ControllerCollection.hpp"
-#include "../Controller/EntryEditControllerImpl.hpp"
-#include "../Controller/EnvEditorControllerImpl.hpp"
-#include "../Controller/ErrorControllerImpl.hpp"
-#include "../Controller/InstallerControllerImpl.hpp"
-#include "../Controller/MainControllerImpl.hpp"
-#include "../Controller/SettingsControllerImpl.hpp"
-#include "../Controller/ThemeControllerImpl.hpp"
-#include "../Controller/TrashControllerImpl.hpp"
+#include "../Bootstrap/Application.hpp"
 #include "../lib/ArrayStructure.hpp"
 #include "../lib/ContentParser/Chainloader.hpp"
 #include "../lib/ContentParser/FactoryImpl.hpp"
@@ -42,6 +33,15 @@
 #include "../Model/Env.hpp"
 #include "../Model/ThemeManager.hpp"
 #include "../config.hpp"
+#include "../Controller/AboutController.hpp"
+#include "../Controller/EntryEditController.hpp"
+#include "../Controller/EnvEditorController.hpp"
+#include "../Controller/ErrorController.hpp"
+#include "../Controller/InstallerController.hpp"
+#include "../Controller/MainController.hpp"
+#include "../Controller/SettingsController.hpp"
+#include "../Controller/ThemeController.hpp"
+#include "../Controller/TrashController.hpp"
 
 
 
@@ -58,7 +58,8 @@ int main(int argc, char** argv){
 	try {
 		Model_Env env;
 
-		Bootstrap_View view(argc, argv);
+		Bootstrap_Application application(argc, argv);
+		Bootstrap_View view;
 		Bootstrap_Thread thread;
 		Bootstrap_Regex regex;
 
@@ -81,13 +82,14 @@ int main(int argc, char** argv){
 
 		view.setDeviceDataList(deviceDataList);
 
-		EntryEditControllerImpl entryEditController;
+		EntryEditController entryEditController;
 		entryEditController.setContentParserFactory(contentParserFactory);
 		entryEditController.setView(*view.entryEditor);
 		entryEditController.setDeviceDataList(deviceDataList);
 		entryEditController.setListCfg(listcfg);
+		entryEditController.setApplicationObject(application.applicationObject);
 
-		MainControllerImpl mainController;
+		MainController mainController;
 		mainController.setListCfg(listcfg);
 		mainController.setSettingsManager(settings);
 		mainController.setSettingsBuffer(settingsOnDisk);
@@ -98,82 +100,55 @@ int main(int argc, char** argv){
 		mainController.setContentParserFactory(contentParserFactory);
 		mainController.setView(*view.main);
 		mainController.setEntryNameMapper(entryNameMapper);
+		mainController.setApplicationObject(application.applicationObject);
 
-		SettingsControllerImpl settingsController;
+		SettingsController settingsController;
 		settingsController.setListCfg(listcfg);
 		settingsController.setView(*view.settings);
 		settingsController.setSettingsManager(settings);
 		settingsController.setFbResolutionsGetter(fbResolutionsGetter);
+		settingsController.setApplicationObject(application.applicationObject);
 
-		EnvEditorControllerImpl envEditController;
+		EnvEditorController envEditController;
 		envEditController.setMountTable(mountTable);
 		envEditController.setView(*view.envEditor);
 		envEditController.setDeviceMap(deviceMap);
+		envEditController.setApplicationObject(application.applicationObject);
 
-		TrashControllerImpl trashController;
+		TrashController trashController;
 		trashController.setEntryNameMapper(entryNameMapper);
 		trashController.setListCfg(listcfg);
 		trashController.setDeviceDataList(deviceDataList);
 		trashController.setContentParserFactory(contentParserFactory);
 		trashController.setView(*view.trash);
+		trashController.setApplicationObject(application.applicationObject);
 
-		InstallerControllerImpl installController;
+		InstallerController installController;
 		installController.setInstaller(installer);
 		installController.setView(*view.installer);
+		installController.setApplicationObject(application.applicationObject);
 
-		AboutControllerImpl aboutController;
+		AboutController aboutController;
 		aboutController.setView(*view.about);
+		aboutController.setApplicationObject(application.applicationObject);
 
-		ErrorControllerImpl errorController;
+		ErrorController errorController;
 		errorController.setView(*view.error);
+		errorController.setApplicationObject(application.applicationObject);
 
-		ThemeControllerImpl themeController;
+		ThemeController themeController;
 		themeController.setView(*view.theme);
 		themeController.setThemeManager(themeManager);
 		themeController.setSettingsManager(settings);
 		themeController.setListCfg(listcfg);
+		themeController.setApplicationObject(application.applicationObject);
 
-		ControllerCollection controllerCollection;
-		controllerCollection.entryEditController = &entryEditController;
-		controllerCollection.mainController = &mainController;
-		controllerCollection.settingsController = &settingsController;
-		controllerCollection.envEditController = &envEditController;
-		controllerCollection.trashController = &trashController;
-		controllerCollection.installerController = &installController;
-		controllerCollection.aboutController = &aboutController;
-		controllerCollection.errorController = &errorController;
-		controllerCollection.themeController = &themeController;
-
-		dynamic_cast<ControllerCollection_Connection&>(*thread.threadController).setControllerCollection(controllerCollection);
-		entryEditController.setControllerCollection(controllerCollection);
-		mainController.setControllerCollection(controllerCollection);
-		settingsController.setControllerCollection(controllerCollection);
-		envEditController.setControllerCollection(controllerCollection);
-		trashController.setControllerCollection(controllerCollection);
-		installController.setControllerCollection(controllerCollection);
-		aboutController.setControllerCollection(controllerCollection);
-		errorController.setControllerCollection(controllerCollection);
-		themeController.setControllerCollection(controllerCollection);
-
-		mainController.setThreadController(*thread.threadController);
-		settingsController.setThreadController(*thread.threadController);
-		installController.setThreadController(*thread.threadController);
-		errorController.setThreadController(*thread.threadController);
-		entryEditController.setThreadController(*thread.threadController);
-		themeController.setThreadController(*thread.threadController);
-
-		//assign event listener
-		view.main->setController(mainController);
-		view.installer->setController(installController);
-		view.trash->setController(trashController);
-		view.entryEditor->setController(entryEditController);
-		view.settings->setController(settingsController);
-		listcfg.setController(mainController);
-		installer.setController(installController);
-		fbResolutionsGetter.setController(settingsController);
-		view.envEditor->setController(envEditController);
-		view.error->setController(errorController);
-		view.theme->setController(themeController);
+		mainController.setThreadHelper(*thread.threadHelper);
+		settingsController.setThreadHelper(*thread.threadHelper);
+		installController.setThreadHelper(*thread.threadHelper);
+		errorController.setThreadHelper(*thread.threadHelper);
+		entryEditController.setThreadHelper(*thread.threadHelper);
+		themeController.setThreadHelper(*thread.threadHelper);
 
 		//assign logger
 		listcfg.setLogger(logger);
@@ -192,7 +167,6 @@ int main(int argc, char** argv){
 		view.about->setLogger(logger);
 		thread.mutex1->setLogger(logger);
 		thread.mutex2->setLogger(logger);
-		thread.threadController->setLogger(logger);
 		env.setLogger(logger);
 		view.envEditor->setLogger(logger);
 		mainController.setLogger(logger);
@@ -205,6 +179,7 @@ int main(int argc, char** argv){
 		aboutController.setLogger(logger);
 		view.theme->setLogger(logger);
 		themeController.setLogger(logger);
+		thread.threadHelper->setLogger(logger);
 
 		// configure logger
 		logger.setLogLevel(Logger_Stream::LOG_EVENT);
@@ -262,7 +237,7 @@ int main(int argc, char** argv){
 		mainController.initAction();
 		errorController.setApplicationStarted(true);
 
-		view.run();
+		application.applicationObject->run();
 	} catch (Exception const& e) {
 		logger.log(e, Logger::ERROR);
 		return 1;

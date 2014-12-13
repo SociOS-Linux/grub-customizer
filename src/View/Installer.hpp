@@ -18,18 +18,19 @@
 
 #ifndef GRUBINSTALLDLG_H_
 #define GRUBINSTALLDLG_H_
-#include "../Controller/InstallerController.hpp"
+#include <functional>
+
 #include "../lib/Trait/LoggerAware.hpp"
-#include "../Controller/Trait/ControllerAware.hpp"
 
 /**
  * Interface for dialogs which helps users to install grub into the MBR
  */
 class View_Installer :
-	public Trait_LoggerAware,
-	public Trait_ControllerAware<InstallerController>
+	public Trait_LoggerAware
 {
 public:
+	std::function<void (std::string device)> onInstallClick;
+
 	virtual inline ~View_Installer() {};
 
 	//show this dialog

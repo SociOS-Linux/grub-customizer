@@ -16,18 +16,17 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef TRAIT_CONTROLLERAWARE_H_
-#define TRAIT_CONTROLLERAWARE_H_
+#ifndef CONTROLLER_ABSTRACT_H_
+#define CONTROLLER_ABSTRACT_H_
 
-template <typename T>
-class Trait_ControllerAware {
-protected:
-	T* controller;
+#include "../../lib/Trait/ActionLoggerAware.hpp"
+
+class Controller_Common_ControllerAbstract : public Trait_ActionLoggerAware {
 public:
-	Trait_ControllerAware() : controller(NULL) {}
-	void setController(T& controller) {
-		this->controller = &controller;
+	Controller_Common_ControllerAbstract(std::string const& controllerName) {
+		this->setControllerName(controllerName);
 	}
 };
 
-#endif /* TRAIT_CONTROLLERAWARE_H_ */
+
+#endif /* ABSTRACT_H_ */

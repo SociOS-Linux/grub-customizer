@@ -16,24 +16,14 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#include "../Controller/GLib/ThreadController.hpp"
+#include "../Controller/Helper/GLibThread.hpp"
 #include "../lib/Mutex/GLib.hpp"
 #include "Thread.hpp"
 
-Bootstrap_Thread::Bootstrap_Thread()
-	: mutex1(NULL)
-	, mutex2(NULL)
-	, threadController(NULL)
-{
+Bootstrap_Thread::Bootstrap_Thread() {
 	Glib::thread_init();
 
-	this->mutex1 = new Mutex_GLib;
-	this->mutex2 = new Mutex_GLib;
-	this->threadController = new GLib_ThreadController;
-}
-
-Bootstrap_Thread::~Bootstrap_Thread() {
-	delete this->mutex1;
-	delete this->mutex2;
-	delete this->threadController;
+	this->mutex1 = std::make_shared<Mutex_GLib>();
+	this->mutex2 = std::make_shared<Mutex_GLib>();
+	this->threadHelper = std::make_shared<Controller_Helper_GLibThread>();
 }

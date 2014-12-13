@@ -19,6 +19,8 @@
 #ifndef SRC_BOOTSTRAP_VIEW_HPP_
 #define SRC_BOOTSTRAP_VIEW_HPP_
 
+#include <memory>
+
 #include "../View/Main.hpp"
 #include "../View/About.hpp"
 #include "../View/Installer.hpp"
@@ -34,22 +36,20 @@
 class Bootstrap_View :
 	public Model_DeviceDataListInterface_Connection
 {
-	public: View_About* about;
-	public: View_EntryEditor* entryEditor;
-	public: View_EnvEditor* envEditor;
-	public: View_Error* error;
-	public: View_Installer* installer;
-	public: View_Main* main;
-	public: View_Settings* settings;
-	public: View_Theme* theme;
-	public: View_Trash* trash;
+	public: std::shared_ptr<View_About> about;
+	public: std::shared_ptr<View_EntryEditor> entryEditor;
+	public: std::shared_ptr<View_EnvEditor> envEditor;
+	public: std::shared_ptr<View_Error> error;
+	public: std::shared_ptr<View_Installer> installer;
+	public: std::shared_ptr<View_Main> main;
+	public: std::shared_ptr<View_Settings> settings;
+	public: std::shared_ptr<View_Theme> theme;
+	public: std::shared_ptr<View_Trash> trash;
 
 	public: void setDeviceDataList(Model_DeviceDataListInterface& deviceDataList);
 
-	public: Bootstrap_View(int argc, char** argv);
+	public: Bootstrap_View();
 	public: ~Bootstrap_View();
-
-	public: void run();
 };
 
 

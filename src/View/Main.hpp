@@ -22,20 +22,43 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <list>
 
-#include "../Controller/MainController.hpp"
 #include "../lib/Type.hpp"
-#include "../Controller/Trait/ControllerAware.hpp"
 #include "../lib/Trait/LoggerAware.hpp"
 #include "Model/ListItem.hpp"
-#include "Settings.hpp"
+#include <functional>
 
 /**
  * Interface for dialogs which lets the user control the grub list
  */
-class View_Main : public Trait_LoggerAware, public Trait_ControllerAware<MainController> {
+class View_Main : public Trait_LoggerAware {
 public:
 	virtual inline ~View_Main() {};
+
+	std::function<void (std::list<Rule*> rules, bool force)> onRemoveRulesClick;
+	std::function<void ()> onShowSettingsClick;
+	std::function<void ()> onReloadClick;
+	std::function<void ()> onSaveClick;
+	std::function<void ()> onShowEnvEditorClick;
+	std::function<void ()> onShowInstallerClick;
+	std::function<void (std::list<Rule*> childItems)> onCreateSubmenuClick;
+	std::function<void (std::list<Rule*> childItems)> onRemoveSubmenuClick;
+	std::function<void (Rule* rule)> onShowEntryEditorClick;
+	std::function<void ()> onShowEntryCreatorClick;
+	std::function<void ()> onShowAboutClick;
+	std::function<void ()> onExitClick;
+	std::function<void (Rule* entry, std::string const& newText)> onRenameClick;
+	std::function<void ()> onRevertClick;
+	std::function<void (std::list<Rule*> rules, int direction)> onMoveClick;
+	std::function<void ()> onCancelBurgSwitcherClick;
+	std::function<void (bool burgChosen)> onInitModeClick;
+	std::function<void (Rule* rule, bool startEdit)> onRuleSelection;
+	std::function<void (unsigned int pos)> onTabChange;
+	std::function<void (ViewOption option, bool value)> onViewOptionChange;
+	std::function<void (Rule* entry, bool state)> onEntryStateChange;
+	std::function<void (std::list<Rule*> selectedRules)> onSelectionChange;
+
 
 	//show this dialog without waiting
 	virtual void show()=0;
@@ -72,14 +95,14 @@ public:
 	//notifies the user about the problem that no grublistcfg_proxy has been found
 	virtual void showProxyNotFoundMessage()=0;
 	//creates a string for an other entry placeholder
-	virtual std::string createNewEntriesPlaceholderString(std::string const& parentMenu = "", std::string const& sourceScriptName = "")=0;
+	virtual std::string createNewEntriesPlaceholderString(std::string const& parentMenu)=0;
 	//creates the string for plaintexts
-	virtual std::string createPlaintextString(std::string const& scriptName = "") const=0;
+	virtual std::string createPlaintextString() const=0;
 
 	//asks the user if he wants to exit the whole application
 	virtual int showExitConfirmDialog(int type)=0;
 	//show the given error message
-	virtual void showErrorMessage(std::string const& msg, std::vector<std::string> const& values = std::vector<std::string>())=0;
+	virtual void showErrorMessage(std::string const& msg)=0;
 
 	virtual void showConfigSavingError(std::string const& message) = 0;
 
