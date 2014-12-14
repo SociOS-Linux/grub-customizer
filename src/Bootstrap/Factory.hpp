@@ -45,24 +45,26 @@ class Bootstrap_Factory
 	public: std::shared_ptr<Mapper_EntryNameImpl> entryNameMapper;
 	public: std::shared_ptr<Model_ThemeManager> themeManager;
 	public: std::shared_ptr<Model_DeviceMap> deviceMap;
+	public: std::shared_ptr<Logger> logger;
 
 	public: std::shared_ptr<Bootstrap_Application_Object> applicationObject;
 
-	public: Bootstrap_Factory(std::shared_ptr<Bootstrap_Application_Object> applicationObject)
+	public: Bootstrap_Factory(std::shared_ptr<Bootstrap_Application_Object> applicationObject, std::shared_ptr<Logger> logger)
 	{
 		this->applicationObject    = applicationObject;
+		this->logger               = logger;
 
-		this->env                  = std::make_shared<Model_Env>();
-		this->listcfg              = std::make_shared<Model_ListCfg>();
-		this->settings             = std::make_shared<Model_SettingsManagerData>();
-		this->installer            = std::make_shared<Model_Installer>();
-		this->mountTable           = std::make_shared<Model_MountTable>();
-		this->fbResolutionsGetter  = std::make_shared<Model_FbResolutionsGetter>();
-		this->deviceDataList       = std::make_shared<Model_DeviceDataList>();
-		this->contentParserFactory = std::make_shared<ContentParser_FactoryImpl>();
-		this->entryNameMapper      = std::make_shared<Mapper_EntryNameImpl>();
-		this->themeManager         = std::make_shared<Model_ThemeManager>();
-		this->deviceMap            = std::make_shared<Model_DeviceMap>();
+		this->env                  = this->create<Model_Env>();
+		this->listcfg              = this->create<Model_ListCfg>();
+		this->settings             = this->create<Model_SettingsManagerData>();
+		this->installer            = this->create<Model_Installer>();
+		this->mountTable           = this->create<Model_MountTable>();
+		this->fbResolutionsGetter  = this->create<Model_FbResolutionsGetter>();
+		this->deviceDataList       = this->create<Model_DeviceDataList>();
+		this->contentParserFactory = this->create<ContentParser_FactoryImpl>();
+		this->entryNameMapper      = this->create<Mapper_EntryNameImpl>();
+		this->themeManager         = this->create<Model_ThemeManager>();
+		this->deviceMap            = this->create<Model_DeviceMap>();
 	}
 
 	public: template <typename TController, typename TView> std::shared_ptr<TController> createController(std::shared_ptr<TView> view)
@@ -73,8 +75,16 @@ class Bootstrap_Factory
 		controller->setView(view);
 
 		this->bootstrap(controller);
+		this->bootstrap(view);
 
 		return controller;
+	}
+
+	public: template <typename T> std::shared_ptr<T> create()
+	{
+		auto obj = std::make_shared<T>();
+		this->bootstrap(obj);
+		return obj;
 	}
 
 	public: template <typename T> void bootstrap(std::shared_ptr<T> obj)
@@ -126,6 +136,10 @@ class Bootstrap_Factory
 		{
 			std::shared_ptr<Model_DeviceMap_Connection> objc = std::dynamic_pointer_cast<Model_DeviceMap_Connection>(obj);
 			if (objc) {assert(this->deviceMap); objc->setDeviceMap(this->deviceMap);}
+		}
+		{
+			std::shared_ptr<Trait_LoggerAware> objc = std::dynamic_pointer_cast<Trait_LoggerAware>(obj);
+			if (objc) {assert(this->logger); objc->setLogger(this->logger);}
 		}
 	}
 };

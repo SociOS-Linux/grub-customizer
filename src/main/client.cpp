@@ -60,10 +60,10 @@ int main(int argc, char** argv){
 		auto view                 = std::make_shared<Bootstrap_View>();
 		auto thread               = std::make_shared<Bootstrap_Thread>();
 		auto regex                = std::make_shared<Bootstrap_Regex>();
-		auto factory              = std::make_shared<Bootstrap_Factory>(application->applicationObject);
+		auto factory              = std::make_shared<Bootstrap_Factory>(application->applicationObject, logger);
 
-		auto settingsOnDisk       = std::make_shared<Model_SettingsManagerData>();
-		auto savedListCfg         = std::make_shared<Model_ListCfg>();
+		auto settingsOnDisk       = factory->create<Model_SettingsManagerData>();
+		auto savedListCfg         = factory->create<Model_ListCfg>();
 
 		factory->deviceMap->setRegexEngine(regex->engine);
 
@@ -93,34 +93,8 @@ int main(int argc, char** argv){
 		themeController->setThreadHelper(thread->threadHelper);
 
 		//assign logger
-		factory->listcfg->setLogger(logger);
-		view->main->setLogger(logger);
-		factory->settings->setLogger(logger);
-		settingsOnDisk->setLogger(logger);
-		factory->installer->setLogger(logger);
-		view->installer->setLogger(logger);
-		view->trash->setLogger(logger);
-		view->entryEditor->setLogger(logger);
-		factory->mountTable->setLogger(logger);
-		savedListCfg->setLogger(logger);
-		factory->fbResolutionsGetter->setLogger(logger);
-		view->settings->setLogger(logger);
-		factory->deviceDataList->setLogger(logger);
-		view->about->setLogger(logger);
 		thread->mutex1->setLogger(logger);
 		thread->mutex2->setLogger(logger);
-		factory->env->setLogger(logger);
-		view->envEditor->setLogger(logger);
-		mainController->setLogger(logger);
-		entryEditController->setLogger(logger);
-		settingsController->setLogger(logger);
-		envEditController->setLogger(logger);
-		trashController->setLogger(logger);
-		errorController->setLogger(logger);
-		installController->setLogger(logger);
-		aboutController->setLogger(logger);
-		view->theme->setLogger(logger);
-		themeController->setLogger(logger);
 		thread->threadHelper->setLogger(logger);
 
 		// configure logger
@@ -160,22 +134,6 @@ int main(int argc, char** argv){
 		memtestParser->setRegexEngine(regex->engine);
 
 		view->entryEditor->setAvailableEntryTypes(factory->contentParserFactory->getNames());
-
-		//set env
-		factory->listcfg->setEnv(factory->env);
-		savedListCfg->setEnv(factory->env);
-		factory->settings->setEnv(factory->env);
-		settingsOnDisk->setEnv(factory->env);
-		factory->installer->setEnv(factory->env);
-		factory->themeManager->setEnv(factory->env);
-		entryEditController->setEnv(factory->env);
-		mainController->setEnv(factory->env);
-		settingsController->setEnv(factory->env);
-		envEditController->setEnv(factory->env);
-		trashController->setEnv(factory->env);
-		installController->setEnv(factory->env);
-		themeController->setEnv(factory->env);
-		factory->deviceMap->setEnv(factory->env);
 
 		//set mutex
 		factory->listcfg->setMutex(thread->mutex1);

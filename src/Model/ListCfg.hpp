@@ -67,16 +67,14 @@ public:
 	 errorLogFile(ERROR_LOG_FILE), ignoreLock(false), progress_pos(0), progress_max(0)
 	{}
 
-	void setLogger(std::shared_ptr<Logger> logger) {
-		this->Trait_LoggerAware::setLogger(logger);
-		this->proxies.setLogger(logger);
-		this->repository.setLogger(logger);
-		this->scriptSourceMap.setLogger(logger);
+	void initLogger() override {
+		this->proxies.setLogger(this->logger);
+		this->repository.setLogger(this->logger);
+		this->scriptSourceMap.setLogger(this->logger);
 	}
 
-	void setEnv(std::shared_ptr<Model_Env> env) {
-		this->Model_Env_Connection::setEnv(env);
-		this->scriptSourceMap.setEnv(env);
+	void initEnv() override {
+		this->scriptSourceMap.setEnv(this->env);
 	}
 
 

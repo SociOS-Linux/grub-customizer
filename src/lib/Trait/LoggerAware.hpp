@@ -28,8 +28,15 @@ class Trait_LoggerAware
 {
 	protected: mutable std::shared_ptr<Logger> logger;
 
+	public: virtual ~Trait_LoggerAware() {}
+
 	public: void setLogger(std::shared_ptr<Logger> logger) {
 		this->logger = logger;
+		this->initLogger();
+	}
+
+	public: virtual void initLogger() {
+		// override to add initializations
 	}
 
 	public: std::shared_ptr<Logger> getLogger() {
