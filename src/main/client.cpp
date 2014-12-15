@@ -18,8 +18,6 @@
 
 #include <iostream>
 
-#include "../Bootstrap/Regex.hpp"
-#include "../Bootstrap/Thread.hpp"
 #include "../Bootstrap/View.hpp"
 #include "../Bootstrap/Application.hpp"
 #include "../Bootstrap/Factory.hpp"
@@ -58,19 +56,12 @@ int main(int argc, char** argv){
 	try {
 		auto application          = std::make_shared<Bootstrap_Application>(argc, argv);
 		auto view                 = std::make_shared<Bootstrap_View>();
-		auto thread               = std::make_shared<Bootstrap_Thread>();
-		auto regex                = std::make_shared<Bootstrap_Regex>();
 		auto factory              = std::make_shared<Bootstrap_Factory>(application->applicationObject, logger);
 
 		auto settingsOnDisk       = factory->create<Model_SettingsManagerData>();
 		auto savedListCfg         = factory->create<Model_ListCfg>();
 
-		factory->deviceMap->setRegexEngine(regex->engine);
-
 		factory->entryNameMapper->setView(view->main);
-
-		view->entryEditor->setDeviceDataList(factory->deviceDataList);
-		view->envEditor->setDeviceDataList(factory->deviceDataList);
 
 		auto entryEditController = factory->createController<EntryEditController>(view->entryEditor);
 		auto mainController      = factory->createController<MainController>(view->main);
@@ -84,18 +75,6 @@ int main(int argc, char** argv){
 
 		mainController->setSettingsBuffer(settingsOnDisk);
 		mainController->setSavedListCfg(savedListCfg);
-
-		mainController->setThreadHelper(thread->threadHelper);
-		settingsController->setThreadHelper(thread->threadHelper);
-		installController->setThreadHelper(thread->threadHelper);
-		errorController->setThreadHelper(thread->threadHelper);
-		entryEditController->setThreadHelper(thread->threadHelper);
-		themeController->setThreadHelper(thread->threadHelper);
-
-		//assign logger
-		thread->mutex1->setLogger(logger);
-		thread->mutex2->setLogger(logger);
-		thread->threadHelper->setLogger(logger);
 
 		// configure logger
 		logger->setLogLevel(Logger_Stream::LOG_EVENT);
@@ -112,32 +91,12 @@ int main(int argc, char** argv){
 			}
 		}
 
-		//configure contentParser factory
-		auto linuxParser = std::make_shared<ContentParser_Linux>();
-		auto linuxIsoParser = std::make_shared<ContentParser_LinuxIso>();
-		auto chainloadParser = std::make_shared<ContentParser_Chainloader>();
-		auto memtestParser = std::make_shared<ContentParser_Memtest>();
-
-		linuxParser->setDeviceMap(factory->deviceMap);
-		linuxIsoParser->setDeviceMap(factory->deviceMap);
-		chainloadParser->setDeviceMap(factory->deviceMap);
-		memtestParser->setDeviceMap(factory->deviceMap);
-
-		factory->contentParserFactory->registerParser(linuxParser, gettext("Linux"));
-		factory->contentParserFactory->registerParser(linuxIsoParser, gettext("Linux-ISO"));
-		factory->contentParserFactory->registerParser(chainloadParser, gettext("Chainloader"));
-		factory->contentParserFactory->registerParser(memtestParser, gettext("Memtest"));
-
-		linuxParser->setRegexEngine(regex->engine);
-		linuxIsoParser->setRegexEngine(regex->engine);
-		chainloadParser->setRegexEngine(regex->engine);
-		memtestParser->setRegexEngine(regex->engine);
+		factory->contentParserFactory->registerParser(factory->create<ContentParser_Linux>(), gettext("Linux"));
+		factory->contentParserFactory->registerParser(factory->create<ContentParser_LinuxIso>(), gettext("Linux-ISO"));
+		factory->contentParserFactory->registerParser(factory->create<ContentParser_Chainloader>(), gettext("Chainloader"));
+		factory->contentParserFactory->registerParser(factory->create<ContentParser_Memtest>(), gettext("Memtest"));
 
 		view->entryEditor->setAvailableEntryTypes(factory->contentParserFactory->getNames());
-
-		//set mutex
-		factory->listcfg->setMutex(thread->mutex1);
-		savedListCfg->setMutex(thread->mutex2);
 
 		mainController->initAction();
 		errorController->setApplicationStarted(true);

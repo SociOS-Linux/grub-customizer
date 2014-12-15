@@ -15,16 +15,19 @@
  * along with this program; if not, write to the Free Software
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
-#ifndef SRC_BOOTSTRAP_REGEX_HPP_
-#define SRC_BOOTSTRAP_REGEX_HPP_
 
-#include "../lib/Regex.hpp"
+#include "../../Controller/Helper/GLibThread.hpp"
+#include "../../lib/Mutex/GLib.hpp"
+#include "../Factory.hpp"
 
-class Bootstrap_Regex {
-	public: std::shared_ptr<Regex> engine;
-	public: Bootstrap_Regex();
-};
+std::shared_ptr<Controller_Helper_Thread> Bootstrap_Factory::createThreadHelper()
+{
+	Glib::thread_init();
 
+	return std::make_shared<Controller_Helper_GLibThread>();
+}
 
-
-#endif /* SRC_BOOTSTRAP_REGEX_HPP_ */
+std::shared_ptr<Mutex> Bootstrap_Factory::createMutex()
+{
+	return std::make_shared<Mutex_GLib>();
+}

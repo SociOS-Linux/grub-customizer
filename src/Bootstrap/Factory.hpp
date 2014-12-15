@@ -31,6 +31,8 @@
 #include "../Mapper/EntryNameImpl.hpp"
 #include "../Model/ThemeManager.hpp"
 #include "../Model/DeviceMap.hpp"
+#include "../Controller/Helper/Thread.hpp"
+#include "Application.hpp"
 
 class Bootstrap_Factory
 {
@@ -47,12 +49,18 @@ class Bootstrap_Factory
 	public: std::shared_ptr<Model_DeviceMap> deviceMap;
 	public: std::shared_ptr<Logger> logger;
 
+	public: std::shared_ptr<Regex> regexEngine;
+	public: std::shared_ptr<Controller_Helper_Thread> threadHelper;
+
 	public: std::shared_ptr<Bootstrap_Application_Object> applicationObject;
 
 	public: Bootstrap_Factory(std::shared_ptr<Bootstrap_Application_Object> applicationObject, std::shared_ptr<Logger> logger)
 	{
 		this->applicationObject    = applicationObject;
 		this->logger               = logger;
+
+		this->regexEngine          = this->createRegexExgine();
+		this->threadHelper         = this->createThreadHelper();
 
 		this->env                  = this->create<Model_Env>();
 		this->listcfg              = this->create<Model_ListCfg>();
@@ -65,6 +73,9 @@ class Bootstrap_Factory
 		this->entryNameMapper      = this->create<Mapper_EntryNameImpl>();
 		this->themeManager         = this->create<Model_ThemeManager>();
 		this->deviceMap            = this->create<Model_DeviceMap>();
+
+		this->bootstrap(this->regexEngine);
+		this->bootstrap(this->threadHelper);
 	}
 
 	public: template <typename TController, typename TView> std::shared_ptr<TController> createController(std::shared_ptr<TView> view)
@@ -141,7 +152,24 @@ class Bootstrap_Factory
 			std::shared_ptr<Trait_LoggerAware> objc = std::dynamic_pointer_cast<Trait_LoggerAware>(obj);
 			if (objc) {assert(this->logger); objc->setLogger(this->logger);}
 		}
+		{
+			std::shared_ptr<Regex_RegexConnection> objc = std::dynamic_pointer_cast<Regex_RegexConnection>(obj);
+			if (objc) {assert(this->regexEngine); objc->setRegexEngine(this->regexEngine);}
+		}
+		{
+			std::shared_ptr<Mutex_Connection> objc = std::dynamic_pointer_cast<Mutex_Connection>(obj);
+			if (objc) {objc->setMutex(this->createMutex());}
+		}
+		{
+			std::shared_ptr<Controller_Helper_Thread_Connection> objc = std::dynamic_pointer_cast<Controller_Helper_Thread_Connection>(obj);
+			if (objc) {assert(this->threadHelper); objc->setThreadHelper(this->threadHelper);}
+		}
 	}
+
+	// external implementations
+	private: std::shared_ptr<Regex> createRegexExgine();
+	private: std::shared_ptr<Mutex> createMutex();
+	private: std::shared_ptr<Controller_Helper_Thread> createThreadHelper();
 };
 
 #endif /* SRC_BOOTSTRAP_FACTORY_HPP_ */
