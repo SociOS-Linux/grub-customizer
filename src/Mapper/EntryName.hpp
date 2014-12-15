@@ -28,13 +28,13 @@ public:
 	virtual std::string map(Model_Entry const* sourceEntry, std::string const& defaultName, bool treatSubmenuAsPlaceholder) = 0;
 };
 
-class Mapper_EntryName_Connection {
-protected:
-	Mapper_EntryName* entryNameMapper;
-public:
-	Mapper_EntryName_Connection() : entryNameMapper(NULL) {}
-	void setEntryNameMapper(Mapper_EntryName& mapper) {
-		this->entryNameMapper = &mapper;
+class Mapper_EntryName_Connection
+{
+	protected: std::shared_ptr<Mapper_EntryName> entryNameMapper;
+
+	public: void setEntryNameMapper(std::shared_ptr<Mapper_EntryName> mapper)
+	{
+		this->entryNameMapper = mapper;
 	}
 };
 

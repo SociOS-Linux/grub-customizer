@@ -155,7 +155,7 @@ public:
 };
 
 // prefix "!" = use prefixes
-void var_dump(std::map<std::string, ArrayStructureItem> const& data, std::string prefix = "", unsigned int indent = 0) {
+inline void var_dump(std::map<std::string, ArrayStructureItem> const& data, std::string prefix = "", unsigned int indent = 0) {
 	if (prefix[0] == '!') {
 		indent = 2;
 	}

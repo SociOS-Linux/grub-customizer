@@ -24,22 +24,19 @@
 
 class ContentParser_Linux :
 	public ContentParser_Abstract,
-	public Regex_RegexConnection
+	public Regex_RegexConnection,
+	public Model_DeviceMap_Connection
 {
 	static const char* _regex;
-	Model_DeviceMap& deviceMap;
 	std::string sourceCode;
 public:
-	ContentParser_Linux(Model_DeviceMap& deviceMap) : deviceMap(deviceMap)
-	{}
-
 	void parse(std::string const& sourceCode) {
 		this->sourceCode = sourceCode;
 		try {
 			std::vector<std::string> result = this->regexEngine->match(ContentParser_Linux::_regex, sourceCode);
 	
 			//check partition indices by uuid
-			Model_DeviceMap_PartitionIndex pIndex = deviceMap.getHarddriveIndexByPartitionUuid(result[6]);
+			Model_DeviceMap_PartitionIndex pIndex = this->deviceMap->getHarddriveIndexByPartitionUuid(result[6]);
 			if (pIndex.hddNum != result[1] || pIndex.partNum != result[2]){
 				throw ParserException("parsing failed - hdd num check", __FILE__, __LINE__);
 			}
@@ -58,7 +55,7 @@ public:
 	}
 
 	std::string buildSource() const {
-		Model_DeviceMap_PartitionIndex pIndex = deviceMap.getHarddriveIndexByPartitionUuid(this->options.at("partition_uuid"));
+		Model_DeviceMap_PartitionIndex pIndex = this->deviceMap->getHarddriveIndexByPartitionUuid(this->options.at("partition_uuid"));
 		std::map<int, std::string> newValues;
 		newValues[1] = pIndex.hddNum;
 		newValues[2] = pIndex.partNum;
@@ -85,7 +82,7 @@ public:
 		search --no-floppy --fs-uuid --set=root 000000000000\n\
 		linux /vmlinuz root=UUID=000000000000 \n\
 		initrd /initrd.img";
-		Model_DeviceMap_PartitionIndex pIndex = this->deviceMap.getHarddriveIndexByPartitionUuid(partition_uuid);
+		Model_DeviceMap_PartitionIndex pIndex = this->deviceMap->getHarddriveIndexByPartitionUuid(partition_uuid);
 		std::map<int, std::string> newValues;
 		newValues[1] = pIndex.hddNum;
 		newValues[2] = pIndex.partNum;

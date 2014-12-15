@@ -19,42 +19,37 @@
 #ifndef TRAIT_LOGGERAWARE_INCLUDED
 #define TRAIT_LOGGERAWARE_INCLUDED
 
+#include <memory>
+
 #include "../Exception.hpp"
 #include "../Logger.hpp"
 
-class Trait_LoggerAware {
-protected:
-	mutable Logger* logger;
-public:
-	Trait_LoggerAware() : logger(NULL) {}
+class Trait_LoggerAware
+{
+	protected: mutable std::shared_ptr<Logger> logger;
 
-	void setLogger(Logger& logger) {
-		this->logger = &logger;
+	public: virtual ~Trait_LoggerAware() {}
+
+	public: void setLogger(std::shared_ptr<Logger> logger) {
+		this->logger = logger;
+		this->initLogger();
 	}
 
-	Logger const& getLogger() const {
-		if (this->logger == NULL) {
-			throw ConfigException("missing logger");
-		}
-		return *this->logger;
+	public: virtual void initLogger() {
+		// override to add initializations
 	}
 
-	Logger& getLogger() {
-		if (this->logger == NULL) {
-			throw ConfigException("missing logger");
-		}
-		return *this->logger;
-	}
-
-	Logger* getLoggerPtr() {
+	public: std::shared_ptr<Logger> getLogger() {
 		return this->logger;
 	}
 
-	bool hasLogger() const {
-		return this->logger != NULL;
+	public: bool hasLogger() const
+	{
+		return this->logger != nullptr;
 	}
-protected:
-	void log(std::string const& message, Logger::Priority prio) const {
+
+	protected: void log(std::string const& message, Logger::Priority prio) const
+	{
 		if (this->logger) {
 			this->logger->log(message, prio);
 		}

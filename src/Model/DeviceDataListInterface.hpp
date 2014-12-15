@@ -20,6 +20,7 @@
 #define DEVICEDATALIST_IFACE_H_
 #include <map>
 #include <string>
+#include <memory>
 
 class Model_DeviceDataListInterface : public std::map<std::string, std::map<std::string, std::string> > {
 public:
@@ -29,14 +30,13 @@ public:
 	virtual void clear()=0;
 };
 
-class Model_DeviceDataListInterface_Connection {
-protected:
-	Model_DeviceDataListInterface* deviceDataList;
-public:
-	Model_DeviceDataListInterface_Connection() : deviceDataList(NULL) {}
+class Model_DeviceDataListInterface_Connection
+{
+	protected: std::shared_ptr<Model_DeviceDataListInterface> deviceDataList;
 
-	void setDeviceDataList(Model_DeviceDataListInterface& deviceDataList){
-		this->deviceDataList = &deviceDataList;
+	public: void setDeviceDataList(std::shared_ptr<Model_DeviceDataListInterface> deviceDataList)
+	{
+		this->deviceDataList = deviceDataList;
 	}
 };
 

@@ -415,14 +415,21 @@ public:
 
 };
 
-class Model_Env_Connection {
-protected:
-	Model_Env* env;
-public:
-	Model_Env_Connection() : env(NULL) {}
+class Model_Env_Connection
+{
+	protected: std::shared_ptr<Model_Env> env;
 
-	void setEnv(Model_Env& env) {
-		this->env = &env;
+	public: virtual ~Model_Env_Connection(){}
+
+	public: void setEnv(std::shared_ptr<Model_Env> env)
+	{
+		this->env = env;
+		this->initEnv();
+	}
+
+	public: virtual void initEnv()
+	{
+		// override to add custom functionality
 	}
 };
 

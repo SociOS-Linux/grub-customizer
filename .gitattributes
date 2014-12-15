@@ -47,12 +47,11 @@ misc/icons/64x64.png -text svneol=unset#unset
 misc/manpage.gz -text svneol=unset#unset
 misc/pkexec_policy.in -text
 src/Bootstrap/Application.hpp -text
-src/Bootstrap/GLibRegex.cpp -text
-src/Bootstrap/GlibThread.cpp -text
+src/Bootstrap/Factory.hpp -text
+src/Bootstrap/FactoryImpl/GLibRegex.cpp -text
+src/Bootstrap/FactoryImpl/GlibThread.cpp -text
 src/Bootstrap/GtkApplication.cpp -text
 src/Bootstrap/GtkView.cpp -text
-src/Bootstrap/Regex.hpp -text
-src/Bootstrap/Thread.hpp -text
 src/Bootstrap/View.hpp -text
 src/Controller/AboutController.hpp -text
 src/Controller/Common/ControllerAbstract.hpp -text

@@ -31,12 +31,13 @@ class Controller_Helper_Thread : public Trait_LoggerAware
 
 class Controller_Helper_Thread_Connection
 {
-	protected: Controller_Helper_Thread* threadHelper = nullptr;
+	protected: std::shared_ptr<Controller_Helper_Thread> threadHelper;
 
 	public: virtual ~Controller_Helper_Thread_Connection(){}
 
-	public: void setThreadHelper(Controller_Helper_Thread& threadHelper) {
-		this->threadHelper = &threadHelper;
+	public: void setThreadHelper(std::shared_ptr<Controller_Helper_Thread> threadHelper)
+	{
+		this->threadHelper = threadHelper;
 	}
 };
 

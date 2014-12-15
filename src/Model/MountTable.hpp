@@ -259,14 +259,13 @@ class Model_MountTable : public std::list<Model_MountTable_Mountpoint>, public T
 
 };
 
-class Model_MountTable_Connection {
-protected:
-	Model_MountTable* mountTable;
-public:
-	Model_MountTable_Connection() : mountTable(NULL) {}
+class Model_MountTable_Connection
+{
+	protected: std::shared_ptr<Model_MountTable> mountTable;
 
-	void setMountTable(Model_MountTable& mountTable){
-		this->mountTable = &mountTable;
+	public: void setMountTable(std::shared_ptr<Model_MountTable> mountTable)
+	{
+		this->mountTable = mountTable;
 	}
 };
 

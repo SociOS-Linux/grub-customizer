@@ -21,12 +21,12 @@
 
 template <typename T>
 class View_Trait_ViewAware {
-	protected: T* view = nullptr;
+	protected: std::shared_ptr<T> view;
 
 	public: virtual ~View_Trait_ViewAware(){}
 
-	public: void setView(T& view) {
-		this->view = &view;
+	public: void setView(std::shared_ptr<T> view) {
+		this->view = view;
 		this->initViewEvents();
 	}
 

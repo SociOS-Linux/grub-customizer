@@ -15,15 +15,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
-#include "../lib/Regex/GLib.hpp"
-#include "Regex.hpp"
+#include "../../lib/Regex/GLib.hpp"
+#include "../Factory.hpp"
 
-Bootstrap_Regex::Bootstrap_Regex() :
-	engine(NULL)
+std::shared_ptr<Regex> Bootstrap_Factory::createRegexExgine()
 {
-	this->engine = new Regex_GLib;
-}
-
-Bootstrap_Regex::~Bootstrap_Regex() {
-	delete this->engine;
+	return std::make_shared<Regex_GLib>();
 }

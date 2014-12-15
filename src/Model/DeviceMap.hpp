@@ -133,4 +133,14 @@ public:
 
 };
 
+class Model_DeviceMap_Connection
+{
+	protected: std::shared_ptr<Model_DeviceMap> deviceMap;
+
+	public: void setDeviceMap(std::shared_ptr<Model_DeviceMap> deviceMap)
+	{
+		this->deviceMap = deviceMap;
+	}
+};
+
 #endif

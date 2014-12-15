@@ -21,23 +21,24 @@
 #include "../../lib/ContentParserFactory.hpp"
 #include "../../lib/ContentParser.hpp"
 #include <list>
+#include <memory>
 #include "../Exception.hpp"
 
 class ContentParser_FactoryImpl : public ContentParserFactory {
-	std::list<ContentParser*> parsers;
-	std::list<std::string> names;
-public:
-	void registerParser(ContentParser& parser, std::string const& name) {
+	private: std::list<std::shared_ptr<ContentParser>> parsers;
+	private: std::list<std::string> names;
+
+	public: void registerParser(std::shared_ptr<ContentParser> parser, std::string const& name) {
 		assert(this->parsers.size() == this->names.size());
-		this->parsers.push_back(&parser);
+		this->parsers.push_back(parser);
 		this->names.push_back(name);
 	}
 
-	ContentParser* create(std::string const& sourceCode) {
-		for (std::list<ContentParser*>::iterator iter = this->parsers.begin(); iter != this->parsers.end(); iter++) {
+	public: std::shared_ptr<ContentParser> create(std::string const& sourceCode) {
+		for (auto parser : this->parsers) {
 			try {
-				(*iter)->parse(sourceCode);
-				return *iter;
+				parser->parse(sourceCode);
+				return parser;
 			} catch (ParserException const& e) {
 				continue;
 			}
@@ -45,29 +46,29 @@ public:
 		throw ParserNotFoundException("no matching parser found", __FILE__, __LINE__);
 	}
 
-	ContentParser* createByName(std::string const& name) {
+	public: std::shared_ptr<ContentParser> createByName(std::string const& name) {
 		assert(this->parsers.size() == this->names.size());
 	
 		std::list<std::string>::iterator namesIter = this->names.begin();
-		for (std::list<ContentParser*>::iterator parsersIter = this->parsers.begin(); parsersIter != this->parsers.end(); parsersIter++) {
+		for (auto parser : this->parsers) {
 			if (name == *namesIter) {
-				return *parsersIter;
+				return parser;
 			}
 			namesIter++;
 		}
 		throw ItemNotFoundException("no parser found by name '" + name + "'", __FILE__, __LINE__);
 	}
 
-	std::list<std::string> const& getNames() const {
+	public: std::list<std::string> const& getNames() const {
 		return this->names;
 	}
 
-	std::string getNameByInstance(ContentParser const& instance) const {
+	public: std::string getNameByInstance(ContentParser const& instance) const {
 		assert(this->parsers.size() == this->names.size());
 	
 		std::list<std::string>::const_iterator namesIter = this->names.begin();
-		for (std::list<ContentParser*>::const_iterator parsersIter = this->parsers.begin(); parsersIter != this->parsers.end(); parsersIter++) {
-			if (&instance == *parsersIter) {
+		for (auto parser : this->parsers) {
+			if (&instance == &*parser) {
 				return *namesIter;
 			}
 			namesIter++;

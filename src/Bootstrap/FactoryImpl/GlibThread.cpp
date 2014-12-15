@@ -16,22 +16,18 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef SRC_BOOTSTRAP_THREAD_HPP_
-#define SRC_BOOTSTRAP_THREAD_HPP_
+#include "../../Controller/Helper/GLibThread.hpp"
+#include "../../lib/Mutex/GLib.hpp"
+#include "../Factory.hpp"
 
-#include <memory>
-
-#include "../Controller/Helper/Thread.hpp"
-#include "../lib/Mutex.hpp"
-
-class Bootstrap_Thread
+std::shared_ptr<Controller_Helper_Thread> Bootstrap_Factory::createThreadHelper()
 {
-	public: Bootstrap_Thread();
-	public: std::shared_ptr<Controller_Helper_Thread> threadHelper;
-	public: std::shared_ptr<Mutex> mutex1;
-	public: std::shared_ptr<Mutex> mutex2;
-};
+	Glib::thread_init();
 
+	return std::make_shared<Controller_Helper_GLibThread>();
+}
 
-
-#endif /* SRC_BOOTSTRAP_THREAD_HPP_ */
+std::shared_ptr<Mutex> Bootstrap_Factory::createMutex()
+{
+	return std::make_shared<Mutex_GLib>();
+}

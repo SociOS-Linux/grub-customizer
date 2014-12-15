@@ -75,14 +75,13 @@ public:
 
 };
 
-class Model_DeviceDataList_Connection {
-protected:
-	Model_DeviceDataList* deviceDataList;
-public:
-	Model_DeviceDataList_Connection() : deviceDataList(NULL) {}
+class Model_DeviceDataList_Connection
+{
+	protected: std::shared_ptr<Model_DeviceDataList> deviceDataList;
 
-	void setDeviceDataList(Model_DeviceDataList& deviceDataList){
-		this->deviceDataList = &deviceDataList;
+	public: void setDeviceDataList(std::shared_ptr<Model_DeviceDataList> deviceDataList)
+	{
+		this->deviceDataList = deviceDataList;
 	}
 };
 #endif

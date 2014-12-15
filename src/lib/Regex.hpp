@@ -21,6 +21,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <memory>
 
 class Regex {
 	public: virtual ~Regex(){}
@@ -28,13 +29,13 @@ class Regex {
 	public: virtual std::string replace(std::string const& pattern, std::string const& str, std::map<int, std::string> const& newValues) = 0;
 };
 
-class Regex_RegexConnection {
-protected:
-	Regex* regexEngine;
-public:
-	Regex_RegexConnection() : regexEngine(NULL) {}
-	void setRegexEngine(Regex& regexEngine) {
-		this->regexEngine = &regexEngine;
+class Regex_RegexConnection
+{
+	protected: std::shared_ptr<Regex> regexEngine;
+
+	public: void setRegexEngine(std::shared_ptr<Regex> regexEngine)
+	{
+		this->regexEngine = regexEngine;
 	}
 };
 

@@ -19,6 +19,7 @@
 #ifndef MUTEX_H_INCLUDED
 #define MUTEX_H_INCLUDED
 #include <cstdlib>
+#include <memory>
 
 #include "Trait/LoggerAware.hpp"
 
@@ -31,14 +32,13 @@ public:
 	virtual void unlock() = 0;
 };
 
-class Mutex_Connection {
-protected:
-	Mutex* mutex;
-public:
-	Mutex_Connection() : mutex(NULL) {}
+class Mutex_Connection
+{
+	protected: std::shared_ptr<Mutex> mutex;
 
-	void setMutex(Mutex& mutex) {
-		this->mutex = &mutex;
+	public: void setMutex(std::shared_ptr<Mutex> mutex)
+	{
+		this->mutex = mutex;
 	}
 };
 

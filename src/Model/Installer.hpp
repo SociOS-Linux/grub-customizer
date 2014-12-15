@@ -57,15 +57,13 @@ public:
 
 class Model_Installer_Connection
 {
-	protected: Model_Installer* installer;
-
-	public: Model_Installer_Connection() : installer(NULL) {}
+	protected: std::shared_ptr<Model_Installer> installer;
 
 	public: virtual ~Model_Installer_Connection(){}
 
-	public: void setInstaller(Model_Installer& installer)
+	public: void setInstaller(std::shared_ptr<Model_Installer> installer)
 	{
-		this->installer = &installer;
+		this->installer = installer;
 
 		this->initInstallerEvents();
 	}

@@ -20,6 +20,7 @@
 #define CONTENTPARSERFACTORY_H_
 #include <list>
 #include <string>
+#include <memory>
 
 #include "ContentParser.hpp"
 #include "Exception.hpp"
@@ -28,20 +29,19 @@ class ContentParserFactory {
 public:
 	virtual inline ~ContentParserFactory() {};
 
-	virtual ContentParser* create(std::string const& sourceCode) = 0;
-	virtual ContentParser* createByName(std::string const& name) = 0;
+	virtual std::shared_ptr<ContentParser> create(std::string const& sourceCode) = 0;
+	virtual std::shared_ptr<ContentParser> createByName(std::string const& name) = 0;
 	virtual std::list<std::string> const& getNames() const = 0;
 	virtual std::string getNameByInstance(ContentParser const& instance) const = 0;
 };
 
-class ContentParserFactory_Connection {
-protected:
-	ContentParserFactory* contentParserFactory;
-public:
-	ContentParserFactory_Connection() : contentParserFactory(NULL) {}
+class ContentParserFactory_Connection
+{
+	protected: std::shared_ptr<ContentParserFactory> contentParserFactory;
 
-	void setContentParserFactory(ContentParserFactory& contentParserFactory) {
-		this->contentParserFactory = &contentParserFactory;
+	public:	void setContentParserFactory(std::shared_ptr<ContentParserFactory> contentParserFactory)
+	{
+		this->contentParserFactory = contentParserFactory;
 	}
 };
 

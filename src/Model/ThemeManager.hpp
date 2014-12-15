@@ -156,14 +156,13 @@ public:
 
 };
 
-class Model_ThemeManager_Connection {
-protected:
-	Model_ThemeManager* themeManager;
-public:
-	Model_ThemeManager_Connection() : themeManager(NULL) {}
+class Model_ThemeManager_Connection
+{
+	protected: std::shared_ptr<Model_ThemeManager> themeManager;
 
-	void setThemeManager(Model_ThemeManager& themeManager) {
-		this->themeManager = &themeManager;
+	public:	void setThemeManager(std::shared_ptr<Model_ThemeManager> themeManager)
+	{
+		this->themeManager = themeManager;
 	}
 };
 

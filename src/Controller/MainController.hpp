@@ -27,6 +27,7 @@
 #include <sstream>
 #include <algorithm>
 #include <functional>
+#include <memory>
 #include "../config.hpp"
 
 #include "../Model/Env.hpp"
@@ -63,8 +64,8 @@ class MainController :
 	public Controller_Helper_Thread_Connection,
 	public Bootstrap_Application_Object_Connection
 {
-	Model_SettingsManagerData* settingsOnDisk; //buffer for the existing settings
-	Model_ListCfg* savedListCfg;
+	std::shared_ptr<Model_SettingsManagerData> settingsOnDisk; //buffer for the existing settings
+	std::shared_ptr<Model_ListCfg> savedListCfg;
 	ContentParser* currentContentParser;
 
 	bool config_has_been_different_on_startup_but_unsaved;
@@ -272,12 +273,12 @@ class MainController :
 
 
 public:
-	void setSettingsBuffer(Model_SettingsManagerData& settings) {
-		this->settingsOnDisk = &settings;
+	void setSettingsBuffer(std::shared_ptr<Model_SettingsManagerData> settings) {
+		this->settingsOnDisk = settings;
 	}
 
-	void setSavedListCfg(Model_ListCfg& savedListCfg) {
-		this->savedListCfg = &savedListCfg;
+	void setSavedListCfg(std::shared_ptr<Model_ListCfg> savedListCfg) {
+		this->savedListCfg = savedListCfg;
 	}
 
 	Model_FbResolutionsGetter& getFbResolutionsGetter() {
@@ -618,8 +619,6 @@ public:
 	}
 
 	MainController() : Controller_Common_ControllerAbstract("main"),
-		  settingsOnDisk(NULL),
-		  savedListCfg(NULL),
 		 config_has_been_different_on_startup_but_unsaved(false),
 		 is_loading(false),
 		 currentContentParser(NULL),

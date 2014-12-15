@@ -51,7 +51,7 @@ class EntryEditController :
 	public Controller_Helper_Thread_Connection,
 	public Bootstrap_Application_Object_Connection
 {
-	ContentParser* currentContentParser;
+	std::shared_ptr<ContentParser> currentContentParser;
 	Model_Script* _createCustomScript() {
 		this->grublistCfg->repository.push_back(Model_Script("custom", ""));
 		Model_Script& script = this->grublistCfg->repository.back();
