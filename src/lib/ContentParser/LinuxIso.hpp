@@ -26,7 +26,9 @@
 class ContentParser_LinuxIso :
 	public ContentParser_Abstract,
 	public Regex_RegexConnection,
-	public Model_DeviceMap_Connection
+	public Model_DeviceMap_Connection,
+	public Model_MountTable_Connection,
+	public Model_DeviceDataList_Connection
 {
 	static const char* _regex;
 	std::string sourceCode;
@@ -34,7 +36,7 @@ public:
 	void parse(std::string const& sourceCode) {
 		this->sourceCode = sourceCode;
 		try {
-			std::vector<std::string> result = this->regexEngine->match(ContentParser_LinuxIso::_regex, this->sourceCode);
+			std::vector<std::string> result = this->regexEngine->match(ContentParser_LinuxIso::_regex, this->sourceCode, '\\', '_');
 	
 			//check partition indices by uuid
 			Model_DeviceMap_PartitionIndex pIndex = this->deviceMap->getHarddriveIndexByPartitionUuid(result[3]);
@@ -43,66 +45,88 @@ public:
 			}
 	
 			//check if the iso filepaths are the same
-			if (result[4] != result[6])
+			if (this->unescape(result[4]) != this->unescape(result[6]))
 				throw ParserException("parsing failed - iso filepaths are different", __FILE__, __LINE__);
-	
+
 			//assign data
 			this->options["partition_uuid"] = result[3];
-			this->options["linux_image"] = result[5];
-			this->options["initramfs"] = result[9];
-			this->options["iso_path"] = result[4];
-			this->options["locale"] = result[7];
-			this->options["other_params"] = result[8];
+			this->options["linux_image"] = Helper::str_replace("(loop)", "", this->unescape(result[5]));
+			this->options["initramfs"] = Helper::str_replace("(loop)", "", this->unescape(result[8]));
+			this->options["iso_path"] = this->unescape(result[4]);
+			this->options["iso_path_full"] = "";
+			this->options["other_params"] = Helper::ltrim(result[7], " ");
+
+			try {
+				std::string device = this->deviceDataList->getDeviceByUuid(this->options["partition_uuid"]);
+				this->options["iso_path_full"] = Helper::rtrim(this->mountTable->findByDevice(device).mountpoint, "/") + "/" + Helper::ltrim(this->options["iso_path"], "/");
+				if (!this->_fileExists(this->options["iso_path_full"])) {
+					throw ItemNotFoundException("iso file '" + this->options["iso_path_full"] + "'not found!", __FILE__, __LINE__);
+				}
+				this->options.erase("partition_uuid");
+				this->options.erase("iso_path");
+			} catch (ItemNotFoundException const& e) {
+				// partition not mounted or file not found
+				this->options.erase("iso_path_full");
+			}
+
+
 		} catch (RegExNotMatchedException const& e) {
 			throw ParserException("parsing failed - RegEx not matched", __FILE__, __LINE__);
 		}
 	}
 
 	std::string buildSource() const {
-		Model_DeviceMap_PartitionIndex pIndex = this->deviceMap->getHarddriveIndexByPartitionUuid(this->options.at("partition_uuid"));
+		std::string partitionUuid, isoPath;
+
+		if (this->options.find("iso_path_full") != this->options.end()) {
+			std::string realIsoPath = this->_realpath(this->options.at("iso_path_full"));
+			Model_MountTable_Mountpoint& mountpoint = this->mountTable->getByFilePath(realIsoPath);
+			partitionUuid = (*this->deviceDataList)[mountpoint.device]["UUID"];
+			isoPath = realIsoPath.substr(mountpoint.mountpoint.size());
+		} else {
+			partitionUuid = this->options.at("partition_uuid");
+			isoPath = this->options.at("iso_path");
+		}
+
+		Model_DeviceMap_PartitionIndex pIndex = this->deviceMap->getHarddriveIndexByPartitionUuid(partitionUuid);
 		std::map<int, std::string> newValues;
 		newValues[1] = pIndex.hddNum;
 		newValues[2] = pIndex.partNum;
-		newValues[3] = this->options.at("partition_uuid");
-		newValues[4] = this->options.at("iso_path");
-		newValues[5] = this->options.at("linux_image");
-		newValues[6] = this->options.at("iso_path");
-		newValues[7] = this->options.at("locale");
-		newValues[8] = this->options.at("other_params");
-		newValues[9] = this->options.at("initramfs");
-	
-		std::string result = this->regexEngine->replace(ContentParser_LinuxIso::_regex, this->sourceCode, newValues);
-	
-		//check the new string. If they aren't matchable anymore (evil input), do a rollback
+		newValues[3] = partitionUuid;
+		newValues[4] = this->escape(isoPath);
+		newValues[5] = this->escape("(loop)" + this->options.at("linux_image"));
+		newValues[6] = this->escape(isoPath);
+		newValues[7] = this->options.at("other_params").size() ? " " + this->options.at("other_params") : "";
+		newValues[8] = this->escape("(loop)" + this->options.at("initramfs"));
+
+		std::string result;
 		try {
-			this->regexEngine->match(ContentParser_LinuxIso::_regex, result);
+			result = this->regexEngine->replace(ContentParser_LinuxIso::_regex, this->sourceCode, newValues, '\\', '_');
+			this->regexEngine->match(ContentParser_LinuxIso::_regex, result, '\\', '_');
 		} catch (RegExNotMatchedException const& e) {
-			this->log("Ignoring data - doesn't match", Logger::ERROR);
-			result = this->sourceCode;
+			throw ParserException("parsing failed - RegEx not matched", __FILE__, __LINE__);
 		}
 		return result;
 	}
 
 
-	void buildDefaultEntry(std::string const& partition_uuid) {
+	void buildDefaultEntry() {
 		std::string defaultEntry = "\
 		set root='(hd0,0)'\n\
 		search --no-floppy --fs-uuid --set=root 000000000000000000\n\
-		loopback loop /xxx.iso\n\
-		linux (loop)/casper/vmlinuz boot=casper iso-scan/filename=/xxx.iso quiet splash locale=en_US bootkbd=us console-setup/layoutcode=us noeject --\n\
-		initrd (loop)/casper/initrd.lz\n";
-		Model_DeviceMap_PartitionIndex pIndex = this->deviceMap->getHarddriveIndexByPartitionUuid(partition_uuid);
-		std::map<int, std::string> newValues;
-		newValues[1] = pIndex.hddNum;
-		newValues[2] = pIndex.partNum;
-		newValues[3] = partition_uuid;
-	//	newValues[4] = ISO
-	//	newValues[5] = KERNEL
-	//	newValues[6] = ISO
-	//	newValues[7] = LOCALE
-	//	newValues[8] = INITRD
-	
-		this->parse(this->regexEngine->replace(ContentParser_LinuxIso::_regex, defaultEntry, newValues));
+		loopback loop ___\n\
+		linux (loop)___ boot=casper iso-scan/filename=___\n\
+		initrd (loop)___\n";
+
+		assert(this->regexEngine->match(ContentParser_LinuxIso::_regex, defaultEntry, '\\', '_').size() > 0);
+
+		this->sourceCode = defaultEntry;
+
+		this->options.clear();
+		this->options["linux_image"] = "/casper/vmlinuz";
+		this->options["initramfs"] = "/casper/initrd.lz";
+		this->options["iso_path_full"] = "";
+		this->options["other_params"] = "quiet splash locale=en_US bootkbd=us console-setup/layoutcode=us noeject --";
 	}
 
 };
@@ -110,9 +134,9 @@ public:
 const char* ContentParser_LinuxIso::_regex = "\
 [ \t]*set root='\\(hd([0-9]+)[^0-9]+([0-9]+)\\)'\\n\
 [ \t]*search[ \\t]+--no-floppy[ \\t]+--fs-uuid[ \\t]+--set(?:=root)? ([-0-9a-fA-F]+)\\n\
-[ \t]*loopback[ \\t]+loop[ \t]+([^ \\t]+)\\n\
-[ \t]*linux[ \\t]+\\(loop\\)([^ \\t]+)[ \\t]+boot=casper iso-scan/filename=([^ \\t]+) quiet splash locale=([^ \\t]+) (.*)\\n\
-[ \t]*initrd[ \\t]+\\(loop\\)([^ \\t]+)\\n\
+[ \t]*loopback[ \\t]+loop[ \t]+(\"[^\"]*\"|[^ \\t]+)\\n\
+[ \t]*linux[ \\t]+(\"\\(loop\\)[^\"]*\"|\\(loop\\)[^ \\t]*)[ \\t]+boot=casper iso-scan/filename=(\"[^\"]*\"|[^ \\t]+)(.*)\\n\
+[ \t]*initrd[ \\t]+(\"\\(loop\\)[^\"]*\"|\\(loop\\)[^ \\t]*)\\n\
 ";
 
 #endif /* CONTENT_PARSER_LINUXISO_H_ */
