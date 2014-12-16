@@ -39,26 +39,27 @@ class ErrorController :
 	public Controller_Helper_Thread_Connection,
 	public Bootstrap_Application_Object_Connection
 {
-	bool applicationStarted;
-public:
-	void setApplicationStarted(bool val) {
+	private: bool applicationStarted;
+
+	public:	void setApplicationStarted(bool val)
+	{
 		this->applicationStarted = val;
 	}
 
-
-	ErrorController() : Controller_Common_ControllerAbstract("error"),
-		  applicationStarted(false)
+	public:	ErrorController() :
+		Controller_Common_ControllerAbstract("error"),
+		applicationStarted(false)
 	{
 	}
 
-	void initViewEvents() override
+	public:	void initViewEvents() override
 	{
 		using namespace std::placeholders;
 
 		this->view->onQuitClick = std::bind(std::mem_fn(&ErrorController::quitAction), this);
 	}
 
-	void initApplicationEvents() override
+	public:	void initApplicationEvents() override
 	{
 		using namespace std::placeholders;
 
@@ -67,12 +68,14 @@ public:
 	}
 
 	
-	void errorAction(Exception const& e) {
+	public:	void errorAction(Exception const& e)
+	{
 		this->log(e, Logger::EXCEPTION);
 		this->view->showErrorMessage(e, this->applicationStarted);
 	}
 
-	void errorThreadedAction(Exception const& e) {
+	public:	void errorThreadedAction(Exception const& e)
+	{
 		if (this->threadHelper) {
 			this->threadHelper->runDispatched(std::bind(std::mem_fn(&ErrorController::errorAction), this, Exception(e)));
 		} else {
@@ -81,7 +84,8 @@ public:
 		}
 	}
 
-	void quitAction() {
+	public:	void quitAction()
+	{
 		if (this->applicationStarted) {
 			this->applicationObject->shutdown();
 		} else {

@@ -40,122 +40,17 @@ class ThemeController :
 	public Controller_Helper_Thread_Connection,
 	public Bootstrap_Application_Object_Connection
 {
-	std::string currentTheme, currentThemeFile;
-	bool syncActive; // should only be controlled by syncSettings()
-	bool isImage(std::string const& fileName) {
-		std::list<std::string> imageExtensions;
-		imageExtensions.push_back("png");
-		imageExtensions.push_back("jpg");
-		imageExtensions.push_back("bmp");
-		imageExtensions.push_back("gif");
-		imageExtensions.push_back("pf2"); // not really, but shouldn't be handled as text
+	private: std::string currentTheme, currentThemeFile;
+	private: bool syncActive; // should only be controlled by syncSettings()
 	
-		if (fileName.find_last_of(".") != std::string::npos) {
-			int dotPos = fileName.find_last_of(".");
-			std::string extension = fileName.substr(dotPos + 1);
-			if (std::find(imageExtensions.begin(), imageExtensions.end(), extension) != imageExtensions.end()) {
-				return true;
-			}
-		}
-		return false;
-	}
 
-
-	void syncSettings() {
-		if (this->syncActive) {
-			return;
-		}
-		this->syncActive = true;
-		std::string nColor = this->settings->getValue("GRUB_COLOR_NORMAL");
-		std::string hColor = this->settings->getValue("GRUB_COLOR_HIGHLIGHT");
-		if (nColor != ""){
-			this->view->getColorChooser(View_Theme::COLOR_CHOOSER_DEFAULT_FONT).selectColor(nColor.substr(0, nColor.find('/')));
-			this->view->getColorChooser(View_Theme::COLOR_CHOOSER_DEFAULT_BACKGROUND).selectColor(nColor.substr(nColor.find('/')+1));
-		}
-		else {
-			//default grub menu colors
-			this->view->getColorChooser(View_Theme::COLOR_CHOOSER_DEFAULT_FONT).selectColor("light-gray");
-			this->view->getColorChooser(View_Theme::COLOR_CHOOSER_DEFAULT_BACKGROUND).selectColor("black");
-		}
-		if (hColor != ""){
-			this->view->getColorChooser(View_Theme::COLOR_CHOOSER_HIGHLIGHT_FONT).selectColor(hColor.substr(0, hColor.find('/')));
-			this->view->getColorChooser(View_Theme::COLOR_CHOOSER_HIGHLIGHT_BACKGROUND).selectColor(hColor.substr(hColor.find('/')+1));
-		}
-		else {
-			//default grub menu colors
-			this->view->getColorChooser(View_Theme::COLOR_CHOOSER_HIGHLIGHT_FONT).selectColor("magenta");
-			this->view->getColorChooser(View_Theme::COLOR_CHOOSER_HIGHLIGHT_BACKGROUND).selectColor("black");
-		}
-	
-		std::string wallpaper_key = this->env->useDirectBackgroundProps ? "GRUB_BACKGROUND" : "GRUB_MENU_PICTURE";
-		std::string menuPicturePath = this->settings->getValue(wallpaper_key);
-		bool menuPicIsInGrubDir = false;
-		if (menuPicturePath != "" && menuPicturePath[0] != '/'){
-			menuPicturePath = env->output_config_dir + "/" + menuPicturePath;
-			menuPicIsInGrubDir = true;
-		}
-		this->view->setFontName(this->settings->grubFont);
-	
-		if (this->settings->isActive(wallpaper_key) && menuPicturePath != ""){
-			this->view->setBackgroundImagePreviewPath(menuPicturePath, menuPicIsInGrubDir);
-		}
-		else {
-			this->view->setBackgroundImagePreviewPath("", menuPicIsInGrubDir);
-		}
-	
-		std::string selectedTheme = this->view->getSelectedTheme();
-	
-		this->view->clearThemeSelection();
-		for (std::list<Model_Theme>::iterator themeIter = this->themeManager->themes.begin(); themeIter != this->themeManager->themes.end(); themeIter++) {
-			this->view->addTheme(themeIter->name);
-		}
-		this->view->selectTheme(selectedTheme);
-	
-		std::string themeName;
-		if (this->settings->isActive("GRUB_THEME")) {
-			try {
-				themeName = this->themeManager->extractThemeName(this->settings->getValue("GRUB_THEME"));
-			} catch (InvalidStringFormatException const& e) {
-				this->log(e, Logger::ERROR);
-			}
-		}
-	
-		if (this->currentTheme != themeName) {
-			if (this->settings->isActive("GRUB_THEME")) {
-				if (this->themeManager->themeExists(themeName)) {
-					this->loadThemeAction(themeName);
-				} else {
-					this->log("theme " + themeName + " not found!", Logger::ERROR);
-				}
-			} else if (!this->settings->isActive("GRUB_THEME")) {
-				this->showSimpleThemeConfigAction();
-			}
-		}
-
-		this->applicationObject->onSettingModelChange.exec();
-		this->syncActive = false;
-	}
-
-	void syncFiles() {
-		this->view->clear();
-		if (this->currentTheme != "") {
-			Model_Theme* theme = &this->themeManager->getTheme(this->currentTheme);
-			for (std::list<Model_ThemeFile>::iterator themeFileIter = theme->files.begin(); themeFileIter != theme->files.end(); themeFileIter++) {
-				this->view->addFile(themeFileIter->newLocalFileName);
-			}
-			if (this->currentThemeFile != "") {
-				this->view->selectFile(theme->getFile(this->currentThemeFile).newLocalFileName);
-			}
-		}
-	}
-
-public:
-	ThemeController() : Controller_Common_ControllerAbstract("theme"),
-		  syncActive(false)
+	public: ThemeController() :
+		Controller_Common_ControllerAbstract("theme"),
+		syncActive(false)
 	{
 	}
 
-	void initViewEvents() override
+	public: void initViewEvents() override
 	{
 		using namespace std::placeholders;
 
@@ -177,7 +72,7 @@ public:
 		this->view->onSaveClick = std::bind(std::mem_fn(&ThemeController::saveAction), this);
 	}
 
-	void initApplicationEvents() override
+	public: void initApplicationEvents() override
 	{
 		using namespace std::placeholders;
 
@@ -190,7 +85,8 @@ public:
 	}
 
 
-	void loadThemesAction() {
+	public: void loadThemesAction()
+	{
 		this->logActionBegin("load-themes");
 		try {
 			try {
@@ -205,7 +101,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void loadThemeAction(std::string const& name) {
+	public: void loadThemeAction(std::string const& name)
+	{
 		this->logActionBegin("load-theme");
 		try {
 			this->view->setEditorType(View_Theme::EDITORTYPE_THEME);
@@ -228,7 +125,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void addThemePackageAction(const std::string& filePath) {
+	public: void addThemePackageAction(const std::string& filePath)
+	{
 		this->logActionBegin("add-theme-package");
 		try {
 			try {
@@ -246,7 +144,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void removeThemeAction(const std::string& name) {
+	public: void removeThemeAction(const std::string& name)
+	{
 		this->logActionBegin("remove-theme");
 		try {
 			this->themeManager->removeTheme(this->themeManager->getTheme(name));
@@ -258,7 +157,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void showThemeInstallerAction() {
+	public: void showThemeInstallerAction()
+	{
 		this->logActionBegin("show-theme-installer");
 		try {
 			this->view->showThemeFileChooser();
@@ -268,7 +168,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void showSimpleThemeConfigAction() {
+	public: void showSimpleThemeConfigAction()
+	{
 		this->logActionBegin("show-simple-theme-config");
 		try {
 			this->view->setEditorType(View_Theme::EDITORTYPE_CUSTOM);
@@ -285,7 +186,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void addFileAction() {
+	public: void addFileAction()
+	{
 		this->logActionBegin("add-file");
 		try {
 			std::string defaultName = this->view->getDefaultName();
@@ -311,7 +213,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void startFileEditAction(std::string const& file) {
+	public: void startFileEditAction(std::string const& file)
+	{
 		this->logActionBegin("select-file");
 		try {
 			this->view->selectFile(file, true);
@@ -321,7 +224,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void removeFileAction(std::string const& file) {
+	public: void removeFileAction(std::string const& file)
+	{
 		this->logActionBegin("remove-file");
 		try {
 			Model_ThemeFile* fileObj = &this->themeManager->getTheme(this->currentTheme).getFileByNewName(file);
@@ -334,7 +238,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void updateEditAreaAction(std::string const& file) {
+	public: void updateEditAreaAction(std::string const& file)
+	{
 		this->logActionBegin("update-edit-area");
 		try {
 			Model_Theme* theme = &this->themeManager->getTheme(this->currentTheme);
@@ -370,7 +275,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void renameAction(std::string const& newName) {
+	public: void renameAction(std::string const& newName)
+	{
 		this->logActionBegin("rename");
 		try {
 			Model_ThemeFile* themeFile = &this->themeManager->getTheme(this->currentTheme).getFile(this->currentThemeFile);
@@ -396,7 +302,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void loadFileAction(std::string const& externalPath) {
+	public: void loadFileAction(std::string const& externalPath)
+	{
 		this->logActionBegin("load-file");
 		try {
 			if (this->currentThemeFile == "") {
@@ -415,7 +322,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void saveTextAction(std::string const& newText) {
+	public: void saveTextAction(std::string const& newText)
+	{
 		this->logActionBegin("save-text");
 		try {
 			this->themeManager->getTheme(this->currentTheme).isModified = true;
@@ -431,7 +339,8 @@ public:
 	}
 
 
-	void updateColorSettingsAction() {
+	public: void updateColorSettingsAction()
+	{
 		this->logActionBegin("update-color-settings");
 		try {
 			if (this->view->getColorChooser(View_Theme::COLOR_CHOOSER_DEFAULT_FONT).getSelectedColor() != "" && this->view->getColorChooser(View_Theme::COLOR_CHOOSER_DEFAULT_BACKGROUND).getSelectedColor() != ""){
@@ -452,7 +361,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void updateFontSettingsAction(bool removeFont) {
+	public: void updateFontSettingsAction(bool removeFont)
+	{
 		this->logActionBegin("update-font-settings");
 		try {
 			std::string fontName;
@@ -491,7 +401,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void updateFontSizeAction() {
+	public: void updateFontSizeAction()
+	{
 		this->logActionBegin("update-font-size");
 		try {
 			this->settings->grubFontSize = this->view->getFontSize();
@@ -501,7 +412,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void updateBackgroundImageAction() {
+	public: void updateBackgroundImageAction()
+	{
 		this->logActionBegin("update-background-image");
 		try {
 			if (!this->env->useDirectBackgroundProps) {
@@ -520,7 +432,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void removeBackgroundImageAction() {
+	public: void removeBackgroundImageAction()
+	{
 		this->logActionBegin("remove-background-image");
 		try {
 			if (!this->env->useDirectBackgroundProps) {
@@ -536,7 +449,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void updateSettingsDataAction() {
+	public: void updateSettingsDataAction()
+	{
 		this->logActionBegin("update-settings-data");
 		try {
 			std::list<std::string> labelListToplevel  = this->grublistCfg->proxies.getToplevelEntryTitles();
@@ -551,7 +465,8 @@ public:
 	}
 
 
-	void syncAction() {
+	public: void syncAction()
+	{
 		this->logActionBegin("sync");
 		try {
 			this->syncSettings();
@@ -561,7 +476,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void saveAction() {
+	public: void saveAction()
+	{
 		this->logActionBegin("save");
 		try {
 			this->themeManager->save();
@@ -572,7 +488,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void postSaveAction() {
+	public: void postSaveAction()
+	{
 		this->logActionBegin("post-save");
 		try {
 			if (this->themeManager->hasSaveErrors()) {
@@ -588,6 +505,114 @@ public:
 		this->logActionEnd();
 	}
 
+	private: bool isImage(std::string const& fileName)
+	{
+		std::list<std::string> imageExtensions;
+		imageExtensions.push_back("png");
+		imageExtensions.push_back("jpg");
+		imageExtensions.push_back("bmp");
+		imageExtensions.push_back("gif");
+		imageExtensions.push_back("pf2"); // not really, but shouldn't be handled as text
+
+		if (fileName.find_last_of(".") != std::string::npos) {
+			int dotPos = fileName.find_last_of(".");
+			std::string extension = fileName.substr(dotPos + 1);
+			if (std::find(imageExtensions.begin(), imageExtensions.end(), extension) != imageExtensions.end()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private: void syncSettings()
+	{
+		if (this->syncActive) {
+			return;
+		}
+		this->syncActive = true;
+		std::string nColor = this->settings->getValue("GRUB_COLOR_NORMAL");
+		std::string hColor = this->settings->getValue("GRUB_COLOR_HIGHLIGHT");
+		if (nColor != ""){
+			this->view->getColorChooser(View_Theme::COLOR_CHOOSER_DEFAULT_FONT).selectColor(nColor.substr(0, nColor.find('/')));
+			this->view->getColorChooser(View_Theme::COLOR_CHOOSER_DEFAULT_BACKGROUND).selectColor(nColor.substr(nColor.find('/')+1));
+		} else {
+			//default grub menu colors
+			this->view->getColorChooser(View_Theme::COLOR_CHOOSER_DEFAULT_FONT).selectColor("light-gray");
+			this->view->getColorChooser(View_Theme::COLOR_CHOOSER_DEFAULT_BACKGROUND).selectColor("black");
+		}
+
+		if (hColor != ""){
+			this->view->getColorChooser(View_Theme::COLOR_CHOOSER_HIGHLIGHT_FONT).selectColor(hColor.substr(0, hColor.find('/')));
+			this->view->getColorChooser(View_Theme::COLOR_CHOOSER_HIGHLIGHT_BACKGROUND).selectColor(hColor.substr(hColor.find('/')+1));
+		} else {
+			//default grub menu colors
+			this->view->getColorChooser(View_Theme::COLOR_CHOOSER_HIGHLIGHT_FONT).selectColor("magenta");
+			this->view->getColorChooser(View_Theme::COLOR_CHOOSER_HIGHLIGHT_BACKGROUND).selectColor("black");
+		}
+
+		std::string wallpaper_key = this->env->useDirectBackgroundProps ? "GRUB_BACKGROUND" : "GRUB_MENU_PICTURE";
+		std::string menuPicturePath = this->settings->getValue(wallpaper_key);
+		bool menuPicIsInGrubDir = false;
+
+		if (menuPicturePath != "" && menuPicturePath[0] != '/'){
+			menuPicturePath = env->output_config_dir + "/" + menuPicturePath;
+			menuPicIsInGrubDir = true;
+		}
+
+		this->view->setFontName(this->settings->grubFont);
+
+		if (this->settings->isActive(wallpaper_key) && menuPicturePath != ""){
+			this->view->setBackgroundImagePreviewPath(menuPicturePath, menuPicIsInGrubDir);
+		} else {
+			this->view->setBackgroundImagePreviewPath("", menuPicIsInGrubDir);
+		}
+
+		std::string selectedTheme = this->view->getSelectedTheme();
+
+		this->view->clearThemeSelection();
+		for (auto& theme : this->themeManager->themes) {
+			this->view->addTheme(theme.name);
+		}
+		this->view->selectTheme(selectedTheme);
+
+		std::string themeName;
+		if (this->settings->isActive("GRUB_THEME")) {
+			try {
+				themeName = this->themeManager->extractThemeName(this->settings->getValue("GRUB_THEME"));
+			} catch (InvalidStringFormatException const& e) {
+				this->log(e, Logger::ERROR);
+			}
+		}
+
+		if (this->currentTheme != themeName) {
+			if (this->settings->isActive("GRUB_THEME")) {
+				if (this->themeManager->themeExists(themeName)) {
+					this->loadThemeAction(themeName);
+				} else {
+					this->log("theme " + themeName + " not found!", Logger::ERROR);
+				}
+			} else if (!this->settings->isActive("GRUB_THEME")) {
+				this->showSimpleThemeConfigAction();
+			}
+		}
+
+		this->applicationObject->onSettingModelChange.exec();
+		this->syncActive = false;
+	}
+
+	private: void syncFiles()
+	{
+		this->view->clear();
+		if (this->currentTheme != "") {
+			Model_Theme* theme = &this->themeManager->getTheme(this->currentTheme);
+			for (auto& themeFile : theme->files) {
+				this->view->addFile(themeFile.newLocalFileName);
+			}
+			if (this->currentThemeFile != "") {
+				this->view->selectFile(theme->getFile(this->currentThemeFile).newLocalFileName);
+			}
+		}
+	}
 };
 
 

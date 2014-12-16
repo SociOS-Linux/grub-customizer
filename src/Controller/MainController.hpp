@@ -64,228 +64,29 @@ class MainController :
 	public Controller_Helper_Thread_Connection,
 	public Bootstrap_Application_Object_Connection
 {
-	std::shared_ptr<Model_SettingsManagerData> settingsOnDisk; //buffer for the existing settings
-	std::shared_ptr<Model_ListCfg> savedListCfg;
-	ContentParser* currentContentParser;
+	private: std::shared_ptr<Model_SettingsManagerData> settingsOnDisk; //buffer for the existing settings
+	private: std::shared_ptr<Model_ListCfg> savedListCfg;
+	private: ContentParser* currentContentParser;
 
-	bool config_has_been_different_on_startup_but_unsaved;
-	bool is_loading;
-	CmdExecException thrownException; //to be used from the die() function
+	private: bool config_has_been_different_on_startup_but_unsaved;
+	private: bool is_loading;
+	private: CmdExecException thrownException; //to be used from the die() function
 
-	void _rAppendRule(Model_Rule& rule, Model_Rule* parentRule = NULL) {
-		bool is_other_entries_ph = rule.type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER;
-		bool is_plaintext = rule.dataSource && rule.dataSource->type == Model_Entry::PLAINTEXT;
-		bool is_submenu = rule.type == Model_Rule::SUBMENU;
-
-		if (rule.dataSource || is_submenu){
-			std::string name = this->entryNameMapper->map(rule.dataSource, rule.outputName, true);
-
-			bool isSubmenu = rule.type == Model_Rule::SUBMENU;
-			std::string scriptName = "", defaultName = "";
-			if (rule.dataSource) {
-				Model_Script* script = this->grublistCfg->repository.getScriptByEntry(*rule.dataSource);
-				assert(script != NULL);
-				scriptName = script->name;
-				if (!is_other_entries_ph && !is_plaintext) {
-					defaultName = rule.dataSource->name;
-				}
-			}
-			bool isEditable = rule.type == Model_Rule::NORMAL || rule.type == Model_Rule::PLAINTEXT;
-			bool isModified = rule.dataSource && rule.dataSource->isModified;
-
-			// parse content to show additional informations
-			std::map<std::string, std::string> options;
-			if (rule.dataSource) {
-				options = Controller_Helper_DeviceInfo::fetch(rule.dataSource->content, *this->contentParserFactory, *deviceDataList);
-			}
-
-			Model_Proxy* proxy = this->grublistCfg->proxies.getProxyByRule(&rule);
-
-			View_Model_ListItem<Rule, Proxy> listItem;
-			listItem.name = name;
-			listItem.entryPtr = &rule;
-			listItem.is_placeholder = is_other_entries_ph || is_plaintext;
-			listItem.is_submenu = isSubmenu;
-			listItem.scriptName = scriptName;
-			listItem.defaultName = defaultName;
-			listItem.isEditable = isEditable;
-			listItem.isModified = isModified;
-			listItem.options = options;
-			listItem.isVisible = rule.isVisible;
-			listItem.parentEntry = parentRule;
-			listItem.parentScript = proxy;
-			this->view->appendEntry(listItem);
-
-			if (rule.type == Model_Rule::SUBMENU) {
-				for (std::list<Model_Rule>::iterator subruleIter = rule.subRules.begin(); subruleIter != rule.subRules.end(); subruleIter++) {
-					this->_rAppendRule(*subruleIter, &rule);
-				}
-			}
-		}
-	}
-
-	bool _listHasPlaintextRules(std::list<Rule*> const& rules) {
-		for (std::list<Rule*>::const_iterator iter = rules.begin(); iter != rules.end(); iter++) {
-			const Model_Rule* rule = &Model_Rule::fromPtr(*iter);
-			if (rule->type == Model_Rule::PLAINTEXT) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	bool _listHasAllCurrentSystemRules(std::list<Rule*> const& rules) {
-		int visibleSystemRulesCount = 0;
-		int selectedSystemRulesCount = 0;
-
-		Model_Script* linuxScript = NULL;
-
-		// count selected entries related to linux script
-		for (std::list<Rule*>::const_iterator iter = rules.begin(); iter != rules.end(); iter++) {
-			const Model_Rule* rule = &Model_Rule::fromPtr(*iter);
-			if (rule->type == Model_Rule::NORMAL) {
-				assert(rule->dataSource != NULL);
-				Model_Script* script = this->grublistCfg->repository.getScriptByEntry(*rule->dataSource);
-				if (script->name == "linux") {
-					selectedSystemRulesCount++;
-
-					linuxScript = script;
-				}
-			}
-		}
-
-		// count all entries and compare counters if there are linux entries
-		if (linuxScript != NULL) {
-			// check whether it's the last remaining entry
-			std::list<Model_Proxy*> proxies = this->grublistCfg->proxies.getProxiesByScript(*linuxScript);
-			bool visibleRulesFound = false;
-			for (std::list<Model_Proxy*>::iterator proxyIter = proxies.begin(); proxyIter != proxies.end(); proxyIter++) {
-				visibleSystemRulesCount += (*proxyIter)->getVisibleRulesByType(Model_Rule::NORMAL).size();
-			}
-
-			if (selectedSystemRulesCount == visibleSystemRulesCount) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	std::list<Rule*> _populateSelection(std::list<Rule*> rules) {
-		std::list<Rule*> result;
-		for (std::list<Rule*>::iterator ruleIter = rules.begin(); ruleIter != rules.end(); ruleIter++) {
-			this->_populateSelection(result, &Model_Rule::fromPtr(*ruleIter), -1, *ruleIter == rules.front());
-			result.push_back(*ruleIter);
-			this->_populateSelection(result, &Model_Rule::fromPtr(*ruleIter), 1, *ruleIter == rules.back());
-		}
-		// remove duplicates
-		std::list<Rule*> result2;
-		std::map<Rule*, Rule*> duplicateIndex; // key: pointer to the rule, value: always NULL
-		for (std::list<Rule*>::iterator ruleIter = result.begin(); ruleIter != result.end(); ruleIter++) {
-			if (duplicateIndex.find(*ruleIter) == duplicateIndex.end()) {
-				duplicateIndex[*ruleIter] = NULL;
-				result2.push_back(*ruleIter);
-			}
-		}
-		return result2;
-	}
-
-	void _populateSelection(std::list<Rule*>& rules, Model_Rule* baseRule, int direction, bool checkScript) {
-		assert(direction == 1 || direction == -1);
-		bool placeholderFound = false;
-		Model_Rule* currentRule = baseRule;
-		do {
-			try {
-				currentRule = &*this->grublistCfg->proxies.getNextVisibleRule(currentRule, direction);
-				if (currentRule->dataSource == NULL || baseRule->dataSource == NULL) {
-					break;
-				}
-				Model_Script* scriptCurrent = this->grublistCfg->repository.getScriptByEntry(*currentRule->dataSource);
-				Model_Script* scriptBase    = this->grublistCfg->repository.getScriptByEntry(*baseRule->dataSource);
-
-				if ((scriptCurrent == scriptBase || !checkScript) && (currentRule->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER || currentRule->type == Model_Rule::PLAINTEXT)) {
-					if (direction == 1) {
-						rules.push_back(currentRule);
-					} else {
-						rules.push_front(currentRule);
-					}
-					placeholderFound = true;
-				} else {
-					placeholderFound = false;
-				}
-			} catch (NoMoveTargetException const& e) {
-				placeholderFound = false;
-			}
-		} while (placeholderFound);
-	}
-
-	int _countRulesUntilNextRealRule(Model_Rule* baseRule, int direction) {
-		int result = 1;
-		bool placeholderFound = false;
-		Model_Rule* currentRule = baseRule;
-		do {
-			try {
-				currentRule = &*this->grublistCfg->proxies.getNextVisibleRule(currentRule, direction);
-
-				if (currentRule->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER || currentRule->type == Model_Rule::PLAINTEXT) {
-					result++;
-					placeholderFound = true;
-				} else {
-					placeholderFound = false;
-				}
-			} catch (NoMoveTargetException const& e) {
-				placeholderFound = false;
-			}
-		} while (placeholderFound);
-		return result;
-	}
-
-	std::list<Rule*> _removePlaceholdersFromSelection(std::list<Rule*> rules) {
-		std::list<Rule*> result;
-		for (std::list<Rule*>::iterator ruleIter = rules.begin(); ruleIter != rules.end(); ruleIter++) {
-			Model_Rule* rule = &Model_Rule::fromPtr(*ruleIter);
-			if (!(rule->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER || rule->type == Model_Rule::PLAINTEXT)) {
-				result.push_back(rule);
-			}
-		}
-		return result;
-	}
-
-	bool _ruleAffectsCurrentDefaultOs(Model_Rule* rule, std::string const& currentRulePath, std::string const& currentDefaultRulePath) {
-		bool result = false;
-
-		if (rule->type == Model_Rule::SUBMENU) {
-			if (currentDefaultRulePath.substr(0, currentRulePath.length() + 1) == currentRulePath + ">") {
-				result = true;
-			}
-		} else {
-			if (this->settings->getValue("GRUB_DEFAULT") == currentRulePath) {
-				result = true;
-			}
-		}
-		return result;
-	}
-
-	void _updateCurrentDefaultOs(Model_Rule* rule, std::string const& oldRulePath, std::string oldDefaultRulePath) {
-		oldDefaultRulePath.replace(0, oldRulePath.length(), this->grublistCfg->getRulePath(*rule));
-		this->settings->setValue("GRUB_DEFAULT", oldDefaultRulePath);
-	}
-
-
-public:
-	void setSettingsBuffer(std::shared_ptr<Model_SettingsManagerData> settings) {
+	public: void setSettingsBuffer(std::shared_ptr<Model_SettingsManagerData> settings)
+	{
 		this->settingsOnDisk = settings;
 	}
 
-	void setSavedListCfg(std::shared_ptr<Model_ListCfg> savedListCfg) {
+	public: void setSavedListCfg(std::shared_ptr<Model_ListCfg> savedListCfg)
+	{
 		this->savedListCfg = savedListCfg;
 	}
 
-	Model_FbResolutionsGetter& getFbResolutionsGetter() {
+	public: Model_FbResolutionsGetter& getFbResolutionsGetter() {
 		return *this->fbResolutionsGetter;
 	}
 
-	void initViewEvents() override
+	public: void initViewEvents() override
 	{
 		using namespace std::placeholders;
 		this->view->onRemoveRulesClick = std::bind(std::mem_fn(&MainController::removeRulesAction), this, _1, _2);
@@ -312,7 +113,7 @@ public:
 		this->view->onSelectionChange = std::bind(std::mem_fn(&MainController::updateSelectionAction), this, _1);
 	}
 
-	void initApplicationEvents() override
+	public: void initApplicationEvents() override
 	{
 		using namespace std::placeholders;
 
@@ -353,7 +154,7 @@ public:
 		);
 	}
 
-	void initListCfgEvents() override
+	public: void initListCfgEvents() override
 	{
 		using namespace std::placeholders;
 
@@ -362,7 +163,8 @@ public:
 	}
 
 	//init functions
-	void init() {
+	public: void init()
+	{
 		if ( !grublistCfg
 			or !view
 			or !settings
@@ -418,7 +220,8 @@ public:
 		}
 	}
 
-	void init(Model_Env::Mode mode, bool initEnv = true) {
+	public: void init(Model_Env::Mode mode, bool initEnv = true)
+	{
 		this->log("initializing (w/ specified bootloader type)…", Logger::IMPORTANT_EVENT);
 		if (initEnv) {
 			this->env->init(mode, env->cfg_dir_prefix);
@@ -439,7 +242,8 @@ public:
 		this->threadHelper->runAsThread(std::bind(std::mem_fn(&MainController::loadThreadedAction), this, false));
 	}
 
-	void initAction() {
+	public: void initAction()
+	{
 		this->logActionBegin("init");
 		try {
 			this->init();
@@ -449,7 +253,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void reInitAction(bool burgMode) {
+	public: void reInitAction(bool burgMode)
+	{
 		this->logActionBegin("re-init");
 		try {
 			Model_Env::Mode mode = burgMode ? Model_Env::BURG_MODE : Model_Env::GRUB_MODE;
@@ -460,7 +265,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void showEnvEditorAction() {
+	public: void showEnvEditorAction()
+	{
 		this->logActionBegin("show-env-editor");
 		try {
 			if (this->env->modificationsUnsaved) {
@@ -479,7 +285,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void cancelBurgSwitcherAction() {
+	public: void cancelBurgSwitcherAction()
+	{
 		this->logActionBegin("cancel-burg-switcher");
 		try {
 			if (!this->view->isVisible()) {
@@ -492,7 +299,8 @@ public:
 	}
 
 
-	void reloadAction() {
+	public: void reloadAction()
+	{
 		this->logActionBegin("reload");
 		try {
 			this->applicationObject->onSettingModelChange.exec();
@@ -505,7 +313,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void loadThreadedAction(bool preserveConfig) {
+	public: void loadThreadedAction(bool preserveConfig)
+	{
 		this->logActionBeginThreaded("load-threaded");
 		try {
 			if (!is_loading){ //allow only one load thread at the same time!
@@ -569,7 +378,8 @@ public:
 		this->logActionEndThreaded();
 	}
 
-	void saveAction() {
+	public: void saveAction()
+	{
 		this->logActionBegin("save");
 		try {
 			this->config_has_been_different_on_startup_but_unsaved = false;
@@ -585,7 +395,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void saveThreadedAction() {
+	public: void saveThreadedAction()
+	{
 		this->logActionBeginThreaded("save-threaded");
 		try {
 			this->env->createBackup();
@@ -608,7 +419,8 @@ public:
 		this->logActionEndThreaded();
 	}
 
-	void showConfigSavingErrorAction(std::string errorMessage) {
+	public: void showConfigSavingErrorAction(std::string errorMessage)
+	{
 		this->logActionBeginThreaded("show-config-saving-error");
 		try {
 			this->view->showConfigSavingError(errorMessage);
@@ -618,27 +430,27 @@ public:
 		this->logActionEndThreaded();
 	}
 
-	MainController() : Controller_Common_ControllerAbstract("main"),
-		 config_has_been_different_on_startup_but_unsaved(false),
-		 is_loading(false),
-		 currentContentParser(NULL),
-		 thrownException("")
+	public: MainController() :
+		Controller_Common_ControllerAbstract("main"),
+		config_has_been_different_on_startup_but_unsaved(false),
+		is_loading(false),
+		currentContentParser(NULL),
+		thrownException("")
 	{
 	}
 
-
-public:
-	void renameEntry(Model_Rule* rule, std::string const& newName) {
+	public: void renameEntry(Model_Rule* rule, std::string const& newName)
+	{
 		if (rule->type != Model_Rule::PLAINTEXT) {
 
 			std::string currentRulePath = this->grublistCfg->getRulePath(*rule);
 			std::string currentDefaultRulePath = this->settings->getValue("GRUB_DEFAULT");
-			bool updateDefault = this->_ruleAffectsCurrentDefaultOs(rule, currentRulePath, currentDefaultRulePath);
+			bool updateDefault = this->ruleAffectsCurrentDefaultOs(rule, currentRulePath, currentDefaultRulePath);
 
 			this->grublistCfg->renameRule(rule, newName);
 
 			if (updateDefault) {
-				this->_updateCurrentDefaultOs(rule, currentRulePath, currentDefaultRulePath);
+				this->updateCurrentDefaultOs(rule, currentRulePath, currentDefaultRulePath);
 			}
 
 			if (rule->dataSource && this->grublistCfg->repository.getScriptByEntry(*rule->dataSource)->isCustomScript) {
@@ -650,13 +462,15 @@ public:
 		}
 	}
 
-	void reset() {
+	public: void reset()
+	{
 		this->grublistCfg->reset();
 		this->settings->clear();
 	}
 
 
-	void showInstallerAction() {
+	public: void showInstallerAction()
+	{
 		this->logActionBegin("show-installer");
 		try {
 			this->applicationObject->onInstallerShowRequest.exec();
@@ -667,7 +481,8 @@ public:
 	}
 
 
-	void showEntryEditorAction(Rule* rule) {
+	public: void showEntryEditorAction(Rule* rule)
+	{
 		this->logActionBegin("show-entry-editor");
 		try {
 			this->applicationObject->onEntryEditorShowRequest.exec(rule);
@@ -677,7 +492,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void showEntryCreatorAction() {
+	public: void showEntryCreatorAction()
+	{
 		this->logActionBegin("show-entry-creator");
 		try {
 			this->applicationObject->onEntryEditorShowRequest.exec(nullptr);
@@ -689,7 +505,8 @@ public:
 
 
 	//dispatchers
-	void dieAction() {
+	public: void dieAction()
+	{
 		this->logActionBegin("die");
 		try {
 			this->is_loading = false;
@@ -709,27 +526,28 @@ public:
 		this->logActionEnd();
 	}
 
-	void updateList() {
+	public: void updateList()
+	{
 		this->view->clear();
 
-		for (std::list<Model_Proxy>::iterator iter = this->grublistCfg->proxies.begin(); iter != this->grublistCfg->proxies.end(); iter++){
-			std::string name = iter->getScriptName();
-			if ((name != "header" && name != "debian_theme" && name != "grub-customizer_menu_color_helper") || iter->isModified()) {
+		for (auto& proxy : this->grublistCfg->proxies){
+			std::string name = proxy.getScriptName();
+			if ((name != "header" && name != "debian_theme" && name != "grub-customizer_menu_color_helper") || proxy.isModified()) {
 				View_Model_ListItem<Rule, Proxy> listItem;
 				listItem.name = name;
-				listItem.scriptPtr = &*iter;
+				listItem.scriptPtr = &proxy;
 				listItem.is_submenu = true;
 				listItem.defaultName = name;
 				listItem.isVisible = true;
 				this->view->appendEntry(listItem);
-				for (std::list<Model_Rule>::iterator ruleIter = iter->rules.begin(); ruleIter != iter->rules.end(); ruleIter++){
-					this->_rAppendRule(*ruleIter);
+				for (auto& rule : proxy.rules){
+					this->appendRuleToView(rule);
 				}
 			}
 		}
 	}
 
-	void updateTrashView()
+	public: void updateTrashView()
 	{
 		bool placeholdersVisible = this->view->getOptions().at(VIEW_SHOW_PLACEHOLDERS);
 		bool hiddenEntriesVisible = this->view->getOptions().at(VIEW_SHOW_HIDDEN_ENTRIES);
@@ -739,7 +557,8 @@ public:
 	}
 
 
-	void exitAction() {
+	public: void exitAction()
+	{
 		this->logActionBegin("exit");
 		try {
 			int dlgResponse = this->view->showExitConfirmDialog(this->config_has_been_different_on_startup_but_unsaved*2 + this->env->modificationsUnsaved);
@@ -763,12 +582,13 @@ public:
 	}
 
 
-	void removeRulesAction(std::list<Rule*> rules, bool force) {
+	public: void removeRulesAction(std::list<Rule*> rules, bool force)
+	{
 		this->logActionBegin("remove-rules");
 		try {
-			if (!force && this->_listHasAllCurrentSystemRules(rules)) {
+			if (!force && this->listHasAllCurrentSystemRules(rules)) {
 				this->view->showSystemRuleRemoveWarning();
-			} else if (!force && this->_listHasPlaintextRules(rules)) {
+			} else if (!force && this->listHasPlaintextRules(rules)) {
 				this->view->showPlaintextRemoveWarning();
 			} else {
 				std::list<Entry*> entriesOfRemovedRules;
@@ -798,12 +618,12 @@ public:
 		this->logActionEnd();
 	}
 
-	void renameRuleAction(Rule* entry, std::string const& newText) {
+	public: void renameRuleAction(Rule* entry, std::string const& newText)
+	{
 		this->logActionBegin("rename-rule");
 		try {
 			Model_Rule* entry2 = &Model_Rule::fromPtr(entry);
 			std::string oldName = entry2->outputName;
-		//	std::string newName = this->view->getRuleName(entry);
 			if (newText == ""){
 				this->view->showErrorMessage(gettext("Name the Entry"));
 				this->view->setRuleName(entry, oldName);
@@ -818,7 +638,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void moveAction(std::list<Rule*> rules, int direction) {
+	public: void moveAction(std::list<Rule*> rules, int direction)
+	{
 		this->logActionBegin("move");
 		try {
 			bool stickyPlaceholders = !this->view->getOptions().at(VIEW_SHOW_PLACEHOLDERS);
@@ -826,9 +647,9 @@ public:
 				assert(direction == -1 || direction == 1);
 				int distance = 1;
 				if (stickyPlaceholders) {
-					rules = this->_populateSelection(rules);
+					rules = this->populateSelection(rules);
 					rules = this->grublistCfg->getNormalizedRuleOrder(rules);
-					distance = this->_countRulesUntilNextRealRule(&Model_Rule::fromPtr(direction == -1 ? rules.front() : rules.back()), direction);
+					distance = this->countRulesUntilNextRealRule(&Model_Rule::fromPtr(direction == -1 ? rules.front() : rules.back()), direction);
 				}
 
 				std::list<Rule*> movedRules;
@@ -839,12 +660,12 @@ public:
 					for (int i = 0; i < ruleCount; i++) { // move multiple rules
 						std::string currentRulePath = this->grublistCfg->getRulePath(*rulePtr);
 						std::string currentDefaultRulePath = this->settings->getValue("GRUB_DEFAULT");
-						bool updateDefault = this->_ruleAffectsCurrentDefaultOs(rulePtr, currentRulePath, currentDefaultRulePath);
+						bool updateDefault = this->ruleAffectsCurrentDefaultOs(rulePtr, currentRulePath, currentDefaultRulePath);
 
 						rulePtr = &this->grublistCfg->moveRule(rulePtr, direction);
 
 						if (updateDefault) {
-							this->_updateCurrentDefaultOs(rulePtr, currentRulePath, currentDefaultRulePath);
+							this->updateCurrentDefaultOs(rulePtr, currentRulePath, currentDefaultRulePath);
 						}
 
 						if (i < ruleCount - 1) {
@@ -881,7 +702,7 @@ public:
 
 				this->applicationObject->onListModelChange.exec();
 				if (stickyPlaceholders) {
-					movedRules = this->_removePlaceholdersFromSelection(movedRules);
+					movedRules = this->removePlaceholdersFromSelection(movedRules);
 				}
 				this->view->selectRules(movedRules);
 				this->env->modificationsUnsaved = true;
@@ -895,7 +716,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void createSubmenuAction(std::list<Rule*> childItems) {
+	public: void createSubmenuAction(std::list<Rule*> childItems)
+	{
 		this->logActionBegin("create-submenu");
 		try {
 			Model_Rule* firstRule = &Model_Rule::fromPtr(childItems.front());
@@ -912,7 +734,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void removeSubmenuAction(std::list<Rule*> childItems) {
+	public: void removeSubmenuAction(std::list<Rule*> childItems)
+	{
 		this->logActionBegin("remove-submenu");
 		try {
 			Model_Rule* firstItem = this->grublistCfg->splitSubmenu(&Model_Rule::fromPtr(childItems.front()));
@@ -930,7 +753,8 @@ public:
 	}
 
 
-	void revertAction() {
+	public: void revertAction()
+	{
 		this->logActionBegin("revert");
 		try {
 			this->grublistCfg->revert();
@@ -943,12 +767,14 @@ public:
 	}
 
 
-	void showProxyInfo(Model_Proxy* proxy) {
+	public: void showProxyInfo(Model_Proxy* proxy)
+	{
 		this->view->setStatusText("");
 	}
 
 
-	void showAboutAction() {
+	public: void showAboutAction()
+	{
 		this->logActionBegin("show-about");
 		try {
 			this->applicationObject->onAboutDlgShowRequest.exec();
@@ -959,7 +785,8 @@ public:
 	}
 
 
-	void syncLoadStateThreadedAction() {
+	public: void syncLoadStateThreadedAction()
+	{
 		this->logActionBeginThreaded("sync-load-state-threaded");
 		try {
 			this->threadHelper->runDispatched(std::bind(std::mem_fn(&MainController::syncLoadStateAction), this));
@@ -969,7 +796,8 @@ public:
 		this->logActionEndThreaded();
 	}
 
-	void syncSaveStateThreadedAction() {
+	public: void syncSaveStateThreadedAction()
+	{
 		this->logActionBeginThreaded("sync-save-state-threaded");
 		try {
 			this->threadHelper->runDispatched(std::bind(std::mem_fn(&MainController::syncSaveStateAction), this));
@@ -980,7 +808,8 @@ public:
 	}
 
 
-	void syncSaveStateAction() {
+	public: void syncSaveStateAction()
+	{
 		this->logActionBegin("sync-save-state");
 		try {
 			this->log("running MainControllerImpl::syncListView_save", Logger::INFO);
@@ -1011,7 +840,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void syncLoadStateAction() {
+	public: void syncLoadStateAction()
+	{
 		this->logActionBegin("sync-load-state");
 		try {
 			this->log("running MainControllerImpl::syncListView_load", Logger::INFO);
@@ -1052,8 +882,8 @@ public:
 		this->logActionEnd();
 	}
 
-
-	void showSettingsAction() {
+	public: void showSettingsAction()
+	{
 		this->logActionBegin("show-settings");
 		try {
 			this->applicationObject->onSettingsShowRequest.exec();
@@ -1063,7 +893,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void initModeAction(bool burgChosen) {
+	public: void initModeAction(bool burgChosen)
+	{
 		this->logActionBegin("init-mode");
 		try {
 			this->init(burgChosen ? Model_Env::BURG_MODE : Model_Env::GRUB_MODE);
@@ -1073,7 +904,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void addEntriesAction(std::list<Rule*> entries) {
+	public: void addEntriesAction(std::list<Rule*> entries)
+	{
 		this->logActionBegin("add-entries");
 		try {
 			std::list<Rule*> addedRules;
@@ -1094,7 +926,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void activateSettingsAction() {
+	public: void activateSettingsAction()
+	{
 		this->logActionBegin("activate-settings");
 		try {
 			this->view->setLockState(1);
@@ -1105,7 +938,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void showReloadRecommendationAction() {
+	public: void showReloadRecommendationAction()
+	{
 		this->logActionBegin("show-reload-recommendation");
 		try {
 			this->view->showReloadRecommendation();
@@ -1115,7 +949,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void selectRulesAction(std::list<Rule*> rules) {
+	public: void selectRulesAction(std::list<Rule*> rules)
+	{
 		this->logActionBegin("select-rules");
 		try {
 			this->view->selectRules(rules);
@@ -1125,7 +960,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void selectRuleAction(Rule* rule, bool startEdit) {
+	public: void selectRuleAction(Rule* rule, bool startEdit)
+	{
 		this->logActionBegin("select-rule");
 		try {
 			this->view->selectRule(rule, startEdit);
@@ -1135,7 +971,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void refreshTabAction(unsigned int pos) {
+	public: void refreshTabAction(unsigned int pos)
+	{
 		this->logActionBegin("refresh-tab");
 		try {
 			if (pos != 0) { // list
@@ -1148,7 +985,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void setViewOptionAction(ViewOption option, bool value) {
+	public: void setViewOptionAction(ViewOption option, bool value)
+	{
 		this->logActionBegin("set-view-option");
 		try {
 			this->view->setOption(option, value);
@@ -1165,7 +1003,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void entryStateToggledAction(Rule* entry, bool state) {
+	public: void entryStateToggledAction(Rule* entry, bool state)
+	{
 		this->logActionBegin("entry-state-toggled");
 		try {
 			Model_Rule::fromPtr(entry).setVisibility(state);
@@ -1176,7 +1015,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void updateSelectionAction(std::list<Rule*> selectedRules) {
+	public: void updateSelectionAction(std::list<Rule*> selectedRules)
+	{
 		this->logActionBegin("update-selection");
 		try {
 			if (selectedRules.size()) {
@@ -1188,6 +1028,216 @@ public:
 		this->logActionEnd();
 	}
 
+	private: void appendRuleToView(Model_Rule& rule, Model_Rule* parentRule = NULL)
+	{
+		bool is_other_entries_ph = rule.type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER;
+		bool is_plaintext = rule.dataSource && rule.dataSource->type == Model_Entry::PLAINTEXT;
+		bool is_submenu = rule.type == Model_Rule::SUBMENU;
+
+		if (rule.dataSource || is_submenu){
+			std::string name = this->entryNameMapper->map(rule.dataSource, rule.outputName, true);
+
+			bool isSubmenu = rule.type == Model_Rule::SUBMENU;
+			std::string scriptName = "", defaultName = "";
+			if (rule.dataSource) {
+				Model_Script* script = this->grublistCfg->repository.getScriptByEntry(*rule.dataSource);
+				assert(script != NULL);
+				scriptName = script->name;
+				if (!is_other_entries_ph && !is_plaintext) {
+					defaultName = rule.dataSource->name;
+				}
+			}
+			bool isEditable = rule.type == Model_Rule::NORMAL || rule.type == Model_Rule::PLAINTEXT;
+			bool isModified = rule.dataSource && rule.dataSource->isModified;
+
+			// parse content to show additional informations
+			std::map<std::string, std::string> options;
+			if (rule.dataSource) {
+				options = Controller_Helper_DeviceInfo::fetch(rule.dataSource->content, *this->contentParserFactory, *deviceDataList);
+			}
+
+			Model_Proxy* proxy = this->grublistCfg->proxies.getProxyByRule(&rule);
+
+			View_Model_ListItem<Rule, Proxy> listItem;
+			listItem.name = name;
+			listItem.entryPtr = &rule;
+			listItem.is_placeholder = is_other_entries_ph || is_plaintext;
+			listItem.is_submenu = isSubmenu;
+			listItem.scriptName = scriptName;
+			listItem.defaultName = defaultName;
+			listItem.isEditable = isEditable;
+			listItem.isModified = isModified;
+			listItem.options = options;
+			listItem.isVisible = rule.isVisible;
+			listItem.parentEntry = parentRule;
+			listItem.parentScript = proxy;
+			this->view->appendEntry(listItem);
+
+			if (rule.type == Model_Rule::SUBMENU) {
+				for (std::list<Model_Rule>::iterator subruleIter = rule.subRules.begin(); subruleIter != rule.subRules.end(); subruleIter++) {
+					this->appendRuleToView(*subruleIter, &rule);
+				}
+			}
+		}
+	}
+
+	private: bool listHasPlaintextRules(std::list<Rule*> const& rules)
+	{
+		for (std::list<Rule*>::const_iterator iter = rules.begin(); iter != rules.end(); iter++) {
+			const Model_Rule* rule = &Model_Rule::fromPtr(*iter);
+			if (rule->type == Model_Rule::PLAINTEXT) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private: bool listHasAllCurrentSystemRules(std::list<Rule*> const& rules)
+	{
+		int visibleSystemRulesCount = 0;
+		int selectedSystemRulesCount = 0;
+
+		Model_Script* linuxScript = NULL;
+
+		// count selected entries related to linux script
+		for (std::list<Rule*>::const_iterator iter = rules.begin(); iter != rules.end(); iter++) {
+			const Model_Rule* rule = &Model_Rule::fromPtr(*iter);
+			if (rule->type == Model_Rule::NORMAL) {
+				assert(rule->dataSource != NULL);
+				Model_Script* script = this->grublistCfg->repository.getScriptByEntry(*rule->dataSource);
+				if (script->name == "linux") {
+					selectedSystemRulesCount++;
+
+					linuxScript = script;
+				}
+			}
+		}
+
+		// count all entries and compare counters if there are linux entries
+		if (linuxScript != NULL) {
+			// check whether it's the last remaining entry
+			std::list<Model_Proxy*> proxies = this->grublistCfg->proxies.getProxiesByScript(*linuxScript);
+			bool visibleRulesFound = false;
+			for (std::list<Model_Proxy*>::iterator proxyIter = proxies.begin(); proxyIter != proxies.end(); proxyIter++) {
+				visibleSystemRulesCount += (*proxyIter)->getVisibleRulesByType(Model_Rule::NORMAL).size();
+			}
+
+			if (selectedSystemRulesCount == visibleSystemRulesCount) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private: std::list<Rule*> populateSelection(std::list<Rule*> rules)
+	{
+		std::list<Rule*> result;
+		for (std::list<Rule*>::iterator ruleIter = rules.begin(); ruleIter != rules.end(); ruleIter++) {
+			this->populateSelection(result, &Model_Rule::fromPtr(*ruleIter), -1, *ruleIter == rules.front());
+			result.push_back(*ruleIter);
+			this->populateSelection(result, &Model_Rule::fromPtr(*ruleIter), 1, *ruleIter == rules.back());
+		}
+		// remove duplicates
+		std::list<Rule*> result2;
+		std::map<Rule*, Rule*> duplicateIndex; // key: pointer to the rule, value: always NULL
+		for (std::list<Rule*>::iterator ruleIter = result.begin(); ruleIter != result.end(); ruleIter++) {
+			if (duplicateIndex.find(*ruleIter) == duplicateIndex.end()) {
+				duplicateIndex[*ruleIter] = NULL;
+				result2.push_back(*ruleIter);
+			}
+		}
+		return result2;
+	}
+
+	private: void populateSelection(std::list<Rule*>& rules, Model_Rule* baseRule, int direction, bool checkScript)
+	{
+		assert(direction == 1 || direction == -1);
+		bool placeholderFound = false;
+		Model_Rule* currentRule = baseRule;
+		do {
+			try {
+				currentRule = &*this->grublistCfg->proxies.getNextVisibleRule(currentRule, direction);
+				if (currentRule->dataSource == NULL || baseRule->dataSource == NULL) {
+					break;
+				}
+				Model_Script* scriptCurrent = this->grublistCfg->repository.getScriptByEntry(*currentRule->dataSource);
+				Model_Script* scriptBase    = this->grublistCfg->repository.getScriptByEntry(*baseRule->dataSource);
+
+				if ((scriptCurrent == scriptBase || !checkScript) && (currentRule->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER || currentRule->type == Model_Rule::PLAINTEXT)) {
+					if (direction == 1) {
+						rules.push_back(currentRule);
+					} else {
+						rules.push_front(currentRule);
+					}
+					placeholderFound = true;
+				} else {
+					placeholderFound = false;
+				}
+			} catch (NoMoveTargetException const& e) {
+				placeholderFound = false;
+			}
+		} while (placeholderFound);
+	}
+
+	private: int countRulesUntilNextRealRule(Model_Rule* baseRule, int direction)
+	{
+		int result = 1;
+		bool placeholderFound = false;
+		Model_Rule* currentRule = baseRule;
+		do {
+			try {
+				currentRule = &*this->grublistCfg->proxies.getNextVisibleRule(currentRule, direction);
+
+				if (currentRule->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER || currentRule->type == Model_Rule::PLAINTEXT) {
+					result++;
+					placeholderFound = true;
+				} else {
+					placeholderFound = false;
+				}
+			} catch (NoMoveTargetException const& e) {
+				placeholderFound = false;
+			}
+		} while (placeholderFound);
+		return result;
+	}
+
+	private: std::list<Rule*> removePlaceholdersFromSelection(std::list<Rule*> rules)
+	{
+		std::list<Rule*> result;
+		for (std::list<Rule*>::iterator ruleIter = rules.begin(); ruleIter != rules.end(); ruleIter++) {
+			Model_Rule* rule = &Model_Rule::fromPtr(*ruleIter);
+			if (!(rule->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER || rule->type == Model_Rule::PLAINTEXT)) {
+				result.push_back(rule);
+			}
+		}
+		return result;
+	}
+
+	private: bool ruleAffectsCurrentDefaultOs(
+		Model_Rule* rule,
+		std::string const& currentRulePath,
+		std::string const& currentDefaultRulePath
+	)
+	{
+		bool result = false;
+
+		if (rule->type == Model_Rule::SUBMENU) {
+			if (currentDefaultRulePath.substr(0, currentRulePath.length() + 1) == currentRulePath + ">") {
+				result = true;
+			}
+		} else {
+			if (this->settings->getValue("GRUB_DEFAULT") == currentRulePath) {
+				result = true;
+			}
+		}
+		return result;
+	}
+
+	private: void updateCurrentDefaultOs(Model_Rule* rule, std::string const& oldRulePath, std::string oldDefaultRulePath) {
+		oldDefaultRulePath.replace(0, oldRulePath.length(), this->grublistCfg->getRulePath(*rule));
+		this->settings->setValue("GRUB_DEFAULT", oldDefaultRulePath);
+	}
 };
 
 #endif

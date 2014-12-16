@@ -21,12 +21,13 @@
 
 #include "../../lib/Trait/ActionLoggerAware.hpp"
 
-class Controller_Common_ControllerAbstract : public Trait_ActionLoggerAware {
-public:
-	Controller_Common_ControllerAbstract(std::string const& controllerName) {
+class Controller_Common_ControllerAbstract :
+	public Trait_ActionLoggerAware
+{
+	public: Controller_Common_ControllerAbstract(std::string const& controllerName)
+	{
 		this->setControllerName(controllerName);
 	}
 };
 
-
-#endif /* ABSTRACT_H_ */
+#endif /* CONTROLLER_ABSTRACT_H_ */

@@ -43,9 +43,7 @@ class EnvEditorController :
 	public Model_MountTable_Connection,
 	public Model_DeviceMap_Connection
 {
-
-public:
-	void showAction(bool resetPartitionChooser = false) {
+	public: void showAction(bool resetPartitionChooser = false) {
 		this->logActionBegin("show");
 		try {
 			this->view->setEnvSettings(this->env->getProperties(), this->env->getRequiredProperties(), this->env->getValidProperties());
@@ -58,11 +56,12 @@ public:
 	}
 
 
-	EnvEditorController() : Controller_Common_ControllerAbstract("env-editor")
+	public: EnvEditorController() :
+		Controller_Common_ControllerAbstract("env-editor")
 	{
 	}
 
-	void initViewEvents() override
+	public: void initViewEvents() override
 	{
 		using namespace std::placeholders;
 
@@ -75,7 +74,7 @@ public:
 		this->view->onExitClick = std::bind(std::mem_fn(&EnvEditorController::exitAction), this);
 	}
 
-	void initApplicationEvents() override
+	public: void initApplicationEvents() override
 	{
 		using namespace std::placeholders;
 
@@ -84,7 +83,8 @@ public:
 
 	
 	//partition chooser
-	void mountSubmountpointAction(std::string const& submountpoint) {
+	public: void mountSubmountpointAction(std::string const& submountpoint)
+	{
 		this->logActionBegin("mount-submountpoint");
 		try {
 			try {
@@ -103,7 +103,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void umountSubmountpointAction(std::string const& submountpoint) {
+	public: void umountSubmountpointAction(std::string const& submountpoint)
+	{
 		this->logActionBegin("umount-submountpoint");
 		try {
 			try {
@@ -122,24 +123,26 @@ public:
 		this->logActionEnd();
 	}
 
-	void generateSubmountpointSelection(std::string const& prefix) {
+	public: void generateSubmountpointSelection(std::string const& prefix)
+	{
 		this->view->removeAllSubmountpoints();
 	
 		//create new submountpoint checkbuttons
-		for (Model_MountTable::const_iterator iter = mountTable->begin(); iter != mountTable->end(); iter++){
-			if (iter->mountpoint.length() > prefix.length() && iter->mountpoint.substr(0, prefix.length()) == prefix
-			 && iter->mountpoint != prefix + "/dev"
-			 && iter->mountpoint != prefix + "/proc"
-			 && iter->mountpoint != prefix + "/sys"
+		for (auto& item : *this->mountTable){
+			if (item.mountpoint.length() > prefix.length() && item.mountpoint.substr(0, prefix.length()) == prefix
+			 && item.mountpoint != prefix + "/dev"
+			 && item.mountpoint != prefix + "/proc"
+			 && item.mountpoint != prefix + "/sys"
 			) {
-				this->view->addSubmountpoint(iter->mountpoint.substr(prefix.length()), iter->isMounted);
+				this->view->addSubmountpoint(item.mountpoint.substr(prefix.length()), item.isMounted);
 			}
 		}
 	}
 
 
 	// env editor
-	void switchPartitionAction(std::string const& newPartition) {
+	public: void switchPartitionAction(std::string const& newPartition)
+	{
 		this->logActionBegin("switch-partition");
 		try {
 			if (this->mountTable->getEntryByMountpoint(PARTCHOOSER_MOUNTPOINT).isMounted) {
@@ -176,7 +179,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void switchBootloaderTypeAction(int newTypeIndex) {
+	public: void switchBootloaderTypeAction(int newTypeIndex)
+	{
 		this->logActionBegin("switch-bootloader-type");
 		try {
 			this->env->init(newTypeIndex == 0 ? Model_Env::GRUB_MODE : Model_Env::BURG_MODE, this->env->cfg_dir_prefix);
@@ -187,7 +191,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void updateGrubEnvOptionsAction() {
+	public: void updateGrubEnvOptionsAction()
+	{
 		this->logActionBegin("update-grub-env-options");
 		try {
 			this->env->setProperties(this->view->getEnvSettings());
@@ -198,7 +203,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void applyAction(bool saveConfig) {
+	public: void applyAction(bool saveConfig)
+	{
 		this->logActionBegin("apply");
 		try {
 			bool isBurgMode = this->view->getBootloaderType() == 1;
@@ -216,7 +222,8 @@ public:
 	}
 
 
-	void exitAction() {
+	public: void exitAction()
+	{
 		this->logActionBegin("exit");
 		try {
 			this->applicationObject->shutdown();

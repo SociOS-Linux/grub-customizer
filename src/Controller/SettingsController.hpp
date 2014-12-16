@@ -56,24 +56,26 @@ class SettingsController :
 	public Controller_Helper_Thread_Connection,
 	public Bootstrap_Application_Object_Connection
 {
-	bool syncActive; // should only be controlled by syncSettings()
+	private: bool syncActive; // should only be controlled by syncSettings()
 
-public:
-	Model_FbResolutionsGetter& getFbResolutionsGetter() {
+	public:	Model_FbResolutionsGetter& getFbResolutionsGetter()
+	{
 		return *this->fbResolutionsGetter;
 	}
 
 
-	void showSettingsDlg() {
+	public: void showSettingsDlg()
+	{
 		this->view->show();
 	}
 
-	SettingsController() : Controller_Common_ControllerAbstract("settings"),
-		 syncActive(false)
+	public: SettingsController() :
+		Controller_Common_ControllerAbstract("settings"),
+		syncActive(false)
 	{
 	}
 
-	void initViewEvents() override
+	public: void initViewEvents() override
 	{
 		using namespace std::placeholders;
 
@@ -91,12 +93,12 @@ public:
 		this->view->onHide = std::bind(std::mem_fn(&SettingsController::hideAction), this);
 	}
 
-	void initFbResolutionsGetterEvents() override
+	public: void initFbResolutionsGetterEvents() override
 	{
 		this->fbResolutionsGetter->onFinish = std::bind(std::mem_fn(&SettingsController::updateResolutionlistThreadedAction), this);
 	}
 
-	void initApplicationEvents() override
+	public: void initApplicationEvents() override
 	{
 		this->applicationObject->onSettingsShowRequest.addHandler(std::bind(std::mem_fn(&SettingsController::showAction), this));
 		this->applicationObject->onEnvChange.addHandler(std::bind(std::mem_fn(&SettingsController::hideAction), this));
@@ -114,8 +116,8 @@ public:
 		this->applicationObject->onSettingModelChange.addHandler(std::bind(std::mem_fn(&SettingsController::syncAction), this));
 	}
 
-	//dispatchers
-	void updateSettingsDataAction() {
+	public: void updateSettingsDataAction()
+	{
 		this->logActionBegin("update-settings-data");
 		try {
 			std::list<Model_Proxylist_Item> entryTitles = this->grublistCfg->proxies.generateEntryTitleList();
@@ -132,8 +134,8 @@ public:
 		this->logActionEnd();
 	}
 
-
-	void loadResolutionsAction() {
+	public: void loadResolutionsAction()
+	{
 		this->logActionBegin("load-resolutions");
 		try {
 			this->fbResolutionsGetter->load();
@@ -144,8 +146,8 @@ public:
 	}
 
 
-	//settings dialog
-	void updateResolutionlistAction() {
+	public: void updateResolutionlistAction()
+	{
 		this->logActionBegin("update-resolutionlist");
 		try {
 			const std::list<std::string>& data = this->fbResolutionsGetter->getData();
@@ -159,7 +161,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void updateResolutionlistThreadedAction() {
+	public: void updateResolutionlistThreadedAction()
+	{
 		this->logActionBeginThreaded("update-resolutionlist-threaded");
 		try {
 			this->threadHelper->runDispatched(std::bind(std::mem_fn(&SettingsController::updateResolutionlistAction), this));
@@ -169,60 +172,8 @@ public:
 		this->logActionEndThreaded();
 	}
 
-
-	void syncSettings() {
-		if (this->syncActive) {
-			return;
-		}
-		this->syncActive = true;
-		std::string sel = this->view->getSelectedCustomOption();
-		this->view->removeAllSettingRows();
-		for (std::list<Model_SettingsStore_Row>::iterator iter = this->settings->begin(); iter != this->settings->end(); this->settings->iter_to_next_setting(iter)){
-			this->view->addCustomOption(iter->isActive, iter->name, iter->value);
-		}
-		this->view->selectCustomOption(sel);
-		std::string defEntry = this->settings->getValue("GRUB_DEFAULT");
-		if (defEntry == "saved"){
-			this->view->setActiveDefEntryOption(View_Settings::DEF_ENTRY_SAVED);
-		}
-		else {
-			this->view->setActiveDefEntryOption(View_Settings::DEF_ENTRY_PREDEFINED);
-			this->view->setDefEntry(defEntry);
-		}
-	
-		this->view->setShowMenuCheckboxState(!this->settings->isActive("GRUB_HIDDEN_TIMEOUT", true));
-		this->view->setOsProberCheckboxState(!this->settings->isActive("GRUB_DISABLE_OS_PROBER", true));
-	
-		std::string timeoutStr;
-		if (this->view->getShowMenuCheckboxState())
-			timeoutStr = this->settings->getValue("GRUB_TIMEOUT");
-		else
-			timeoutStr = this->settings->getValue("GRUB_HIDDEN_TIMEOUT");
-	
-		if (timeoutStr == "" || (timeoutStr.find_first_not_of("0123456789") != -1 && timeoutStr != "-1")) {
-			timeoutStr = "10"; //default value
-		}
-		std::istringstream in(timeoutStr);
-		int timeout;
-		in >> timeout;
-		this->view->setTimeoutValue(timeout == -1 ? 10 : timeout);
-		this->view->setTimeoutActive(timeout != -1);
-	
-		this->view->setKernelParams(this->settings->getValue("GRUB_CMDLINE_LINUX_DEFAULT"));
-		this->view->setRecoveryCheckboxState(!this->settings->isActive("GRUB_DISABLE_RECOVERY", true));
-	
-		this->view->setResolutionCheckboxState(this->settings->isActive("GRUB_GFXMODE", true));
-		this->view->setResolution(this->settings->getValue("GRUB_GFXMODE"));
-	
-		if (this->settings->reloadRequired()) {
-			this->applicationObject->onListRelevantSettingChange.exec();
-		}
-		this->applicationObject->onSettingModelChange.exec();
-		this->syncActive = false;
-	}
-
-
-	void updateDefaultSystemAction() {
+	public: void updateDefaultSystemAction()
+	{
 		this->logActionBegin("update-default-system");
 		try {
 			if (this->view->getActiveDefEntryOption() == View_Settings::DEF_ENTRY_SAVED){
@@ -242,7 +193,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void updateCustomSettingAction(std::string const& name) {
+	public: void updateCustomSettingAction(std::string const& name)
+	{
 		this->logActionBegin("update-custom-setting");
 		try {
 			View_Settings::CustomOption c = this->view->getCustomOption(name);
@@ -257,7 +209,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void addCustomSettingAction() {
+	public: void addCustomSettingAction()
+	{
 		this->logActionBegin("add-custom-setting");
 		try {
 			std::string newSettingName = this->settings->addNewItem();
@@ -268,7 +221,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void removeCustomSettingAction(std::string const& name) {
+	public: void removeCustomSettingAction(std::string const& name)
+	{
 		this->logActionBegin("remove-custom-setting");
 		try {
 			this->settings->removeItem(name);
@@ -280,7 +234,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void updateShowMenuSettingAction() {
+	public: void updateShowMenuSettingAction()
+	{
 		this->logActionBegin("update-show-menu-setting");
 		try {
 			std::string val = this->settings->getValue("GRUB_HIDDEN_TIMEOUT");
@@ -299,7 +254,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void updateOsProberSettingAction() {
+	public: void updateOsProberSettingAction()
+	{
 		this->logActionBegin("update-os-prober-setting");
 		try {
 			this->settings->setValue("GRUB_DISABLE_OS_PROBER", this->view->getOsProberCheckboxState() ? "false" : "true");
@@ -312,7 +268,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void updateTimeoutSettingAction() {
+	public: void updateTimeoutSettingAction()
+	{
 		this->logActionBegin("update-timeout-setting");
 		try {
 			std::string timeoutValue = this->view->getTimeoutValueString();
@@ -334,7 +291,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void updateKernelParamsAction() {
+	public: void updateKernelParamsAction()
+	{
 		this->logActionBegin("update-kernel-params");
 		try {
 			this->settings->setValue("GRUB_CMDLINE_LINUX_DEFAULT", this->view->getKernelParams());
@@ -346,7 +304,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void updateRecoverySettingAction() {
+	public: void updateRecoverySettingAction()
+	{
 		this->logActionBegin("update-recovery-setting");
 		try {
 			// GRUB_DISABLE_LINUX_RECOVERY is used until GRUB 1.98
@@ -369,7 +328,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void updateCustomResolutionAction() {
+	public: void updateCustomResolutionAction()
+	{
 		this->logActionBegin("update-custom-resolution");
 		try {
 			this->settings->setValue("GRUB_GFXMODE", this->view->getResolution());
@@ -381,7 +341,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void updateUseCustomResolutionAction() {
+	public: void updateUseCustomResolutionAction()
+	{
 		this->logActionBegin("update-use-custom-resolution");
 		try {
 			if (this->settings->getValue("GRUB_GFXMODE") == "") {
@@ -396,7 +357,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void hideAction() {
+	public: void hideAction()
+	{
 		this->logActionBegin("hide");
 		try {
 			this->view->hide();
@@ -406,7 +368,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void showAction() {
+	public: void showAction()
+	{
 		this->logActionBegin("show");
 		try {
 			this->view->show();
@@ -416,7 +379,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void syncAction() {
+	public: void syncAction()
+	{
 		this->logActionBegin("sync");
 		try {
 			this->syncSettings();
@@ -426,6 +390,57 @@ public:
 		this->logActionEnd();
 	}
 
+	private: void syncSettings()
+	{
+		if (this->syncActive) {
+			return;
+		}
+		this->syncActive = true;
+		std::string sel = this->view->getSelectedCustomOption();
+		this->view->removeAllSettingRows();
+		for (std::list<Model_SettingsStore_Row>::iterator iter = this->settings->begin(); iter != this->settings->end(); this->settings->iter_to_next_setting(iter)){
+			this->view->addCustomOption(iter->isActive, iter->name, iter->value);
+		}
+		this->view->selectCustomOption(sel);
+		std::string defEntry = this->settings->getValue("GRUB_DEFAULT");
+		if (defEntry == "saved"){
+			this->view->setActiveDefEntryOption(View_Settings::DEF_ENTRY_SAVED);
+		}
+		else {
+			this->view->setActiveDefEntryOption(View_Settings::DEF_ENTRY_PREDEFINED);
+			this->view->setDefEntry(defEntry);
+		}
+
+		this->view->setShowMenuCheckboxState(!this->settings->isActive("GRUB_HIDDEN_TIMEOUT", true));
+		this->view->setOsProberCheckboxState(!this->settings->isActive("GRUB_DISABLE_OS_PROBER", true));
+
+		std::string timeoutStr;
+		if (this->view->getShowMenuCheckboxState())
+			timeoutStr = this->settings->getValue("GRUB_TIMEOUT");
+		else
+			timeoutStr = this->settings->getValue("GRUB_HIDDEN_TIMEOUT");
+
+		if (timeoutStr == "" || (timeoutStr.find_first_not_of("0123456789") != -1 && timeoutStr != "-1")) {
+			timeoutStr = "10"; //default value
+		}
+		std::istringstream in(timeoutStr);
+		int timeout;
+		in >> timeout;
+		this->view->setTimeoutValue(timeout == -1 ? 10 : timeout);
+		this->view->setTimeoutActive(timeout != -1);
+
+		this->view->setKernelParams(this->settings->getValue("GRUB_CMDLINE_LINUX_DEFAULT"));
+		this->view->setRecoveryCheckboxState(!this->settings->isActive("GRUB_DISABLE_RECOVERY", true));
+
+		this->view->setResolutionCheckboxState(this->settings->isActive("GRUB_GFXMODE", true));
+		this->view->setResolution(this->settings->getValue("GRUB_GFXMODE"));
+
+		if (this->settings->reloadRequired()) {
+			this->applicationObject->onListRelevantSettingChange.exec();
+		}
+		this->applicationObject->onSettingModelChange.exec();
+		this->syncActive = false;
+	}
 };
 
 #endif

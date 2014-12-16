@@ -45,26 +45,26 @@ class InstallerController :
 	public Controller_Helper_Thread_Connection,
 	public Bootstrap_Application_Object_Connection
 {
-public:
-	InstallerController() : Controller_Common_ControllerAbstract("installer")
+	public:	InstallerController() :
+		Controller_Common_ControllerAbstract("installer")
 	{
 	}
 
-	void initViewEvents() override
+	public:	void initViewEvents() override
 	{
 		using namespace std::placeholders;
 
 		this->view->onInstallClick = std::bind(std::mem_fn(&InstallerController::installGrubAction), this, _1);
 	}
 
-	void initApplicationEvents() override
+	public:	void initApplicationEvents() override
 	{
 		using namespace std::placeholders;
 
 		this->applicationObject->onInstallerShowRequest.addHandler(std::bind(std::mem_fn(&InstallerController::showAction), this));
 	}
 
-	void initInstallerEvents() override
+	public:	void initInstallerEvents() override
 	{
 		using namespace std::placeholders;
 
@@ -73,7 +73,8 @@ public:
 		};
 	}
 
-	void showAction() {
+	public:	void showAction()
+	{
 		this->logActionBegin("show");
 		try {
 			view->show();
@@ -83,7 +84,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void installGrubAction(std::string device) {
+	public:	void installGrubAction(std::string device)
+	{
 		this->logActionBegin("install-grub");
 		try {
 			this->threadHelper->runAsThread(std::bind(std::mem_fn(&InstallerController::installGrubThreadedAction), this, device));
@@ -93,7 +95,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void installGrubThreadedAction(std::string device) {
+	public:	void installGrubThreadedAction(std::string device)
+	{
 		this->logActionBeginThreaded("install-grub-threaded");
 		try {
 			this->env->activeThreadCount++;
@@ -108,7 +111,8 @@ public:
 		this->logActionEndThreaded();
 	}
 
-	void showMessageAction(std::string const& msg) {
+	public:	void showMessageAction(std::string const& msg)
+	{
 		this->logActionBegin("show-message");
 		try {
 			view->showMessageGrubInstallCompleted(msg);

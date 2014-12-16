@@ -35,17 +35,18 @@ class AboutController :
 	public View_Trait_ViewAware<View_About>,
 	public Bootstrap_Application_Object_Connection
 {
-public:
-	AboutController() : Controller_Common_ControllerAbstract("about")
+	public:	AboutController() :
+		Controller_Common_ControllerAbstract("about")
 	{
 	}
 
-	void initApplicationEvents() override
+	public:	void initApplicationEvents() override
 	{
 		this->applicationObject->onAboutDlgShowRequest.addHandler(std::bind(std::mem_fn(&AboutController::showAction), this));
 	}
 	
-	void showAction() {
+	public:	void showAction()
+	{
 		this->logActionBegin("show");
 		try {
 			this->view->show();

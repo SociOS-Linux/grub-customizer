@@ -51,21 +51,15 @@ class EntryEditController :
 	public Controller_Helper_Thread_Connection,
 	public Bootstrap_Application_Object_Connection
 {
-	std::shared_ptr<ContentParser> currentContentParser;
-	Model_Script* _createCustomScript() {
-		this->grublistCfg->repository.push_back(Model_Script("custom", ""));
-		Model_Script& script = this->grublistCfg->repository.back();
-		script.isCustomScript = true;
-		return &script;
-	}
+	private: std::shared_ptr<ContentParser> currentContentParser;
 
-public:
-	EntryEditController() : Controller_Common_ControllerAbstract("entry-edit"),
-		 currentContentParser(NULL)
+	public: EntryEditController() :
+		Controller_Common_ControllerAbstract("entry-edit"),
+		currentContentParser(NULL)
 	{
 	}
 
-	void initViewEvents() override
+	public: void initViewEvents() override
 	{
 		using namespace std::placeholders;
 		this->view->onApplyClick = std::bind(std::mem_fn(&EntryEditController::applyAction), this);
@@ -74,13 +68,14 @@ public:
 		this->view->onTypeSwitch = std::bind(std::mem_fn(&EntryEditController::switchTypeAction), this, _1);
 	}
 
-	void initApplicationEvents() override
+	public: void initApplicationEvents() override
 	{
 		using namespace std::placeholders;
 		this->applicationObject->onEntryEditorShowRequest.addHandler(std::bind(std::mem_fn(&EntryEditController::showAction), this, _1));
 	}
 
-	void showAction(Rule* rule) {
+	public: void showAction(Rule* rule)
+	{
 		if (rule == nullptr) {
 			this->showCreatorAction();
 			return;
@@ -98,7 +93,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void showCreatorAction() {
+	public: void showCreatorAction()
+	{
 		this->logActionBegin("show-creator");
 		try {
 			this->view->setRulePtr(NULL);
@@ -112,7 +108,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void syncOptionsAction() {
+	public: void syncOptionsAction()
+	{
 		this->logActionBegin("sync-options");
 		try {
 			this->syncEntryEditDlg(false);
@@ -122,7 +119,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void syncSourceAction() {
+	public: void syncSourceAction()
+	{
 		this->logActionBegin("sync-source");
 		try {
 			this->syncEntryEditDlg(true);
@@ -132,7 +130,8 @@ public:
 		this->logActionEnd();
 	}
 
-	void syncEntryEditDlg(bool useOptionsAsSource) {
+	public: void syncEntryEditDlg(bool useOptionsAsSource)
+	{
 		try {
 			if (useOptionsAsSource) {
 				assert(this->currentContentParser != NULL);
@@ -149,7 +148,8 @@ public:
 		}
 	}
 
-	void switchTypeAction(std::string const& newType) {
+	public: void switchTypeAction(std::string const& newType)
+	{
 		this->logActionBegin("switch-type");
 		try {
 			std::string partition;
@@ -178,7 +178,8 @@ public:
 	}
 
 	
-	void applyAction() {
+	public: void applyAction()
+	{
 		this->logActionBegin("apply");
 		try {
 			Model_Rule* rulePtr = NULL;
@@ -189,7 +190,7 @@ public:
 			if (rulePtr == NULL) { // insert
 				Model_Script* script = this->grublistCfg->repository.getCustomScript();
 				if (script == NULL) {
-					script = this->_createCustomScript();
+					script = this->createCustomScript();
 				}
 				assert(script != NULL);
 				script->entries().push_back(Model_Entry("new", "", ""));
@@ -216,7 +217,7 @@ public:
 				if (!script->isCustomScript) {
 					script = this->grublistCfg->repository.getCustomScript();
 					if (script == NULL) {
-						script = this->_createCustomScript();
+						script = this->createCustomScript();
 					}
 					assert(script != NULL);
 					script->entries().push_back(*rulePtr->dataSource);
@@ -270,6 +271,12 @@ public:
 		this->logActionEnd();
 	}
 
+	private: Model_Script* createCustomScript() {
+		this->grublistCfg->repository.push_back(Model_Script("custom", ""));
+		Model_Script& script = this->grublistCfg->repository.back();
+		script.isCustomScript = true;
+		return &script;
+	}
 };
 
 #endif
