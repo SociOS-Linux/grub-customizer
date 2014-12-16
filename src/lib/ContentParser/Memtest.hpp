@@ -100,10 +100,10 @@ public:
 
 
 	void buildDefaultEntry() {
-		std::string defaultEntry = "\
-		set root='(hd0,0)'\n\
-		search --no-floppy --fs-uuid --set 000\n\
-		linux16 ___";
+		std::string defaultEntry =
+			"set root='(hd0,0)'\n"
+			"search --no-floppy --fs-uuid --set 000\n"
+			"linux16 ___";
 
 		this->sourceCode = defaultEntry;
 
@@ -115,10 +115,9 @@ public:
 
 };
 
-const char* ContentParser_Memtest::_regex = "\
-[ \t]*set root='\\(hd([0-9]+)[^0-9]+([0-9]+)\\)'\\n\
-[ \t]*search[ \t]+--no-floppy[ \t]+--fs-uuid[ \t]+--set(?:=root)? ([-0-9a-fA-F]+)\\n\
-[ \t]*linux16[ \t]*(\"[^\"]*\"|[^ \\t\\n]+).*$\
-";
+const char* ContentParser_Memtest::_regex =
+	"[ \t]*set root='\\(hd([0-9]+)[^0-9]+([0-9]+)\\)'\\n"
+	"[ \t]*search[ \t]+--no-floppy[ \t]+--fs-uuid[ \t]+--set(?:=root)? ([-0-9a-fA-F]+)\\n"
+	"[ \t]*linux16[ \t]*(\"[^\"]*\"|[^ \\t\\n]+).*$";
 
 #endif /* CONTENT_PARSER_MEMTEST_H_ */

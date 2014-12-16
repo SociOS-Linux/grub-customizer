@@ -111,12 +111,12 @@ public:
 
 
 	void buildDefaultEntry() {
-		std::string defaultEntry = "\
-		set root='(hd0,0)'\n\
-		search --no-floppy --fs-uuid --set=root 000000000000000000\n\
-		loopback loop ___\n\
-		linux (loop)___ boot=casper iso-scan/filename=___\n\
-		initrd (loop)___\n";
+		std::string defaultEntry =
+			"set root='(hd0,0)'\n"
+			"search --no-floppy --fs-uuid --set=root 000000000000000000\n"
+			"loopback loop ___\n"
+			"linux (loop)___ boot=casper iso-scan/filename=___\n"
+			"initrd (loop)___\n";
 
 		assert(this->regexEngine->match(ContentParser_LinuxIso::_regex, defaultEntry, '\\', '_').size() > 0);
 
@@ -131,12 +131,11 @@ public:
 
 };
 
-const char* ContentParser_LinuxIso::_regex = "\
-[ \t]*set root='\\(hd([0-9]+)[^0-9]+([0-9]+)\\)'\\n\
-[ \t]*search[ \\t]+--no-floppy[ \\t]+--fs-uuid[ \\t]+--set(?:=root)? ([-0-9a-fA-F]+)\\n\
-[ \t]*loopback[ \\t]+loop[ \t]+(\"[^\"]*\"|[^ \\t]+)\\n\
-[ \t]*linux[ \\t]+(\"\\(loop\\)[^\"]*\"|\\(loop\\)[^ \\t]*)[ \\t]+boot=casper iso-scan/filename=(\"[^\"]*\"|[^ \\t]+)(.*)\\n\
-[ \t]*initrd[ \\t]+(\"\\(loop\\)[^\"]*\"|\\(loop\\)[^ \\t]*)\\n\
-";
+const char* ContentParser_LinuxIso::_regex =
+	"[ \t]*set root='\\(hd([0-9]+)[^0-9]+([0-9]+)\\)'\\n"
+	"[ \t]*search[ \\t]+--no-floppy[ \\t]+--fs-uuid[ \\t]+--set(?:=root)? ([-0-9a-fA-F]+)\\n"
+	"[ \t]*loopback[ \\t]+loop[ \t]+(\"[^\"]*\"|[^ \\t]+)\\n"
+	"[ \t]*linux[ \\t]+(\"\\(loop\\)[^\"]*\"|\\(loop\\)[^ \\t]*)[ \\t]+boot=casper iso-scan/filename=(\"[^\"]*\"|[^ \\t]+)(.*)\\n"
+	"[ \t]*initrd[ \\t]+(\"\\(loop\\)[^\"]*\"|\\(loop\\)[^ \\t]*)";
 
 #endif /* CONTENT_PARSER_LINUXISO_H_ */

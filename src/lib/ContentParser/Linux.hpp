@@ -77,11 +77,11 @@ public:
 	}
 
 	void buildDefaultEntry() {
-		std::string defaultEntry = "\
-		set root='(hd0,0)'\n\
-		search --no-floppy --fs-uuid --set=root 000\n\
-		linux ___ root=UUID=000\n\
-		initrd ___";
+		std::string defaultEntry =
+			"set root='(hd0,0)'\n"
+			"search --no-floppy --fs-uuid --set=root 000\n"
+			"linux ___ root=UUID=000\n"
+			"initrd ___";
 
 		assert(this->regexEngine->match(ContentParser_Linux::_regex, defaultEntry, '\\', '_').size() > 0);
 
@@ -96,13 +96,12 @@ public:
 
 };
 
-const char* ContentParser_Linux::_regex = "\
-[ \t]*set root='\\(hd([0-9]+)[^0-9]+([0-9]+)\\)'\\n\
-[ \t]*search[ \t]+--no-floppy[ \t]+--fs-uuid[ \t]+--set(?:=root)? ([-0-9a-fA-F]+)\\n\
-([ \t]*echo[ \t]+.*\n)?\
-[ \t]*linux[ \t]+(\"[^\"]*\"|[^ \t]+)[ \t]+root=UUID=([-0-9a-fA-F]+)(.*)\\n\
-([ \t]*echo[ \t]+.*\n)?\
-[ \t]*initrd[ \t]+(\"[^\"]*\"|[^ \\n]+)[ \\n\t]*$\
-";
+const char* ContentParser_Linux::_regex =
+	"[ \t]*set root='\\(hd([0-9]+)[^0-9]+([0-9]+)\\)'\\n"
+	"[ \t]*search[ \t]+--no-floppy[ \t]+--fs-uuid[ \t]+--set(?:=root)? ([-0-9a-fA-F]+)\\n"
+	"([ \t]*echo[ \t]+.*\n)?"
+	"[ \t]*linux[ \t]+(\"[^\"]*\"|[^ \t]+)[ \t]+root=UUID=([-0-9a-fA-F]+)(.*)\\n"
+	"([ \t]*echo[ \t]+.*\n)?"
+	"[ \t]*initrd[ \t]+(\"[^\"]*\"|[^ \\n]+)[ \\n\t]*$";
 
 #endif /* CONTENT_PARSER_LINUX_H_ */

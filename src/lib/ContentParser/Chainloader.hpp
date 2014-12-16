@@ -67,11 +67,11 @@ public:
 	}
 
 	void buildDefaultEntry() {
-		std::string defaultEntry = "\
-		set root='(hd0,0)'\n\
-		search --no-floppy --fs-uuid --set 000\n\
-		drivemap -s (hd0) ${root}\n\
-		chainloader +1";
+		std::string defaultEntry =
+			"set root='(hd0,0)'\n"
+			"search --no-floppy --fs-uuid --set 000\n"
+			"drivemap -s (hd0) ${root}\n"
+			"chainloader +1";
 
 		assert(this->regexEngine->match(ContentParser_Chainloader::_regex, defaultEntry, '\\', '_').size() > 0);
 
@@ -82,10 +82,9 @@ public:
 	}
 };
 
-const char* ContentParser_Chainloader::_regex = "\
-[ \t]*set[ \t]+root='\\(hd([0-9]+)[^0-9]+([0-9]+)\\)'\\n\
-[ \t]*search[ \t]+--no-floppy[ \t]+--fs-uuid[ \t]+--set(?:=root)?[ \t]+([-0-9a-fA-F]+)\\n\
-(.|\\n)*\
-[ \t]*chainloader[ \t]+\\+1\\n?[ \t]*\
-";
+const char* ContentParser_Chainloader::_regex =
+	"[ \t]*set[ \t]+root='\\(hd([0-9]+)[^0-9]+([0-9]+)\\)'\\n"
+	"[ \t]*search[ \t]+--no-floppy[ \t]+--fs-uuid[ \t]+--set(?:=root)?[ \t]+([-0-9a-fA-F]+)\\n"
+	"(.|\\n)*"
+	"[ \t]*chainloader[ \t]+\\+1\\n?[ \t]*";
 #endif /* CONTENT_PARSER_CHAINLOADER_H_ */
