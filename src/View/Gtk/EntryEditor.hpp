@@ -30,20 +30,21 @@ class View_Gtk_EntryEditor :
 	public View_EntryEditor,
 	public Gtk::Dialog
 {
-	Gtk::Notebook tabbox;
-	Gtk::TextView tvSource;
-	Gtk::ScrolledWindow scrSource;
-	Gtk::ScrolledWindow scrOptions;
-	Gtk::Table tblOptions;
-	std::map<std::string, Gtk::Widget*> optionMap;
-	std::map<std::string, Gtk::Label*> labelMap;
-	Gtk::ComboBoxText cbType;
-	Gtk::Label lblType;
-	bool lock_state;
+	private: Gtk::Notebook tabbox;
+	private: Gtk::TextView tvSource;
+	private: Gtk::ScrolledWindow scrSource;
+	private: Gtk::ScrolledWindow scrOptions;
+	private: Gtk::Table tblOptions;
+	private: std::map<std::string, Gtk::Widget*> optionMap;
+	private: std::map<std::string, Gtk::Label*> labelMap;
+	private: Gtk::ComboBoxText cbType;
+	private: Gtk::Label lblType;
+	private: bool lock_state;
 
-	Rule* rulePtr;
-protected:
-	virtual std::string mapOptionName(std::string const& name) {
+	private: Rule* rulePtr = nullptr;
+
+	private: virtual std::string mapOptionName(std::string const& name)
+	{
 		if (name == "partition_uuid")
 			return gettext("_Partition");
 		else if (name == "initramfs")
@@ -61,9 +62,10 @@ protected:
 		else
 			return name;
 	}
-public:
-	View_Gtk_EntryEditor()
-		: rulePtr(NULL), lblType(gettext("_Type:"), true), lock_state(false)
+
+	public:	View_Gtk_EntryEditor() :
+		lblType(gettext("_Type:"), true),
+		lock_state(false)
 	{
 		this->add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
 		this->add_button(Gtk::Stock::OK, Gtk::RESPONSE_OK);
@@ -93,7 +95,8 @@ public:
 		this->tvSource.signal_key_release_event().connect(sigc::mem_fun(this, &View_Gtk_EntryEditor::signal_sourceModified));
 	}
 
-	void setSourcecode(std::string const& source) {
+	public:	void setSourcecode(std::string const& source)
+	{
 		std::string optimizedSource = Helper::str_replace("\n\t", "\n", source);
 		if (optimizedSource[0] == '\t') {
 			optimizedSource = optimizedSource.substr(1);
@@ -101,7 +104,8 @@ public:
 		this->tvSource.get_buffer()->set_text(optimizedSource);
 	}
 
-	std::string getSourcecode() {
+	public:	std::string getSourcecode()
+	{
 		std::string optimizedSourcecode = this->tvSource.get_buffer()->get_text();
 		std::string withIndent = Helper::str_replace("\n", "\n\t", optimizedSourcecode);
 		if (withIndent.size() >= 2 && withIndent.substr(withIndent.size() - 2) == "\n\t") {
@@ -112,15 +116,16 @@ public:
 		return "\t" + withIndent;
 	}
 
-	void addOption(std::string const& name, std::string const& value) {
+	public:	void addOption(std::string const& name, std::string const& value)
+	{
 		int pos = name == "partition_uuid" ? 1 : this->optionMap.size() + 2; // partition should be the first option
 		Gtk::Label* label = Gtk::manage(new Gtk::Label(this->mapOptionName(name) + ":", true));
 		label->set_alignment(Pango::ALIGN_RIGHT);
 		this->tblOptions.attach(*label, 0, 1, pos, pos+1, Gtk::SHRINK | Gtk::FILL, Gtk::SHRINK, 5, 5);
 		this->labelMap[name] = label;
 
-		Gtk::Widget* addedWidget = NULL;
-		if (name != "partition_uuid" || this->deviceDataList == NULL) {
+		Gtk::Widget* addedWidget = nullptr;
+		if (name != "partition_uuid" || this->deviceDataList == nullptr) {
 			Gtk::Entry* entry = Gtk::manage(new Gtk::Entry());
 			entry->set_text(value);
 			entry->signal_changed().connect(sigc::mem_fun(this, &View_Gtk_EntryEditor::signal_optionsModified));
@@ -140,14 +145,16 @@ public:
 		}
 	}
 
-	void setOptions(std::map<std::string, std::string> options){
+	public:	void setOptions(std::map<std::string, std::string> options)
+	{
 		this->removeOptions();
 		for (std::map<std::string, std::string>::iterator iter = options.begin(); iter != options.end(); iter++) {
 			this->addOption(iter->first, iter->second);
 		}
 	}
 
-	std::map<std::string, std::string> getOptions() const {
+	public:	std::map<std::string, std::string> getOptions() const
+	{
 		std::map<std::string, std::string> result;
 		for (std::map<std::string, Gtk::Widget*>::const_iterator iter = this->optionMap.begin(); iter != this->optionMap.end(); iter++) {
 			try {
@@ -159,7 +166,8 @@ public:
 		return result;
 	}
 
-	void removeOptions() {
+	public:	void removeOptions()
+	{
 		for (std::map<std::string, Gtk::Label*>::iterator iter = this->labelMap.begin(); iter != this->labelMap.end(); iter++) {
 			this->tblOptions.remove(*iter->second);
 		}
@@ -170,23 +178,28 @@ public:
 		this->optionMap.clear();
 	}
 
-	void setRulePtr(Rule* rulePtr) {
+	public:	void setRulePtr(Rule* rulePtr)
+	{
 		this->rulePtr = rulePtr;
 	}
 
-	Rule* getRulePtr() {
+	public:	Rule* getRulePtr()
+	{
 		return this->rulePtr;
 	}
 
-	void show() {
+	public:	void show()
+	{
 		Gtk::Window::show_all();
 	}
 
-	void hide() {
+	public:	void hide()
+	{
 		Gtk::Window::hide();
 	}
 
-	void setAvailableEntryTypes(std::list<std::string> const& names) {
+	public:	void setAvailableEntryTypes(std::list<std::string> const& names)
+	{
 		this->cbType.remove_all();
 		for (std::list<std::string>::const_iterator iter = names.begin(); iter != names.end(); iter++) {
 			this->cbType.append(*iter);
@@ -194,7 +207,8 @@ public:
 		this->cbType.append(gettext("Other"));
 	}
 
-	void selectType(std::string const& name) {
+	public:	void selectType(std::string const& name)
+	{
 		std::string name2 = name;
 		if (name2 == "") {
 			name2 = gettext("Other");
@@ -205,31 +219,34 @@ public:
 		this->lock_state = false;
 	}
 
-	std::string getSelectedType() const {
+	public:	std::string getSelectedType() const
+	{
 		return this->cbType.get_active_text();
 	}
 
-	void signal_response_action(int response_id) {
+	private: void signal_response_action(int response_id)
+	{
 		if (response_id == Gtk::RESPONSE_OK){
 			this->onApplyClick();
 		}
 		this->hide();
 	}
 
-	bool signal_sourceModified(GdkEventKey* event) {
+	private: bool signal_sourceModified(GdkEventKey* event)
+	{
 		if (!this->lock_state) {
 			this->onSourceModification();
 		}
 		return true;
 	}
 
-	void signal_optionsModified() {
+	private: void signal_optionsModified() {
 		if (!this->lock_state) {
 			this->onOptionModification();
 		}
 	}
 
-	void signal_typeModified() {
+	private: void signal_typeModified() {
 		if (!this->lock_state) {
 			this->onTypeSwitch(this->cbType.get_active_text() != gettext("Other") ? this->cbType.get_active_text() : "");
 		}

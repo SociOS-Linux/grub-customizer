@@ -23,19 +23,31 @@
 #include "../../../Model/DeviceDataListInterface.hpp"
 #include <libintl.h>
 
-class View_Gtk_Element_PartitionChooser : public Gtk::ComboBoxText {
-	std::map<std::string, std::string> uuid_map;
-	Glib::ustring activePartition_uuid;
-	Model_DeviceDataListInterface const* deviceDataList;
-	bool prependCurrentPartition;
-	std::string currentPartitionName;
-public:
-	View_Gtk_Element_PartitionChooser(Glib::ustring const& activePartition_uuid, Model_DeviceDataListInterface const& deviceDataList, bool prependCurrentPartition = false, std::string const& currentPartitionName = "") : activePartition_uuid(activePartition_uuid), deviceDataList(&deviceDataList), prependCurrentPartition(prependCurrentPartition), currentPartitionName(currentPartitionName)
+class View_Gtk_Element_PartitionChooser :
+	public Gtk::ComboBoxText
+{
+	private: std::map<std::string, std::string> uuid_map;
+	private: Glib::ustring activePartition_uuid;
+	private: Model_DeviceDataListInterface const* deviceDataList;
+	private: bool prependCurrentPartition;
+	private: std::string currentPartitionName;
+
+	public:	View_Gtk_Element_PartitionChooser(
+		Glib::ustring const& activePartition_uuid,
+		Model_DeviceDataListInterface const& deviceDataList,
+		bool prependCurrentPartition = false,
+		std::string const& currentPartitionName = ""
+	) :
+		activePartition_uuid(activePartition_uuid),
+		deviceDataList(&deviceDataList),
+		prependCurrentPartition(prependCurrentPartition),
+		currentPartitionName(currentPartitionName)
 	{
 		load();
 	}
 
-	void load() {
+	public:	void load()
+	{
 		this->remove_all();
 		if (prependCurrentPartition) {
 			this->append(currentPartitionName + "\n(" + gettext("current") + ")");
@@ -53,7 +65,8 @@ public:
 		}
 	}
 
-	std::string getSelectedUuid() const {
+	public:	std::string getSelectedUuid() const
+	{
 		if (this->get_active_row_number() == 0 && prependCurrentPartition) { // (current)
 			return "";
 		} else {
@@ -61,7 +74,8 @@ public:
 		}
 	}
 
-	static std::string strToLower(std::string str) {
+	public:	static std::string strToLower(std::string str)
+	{
 		for (std::string::iterator iter = str.begin(); iter != str.end(); iter++) {
 			*iter = std::tolower(*iter);
 		}

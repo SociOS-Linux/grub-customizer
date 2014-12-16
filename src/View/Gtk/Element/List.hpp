@@ -26,9 +26,12 @@
 #include <libintl.h>
 
 template<typename TItem, typename TWrapper>
-class View_Gtk_Element_List : public Gtk::TreeView {
-public:
-	struct TreeModel : public Gtk::TreeModelColumnRecord {
+class View_Gtk_Element_List :
+	public Gtk::TreeView
+{
+	public:	struct TreeModel :
+		public Gtk::TreeModelColumnRecord
+	{
 		Gtk::TreeModelColumn<Glib::ustring> name;
 		Gtk::TreeModelColumn<Glib::ustring> text;
 		Gtk::TreeModelColumn<TItem*> relatedRule;
@@ -43,7 +46,8 @@ public:
 		Gtk::TreeModelColumn<Pango::EllipsizeMode> ellipsize;
 		Gtk::TreeModelColumn<Glib::RefPtr<Gdk::Pixbuf> > icon;
 
-		TreeModel(){
+		TreeModel()
+		{
 			this->add(name);
 			this->add(text);
 			this->add(relatedRule);
@@ -59,16 +63,16 @@ public:
 			this->add(ellipsize);
 		}
 	};
-	TreeModel treeModel;
-	Glib::RefPtr<Gtk::TreeStore> refTreeStore;
-	Gtk::CellRendererPixbuf pixbufRenderer;
-	Gtk::CellRendererToggle toggleRenderer;
-	Gtk::CellRendererText textRenderer;
-	Gtk::TreeViewColumn mainColumn;
-	Pango::EllipsizeMode ellipsizeMode;
+	public: TreeModel treeModel;
+	public: Glib::RefPtr<Gtk::TreeStore> refTreeStore;
+	public: Gtk::CellRendererPixbuf pixbufRenderer;
+	public: Gtk::CellRendererToggle toggleRenderer;
+	public: Gtk::CellRendererText textRenderer;
+	public: Gtk::TreeViewColumn mainColumn;
+	public: Pango::EllipsizeMode ellipsizeMode;
 
-	View_Gtk_Element_List()
-		: ellipsizeMode(Pango::ELLIPSIZE_NONE)
+	public:	View_Gtk_Element_List() :
+		ellipsizeMode(Pango::ELLIPSIZE_NONE)
 	{
 		refTreeStore = Gtk::TreeStore::create(treeModel);
 		this->set_model(refTreeStore);
@@ -92,7 +96,12 @@ public:
 		this->set_rubber_banding(true);
 	}
 
-	void addListItem(View_Model_ListItem<TItem, TWrapper> const& listItem, std::map<ViewOption, bool> const& options, Gtk::Window& window) {
+	public:	void addListItem(
+		View_Model_ListItem<TItem, TWrapper> const& listItem,
+		std::map<ViewOption, bool> const& options,
+		Gtk::Window& window
+	)
+	{
 		if (!listItem.isVisible && !options.at(VIEW_SHOW_HIDDEN_ENTRIES)) {
 			return;
 		}
@@ -174,7 +183,8 @@ public:
 		(*entryRow)[this->treeModel.ellipsize] = ellipsizeMode;
 	}
 
-	Gtk::TreeModel::iterator getIterByRulePtr(TItem* rulePtr, const Gtk::TreeRow* parentRow = NULL) const {
+	public:	Gtk::TreeModel::iterator getIterByRulePtr(TItem* rulePtr, const Gtk::TreeRow* parentRow = NULL) const
+	{
 		const Gtk::TreeNodeChildren children = parentRow ? parentRow->children() : this->refTreeStore->children();
 		for (Gtk::TreeModel::const_iterator iter = children.begin(); iter != children.end(); iter++) {
 			if ((*iter)[this->treeModel.relatedRule] == rulePtr)
@@ -188,7 +198,8 @@ public:
 		throw ItemNotFoundException("rule not found", __FILE__, __LINE__);
 	}
 
-	Gtk::TreeModel::iterator getIterByScriptPtr(TWrapper* scriptPtr) const {
+	public:	Gtk::TreeModel::iterator getIterByScriptPtr(TWrapper* scriptPtr) const
+	{
 		const Gtk::TreeNodeChildren children = this->refTreeStore->children();
 		for (Gtk::TreeModel::const_iterator iter = children.begin(); iter != children.end(); iter++) {
 			if ((*iter)[this->treeModel.relatedScript] == scriptPtr) {
@@ -198,13 +209,15 @@ public:
 		throw ItemNotFoundException("script not found", __FILE__, __LINE__);
 	}
 
-	void setRuleName(TItem* rule, std::string const& newName){
+	public:	void setRuleName(TItem* rule, std::string const& newName)
+	{
 		Gtk::TreeModel::iterator iter = this->getIterByRulePtr(rule);
 		(*iter)[this->treeModel.name] = newName;
 	}
 
 
-	void selectRule(TItem* rule, bool startEdit) {
+	public:	void selectRule(TItem* rule, bool startEdit)
+	{
 		try {
 			this->get_selection()->select(this->getIterByRulePtr(rule));
 			if (startEdit) {
@@ -215,7 +228,8 @@ public:
 		}
 	}
 
-	void selectRules(std::list<TItem*> rules) {
+	public:	void selectRules(std::list<TItem*> rules)
+	{
 		this->get_selection()->unselect_all();
 		for (typename std::list<TItem*>::iterator iter = rules.begin(); iter != rules.end(); iter++) {
 			try {
@@ -226,11 +240,13 @@ public:
 		}
 	}
 
-	void setEntryVisibility(TItem* entry, bool value) {
+	public:	void setEntryVisibility(TItem* entry, bool value)
+	{
 		(*this->getIterByRulePtr(entry))[this->treeModel.is_activated] = value;
 	}
 
-	std::list<TItem*> getSelectedRules() {
+	public:	std::list<TItem*> getSelectedRules()
+	{
 		std::list<TItem*> rules;
 		std::vector<Gtk::TreeModel::Path> pathes = this->get_selection()->get_selected_rows();
 		for (std::vector<Gtk::TreeModel::Path>::iterator iter = pathes.begin(); iter != pathes.end(); iter++) {

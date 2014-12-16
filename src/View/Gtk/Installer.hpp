@@ -27,52 +27,14 @@ class View_Gtk_Installer :
 	public Gtk::Dialog,
 	public View_Installer
 {
-	Gtk::Label lblDescription;
-	Gtk::HBox hbDevice;
-	Gtk::Label lblDevice, lblInstallInfo;
-	Gtk::Entry txtDevice;
-	Glib::Dispatcher disp_grub_install_ready;
+	private: Gtk::Label lblDescription;
+	private: Gtk::HBox hbDevice;
+	private: Gtk::Label lblDevice, lblInstallInfo;
+	private: Gtk::Entry txtDevice;
 
-	void func_disp_grub_install_ready() {
-		std::string output = this->install_result;
-		if (output == ""){
-			Gtk::MessageDialog msg(gettext("The bootloader has been installed successfully"));
-			msg.run();
-			this->hide();
-		}
-		else {
-			Gtk::MessageDialog msg(gettext("Error while installing the bootloader"), false, Gtk::MESSAGE_ERROR);
-			msg.set_secondary_text(output);
-			msg.run();
-		}
-		this->set_response_sensitive(Gtk::RESPONSE_OK, true);
-		this->set_response_sensitive(Gtk::RESPONSE_CANCEL, true);
-		txtDevice.set_sensitive(true);
-		lblInstallInfo.set_text("");
-	}
-
-	void signal_grub_install_dialog_response(int response_id) {
-		if (response_id == Gtk::RESPONSE_OK){
-			if (txtDevice.get_text().length()){
-				this->set_response_sensitive(Gtk::RESPONSE_OK, false);
-				this->set_response_sensitive(Gtk::RESPONSE_CANCEL, false);
-				txtDevice.set_sensitive(false);
-				lblInstallInfo.set_text(gettext("installing the bootloader…"));
-
-				this->onInstallClick(txtDevice.get_text());
-			}
-			else
-				Gtk::MessageDialog(gettext("Please type a device string!")).run();
-		}
-		else
-			this->hide();
-	}
-
-	Glib::ustring install_result;
-	public:
-	View_Gtk_Installer()
-		: lblDescription(gettext("Install the bootloader to MBR and put some\nfiles to the bootloaders data directory\n(if they don't already exist)."), Pango::ALIGN_LEFT)
-		, lblDevice(gettext("_Device: "), Pango::ALIGN_LEFT, Pango::ALIGN_CENTER, true)
+	public:	View_Gtk_Installer() :
+		lblDescription(gettext("Install the bootloader to MBR and put some\nfiles to the bootloaders data directory\n(if they don't already exist)."), Pango::ALIGN_LEFT),
+		lblDevice(gettext("_Device: "), Pango::ALIGN_LEFT, Pango::ALIGN_CENTER, true)
 	{
 		Gtk::Box* vbDialog = this->get_vbox();
 		this->set_icon_name("grub-customizer");
@@ -92,17 +54,47 @@ class View_Gtk_Installer :
 		txtDevice.set_activates_default(true);
 
 		this->signal_response().connect(sigc::mem_fun(this, &View_Gtk_Installer::signal_grub_install_dialog_response));
-
-		disp_grub_install_ready.connect(sigc::mem_fun(this, &View_Gtk_Installer::func_disp_grub_install_ready));
 	}
 
-	void show() {
+	public:	void show()
+	{
 		this->show_all();
 	}
 
-	void showMessageGrubInstallCompleted(std::string const& msg) {
-		this->install_result = msg;
-		disp_grub_install_ready();
+	public:	void showMessageGrubInstallCompleted(std::string const& msg)
+	{
+		std::string output = msg;
+		if (output == ""){
+			Gtk::MessageDialog msg(gettext("The bootloader has been installed successfully"));
+			msg.run();
+			this->hide();
+		} else {
+			Gtk::MessageDialog msg(gettext("Error while installing the bootloader"), false, Gtk::MESSAGE_ERROR);
+			msg.set_secondary_text(output);
+			msg.run();
+		}
+		this->set_response_sensitive(Gtk::RESPONSE_OK, true);
+		this->set_response_sensitive(Gtk::RESPONSE_CANCEL, true);
+		txtDevice.set_sensitive(true);
+		lblInstallInfo.set_text("");
+	}
+
+	public:	private: void signal_grub_install_dialog_response(int response_id)
+	{
+		if (response_id == Gtk::RESPONSE_OK){
+			if (txtDevice.get_text().length()){
+				this->set_response_sensitive(Gtk::RESPONSE_OK, false);
+				this->set_response_sensitive(Gtk::RESPONSE_CANCEL, false);
+				txtDevice.set_sensitive(false);
+				lblInstallInfo.set_text(gettext("installing the bootloader…"));
+
+				this->onInstallClick(txtDevice.get_text());
+			} else {
+				Gtk::MessageDialog(gettext("Please type a device string!")).run();
+			}
+		} else {
+			this->hide();
+		}
 	}
 };
 #endif

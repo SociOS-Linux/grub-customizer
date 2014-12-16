@@ -49,180 +49,76 @@ class View_Gtk_Settings :
 			this->isActive = isActive;
 		}
 	};
-	AdvancedSettingsTreeModel asTreeModel;
-	Glib::RefPtr<Gtk::ListStore> refAsListStore;
-	bool event_lock;
+	private: AdvancedSettingsTreeModel asTreeModel;
+	private: Glib::RefPtr<Gtk::ListStore> refAsListStore;
+	private: bool event_lock = false;
 	
-	Gtk::Notebook tabbox;
-	Gtk::ScrolledWindow scrAllEntries;
-	Gtk::TreeView tvAllEntries;
-	Gtk::VBox vbAllEntries;
-	Gtk::HBox hbAllEntriesControl;
-	Gtk::Button bttAddCustomEntry, bttRemoveCustomEntry;
+	private: Gtk::Notebook tabbox;
+	private: Gtk::ScrolledWindow scrAllEntries;
+	private: Gtk::TreeView tvAllEntries;
+	private: Gtk::VBox vbAllEntries;
+	private: Gtk::HBox hbAllEntriesControl;
+	private: Gtk::Button bttAddCustomEntry, bttRemoveCustomEntry;
 
-	Gtk::VBox vbCommonSettings, vbAppearanceSettings;
-	Gtk::Alignment alignCommonSettings;
+	private: Gtk::VBox vbCommonSettings, vbAppearanceSettings;
+	private: Gtk::Alignment alignCommonSettings;
 	
-	Pango::AttrList attrDefaultEntry;
-	Pango::Attribute aDefaultEntry;
+	private: Pango::AttrList attrDefaultEntry;
+	private: Pango::Attribute aDefaultEntry;
 	//default entry group
-	Gtk::Frame groupDefaultEntry;
-	Gtk::Alignment alignDefaultEntry;
-	Gtk::Label lblDefaultEntry;
+	private: Gtk::Frame groupDefaultEntry;
+	private: Gtk::Alignment alignDefaultEntry;
+	private: Gtk::Label lblDefaultEntry;
 	//Gtk::Table tblDefaultEntry;
-	Gtk::RadioButton rbDefPredefined, rbDefSaved;
-	Gtk::RadioButtonGroup rbgDefEntry;
-	Gtk::VBox vbDefaultEntry;
-	Gtk::HBox hbDefPredefined;
+	private: Gtk::RadioButton rbDefPredefined, rbDefSaved;
+	private: Gtk::RadioButtonGroup rbgDefEntry;
+	private: Gtk::VBox vbDefaultEntry;
+	private: Gtk::HBox hbDefPredefined;
 	//Gtk::SpinButton spDefPosition;
-	Gtk::ComboBoxText cbDefEntry;
-	std::map<int, std::string> defEntryValueMapping;
-	Gtk::Button bttDefaultEntryHelp;
-	Gtk::Image imgDefaultEntryHelp;
+	private: Gtk::ComboBoxText cbDefEntry;
+	private: std::map<int, std::string> defEntryValueMapping;
+	private: Gtk::Button bttDefaultEntryHelp;
+	private: Gtk::Image imgDefaultEntryHelp;
 
 	//view group
-	Gtk::Frame groupView;
-	Gtk::Alignment alignView;
-	Gtk::Label lblView;
-	Gtk::VBox vbView;
-	Gtk::CheckButton chkShowMenu, chkOsProber;
-	Gtk::HBox hbTimeout;
-	Gtk::CheckButton chkTimeout;
-	Gtk::SpinButton spTimeout;
-	Gtk::Label lblTimeout2;
+	private: Gtk::Frame groupView;
+	private: Gtk::Alignment alignView;
+	private: Gtk::Label lblView;
+	private: Gtk::VBox vbView;
+	private: Gtk::CheckButton chkShowMenu, chkOsProber;
+	private: Gtk::HBox hbTimeout;
+	private: Gtk::CheckButton chkTimeout;
+	private: Gtk::SpinButton spTimeout;
+	private: Gtk::Label lblTimeout2;
 
 	//kernel parameters
-	Gtk::Frame groupKernelParams;
-	Gtk::Alignment alignKernelParams;
-	Gtk::Label lblKernelParams;
-	Gtk::VBox vbKernelParams;
-	Gtk::Entry txtKernelParams;
-	Gtk::CheckButton chkGenerateRecovery;
+	private: Gtk::Frame groupKernelParams;
+	private: Gtk::Alignment alignKernelParams;
+	private: Gtk::Label lblKernelParams;
+	private: Gtk::VBox vbKernelParams;
+	private: Gtk::Entry txtKernelParams;
+	private: Gtk::CheckButton chkGenerateRecovery;
 	
 	//screen resolution
-	Gtk::Alignment alignResolutionAndTheme;
-	Gtk::HBox hbResolutionAndTheme;
-	Gtk::HBox hbResolution;
-	Gtk::CheckButton chkResolution;
-	Gtk::ComboBoxText cbResolution;
+	private: Gtk::Alignment alignResolutionAndTheme;
+	private: Gtk::HBox hbResolutionAndTheme;
+	private: Gtk::HBox hbResolution;
+	private: Gtk::CheckButton chkResolution;
+	private: Gtk::ComboBoxText cbResolution;
 
-
-	void signal_setting_row_changed(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter) {
-		if (!event_lock) {
-			this->onCustomSettingChange((Glib::ustring)(*iter)[asTreeModel.old_name]);
-		}
-	}
-
-	void signal_add_row_button_clicked() {
-		if (!event_lock) {
-			this->onAddCustomSettingClick();
-		}
-	}
-
-	void signal_remove_row_button_clicked() {
-		if (!event_lock) {
-			this->onRemoveCustomSettingClick((Glib::ustring)(*tvAllEntries.get_selection()->get_selected())[asTreeModel.name]);
-		}
-	}
-
-	void signal_default_entry_predefined_toggeled() {
-		if (!event_lock){
-			this->onDefaultSystemChange();
-		}
-	}
-
-	void signal_default_entry_saved_toggeled() {
-		if (!event_lock){
-			this->onDefaultSystemChange();
-		}
-	}
-
-	void signal_default_entry_changed() {
-		if (!event_lock){
-			this->onDefaultSystemChange();
-		}
-	}
-
-	void signal_showMenu_toggled() {
-		if (!event_lock){
-			this->onShowMenuSettingChange();
-		}
-	}
-
-	void signal_osProber_toggled(){
-		if (!event_lock){
-			this->onOsProberSettingChange();
-		}
-	}
-
-	void signal_timeout_changed(){
-		if (!event_lock){
-			this->onTimeoutSettingChange();
-		}
-	}
-
-	void signal_timeout_checkbox_toggled() {
-		if (!event_lock){
-			this->onTimeoutSettingChange();
-		}
-	}
-
-	void signal_kernelparams_changed() {
-		if (!event_lock){
-			this->onKernelParamsChange();
-		}
-	}
-
-	void signal_recovery_toggled() {
-		if (!event_lock){
-			this->onRecoverySettingChange();
-		}
-	}
-
-	void signal_chkResolution_toggled() {
-		if (!event_lock){
-			this->onUseCustomResolutionChange();
-		}
-	}
-
-	void signal_resolution_selected() {
-		if (!event_lock){
-			this->onCustomResolutionChange();
-		}
-	}
-
-	void signal_defEntryHelpClick() {
-		if (!event_lock){
-			Gtk::MessageDialog helpDlg(
-				gettext("This option allows choosing the operating system which should be selected when booting. "
-				"By default this always is the first one.\n\nThere are two columns because "
-				"there are two ways of selecting the default operating system. "
-				"The first way is to say \"always select the operating system at position X\". This means when a new menuentry appears, "
-				"the default menuentry may change (because there's another one at Position X).\n\n"
-				"The other way is to say \"use the operating system named Linux 123\". "
-				"Then it will always point to the same operating system - the position doesn't matter. "
-				"When changing the name of an entry using Grub Customizer this option will be updated automatically. "
-				"So you won't have to re-select the default entry."),
-				true,
-				Gtk::MESSAGE_INFO,
-				Gtk::BUTTONS_OK,
-				false
-			);
-			helpDlg.run();
-		}
-	}
-
-	void on_response(int response_id) {
-		this->onHide();
-	}
-	public:
-	View_Gtk_Settings()
-		: event_lock(false), bttAddCustomEntry(Gtk::Stock::ADD), bttRemoveCustomEntry(Gtk::Stock::REMOVE),
-		rbDefPredefined(gettext("pre_defined: "), true), rbDefSaved(gettext("previously _booted entry"), true),
-		lblDefaultEntry(gettext("default entry")), lblView(gettext("visibility")), chkShowMenu(gettext("show menu")),
+	public: View_Gtk_Settings() :
+		bttAddCustomEntry(Gtk::Stock::ADD),
+		bttRemoveCustomEntry(Gtk::Stock::REMOVE),
+		rbDefPredefined(gettext("pre_defined: "), true),
+		rbDefSaved(gettext("previously _booted entry"), true),
+		lblDefaultEntry(gettext("default entry")),
+		lblView(gettext("visibility")),
+		chkShowMenu(gettext("show menu")),
 		lblKernelParams(gettext("kernel parameters")),
-		chkGenerateRecovery(gettext("generate recovery entries")), chkOsProber(gettext("look for other operating systems")),
-		chkResolution(gettext("custom resolution: ")), cbResolution(true),
+		chkGenerateRecovery(gettext("generate recovery entries")),
+		chkOsProber(gettext("look for other operating systems")),
+		chkResolution(gettext("custom resolution: ")),
+		cbResolution(true),
 		imgDefaultEntryHelp(Gtk::Stock::HELP, Gtk::ICON_SIZE_BUTTON)
 	{
 		this->set_title("Grub Customizer - "+Glib::ustring(gettext("settings")));
@@ -364,26 +260,36 @@ class View_Gtk_Settings :
 		this->set_default_size(500, 600);
 	}
 
-	Gtk::VBox& getCommonSettingsPane() {
+	public: Gtk::VBox& getCommonSettingsPane()
+	{
 		tabbox.remove(alignCommonSettings);
 		alignCommonSettings.remove();
 		return vbCommonSettings;
 	}
 
-	Gtk::VBox& getAppearanceSettingsPane() {
+	public: Gtk::VBox& getAppearanceSettingsPane()
+	{
 		tabbox.remove(vbAppearanceSettings);
 		return vbAppearanceSettings;
 	}
 
-	void show() {
+	public: void show()
+	{
 		this->show_all();
 	}
 
-	void hide() {
+	public: void hide()
+	{
 		Gtk::Dialog::hide();
 	}
 
-	void addEntryToDefaultEntryChooser(std::string const& labelPathValue, std::string const& labelPathLabel, std::string const& numericPathValue, std::string const& numericPathLabel) {
+	public: void addEntryToDefaultEntryChooser(
+		std::string const& labelPathValue,
+		std::string const& labelPathLabel,
+		std::string const& numericPathValue,
+		std::string const& numericPathLabel
+	)
+	{
 		event_lock = true;
 		this->defEntryValueMapping[this->defEntryValueMapping.size()] = numericPathValue;
 		cbDefEntry.append(Glib::ustring::compose(gettext("Entry %1 (by position)"), numericPathLabel));
@@ -394,7 +300,8 @@ class View_Gtk_Settings :
 		event_lock = false;
 	}
 
-	void clearDefaultEntryChooser() {
+	public: void clearDefaultEntryChooser()
+	{
 		event_lock = true;
 		cbDefEntry.remove_all();
 		this->defEntryValueMapping.clear();
@@ -402,19 +309,23 @@ class View_Gtk_Settings :
 		event_lock = false;
 	}
 
-	void clearResolutionChooser() {
+	public: void clearResolutionChooser()
+	{
 		this->cbResolution.remove_all();
 	}
 
-	void addResolution(std::string const& resolution) {
+	public: void addResolution(std::string const& resolution)
+	{
 		this->cbResolution.append(resolution);
 	}
 
-	std::string getSelectedDefaultGrubValue() {
+	public: std::string getSelectedDefaultGrubValue()
+	{
 		return this->defEntryValueMapping[cbDefEntry.get_active_row_number()];
 	}
 
-	void addCustomOption(bool isActive, std::string const& name, std::string const& value) {
+	public: void addCustomOption(bool isActive, std::string const& name, std::string const& value)
+	{
 		this->event_lock = true;
 		Gtk::TreeModel::iterator newItemIter = refAsListStore->append();
 		(*newItemIter)[asTreeModel.active] = isActive;
@@ -424,7 +335,8 @@ class View_Gtk_Settings :
 		this->event_lock = false;
 	}
 
-	void selectCustomOption(std::string const& name) {
+	public: void selectCustomOption(std::string const& name)
+	{
 		for (Gtk::TreeModel::iterator iter = refAsListStore->children().begin(); iter != refAsListStore->children().end(); iter++){
 			if ((*iter)[asTreeModel.old_name] == name){
 				tvAllEntries.set_cursor(refAsListStore->get_path(iter), *tvAllEntries.get_column(name == "" ? 1 : 2), name == "");
@@ -433,7 +345,8 @@ class View_Gtk_Settings :
 		}
 	}
 
-	std::string getSelectedCustomOption() {
+	public: std::string getSelectedCustomOption()
+	{
 		std::vector<Gtk::TreeModel::Path> p = tvAllEntries.get_selection()->get_selected_rows();
 		if (p.size() == 1)
 			return (Glib::ustring)(*refAsListStore->get_iter(p.front()))[asTreeModel.name];
@@ -441,21 +354,29 @@ class View_Gtk_Settings :
 			return "";
 	}
 
-	void removeAllSettingRows() {
+	public: void removeAllSettingRows()
+	{
 		this->event_lock = true;
 		this->refAsListStore->clear();
 		this->event_lock = false;
 	}
 
-	CustomOption getCustomOption(std::string const& name) {
-		for (Gtk::TreeModel::iterator iter = this->refAsListStore->children().begin(); iter != this->refAsListStore->children().end(); iter++){
-			if ((*iter)[asTreeModel.old_name] == name)
-				return CustomOption_obj(Glib::ustring((*iter)[asTreeModel.name]), Glib::ustring((*iter)[asTreeModel.old_name]), Glib::ustring((*iter)[asTreeModel.value]), (*iter)[asTreeModel.active]);
+	public: CustomOption getCustomOption(std::string const& name)
+	{
+		for (auto& treeRow : this->refAsListStore->children()){
+			if (treeRow[asTreeModel.old_name] == name)
+				return CustomOption_obj(
+					Glib::ustring(treeRow[asTreeModel.name]),
+					Glib::ustring(treeRow[asTreeModel.old_name]),
+					Glib::ustring(treeRow[asTreeModel.value]),
+					treeRow[asTreeModel.active]
+				 );
 		}
 		throw ItemNotFoundException("requested custom option not found", __FILE__, __LINE__);
 	}
 
-	void setActiveDefEntryOption(DefEntryType option) {
+	public: void setActiveDefEntryOption(DefEntryType option)
+	{
 		this->event_lock = true;
 		if (option == this->DEF_ENTRY_SAVED) {
 			rbDefSaved.set_active(true);
@@ -468,11 +389,13 @@ class View_Gtk_Settings :
 		this->event_lock = false;
 	}
 
-	DefEntryType getActiveDefEntryOption() {
+	public: DefEntryType getActiveDefEntryOption()
+	{
 		return rbDefSaved.get_active() ? DEF_ENTRY_SAVED : DEF_ENTRY_PREDEFINED;
 	}
 
-	void setDefEntry(std::string const& defEntry) {
+	public: void setDefEntry(std::string const& defEntry)
+	{
 		this->event_lock = true;
 
 		int pos = 0;
@@ -487,7 +410,8 @@ class View_Gtk_Settings :
 		this->event_lock = false;
 	}
 
-	void setShowMenuCheckboxState(bool isActive) {
+	public: void setShowMenuCheckboxState(bool isActive)
+	{
 		this->event_lock = true;
 		chkShowMenu.set_active(isActive);
 		chkTimeout.set_sensitive(isActive);
@@ -497,96 +421,241 @@ class View_Gtk_Settings :
 		this->event_lock = false;
 	}
 
-	bool getShowMenuCheckboxState() {
+	public: bool getShowMenuCheckboxState()
+	{
 		return chkShowMenu.get_active();
 	}
 
-	void setOsProberCheckboxState(bool isActive) {
+	public: void setOsProberCheckboxState(bool isActive)
+	{
 		this->event_lock = true;
 		chkOsProber.set_active(isActive);
 		this->event_lock = false;
 	}
 
-	bool getOsProberCheckboxState() {
+	public: bool getOsProberCheckboxState()
+	{
 		return chkOsProber.get_active();
 	}
 
-	void showHiddenMenuOsProberConflictMessage() {
+	public: void showHiddenMenuOsProberConflictMessage()
+	{
 		Gtk::MessageDialog(Glib::ustring::compose(gettext("This option doesn't work when the \"os-prober\" script finds other operating systems. Disable \"%1\" if you don't need to boot other operating systems."), chkOsProber.get_label())).run();
 	}
 
-	void setTimeoutValue(int value) {
+	public: void setTimeoutValue(int value)
+	{
 		this->event_lock = true;
 		spTimeout.set_value(value);
 		this->event_lock = false;
 	}
 
-	void setTimeoutActive(bool active) {
+	public: void setTimeoutActive(bool active)
+	{
 		this->event_lock = true;
 		chkTimeout.set_active(active);
 		spTimeout.set_sensitive(active);
 		this->event_lock = false;
 	}
 
-	int getTimeoutValue() {
+	public: int getTimeoutValue()
+	{
 		return spTimeout.get_value_as_int();
 	}
 
-	std::string getTimeoutValueString() {
+	public: std::string getTimeoutValueString()
+	{
 		return Glib::ustring::format(this->getTimeoutValue());
 	}
 
-	bool getTimeoutActive() {
+	public: bool getTimeoutActive()
+	{
 		return this->chkTimeout.get_active();
 	}
 
-	void setKernelParams(std::string const& params) {
+	public: void setKernelParams(std::string const& params)
+	{
 		this->event_lock = true;
 		txtKernelParams.set_text(params);
 		this->event_lock = false;
 	}
 
-	std::string getKernelParams() {
+	public: std::string getKernelParams()
+	{
 		return txtKernelParams.get_text();
 	}
 
-	void setRecoveryCheckboxState(bool isActive) {
+	public: void setRecoveryCheckboxState(bool isActive)
+	{
 		this->event_lock = true;
 		chkGenerateRecovery.set_active(isActive);
 		this->event_lock = false;
 	}
 
-	bool getRecoveryCheckboxState() {
+	public: bool getRecoveryCheckboxState()
+	{
 		return chkGenerateRecovery.get_active();
 	}
 
-	void setResolutionCheckboxState(bool isActive) {
+	public: void setResolutionCheckboxState(bool isActive)
+	{
 		this->event_lock = true;
 		chkResolution.set_active(isActive);
 		cbResolution.set_sensitive(isActive);
 		this->event_lock = false;
 	}
 
-	bool getResolutionCheckboxState() {
+	public: bool getResolutionCheckboxState()
+	{
 		return chkResolution.get_active();
 	}
 
-	void setResolution(std::string const& resolution) {
+	public: void setResolution(std::string const& resolution)
+	{
 		this->event_lock = true;
 		cbResolution.get_entry()->set_text(resolution);
 		this->event_lock = false;
 	}
 
-	std::string getResolution() {
+	public: std::string getResolution()
+	{
 		return cbResolution.get_entry()->get_text();
 	}
 
-	void putThemeSelector(Gtk::Widget& themeSelector) {
+	public: void putThemeSelector(Gtk::Widget& themeSelector)
+	{
 		this->hbResolutionAndTheme.pack_start(themeSelector);
 	}
 
-	void putThemeEditArea(Gtk::Widget& themeEditArea) {
+	public: void putThemeEditArea(Gtk::Widget& themeEditArea)
+	{
 		this->vbAppearanceSettings.pack_start(themeEditArea);
+	}
+
+
+	private: void signal_setting_row_changed(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter)
+	{
+		if (!event_lock) {
+			this->onCustomSettingChange((Glib::ustring)(*iter)[asTreeModel.old_name]);
+		}
+	}
+
+	private: void signal_add_row_button_clicked()
+	{
+		if (!event_lock) {
+			this->onAddCustomSettingClick();
+		}
+	}
+
+	private: void signal_remove_row_button_clicked()
+	{
+		if (!event_lock) {
+			this->onRemoveCustomSettingClick((Glib::ustring)(*tvAllEntries.get_selection()->get_selected())[asTreeModel.name]);
+		}
+	}
+
+	private: void signal_default_entry_predefined_toggeled()
+	{
+		if (!event_lock){
+			this->onDefaultSystemChange();
+		}
+	}
+
+	private: void signal_default_entry_saved_toggeled()
+	{
+		if (!event_lock){
+			this->onDefaultSystemChange();
+		}
+	}
+
+	private: void signal_default_entry_changed()
+	{
+		if (!event_lock){
+			this->onDefaultSystemChange();
+		}
+	}
+
+	private: void signal_showMenu_toggled()
+	{
+		if (!event_lock){
+			this->onShowMenuSettingChange();
+		}
+	}
+
+	private: void signal_osProber_toggled()
+	{
+		if (!event_lock){
+			this->onOsProberSettingChange();
+		}
+	}
+
+	private: void signal_timeout_changed()
+	{
+		if (!event_lock){
+			this->onTimeoutSettingChange();
+		}
+	}
+
+	private: void signal_timeout_checkbox_toggled()
+	{
+		if (!event_lock){
+			this->onTimeoutSettingChange();
+		}
+	}
+
+	private: void signal_kernelparams_changed()
+	{
+		if (!event_lock){
+			this->onKernelParamsChange();
+		}
+	}
+
+	private: void signal_recovery_toggled()
+	{
+		if (!event_lock){
+			this->onRecoverySettingChange();
+		}
+	}
+
+	private: void signal_chkResolution_toggled()
+	{
+		if (!event_lock){
+			this->onUseCustomResolutionChange();
+		}
+	}
+
+	private: void signal_resolution_selected()
+	{
+		if (!event_lock){
+			this->onCustomResolutionChange();
+		}
+	}
+
+	private: void signal_defEntryHelpClick()
+	{
+		if (!event_lock){
+			Gtk::MessageDialog helpDlg(
+				gettext("This option allows choosing the operating system which should be selected when booting. "
+				"By default this always is the first one.\n\nThere are two columns because "
+				"there are two ways of selecting the default operating system. "
+				"The first way is to say \"always select the operating system at position X\". This means when a new menuentry appears, "
+				"the default menuentry may change (because there's another one at Position X).\n\n"
+				"The other way is to say \"use the operating system named Linux 123\". "
+				"Then it will always point to the same operating system - the position doesn't matter. "
+				"When changing the name of an entry using Grub Customizer this option will be updated automatically. "
+				"So you won't have to re-select the default entry."),
+				true,
+				Gtk::MESSAGE_INFO,
+				Gtk::BUTTONS_OK,
+				false
+			);
+			helpDlg.run();
+		}
+	}
+
+	private: void on_response(int response_id)
+	{
+		this->onHide();
 	}
 };
 

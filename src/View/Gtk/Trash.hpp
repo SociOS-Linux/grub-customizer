@@ -29,28 +29,28 @@ class View_Gtk_Trash :
 	public Gtk::Window,
 	public View_Trash
 {
-	Gtk::ScrolledWindow scrEntryBox;
-	View_Gtk_Element_List<Rule, Script> list;
-	Gtk::Frame frmList;
-	Gtk::VBox vbList;
-	Gtk::HBox hbList;
-	Gtk::Button bttRestore;
-	Gtk::Button bttDelete;
+	private: Gtk::ScrolledWindow scrEntryBox;
+	private: View_Gtk_Element_List<Rule, Script> list;
+	private: Gtk::Frame frmList;
+	private: Gtk::VBox vbList;
+	private: Gtk::HBox hbList;
+	private: Gtk::Button bttRestore;
+	private: Gtk::Button bttDelete;
 
-	std::map<ViewOption, bool> options;
+	private: std::map<ViewOption, bool> options;
 
-	Gtk::MenuItem miContext;
-	Gtk::Menu contextMenu;
-	Gtk::ImageMenuItem micRestore;
-	Gtk::ImageMenuItem micDelete;
+	private: Gtk::MenuItem miContext;
+	private: Gtk::Menu contextMenu;
+	private: Gtk::ImageMenuItem micRestore;
+	private: Gtk::ImageMenuItem micDelete;
 
-	bool event_lock;
+	private: bool event_lock = false;
 
-	public: View_Gtk_Trash() : micRestore(Gtk::Stock::ADD),
-		  bttRestore(Gtk::Stock::UNDELETE),
-		  bttDelete(Gtk::Stock::DELETE),
-		  micDelete(Gtk::Stock::DELETE),
-		  event_lock(false)
+	public: View_Gtk_Trash() :
+		micRestore(Gtk::Stock::ADD),
+		bttRestore(Gtk::Stock::UNDELETE),
+		bttDelete(Gtk::Stock::DELETE),
+		micDelete(Gtk::Stock::DELETE)
 	{
 		this->set_title(gettext("Add entry from trash"));
 		this->set_icon_name("grub-customizer");
@@ -213,7 +213,7 @@ class View_Gtk_Trash :
 	private: bool signal_popup()
 	{
 		contextMenu.show_all();
-		contextMenu.popup(0, gdk_event_get_time(NULL));
+		contextMenu.popup(0, gdk_event_get_time(nullptr));
 		return true;
 	}
 };

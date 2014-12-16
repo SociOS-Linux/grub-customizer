@@ -28,30 +28,31 @@ class View_Gtk_EnvEditor :
 	public Gtk::Dialog,
 	public View_EnvEditor
 {
-	Gtk::VBox vbContent;
-	Gtk::Table tblLayout;
-	Gtk::Label lblPartition;
-	Gtk::Label lblType;
-	Gtk::ComboBoxText cbType;
-	Gtk::HSeparator separator;
-	Gtk::ScrolledWindow scrSubmountpoints;
-	Gtk::VBox vbSubmountpoints;
-	Gtk::Label lblSubmountpoints;
-	View_Gtk_Element_PartitionChooser* pChooser;
-	std::map<std::string, Gtk::Entry*> optionMap;
-	std::map<std::string, Gtk::Label*> labelMap;
-	std::map<std::string, Gtk::Image*> imageMap;
-	std::map<std::string, Gtk::CheckButton*> subMountpoints;
-	Gtk::CheckButton cbSaveConfig;
-	Gtk::HButtonBox bbxSaveConfig;
-	bool eventLock;
+	private: Gtk::VBox vbContent;
+	private: Gtk::Table tblLayout;
+	private: Gtk::Label lblPartition;
+	private: Gtk::Label lblType;
+	private: Gtk::ComboBoxText cbType;
+	private: Gtk::HSeparator separator;
+	private: Gtk::ScrolledWindow scrSubmountpoints;
+	private: Gtk::VBox vbSubmountpoints;
+	private: Gtk::Label lblSubmountpoints;
+	private: View_Gtk_Element_PartitionChooser* pChooser = nullptr;
+	private: std::map<std::string, Gtk::Entry*> optionMap;
+	private: std::map<std::string, Gtk::Label*> labelMap;
+	private: std::map<std::string, Gtk::Image*> imageMap;
+	private: std::map<std::string, Gtk::CheckButton*> subMountpoints;
+	private: Gtk::CheckButton cbSaveConfig;
+	private: Gtk::HButtonBox bbxSaveConfig;
+	private: bool eventLock = true;
 
-	std::string rootDeviceName;
-public:
-	View_Gtk_EnvEditor()
-	: pChooser(NULL), lblPartition(gettext("_Partition:"), true),
-	  lblType(gettext("_Type:"), true), eventLock(true), lblSubmountpoints(gettext("Submountpoints:")),
-	  cbSaveConfig(gettext("save this configuration"))
+	private: std::string rootDeviceName;
+
+	public: View_Gtk_EnvEditor() :
+		lblPartition(gettext("_Partition:"), true),
+		lblType(gettext("_Type:"), true),
+		lblSubmountpoints(gettext("Submountpoints:")),
+		cbSaveConfig(gettext("save this configuration"))
 	{
 		this->set_title("Grub Customizer environment setup");
 		this->set_icon_name("grub-customizer");
@@ -100,62 +101,70 @@ public:
 		this->eventLock = false;
 	}
 
-	~View_Gtk_EnvEditor() {
+	public: ~View_Gtk_EnvEditor()
+	{
 		if (this->pChooser) {
 			this->tblLayout.remove(*this->pChooser);
 			delete this->pChooser;
-			this->pChooser = NULL;
+			this->pChooser = nullptr;
 		}
 	}
 
-	void setRootDeviceName(std::string const& rootDeviceName) {
+	public: void setRootDeviceName(std::string const& rootDeviceName)
+	{
 		this->rootDeviceName = rootDeviceName;
 	}
 
-	void setEnvSettings(std::map<std::string, std::string> const& props, std::list<std::string> const& requiredProps, std::list<std::string> const& validProps) {
+	public: void setEnvSettings(
+		std::map<std::string, std::string> const& props,
+		std::list<std::string> const& requiredProps,
+		std::list<std::string> const& validProps
+	)
+	{
 		this->eventLock = true;
 		int pos = 4;
-		for (std::map<std::string, std::string>::const_iterator iter = props.begin(); iter != props.end(); iter++) {
-			Gtk::Label* label = NULL;
-			if (this->labelMap.find(iter->first) == this->labelMap.end()) {
-				label = Gtk::manage(new Gtk::Label(iter->first + ":"));
+
+		for (auto& property : props) {
+			Gtk::Label* label = nullptr;
+			if (this->labelMap.find(property.first) == this->labelMap.end()) {
+				label = Gtk::manage(new Gtk::Label(property.first + ":"));
 				label->set_alignment(Pango::ALIGN_RIGHT);
 				this->tblLayout.attach(*label, 0, 1, pos, pos+1, Gtk::SHRINK | Gtk::FILL, Gtk::SHRINK);
-				this->labelMap[iter->first] = label;
+				this->labelMap[property.first] = label;
 			} else {
-				label = this->labelMap[iter->first];
+				label = this->labelMap[property.first];
 			}
 
-			Gtk::Entry* entry = NULL;
+			Gtk::Entry* entry = nullptr;
 			bool entryCreated = false;
-			if (this->optionMap.find(iter->first) == this->optionMap.end()) {
+			if (this->optionMap.find(property.first) == this->optionMap.end()) {
 				entry = Gtk::manage(new Gtk::Entry());
 				entryCreated = true;
 				this->tblLayout.attach(*entry, 1, 2, pos, pos+1, Gtk::EXPAND | Gtk::FILL, Gtk::SHRINK);
 				label->set_mnemonic_widget(*entry);
 				entry->signal_changed().connect(sigc::mem_fun(this, &View_Gtk_EnvEditor::signal_optionModified));
-				this->optionMap[iter->first] = entry;
+				this->optionMap[property.first] = entry;
 			} else {
-				entry = this->optionMap[iter->first];
+				entry = this->optionMap[property.first];
 			}
 
-			if (entry->get_text() != iter->second) {
-				entry->set_text(iter->second);
+			if (entry->get_text() != property.second) {
+				entry->set_text(property.second);
 			}
 
-			Gtk::Image* img = NULL;
-			if (this->imageMap.find(iter->first) == this->imageMap.end()) {
+			Gtk::Image* img = nullptr;
+			if (this->imageMap.find(property.first) == this->imageMap.end()) {
 				img = Gtk::manage(new Gtk::Image());
 				this->tblLayout.attach(*img, 2, 3, pos, pos+1, Gtk::SHRINK | Gtk::FILL, Gtk::SHRINK);
-				this->imageMap[iter->first] = img;
+				this->imageMap[property.first] = img;
 			} else {
-				img = this->imageMap[iter->first];
+				img = this->imageMap[property.first];
 			}
 
 			Glib::RefPtr<Gdk::Pixbuf> icon;
-			if (std::find(validProps.begin(), validProps.end(), iter->first) != validProps.end()) {
+			if (std::find(validProps.begin(), validProps.end(), property.first) != validProps.end()) {
 				icon = this->render_icon_pixbuf(Gtk::Stock::OK, Gtk::ICON_SIZE_BUTTON);
-			} else if (std::find(requiredProps.begin(), requiredProps.end(), iter->first) != requiredProps.end()) {
+			} else if (std::find(requiredProps.begin(), requiredProps.end(), property.first) != requiredProps.end()) {
 				icon = this->render_icon_pixbuf(Gtk::Stock::DIALOG_ERROR, Gtk::ICON_SIZE_BUTTON);
 			} else {
 				icon = this->render_icon_pixbuf(Gtk::Stock::DIALOG_WARNING, Gtk::ICON_SIZE_BUTTON);
@@ -171,21 +180,24 @@ public:
 		this->eventLock = false;
 	}
 
-	std::map<std::string, std::string> getEnvSettings() {
+	public: std::map<std::string, std::string> getEnvSettings()
+	{
 		std::map<std::string, std::string> result;
-		for (std::map<std::string, Gtk::Entry*>::iterator iter = this->optionMap.begin(); iter != this->optionMap.end(); iter++) {
-			result[iter->first] = iter->second->get_text();
+		for (auto& option : this->optionMap) {
+			result[option.first] = option.second->get_text();
 		}
 		return result;
 	}
 
-	int getBootloaderType() const {
+	public: int getBootloaderType() const
+	{
 		return this->cbType.get_active_row_number();
 	}
 
-	void show(bool resetPartitionChooser = false) {
+	public: void show(bool resetPartitionChooser = false)
+	{
 		this->eventLock = true;
-		if (this->pChooser != NULL) {
+		if (this->pChooser != nullptr) {
 			this->tblLayout.remove(*pChooser);
 		}
 
@@ -205,14 +217,16 @@ public:
 		this->eventLock = false;
 	}
 
-	void hide() {
+	public: void hide()
+	{
 		Gtk::Dialog::hide();
 	}
 
-	void removeAllSubmountpoints() {
-		for (std::map<std::string, Gtk::CheckButton*>::iterator iter = this->subMountpoints.begin(); iter != this->subMountpoints.end(); iter++) {
-			this->vbSubmountpoints.remove(*iter->second);
-			delete iter->second;
+	public: void removeAllSubmountpoints()
+	{
+		for (auto& subMountpoint : this->subMountpoints) {
+			this->vbSubmountpoints.remove(*subMountpoint.second);
+			delete subMountpoint.second;
 		}
 		this->subMountpoints.clear();
 
@@ -220,7 +234,8 @@ public:
 		this->lblSubmountpoints.hide();
 	}
 
-	void addSubmountpoint(std::string const& name, bool isActive) {
+	public: void addSubmountpoint(std::string const& name, bool isActive)
+	{
 		Gtk::CheckButton* cb = new Gtk::CheckButton(name);
 		cb->set_active(isActive);
 		cb->signal_toggled().connect(sigc::bind<Gtk::CheckButton&>(sigc::mem_fun(this, &View_Gtk_EnvEditor::signal_submountpointToggled), *cb));
@@ -232,11 +247,13 @@ public:
 		this->lblSubmountpoints.show();
 	}
 
-	void setSubmountpointSelectionState(std::string const& submountpoint, bool new_isSelected) {
+	public: void setSubmountpointSelectionState(std::string const& submountpoint, bool new_isSelected)
+	{
 		this->subMountpoints[submountpoint]->set_active(new_isSelected);
 	}
 
-	void showErrorMessage(MountExceptionType type) {
+	public: void showErrorMessage(MountExceptionType type)
+	{
 		switch (type){
 			case MOUNT_FAILED:       Gtk::MessageDialog(gettext("Mount failed!")).run(); break;
 			case UMOUNT_FAILED:      Gtk::MessageDialog(gettext("umount failed!")).run(); break;
@@ -246,12 +263,14 @@ public:
 		}
 	}
 
-	Gtk::Widget& getContentBox() {
+	public: Gtk::Widget& getContentBox()
+	{
 		this->get_vbox()->remove(this->vbContent);
 		return this->vbContent;
 	}
-private:
-	void signal_partitionChanged() {
+
+	private: void signal_partitionChanged()
+	{
 		if (!this->eventLock) {
 			std::string selectedUuid = this->pChooser->getSelectedUuid();
 			if (selectedUuid != "") {
@@ -261,19 +280,22 @@ private:
 		}
 	}
 
-	void signal_bootloaderType_changed() {
+	private: void signal_bootloaderType_changed()
+	{
 		if (!this->eventLock) {
 			this->onSwitchBootloaderType(this->cbType.get_active_row_number());
 		}
 	}
 
-	void signal_optionModified() {
+	private: void signal_optionModified()
+	{
 		if (!this->eventLock) {
 			this->onOptionChange();
 		}
 	}
 
-	void signal_response_action(int response_id) {
+	private: void signal_response_action(int response_id)
+	{
 		if (response_id == Gtk::RESPONSE_CLOSE || response_id == Gtk::RESPONSE_DELETE_EVENT) {
 			this->onExitClick();
 		} else if (response_id == Gtk::RESPONSE_APPLY) {
@@ -281,7 +303,8 @@ private:
 		}
 	}
 
-	void signal_submountpointToggled(Gtk::CheckButton& sender) {
+	private: void signal_submountpointToggled(Gtk::CheckButton& sender)
+	{
 		if (!eventLock) {
 			if (sender.get_active()) {
 				this->onMountSubmountpointClick(sender.get_label());

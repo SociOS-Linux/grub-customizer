@@ -39,10 +39,11 @@ class View_Gtk_Theme_ColorChooser : public Gtk::ComboBox, public View_ColorChoos
 			this->add(this->colorCode_foreground);
 		}
 	};
-	Columns columns;
-	Glib::RefPtr<Gtk::ListStore> refListStore;
-	public:
-	View_Gtk_Theme_ColorChooser() : event_lock(false)
+	private: Columns columns;
+	private: Glib::RefPtr<Gtk::ListStore> refListStore;
+	public: bool event_lock = false;
+
+	public:	View_Gtk_Theme_ColorChooser()
 	{
 		refListStore = Gtk::ListStore::create(columns);
 		this->set_model(refListStore);
@@ -56,7 +57,13 @@ class View_Gtk_Theme_ColorChooser : public Gtk::ComboBox, public View_ColorChoos
 		this->add_attribute(*cellRenderer, "foreground", columns.colorCode_foreground);
 	}
 
-	void addColor(std::string const& codeName, std::string const& outputName, std::string const& cell_background, std::string const& cell_foreground) {
+	public:	void addColor(
+		std::string const& codeName,
+		std::string const& outputName,
+		std::string const& cell_background,
+		std::string const& cell_foreground
+	)
+	{
 		this->event_lock = true;
 		Gtk::TreeModel::iterator iter = refListStore->append();
 		(*iter)[columns.idName] = codeName;
@@ -66,7 +73,8 @@ class View_Gtk_Theme_ColorChooser : public Gtk::ComboBox, public View_ColorChoos
 		this->event_lock = false;
 	}
 
-	void selectColor(std::string const& codeName) {
+	public:	void selectColor(std::string const& codeName)
+	{
 		this->event_lock = true;
 		this->set_active(0);
 		for (Gtk::TreeModel::iterator iter = this->get_active(); iter; iter++){
@@ -78,7 +86,8 @@ class View_Gtk_Theme_ColorChooser : public Gtk::ComboBox, public View_ColorChoos
 		this->event_lock = false;
 	}
 
-	std::string getSelectedColor() const {
+	public:	std::string getSelectedColor() const
+	{
 		Gtk::TreeModel::iterator iter = this->get_active();
 		if (iter)
 			return (Glib::ustring)(*iter)[columns.idName];
@@ -86,7 +95,8 @@ class View_Gtk_Theme_ColorChooser : public Gtk::ComboBox, public View_ColorChoos
 			return "";
 	}
 
-	Pango::Color getSelectedColorAsPangoObject() const {
+	public:	Pango::Color getSelectedColorAsPangoObject() const
+	{
 		Pango::Color color;
 		Gtk::TreeModel::iterator iter = this->get_active();
 		if (iter) {
@@ -94,14 +104,13 @@ class View_Gtk_Theme_ColorChooser : public Gtk::ComboBox, public View_ColorChoos
 		}
 		return color;
 	}
-
-	bool event_lock;
 };
 
 //a color chooser with predefined colors for grub
 class GrubColorChooser : public View_Gtk_Theme_ColorChooser {
-public:
-	GrubColorChooser(bool blackIsTransparent = false) : View_Gtk_Theme_ColorChooser() {
+public: GrubColorChooser(bool blackIsTransparent = false) :
+	View_Gtk_Theme_ColorChooser()
+{
 		this->addColor("white",          gettext("white"),         "#ffffff", "#000000");
 		this->addColor("yellow",         gettext("yellow"),        "#fefe54", "#000000");
 		this->addColor("light-cyan",     gettext("light-cyan"),    "#54fefe", "#000000");
@@ -126,101 +135,99 @@ class View_Gtk_Theme :
 	public View_Theme,
 	public Gtk::Dialog
 {
-	Gtk::VBox vbMain;
+	private: Gtk::VBox vbMain;
 
-	Gtk::Frame frmCustomTheme;
-	Gtk::HPaned hpCustomTheme;
-	Gtk::Frame frmCustomThemeSettings;
-	Gtk::VBox vbCustomThemeSettings;
-	Gtk::Frame frmCustomThemePreview;
-	Gtk::VBox vbCustomThemePreview;
+	private: Gtk::Frame frmCustomTheme;
+	private: Gtk::HPaned hpCustomTheme;
+	private: Gtk::Frame frmCustomThemeSettings;
+	private: Gtk::VBox vbCustomThemeSettings;
+	private: Gtk::Frame frmCustomThemePreview;
+	private: Gtk::VBox vbCustomThemePreview;
 
-	Gtk::HPaned hpThemeEditor;
-	Gtk::Toolbar toolbar;
-	Gtk::ToolButton tbttAdd, tbttRemove;
+	private: Gtk::HPaned hpThemeEditor;
+	private: Gtk::Toolbar toolbar;
+	private: Gtk::ToolButton tbttAdd, tbttRemove;
 
-	Gtk::VBox vbFiles;
-	Gtk::Frame frmThemeEditor;
-	Gtk::ScrolledWindow scrFiles;
-	Gtk::ListViewText lvFiles;
-	Gtk::VBox vbEdit, vbEditInner;
-	Gtk::ScrolledWindow scrEdit;
-	Gtk::TextView txtEdit;
-	Gtk::Image imgPreview;
-	Gtk::HBox hbFileSelection;
-	Gtk::Label lblFileSelection;
-	Gtk::FileChooserButton fcFileSelection;
-	Glib::RefPtr<Gtk::SizeGroup> sizeGroupFooter;
+	private: Gtk::VBox vbFiles;
+	private: Gtk::Frame frmThemeEditor;
+	private: Gtk::ScrolledWindow scrFiles;
+	private: Gtk::ListViewText lvFiles;
+	private: Gtk::VBox vbEdit, vbEditInner;
+	private: Gtk::ScrolledWindow scrEdit;
+	private: Gtk::TextView txtEdit;
+	private: Gtk::Image imgPreview;
+	private: Gtk::HBox hbFileSelection;
+	private: Gtk::Label lblFileSelection;
+	private: Gtk::FileChooserButton fcFileSelection;
+	private: Glib::RefPtr<Gtk::SizeGroup> sizeGroupFooter;
 
-	Gtk::HBox hbTheme;
-	Gtk::Label lblTheme;
-	Gtk::ComboBoxText cbTheme;
-	Gtk::Button bttAddTheme, bttRemoveTheme, bttThemeHelp;
-	Gtk::Image imgAddTheme, imgRemoveTheme, imgThemeHelp;
+	private: Gtk::HBox hbTheme;
+	private: Gtk::Label lblTheme;
+	private: Gtk::ComboBoxText cbTheme;
+	private: Gtk::Button bttAddTheme, bttRemoveTheme, bttThemeHelp;
+	private: Gtk::Image imgAddTheme, imgRemoveTheme, imgThemeHelp;
 
-	Gtk::FileChooserDialog fcThemeFileChooser;
+	private: Gtk::FileChooserDialog fcThemeFileChooser;
 
 	// simple theme editor
 
 	//color chooser
-	Gtk::VBox vbColorChoosers;
-	GrubColorChooser gccNormalForeground, gccNormalBackground, gccHighlightForeground, gccHighlightBackground;
-	Gtk::Label lblNormalForeground, lblNormalBackground, lblHighlightForeground, lblHighlightBackground;
-	Gtk::VBox vbNormalForeground, vbNormalBackground, vbHighlightForeground, vbHighlightBackground;
-	Gtk::Frame groupNormalForeground, groupNormalBackground, groupHighlightForeground, groupHighlightBackground;
+	private: Gtk::VBox vbColorChoosers;
+	private: GrubColorChooser gccNormalForeground, gccNormalBackground, gccHighlightForeground, gccHighlightBackground;
+	private: Gtk::Label lblNormalForeground, lblNormalBackground, lblHighlightForeground, lblHighlightBackground;
+	private: Gtk::VBox vbNormalForeground, vbNormalBackground, vbHighlightForeground, vbHighlightBackground;
+	private: Gtk::Frame groupNormalForeground, groupNormalBackground, groupHighlightForeground, groupHighlightBackground;
 
 	//font selection
-	Gtk::Frame groupFont;
-	Gtk::Label lblFont;
-	Gtk::Alignment alignFont;
-	Gtk::FontButton bttFont;
-	Gtk::HBox hbFont;
-	Gtk::Button bttRemoveFont;
-	Gtk::Image imgRemoveFont;
+	private: Gtk::Frame groupFont;
+	private: Gtk::Label lblFont;
+	private: Gtk::Alignment alignFont;
+	private: Gtk::FontButton bttFont;
+	private: Gtk::HBox hbFont;
+	private: Gtk::Button bttRemoveFont;
+	private: Gtk::Image imgRemoveFont;
 
 	//background image
-	Gtk::Frame groupBackgroundImage;
-	Gtk::Alignment alignBackgroundImage;
-	Gtk::Label lblBackgroundImage, lblBackgroundRequiredInfo;
-	Gtk::VBox vbBackgroundImage;
-	Gtk::HBox hbBackgroundImage;
-	Gtk::FileChooserButton fcBackgroundImage;
-	Gtk::DrawingArea drwBackgroundPreview;
-	Glib::ustring backgroundImagePath;
-	std::list<std::string> previewEntryTitles;
-	Glib::Mutex previewEntryTitles_mutex;
-	Gtk::VBox vbButtons;
-	Gtk::Button bttCopyBackground, bttRemoveBackground;
-	Gtk::Image imgRemoveBackground;
+	private: Gtk::Frame groupBackgroundImage;
+	private: Gtk::Alignment alignBackgroundImage;
+	private: Gtk::Label lblBackgroundImage, lblBackgroundRequiredInfo;
+	private: Gtk::VBox vbBackgroundImage;
+	private: Gtk::HBox hbBackgroundImage;
+	private: Gtk::FileChooserButton fcBackgroundImage;
+	private: Gtk::DrawingArea drwBackgroundPreview;
+	private: Glib::ustring backgroundImagePath;
+	private: std::list<std::string> previewEntryTitles;
+	private: Glib::Mutex previewEntryTitles_mutex;
+	private: Gtk::VBox vbButtons;
+	private: Gtk::Button bttCopyBackground, bttRemoveBackground;
+	private: Gtk::Image imgRemoveBackground;
 
 
-	bool event_lock;
-	std::string _getSelectedFileName() {
-		std::vector<int> selectedFiles = this->lvFiles.get_selected();
-		std::string result;
-		if (selectedFiles.size() == 1) {
-			result = this->lvFiles.get_text(selectedFiles[0]);
-		} else {
-			throw ItemNotFoundException("theme editor: invalid selection count", __FILE__, __LINE__);
-		}
-		return result;
-	}
+	private: bool event_lock = false;
 
-public:
-	View_Gtk_Theme() : lvFiles(1, true), lblFileSelection(gettext("_Load file: "), true),
-		  tbttAdd(Gtk::Stock::ADD), tbttRemove(Gtk::Stock::REMOVE), event_lock(false),
-		  lblTheme(gettext("_Theme:"), true), lblBackgroundImage(gettext("background image")),
-		  imgRemoveBackground(Gtk::Stock::REMOVE, Gtk::ICON_SIZE_BUTTON), imgRemoveFont(Gtk::Stock::REMOVE, Gtk::ICON_SIZE_BUTTON),
-		  imgThemeHelp(Gtk::Stock::HELP, Gtk::ICON_SIZE_BUTTON),
-		  lblBackgroundRequiredInfo(gettext("Please choose a background image!")),
-		  gccNormalBackground(true), gccHighlightBackground(true), lblFont(gettext("_Font"), true),
-		  imgAddTheme(Gtk::Stock::ADD, Gtk::ICON_SIZE_BUTTON), imgRemoveTheme(Gtk::Stock::DELETE, Gtk::ICON_SIZE_BUTTON),
-		  fcThemeFileChooser(*this, gettext("choose theme file"), Gtk::FILE_CHOOSER_ACTION_OPEN),
-		  frmThemeEditor(gettext("Theme contents")), frmCustomTheme(gettext("Custom Theme settings")),
-		  lblNormalForeground(gettext("Normal: Font"), Pango::ALIGN_LEFT, Pango::ALIGN_CENTER, false),
-		  lblNormalBackground(gettext("Normal: Background"), Pango::ALIGN_LEFT, Pango::ALIGN_CENTER, false),
-		  lblHighlightForeground(gettext("Highlighted: Font"), Pango::ALIGN_LEFT, Pango::ALIGN_CENTER, false),
-		  lblHighlightBackground(gettext("Highlighted: Background"), Pango::ALIGN_LEFT, Pango::ALIGN_CENTER, false)
+	public:	View_Gtk_Theme() :
+		lvFiles(1, true),
+		lblFileSelection(gettext("_Load file: "), true),
+		tbttAdd(Gtk::Stock::ADD),
+		tbttRemove(Gtk::Stock::REMOVE),
+		lblTheme(gettext("_Theme:"), true),
+		lblBackgroundImage(gettext("background image")),
+		imgRemoveBackground(Gtk::Stock::REMOVE, Gtk::ICON_SIZE_BUTTON),
+		imgRemoveFont(Gtk::Stock::REMOVE, Gtk::ICON_SIZE_BUTTON),
+		imgThemeHelp(Gtk::Stock::HELP, Gtk::ICON_SIZE_BUTTON),
+		lblBackgroundRequiredInfo(gettext("Please choose a background image!")),
+		gccNormalBackground(true),
+		gccHighlightBackground(true),
+		lblFont(gettext("_Font"), true),
+		imgAddTheme(Gtk::Stock::ADD, Gtk::ICON_SIZE_BUTTON),
+		imgRemoveTheme(Gtk::Stock::DELETE, Gtk::ICON_SIZE_BUTTON),
+		fcThemeFileChooser(*this, gettext("choose theme file"), Gtk::FILE_CHOOSER_ACTION_OPEN),
+		frmThemeEditor(gettext("Theme contents")),
+		frmCustomTheme(gettext("Custom Theme settings")),
+		lblNormalForeground(gettext("Normal: Font"), Pango::ALIGN_LEFT, Pango::ALIGN_CENTER, false),
+		lblNormalBackground(gettext("Normal: Background"), Pango::ALIGN_LEFT, Pango::ALIGN_CENTER, false),
+		lblHighlightForeground(gettext("Highlighted: Font"), Pango::ALIGN_LEFT, Pango::ALIGN_CENTER, false),
+		lblHighlightBackground(gettext("Highlighted: Background"), Pango::ALIGN_LEFT, Pango::ALIGN_CENTER, false)
 	{
 		Gtk::Box& dlgVBox = *this->get_vbox();
 
@@ -421,19 +428,22 @@ public:
 	}
 
 
-	void addFile(std::string const& fileName) {
+	public:	void addFile(std::string const& fileName)
+	{
 		event_lock = true;
 		lvFiles.append(fileName);
 		event_lock = false;
 	}
 
-	void clear() {
+	public:	void clear()
+	{
 		event_lock = true;
 		lvFiles.clear_items();
 		event_lock = false;
 	}
 
-	void setText(std::string const& text) {
+	public:	void setText(std::string const& text)
+	{
 		event_lock = true;
 		imgPreview.hide();
 		txtEdit.show();
@@ -441,7 +451,8 @@ public:
 		event_lock = false;
 	}
 
-	void setImage(std::string const& path) {
+	public:	void setImage(std::string const& path)
+	{
 		event_lock = true;
 		txtEdit.hide();
 		imgPreview.show();
@@ -449,7 +460,8 @@ public:
 		event_lock = false;
 	}
 
-	void selectFile(std::string const& fileName, bool startEdit = false) {
+	public:	void selectFile(std::string const& fileName, bool startEdit = false)
+	{
 		lvFiles.get_selection()->unselect_all();
 		int pos = 0;
 		for (Gtk::TreeModel::iterator iter = lvFiles.get_model()->get_iter("0"); iter; iter++) {
@@ -461,7 +473,8 @@ public:
 		}
 	}
 
-	void selectTheme(std::string const& name) {
+	public:	void selectTheme(std::string const& name)
+	{
 		this->event_lock = true;
 		cbTheme.set_active_text(name);
 		if (cbTheme.get_active_row_number() == -1 && cbTheme.get_children().size()) {
@@ -470,15 +483,18 @@ public:
 		this->event_lock = false;
 	}
 
-	std::string getSelectedTheme() {
+	public:	std::string getSelectedTheme()
+	{
 		return cbTheme.get_active_text();
 	}
 
-	void addTheme(std::string const& name) {
+	public:	void addTheme(std::string const& name)
+	{
 		this->cbTheme.append(name);
 	}
 
-	void clearThemeSelection() {
+	public:	void clearThemeSelection()
+	{
 		event_lock = true;
 		this->cbTheme.remove_all();
 
@@ -487,7 +503,8 @@ public:
 		event_lock = false;
 	}
 
-	void show(bool burgMode) {
+	public:	void show(bool burgMode)
+	{
 		this->show_all();
 
 		if (burgMode){
@@ -500,12 +517,14 @@ public:
 		}
 	}
 
-	void setRemoveFunctionalityEnabled(bool value) {
+	public:	void setRemoveFunctionalityEnabled(bool value)
+	{
 		this->bttRemoveTheme.set_sensitive(value);
 	}
 
 
-	void setEditorType(EditorType type) {
+	public:	void setEditorType(EditorType type)
+	{
 		this->frmCustomTheme.hide();
 		this->frmThemeEditor.hide();
 
@@ -523,11 +542,13 @@ public:
 		}
 	}
 
-	void showThemeFileChooser() {
+	public:	void showThemeFileChooser()
+	{
 		fcThemeFileChooser.show_all();
 	}
 
-	void showError(Error const& e, std::string const& info = "") {
+	public:	void showError(Error const& e, std::string const& info = "")
+	{
 		switch (e) {
 		case ERROR_INVALID_THEME_PACK_FORMAT:
 			Gtk::MessageDialog(gettext("The chosen file cannot be loaded as theme"), false, Gtk::MESSAGE_ERROR).run();
@@ -549,7 +570,8 @@ public:
 		}
 	}
 
-	void setCurrentExternalThemeFilePath(std::string const& fileName) {
+	public:	void setCurrentExternalThemeFilePath(std::string const& fileName)
+	{
 		this->event_lock = true;
 		if (fileName == "") {
 			this->fcFileSelection.unselect_all();
@@ -560,12 +582,14 @@ public:
 		this->event_lock = false;
 	}
 
-	std::string getDefaultName() const {
+	public:	std::string getDefaultName() const
+	{
 		return "[" + std::string(gettext("filename")) + "]";
 	}
 
-	View_ColorChooser& getColorChooser(ColorChooserType type) {
-		View_ColorChooser* result = NULL;
+	public:	View_ColorChooser& getColorChooser(ColorChooserType type)
+	{
+		View_ColorChooser* result = nullptr;
 		switch (type){
 			case COLOR_CHOOSER_DEFAULT_BACKGROUND: result = &this->gccNormalBackground; break;
 			case COLOR_CHOOSER_DEFAULT_FONT: result = &this->gccNormalForeground; break;
@@ -573,26 +597,30 @@ public:
 			case COLOR_CHOOSER_HIGHLIGHT_FONT: result = &this->gccHighlightForeground; break;
 		}
 
-		assert(result != NULL);
+		assert(result != nullptr);
 		return *result;
 	}
 
-	std::string getFontName() {
+	public:	std::string getFontName()
+	{
 		return bttFont.get_font_name();
 	}
 
-	int getFontSize() {
+	public:	int getFontSize()
+	{
 		Pango::FontDescription desc(bttFont.get_font_name());
 		return desc.get_size() / 1024;
 	}
 
-	void setFontName(std::string const& value) {
+	public:	void setFontName(std::string const& value)
+	{
 		bttFont.set_font_name(value);
 		bttRemoveFont.set_visible(value != "");
 		imgRemoveFont.set_visible(value != "");
 	}
 
-	void showFontWarning() {
+	public:	void showFontWarning()
+	{
 		Gtk::MessageDialog dialog(gettext("please note: large fonts on low boot screen resolutions can corrupt the boot screen\n"
 			"Because this problem depends on chosen font, it isn't possible to define a general maximum. "
 			"When you're trying to select a larger font, please do it in small steps (rebooting and checking the results).\n"
@@ -609,7 +637,19 @@ public:
 		dialog.run();
 	}
 
-	Glib::RefPtr<Pango::Layout> createFormattedText(Cairo::RefPtr<Cairo::Context>& context, Glib::ustring const& text, std::string const& format, int r, int g, int b, int r_b, int g_b, int b_b, bool black_bg_is_transparent = true) {
+	public:	Glib::RefPtr<Pango::Layout> createFormattedText(
+		Cairo::RefPtr<Cairo::Context>& context,
+		Glib::ustring const& text,
+		std::string const& format,
+		int r,
+		int g,
+		int b,
+		int r_b,
+		int g_b,
+		int b_b,
+		bool black_bg_is_transparent = true
+	)
+	{
 		Glib::RefPtr<Pango::Layout> layout = Pango::Layout::create(context);
 		layout->set_text(text);
 		Pango::AttrList attrList;
@@ -629,7 +669,8 @@ public:
 		return layout;
 	}
 
-	void setBackgroundImagePreviewPath(std::string const& menuPicturePath, bool isInGrubDir) {
+	public:	void setBackgroundImagePreviewPath(std::string const& menuPicturePath, bool isInGrubDir)
+	{
 		this->redraw(menuPicturePath, isInGrubDir);
 
 		this->event_lock = true;
@@ -641,7 +682,8 @@ public:
 		this->event_lock = false;
 	}
 
-	void redraw(std::string const& menuPicturePath, bool isInGrubDir, Cairo::RefPtr<Cairo::Context> const* cr = NULL) {
+	public:	void redraw(std::string const& menuPicturePath, bool isInGrubDir, Cairo::RefPtr<Cairo::Context> const* cr = nullptr)
+	{
 		this->event_lock = true;
 		this->backgroundImagePath = menuPicturePath;
 
@@ -711,77 +753,87 @@ public:
 		this->event_lock = false;
 	}
 
-	std::string getBackgroundImagePath() {
+	public:	std::string getBackgroundImagePath()
+	{
 		return fcBackgroundImage.get_filename();
 	}
 
-	void setPreviewEntryTitles(std::list<std::string> const& entries) {
+	public:	void setPreviewEntryTitles(std::list<std::string> const& entries)
+	{
 		this->previewEntryTitles_mutex.lock();
 		this->previewEntryTitles = entries;
 		this->previewEntryTitles_mutex.unlock();
 	}
 
 
-	Gtk::Widget& getThemeSelector() {
+	public:	Gtk::Widget& getThemeSelector()
+	{
 		this->get_vbox()->remove(this->hbTheme);
 		return this->hbTheme;
 	}
 
-	Gtk::Widget& getEditorBox() {
+	public:	Gtk::Widget& getEditorBox()
+	{
 		this->get_vbox()->remove(this->vbMain);
 		return this->vbMain;
 	}
 
-private:
-	void signal_fileAddClick() {
+	private: void signal_fileAddClick()
+	{
 		if (!event_lock) {
 			this->onAddFile();
 		}
 	}
 
-	void signal_fileRemoveClick() {
+	private: void signal_fileRemoveClick()
+	{
 		if (!event_lock) {
 			try {
-				this->onRemoveFile(this->_getSelectedFileName());
+				this->onRemoveFile(this->getSelectedFileName());
 			} catch (ItemNotFoundException const& e) {
 				this->log("no file selected - ignoring event", Logger::ERROR);
 			}
 		}
 	}
 
-	void signal_fileSelected() {
+	private: void signal_fileSelected()
+	{
 		if (!event_lock) {
 			try {
-				this->onSelect(this->_getSelectedFileName());
+				this->onSelect(this->getSelectedFileName());
 			} catch (ItemNotFoundException const& e) {
 				this->log("no file selected - ignoring event", Logger::INFO);
 			}
 		}
 	}
 
-	void signal_fileRenamed(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter) {
+	private: void signal_fileRenamed(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter)
+	{
 		if (!event_lock) {
 			try {
-				this->onRename(this->_getSelectedFileName());
+				this->onRename(this->getSelectedFileName());
 			} catch (ItemNotFoundException const& e) {
 				this->log("no file selected - ignoring event", Logger::ERROR);
 			}
 		}
 	}
 
-	void signal_fileChosen() {
+	private: void signal_fileChosen()
+	{
 		if (!event_lock) {
 			this->onFileChoose(fcFileSelection.get_filename());
 		}
 	}
 
-	void signal_textChanged() {
+	private: void signal_textChanged()
+	{
 		if (!event_lock) {
 			this->onTextChange(txtEdit.get_buffer()->get_text());
 		}
 	}
 
-	void signal_themeChosen() {
+	private: void signal_themeChosen()
+	{
 		if (!event_lock) {
 			if (this->cbTheme.get_active_row_number() == 0) {
 				this->onSimpleThemeSelected();
@@ -791,15 +843,23 @@ private:
 		}
 	}
 
-	void signal_addThemeClicked() {
+	private: void signal_addThemeClicked()
+	{
 		if (!event_lock) {
 			this->onAddThemeClicked();
 		}
 	}
 
-	void signal_removeThemeClicked() {
+	private: void signal_removeThemeClicked()
+	{
 		if (!event_lock) {
-			Gtk::MessageDialog confirmDlg(gettext("Are you sure you want to remove this theme"), false, Gtk::MESSAGE_QUESTION, Gtk::BUTTONS_YES_NO, true);
+			Gtk::MessageDialog confirmDlg(
+				gettext("Are you sure you want to remove this theme"),
+				false,
+				Gtk::MESSAGE_QUESTION,
+				Gtk::BUTTONS_YES_NO,
+				true
+			);
 			confirmDlg.set_default_response(Gtk::RESPONSE_YES);
 			if (confirmDlg.run() == Gtk::RESPONSE_YES) {
 				this->onRemoveThemeClicked(cbTheme.get_active_text());
@@ -807,7 +867,8 @@ private:
 		}
 	}
 
-	void signal_themeFileChooserResponse(int response_id) {
+	private: void signal_themeFileChooserResponse(int response_id)
+	{
 		if (!event_lock) {
 			this->fcThemeFileChooser.hide();
 			if (response_id == Gtk::RESPONSE_APPLY) {
@@ -816,7 +877,8 @@ private:
 		}
 	}
 
-	void signal_dialogResponse(int response_id) {
+	private: void signal_dialogResponse(int response_id)
+	{
 		if (!event_lock) {
 			switch (response_id) {
 			case Gtk::RESPONSE_DELETE_EVENT:
@@ -833,31 +895,36 @@ private:
 	}
 
 
-	void signal_color_changed(View_Gtk_Theme_ColorChooser& caller) {
+	private: void signal_color_changed(View_Gtk_Theme_ColorChooser& caller)
+	{
 		if (!event_lock && !caller.event_lock){
 			this->onColorChange();
 		}
 	}
 
-	void signal_font_changed() {
+	private: void signal_font_changed()
+	{
 		if (!event_lock) {
 			this->onFontChange(false);
 		}
 	}
 
-	void signal_font_removed() {
+	private: void signal_font_removed()
+	{
 		if (!event_lock) {
 			this->onFontChange(true);
 		}
 	}
 
-	void signal_other_image_chosen() {
+	private: void signal_other_image_chosen()
+	{
 		if (!event_lock){
 			this->onImageChange();
 		}
 	}
 
-	void signal_help_click() {
+	private: void signal_help_click()
+	{
 		if (!event_lock){
 			Gtk::MessageDialog helpDlg(
 				Glib::ustring::compose(
@@ -879,17 +946,31 @@ private:
 		}
 	}
 
-	void signal_bttRemoveBackground_clicked() {
+	private: void signal_bttRemoveBackground_clicked()
+	{
 		if (!event_lock){
 			this->onImageRemove();
 		}
 	}
 
-	bool signal_redraw_preview(const Cairo::RefPtr<Cairo::Context>& cr) {
+	private: bool signal_redraw_preview(const Cairo::RefPtr<Cairo::Context>& cr)
+	{
 		if (!event_lock) {
 			this->redraw(this->backgroundImagePath, false, &cr);
 		}
 		return true;
+	}
+
+	private: std::string getSelectedFileName()
+	{
+		std::vector<int> selectedFiles = this->lvFiles.get_selected();
+		std::string result;
+		if (selectedFiles.size() == 1) {
+			result = this->lvFiles.get_text(selectedFiles[0]);
+		} else {
+			throw ItemNotFoundException("theme editor: invalid selection count", __FILE__, __LINE__);
+		}
+		return result;
 	}
 };
 
