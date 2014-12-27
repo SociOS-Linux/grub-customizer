@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010-2011 Daniel Richter <danielrichter2007@web.de>
+ * Copyright (C) 2010-2014 Daniel Richter <danielrichter2007@web.de>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,38 +16,18 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef MUTEX_H_INCLUDED
-#define MUTEX_H_INCLUDED
-#include <cstdlib>
-#include <memory>
+#ifndef SRC_MODEL_MAPPER_ABSTRACT_PROCESSREADER_ABSTRACTWORKER_HPP_
+#define SRC_MODEL_MAPPER_ABSTRACT_PROCESSREADER_ABSTRACTWORKER_HPP_
 
-#include "Trait/LoggerAware.hpp"
+#include <functional>
+#include <string>
 
-class MutexLock {
-	public: virtual void release() = 0;
-	public: virtual void acquire() = 0;
-	public: virtual ~MutexLock() {};
-};
-
-class Mutex : public Trait_LoggerAware {
-public:
-	virtual inline ~Mutex() {};
-
-	virtual void lock() = 0;
-	virtual bool trylock() = 0;
-	virtual void unlock() = 0;
-
-	virtual std::shared_ptr<MutexLock> getLock() = 0;
-};
-
-class Mutex_Connection
+class Model_Mapper_Abstract_ProcessReader_AbstractWorker
 {
-	protected: std::shared_ptr<Mutex> mutex;
-
-	public: void setMutex(std::shared_ptr<Mutex> mutex)
-	{
-		this->mutex = mutex;
-	}
+	public: std::string command;
+	public: std::function<void (char)> onReceive;
+	public: std::function<void (int)> onFinish;
 };
 
-#endif
+
+#endif /* SRC_MODEL_MAPPER_ABSTRACT_PROCESSREADER_ABSTRACTWORKER_HPP_ */

@@ -79,6 +79,10 @@ src/Model/Env.hpp -text
 src/Model/FbResolutionsGetter.hpp -text
 src/Model/Installer.hpp -text
 src/Model/ListCfg.hpp -text
+src/Model/Mapper/Abstract/ProcessReader.hpp -text
+src/Model/Mapper/Abstract/ProcessReader/ASyncWorker.hpp -text
+src/Model/Mapper/Abstract/ProcessReader/AbstractWorker.hpp -text
+src/Model/Mapper/Abstract/ProcessReader/SyncWorker.hpp -text
 src/Model/MountTable.hpp -text
 src/Model/Proxy.hpp -text
 src/Model/ProxyScriptData.hpp -text
