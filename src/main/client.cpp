@@ -16,93 +16,300 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#include <iostream>
+#include "../Model/Mapper/Abstract/ProcessReader.hpp"
+#include <memory>
+#include <glibmm.h>
+#include <gtkmm.h>
+#include "../Controller/Helper/GLibThread.hpp"
+#include "../lib/Mutex/GLib.hpp"
 
-#include "../Bootstrap/View.hpp"
-#include "../Bootstrap/Application.hpp"
-#include "../Bootstrap/Factory.hpp"
-#include "../lib/ContentParser/Chainloader.hpp"
-#include "../lib/ContentParser/FactoryImpl.hpp"
-#include "../lib/ContentParser/Linux.hpp"
-#include "../lib/ContentParser/LinuxIso.hpp"
-#include "../lib/ContentParser/Memtest.hpp"
-#include "../lib/Logger/Stream.hpp"
-#include "../Mapper/EntryNameImpl.hpp"
-#include "../config.hpp"
-#include "../Controller/AboutController.hpp"
-#include "../Controller/EntryEditController.hpp"
-#include "../Controller/EnvEditorController.hpp"
-#include "../Controller/ErrorController.hpp"
-#include "../Controller/InstallerController.hpp"
-#include "../Controller/MainController.hpp"
-#include "../Controller/SettingsController.hpp"
-#include "../Controller/ThemeController.hpp"
-#include "../Controller/TrashController.hpp"
+void execCommand(Gtk::TextView& dest)
+{
+	dest.get_buffer()->set_text("");
 
+	Model_Mapper_Abstract_ProcessReader pr;
+	pr.setThreadHelper(std::make_shared<Controller_Helper_GLibThread>());
+	pr.setMutex(std::make_shared<Mutex_GLib>());
 
+	auto buf = std::make_shared<std::string>();
 
-int main(int argc, char** argv){
-	if (getuid() != 0 && (argc == 1 || argv[1] != std::string("no-fork"))) {
-		return system((std::string("pkexec ") + argv[0] + (argc == 2 ? std::string(" ") + argv[1] : "") + " no-fork").c_str());
+	pr.runASync(
+		"grub-mkconfig",
+		[&dest, buf] (char receivedChar) {
+			*buf += receivedChar;
+
+			if (receivedChar == '\n') {
+				dest.get_buffer()->insert(dest.get_buffer()->begin(), *buf);
+				*buf = "";
+			}
+		},
+		[&dest, buf] (int status) {
+			dest.get_buffer()->insert(dest.get_buffer()->begin(), *buf);
+			dest.get_buffer()->insert(dest.get_buffer()->begin(), "terminated with exit status " + std::to_string(status));
+		}
+	);
+}
+
+class Test : public std::enable_shared_from_this<Test>
+{
+	public: void checkIsShared()
+	{
+		try {
+			auto ptr = this->shared_from_this();
+			std::cout << "object is a shared_ptr" << std::endl;
+		} catch (std::bad_weak_ptr const& e) {
+			std::cout << "object is NOT a shared_ptr" << std::endl;
+		}
 	}
-	setlocale(LC_ALL, "");
-	bindtextdomain("grub-customizer", LOCALEDIR);
-	textdomain("grub-customizer");
+};
 
-	auto logger = std::make_shared<Logger_Stream>(std::cout);
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <map>
+#include <array>
+#include <cassert>
 
-	try {
-		auto application          = std::make_shared<Bootstrap_Application>(argc, argv);
-		auto view                 = std::make_shared<Bootstrap_View>();
-		auto factory              = std::make_shared<Bootstrap_Factory>(application->applicationObject, logger);
+class Process
+{
+	public: enum class Channel {
+		STDIN,
+		STDOUT,
+		STDERR
+	};
 
-		auto settingsOnDisk       = factory->create<Model_SettingsManagerData>();
-		auto savedListCfg         = factory->create<Model_ListCfg>();
+	private: std::initializer_list<Channel> allChannels = {Channel::STDOUT, Channel::STDERR, Channel::STDIN};
 
-		factory->entryNameMapper->setView(view->main);
+	private: const int PIPE_INDEX_READ = 0;
+	private: const int PIPE_INDEX_WRITE = 1;
 
-		auto entryEditController = factory->createController<EntryEditController>(view->entryEditor);
-		auto mainController      = factory->createController<MainController>(view->main);
-		auto settingsController  = factory->createController<SettingsController>(view->settings);
-		auto envEditController   = factory->createController<EnvEditorController>(view->envEditor);
-		auto trashController     = factory->createController<TrashController>(view->trash);
-		auto installController   = factory->createController<InstallerController>(view->installer);
-		auto aboutController     = factory->createController<AboutController>(view->about);
-		auto errorController     = factory->createController<ErrorController>(view->error);
-		auto themeController     = factory->createController<ThemeController>(view->theme);
+	private: pid_t pid = 0;
+	private: std::map<Channel, std::array<int, 2>> pipes;
+	private: std::map<Channel, bool> pipeOpened;
+	private: int exitStatus = 0;
 
-		mainController->setSettingsBuffer(settingsOnDisk);
-		mainController->setSavedListCfg(savedListCfg);
-
-		// configure logger
-		logger->setLogLevel(Logger_Stream::LOG_EVENT);
-		if (argc > 1) {
-			std::string logParam = argv[1];
-			if (logParam == "debug") {
-				logger->setLogLevel(Logger_Stream::LOG_DEBUG_ONLY);
-			} else if (logParam == "log-important") {
-				logger->setLogLevel(Logger_Stream::LOG_IMPORTANT);
-			} else if (logParam == "quiet") {
-				logger->setLogLevel(Logger_Stream::LOG_NOTHING);
-			} else if (logParam == "verbose") {
-				logger->setLogLevel(Logger_Stream::LOG_VERBOSE);
+	public: Process(std::string const& command, std::vector<std::string> args = {})
+	{
+		for (Channel channel : this->allChannels) {
+			if (pipe(this->pipes[channel].data())) {
+				throw std::runtime_error("pipe creation failed");
+			} else {
+				this->pipeOpened[channel] = true;
 			}
 		}
 
-		factory->contentParserFactory->registerParser(factory->create<ContentParser_Linux>(), gettext("Linux"));
-		factory->contentParserFactory->registerParser(factory->create<ContentParser_LinuxIso>(), gettext("Linux-ISO"));
-		factory->contentParserFactory->registerParser(factory->create<ContentParser_Chainloader>(), gettext("Chainloader"));
-		factory->contentParserFactory->registerParser(factory->create<ContentParser_Memtest>(), gettext("Memtest"));
+		try {
+			this->pid = Process::createSubProcess(std::bind(std::mem_fn(&Process::initChild), this, command, args));
+		} catch (std::runtime_error const& e) {
+			for (Channel channel : this->allChannels) {
+				close(this->pipes[channel][PIPE_INDEX_READ]);
+				close(this->pipes[channel][PIPE_INDEX_WRITE]);
+			}
 
-		view->entryEditor->setAvailableEntryTypes(factory->contentParserFactory->getNames());
+			throw e;
+		}
 
-		mainController->initAction();
-		errorController->setApplicationStarted(true);
-
-		application->applicationObject->run();
-	} catch (Exception const& e) {
-		logger->log(e, Logger::ERROR);
-		return 1;
+		// close pipes which should only be written by the child process
+		close(this->pipes[Channel::STDIN][PIPE_INDEX_READ]);
+		close(this->pipes[Channel::STDOUT][PIPE_INDEX_WRITE]);
+		close(this->pipes[Channel::STDERR][PIPE_INDEX_WRITE]);
 	}
+
+	public: ~Process()
+	{
+		// close remaining pipes
+		this->closeAllPipes();
+	}
+
+	public: bool read(char& dest, Channel channel = Channel::STDOUT)
+	{
+		assert(this->pipeOpened[channel]);
+
+		char c;
+		int readCount = ::read(this->pipes[channel][PIPE_INDEX_READ], &c, 1);
+
+		if (readCount == 0) {
+			return false;
+		}
+
+		dest = char(c);
+		return true;
+	}
+
+	public: void write(std::string const& data)
+	{
+		assert(this->pipeOpened[Channel::STDIN]);
+
+		::write(this->pipes[Channel::STDIN][PIPE_INDEX_WRITE], data.c_str(), data.length());
+	}
+
+	public: void write(char c)
+	{
+		this->write(std::string() + c);
+	}
+
+	public: void closeWritePipe()
+	{
+		assert(this->pipeOpened[Channel::STDIN]);
+
+		close(this->pipes[Channel::STDIN][PIPE_INDEX_WRITE]);
+		this->pipeOpened[Channel::STDIN] = false;
+	}
+
+	public: int finish()
+	{
+		this->closeAllPipes();
+
+	    waitpid(this->pid, &this->exitStatus, WNOHANG);
+
+		return this->exitStatus;
+	}
+
+	public: void kill(int signal = SIGTERM)
+	{
+		::kill(this->pid, signal);
+	}
+
+	private: static pid_t createSubProcess(std::function<void ()> childInit)
+	{
+		pid_t pid = vfork();
+
+		if (pid < (pid_t) 0) {
+			throw std::runtime_error("fork failed");
+		}
+
+		if (pid == (pid_t) 0) {
+			childInit(); // should exit
+		}
+
+		return pid;
+	}
+
+	/**
+	 * run commands to initialize the child process
+	 * this should be the only function running at child context
+	 * because of vfork the actions should be limited to close, open and dup*
+	 */
+	private: void initChild(std::string const& command, std::vector<std::string> args) const
+	{
+		dup2(this->pipes.at(Channel::STDIN)[PIPE_INDEX_READ], STDIN_FILENO);
+		dup2(this->pipes.at(Channel::STDOUT)[PIPE_INDEX_WRITE], STDOUT_FILENO);
+		dup2(this->pipes.at(Channel::STDERR)[PIPE_INDEX_WRITE], STDERR_FILENO);
+
+		for (Channel channel : this->allChannels) {
+			close(this->pipes.at(channel)[PIPE_INDEX_READ]);
+			close(this->pipes.at(channel)[PIPE_INDEX_WRITE]);
+		}
+
+		execvp(command.c_str(), this->buildArgList(command, args).data());
+		std::cerr << "failed running command '" << command << "'" << std::endl;
+		_exit(EXIT_FAILURE);
+	}
+
+	private: void closeAllPipes()
+	{
+		if (this->pipeOpened[Channel::STDIN]) {
+			close(this->pipes[Channel::STDIN][PIPE_INDEX_WRITE]);
+			this->pipeOpened[Channel::STDIN] = false;
+		}
+		if (this->pipeOpened[Channel::STDOUT]) {
+			close(this->pipes[Channel::STDOUT][PIPE_INDEX_READ]);
+			this->pipeOpened[Channel::STDOUT] = false;
+		}
+		if (this->pipeOpened[Channel::STDERR]) {
+			close(this->pipes[Channel::STDERR][PIPE_INDEX_READ]);
+			this->pipeOpened[Channel::STDERR] = false;
+		}
+	}
+
+	private: std::vector<char*> buildArgList(std::string const& command, std::vector<std::string> const& source) const
+	{
+		std::vector<char*> result;
+		result.reserve(source.size() + 2);
+		result.push_back(const_cast<char*>(command.c_str())); // first argument is the command
+		for (auto const& str : source) {
+			result.push_back(const_cast<char*>(str.c_str()));
+		}
+		result.push_back(nullptr);
+
+		return result;
+	}
+};
+#include <thread>
+
+int main(int argc, char** argv)
+{
+	Process bash("bash");
+
+//	FILE* file = popen("/home/daniel/Schreibtisch/test3.sh", "r");
+//	int c;
+//	while ((c = fgetc(file)) != EOF) {
+//		//std::cout << char(c);
+//	}
+//	std::cout << "exit status: " << pclose(file) << std::endl;
+//	return 0;
+
+//	Process p("echo", {"test", "blubb"});
+//
+	std::function<void(Process::Channel)> readChannel = [&bash] (Process::Channel ch) {
+		char nextChar;
+		while (bash.read(nextChar, ch)) {
+			if (ch == Process::Channel::STDERR) {
+				std::cerr << nextChar;
+			} else {
+				std::cout << nextChar;
+			}
+		}
+	};
+
+	std::thread t1(readChannel, Process::Channel::STDOUT);
+	std::thread t2(readChannel, Process::Channel::STDERR);
+
+	bash.write("echo 'du -sh /usr/*'\n");
+	bash.write("du -sh /usr/*\n");
+	bash.write("echo 'echo blabla'\n");
+	bash.write("echo blabla\n");
+	bash.write("echo myerror 1>&2\n");
+	bash.closeWritePipe();
+//	bash.write('\0');
+
+//	sleep(2);
+//	std::cout << "_____ now killing ______" << std::endl;
+//	p.kill();
+
+	t1.join();
+	t2.join();
+
+	bash.kill();
+
+//	std::cout << "_____ threads closed ______" << std::endl;
+
+	std::cout << std::endl << "process finished with status " << bash.finish() << std::endl;
+
+	return 0;
+
+	Gtk::Main app(argc, argv);
+
+	Glib::thread_init();
+
+	Gtk::Window win;
+	Gtk::VBox vbMain;
+	Gtk::ScrolledWindow scr;
+	Gtk::TextView tv;
+	Gtk::Button btt("run!");
+
+	btt.signal_clicked().connect(sigc::bind<Gtk::TextView&>(sigc::ptr_fun(execCommand), tv));
+
+	scr.add(tv);
+
+	vbMain.pack_start(btt, Gtk::PACK_SHRINK);
+	vbMain.pack_start(scr);
+
+	win.add(vbMain);
+
+	win.set_default_size(400, 300);
+
+	win.show_all();
+
+	app.run(win);
 }
 
