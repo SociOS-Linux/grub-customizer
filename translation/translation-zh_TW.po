@@ -7,29 +7,29 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2013-11-13 22:24+0100\n"
+"POT-Creation-Date: 2014-04-16 20:28+0200\n"
 "PO-Revision-Date: 2014-03-01 04:20+0000\n"
 "Last-Translator: Walter Cheuk <wwycheuk@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <zh_TW@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-04-16 18:08+0000\n"
-"X-Generator: Launchpad (build 16985)\n"
+"X-Launchpad-Export-Date: 2015-01-11 12:12+0000\n"
+"X-Generator: Launchpad (build 17298)\n"
 
-#: src/Controller/MainControllerImpl.cpp:654
+#: src/Controller/MainControllerImpl.cpp:673
 msgid "Name the Entry"
 msgstr "命名該項目"
 
-#: src/Controller/MainControllerImpl.cpp:736
+#: src/Controller/MainControllerImpl.cpp:755
 msgid "cannot move this entry"
 msgstr "不能移動這個項目"
 
-#: src/Controller/MainControllerImpl.cpp:829
+#: src/Controller/MainControllerImpl.cpp:848
 msgid "Configuration has been saved"
 msgstr "配置已被儲存"
 
-#: src/Controller/MainControllerImpl.cpp:834
+#: src/Controller/MainControllerImpl.cpp:853
 msgid "updating configuration"
 msgstr "更新配置"
 
@@ -53,10 +53,6 @@ msgstr "記憶體檢測"
 msgid ""
 "Grub Customizer is a graphical interface to configure the grub2/burg settings"
 msgstr "Grub Customizer 是用來設置 grub2/burg 設定的圖形介面程式"
-
-#: src/View/Gtk/Element/PartitionChooser.cpp:48
-msgid "current"
-msgstr "目前"
 
 #: src/View/Gtk/EntryEditor.cpp:22 src/View/Gtk/EnvEditor.cpp:23
 msgid "_Type:"
@@ -312,75 +308,75 @@ msgstr "您是否想要配置BURG，而不是grub2？"
 msgid "_General settings"
 msgstr "一般設定(_G)"
 
-#: src/View/Gtk/Main.cpp:286
+#: src/View/Gtk/Main.cpp:288
 msgid "_Appearance settings"
 msgstr "外觀設定(_A)"
 
-#: src/View/Gtk/Main.cpp:304
+#: src/View/Gtk/Main.cpp:308
 msgid "BURG Mode"
 msgstr "BURG 模式"
 
-#: src/View/Gtk/Main.cpp:308
+#: src/View/Gtk/Main.cpp:312
 msgid "Save configuration and generate a new "
 msgstr "儲存配置及產生一新的 "
 
-#: src/View/Gtk/Main.cpp:335
+#: src/View/Gtk/Main.cpp:339
 msgid "Are you sure?"
 msgstr "您確定嗎？"
 
-#: src/View/Gtk/Main.cpp:336
+#: src/View/Gtk/Main.cpp:340
 msgid "This removes all your list modifications of the bootloader menu!"
 msgstr "這將移除您開機選單中所有清單的修改！"
 
-#: src/View/Gtk/Main.cpp:429
+#: src/View/Gtk/Main.cpp:433
 msgid "loading configuration…"
 msgstr "正在載入配置..."
 
-#: src/View/Gtk/Main.cpp:431
+#: src/View/Gtk/Main.cpp:435
 msgid "loading script %2/%3 (%1)"
 msgstr "載入腳本 %2/%3 (%1)"
 
-#: src/View/Gtk/Main.cpp:444
+#: src/View/Gtk/Main.cpp:448
 msgid "Proxy binary not found!"
 msgstr ""
 
-#: src/View/Gtk/Main.cpp:445
+#: src/View/Gtk/Main.cpp:449
 msgid ""
 "You will see all entries (uncustomized) when you run grub. This error accurs "
 "(in most cases), when you didn't install grub gustomizer currectly."
 msgstr ""
 
-#: src/View/Gtk/Main.cpp:451
+#: src/View/Gtk/Main.cpp:455
 msgid "(incoming Entries of %1, Script: %2)"
 msgstr "(進入項目 %1，腳本：%2)"
 
-#: src/View/Gtk/Main.cpp:453
+#: src/View/Gtk/Main.cpp:457
 msgid "(incoming Entries of %1)"
 msgstr "(進入項目%1)"
 
-#: src/View/Gtk/Main.cpp:455
+#: src/View/Gtk/Main.cpp:459
 msgid "(incoming Entries of Script: %1)"
 msgstr "(進入項目腳本：%1)"
 
-#: src/View/Gtk/Main.cpp:457
+#: src/View/Gtk/Main.cpp:461
 msgid "(incoming Entries)"
 msgstr "(進入項目)"
 
-#: src/View/Gtk/Main.cpp:463
+#: src/View/Gtk/Main.cpp:467
 msgid "(script code)"
 msgstr "(腳本代碼)"
 
-#: src/View/Gtk/Main.cpp:465
+#: src/View/Gtk/Main.cpp:469
 msgid "(script code of %1)"
 msgstr "(腳本代碼 %1)"
 
-#: src/View/Gtk/Main.cpp:683
+#: src/View/Gtk/Main.cpp:687
 msgid ""
 "Removing Script Code can cause problems when trying to boot entries relying "
 "on it. Are you sure you want to do it anyway?"
 msgstr "移除腳本代碼可能會導致當試圖啟動依賴於它的項目時發生問題。確定想這樣做嗎？"
 
-#: src/View/Gtk/Main.cpp:692
+#: src/View/Gtk/Main.cpp:696
 msgid ""
 "You're trying to remove an entry of the currently running system. Make sure "
 "there are other working entries of this system!\n"
@@ -390,32 +386,32 @@ msgstr ""
 "正在移除正在運行的系統項目。請先確保本電腦有其他可正常運行的系統項目！\n"
 "如僅想移除舊內核，應將其解除安裝而非在開機選單隱藏。"
 
-#: src/View/Gtk/Main.cpp:806 src/View/Gtk/Element/List.h:128
+#: src/View/Gtk/Main.cpp:810 src/View/Gtk/Element/List.h:132
 msgid "menuentry"
 msgstr "選單項目(menuentry)"
 
-#: src/View/Gtk/Main.cpp:807
+#: src/View/Gtk/Main.cpp:811
 msgid ""
 "An menuentry which is visible at the grub menu and boots an operating system "
 "when activated."
 msgstr ""
 
-#: src/View/Gtk/Main.cpp:808 src/View/Gtk/Element/List.h:124
+#: src/View/Gtk/Main.cpp:812 src/View/Gtk/Element/List.h:128
 msgid "submenu"
 msgstr "子選單(submenu)"
 
-#: src/View/Gtk/Main.cpp:809
+#: src/View/Gtk/Main.cpp:813
 msgid ""
 "A group of other operating systems. Grub shows it as a normal menuentry "
 "however when clicking it, it loads another menu which allows you to choose "
 "one the the containing menuentries."
 msgstr ""
 
-#: src/View/Gtk/Main.cpp:811 src/View/Gtk/Element/List.h:126
+#: src/View/Gtk/Main.cpp:815 src/View/Gtk/Element/List.h:130
 msgid "placeholder"
 msgstr "佔位符號"
 
-#: src/View/Gtk/Main.cpp:812
+#: src/View/Gtk/Main.cpp:816
 msgid ""
 "There are two types of this special entry: Incoming entries are the place "
 "where Grub Customizer places new operating systems which are found by grub "
@@ -430,57 +426,72 @@ msgstr ""
 "look like an menuentry. In most cases it's used to configure grub. You "
 "should only touch it when knowing what it does. 預設會隱藏佔位符號。"
 
-#: src/View/Gtk/Main.cpp:817 src/View/Gtk/Element/List.h:122
+#: src/View/Gtk/Main.cpp:821 src/View/Gtk/Element/List.h:126
 msgid "script"
 msgstr "腳本(script)"
 
-#: src/View/Gtk/Main.cpp:818
+#: src/View/Gtk/Main.cpp:822
 msgid ""
 "Scripts are generating menuentries. So every menuentry belongs to a script. "
 "They are shown as top level groups when activated. However in contrast to "
 "submenus they aren't shown at the boot menu."
 msgstr ""
 
-#: src/View/Gtk/Main.cpp:825
+#: src/View/Gtk/Main.cpp:829
 msgid "About the entry types"
 msgstr "有關項目類型"
 
-#: src/View/Gtk/Main.cpp:887
+#: src/View/Gtk/Main.cpp:891
 msgid "The saved configuration is not up to date!"
 msgstr "儲存的配置不是最新的！"
 
-#: src/View/Gtk/Main.cpp:888
+#: src/View/Gtk/Main.cpp:892
 msgid ""
 "The generated configuration didn't equal to the saved configuration on "
 "startup. So what you see now may not be what you see when you restart your "
 "pc. To fix this, click update!"
 msgstr ""
 
-#: src/View/Gtk/Main.cpp:891
+#: src/View/Gtk/Main.cpp:895
 msgid "_Quit without update"
 msgstr "結束而不更新(_Q)"
 
-#: src/View/Gtk/Main.cpp:894
+#: src/View/Gtk/Main.cpp:898
 msgid "_Update & Quit"
 msgstr "更新及結束(_U)"
 
-#: src/View/Gtk/Main.cpp:898
+#: src/View/Gtk/Main.cpp:902
 msgid "Do you want to save your modifications?"
 msgstr "是否要儲存所做的修改？"
 
-#: src/View/Gtk/Main.cpp:901
+#: src/View/Gtk/Main.cpp:905
 msgid "_Quit without saving"
 msgstr "結束而不更新(_Q)"
 
-#: src/View/Gtk/Main.cpp:904
+#: src/View/Gtk/Main.cpp:908
 msgid "_Save & Quit"
 msgstr "儲存及結束(_S)"
 
-#: src/View/Gtk/Main.cpp:907
+#: src/View/Gtk/Main.cpp:911
 msgid "AND: your modifications are still unsaved, update will save them too!"
 msgstr "並且：您的修改仍未儲存，更新將連同儲存它們！"
 
-#: src/View/Gtk/Main.cpp:960
+#: src/View/Gtk/Main.cpp:964
+msgid "Failed saving grub configuration!"
+msgstr ""
+
+#: src/View/Gtk/Main.cpp:965
+msgid "The grub configuration cannot be saved"
+msgstr ""
+
+#: src/View/Gtk/Main.cpp:966
+msgid ""
+"Please take a look at the command line output below. If you think this is a "
+"bug of Grub Customizer, please create one at %1! Generally Grub Customizer "
+"should prevent errors like this."
+msgstr ""
+
+#: src/View/Gtk/Main.cpp:971
 msgid ""
 "%1 couldn't be executed successfully. error message:\n"
 " %2"
@@ -488,15 +499,15 @@ msgstr ""
 "%1 無法成功執行。錯誤訊息：\n"
 " %2"
 
-#: src/View/Gtk/Main.cpp:962
+#: src/View/Gtk/Main.cpp:973
 msgid "Environment settings"
 msgstr "環境設定"
 
-#: src/View/Gtk/Main.cpp:974
+#: src/View/Gtk/Main.cpp:985
 msgid "Do you want to proceed without saving the current configuration?"
 msgstr "想繼續執行而不儲存目前配置嗎？"
 
-#: src/View/Gtk/Main.cpp:975
+#: src/View/Gtk/Main.cpp:986
 msgid "There are unsaved modifications!"
 msgstr "有未儲存的修改！"
 
@@ -794,11 +805,11 @@ msgstr ""
 msgid "Grub fonts can be harmful (Info)"
 msgstr ""
 
-#: src/View/Gtk/Theme.cpp:703
+#: src/View/Gtk/Theme.cpp:707
 msgid "Are you sure you want to remove this theme"
 msgstr ""
 
-#: src/View/Gtk/Theme.cpp:771
+#: src/View/Gtk/Theme.cpp:775
 msgid ""
 "Alternatively to the simple theme method which provides some options like "
 "color, wallpaper and font you can install complex theme packages to get an "
@@ -846,14 +857,18 @@ msgstr "永久刪除所選項目 - 此動作只在自訂項目提供"
 msgid "This deletes the following entries:"
 msgstr "這會刪除以下項目："
 
-#: src/View/Gtk/Element/List.h:131
+#: src/View/Gtk/Element/List.h:135
 msgid "script: "
 msgstr "腳本： "
 
-#: src/View/Gtk/Element/List.h:135
+#: src/View/Gtk/Element/List.h:139
 msgid "default name: "
 msgstr "預設名稱： "
 
-#: src/View/Gtk/Element/List.h:139
+#: src/View/Gtk/Element/List.h:143
 msgid "Partition: "
 msgstr "分割區： "
+
+#: src/View/Gtk/Element/PartitionChooser.cpp:48
+msgid "current"
+msgstr "目前"

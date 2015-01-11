@@ -7,29 +7,29 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2013-11-13 22:24+0100\n"
-"PO-Revision-Date: 2014-02-06 23:39+0000\n"
+"POT-Creation-Date: 2014-04-16 20:28+0200\n"
+"PO-Revision-Date: 2015-01-04 16:10+0000\n"
 "Last-Translator: Timo Seppola <Unknown>\n"
 "Language-Team: Finnish <fi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-04-16 18:08+0000\n"
-"X-Generator: Launchpad (build 16985)\n"
+"X-Launchpad-Export-Date: 2015-01-11 12:12+0000\n"
+"X-Generator: Launchpad (build 17298)\n"
 
-#: src/Controller/MainControllerImpl.cpp:654
+#: src/Controller/MainControllerImpl.cpp:673
 msgid "Name the Entry"
 msgstr "Nimeä käynnistysrivi (entry)"
 
-#: src/Controller/MainControllerImpl.cpp:736
+#: src/Controller/MainControllerImpl.cpp:755
 msgid "cannot move this entry"
 msgstr "en voi siirtää käynnistysriviä (entry)"
 
-#: src/Controller/MainControllerImpl.cpp:829
+#: src/Controller/MainControllerImpl.cpp:848
 msgid "Configuration has been saved"
 msgstr "Asetukset on tallennettu"
 
-#: src/Controller/MainControllerImpl.cpp:834
+#: src/Controller/MainControllerImpl.cpp:853
 msgid "updating configuration"
 msgstr "päivitetään asetuksia"
 
@@ -55,10 +55,6 @@ msgid ""
 msgstr ""
 "Grub Customizer on graafinen liittymä, jolla säädetään grub2/burg asetuksia"
 
-#: src/View/Gtk/Element/PartitionChooser.cpp:48
-msgid "current"
-msgstr "nykyinen"
-
 #: src/View/Gtk/EntryEditor.cpp:22 src/View/Gtk/EnvEditor.cpp:23
 msgid "_Type:"
 msgstr "_Tyyppi:"
@@ -69,7 +65,7 @@ msgstr "Käynnistä muokkaus"
 
 #: src/View/Gtk/EntryEditor.cpp:34
 msgid "Options"
-msgstr "Lisäasetukset"
+msgstr "Asetukset"
 
 #: src/View/Gtk/EntryEditor.cpp:35
 msgid "Source"
@@ -97,7 +93,7 @@ msgstr "polku ISO-tiedostolle"
 
 #: src/View/Gtk/EntryEditor.cpp:64
 msgid "Locale"
-msgstr "Maa-asetukset"
+msgstr "Maa-asetus"
 
 #: src/View/Gtk/EntryEditor.cpp:66
 msgid "Kernel params"
@@ -204,15 +200,15 @@ msgstr "_Tiedosto"
 
 #: src/View/Gtk/Main.cpp:31
 msgid "_Edit"
-msgstr "_Muokkaa"
+msgstr "M_uokkaa"
 
 #: src/View/Gtk/Main.cpp:31
 msgid "_View"
-msgstr "_Näytä"
+msgstr "_Näkymä"
 
 #: src/View/Gtk/Main.cpp:31
 msgid "_Help"
-msgstr "_Ohje"
+msgstr "O_hje"
 
 #: src/View/Gtk/Main.cpp:32
 msgid "_Install to MBR …"
@@ -289,15 +285,15 @@ msgstr "Lataa uudelleen asetukset. Tallentamattomat muutokset tallennetaan."
 
 #: src/View/Gtk/Main.cpp:185
 msgid "Rename"
-msgstr "Nimeä uudelleen"
+msgstr "Nimeä"
 
 #: src/View/Gtk/Main.cpp:186 src/View/Gtk/Main.cpp:187
 msgid "Move up"
-msgstr "Siirrä ylöspäin"
+msgstr "Siirrä ylös"
 
 #: src/View/Gtk/Main.cpp:188 src/View/Gtk/Main.cpp:189
 msgid "Move down"
-msgstr "Siirrä alaspäin"
+msgstr "Siirrä alas"
 
 #: src/View/Gtk/Main.cpp:190 src/View/Gtk/Main.cpp:191
 msgid "Remove from submenu"
@@ -319,39 +315,39 @@ msgstr "Haluatko tehdä asetukset BURG:iin eikä grub2:een?"
 msgid "_General settings"
 msgstr "_Yleiset asetukset"
 
-#: src/View/Gtk/Main.cpp:286
+#: src/View/Gtk/Main.cpp:288
 msgid "_Appearance settings"
 msgstr "_Ulkonäköasetukset"
 
-#: src/View/Gtk/Main.cpp:304
+#: src/View/Gtk/Main.cpp:308
 msgid "BURG Mode"
 msgstr "BURG tilassa"
 
-#: src/View/Gtk/Main.cpp:308
+#: src/View/Gtk/Main.cpp:312
 msgid "Save configuration and generate a new "
 msgstr "Tallenna asetukset ja luo uusi "
 
-#: src/View/Gtk/Main.cpp:335
+#: src/View/Gtk/Main.cpp:339
 msgid "Are you sure?"
 msgstr "Oletko varma?"
 
-#: src/View/Gtk/Main.cpp:336
+#: src/View/Gtk/Main.cpp:340
 msgid "This removes all your list modifications of the bootloader menu!"
 msgstr "Tämä poistaa kaikki sinun listaus muutokset boot-lataajan valikosta!"
 
-#: src/View/Gtk/Main.cpp:429
+#: src/View/Gtk/Main.cpp:433
 msgid "loading configuration…"
 msgstr "ladataan asetukset..."
 
-#: src/View/Gtk/Main.cpp:431
+#: src/View/Gtk/Main.cpp:435
 msgid "loading script %2/%3 (%1)"
 msgstr "ladataan komentosarja (script) %2/%3 (%1)"
 
-#: src/View/Gtk/Main.cpp:444
+#: src/View/Gtk/Main.cpp:448
 msgid "Proxy binary not found!"
 msgstr "Binääristä Proxya ei löydy !"
 
-#: src/View/Gtk/Main.cpp:445
+#: src/View/Gtk/Main.cpp:449
 msgid ""
 "You will see all entries (uncustomized) when you run grub. This error accurs "
 "(in most cases), when you didn't install grub gustomizer currectly."
@@ -360,31 +356,31 @@ msgstr ""
 "Tämä virhe ilmenee (useinmiten), jos et ole asentanut grub customizer:ia "
 "oikein."
 
-#: src/View/Gtk/Main.cpp:451
+#: src/View/Gtk/Main.cpp:455
 msgid "(incoming Entries of %1, Script: %2)"
 msgstr "(sisääntulevat käynnistysvalikot  %1 :sta, komentosarja: %2 )"
 
-#: src/View/Gtk/Main.cpp:453
+#: src/View/Gtk/Main.cpp:457
 msgid "(incoming Entries of %1)"
 msgstr "(sisääntulevat käynnistysvalikot  %1 :sta)"
 
-#: src/View/Gtk/Main.cpp:455
+#: src/View/Gtk/Main.cpp:459
 msgid "(incoming Entries of Script: %1)"
 msgstr "(sisääntulevat käynnistysvalikot komentosarjasta:  %1)"
 
-#: src/View/Gtk/Main.cpp:457
+#: src/View/Gtk/Main.cpp:461
 msgid "(incoming Entries)"
 msgstr "(sisääntulevat käynnistysvalikot)"
 
-#: src/View/Gtk/Main.cpp:463
+#: src/View/Gtk/Main.cpp:467
 msgid "(script code)"
 msgstr "(komentosarja koodi)"
 
-#: src/View/Gtk/Main.cpp:465
+#: src/View/Gtk/Main.cpp:469
 msgid "(script code of %1)"
 msgstr "(komentosarja koodi %1 :ssa)"
 
-#: src/View/Gtk/Main.cpp:683
+#: src/View/Gtk/Main.cpp:687
 msgid ""
 "Removing Script Code can cause problems when trying to boot entries relying "
 "on it. Are you sure you want to do it anyway?"
@@ -392,7 +388,7 @@ msgstr ""
 "Komentosarjan poistaminen voi aiheuttaa ongelmia käynnistysvalikoihin, jotka "
 "liittyvät tähän. Oletko varma, että haluat tehdä tämän poiston?"
 
-#: src/View/Gtk/Main.cpp:692
+#: src/View/Gtk/Main.cpp:696
 msgid ""
 "You're trying to remove an entry of the currently running system. Make sure "
 "there are other working entries of this system!\n"
@@ -404,11 +400,11 @@ msgstr ""
 "Jos haluat vain poistaa vanhat kernelit: Parempi tapa on poistaa ne "
 "(uninstall) kuin vain  piilottaa ne boot-valikoissa."
 
-#: src/View/Gtk/Main.cpp:806 src/View/Gtk/Element/List.h:128
+#: src/View/Gtk/Main.cpp:810 src/View/Gtk/Element/List.h:132
 msgid "menuentry"
 msgstr "menu-valikko"
 
-#: src/View/Gtk/Main.cpp:807
+#: src/View/Gtk/Main.cpp:811
 msgid ""
 "An menuentry which is visible at the grub menu and boots an operating system "
 "when activated."
@@ -416,11 +412,11 @@ msgstr ""
 "Menu-valikko, joka on näkyvissä grub valikossa ja joka aktivoituna "
 "käynnistää käyttöjärjestelmän."
 
-#: src/View/Gtk/Main.cpp:808 src/View/Gtk/Element/List.h:124
+#: src/View/Gtk/Main.cpp:812 src/View/Gtk/Element/List.h:128
 msgid "submenu"
 msgstr "alavalikko"
 
-#: src/View/Gtk/Main.cpp:809
+#: src/View/Gtk/Main.cpp:813
 msgid ""
 "A group of other operating systems. Grub shows it as a normal menuentry "
 "however when clicking it, it loads another menu which allows you to choose "
@@ -430,11 +426,11 @@ msgstr ""
 "kun sitä klikataan, se lataa toisen valikon, joka antaa sinun valita yhden "
 "siellä olevista menu-valikoista."
 
-#: src/View/Gtk/Main.cpp:811 src/View/Gtk/Element/List.h:126
+#: src/View/Gtk/Main.cpp:815 src/View/Gtk/Element/List.h:130
 msgid "placeholder"
 msgstr "paikan kiinnittäjä"
 
-#: src/View/Gtk/Main.cpp:812
+#: src/View/Gtk/Main.cpp:816
 msgid ""
 "There are two types of this special entry: Incoming entries are the place "
 "where Grub Customizer places new operating systems which are found by grub "
@@ -451,11 +447,11 @@ msgstr ""
 "tule koskea koodiin, ellet ole varma, mitä se koodi tekee. Paikkamerkit ovat "
 "oletusarvona piilotettuina."
 
-#: src/View/Gtk/Main.cpp:817 src/View/Gtk/Element/List.h:122
+#: src/View/Gtk/Main.cpp:821 src/View/Gtk/Element/List.h:126
 msgid "script"
 msgstr "komentosarja"
 
-#: src/View/Gtk/Main.cpp:818
+#: src/View/Gtk/Main.cpp:822
 msgid ""
 "Scripts are generating menuentries. So every menuentry belongs to a script. "
 "They are shown as top level groups when activated. However in contrast to "
@@ -465,15 +461,15 @@ msgstr ""
 "johonkin käskyriviin. Nämä näytetään ylimmän tason ryhminä, kun ne on "
 "aktivoituna.  Verrattuna alavalikoihin, näitä ei näytetä käynnistysvalikossa."
 
-#: src/View/Gtk/Main.cpp:825
+#: src/View/Gtk/Main.cpp:829
 msgid "About the entry types"
 msgstr "Valikkotyypeistä"
 
-#: src/View/Gtk/Main.cpp:887
+#: src/View/Gtk/Main.cpp:891
 msgid "The saved configuration is not up to date!"
 msgstr "Tallennettu asetus ei ole päivitetty!"
 
-#: src/View/Gtk/Main.cpp:888
+#: src/View/Gtk/Main.cpp:892
 msgid ""
 "The generated configuration didn't equal to the saved configuration on "
 "startup. So what you see now may not be what you see when you restart your "
@@ -483,33 +479,51 @@ msgstr ""
 "Joten se mitä näet nyt, ei ehkä ole samaa kuin mitä näet, kun käynnistät "
 "PC:n uudelleen. Korjaa tämä klikkaamalla 'päivitys'!"
 
-#: src/View/Gtk/Main.cpp:891
+#: src/View/Gtk/Main.cpp:895
 msgid "_Quit without update"
 msgstr "_Lopeta ilman päivittämistä"
 
-#: src/View/Gtk/Main.cpp:894
+#: src/View/Gtk/Main.cpp:898
 msgid "_Update & Quit"
 msgstr "_Päivitä ja lopeta"
 
-#: src/View/Gtk/Main.cpp:898
+#: src/View/Gtk/Main.cpp:902
 msgid "Do you want to save your modifications?"
 msgstr "Haluatko tallentaa tekemäsi muutokset?"
 
-#: src/View/Gtk/Main.cpp:901
+#: src/View/Gtk/Main.cpp:905
 msgid "_Quit without saving"
 msgstr "_Lopeta ilman tallentamista"
 
-#: src/View/Gtk/Main.cpp:904
+#: src/View/Gtk/Main.cpp:908
 msgid "_Save & Quit"
 msgstr "_Tallenna ja lopeta"
 
-#: src/View/Gtk/Main.cpp:907
+#: src/View/Gtk/Main.cpp:911
 msgid "AND: your modifications are still unsaved, update will save them too!"
 msgstr ""
 "JA: Muokkauksesi ovat vielä tallentamatta, nyt päivitys tallentaa nekin "
 "samalla!"
 
-#: src/View/Gtk/Main.cpp:960
+#: src/View/Gtk/Main.cpp:964
+msgid "Failed saving grub configuration!"
+msgstr "Grub asetuksien tallennus epäonnistui!"
+
+#: src/View/Gtk/Main.cpp:965
+msgid "The grub configuration cannot be saved"
+msgstr "Grub asetuksia ei voida tallentaa"
+
+#: src/View/Gtk/Main.cpp:966
+msgid ""
+"Please take a look at the command line output below. If you think this is a "
+"bug of Grub Customizer, please create one at %1! Generally Grub Customizer "
+"should prevent errors like this."
+msgstr ""
+"Ole hyvä ja katso alempana komentorivin tulostusta. Jos epäilet, että tämä "
+"on Grub Customerin virhe (bugi), niin luo yksi %1:ssä! Yleensä Grub "
+"Customizerin pitäisi ehkäistä tämän tyyppiset virheet."
+
+#: src/View/Gtk/Main.cpp:971
 msgid ""
 "%1 couldn't be executed successfully. error message:\n"
 " %2"
@@ -517,15 +531,15 @@ msgstr ""
 "%1 ei voitu suorittaa onnistuneesti. Virheviesti:\n"
 " %2"
 
-#: src/View/Gtk/Main.cpp:962
+#: src/View/Gtk/Main.cpp:973
 msgid "Environment settings"
 msgstr "Ympäristöasetukset"
 
-#: src/View/Gtk/Main.cpp:974
+#: src/View/Gtk/Main.cpp:985
 msgid "Do you want to proceed without saving the current configuration?"
 msgstr "Haluatko edetä ilman, että olet tallentanut nykyiset asetukset?"
 
-#: src/View/Gtk/Main.cpp:975
+#: src/View/Gtk/Main.cpp:986
 msgid "There are unsaved modifications!"
 msgstr "On tallentamattomia muutoksia!"
 
@@ -659,7 +673,7 @@ msgstr "Ole hyvä ja valitse taustakuva!"
 
 #: src/View/Gtk/Theme.cpp:28
 msgid "_Font"
-msgstr "_Fontti"
+msgstr "Ki_rjasin"
 
 #: src/View/Gtk/Theme.cpp:30
 msgid "choose theme file"
@@ -861,11 +875,11 @@ msgstr ""
 msgid "Grub fonts can be harmful (Info)"
 msgstr "Grubin fontit voivat olla haitallisia (info)"
 
-#: src/View/Gtk/Theme.cpp:703
+#: src/View/Gtk/Theme.cpp:707
 msgid "Are you sure you want to remove this theme"
 msgstr "Oletko varma, että haluat poistaa tämän teeman"
 
-#: src/View/Gtk/Theme.cpp:771
+#: src/View/Gtk/Theme.cpp:775
 msgid ""
 "Alternatively to the simple theme method which provides some options like "
 "color, wallpaper and font you can install complex theme packages to get an "
@@ -932,14 +946,18 @@ msgstr ""
 msgid "This deletes the following entries:"
 msgstr "Tämä poistaa seuraavat käynnistysvalikot:"
 
-#: src/View/Gtk/Element/List.h:131
+#: src/View/Gtk/Element/List.h:135
 msgid "script: "
 msgstr "komentosarja (script): "
 
-#: src/View/Gtk/Element/List.h:135
+#: src/View/Gtk/Element/List.h:139
 msgid "default name: "
 msgstr "nykyinen nimi (oletusnimi): "
 
-#: src/View/Gtk/Element/List.h:139
+#: src/View/Gtk/Element/List.h:143
 msgid "Partition: "
 msgstr "Osio: "
+
+#: src/View/Gtk/Element/PartitionChooser.cpp:48
+msgid "current"
+msgstr "nykyinen"

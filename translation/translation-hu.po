@@ -7,29 +7,29 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2013-11-13 22:24+0100\n"
-"PO-Revision-Date: 2014-01-12 05:22+0000\n"
+"POT-Creation-Date: 2014-04-16 20:28+0200\n"
+"PO-Revision-Date: 2014-04-20 05:56+0000\n"
 "Last-Translator: Lukacsi Karoly <karoly.lukacsi@postafiok.hu>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-04-16 18:08+0000\n"
-"X-Generator: Launchpad (build 16985)\n"
+"X-Launchpad-Export-Date: 2015-01-11 12:12+0000\n"
+"X-Generator: Launchpad (build 17298)\n"
 
-#: src/Controller/MainControllerImpl.cpp:654
+#: src/Controller/MainControllerImpl.cpp:673
 msgid "Name the Entry"
 msgstr "A bejegyzés neve"
 
-#: src/Controller/MainControllerImpl.cpp:736
+#: src/Controller/MainControllerImpl.cpp:755
 msgid "cannot move this entry"
 msgstr "Ezt a bejegyzést nem lehet áthelyezni"
 
-#: src/Controller/MainControllerImpl.cpp:829
+#: src/Controller/MainControllerImpl.cpp:848
 msgid "Configuration has been saved"
 msgstr "Konfiguráció elmentve"
 
-#: src/Controller/MainControllerImpl.cpp:834
+#: src/Controller/MainControllerImpl.cpp:853
 msgid "updating configuration"
 msgstr "konfiguráció frissítése"
 
@@ -53,10 +53,6 @@ msgstr "Memtest"
 msgid ""
 "Grub Customizer is a graphical interface to configure the grub2/burg settings"
 msgstr "Grub Customizer egy grafikus interfész a grub2/burg beállításához"
-
-#: src/View/Gtk/Element/PartitionChooser.cpp:48
-msgid "current"
-msgstr "aktuális"
 
 #: src/View/Gtk/EntryEditor.cpp:22 src/View/Gtk/EnvEditor.cpp:23
 msgid "_Type:"
@@ -319,39 +315,39 @@ msgstr "Szeretné a BURG-ot konfigurálni a grub2 helyett?"
 msgid "_General settings"
 msgstr "_Általános beállítások"
 
-#: src/View/Gtk/Main.cpp:286
+#: src/View/Gtk/Main.cpp:288
 msgid "_Appearance settings"
 msgstr "_A megjelenítés beállításai"
 
-#: src/View/Gtk/Main.cpp:304
+#: src/View/Gtk/Main.cpp:308
 msgid "BURG Mode"
 msgstr "BURG Mód"
 
-#: src/View/Gtk/Main.cpp:308
+#: src/View/Gtk/Main.cpp:312
 msgid "Save configuration and generate a new "
 msgstr "Konfiguráció mentése és új fájl létrehozása: "
 
-#: src/View/Gtk/Main.cpp:335
+#: src/View/Gtk/Main.cpp:339
 msgid "Are you sure?"
 msgstr "Ezt akarod?"
 
-#: src/View/Gtk/Main.cpp:336
+#: src/View/Gtk/Main.cpp:340
 msgid "This removes all your list modifications of the bootloader menu!"
 msgstr "Ez eltávolítja a lista módosításokat a bootloader menüben!"
 
-#: src/View/Gtk/Main.cpp:429
+#: src/View/Gtk/Main.cpp:433
 msgid "loading configuration…"
 msgstr "konfiguráció betöltése..."
 
-#: src/View/Gtk/Main.cpp:431
+#: src/View/Gtk/Main.cpp:435
 msgid "loading script %2/%3 (%1)"
 msgstr "script betöltése %2/%3 (%1)"
 
-#: src/View/Gtk/Main.cpp:444
+#: src/View/Gtk/Main.cpp:448
 msgid "Proxy binary not found!"
 msgstr "Proxy nem található!"
 
-#: src/View/Gtk/Main.cpp:445
+#: src/View/Gtk/Main.cpp:449
 msgid ""
 "You will see all entries (uncustomized) when you run grub. This error accurs "
 "(in most cases), when you didn't install grub gustomizer currectly."
@@ -360,31 +356,31 @@ msgstr ""
 "a grub-ot. Ez a hiba akkor fordul elő (a legtöbb esetben), amikor a grub "
 "customizer nincs helyesen telepítve."
 
-#: src/View/Gtk/Main.cpp:451
+#: src/View/Gtk/Main.cpp:455
 msgid "(incoming Entries of %1, Script: %2)"
 msgstr "(bejegyzések %1, Script: %2)"
 
-#: src/View/Gtk/Main.cpp:453
+#: src/View/Gtk/Main.cpp:457
 msgid "(incoming Entries of %1)"
 msgstr "(bejegyzések %1)"
 
-#: src/View/Gtk/Main.cpp:455
+#: src/View/Gtk/Main.cpp:459
 msgid "(incoming Entries of Script: %1)"
 msgstr "(bejegyzések Script: %1)"
 
-#: src/View/Gtk/Main.cpp:457
+#: src/View/Gtk/Main.cpp:461
 msgid "(incoming Entries)"
 msgstr "(bejegyzések)"
 
-#: src/View/Gtk/Main.cpp:463
+#: src/View/Gtk/Main.cpp:467
 msgid "(script code)"
 msgstr "Kód írása"
 
-#: src/View/Gtk/Main.cpp:465
+#: src/View/Gtk/Main.cpp:469
 msgid "(script code of %1)"
 msgstr "(script kód %1)"
 
-#: src/View/Gtk/Main.cpp:683
+#: src/View/Gtk/Main.cpp:687
 msgid ""
 "Removing Script Code can cause problems when trying to boot entries relying "
 "on it. Are you sure you want to do it anyway?"
@@ -392,7 +388,7 @@ msgstr ""
 "Script kód eltávolítása problémát okozhat, amikor megpróbál a bejegyzésekre "
 "támaszkodva bootolni. Biztos benne, hogy ezt szeretné?"
 
-#: src/View/Gtk/Main.cpp:692
+#: src/View/Gtk/Main.cpp:696
 msgid ""
 "You're trying to remove an entry of the currently running system. Make sure "
 "there are other working entries of this system!\n"
@@ -404,11 +400,11 @@ msgstr ""
 "Ha eltávolítani akarod a régi kerneleket: jobb ha csak elrejted a boot "
 "menüben."
 
-#: src/View/Gtk/Main.cpp:806 src/View/Gtk/Element/List.h:128
+#: src/View/Gtk/Main.cpp:810 src/View/Gtk/Element/List.h:132
 msgid "menuentry"
 msgstr "menüpont"
 
-#: src/View/Gtk/Main.cpp:807
+#: src/View/Gtk/Main.cpp:811
 msgid ""
 "An menuentry which is visible at the grub menu and boots an operating system "
 "when activated."
@@ -416,11 +412,11 @@ msgstr ""
 "Egy menü bejegyzést, ami látható a grub menüben és bootban egy operációs "
 "rendszer, ha aktiválva van."
 
-#: src/View/Gtk/Main.cpp:808 src/View/Gtk/Element/List.h:124
+#: src/View/Gtk/Main.cpp:812 src/View/Gtk/Element/List.h:128
 msgid "submenu"
 msgstr "almenü"
 
-#: src/View/Gtk/Main.cpp:809
+#: src/View/Gtk/Main.cpp:813
 msgid ""
 "A group of other operating systems. Grub shows it as a normal menuentry "
 "however when clicking it, it loads another menu which allows you to choose "
@@ -430,11 +426,11 @@ msgstr ""
 "menüpont, de amikor rákattint akkor betölti másik menüből, amely lehetővé "
 "teszi, hogy válasszon egyet az azt tartalmazó menüpontokból."
 
-#: src/View/Gtk/Main.cpp:811 src/View/Gtk/Element/List.h:126
+#: src/View/Gtk/Main.cpp:815 src/View/Gtk/Element/List.h:130
 msgid "placeholder"
 msgstr "helyőrző"
 
-#: src/View/Gtk/Main.cpp:812
+#: src/View/Gtk/Main.cpp:816
 msgid ""
 "There are two types of this special entry: Incoming entries are the place "
 "where Grub Customizer places new operating systems which are found by grub "
@@ -450,11 +446,11 @@ msgstr ""
 "legtöbb esetben ez konfigurálásra grub. Csak akkor nyúljon hozzá, ha tudja "
 "mit csinál. Helyőrzők alapértelmezés szerint rejtve vannak."
 
-#: src/View/Gtk/Main.cpp:817 src/View/Gtk/Element/List.h:122
+#: src/View/Gtk/Main.cpp:821 src/View/Gtk/Element/List.h:126
 msgid "script"
 msgstr "script"
 
-#: src/View/Gtk/Main.cpp:818
+#: src/View/Gtk/Main.cpp:822
 msgid ""
 "Scripts are generating menuentries. So every menuentry belongs to a script. "
 "They are shown as top level groups when activated. However in contrast to "
@@ -464,15 +460,15 @@ msgstr ""
 "script. Ezek jelennek meg, ha felső szintű csoportok aktiválva vannak. "
 "Ellentétben az almenük nem jelennek meg a bootmenüben."
 
-#: src/View/Gtk/Main.cpp:825
+#: src/View/Gtk/Main.cpp:829
 msgid "About the entry types"
 msgstr "A belépési típusokról"
 
-#: src/View/Gtk/Main.cpp:887
+#: src/View/Gtk/Main.cpp:891
 msgid "The saved configuration is not up to date!"
 msgstr "Az elmentett konfiguráció nem naprakész!"
 
-#: src/View/Gtk/Main.cpp:888
+#: src/View/Gtk/Main.cpp:892
 msgid ""
 "The generated configuration didn't equal to the saved configuration on "
 "startup. So what you see now may not be what you see when you restart your "
@@ -482,32 +478,50 @@ msgstr ""
 "induláskor. Tehát amit most lát nem ugyanaz mit akkor fog látni mikor újra "
 "indítja a számítógépét. Hogy javítsa ezt, kattintson a frissítésre!"
 
-#: src/View/Gtk/Main.cpp:891
+#: src/View/Gtk/Main.cpp:895
 msgid "_Quit without update"
 msgstr "_Kilépés frissítés nélkül"
 
-#: src/View/Gtk/Main.cpp:894
+#: src/View/Gtk/Main.cpp:898
 msgid "_Update & Quit"
 msgstr "_Frissítés & Kilépés"
 
-#: src/View/Gtk/Main.cpp:898
+#: src/View/Gtk/Main.cpp:902
 msgid "Do you want to save your modifications?"
 msgstr "Szeretné menteni a módosításokat?"
 
-#: src/View/Gtk/Main.cpp:901
+#: src/View/Gtk/Main.cpp:905
 msgid "_Quit without saving"
 msgstr "K_ilépés mentés nélkül"
 
-#: src/View/Gtk/Main.cpp:904
+#: src/View/Gtk/Main.cpp:908
 msgid "_Save & Quit"
 msgstr "_Mentés & Kilépés"
 
-#: src/View/Gtk/Main.cpp:907
+#: src/View/Gtk/Main.cpp:911
 msgid "AND: your modifications are still unsaved, update will save them too!"
 msgstr ""
 "ÉS: a módosítások még nincsenek mentve, a frissítés menteni is fogja őket!"
 
-#: src/View/Gtk/Main.cpp:960
+#: src/View/Gtk/Main.cpp:964
+msgid "Failed saving grub configuration!"
+msgstr "A grub beállításainak mentése nem sikerült!"
+
+#: src/View/Gtk/Main.cpp:965
+msgid "The grub configuration cannot be saved"
+msgstr "A grub konfiguráció nem menthető"
+
+#: src/View/Gtk/Main.cpp:966
+msgid ""
+"Please take a look at the command line output below. If you think this is a "
+"bug of Grub Customizer, please create one at %1! Generally Grub Customizer "
+"should prevent errors like this."
+msgstr ""
+"Kérjük, vessen egy pillantást a parancssori kimenetre alább. Ha úgy "
+"gondolja, hogy ez egy bug a Grub Customizerben, kérjük hozzon létre egy %1! "
+"Általában az ehhez hasonló hibákat a Grub Customizer elkerüli."
+
+#: src/View/Gtk/Main.cpp:971
 msgid ""
 "%1 couldn't be executed successfully. error message:\n"
 " %2"
@@ -515,15 +529,15 @@ msgstr ""
 "A(z) %1 végrhajtása sikertelen. A hibeüzenet a következő:\n"
 " %2"
 
-#: src/View/Gtk/Main.cpp:962
+#: src/View/Gtk/Main.cpp:973
 msgid "Environment settings"
 msgstr "Környezet beállításai"
 
-#: src/View/Gtk/Main.cpp:974
+#: src/View/Gtk/Main.cpp:985
 msgid "Do you want to proceed without saving the current configuration?"
 msgstr "Szeretné folytatni mentés nélkül az aktuális konfigurációt?"
 
-#: src/View/Gtk/Main.cpp:975
+#: src/View/Gtk/Main.cpp:986
 msgid "There are unsaved modifications!"
 msgstr "Nem mentett módosítások!"
 
@@ -857,11 +871,11 @@ msgstr ""
 msgid "Grub fonts can be harmful (Info)"
 msgstr "Grub betűtípusok használata káros lehet (Infó)"
 
-#: src/View/Gtk/Theme.cpp:703
+#: src/View/Gtk/Theme.cpp:707
 msgid "Are you sure you want to remove this theme"
 msgstr "Biztosan el akarod távolítani ezt a témát"
 
-#: src/View/Gtk/Theme.cpp:771
+#: src/View/Gtk/Theme.cpp:775
 msgid ""
 "Alternatively to the simple theme method which provides some options like "
 "color, wallpaper and font you can install complex theme packages to get an "
@@ -925,14 +939,18 @@ msgstr ""
 msgid "This deletes the following entries:"
 msgstr "Ez törli a következő bejegyzéseket:"
 
-#: src/View/Gtk/Element/List.h:131
+#: src/View/Gtk/Element/List.h:135
 msgid "script: "
 msgstr "script: "
 
-#: src/View/Gtk/Element/List.h:135
+#: src/View/Gtk/Element/List.h:139
 msgid "default name: "
 msgstr "eredeti név "
 
-#: src/View/Gtk/Element/List.h:139
+#: src/View/Gtk/Element/List.h:143
 msgid "Partition: "
 msgstr "Partíció: "
+
+#: src/View/Gtk/Element/PartitionChooser.cpp:48
+msgid "current"
+msgstr "aktuális"

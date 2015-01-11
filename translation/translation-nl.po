@@ -7,29 +7,29 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2013-11-13 22:24+0100\n"
-"PO-Revision-Date: 2013-12-01 20:19+0000\n"
+"POT-Creation-Date: 2014-04-16 20:28+0200\n"
+"PO-Revision-Date: 2014-04-23 09:16+0000\n"
 "Last-Translator: rob <linuxned@gmail.com>\n"
 "Language-Team: Dutch <nl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2014-04-16 18:08+0000\n"
-"X-Generator: Launchpad (build 16985)\n"
+"X-Launchpad-Export-Date: 2015-01-11 12:12+0000\n"
+"X-Generator: Launchpad (build 17298)\n"
 
-#: src/Controller/MainControllerImpl.cpp:654
+#: src/Controller/MainControllerImpl.cpp:673
 msgid "Name the Entry"
 msgstr "Geef de opstartkeuze een naam"
 
-#: src/Controller/MainControllerImpl.cpp:736
+#: src/Controller/MainControllerImpl.cpp:755
 msgid "cannot move this entry"
 msgstr "kan deze opstartkeuze niet verplaatsen"
 
-#: src/Controller/MainControllerImpl.cpp:829
+#: src/Controller/MainControllerImpl.cpp:848
 msgid "Configuration has been saved"
 msgstr "Configuratie is opgeslagen"
 
-#: src/Controller/MainControllerImpl.cpp:834
+#: src/Controller/MainControllerImpl.cpp:853
 msgid "updating configuration"
 msgstr "configuratie bijwerken"
 
@@ -55,10 +55,6 @@ msgid ""
 msgstr ""
 "Grub Customizer is een grafische gebruikersinterface om de grub2/burg-"
 "instellingen te configureren"
-
-#: src/View/Gtk/Element/PartitionChooser.cpp:48
-msgid "current"
-msgstr "huidige"
 
 #: src/View/Gtk/EntryEditor.cpp:22 src/View/Gtk/EnvEditor.cpp:23
 msgid "_Type:"
@@ -324,40 +320,40 @@ msgstr "Wilt u BURG configureren in plaats van grub2?"
 msgid "_General settings"
 msgstr "Al_gemene instellingen"
 
-#: src/View/Gtk/Main.cpp:286
+#: src/View/Gtk/Main.cpp:288
 msgid "_Appearance settings"
 msgstr "_Weergave-instellingen"
 
-#: src/View/Gtk/Main.cpp:304
+#: src/View/Gtk/Main.cpp:308
 msgid "BURG Mode"
 msgstr "BURG-modus"
 
-#: src/View/Gtk/Main.cpp:308
+#: src/View/Gtk/Main.cpp:312
 msgid "Save configuration and generate a new "
-msgstr "Sla configuratie op en genereer nieuwe "
+msgstr "Configuratie opslaan en een nieuwe genereren "
 
-#: src/View/Gtk/Main.cpp:335
+#: src/View/Gtk/Main.cpp:339
 msgid "Are you sure?"
 msgstr "Weet u het zeker?"
 
-#: src/View/Gtk/Main.cpp:336
+#: src/View/Gtk/Main.cpp:340
 msgid "This removes all your list modifications of the bootloader menu!"
 msgstr ""
 "Uw wijzigingen aan het opstartladermenu zullen niet opgeslagen worden!"
 
-#: src/View/Gtk/Main.cpp:429
+#: src/View/Gtk/Main.cpp:433
 msgid "loading configuration…"
 msgstr "configuratie wordt geladen…"
 
-#: src/View/Gtk/Main.cpp:431
+#: src/View/Gtk/Main.cpp:435
 msgid "loading script %2/%3 (%1)"
 msgstr "Script %2/%3 (%1) laden"
 
-#: src/View/Gtk/Main.cpp:444
+#: src/View/Gtk/Main.cpp:448
 msgid "Proxy binary not found!"
 msgstr "Proxy binary niet gevonden!"
 
-#: src/View/Gtk/Main.cpp:445
+#: src/View/Gtk/Main.cpp:449
 msgid ""
 "You will see all entries (uncustomized) when you run grub. This error accurs "
 "(in most cases), when you didn't install grub gustomizer currectly."
@@ -366,31 +362,31 @@ msgstr ""
 "krijgen. Deze fout doet zich (in de meeste gevallen) voor, wanneer grub "
 "customizer onjuist is geïnstalleerd."
 
-#: src/View/Gtk/Main.cpp:451
+#: src/View/Gtk/Main.cpp:455
 msgid "(incoming Entries of %1, Script: %2)"
 msgstr "(inkomende opstartkeuzes van %1, script: %2)"
 
-#: src/View/Gtk/Main.cpp:453
+#: src/View/Gtk/Main.cpp:457
 msgid "(incoming Entries of %1)"
 msgstr "(inkomende opstartkeuzes van %1)"
 
-#: src/View/Gtk/Main.cpp:455
+#: src/View/Gtk/Main.cpp:459
 msgid "(incoming Entries of Script: %1)"
 msgstr "(inkomende opstartkeuzes van script: %1)"
 
-#: src/View/Gtk/Main.cpp:457
+#: src/View/Gtk/Main.cpp:461
 msgid "(incoming Entries)"
 msgstr "(inkomende opstartkeuzes van)"
 
-#: src/View/Gtk/Main.cpp:463
+#: src/View/Gtk/Main.cpp:467
 msgid "(script code)"
 msgstr "(scriptcode)"
 
-#: src/View/Gtk/Main.cpp:465
+#: src/View/Gtk/Main.cpp:469
 msgid "(script code of %1)"
 msgstr "(scriptcode van %1)"
 
-#: src/View/Gtk/Main.cpp:683
+#: src/View/Gtk/Main.cpp:687
 msgid ""
 "Removing Script Code can cause problems when trying to boot entries relying "
 "on it. Are you sure you want to do it anyway?"
@@ -398,7 +394,7 @@ msgstr ""
 "Het verwijderen van scriptcode kan problemen veroorzaken wanneer een "
 "opstartkeuze hiervan afhankelijk is. Weet u zeker dat u toch door wilt gaan?"
 
-#: src/View/Gtk/Main.cpp:692
+#: src/View/Gtk/Main.cpp:696
 msgid ""
 "You're trying to remove an entry of the currently running system. Make sure "
 "there are other working entries of this system!\n"
@@ -411,11 +407,11 @@ msgstr ""
 "Indien u alleen oude kernels wilt verwijderen, dan kunt u deze beter "
 "verwijderen in plaats van ze te verbergen in het opstartmenu."
 
-#: src/View/Gtk/Main.cpp:806 src/View/Gtk/Element/List.h:128
+#: src/View/Gtk/Main.cpp:810 src/View/Gtk/Element/List.h:132
 msgid "menuentry"
 msgstr "opstartkeuzemenu"
 
-#: src/View/Gtk/Main.cpp:807
+#: src/View/Gtk/Main.cpp:811
 msgid ""
 "An menuentry which is visible at the grub menu and boots an operating system "
 "when activated."
@@ -423,11 +419,11 @@ msgstr ""
 "Een opstartkeuze die zichtbaar is in het grub-menu, en een besturingssysteem "
 "opstart wanneer het geactiveerd wordt."
 
-#: src/View/Gtk/Main.cpp:808 src/View/Gtk/Element/List.h:124
+#: src/View/Gtk/Main.cpp:812 src/View/Gtk/Element/List.h:128
 msgid "submenu"
 msgstr "submenu"
 
-#: src/View/Gtk/Main.cpp:809
+#: src/View/Gtk/Main.cpp:813
 msgid ""
 "A group of other operating systems. Grub shows it as a normal menuentry "
 "however when clicking it, it loads another menu which allows you to choose "
@@ -438,11 +434,11 @@ msgstr ""
 "geladen worden, waarin u een van de weergegeven opstartkeuzes kunt "
 "selecteren."
 
-#: src/View/Gtk/Main.cpp:811 src/View/Gtk/Element/List.h:126
+#: src/View/Gtk/Main.cpp:815 src/View/Gtk/Element/List.h:130
 msgid "placeholder"
 msgstr "placeholder"
 
-#: src/View/Gtk/Main.cpp:812
+#: src/View/Gtk/Main.cpp:816
 msgid ""
 "There are two types of this special entry: Incoming entries are the place "
 "where Grub Customizer places new operating systems which are found by grub "
@@ -460,11 +456,11 @@ msgstr ""
 "alleen aan moeten komen als u weet wat u doet. Placeholders worden standaard "
 "verborgen."
 
-#: src/View/Gtk/Main.cpp:817 src/View/Gtk/Element/List.h:122
+#: src/View/Gtk/Main.cpp:821 src/View/Gtk/Element/List.h:126
 msgid "script"
 msgstr "script"
 
-#: src/View/Gtk/Main.cpp:818
+#: src/View/Gtk/Main.cpp:822
 msgid ""
 "Scripts are generating menuentries. So every menuentry belongs to a script. "
 "They are shown as top level groups when activated. However in contrast to "
@@ -475,15 +471,15 @@ msgstr ""
 "tegenstelling tot submenu's worden ze echter niet weergegeven in het "
 "opstartmenu."
 
-#: src/View/Gtk/Main.cpp:825
+#: src/View/Gtk/Main.cpp:829
 msgid "About the entry types"
 msgstr "Info over opstartkeuzetypes"
 
-#: src/View/Gtk/Main.cpp:887
+#: src/View/Gtk/Main.cpp:891
 msgid "The saved configuration is not up to date!"
 msgstr "De opgeslagen configuratie is niet up-to-date!"
 
-#: src/View/Gtk/Main.cpp:888
+#: src/View/Gtk/Main.cpp:892
 msgid ""
 "The generated configuration didn't equal to the saved configuration on "
 "startup. So what you see now may not be what you see when you restart your "
@@ -494,33 +490,51 @@ msgstr ""
 "te zijn wat u zult zien wanneer u uw pc herstart. Om dit te herstellen, "
 "klikt u op Bijwerken!"
 
-#: src/View/Gtk/Main.cpp:891
+#: src/View/Gtk/Main.cpp:895
 msgid "_Quit without update"
 msgstr "A_fsluiten zonder bij te werken"
 
-#: src/View/Gtk/Main.cpp:894
+#: src/View/Gtk/Main.cpp:898
 msgid "_Update & Quit"
 msgstr "_Bijwerken & afsluiten"
 
-#: src/View/Gtk/Main.cpp:898
+#: src/View/Gtk/Main.cpp:902
 msgid "Do you want to save your modifications?"
 msgstr "Wilt u uw wijzigingen opslaan?"
 
-#: src/View/Gtk/Main.cpp:901
+#: src/View/Gtk/Main.cpp:905
 msgid "_Quit without saving"
 msgstr "A_fsluiten zonder op te slaan"
 
-#: src/View/Gtk/Main.cpp:904
+#: src/View/Gtk/Main.cpp:908
 msgid "_Save & Quit"
 msgstr "Op_slaan & afsluiten"
 
-#: src/View/Gtk/Main.cpp:907
+#: src/View/Gtk/Main.cpp:911
 msgid "AND: your modifications are still unsaved, update will save them too!"
 msgstr ""
 "EN: uw wijzigingen zijn niet opgeslagen, door bij te werken zullen de "
 "wijzigingen ook opgeslagen worden!"
 
-#: src/View/Gtk/Main.cpp:960
+#: src/View/Gtk/Main.cpp:964
+msgid "Failed saving grub configuration!"
+msgstr "Opslaan van grub-configuratie is mislukt!"
+
+#: src/View/Gtk/Main.cpp:965
+msgid "The grub configuration cannot be saved"
+msgstr "De grub-configuratie kon niet opgeslagen worden"
+
+#: src/View/Gtk/Main.cpp:966
+msgid ""
+"Please take a look at the command line output below. If you think this is a "
+"bug of Grub Customizer, please create one at %1! Generally Grub Customizer "
+"should prevent errors like this."
+msgstr ""
+"Contoleer a.u.b. het opdrachtregelresultaat hieronder. Als u denkt dat dit "
+"een fout is in Grub Customizer, maak dan een melding op %1! Normaal zou Grub "
+"Customizer fouten als deze moeten voorkomen."
+
+#: src/View/Gtk/Main.cpp:971
 msgid ""
 "%1 couldn't be executed successfully. error message:\n"
 " %2"
@@ -528,15 +542,15 @@ msgstr ""
 "%1 kon niet uitgevoerd worden. foutmelding:\n"
 " %2"
 
-#: src/View/Gtk/Main.cpp:962
+#: src/View/Gtk/Main.cpp:973
 msgid "Environment settings"
 msgstr "Omgevingsinstellingen"
 
-#: src/View/Gtk/Main.cpp:974
+#: src/View/Gtk/Main.cpp:985
 msgid "Do you want to proceed without saving the current configuration?"
 msgstr "Wilt u doorgaan zonder de huidige configuratie op te slaan?"
 
-#: src/View/Gtk/Main.cpp:975
+#: src/View/Gtk/Main.cpp:986
 msgid "There are unsaved modifications!"
 msgstr "Er zijn wijzigingen gemaakt die niet opgeslagen zijn!"
 
@@ -876,11 +890,11 @@ msgstr ""
 msgid "Grub fonts can be harmful (Info)"
 msgstr "Grub-lettertypes kunnen schadelijk zijn (info)"
 
-#: src/View/Gtk/Theme.cpp:703
+#: src/View/Gtk/Theme.cpp:707
 msgid "Are you sure you want to remove this theme"
 msgstr "Weet u zeker dat u dit thema wilt verwijderen"
 
-#: src/View/Gtk/Theme.cpp:771
+#: src/View/Gtk/Theme.cpp:775
 msgid ""
 "Alternatively to the simple theme method which provides some options like "
 "color, wallpaper and font you can install complex theme packages to get an "
@@ -946,14 +960,18 @@ msgstr ""
 msgid "This deletes the following entries:"
 msgstr "Dit zal de volgende opstartkeuzes verwijderen:"
 
-#: src/View/Gtk/Element/List.h:131
+#: src/View/Gtk/Element/List.h:135
 msgid "script: "
 msgstr "script: "
 
-#: src/View/Gtk/Element/List.h:135
+#: src/View/Gtk/Element/List.h:139
 msgid "default name: "
 msgstr "standaardnaam: "
 
-#: src/View/Gtk/Element/List.h:139
+#: src/View/Gtk/Element/List.h:143
 msgid "Partition: "
 msgstr "Partitie: "
+
+#: src/View/Gtk/Element/PartitionChooser.cpp:48
+msgid "current"
+msgstr "huidige"
