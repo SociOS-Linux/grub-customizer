@@ -557,7 +557,7 @@ class View_Gtk_Theme :
 			Gtk::MessageDialog(gettext("The given filename cannot be used"), false, Gtk::MESSAGE_ERROR).run();
 			break;
 		case ERROR_THEMEFILE_NOT_FOUND:
-			Gtk::MessageDialog(gettext("This theme doesn't contain a theme.txt. Please look for the config file and rename it to \"theme.txt\"!"), false, Gtk::MESSAGE_WARNING).run();
+			Gtk::MessageDialog(Glib::ustring::compose(gettext("This theme doesn't contain a %1. Please look for the config file and rename it to \"%1\"!"), "theme.txt"), false, Gtk::MESSAGE_WARNING).run();
 			break;
 		case ERROR_SAVE_FAILED:
 			Gtk::MessageDialog(Glib::ustring(gettext("Saving of themes didn't succeed completely!")) + "\n" + info, false, Gtk::MESSAGE_WARNING).run();

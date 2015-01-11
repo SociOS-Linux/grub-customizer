@@ -121,7 +121,7 @@ class View_Gtk_Settings :
 		cbResolution(true),
 		imgDefaultEntryHelp(Gtk::Stock::HELP, Gtk::ICON_SIZE_BUTTON)
 	{
-		this->set_title("Grub Customizer - "+Glib::ustring(gettext("settings")));
+		this->set_title("Grub Customizer - " + Glib::ustring(gettext("settings")));
 		this->set_icon_name("grub-customizer");
 		Gtk::Box* winBox = this->get_vbox();
 		winBox->pack_start(tabbox);

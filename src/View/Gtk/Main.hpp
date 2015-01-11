@@ -435,7 +435,7 @@ class View_Gtk_Main : public View_Main {
 		else
 			win.set_title("Grub Customizer");
 
-		tbttSave.set_tooltip_text(Glib::ustring(gettext("Save configuration and generate a new "))+(isBurgMode?"burg.cfg":"grub.cfg"));
+		tbttSave.set_tooltip_text(Glib::ustring::compose(gettext("Save configuration and generate a new %1"), isBurgMode ? "burg.cfg" : "grub.cfg"));
 	}
 
 	public: void setLockState(int state)

@@ -141,15 +141,15 @@ class View_Gtk_Element_List :
 				outputName += gettext("menuentry");
 			}
 			if (listItem.scriptName != "") {
-				outputName += std::string(" / ") + gettext("script: ") + Helper::escapeXml(listItem.scriptName);
+				outputName += std::string(" / ") + Helper::escapeXml(Glib::ustring::compose(gettext("script: %1"), listItem.scriptName));
 			}
 
 			if (listItem.defaultName != "" && listItem.name != listItem.defaultName) {
-				outputName += std::string(" / ") + gettext("default name: ") + Helper::escapeXml(listItem.defaultName);
+				outputName += std::string(" / ") + Helper::escapeXml(Glib::ustring::compose(gettext("default name: %1"), listItem.defaultName));
 			}
 
 			if (listItem.options.find("_deviceName") != listItem.options.end()) {
-				outputName += Helper::escapeXml(Glib::ustring(" / ") + gettext("Partition: ") + listItem.options.at("_deviceName"));
+				outputName += Helper::escapeXml(Glib::ustring(" / ") + Helper::escapeXml(Glib::ustring::compose(gettext("partition: %1"), listItem.options.at("_deviceName"))));
 			}
 
 			outputName += "</small>";
