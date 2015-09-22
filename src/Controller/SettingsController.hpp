@@ -123,9 +123,11 @@ class SettingsController :
 			std::list<Model_Proxylist_Item> entryTitles = this->grublistCfg->proxies.generateEntryTitleList();
 	
 			this->view->clearDefaultEntryChooser();
+			this->view->addEntryToDefaultEntryChooser("0", "");
 			for (std::list<Model_Proxylist_Item>::iterator iter = entryTitles.begin(); iter != entryTitles.end(); iter++) {
-				this->view->addEntryToDefaultEntryChooser(iter->labelPathValue, iter->labelPathLabel, iter->numericPathValue, iter->numericPathLabel);
+				this->view->addEntryToDefaultEntryChooser(iter->labelPathValue, iter->labelPathLabel);
 			}
+			this->view->addEntryToDefaultEntryChooser("", "");
 	
 			this->syncSettings();
 		} catch (Exception const& e) {

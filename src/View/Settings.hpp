@@ -58,7 +58,7 @@ public:
 	//reads the selection row from the custom options list
 	virtual std::string getSelectedCustomOption()=0;
 	//adds an entry to the end of the default entry chooser
-	virtual void addEntryToDefaultEntryChooser(std::string const& labelPathValue, std::string const& labelPathLabel, std::string const& numericPathValue, std::string const& numericPathLabel)=0;
+	virtual void addEntryToDefaultEntryChooser(std::string const& value, std::string const& label)=0;
 	//removes all items from the default entry chooser
 	virtual void clearDefaultEntryChooser()=0;
 	//removes all item from the resolution chooser

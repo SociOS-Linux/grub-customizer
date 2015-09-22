@@ -174,10 +174,8 @@ struct Model_Proxylist : public std::list<Model_Proxy>, public Trait_LoggerAware
 					result.splice(result.end(), subList);
 				} else {
 					Model_Proxylist_Item newItem;
-					newItem.labelPathLabel = rule_iter->outputName;
+					newItem.labelPathLabel = labelPathPrefix + rule_iter->outputName;
 					newItem.labelPathValue = labelPathPrefix + rule_iter->outputName;
-					newItem.numericPathLabel = currentLabelNumPath.str();
-					newItem.numericPathValue = currentNumPath.str();
 					result.push_back(newItem);
 				}
 				if (addedSomething) {
