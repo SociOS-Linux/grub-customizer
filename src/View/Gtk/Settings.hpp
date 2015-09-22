@@ -76,6 +76,7 @@ class View_Gtk_Settings :
 	private: Gtk::HBox hbDefPredefined;
 	//Gtk::SpinButton spDefPosition;
 	private: Gtk::ComboBoxText cbDefEntry;
+	private: Gtk::Entry txtDefEntry;
 	private: std::map<int, std::string> defEntryValueMapping;
 	private: Gtk::Button bttDefaultEntryHelp;
 	private: Gtk::Image imgDefaultEntryHelp;
@@ -163,6 +164,7 @@ class View_Gtk_Settings :
 
 		hbDefPredefined.pack_start(rbDefPredefined, Gtk::PACK_SHRINK);
 		hbDefPredefined.pack_start(cbDefEntry);
+		hbDefPredefined.pack_start(txtDefEntry);
 		hbDefPredefined.pack_start(bttDefaultEntryHelp, Gtk::PACK_SHRINK);
 
 		hbDefPredefined.set_spacing(5);
@@ -171,14 +173,17 @@ class View_Gtk_Settings :
 		alignDefaultEntry.set_padding(2, 2, 25, 2);
 		rbDefPredefined.set_group(rbgDefEntry);
 		rbDefSaved.set_group(rbgDefEntry);
-		//cbDefEntry.set_sensitive(false);
+		txtDefEntry.set_no_show_all(true);
 
 		//set maximum size of the combobox
 		Glib::ListHandle<Gtk::CellRenderer*> cellRenderers = cbDefEntry.get_cells();
 		Gtk::CellRenderer* cellRenderer = *cellRenderers.begin();
 		cellRenderer->set_fixed_size(200, -1);
-
-		cbDefEntry.set_wrap_width(2);
+		try {
+			dynamic_cast<Gtk::CellRendererText&>(*cellRenderer).property_ellipsize().set_value(Pango::ELLIPSIZE_END);
+		} catch (std::bad_cast const& e) {
+			this->log("cannot set ellipsizing mode because of an cast error", Logger::ERROR);
+		}
 
 		//view group
 		alignCommonSettings.add(vbCommonSettings);
@@ -244,6 +249,7 @@ class View_Gtk_Settings :
 		rbDefPredefined.signal_toggled().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_default_entry_predefined_toggeled));
 		rbDefSaved.signal_toggled().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_default_entry_saved_toggeled));
 		cbDefEntry.signal_changed().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_default_entry_changed));
+		txtDefEntry.signal_changed().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_default_entry_changed));
 		chkShowMenu.signal_toggled().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_showMenu_toggled));
 		chkOsProber.signal_toggled().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_osProber_toggled));
 		spTimeout.signal_value_changed().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_timeout_changed));
@@ -283,18 +289,18 @@ class View_Gtk_Settings :
 		Gtk::Dialog::hide();
 	}
 
-	public: void addEntryToDefaultEntryChooser(
-		std::string const& labelPathValue,
-		std::string const& labelPathLabel,
-		std::string const& numericPathValue,
-		std::string const& numericPathLabel
-	)
+	public: void addEntryToDefaultEntryChooser(std::string const& value, std::string const& label)
 	{
 		event_lock = true;
-		this->defEntryValueMapping[this->defEntryValueMapping.size()] = numericPathValue;
-		cbDefEntry.append(Glib::ustring::compose(gettext("Entry %1 (by position)"), numericPathLabel));
-		this->defEntryValueMapping[this->defEntryValueMapping.size()] = labelPathValue;
-		cbDefEntry.append(labelPathLabel);
+		Glib::ustring mappedLabel = label;
+		if (value == "0") {
+			mappedLabel = gettext("(first entry)");
+		} else if (value == "") {
+			mappedLabel = gettext("(other…)");
+		}
+
+		this->defEntryValueMapping[this->defEntryValueMapping.size()] = value;
+		cbDefEntry.append(mappedLabel);
 		cbDefEntry.set_active(0);
 		this->groupDefaultEntry.set_sensitive(true);
 		event_lock = false;
@@ -319,9 +325,13 @@ class View_Gtk_Settings :
 		this->cbResolution.append(resolution);
 	}
 
-	public: std::string getSelectedDefaultGrubValue()
-	{
-		return this->defEntryValueMapping[cbDefEntry.get_active_row_number()];
+	public: std::string getSelectedDefaultGrubValue(){
+		std::string value = this->defEntryValueMapping[cbDefEntry.get_active_row_number()];
+		if (value != "") {
+			return value;
+		} else {
+			return txtDefEntry.get_text();
+		}
 	}
 
 	public: void addCustomOption(bool isActive, std::string const& name, std::string const& value)
@@ -398,15 +408,21 @@ class View_Gtk_Settings :
 	{
 		this->event_lock = true;
 
-		int pos = 0;
-		for (std::map<int, std::string>::iterator iter = this->defEntryValueMapping.begin(); iter != this->defEntryValueMapping.end(); iter++) {
-			if (iter->second == defEntry) {
-				pos = iter->first;
-				break;
-			}
+		int pos = -1;
+		bool isOtherEntry = defEntry == "";
+		try {
+			pos = this->getDefEntryPosition(defEntry);
+		} catch (ItemNotFoundException const& e) {
+			pos = this->getDefEntryPosition(""); // choose option "other"
+			isOtherEntry = true;
 		}
 
-		cbDefEntry.set_active(pos);
+		if (!txtDefEntry.has_focus()) { // don't change ui while typing
+			txtDefEntry.set_text(isOtherEntry ? defEntry : "");
+			txtDefEntry.set_visible(isOtherEntry);
+			cbDefEntry.set_active(pos);
+		}
+
 		this->event_lock = false;
 	}
 
@@ -532,6 +548,18 @@ class View_Gtk_Settings :
 		this->vbAppearanceSettings.pack_start(themeEditArea);
 	}
 
+	private: int getDefEntryPosition(std::string const& name)
+	{
+		for (auto& entry : this->defEntryValueMapping) {
+			if (entry.second == name) {
+				return entry.first;
+				break;
+			}
+		}
+
+		throw ItemNotFoundException("default entry selection: unable to find position by name '" + name + "'", __FILE__, __LINE__);
+	}
+
 
 	private: void signal_setting_row_changed(const Gtk::TreeModel::Path& path, const Gtk::TreeModel::iterator& iter)
 	{
@@ -636,14 +664,13 @@ class View_Gtk_Settings :
 		if (!event_lock){
 			Gtk::MessageDialog helpDlg(
 				gettext("This option allows choosing the operating system which should be selected when booting. "
-				"By default this always is the first one.\n\nThere are two columns because "
-				"there are two ways of selecting the default operating system. "
-				"The first way is to say \"always select the operating system at position X\". This means when a new menuentry appears, "
-				"the default menuentry may change (because there's another one at Position X).\n\n"
-				"The other way is to say \"use the operating system named Linux 123\". "
-				"Then it will always point to the same operating system - the position doesn't matter. "
-				"When changing the name of an entry using Grub Customizer this option will be updated automatically. "
-				"So you won't have to re-select the default entry."),
+				"By default this always is the first one. This option means that the default entry selection "
+				"stays the same when placing other operating systems there.\n\nIn contrast to the first option the other "
+				"choices are referenced by name. So the default system isn't changed when moving to another position.\n\n"
+				"If you want to use another reference like \"always point to the second entry\" you can use the "
+				"last option which allows typing a custom reference. Usage examples:\n"
+				" 1 = \"always point to the second entry\" (counting starts by 0)\n"
+				" test>0 = \"always point to the first entry of a submenu named test\""),
 				true,
 				Gtk::MESSAGE_INFO,
 				Gtk::BUTTONS_OK,

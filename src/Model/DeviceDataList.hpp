@@ -73,6 +73,15 @@ public:
 		this->std::map<std::string, std::map<std::string, std::string> >::clear();
 	}
 
+	std::string getDeviceByUuid(std::string const& uuid) const {
+		for (std::map<std::string, std::map<std::string, std::string> >::const_iterator iter = this->begin(); iter != this->end(); iter++) {
+			if (iter->second.find("UUID") != iter->second.end() && iter->second.at("UUID") == uuid) {
+				return iter->first;
+			}
+		}
+		throw ItemNotFoundException("no device found by uuid " + uuid, __FILE__, __LINE__);
+	}
+
 };
 
 class Model_DeviceDataList_Connection

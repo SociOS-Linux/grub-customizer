@@ -25,8 +25,20 @@
 
 class Regex {
 	public: virtual ~Regex(){}
-	public: virtual std::vector<std::string> match(std::string const& pattern, std::string const& str) = 0;
-	public: virtual std::string replace(std::string const& pattern, std::string const& str, std::map<int, std::string> const& newValues) = 0;
+	public: virtual std::vector<std::string> match(
+		std::string const& pattern,
+		std::string const& str,
+		char const& escapeCharacter = '\0',
+		char const& replaceCharacter = '\0'
+	) = 0;
+
+	public: virtual std::string replace(
+		std::string const& pattern,
+		std::string const& str,
+		std::map<int, std::string> const& newValues,
+		char const& escapeCharacter = '\0',
+		char const& replaceCharacter = '\0'
+	) = 0;
 };
 
 class Regex_RegexConnection

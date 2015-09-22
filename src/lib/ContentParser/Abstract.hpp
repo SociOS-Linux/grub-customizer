@@ -20,31 +20,116 @@
 #define CONTENT_PARSER_ABSTRACT_H_
 #include <map>
 #include <string>
+#include <climits>
+#include <cstdlib>
+#include <cstdio>
 #include "../../lib/ContentParser.hpp"
 #include "../../lib/Trait/LoggerAware.hpp"
+#include "../../lib/Helper.hpp"
 
-class ContentParser_Abstract : public ContentParser, public Trait_LoggerAware {
-protected:
-	std::map<std::string, std::string> options;
-public:
-	virtual inline ~ContentParser_Abstract() {}
+class ContentParser_Abstract :
+	public ContentParser,
+	public Trait_LoggerAware
+{
+	protected: std::map<std::string, std::string> options;
 
-	std::map<std::string, std::string> getOptions() const {
+	public:	virtual inline ~ContentParser_Abstract() {}
+
+	public:	std::map<std::string, std::string> getOptions() const
+	{
 		return this->options;
 	}
 
-	std::string getOption(std::string const& name) const {
+	public:	bool hasOption(std::string const& name) const
+	{
+		return this->options.find(name) != this->options.end();
+	}
+
+	public:	std::string getOption(std::string const& name) const
+	{
+		if (!this->hasOption(name)) {
+			throw ItemNotFoundException("option '" + name + "' not found", __FILE__, __LINE__);
+		}
+
 		return this->options.at(name);
 	}
 
-	void setOption(std::string const& name, std::string const& value) {
+	public:	void setOption(std::string const& name, std::string const& value)
+	{
 		this->options[name] = value;
 	}
 
-	void setOptions(std::map<std::string, std::string> const& options) {
+	public:	void setOptions(std::map<std::string, std::string> const& options)
+	{
 		this->options = options;
 	}
 
+	public:	std::list<std::string> getErrors()
+	{
+		std::list<std::string> errors;
+
+		// not empty
+		for (std::map<std::string, std::string>::iterator optionIter = this->options.begin(); optionIter != this->options.end(); optionIter++) {
+			if (optionIter->first == "other_params") {
+				continue;
+			}
+
+			if (optionIter->second == "") {
+				errors.push_back(optionIter->first);
+			}
+		}
+
+		// specific validators
+		if (this->options.find("iso_path_full") != this->options.end() && !this->_fileExists(this->options["iso_path_full"])) {
+			errors.push_back("iso_path_full");
+		}
+		if (this->options.find("memtest_image_full") != this->options.end() && !this->_fileExists(this->options["memtest_image_full"])) {
+			errors.push_back("memtest_image_full");
+		}
+
+		errors.unique();
+		return errors;
+	}
+
+	protected: std::string _realpath(std::string const& path) const
+	{
+		char* realPathCharPtr = realpath(path.c_str(), NULL);
+		std::string realPath;
+		if (realPathCharPtr != NULL) {
+			realPath = realPathCharPtr;
+			free(realPathCharPtr); // allocated data by realpath must be deleted
+		} else {
+			realPath = path; // use given path if file not found
+		}
+		return realPath;
+	}
+
+	protected: bool _fileExists(std::string const& fileName)
+	{
+		FILE* file = fopen(fileName.c_str(), "r");
+		if (file) {
+			fclose(file);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	protected: std::string escape(std::string value) const
+	{
+		if (value.find_first_of(" \"") != -1 || value.size() == 0) {
+			value = "\"" + Helper::str_escape(value, '\\', "\\\"") + "\"";
+		}
+		return value;
+	}
+
+	protected: std::string unescape(std::string value) const
+	{
+		if (value[0] == '"' && value[value.size() - 1] == '"') {
+			value = value.substr(1, value.size() - 2);
+		}
+		return Helper::str_unescape(value, '\\');
+	}
 };
 
 #endif /* CONTENT_PARSER_ABSTRACT_H_ */

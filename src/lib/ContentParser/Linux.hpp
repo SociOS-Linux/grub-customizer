@@ -33,7 +33,7 @@ public:
 	void parse(std::string const& sourceCode) {
 		this->sourceCode = sourceCode;
 		try {
-			std::vector<std::string> result = this->regexEngine->match(ContentParser_Linux::_regex, sourceCode);
+			std::vector<std::string> result = this->regexEngine->match(ContentParser_Linux::_regex, sourceCode, '\\', '_');
 	
 			//check partition indices by uuid
 			Model_DeviceMap_PartitionIndex pIndex = this->deviceMap->getHarddriveIndexByPartitionUuid(result[6]);
@@ -47,8 +47,9 @@ public:
 	
 			//assign data
 			this->options["partition_uuid"] = result[6];
-			this->options["linux_image"] = result[5];
-			this->options["initramfs"] = result[8];
+			this->options["linux_image"] = this->unescape(result[5]);
+			this->options["other_params"] = Helper::ltrim(result[7], " ");
+			this->options["initramfs"] = this->unescape(result[9]);
 		} catch (RegExNotMatchedException const& e) {
 			throw ParserException("parsing failed - RegEx not matched", __FILE__, __LINE__);
 		}
@@ -60,47 +61,47 @@ public:
 		newValues[1] = pIndex.hddNum;
 		newValues[2] = pIndex.partNum;
 		newValues[3] = this->options.at("partition_uuid");
-		newValues[5] = this->options.at("linux_image");
+		newValues[5] = this->escape(this->options.at("linux_image"));
 		newValues[6] = this->options.at("partition_uuid");
-		newValues[8] = this->options.at("initramfs");
-	
-		std::string result = this->regexEngine->replace(ContentParser_Linux::_regex, this->sourceCode, newValues);
-	
-		//check the new string. If they aren't matchable anymore (evil input), do a rollback
+		newValues[7] = this->options.at("other_params").size() ? " " + this->options.at("other_params") : "";
+		newValues[9] = this->escape(this->options.at("initramfs"));
+
+		std::string result;
 		try {
-			this->regexEngine->match(ContentParser_Linux::_regex, result);
+			result = this->regexEngine->replace(ContentParser_Linux::_regex, this->sourceCode, newValues, '\\', '_');
+			this->regexEngine->match(ContentParser_Linux::_regex, result, '\\', '_');
 		} catch (RegExNotMatchedException const& e) {
-			this->log("Ignoring data - doesn't match", Logger::ERROR);
-			result = this->sourceCode;
+			throw ParserException("parsing failed - RegEx not matched", __FILE__, __LINE__);
 		}
 		return result;
 	}
 
-	void buildDefaultEntry(std::string const& partition_uuid) {
-		std::string defaultEntry = "\
-		set root='(hd0,0)'\n\
-		search --no-floppy --fs-uuid --set=root 000000000000\n\
-		linux /vmlinuz root=UUID=000000000000 \n\
-		initrd /initrd.img";
-		Model_DeviceMap_PartitionIndex pIndex = this->deviceMap->getHarddriveIndexByPartitionUuid(partition_uuid);
-		std::map<int, std::string> newValues;
-		newValues[1] = pIndex.hddNum;
-		newValues[2] = pIndex.partNum;
-		newValues[3] = partition_uuid;
-		newValues[6] = partition_uuid;
-	
-		this->parse(this->regexEngine->replace(ContentParser_Linux::_regex, defaultEntry, newValues));
+	void buildDefaultEntry() {
+		std::string defaultEntry =
+			"set root='(hd0,0)'\n"
+			"search --no-floppy --fs-uuid --set=root 000\n"
+			"linux ___ root=UUID=000\n"
+			"initrd ___";
+
+		assert(this->regexEngine->match(ContentParser_Linux::_regex, defaultEntry, '\\', '_').size() > 0);
+
+		this->sourceCode = defaultEntry;
+
+		this->options.clear();
+		this->options["partition_uuid"] = "";
+		this->options["linux_image"] = "/vmlinuz";
+		this->options["initramfs"] = "/initrd.img";
+		this->options["other_params"] = "";
 	}
 
 };
 
-const char* ContentParser_Linux::_regex = "\
-[ \t]*set root='\\(hd([0-9]+)[^0-9]+([0-9]+)\\)'\\n\
-[ \t]*search[ \t]+--no-floppy[ \t]+--fs-uuid[ \t]+--set(?:=root)? ([-0-9a-fA-F]+)\\n\
-([ \t]*echo[ \t]+.*\n)?\
-[ \t]*linux[ \t]+([^ \t]+)[ \t]+root=UUID=([-0-9a-fA-F]+) .*\\n\
-([ \t]*echo[ \t]+.*\n)?\
-[ \t]*initrd[ \t]+([^ \\n]+)[ \\n\t]*$\
-";
+const char* ContentParser_Linux::_regex =
+	"[ \t]*set root='\\(hd([0-9]+)[^0-9]+([0-9]+)\\)'\\n"
+	"[ \t]*search[ \t]+--no-floppy[ \t]+--fs-uuid[ \t]+--set(?:=root)? ([-0-9a-fA-F]+)\\n"
+	"([ \t]*echo[ \t]+.*\n)?"
+	"[ \t]*linux[ \t]+(\"[^\"]*\"|[^ \t]+)[ \t]+root=UUID=([-0-9a-fA-F]+)(.*)\\n"
+	"([ \t]*echo[ \t]+.*\n)?"
+	"[ \t]*initrd[ \t]+(\"[^\"]*\"|[^ \\n]+)[ \\n\t]*$";
 
 #endif /* CONTENT_PARSER_LINUX_H_ */
