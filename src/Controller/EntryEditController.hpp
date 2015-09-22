@@ -199,7 +199,7 @@ class EntryEditController :
 	
 				std::list<Model_Proxy*> proxies = this->grublistCfg->proxies.getProxiesByScript(*script);
 				if (proxies.size() == 0) {
-					this->grublistCfg->proxies.push_back(Model_Proxy(*script, false));
+					this->grublistCfg->proxies.push_back(std::make_shared<Model_Proxy>(*script, false));
 					proxies = this->grublistCfg->proxies.getProxiesByScript(*script);
 				}
 				assert(proxies.size() != 0);

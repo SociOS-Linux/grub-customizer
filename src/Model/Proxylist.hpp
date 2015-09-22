@@ -20,6 +20,7 @@
 #define GRUB_CUSTOMIZER_PROXYLIST_INCLUDED
 #include <list>
 #include <sstream>
+#include <memory>
 #include "../lib/Trait/LoggerAware.hpp"
 #include "../lib/Exception.hpp"
 #include "../lib/ArrayStructure.hpp"
@@ -31,22 +32,22 @@ struct Model_Proxylist_Item {
 	std::string numericPathValue;
 	std::string numericPathLabel;
 };
-struct Model_Proxylist : public std::list<Model_Proxy>, public Trait_LoggerAware {
+struct Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public Trait_LoggerAware {
 	std::list<Model_Proxy> trash; //removed proxies
 	std::list<Model_Proxy*> getProxiesByScript(Model_Script const& script) {
 		std::list<Model_Proxy*> result;
-		for (Model_Proxylist::iterator iter = this->begin(); iter != this->end(); iter++){
-			if (iter->dataSource == &script)
-				result.push_back(&*iter);
+		for (auto proxy : *this) {
+			if (proxy->dataSource == &script)
+				result.push_back(&*proxy);
 		}
 		return result;
 	}
 
 	std::list<const Model_Proxy*> getProxiesByScript(Model_Script const& script) const {
 		std::list<const Model_Proxy*> result;
-		for (Model_Proxylist::const_iterator iter = this->begin(); iter != this->end(); iter++){
-			if (iter->dataSource == &script)
-				result.push_back(&*iter);
+		for (auto proxy : *this){
+			if (proxy->dataSource == &script)
+				result.push_back(&*proxy);
 		}
 		return result;
 	}
@@ -54,8 +55,8 @@ struct Model_Proxylist : public std::list<Model_Proxy>, public Trait_LoggerAware
 	std::list<Model_Rule*> getForeignRules() {
 		std::list<Model_Rule*> result;
 	
-		for (std::list<Model_Proxy>::iterator proxyIter = this->begin(); proxyIter != this->end(); proxyIter++) {
-			std::list<Model_Rule*> subResult = proxyIter->getForeignRules();
+		for (auto proxy : *this) {
+			std::list<Model_Rule*> subResult = proxy->getForeignRules();
 			result.splice(result.end(), subResult);
 		}
 	
@@ -63,15 +64,15 @@ struct Model_Proxylist : public std::list<Model_Proxy>, public Trait_LoggerAware
 	}
 
 	void sync_all(bool deleteInvalidRules = true, bool expand = true, Model_Script* relatedScript = NULL, std::map<std::string, Model_Script*> scriptMap = std::map<std::string, Model_Script*>() ) { //relatedScript = NULL: sync all proxies, otherwise only sync proxies wich target the given Script
-		for (Model_Proxylist::iterator proxy_iter = this->begin(); proxy_iter != this->end(); proxy_iter++){
-			if (relatedScript == NULL || proxy_iter->dataSource == relatedScript)
-				proxy_iter->sync(deleteInvalidRules, expand, scriptMap);
+		for (auto proxy : *this) {
+			if (relatedScript == NULL || proxy->dataSource == relatedScript)
+				proxy->sync(deleteInvalidRules, expand, scriptMap);
 		}	
 	}
  //relatedScript = NULL: sync all proxies, otherwise only sync proxies wich target the given Script
 	void unsync_all() {
-		for (Model_Proxylist::iterator proxy_iter = this->begin(); proxy_iter != this->end(); proxy_iter++){
-			proxy_iter->unsync();
+		for (auto proxy : *this) {
+			proxy->unsync();
 		}
 	}
 
@@ -85,19 +86,19 @@ struct Model_Proxylist : public std::list<Model_Proxy>, public Trait_LoggerAware
 	}
 
 	void deleteAllProxyscriptFiles() {
-		for (Model_Proxylist::iterator iter = this->begin(); iter != this->end(); iter++){
-			if (iter->fileName != "" && iter->dataSource && iter->dataSource->fileName != iter->fileName){
-				iter->deleteFile();
+		for (auto proxy : *this) {
+			if (proxy->fileName != "" && proxy->dataSource && proxy->dataSource->fileName != proxy->fileName){
+				proxy->deleteFile();
 			}
 		}
 	}
 
-	static bool compare_proxies(Model_Proxy const& a, Model_Proxy const& b) {
-		if (a.index != b.index) {
-			return a.index < b.index;
+	static bool compare_proxies(std::shared_ptr<Model_Proxy> const& a, std::shared_ptr<Model_Proxy> const& b) {
+		if (a->index != b->index) {
+			return a->index < b->index;
 		} else {
-			if (a.dataSource != NULL && b.dataSource != NULL) {
-				return a.dataSource->name < b.dataSource->name;
+			if (a->dataSource != nullptr && b->dataSource != nullptr) {
+				return a->dataSource->name < b->dataSource->name;
 			} else {
 				return true;
 			}
@@ -105,17 +106,17 @@ struct Model_Proxylist : public std::list<Model_Proxy>, public Trait_LoggerAware
 	}
 
 	void sort() {
-		std::list<Model_Proxy>::sort(Model_Proxylist::compare_proxies);
+		std::list<std::shared_ptr<Model_Proxy>>::sort(Model_Proxylist::compare_proxies);
 	}
 
 	void deleteProxy(Model_Proxy* proxyPointer) {
-		for (Model_Proxylist::iterator iter = this->begin(); iter != this->end(); iter++){
-			if (&*iter == proxyPointer){
+		for (auto proxyIter = this->begin(); proxyIter != this->end(); proxyIter++) {
+			if (proxyIter->get() == proxyPointer){
 				//if the file must be deleted when saving, move it to trash
 				if (proxyPointer->fileName != "" && proxyPointer->dataSource && proxyPointer->fileName != proxyPointer->dataSource->fileName)
 					this->trash.push_back(*proxyPointer);
 				//remove the proxy object
-				this->erase(iter);
+				this->erase(proxyIter);
 				break;
 			}
 		}
@@ -132,9 +133,9 @@ struct Model_Proxylist : public std::list<Model_Proxy>, public Trait_LoggerAware
 	std::list<Model_Proxylist_Item> generateEntryTitleList() const {
 		std::list<Model_Proxylist_Item> result;
 		int offset = 0;
-		for (Model_Proxylist::const_iterator proxy_iter = this->begin(); proxy_iter != this->end(); proxy_iter++){
-			if (proxy_iter->isExecutable()){
-				std::list<Model_Proxylist_Item> subList = Model_Proxylist::generateEntryTitleList(proxy_iter->rules, "", "", "", &offset);
+		for (auto proxy : *this) {
+			if (proxy->isExecutable()){
+				std::list<Model_Proxylist_Item> subList = Model_Proxylist::generateEntryTitleList(proxy->rules, "", "", "", &offset);
 				result.splice(result.end(), subList);
 			}
 		}
@@ -143,9 +144,9 @@ struct Model_Proxylist : public std::list<Model_Proxy>, public Trait_LoggerAware
 
 	std::list<std::string> getToplevelEntryTitles() const {
 		std::list<std::string> result;
-		for (Model_Proxylist::const_iterator proxy_iter = this->begin(); proxy_iter != this->end(); proxy_iter++){
-			if (proxy_iter->isExecutable()){
-				for (std::list<Model_Rule>::const_iterator rule_iter = proxy_iter->rules.begin(); rule_iter != proxy_iter->rules.end(); rule_iter++) {
+		for (auto proxy : *this) {
+			if (proxy->isExecutable()){
+				for (std::list<Model_Rule>::const_iterator rule_iter = proxy->rules.begin(); rule_iter != proxy->rules.end(); rule_iter++) {
 					if (rule_iter->isVisible && rule_iter->type == Model_Rule::NORMAL) {
 						result.push_back(rule_iter->outputName);
 					}
@@ -207,9 +208,9 @@ struct Model_Proxylist : public std::list<Model_Proxy>, public Trait_LoggerAware
 	}
 
 	Model_Proxy* getProxyByRule(Model_Rule* rule) {
-		for (Model_Proxylist::iterator proxy_iter = this->begin(); proxy_iter != this->end(); proxy_iter++){
+		for (auto proxy : *this) {
 			try {
-				return this->getProxyByRule(rule, proxy_iter->rules, *proxy_iter);
+				return this->getProxyByRule(rule, proxy->rules, *proxy);
 			} catch (ItemNotFoundException const& e) {
 				// do nothing
 			}
@@ -217,20 +218,26 @@ struct Model_Proxylist : public std::list<Model_Proxy>, public Trait_LoggerAware
 		throw ItemNotFoundException("proxy by rule not found", __FILE__, __LINE__);
 	}
 
-	std::list<Model_Rule>::iterator moveRuleToNewProxy(Model_Rule& rule, int direction, Model_Script* dataSource = NULL) {
-		Model_Proxy* currentProxy = this->getProxyByRule(&rule);
-		std::list<Model_Proxy>::iterator proxyIter = this->begin();
-		for (;proxyIter != this->end() && &*proxyIter != currentProxy; proxyIter++) {}
+	std::list<Model_Rule>::iterator moveRuleToNewProxy(Model_Rule& rule, int direction, Model_Script* dataSource = nullptr) {
+		auto currentProxy = this->getProxyByRule(&rule);
+		auto proxyIter = this->begin();
+
+		for (auto proxy : *this) {
+			if (proxy.get() == currentProxy) {
+				break;
+			}
+			proxyIter++;
+		}
 	
 		if (direction == 1) {
 			proxyIter++;
 		}
-		if (dataSource == NULL) {
+		if (dataSource == nullptr) {
 			dataSource = currentProxy->dataSource;
 		}
-		std::list<Model_Proxy>::iterator newProxy = this->insert(proxyIter, Model_Proxy(*dataSource, false));
+		auto newProxy = *this->insert(proxyIter, std::make_shared<Model_Proxy>(*dataSource, false));
 		newProxy->removeEquivalentRules(rule);
-		std::list<Model_Rule>::iterator movedRule = newProxy->rules.insert(direction == -1 ? newProxy->rules.end() : newProxy->rules.begin(), rule);
+		auto movedRule = newProxy->rules.insert(direction == -1 ? newProxy->rules.end() : newProxy->rules.begin(), rule);
 		rule.setVisibility(false);
 	
 		if (!currentProxy->hasVisibleRules()) {
@@ -246,20 +253,16 @@ struct Model_Proxylist : public std::list<Model_Proxy>, public Trait_LoggerAware
 	}
 
 	std::list<Model_Rule>::iterator getNextVisibleRule(std::list<Model_Rule>::iterator base, int direction) {
-		std::list<Model_Proxy>::iterator proxyIter = this->begin();
-		{
-			Model_Proxy* proxy = this->getProxyByRule(&*base);
-			for (;proxyIter != this->end() && &*proxyIter != proxy; proxyIter++) {}
-		}
+		auto proxyIter = this->getIter(this->getProxyByRule(&*base));
 
 		bool hasParent = false;
-		if (proxyIter->getParentRule(&*base)) {
+		if (proxyIter->get()->getParentRule(&*base)) {
 			hasParent = true;
 		}
 
 		while (proxyIter != this->end()) {
 			try {
-				return proxyIter->getNextVisibleRule(base, direction);
+				return proxyIter->get()->getNextVisibleRule(base, direction);
 			} catch (NoMoveTargetException const& e) {
 
 				if (hasParent) {
@@ -271,13 +274,13 @@ struct Model_Proxylist : public std::list<Model_Proxy>, public Trait_LoggerAware
 					if (proxyIter == this->end()) {
 						throw NoMoveTargetException("next visible rule not found", __FILE__, __LINE__);
 					}
-					base = proxyIter->rules.begin();
+					base = proxyIter->get()->rules.begin();
 				} else {
 					proxyIter--;
 					if (proxyIter == this->end()) {
 						throw NoMoveTargetException("next visible rule not found", __FILE__, __LINE__);
 					}
-					base = proxyIter->rules.end();
+					base = proxyIter->get()->rules.end();
 					base--;
 				}
 				if (base->isVisible) {
@@ -288,10 +291,10 @@ struct Model_Proxylist : public std::list<Model_Proxy>, public Trait_LoggerAware
 		throw NoMoveTargetException("next visible rule not found", __FILE__, __LINE__);
 	}
 
-	std::list<Model_Proxy>::iterator getIter(Model_Proxy const* proxy) {
-		std::list<Model_Proxy>::iterator iter = this->begin();
+	std::list<std::shared_ptr<Model_Proxy>>::iterator getIter(Model_Proxy const* proxy) {
+		auto iter = this->begin();
 		while (iter != this->end()) {
-			if (&*iter == proxy) {
+			if (iter->get() == proxy) {
 				break;
 			}
 			iter++;
@@ -300,12 +303,12 @@ struct Model_Proxylist : public std::list<Model_Proxy>, public Trait_LoggerAware
 	}
 
 	void splitProxy(Model_Proxy const* proxyToSplit, Model_Rule const* firstRuleOfPart2, int direction) {
-		std::list<Model_Proxy>::iterator iter = this->getIter(proxyToSplit);
-		Model_Proxy* sourceProxy = &*iter;
+		auto iter = this->getIter(proxyToSplit);
+		auto sourceProxy = *iter;
 		if (direction == 1) {
 			iter++;
 		}
-		Model_Proxy* newProxy = &*this->insert(iter, Model_Proxy(*sourceProxy->dataSource, false));
+		auto newProxy = *this->insert(iter, std::make_shared<Model_Proxy>(*sourceProxy->dataSource, false));
 	
 		bool isSecondPart = false;
 		if (direction == 1) {
@@ -334,9 +337,9 @@ struct Model_Proxylist : public std::list<Model_Proxy>, public Trait_LoggerAware
 	}
 
 	Model_Rule* getVisibleRuleForEntry(Model_Entry const& entry) {
-		for (std::list<Model_Proxy>::iterator proxyIter = this->begin(); proxyIter != this->end(); proxyIter++) {
-			if (proxyIter->isExecutable()) {
-				Model_Rule* result = proxyIter->getVisibleRuleForEntry(entry);
+		for (auto proxy : *this) {
+			if (proxy->isExecutable()) {
+				Model_Rule* result = proxy->getVisibleRuleForEntry(entry);
 				if (result) {
 					return result;
 				}
@@ -347,10 +350,10 @@ struct Model_Proxylist : public std::list<Model_Proxy>, public Trait_LoggerAware
 
 	bool hasConflicts() const {
 		std::map<std::string, bool> resources; // key: combination of number, "_" and name. Value: true if used before
-		for (std::list<Model_Proxy>::const_iterator proxyIter = this->begin(); proxyIter != this->end(); proxyIter++) {
-			assert(proxyIter->dataSource); // assume all proxies are having a datasource
+		for (auto proxy : *this) {
+			assert(proxy->dataSource); // assume all proxies are having a datasource
 			std::ostringstream resourceName;
-			resourceName << proxyIter->index << "_" << proxyIter->dataSource->name;
+			resourceName << proxy->index << "_" << proxy->dataSource->name;
 			if (resources[resourceName.str()]) {
 				return true;
 			} else {
@@ -361,8 +364,8 @@ struct Model_Proxylist : public std::list<Model_Proxy>, public Trait_LoggerAware
 	}
 
 	bool hasProxy(Model_Proxy* proxy) {
-		for (std::list<Model_Proxy>::iterator proxyIter = this->begin(); proxyIter != this->end(); proxyIter++) {
-			if (&*proxyIter == proxy) {
+		for (auto proxy_loop : *this) {
+			if (proxy_loop.get() == proxy) {
 				return true;
 			}
 		}
@@ -379,8 +382,8 @@ struct Model_Proxylist : public std::list<Model_Proxy>, public Trait_LoggerAware
 		}
 		int itemsIterPos = 0;
 		result["(items)"].isArray = true;
-		for (std::list<Model_Proxy>::const_iterator itemIter = this->begin(); itemIter != this->end(); itemIter++) {
-			result["(items)"][itemsIterPos] = ArrayStructure(*itemIter);
+		for (auto proxy : *this) {
+			result["(items)"][itemsIterPos] = ArrayStructure(*proxy);
 			itemsIterPos++;
 		}
 		return result;

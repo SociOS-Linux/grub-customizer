@@ -531,16 +531,16 @@ class MainController :
 		this->view->clear();
 
 		for (auto& proxy : this->grublistCfg->proxies){
-			std::string name = proxy.getScriptName();
-			if ((name != "header" && name != "debian_theme" && name != "grub-customizer_menu_color_helper") || proxy.isModified()) {
+			std::string name = proxy->getScriptName();
+			if ((name != "header" && name != "debian_theme" && name != "grub-customizer_menu_color_helper") || proxy->isModified()) {
 				View_Model_ListItem<Rule, Proxy> listItem;
 				listItem.name = name;
-				listItem.scriptPtr = &proxy;
+				listItem.scriptPtr = proxy.get();
 				listItem.is_submenu = true;
 				listItem.defaultName = name;
 				listItem.isVisible = true;
 				this->view->appendEntry(listItem);
-				for (auto& rule : proxy.rules){
+				for (auto& rule : proxy->rules){
 					this->appendRuleToView(rule);
 				}
 			}

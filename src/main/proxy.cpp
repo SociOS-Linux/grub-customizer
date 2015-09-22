@@ -52,19 +52,19 @@ int main(int argc, char** argv){
 		scriptSource.setEnv(env);
 		scriptSource.ignoreLock = true;
 		{ // this scope prevents access to the unused proxy variable - push_back takes a copy!
-			Model_Proxy proxy;
-			proxy.importRuleString(argv[1], env->cfg_dir_prefix);
+			auto proxy = std::make_shared<Model_Proxy>();
+			proxy->importRuleString(argv[1], env->cfg_dir_prefix);
 			scriptSource.proxies.push_back(proxy);
 		}
 		scriptSource.readGeneratedFile(stdin, true, false);
 
-		scriptSource.proxies.front().dataSource = &scriptSource.repository.front(); // the first Script is always the main script
+		scriptSource.proxies.front()->dataSource = &scriptSource.repository.front(); // the first Script is always the main script
 
 		std::map<std::string, Model_Script*> map = scriptSource.repository.getScriptPathMap();
-		scriptSource.proxies.front().sync(true, true, map);
+		scriptSource.proxies.front()->sync(true, true, map);
 
-		for (std::list<Model_Rule>::iterator iter = scriptSource.proxies.front().rules.begin(); iter != scriptSource.proxies.front().rules.end(); iter++){
-			iter->print(std::cout);
+		for (auto& rule : scriptSource.proxies.front()->rules) {
+			rule.print(std::cout);
 		}
 	} else {
 		std::cerr << "wrong argument count. You have to give the config as parameter 1!" << std::endl;
