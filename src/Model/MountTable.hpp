@@ -249,6 +249,31 @@ class Model_MountTable : public std::list<Model_MountTable_Mountpoint>, public T
 		this->loaded = true;
 	}
 
+	Model_MountTable_Mountpoint& findByDevice(std::string device) {
+		for (std::list<Model_MountTable_Mountpoint>::iterator iter = this->begin(); iter != this->end(); iter++){
+			if (iter->device == device) {
+				return *iter;
+			}
+		}
+		throw ItemNotFoundException("no mountpoint found by device " + device);
+	}
+
+	Model_MountTable_Mountpoint& getByFilePath(std::string path) {
+		Model_MountTable_Mountpoint* result = NULL;
+		for (std::list<Model_MountTable_Mountpoint>::iterator iter = this->begin(); iter != this->end(); iter++) {
+			// look for the longest matching mountpoint because "/" matches as well as "/mnt" if filename is "/mnt/foo.iso"
+			if (path.substr(0, iter->mountpoint.size()) == iter->mountpoint && (result == NULL || iter->mountpoint.size() > result->mountpoint.size())) {
+				result = &*iter;
+			}
+		}
+
+		if (result == NULL) {
+			throw ItemNotFoundException("no mountpoint found by path " + path);
+		} else {
+			return *result;
+		}
+	}
+
 	operator std::string() const {
 		std::string result;
 		for (Model_MountTable::const_iterator iter = this->begin(); iter != this->end(); iter++){

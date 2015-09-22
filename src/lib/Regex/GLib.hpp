@@ -28,21 +28,34 @@
 
 #include "../Exception.hpp"
 #include "../Regex.hpp"
+#include "../Helper.hpp"
 
-class Regex_GLib : public Regex {
-	public: std::vector<std::string> match(std::string const& pattern, std::string const& str) {
+class Regex_GLib :
+	public Regex
+{
+	public: std::vector<std::string> match(
+		std::string const& pattern,
+		std::string const& str,
+		char const& escapeCharacter = '\0',
+		char const& replaceCharacter = '\0'
+	)
+	{
 		std::vector<std::string> result;
 		GMatchInfo* mi = NULL;
 		GRegex* gr = g_regex_new(pattern.c_str(), GRegexCompileFlags(0), GRegexMatchFlags(0), NULL);
-		bool success = g_regex_match(gr, str.c_str(), GRegexMatchFlags(0), &mi);
+		std::string escapedStr = escapeCharacter == '\0' ? "" : Helper::str_replace_escape(str, escapeCharacter, replaceCharacter);
+		const gchar* matchStr = escapeCharacter == '\0' ? str.c_str() : escapedStr.c_str();
+		bool success = g_regex_match(gr, matchStr, GRegexMatchFlags(0), &mi);
 		if (!success)
 			throw RegExNotMatchedException("RegEx doesn't match", __FILE__, __LINE__);
 
 		gint match_count = g_match_info_get_match_count(mi);
+		gint offset = 0;
 		for (gint i = 0; i < match_count; i++){
-			gchar* matched_string = g_match_info_fetch(mi, i);
-			result.push_back(std::string(matched_string));
-			delete matched_string;
+			gint start_pos, end_pos;
+			g_match_info_fetch_pos(mi, i, &start_pos, &end_pos);
+
+			result.push_back(start_pos == -1 ? "" : str.substr(start_pos, end_pos - start_pos));
 		}
 
 		g_match_info_free(mi);
@@ -50,11 +63,22 @@ class Regex_GLib : public Regex {
 		return result;
 	}
 
-	public: std::string replace(std::string const& pattern, std::string const& str, std::map<int, std::string> const& newValues) {
+	public: std::string replace(
+		std::string const& pattern,
+		std::string const& str,
+		std::map<int, std::string> const& newValues,
+		char const& escapeCharacter = '\0',
+		char const& replaceCharacter = '\0'
+	)
+	{
 		std::string result = str;
 		GMatchInfo* mi = NULL;
 		GRegex* gr = g_regex_new(pattern.c_str(), GRegexCompileFlags(0), GRegexMatchFlags(0), NULL);
-		bool success = g_regex_match(gr, str.c_str(), GRegexMatchFlags(0), &mi);
+
+		std::string escapedStr = escapeCharacter == '\0' ? "" : Helper::str_replace_escape(str, escapeCharacter, replaceCharacter);
+		const gchar* matchStr = escapeCharacter == '\0' ? str.c_str() : escapedStr.c_str();
+
+		bool success = g_regex_match(gr, matchStr, GRegexMatchFlags(0), &mi);
 		if (!success)
 			throw RegExNotMatchedException("RegEx doesn't match", __FILE__, __LINE__);
 

@@ -21,6 +21,7 @@
 #include <cstdio>
 #include <openssl/md5.h>
 #include <string>
+#include <map>
 #include "Exception.hpp"
 
 # define ASSERT_VOID_CAST static_cast<void>
@@ -101,6 +102,37 @@ class Helper {
 
 	public: static std::string trim(std::string string, std::string const& chars = " \t\n\r") {
 		return rtrim(ltrim(string, chars));
+	}
+
+	public: static std::string str_replace_escape(std::string subject, char const& escapeCharacter, char const& replaceCharacter) {
+		std::map<int, std::string> extractedEscapeSequences;
+
+		size_t pos = 0;
+		while (pos < subject.length() && (pos = subject.find(escapeCharacter, pos)) != -1){
+			subject[pos] = replaceCharacter;
+			subject[pos + 1] = replaceCharacter;
+			pos += 2;
+		}
+
+		return subject;
+	}
+
+	public: static std::string str_escape(std::string subject, char const& escapeCharacter, std::string const& charactersToBeEscaped) {
+		size_t pos = 0;
+		while (pos < subject.length() && (pos = subject.find_first_of(charactersToBeEscaped, pos)) != -1){
+			subject.replace(pos, 1, std::string(1, escapeCharacter) + subject[pos]);
+			pos += 2;
+		}
+		return subject;
+	}
+
+	public: static std::string str_unescape(std::string subject, char const& escapeCharacter) {
+		size_t pos = 0;
+		while (pos < subject.length() && (pos = subject.find_first_of(escapeCharacter, pos)) != -1){
+			subject.replace(pos, 2, subject.substr(pos + 1, 1));
+			pos += 1;
+		}
+		return subject;
 	}
 };
 

@@ -152,6 +152,14 @@ class View_Gtk_Element_List :
 				outputName += Helper::escapeXml(Glib::ustring(" / ") + Helper::escapeXml(Glib::ustring::compose(gettext("partition: %1"), listItem.options.at("_deviceName"))));
 			}
 
+			if (listItem.options.find("iso_path_full") != listItem.options.end()) {
+				outputName += Helper::escapeXml(Glib::ustring(" / ") + gettext("ISO-Image: ") + listItem.options.at("iso_path_full"));
+			}
+
+			if (listItem.options.find("memtest_image_full") != listItem.options.end()) {
+				outputName += Helper::escapeXml(Glib::ustring(" / ") + gettext("Memtest-Image: ") + listItem.options.at("memtest_image_full"));
+			}
+
 			outputName += "</small>";
 		}
 
