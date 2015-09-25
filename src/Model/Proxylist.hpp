@@ -32,52 +32,65 @@ struct Model_Proxylist_Item {
 	std::string numericPathValue;
 	std::string numericPathLabel;
 };
-struct Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public Trait_LoggerAware {
-	std::list<Model_Proxy> trash; //removed proxies
-	std::list<Model_Proxy*> getProxiesByScript(Model_Script const& script) {
-		std::list<Model_Proxy*> result;
+class Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public Trait_LoggerAware
+{
+	public: std::list<Model_Proxy> trash; //removed proxies
+
+	public: std::list<std::shared_ptr<Model_Proxy>> getProxiesByScript(std::shared_ptr<Model_Script> script)
+	{
+		std::list<std::shared_ptr<Model_Proxy>> result;
 		for (auto proxy : *this) {
-			if (proxy->dataSource == &script)
-				result.push_back(&*proxy);
+			if (proxy->dataSource == script)
+				result.push_back(proxy);
 		}
 		return result;
 	}
 
-	std::list<const Model_Proxy*> getProxiesByScript(Model_Script const& script) const {
-		std::list<const Model_Proxy*> result;
+	public: std::list<std::shared_ptr<Model_Proxy>> getProxiesByScript(std::shared_ptr<Model_Script> script) const
+	{
+		std::list<std::shared_ptr<Model_Proxy>> result;
 		for (auto proxy : *this){
-			if (proxy->dataSource == &script)
-				result.push_back(&*proxy);
+			if (proxy->dataSource == script)
+				result.push_back(proxy);
 		}
 		return result;
 	}
 
-	std::list<Model_Rule*> getForeignRules() {
-		std::list<Model_Rule*> result;
+	public: std::list<std::shared_ptr<Model_Rule>> getForeignRules()
+	{
+		std::list<std::shared_ptr<Model_Rule>> result;
 	
 		for (auto proxy : *this) {
-			std::list<Model_Rule*> subResult = proxy->getForeignRules();
+			auto subResult = proxy->getForeignRules();
 			result.splice(result.end(), subResult);
 		}
 	
 		return result;
 	}
 
-	void sync_all(bool deleteInvalidRules = true, bool expand = true, Model_Script* relatedScript = NULL, std::map<std::string, Model_Script*> scriptMap = std::map<std::string, Model_Script*>() ) { //relatedScript = NULL: sync all proxies, otherwise only sync proxies wich target the given Script
+	//relatedScript = NULL: sync all proxies, otherwise only sync proxies wich target the given Script
+	public: void sync_all(
+		bool deleteInvalidRules = true,
+		bool expand = true,
+		std::shared_ptr<Model_Script> relatedScript = nullptr,
+		std::map<std::string, std::shared_ptr<Model_Script>> scriptMap = std::map<std::string, std::shared_ptr<Model_Script>>()
+	) {
 		for (auto proxy : *this) {
-			if (relatedScript == NULL || proxy->dataSource == relatedScript)
+			if (relatedScript == nullptr || proxy->dataSource == relatedScript)
 				proxy->sync(deleteInvalidRules, expand, scriptMap);
 		}	
 	}
- //relatedScript = NULL: sync all proxies, otherwise only sync proxies wich target the given Script
-	void unsync_all() {
+
+	public: void unsync_all()
+	{
 		for (auto proxy : *this) {
 			proxy->unsync();
 		}
 	}
 
-	bool proxyRequired(Model_Script const& script) const {
-		std::list<const Model_Proxy*> plist = this->getProxiesByScript(script);
+	public: bool proxyRequired(std::shared_ptr<Model_Script> script) const
+	{
+		auto plist = this->getProxiesByScript(script);
 		if (plist.size() == 1){
 			return plist.front()->isModified();
 		}
@@ -85,7 +98,8 @@ struct Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public 
 			return true;
 	}
 
-	void deleteAllProxyscriptFiles() {
+	public: void deleteAllProxyscriptFiles()
+	{
 		for (auto proxy : *this) {
 			if (proxy->fileName != "" && proxy->dataSource && proxy->dataSource->fileName != proxy->fileName){
 				proxy->deleteFile();
@@ -93,7 +107,8 @@ struct Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public 
 		}
 	}
 
-	static bool compare_proxies(std::shared_ptr<Model_Proxy> const& a, std::shared_ptr<Model_Proxy> const& b) {
+	public: static bool compare_proxies(std::shared_ptr<Model_Proxy> const& a, std::shared_ptr<Model_Proxy> const& b)
+	{
 		if (a->index != b->index) {
 			return a->index < b->index;
 		} else {
@@ -105,13 +120,14 @@ struct Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public 
 		}
 	}
 
-	void sort() {
+	public: void sort()
+	{
 		std::list<std::shared_ptr<Model_Proxy>>::sort(Model_Proxylist::compare_proxies);
 	}
 
-	void deleteProxy(Model_Proxy* proxyPointer) {
+	public: void deleteProxy(std::shared_ptr<Model_Proxy> proxyPointer) {
 		for (auto proxyIter = this->begin(); proxyIter != this->end(); proxyIter++) {
-			if (proxyIter->get() == proxyPointer){
+			if (*proxyIter == proxyPointer){
 				//if the file must be deleted when saving, move it to trash
 				if (proxyPointer->fileName != "" && proxyPointer->dataSource && proxyPointer->fileName != proxyPointer->dataSource->fileName)
 					this->trash.push_back(*proxyPointer);
@@ -122,7 +138,8 @@ struct Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public 
 		}
 	}
 
-	void clearTrash() {
+	public: void clearTrash()
+	{
 		for (std::list<Model_Proxy>::iterator iter = this->trash.begin(); iter != this->trash.end(); iter++){
 			if (iter->fileName != "") {
 				iter->deleteFile();
@@ -130,7 +147,8 @@ struct Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public 
 		}
 	}
 
-	std::list<Model_Proxylist_Item> generateEntryTitleList() const {
+	public: std::list<Model_Proxylist_Item> generateEntryTitleList() const
+	{
 		std::list<Model_Proxylist_Item> result;
 		int offset = 0;
 		for (auto proxy : *this) {
@@ -142,13 +160,14 @@ struct Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public 
 		return result;
 	}
 
-	std::list<std::string> getToplevelEntryTitles() const {
+	public: std::list<std::string> getToplevelEntryTitles() const
+	{
 		std::list<std::string> result;
 		for (auto proxy : *this) {
 			if (proxy->isExecutable()){
-				for (std::list<Model_Rule>::const_iterator rule_iter = proxy->rules.begin(); rule_iter != proxy->rules.end(); rule_iter++) {
-					if (rule_iter->isVisible && rule_iter->type == Model_Rule::NORMAL) {
-						result.push_back(rule_iter->outputName);
+				for (auto rule : proxy->rules) {
+					if (rule->isVisible && rule->type == Model_Rule::NORMAL) {
+						result.push_back(rule->outputName);
 					}
 				}
 			}
@@ -156,27 +175,38 @@ struct Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public 
 		return result;
 	}
 
-	static std::list<Model_Proxylist_Item> generateEntryTitleList(std::list<Model_Rule> const& parent, std::string const& labelPathPrefix, std::string const& numericPathPrefix, std::string const& numericPathLabelPrefix, int* offset = NULL) {
+	public: static std::list<Model_Proxylist_Item> generateEntryTitleList(
+		std::list<std::shared_ptr<Model_Rule>> const& parent,
+		std::string const& labelPathPrefix,
+		std::string const& numericPathPrefix,
+		std::string const& numericPathLabelPrefix,
+		int* offset = nullptr
+	) {
 		std::list<Model_Proxylist_Item> result;
-		int i = (offset != NULL ? *offset : 0);
-		for (std::list<Model_Rule>::const_iterator rule_iter = parent.begin(); rule_iter != parent.end(); rule_iter++){
-			if (rule_iter->isVisible && (rule_iter->type == Model_Rule::NORMAL || rule_iter->type == Model_Rule::SUBMENU)) {
+		int i = (offset != nullptr ? *offset : 0);
+		for (auto rule : parent){
+			if (rule->isVisible && (rule->type == Model_Rule::NORMAL || rule->type == Model_Rule::SUBMENU)) {
 				std::ostringstream currentNumPath;
 				currentNumPath << numericPathPrefix << i;
 				std::ostringstream currentLabelNumPath;
 				currentLabelNumPath << numericPathLabelPrefix << (i+1);
 
 				bool addedSomething = true;
-				if (rule_iter->type == Model_Rule::SUBMENU) {
-					std::list<Model_Proxylist_Item> subList = Model_Proxylist::generateEntryTitleList(rule_iter->subRules, labelPathPrefix + rule_iter->outputName + ">", currentNumPath.str() + ">", currentLabelNumPath.str() + ">");
+				if (rule->type == Model_Rule::SUBMENU) {
+					std::list<Model_Proxylist_Item> subList = Model_Proxylist::generateEntryTitleList(
+						rule->subRules,
+						labelPathPrefix + rule->outputName + ">",
+						currentNumPath.str() + ">",
+						currentLabelNumPath.str() + ">"
+					);
 					if (subList.size() == 0) {
 						addedSomething = false;
 					}
 					result.splice(result.end(), subList);
 				} else {
 					Model_Proxylist_Item newItem;
-					newItem.labelPathLabel = labelPathPrefix + rule_iter->outputName;
-					newItem.labelPathValue = labelPathPrefix + rule_iter->outputName;
+					newItem.labelPathLabel = labelPathPrefix + rule->outputName;
+					newItem.labelPathValue = labelPathPrefix + rule->outputName;
 					result.push_back(newItem);
 				}
 				if (addedSomething) {
@@ -190,13 +220,17 @@ struct Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public 
 		return result;
 	}
 
-	Model_Proxy* getProxyByRule(Model_Rule* rule, std::list<Model_Rule> const& list, Model_Proxy& parentProxy) {
-		for (std::list<Model_Rule>::const_iterator rule_iter = list.begin(); rule_iter != list.end(); rule_iter++){
-			if (&*rule_iter == rule)
-				return &parentProxy;
+	public: std::shared_ptr<Model_Proxy> getProxyByRule(
+		std::shared_ptr<Model_Rule> rule,
+		std::list<std::shared_ptr<Model_Rule>> const& list,
+		std::shared_ptr<Model_Proxy> parentProxy
+	) {
+		for (auto loop_rule : list) {
+			if (loop_rule == rule)
+				return parentProxy;
 			else {
 				try {
-					return this->getProxyByRule(rule, rule_iter->subRules, parentProxy);
+					return this->getProxyByRule(rule, loop_rule->subRules, parentProxy);
 				} catch (ItemNotFoundException const& e) {
 					// do nothing
 				}
@@ -205,10 +239,10 @@ struct Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public 
 		throw ItemNotFoundException("proxy by rule not found", __FILE__, __LINE__);
 	}
 
-	Model_Proxy* getProxyByRule(Model_Rule* rule) {
+	public: std::shared_ptr<Model_Proxy> getProxyByRule(std::shared_ptr<Model_Rule> rule) {
 		for (auto proxy : *this) {
 			try {
-				return this->getProxyByRule(rule, proxy->rules, *proxy);
+				return this->getProxyByRule(rule, proxy->rules, proxy);
 			} catch (ItemNotFoundException const& e) {
 				// do nothing
 			}
@@ -216,12 +250,16 @@ struct Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public 
 		throw ItemNotFoundException("proxy by rule not found", __FILE__, __LINE__);
 	}
 
-	std::list<Model_Rule>::iterator moveRuleToNewProxy(Model_Rule& rule, int direction, Model_Script* dataSource = nullptr) {
-		auto currentProxy = this->getProxyByRule(&rule);
+	public: std::list<std::shared_ptr<Model_Rule>>::iterator moveRuleToNewProxy(
+		std::shared_ptr<Model_Rule> rule,
+		int direction,
+		std::shared_ptr<Model_Script> dataSource = nullptr
+	) {
+		auto currentProxy = this->getProxyByRule(rule);
 		auto proxyIter = this->begin();
 
 		for (auto proxy : *this) {
-			if (proxy.get() == currentProxy) {
+			if (proxy == currentProxy) {
 				break;
 			}
 			proxyIter++;
@@ -233,10 +271,13 @@ struct Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public 
 		if (dataSource == nullptr) {
 			dataSource = currentProxy->dataSource;
 		}
-		auto newProxy = *this->insert(proxyIter, std::make_shared<Model_Proxy>(*dataSource, false));
+		auto newProxy = *this->insert(proxyIter, std::make_shared<Model_Proxy>(dataSource, false));
 		newProxy->removeEquivalentRules(rule);
-		auto movedRule = newProxy->rules.insert(direction == -1 ? newProxy->rules.end() : newProxy->rules.begin(), rule);
-		rule.setVisibility(false);
+		auto movedRule = newProxy->rules.insert(
+			direction == -1 ? newProxy->rules.end() : newProxy->rules.begin(),
+			std::make_shared<Model_Rule>(*rule)
+		);
+		rule->setVisibility(false);
 	
 		if (!currentProxy->hasVisibleRules()) {
 			this->deleteProxy(currentProxy);
@@ -244,17 +285,20 @@ struct Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public 
 		return movedRule;
 	}
 
-	std::list<Model_Rule>::iterator getNextVisibleRule(Model_Rule* base, int direction) {
-		Model_Proxy* proxy = this->getProxyByRule(base);
-		std::list<Model_Rule>::iterator iter = proxy->getListIterator(*base, proxy->getRuleList(proxy->getParentRule(base, NULL)));
+	public: std::list<std::shared_ptr<Model_Rule>>::iterator getNextVisibleRule(std::shared_ptr<Model_Rule> base, int direction) {
+		auto proxy = this->getProxyByRule(base);
+		auto iter = proxy->getListIterator(base, proxy->getRuleList(proxy->getParentRule(base, nullptr)));
 		return this->getNextVisibleRule(iter, direction);
 	}
 
-	std::list<Model_Rule>::iterator getNextVisibleRule(std::list<Model_Rule>::iterator base, int direction) {
-		auto proxyIter = this->getIter(this->getProxyByRule(&*base));
+	public: std::list<std::shared_ptr<Model_Rule>>::iterator getNextVisibleRule(
+		std::list<std::shared_ptr<Model_Rule>>::iterator base,
+		int direction
+	) {
+		auto proxyIter = this->getIter(this->getProxyByRule(*base));
 
 		bool hasParent = false;
-		if (proxyIter->get()->getParentRule(&*base)) {
+		if (proxyIter->get()->getParentRule(*base)) {
 			hasParent = true;
 		}
 
@@ -281,7 +325,7 @@ struct Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public 
 					base = proxyIter->get()->rules.end();
 					base--;
 				}
-				if (base->isVisible) {
+				if (base->get()->isVisible) {
 					return base;
 				}
 			}
@@ -289,10 +333,10 @@ struct Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public 
 		throw NoMoveTargetException("next visible rule not found", __FILE__, __LINE__);
 	}
 
-	std::list<std::shared_ptr<Model_Proxy>>::iterator getIter(Model_Proxy const* proxy) {
+	std::list<std::shared_ptr<Model_Proxy>>::iterator getIter(std::shared_ptr<Model_Proxy> proxy) {
 		auto iter = this->begin();
 		while (iter != this->end()) {
-			if (iter->get() == proxy) {
+			if (*iter == proxy) {
 				break;
 			}
 			iter++;
@@ -300,44 +344,44 @@ struct Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public 
 		return iter;
 	}
 
-	void splitProxy(Model_Proxy const* proxyToSplit, Model_Rule const* firstRuleOfPart2, int direction) {
+	void splitProxy(std::shared_ptr<Model_Proxy> proxyToSplit, std::shared_ptr<Model_Rule> firstRuleOfPart2, int direction) {
 		auto iter = this->getIter(proxyToSplit);
 		auto sourceProxy = *iter;
 		if (direction == 1) {
 			iter++;
 		}
-		auto newProxy = *this->insert(iter, std::make_shared<Model_Proxy>(*sourceProxy->dataSource, false));
+		auto newProxy = *this->insert(iter, std::make_shared<Model_Proxy>(sourceProxy->dataSource, false));
 	
 		bool isSecondPart = false;
 		if (direction == 1) {
-			for (std::list<Model_Rule>::iterator ruleIter = sourceProxy->rules.begin(); ruleIter != sourceProxy->rules.end(); ruleIter++) {
-				if (&*ruleIter == firstRuleOfPart2) {
+			for (auto ruleIter = sourceProxy->rules.begin(); ruleIter != sourceProxy->rules.end(); ruleIter++) {
+				if (*ruleIter == firstRuleOfPart2) {
 					isSecondPart = true;
 				}
 				if (isSecondPart) {
 					newProxy->removeEquivalentRules(*ruleIter);
 					newProxy->rules.push_back(*ruleIter);
-					ruleIter->isVisible = false;
+					ruleIter->get()->isVisible = false;
 				}
 			}
 		} else {
-			for (std::list<Model_Rule>::reverse_iterator ruleIter = sourceProxy->rules.rbegin(); ruleIter != sourceProxy->rules.rend(); ruleIter++) {
-				if (&*ruleIter == firstRuleOfPart2) {
+			for (auto ruleIter = sourceProxy->rules.rbegin(); ruleIter != sourceProxy->rules.rend(); ruleIter++) {
+				if (*ruleIter == firstRuleOfPart2) {
 					isSecondPart = true;
 				}
 				if (isSecondPart) {
 					newProxy->removeEquivalentRules(*ruleIter);
 					newProxy->rules.push_front(*ruleIter);
-					ruleIter->isVisible = false;
+					ruleIter->get()->isVisible = false;
 				}
 			}
 		}
 	}
 
-	Model_Rule* getVisibleRuleForEntry(Model_Entry const& entry) {
+	std::shared_ptr<Model_Rule> getVisibleRuleForEntry(std::shared_ptr<Model_Entry> entry) {
 		for (auto proxy : *this) {
 			if (proxy->isExecutable()) {
-				Model_Rule* result = proxy->getVisibleRuleForEntry(entry);
+				std::shared_ptr<Model_Rule> result = proxy->getVisibleRuleForEntry(entry);
 				if (result) {
 					return result;
 				}
@@ -361,9 +405,9 @@ struct Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public 
 		return false;
 	}
 
-	bool hasProxy(Model_Proxy* proxy) {
+	bool hasProxy(std::shared_ptr<Model_Proxy> proxy) {
 		for (auto proxy_loop : *this) {
-			if (proxy_loop.get() == proxy) {
+			if (proxy_loop == proxy) {
 				return true;
 			}
 		}

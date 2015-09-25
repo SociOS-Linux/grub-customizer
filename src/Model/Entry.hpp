@@ -21,13 +21,15 @@
 #include <cstdio>
 #include <string>
 #include <list>
+#include <memory>
 #include "../lib/Trait/LoggerAware.hpp"
 #include "../lib/Helper.hpp"
 #include "../lib/ArrayStructure.hpp"
 #include "../lib/Type.hpp"
 
-struct Model_Entry_Row {
-	Model_Entry_Row(FILE* sourceFile) : eof(false), is_loaded(true)
+class Model_Entry_Row
+{
+	public: Model_Entry_Row(FILE* sourceFile) : eof(false), is_loaded(true)
 	{
 		this->eof = true; //will be set to false on the first loop run
 		int c;
@@ -42,38 +44,42 @@ struct Model_Entry_Row {
 		}
 	}
 
-	Model_Entry_Row() : eof(false), is_loaded(true)
+	public: Model_Entry_Row() : eof(false), is_loaded(true)
 	{}
 
-	std::string text;
-	bool eof;
-	bool is_loaded;
-	operator bool() {
+	public: std::string text;
+	public: bool eof;
+	public: bool is_loaded;
+	public: operator bool()
+	{
 		return !eof && is_loaded;
 	}
 };
 
-struct Model_Entry : public Trait_LoggerAware, public Entry {
-	enum EntryType {
+class Model_Entry : public Trait_LoggerAware, public Entry
+{
+	public: enum EntryType {
 		MENUENTRY,
 		SUBMENU,
 		SCRIPT_ROOT,
 		PLAINTEXT
-	} type;
-	bool isValid, isModified;
-	std::string name, extension, content;
-	char quote;
-	std::list<Model_Entry> subEntries;
+	};
 
-	Model_Entry()
+	public: EntryType type;
+	public: bool isValid, isModified;
+	public: std::string name, extension, content;
+	public: char quote;
+	public: std::list<std::shared_ptr<Model_Entry>> subEntries;
+
+	public: Model_Entry()
 		: isValid(false), isModified(false), quote('\''), type(MENUENTRY)
 	{}
 
-	Model_Entry(std::string name, std::string extension, std::string content = "", EntryType type = MENUENTRY)
+	public: Model_Entry(std::string name, std::string extension, std::string content = "", EntryType type = MENUENTRY)
 		: name(name), extension(extension), content(content), isValid(true), type(type), isModified(false), quote('\'')
 	{}
 	
-	Model_Entry(FILE* sourceFile, Model_Entry_Row firstRow = Model_Entry_Row(), std::shared_ptr<Logger> logger = nullptr, std::string* plaintextBuffer = NULL)
+	public: Model_Entry(FILE* sourceFile, Model_Entry_Row firstRow = Model_Entry_Row(), std::shared_ptr<Logger> logger = nullptr, std::string* plaintextBuffer = NULL)
 		: isValid(false), type(MENUENTRY), quote('\''), isModified(false)
 	{
 		if (logger) {
@@ -98,8 +104,8 @@ struct Model_Entry : public Trait_LoggerAware, public Entry {
 		}
 	}
 	
-private:
-	void readSubmenu(FILE* sourceFile, Model_Entry_Row firstRow) {
+	private: void readSubmenu(FILE* sourceFile, Model_Entry_Row firstRow)
+	{
 		std::string rowText = Helper::ltrim(firstRow.text);
 		int endOfEntryName = rowText.find('"', 10);
 		if (endOfEntryName == -1)
@@ -115,7 +121,7 @@ private:
 			std::string rowText = Helper::ltrim(row.text);
 	
 			if (rowText.substr(0, 10) == "menuentry " || rowText.substr(0, 8) == "submenu "){
-				this->subEntries.push_back(Model_Entry(sourceFile, row));
+				this->subEntries.push_back(std::make_shared<Model_Entry>(sourceFile, row));
 			} else if (Helper::trim(rowText) == "}") {
 				this->isValid = true;
 				break; //read only one submenu
@@ -123,7 +129,8 @@ private:
 		}
 	}
 
-	void readMenuEntry(FILE* sourceFile, Model_Entry_Row firstRow) {
+	private: void readMenuEntry(FILE* sourceFile, Model_Entry_Row firstRow)
+	{
 		std::string rowText = Helper::ltrim(firstRow.text);
 		char quote = '"';
 		int endOfEntryName = rowText.find('"', 12);
@@ -162,16 +169,18 @@ private:
 		}
 	}
 
-public:
-	std::list<Model_Entry>& getSubEntries() {
+	public: std::list<std::shared_ptr<Model_Entry>>& getSubEntries()
+	{
 		return this->subEntries;
 	}
 
-	operator bool() const {
+	public: operator bool() const
+	{
 		return isValid;
 	}
 
-	operator ArrayStructure() const {
+	public: operator ArrayStructure() const
+	{
 		ArrayStructure result;
 		result["type"] = this->type;
 		result["isValid"] = this->isValid;
@@ -183,32 +192,12 @@ public:
 		result["subEntries"].isArray = true;
 		result["rulepointer"] = this;
 		int i = 0;
-		for (std::list<Model_Entry>::const_iterator iter = this->subEntries.begin(); iter != this->subEntries.end(); iter++) {
-			result["subEntries"][i] = ArrayStructure(*iter);
+		for (auto entry : this->subEntries) {
+			result["subEntries"][i] = ArrayStructure(*entry);
 			i++;
 		}
 
 		return result;
-	}
-
-	static Model_Entry& fromPtr(Entry* entry) {
-		if (entry != NULL) {
-			try {
-				return dynamic_cast<Model_Entry&>(*entry);
-			} catch (std::bad_cast const& e) {
-			}
-		}
-		throw BadCastException("Model_Entry::fromPtr failed");
-	}
-
-	static Model_Entry const& fromPtr(Entry const* entry) {
-		if (entry != NULL) {
-			try {
-				return dynamic_cast<Model_Entry const&>(*entry);
-			} catch (std::bad_cast const& e) {
-			}
-		}
-		throw BadCastException("Model_Entry::fromPtr [const] failed");
 	}
 };
 

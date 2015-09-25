@@ -439,11 +439,11 @@ class MainController :
 	{
 	}
 
-	public: void renameEntry(Model_Rule* rule, std::string const& newName)
+	public: void renameEntry(std::shared_ptr<Model_Rule> rule, std::string const& newName)
 	{
 		if (rule->type != Model_Rule::PLAINTEXT) {
 
-			std::string currentRulePath = this->grublistCfg->getRulePath(*rule);
+			std::string currentRulePath = this->grublistCfg->getRulePath(rule);
 			std::string currentDefaultRulePath = this->settings->getValue("GRUB_DEFAULT");
 			bool updateDefault = this->ruleAffectsCurrentDefaultOs(rule, currentRulePath, currentDefaultRulePath);
 
@@ -453,12 +453,12 @@ class MainController :
 				this->updateCurrentDefaultOs(rule, currentRulePath, currentDefaultRulePath);
 			}
 
-			if (rule->dataSource && this->grublistCfg->repository.getScriptByEntry(*rule->dataSource)->isCustomScript) {
+			if (rule->dataSource && this->grublistCfg->repository.getScriptByEntry(rule->dataSource)->isCustomScript) {
 				rule->dataSource->name = newName;
 			}
 
 			this->applicationObject->onListModelChange.exec();
-			this->view->selectRule(rule);
+			this->view->selectRule(rule.get());
 		}
 	}
 
@@ -592,18 +592,18 @@ class MainController :
 				this->view->showPlaintextRemoveWarning();
 			} else {
 				std::list<Entry*> entriesOfRemovedRules;
-				std::map<Model_Proxy*, Nothing> emptyProxies;
+				std::map<std::shared_ptr<Model_Proxy>, Nothing> emptyProxies;
 				for (std::list<Rule*>::iterator iter = rules.begin(); iter != rules.end(); iter++) {
-					Model_Rule* rule = &Model_Rule::fromPtr(*iter);
+					std::shared_ptr<Model_Rule> rule = this->grublistCfg->findRule(*iter);
 					rule->setVisibility(false);
-					entriesOfRemovedRules.push_back(rule->dataSource);
+					entriesOfRemovedRules.push_back(rule->dataSource.get());
 					if (!this->grublistCfg->proxies.getProxyByRule(rule)->hasVisibleRules()) {
 						emptyProxies[this->grublistCfg->proxies.getProxyByRule(rule)] = Nothing();
 					}
 				}
 
-				for (std::map<Model_Proxy*, Nothing>::iterator iter = emptyProxies.begin(); iter != emptyProxies.end(); iter++) {
-					this->grublistCfg->proxies.deleteProxy(iter->first);
+				for (auto emptyProxy : emptyProxies) {
+					this->grublistCfg->proxies.deleteProxy(emptyProxy.first);
 					this->log("proxy removed", Logger::INFO);
 				}
 
@@ -622,7 +622,7 @@ class MainController :
 	{
 		this->logActionBegin("rename-rule");
 		try {
-			Model_Rule* entry2 = &Model_Rule::fromPtr(entry);
+			auto entry2 = this->grublistCfg->findRule(entry);
 			std::string oldName = entry2->outputName;
 			if (newText == ""){
 				this->view->showErrorMessage(gettext("Name the Entry"));
@@ -649,20 +649,20 @@ class MainController :
 				if (stickyPlaceholders) {
 					rules = this->populateSelection(rules);
 					rules = this->grublistCfg->getNormalizedRuleOrder(rules);
-					distance = this->countRulesUntilNextRealRule(&Model_Rule::fromPtr(direction == -1 ? rules.front() : rules.back()), direction);
+					distance = this->countRulesUntilNextRealRule(this->grublistCfg->findRule(direction == -1 ? rules.front() : rules.back()), direction);
 				}
 
 				std::list<Rule*> movedRules;
 
 				for (int j = 0; j < distance; j++) { // move the range multiple times
 					int ruleCount = rules.size();
-					Model_Rule* rulePtr = &Model_Rule::fromPtr(direction == -1 ? rules.front() : rules.back());
+					auto rulePtr = this->grublistCfg->findRule(direction == -1 ? rules.front() : rules.back());
 					for (int i = 0; i < ruleCount; i++) { // move multiple rules
-						std::string currentRulePath = this->grublistCfg->getRulePath(*rulePtr);
+						std::string currentRulePath = this->grublistCfg->getRulePath(rulePtr);
 						std::string currentDefaultRulePath = this->settings->getValue("GRUB_DEFAULT");
 						bool updateDefault = this->ruleAffectsCurrentDefaultOs(rulePtr, currentRulePath, currentDefaultRulePath);
 
-						rulePtr = &this->grublistCfg->moveRule(rulePtr, direction);
+						rulePtr = this->grublistCfg->moveRule(rulePtr, direction);
 
 						if (updateDefault) {
 							this->updateCurrentDefaultOs(rulePtr, currentRulePath, currentDefaultRulePath);
@@ -672,28 +672,28 @@ class MainController :
 							bool isEndOfList = false;
 							bool targetFound = false;
 							try {
-								rulePtr = &*this->grublistCfg->proxies.getNextVisibleRule(rulePtr, -direction);
+								rulePtr = *this->grublistCfg->proxies.getNextVisibleRule(rulePtr, -direction);
 							} catch (NoMoveTargetException const& e) {
 								isEndOfList = true;
 								rulePtr = this->grublistCfg->proxies.getProxyByRule(rulePtr)->getParentRule(rulePtr);
 							}
 							if (!isEndOfList && rulePtr->type == Model_Rule::SUBMENU) {
-								rulePtr = direction == -1 ? &rulePtr->subRules.front() : &rulePtr->subRules.back();
+								rulePtr = direction == -1 ? rulePtr->subRules.front() : rulePtr->subRules.back();
 								if (rulePtr->isVisible) {
 									targetFound = true;
 								}
 							}
 
 							if (!targetFound) {
-								rulePtr = &*this->grublistCfg->proxies.getNextVisibleRule(rulePtr, -direction);
+								rulePtr = *this->grublistCfg->proxies.getNextVisibleRule(rulePtr, -direction);
 							}
 						}
 					}
 
 					movedRules.clear();
-					movedRules.push_back(rulePtr);
+					movedRules.push_back(rulePtr.get());
 					for (int i = 1; i < ruleCount; i++) {
-						movedRules.push_back(&*this->grublistCfg->proxies.getNextVisibleRule(&Model_Rule::fromPtr(movedRules.back()), direction));
+						movedRules.push_back(this->grublistCfg->proxies.getNextVisibleRule(this->grublistCfg->findRule(movedRules.back()), direction)->get());
 					}
 					movedRules = this->grublistCfg->getNormalizedRuleOrder(movedRules);
 
@@ -720,12 +720,12 @@ class MainController :
 	{
 		this->logActionBegin("create-submenu");
 		try {
-			Model_Rule* firstRule = &Model_Rule::fromPtr(childItems.front());
-			Model_Rule* newItem = this->grublistCfg->createSubmenu(firstRule);
+			auto firstRule = this->grublistCfg->findRule(childItems.front());
+			auto newItem = this->grublistCfg->createSubmenu(firstRule);
 			this->applicationObject->onListModelChange.exec();
 			this->moveAction(childItems, -1);
 			this->threadHelper->runDelayed(
-				std::bind(std::mem_fn(&MainController::selectRuleAction), this, newItem, true),
+				std::bind(std::mem_fn(&MainController::selectRuleAction), this, newItem.get(), true),
 				10
 			);
 		} catch (Exception const& e) {
@@ -738,11 +738,11 @@ class MainController :
 	{
 		this->logActionBegin("remove-submenu");
 		try {
-			Model_Rule* firstItem = this->grublistCfg->splitSubmenu(&Model_Rule::fromPtr(childItems.front()));
+			auto firstItem = this->grublistCfg->splitSubmenu(this->grublistCfg->findRule(childItems.front()));
 			std::list<Rule*> movedRules;
-			movedRules.push_back(firstItem);
+			movedRules.push_back(firstItem.get());
 			for (int i = 1; i < childItems.size(); i++) {
-				movedRules.push_back(&*this->grublistCfg->proxies.getNextVisibleRule(&Model_Rule::fromPtr(movedRules.back()), 1));
+				movedRules.push_back(this->grublistCfg->proxies.getNextVisibleRule(this->grublistCfg->findRule(movedRules.back()), 1)->get());
 			}
 
 			this->moveAction(movedRules, -1);
@@ -910,9 +910,9 @@ class MainController :
 		try {
 			std::list<Rule*> addedRules;
 			for (std::list<Rule*>::iterator iter = entries.begin(); iter != entries.end(); iter++) {
-				Model_Entry* entry = Model_Rule::fromPtr(*iter).dataSource;
+				auto entry = this->grublistCfg->findRule(*iter)->dataSource;
 				assert(entry != NULL);
-				addedRules.push_back(this->grublistCfg->addEntry(*entry, Model_Rule::fromPtr(*iter).type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER));
+				addedRules.push_back(this->grublistCfg->addEntry(entry, this->grublistCfg->findRule(*iter)->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER).get());
 			}
 
 			this->applicationObject->onListModelChange.exec();
@@ -1007,7 +1007,7 @@ class MainController :
 	{
 		this->logActionBegin("entry-state-toggled");
 		try {
-			Model_Rule::fromPtr(entry).setVisibility(state);
+			this->grublistCfg->findRule(entry)->setVisibility(state);
 			this->applicationObject->onListModelChange.exec();
 		} catch (Exception const& e) {
 			this->applicationObject->onError.exec(e);
@@ -1028,39 +1028,39 @@ class MainController :
 		this->logActionEnd();
 	}
 
-	private: void appendRuleToView(Model_Rule& rule, Model_Rule* parentRule = NULL)
+	private: void appendRuleToView(std::shared_ptr<Model_Rule> rule, std::shared_ptr<Model_Rule> parentRule = nullptr)
 	{
-		bool is_other_entries_ph = rule.type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER;
-		bool is_plaintext = rule.dataSource && rule.dataSource->type == Model_Entry::PLAINTEXT;
-		bool is_submenu = rule.type == Model_Rule::SUBMENU;
+		bool is_other_entries_ph = rule->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER;
+		bool is_plaintext = rule->dataSource && rule->dataSource->type == Model_Entry::PLAINTEXT;
+		bool is_submenu = rule->type == Model_Rule::SUBMENU;
 
-		if (rule.dataSource || is_submenu){
-			std::string name = this->entryNameMapper->map(rule.dataSource, rule.outputName, true);
+		if (rule->dataSource || is_submenu){
+			std::string name = this->entryNameMapper->map(rule->dataSource, rule->outputName, true);
 
-			bool isSubmenu = rule.type == Model_Rule::SUBMENU;
+			bool isSubmenu = rule->type == Model_Rule::SUBMENU;
 			std::string scriptName = "", defaultName = "";
-			if (rule.dataSource) {
-				Model_Script* script = this->grublistCfg->repository.getScriptByEntry(*rule.dataSource);
-				assert(script != NULL);
+			if (rule->dataSource) {
+				auto script = this->grublistCfg->repository.getScriptByEntry(rule->dataSource);
+				assert(script != nullptr);
 				scriptName = script->name;
 				if (!is_other_entries_ph && !is_plaintext) {
-					defaultName = rule.dataSource->name;
+					defaultName = rule->dataSource->name;
 				}
 			}
-			bool isEditable = rule.type == Model_Rule::NORMAL || rule.type == Model_Rule::PLAINTEXT;
-			bool isModified = rule.dataSource && rule.dataSource->isModified;
+			bool isEditable = rule->type == Model_Rule::NORMAL || rule->type == Model_Rule::PLAINTEXT;
+			bool isModified = rule->dataSource && rule->dataSource->isModified;
 
 			// parse content to show additional informations
 			std::map<std::string, std::string> options;
-			if (rule.dataSource) {
-				options = Controller_Helper_DeviceInfo::fetch(rule.dataSource->content, *this->contentParserFactory, *deviceDataList);
+			if (rule->dataSource) {
+				options = Controller_Helper_DeviceInfo::fetch(rule->dataSource->content, *this->contentParserFactory, *deviceDataList);
 			}
 
-			Model_Proxy* proxy = this->grublistCfg->proxies.getProxyByRule(&rule);
+			auto proxy = this->grublistCfg->proxies.getProxyByRule(rule);
 
 			View_Model_ListItem<Rule, Proxy> listItem;
 			listItem.name = name;
-			listItem.entryPtr = &rule;
+			listItem.entryPtr = rule.get();
 			listItem.is_placeholder = is_other_entries_ph || is_plaintext;
 			listItem.is_submenu = isSubmenu;
 			listItem.scriptName = scriptName;
@@ -1068,14 +1068,14 @@ class MainController :
 			listItem.isEditable = isEditable;
 			listItem.isModified = isModified;
 			listItem.options = options;
-			listItem.isVisible = rule.isVisible;
-			listItem.parentEntry = parentRule;
-			listItem.parentScript = proxy;
+			listItem.isVisible = rule->isVisible;
+			listItem.parentEntry = parentRule.get();
+			listItem.parentScript = proxy.get();
 			this->view->appendEntry(listItem);
 
-			if (rule.type == Model_Rule::SUBMENU) {
-				for (std::list<Model_Rule>::iterator subruleIter = rule.subRules.begin(); subruleIter != rule.subRules.end(); subruleIter++) {
-					this->appendRuleToView(*subruleIter, &rule);
+			if (rule->type == Model_Rule::SUBMENU) {
+				for (auto subRule : rule->subRules) {
+					this->appendRuleToView(subRule, rule);
 				}
 			}
 		}
@@ -1083,8 +1083,8 @@ class MainController :
 
 	private: bool listHasPlaintextRules(std::list<Rule*> const& rules)
 	{
-		for (std::list<Rule*>::const_iterator iter = rules.begin(); iter != rules.end(); iter++) {
-			const Model_Rule* rule = &Model_Rule::fromPtr(*iter);
+		for (auto rulePtr : rules) {
+			auto rule = this->grublistCfg->findRule(rulePtr);
 			if (rule->type == Model_Rule::PLAINTEXT) {
 				return true;
 			}
@@ -1097,14 +1097,14 @@ class MainController :
 		int visibleSystemRulesCount = 0;
 		int selectedSystemRulesCount = 0;
 
-		Model_Script* linuxScript = NULL;
+		std::shared_ptr<Model_Script> linuxScript = nullptr;
 
 		// count selected entries related to linux script
-		for (std::list<Rule*>::const_iterator iter = rules.begin(); iter != rules.end(); iter++) {
-			const Model_Rule* rule = &Model_Rule::fromPtr(*iter);
+		for (auto rulePtr : rules) {
+			auto rule = this->grublistCfg->findRule(rulePtr);
 			if (rule->type == Model_Rule::NORMAL) {
-				assert(rule->dataSource != NULL);
-				Model_Script* script = this->grublistCfg->repository.getScriptByEntry(*rule->dataSource);
+				assert(rule->dataSource != nullptr);
+				auto script = this->grublistCfg->repository.getScriptByEntry(rule->dataSource);
 				if (script->name == "linux") {
 					selectedSystemRulesCount++;
 
@@ -1114,12 +1114,12 @@ class MainController :
 		}
 
 		// count all entries and compare counters if there are linux entries
-		if (linuxScript != NULL) {
+		if (linuxScript != nullptr) {
 			// check whether it's the last remaining entry
-			std::list<Model_Proxy*> proxies = this->grublistCfg->proxies.getProxiesByScript(*linuxScript);
+			auto proxies = this->grublistCfg->proxies.getProxiesByScript(linuxScript);
 			bool visibleRulesFound = false;
-			for (std::list<Model_Proxy*>::iterator proxyIter = proxies.begin(); proxyIter != proxies.end(); proxyIter++) {
-				visibleSystemRulesCount += (*proxyIter)->getVisibleRulesByType(Model_Rule::NORMAL).size();
+			for (auto proxy : proxies) {
+				visibleSystemRulesCount += proxy->getVisibleRulesByType(Model_Rule::NORMAL).size();
 			}
 
 			if (selectedSystemRulesCount == visibleSystemRulesCount) {
@@ -1133,42 +1133,42 @@ class MainController :
 	private: std::list<Rule*> populateSelection(std::list<Rule*> rules)
 	{
 		std::list<Rule*> result;
-		for (std::list<Rule*>::iterator ruleIter = rules.begin(); ruleIter != rules.end(); ruleIter++) {
-			this->populateSelection(result, &Model_Rule::fromPtr(*ruleIter), -1, *ruleIter == rules.front());
-			result.push_back(*ruleIter);
-			this->populateSelection(result, &Model_Rule::fromPtr(*ruleIter), 1, *ruleIter == rules.back());
+		for (auto rule : rules) {
+			this->populateSelection(result, this->grublistCfg->findRule(rule), -1, rule == rules.front());
+			result.push_back(rule);
+			this->populateSelection(result, this->grublistCfg->findRule(rule), 1, rule == rules.back());
 		}
 		// remove duplicates
 		std::list<Rule*> result2;
 		std::map<Rule*, Rule*> duplicateIndex; // key: pointer to the rule, value: always NULL
 		for (std::list<Rule*>::iterator ruleIter = result.begin(); ruleIter != result.end(); ruleIter++) {
 			if (duplicateIndex.find(*ruleIter) == duplicateIndex.end()) {
-				duplicateIndex[*ruleIter] = NULL;
+				duplicateIndex[*ruleIter] = nullptr;
 				result2.push_back(*ruleIter);
 			}
 		}
 		return result2;
 	}
 
-	private: void populateSelection(std::list<Rule*>& rules, Model_Rule* baseRule, int direction, bool checkScript)
+	private: void populateSelection(std::list<Rule*>& rules, std::shared_ptr<Model_Rule> baseRule, int direction, bool checkScript)
 	{
 		assert(direction == 1 || direction == -1);
 		bool placeholderFound = false;
-		Model_Rule* currentRule = baseRule;
+		auto currentRule = baseRule;
 		do {
 			try {
-				currentRule = &*this->grublistCfg->proxies.getNextVisibleRule(currentRule, direction);
-				if (currentRule->dataSource == NULL || baseRule->dataSource == NULL) {
+				currentRule = *this->grublistCfg->proxies.getNextVisibleRule(currentRule, direction);
+				if (currentRule->dataSource == nullptr || baseRule->dataSource == nullptr) {
 					break;
 				}
-				Model_Script* scriptCurrent = this->grublistCfg->repository.getScriptByEntry(*currentRule->dataSource);
-				Model_Script* scriptBase    = this->grublistCfg->repository.getScriptByEntry(*baseRule->dataSource);
+				auto scriptCurrent = this->grublistCfg->repository.getScriptByEntry(currentRule->dataSource);
+				auto scriptBase    = this->grublistCfg->repository.getScriptByEntry(baseRule->dataSource);
 
 				if ((scriptCurrent == scriptBase || !checkScript) && (currentRule->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER || currentRule->type == Model_Rule::PLAINTEXT)) {
 					if (direction == 1) {
-						rules.push_back(currentRule);
+						rules.push_back(currentRule.get());
 					} else {
-						rules.push_front(currentRule);
+						rules.push_front(currentRule.get());
 					}
 					placeholderFound = true;
 				} else {
@@ -1180,14 +1180,14 @@ class MainController :
 		} while (placeholderFound);
 	}
 
-	private: int countRulesUntilNextRealRule(Model_Rule* baseRule, int direction)
+	private: int countRulesUntilNextRealRule(std::shared_ptr<Model_Rule> baseRule, int direction)
 	{
 		int result = 1;
 		bool placeholderFound = false;
-		Model_Rule* currentRule = baseRule;
+		auto currentRule = baseRule;
 		do {
 			try {
-				currentRule = &*this->grublistCfg->proxies.getNextVisibleRule(currentRule, direction);
+				currentRule = *this->grublistCfg->proxies.getNextVisibleRule(currentRule, direction);
 
 				if (currentRule->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER || currentRule->type == Model_Rule::PLAINTEXT) {
 					result++;
@@ -1205,17 +1205,17 @@ class MainController :
 	private: std::list<Rule*> removePlaceholdersFromSelection(std::list<Rule*> rules)
 	{
 		std::list<Rule*> result;
-		for (std::list<Rule*>::iterator ruleIter = rules.begin(); ruleIter != rules.end(); ruleIter++) {
-			Model_Rule* rule = &Model_Rule::fromPtr(*ruleIter);
+		for (auto rulePtr : rules) {
+			auto rule = this->grublistCfg->findRule(rulePtr);
 			if (!(rule->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER || rule->type == Model_Rule::PLAINTEXT)) {
-				result.push_back(rule);
+				result.push_back(rule.get());
 			}
 		}
 		return result;
 	}
 
 	private: bool ruleAffectsCurrentDefaultOs(
-		Model_Rule* rule,
+		std::shared_ptr<Model_Rule> rule,
 		std::string const& currentRulePath,
 		std::string const& currentDefaultRulePath
 	)
@@ -1234,8 +1234,8 @@ class MainController :
 		return result;
 	}
 
-	private: void updateCurrentDefaultOs(Model_Rule* rule, std::string const& oldRulePath, std::string oldDefaultRulePath) {
-		oldDefaultRulePath.replace(0, oldRulePath.length(), this->grublistCfg->getRulePath(*rule));
+	private: void updateCurrentDefaultOs(std::shared_ptr<Model_Rule> rule, std::string const& oldRulePath, std::string oldDefaultRulePath) {
+		oldDefaultRulePath.replace(0, oldRulePath.length(), this->grublistCfg->getRulePath(rule));
 		this->settings->setValue("GRUB_DEFAULT", oldDefaultRulePath);
 	}
 };

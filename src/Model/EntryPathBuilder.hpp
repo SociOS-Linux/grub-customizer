@@ -20,15 +20,16 @@
 #define ENTRY_PATH_BUILDER_INCLUDED
 #include <string>
 #include <list>
+#include <memory>
 #include "../Model/Entry.hpp"
 
 class Model_EntryPathBilder {
 public:
 	virtual inline ~Model_EntryPathBilder() {};
 
-	virtual std::list<std::string> buildPath(Model_Entry const& entry) const =0;
-	virtual std::string buildPathString(Model_Entry const& entry, bool withOtherEntriesPlaceholder = false) const =0;
-	virtual std::string buildScriptPath(Model_Entry const& entry) const =0;
+	virtual std::list<std::string> buildPath(std::shared_ptr<Model_Entry> entry) const =0;
+	virtual std::string buildPathString(std::shared_ptr<Model_Entry> entry, bool withOtherEntriesPlaceholder = false) const =0;
+	virtual std::string buildScriptPath(std::shared_ptr<Model_Entry> entry) const =0;
 };
 
 #endif

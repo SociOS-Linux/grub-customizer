@@ -23,45 +23,53 @@
 #include <map>
 #include "Script.hpp"
 
-class Model_EntryPathBuilderImpl : public Model_EntryPathBilder {
-	Model_Script const* mainScript;
-	std::map<Model_Entry const*, Model_Script const*> entrySourceMap;
-	std::map<Model_Script const*, std::string> scriptTargetMap;
-	int prefixLength;
-public:
-	Model_EntryPathBuilderImpl(Model_Script const& mainScript) : prefixLength(0), mainScript(NULL)
+class Model_EntryPathBuilderImpl : public Model_EntryPathBilder
+{
+	private: std::shared_ptr<Model_Script> mainScript;
+	private: std::map<std::shared_ptr<Model_Entry>, std::shared_ptr<Model_Script>> entrySourceMap;
+	private: std::map<std::shared_ptr<Model_Script>, std::string> scriptTargetMap;
+	private: int prefixLength;
+
+	public: Model_EntryPathBuilderImpl(std::shared_ptr<Model_Script> mainScript) : prefixLength(0), mainScript(NULL)
 	{
 		this->setMainScript(mainScript);
 	}
 
-	void setMainScript(Model_Script const& mainScript) {
-		this->mainScript = &mainScript;
+	public: void setMainScript(std::shared_ptr<Model_Script> mainScript)
+	{
+		this->mainScript = mainScript;
 	}
 
-	void setEntrySourceMap(std::map<Model_Entry const*, Model_Script const*> const& entrySourceMap) {
+	public: void setEntrySourceMap(std::map<std::shared_ptr<Model_Entry>, std::shared_ptr<Model_Script>> const& entrySourceMap)
+	{
 		this->entrySourceMap = entrySourceMap;
 	}
 
-	void setScriptTargetMap(std::map<Model_Script const*, std::string> const& scriptTargetMap) {
+	public: void setScriptTargetMap(std::map<std::shared_ptr<Model_Script>, std::string> const& scriptTargetMap)
+	{
 		this->scriptTargetMap = scriptTargetMap;
 	}
 
-	void setPrefixLength(int length) {
+	public: void setPrefixLength(int length)
+	{
 		this->prefixLength = length;
 	}
 
-	std::list<std::string> buildPath(Model_Entry const& entry) const {
-		Model_Script const* script = entrySourceMap.find(&entry) != entrySourceMap.end() ? entrySourceMap.find(&entry)->second : this->mainScript;
+	public: std::list<std::string> buildPath(std::shared_ptr<Model_Entry> entry) const
+	{
+		auto script = entrySourceMap.find(entry) != entrySourceMap.end() ? entrySourceMap.find(entry)->second : this->mainScript;
 		return script->buildPath(entry);
 	}
 
-	std::string buildPathString(Model_Entry const& entry, bool withOtherEntriesPlaceholder = false) const {
-		Model_Script const* script = entrySourceMap.find(&entry) != entrySourceMap.end() ? entrySourceMap.find(&entry)->second : this->mainScript;
+	public: std::string buildPathString(std::shared_ptr<Model_Entry> entry, bool withOtherEntriesPlaceholder = false) const
+	{
+		auto script = entrySourceMap.find(entry) != entrySourceMap.end() ? entrySourceMap.find(entry)->second : this->mainScript;
 		return script->buildPathString(entry, withOtherEntriesPlaceholder);
 	}
 
-	std::string buildScriptPath(Model_Entry const& entry) const {
-		Model_Script const* script = entrySourceMap.find(&entry) != entrySourceMap.end() ? entrySourceMap.find(&entry)->second : NULL;
+	public: std::string buildScriptPath(std::shared_ptr<Model_Entry> entry) const
+	{
+		auto script = entrySourceMap.find(entry) != entrySourceMap.end() ? entrySourceMap.find(entry)->second : nullptr;
 		return script ? this->scriptTargetMap.find(script)->second.substr(this->prefixLength) : "";
 	}
 

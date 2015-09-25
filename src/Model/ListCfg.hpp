@@ -54,39 +54,39 @@ class Model_ListCfg :
 	public Mutex_Connection,
 	public Model_Env_Connection
 {
-	double progress;
-	std::string progress_name;
-	int progress_pos, progress_max;
-	std::string errorLogFile;
+	private: double progress;
+	private: std::string progress_name;
+	private: int progress_pos, progress_max;
+	private: std::string errorLogFile;
 
-	Model_ScriptSourceMap scriptSourceMap;
-public:
-	Model_ListCfg() : error_proxy_not_found(false),
+	private: Model_ScriptSourceMap scriptSourceMap;
+
+	public: Model_ListCfg() : error_proxy_not_found(false),
 	 progress(0),
 	 cancelThreadsRequested(false), verbose(true),
 	 errorLogFile(ERROR_LOG_FILE), ignoreLock(false), progress_pos(0), progress_max(0)
 	{}
 
-	void initLogger() override {
+	public: void initLogger() override {
 		this->proxies.setLogger(this->logger);
 		this->repository.setLogger(this->logger);
 		this->scriptSourceMap.setLogger(this->logger);
 	}
 
-	void initEnv() override {
+	public: void initEnv() override {
 		this->scriptSourceMap.setEnv(this->env);
 	}
 
 
-	Model_Proxylist proxies;
-	Model_Repository repository;
+	public: Model_Proxylist proxies;
+	public: Model_Repository repository;
 	
-	std::function<void ()> onLoadStateChange;
-	std::function<void ()> onSaveStateChange;
+	public: std::function<void ()> onLoadStateChange;
+	public: std::function<void ()> onSaveStateChange;
 
-	bool verbose;
-	bool error_proxy_not_found;
-	void lock() {
+	public: bool verbose;
+	public: bool error_proxy_not_found;
+	public: void lock() {
 		if (this->ignoreLock)
 			return;
 		if (this->mutex == NULL)
@@ -94,7 +94,7 @@ public:
 		this->mutex->lock();
 	}
 
-	bool lock_if_free() {
+	public: bool lock_if_free() {
 		if (this->ignoreLock)
 			return true;
 		if (this->mutex == NULL)
@@ -102,7 +102,7 @@ public:
 		return this->mutex->trylock();
 	}
 
-	void unlock() {
+	public: void unlock() {
 		if (this->ignoreLock)
 			return;
 		if (this->mutex == NULL)
@@ -110,10 +110,12 @@ public:
 		this->mutex->unlock();
 	}
 
-	bool ignoreLock;
+	public: bool ignoreLock;
 	
-	bool cancelThreadsRequested;
-	bool createScriptForwarder(std::string const& scriptName) const {
+	public: bool cancelThreadsRequested;
+
+	public: bool createScriptForwarder(std::string const& scriptName) const
+	{
 		//replace: $cfg_dir/proxifiedScripts/ -> $cfg_dir/LS_
 		std::string scriptNameNoPath = scriptName.substr((this->env->cfg_dir+"/proxifiedScripts/").length());
 		std::string outputFilePath = this->env->cfg_dir+"/LS_"+scriptNameNoPath;
@@ -137,13 +139,14 @@ public:
 		}
 	}
 
-	bool removeScriptForwarder(std::string const& scriptName) const {
+	public: bool removeScriptForwarder(std::string const& scriptName) const
+	{
 		std::string scriptNameNoPath = scriptName.substr((this->env->cfg_dir+"/proxifiedScripts/").length());
 		std::string filePath = this->env->cfg_dir+"/LS_"+scriptNameNoPath;
 		return unlink(filePath.c_str()) == 0;
 	}
 
-	std::string readScriptForwarder(std::string const& scriptForwarderFilePath) const {
+	public: std::string readScriptForwarder(std::string const& scriptForwarderFilePath) const {
 		std::string result;
 		FILE* scriptForwarderFile = fopen(scriptForwarderFilePath.c_str(), "r");
 		if (scriptForwarderFile){
@@ -160,7 +163,8 @@ public:
 		}
 	}
 
-	void load(bool preserveConfig = false) {
+	public: void load(bool preserveConfig = false)
+	{
 		if (!preserveConfig){
 			send_new_load_progress(0);
 	
@@ -222,7 +226,7 @@ public:
 				for (auto proxy : this->proxies) {
 					if (!proxy->isExecutable() || !proxy->hasVisibleRules()) {
 						this->log(proxy->fileName + " has no visible entries and will be removed / disabled", Logger::INFO);
-						this->proxies.deleteProxy(proxy.get());
+						this->proxies.deleteProxy(proxy);
 						proxyRemoved = true;
 						break;
 					}
@@ -231,8 +235,7 @@ public:
 			} while (proxyRemoved);
 	
 			this->unlock();
-		}
-		else {
+		} else {
 			this->lock();
 			proxies.unsync_all();
 			repository.deleteAllEntries();
@@ -243,17 +246,17 @@ public:
 		this->log("creating proxifiedScript links & chmodding other files…", Logger::EVENT);
 	
 		this->lock();
-		for (Model_Repository::iterator iter = this->repository.begin(); iter != this->repository.end(); iter++){
-			if (iter->isInScriptDir(env->cfg_dir)){
+		for (auto script : this->repository) {
+			if (script->isInScriptDir(env->cfg_dir)){
 				//createScriptForwarder & disable proxies
-				createScriptForwarder(iter->fileName);
-				std::list<Model_Proxy*> relatedProxies = proxies.getProxiesByScript(*iter);
-				for (std::list<Model_Proxy*>::iterator piter = relatedProxies.begin(); piter != relatedProxies.end(); piter++){
-					int res = chmod((*piter)->fileName.c_str(), 0644);
+				createScriptForwarder(script->fileName);
+				auto relatedProxies = proxies.getProxiesByScript(script);
+				for (auto proxy : relatedProxies) {
+					int res = chmod(proxy->fileName.c_str(), 0644);
 				}
 			} else {
 				//enable scripts (unproxified), in this case, Proxy::fileName == Script::fileName
-				chmod(iter->fileName.c_str(), 0755);
+				chmod(script->fileName.c_str(), 0755);
 			}
 		}
 		this->unlock();
@@ -297,17 +300,17 @@ public:
 		//restore old configuration
 		this->log("restoring grub configuration", Logger::EVENT);
 		this->lock();
-		for (Model_Repository::iterator iter = this->repository.begin(); iter != this->repository.end(); iter++){
-			if (iter->isInScriptDir(env->cfg_dir)){
+		for (auto script : this->repository){
+			if (script->isInScriptDir(env->cfg_dir)){
 				//removeScriptForwarder & reset proxy permissions
-				bool result = removeScriptForwarder(iter->fileName);
+				bool result = removeScriptForwarder(script->fileName);
 				if (!result) {
 					this->log("removing of script forwarder not successful!", Logger::ERROR);
 				}
 			}
-			std::list<Model_Proxy*> relatedProxies = proxies.getProxiesByScript(*iter);
-			for (std::list<Model_Proxy*>::iterator piter = relatedProxies.begin(); piter != relatedProxies.end(); piter++){
-				chmod((*piter)->fileName.c_str(), (*piter)->permissions);
+			auto relatedProxies = proxies.getProxiesByScript(script);
+			for (auto proxy : relatedProxies){
+				chmod(proxy->fileName.c_str(), proxy->permissions);
 			}
 		}
 		this->unlock();
@@ -321,7 +324,7 @@ public:
 			for (auto proxy : this->proxies) {
 				if (proxy->dataSource == NULL) {
 					this->proxies.trash.push_back(*proxy); // mark for deletion
-					this->proxies.erase(this->proxies.getIter(proxy.get()));
+					this->proxies.erase(this->proxies.getIter(proxy));
 					foundInvalidScript = true;
 					invalidProxies += proxy->fileName + ",";
 					break;
@@ -343,65 +346,72 @@ public:
 		send_new_load_progress(1);
 	}
 
-	void save() {
+	public: void save()
+	{
 		send_new_save_progress(0);
 		std::map<std::string, int> samename_counter;
 		proxies.deleteAllProxyscriptFiles();  //delete all proxies to get a clean file system
 		proxies.clearTrash(); //delete all files of removed proxies
 		repository.clearTrash();
 		
-		std::map<Model_Script*, std::string> scriptFilenameMap; // stores original filenames
-		for (std::list<Model_Script>::iterator scriptIter = this->repository.begin(); scriptIter != this->repository.end(); scriptIter++) {
-			scriptFilenameMap[&*scriptIter] = scriptIter->fileName;
+		std::map<std::shared_ptr<Model_Script>, std::string> scriptFilenameMap; // stores original filenames
+		for (auto script : this->repository) {
+			scriptFilenameMap[script] = script->fileName;
 		}
 	
 		// create virtual custom scripts on file system
-		for (std::list<Model_Script>::iterator scriptIter = this->repository.begin(); scriptIter != this->repository.end(); scriptIter++) {
-			if (scriptIter->isCustomScript && scriptIter->fileName == "") {
-				scriptIter->fileName = this->env->cfg_dir + "/IN_" + scriptIter->name;
-				this->repository.createScript(*scriptIter, "");
+		for (auto script : this->repository) {
+			if (script->isCustomScript && script->fileName == "") {
+				script->fileName = this->env->cfg_dir + "/IN_" + script->name;
+				this->repository.createScript(script, "");
 			}
 		}
 	
-		for (Model_Repository::iterator script_iter = repository.begin(); script_iter != repository.end(); script_iter++)
-			script_iter->moveToBasedir(this->env->cfg_dir);
+		for (auto script : repository) {
+			script->moveToBasedir(this->env->cfg_dir);
+		}
 	
 		send_new_save_progress(0.1);
 	
 		int mkdir_result = mkdir((this->env->cfg_dir+"/proxifiedScripts").c_str(), 0755); //create this directory if it doesn't already exist
 	
 		// get new script locations
-		std::map<Model_Script const*, std::string> scriptTargetMap; // scripts and their target directories
-		for (Model_Repository::iterator script_iter = repository.begin(); script_iter != repository.end(); script_iter++) {
-			std::list<Model_Proxy*> relatedProxies = proxies.getProxiesByScript(*script_iter);
-			if (proxies.proxyRequired(*script_iter)){
-				scriptTargetMap[&*script_iter] = this->env->cfg_dir+"/proxifiedScripts/"+Model_PscriptnameTranslator::encode(script_iter->name, samename_counter[script_iter->name]++);
+		std::map<std::shared_ptr<Model_Script>, std::string> scriptTargetMap; // scripts and their target directories
+		for (auto script : repository) {
+			auto relatedProxies = proxies.getProxiesByScript(script);
+			if (proxies.proxyRequired(script)){
+				scriptTargetMap[script] = this->env->cfg_dir+"/proxifiedScripts/"+Model_PscriptnameTranslator::encode(script->name, samename_counter[script->name]++);
 			} else {
 				std::ostringstream nameStream;
-				nameStream << std::setw(2) << std::setfill('0') << relatedProxies.front()->index << "_" << script_iter->name;
-				std::list<Model_Proxy*> relatedProxies = proxies.getProxiesByScript(*script_iter);
-				scriptTargetMap[&*script_iter] = this->env->cfg_dir+"/"+nameStream.str();
+				nameStream << std::setw(2) << std::setfill('0') << relatedProxies.front()->index << "_" << script->name;
+				scriptTargetMap[script] = this->env->cfg_dir+"/"+nameStream.str();
 			}
 		}
 	
 		// move scripts and create proxies
 		int proxyCount = 0;
-		for (Model_Repository::iterator script_iter = repository.begin(); script_iter != repository.end(); script_iter++){
-			std::list<Model_Proxy*> relatedProxies = proxies.getProxiesByScript(*script_iter);
-			if (proxies.proxyRequired(*script_iter)){
-				script_iter->moveFile(scriptTargetMap[&*script_iter], 0755);
-				for (std::list<Model_Proxy*>::iterator proxy_iter = relatedProxies.begin(); proxy_iter != relatedProxies.end(); proxy_iter++){
-					std::map<Model_Entry const*, Model_Script const*> entrySourceMap = this->getEntrySources(**proxy_iter);
+		for (auto script : repository) {
+			auto relatedProxies = proxies.getProxiesByScript(script);
+			if (proxies.proxyRequired(script)){
+				script->moveFile(scriptTargetMap[script], 0755);
+				for (auto proxy : relatedProxies) {
+					auto entrySourceMap = this->getEntrySources(proxy);
 					std::ostringstream nameStream;
-					nameStream << std::setw(2) << std::setfill('0') << (*proxy_iter)->index << "_" << script_iter->name << "_proxy";
-					(*proxy_iter)->generateFile(this->env->cfg_dir+"/"+nameStream.str(), this->env->cfg_dir_prefix.length(), this->env->cfg_dir_noprefix, entrySourceMap, scriptTargetMap);
+					nameStream << std::setw(2) << std::setfill('0') << proxy->index << "_" << script->name << "_proxy";
+					proxy->generateFile(
+						this->env->cfg_dir + "/" + nameStream.str(),
+						this->env->cfg_dir_prefix.length(),
+						this->env->cfg_dir_noprefix,
+						entrySourceMap,
+						scriptTargetMap
+					);
 					proxyCount++;
 				}
 			}
 			else {
 				if (relatedProxies.size() == 1){
-					script_iter->moveFile(scriptTargetMap[&*script_iter], relatedProxies.front()->permissions);
-					relatedProxies.front()->fileName = script_iter->fileName; // update filename
+					script->moveFile(scriptTargetMap[script], relatedProxies.front()->permissions);
+					relatedProxies.front()->fileName = script->fileName; // update filename
 				}
 				else {
 					this->log("GrublistCfg::save: cannot move proxy… only one expected!", Logger::ERROR);
@@ -411,8 +421,8 @@ public:
 		send_new_save_progress(0.2);
 	
 		// register in script source map
-		for (std::map<Model_Script*, std::string>::iterator sMapIter = scriptFilenameMap.begin(); sMapIter != scriptFilenameMap.end(); sMapIter++) {
-			this->scriptSourceMap.registerMove(sMapIter->second, sMapIter->first->fileName);
+		for (auto scriptFilenameMapItem : scriptFilenameMap) {
+			this->scriptSourceMap.registerMove(scriptFilenameMapItem.second, scriptFilenameMapItem.first->fileName);
 		}
 		this->scriptSourceMap.save();
 	
@@ -485,17 +495,17 @@ public:
 		}
 	
 		//update modified "custom" scripts
-		for (std::list<Model_Script>::iterator scriptIter = this->repository.begin(); scriptIter != this->repository.end(); scriptIter++) {
-			if (scriptIter->isCustomScript && scriptIter->isModified()) {
-				this->log("modifying script \"" + scriptIter->name + "\"", Logger::INFO);
-				assert(scriptIter->fileName != "");
-				Model_Proxy dummyProxy(*scriptIter);
-				std::ofstream scriptStream(scriptIter->fileName.c_str());
+		for (auto script : this->repository) {
+			if (script->isCustomScript && script->isModified()) {
+				this->log("modifying script \"" + script->name + "\"", Logger::INFO);
+				assert(script->fileName != "");
+				auto dummyProxy = std::make_shared<Model_Proxy>(script);
+				std::ofstream scriptStream(script->fileName.c_str());
 				scriptStream << CUSTOM_SCRIPT_SHEBANG << "\n" << CUSTOM_SCRIPT_PREFIX << "\n";
-				for (std::list<Model_Rule>::iterator ruleIter = dummyProxy.rules.begin(); ruleIter != dummyProxy.rules.end(); ruleIter++) {
-					ruleIter->print(scriptStream);
-					if (ruleIter->dataSource) {
-						ruleIter->dataSource->isModified = false;
+				for (auto rule : dummyProxy->rules) {
+					rule->print(scriptStream);
+					if (rule->dataSource) {
+						rule->dataSource->isModified = false;
 					}
 				}
 			}
@@ -524,13 +534,13 @@ public:
 		}
 	
 		// correct pathes of foreign rules (to make sure re-syncing works)
-		std::list<Model_Rule*> foreignRules = this->proxies.getForeignRules();
-		for (std::list<Model_Rule*>::iterator foreignRuleIter = foreignRules.begin(); foreignRuleIter != foreignRules.end(); foreignRuleIter++) {
-			Model_Entry* entry = (*foreignRuleIter)->dataSource;
-			assert(entry != NULL);
-			Model_Script* script = this->repository.getScriptByEntry(*entry);
-			assert(script != NULL);
-			(*foreignRuleIter)->__sourceScriptPath = script->fileName;
+		auto foreignRules = this->proxies.getForeignRules();
+		for (auto foreignRule : foreignRules) {
+			auto entry = foreignRule->dataSource;
+			assert(entry != nullptr);
+			auto script = this->repository.getScriptByEntry(entry);
+			assert(script != nullptr);
+			foreignRule->__sourceScriptPath = script->fileName;
 		}
 	
 		send_new_save_progress(1);
@@ -540,9 +550,10 @@ public:
 		}
 	}
 
-	void readGeneratedFile(FILE* source, bool createScriptIfNotFound = false, bool createProxyIfNotFound = false) {
+	public: void readGeneratedFile(FILE* source, bool createScriptIfNotFound = false, bool createProxyIfNotFound = false)
+	{
 		Model_Entry_Row row;
-		Model_Script* script;
+		std::shared_ptr<Model_Script> script = nullptr;
 		int i = 0;
 		bool inScript = false;
 		std::string plaintextBuffer = "";
@@ -554,9 +565,9 @@ public:
 				this->lock();
 				if (script) {
 					if (plaintextBuffer != "" && !script->isModified()) {
-						Model_Entry newEntry("#text", "", plaintextBuffer, Model_Entry::PLAINTEXT);
+						auto newEntry = std::make_shared<Model_Entry>("#text", "", plaintextBuffer, Model_Entry::PLAINTEXT);
 						if (this->hasLogger()) {
-							newEntry.setLogger(this->getLogger());
+							newEntry->setLogger(this->getLogger());
 						}
 						script->entries().push_front(newEntry);
 					}
@@ -571,7 +582,7 @@ public:
 				}
 				script = repository.getScriptByFilename(realScriptName, createScriptIfNotFound);
 				if (createScriptIfNotFound && createProxyIfNotFound){ //for the compare-configuration
-					this->proxies.push_back(std::make_shared<Model_Proxy>(*script));
+					this->proxies.push_back(std::make_shared<Model_Proxy>(script));
 				}
 				this->unlock();
 				if (script){
@@ -581,12 +592,12 @@ public:
 			} else if (inScript && rowText.substr(0,8) == ("### END ") && rowText.substr(rowText.length()-4,4) == " ###") {
 				inScript = false;
 				innerCount = 0;
-			} else if (script != NULL && rowText.substr(0, 10) == "menuentry ") {
+			} else if (script != nullptr && rowText.substr(0, 10) == "menuentry ") {
 				this->lock();
 				if (innerCount < 10) {
 					innerCount++;
 				}
-				Model_Entry newEntry(source, row, this->getLogger());
+				auto newEntry = std::make_shared<Model_Entry>(source, row, this->getLogger());
 				if (!script->isModified()) {
 					script->entries().push_back(newEntry);
 				}
@@ -595,7 +606,7 @@ public:
 				this->send_new_load_progress(0.1 + (progressbarScriptSpace * i + (progressbarScriptSpace/10*innerCount)), script->name, i, this->repository.size());
 			} else if (script != NULL && rowText.substr(0, 8) == "submenu ") {
 				this->lock();
-				Model_Entry newEntry(source, row, this->getLogger());
+				auto newEntry = std::make_shared<Model_Entry>(source, row, this->getLogger());
 				script->entries().push_back(newEntry);
 				this->proxies.sync_all(false, false, script);
 				this->unlock();
@@ -607,9 +618,9 @@ public:
 		this->lock();
 		if (script) {
 			if (plaintextBuffer != "" && !script->isModified()) {
-				Model_Entry newEntry("#text", "", plaintextBuffer, Model_Entry::PLAINTEXT);
+				auto newEntry = std::make_shared<Model_Entry>("#text", "", plaintextBuffer, Model_Entry::PLAINTEXT);
 				if (this->hasLogger()) {
-					newEntry.setLogger(this->getLogger());
+					newEntry->setLogger(this->getLogger());
 				}
 				script->entries().push_front(newEntry);
 			}
@@ -617,25 +628,30 @@ public:
 		}
 	
 		// sync all (including foreign entries)
-		this->proxies.sync_all(true, true, NULL, this->repository.getScriptPathMap());
+		this->proxies.sync_all(true, true, nullptr, this->repository.getScriptPathMap());
 	
 		this->unlock();
 	}
 
-	std::map<Model_Entry const*, Model_Script const*> getEntrySources(Model_Proxy const& proxy, Model_Rule const* parent = NULL) const {
-		std::list<Model_Rule> const& list = parent ? parent->subRules : proxy.rules;
-		std::map<Model_Entry const*, Model_Script const*> result;
-		assert(proxy.dataSource != NULL);
-		for (std::list<Model_Rule>::const_iterator iter = list.begin(); iter != list.end(); iter++) {
-			if (iter->dataSource && !proxy.ruleIsFromOwnScript(*iter)) {
-				Model_Script const* script = this->repository.getScriptByEntry(*iter->dataSource);
-				if (script != NULL) {
-					result[iter->dataSource] = script;
+	public: std::map<std::shared_ptr<Model_Entry>, std::shared_ptr<Model_Script>> getEntrySources(
+		std::shared_ptr<Model_Proxy> proxy,
+		std::shared_ptr<Model_Rule> parent = nullptr
+	) {
+		auto& list = parent ? parent->subRules : proxy->rules;
+
+		std::map<std::shared_ptr<Model_Entry>, std::shared_ptr<Model_Script>> result;
+		assert(proxy->dataSource != nullptr);
+
+		for (auto rule : list) {
+			if (rule->dataSource && !proxy->ruleIsFromOwnScript(rule)) {
+				auto script = this->repository.getScriptByEntry(rule->dataSource);
+				if (script != nullptr) {
+					result[rule->dataSource] = script;
 				} else {
-					this->log("error finding the associated script! (" + iter->outputName + ")", Logger::WARNING);
+					this->log("error finding the associated script! (" + rule->outputName + ")", Logger::WARNING);
 				}
-			} else if (iter->type == Model_Rule::SUBMENU) {
-				std::map<Model_Entry const*, Model_Script const*> subResult = this->getEntrySources(proxy, &*iter);
+			} else if (rule->type == Model_Rule::SUBMENU) {
+				auto subResult = this->getEntrySources(proxy, rule);
 				if (subResult.size()) {
 					result.insert(subResult.begin(), subResult.end());
 				}
@@ -644,7 +660,8 @@ public:
 		return result;
 	}
 
-	bool loadStaticCfg() {
+	public: bool loadStaticCfg()
+	{
 		FILE* oldConfigFile = fopen(env->output_config_file.c_str(), "r");
 		if (oldConfigFile){
 			this->readGeneratedFile(oldConfigFile, true, true);
@@ -655,7 +672,8 @@ public:
 	}
 
 
-	void send_new_load_progress(double newProgress, std::string scriptName = "", int current = 0, int max = 0) {
+	public: void send_new_load_progress(double newProgress, std::string scriptName = "", int current = 0, int max = 0)
+	{
 		if (this->onLoadStateChange){
 			this->progress = newProgress;
 			this->progress_name = scriptName;
@@ -667,7 +685,8 @@ public:
 		}
 	}
 
-	void send_new_save_progress(double newProgress) {
+	public: void send_new_save_progress(double newProgress)
+	{
 		if (this->onSaveStateChange){
 			this->progress = newProgress;
 			this->onSaveStateChange();
@@ -676,11 +695,13 @@ public:
 		}
 	}
 
-	void cancelThreads() {
+	public: void cancelThreads()
+	{
 		cancelThreadsRequested = true;
 	}
 
-	void reset() {
+	public: void reset()
+	{
 		this->lock();
 		this->repository.clear();
 		this->repository.trash.clear();
@@ -689,23 +710,28 @@ public:
 		this->unlock();
 	}
 
-	double getProgress() const {
+	public: double getProgress() const
+	{
 		return progress;
 	}
 
-	std::string getProgress_name() const {
+	public: std::string getProgress_name() const
+	{
 		return progress_name;
 	}
 
-	int getProgress_pos() const {
+	public: int getProgress_pos() const
+	{
 		return progress_pos;
 	}
 
-	int getProgress_max() const {
+	public: int getProgress_max() const
+	{
 		return progress_max;
 	}
 
-	void renumerate(bool favorDefaultOrder = true) {
+	public: void renumerate(bool favorDefaultOrder = true)
+	{
 		short int i = 0;
 		for (auto proxy : this->proxies) {
 			bool isDefaultNumber = false;
@@ -748,20 +774,21 @@ public:
 		}
 	}
 
-	Model_Rule& moveRule(Model_Rule* rule, int direction) {
+	public: std::shared_ptr<Model_Rule> moveRule(std::shared_ptr<Model_Rule> rule, int direction)
+	{
 		try {
 			return this->proxies.getProxyByRule(rule)->moveRule(rule, direction);
 		} catch (NoMoveTargetException const& e) {
-			Model_Proxy* proxy = this->proxies.getProxyByRule(rule);
-			Model_Rule* parent = NULL;
+			auto proxy = this->proxies.getProxyByRule(rule);
+			std::shared_ptr<Model_Rule> parent = nullptr;
 			try {
 				parent = proxy->getParentRule(rule);
 			} catch (ItemNotFoundException const& e) {/* do nothing */}
 	
 			try {
-				std::list<Model_Rule>::iterator nextRule = this->proxies.getNextVisibleRule(proxy->getListIterator(*rule, proxy->getRuleList(parent)), direction);
-				if (nextRule->type != Model_Rule::SUBMENU) { // create new proxy
-					std::list<Model_Rule>::iterator targetRule = proxy->rules.end();
+				auto nextRule = this->proxies.getNextVisibleRule(proxy->getListIterator(rule, proxy->getRuleList(parent)), direction);
+				if (nextRule->get()->type != Model_Rule::SUBMENU) { // create new proxy
+					auto targetRule = proxy->rules.end();
 					bool targetRuleFound = false;
 					try {
 						targetRule = this->proxies.getNextVisibleRule(nextRule, direction);
@@ -770,31 +797,31 @@ public:
 						// ignore GrublistCfg::NO_MOVE_TARGET_FOUND - occurs when previousRule is not found. But this isn't a problem
 					}
 	
-					if (targetRuleFound && this->proxies.getProxyByRule(&*targetRule)->dataSource == this->proxies.getProxyByRule(&*rule)->dataSource) {
-						Model_Proxy* targetProxy = this->proxies.getProxyByRule(&*targetRule);
-						targetProxy->removeEquivalentRules(*rule);
-						Model_Rule* newRule = NULL;
+					if (targetRuleFound && this->proxies.getProxyByRule(*targetRule)->dataSource == this->proxies.getProxyByRule(rule)->dataSource) {
+						auto targetProxy = this->proxies.getProxyByRule(*targetRule);
+						targetProxy->removeEquivalentRules(rule);
+						std::shared_ptr<Model_Rule> newRule = nullptr;
 						if (direction == -1) {
-							targetProxy->rules.push_back(*rule);
-							newRule = &targetProxy->rules.back();
+							targetProxy->rules.push_back(rule);
+							newRule = targetProxy->rules.back();
 						} else {
-							targetProxy->rules.push_front(*rule);
-							newRule = &targetProxy->rules.front();
+							targetProxy->rules.push_front(rule);
+							newRule = targetProxy->rules.front();
 						}
 						rule->setVisibility(false);
 	
 						try {
-							std::list<Model_Rule>::iterator previousRule = this->proxies.getNextVisibleRule(proxy->getListIterator(*rule, proxy->getRuleList(parent)), -direction);
-							if (this->proxies.getProxyByRule(&*nextRule)->dataSource == this->proxies.getProxyByRule(&*previousRule)->dataSource) {
-								this->proxies.getProxyByRule(&*previousRule)->removeEquivalentRules(*nextRule);
+							auto previousRule = this->proxies.getNextVisibleRule(proxy->getListIterator(rule, proxy->getRuleList(parent)), -direction);
+							if (this->proxies.getProxyByRule(*nextRule)->dataSource == this->proxies.getProxyByRule(*previousRule)->dataSource) {
+								this->proxies.getProxyByRule(*previousRule)->removeEquivalentRules(*nextRule);
 								if (direction == 1) {
-									this->proxies.getProxyByRule(&*previousRule)->rules.push_back(*nextRule);
+									this->proxies.getProxyByRule(*previousRule)->rules.push_back(std::make_shared<Model_Rule>(**nextRule));
 								} else {
-									this->proxies.getProxyByRule(&*previousRule)->rules.push_front(*nextRule);
+									this->proxies.getProxyByRule(*previousRule)->rules.push_front(std::make_shared<Model_Rule>(**nextRule));
 								}
-								nextRule->setVisibility(false);
-								if (!this->proxies.getProxyByRule(&*nextRule)->hasVisibleRules()) {
-									this->proxies.deleteProxy(this->proxies.getProxyByRule(&*nextRule));
+								nextRule->get()->setVisibility(false);
+								if (!this->proxies.getProxyByRule(*nextRule)->hasVisibleRules()) {
+									this->proxies.deleteProxy(this->proxies.getProxyByRule(*nextRule));
 								}
 							}
 						} catch (NoMoveTargetException const& e) {
@@ -806,30 +833,30 @@ public:
 							this->proxies.deleteProxy(proxy);
 						}
 	
-						return *newRule;
+						return newRule;
 					} else {
-						std::list<Model_Rule>::iterator movedRule = this->proxies.moveRuleToNewProxy(*rule, direction);
+						auto movedRule = this->proxies.moveRuleToNewProxy(rule, direction);
 	
-						Model_Proxy* currentProxy = this->proxies.getProxyByRule(&*movedRule);
+						auto currentProxy = this->proxies.getProxyByRule(*movedRule);
 	
-						std::list<Model_Rule>::iterator movedRule2 = this->proxies.moveRuleToNewProxy(*nextRule, -direction);
+						auto movedRule2 = this->proxies.moveRuleToNewProxy(*nextRule, -direction);
 						this->renumerate();
-						this->swapProxies(currentProxy, this->proxies.getProxyByRule(&*movedRule2));
+						this->swapProxies(currentProxy, this->proxies.getProxyByRule(*movedRule2));
 	
 						try {
-							std::list<Model_Rule>::iterator prevPrevRule = this->proxies.getNextVisibleRule(movedRule2, -direction);
+							auto prevPrevRule = this->proxies.getNextVisibleRule(movedRule2, -direction);
 	
-							if (this->proxies.getProxyByRule(&*prevPrevRule)->dataSource == this->proxies.getProxyByRule(&*movedRule2)->dataSource) {
-								Model_Proxy* prevprev = this->proxies.getProxyByRule(&*prevPrevRule);
+							if (this->proxies.getProxyByRule(*prevPrevRule)->dataSource == this->proxies.getProxyByRule(*movedRule2)->dataSource) {
+								auto prevprev = this->proxies.getProxyByRule(*prevPrevRule);
 								prevprev->removeEquivalentRules(*movedRule2);
 								if (direction == 1) {
 									prevprev->rules.push_back(*movedRule2);
 								} else {
 									prevprev->rules.push_front(*movedRule2);
 								}
-								movedRule2->setVisibility(false);
-								if (!this->proxies.getProxyByRule(&*movedRule2)->hasVisibleRules()) {
-									this->proxies.deleteProxy(this->proxies.getProxyByRule(&*movedRule2));
+								movedRule2->get()->setVisibility(false);
+								if (!this->proxies.getProxyByRule(*movedRule2)->hasVisibleRules()) {
+									this->proxies.deleteProxy(this->proxies.getProxyByRule(*movedRule2));
 								}
 							}
 						} catch (NoMoveTargetException const& e) {
@@ -843,38 +870,38 @@ public:
 					this->log("convert to multiproxy", Logger::INFO);
 					auto proxyIter = this->proxies.getIter(proxy);
 	
-					Model_Rule* movedRule = NULL;
-					Model_Proxy* target = NULL;
+					std::shared_ptr<Model_Rule> movedRule = nullptr;
+					std::shared_ptr<Model_Proxy> target = nullptr;
 					if (direction == -1 && proxyIter != this->proxies.begin()) {
 						proxyIter--;
-						target = proxyIter->get();
-						target->removeEquivalentRules(*rule);
-						nextRule->subRules.push_back(*rule);
+						target = *proxyIter;
+						target->removeEquivalentRules(rule);
+						nextRule->get()->subRules.push_back(std::make_shared<Model_Rule>(*rule));
 						if (rule->type == Model_Rule::SUBMENU) {
-							proxy->removeForeignChildRules(*rule);
+							proxy->removeForeignChildRules(rule);
 						}
-						if ((rule->type == Model_Rule::SUBMENU && rule->subRules.size() != 0) || (rule->type != Model_Rule::SUBMENU && proxy->ruleIsFromOwnScript(*rule))) {
+						if ((rule->type == Model_Rule::SUBMENU && rule->subRules.size() != 0) || (rule->type != Model_Rule::SUBMENU && proxy->ruleIsFromOwnScript(rule))) {
 							rule->setVisibility(false);
 						} else {
 							proxy->rules.pop_front();
 						}
-						movedRule = &nextRule->subRules.back();
+						movedRule = nextRule->get()->subRules.back();
 						proxyIter++;
 						proxyIter++; // go to the next proxy
 					} else if (direction == 1 && proxyIter != this->proxies.end() && &*proxyIter != &this->proxies.back()) {
 						proxyIter++;
-						target = proxyIter->get();
-						target->removeEquivalentRules(*rule);
-						nextRule->subRules.push_front(*rule);
+						target = *proxyIter;
+						target->removeEquivalentRules(rule);
+						nextRule->get()->subRules.push_front(std::make_shared<Model_Rule>(*rule));
 						if (rule->type == Model_Rule::SUBMENU) {
-							proxy->removeForeignChildRules(*rule);
+							proxy->removeForeignChildRules(rule);
 						}
-						if ((rule->type == Model_Rule::SUBMENU && rule->subRules.size() != 0) || (rule->type != Model_Rule::SUBMENU && proxy->ruleIsFromOwnScript(*rule))) {
+						if ((rule->type == Model_Rule::SUBMENU && rule->subRules.size() != 0) || (rule->type != Model_Rule::SUBMENU && proxy->ruleIsFromOwnScript(rule))) {
 							rule->setVisibility(false);
 						} else {
 							proxy->rules.pop_back();
 						}
-						movedRule = &nextRule->subRules.front();
+						movedRule = nextRule->get()->subRules.front();
 	
 						proxyIter--;
 						proxyIter--; // go to the previous proxy
@@ -884,65 +911,66 @@ public:
 	
 					if (!proxy->hasVisibleRules()) {
 						if (proxyIter != this->proxies.end() && target->dataSource == proxyIter->get()->dataSource) {
-							target->merge(*proxyIter->get(), direction);
-							this->proxies.deleteProxy(proxyIter->get());
+							target->merge(*proxyIter, direction);
+							this->proxies.deleteProxy(*proxyIter);
 						}
 	
 						this->proxies.deleteProxy(proxy);
 					}
-					return *movedRule;
+					return movedRule;
 				}
 			} catch (NoMoveTargetException const& e) {
 				throw e;
 			}
 		} catch (MustBeProxyException const& e) {
-			Model_Proxy* proxy = this->proxies.getProxyByRule(rule);
-			Model_Rule* parent = NULL;
+			std::shared_ptr<Model_Proxy> proxy = this->proxies.getProxyByRule(rule);
+			std::shared_ptr<Model_Rule> parent = nullptr;
 			try {
 				parent = proxy->getParentRule(rule);
 			} catch (ItemNotFoundException const& e) {/* do nothing */}
 	
-			Model_Rule* parentSubmenu = parent;
+			auto parentSubmenu = parent;
 			try {
-				std::list<Model_Rule>::iterator nextRule = this->proxies.getNextVisibleRule(proxy->getListIterator(*parent, proxy->rules), direction); // go forward
+				auto nextRule = this->proxies.getNextVisibleRule(proxy->getListIterator(parent, proxy->rules), direction); // go forward
 	
-				if (this->proxies.getProxyByRule(&*nextRule) == this->proxies.getProxyByRule(&*rule)) {
-					this->proxies.splitProxy(proxy, &*nextRule, direction);
+				if (this->proxies.getProxyByRule(*nextRule) == this->proxies.getProxyByRule(rule)) {
+					this->proxies.splitProxy(proxy, *nextRule, direction);
 				}
 			} catch (NoMoveTargetException const& e) {
 				// there's no next rule… no split required
 			}
 	
-			auto nextProxy = this->proxies.getIter(this->proxies.getProxyByRule(&*rule));
+			auto nextProxy = this->proxies.getIter(this->proxies.getProxyByRule(rule));
 			if (direction == 1) {
 				nextProxy++;
 			} else {
 				nextProxy--;
 			}
 	
-			Model_Rule* movedRule = NULL;
-			if (nextProxy != this->proxies.end() && nextProxy->get()->dataSource == this->repository.getScriptByEntry(*rule->dataSource)) {
-				nextProxy->get()->removeEquivalentRules(*rule);
+			std::shared_ptr<Model_Rule> movedRule = nullptr;
+			if (nextProxy != this->proxies.end() && nextProxy->get()->dataSource == this->repository.getScriptByEntry(rule->dataSource)) {
+				nextProxy->get()->removeEquivalentRules(rule);
 				if (direction == 1) {
-					nextProxy->get()->rules.push_front(*rule);
-					movedRule = &nextProxy->get()->rules.front();
+					nextProxy->get()->rules.push_front(std::make_shared<Model_Rule>(*rule));
+					movedRule = nextProxy->get()->rules.front();
 				} else {
-					nextProxy->get()->rules.push_back(*rule);
-					movedRule = &nextProxy->get()->rules.back();
+					nextProxy->get()->rules.push_back(std::make_shared<Model_Rule>(*rule));
+					movedRule = nextProxy->get()->rules.back();
 				}
 			} else {
-				movedRule = &*this->proxies.moveRuleToNewProxy(*rule, direction, this->repository.getScriptByEntry(*rule->dataSource));
+				movedRule = *this->proxies.moveRuleToNewProxy(rule, direction, this->repository.getScriptByEntry(rule->dataSource));
 			}
 	
 			if (this->proxies.hasProxy(proxy)) { // check whether the proxy pointer is still valid
-				proxy->removeEquivalentRules(*rule);
+				proxy->removeEquivalentRules(rule);
 			}
-			return *movedRule;
+			return movedRule;
 		}
 		throw NoMoveTargetException("no move target found", __FILE__, __LINE__);
 	}
 
-	void swapProxies(Model_Proxy* a, Model_Proxy* b) {
+	public: void swapProxies(std::shared_ptr<Model_Proxy> a, std::shared_ptr<Model_Proxy> b)
+	{
 		if (a->index == b->index) { // swapping has no effect if the indexes are identical
 			this->renumerate();
 		}
@@ -954,16 +982,19 @@ public:
 	}
 
 	
-	Model_Rule* createSubmenu(Model_Rule* position) {
+	public: std::shared_ptr<Model_Rule> createSubmenu(std::shared_ptr<Model_Rule> position)
+	{
 		return this->proxies.getProxyByRule(position)->createSubmenu(position);
 	}
 
-	Model_Rule* splitSubmenu(Model_Rule* child) {
+	public: std::shared_ptr<Model_Rule> splitSubmenu(std::shared_ptr<Model_Rule> child)
+	{
 		return this->proxies.getProxyByRule(child)->splitSubmenu(child);
 	}
 
 
-	bool cfgDirIsClean() {
+	public: bool cfgDirIsClean()
+	{
 		DIR* hGrubCfgDir = opendir(this->env->cfg_dir.c_str());
 		if (hGrubCfgDir){
 			struct dirent *entry;
@@ -978,7 +1009,8 @@ public:
 		return true;
 	}
 
-	void cleanupCfgDir() {
+	public: void cleanupCfgDir()
+	{
 		this->log("cleaning up cfg dir!", Logger::IMPORTANT_EVENT);
 		
 		DIR* hGrubCfgDir = opendir(this->env->cfg_dir.c_str());
@@ -1036,19 +1068,20 @@ public:
 	}
 
 	
-	bool compare(Model_ListCfg const& other) const {
-		std::list<const Model_Rule*> rlist[2];
+	public: bool compare(Model_ListCfg const& other) const
+	{
+		std::array<std::list<std::shared_ptr<Model_Rule>>, 2> rlist;
 		for (int i = 0; i < 2; i++){
 			const Model_ListCfg* gc = i == 0 ? this : &other;
 			for (auto proxy : gc->proxies) {
-				assert(proxy->dataSource != NULL);
+				assert(proxy->dataSource != nullptr);
 				if (proxy->isExecutable() && proxy->dataSource){
 					if (proxy->dataSource->fileName == "") { // if the associated file isn't found
 						return false;
 					}
 					std::string fname = proxy->dataSource->fileName.substr(other.env->cfg_dir.length()+1);
 					if (i == 0 || (fname[0] >= '1' && fname[0] <= '9' && fname[1] >= '0' && fname[1] <= '9' && fname[2] == '_')) {
-						std::list<Model_Rule const*> comparableRules = this->getComparableRules(proxy->rules);
+						auto comparableRules = this->getComparableRules(proxy->rules);
 						rlist[i].splice(rlist[i].end(), comparableRules);
 					}
 				}
@@ -1057,22 +1090,24 @@ public:
 		return Model_ListCfg::compareLists(rlist[0], rlist[1]);
 	}
 
-	static std::list<Model_Rule const*> getComparableRules(std::list<Model_Rule> const& list) {
-		std::list<Model_Rule const*> result;
-		for (std::list<Model_Rule>::const_iterator riter = list.begin(); riter != list.end(); riter++){
-			if (((riter->type == Model_Rule::NORMAL && riter->dataSource) || (riter->type == Model_Rule::SUBMENU && riter->hasRealSubrules())) && riter->isVisible){
-				result.push_back(&*riter);
+	public: static std::list<std::shared_ptr<Model_Rule>> getComparableRules(std::list<std::shared_ptr<Model_Rule>> const& list)
+	{
+		std::list<std::shared_ptr<Model_Rule>> result;
+		for (auto rule : list) {
+			if (((rule->type == Model_Rule::NORMAL && rule->dataSource) || (rule->type == Model_Rule::SUBMENU && rule->hasRealSubrules())) && rule->isVisible){
+				result.push_back(rule);
 			}
 		}
 		return result;
 	}
 
-	static bool compareLists(std::list<Model_Rule const*> a, std::list<Model_Rule const*> b) {
+	public: static bool compareLists(std::list<std::shared_ptr<Model_Rule>> a, std::list<std::shared_ptr<Model_Rule>> b)
+	{
 		if (a.size() != b.size()) {
 			return false;
 		}
 	
-		std::list<const Model_Rule*>::iterator self_iter = a.begin(), other_iter = b.begin();
+		auto self_iter = a.begin(), other_iter = b.begin();
 		while (self_iter != a.end() && other_iter != b.end()){
 			if ((*self_iter)->type != (*other_iter)->type) {
 				return false;
@@ -1100,16 +1135,18 @@ public:
 	}
 
 
-	void renameRule(Model_Rule* rule, std::string const& newName) {
+	public: void renameRule(std::shared_ptr<Model_Rule> rule, std::string const& newName)
+	{
 		rule->outputName = newName;
 	}
 
-	std::string getRulePath(Model_Rule& rule) {
-		Model_Proxy* proxy = this->proxies.getProxyByRule(&rule);
+	public: std::string getRulePath(std::shared_ptr<Model_Rule> rule)
+	{
+		auto proxy = this->proxies.getProxyByRule(rule);
 		std::stack<std::string> ruleNameStack;
-		ruleNameStack.push(rule.outputName);
+		ruleNameStack.push(rule->outputName);
 	
-		Model_Rule* currentRule = &rule;
+		auto currentRule = rule;
 		while ((currentRule = proxy->getParentRule(currentRule))) {
 			ruleNameStack.push(currentRule->outputName);
 		}
@@ -1123,7 +1160,8 @@ public:
 		return output;
 	}
 
-	std::string getGrubErrorMessage() const {
+	public: std::string getGrubErrorMessage() const
+	{
 		FILE* errorLogFile = fopen(this->errorLogFile.c_str(), "r");
 		std::string errorMessage;
 		int c;
@@ -1135,10 +1173,10 @@ public:
 	}
 
 
-	void addColorHelper() {
-		Model_Script* newScript = NULL;
-		if (this->repository.getScriptByName("grub-customizer_menu_color_helper") == NULL) {
-			Model_Script* newScript = this->repository.createScript("grub-customizer_menu_color_helper", this->env->cfg_dir + "06_grub-customizer_menu_color_helper", "#!/bin/sh\n\
+	public: void addColorHelper()
+	{
+		if (this->repository.getScriptByName("grub-customizer_menu_color_helper") == nullptr) {
+			std::shared_ptr<Model_Script> newScript = this->repository.createScript("grub-customizer_menu_color_helper", this->env->cfg_dir + "06_grub-customizer_menu_color_helper", "#!/bin/sh\n\
 	\n\
 	if [ \"x${GRUB_BACKGROUND}\" != \"x\" ] ; then\n\
 		if [ \"x${GRUB_COLOR_NORMAL}\" != \"x\" ] ; then\n\
@@ -1150,37 +1188,40 @@ public:
 		fi\n\
 	fi\n\
 	");
-			assert(newScript != NULL);
-			auto newProxy = std::make_shared<Model_Proxy>(*newScript);
+			assert(newScript != nullptr);
+			auto newProxy = std::make_shared<Model_Proxy>(newScript);
 			newProxy->index = 6;
 			this->proxies.push_back(newProxy);
 		}
 	}
 
 
-	std::list<Model_Rule> getRemovedEntries(Model_Entry* parent = NULL, bool ignorePlaceholders = false) {
-		std::list<Model_Rule> result;
-		if (parent == NULL) {
-			for (std::list<Model_Script>::iterator iter = this->repository.begin(); iter != this->repository.end(); iter++) {
-				std::list<Model_Rule> subResult = this->getRemovedEntries(&iter->root, ignorePlaceholders);
+	public: std::list<std::shared_ptr<Model_Rule>> getRemovedEntries(
+		std::shared_ptr<Model_Entry> parent = nullptr,
+		bool ignorePlaceholders = false
+	) {
+		std::list<std::shared_ptr<Model_Rule>> result;
+		if (parent == nullptr) {
+			for (auto script : this->repository) {
+				auto subResult = this->getRemovedEntries(script->root, ignorePlaceholders);
 				result.insert(result.end(), subResult.begin(), subResult.end());
 			}
 		} else {
 			if (parent->type == Model_Entry::SUBMENU || parent->type == Model_Entry::SCRIPT_ROOT) {
-				for (std::list<Model_Entry>::iterator entryIter = parent->subEntries.begin(); entryIter != parent->subEntries.end(); entryIter++) {
-					std::list<Model_Rule> subResult = this->getRemovedEntries(&*entryIter, ignorePlaceholders);
-					Model_Rule* currentSubmenu = NULL;
+				for (auto entry : parent->subEntries) {
+					auto subResult = this->getRemovedEntries(entry, ignorePlaceholders);
+					std::shared_ptr<Model_Rule> currentSubmenu = nullptr;
 					if (subResult.size()) {
-						Model_Rule submenu(Model_Rule::SUBMENU, std::list<std::string>(), entryIter->name, true);
-						submenu.subRules = subResult;
-						submenu.dataSource = &*entryIter;
+						auto submenu = std::make_shared<Model_Rule>(Model_Rule::SUBMENU, std::list<std::string>(), entry->name, true);
+						submenu->subRules = subResult;
+						submenu->dataSource = entry;
 						result.push_back(submenu);
-						currentSubmenu = &result.back();
+						currentSubmenu = result.back();
 					}
 	
-					if ((entryIter->type == Model_Entry::MENUENTRY || !ignorePlaceholders) && !this->proxies.getVisibleRuleForEntry(*entryIter)) {
+					if ((entry->type == Model_Entry::MENUENTRY || !ignorePlaceholders) && !this->proxies.getVisibleRuleForEntry(entry)) {
 						Model_Rule::RuleType ruleType = Model_Rule::NORMAL;
-						switch (entryIter->type) {
+						switch (entry->type) {
 						case Model_Entry::MENUENTRY:
 							ruleType = Model_Rule::NORMAL;
 							break;
@@ -1191,8 +1232,8 @@ public:
 							ruleType = Model_Rule::OTHER_ENTRIES_PLACEHOLDER;
 							break;
 						}
-						Model_Rule newRule(ruleType, std::list<std::string>(), entryIter->name, true);
-						newRule.dataSource = &*entryIter;
+						auto newRule = std::make_shared<Model_Rule>(ruleType, std::list<std::string>(), entry->name, true);
+						newRule->dataSource = entry;
 						if (currentSubmenu) {
 							currentSubmenu->subRules.push_front(newRule);
 						} else {
@@ -1205,8 +1246,11 @@ public:
 		return result;
 	}
 
-	Model_Rule* addEntry(Model_Entry& entry, bool insertAsOtherEntriesPlaceholder = false) {
-		Model_Script* sourceScript = this->repository.getScriptByEntry(entry);
+	public: std::shared_ptr<Model_Rule> addEntry(
+		std::shared_ptr<Model_Entry> entry,
+		bool insertAsOtherEntriesPlaceholder = false
+	) {
+		auto sourceScript = this->repository.getScriptByEntry(entry);
 		assert(sourceScript != nullptr);
 	
 		std::shared_ptr<Model_Proxy> targetProxy = nullptr;
@@ -1214,28 +1258,35 @@ public:
 			targetProxy = this->proxies.back();
 			targetProxy->set_isExecutable(true);
 		} else {
-			this->proxies.push_back(std::make_shared<Model_Proxy>(*sourceScript, false));
+			this->proxies.push_back(std::make_shared<Model_Proxy>(sourceScript, false));
 			targetProxy = this->proxies.back();
 			this->renumerate();
 		}
 	
-		Model_Rule rule;
+		std::shared_ptr<Model_Rule> rule = nullptr;
 		if (insertAsOtherEntriesPlaceholder) {
-			rule = Model_Rule(Model_Rule::OTHER_ENTRIES_PLACEHOLDER, sourceScript->buildPath(entry), true);
-			rule.dataSource = &entry;
+			rule = std::make_shared<Model_Rule>(Model_Rule::OTHER_ENTRIES_PLACEHOLDER, sourceScript->buildPath(entry), true);
+			rule->dataSource = entry;
 		} else {
-			rule = Model_Rule(entry, true, *sourceScript, std::list<std::list<std::string> >(), sourceScript->buildPath(entry));
+			rule = std::make_shared<Model_Rule>(
+				entry,
+				true,
+				sourceScript,
+				std::list<std::list<std::string>>(),
+				sourceScript->buildPath(entry)
+			);
 		}
 	
 		targetProxy->removeEquivalentRules(rule);
 		targetProxy->rules.push_back(rule);
-		return &targetProxy->rules.back();
+		return targetProxy->rules.back();
 	}
 
 
-	void deleteEntry(Model_Entry const& entry) {
+	public: void deleteEntry(std::shared_ptr<Model_Entry> entry)
+	{
 		for (auto proxy : this->proxies) {
-			Model_Rule* rule = proxy->getRuleByEntry(entry, proxy->rules, Model_Rule::NORMAL);
+			auto rule = proxy->getRuleByEntry(entry, proxy->rules, Model_Rule::NORMAL);
 			if (rule) {
 				proxy->removeRule(rule);
 			}
@@ -1244,16 +1295,17 @@ public:
 	}
 
 
-	std::list<Rule*> getNormalizedRuleOrder(std::list<Rule*> rules) {
+	public: std::list<Rule*> getNormalizedRuleOrder(std::list<Rule*> rules)
+	{
 		if (rules.size() == 0 || rules.size() == 1) {
 			return rules;
 		}
 		std::list<Rule*> result;
 	
-		Model_Rule* firstRuleOfList = &Model_Rule::fromPtr(rules.front());
-		std::list<Model_Rule>::iterator currentRule;
+		auto firstRuleOfList = this->findRule(rules.front());
+		std::list<std::shared_ptr<Model_Rule>>::iterator currentRule;
 	
-		Model_Rule* parentRule = this->proxies.getProxyByRule(firstRuleOfList)->getParentRule(firstRuleOfList);
+		auto parentRule = this->proxies.getProxyByRule(firstRuleOfList)->getParentRule(firstRuleOfList);
 		if (parentRule) {
 			currentRule = parentRule->subRules.begin();
 		} else {
@@ -1262,9 +1314,9 @@ public:
 	
 		try {
 			while (true) {
-				for (std::list<Rule*>::iterator iter = rules.begin(); iter != rules.end(); iter++) {
-					if (&*currentRule == *iter) {
-						result.push_back(*iter);
+				for (auto rulePtr : rules) {
+					if (currentRule->get() == rulePtr) {
+						result.push_back(rulePtr);
 						break;
 					}
 				}
@@ -1278,19 +1330,21 @@ public:
 	}
 
 
-	std::list<Model_Script*> getProxifiedScripts() {
-		std::list<Model_Script*> result;
+	public: std::list<std::shared_ptr<Model_Script>> getProxifiedScripts()
+	{
+		std::list<std::shared_ptr<Model_Script>> result;
 	
-		for (std::list<Model_Script>::iterator iter = this->repository.begin(); iter != this->repository.end(); iter++) {
-			if (this->proxies.proxyRequired(*iter)) {
-				result.push_back(&*iter);
+		for (auto script : this->repository) {
+			if (this->proxies.proxyRequired(script)) {
+				result.push_back(script);
 			}
 		}
 	
 		return result;
 	}
 
-	void generateScriptSourceMap() {
+	public: void generateScriptSourceMap()
+	{
 		std::map<std::string, int> defaultScripts; // only for non-static scripts - so 40_custom is ignored
 		defaultScripts["header"]                            =  0;
 		defaultScripts["debian_theme"]                      =  5;
@@ -1303,17 +1357,17 @@ public:
 	
 		std::string proxyfiedScriptPath = this->env->cfg_dir + "/proxifiedScripts";
 	
-		for (std::list<Model_Script>::iterator scriptIter = this->repository.begin(); scriptIter != this->repository.end(); scriptIter++) {
-			std::string currentPath = scriptIter->fileName;
+		for (auto script : this->repository) {
+			std::string currentPath = script->fileName;
 			std::string defaultPath;
 			int pos = -1;
 	
-			if (scriptIter->isCustomScript) {
+			if (script->isCustomScript) {
 				defaultPath = this->env->cfg_dir + "/40_custom";
-			} else if (defaultScripts.find(scriptIter->name) != defaultScripts.end()) {
-				pos = defaultScripts[scriptIter->name];
+			} else if (defaultScripts.find(script->name) != defaultScripts.end()) {
+				pos = defaultScripts[script->name];
 				std::ostringstream str;
-				str << this->env->cfg_dir << "/" << std::setw(2) << std::setfill('0') << pos << "_" << scriptIter->name;
+				str << this->env->cfg_dir << "/" << std::setw(2) << std::setfill('0') << pos << "_" << script->name;
 				defaultPath = str.str();
 			}
 	
@@ -1323,91 +1377,95 @@ public:
 		}
 	}
 
-	void populateScriptSourceMap() {
+	public: void populateScriptSourceMap()
+	{
 		std::string proxyfiedScriptPath = this->env->cfg_dir + "/proxifiedScripts";
-		for (std::list<Model_Script>::iterator scriptIter = this->repository.begin(); scriptIter != this->repository.end(); scriptIter++) {
-			if (scriptIter->fileName.substr(0, proxyfiedScriptPath.length()) != proxyfiedScriptPath
-					&& this->scriptSourceMap.getSourceName(scriptIter->fileName) == "") {
-				this->scriptSourceMap.addScript(scriptIter->fileName);
+		for (auto script : this->repository) {
+			if (script->fileName.substr(0, proxyfiedScriptPath.length()) != proxyfiedScriptPath
+					&& this->scriptSourceMap.getSourceName(script->fileName) == "") {
+				this->scriptSourceMap.addScript(script->fileName);
 			}
 		}
 	}
 
-	bool hasScriptUpdates() const {
+	public: bool hasScriptUpdates() const
+	{
 		return this->scriptSourceMap.getUpdates().size() > 0;
 	}
 
-	void applyScriptUpdates() {
+	public: void applyScriptUpdates()
+	{
 		std::list<std::string> newScriptPathes = this->scriptSourceMap.getUpdates();
-		for (std::list<std::string>::iterator newScriptPathIter = newScriptPathes.begin(); newScriptPathIter != newScriptPathes.end(); newScriptPathIter++) {
-			std::string oldScriptPath = this->scriptSourceMap[*newScriptPathIter];
-			Model_Script* oldScript = this->repository.getScriptByFilename(oldScriptPath);
-			Model_Script* newScript = this->repository.getScriptByFilename(*newScriptPathIter);
+		for (auto newScriptPath : newScriptPathes) {
+			std::string oldScriptPath = this->scriptSourceMap[newScriptPath];
+			auto oldScript = this->repository.getScriptByFilename(oldScriptPath);
+			auto newScript = this->repository.getScriptByFilename(newScriptPath);
 			if (!oldScript || !newScript) {
-				this->log("applyScriptUpdates failed for " + oldScriptPath + " (" + *newScriptPathIter + ")", Logger::ERROR);
+				this->log("applyScriptUpdates failed for " + oldScriptPath + " (" + newScriptPath + ")", Logger::ERROR);
 				continue;
 			}
 	
 			// unsync proxies of newScript
-			std::list<Model_Proxy*> newProxies = this->proxies.getProxiesByScript(*newScript);
-			for (std::list<Model_Proxy*>::iterator newProxyIter = newProxies.begin(); newProxyIter != newProxies.end(); newProxyIter++) {
-				(*newProxyIter)->unsync();
-				this->proxies.deleteProxy(&**newProxyIter);
+			auto newProxies = this->proxies.getProxiesByScript(newScript);
+			for (auto newProxy : newProxies) {
+				newProxy->unsync();
+				this->proxies.deleteProxy(newProxy);
 			}
 	
 			// copy entries of custom scripts
 			if (oldScript->isCustomScript && newScript->isCustomScript && oldScript->entries().size()) {
-				for (std::list<Model_Entry>::iterator entryIter = oldScript->entries().begin(); entryIter != oldScript->entries().end(); entryIter++) {
-					if (entryIter->type == Model_Entry::PLAINTEXT && newScript->getPlaintextEntry()) {
-						newScript->getPlaintextEntry()->content = entryIter->content; // copy plaintext instead of adding another entry
+				for (auto entry : oldScript->entries()) {
+					if (entry->type == Model_Entry::PLAINTEXT && newScript->getPlaintextEntry()) {
+						newScript->getPlaintextEntry()->content = entry->content; // copy plaintext instead of adding another entry
 						newScript->getPlaintextEntry()->isModified = true;
 					} else {
-						newScript->entries().push_back(*entryIter);
-						newScript->entries().back().isModified = true;
+						newScript->entries().push_back(entry);
+						newScript->entries().back()->isModified = true;
 					}
 				}
 			}
 	
 			// connect proxies of oldScript with newScript, resync
-			std::list<Model_Proxy*> oldProxies = this->proxies.getProxiesByScript(*oldScript);
-			for (std::list<Model_Proxy*>::iterator oldProxyIter = oldProxies.begin(); oldProxyIter != oldProxies.end(); oldProxyIter++) {
+			auto oldProxies = this->proxies.getProxiesByScript(oldScript);
+			for (auto oldProxy : oldProxies) {
 				// connect old proxy to new script
-				(*oldProxyIter)->unsync();
-				(*oldProxyIter)->dataSource = newScript;
-				if ((*oldProxyIter)->fileName == oldScript->fileName) {
-					(*oldProxyIter)->fileName = newScript->fileName; // set the new fileName
+				oldProxy->unsync();
+				oldProxy->dataSource = newScript;
+				if (oldProxy->fileName == oldScript->fileName) {
+					oldProxy->fileName = newScript->fileName; // set the new fileName
 				}
 			}
 	
-			std::list<Model_Rule*> foreignRules = this->proxies.getForeignRules();
+			auto foreignRules = this->proxies.getForeignRules();
 	
-			for (std::list<Model_Rule*>::iterator ruleIter = foreignRules.begin(); ruleIter != foreignRules.end(); ruleIter++) {
-				if (this->repository.getScriptByEntry(*(*ruleIter)->dataSource) == oldScript) {
-					(*ruleIter)->__sourceScriptPath = newScript->fileName;
+			for (auto rule : foreignRules) {
+				if (this->repository.getScriptByEntry(rule->dataSource) == oldScript) {
+					rule->__sourceScriptPath = newScript->fileName;
 				}
 			}
 	
-			this->repository.removeScript(*oldScript);
+			this->repository.removeScript(oldScript);
 		}
 		this->scriptSourceMap.deleteUpdates();
 	
 		this->proxies.unsync_all();
-		this->proxies.sync_all(true, true, NULL, this->repository.getScriptPathMap());
+		this->proxies.sync_all(true, true, nullptr, this->repository.getScriptPathMap());
 	}
 
 
-	void revert() {
+	public: void revert()
+	{
 		int remaining = this->proxies.size();
 		while (remaining) {
-			this->proxies.deleteProxy(this->proxies.front().get());
+			this->proxies.deleteProxy(this->proxies.front());
 			assert(this->proxies.size() < remaining); // make sure that the proxy has really been deleted to prevent an endless loop
 			remaining = this->proxies.size();
 		}
 		std::list<std::string> usedIndices;
 		int i = 50; // unknown scripts starting at position 50
-		for (std::list<Model_Script>::iterator iter = this->repository.begin(); iter != this->repository.end(); iter++) {
-			auto newProxy = std::make_shared<Model_Proxy>(*iter);
-			std::string sourceFileName = this->scriptSourceMap.getSourceName(iter->fileName);
+		for (auto script : this->repository) {
+			auto newProxy = std::make_shared<Model_Proxy>(script);
+			std::string sourceFileName = this->scriptSourceMap.getSourceName(script->fileName);
 			try {
 				newProxy->index = Model_Script::extractIndexFromPath(sourceFileName, this->env->cfg_dir);
 			} catch (InvalidStringFormatException const& e) {
@@ -1417,7 +1475,7 @@ public:
 	
 			// avoid duplicates
 			std::ostringstream uniqueIndex;
-			uniqueIndex << newProxy->index << iter->name;
+			uniqueIndex << newProxy->index << script->name;
 	
 			if (std::find(usedIndices.begin(), usedIndices.end(), uniqueIndex.str()) != usedIndices.end()) {
 				newProxy->index = i++;
@@ -1430,8 +1488,35 @@ public:
 		this->proxies.sort();
 	}
 
+	public: std::shared_ptr<Model_Rule> findRule(Rule const* rulePtr)
+	{
+		for (auto proxy : this->proxies) {
+			auto result = this->findRule(rulePtr, proxy->rules);
+			if (result != nullptr) {
+				return result;
+			}
+		}
 
-	operator ArrayStructure() const  {
+		throw ItemNotFoundException("rule not found", __FILE__, __LINE__);
+	}
+
+	private: std::shared_ptr<Model_Rule> findRule(Rule const* rulePtr, std::list<std::shared_ptr<Model_Rule>> list)
+	{
+		for (auto rule : list) {
+			if (rule.get() == rulePtr) {
+				return rule;
+			}
+
+			auto subResult = this->findRule(rulePtr, rule->subRules);
+			if (subResult != nullptr) {
+				return subResult;
+			}
+		}
+		return nullptr;
+	}
+
+
+	public: operator ArrayStructure() const  {
 		ArrayStructure result;
 		result["proxies"] = ArrayStructure(this->proxies);
 		result["repository"] = ArrayStructure(this->repository);

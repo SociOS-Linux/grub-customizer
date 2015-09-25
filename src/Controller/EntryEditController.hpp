@@ -85,9 +85,9 @@ class EntryEditController :
 		try {
 			this->_initTypes();
 			this->view->setRulePtr(rule);
-			this->view->setName(Model_Rule::fromPtr(rule).outputName);
-			this->view->setSourcecode(Model_Rule::fromPtr(rule).dataSource->content);
-			if (Model_Rule::fromPtr(rule).dataSource->type == Model_Entry::PLAINTEXT) {
+			this->view->setName(this->grublistCfg->findRule(rule)->outputName);
+			this->view->setSourcecode(this->grublistCfg->findRule(rule)->dataSource->content);
+			if (this->grublistCfg->findRule(rule)->dataSource->type == Model_Entry::PLAINTEXT) {
 				this->view->selectType("[TEXT]");
 				this->view->setNameFieldVisibility(false);
 			} else {
@@ -214,84 +214,84 @@ class EntryEditController :
 	{
 		this->logActionBegin("apply");
 		try {
-			Model_Rule* rulePtr = NULL;
-			if (this->view->getRulePtr() != NULL) {
-				rulePtr = &Model_Rule::fromPtr(this->view->getRulePtr());
+			std::shared_ptr<Model_Rule> rule = nullptr;
+			if (this->view->getRulePtr() != nullptr) {
+				rule = this->grublistCfg->findRule(this->view->getRulePtr());
 			}
 			bool isAdded = false;
 
 			Model_Entry::EntryType type = this->view->getSelectedType() == "[TEXT]" ? Model_Entry::PLAINTEXT : Model_Entry::MENUENTRY;
 			Model_Rule::RuleType ruleType = type == Model_Entry::PLAINTEXT ? Model_Rule::PLAINTEXT : Model_Rule::NORMAL;
 
-			if (rulePtr == NULL) { // insert
-				Model_Script* script = this->grublistCfg->repository.getCustomScript();
-				if (script == NULL) {
+			if (rule == nullptr) { // insert
+				auto script = this->grublistCfg->repository.getCustomScript();
+				if (script == nullptr) {
 					script = this->createCustomScript();
 				}
-				assert(script != NULL);
-				script->entries().push_back(Model_Entry("new", "", "", type));
+				assert(script != nullptr);
+				script->entries().push_back(std::make_shared<Model_Entry>("new", "", "", type));
 	
-				Model_Rule newRule(script->entries().back(), true, *script);
+				auto newRule = std::make_shared<Model_Rule>(script->entries().back(), true, script);
 	
-				std::list<Model_Proxy*> proxies = this->grublistCfg->proxies.getProxiesByScript(*script);
+				auto proxies = this->grublistCfg->proxies.getProxiesByScript(script);
 				if (proxies.size() == 0) {
-					this->grublistCfg->proxies.push_back(std::make_shared<Model_Proxy>(*script, false));
-					proxies = this->grublistCfg->proxies.getProxiesByScript(*script);
+					this->grublistCfg->proxies.push_back(std::make_shared<Model_Proxy>(script, false));
+					proxies = this->grublistCfg->proxies.getProxiesByScript(script);
 				}
 				assert(proxies.size() != 0);
 	
-				for (std::list<Model_Proxy*>::iterator proxyIter = proxies.begin(); proxyIter != proxies.end(); proxyIter++) {
-					(*proxyIter)->rules.push_back(newRule);
-					newRule.isVisible = false; // if there are more rules of this type, add them invisible
+				for (auto proxy : proxies) {
+					proxy->rules.push_back(newRule);
+					newRule->isVisible = false; // if there are more rules of this type, add them invisible
 				}
-				rulePtr = &proxies.front()->rules.back();
+				rule = proxies.front()->rules.back();
 				isAdded = true;
 			} else { // update
-				Model_Script* script = this->grublistCfg->repository.getScriptByEntry(*rulePtr->dataSource);
-				assert(script != NULL);
+				auto script = this->grublistCfg->repository.getScriptByEntry(rule->dataSource);
+				assert(script != nullptr);
 	
 				if (!script->isCustomScript) {
 					script = this->grublistCfg->repository.getCustomScript();
-					if (script == NULL) {
+					if (script == nullptr) {
 						script = this->createCustomScript();
 					}
-					assert(script != NULL);
-					script->entries().push_back(*rulePtr->dataSource);
+					assert(script != nullptr);
+					script->entries().push_back(std::make_shared<Model_Entry>(*rule->dataSource));
 	
-					Model_Rule ruleCopy = *rulePtr;
-					rulePtr->setVisibility(false);
-					ruleCopy.dataSource = &script->entries().back();
-					Model_Proxy* proxy = this->grublistCfg->proxies.getProxyByRule(rulePtr);
-					std::list<Model_Rule>& ruleList = proxy->getRuleList(proxy->getParentRule(rulePtr));
+					auto ruleCopy = std::make_shared<Model_Rule>(*rule);
+					rule->setVisibility(false);
+					ruleCopy->dataSource = script->entries().back();
+					auto proxy = this->grublistCfg->proxies.getProxyByRule(rule);
+					auto& ruleList = proxy->getRuleList(proxy->getParentRule(rule));
 	
-					Model_Rule dummySubmenu(Model_Rule::SUBMENU, std::list<std::string>(), "DUMMY", true);
-					dummySubmenu.subRules.push_back(ruleCopy);
-					std::list<Model_Rule>::iterator iter = ruleList.insert(proxy->getListIterator(*rulePtr, ruleList), dummySubmenu);
+					auto dummySubmenu = std::make_shared<Model_Rule>(Model_Rule::SUBMENU, std::list<std::string>(), "DUMMY", true);
+					dummySubmenu->subRules.push_back(ruleCopy);
+					auto iter = ruleList.insert(proxy->getListIterator(rule, ruleList), dummySubmenu);
 	
-					Model_Rule& insertedRule = iter->subRules.back();
-					rulePtr = &this->grublistCfg->moveRule(&insertedRule, -1);
+					auto insertedRule = iter->get()->subRules.back();
+					rule = this->grublistCfg->moveRule(insertedRule, -1);
 					this->grublistCfg->renumerate();
 	
-					std::list<Model_Proxy*> proxies = this->grublistCfg->proxies.getProxiesByScript(*script);
-					for (std::list<Model_Proxy*>::iterator proxyIter = proxies.begin(); proxyIter != proxies.end(); proxyIter++) {
-						if (!(*proxyIter)->getRuleByEntry(*rulePtr->dataSource, (*proxyIter)->rules, rulePtr->type)) {
-							(*proxyIter)->rules.push_back(Model_Rule(*rulePtr->dataSource, false, *script));
+					auto proxies = this->grublistCfg->proxies.getProxiesByScript(script);
+					for (auto proxy : proxies) {
+						if (!proxy->getRuleByEntry(rule->dataSource, proxy->rules, rule->type)) {
+							proxy->rules.push_back(std::make_shared<Model_Rule>(rule->dataSource, false, script));
 						}
 					}
 				}
 			}
 	
 			std::string newCode = this->view->getSourcecode();
-			rulePtr->dataSource->content = newCode;
-			rulePtr->dataSource->isModified = true;
-			rulePtr->dataSource->type = type;
-			rulePtr->dataSource->name = this->view->getName();
-			rulePtr->outputName = this->view->getName();
-			rulePtr->type = ruleType;
+			rule->dataSource->content = newCode;
+			rule->dataSource->isModified = true;
+			rule->dataSource->type = type;
+			rule->dataSource->name = this->view->getName();
+			rule->outputName = this->view->getName();
+			rule->type = ruleType;
 	
 			this->env->modificationsUnsaved = true;
 			this->applicationObject->onListModelChange.exec();
-			this->applicationObject->onListRuleChange.exec(rulePtr, false);
+			this->applicationObject->onListRuleChange.exec(rule.get(), false);
 	
 			this->currentContentParser = nullptr;
 		} catch (Exception const& e) {
@@ -356,11 +356,11 @@ class EntryEditController :
 		}
 	}
 
-	private: Model_Script* createCustomScript() {
-		this->grublistCfg->repository.push_back(Model_Script("custom", ""));
-		Model_Script& script = this->grublistCfg->repository.back();
-		script.isCustomScript = true;
-		return &script;
+	private: std::shared_ptr<Model_Script> createCustomScript() {
+		this->grublistCfg->repository.push_back(std::make_shared<Model_Script>("custom", ""));
+		auto script = this->grublistCfg->repository.back();
+		script->isCustomScript = true;
+		return script;
 	}
 };
 
