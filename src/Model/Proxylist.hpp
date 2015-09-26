@@ -34,7 +34,7 @@ struct Model_Proxylist_Item {
 };
 class Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public Trait_LoggerAware
 {
-	public: std::list<Model_Proxy> trash; //removed proxies
+	public: std::list<std::shared_ptr<Model_Proxy>> trash; //removed proxies
 
 	public: std::list<std::shared_ptr<Model_Proxy>> getProxiesByScript(std::shared_ptr<Model_Script> script)
 	{
@@ -130,7 +130,7 @@ class Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public T
 			if (*proxyIter == proxyPointer){
 				//if the file must be deleted when saving, move it to trash
 				if (proxyPointer->fileName != "" && proxyPointer->dataSource && proxyPointer->fileName != proxyPointer->dataSource->fileName)
-					this->trash.push_back(*proxyPointer);
+					this->trash.push_back(proxyPointer);
 				//remove the proxy object
 				this->erase(proxyIter);
 				break;
@@ -140,9 +140,9 @@ class Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public T
 
 	public: void clearTrash()
 	{
-		for (std::list<Model_Proxy>::iterator iter = this->trash.begin(); iter != this->trash.end(); iter++){
-			if (iter->fileName != "") {
-				iter->deleteFile();
+		for (auto trashedProxy : this->trash){
+			if (trashedProxy->fileName != "") {
+				trashedProxy->deleteFile();
 			}
 		}
 	}
@@ -418,8 +418,8 @@ class Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public T
 		ArrayStructure result;
 		int trashIterPos = 0;
 		result["trash"].isArray = true;
-		for (std::list<Model_Proxy>::const_iterator trashIter = this->trash.begin(); trashIter != this->trash.end(); trashIter++) {
-			result["trash"][trashIterPos] = ArrayStructure(*trashIter);
+		for (auto trashedProxy : this->trash) {
+			result["trash"][trashIterPos] = ArrayStructure(*trashedProxy);
 			trashIterPos++;
 		}
 		int itemsIterPos = 0;

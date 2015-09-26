@@ -322,8 +322,8 @@ class Model_ListCfg :
 		do {
 			foundInvalidScript = false;
 			for (auto proxy : this->proxies) {
-				if (proxy->dataSource == NULL) {
-					this->proxies.trash.push_back(*proxy); // mark for deletion
+				if (proxy->dataSource == nullptr) {
+					this->proxies.trash.push_back(proxy); // mark for deletion
 					this->proxies.erase(this->proxies.getIter(proxy));
 					foundInvalidScript = true;
 					invalidProxies += proxy->fileName + ",";
@@ -1490,7 +1490,10 @@ class Model_ListCfg :
 
 	public: std::shared_ptr<Model_Rule> findRule(Rule const* rulePtr)
 	{
-		for (auto proxy : this->proxies) {
+		auto allProxies = this->proxies;
+		allProxies.insert(allProxies.end(), this->proxies.trash.begin(), this->proxies.trash.end());
+
+		for (auto proxy : allProxies) {
 			auto result = this->findRule(rulePtr, proxy->rules);
 			if (result != nullptr) {
 				return result;

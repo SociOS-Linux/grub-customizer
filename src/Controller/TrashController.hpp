@@ -94,8 +94,8 @@ class TrashController :
 	{
 		this->logActionBegin("apply");
 		try {
-			std::list<Rule*> entries = view->getSelectedEntries();
-			this->applicationObject->onEntryInsertionRequest.exec(entries);
+			std::list<Rule*> rulePtrs = view->getSelectedEntries();
+			this->applicationObject->onEntryInsertionRequest.exec(rulePtrs);
 		} catch (Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
@@ -119,8 +119,8 @@ class TrashController :
 		try {
 			auto deletableEntries = this->view->getSelectedEntries();
 			for (auto rulePtr : deletableEntries) {
-				assert(this->grublistCfg->findRule(rulePtr)->dataSource != nullptr);
-				this->grublistCfg->deleteEntry(this->grublistCfg->findRule(rulePtr)->dataSource);
+				assert(this->findRule(rulePtr)->dataSource != nullptr);
+				this->grublistCfg->deleteEntry(this->findRule(rulePtr)->dataSource);
 			}
 			this->refresh();
 			this->updateSelectionAction(std::list<Rule*>());
@@ -224,10 +224,10 @@ class TrashController :
 		}
 
 		for (auto& entry : selectedEntries) {
-			if (this->grublistCfg->findRule(entry)->type != Model_Rule::NORMAL || this->grublistCfg->findRule(entry)->dataSource == nullptr) {
+			if (this->findRule(entry)->type != Model_Rule::NORMAL || this->findRule(entry)->dataSource == nullptr) {
 				return false;
 			}
-			auto script = this->grublistCfg->repository.getScriptByEntry(this->grublistCfg->findRule(entry)->dataSource);
+			auto script = this->grublistCfg->repository.getScriptByEntry(this->findRule(entry)->dataSource);
 			assert(script != nullptr);
 			if (!script->isCustomScript) {
 				return false;
@@ -235,6 +235,16 @@ class TrashController :
 		}
 
 		return true;
+	}
+
+	private: std::shared_ptr<Model_Rule> findRule(Rule* rulePtr)
+	{
+		for (auto rule : this->data) {
+			if (rule.get() == rulePtr) {
+				return rule;
+			}
+		}
+		throw ItemNotFoundException("rule not found in trash data", __FILE__, __LINE__);
 	}
 };
 

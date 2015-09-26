@@ -904,15 +904,16 @@ class MainController :
 		this->logActionEnd();
 	}
 
-	public: void addEntriesAction(std::list<Rule*> entries)
+	public: void addEntriesAction(std::list<Rule*> rulePtrs)
 	{
 		this->logActionBegin("add-entries");
 		try {
 			std::list<Rule*> addedRules;
-			for (std::list<Rule*>::iterator iter = entries.begin(); iter != entries.end(); iter++) {
-				auto entry = this->grublistCfg->findRule(*iter)->dataSource;
-				assert(entry != NULL);
-				addedRules.push_back(this->grublistCfg->addEntry(entry, this->grublistCfg->findRule(*iter)->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER).get());
+			for (auto rulePtr : rulePtrs) {
+				auto& modelRule = dynamic_cast<Model_Rule&>(*rulePtr);
+				auto entry = modelRule.dataSource;
+				assert(entry != nullptr);
+				addedRules.push_back(this->grublistCfg->addEntry(entry, modelRule.type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER).get());
 			}
 
 			this->applicationObject->onListModelChange.exec();

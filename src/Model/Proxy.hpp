@@ -623,7 +623,7 @@ class Model_Proxy : public Proxy
 		try {
 			parent = this->getParentRule(*base);
 		} catch (ItemNotFoundException const& e) {} // leave parent in nullptr state
-		auto list = this->getRuleList(parent);
+		auto& list = this->getRuleList(parent);
 	
 		do {
 			if (direction == 1) {
@@ -631,7 +631,7 @@ class Model_Proxy : public Proxy
 			} else {
 				base--;
 			}
-		} while (!base->get()->isVisible && base != list.end());
+		} while (base != list.end() && !base->get()->isVisible);
 		if (base == list.end()) {
 			throw NoMoveTargetException("no move target found inside of this proxy", __FILE__, __LINE__);
 		}
@@ -757,7 +757,7 @@ class Model_Proxy : public Proxy
 			} catch (ItemNotFoundException const& e) {
 				parent = nullptr;
 			}
-			auto rlist = this->getRuleList(parent);
+			auto& rlist = this->getRuleList(parent);
 			auto iter = this->getListIterator(rule, rlist);
 			rlist.erase(iter);
 	
