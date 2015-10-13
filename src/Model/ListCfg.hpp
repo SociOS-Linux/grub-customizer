@@ -850,9 +850,9 @@ class Model_ListCfg :
 								auto prevprev = this->proxies.getProxyByRule(*prevPrevRule);
 								prevprev->removeEquivalentRules(*movedRule2);
 								if (direction == 1) {
-									prevprev->rules.push_back(*movedRule2);
+									prevprev->rules.push_back(std::make_shared<Model_Rule>(**movedRule2));
 								} else {
-									prevprev->rules.push_front(*movedRule2);
+									prevprev->rules.push_front(std::make_shared<Model_Rule>(**movedRule2));
 								}
 								movedRule2->get()->setVisibility(false);
 								if (!this->proxies.getProxyByRule(*movedRule2)->hasVisibleRules()) {
