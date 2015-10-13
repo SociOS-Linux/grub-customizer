@@ -26,6 +26,7 @@
 #include "../lib/ContentParser/Linux.hpp"
 #include "../lib/ContentParser/LinuxIso.hpp"
 #include "../lib/ContentParser/Memtest.hpp"
+#include "../Controller/Helper/RuleMover/Strategy/MoveRuleOnSameLevelInsideProxy.hpp"
 #include "../lib/Logger/Stream.hpp"
 #include "../Mapper/EntryNameImpl.hpp"
 #include "../config.hpp"
@@ -95,6 +96,8 @@ int main(int argc, char** argv){
 		factory->contentParserFactory->registerParser(factory->create<ContentParser_Memtest>(), gettext("Memtest"));
 
 		view->entryEditor->setAvailableEntryTypes(factory->contentParserFactory->getNames());
+
+		factory->ruleMover->addStrategy(factory->create<Controller_Helper_RuleMover_Strategy_MoveRuleOnSameLevelInsideProxy>());
 
 		mainController->initAction();
 		errorController->setApplicationStarted(true);
