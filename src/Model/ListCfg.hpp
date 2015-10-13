@@ -802,10 +802,10 @@ class Model_ListCfg :
 						targetProxy->removeEquivalentRules(rule);
 						std::shared_ptr<Model_Rule> newRule = nullptr;
 						if (direction == -1) {
-							targetProxy->rules.push_back(rule);
+							targetProxy->rules.push_back(std::make_shared<Model_Rule>(*rule));
 							newRule = targetProxy->rules.back();
 						} else {
-							targetProxy->rules.push_front(rule);
+							targetProxy->rules.push_front(std::make_shared<Model_Rule>(*rule));
 							newRule = targetProxy->rules.front();
 						}
 						rule->setVisibility(false);
