@@ -29,7 +29,7 @@ int main(int argc, char** argv){
 		auto script = std::make_shared<Model_Script>("noname", "");
 		std::shared_ptr<Model_Entry> newEntry;
 		std::string plaintextBuffer;
-		while ((newEntry = std::make_shared<Model_Entry>(stdin, Model_Entry_Row(), nullptr, &plaintextBuffer))) {
+		while (*(newEntry = std::make_shared<Model_Entry>(stdin, Model_Entry_Row(), nullptr, &plaintextBuffer))) {
 			script->entries().push_back(newEntry);
 		}
 		if (plaintextBuffer.size()) {
