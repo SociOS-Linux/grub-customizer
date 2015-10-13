@@ -32,11 +32,16 @@
 #include "../lib/Type.hpp"
 #include "Entry.hpp"
 
-struct Model_Script : public Model_EntryPathFollower, public Trait_LoggerAware, public Script {
-	std::string name, fileName;
-	bool isCustomScript;
-	Model_Entry root;
-	Model_Script(std::string const& name, std::string const& fileName) : name(name), fileName(fileName), root("DUMMY", "DUMMY", "DUMMY", Model_Entry::SCRIPT_ROOT), isCustomScript(false)
+class Model_Script : public Model_EntryPathFollower, public Trait_LoggerAware, public Script {
+	public: std::string name, fileName;
+	public: bool isCustomScript;
+	public: std::shared_ptr<Model_Entry> root;
+
+	public: Model_Script(std::string const& name, std::string const& fileName) :
+		name(name),
+		fileName(fileName),
+		root(std::make_shared<Model_Entry>("DUMMY", "DUMMY", "DUMMY", Model_Entry::SCRIPT_ROOT)),
+		isCustomScript(false)
 	{
 		FILE* script = fopen(fileName.c_str(), "r");
 		if (script) {
@@ -48,18 +53,19 @@ struct Model_Script : public Model_EntryPathFollower, public Trait_LoggerAware, 
 		}
 	}
 
-	bool isModified(Model_Entry* parent = NULL) {
+	public: bool isModified(std::shared_ptr<Model_Entry> parent = nullptr)
+	{
 		if (!parent) {
-			parent = &this->root;
+			parent = this->root;
 		}
 		if (parent->isModified) {
 			return true;
 		}
-		for (std::list<Model_Entry>::iterator iter = parent->subEntries.begin(); iter != parent->subEntries.end(); iter++) {
-			if (iter->isModified) {
+		for (auto entry : parent->subEntries) {
+			if (entry->isModified) {
 				return true;
-			} else if (iter->type == Model_Entry::SUBMENU) {
-				bool modified = this->isModified(&*iter);
+			} else if (entry->type == Model_Entry::SUBMENU) {
+				bool modified = this->isModified(entry);
 				if (modified) {
 					return true;
 				}
@@ -68,68 +74,79 @@ struct Model_Script : public Model_EntryPathFollower, public Trait_LoggerAware, 
 		return false;
 	}
 
-	std::list<Model_Entry>& entries() {
-		return this->root.subEntries;
+	public: std::list<std::shared_ptr<Model_Entry>>& entries()
+	{
+		return this->root->subEntries;
 	}
 
-	std::list<Model_Entry> const& entries() const {
-		return this->root.subEntries;
+	public: std::list<std::shared_ptr<Model_Entry>> const& entries() const
+			{
+		return this->root->subEntries;
 	}
 
-	bool isInScriptDir(std::string const& cfg_dir) const {
+	public: bool isInScriptDir(std::string const& cfg_dir) const
+	{
 		return this->fileName.substr(cfg_dir.length(), std::string("/proxifiedScripts/").length()) == "/proxifiedScripts/";
 	}
 
-	Model_Entry* getEntryByPath(std::list<std::string> const& path) {
-		Model_Entry* result = NULL;
+	public: std::shared_ptr<Model_Entry> getEntryByPath(std::list<std::string> const& path) {
+		std::shared_ptr<Model_Entry> result = nullptr;
 		if (path.size() == 0) { // top level oep
-			result = &this->root;
+			result = this->root;
 		} else {
-			for (std::list<std::string>::const_iterator iter = path.begin(); iter != path.end(); iter++) {
-				result = this->getEntryByName(*iter, result != NULL ? result->subEntries : this->entries());
-				if (result == NULL)
-					return NULL;
+			for (auto pathPart : path) {
+				result = this->getEntryByName(pathPart, result != nullptr ? result->subEntries : this->entries());
+				if (result == nullptr)
+					return nullptr;
 			}
 		}
 		return result;
 	}
 
-	Model_Entry* getEntryByName(std::string const& name, std::list<Model_Entry>& parentList) {
-		std::list<Model_Entry*> results;
-		for (std::list<Model_Entry>::iterator iter = parentList.begin(); iter != parentList.end(); iter++){
-			if (iter->name == name)
-				results.push_back(&*iter);
+	public: std::shared_ptr<Model_Entry> getEntryByName(
+		std::string const& name,
+		std::list<std::shared_ptr<Model_Entry>>& parentList
+	) {
+		std::list<std::shared_ptr<Model_Entry>> results;
+		for (auto entry : parentList) {
+			if (entry->name == name)
+				results.push_back(entry);
 		}
 		if (results.size() == 1) {
 			return results.front();
 		}
-		return NULL;
+		return nullptr;
 	}
 
-	Model_Entry* getEntryByHash(std::string const& hash, std::list<Model_Entry>& parentList) {
-		for (std::list<Model_Entry>::iterator iter = parentList.begin(); iter != parentList.end(); iter++){
-			if (iter->type == Model_Entry::MENUENTRY && iter->content != "" && Helper::md5(iter->content) == hash) {
-				return &*iter;
-			} else if (iter->type == Model_Entry::SUBMENU) {
-				Model_Entry* result = this->getEntryByHash(hash, iter->subEntries);
-				if (result != NULL) {
+	public: std::shared_ptr<Model_Entry> getEntryByHash(
+		std::string const& hash,
+		std::list<std::shared_ptr<Model_Entry>>& parentList
+	) {
+		for (auto entry : parentList) {
+			if (entry->type == Model_Entry::MENUENTRY && entry->content != "" && Helper::md5(entry->content) == hash) {
+				return entry;
+			} else if (entry->type == Model_Entry::SUBMENU) {
+				auto result = this->getEntryByHash(hash, entry->subEntries);
+				if (result != nullptr) {
 					return result;
 				}
 			}
 		}
-		return NULL;
+		return nullptr;
 	}
 
-	Model_Entry* getPlaintextEntry() {
-		for (std::list<Model_Entry>::iterator iter = this->entries().begin(); iter != this->entries().end(); iter++){
-			if (iter->type == Model_Entry::PLAINTEXT) {
-				return &*iter;
+	public: std::shared_ptr<Model_Entry> getPlaintextEntry()
+	{
+		for (auto entry : this->entries()) {
+			if (entry->type == Model_Entry::PLAINTEXT) {
+				return entry;
 			}
 		}
-		return NULL;
+		return nullptr;
 	}
 
-	void moveToBasedir(std::string const& cfg_dir) {
+	public: void moveToBasedir(std::string const& cfg_dir)
+	{
 		std::string newPath;
 		if (isInScriptDir(cfg_dir)){
 			newPath = cfg_dir+"/PS_"+this->fileName.substr((cfg_dir+"/proxifiedScripts/").length());
@@ -142,8 +159,10 @@ struct Model_Script : public Model_EntryPathFollower, public Trait_LoggerAware, 
 		if (renameSuccess == 0)
 			this->fileName = newPath;
 	}
- //moves the file from any location to grub.d and adds the prefix PS_ (proxified Script) or DS_ (default script)
-	bool moveFile(std::string const& newPath, short int permissions = -1) {
+
+	//moves the file from any location to grub.d and adds the prefix PS_ (proxified Script) or DS_ (default script)
+	public: bool moveFile(std::string const& newPath, short int permissions = -1)
+	{
 		Helper::assert_filepath_empty(newPath, __FILE__, __LINE__);
 		int rename_success = rename(this->fileName.c_str(), newPath.c_str());
 		if (rename_success == 0){
@@ -155,21 +174,22 @@ struct Model_Script : public Model_EntryPathFollower, public Trait_LoggerAware, 
 		return false;
 	}
 
-	std::list<std::string> buildPath(Model_Entry const& entry, Model_Entry const* parent) const {
-		if (&entry == &this->root) { // return an empty list if it's the root entry!
+	public: std::list<std::string> buildPath(std::shared_ptr<Model_Entry> entry, std::shared_ptr<Model_Entry> parent) const
+	{
+		if (entry == this->root) { // return an empty list if it's the root entry!
 			return std::list<std::string>();
 		}
-		std::list<Model_Entry> const& list = parent ? parent->subEntries : this->entries();
-		for (std::list<Model_Entry>::const_iterator iter = list.begin(); iter != list.end(); iter++) {
-			if (&*iter == &entry) {
+		auto& list = parent ? parent->subEntries : this->entries();
+		for (auto loop_entry : list) {
+			if (loop_entry == entry) {
 				std::list<std::string> result;
-				result.push_back(iter->name);
+				result.push_back(loop_entry->name);
 				return result;
 			}
-			if (iter->type == Model_Entry::SUBMENU) {
+			if (loop_entry->type == Model_Entry::SUBMENU) {
 				try {
-					std::list<std::string> result = this->buildPath(entry, &*iter);
-					result.push_front(iter->name);
+					std::list<std::string> result = this->buildPath(entry, loop_entry);
+					result.push_front(loop_entry->name);
 					return result;
 				} catch (ItemNotFoundException const& e) {
 					//continue
@@ -179,11 +199,13 @@ struct Model_Script : public Model_EntryPathFollower, public Trait_LoggerAware, 
 		throw ItemNotFoundException("entry not found inside of specified parent", __FILE__, __LINE__);
 	}
 
-	std::list<std::string> buildPath(Model_Entry const& entry) const {
-		return this->buildPath(entry, NULL);
+	public: std::list<std::string> buildPath(std::shared_ptr<Model_Entry> entry) const
+	{
+		return this->buildPath(entry, nullptr);
 	}
 
-	std::string buildPathString(Model_Entry const& entry, bool withOtherEntriesPlaceholder = false) const {
+	public: std::string buildPathString(std::shared_ptr<Model_Entry> entry, bool withOtherEntriesPlaceholder = false) const
+	{
 		std::string result;
 		std::list<std::string> list = this->buildPath(entry, NULL);
 		for (std::list<std::string>::iterator iter = list.begin(); iter != list.end(); iter++) {
@@ -199,19 +221,22 @@ struct Model_Script : public Model_EntryPathFollower, public Trait_LoggerAware, 
 		return result;
 	}
 
-	bool hasEntry(Model_Entry const& entry, Model_Entry const * parent = NULL) const {
-		if (parent == NULL && &this->root == &entry) { // check toplevel entry
+	public: bool hasEntry(
+		std::shared_ptr<Model_Entry const> entry,
+		std::shared_ptr<Model_Entry const> parent = nullptr
+	) const {
+		if (parent == nullptr && this->root == entry) { // check toplevel entry
 			return true;
 		}
 	
-		std::list<Model_Entry> const& list = parent ? parent->subEntries : this->entries();
+		auto const& list = parent ? parent->subEntries : this->entries();
 	
-		for (std::list<Model_Entry>::const_iterator iter = list.begin(); iter != list.end(); iter++) {
-			if (&*iter == &entry) {
+		for (auto loop_entry : list) {
+			if (loop_entry == entry) {
 				return true;
 			}
-			if (iter->type == Model_Entry::SUBMENU) {
-				bool has = this->hasEntry(entry, &*iter);
+			if (loop_entry->type == Model_Entry::SUBMENU) {
+				bool has = this->hasEntry(entry, loop_entry);
 				if (has) {
 					return true;
 				}
@@ -220,18 +245,19 @@ struct Model_Script : public Model_EntryPathFollower, public Trait_LoggerAware, 
 		return false;
 	}
 
-	void deleteEntry(Model_Entry const& entry, Model_Entry* parent = NULL) {
-		if (parent == NULL) {
-			parent = &this->root;
+	public: void deleteEntry(std::shared_ptr<Model_Entry> entry, std::shared_ptr<Model_Entry> parent = nullptr)
+	{
+		if (parent == nullptr) {
+			parent = this->root;
 		}
-		for (std::list<Model_Entry>::iterator iter = parent->subEntries.begin(); iter != parent->subEntries.end(); iter++) {
+		for (auto iter = parent->subEntries.begin(); iter != parent->subEntries.end(); iter++) {
 			if (&*iter == &entry) {
 				parent->subEntries.erase(iter);
-				this->root.isModified = true;
+				this->root->isModified = true;
 				return;
-			} else if (iter->subEntries.size()) {
+			} else if (iter->get()->subEntries.size()) {
 				try {
-					this->deleteEntry(entry, &*iter);
+					this->deleteEntry(entry, *iter);
 					return; // if no exception the entry has been deleted
 				} catch (ItemNotFoundException const& e) {}
 			}
@@ -239,7 +265,8 @@ struct Model_Script : public Model_EntryPathFollower, public Trait_LoggerAware, 
 		throw ItemNotFoundException("entry for deletion not found");
 	}
 
-	bool deleteFile() {
+	public: bool deleteFile()
+	{
 		int success = unlink(this->fileName.c_str());
 		if (success == 0){
 			this->fileName = "";
@@ -249,38 +276,19 @@ struct Model_Script : public Model_EntryPathFollower, public Trait_LoggerAware, 
 			return false;
 	}
 
-	operator ArrayStructure() const {
+	public: operator ArrayStructure() const
+	{
 		ArrayStructure result;
 
 		result["name"] = this->name;
 		result["fileName"] = this->fileName;
 		result["isCustomScript"] = this->isCustomScript;
-		result["root"] = ArrayStructure(this->root);
+		result["root"] = ArrayStructure(*this->root);
 
 		return result;
 	}
 
-	Model_Script& fromPtr(Script* script) {
-		if (script != NULL) {
-			try {
-				return dynamic_cast<Model_Script&>(*script);
-			} catch (std::bad_cast const& e) {
-			}
-		}
-		throw BadCastException("Model_Script::fromPtr failed");
-	}
-
-	Model_Script const& fromPtr(Script const* script) {
-		if (script != NULL) {
-			try {
-				return dynamic_cast<Model_Script const&>(*script);
-			} catch (std::bad_cast const& e) {
-			}
-		}
-		throw BadCastException("Model_Script::fromPtr [const] failed");
-	}
-
-	static int extractIndexFromPath(std::string const& path, std::string const& cfgDirPath) {
+	public: static int extractIndexFromPath(std::string const& path, std::string const& cfgDirPath) {
 		if (path.substr(0, cfgDirPath.length()) == cfgDirPath) {
 			std::string subPath = path.substr(cfgDirPath.length() + 1); // remove path
 			std::string prefix = subPath.substr(0, 2);

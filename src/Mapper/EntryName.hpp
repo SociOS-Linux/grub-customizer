@@ -25,7 +25,7 @@
 class Mapper_EntryName {
 public:
 	virtual inline ~Mapper_EntryName(){};
-	virtual std::string map(Model_Entry const* sourceEntry, std::string const& defaultName, bool treatSubmenuAsPlaceholder) = 0;
+	virtual std::string map(std::shared_ptr<Model_Entry> sourceEntry, std::string const& defaultName, bool treatSubmenuAsPlaceholder) = 0;
 };
 
 class Mapper_EntryName_Connection

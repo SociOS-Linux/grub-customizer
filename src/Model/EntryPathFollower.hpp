@@ -26,7 +26,7 @@ class Model_EntryPathFollower {
 public:
 	virtual inline ~Model_EntryPathFollower() {};
 
-	virtual Model_Entry* getEntryByPath(std::list<std::string> const& path)=0;
+	virtual std::shared_ptr<Model_Entry> getEntryByPath(std::list<std::string> const& path)=0;
 };
 
 #endif

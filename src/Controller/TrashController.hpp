@@ -52,7 +52,7 @@ class TrashController :
 	public Model_Env_Connection,
 	public Bootstrap_Application_Object_Connection
 {
-	private: std::list<Model_Rule> data;
+	private: std::list<std::shared_ptr<Model_Rule>> data;
 
 	public:	TrashController() :
 		Controller_Common_ControllerAbstract("trash")
@@ -94,8 +94,8 @@ class TrashController :
 	{
 		this->logActionBegin("apply");
 		try {
-			std::list<Rule*> entries = view->getSelectedEntries();
-			this->applicationObject->onEntryInsertionRequest.exec(entries);
+			std::list<Rule*> rulePtrs = view->getSelectedEntries();
+			this->applicationObject->onEntryInsertionRequest.exec(rulePtrs);
 		} catch (Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
@@ -117,10 +117,10 @@ class TrashController :
 	{
 		this->logActionBegin("delete-custom-entries");
 		try {
-			std::list<Rule*> deletableEntries = this->view->getSelectedEntries();
-			for (std::list<Rule*>::iterator iter = deletableEntries.begin(); iter != deletableEntries.end(); iter++) {
-				assert(Model_Rule::fromPtr(*iter).dataSource != NULL);
-				this->grublistCfg->deleteEntry(*Model_Rule::fromPtr(*iter).dataSource);
+			auto deletableEntries = this->view->getSelectedEntries();
+			for (auto rulePtr : deletableEntries) {
+				assert(this->findRule(rulePtr)->dataSource != nullptr);
+				this->grublistCfg->deleteEntry(this->findRule(rulePtr)->dataSource);
 			}
 			this->refresh();
 			this->updateSelectionAction(std::list<Rule*>());
@@ -136,10 +136,10 @@ class TrashController :
 		try {
 			// first look for rules in local data, linking to the the given entries
 			std::list<Rule*> rules;
-			for (std::list<Entry*>::const_iterator entryIter = entries.begin(); entryIter != entries.end(); entryIter++) {
-				for (std::list<Model_Rule>::iterator ruleIter = this->data.begin(); ruleIter != this->data.end(); ruleIter++) {
-					if (*entryIter == ruleIter->dataSource) {
-						rules.push_back(&*ruleIter);
+			for (auto entryPtr : entries) {
+				for (auto rule : this->data) {
+					if (entryPtr == rule->dataSource.get()) {
+						rules.push_back(rule.get());
 					}
 				}
 			}
@@ -170,40 +170,40 @@ class TrashController :
 
 	private: void refresh()
 	{
-		assert(this->contentParserFactory != NULL);
-		assert(this->deviceDataList != NULL);
+		assert(this->contentParserFactory != nullptr);
+		assert(this->deviceDataList != nullptr);
 
 		this->view->clear();
 
 		this->data = this->grublistCfg->getRemovedEntries();
 
-		this->refreshView(NULL);
+		this->refreshView(nullptr);
 	}
 
-	private: void refreshView(Model_Rule* parent)
+	private: void refreshView(std::shared_ptr<Model_Rule> parent)
 	{
-		std::list<Model_Rule>& list = parent ? parent->subRules : this->data;
-		for (std::list<Model_Rule>::iterator iter = list.begin(); iter != list.end(); iter++) {
-			Model_Script* script = iter->dataSource ? this->grublistCfg->repository.getScriptByEntry(*iter->dataSource) : NULL;
+		auto& list = parent ? parent->subRules : this->data;
+		for (auto rule : list) {
+			auto script = rule->dataSource ? this->grublistCfg->repository.getScriptByEntry(rule->dataSource) : nullptr;
 
-			std::string name = iter->outputName;
-			if (iter->dataSource && script) {
-				name = this->entryNameMapper->map(iter->dataSource, name, iter->type != Model_Rule::SUBMENU);
+			std::string name = rule->outputName;
+			if (rule->dataSource && script) {
+				name = this->entryNameMapper->map(rule->dataSource, name, rule->type != Model_Rule::SUBMENU);
 			}
 
 			View_Model_ListItem<Rule, Script> listItem;
 			listItem.name = name;
-			listItem.entryPtr = &*iter;
-			listItem.scriptPtr = NULL;
-			listItem.is_placeholder = iter->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER || iter->type == Model_Rule::PLAINTEXT;
-			listItem.is_submenu = iter->type == Model_Rule::SUBMENU;
+			listItem.entryPtr = rule.get();
+			listItem.scriptPtr = nullptr;
+			listItem.is_placeholder = rule->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER || rule->type == Model_Rule::PLAINTEXT;
+			listItem.is_submenu = rule->type == Model_Rule::SUBMENU;
 			listItem.scriptName = script ? script->name : "";
 			listItem.isVisible = true;
-			listItem.parentEntry = parent;
+			listItem.parentEntry = parent.get();
 
-			if (iter->dataSource) {
+			if (rule->dataSource) {
 				listItem.options = Controller_Helper_DeviceInfo::fetch(
-					iter->dataSource->content,
+					rule->dataSource->content,
 					*this->contentParserFactory,
 					*this->deviceDataList
 				);
@@ -211,8 +211,8 @@ class TrashController :
 
 			this->view->addItem(listItem);
 
-			if (iter->subRules.size()) {
-				this->refreshView(&*iter);
+			if (rule->subRules.size()) {
+				this->refreshView(rule);
 			}
 		}
 	}
@@ -224,17 +224,27 @@ class TrashController :
 		}
 
 		for (auto& entry : selectedEntries) {
-			if (Model_Rule::fromPtr(entry).type != Model_Rule::NORMAL || Model_Rule::fromPtr(entry).dataSource == NULL) {
+			if (this->findRule(entry)->type != Model_Rule::NORMAL || this->findRule(entry)->dataSource == nullptr) {
 				return false;
 			}
-			Model_Script* script = this->grublistCfg->repository.getScriptByEntry(*Model_Rule::fromPtr(entry).dataSource);
-			assert(script != NULL);
+			auto script = this->grublistCfg->repository.getScriptByEntry(this->findRule(entry)->dataSource);
+			assert(script != nullptr);
 			if (!script->isCustomScript) {
 				return false;
 			}
 		}
 
 		return true;
+	}
+
+	private: std::shared_ptr<Model_Rule> findRule(Rule* rulePtr)
+	{
+		for (auto rule : this->data) {
+			if (rule.get() == rulePtr) {
+				return rule;
+			}
+		}
+		throw ItemNotFoundException("rule not found in trash data", __FILE__, __LINE__);
 	}
 };
 
