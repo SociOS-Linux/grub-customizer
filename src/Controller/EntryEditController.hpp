@@ -241,7 +241,7 @@ class EntryEditController :
 				assert(proxies.size() != 0);
 	
 				for (auto proxy : proxies) {
-					proxy->rules.push_back(newRule);
+					proxy->rules.push_back(std::make_shared<Model_Rule>(*newRule));
 					newRule->isVisible = false; // if there are more rules of this type, add them invisible
 				}
 				rule = proxies.front()->rules.back();
