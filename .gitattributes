@@ -46,6 +46,216 @@ misc/icons/48x48.png -text svneol=unset#unset
 misc/icons/64x64.png -text svneol=unset#unset
 misc/manpage.gz -text svneol=unset#unset
 misc/pkexec_policy.in -text
+move_strategies/.pc/.quilt_patches -text
+move_strategies/.pc/.quilt_series -text
+move_strategies/.pc/.version -text
+move_strategies/.pc/applied-patches -text
+move_strategies/.pc/debian-changes-2.4.1-0ubuntu1~ppa1k/.project -text
+move_strategies/.pc/debian-changes-2.4.1-0ubuntu1~ppa1l/src/config.h -text
+move_strategies/.pc/debian-changes-2.4.1-0ubuntu1~ppa1o/.cproject -text
+move_strategies/.pc/debian-changes-2.4.1-0ubuntu1~ppa1o/.project -text
+move_strategies/.pc/debian-changes-2.4.1-0ubuntu1~ppa1o/.settings/org.eclipse.cdt.ui.prefs -text
+move_strategies/.pc/debian-changes-2.4.1-0ubuntu1~ppa1o/.settings/org.eclipse.ltk.core.refactoring.prefs -text
+move_strategies/.settings/org.eclipse.cdt.ui.prefs -text
+move_strategies/.settings/org.eclipse.ltk.core.refactoring.prefs -text
+move_strategies/CMakeLists.txt -text
+move_strategies/COPYING -text
+move_strategies/README -text
+move_strategies/build/README -text
+move_strategies/build/build_all.sh -text
+move_strategies/build/eclipse_gtkmm-3.0_includes.xml -text
+move_strategies/build/eclipse_setup.txt -text
+move_strategies/changelog -text
+move_strategies/cmake_uninstall.cmake.in -text
+move_strategies/config.hpp.in -text
+move_strategies/debian/changelog.d -text
+move_strategies/debian/changelog.mentors.d -text
+move_strategies/debian/changelog.revu.d -text
+move_strategies/debian/compat -text
+move_strategies/debian/control -text
+move_strategies/debian/copyright -text
+move_strategies/debian/patches/00list -text
+move_strategies/debian/patches/01su-to-root.dpatch -text
+move_strategies/debian/patches/02_gtkmm24.dpatch -text
+move_strategies/debian/patches/03_libarchive_old.dpatch -text
+move_strategies/debian/rules -text
+move_strategies/debian/source/format -text
+move_strategies/debian/watch -text
+move_strategies/misc/grub-customizer.desktop -text
+move_strategies/misc/icons/128x128.png -text svneol=unset#unset
+move_strategies/misc/icons/14x14.png -text svneol=unset#unset
+move_strategies/misc/icons/16x16.png -text svneol=unset#unset
+move_strategies/misc/icons/192x192.png -text svneol=unset#unset
+move_strategies/misc/icons/22x22.png -text svneol=unset#unset
+move_strategies/misc/icons/24x24.png -text svneol=unset#unset
+move_strategies/misc/icons/32x32.png -text svneol=unset#unset
+move_strategies/misc/icons/48x48.png -text svneol=unset#unset
+move_strategies/misc/icons/64x64.png -text svneol=unset#unset
+move_strategies/misc/manpage.gz -text svneol=unset#unset
+move_strategies/misc/pkexec_policy.in -text
+move_strategies/src/Bootstrap/Application.hpp -text
+move_strategies/src/Bootstrap/Factory.hpp -text
+move_strategies/src/Bootstrap/FactoryImpl/GLibRegex.cpp -text
+move_strategies/src/Bootstrap/FactoryImpl/GlibThread.cpp -text
+move_strategies/src/Bootstrap/GtkApplication.cpp -text
+move_strategies/src/Bootstrap/GtkView.cpp -text
+move_strategies/src/Bootstrap/View.hpp -text
+move_strategies/src/Controller/AboutController.hpp -text
+move_strategies/src/Controller/Common/ControllerAbstract.hpp -text
+move_strategies/src/Controller/EntryEditController.hpp -text
+move_strategies/src/Controller/EnvEditorController.hpp -text
+move_strategies/src/Controller/ErrorController.hpp -text
+move_strategies/src/Controller/Helper/DeviceInfo.hpp -text
+move_strategies/src/Controller/Helper/GLibThread.hpp -text
+move_strategies/src/Controller/Helper/Thread.hpp -text
+move_strategies/src/Controller/InstallerController.hpp -text
+move_strategies/src/Controller/MainController.hpp -text
+move_strategies/src/Controller/SettingsController.hpp -text
+move_strategies/src/Controller/ThemeController.hpp -text
+move_strategies/src/Controller/TrashController.hpp -text
+move_strategies/src/Mapper/EntryName.hpp -text
+move_strategies/src/Mapper/EntryNameImpl.hpp -text
+move_strategies/src/Model/DeviceDataList.hpp -text
+move_strategies/src/Model/DeviceDataListInterface.hpp -text
+move_strategies/src/Model/DeviceMap.hpp -text
+move_strategies/src/Model/Entry.hpp -text
+move_strategies/src/Model/EntryPathBuilder.hpp -text
+move_strategies/src/Model/EntryPathBuilderImpl.hpp -text
+move_strategies/src/Model/EntryPathFollower.hpp -text
+move_strategies/src/Model/Env.hpp -text
+move_strategies/src/Model/FbResolutionsGetter.hpp -text
+move_strategies/src/Model/Installer.hpp -text
+move_strategies/src/Model/ListCfg.hpp -text
+move_strategies/src/Model/MountTable.hpp -text
+move_strategies/src/Model/Proxy.hpp -text
+move_strategies/src/Model/ProxyScriptData.hpp -text
+move_strategies/src/Model/Proxylist.hpp -text
+move_strategies/src/Model/PscriptnameTranslator.hpp -text
+move_strategies/src/Model/Repository.hpp -text
+move_strategies/src/Model/Rule.hpp -text
+move_strategies/src/Model/Script.hpp -text
+move_strategies/src/Model/ScriptSourceMap.hpp -text
+move_strategies/src/Model/SettingsManagerData.hpp -text
+move_strategies/src/Model/SettingsStore.hpp -text
+move_strategies/src/Model/SmartFileHandle.hpp -text
+move_strategies/src/Model/Theme.hpp -text
+move_strategies/src/Model/ThemeFile.hpp -text
+move_strategies/src/Model/ThemeManager.hpp -text
+move_strategies/src/View/About.hpp -text
+move_strategies/src/View/ColorChooser.hpp -text
+move_strategies/src/View/EntryEditor.hpp -text
+move_strategies/src/View/EnvEditor.hpp -text
+move_strategies/src/View/Error.hpp -text
+move_strategies/src/View/Gtk/About.hpp -text
+move_strategies/src/View/Gtk/Element/List.hpp -text
+move_strategies/src/View/Gtk/Element/PartitionChooser.hpp -text
+move_strategies/src/View/Gtk/EntryEditor.hpp -text
+move_strategies/src/View/Gtk/EnvEditor.hpp -text
+move_strategies/src/View/Gtk/Error.hpp -text
+move_strategies/src/View/Gtk/Installer.hpp -text
+move_strategies/src/View/Gtk/Main.hpp -text
+move_strategies/src/View/Gtk/Settings.hpp -text
+move_strategies/src/View/Gtk/Theme.hpp -text
+move_strategies/src/View/Gtk/Trash.hpp -text
+move_strategies/src/View/Installer.hpp -text
+move_strategies/src/View/Main.hpp -text
+move_strategies/src/View/Model/ListItem.hpp -text
+move_strategies/src/View/Settings.hpp -text
+move_strategies/src/View/Theme.hpp -text
+move_strategies/src/View/Trait/ViewAware.hpp -text
+move_strategies/src/View/Trash.hpp -text
+move_strategies/src/lib/ArrayStructure.hpp -text
+move_strategies/src/lib/ContentParser.hpp -text
+move_strategies/src/lib/ContentParser/Abstract.hpp -text
+move_strategies/src/lib/ContentParser/Chainloader.hpp -text
+move_strategies/src/lib/ContentParser/FactoryImpl.hpp -text
+move_strategies/src/lib/ContentParser/Linux.hpp -text
+move_strategies/src/lib/ContentParser/LinuxIso.hpp -text
+move_strategies/src/lib/ContentParser/Memtest.hpp -text
+move_strategies/src/lib/ContentParserFactory.hpp -text
+move_strategies/src/lib/CsvProcessor.hpp -text
+move_strategies/src/lib/Exception.hpp -text
+move_strategies/src/lib/FileSystem.hpp -text
+move_strategies/src/lib/Helper.hpp -text
+move_strategies/src/lib/Logger.hpp -text
+move_strategies/src/lib/Logger/Stream.hpp -text
+move_strategies/src/lib/Mutex.hpp -text
+move_strategies/src/lib/Mutex/GLib.hpp -text
+move_strategies/src/lib/Regex.hpp -text
+move_strategies/src/lib/Regex/GLib.hpp -text
+move_strategies/src/lib/Trait/ActionLoggerAware.hpp -text
+move_strategies/src/lib/Trait/LoggerAware.hpp -text
+move_strategies/src/lib/Type.hpp -text
+move_strategies/src/main/client.cpp -text
+move_strategies/src/main/proxy.cpp -text
+move_strategies/translation/compile_all.sh -text
+move_strategies/translation/translation-ar.mo -text svneol=unset#unset
+move_strategies/translation/translation-ar.po -text
+move_strategies/translation/translation-ast.mo -text svneol=unset#unset
+move_strategies/translation/translation-ast.po -text
+move_strategies/translation/translation-bg.mo -text svneol=unset#unset
+move_strategies/translation/translation-bg.po -text
+move_strategies/translation/translation-bs.mo -text
+move_strategies/translation/translation-bs.po -text
+move_strategies/translation/translation-ca.mo -text svneol=unset#unset
+move_strategies/translation/translation-ca.po -text
+move_strategies/translation/translation-cs.mo -text svneol=unset#unset
+move_strategies/translation/translation-cs.po -text
+move_strategies/translation/translation-cy.mo -text svneol=unset#unset
+move_strategies/translation/translation-cy.po -text
+move_strategies/translation/translation-de.mo -text svneol=unset#unset
+move_strategies/translation/translation-de.po -text
+move_strategies/translation/translation-el.mo -text svneol=unset#unset
+move_strategies/translation/translation-el.po -text
+move_strategies/translation/translation-en_GB.mo -text
+move_strategies/translation/translation-en_GB.po -text
+move_strategies/translation/translation-es.mo -text svneol=unset#unset
+move_strategies/translation/translation-es.po -text
+move_strategies/translation/translation-et.mo -text
+move_strategies/translation/translation-et.po -text
+move_strategies/translation/translation-eu.mo -text
+move_strategies/translation/translation-eu.po -text
+move_strategies/translation/translation-fi.mo -text svneol=unset#unset
+move_strategies/translation/translation-fi.po -text
+move_strategies/translation/translation-fr.mo -text svneol=unset#unset
+move_strategies/translation/translation-fr.po -text
+move_strategies/translation/translation-gl.mo -text svneol=unset#unset
+move_strategies/translation/translation-gl.po -text
+move_strategies/translation/translation-hr.mo -text svneol=unset#unset
+move_strategies/translation/translation-hr.po -text
+move_strategies/translation/translation-hu.mo -text svneol=unset#unset
+move_strategies/translation/translation-hu.po -text
+move_strategies/translation/translation-it.mo -text svneol=unset#unset
+move_strategies/translation/translation-it.po -text
+move_strategies/translation/translation-ja.mo -text
+move_strategies/translation/translation-ja.po -text
+move_strategies/translation/translation-kk.mo -text svneol=unset#unset
+move_strategies/translation/translation-kk.po -text
+move_strategies/translation/translation-ko.mo -text
+move_strategies/translation/translation-ko.po -text
+move_strategies/translation/translation-lt.mo -text svneol=unset#unset
+move_strategies/translation/translation-lt.po -text
+move_strategies/translation/translation-nl.mo -text svneol=unset#unset
+move_strategies/translation/translation-nl.po -text
+move_strategies/translation/translation-pl.mo -text svneol=unset#unset
+move_strategies/translation/translation-pl.po -text
+move_strategies/translation/translation-pt_BR.mo -text svneol=unset#unset
+move_strategies/translation/translation-pt_BR.po -text
+move_strategies/translation/translation-ru.mo -text svneol=unset#unset
+move_strategies/translation/translation-ru.po -text
+move_strategies/translation/translation-sk.mo -text svneol=unset#unset
+move_strategies/translation/translation-sk.po -text
+move_strategies/translation/translation-tr.mo -text svneol=unset#unset
+move_strategies/translation/translation-tr.po -text
+move_strategies/translation/translation-uk.mo -text svneol=unset#unset
+move_strategies/translation/translation-uk.po -text
+move_strategies/translation/translation-vi.mo -text svneol=unset#unset
+move_strategies/translation/translation-vi.po -text
+move_strategies/translation/translation-zh_CN.mo -text svneol=unset#unset
+move_strategies/translation/translation-zh_CN.po -text
+move_strategies/translation/translation-zh_TW.mo -text
+move_strategies/translation/translation-zh_TW.po -text
+move_strategies/translation/translation.pot -text
 src/Bootstrap/Application.hpp -text
 src/Bootstrap/Factory.hpp -text
 src/Bootstrap/FactoryImpl/GLibRegex.cpp -text

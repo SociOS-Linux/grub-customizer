@@ -1,4 +1,8 @@
 /.cproject
 /.project
 build/tmp/*
+move_strategies/.cproject
+move_strategies/.project
+move_strategies/build/tmp/*
+move_strategies/src/config.hpp
 src/config.hpp
