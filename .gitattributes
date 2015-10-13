@@ -1,0 +1,211 @@
+* text=auto !eol
+.pc/.quilt_patches -text
+.pc/.quilt_series -text
+.pc/.version -text
+.pc/applied-patches -text
+.pc/debian-changes-2.4.1-0ubuntu1~ppa1k/.project -text
+.pc/debian-changes-2.4.1-0ubuntu1~ppa1l/src/config.h -text
+.pc/debian-changes-2.4.1-0ubuntu1~ppa1o/.cproject -text
+.pc/debian-changes-2.4.1-0ubuntu1~ppa1o/.project -text
+.pc/debian-changes-2.4.1-0ubuntu1~ppa1o/.settings/org.eclipse.cdt.ui.prefs -text
+.pc/debian-changes-2.4.1-0ubuntu1~ppa1o/.settings/org.eclipse.ltk.core.refactoring.prefs -text
+.settings/org.eclipse.cdt.ui.prefs -text
+.settings/org.eclipse.ltk.core.refactoring.prefs -text
+/CMakeLists.txt -text
+/COPYING -text
+/README -text
+build/README -text
+build/build_all.sh -text
+build/eclipse_gtkmm-3.0_includes.xml -text
+build/eclipse_setup.txt -text
+/changelog -text
+/cmake_uninstall.cmake.in -text
+/config.hpp.in -text
+debian/changelog.d -text
+debian/changelog.mentors.d -text
+debian/changelog.revu.d -text
+debian/compat -text
+debian/control -text
+debian/copyright -text
+debian/patches/00list -text
+debian/patches/01su-to-root.dpatch -text
+debian/patches/02_gtkmm24.dpatch -text
+debian/patches/03_libarchive_old.dpatch -text
+debian/rules -text
+debian/source/format -text
+debian/watch -text
+misc/grub-customizer.desktop -text
+misc/icons/128x128.png -text svneol=unset#unset
+misc/icons/14x14.png -text svneol=unset#unset
+misc/icons/16x16.png -text svneol=unset#unset
+misc/icons/192x192.png -text svneol=unset#unset
+misc/icons/22x22.png -text svneol=unset#unset
+misc/icons/24x24.png -text svneol=unset#unset
+misc/icons/32x32.png -text svneol=unset#unset
+misc/icons/48x48.png -text svneol=unset#unset
+misc/icons/64x64.png -text svneol=unset#unset
+misc/manpage.gz -text svneol=unset#unset
+misc/pkexec_policy.in -text
+src/Bootstrap/Application.hpp -text
+src/Bootstrap/Factory.hpp -text
+src/Bootstrap/FactoryImpl/GLibRegex.cpp -text
+src/Bootstrap/FactoryImpl/GlibThread.cpp -text
+src/Bootstrap/GtkApplication.cpp -text
+src/Bootstrap/GtkView.cpp -text
+src/Bootstrap/View.hpp -text
+src/Controller/AboutController.hpp -text
+src/Controller/Common/ControllerAbstract.hpp -text
+src/Controller/EntryEditController.hpp -text
+src/Controller/EnvEditorController.hpp -text
+src/Controller/ErrorController.hpp -text
+src/Controller/Helper/DeviceInfo.hpp -text
+src/Controller/Helper/GLibThread.hpp -text
+src/Controller/Helper/Thread.hpp -text
+src/Controller/InstallerController.hpp -text
+src/Controller/MainController.hpp -text
+src/Controller/SettingsController.hpp -text
+src/Controller/ThemeController.hpp -text
+src/Controller/TrashController.hpp -text
+src/Mapper/EntryName.hpp -text
+src/Mapper/EntryNameImpl.hpp -text
+src/Model/DeviceDataList.hpp -text
+src/Model/DeviceDataListInterface.hpp -text
+src/Model/DeviceMap.hpp -text
+src/Model/Entry.hpp -text
+src/Model/EntryPathBuilder.hpp -text
+src/Model/EntryPathBuilderImpl.hpp -text
+src/Model/EntryPathFollower.hpp -text
+src/Model/Env.hpp -text
+src/Model/FbResolutionsGetter.hpp -text
+src/Model/Installer.hpp -text
+src/Model/ListCfg.hpp -text
+src/Model/MountTable.hpp -text
+src/Model/Proxy.hpp -text
+src/Model/ProxyScriptData.hpp -text
+src/Model/Proxylist.hpp -text
+src/Model/PscriptnameTranslator.hpp -text
+src/Model/Repository.hpp -text
+src/Model/Rule.hpp -text
+src/Model/Script.hpp -text
+src/Model/ScriptSourceMap.hpp -text
+src/Model/SettingsManagerData.hpp -text
+src/Model/SettingsStore.hpp -text
+src/Model/SmartFileHandle.hpp -text
+src/Model/Theme.hpp -text
+src/Model/ThemeFile.hpp -text
+src/Model/ThemeManager.hpp -text
+src/View/About.hpp -text
+src/View/ColorChooser.hpp -text
+src/View/EntryEditor.hpp -text
+src/View/EnvEditor.hpp -text
+src/View/Error.hpp -text
+src/View/Gtk/About.hpp -text
+src/View/Gtk/Element/List.hpp -text
+src/View/Gtk/Element/PartitionChooser.hpp -text
+src/View/Gtk/EntryEditor.hpp -text
+src/View/Gtk/EnvEditor.hpp -text
+src/View/Gtk/Error.hpp -text
+src/View/Gtk/Installer.hpp -text
+src/View/Gtk/Main.hpp -text
+src/View/Gtk/Settings.hpp -text
+src/View/Gtk/Theme.hpp -text
+src/View/Gtk/Trash.hpp -text
+src/View/Installer.hpp -text
+src/View/Main.hpp -text
+src/View/Model/ListItem.hpp -text
+src/View/Settings.hpp -text
+src/View/Theme.hpp -text
+src/View/Trait/ViewAware.hpp -text
+src/View/Trash.hpp -text
+src/lib/ArrayStructure.hpp -text
+src/lib/ContentParser.hpp -text
+src/lib/ContentParser/Abstract.hpp -text
+src/lib/ContentParser/Chainloader.hpp -text
+src/lib/ContentParser/FactoryImpl.hpp -text
+src/lib/ContentParser/Linux.hpp -text
+src/lib/ContentParser/LinuxIso.hpp -text
+src/lib/ContentParser/Memtest.hpp -text
+src/lib/ContentParserFactory.hpp -text
+src/lib/CsvProcessor.hpp -text
+src/lib/Exception.hpp -text
+src/lib/FileSystem.hpp -text
+src/lib/Helper.hpp -text
+src/lib/Logger.hpp -text
+src/lib/Logger/Stream.hpp -text
+src/lib/Mutex.hpp -text
+src/lib/Mutex/GLib.hpp -text
+src/lib/Regex.hpp -text
+src/lib/Regex/GLib.hpp -text
+src/lib/Trait/ActionLoggerAware.hpp -text
+src/lib/Trait/LoggerAware.hpp -text
+src/lib/Type.hpp -text
+src/main/client.cpp -text
+src/main/proxy.cpp -text
+translation/compile_all.sh -text
+translation/translation-ar.mo -text svneol=unset#unset
+translation/translation-ar.po -text
+translation/translation-ast.mo -text svneol=unset#unset
+translation/translation-ast.po -text
+translation/translation-bg.mo -text svneol=unset#unset
+translation/translation-bg.po -text
+translation/translation-bs.mo -text
+translation/translation-bs.po -text
+translation/translation-ca.mo -text svneol=unset#unset
+translation/translation-ca.po -text
+translation/translation-cs.mo -text svneol=unset#unset
+translation/translation-cs.po -text
+translation/translation-cy.mo -text svneol=unset#unset
+translation/translation-cy.po -text
+translation/translation-de.mo -text svneol=unset#unset
+translation/translation-de.po -text
+translation/translation-el.mo -text svneol=unset#unset
+translation/translation-el.po -text
+translation/translation-en_GB.mo -text
+translation/translation-en_GB.po -text
+translation/translation-es.mo -text svneol=unset#unset
+translation/translation-es.po -text
+translation/translation-et.mo -text
+translation/translation-et.po -text
+translation/translation-eu.mo -text
+translation/translation-eu.po -text
+translation/translation-fi.mo -text svneol=unset#unset
+translation/translation-fi.po -text
+translation/translation-fr.mo -text svneol=unset#unset
+translation/translation-fr.po -text
+translation/translation-gl.mo -text svneol=unset#unset
+translation/translation-gl.po -text
+translation/translation-hr.mo -text svneol=unset#unset
+translation/translation-hr.po -text
+translation/translation-hu.mo -text svneol=unset#unset
+translation/translation-hu.po -text
+translation/translation-it.mo -text svneol=unset#unset
+translation/translation-it.po -text
+translation/translation-ja.mo -text
+translation/translation-ja.po -text
+translation/translation-kk.mo -text svneol=unset#unset
+translation/translation-kk.po -text
+translation/translation-ko.mo -text
+translation/translation-ko.po -text
+translation/translation-lt.mo -text svneol=unset#unset
+translation/translation-lt.po -text
+translation/translation-nl.mo -text svneol=unset#unset
+translation/translation-nl.po -text
+translation/translation-pl.mo -text svneol=unset#unset
+translation/translation-pl.po -text
+translation/translation-pt_BR.mo -text svneol=unset#unset
+translation/translation-pt_BR.po -text
+translation/translation-ru.mo -text svneol=unset#unset
+translation/translation-ru.po -text
+translation/translation-sk.mo -text svneol=unset#unset
+translation/translation-sk.po -text
+translation/translation-tr.mo -text svneol=unset#unset
+translation/translation-tr.po -text
+translation/translation-uk.mo -text svneol=unset#unset
+translation/translation-uk.po -text
+translation/translation-vi.mo -text svneol=unset#unset
+translation/translation-vi.po -text
+translation/translation-zh_CN.mo -text svneol=unset#unset
+translation/translation-zh_CN.po -text
+translation/translation-zh_TW.mo -text
+translation/translation-zh_TW.po -text
+translation/translation.pot -text
