@@ -16,32 +16,42 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef INC_Controller_Helper_RuleMover_Strategy_MoveRuleOnSameLevelInsideProxy
-#define INC_Controller_Helper_RuleMover_Strategy_MoveRuleOnSameLevelInsideProxy
+#ifndef INC_Controller_Helper_RuleMover_Strategy_MoveRuleOutOfSubmenu
+#define INC_Controller_Helper_RuleMover_Strategy_MoveRuleOutOfSubmenu
 
 #include "../../../../Model/Rule.hpp"
 #include "../../../../Model/ListCfg.hpp"
 #include "../AbstractStrategy.hpp"
 #include <memory>
 
-class Controller_Helper_RuleMover_Strategy_MoveRuleOnSameLevelInsideProxy :
+class Controller_Helper_RuleMover_Strategy_MoveRuleOutOfSubmenu :
 	public Controller_Helper_RuleMover_AbstractStrategy,
 	public Model_ListCfg_Connection
 {
 	public: void move(std::shared_ptr<Model_Rule> rule, Controller_Helper_RuleMover_AbstractStrategy::Direction direction)
 	{
 		auto proxy = this->grublistCfg->proxies.getProxyByRule(rule);
-		auto& ruleList = proxy->getRuleList(proxy->getParentRule(rule));
+		auto parentRule = proxy->getParentRule(rule);
+
+		if (parentRule == nullptr) {
+			throw Controller_Helper_RuleMover_MoveFailedException(
+				"having no parent rule - so we already are on toplevel and cannot move out", __FILE__, __LINE__
+			);
+		}
+
+		auto& ruleList = proxy->getRuleList(parentRule);
 
 		auto visibleRules = this->findVisibleRules(ruleList, rule);
 
 		auto nextRule = this->getNextRule(visibleRules, rule, direction);
-		if (nextRule == nullptr) {
-			throw Controller_Helper_RuleMover_MoveFailedException("no next rule found", __FILE__, __LINE__);
+		if (nextRule != nullptr) {
+			throw Controller_Helper_RuleMover_MoveFailedException("next rule exists - so we cannot move", __FILE__, __LINE__);
 		}
 
+		auto& destinationRuleList = proxy->getRuleList(proxy->getParentRule(parentRule));
+
 		this->removeFromList(ruleList, rule);
-		this->insertBehind(ruleList, rule, nextRule, direction);
+		this->insertBehind(destinationRuleList, rule, parentRule, direction);
 	}
 };
 #endif

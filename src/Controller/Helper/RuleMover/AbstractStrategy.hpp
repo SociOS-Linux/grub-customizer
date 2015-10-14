@@ -32,6 +32,69 @@ class Controller_Helper_RuleMover_AbstractStrategy
 
 	public: virtual void move(std::shared_ptr<Model_Rule> rule, Controller_Helper_RuleMover_AbstractStrategy::Direction direction) = 0;
 	public: virtual ~Controller_Helper_RuleMover_AbstractStrategy(){};
+
+
+	protected: std::list<std::shared_ptr<Model_Rule>> findVisibleRules(
+		std::list<std::shared_ptr<Model_Rule>> ruleList,
+		std::shared_ptr<Model_Rule> ruleAlwaysToInclude
+	) {
+		std::list<std::shared_ptr<Model_Rule>> result;
+
+		for (auto rule : ruleList) {
+			if (rule->isVisible || rule == ruleAlwaysToInclude) {
+				result.push_back(rule);
+			}
+		}
+
+		return result;
+	}
+
+	protected: std::shared_ptr<Model_Rule> getNextRule(
+		std::list<std::shared_ptr<Model_Rule>> list,
+		std::shared_ptr<Model_Rule> base,
+		Controller_Helper_RuleMover_AbstractStrategy::Direction direction
+	) {
+		auto currentPosition = std::find(list.begin(), list.end(), base);
+
+		if (direction == Controller_Helper_RuleMover_AbstractStrategy::Direction::UP) {
+			if (currentPosition == list.begin()) {
+				return nullptr;
+			}
+			currentPosition--;
+			return *currentPosition;
+		}
+
+		if (direction == Controller_Helper_RuleMover_AbstractStrategy::Direction::DOWN) {
+			currentPosition++; // iterator returned by end points behind to list so we have to increase before
+			if (currentPosition == list.end()) {
+				return nullptr;
+			}
+			return *currentPosition;
+		}
+
+		throw LogicException("cannot handle given direction", __FILE__, __LINE__);
+	}
+
+	protected: void removeFromList(
+		std::list<std::shared_ptr<Model_Rule>>& list,
+		std::shared_ptr<Model_Rule> ruleToRemove
+	) {
+		auto position = std::find(list.begin(), list.end(), ruleToRemove);
+		list.erase(position);
+	}
+
+	protected: void insertBehind(
+		std::list<std::shared_ptr<Model_Rule>>& list,
+		std::shared_ptr<Model_Rule> ruleToInsert,
+		std::shared_ptr<Model_Rule> position,
+		Controller_Helper_RuleMover_AbstractStrategy::Direction direction
+	) {
+		auto insertPosition = std::find(list.begin(), list.end(), position);
+		if (direction == Controller_Helper_RuleMover_AbstractStrategy::Direction::DOWN) {
+			insertPosition++;
+		}
+		list.insert(insertPosition, ruleToInsert);
+	}
 };
 
 #endif

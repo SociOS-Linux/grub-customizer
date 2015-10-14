@@ -27,6 +27,8 @@
 #include "../lib/ContentParser/LinuxIso.hpp"
 #include "../lib/ContentParser/Memtest.hpp"
 #include "../Controller/Helper/RuleMover/Strategy/MoveRuleOnSameLevelInsideProxy.hpp"
+#include "../Controller/Helper/RuleMover/Strategy/MoveRuleIntoSubmenu.hpp"
+#include "../Controller/Helper/RuleMover/Strategy/MoveRuleOutOfSubmenu.hpp"
 #include "../lib/Logger/Stream.hpp"
 #include "../Mapper/EntryNameImpl.hpp"
 #include "../config.hpp"
@@ -97,6 +99,8 @@ int main(int argc, char** argv){
 
 		view->entryEditor->setAvailableEntryTypes(factory->contentParserFactory->getNames());
 
+		factory->ruleMover->addStrategy(factory->create<Controller_Helper_RuleMover_Strategy_MoveRuleIntoSubmenu>());
+		factory->ruleMover->addStrategy(factory->create<Controller_Helper_RuleMover_Strategy_MoveRuleOutOfSubmenu>());
 		factory->ruleMover->addStrategy(factory->create<Controller_Helper_RuleMover_Strategy_MoveRuleOnSameLevelInsideProxy>());
 
 		mainController->initAction();

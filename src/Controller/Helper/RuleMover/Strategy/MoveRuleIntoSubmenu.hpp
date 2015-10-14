@@ -16,15 +16,15 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef INC_Controller_Helper_RuleMover_Strategy_MoveRuleOnSameLevelInsideProxy
-#define INC_Controller_Helper_RuleMover_Strategy_MoveRuleOnSameLevelInsideProxy
+#ifndef INC_Controller_Helper_RuleMover_Strategy_MoveRuleIntoSubmenu
+#define INC_Controller_Helper_RuleMover_Strategy_MoveRuleIntoSubmenu
 
 #include "../../../../Model/Rule.hpp"
 #include "../../../../Model/ListCfg.hpp"
 #include "../AbstractStrategy.hpp"
 #include <memory>
 
-class Controller_Helper_RuleMover_Strategy_MoveRuleOnSameLevelInsideProxy :
+class Controller_Helper_RuleMover_Strategy_MoveRuleIntoSubmenu :
 	public Controller_Helper_RuleMover_AbstractStrategy,
 	public Model_ListCfg_Connection
 {
@@ -36,12 +36,31 @@ class Controller_Helper_RuleMover_Strategy_MoveRuleOnSameLevelInsideProxy :
 		auto visibleRules = this->findVisibleRules(ruleList, rule);
 
 		auto nextRule = this->getNextRule(visibleRules, rule, direction);
+
 		if (nextRule == nullptr) {
-			throw Controller_Helper_RuleMover_MoveFailedException("no next rule found", __FILE__, __LINE__);
+			throw Controller_Helper_RuleMover_MoveFailedException("next rule not found", __FILE__, __LINE__);
+		}
+
+		if (nextRule->type != Model_Rule::SUBMENU) {
+			throw Controller_Helper_RuleMover_MoveFailedException("next rule is not a submenu", __FILE__, __LINE__);
 		}
 
 		this->removeFromList(ruleList, rule);
-		this->insertBehind(ruleList, rule, nextRule, direction);
+		this->insertIntoSubmenu(nextRule, rule, direction);
+	}
+
+	private: void insertIntoSubmenu(
+		std::shared_ptr<Model_Rule>& submenu,
+		std::shared_ptr<Model_Rule> ruleToInsert,
+		Controller_Helper_RuleMover_AbstractStrategy::Direction direction
+	) {
+		if (direction == Controller_Helper_RuleMover_AbstractStrategy::Direction::DOWN) {
+			submenu->subRules.push_front(ruleToInsert);
+		}
+
+		if (direction == Controller_Helper_RuleMover_AbstractStrategy::Direction::UP) {
+			submenu->subRules.push_back(ruleToInsert);
+		}
 	}
 };
 #endif
