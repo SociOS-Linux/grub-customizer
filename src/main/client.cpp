@@ -100,8 +100,8 @@ int main(int argc, char** argv){
 		view->entryEditor->setAvailableEntryTypes(factory->contentParserFactory->getNames());
 
 		factory->ruleMover->addStrategy(factory->create<Controller_Helper_RuleMover_Strategy_MoveRuleIntoSubmenu>());
-		factory->ruleMover->addStrategy(factory->create<Controller_Helper_RuleMover_Strategy_MoveRuleOutOfSubmenu>());
 		factory->ruleMover->addStrategy(factory->create<Controller_Helper_RuleMover_Strategy_MoveRuleOnSameLevelInsideProxy>());
+		factory->ruleMover->addStrategy(factory->create<Controller_Helper_RuleMover_Strategy_MoveRuleOutOfSubmenu>());
 
 		mainController->initAction();
 		errorController->setApplicationStarted(true);

@@ -44,9 +44,6 @@ class Controller_Helper_RuleMover_Strategy_MoveRuleOutOfSubmenu :
 		auto visibleRules = this->findVisibleRules(ruleList, rule);
 
 		auto nextRule = this->getNextRule(visibleRules, rule, direction);
-		if (nextRule != nullptr) {
-			throw Controller_Helper_RuleMover_MoveFailedException("next rule exists - so we cannot move", __FILE__, __LINE__);
-		}
 
 		auto& destinationRuleList = proxy->getRuleList(proxy->getParentRule(parentRule));
 
