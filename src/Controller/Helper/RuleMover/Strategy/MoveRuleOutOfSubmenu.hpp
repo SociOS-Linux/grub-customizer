@@ -22,11 +22,13 @@
 #include "../../../../Model/Rule.hpp"
 #include "../../../../Model/ListCfg.hpp"
 #include "../AbstractStrategy.hpp"
+#include "../../../../lib/Trait/LoggerAware.hpp"
 #include <memory>
 
 class Controller_Helper_RuleMover_Strategy_MoveRuleOutOfSubmenu :
 	public Controller_Helper_RuleMover_AbstractStrategy,
-	public Model_ListCfg_Connection
+	public Model_ListCfg_Connection,
+	public Trait_LoggerAware
 {
 	public: void move(std::shared_ptr<Model_Rule> rule, Controller_Helper_RuleMover_AbstractStrategy::Direction direction)
 	{
