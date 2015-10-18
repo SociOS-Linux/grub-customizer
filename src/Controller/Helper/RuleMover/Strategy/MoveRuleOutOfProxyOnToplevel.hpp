@@ -101,6 +101,7 @@ class Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel :
 		// it's important to handle all tasks!
 		if (currentTaskList.count(Task::MoveOwnProxy)) {
 			this->log("Task::MoveOwnProxy", Logger::DEBUG);
+			this->moveProxy(proxy, nextProxy, direction);
 		}
 
 		if (currentTaskList.count(Task::MoveOwnEntry)) {
@@ -126,6 +127,20 @@ class Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel :
 		if (currentTaskList.count(Task::DeleteForeignProxy)) {
 			this->log("Task::DeleteForeignProxy", Logger::DEBUG);
 		}
+	}
+
+	private: void moveProxy(
+		std::shared_ptr<Model_Proxy> proxyToMove,
+		std::shared_ptr<Model_Proxy> destination, // proxyToMove will be moved behind destination
+		Controller_Helper_RuleMover_AbstractStrategy::Direction direction
+	) {
+		auto insertPosition = std::find(this->grublistCfg->proxies.begin(), this->grublistCfg->proxies.end(), destination);
+		if (direction == Controller_Helper_RuleMover_AbstractStrategy::Direction::DOWN) {
+			insertPosition++;
+		}
+		auto elementPosition = std::find(this->grublistCfg->proxies.begin(), this->grublistCfg->proxies.end(), proxyToMove);
+
+		this->grublistCfg->proxies.splice(insertPosition, this->grublistCfg->proxies, elementPosition);
 	}
 
 	private: std::list<std::shared_ptr<Model_Proxy>> findProxiesWithVisibleToplevelEntries()
