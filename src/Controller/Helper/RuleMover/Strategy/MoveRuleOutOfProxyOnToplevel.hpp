@@ -41,7 +41,8 @@ class Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel :
 		SplitOwnProxy,
 		SplitForeignProxy,
 		DeleteOwnProxy,
-		DeleteForeignProxy
+		DeleteForeignProxy,
+		MoveNewProxiesToTheMiddle
 	};
 
 	public: void move(std::shared_ptr<Model_Rule> rule, Controller_Helper_RuleMover_AbstractStrategy::Direction direction)
@@ -84,7 +85,7 @@ class Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel :
 			{std::bitset<4>("0000"), {Task::MoveOwnProxy}},
 			{std::bitset<4>("0001"), {Task::SplitOwnProxy}},
 			{std::bitset<4>("0010"), {Task::SplitForeignProxy}},
-			{std::bitset<4>("0011"), {Task::SplitOwnProxy, Task::SplitForeignProxy}},
+			{std::bitset<4>("0011"), {Task::SplitForeignProxy, Task::SplitOwnProxy, Task::MoveNewProxiesToTheMiddle}},
 			{std::bitset<4>("0100"), {Task::MoveOwnEntry, Task::DeleteOwnProxy}},
 			{std::bitset<4>("0101"), {Task::MoveOwnEntry}},
 			{std::bitset<4>("1000"), {Task::MoveForeignEntry, Task::DeleteForeignProxy}},
@@ -126,6 +127,11 @@ class Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel :
 			this->insertAsNewProxy(firstVisibleRuleOfNextProxy, nextProxy, proxy, this->flipDirection(direction));
 		}
 
+		if (currentTaskList.count(Task::MoveNewProxiesToTheMiddle)) {
+			this->log("Task::MoveNewProxiesToTheMiddle", Logger::DEBUG);
+			this->moveNewProxiesToTheMiddle(proxy, nextProxy, direction);
+		}
+
 		if (currentTaskList.count(Task::DeleteOwnProxy)) {
 			this->log("Task::DeleteOwnProxy", Logger::DEBUG);
 			this->removeProxy(proxy);
@@ -149,6 +155,8 @@ class Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel :
 		auto elementPosition = std::find(this->grublistCfg->proxies.begin(), this->grublistCfg->proxies.end(), proxyToMove);
 
 		this->grublistCfg->proxies.splice(insertPosition, this->grublistCfg->proxies, elementPosition);
+
+		this->grublistCfg->renumerate();
 	}
 
 	private: void moveRuleToOtherProxy(
@@ -159,7 +167,7 @@ class Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel :
 	) {
 		// replace ruleToMove by an invisible copy
 		auto ruleToMoveSource = std::find(sourceProxy->rules.begin(), sourceProxy->rules.end(), ruleToMove);
-		auto dummyRule = std::make_shared<Model_Rule>(*ruleToMove);
+		auto dummyRule = ruleToMove->clone();
 		dummyRule->setVisibility(false);
 		*ruleToMoveSource = dummyRule;
 
@@ -183,7 +191,7 @@ class Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel :
 	) {
 		// replace existing rule on old proxy with invisible copy
 		auto oldPos = std::find(proxyToCopy->rules.begin(), proxyToCopy->rules.end(), ruleToMove);
-		auto ruleCopy = std::make_shared<Model_Rule>(*ruleToMove);
+		auto ruleCopy = ruleToMove->clone();
 		ruleCopy->setVisibility(false);
 		*oldPos = ruleCopy;
 
@@ -218,6 +226,19 @@ class Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel :
 	{
 		auto proxyPos = std::find(this->grublistCfg->proxies.begin(), this->grublistCfg->proxies.end(), proxyToRemove);
 		this->grublistCfg->proxies.erase(proxyPos);
+	}
+
+	private: void moveNewProxiesToTheMiddle(
+		std::shared_ptr<Model_Proxy> oldOwnProxy,
+		std::shared_ptr<Model_Proxy> oldNextProxy,
+		Controller_Helper_RuleMover_AbstractStrategy::Direction direction
+	) {
+		auto visibleProxies = this->findProxiesWithVisibleToplevelEntries();
+		auto afterNextProxy = this->getNextProxy(visibleProxies, oldNextProxy, direction);
+		auto previousProxy = this->getNextProxy(visibleProxies, oldOwnProxy, this->flipDirection(direction));
+
+		this->moveProxy(oldNextProxy, afterNextProxy, direction);
+		this->moveProxy(oldOwnProxy, previousProxy, this->flipDirection(direction));
 	}
 
 	private: std::shared_ptr<Model_Rule> getFirstVisibleRule(

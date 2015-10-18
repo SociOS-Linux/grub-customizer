@@ -185,6 +185,19 @@ class Model_Rule : public Rule {
 		}
 	}
 
+	public: std::shared_ptr<Model_Rule> clone()
+	{
+		auto result = std::make_shared<Model_Rule>(*this);
+
+		result->subRules.clear();
+
+		for (auto subRule : this->subRules) {
+			result->subRules.push_back(subRule->clone());
+		}
+
+		return result;
+	}
+
 	public: operator ArrayStructure() const {
 		ArrayStructure result;
 
