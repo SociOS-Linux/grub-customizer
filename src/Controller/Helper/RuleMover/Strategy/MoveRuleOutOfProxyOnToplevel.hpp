@@ -125,10 +125,12 @@ class Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel :
 
 		if (currentTaskList.count(Task::DeleteOwnProxy)) {
 			this->log("Task::DeleteOwnProxy", Logger::DEBUG);
+			this->removeProxy(proxy);
 		}
 
 		if (currentTaskList.count(Task::DeleteForeignProxy)) {
 			this->log("Task::DeleteForeignProxy", Logger::DEBUG);
+			this->removeProxy(nextProxy);
 		}
 	}
 
@@ -168,6 +170,12 @@ class Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel :
 		}
 
 		destination->rules.insert(insertPosition, ruleToMove);
+	}
+
+	private: void removeProxy(std::shared_ptr<Model_Proxy> proxyToRemove)
+	{
+		auto proxyPos = std::find(this->grublistCfg->proxies.begin(), this->grublistCfg->proxies.end(), proxyToRemove);
+		this->grublistCfg->proxies.erase(proxyPos);
 	}
 
 	private: std::shared_ptr<Model_Rule> getLastVisibleRule(
