@@ -106,6 +106,7 @@ class Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel :
 
 		if (currentTaskList.count(Task::MoveOwnEntry)) {
 			this->log("Task::MoveOwnEntry", Logger::DEBUG);
+			this->moveRuleToOtherProxy(rule, proxy, afterNextProxy, direction);
 		}
 
 		if (currentTaskList.count(Task::MoveForeignEntry)) {
@@ -141,6 +142,30 @@ class Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel :
 		auto elementPosition = std::find(this->grublistCfg->proxies.begin(), this->grublistCfg->proxies.end(), proxyToMove);
 
 		this->grublistCfg->proxies.splice(insertPosition, this->grublistCfg->proxies, elementPosition);
+	}
+
+	private: void moveRuleToOtherProxy(
+		std::shared_ptr<Model_Rule> ruleToMove,
+		std::shared_ptr<Model_Proxy> sourceProxy,
+		std::shared_ptr<Model_Proxy> destination,
+		Controller_Helper_RuleMover_AbstractStrategy::Direction direction
+	) {
+		// replace ruleToMove by an invisible copy
+		auto ruleToMoveSource = std::find(sourceProxy->rules.begin(), sourceProxy->rules.end(), ruleToMove);
+		auto dummyRule = std::make_shared<Model_Rule>(*ruleToMove);
+		dummyRule->setVisibility(false);
+		*ruleToMoveSource = dummyRule;
+
+		// remove old equivalent rule
+		destination->removeEquivalentRules(ruleToMove);
+
+		// do the insertion
+		auto insertPosition = destination->rules.begin();
+		if (direction == Controller_Helper_RuleMover_AbstractStrategy::Direction::UP) {
+			insertPosition = destination->rules.end();
+		}
+
+		destination->rules.insert(insertPosition, ruleToMove);
 	}
 
 	private: std::list<std::shared_ptr<Model_Proxy>> findProxiesWithVisibleToplevelEntries()
