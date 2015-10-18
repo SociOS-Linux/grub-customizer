@@ -16,58 +16,13 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#include "../Model/Entry.hpp"
 #include <iostream>
-#include <memory>
-#include "../Model/ListCfg.hpp" // multi
-#include "../Model/Proxy.hpp"
-#include "../Model/Rule.hpp"
-#include "../Model/Script.hpp"
+#include <list>
+#include <string>
 
 int main(int argc, char** argv){
-	if (argc == 2) {
-		Model_Script script("noname", "");
-		Model_Entry newEntry;
-		std::string plaintextBuffer;
-		while ((newEntry = Model_Entry(stdin, Model_Entry_Row(), NULL, &plaintextBuffer))) {
-			script.entries().push_back(newEntry);
-		}
-		if (plaintextBuffer.size()) {
-			script.entries().push_front(Model_Entry("#text", "", plaintextBuffer, Model_Entry::PLAINTEXT));
-		}
-
-		Model_Proxy proxy;
-		proxy.importRuleString(argv[1], "");
-
-		proxy.dataSource = &script;
-		proxy.sync(true, true);
-		
-		for (std::list<Model_Rule>::iterator iter = proxy.rules.begin(); iter != proxy.rules.end(); iter++){
-			iter->print(std::cout);
-		}
-		return 0;
-	} else if (argc == 3 && std::string(argv[2]) == "multi") {
-		auto env = std::make_shared<Model_Env>();
-		Model_ListCfg scriptSource;
-		scriptSource.setEnv(env);
-		scriptSource.ignoreLock = true;
-		{ // this scope prevents access to the unused proxy variable - push_back takes a copy!
-			Model_Proxy proxy;
-			proxy.importRuleString(argv[1], env->cfg_dir_prefix);
-			scriptSource.proxies.push_back(proxy);
-		}
-		scriptSource.readGeneratedFile(stdin, true, false);
-
-		scriptSource.proxies.front().dataSource = &scriptSource.repository.front(); // the first Script is always the main script
-
-		std::map<std::string, Model_Script*> map = scriptSource.repository.getScriptPathMap();
-		scriptSource.proxies.front().sync(true, true, map);
-
-		for (std::list<Model_Rule>::iterator iter = scriptSource.proxies.front().rules.begin(); iter != scriptSource.proxies.front().rules.end(); iter++){
-			iter->print(std::cout);
-		}
-	} else {
-		std::cerr << "wrong argument count. You have to give the config as parameter 1!" << std::endl;
-		return 1;
+	std::list<std::string> args(argv, argv + argc);
+	for (auto& str : args) {
+		std::cout << str << std::endl;
 	}
 }

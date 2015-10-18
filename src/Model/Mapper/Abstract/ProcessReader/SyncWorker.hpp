@@ -25,7 +25,19 @@
 class Model_Mapper_Abstract_ProcessReader_SyncWorker :
 	public Model_Mapper_Abstract_ProcessReader_AbstractWorker
 {
-	public: void run()
+	public: Model_Mapper_Abstract_ProcessReader_SyncWorker(
+		std::string const& command,
+		std::function<void (char)> onReceive,
+		std::function<void (int)> onFinish
+	) {
+		this->command = command;
+		this->onReceive = onReceive;
+		this->onFinish = onFinish;
+
+		this->run();
+	}
+
+	private: void run()
 	{
 		if (this->command == "") {
 			throw std::logic_error("a command must be set before running ProcessReader_*::run");

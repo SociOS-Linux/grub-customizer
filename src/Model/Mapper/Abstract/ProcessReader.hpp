@@ -33,13 +33,7 @@ class Model_Mapper_Abstract_ProcessReader :
 		std::function<void (char)> onReceive,
 		std::function<void (int)> onFinish
 	) const	{
-		auto worker = std::make_shared<Model_Mapper_Abstract_ProcessReader_SyncWorker>();
-
-		worker->command = command;
-		worker->onReceive = onReceive;
-		worker->onFinish = onFinish;
-
-		worker->run();
+		std::make_shared<Model_Mapper_Abstract_ProcessReader_SyncWorker>(command, onReceive, onFinish);
 	}
 
 	public: void runASync(
@@ -47,16 +41,13 @@ class Model_Mapper_Abstract_ProcessReader :
 		std::function<void (char)> onReceive,
 		std::function<void (int)> onFinish
 	) const	{
-		auto worker = std::make_shared<Model_Mapper_Abstract_ProcessReader_ASyncWorker>();
-
-		worker->setThreadHelper(this->threadHelper);
-		worker->setMutex(this->mutex);
-
-		worker->command = command;
-		worker->onReceive = onReceive;
-		worker->onFinish = onFinish;
-
-		worker->run();
+		std::make_shared<Model_Mapper_Abstract_ProcessReader_ASyncWorker>(
+			command,
+			onReceive,
+			onFinish,
+			this->threadHelper,
+			this->mutex
+		);
 	}
 };
 

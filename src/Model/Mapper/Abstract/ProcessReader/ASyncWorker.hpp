@@ -27,6 +27,7 @@
 #include <memory>
 #include "../../../../Controller/Helper/Thread.hpp"
 #include "../../../../lib/Mutex.hpp"
+#include <thread>
 
 class Model_Mapper_Abstract_ProcessReader_ASyncWorker :
 	public Model_Mapper_Abstract_ProcessReader_AbstractWorker,
@@ -39,7 +40,23 @@ class Model_Mapper_Abstract_ProcessReader_ASyncWorker :
 	private: std::queue<char> receivedChars;
 	private: bool running = false;
 
-	public: void run()
+	public: Model_Mapper_Abstract_ProcessReader_ASyncWorker(
+		std::string const& command,
+		std::function<void (char)> onReceive,
+		std::function<void (int)> onFinish,
+		std::shared_ptr<Controller_Helper_Thread> threadHelper,
+		std::shared_ptr<Mutex>
+	) {
+		this->command = command;
+		this->onReceive = onReceive;
+		this->onFinish = onFinish;
+		this->setThreadHelper(threadHelper);
+		this->setMutex(mutex);
+
+		this->run();
+	}
+
+	private: void run()
 	{
 		if (this->command == "") {
 			throw std::logic_error("a command must be set before running ProcessReader_*::run");
