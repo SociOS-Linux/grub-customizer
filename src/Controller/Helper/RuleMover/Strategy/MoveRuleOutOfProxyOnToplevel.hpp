@@ -111,6 +111,8 @@ class Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel :
 
 		if (currentTaskList.count(Task::MoveForeignEntry)) {
 			this->log("Task::MoveForeignEntry", Logger::DEBUG);
+			auto lastVisibleRuleOfNextProxy = this->getLastVisibleRule(nextProxy, direction);
+			this->moveRuleToOtherProxy(lastVisibleRuleOfNextProxy, nextProxy, previousProxy, this->flipDirection(direction));
 		}
 
 		if (currentTaskList.count(Task::SplitOwnProxy)) {
@@ -166,6 +168,25 @@ class Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel :
 		}
 
 		destination->rules.insert(insertPosition, ruleToMove);
+	}
+
+	private: std::shared_ptr<Model_Rule> getLastVisibleRule(
+		std::shared_ptr<Model_Proxy> proxy,
+		Controller_Helper_RuleMover_AbstractStrategy::Direction direction
+	) {
+		auto visibleRules = this->findVisibleRules(proxy->rules, nullptr);
+		if (visibleRules.size() == 0) {
+			return nullptr;
+		}
+		if (direction == Controller_Helper_RuleMover_AbstractStrategy::Direction::UP) {
+			return visibleRules.back();
+		}
+
+		if (direction == Controller_Helper_RuleMover_AbstractStrategy::Direction::DOWN) {
+			return visibleRules.front();
+		}
+
+		throw LogicException("cannot handle given direction", __FILE__, __LINE__);
 	}
 
 	private: std::list<std::shared_ptr<Model_Proxy>> findProxiesWithVisibleToplevelEntries()
