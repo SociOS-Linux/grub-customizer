@@ -30,6 +30,10 @@ class Controller_Helper_RuleMover_Strategy_MoveRuleIntoSubmenu :
 	public Model_ListCfg_Connection,
 	public Trait_LoggerAware
 {
+	public: Controller_Helper_RuleMover_Strategy_MoveRuleIntoSubmenu()
+		: Controller_Helper_RuleMover_AbstractStrategy("MoveRuleIntoSubmenu")
+	{}
+
 	public: void move(std::shared_ptr<Model_Rule> rule, Controller_Helper_RuleMover_AbstractStrategy::Direction direction)
 	{
 		auto proxy = this->grublistCfg->proxies.getProxyByRule(rule);

@@ -22,6 +22,7 @@
 #include "../../../Model/Rule.hpp"
 #include "../../../Model/ListCfg.hpp"
 #include <memory>
+#include <string>
 
 class Controller_Helper_RuleMover_AbstractStrategy
 {
@@ -30,7 +31,19 @@ class Controller_Helper_RuleMover_AbstractStrategy
 		UP = -1
 	};
 
+	protected: std::string name;
+
+	Controller_Helper_RuleMover_AbstractStrategy(std::string const& name)
+		: name(name)
+	{}
+
 	public: virtual void move(std::shared_ptr<Model_Rule> rule, Controller_Helper_RuleMover_AbstractStrategy::Direction direction) = 0;
+
+	public: virtual std::string getName()
+	{
+		return this->name;
+	}
+
 	public: virtual ~Controller_Helper_RuleMover_AbstractStrategy(){};
 
 

@@ -45,6 +45,10 @@ class Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel :
 		MoveNewProxiesToTheMiddle
 	};
 
+	public: Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel()
+		: Controller_Helper_RuleMover_AbstractStrategy("MoveRuleOutOfProxyOnToplevel")
+	{}
+
 	public: void move(std::shared_ptr<Model_Rule> rule, Controller_Helper_RuleMover_AbstractStrategy::Direction direction)
 	{
 		auto proxy = this->grublistCfg->proxies.getProxyByRule(rule);
@@ -97,48 +101,48 @@ class Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel :
 
 		// step 2: execute tasks
 		if (situationToTask.find(situation) == situationToTask.end()) {
-			throw LogicException("current situation was not defined. Programming error!", __FILE__, __LINE__);
+			throw LogicException("cannot handle current situation. Programming error!", __FILE__, __LINE__);
 		}
 		auto currentTaskList = situationToTask[situation];
 
 		// it's important to handle all tasks!
 		if (currentTaskList.count(Task::MoveOwnProxy)) {
-			this->log("Task::MoveOwnProxy", Logger::DEBUG);
+			this->log("using Task::MoveOwnProxy", Logger::INFO);
 			this->moveProxy(proxy, nextProxy, direction);
 		}
 
 		if (currentTaskList.count(Task::MoveOwnEntry)) {
-			this->log("Task::MoveOwnEntry", Logger::DEBUG);
+			this->log("using Task::MoveOwnEntry", Logger::INFO);
 			this->moveRuleToOtherProxy(rule, proxy, afterNextProxy, direction);
 		}
 
 		if (currentTaskList.count(Task::MoveForeignEntry)) {
-			this->log("Task::MoveForeignEntry", Logger::DEBUG);
+			this->log("using Task::MoveForeignEntry", Logger::INFO);
 			this->moveRuleToOtherProxy(firstVisibleRuleOfNextProxy, nextProxy, previousProxy, this->flipDirection(direction));
 		}
 
 		if (currentTaskList.count(Task::SplitOwnProxy)) {
-			this->log("Task::SplitOwnProxy", Logger::DEBUG);
+			this->log("using Task::SplitOwnProxy", Logger::INFO);
 			this->insertAsNewProxy(rule, proxy, nextProxy, direction);
 		}
 
 		if (currentTaskList.count(Task::SplitForeignProxy)) {
-			this->log("Task::SplitForeignProxy", Logger::DEBUG);
+			this->log("using Task::SplitForeignProxy", Logger::INFO);
 			this->insertAsNewProxy(firstVisibleRuleOfNextProxy, nextProxy, proxy, this->flipDirection(direction));
 		}
 
 		if (currentTaskList.count(Task::MoveNewProxiesToTheMiddle)) {
-			this->log("Task::MoveNewProxiesToTheMiddle", Logger::DEBUG);
+			this->log("using Task::MoveNewProxiesToTheMiddle", Logger::INFO);
 			this->moveNewProxiesToTheMiddle(proxy, nextProxy, direction);
 		}
 
 		if (currentTaskList.count(Task::DeleteOwnProxy)) {
-			this->log("Task::DeleteOwnProxy", Logger::DEBUG);
+			this->log("using Task::DeleteOwnProxy", Logger::INFO);
 			this->removeProxy(proxy);
 		}
 
 		if (currentTaskList.count(Task::DeleteForeignProxy)) {
-			this->log("Task::DeleteForeignProxy", Logger::DEBUG);
+			this->log("using Task::DeleteForeignProxy", Logger::INFO);
 			this->removeProxy(nextProxy);
 		}
 	}

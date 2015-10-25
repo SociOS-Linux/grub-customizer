@@ -25,8 +25,9 @@
 #include "RuleMover/MoveFailedException.hpp"
 #include <memory>
 
-class Controller_Helper_RuleMover
-	: public Model_ListCfg_Connection
+class Controller_Helper_RuleMover :
+	public Model_ListCfg_Connection,
+	public Trait_LoggerAware
 {
 	private: std::list<std::shared_ptr<Controller_Helper_RuleMover_AbstractStrategy>> strategies;
 
@@ -36,7 +37,9 @@ class Controller_Helper_RuleMover
 
 		for (auto strategy : this->strategies) {
 			try {
+				this->log("trying move strategy \"" + strategy->getName() + "\"", Logger::INFO);
 				strategy->move(rule, direction);
+				this->log("move strategy \"" + strategy->getName() + "\" was successful", Logger::INFO);
 				return;
 			} catch (Controller_Helper_RuleMover_MoveFailedException const& e) {
 				continue;
