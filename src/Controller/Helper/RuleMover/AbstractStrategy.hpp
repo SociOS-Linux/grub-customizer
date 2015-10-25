@@ -108,6 +108,142 @@ class Controller_Helper_RuleMover_AbstractStrategy
 		}
 		list.insert(insertPosition, ruleToInsert);
 	}
+
+	protected: std::list<std::shared_ptr<Model_Proxy>> findProxiesWithVisibleToplevelEntries(
+		std::list<std::shared_ptr<Model_Proxy>> proxies
+	) {
+		std::list<std::shared_ptr<Model_Proxy>> result;
+
+		for (auto proxy : proxies) {
+			for (auto rule : proxy->rules) {
+				if (rule->isVisible) {
+					result.push_back(proxy);
+					proxy->hasVisibleRules();
+					break;
+				}
+			}
+		}
+
+		return result;
+	}
+
+	protected: std::shared_ptr<Model_Proxy> getNextProxy(
+		std::list<std::shared_ptr<Model_Proxy>> list,
+		std::shared_ptr<Model_Proxy> base,
+		Controller_Helper_RuleMover_AbstractStrategy::Direction direction
+	) {
+		auto currentPosition = std::find(list.begin(), list.end(), base);
+
+		if (direction == Controller_Helper_RuleMover_AbstractStrategy::Direction::UP) {
+			if (currentPosition == list.begin()) {
+				return nullptr;
+			}
+			currentPosition--;
+			return *currentPosition;
+		}
+
+		if (direction == Controller_Helper_RuleMover_AbstractStrategy::Direction::DOWN) {
+			currentPosition++; // iterator returned by end points behind to list so we have to increase before
+			if (currentPosition == list.end()) {
+				return nullptr;
+			}
+			return *currentPosition;
+		}
+
+		throw LogicException("cannot handle given direction", __FILE__, __LINE__);
+	}
+
+	protected: std::shared_ptr<Model_Rule> getFirstVisibleRule(
+		std::shared_ptr<Model_Proxy> proxy,
+		Controller_Helper_RuleMover_AbstractStrategy::Direction direction
+	) {
+		auto visibleRules = this->findVisibleRules(proxy->rules, nullptr);
+		if (visibleRules.size() == 0) {
+			return nullptr;
+		}
+		if (direction == Controller_Helper_RuleMover_AbstractStrategy::Direction::UP) {
+			return visibleRules.back();
+		}
+
+		if (direction == Controller_Helper_RuleMover_AbstractStrategy::Direction::DOWN) {
+			return visibleRules.front();
+		}
+
+		throw LogicException("cannot handle given direction", __FILE__, __LINE__);
+	}
+
+	protected: void insertIntoSubmenu(
+		std::shared_ptr<Model_Rule>& submenu,
+		std::shared_ptr<Model_Rule> ruleToInsert,
+		Controller_Helper_RuleMover_AbstractStrategy::Direction direction
+	) {
+		if (direction == Controller_Helper_RuleMover_AbstractStrategy::Direction::DOWN) {
+			submenu->subRules.push_front(ruleToInsert);
+		}
+
+		if (direction == Controller_Helper_RuleMover_AbstractStrategy::Direction::UP) {
+			submenu->subRules.push_back(ruleToInsert);
+		}
+	}
+
+	protected: unsigned int countVisibleRulesOnToplevel(std::shared_ptr<Model_Proxy> proxy)
+	{
+		unsigned int count = 0;
+
+		for (auto rule : proxy->rules) {
+			if (rule->isVisible) {
+				count++;
+			}
+		}
+
+		return count;
+	}
+
+	protected: void removeProxy(
+		std::shared_ptr<Model_Proxy> proxyToRemove,
+		std::list<std::shared_ptr<Model_Proxy>>& proxyList
+	) {
+		auto proxyPos = std::find(proxyList.begin(), proxyList.end(), proxyToRemove);
+		proxyList.erase(proxyPos);
+	}
+
+	protected: Controller_Helper_RuleMover_AbstractStrategy::Direction flipDirection(
+		Controller_Helper_RuleMover_AbstractStrategy::Direction in
+	) {
+		if (in == Controller_Helper_RuleMover_AbstractStrategy::Direction::UP) {
+			return Controller_Helper_RuleMover_AbstractStrategy::Direction::DOWN;
+		}
+
+		if (in == Controller_Helper_RuleMover_AbstractStrategy::Direction::DOWN) {
+			return Controller_Helper_RuleMover_AbstractStrategy::Direction::UP;
+		}
+
+		throw LogicException("cannot handle given direction", __FILE__, __LINE__);
+	}
+
+	protected: void moveRuleToOtherProxy(
+		std::shared_ptr<Model_Rule> ruleToMove,
+		std::shared_ptr<Model_Proxy> sourceProxy,
+		std::shared_ptr<Model_Proxy> destination,
+		Controller_Helper_RuleMover_AbstractStrategy::Direction direction
+	) {
+		// replace ruleToMove by an invisible copy
+		auto ruleToMoveSource = std::find(sourceProxy->rules.begin(), sourceProxy->rules.end(), ruleToMove);
+		auto dummyRule = ruleToMove->clone();
+		dummyRule->setVisibility(false);
+		*ruleToMoveSource = dummyRule;
+
+		// remove old equivalent rule
+		destination->removeEquivalentRules(ruleToMove);
+
+		// do the insertion
+		auto insertPosition = destination->rules.begin();
+		if (direction == Controller_Helper_RuleMover_AbstractStrategy::Direction::UP) {
+			insertPosition = destination->rules.end();
+		}
+
+		destination->rules.insert(insertPosition, ruleToMove);
+	}
 };
 
 #endif

@@ -52,7 +52,7 @@ class Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel :
 	public: void move(std::shared_ptr<Model_Rule> rule, Controller_Helper_RuleMover_AbstractStrategy::Direction direction)
 	{
 		auto proxy = this->grublistCfg->proxies.getProxyByRule(rule);
-		auto proxiesWithVisibleEntries = this->findProxiesWithVisibleToplevelEntries();
+		auto proxiesWithVisibleEntries = this->findProxiesWithVisibleToplevelEntries(this->grublistCfg->proxies);
 
 		auto nextProxy = this->getNextProxy(proxiesWithVisibleEntries, proxy, direction);
 		if (nextProxy == nullptr) {
@@ -138,12 +138,12 @@ class Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel :
 
 		if (currentTaskList.count(Task::DeleteOwnProxy)) {
 			this->log("using Task::DeleteOwnProxy", Logger::INFO);
-			this->removeProxy(proxy);
+			this->removeProxy(proxy, this->grublistCfg->proxies);
 		}
 
 		if (currentTaskList.count(Task::DeleteForeignProxy)) {
 			this->log("using Task::DeleteForeignProxy", Logger::INFO);
-			this->removeProxy(nextProxy);
+			this->removeProxy(nextProxy, this->grublistCfg->proxies);
 		}
 	}
 
@@ -161,30 +161,6 @@ class Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel :
 		this->grublistCfg->proxies.splice(insertPosition, this->grublistCfg->proxies, elementPosition);
 
 		this->grublistCfg->renumerate();
-	}
-
-	private: void moveRuleToOtherProxy(
-		std::shared_ptr<Model_Rule> ruleToMove,
-		std::shared_ptr<Model_Proxy> sourceProxy,
-		std::shared_ptr<Model_Proxy> destination,
-		Controller_Helper_RuleMover_AbstractStrategy::Direction direction
-	) {
-		// replace ruleToMove by an invisible copy
-		auto ruleToMoveSource = std::find(sourceProxy->rules.begin(), sourceProxy->rules.end(), ruleToMove);
-		auto dummyRule = ruleToMove->clone();
-		dummyRule->setVisibility(false);
-		*ruleToMoveSource = dummyRule;
-
-		// remove old equivalent rule
-		destination->removeEquivalentRules(ruleToMove);
-
-		// do the insertion
-		auto insertPosition = destination->rules.begin();
-		if (direction == Controller_Helper_RuleMover_AbstractStrategy::Direction::UP) {
-			insertPosition = destination->rules.end();
-		}
-
-		destination->rules.insert(insertPosition, ruleToMove);
 	}
 
 	private: void insertAsNewProxy(
@@ -226,112 +202,17 @@ class Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel :
 		this->grublistCfg->renumerate();
 	}
 
-	private: void removeProxy(std::shared_ptr<Model_Proxy> proxyToRemove)
-	{
-		auto proxyPos = std::find(this->grublistCfg->proxies.begin(), this->grublistCfg->proxies.end(), proxyToRemove);
-		this->grublistCfg->proxies.erase(proxyPos);
-	}
-
 	private: void moveNewProxiesToTheMiddle(
 		std::shared_ptr<Model_Proxy> oldOwnProxy,
 		std::shared_ptr<Model_Proxy> oldNextProxy,
 		Controller_Helper_RuleMover_AbstractStrategy::Direction direction
 	) {
-		auto visibleProxies = this->findProxiesWithVisibleToplevelEntries();
+		auto visibleProxies = this->findProxiesWithVisibleToplevelEntries(this->grublistCfg->proxies);
 		auto afterNextProxy = this->getNextProxy(visibleProxies, oldNextProxy, direction);
 		auto previousProxy = this->getNextProxy(visibleProxies, oldOwnProxy, this->flipDirection(direction));
 
 		this->moveProxy(oldNextProxy, afterNextProxy, direction);
 		this->moveProxy(oldOwnProxy, previousProxy, this->flipDirection(direction));
-	}
-
-	private: std::shared_ptr<Model_Rule> getFirstVisibleRule(
-		std::shared_ptr<Model_Proxy> proxy,
-		Controller_Helper_RuleMover_AbstractStrategy::Direction direction
-	) {
-		auto visibleRules = this->findVisibleRules(proxy->rules, nullptr);
-		if (visibleRules.size() == 0) {
-			return nullptr;
-		}
-		if (direction == Controller_Helper_RuleMover_AbstractStrategy::Direction::UP) {
-			return visibleRules.back();
-		}
-
-		if (direction == Controller_Helper_RuleMover_AbstractStrategy::Direction::DOWN) {
-			return visibleRules.front();
-		}
-
-		throw LogicException("cannot handle given direction", __FILE__, __LINE__);
-	}
-
-	private: std::list<std::shared_ptr<Model_Proxy>> findProxiesWithVisibleToplevelEntries()
-	{
-		std::list<std::shared_ptr<Model_Proxy>> proxies;
-
-		for (auto proxy : this->grublistCfg->proxies) {
-			for (auto rule : proxy->rules) {
-				if (rule->isVisible) {
-					proxies.push_back(proxy);
-					proxy->hasVisibleRules();
-					break;
-				}
-			}
-		}
-
-		return proxies;
-	}
-
-	private: std::shared_ptr<Model_Proxy> getNextProxy(
-		std::list<std::shared_ptr<Model_Proxy>> list,
-		std::shared_ptr<Model_Proxy> base,
-		Controller_Helper_RuleMover_AbstractStrategy::Direction direction
-	) {
-		auto currentPosition = std::find(list.begin(), list.end(), base);
-
-		if (direction == Controller_Helper_RuleMover_AbstractStrategy::Direction::UP) {
-			if (currentPosition == list.begin()) {
-				return nullptr;
-			}
-			currentPosition--;
-			return *currentPosition;
-		}
-
-		if (direction == Controller_Helper_RuleMover_AbstractStrategy::Direction::DOWN) {
-			currentPosition++; // iterator returned by end points behind to list so we have to increase before
-			if (currentPosition == list.end()) {
-				return nullptr;
-			}
-			return *currentPosition;
-		}
-
-		throw LogicException("cannot handle given direction", __FILE__, __LINE__);
-	}
-
-	private: unsigned int countVisibleRulesOnToplevel(std::shared_ptr<Model_Proxy> proxy)
-	{
-		unsigned int count = 0;
-
-		for (auto rule : proxy->rules) {
-			if (rule->isVisible) {
-				count++;
-			}
-		}
-
-		return count;
-	}
-
-	private: Controller_Helper_RuleMover_AbstractStrategy::Direction flipDirection(
-		Controller_Helper_RuleMover_AbstractStrategy::Direction in
-	) {
-		if (in == Controller_Helper_RuleMover_AbstractStrategy::Direction::UP) {
-			return Controller_Helper_RuleMover_AbstractStrategy::Direction::DOWN;
-		}
-
-		if (in == Controller_Helper_RuleMover_AbstractStrategy::Direction::DOWN) {
-			return Controller_Helper_RuleMover_AbstractStrategy::Direction::UP;
-		}
-
-		throw LogicException("cannot handle given direction", __FILE__, __LINE__);
 	}
 };
 #endif

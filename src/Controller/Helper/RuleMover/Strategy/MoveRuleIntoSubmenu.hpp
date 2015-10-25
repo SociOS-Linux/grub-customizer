@@ -54,19 +54,5 @@ class Controller_Helper_RuleMover_Strategy_MoveRuleIntoSubmenu :
 		this->removeFromList(ruleList, rule);
 		this->insertIntoSubmenu(nextRule, rule, direction);
 	}
-
-	private: void insertIntoSubmenu(
-		std::shared_ptr<Model_Rule>& submenu,
-		std::shared_ptr<Model_Rule> ruleToInsert,
-		Controller_Helper_RuleMover_AbstractStrategy::Direction direction
-	) {
-		if (direction == Controller_Helper_RuleMover_AbstractStrategy::Direction::DOWN) {
-			submenu->subRules.push_front(ruleToInsert);
-		}
-
-		if (direction == Controller_Helper_RuleMover_AbstractStrategy::Direction::UP) {
-			submenu->subRules.push_back(ruleToInsert);
-		}
-	}
 };
 #endif
