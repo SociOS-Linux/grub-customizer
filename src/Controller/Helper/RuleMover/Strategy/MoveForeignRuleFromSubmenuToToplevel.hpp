@@ -79,6 +79,10 @@ class Controller_Helper_RuleMover_Strategy_MoveForeignRuleFromSubmenuToToplevel 
 			// next proxy is from different script: insert a new proxy before
 			this->insertAsNewProxy(rule, ownScript, proxy, this->grublistCfg, direction);
 		}
+
+		if (sourceRuleList.size() == 0) {
+			this->removeFromList(ruleList, parentRule);
+		}
 	}
 
 	private: void splitProxyAndInsertBetween(

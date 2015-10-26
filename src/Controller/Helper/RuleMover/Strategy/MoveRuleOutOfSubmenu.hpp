@@ -55,6 +55,10 @@ class Controller_Helper_RuleMover_Strategy_MoveRuleOutOfSubmenu :
 
 		this->removeFromList(ruleList, rule);
 		this->insertBehind(destinationRuleList, rule, parentRule, direction);
+
+		if (ruleList.size() == 0) {
+			this->removeFromList(destinationRuleList, parentRule);
+		}
 	}
 };
 #endif
