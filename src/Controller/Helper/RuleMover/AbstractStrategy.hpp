@@ -233,8 +233,16 @@ class Controller_Helper_RuleMover_AbstractStrategy
 		dummyRule->setVisibility(false);
 		*ruleToMoveSource = dummyRule;
 
+		this->insertIntoProxy(ruleToMove, destination, direction);
+	}
+
+	protected: void insertIntoProxy(
+		std::shared_ptr<Model_Rule> ruleToInsert,
+		std::shared_ptr<Model_Proxy> destination,
+		Controller_Helper_RuleMover_AbstractStrategy::Direction direction
+	) {
 		// remove old equivalent rule
-		destination->removeEquivalentRules(ruleToMove);
+		destination->removeEquivalentRules(ruleToInsert);
 
 		// do the insertion
 		auto insertPosition = destination->rules.begin();
@@ -242,7 +250,61 @@ class Controller_Helper_RuleMover_AbstractStrategy
 			insertPosition = destination->rules.end();
 		}
 
-		destination->rules.insert(insertPosition, ruleToMove);
+		destination->rules.insert(insertPosition, ruleToInsert);
+	}
+
+	/**
+	 * extended version with replacement of old rule
+	 */
+	protected: void insertAsNewProxy(
+		std::shared_ptr<Model_Rule> ruleToMove,
+		std::shared_ptr<Model_Proxy> proxyToCopy,
+		std::shared_ptr<Model_Proxy> destination,
+		std::shared_ptr<Model_ListCfg> listCfg,
+		Controller_Helper_RuleMover_AbstractStrategy::Direction direction,
+		bool reAddOldRuleInvisible = true
+	) {
+		// replace existing rule on old proxy with invisible copy
+		auto oldPos = std::find(proxyToCopy->rules.begin(), proxyToCopy->rules.end(), ruleToMove);
+		auto ruleCopy = ruleToMove->clone();
+		ruleCopy->setVisibility(false);
+		*oldPos = ruleCopy;
+
+		this->insertAsNewProxy(ruleToMove, proxyToCopy->dataSource, destination, listCfg, direction);
+	}
+
+	protected: void insertAsNewProxy(
+		std::shared_ptr<Model_Rule> ruleToMove,
+		std::shared_ptr<Model_Script> sourceScript,
+		std::shared_ptr<Model_Proxy> destination,
+		std::shared_ptr<Model_ListCfg> listCfg,
+		Controller_Helper_RuleMover_AbstractStrategy::Direction direction
+	) {
+		// prepare new proxy containing ruleToMove as the only visible entry
+		auto newProxy = std::make_shared<Model_Proxy>(sourceScript, false);
+
+		newProxy->removeEquivalentRules(ruleToMove);
+
+		switch (direction) {
+			case Controller_Helper_RuleMover_AbstractStrategy::Direction::UP:
+				newProxy->rules.push_back(ruleToMove);
+				break;
+			case Controller_Helper_RuleMover_AbstractStrategy::Direction::DOWN:
+				newProxy->rules.push_front(ruleToMove);
+				break;
+			default:
+				throw LogicException("cannot handle given direction", __FILE__, __LINE__);
+		}
+
+		// insert the new proxy
+		auto insertPosition = std::find(listCfg->proxies.begin(), listCfg->proxies.end(), destination);
+		if (direction == Controller_Helper_RuleMover_AbstractStrategy::Direction::DOWN) {
+			insertPosition++;
+		}
+
+		listCfg->proxies.insert(insertPosition, newProxy);
+
+		listCfg->renumerate();
 	}
 };
 

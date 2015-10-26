@@ -31,6 +31,7 @@
 #include "../Controller/Helper/RuleMover/Strategy/MoveRuleOutOfSubmenu.hpp"
 #include "../Controller/Helper/RuleMover/Strategy/MoveRuleOutOfProxyOnToplevel.hpp"
 #include "../Controller/Helper/RuleMover/Strategy/MoveRuleIntoForeignSubmenu.hpp"
+#include "../Controller/Helper/RuleMover/Strategy/MoveForeignRuleFromSubmenuToToplevel.hpp"
 #include "../lib/Logger/Stream.hpp"
 #include "../Mapper/EntryNameImpl.hpp"
 #include "../config.hpp"
@@ -103,6 +104,7 @@ int main(int argc, char** argv){
 
 		factory->ruleMover->addStrategy(factory->create<Controller_Helper_RuleMover_Strategy_MoveRuleIntoSubmenu>());
 		factory->ruleMover->addStrategy(factory->create<Controller_Helper_RuleMover_Strategy_MoveRuleOnSameLevelInsideProxy>());
+		factory->ruleMover->addStrategy(factory->create<Controller_Helper_RuleMover_Strategy_MoveForeignRuleFromSubmenuToToplevel>());
 		factory->ruleMover->addStrategy(factory->create<Controller_Helper_RuleMover_Strategy_MoveRuleOutOfSubmenu>());
 		factory->ruleMover->addStrategy(factory->create<Controller_Helper_RuleMover_Strategy_MoveRuleIntoForeignSubmenu>());
 		factory->ruleMover->addStrategy(factory->create<Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel>());

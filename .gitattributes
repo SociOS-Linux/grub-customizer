@@ -63,6 +63,7 @@ src/Controller/Helper/GLibThread.hpp -text
 src/Controller/Helper/RuleMover.hpp -text
 src/Controller/Helper/RuleMover/AbstractStrategy.hpp -text
 src/Controller/Helper/RuleMover/MoveFailedException.hpp -text
+src/Controller/Helper/RuleMover/Strategy/MoveForeignRuleFromSubmenuToToplevel.hpp -text
 src/Controller/Helper/RuleMover/Strategy/MoveRuleIntoForeignSubmenu.hpp -text
 src/Controller/Helper/RuleMover/Strategy/MoveRuleIntoSubmenu.hpp -text
 src/Controller/Helper/RuleMover/Strategy/MoveRuleOnSameLevelInsideProxy.hpp -text

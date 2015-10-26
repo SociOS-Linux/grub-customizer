@@ -123,12 +123,12 @@ class Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel :
 
 		if (currentTaskList.count(Task::SplitOwnProxy)) {
 			this->log("using Task::SplitOwnProxy", Logger::INFO);
-			this->insertAsNewProxy(rule, proxy, nextProxy, direction);
+			this->insertAsNewProxy(rule, proxy, nextProxy, this->grublistCfg, direction);
 		}
 
 		if (currentTaskList.count(Task::SplitForeignProxy)) {
 			this->log("using Task::SplitForeignProxy", Logger::INFO);
-			this->insertAsNewProxy(firstVisibleRuleOfNextProxy, nextProxy, proxy, this->flipDirection(direction));
+			this->insertAsNewProxy(firstVisibleRuleOfNextProxy, nextProxy, proxy, this->grublistCfg, this->flipDirection(direction));
 		}
 
 		if (currentTaskList.count(Task::MoveNewProxiesToTheMiddle)) {
@@ -159,45 +159,6 @@ class Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel :
 		auto elementPosition = std::find(this->grublistCfg->proxies.begin(), this->grublistCfg->proxies.end(), proxyToMove);
 
 		this->grublistCfg->proxies.splice(insertPosition, this->grublistCfg->proxies, elementPosition);
-
-		this->grublistCfg->renumerate();
-	}
-
-	private: void insertAsNewProxy(
-		std::shared_ptr<Model_Rule> ruleToMove,
-		std::shared_ptr<Model_Proxy> proxyToCopy,
-		std::shared_ptr<Model_Proxy> destination,
-		Controller_Helper_RuleMover_AbstractStrategy::Direction direction
-	) {
-		// replace existing rule on old proxy with invisible copy
-		auto oldPos = std::find(proxyToCopy->rules.begin(), proxyToCopy->rules.end(), ruleToMove);
-		auto ruleCopy = ruleToMove->clone();
-		ruleCopy->setVisibility(false);
-		*oldPos = ruleCopy;
-
-		// prepare new proxy containing ruleToMove as the only visible entry
-		auto newProxy = std::make_shared<Model_Proxy>(proxyToCopy->dataSource, false);
-
-		newProxy->removeEquivalentRules(ruleToMove);
-
-		switch (direction) {
-			case Controller_Helper_RuleMover_AbstractStrategy::Direction::UP:
-				newProxy->rules.push_back(ruleToMove);
-				break;
-			case Controller_Helper_RuleMover_AbstractStrategy::Direction::DOWN:
-				newProxy->rules.push_front(ruleToMove);
-				break;
-			default:
-				throw LogicException("cannot handle given direction", __FILE__, __LINE__);
-		}
-
-		// insert the new proxy
-		auto insertPosition = std::find(this->grublistCfg->proxies.begin(), this->grublistCfg->proxies.end(), destination);
-		if (direction == Controller_Helper_RuleMover_AbstractStrategy::Direction::DOWN) {
-			insertPosition++;
-		}
-
-		this->grublistCfg->proxies.insert(insertPosition, newProxy);
 
 		this->grublistCfg->renumerate();
 	}
