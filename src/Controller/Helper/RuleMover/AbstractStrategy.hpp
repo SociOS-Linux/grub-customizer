@@ -199,14 +199,6 @@ class Controller_Helper_RuleMover_AbstractStrategy
 		return count;
 	}
 
-	protected: void removeProxy(
-		std::shared_ptr<Model_Proxy> proxyToRemove,
-		std::list<std::shared_ptr<Model_Proxy>>& proxyList
-	) {
-		auto proxyPos = std::find(proxyList.begin(), proxyList.end(), proxyToRemove);
-		proxyList.erase(proxyPos);
-	}
-
 	protected: Controller_Helper_RuleMover_AbstractStrategy::Direction flipDirection(
 		Controller_Helper_RuleMover_AbstractStrategy::Direction in
 	) {

@@ -138,12 +138,12 @@ class Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel :
 
 		if (currentTaskList.count(Task::DeleteOwnProxy)) {
 			this->log("using Task::DeleteOwnProxy", Logger::INFO);
-			this->removeProxy(proxy, this->grublistCfg->proxies);
+			this->grublistCfg->proxies.deleteProxy(proxy);
 		}
 
 		if (currentTaskList.count(Task::DeleteForeignProxy)) {
 			this->log("using Task::DeleteForeignProxy", Logger::INFO);
-			this->removeProxy(nextProxy, this->grublistCfg->proxies);
+			this->grublistCfg->proxies.deleteProxy(nextProxy);
 		}
 	}
 

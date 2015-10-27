@@ -69,7 +69,7 @@ class Controller_Helper_RuleMover_Strategy_MoveRuleIntoForeignSubmenu :
 		this->insertIntoSubmenu(firstVisibleRuleOfNextProxy, rule, direction);
 
 		if (this->countVisibleRulesOnToplevel(proxy) == 0) {
-			this->removeProxy(proxy, this->grublistCfg->proxies);
+			this->grublistCfg->proxies.deleteProxy(proxy);
 
 			if (previousProxy != nullptr && previousProxy->dataSource == nextProxy->dataSource) {
 				this->mergeProxy(previousProxy, nextProxy, direction);
@@ -91,7 +91,7 @@ class Controller_Helper_RuleMover_Strategy_MoveRuleIntoForeignSubmenu :
 			this->moveRuleToOtherProxy(rule, source, destination, direction);
 		}
 
-		this->removeProxy(source, this->grublistCfg->proxies);
+		this->grublistCfg->proxies.deleteProxy(source);
 	}
 };
 
