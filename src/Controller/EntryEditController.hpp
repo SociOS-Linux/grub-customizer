@@ -39,6 +39,7 @@
 #include "../Model/Installer.hpp"
 #include "../Model/ListCfg.hpp"
 #include "Helper/Thread.hpp"
+#include "Helper/RuleMover.hpp"
 
 
 class EntryEditController :
@@ -49,7 +50,8 @@ class EntryEditController :
 	public Model_DeviceDataListInterface_Connection,
 	public Model_Env_Connection,
 	public Controller_Helper_Thread_Connection,
-	public Bootstrap_Application_Object_Connection
+	public Bootstrap_Application_Object_Connection,
+	public Controller_Helper_RuleMover_Connection
 {
 	private: std::shared_ptr<ContentParser> currentContentParser;
 
@@ -258,7 +260,7 @@ class EntryEditController :
 					assert(script != nullptr);
 					script->entries().push_back(std::make_shared<Model_Entry>(*rule->dataSource));
 	
-					auto ruleCopy = std::make_shared<Model_Rule>(*rule);
+					auto ruleCopy = rule->clone();
 					rule->setVisibility(false);
 					ruleCopy->dataSource = script->entries().back();
 					auto proxy = this->grublistCfg->proxies.getProxyByRule(rule);
@@ -266,10 +268,10 @@ class EntryEditController :
 	
 					auto dummySubmenu = std::make_shared<Model_Rule>(Model_Rule::SUBMENU, std::list<std::string>(), "DUMMY", true);
 					dummySubmenu->subRules.push_back(ruleCopy);
-					auto iter = ruleList.insert(proxy->getListIterator(rule, ruleList), dummySubmenu);
+					ruleList.insert(proxy->getListIterator(rule, ruleList), dummySubmenu);
 	
-					auto insertedRule = iter->get()->subRules.back();
-					rule = this->grublistCfg->moveRule(insertedRule, -1);
+					this->ruleMover->move(ruleCopy, Controller_Helper_RuleMover_AbstractStrategy::Direction::UP);
+					rule = ruleCopy;
 					this->grublistCfg->renumerate();
 	
 					auto proxies = this->grublistCfg->proxies.getProxiesByScript(script);
