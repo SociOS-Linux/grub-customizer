@@ -21,20 +21,48 @@
 #include <glibmm/thread.h>
 #include "../Mutex.hpp"
 
-class Mutex_GLib : public Mutex {
-protected:
-	Glib::Mutex mutex;
-public:
-	void lock() {
+class Mutex_GLib_Lock : public MutexLock
+{
+	private: Glib::Mutex::Lock lock;
+
+	public: Mutex_GLib_Lock(Glib::Mutex& mutex)
+		: lock(mutex)
+	{
+	}
+
+	public: void release() override
+	{
+		this->lock.release();
+	}
+
+	public: void acquire() override
+	{
+		this->lock.acquire();
+	}
+};
+
+class Mutex_GLib : public Mutex
+{
+	protected: Glib::Mutex mutex;
+
+	public: void lock() override
+	{
 		this->mutex.lock();
 	}
 
-	bool trylock() {
+	public: bool trylock() override
+	{
 		return this->mutex.trylock();
 	}
 
-	void unlock() {
+	public: void unlock() override
+	{
 		this->mutex.unlock();
+	}
+
+	public: std::shared_ptr<MutexLock> getLock() override
+	{
+		return std::make_shared<Mutex_GLib_Lock>(this->mutex);
 	}
 
 };
