@@ -32,6 +32,7 @@
 #include "../Model/ThemeManager.hpp"
 #include "../Model/DeviceMap.hpp"
 #include "../Controller/Helper/Thread.hpp"
+#include "../Controller/Helper/RuleMover.hpp"
 #include "Application.hpp"
 
 class Bootstrap_Factory
@@ -47,6 +48,7 @@ class Bootstrap_Factory
 	public: std::shared_ptr<Mapper_EntryNameImpl> entryNameMapper;
 	public: std::shared_ptr<Model_ThemeManager> themeManager;
 	public: std::shared_ptr<Model_DeviceMap> deviceMap;
+	public: std::shared_ptr<Controller_Helper_RuleMover> ruleMover;
 	public: std::shared_ptr<Logger> logger;
 
 	public: std::shared_ptr<Regex> regexEngine;
@@ -73,6 +75,7 @@ class Bootstrap_Factory
 		this->entryNameMapper      = this->create<Mapper_EntryNameImpl>();
 		this->themeManager         = this->create<Model_ThemeManager>();
 		this->deviceMap            = this->create<Model_DeviceMap>();
+		this->ruleMover            = this->create<Controller_Helper_RuleMover>();
 
 		this->bootstrap(this->regexEngine);
 		this->bootstrap(this->threadHelper);
@@ -163,6 +166,10 @@ class Bootstrap_Factory
 		{
 			std::shared_ptr<Controller_Helper_Thread_Connection> objc = std::dynamic_pointer_cast<Controller_Helper_Thread_Connection>(obj);
 			if (objc) {assert(this->threadHelper); objc->setThreadHelper(this->threadHelper);}
+		}
+		{
+			std::shared_ptr<Controller_Helper_RuleMover_Connection> objc = std::dynamic_pointer_cast<Controller_Helper_RuleMover_Connection>(obj);
+			if (objc) {assert(this->ruleMover); objc->setRuleMover(this->ruleMover);}
 		}
 	}
 

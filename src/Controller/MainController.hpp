@@ -62,7 +62,8 @@ class MainController :
 	public Mapper_EntryName_Connection,
 	public Model_Env_Connection,
 	public Controller_Helper_Thread_Connection,
-	public Bootstrap_Application_Object_Connection
+	public Bootstrap_Application_Object_Connection,
+	public Controller_Helper_RuleMover_Connection
 {
 	private: std::shared_ptr<Model_SettingsManagerData> settingsOnDisk; //buffer for the existing settings
 	private: std::shared_ptr<Model_ListCfg> savedListCfg;
@@ -662,7 +663,11 @@ class MainController :
 						std::string currentDefaultRulePath = this->settings->getValue("GRUB_DEFAULT");
 						bool updateDefault = this->ruleAffectsCurrentDefaultOs(rulePtr, currentRulePath, currentDefaultRulePath);
 
-						rulePtr = this->grublistCfg->moveRule(rulePtr, direction);
+						//rulePtr = this->grublistCfg->moveRule(rulePtr, direction);
+						this->ruleMover->move(
+							rulePtr,
+							direction == -1 ? Controller_Helper_RuleMover_AbstractStrategy::Direction::UP : Controller_Helper_RuleMover_AbstractStrategy::Direction::DOWN
+						);
 
 						if (updateDefault) {
 							this->updateCurrentDefaultOs(rulePtr, currentRulePath, currentDefaultRulePath);

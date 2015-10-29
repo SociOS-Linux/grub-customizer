@@ -26,6 +26,12 @@
 #include "../lib/ContentParser/Linux.hpp"
 #include "../lib/ContentParser/LinuxIso.hpp"
 #include "../lib/ContentParser/Memtest.hpp"
+#include "../Controller/Helper/RuleMover/Strategy/MoveRuleOnSameLevelInsideProxy.hpp"
+#include "../Controller/Helper/RuleMover/Strategy/MoveRuleIntoSubmenu.hpp"
+#include "../Controller/Helper/RuleMover/Strategy/MoveRuleOutOfSubmenu.hpp"
+#include "../Controller/Helper/RuleMover/Strategy/MoveRuleOutOfProxyOnToplevel.hpp"
+#include "../Controller/Helper/RuleMover/Strategy/MoveRuleIntoForeignSubmenu.hpp"
+#include "../Controller/Helper/RuleMover/Strategy/MoveForeignRuleFromSubmenuToToplevel.hpp"
 #include "../lib/Logger/Stream.hpp"
 #include "../Mapper/EntryNameImpl.hpp"
 #include "../config.hpp"
@@ -95,6 +101,13 @@ int main(int argc, char** argv){
 		factory->contentParserFactory->registerParser(factory->create<ContentParser_Memtest>(), gettext("Memtest"));
 
 		view->entryEditor->setAvailableEntryTypes(factory->contentParserFactory->getNames());
+
+		factory->ruleMover->addStrategy(factory->create<Controller_Helper_RuleMover_Strategy_MoveRuleIntoSubmenu>());
+		factory->ruleMover->addStrategy(factory->create<Controller_Helper_RuleMover_Strategy_MoveRuleOnSameLevelInsideProxy>());
+		factory->ruleMover->addStrategy(factory->create<Controller_Helper_RuleMover_Strategy_MoveForeignRuleFromSubmenuToToplevel>());
+		factory->ruleMover->addStrategy(factory->create<Controller_Helper_RuleMover_Strategy_MoveRuleOutOfSubmenu>());
+		factory->ruleMover->addStrategy(factory->create<Controller_Helper_RuleMover_Strategy_MoveRuleIntoForeignSubmenu>());
+		factory->ruleMover->addStrategy(factory->create<Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel>());
 
 		mainController->initAction();
 		errorController->setApplicationStarted(true);
