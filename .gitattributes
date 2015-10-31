@@ -147,6 +147,8 @@ src/lib/Logger.hpp -text
 src/lib/Logger/Stream.hpp -text
 src/lib/Mutex.hpp -text
 src/lib/Mutex/GLib.hpp -text
+src/lib/Pipe.hpp -text
+src/lib/Process.hpp -text
 src/lib/Regex.hpp -text
 src/lib/Regex/GLib.hpp -text
 src/lib/Trait/ActionLoggerAware.hpp -text
