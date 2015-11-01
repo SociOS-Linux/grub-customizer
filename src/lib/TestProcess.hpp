@@ -23,26 +23,19 @@
 
 int main()
 {
-	auto in  = std::make_shared<Pipe>();
-	auto out = std::make_shared<Pipe>();
-	auto err = std::make_shared<Pipe>();
+	auto out           = std::make_shared<Pipe>();
 
 	auto cat = Process::create("cat")
-		->addArgument("/dev/stdin")
 		->addArgument("/etc/issue")
-		->setStdIn(in)
-		->setStdOut(out)
-		->setStdErr(err)
+		->pipeInto(Process::create("bzip2")
+			->pipeInto(Process::create("base64")
+				->setStdOut(out)
+			)
+		)
 		->run();
 
-	in->write("Hallo!\n\n");
-	in->closeWriteDescriptor();
-
 	for (char c : *out) {
-		std::cout << "[" << c << "]";
-	}
-	for (char c : *err) {
-		std::cout << "!" << c << "!";
+		std::cout << c;
 	}
 
 	std::cout << std::endl;

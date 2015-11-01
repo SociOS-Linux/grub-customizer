@@ -68,6 +68,7 @@ class Process : public std::enable_shared_from_this<Process>
 	private: std::map<unsigned int, PipeConnection> pipeConnections;
 	private: std::string cmd;
 	private: std::vector<std::string> args;
+	private: std::shared_ptr<Process> pipeDest;
 
 	private: pid_t processId;
 
@@ -144,6 +145,18 @@ class Process : public std::enable_shared_from_this<Process>
 		return this->addPipe(Process::STDERR, Process::ChildAction::WRITE, pipe);
 	}
 
+	/**
+	 * comfort function to attach another process as pipe target
+	 */
+	public: std::shared_ptr<Process> pipeInto(std::shared_ptr<Process> otherProcess)
+	{
+		auto procToProcPipe = std::make_shared<Pipe>();
+		this->setStdOut(procToProcPipe);
+		otherProcess->setStdIn(procToProcPipe);
+		this->pipeDest = otherProcess;
+		return shared_from_this();
+	}
+
 	public: std::shared_ptr<Process> run()
 	{
 		this->processId = this->createNewProcess(std::bind(std::mem_fn(&Process::handleChildProcess), this));
@@ -155,6 +168,10 @@ class Process : public std::enable_shared_from_this<Process>
 			if (pipeConnection.second.childAction == ChildAction::READ) {
 				pipeConnection.second.pipe->closeReadDescriptor();
 			}
+		}
+
+		if (this->pipeDest) {
+			this->pipeDest->run();
 		}
 		return shared_from_this();
 	}
