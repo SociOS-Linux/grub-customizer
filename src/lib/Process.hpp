@@ -26,12 +26,13 @@
 
 #include <sys/types.h>
 #include <unistd.h>
+#include <sys/wait.h>
 
 #include <iostream>
 
 #include "Pipe.hpp"
 
-class Process
+class Process : public std::enable_shared_from_this<Process>
 {
 	public: enum StdChannels {
 		STDIN  = 0,
@@ -65,21 +66,87 @@ class Process
 	};
 
 	private: std::map<unsigned int, PipeConnection> pipeConnections;
+	private: std::string cmd;
+	private: std::vector<std::string> args;
 
-	public: Process(
-		std::string const& cmd,
-		std::vector<std::string> const& args,
-		std::map<unsigned int, Process::ChildAction> descriptorSpecs
-	) {
-		for (auto descriptorSpec : descriptorSpecs) {
-			this->pipeConnections[descriptorSpec.first] = PipeConnection(
-				descriptorSpec.first,
-				descriptorSpec.second,
-				std::make_shared<Pipe>()
-			);
+	private: pid_t processId;
+
+	protected: Process() : processId(-1) {}
+
+	public: static std::shared_ptr<Process> create(std::string const& cmd)
+	{
+		std::shared_ptr<Process> proc = nullptr;
+
+		auto procPtr = new Process();
+		try {
+			proc = std::shared_ptr<Process>(procPtr);
+		} catch (std::bad_alloc const& e) {
+			delete procPtr;
+			throw e;
 		}
 
-		pid_t childProc = this->createNewProcess(std::bind(std::mem_fn(&Process::handleChildProcess), this, cmd, args));
+		proc->cmd = cmd;
+		return proc;
+	}
+
+	public: std::shared_ptr<Process> setCmd(std::string const& cmd)
+	{
+		this->cmd = cmd;
+		return shared_from_this();
+	}
+
+	public: std::shared_ptr<Process> setArguments(std::vector<std::string> const& args)
+	{
+		this->args = args;
+		return shared_from_this();
+	}
+
+	public: std::shared_ptr<Process> addArgument(std::string const& arg)
+	{
+		this->args.push_back(arg);
+		return shared_from_this();
+	}
+
+	public: std::shared_ptr<Process> addPipe(
+		unsigned int fileDescriptorToMap,
+		Process::ChildAction childAction,
+		std::shared_ptr<Pipe> pipe
+	) {
+		this->pipeConnections[fileDescriptorToMap] = PipeConnection(
+			fileDescriptorToMap,
+			childAction,
+			pipe
+		);
+		return shared_from_this();
+	}
+
+	/**
+	 * comfort function to easily assign stdin
+	 */
+	public: std::shared_ptr<Process> setStdIn(std::shared_ptr<Pipe> pipe)
+	{
+		return this->addPipe(Process::STDIN, Process::ChildAction::READ, pipe);
+	}
+
+	/**
+	 * comfort function to easily assign stdout
+	 */
+	public: std::shared_ptr<Process> setStdOut(std::shared_ptr<Pipe> pipe)
+	{
+		return this->addPipe(Process::STDOUT, Process::ChildAction::WRITE, pipe);
+	}
+
+	/**
+	 * comfort function to easily assign stderr
+	 */
+	public: std::shared_ptr<Process> setStdErr(std::shared_ptr<Pipe> pipe)
+	{
+		return this->addPipe(Process::STDERR, Process::ChildAction::WRITE, pipe);
+	}
+
+	public: std::shared_ptr<Process> run()
+	{
+		this->processId = this->createNewProcess(std::bind(std::mem_fn(&Process::handleChildProcess), this));
 
 		for (auto pipeConnection : this->pipeConnections) {
 			if (pipeConnection.second.childAction == ChildAction::WRITE) {
@@ -89,6 +156,14 @@ class Process
 				pipeConnection.second.pipe->closeReadDescriptor();
 			}
 		}
+		return shared_from_this();
+	}
+
+	public: int finish()
+	{
+		int res = 0;
+		::waitpid(this->processId, &res, 0);
+		return res;
 	}
 
 	public: std::shared_ptr<Pipe> getPipe(unsigned int channel)
@@ -111,10 +186,7 @@ class Process
 		return pid;
 	}
 
-	private: void handleChildProcess(
-		std::string const& cmd,
-		std::vector<std::string> const& args
-	) {
+	private: void handleChildProcess() {
 		for (auto pipeConnection : this->pipeConnections) {
 			if (pipeConnection.second.childAction == ChildAction::WRITE) {
 				pipeConnection.second.pipe->closeReadDescriptor();
@@ -126,12 +198,12 @@ class Process
 			}
 		}
 
-		auto argv = new char*[args.size() + 2];
+		auto argv = new char*[this->args.size() + 2];
 
 		int i = 0;
 
-		argv[i++] = const_cast<char*>(cmd.c_str());
-		for (auto& arg : args) {
+		argv[i++] = const_cast<char*>(this->cmd.c_str());
+		for (auto& arg : this->args) {
 			argv[i++] = const_cast<char*>(arg.c_str());
 		}
 		argv[i++] = NULL;

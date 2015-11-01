@@ -151,6 +151,7 @@ src/lib/Pipe.hpp -text
 src/lib/Process.hpp -text
 src/lib/Regex.hpp -text
 src/lib/Regex/GLib.hpp -text
+src/lib/TestProcess.hpp -text
 src/lib/Trait/ActionLoggerAware.hpp -text
 src/lib/Trait/LoggerAware.hpp -text
 src/lib/Type.hpp -text
