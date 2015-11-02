@@ -27,8 +27,8 @@ int main()
 
 	auto cat = Process::create("bash")
 		->setArguments({"-c", "echo Alles gut; cat /foobar"})
-		->setStdOut(out)
-		->setStdErr("/tmp/myerr")
+		->pipeInto(Process::create("base64")->setStdOut(out))
+		->pipeInto(Process::create("awk")->addArgument("{print toupper($0)}")->setStdOut("/tmp/errbig"), Process::STDERR)
 		->run();
 
 	std::string str;

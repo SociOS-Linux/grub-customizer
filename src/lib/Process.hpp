@@ -76,7 +76,7 @@ class Process : public std::enable_shared_from_this<Process>
 	private: std::map<unsigned int, PipeConnection> pipeConnections;
 	private: std::string cmd;
 	private: std::vector<std::string> args;
-	private: std::shared_ptr<Process> pipeDest;
+	private: std::map<unsigned int, std::shared_ptr<Process>> pipeDest;
 	private: std::map<unsigned int, std::string> inputFiles;
 	private: std::map<unsigned int, std::string> outputFiles;
 	private: std::map<unsigned int, FileWriteMode> outputFilesAppendFlags;
@@ -215,12 +215,15 @@ class Process : public std::enable_shared_from_this<Process>
 	/**
 	 * comfort function to attach another process as pipe target
 	 */
-	public: std::shared_ptr<Process> pipeInto(std::shared_ptr<Process> otherProcess)
-	{
+	public: std::shared_ptr<Process> pipeInto(
+		std::shared_ptr<Process> otherProcess,
+		unsigned int channelSrc = Process::STDOUT,
+		unsigned int channelDest = Process::STDIN
+	) {
 		auto procToProcPipe = std::make_shared<Pipe>();
-		this->setStdOut(procToProcPipe);
-		otherProcess->setStdIn(procToProcPipe);
-		this->pipeDest = otherProcess;
+		this->addPipe(channelSrc, ChildAction::WRITE, procToProcPipe);
+		otherProcess->addPipe(channelDest, ChildAction::READ, procToProcPipe);
+		this->pipeDest[channelSrc] = otherProcess;
 		return shared_from_this();
 	}
 
@@ -237,8 +240,8 @@ class Process : public std::enable_shared_from_this<Process>
 			}
 		}
 
-		if (this->pipeDest) {
-			this->pipeDest->run();
+		for (auto pipeDest : this->pipeDest) {
+			pipeDest.second->run();
 		}
 		return shared_from_this();
 	}
