@@ -27,6 +27,8 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <fcntl.h>
+#include <sys/stat.h>
 
 #include <iostream>
 
@@ -50,6 +52,11 @@ class Process : public std::enable_shared_from_this<Process>
 		WRITE = 'w'
 	};
 
+	public: enum FileWriteMode {
+		REPLACE,
+		APPEND
+	};
+
 	public: class PipeConnection
 	{
 		public: unsigned int channel;
@@ -69,6 +76,9 @@ class Process : public std::enable_shared_from_this<Process>
 	private: std::string cmd;
 	private: std::vector<std::string> args;
 	private: std::shared_ptr<Process> pipeDest;
+	private: std::map<unsigned int, std::string> inputFiles;
+	private: std::map<unsigned int, std::string> outputFiles;
+	private: std::map<unsigned int, FileWriteMode> outputFilesAppendFlags;
 
 	private: pid_t processId;
 
@@ -145,6 +155,22 @@ class Process : public std::enable_shared_from_this<Process>
 		return this->addPipe(Process::STDERR, Process::ChildAction::WRITE, pipe);
 	}
 
+	public: std::shared_ptr<Process> readFrom(std::string const& filePath, unsigned int fileDescriptor = Process::STDIN)
+	{
+		this->inputFiles[fileDescriptor] = filePath;
+		return shared_from_this();
+	}
+
+	public: std::shared_ptr<Process> writeInto(
+		std::string const& filePath,
+		FileWriteMode writeMode = FileWriteMode::REPLACE,
+		unsigned int fileDescriptor = Process::STDOUT
+	) {
+		this->outputFiles[fileDescriptor] = filePath;
+		this->outputFilesAppendFlags[fileDescriptor] = writeMode;
+		return shared_from_this();
+	}
+
 	/**
 	 * comfort function to attach another process as pipe target
 	 */
@@ -215,6 +241,22 @@ class Process : public std::enable_shared_from_this<Process>
 			}
 		}
 
+		for (auto inputFile : this->inputFiles) {
+			int file = ::open(inputFile.second.c_str(), 0);
+			::dup2(file, inputFile.first);
+			::close(file);
+		}
+
+		for (auto outputFile : this->outputFiles) {
+			bool replace = this->outputFilesAppendFlags[outputFile.first] == FileWriteMode::REPLACE;
+			int file = ::open(
+				outputFile.second.c_str(),
+				O_WRONLY | O_CREAT | (replace ? O_TRUNC : O_APPEND)
+			);
+			::dup2(file, outputFile.first);
+			::close(file);
+		}
+
 		auto argv = new char*[this->args.size() + 2];
 
 		int i = 0;
@@ -225,7 +267,7 @@ class Process : public std::enable_shared_from_this<Process>
 		}
 		argv[i++] = NULL;
 
-		execvp(cmd.c_str(), argv);
+		::execvp(cmd.c_str(), argv);
 	}
 };
 

@@ -23,20 +23,20 @@
 
 int main()
 {
-	auto out           = std::make_shared<Pipe>();
+//	auto out           = std::make_shared<Pipe>();
 
 	auto cat = Process::create("cat")
-		->addArgument("/etc/issue")
+		->readFrom("/etc/issue2")
 		->pipeInto(Process::create("bzip2")
 			->pipeInto(Process::create("base64")
-				->setStdOut(out)
+				->writeInto("/tmp/test", Process::FileWriteMode::REPLACE)
 			)
 		)
 		->run();
 
-	for (char c : *out) {
-		std::cout << c;
-	}
+//	for (char c : *out) {
+//		std::cout << c;
+//	}
 
 	std::cout << std::endl;
 
