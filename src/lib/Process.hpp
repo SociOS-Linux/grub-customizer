@@ -23,6 +23,7 @@
 #include <memory>
 #include <map>
 #include <vector>
+#include <algorithm>
 
 #include <sys/types.h>
 #include <unistd.h>
@@ -79,6 +80,7 @@ class Process : public std::enable_shared_from_this<Process>
 	private: std::map<unsigned int, std::string> inputFiles;
 	private: std::map<unsigned int, std::string> outputFiles;
 	private: std::map<unsigned int, FileWriteMode> outputFilesAppendFlags;
+	private: std::map<unsigned int, unsigned int> channelMappings; // key: from, value: to
 
 	private: pid_t processId;
 
@@ -123,11 +125,26 @@ class Process : public std::enable_shared_from_this<Process>
 		Process::ChildAction childAction,
 		std::shared_ptr<Pipe> pipe
 	) {
-		this->pipeConnections[fileDescriptorToMap] = PipeConnection(
-			fileDescriptorToMap,
-			childAction,
-			pipe
+		auto existingPipeConnectionWithSamePipeIter = std::find_if(
+			this->pipeConnections.begin(),
+			this->pipeConnections.end(),
+			[pipe](std::pair<const unsigned int,PipeConnection> pipeCon){return pipeCon.second.pipe == pipe;}
 		);
+
+		if (existingPipeConnectionWithSamePipeIter != this->pipeConnections.end()) {
+			// allow combining multiple output channels (example: read stdout and stderr from the same pipe)
+			if (existingPipeConnectionWithSamePipeIter->second.childAction != childAction) {
+				throw std::logic_error("pipe already used but with other childAction");
+			}
+
+			this->channelMappings[fileDescriptorToMap] = existingPipeConnectionWithSamePipeIter->second.channel;
+		} else {
+			this->pipeConnections[fileDescriptorToMap] = PipeConnection(
+				fileDescriptorToMap,
+				childAction,
+				pipe
+			);
+		}
 		return shared_from_this();
 	}
 
@@ -229,7 +246,9 @@ class Process : public std::enable_shared_from_this<Process>
 		return pid;
 	}
 
-	private: void handleChildProcess() {
+	private: void handleChildProcess()
+	{
+
 		for (auto pipeConnection : this->pipeConnections) {
 			if (pipeConnection.second.childAction == ChildAction::WRITE) {
 				pipeConnection.second.pipe->closeReadDescriptor();
@@ -255,6 +274,10 @@ class Process : public std::enable_shared_from_this<Process>
 			);
 			::dup2(file, outputFile.first);
 			::close(file);
+		}
+
+		for (auto mapping : this->channelMappings) {
+			::dup2(mapping.second, mapping.first);
 		}
 
 		auto argv = new char*[this->args.size() + 2];

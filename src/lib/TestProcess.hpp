@@ -23,22 +23,19 @@
 
 int main()
 {
-//	auto out           = std::make_shared<Pipe>();
+	auto out = std::make_shared<Pipe>();
 
-	auto cat = Process::create("cat")
-		->readFrom("/etc/issue2")
-		->pipeInto(Process::create("bzip2")
-			->pipeInto(Process::create("base64")
-				->writeInto("/tmp/test", Process::FileWriteMode::REPLACE)
-			)
-		)
+	auto cat = Process::create("bash")
+		->setArguments({"-c", "echo Alles gut; cat /foobar"})
+		->setStdOut(out)
+		->setStdErr(out)
 		->run();
 
-//	for (char c : *out) {
-//		std::cout << c;
-//	}
-
-	std::cout << std::endl;
+	std::string str;
+	for (char c : *out) {
+		str += c;
+	}
+	std::cerr << "[" << str << "]" << std::endl;
 
 	std::cout << "the exit status is: " << cat->finish() << std::endl;
 }
