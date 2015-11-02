@@ -172,20 +172,44 @@ class Process : public std::enable_shared_from_this<Process>
 		return this->addPipe(Process::STDERR, Process::ChildAction::WRITE, pipe);
 	}
 
-	public: std::shared_ptr<Process> readFrom(std::string const& filePath, unsigned int fileDescriptor = Process::STDIN)
-	{
-		this->inputFiles[fileDescriptor] = filePath;
+	public: std::shared_ptr<Process> addFile(
+		std::string const& filePath,
+		unsigned int fileDescriptor,
+		Process::ChildAction childAction,
+		FileWriteMode writeMode = FileWriteMode::REPLACE
+	) {
+		if (childAction == Process::ChildAction::READ) {
+			this->inputFiles[fileDescriptor] = filePath;
+		} else {
+			this->outputFiles[fileDescriptor] = filePath;
+			this->outputFilesAppendFlags[fileDescriptor] = writeMode;
+		}
+
 		return shared_from_this();
 	}
 
-	public: std::shared_ptr<Process> writeInto(
-		std::string const& filePath,
-		FileWriteMode writeMode = FileWriteMode::REPLACE,
-		unsigned int fileDescriptor = Process::STDOUT
-	) {
-		this->outputFiles[fileDescriptor] = filePath;
-		this->outputFilesAppendFlags[fileDescriptor] = writeMode;
-		return shared_from_this();
+	/**
+	 * comfort function to easily assign stdin
+	 */
+	public: std::shared_ptr<Process> setStdIn(std::string const& filePath)
+	{
+		return this->addFile(filePath, Process::STDIN, Process::ChildAction::READ);
+	}
+
+	/**
+	 * comfort function to easily assign stdout
+	 */
+	public: std::shared_ptr<Process> setStdOut(std::string const& filePath, FileWriteMode writeMode = FileWriteMode::REPLACE)
+	{
+		return this->addFile(filePath, Process::STDOUT, Process::ChildAction::WRITE, writeMode);
+	}
+
+	/**
+	 * comfort function to easily assign stderr
+	 */
+	public: std::shared_ptr<Process> setStdErr(std::string const& filePath, FileWriteMode writeMode = FileWriteMode::REPLACE)
+	{
+		return this->addFile(filePath, Process::STDERR, Process::ChildAction::WRITE, writeMode);
 	}
 
 	/**

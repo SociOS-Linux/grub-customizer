@@ -28,7 +28,7 @@ int main()
 	auto cat = Process::create("bash")
 		->setArguments({"-c", "echo Alles gut; cat /foobar"})
 		->setStdOut(out)
-		->setStdErr(out)
+		->setStdErr("/tmp/myerr")
 		->run();
 
 	std::string str;
