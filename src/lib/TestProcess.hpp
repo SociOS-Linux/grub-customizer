@@ -23,21 +23,22 @@
 
 int main()
 {
-	auto out = std::make_shared<Pipe>();
+	auto testPipe = std::make_shared<Pipe>();
 
-	auto cat = Process::create("bash")
-		->setArguments({"-c", "echo Alles gut; cat /foobar"})
-		->pipeInto(Process::create("base64")->setStdOut(out))
-		->pipeInto(Process::create("awk")->addArgument("{print toupper($0)}")->setStdOut("/tmp/errbig"), Process::STDERR)
+	Process::create("cat")
+		->setStdIn("/etc/passwdx")
+		->setStdOut(testPipe)
+		->setStdErr(testPipe)
 		->run();
 
-	std::string str;
-	for (char c : *out) {
-		str += c;
-	}
-	std::cerr << "[" << str << "]" << std::endl;
+//	testPipe->write("Test!");
+//	testPipe->closeWriteDescriptor();
 
-	std::cout << "the exit status is: " << cat->finish() << std::endl;
+	for (char c : *testPipe) {
+		std::cout << "[" << c << "]" << std::endl;
+	}
+
+	std::cout << "pipe reading finished!" << std::endl;
 }
 
 #endif /* SRC_LIB_TESTPROCESS_HPP_ */

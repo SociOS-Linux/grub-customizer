@@ -24,12 +24,14 @@
 #include <map>
 #include <vector>
 #include <algorithm>
+#include <set>
 
 #include <sys/types.h>
 #include <unistd.h>
 #include <sys/wait.h>
 #include <fcntl.h>
 #include <sys/stat.h>
+#include <sys/resource.h>
 
 #include <iostream>
 
@@ -81,6 +83,7 @@ class Process : public std::enable_shared_from_this<Process>
 	private: std::map<unsigned int, std::string> outputFiles;
 	private: std::map<unsigned int, FileWriteMode> outputFilesAppendFlags;
 	private: std::map<unsigned int, unsigned int> channelMappings; // key: from, value: to
+	private: std::set<unsigned int> passThruChannels;
 
 	private: pid_t processId;
 
@@ -212,6 +215,12 @@ class Process : public std::enable_shared_from_this<Process>
 		return this->addFile(filePath, Process::STDERR, Process::ChildAction::WRITE, writeMode);
 	}
 
+	public: std::shared_ptr<Process> setPassThru(std::set<unsigned int> channels = {STDIN, STDOUT, STDERR})
+	{
+		this->passThruChannels = channels;
+		return shared_from_this();
+	}
+
 	/**
 	 * comfort function to attach another process as pipe target
 	 */
@@ -275,20 +284,18 @@ class Process : public std::enable_shared_from_this<Process>
 
 	private: void handleChildProcess()
 	{
-
 		for (auto pipeConnection : this->pipeConnections) {
 			if (pipeConnection.second.childAction == ChildAction::WRITE) {
-				pipeConnection.second.pipe->closeReadDescriptor();
 				pipeConnection.second.pipe->mapWriteDescriptor(pipeConnection.second.channel);
 			}
 			if (pipeConnection.second.childAction == ChildAction::READ) {
-				pipeConnection.second.pipe->closeWriteDescriptor();
 				pipeConnection.second.pipe->mapReadDescriptor(pipeConnection.second.channel);
 			}
 		}
 
 		for (auto inputFile : this->inputFiles) {
 			int file = ::open(inputFile.second.c_str(), 0);
+			if (file == -1) {std::cerr << "cannot open input file!" << std::endl; _exit(1);}
 			::dup2(file, inputFile.first);
 			::close(file);
 		}
@@ -299,12 +306,24 @@ class Process : public std::enable_shared_from_this<Process>
 				outputFile.second.c_str(),
 				O_WRONLY | O_CREAT | (replace ? O_TRUNC : O_APPEND)
 			);
+			if (file == -1) {std::cerr << "cannot open output file!" << std::endl; _exit(1);}
 			::dup2(file, outputFile.first);
 			::close(file);
 		}
 
 		for (auto mapping : this->channelMappings) {
 			::dup2(mapping.second, mapping.first);
+		}
+
+		// close all unnecessary file descriptors
+		auto usedFileDescriptors = this->getAllChildFileDescriptors();
+		rlimit rlim;
+		getrlimit(RLIMIT_NOFILE, &rlim);
+		for (rlim_t i = 0; i < rlim.rlim_cur; i++) {
+			if (usedFileDescriptors.count(i) == 0) {
+				// ignoring file descriptors that should be used by child process
+				::close(i);
+			}
 		}
 
 		auto argv = new char*[this->args.size() + 2];
@@ -318,6 +337,27 @@ class Process : public std::enable_shared_from_this<Process>
 		argv[i++] = NULL;
 
 		::execvp(cmd.c_str(), argv);
+	}
+
+	private: std::set<unsigned int> getAllChildFileDescriptors()
+	{
+		std::set<unsigned int> result;
+		for (auto pipeCnn : this->pipeConnections) {
+			result.insert(pipeCnn.first);
+		}
+		for (auto inputFile : this->inputFiles) {
+			result.insert(inputFile.first);
+		}
+		for (auto outputFile : this->outputFiles) {
+			result.insert(outputFile.first);
+		}
+		for (auto channelMapping : this->channelMappings) {
+			result.insert(channelMapping.first);
+		}
+		for (auto passThruChannel : this->passThruChannels) {
+			result.insert(passThruChannel);
+		}
+		return result;
 	}
 };
 
