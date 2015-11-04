@@ -52,7 +52,6 @@ class Pipe
 		public: void map(int to)
 		{
 			::dup2(this->descriptor, to);
-			this->close();
 		}
 
 		public: void registerUsage()

@@ -72,7 +72,6 @@ class Process : public std::enable_shared_from_this<Process>
 	private: std::string cmd;
 	private: std::vector<std::string> args;
 	private: std::map<unsigned int, std::shared_ptr<Process>> pipeDest;
-	private: std::map<unsigned int, unsigned int> channelMappings; // key: from, value: to
 	private: std::set<unsigned int> passThruChannels;
 
 	private: pid_t processId;
@@ -117,22 +116,12 @@ class Process : public std::enable_shared_from_this<Process>
 		unsigned int fileDescriptorToMap,
 		std::shared_ptr<Pipe::AbstractEnd> pipeEnd
 	) {
-		auto existingPipeConnectionWithSamePipeIter = std::find_if(
-			this->pipeConnections.begin(),
-			this->pipeConnections.end(),
-			[pipeEnd](std::pair<const unsigned int,PipeEndConnection> pipeCon){return pipeCon.second.pipeEnd == pipeEnd;}
+		this->pipeConnections[fileDescriptorToMap] = PipeEndConnection(
+			fileDescriptorToMap,
+			pipeEnd
 		);
+		pipeEnd->registerUsage();
 
-		if (existingPipeConnectionWithSamePipeIter != this->pipeConnections.end()) {
-			// allow combining multiple output channels (example: read stdout and stderr from the same pipe)
-			this->channelMappings[fileDescriptorToMap] = existingPipeConnectionWithSamePipeIter->second.channel;
-		} else {
-			this->pipeConnections[fileDescriptorToMap] = PipeEndConnection(
-				fileDescriptorToMap,
-				pipeEnd
-			);
-			pipeEnd->registerUsage();
-		}
 		return shared_from_this();
 	}
 
@@ -297,10 +286,6 @@ class Process : public std::enable_shared_from_this<Process>
 			pipeConnection.second.pipeEnd->map(pipeConnection.second.channel);
 		}
 
-		for (auto mapping : this->channelMappings) {
-			::dup2(mapping.second, mapping.first);
-		}
-
 		// close all unnecessary file descriptors
 		auto usedFileDescriptors = this->getAllChildFileDescriptors();
 		rlimit rlim;
@@ -330,9 +315,6 @@ class Process : public std::enable_shared_from_this<Process>
 		std::set<unsigned int> result;
 		for (auto pipeCnn : this->pipeConnections) {
 			result.insert(pipeCnn.first);
-		}
-		for (auto channelMapping : this->channelMappings) {
-			result.insert(channelMapping.first);
 		}
 		for (auto passThruChannel : this->passThruChannels) {
 			result.insert(passThruChannel);

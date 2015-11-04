@@ -26,9 +26,9 @@ int main()
 	auto testPipe = std::make_shared<Pipe>();
 
 	Process::create("bash")
-		->addArgument("echo all good!; cat /etc/issue3")
-		->setStdOut(Process::create("md5sum")->setStdOut(testPipe->getWriter()))
-		->setStdErr(Process::create("base64")->setStdOut(testPipe->getWriter()))
+		->setArguments({"-c", "echo all good!; cat /etc/issue3"})
+		->setStdOut(testPipe->getWriter())
+		->setStdErr(testPipe->getWriter())
 		->run();
 
 	std::cout << "finally it's " << (testPipe->getWriter()->isClosed() ? "closed" : "not closed") << std::endl;
@@ -37,7 +37,7 @@ int main()
 //	testPipe->closeWriteDescriptor();
 
 	for (char c : *testPipe->getReader()) {
-		std::cerr << c;
+		std::cerr << "[" << c << "]";
 	}
 
 	std::cout << "pipe reading finished!" << std::endl;
