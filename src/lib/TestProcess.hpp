@@ -27,8 +27,8 @@ int main()
 
 	Process::create("cat")
 		->setStdIn("/etc/passwd")
-		->setStdOut(testPipe)
-		->setStdErr(testPipe)
+		->setStdOut(testPipe->getWriter())
+		->setStdErr(testPipe->getWriter())
 		->run();
 
 //	testPipe->write("Test!");

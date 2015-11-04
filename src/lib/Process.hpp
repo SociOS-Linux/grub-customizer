@@ -60,22 +60,20 @@ class Process : public std::enable_shared_from_this<Process>
 		APPEND
 	};
 
-	public: class PipeConnection
+	public: class PipeEndConnection
 	{
 		public: unsigned int channel;
-		public: std::shared_ptr<Pipe> pipe;
-		public: Process::ChildAction childAction;
+		public: std::shared_ptr<Pipe::AbstractEnd> pipeEnd;
 
-		public: PipeConnection() : childAction(ChildAction::READ), channel(0) {}
+		public: PipeEndConnection() : channel(0) {}
 
-		public: PipeConnection(unsigned int fileDescriptorToMap, Process::ChildAction childAction, std::shared_ptr<Pipe> pipe) :
+		public: PipeEndConnection(unsigned int fileDescriptorToMap, std::shared_ptr<Pipe::AbstractEnd> pipeEnd) :
 			channel(fileDescriptorToMap),
-			childAction(childAction),
-			pipe(pipe)
+			pipeEnd(pipeEnd)
 		{}
 	};
 
-	private: std::map<unsigned int, PipeConnection> pipeConnections;
+	private: std::map<unsigned int, PipeEndConnection> pipeConnections;
 	private: std::string cmd;
 	private: std::vector<std::string> args;
 	private: std::map<unsigned int, std::shared_ptr<Process>> pipeDest;
@@ -123,29 +121,23 @@ class Process : public std::enable_shared_from_this<Process>
 		return shared_from_this();
 	}
 
-	public: std::shared_ptr<Process> addPipe(
+	public: std::shared_ptr<Process> addPipeEnd(
 		unsigned int fileDescriptorToMap,
-		Process::ChildAction childAction,
-		std::shared_ptr<Pipe> pipe
+		std::shared_ptr<Pipe::AbstractEnd> pipeEnd
 	) {
 		auto existingPipeConnectionWithSamePipeIter = std::find_if(
 			this->pipeConnections.begin(),
 			this->pipeConnections.end(),
-			[pipe](std::pair<const unsigned int,PipeConnection> pipeCon){return pipeCon.second.pipe == pipe;}
+			[pipeEnd](std::pair<const unsigned int,PipeEndConnection> pipeCon){return pipeCon.second.pipeEnd == pipeEnd;}
 		);
 
 		if (existingPipeConnectionWithSamePipeIter != this->pipeConnections.end()) {
 			// allow combining multiple output channels (example: read stdout and stderr from the same pipe)
-			if (existingPipeConnectionWithSamePipeIter->second.childAction != childAction) {
-				throw std::logic_error("pipe already used but with other childAction");
-			}
-
 			this->channelMappings[fileDescriptorToMap] = existingPipeConnectionWithSamePipeIter->second.channel;
 		} else {
-			this->pipeConnections[fileDescriptorToMap] = PipeConnection(
+			this->pipeConnections[fileDescriptorToMap] = PipeEndConnection(
 				fileDescriptorToMap,
-				childAction,
-				pipe
+				pipeEnd
 			);
 		}
 		return shared_from_this();
@@ -154,25 +146,25 @@ class Process : public std::enable_shared_from_this<Process>
 	/**
 	 * comfort function to easily assign stdin
 	 */
-	public: std::shared_ptr<Process> setStdIn(std::shared_ptr<Pipe> pipe)
+	public: std::shared_ptr<Process> setStdIn(std::shared_ptr<Pipe::ReadEnd> pipeEnd)
 	{
-		return this->addPipe(Process::STDIN, Process::ChildAction::READ, pipe);
+		return this->addPipeEnd(Process::STDIN, pipeEnd);
 	}
 
 	/**
 	 * comfort function to easily assign stdout
 	 */
-	public: std::shared_ptr<Process> setStdOut(std::shared_ptr<Pipe> pipe)
+	public: std::shared_ptr<Process> setStdOut(std::shared_ptr<Pipe::WriteEnd> pipeEnd)
 	{
-		return this->addPipe(Process::STDOUT, Process::ChildAction::WRITE, pipe);
+		return this->addPipeEnd(Process::STDOUT, pipeEnd);
 	}
 
 	/**
 	 * comfort function to easily assign stderr
 	 */
-	public: std::shared_ptr<Process> setStdErr(std::shared_ptr<Pipe> pipe)
+	public: std::shared_ptr<Process> setStdErr(std::shared_ptr<Pipe::WriteEnd> pipeEnd)
 	{
-		return this->addPipe(Process::STDERR, Process::ChildAction::WRITE, pipe);
+		return this->addPipeEnd(Process::STDERR, pipeEnd);
 	}
 
 	public: std::shared_ptr<Process> addFile(
@@ -230,8 +222,8 @@ class Process : public std::enable_shared_from_this<Process>
 		unsigned int channelDest = Process::STDIN
 	) {
 		auto procToProcPipe = std::make_shared<Pipe>();
-		this->addPipe(channelSrc, ChildAction::WRITE, procToProcPipe);
-		otherProcess->addPipe(channelDest, ChildAction::READ, procToProcPipe);
+		this->addPipeEnd(channelSrc, procToProcPipe->getWriter());
+		otherProcess->addPipeEnd(channelDest, procToProcPipe->getReader());
 		this->pipeDest[channelSrc] = otherProcess;
 		return shared_from_this();
 	}
@@ -241,12 +233,7 @@ class Process : public std::enable_shared_from_this<Process>
 		this->processId = this->createNewProcess(std::bind(std::mem_fn(&Process::handleChildProcess), this));
 
 		for (auto pipeConnection : this->pipeConnections) {
-			if (pipeConnection.second.childAction == ChildAction::WRITE) {
-				pipeConnection.second.pipe->getWriter()->close();
-			}
-			if (pipeConnection.second.childAction == ChildAction::READ) {
-				pipeConnection.second.pipe->getReader()->close();
-			}
+			pipeConnection.second.pipeEnd->close();
 		}
 
 		for (auto pipeDest : this->pipeDest) {
@@ -260,11 +247,6 @@ class Process : public std::enable_shared_from_this<Process>
 		int res = 0;
 		::waitpid(this->processId, &res, 0);
 		return res;
-	}
-
-	public: std::shared_ptr<Pipe> getPipe(unsigned int channel)
-	{
-		return this->pipeConnections[channel].pipe;
 	}
 
 	private: pid_t createNewProcess(std::function<void()> childProcess)
@@ -285,12 +267,7 @@ class Process : public std::enable_shared_from_this<Process>
 	private: void handleChildProcess()
 	{
 		for (auto pipeConnection : this->pipeConnections) {
-			if (pipeConnection.second.childAction == ChildAction::WRITE) {
-				pipeConnection.second.pipe->getWriter()->map(pipeConnection.second.channel);
-			}
-			if (pipeConnection.second.childAction == ChildAction::READ) {
-				pipeConnection.second.pipe->getReader()->map(pipeConnection.second.channel);
-			}
+			pipeConnection.second.pipeEnd->map(pipeConnection.second.channel);
 		}
 
 		for (auto inputFile : this->inputFiles) {
