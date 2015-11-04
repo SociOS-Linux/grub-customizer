@@ -50,11 +50,6 @@ class Process : public std::enable_shared_from_this<Process>
 		ERROR = -1
 	};
 
-	public: enum ChildAction {
-		READ = 'r',
-		WRITE = 'w'
-	};
-
 	public: enum FileWriteMode {
 		REPLACE,
 		APPEND
@@ -77,9 +72,6 @@ class Process : public std::enable_shared_from_this<Process>
 	private: std::string cmd;
 	private: std::vector<std::string> args;
 	private: std::map<unsigned int, std::shared_ptr<Process>> pipeDest;
-	private: std::map<unsigned int, std::string> inputFiles;
-	private: std::map<unsigned int, std::string> outputFiles;
-	private: std::map<unsigned int, FileWriteMode> outputFilesAppendFlags;
 	private: std::map<unsigned int, unsigned int> channelMappings; // key: from, value: to
 	private: std::set<unsigned int> passThruChannels;
 
@@ -167,18 +159,36 @@ class Process : public std::enable_shared_from_this<Process>
 		return this->addPipeEnd(Process::STDERR, pipeEnd);
 	}
 
-	public: std::shared_ptr<Process> addFile(
+	public: std::shared_ptr<Process> addInputFile(
+		std::string const& filePath,
+		unsigned int fileDescriptor
+	) {
+		int file = ::open(filePath.c_str(), 0);
+
+		if (file == -1) {
+			throw std::runtime_error("failed opening input file");
+		}
+
+		this->addPipeEnd(fileDescriptor, std::make_shared<Pipe::ReadEnd>(file));
+
+		return shared_from_this();
+	}
+
+	public: std::shared_ptr<Process> addOutputFile(
 		std::string const& filePath,
 		unsigned int fileDescriptor,
-		Process::ChildAction childAction,
 		FileWriteMode writeMode = FileWriteMode::REPLACE
 	) {
-		if (childAction == Process::ChildAction::READ) {
-			this->inputFiles[fileDescriptor] = filePath;
-		} else {
-			this->outputFiles[fileDescriptor] = filePath;
-			this->outputFilesAppendFlags[fileDescriptor] = writeMode;
+		int file = ::open(
+			filePath.c_str(),
+			O_WRONLY | O_CREAT | (writeMode == FileWriteMode::REPLACE ? O_TRUNC : O_APPEND)
+		);
+
+		if (file == -1) {
+			throw std::runtime_error("failed opening output file");
 		}
+
+		this->addPipeEnd(fileDescriptor, std::make_shared<Pipe::WriteEnd>(file));
 
 		return shared_from_this();
 	}
@@ -188,7 +198,7 @@ class Process : public std::enable_shared_from_this<Process>
 	 */
 	public: std::shared_ptr<Process> setStdIn(std::string const& filePath)
 	{
-		return this->addFile(filePath, Process::STDIN, Process::ChildAction::READ);
+		return this->addInputFile(filePath, Process::STDIN);
 	}
 
 	/**
@@ -196,7 +206,7 @@ class Process : public std::enable_shared_from_this<Process>
 	 */
 	public: std::shared_ptr<Process> setStdOut(std::string const& filePath, FileWriteMode writeMode = FileWriteMode::REPLACE)
 	{
-		return this->addFile(filePath, Process::STDOUT, Process::ChildAction::WRITE, writeMode);
+		return this->addOutputFile(filePath, Process::STDOUT, writeMode);
 	}
 
 	/**
@@ -204,7 +214,7 @@ class Process : public std::enable_shared_from_this<Process>
 	 */
 	public: std::shared_ptr<Process> setStdErr(std::string const& filePath, FileWriteMode writeMode = FileWriteMode::REPLACE)
 	{
-		return this->addFile(filePath, Process::STDERR, Process::ChildAction::WRITE, writeMode);
+		return this->addOutputFile(filePath, Process::STDERR, writeMode);
 	}
 
 	public: std::shared_ptr<Process> setPassThru(std::set<unsigned int> channels = {STDIN, STDOUT, STDERR})
@@ -270,24 +280,6 @@ class Process : public std::enable_shared_from_this<Process>
 			pipeConnection.second.pipeEnd->map(pipeConnection.second.channel);
 		}
 
-		for (auto inputFile : this->inputFiles) {
-			int file = ::open(inputFile.second.c_str(), 0);
-			if (file == -1) {std::cerr << "cannot open input file!" << std::endl; _exit(1);}
-			::dup2(file, inputFile.first);
-			::close(file);
-		}
-
-		for (auto outputFile : this->outputFiles) {
-			bool replace = this->outputFilesAppendFlags[outputFile.first] == FileWriteMode::REPLACE;
-			int file = ::open(
-				outputFile.second.c_str(),
-				O_WRONLY | O_CREAT | (replace ? O_TRUNC : O_APPEND)
-			);
-			if (file == -1) {std::cerr << "cannot open output file!" << std::endl; _exit(1);}
-			::dup2(file, outputFile.first);
-			::close(file);
-		}
-
 		for (auto mapping : this->channelMappings) {
 			::dup2(mapping.second, mapping.first);
 		}
@@ -321,12 +313,6 @@ class Process : public std::enable_shared_from_this<Process>
 		std::set<unsigned int> result;
 		for (auto pipeCnn : this->pipeConnections) {
 			result.insert(pipeCnn.first);
-		}
-		for (auto inputFile : this->inputFiles) {
-			result.insert(inputFile.first);
-		}
-		for (auto outputFile : this->outputFiles) {
-			result.insert(outputFile.first);
 		}
 		for (auto channelMapping : this->channelMappings) {
 			result.insert(channelMapping.first);
