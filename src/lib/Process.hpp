@@ -238,6 +238,22 @@ class Process : public std::enable_shared_from_this<Process>
 		return shared_from_this();
 	}
 
+	/**
+	 * comfort function to easily assign stdout
+	 */
+	public: std::shared_ptr<Process> setStdOut(std::shared_ptr<Process> otherProcess)
+	{
+		return this->pipeInto(otherProcess, Process::STDOUT);
+	}
+
+	/**
+	 * comfort function to easily assign stderr
+	 */
+	public: std::shared_ptr<Process> setStdErr(std::shared_ptr<Process> otherProcess)
+	{
+		return this->pipeInto(otherProcess, Process::STDERR);
+	}
+
 	public: std::shared_ptr<Process> run()
 	{
 		this->processId = this->createNewProcess(std::bind(std::mem_fn(&Process::handleChildProcess), this));
