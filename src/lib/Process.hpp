@@ -131,6 +131,7 @@ class Process : public std::enable_shared_from_this<Process>
 				fileDescriptorToMap,
 				pipeEnd
 			);
+			pipeEnd->registerUsage();
 		}
 		return shared_from_this();
 	}

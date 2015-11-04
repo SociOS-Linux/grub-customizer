@@ -25,17 +25,19 @@ int main()
 {
 	auto testPipe = std::make_shared<Pipe>();
 
-	Process::create("cat")
-		->setStdIn("/etc/issue")
-		->setStdOut(testPipe->getWriter())
-		->setStdErr(testPipe->getWriter())
+	Process::create("bash")
+		->addArgument("echo all good!; cat /etc/issue3")
+		->setStdOut(Process::create("md5sum")->setStdOut(testPipe->getWriter()))
+		->setStdErr(Process::create("base64")->setStdOut(testPipe->getWriter()))
 		->run();
+
+	std::cout << "finally it's " << (testPipe->getWriter()->isClosed() ? "closed" : "not closed") << std::endl;
 
 //	testPipe->write("Test!");
 //	testPipe->closeWriteDescriptor();
 
 	for (char c : *testPipe->getReader()) {
-		std::cout << "[" << c << "]";
+		std::cerr << c;
 	}
 
 	std::cout << "pipe reading finished!" << std::endl;

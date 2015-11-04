@@ -31,12 +31,21 @@ class Pipe
 	{
 		protected: int descriptor;
 
+		private: int usageCount;
+
 		public: AbstractEnd(int descriptor)
-			: descriptor(descriptor)
+			: descriptor(descriptor), usageCount(0)
 		{}
 
 		public: void close()
 		{
+			// usageCount can be 0 if usage where not registered. Otherwise 1 = it was registered once so should be deleted.
+			if (this->usageCount > 1) {
+				this->usageCount--;
+				return;
+			}
+
+			this->usageCount = -1;
 			::close(this->descriptor);
 		}
 
@@ -44,6 +53,16 @@ class Pipe
 		{
 			::dup2(this->descriptor, to);
 			this->close();
+		}
+
+		public: void registerUsage()
+		{
+			this->usageCount++;
+		}
+
+		public: bool isClosed()
+		{
+			return this->usageCount == -1;
 		}
 	};
 
