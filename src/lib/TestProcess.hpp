@@ -26,7 +26,7 @@ int main()
 	auto testPipe = std::make_shared<Pipe>();
 
 	Process::create("cat")
-		->setStdIn("/etc/passwdx")
+		->setStdIn("/etc/passwd")
 		->setStdOut(testPipe)
 		->setStdErr(testPipe)
 		->run();
@@ -34,7 +34,7 @@ int main()
 //	testPipe->write("Test!");
 //	testPipe->closeWriteDescriptor();
 
-	for (char c : *testPipe) {
+	for (char c : *testPipe->getReader()) {
 		std::cout << "[" << c << "]" << std::endl;
 	}
 

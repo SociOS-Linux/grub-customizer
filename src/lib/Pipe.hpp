@@ -27,78 +27,158 @@
 
 class Pipe
 {
-	private: int readDescriptor;
-	private: int writeDescriptor;
-
-	public: class Iterator
+	public: class AbstractEnd
 	{
-		private: Pipe* pipe;
+		protected: int descriptor;
 
-		private: char current;
-		private: bool eof;
+		public: AbstractEnd(int descriptor)
+			: descriptor(descriptor)
+		{}
 
-		private: std::string buffer;
-		private: unsigned int bufferPos;
-
-		public: Iterator(Pipe& pipe, bool eof = false)
-			: pipe(&pipe), current('\0'), eof(eof), bufferPos(-1)
+		public: void close()
 		{
-			if (!eof) {
-				(*this)++;
-			}
+			::close(this->descriptor);
 		}
 
-		public: char operator++(int)
+		public: void map(int to)
 		{
-			char old = this->current;
-			try {
-				this->current = this->readNext();
-			} catch (std::runtime_error const& e) {
-				this->eof = true;
-			}
-			return old;
-		}
-
-		public: char operator++()
-		{
-			(*this)++;
-			return this->current;
-		}
-
-		public: char operator*()
-		{
-			if (this->eof) {
-				throw std::runtime_error("reached end of file!");
-			}
-			return this->current;
-		}
-
-		public: bool operator==(Iterator const& other)
-		{
-			return this->pipe == other.pipe && this->eof == other.eof;
-		}
-
-		public: bool operator!=(Iterator const& other)
-		{
-			return !(*this == other);
-		}
-
-		private: char readNext()
-		{
-			this->bufferPos++;
-			if (this->bufferPos < this->buffer.size()) {
-				return buffer[bufferPos];
-			}
-			this->buffer = this->pipe->read(1024);
-			this->bufferPos = 0;
-
-			if (this->buffer.size() == 0) {
-				throw std::runtime_error("reached end of file!");
-			}
-
-			return this->buffer[0];
+			::dup2(this->descriptor, to);
+			this->close();
 		}
 	};
+
+	public: class ReadEnd : public AbstractEnd
+	{
+		public: ReadEnd(int descriptor)
+			: AbstractEnd(descriptor)
+		{}
+
+		public: class Iterator
+		{
+			private: ReadEnd* readEnd;
+
+			private: char current;
+			private: bool eof;
+
+			private: std::string buffer;
+			private: unsigned int bufferPos;
+
+			public: Iterator(ReadEnd& readEnd, bool eof = false)
+				: readEnd(&readEnd), current('\0'), eof(eof), bufferPos(-1)
+			{
+				if (!eof) {
+					(*this)++;
+				}
+			}
+
+			public: char operator++(int)
+			{
+				char old = this->current;
+				try {
+					this->current = this->readNext();
+				} catch (std::runtime_error const& e) {
+					this->eof = true;
+				}
+				return old;
+			}
+
+			public: char operator++()
+			{
+				(*this)++;
+				return this->current;
+			}
+
+			public: char operator*()
+			{
+				if (this->eof) {
+					throw std::runtime_error("reached end of file!");
+				}
+				return this->current;
+			}
+
+			public: bool operator==(Iterator const& other)
+			{
+				return this->readEnd == other.readEnd && this->eof == other.eof;
+			}
+
+			public: bool operator!=(Iterator const& other)
+			{
+				return !(*this == other);
+			}
+
+			private: char readNext()
+			{
+				this->bufferPos++;
+				if (this->bufferPos < this->buffer.size()) {
+					return buffer[bufferPos];
+				}
+				this->buffer = this->readEnd->read(1024);
+				this->bufferPos = 0;
+
+				if (this->buffer.size() == 0) {
+					throw std::runtime_error("reached end of file!");
+				}
+
+				return this->buffer[0];
+			}
+		};
+
+		public: Iterator begin()
+		{
+			return Iterator(*this);
+		}
+
+		public: Iterator end()
+		{
+			return Iterator(*this, true);
+		}
+
+		public: std::string read(int maxSize)
+		{
+			std::vector<char> buffer(maxSize + 1);
+			ssize_t length = ::read(this->descriptor, buffer.data(), maxSize);
+			if (length == -1) {
+				throw std::runtime_error("error reading from pipe");
+			}
+			return std::string(buffer.data(), length);
+		}
+
+		public: char read()
+		{
+			char buf[1];
+			ssize_t length = ::read(this->descriptor, buf, 1);
+			switch (length) {
+				case 0:
+					throw std::runtime_error("end of file reached!");
+					break;
+				case -1:
+					throw std::runtime_error("error reading from pipe");
+					break;
+			}
+			return buf[0];
+		}
+	};
+
+	public: class WriteEnd : public AbstractEnd
+	{
+		public: WriteEnd(int descriptor)
+			: AbstractEnd(descriptor)
+		{}
+
+		public: void write(char c)
+		{
+			::write(this->descriptor, &c, 1);
+		}
+
+		public: void write(std::string const& str)
+		{
+			::write(this->descriptor, str.c_str(), str.size());
+		}
+	};
+
+	private: std::shared_ptr<ReadEnd> readEnd;
+	private: std::shared_ptr<WriteEnd> writeEnd;
+
 
 	public: Pipe()
 	{
@@ -107,75 +187,18 @@ class Pipe
 			throw std::runtime_error("pipe creation failed");
 		}
 
-		this->readDescriptor  = pipeDescriptors[0];
-		this->writeDescriptor = pipeDescriptors[1];
+		this->readEnd  = std::make_shared<ReadEnd>(pipeDescriptors[0]);
+		this->writeEnd = std::make_shared<WriteEnd>(pipeDescriptors[1]);
 	}
 
-	public: char read()
+	public: std::shared_ptr<ReadEnd> getReader()
 	{
-		char buf[1];
-		ssize_t length = ::read(this->readDescriptor, buf, 1);
-		switch (length) {
-			case 0:
-				throw std::runtime_error("end of file reached!");
-				break;
-			case -1:
-				throw std::runtime_error("error reading from pipe");
-				break;
-		}
-		return buf[0];
+		return this->readEnd;
 	}
 
-	public: std::string read(int maxSize)
+	public: std::shared_ptr<WriteEnd> getWriter()
 	{
-		std::vector<char> buffer(maxSize + 1);
-		ssize_t length = ::read(this->readDescriptor, buffer.data(), maxSize);
-		if (length == -1) {
-			throw std::runtime_error("error reading from pipe");
-		}
-		return std::string(buffer.data(), length);
-	}
-
-	public: Iterator begin()
-	{
-		return Iterator(*this);
-	}
-
-	public: Iterator end()
-	{
-		return Iterator(*this, true);
-	}
-
-	public: void write(char c)
-	{
-		::write(this->writeDescriptor, &c, 1);
-	}
-
-	public: void write(std::string const& str)
-	{
-		::write(this->writeDescriptor, str.c_str(), str.size());
-	}
-
-	public: void closeReadDescriptor()
-	{
-		::close(this->readDescriptor);
-	}
-
-	public: void closeWriteDescriptor()
-	{
-		::close(this->writeDescriptor);
-	}
-
-	public: void mapReadDescriptor(int to)
-	{
-		::dup2(this->readDescriptor, to);
-		this->closeReadDescriptor();
-	}
-
-	public: void mapWriteDescriptor(int to)
-	{
-		::dup2(this->writeDescriptor, to);
-		this->closeWriteDescriptor();
+		return this->writeEnd;
 	}
 };
 

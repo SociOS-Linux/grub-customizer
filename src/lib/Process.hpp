@@ -242,10 +242,10 @@ class Process : public std::enable_shared_from_this<Process>
 
 		for (auto pipeConnection : this->pipeConnections) {
 			if (pipeConnection.second.childAction == ChildAction::WRITE) {
-				pipeConnection.second.pipe->closeWriteDescriptor();
+				pipeConnection.second.pipe->getWriter()->close();
 			}
 			if (pipeConnection.second.childAction == ChildAction::READ) {
-				pipeConnection.second.pipe->closeReadDescriptor();
+				pipeConnection.second.pipe->getReader()->close();
 			}
 		}
 
@@ -286,10 +286,10 @@ class Process : public std::enable_shared_from_this<Process>
 	{
 		for (auto pipeConnection : this->pipeConnections) {
 			if (pipeConnection.second.childAction == ChildAction::WRITE) {
-				pipeConnection.second.pipe->mapWriteDescriptor(pipeConnection.second.channel);
+				pipeConnection.second.pipe->getWriter()->map(pipeConnection.second.channel);
 			}
 			if (pipeConnection.second.childAction == ChildAction::READ) {
-				pipeConnection.second.pipe->mapReadDescriptor(pipeConnection.second.channel);
+				pipeConnection.second.pipe->getReader()->map(pipeConnection.second.channel);
 			}
 		}
 
