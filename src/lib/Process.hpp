@@ -116,11 +116,20 @@ class Process : public std::enable_shared_from_this<Process>
 		unsigned int fileDescriptorToMap,
 		std::shared_ptr<Pipe::AbstractEnd> pipeEnd
 	) {
+		std::shared_ptr<Pipe::AbstractEnd> oldPipeEnd = nullptr;
+		if (this->pipeConnections.find(fileDescriptorToMap) != this->pipeConnections.end()) {
+			oldPipeEnd = this->pipeConnections[fileDescriptorToMap].pipeEnd;
+		}
+
 		this->pipeConnections[fileDescriptorToMap] = PipeEndConnection(
 			fileDescriptorToMap,
 			pipeEnd
 		);
 		pipeEnd->registerUsage();
+
+		if (oldPipeEnd != nullptr) {
+			oldPipeEnd->close(); // decrease usage count or close if no more used
+		}
 
 		return shared_from_this();
 	}
