@@ -71,6 +71,7 @@ class Process : public std::enable_shared_from_this<Process>
 	private: std::map<unsigned int, PipeEndConnection> pipeConnections;
 	private: std::string cmd;
 	private: std::vector<std::string> args;
+	private: std::map<std::string, std::string> env;
 	private: std::map<unsigned int, std::shared_ptr<Process>> pipeDest;
 	private: std::set<unsigned int> passThruChannels;
 
@@ -224,6 +225,18 @@ class Process : public std::enable_shared_from_this<Process>
 		return shared_from_this();
 	}
 
+	public: std::shared_ptr<Process> setEnv(std::map<std::string, std::string> const& env)
+	{
+		this->env = env;
+		return shared_from_this();
+	}
+
+	public: std::shared_ptr<Process> addEnv(std::string const& key, std::string const& value)
+	{
+		this->env[key] = value;
+		return shared_from_this();
+	}
+
 	/**
 	 * comfort function to attach another process as pipe target
 	 */
@@ -319,6 +332,12 @@ class Process : public std::enable_shared_from_this<Process>
 			}
 		}
 
+		if (fcntl(this->errorDetector->getWriter()->getDescriptor(), F_SETFD, FD_CLOEXEC) == -1) {
+			this->errorDetector->getWriter()->write("pipe setup failed");
+			this->errorDetector->getWriter()->close();
+			::_exit(1);
+		}
+
 		auto argv = new char*[this->args.size() + 2];
 
 		int i = 0;
@@ -329,13 +348,17 @@ class Process : public std::enable_shared_from_this<Process>
 		}
 		argv[i++] = NULL;
 
-		if (fcntl(this->errorDetector->getWriter()->getDescriptor(), F_SETFD, FD_CLOEXEC) == -1) {
-			this->errorDetector->getWriter()->write("pipe setup failed");
-			this->errorDetector->getWriter()->close();
-			::_exit(1);
+		if (this->env.size()) {
+			int i = 0;
+			auto env = new char*[this->env.size() + 1];
+			for (auto& envItem : this->env) {
+				env[i++] = const_cast<char*>((envItem.first + "=" + envItem.second).c_str());
+			}
+			env[i++] = NULL;
+			::execvpe(this->cmd.c_str(), argv, env);
+		} else {
+			::execvp(this->cmd.c_str(), argv);
 		}
-
-		::execvp(this->cmd.c_str(), argv);
 
 		// error handling
 		this->errorDetector->getWriter()->write("cannot execute command \"" + this->cmd + "\"!");

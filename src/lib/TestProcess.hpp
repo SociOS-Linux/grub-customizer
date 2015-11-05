@@ -23,11 +23,12 @@
 
 int main()
 {
-	Process::create("echox")
-		->addArgument("bla")
+	Process::create("bash")
+		->setArguments({"-c", "echo x$TESTENVVAR$foo"})
+		->addEnv("TESTENVVAR", "12345")
+		->addEnv("foo", "xxx")
 		->setPassThru()
 		->run();
-
 }
 
 #endif /* SRC_LIB_TESTPROCESS_HPP_ */
