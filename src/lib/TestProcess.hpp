@@ -23,24 +23,11 @@
 
 int main()
 {
-	auto testPipe = std::make_shared<Pipe>();
-
-	Process::create("bash")
-		->setArguments({"-c", "echo all good!; cat /etc/issue3"})
-		->setStdOut(testPipe->getWriter())
-		->setStdErr(testPipe->getWriter())
+	Process::create("echox")
+		->addArgument("bla")
+		->setPassThru()
 		->run();
 
-	std::cout << "finally it's " << (testPipe->getWriter()->isClosed() ? "closed" : "not closed") << std::endl;
-
-//	testPipe->write("Test!");
-//	testPipe->closeWriteDescriptor();
-
-	for (char c : *testPipe->getReader()) {
-		std::cerr << "[" << c << "]";
-	}
-
-	std::cout << "pipe reading finished!" << std::endl;
 }
 
 #endif /* SRC_LIB_TESTPROCESS_HPP_ */

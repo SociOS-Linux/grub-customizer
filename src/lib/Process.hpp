@@ -76,6 +76,8 @@ class Process : public std::enable_shared_from_this<Process>
 
 	private: pid_t processId;
 
+	private: std::shared_ptr<Pipe> errorDetector;
+
 	protected: Process() : processId(-1) {}
 
 	public: static std::shared_ptr<Process> create(std::string const& cmd)
@@ -255,15 +257,26 @@ class Process : public std::enable_shared_from_this<Process>
 
 	public: std::shared_ptr<Process> run()
 	{
+		this->errorDetector = std::make_shared<Pipe>();
+
 		this->processId = this->createNewProcess(std::bind(std::mem_fn(&Process::handleChildProcess), this));
 
 		for (auto pipeConnection : this->pipeConnections) {
 			pipeConnection.second.pipeEnd->close();
 		}
 
+		this->errorDetector->getWriter()->close();
+
 		for (auto pipeDest : this->pipeDest) {
 			pipeDest.second->run();
 		}
+
+		// this pipe gets data only when the child process didn't start correctly
+		std::string errorMessage = this->errorDetector->getReader()->read(50);
+		if (errorMessage.size()) {
+			throw std::runtime_error(errorMessage);
+		}
+
 		return shared_from_this();
 	}
 
@@ -316,7 +329,19 @@ class Process : public std::enable_shared_from_this<Process>
 		}
 		argv[i++] = NULL;
 
-		::execvp(cmd.c_str(), argv);
+		if (fcntl(this->errorDetector->getWriter()->getDescriptor(), F_SETFD, FD_CLOEXEC) == -1) {
+			this->errorDetector->getWriter()->write("pipe setup failed");
+			this->errorDetector->getWriter()->close();
+			::_exit(1);
+		}
+
+		::execvp(this->cmd.c_str(), argv);
+
+		// error handling
+		this->errorDetector->getWriter()->write("cannot execute command \"" + this->cmd + "\"!");
+		this->errorDetector->getWriter()->close();
+
+		::_exit(1);
 	}
 
 	private: std::set<unsigned int> getAllChildFileDescriptors()
@@ -328,6 +353,7 @@ class Process : public std::enable_shared_from_this<Process>
 		for (auto passThruChannel : this->passThruChannels) {
 			result.insert(passThruChannel);
 		}
+		result.insert(this->errorDetector->getWriter()->getDescriptor());
 		return result;
 	}
 };

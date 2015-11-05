@@ -63,6 +63,11 @@ class Pipe
 		{
 			return this->usageCount == -1;
 		}
+
+		public: int getDescriptor()
+		{
+			return this->descriptor;
+		}
 	};
 
 	public: class ReadEnd : public AbstractEnd
@@ -130,7 +135,7 @@ class Pipe
 				if (this->bufferPos < this->buffer.size()) {
 					return buffer[bufferPos];
 				}
-				this->buffer = this->readEnd->read(1024);
+				this->buffer = this->readEnd->read(1024, false);
 				this->bufferPos = 0;
 
 				if (this->buffer.size() == 0) {
@@ -151,14 +156,22 @@ class Pipe
 			return Iterator(*this, true);
 		}
 
-		public: std::string read(int maxSize)
+		public: std::string read(int maxSize, bool waitUntilFull = true)
 		{
 			std::vector<char> buffer(maxSize + 1);
-			ssize_t length = ::read(this->descriptor, buffer.data(), maxSize);
-			if (length == -1) {
-				throw std::runtime_error("error reading from pipe");
-			}
-			return std::string(buffer.data(), length);
+			char* writePosition = buffer.data();
+			int currentSize = 0;
+			do {
+				ssize_t length = ::read(this->descriptor, writePosition, maxSize - currentSize);
+				if (length == -1) {
+					throw std::runtime_error("error reading from pipe");
+				} else if (length == 0) {
+					break; // end of stream
+				}
+				currentSize += length;
+				writePosition += length;
+			} while (waitUntilFull && currentSize < maxSize);
+			return std::string(buffer.data(), currentSize);
 		}
 
 		public: char read()
