@@ -68,12 +68,12 @@ class Process : public std::enable_shared_from_this<Process>
 		{}
 	};
 
-	private: std::map<unsigned int, PipeEndConnection> pipeConnections;
+	private: std::map<int, PipeEndConnection> pipeConnections;
 	private: std::string cmd;
 	private: std::vector<std::string> args;
 	private: std::map<std::string, std::string> env;
-	private: std::map<unsigned int, std::shared_ptr<Process>> pipeDest;
-	private: std::set<unsigned int> passThruChannels;
+	private: std::map<int, std::shared_ptr<Process>> pipeDest;
+	private: std::set<int> passThruChannels;
 
 	private: pid_t processId;
 
@@ -219,7 +219,7 @@ class Process : public std::enable_shared_from_this<Process>
 		return this->addOutputFile(filePath, Process::STDERR, writeMode);
 	}
 
-	public: std::shared_ptr<Process> setPassThru(std::set<unsigned int> channels = {STDIN, STDOUT, STDERR})
+	public: std::shared_ptr<Process> setPassThru(std::set<int> channels = {STDIN, STDOUT, STDERR})
 	{
 		this->passThruChannels = channels;
 		return shared_from_this();
@@ -325,51 +325,58 @@ class Process : public std::enable_shared_from_this<Process>
 
 	private: void handleChildProcess()
 	{
-		//key: desired number, value: current number
-		std::map<int, std::shared_ptr<Pipe::AbstractEnd>> channelMap;
-
-		for (auto pipeConnection : this->pipeConnections) {
-			channelMap[pipeConnection.second.channel] = pipeConnection.second.pipeEnd;
+		if (fcntl(this->errorDetector->getWriter()->getDescriptor(), F_SETFD, FD_CLOEXEC) == -1) {
+			throw std::runtime_error("pipe setup failed");
 		}
-		channelMap[-1] = this->errorDetector->getWriter();
 
+		this->pipeConnections[-1] = PipeEndConnection(
+			-1,
+			this->errorDetector->getWriter()
+		);
+
+		try {
+			this->forwardIntoProcess();
+		} catch (std::exception const& e) {
+			this->errorDetector->getWriter()->write(e.what());
+			this->errorDetector->getWriter()->close();
+			::_exit(1);
+		}
+	}
+
+	public: void forwardIntoProcess()
+	{
 		// copy channels to a new number if equaling with desired number
-		for (auto channel : channelMap) {
-			while (channelMap.find(channel.second->getDescriptor()) != channelMap.end()) {
+		for (auto pipeConnection : this->pipeConnections) {
+			while (this->pipeConnections.find(pipeConnection.second.pipeEnd->getDescriptor()) != this->pipeConnections.end()) {
 				// if current number is a desired number: find a new channel (repeat until it's really unused)
-				channel.second->setDescriptor(::dup(channel.second->getDescriptor()));
-				if (channel.second->getDescriptor() == -1) {
-					this->errorDetector->getWriter()->write("pipe setup failed");
-					this->errorDetector->getWriter()->close();
-					::_exit(1);
+				pipeConnection.second.pipeEnd->setDescriptor(::dup(pipeConnection.second.pipeEnd->getDescriptor()));
+				if (pipeConnection.second.pipeEnd->getDescriptor() == -1) {
+					throw std::runtime_error("pipe setup failed");
 				}
 				// not closed to prevent allocation by next dup() call
 			}
 		}
 
-		for (auto channel : channelMap) {
-			if (channel.first < 0) {
-				continue; // ignore channels that shouldn't be mapped
+		std::set<int> usedChannels = this->passThruChannels;
+
+		for (auto pipeConnection : this->pipeConnections) {
+			if (pipeConnection.first < 0) { // channels < 0 (means: no desired number) wont be mapped
+				usedChannels.insert(pipeConnection.second.pipeEnd->getDescriptor());
+				continue;
 			}
-			::close(channel.first);
-			channel.second->map(channel.first);
+			::close(pipeConnection.first);
+			pipeConnection.second.pipeEnd->map(pipeConnection.first);
+			usedChannels.insert(pipeConnection.first);
 		}
 
 		// close all unnecessary file descriptors
-		auto usedFileDescriptors = this->getAllChildFileDescriptors();
 		rlimit rlim;
 		getrlimit(RLIMIT_NOFILE, &rlim);
 		for (rlim_t i = 0; i < rlim.rlim_cur; i++) {
-			if (usedFileDescriptors.count(i) == 0) {
+			if (usedChannels.count(i) == 0) {
 				// ignoring file descriptors that should be used by child process
 				::close(i);
 			}
-		}
-
-		if (fcntl(this->errorDetector->getWriter()->getDescriptor(), F_SETFD, FD_CLOEXEC) == -1) {
-			this->errorDetector->getWriter()->write("pipe setup failed");
-			this->errorDetector->getWriter()->close();
-			::_exit(1);
 		}
 
 		auto argv = new char*[this->args.size() + 2];
@@ -395,23 +402,7 @@ class Process : public std::enable_shared_from_this<Process>
 		}
 
 		// error handling
-		this->errorDetector->getWriter()->write("cannot execute command \"" + this->cmd + "\"!");
-		this->errorDetector->getWriter()->close();
-
-		::_exit(1);
-	}
-
-	private: std::set<unsigned int> getAllChildFileDescriptors()
-	{
-		std::set<unsigned int> result;
-		for (auto pipeCnn : this->pipeConnections) {
-			result.insert(pipeCnn.first);
-		}
-		for (auto passThruChannel : this->passThruChannels) {
-			result.insert(passThruChannel);
-		}
-		result.insert(this->errorDetector->getWriter()->getDescriptor());
-		return result;
+		throw std::runtime_error("cannot execute command \"" + this->cmd + "\"!");
 	}
 };
 

@@ -23,13 +23,10 @@
 
 int main()
 {
-	auto proc = Process::create("sleep")
-		->setArguments({"5"})
+	Process::create("cat")
+		->setArguments({"/etc/issue"})
 		->setPassThru()
-		->run();
-
-	sleep(1);
-	proc->kill();
+		->forwardIntoProcess();
 }
 
 #endif /* SRC_LIB_TESTPROCESS_HPP_ */
