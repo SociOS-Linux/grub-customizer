@@ -23,12 +23,16 @@
 
 int main()
 {
-	Process::create("bash")
-		->setArguments({"-c", "echo x$TESTENVVAR$foo"})
-		->addEnv("TESTENVVAR", "12345")
-		->addEnv("foo", "xxx")
+	auto pipe = std::make_shared<Pipe>();
+
+	Process::create("cat")
+		->setArguments({"/dev/fd/6"})
+		->addPipeEnd(6, pipe->getReader())
 		->setPassThru()
 		->run();
+
+	pipe->getWriter()->write("this is channel 6");
+	pipe->getWriter()->close();
 }
 
 #endif /* SRC_LIB_TESTPROCESS_HPP_ */

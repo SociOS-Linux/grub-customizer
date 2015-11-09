@@ -68,6 +68,11 @@ class Pipe
 		{
 			return this->descriptor;
 		}
+
+		public: void setDescriptor(int descriptor)
+		{
+			this->descriptor = descriptor;
+		}
 	};
 
 	public: class ReadEnd : public AbstractEnd

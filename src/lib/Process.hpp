@@ -317,8 +317,34 @@ class Process : public std::enable_shared_from_this<Process>
 
 	private: void handleChildProcess()
 	{
+		//key: desired number, value: current number
+		std::map<int, std::shared_ptr<Pipe::AbstractEnd>> channelMap;
+
 		for (auto pipeConnection : this->pipeConnections) {
-			pipeConnection.second.pipeEnd->map(pipeConnection.second.channel);
+			channelMap[pipeConnection.second.channel] = pipeConnection.second.pipeEnd;
+		}
+		channelMap[-1] = this->errorDetector->getWriter();
+
+		// copy channels to a new number if equaling with desired number
+		for (auto channel : channelMap) {
+			while (channelMap.find(channel.second->getDescriptor()) != channelMap.end()) {
+				// if current number is a desired number: find a new channel (repeat until it's really unused)
+				channel.second->setDescriptor(::dup(channel.second->getDescriptor()));
+				if (channel.second->getDescriptor() == -1) {
+					this->errorDetector->getWriter()->write("pipe setup failed");
+					this->errorDetector->getWriter()->close();
+					::_exit(1);
+				}
+				// not closed to prevent allocation by next dup() call
+			}
+		}
+
+		for (auto channel : channelMap) {
+			if (channel.first < 0) {
+				continue; // ignore channels that shouldn't be mapped
+			}
+			::close(channel.first);
+			channel.second->map(channel.first);
 		}
 
 		// close all unnecessary file descriptors
