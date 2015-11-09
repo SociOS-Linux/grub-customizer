@@ -23,16 +23,13 @@
 
 int main()
 {
-	auto pipe = std::make_shared<Pipe>();
-
-	Process::create("cat")
-		->setArguments({"/dev/fd/6"})
-		->addPipeEnd(6, pipe->getReader())
+	auto proc = Process::create("sleep")
+		->setArguments({"5"})
 		->setPassThru()
 		->run();
 
-	pipe->getWriter()->write("this is channel 6");
-	pipe->getWriter()->close();
+	sleep(1);
+	proc->kill();
 }
 
 #endif /* SRC_LIB_TESTPROCESS_HPP_ */

@@ -293,6 +293,14 @@ class Process : public std::enable_shared_from_this<Process>
 		return shared_from_this();
 	}
 
+	public: void kill(int signal = SIGTERM)
+	{
+		int suc = ::kill(this->processId, signal);
+		if (suc == -1) {
+			throw std::runtime_error("failed killing process");
+		}
+	}
+
 	public: int finish()
 	{
 		int res = 0;
