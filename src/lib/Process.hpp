@@ -72,6 +72,8 @@ class Process : public std::enable_shared_from_this<Process>
 	private: std::string cmd;
 	private: std::vector<std::string> args;
 	private: std::map<std::string, std::string> env;
+	private: std::string workingDirectory;
+
 	private: std::map<int, std::shared_ptr<Process>> pipeDest;
 	private: std::set<int> passThruChannels;
 
@@ -268,6 +270,12 @@ class Process : public std::enable_shared_from_this<Process>
 		return this->pipeInto(otherProcess, Process::STDERR);
 	}
 
+	public: std::shared_ptr<Process> setWorkingDirectory(std::string const& workingDirectory)
+	{
+		this->workingDirectory = workingDirectory;
+		return shared_from_this();
+	}
+
 	public: std::shared_ptr<Process> run()
 	{
 		this->errorDetector = std::make_shared<Pipe>();
@@ -377,6 +385,10 @@ class Process : public std::enable_shared_from_this<Process>
 				// ignoring file descriptors that should be used by child process
 				::close(i);
 			}
+		}
+
+		if (this->workingDirectory.size()) {
+			chdir(this->workingDirectory.c_str());
 		}
 
 		auto argv = new char*[this->args.size() + 2];

@@ -23,10 +23,11 @@
 
 int main()
 {
-	Process::create("cat")
-		->setArguments({"/etc/issue"})
+	Process::create("ls")
+		->addArgument("-1")
+		->setWorkingDirectory("/etc")
 		->setPassThru()
-		->forwardIntoProcess();
+		->run();
 }
 
 #endif /* SRC_LIB_TESTPROCESS_HPP_ */
