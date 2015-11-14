@@ -27,7 +27,18 @@
 
 int main()
 {
-	Queue<char> q;
+	ThreadQueue q(10);
+
+	int i = 0;
+	q.onReceive = [&] {
+		if (i % 25 == 0) {
+			std::cout << std::endl << i << " ";
+		}
+		std::cout << q.pop();
+		std::cout.flush();
+		i++;
+	};
+
 	std::thread t(
 		[&q] {
 			for (int i = 0; i < 1000; i++) {
@@ -37,19 +48,19 @@ int main()
 	);
 	std::thread t2(
 		[&q] {
-			for (int i = 0; i < 1000; i++) {
+			for (int i = 0; i < 10000; i++) {
 				q.push('*');
 			}
 		}
 	);
 
-	for (int i = 0; i < 2000; i++) {
-		if (i % 25 == 0) {
-			std::cout << std::endl << i << " ";
-		}
-		std::cout << q.pop();
-		std::cout.flush();
-	}
+//	for (int i = 0; i < 2000; i++) {
+//		if (i % 25 == 0) {
+//			std::cout << std::endl << i << " ";
+//		}
+//		std::cout << q.pop();
+//		std::cout.flush();
+//	}
 
 	t.join();
 	t2.join();

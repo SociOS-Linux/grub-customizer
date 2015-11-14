@@ -23,58 +23,52 @@
 #include <queue>
 #include <functional>
 #include <iostream>
+#include <condition_variable>
 
 class ThreadQueue
 {
-	private: std::mutex accessProtection;
-	private: std::mutex overflowProtection;
-	private: std::mutex underflowProtection;
+	private: std::mutex mutex;
+	private: std::condition_variable condition_push;
+	private: std::condition_variable condition_pop;
 
-	private: bool overflowLocked;
 	private: std::queue<char> objects;
 	private: unsigned int maxSize;
 
 	public: std::function<void()> onReceive;
 
 	public: ThreadQueue(unsigned int maxSize) :
-		maxSize(maxSize), overflowLocked(false)
-	{
-		// the queue is empty so we have to enable the underflow protection
-		this->underflowProtection.lock();
-	}
+		maxSize(maxSize)
+	{}
 
 	public: void push(char const& object)
 	{
-		this->overflowProtection.lock();
-		std::lock_guard<std::mutex> lock(this->accessProtection);
+		std::unique_lock<std::mutex> lock(this->mutex);
+
+		this->condition_push.wait(lock, [&] {return this->objects.size() < this->maxSize;});
+
+		this->condition_pop.notify_one();
 
 		this->objects.push(object);
 
-		this->underflowProtection.unlock();
-
-		if (this->objects.size() < this->maxSize) {
-			this->overflowProtection.unlock();
-		}
-
-		if (this->onReceive != nullptr) {
-			lock.~lock_guard(); // the following function needs access to the object
-			this->onReceive();
+		// we have to unlock the mutex to allow callback function to receive data
+		lock.unlock();// after this line, only call thread safe functions of the current object
+		auto onReceive = this->onReceive; // copy function pointer to prevent race conditions
+		if (onReceive != nullptr) {
+			onReceive();
 		}
 	}
 
 	public: char pop()
 	{
-		this->underflowProtection.lock();
-		std::lock_guard<std::mutex> lock(this->accessProtection);
+		std::unique_lock<std::mutex> lock(this->mutex);
+
+		this->condition_pop.wait(lock, [&] {return this->objects.size() > 0;});
 
 		char value = this->objects.front();
 		this->objects.pop();
 
-		this->overflowProtection.unlock();
+		this->condition_push.notify_one();
 
-		if (this->objects.size() > 0) {
-			this->underflowProtection.unlock();
-		}
 		return value;
 	}
 };
