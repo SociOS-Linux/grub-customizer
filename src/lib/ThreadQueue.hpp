@@ -22,16 +22,15 @@
 #include <mutex>
 #include <queue>
 #include <functional>
-#include <iostream>
 #include <condition_variable>
 
-class ThreadQueue
+template <typename T> class ThreadQueue
 {
 	private: std::mutex mutex;
 	private: std::condition_variable condition_push;
 	private: std::condition_variable condition_pop;
 
-	private: std::queue<char> objects;
+	private: std::queue<T> objects;
 	private: unsigned int maxSize;
 
 	public: std::function<void()> onReceive;
@@ -40,7 +39,7 @@ class ThreadQueue
 		maxSize(maxSize)
 	{}
 
-	public: void push(char const& object)
+	public: void push(T const& object)
 	{
 		std::unique_lock<std::mutex> lock(this->mutex);
 
@@ -58,13 +57,13 @@ class ThreadQueue
 		}
 	}
 
-	public: char pop()
+	public: T pop()
 	{
 		std::unique_lock<std::mutex> lock(this->mutex);
 
 		this->condition_pop.wait(lock, [&] {return this->objects.size() > 0;});
 
-		char value = this->objects.front();
+		T value = this->objects.front();
 		this->objects.pop();
 
 		this->condition_push.notify_one();

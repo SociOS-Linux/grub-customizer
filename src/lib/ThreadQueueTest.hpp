@@ -25,11 +25,13 @@
 #include <unistd.h>
 #include <chrono>
 
+#include <atomic>
+
 int main()
 {
-	ThreadQueue q(10);
+	ThreadQueue<char> q(10);
 
-	int i = 0;
+	std::atomic<int> i(0);
 	q.onReceive = [&] {
 		if (i % 25 == 0) {
 			std::cout << std::endl << i << " ";
@@ -41,14 +43,14 @@ int main()
 
 	std::thread t(
 		[&q] {
-			for (int i = 0; i < 1000; i++) {
+			for (int i = 0; i < 100000; i++) {
 				q.push('.');
 			}
 		}
 	);
 	std::thread t2(
 		[&q] {
-			for (int i = 0; i < 10000; i++) {
+			for (int i = 0; i < 100000; i++) {
 				q.push('*');
 			}
 		}
@@ -64,6 +66,8 @@ int main()
 
 	t.join();
 	t2.join();
+
+	std::cout << std::endl << "received " << i << " chars" << std::endl;
 }
 
 #endif /* SRC_LIB_TESTPROCESS_HPP_ */
