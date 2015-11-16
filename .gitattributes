@@ -131,6 +131,8 @@ src/View/Theme.hpp -text
 src/View/Trait/ViewAware.hpp -text
 src/View/Trash.hpp -text
 src/lib/ArrayStructure.hpp -text
+src/lib/AsyncReader.hpp -text
+src/lib/AsyncReaderTest.hpp -text
 src/lib/ContentParser.hpp -text
 src/lib/ContentParser/Abstract.hpp -text
 src/lib/ContentParser/Chainloader.hpp -text
@@ -140,6 +142,8 @@ src/lib/ContentParser/LinuxIso.hpp -text
 src/lib/ContentParser/Memtest.hpp -text
 src/lib/ContentParserFactory.hpp -text
 src/lib/CsvProcessor.hpp -text
+src/lib/Dispatcher/Abstract.hpp -text
+src/lib/Dispatcher/Glib.hpp -text
 src/lib/Exception.hpp -text
 src/lib/FileSystem.hpp -text
 src/lib/Helper.hpp -text
