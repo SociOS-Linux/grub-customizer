@@ -21,6 +21,7 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 
 #include <sys/types.h>
 #include <unistd.h>
