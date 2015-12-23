@@ -37,10 +37,10 @@ public:
 	Model_SmartFileHandle getFileHandle() const {
 		Model_SmartFileHandle result;
 		try {
-			result.open(env->devicemap_file, "r", Model_SmartFileHandle::TYPE_FILE);
+			result.open(env->devicemap_file, Model_SmartFileHandle::TYPE_FILE);
 		} catch (FileReadException const& e) {
 			if (env->check_cmd(env->mkdevicemap_cmd, env->cmd_prefix)) {
-				result.open(env->mkdevicemap_cmd, "r", Model_SmartFileHandle::TYPE_COMMAND);
+				result.open(env->mkdevicemap_cmd, Model_SmartFileHandle::TYPE_COMMAND);
 			} else {
 				std::string staticMap = std::string() +
 									 + "(hd0)\t/dev/sda\n"
@@ -69,7 +69,7 @@ public:
 									 + "(hd23)\t/dev/sdx\n"
 									 + "(hd24)\t/dev/sdy\n"
 									 + "(hd25)\t/dev/sdz\n";
-				result.open(staticMap, "r", Model_SmartFileHandle::TYPE_STRING);
+				result.open(staticMap, Model_SmartFileHandle::TYPE_STRING);
 			}
 		}
 		return result;

@@ -23,22 +23,20 @@
 #include "../lib/Exception.hpp"
 
 class Model_SmartFileHandle {
-public:
-	enum Type {
+	public: enum Type {
 		TYPE_FILE,
 		TYPE_COMMAND,
 		TYPE_STRING
 	};
-private:
-	FILE* proc_or_file;
-	Model_SmartFileHandle::Type type;
-	std::string string; // content for TYPE_STRING
-public:
-	Model_SmartFileHandle() : type(TYPE_STRING), proc_or_file(NULL)
-	{
-	}
 
-	char getChar() {
+	private: std::shared_ptr<InputStream> stream;
+	private: Model_SmartFileHandle::Type type;
+	private: std::string string; // content for TYPE_STRING
+
+	public: Model_SmartFileHandle() : type(TYPE_STRING), stream(nullptr)
+	{}
+
+	public: char getChar() {
 		if (type == TYPE_STRING) {
 			if (this->string.size()) {
 				int c = (int) this->string[0];
@@ -48,19 +46,19 @@ public:
 				throw EndOfFileException("end of file", __FILE__, __LINE__);
 			}
 		} else {
-			int c = fgetc(this->proc_or_file);
-			if (c != EOF)
-				return c;
-			else
+			try {
+				return this->stream->read();
+			} catch (std::runtime_error const& e) {
 				throw EndOfFileException("end of file", __FILE__, __LINE__);
+			}
 		}
 	}
 
-	std::string getRow() {
+	public: std::string getRow() {
 		std::string result;
-		int c;
+		char c;
 		try {
-			while ((c = this->getChar()) != EOF && c != '\n'){
+			while ((c = this->getChar()) != '\n'){
 				result += c;
 			}
 		} catch (EndOfFileException const& e) {
@@ -71,12 +69,12 @@ public:
 		return result;
 	}
 
-	std::string getAll() {
+	public: std::string getAll() {
 		std::string result;
-		int c;
+		char c;
 		try {
-			while ((c = this->getChar()) != EOF){
-				result += c;
+			while (true){
+				result += this->getChar();
 			}
 		} catch (EndOfFileException const& e) {
 			if (result == "") {
@@ -86,35 +84,45 @@ public:
 		return result;
 	}
 
-	void open(std::string const& cmd_or_file, std::string const& mode, Type type) {
-		if (this->proc_or_file || this->string != "")
+	public: void open(std::string const& cmd_or_file, Type type) {
+		if (this->stream || this->string != "")
 			throw HandleNotClosedException("handle not closed - cannot open", __FILE__, __LINE__);
 	
-		this->proc_or_file = NULL;
+		this->stream = nullptr;
 		this->string = "";
 	
 		switch (type) {
-			case TYPE_STRING:
+			case TYPE_STRING: {
 				this->string = cmd_or_file;
 				break;
-			case TYPE_COMMAND:
-				this->proc_or_file = popen(cmd_or_file.c_str(), mode.c_str());
+			} case TYPE_COMMAND: {
+				auto pipe = Pipe::create();
+				this->stream = pipe->getReader();
+				Process::create("sh")
+					->setArguments({"-c", cmd_or_file})
+					->setStdOut(pipe->getWriter())
+					->run();
 				break;
-			case TYPE_FILE:
-				this->proc_or_file = fopen(cmd_or_file.c_str(), mode.c_str());
+			} case TYPE_FILE: {
+				try {
+					this->stream = File::openInputFile(cmd_or_file);
+				} catch (std::runtime_error const& e) {
+					this->stream = nullptr;
+				}
 				break;
-			default:
+			} default: {
 				throw LogicException("unexpected type given");
+			}
 		}
 	
-		if (this->proc_or_file || type == TYPE_STRING)
+		if (this->stream || type == TYPE_STRING)
 			this->type = type;
 		else
 			throw FileReadException("Cannot read the file/cmd: " + cmd_or_file, __FILE__, __LINE__);
 	}
 
-	void close() {
-		if (this->type != TYPE_STRING && !this->proc_or_file)
+	public: void close() {
+		if (this->type != TYPE_STRING && !this->stream)
 			throw HandleNotOpenedException("handle not opened - cannot close", __FILE__, __LINE__);
 	
 		switch (type) {
@@ -122,10 +130,8 @@ public:
 				this->string = "";
 				break;
 			case TYPE_COMMAND:
-				pclose(this->proc_or_file);
-				break;
 			case TYPE_FILE:
-				fclose(this->proc_or_file);
+				this->stream->close();
 				break;
 			default:
 				throw LogicException("unexpected type given");
