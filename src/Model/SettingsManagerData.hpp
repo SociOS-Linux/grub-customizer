@@ -25,6 +25,8 @@
 #include <map>
 #include "Env.hpp"
 #include "SettingsStore.hpp"
+#include "../lib/Process.hpp"
+#include "../lib/Pipe.hpp"
 
 class Model_SettingsManagerData :
 	public Model_SettingsStore,
@@ -82,46 +84,48 @@ public:
 		translatedName = Helper::str_replace(" Oblique", ":Oblique", translatedName);
 		translatedName = Helper::str_replace(" Regular", ":Regular", translatedName);
 	
-		std::string cmd = "fc-match -f '%{file[0]}' '" + translatedName + "'";
-		FILE* proc = popen(cmd.c_str(), "r");
-		int c;
-		while ((c = getc(proc)) != EOF) {
-			result += char(c);
+		auto pipe = Pipe::create();
+		auto process = Process::create("fc-match")
+			->addArgument("-f")
+			->addArgument("%{file[0]}")
+			->addArgument(translatedName)
+			->setStdOut(pipe->getWriter())
+			->setPassThru({Process::STDERR})
+			->run();
+
+		for (char c : *pipe->getReader()) {
+			result += c;
 		}
-		pclose(proc);
 		return result;
 	}
 
-	std::string mkFont(std::string fontFile = "", std::string outputPath = "") {
+	std::string mkFont(std::string fontFile = "", std::string outputPath = "")
+	{
+		outputPath = outputPath != "" ? outputPath : this->env->output_config_dir_noprefix + "/unicode.pf2";
+
 		int fontSize = -1;
 		if (fontFile == "") {
 			fontFile = Model_SettingsManagerData::getFontFileByName(this->grubFont);
 			fontSize = this->grubFontSize;
 		}
-		std::string sizeParam;
+
+		auto proc = Process::create(this->env->mkfont_cmd)
+			->addArgument("--output=" + outputPath)
+			->addArgument(fontFile);
+
 		if (fontSize != -1) {
 			std::ostringstream stream;
 			stream << fontSize;
-			sizeParam = " --size='" + stream.str() + "'";
+			proc->addArgument("--size=" + stream.str());
 			if (fontSize > 72) {
 				this->log("Error: font too large: " + stream.str() + "!", Logger::ERROR);
-				return ""; // fehler
+				return ""; // error
 			}
 		}
-		outputPath = outputPath != "" ? outputPath : this->env->output_config_dir_noprefix + "/unicode.pf2";
-		std::string cmd = this->env->mkfont_cmd + " --output='" + Helper::str_replace("'", "\\'", outputPath) + "'" + sizeParam + " '" + Helper::str_replace("'", "\\'", fontFile) + "' 2>&1";
-		this->log("running " + cmd, Logger::INFO);
-		FILE* mkfont_proc = popen(cmd.c_str(), "r");
-		int c;
-	//	std::string row = "";
-		while ((c = fgetc(mkfont_proc)) != EOF) {
-	//		if (c == '\n') {
-	//			this->log("MKFONT: " + row, Logger::INFO);
-	//		} else {
-	//			row += char(c);
-	//		}
-		}
-		int result = pclose(mkfont_proc);
+
+		proc->run();
+
+		int result = proc->finish();
 		if (result != 0) {
 			this->log("error running " + this->env->mkfont_cmd, Logger::ERROR);
 			return "";
