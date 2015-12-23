@@ -36,6 +36,7 @@
 #include <iostream>
 
 #include "Pipe.hpp"
+#include "File.hpp"
 
 class Process : public std::enable_shared_from_this<Process>
 {
@@ -48,11 +49,6 @@ class Process : public std::enable_shared_from_this<Process>
 	public: enum ForkPids {
 		CHILD = 0,
 		ERROR = -1
-	};
-
-	public: enum FileWriteMode {
-		REPLACE,
-		APPEND
 	};
 
 	public: class PipeEndConnection
@@ -167,33 +163,16 @@ class Process : public std::enable_shared_from_this<Process>
 		std::string const& filePath,
 		unsigned int fileDescriptor
 	) {
-		int file = ::open(filePath.c_str(), 0);
-
-		if (file == -1) {
-			throw std::runtime_error("failed opening input file");
-		}
-
-		this->addPipeEnd(fileDescriptor, std::make_shared<InputStream>(file));
-
+		this->addPipeEnd(fileDescriptor, File::openInputFile(filePath));
 		return shared_from_this();
 	}
 
 	public: std::shared_ptr<Process> addOutputFile(
 		std::string const& filePath,
 		unsigned int fileDescriptor,
-		FileWriteMode writeMode = FileWriteMode::REPLACE
+		File::WriteMode writeMode = File::WriteMode::REPLACE
 	) {
-		int file = ::open(
-			filePath.c_str(),
-			O_WRONLY | O_CREAT | (writeMode == FileWriteMode::REPLACE ? O_TRUNC : O_APPEND)
-		);
-
-		if (file == -1) {
-			throw std::runtime_error("failed opening output file");
-		}
-
-		this->addPipeEnd(fileDescriptor, std::make_shared<OutputStream>(file));
-
+		this->addPipeEnd(fileDescriptor, File::openOutputFile(filePath, writeMode));
 		return shared_from_this();
 	}
 
@@ -208,7 +187,7 @@ class Process : public std::enable_shared_from_this<Process>
 	/**
 	 * comfort function to easily assign stdout
 	 */
-	public: std::shared_ptr<Process> setStdOut(std::string const& filePath, FileWriteMode writeMode = FileWriteMode::REPLACE)
+	public: std::shared_ptr<Process> setStdOut(std::string const& filePath, File::WriteMode writeMode = File::WriteMode::REPLACE)
 	{
 		return this->addOutputFile(filePath, Process::STDOUT, writeMode);
 	}
@@ -216,7 +195,7 @@ class Process : public std::enable_shared_from_this<Process>
 	/**
 	 * comfort function to easily assign stderr
 	 */
-	public: std::shared_ptr<Process> setStdErr(std::string const& filePath, FileWriteMode writeMode = FileWriteMode::REPLACE)
+	public: std::shared_ptr<Process> setStdErr(std::string const& filePath, File::WriteMode writeMode = File::WriteMode::REPLACE)
 	{
 		return this->addOutputFile(filePath, Process::STDERR, writeMode);
 	}

@@ -145,6 +145,7 @@ src/lib/CsvProcessor.hpp -text
 src/lib/Dispatcher/Abstract.hpp -text
 src/lib/Dispatcher/Glib.hpp -text
 src/lib/Exception.hpp -text
+src/lib/File.hpp -text
 src/lib/FileSystem.hpp -text
 src/lib/Helper.hpp -text
 src/lib/Logger.hpp -text
