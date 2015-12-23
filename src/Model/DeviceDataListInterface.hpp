@@ -21,12 +21,13 @@
 #include <map>
 #include <string>
 #include <memory>
+#include "../lib/Stream.hpp"
 
 class Model_DeviceDataListInterface : public std::map<std::string, std::map<std::string, std::string> > {
 public:
 	virtual inline ~Model_DeviceDataListInterface() {};
 
-	virtual void loadData(FILE* blkidOutput)=0;
+	virtual void loadData(std::shared_ptr<InputStream> blkidOutput)=0;
 	virtual void clear()=0;
 };
 

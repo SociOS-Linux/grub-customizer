@@ -185,11 +185,16 @@ class MainController :
 		savedListCfg->verbose = false;
 
 		this->log("reading partition info…", Logger::EVENT);
-		FILE* blkidProc = popen("blkid", "r");
-		if (blkidProc){
+		auto blkidPipe = Pipe::create();
+		try {
+			Process::create("blkid")
+				->setStdOut(blkidPipe->getWriter())
+				->run();
+
 			deviceDataList->clear();
-			deviceDataList->loadData(blkidProc);
-			pclose(blkidProc);
+			deviceDataList->loadData(blkidPipe->getReader());
+		} catch (std::runtime_error const& e) {
+			// nothing to do here
 		}
 
 		mountTable->loadData("");

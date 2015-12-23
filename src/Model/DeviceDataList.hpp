@@ -24,20 +24,22 @@
 #include "../Model/DeviceDataListInterface.hpp"
 #include "../lib/Trait/LoggerAware.hpp"
 
-class Model_DeviceDataList : public Model_DeviceDataListInterface, public Trait_LoggerAware {
-public:
-	Model_DeviceDataList(FILE* blkidOutput){
-		loadData(blkidOutput);
+class Model_DeviceDataList : public Model_DeviceDataListInterface, public Trait_LoggerAware
+{
+	public: Model_DeviceDataList(std::shared_ptr<InputStream> blkidOutput)
+	{
+		this->loadData(blkidOutput);
 	}
 
-	Model_DeviceDataList() {}
+	public: Model_DeviceDataList() {}
 
-	void loadData(FILE* blkidOutput) {
+	public: void loadData(std::shared_ptr<InputStream> blkidOutput)
+	{
 		std::string deviceName, attributeName;
 		bool inAttributeValue = false;
 		bool deviceNameIsComplete = false, attributeNameIsComplete = false;
 		int c;
-		while ((c = fgetc(blkidOutput)) != EOF){
+		for (char c : *blkidOutput) {
 			if (inAttributeValue && c != '"'){
 				(*this)[deviceName][attributeName] += c;
 			}
@@ -69,11 +71,13 @@ public:
 		}
 	}
 
-	void clear() {
+	public: void clear()
+	{
 		this->std::map<std::string, std::map<std::string, std::string> >::clear();
 	}
 
-	std::string getDeviceByUuid(std::string const& uuid) const {
+	public: std::string getDeviceByUuid(std::string const& uuid) const
+	{
 		for (std::map<std::string, std::map<std::string, std::string> >::const_iterator iter = this->begin(); iter != this->end(); iter++) {
 			if (iter->second.find("UUID") != iter->second.end() && iter->second.at("UUID") == uuid) {
 				return iter->first;
