@@ -23,7 +23,7 @@
 
 class Parser_Char : public StreamParser_Abstract<char>
 {
-	public: Parser_Char(std::shared_ptr<Pipe::ReadEnd> input)
+	public: Parser_Char(std::shared_ptr<InputStream> input)
 		: StreamParser_Abstract(input)
 	{}
 

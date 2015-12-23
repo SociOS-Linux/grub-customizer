@@ -58,11 +58,11 @@ class Process : public std::enable_shared_from_this<Process>
 	public: class PipeEndConnection
 	{
 		public: unsigned int channel;
-		public: std::shared_ptr<Pipe::AbstractEnd> pipeEnd;
+		public: std::shared_ptr<Stream> pipeEnd;
 
 		public: PipeEndConnection() : channel(0) {}
 
-		public: PipeEndConnection(unsigned int fileDescriptorToMap, std::shared_ptr<Pipe::AbstractEnd> pipeEnd) :
+		public: PipeEndConnection(unsigned int fileDescriptorToMap, std::shared_ptr<Stream> pipeEnd) :
 			channel(fileDescriptorToMap),
 			pipeEnd(pipeEnd)
 		{}
@@ -119,9 +119,9 @@ class Process : public std::enable_shared_from_this<Process>
 
 	public: std::shared_ptr<Process> addPipeEnd(
 		unsigned int fileDescriptorToMap,
-		std::shared_ptr<Pipe::AbstractEnd> pipeEnd
+		std::shared_ptr<Stream> pipeEnd
 	) {
-		std::shared_ptr<Pipe::AbstractEnd> oldPipeEnd = nullptr;
+		std::shared_ptr<Stream> oldPipeEnd = nullptr;
 		if (this->pipeConnections.find(fileDescriptorToMap) != this->pipeConnections.end()) {
 			oldPipeEnd = this->pipeConnections[fileDescriptorToMap].pipeEnd;
 		}
@@ -142,7 +142,7 @@ class Process : public std::enable_shared_from_this<Process>
 	/**
 	 * comfort function to easily assign stdin
 	 */
-	public: std::shared_ptr<Process> setStdIn(std::shared_ptr<Pipe::ReadEnd> pipeEnd)
+	public: std::shared_ptr<Process> setStdIn(std::shared_ptr<InputStream> pipeEnd)
 	{
 		return this->addPipeEnd(Process::STDIN, pipeEnd);
 	}
@@ -150,7 +150,7 @@ class Process : public std::enable_shared_from_this<Process>
 	/**
 	 * comfort function to easily assign stdout
 	 */
-	public: std::shared_ptr<Process> setStdOut(std::shared_ptr<Pipe::WriteEnd> pipeEnd)
+	public: std::shared_ptr<Process> setStdOut(std::shared_ptr<OutputStream> pipeEnd)
 	{
 		return this->addPipeEnd(Process::STDOUT, pipeEnd);
 	}
@@ -158,7 +158,7 @@ class Process : public std::enable_shared_from_this<Process>
 	/**
 	 * comfort function to easily assign stderr
 	 */
-	public: std::shared_ptr<Process> setStdErr(std::shared_ptr<Pipe::WriteEnd> pipeEnd)
+	public: std::shared_ptr<Process> setStdErr(std::shared_ptr<OutputStream> pipeEnd)
 	{
 		return this->addPipeEnd(Process::STDERR, pipeEnd);
 	}
@@ -173,7 +173,7 @@ class Process : public std::enable_shared_from_this<Process>
 			throw std::runtime_error("failed opening input file");
 		}
 
-		this->addPipeEnd(fileDescriptor, std::make_shared<Pipe::ReadEnd>(file));
+		this->addPipeEnd(fileDescriptor, std::make_shared<InputStream>(file));
 
 		return shared_from_this();
 	}
@@ -192,7 +192,7 @@ class Process : public std::enable_shared_from_this<Process>
 			throw std::runtime_error("failed opening output file");
 		}
 
-		this->addPipeEnd(fileDescriptor, std::make_shared<Pipe::WriteEnd>(file));
+		this->addPipeEnd(fileDescriptor, std::make_shared<OutputStream>(file));
 
 		return shared_from_this();
 	}

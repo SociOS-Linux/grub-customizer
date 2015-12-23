@@ -24,9 +24,9 @@
 
 template <typename T_Res> class StreamParser_Abstract : public Parser_Abstract<T_Res>
 {
-	protected: std::shared_ptr<Pipe::ReadEnd> input;
+	protected: std::shared_ptr<InputStream> input;
 
-	public: StreamParser_Abstract(std::shared_ptr<Pipe::ReadEnd> input)
+	public: StreamParser_Abstract(std::shared_ptr<InputStream> input)
 		: input(input)
 	{}
 };

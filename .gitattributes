@@ -158,6 +158,7 @@ src/lib/Pipe.hpp -text
 src/lib/Process.hpp -text
 src/lib/Regex.hpp -text
 src/lib/Regex/GLib.hpp -text
+src/lib/Stream.hpp -text
 src/lib/TestProcess.hpp -text
 src/lib/ThreadQueue.hpp -text
 src/lib/ThreadQueueTest.hpp -text
