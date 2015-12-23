@@ -23,6 +23,8 @@
 #include <cstdio>
 #include <functional>
 #include "../lib/Trait/LoggerAware.hpp"
+#include "../lib/Process.hpp"
+#include "../lib/Pipe.hpp"
 
 class Model_FbResolutionsGetter : public Trait_LoggerAware {
 	std::list<std::string> data;
@@ -41,34 +43,41 @@ public:
 		if (!_isLoading){ //make sure that only one thread is running this function at the same time
 			_isLoading = true;
 			data.clear();
-			FILE* hwinfo_proc = popen("hwinfo --framebuffer", "r");
-			if (hwinfo_proc){
-				int c;
-				std::string row;
-				//parses mode lines like "  Mode 0x0300: 640x400 (+640), 8 bits"
-				while ((c = fgetc(hwinfo_proc)) != EOF){
-					if (c != '\n')
-						row += char(c);
-					else {
-						if (row.substr(0,7) == "  Mode "){
-							int beginOfResulution = row.find(':')+2;
-							int endOfResulution = row.find(' ', beginOfResulution);
-	
-							int beginOfColorDepth = row.find(' ', endOfResulution+1)+1;
-							int endOfColorDepth = row.find(' ', beginOfColorDepth);
-	
-							data.push_back(
-								row.substr(beginOfResulution, endOfResulution-beginOfResulution)
-							  + "x"
-							  + row.substr(beginOfColorDepth, endOfColorDepth-beginOfColorDepth)
-							);
-						}
-						row = "";
+			auto hwinfoPipe = Pipe::create();
+			std::shared_ptr<Process> hwinfoProc = nullptr;
+			try {
+				hwinfoProc = Process::create("hwinfo")
+					->addArgument("--framebuffer")
+					->setStdOut(hwinfoPipe->getWriter())
+					->run();
+			} catch (std::runtime_error const& e) {
+				return;
+			}
+
+			std::string row;
+			//parses mode lines like "  Mode 0x0300: 640x400 (+640), 8 bits"
+			for (char c : *hwinfoPipe->getReader()) {
+				if (c != '\n')
+					row += char(c);
+				else {
+					if (row.substr(0,7) == "  Mode "){
+						int beginOfResulution = row.find(':')+2;
+						int endOfResulution = row.find(' ', beginOfResulution);
+
+						int beginOfColorDepth = row.find(' ', endOfResulution+1)+1;
+						int endOfColorDepth = row.find(' ', beginOfColorDepth);
+
+						data.push_back(
+							row.substr(beginOfResulution, endOfResulution-beginOfResulution)
+						  + "x"
+						  + row.substr(beginOfColorDepth, endOfColorDepth-beginOfColorDepth)
+						);
 					}
+					row = "";
 				}
-				if (pclose(hwinfo_proc) == 0 && this->onFinish) {
-					this->onFinish();
-				}
+			}
+			if (hwinfoProc->finish() == 0 && this->onFinish) {
+				this->onFinish();
 			}
 			_isLoading = false;
 		}
