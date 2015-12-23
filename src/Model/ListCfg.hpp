@@ -526,22 +526,25 @@ class Model_ListCfg :
 		std::string saveProcOutput;
 	
 		//run update-grub
-		FILE* saveProc = popen((env->update_cmd + " 2>&1").c_str(), "r");
-		if (saveProc) {
-			int c;
-			std::string row = "";
-			while ((c = fgetc(saveProc)) != EOF) {
-				saveProcOutput += char(c);
-				if (c == '\n') {
-					send_new_save_progress(0.5); //a gui should use pulse() instead of set_fraction
-					this->log(row, Logger::INFO);
-					row = "";
-				} else {
-					row += char(c);
-				}
+		auto savePipe = Pipe::create();
+		auto saveProc = Process::create("sh")
+			->setArguments({"-c", env->update_cmd})
+			->setStdOut(savePipe->getWriter())
+			->setStdErr(savePipe->getWriter())
+			->run();
+
+		std::string row = "";
+		for (char c : *savePipe->getReader()) {
+			saveProcOutput += c;
+			if (c == '\n') {
+				send_new_save_progress(0.5); //a gui should use pulse() instead of set_fraction
+				this->log(row, Logger::INFO);
+				row = "";
+			} else {
+				row += c;
 			}
-			saveProcSuccess = pclose(saveProc);
 		}
+		saveProcSuccess = saveProc->finish();
 	
 		// correct pathes of foreign rules (to make sure re-syncing works)
 		auto foreignRules = this->proxies.getForeignRules();
