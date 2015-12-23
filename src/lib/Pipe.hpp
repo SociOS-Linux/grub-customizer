@@ -45,6 +45,14 @@ class Pipe
 		this->writeEnd = std::make_shared<OutputStream>(pipeDescriptors[1]);
 	}
 
+	/**
+	 * comfort function to create the pipe as shared_ptr
+	 */
+	public: static std::shared_ptr<Pipe> create()
+	{
+		return std::make_shared<Pipe>();
+	}
+
 	public: std::shared_ptr<InputStream> getReader()
 	{
 		return this->readEnd;

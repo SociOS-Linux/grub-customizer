@@ -25,6 +25,7 @@
 #include "../Model/Script.hpp"
 
 int main(int argc, char** argv){
+	auto stdin = std::make_shared<InputStream>(STDIN_FILENO);
 	if (argc == 2) {
 		auto script = std::make_shared<Model_Script>("noname", "");
 		std::shared_ptr<Model_Entry> newEntry;

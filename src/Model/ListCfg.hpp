@@ -48,6 +48,8 @@
 #include "Repository.hpp"
 #include "ScriptSourceMap.hpp"
 #include "SettingsManagerData.hpp"
+#include "../lib/Process.hpp"
+#include "../lib/File.hpp"
 
 class Model_ListCfg :
 	public Trait_LoggerAware,
@@ -274,10 +276,18 @@ class Model_ListCfg :
 	
 		//run mkconfig
 		this->log("running " + this->env->mkconfig_cmd, Logger::EVENT);
-		FILE* mkconfigProc = popen((this->env->mkconfig_cmd + " 2> " + this->errorLogFile).c_str(), "r");
-		readGeneratedFile(mkconfigProc);
+
+		auto mkconfigPipe = Pipe::create();
+		auto mkconfigProc = Process::create("sh")
+			->setArguments({"-c", this->env->mkconfig_cmd})
+			->setStdIn("/dev/null") // grub-mkconfig needs stdin although it's not used. Otherwise output is imcomplete.
+			->setStdOut(mkconfigPipe->getWriter())
+			->setStdErr(this->errorLogFile)
+			->run();
+
+		readGeneratedFile(mkconfigPipe->getReader());
 		
-		int success = pclose(mkconfigProc);
+		int success = mkconfigProc->finish();
 		if (success != 0 && !cancelThreadsRequested){
 			throw CmdExecException("failed running " + this->env->mkconfig_cmd, __FILE__, __LINE__);
 		} else {
@@ -550,7 +560,7 @@ class Model_ListCfg :
 		}
 	}
 
-	public: void readGeneratedFile(FILE* source, bool createScriptIfNotFound = false, bool createProxyIfNotFound = false)
+	public: void readGeneratedFile(std::shared_ptr<InputStream> source, bool createScriptIfNotFound = false, bool createProxyIfNotFound = false)
 	{
 		Model_Entry_Row row;
 		std::shared_ptr<Model_Script> script = nullptr;
@@ -662,13 +672,17 @@ class Model_ListCfg :
 
 	public: bool loadStaticCfg()
 	{
-		FILE* oldConfigFile = fopen(env->output_config_file.c_str(), "r");
-		if (oldConfigFile){
-			this->readGeneratedFile(oldConfigFile, true, true);
-			fclose(oldConfigFile);
-			return true;
+		std::shared_ptr<InputStream> oldConfigFile = nullptr;
+		try {
+			oldConfigFile = File::openInputFile(env->output_config_file);
+		} catch (std::runtime_error const& e) {
+			// file may be missing
+			return false;
 		}
-		return false;
+
+		this->readGeneratedFile(oldConfigFile, true, true);
+		oldConfigFile->close();
+		return true;
 	}
 
 

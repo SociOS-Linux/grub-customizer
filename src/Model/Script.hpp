@@ -31,6 +31,7 @@
 #include "../lib/ArrayStructure.hpp"
 #include "../lib/Type.hpp"
 #include "Entry.hpp"
+#include "../lib/File.hpp"
 
 class Model_Script : public Model_EntryPathFollower, public Trait_LoggerAware, public Script {
 	public: std::string name, fileName;
@@ -43,14 +44,18 @@ class Model_Script : public Model_EntryPathFollower, public Trait_LoggerAware, p
 		root(std::make_shared<Model_Entry>("DUMMY", "DUMMY", "DUMMY", Model_Entry::SCRIPT_ROOT)),
 		isCustomScript(false)
 	{
-		FILE* script = fopen(fileName.c_str(), "r");
-		if (script) {
-			Model_Entry_Row row1(script), row2(script);
-			if (row1.text == CUSTOM_SCRIPT_SHEBANG && row2.text == CUSTOM_SCRIPT_PREFIX) {
-				isCustomScript = true;
-			}
-			fclose(script);
+		std::shared_ptr<InputStream> script;
+		try {
+			script = File::openInputFile(fileName);
+		} catch (std::runtime_error const& e) {
+			return;
 		}
+
+		Model_Entry_Row row1(script), row2(script);
+		if (row1.text == CUSTOM_SCRIPT_SHEBANG && row2.text == CUSTOM_SCRIPT_PREFIX) {
+			isCustomScript = true;
+		}
+		script->close();
 	}
 
 	public: bool isModified(std::shared_ptr<Model_Entry> parent = nullptr)

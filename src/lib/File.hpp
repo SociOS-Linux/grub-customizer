@@ -21,6 +21,11 @@
 
 #include <memory>
 #include "Stream.hpp"
+#include <sys/types.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/resource.h>
 
 class File
 {

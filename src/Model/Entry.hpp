@@ -26,25 +26,29 @@
 #include "../lib/Helper.hpp"
 #include "../lib/ArrayStructure.hpp"
 #include "../lib/Type.hpp"
+#include "../lib/Stream.hpp"
 
 class Model_Entry_Row
 {
-	public: Model_Entry_Row(FILE* sourceFile) : eof(false), is_loaded(true)
+	public: Model_Entry_Row(std::shared_ptr<InputStream> sourceFile) :
+		eof(false),
+		is_loaded(true)
 	{
 		this->eof = true; //will be set to false on the first loop run
-		int c;
-		while ((c = fgetc(sourceFile)) != EOF){
+		std::string c;
+		while ((c = sourceFile->read(1)) != "") {
 			this->eof = false;
-			if (c != '\n'){
-				this->text += char(c);
-			}
-			else {
+			if (c != "\n"){
+				this->text += c;
+			} else {
 				break;
 			}
 		}
 	}
 
-	public: Model_Entry_Row() : eof(false), is_loaded(true)
+	public: Model_Entry_Row() :
+		eof(false),
+		is_loaded(true)
 	{}
 
 	public: std::string text;
@@ -79,8 +83,16 @@ class Model_Entry : public Trait_LoggerAware, public Entry
 		: name(name), extension(extension), content(content), isValid(true), type(type), isModified(false), quote('\'')
 	{}
 	
-	public: Model_Entry(FILE* sourceFile, Model_Entry_Row firstRow = Model_Entry_Row(), std::shared_ptr<Logger> logger = nullptr, std::string* plaintextBuffer = NULL)
-		: isValid(false), type(MENUENTRY), quote('\''), isModified(false)
+	public: Model_Entry(
+		std::shared_ptr<InputStream> sourceFile,
+		Model_Entry_Row firstRow = Model_Entry_Row(),
+		std::shared_ptr<Logger> logger = nullptr,
+		std::string* plaintextBuffer = nullptr
+	) :
+		isValid(false),
+		type(MENUENTRY),
+		quote('\''),
+		isModified(false)
 	{
 		if (logger) {
 			this->setLogger(logger);
@@ -104,7 +116,7 @@ class Model_Entry : public Trait_LoggerAware, public Entry
 		}
 	}
 	
-	private: void readSubmenu(FILE* sourceFile, Model_Entry_Row firstRow)
+	private: void readSubmenu(std::shared_ptr<InputStream> sourceFile, Model_Entry_Row firstRow)
 	{
 		std::string rowText = Helper::ltrim(firstRow.text);
 		int endOfEntryName = rowText.find('"', 10);
@@ -129,7 +141,7 @@ class Model_Entry : public Trait_LoggerAware, public Entry
 		}
 	}
 
-	private: void readMenuEntry(FILE* sourceFile, Model_Entry_Row firstRow)
+	private: void readMenuEntry(std::shared_ptr<InputStream> sourceFile, Model_Entry_Row firstRow)
 	{
 		std::string rowText = Helper::ltrim(firstRow.text);
 		char quote = '"';
