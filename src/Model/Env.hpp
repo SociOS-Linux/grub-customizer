@@ -33,6 +33,8 @@
 #include "../lib/Type.hpp"
 #include "MountTable.hpp"
 #include "SettingsStore.hpp"
+#include "../lib/Process.hpp"
+#include "../lib/Pipe.hpp"
 
 struct Model_Env : public Trait_LoggerAware {
 public:
@@ -294,15 +296,22 @@ public:
 
 	bool check_cmd(std::string const& cmd, std::string const& cmd_prefix = "") const {
 		this->log("checking the " + this->trim_cmd(cmd) + " command… ", Logger::INFO);
-		FILE* proc = popen((cmd_prefix + " which " + this->trim_cmd(cmd) + " 2>&1").c_str(), "r");
+		auto pipe = Pipe::create();
+		auto proc = Process::create("which")
+			->addArgument(this->trim_cmd(cmd))
+			->setStdOut(pipe->getWriter())
+			->setStdErr(pipe->getWriter())
+			->run();
+
 		std::string output;
-		int c;
-		while ((c = fgetc(proc)) != EOF) {
+		for (char c : *pipe->getReader()) {
 			if (c != '\n') {
-				output += char(c);
+				output += c;
 			}
 		}
-		bool result = pclose(proc) == 0;
+
+		bool result = proc->finish() == 0;
+
 		if (result == true) {
 			this->log("found at: " + output, Logger::INFO);
 		} else {
