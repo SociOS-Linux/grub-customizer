@@ -23,6 +23,8 @@
 #include <functional>
 #include "../lib/Trait/LoggerAware.hpp"
 #include "Env.hpp"
+#include "../lib/Process.hpp"
+#include "../lib/Pipe.hpp"
 
 class Model_Installer :
 	public Trait_LoggerAware,
@@ -40,17 +42,23 @@ public:
 	}
 
 	std::string install(std::string const& device) {
-		FILE* install_proc = popen((this->env->install_cmd+" '"+device+"' 2>&1").c_str(), "r");
+		auto installPipe = Pipe::create();
+		auto installProc = Process::create("sh")
+			->setArguments({"-c", this->env->install_cmd + " '" + device + "'"})
+			->setStdOut(installPipe->getWriter())
+			->setStdErr(installPipe->getWriter())
+			->run();
+
 		std::string output;
-		int c;
-		while ((c = fgetc(install_proc)) != EOF){
+		for (char c : *installPipe->getReader()) {
 			output += c;
 		}
-		int success = pclose(install_proc);
-		if (success == 0)
+		int success = installProc->finish();
+		if (success == 0) {
 			return ""; //empty return string = no error
-		else
+		} else {
 			return output;
+		}
 	}
 
 };
