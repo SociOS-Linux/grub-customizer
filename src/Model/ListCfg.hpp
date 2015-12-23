@@ -529,6 +529,7 @@ class Model_ListCfg :
 		auto savePipe = Pipe::create();
 		auto saveProc = Process::create("sh")
 			->setArguments({"-c", env->update_cmd})
+			->setStdIn("/dev/null")
 			->setStdOut(savePipe->getWriter())
 			->setStdErr(savePipe->getWriter())
 			->run();
