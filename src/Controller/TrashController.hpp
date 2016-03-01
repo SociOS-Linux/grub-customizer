@@ -237,11 +237,19 @@ class TrashController :
 		return true;
 	}
 
-	private: std::shared_ptr<Model_Rule> findRule(Rule* rulePtr)
+	private: std::shared_ptr<Model_Rule> findRule(Rule* rulePtr, std::shared_ptr<Model_Rule> parent = nullptr)
 	{
-		for (auto rule : this->data) {
+		std::list<std::shared_ptr<Model_Rule>>& list = parent ? parent->subRules : this->data;
+
+		for (auto rule : list) {
 			if (rule.get() == rulePtr) {
 				return rule;
+			}
+			if (rule->subRules.size()) {
+				auto subRule = this->findRule(rulePtr, rule);
+				if (subRule) {
+					return subRule;
+				}
 			}
 		}
 		throw ItemNotFoundException("rule not found in trash data", __FILE__, __LINE__);
