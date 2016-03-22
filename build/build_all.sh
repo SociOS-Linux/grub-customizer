@@ -69,43 +69,12 @@ cd $basedir/releases/$subdir/launchpad-source
 tar xzf grub-customizer_$version.tar.gz
 cd grub-customizer-$version
 cp -r $releasedir/grub-customizer-$version/debian debian
-dpatch apply 02_gtkmm24.dpatch
-if [ "$?" -ne 0 ] ; then echo 'fail'; exit; fi
-dpatch apply 03_libarchive_old.dpatch
-if [ "$?" -ne 0 ] ; then echo 'fail'; exit; fi
 rm -rf debian
 cd ..
 tar -c grub-customizer-$version | gzip > $basedir/releases/$subdir/launchpad-source/grub-customizer_$version.gtk2.tar.gz
 rm -rf grub-customizer-$version
 gpg --armor --sign --detach-sig $basedir/releases/$subdir/launchpad-source/grub-customizer_$version.gtk2.tar.gz
 cd "$olddir"
-
-echo 7 > debian/compat
-echo "01su-to-root.dpatch\n02_gtkmm24.dpatch\n03_libarchive_old.dpatch" > debian/patches/00list
-cp debian/control debian/control.ori
-cat debian/control.ori | sed 's/libgtkmm-3.0-dev/libgtkmm-2.4-dev/' > debian/control
-
-
-# <lucid>
-cp $basedir/releases/$subdir/grub-customizer_$version.orig.tar.gz $basedir/release/grub-customizer_$version.orig.tar.gz
-$sourcedir/debian/changelog.d l lucid > debian/changelog
-debuild -S;
-mkdir $basedir/releases/$subdir/lucid
-mv $basedir/release/grub-customizer_* $basedir/releases/$subdir/lucid
-echo '#!/bin/sh
-dput ppa:danielrichter2007/grub-customizer '$basedir'/releases/'$subdir'/lucid/grub-customizer_'$version'-0ubuntu1~ppa'$rev'l_source.changes' > $basedir/releases/$subdir/lucid/upload.sh
-echo '#!/bin/sh
-cd '$basedir/releases/$subdir/lucid' && export BD=build_`date +%s` && mkdir $BD && sudo mount none $BD -t tmpfs && tar -xzf *.orig.tar.gz -C $BD && tar -xzf *.debian.tar.gz -C $BD/* && cp *.orig.tar.gz $BD/ && cd $BD/* && dpkg-buildpackage && cd ../.. && mv $BD/*.deb ./ && sudo umount $BD && rm -rf $BD' > $basedir/releases/$subdir/lucid/compile.sh
-chmod +x $basedir/releases/$subdir/lucid/*.sh
-# </lucid>
-
-echo 8 > debian/compat
-
-
-dpatch deapply-all
-echo -n "" > debian/patches/00list
-mv debian/control.ori debian/control
-
 
 # <precise>
 cp $basedir/releases/$subdir/grub-customizer_$version.orig.tar.gz $basedir/release/grub-customizer_$version.orig.tar.gz
@@ -212,12 +181,14 @@ chmod +x $basedir/releases/$subdir/xenial/*.sh
 # </xenial>
 
 echo '#!/bin/sh
-'$basedir'/releases/'$subdir'/lucid/upload.sh
 '$basedir'/releases/'$subdir'/precise/upload.sh
 '$basedir'/releases/'$subdir'/quantal/upload.sh
 '$basedir'/releases/'$subdir'/raring/upload.sh
 '$basedir'/releases/'$subdir'/saucy/upload.sh
 '$basedir'/releases/'$subdir'/trusty/upload.sh
+'$basedir'/releases/'$subdir'/vivid/upload.sh
+'$basedir'/releases/'$subdir'/wily/upload.sh
+'$basedir'/releases/'$subdir'/xenial/upload.sh
 ' > $basedir/releases/$subdir/upload_ppas.sh
 chmod +x $basedir/releases/$subdir/upload_ppas.sh
 

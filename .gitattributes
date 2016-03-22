@@ -27,10 +27,6 @@ debian/changelog.revu.d -text
 debian/compat -text
 debian/control -text
 debian/copyright -text
-debian/patches/00list -text
-debian/patches/01su-to-root.dpatch -text
-debian/patches/02_gtkmm24.dpatch -text
-debian/patches/03_libarchive_old.dpatch -text
 debian/rules -text
 debian/source/format -text
 debian/watch -text
