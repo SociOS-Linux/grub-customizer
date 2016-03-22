@@ -64,18 +64,6 @@ mkdir $basedir/releases/$subdir/launchpad-source
 cp $basedir/releases/$subdir/grub-customizer_$version.orig.tar.gz $basedir/releases/$subdir/launchpad-source/grub-customizer_$version.tar.gz
 gpg --armor --sign --detach-sig $basedir/releases/$subdir/launchpad-source/grub-customizer_$version.tar.gz
 
-olddir=`pwd`
-cd $basedir/releases/$subdir/launchpad-source
-tar xzf grub-customizer_$version.tar.gz
-cd grub-customizer-$version
-cp -r $releasedir/grub-customizer-$version/debian debian
-rm -rf debian
-cd ..
-tar -c grub-customizer-$version | gzip > $basedir/releases/$subdir/launchpad-source/grub-customizer_$version.gtk2.tar.gz
-rm -rf grub-customizer-$version
-gpg --armor --sign --detach-sig $basedir/releases/$subdir/launchpad-source/grub-customizer_$version.gtk2.tar.gz
-cd "$olddir"
-
 # <precise>
 cp $basedir/releases/$subdir/grub-customizer_$version.orig.tar.gz $basedir/release/grub-customizer_$version.orig.tar.gz
 $sourcedir/debian/changelog.d p precise > debian/changelog
@@ -101,19 +89,6 @@ echo '#!/bin/sh
 cd '$basedir/releases/$subdir/quantal' && export BD=build_`date +%s` && mkdir $BD && sudo mount none $BD -t tmpfs && tar -xzf *.orig.tar.gz -C $BD && tar -xzf *.debian.tar.gz -C $BD/* && cp *.orig.tar.gz $BD/ && cd $BD/* && dpkg-buildpackage && cd ../.. && mv $BD/*.deb ./ && sudo umount $BD && rm -rf $BD' > $basedir/releases/$subdir/quantal/compile.sh
 chmod +x $basedir/releases/$subdir/quantal/*.sh
 # </quantal>
-
-# <raring>
-cp $basedir/releases/$subdir/grub-customizer_$version.orig.tar.gz $basedir/release/grub-customizer_$version.orig.tar.gz
-$sourcedir/debian/changelog.d r raring > debian/changelog
-debuild -S;
-mkdir $basedir/releases/$subdir/raring
-mv $basedir/release/grub-customizer_* $basedir/releases/$subdir/raring
-echo '#!/bin/sh
-dput ppa:danielrichter2007/grub-customizer '$basedir'/releases/'$subdir'/raring/grub-customizer_'$version'-0ubuntu1~ppa'$rev'r_source.changes' > $basedir/releases/$subdir/raring/upload.sh
-echo '#!/bin/sh
-cd '$basedir/releases/$subdir/raring' && export BD=build_`date +%s` && mkdir $BD && sudo mount none $BD -t tmpfs && tar -xzf *.orig.tar.gz -C $BD && tar -xzf *.debian.tar.gz -C $BD/* && cp *.orig.tar.gz $BD/ && cd $BD/* && dpkg-buildpackage && cd ../.. && mv $BD/*.deb ./ && sudo umount $BD && rm -rf $BD' > $basedir/releases/$subdir/raring/compile.sh
-chmod +x $basedir/releases/$subdir/raring/*.sh
-# </raring>
 
 # <saucy>
 cp $basedir/releases/$subdir/grub-customizer_$version.orig.tar.gz $basedir/release/grub-customizer_$version.orig.tar.gz
