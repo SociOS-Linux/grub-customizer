@@ -201,12 +201,16 @@ translation/translation-nl.mo -text svneol=unset#unset
 translation/translation-nl.po -text
 translation/translation-pl.mo -text svneol=unset#unset
 translation/translation-pl.po -text
+translation/translation-pt.mo -text
+translation/translation-pt.po -text
 translation/translation-pt_BR.mo -text svneol=unset#unset
 translation/translation-pt_BR.po -text
 translation/translation-ru.mo -text svneol=unset#unset
 translation/translation-ru.po -text
 translation/translation-sk.mo -text svneol=unset#unset
 translation/translation-sk.po -text
+translation/translation-ta.mo -text
+translation/translation-ta.po -text
 translation/translation-tr.mo -text svneol=unset#unset
 translation/translation-tr.po -text
 translation/translation-uk.mo -text svneol=unset#unset

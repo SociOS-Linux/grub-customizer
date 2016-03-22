@@ -1,3 +1,9 @@
+v 5.0.0
+	* improved default os selector
+	* improved entry editor
+	* added c++11 support
+	* internal improvements and fixes
+
 v 4.0.6
 	* showing save errors
 	* fixed background image flicker bug in trusty (image was reset to previous one when choosing inside of image selection window)

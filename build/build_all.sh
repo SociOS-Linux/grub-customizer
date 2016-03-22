@@ -172,6 +172,45 @@ cd '$basedir/releases/$subdir/trusty' && export BD=build_`date +%s` && mkdir $BD
 chmod +x $basedir/releases/$subdir/trusty/*.sh
 # </trusty>
 
+# <vivid>
+cp $basedir/releases/$subdir/grub-customizer_$version.orig.tar.gz $basedir/release/grub-customizer_$version.orig.tar.gz
+$sourcedir/debian/changelog.d v vivid > debian/changelog
+debuild -S;
+mkdir $basedir/releases/$subdir/vivid
+mv $basedir/release/grub-customizer_* $basedir/releases/$subdir/vivid
+echo '#!/bin/sh
+dput ppa:danielrichter2007/grub-customizer '$basedir'/releases/'$subdir'/vivid/grub-customizer_'$version'-0ubuntu1~ppa'$rev'v_source.changes' > $basedir/releases/$subdir/vivid/upload.sh
+echo '#!/bin/sh
+cd '$basedir/releases/$subdir/vivid' && export BD=build_`date +%s` && mkdir $BD && sudo mount none $BD -t tmpfs && tar -xzf *.orig.tar.gz -C $BD && tar -xzf *.debian.tar.gz -C $BD/* && cp *.orig.tar.gz $BD/ && cd $BD/* && dpkg-buildpackage && cd ../.. && mv $BD/*.deb ./ && sudo umount $BD && rm -rf $BD' > $basedir/releases/$subdir/vivid/compile.sh
+chmod +x $basedir/releases/$subdir/vivid/*.sh
+# </vivid>
+
+# <wily>
+cp $basedir/releases/$subdir/grub-customizer_$version.orig.tar.gz $basedir/release/grub-customizer_$version.orig.tar.gz
+$sourcedir/debian/changelog.d w wily > debian/changelog
+debuild -S;
+mkdir $basedir/releases/$subdir/wily
+mv $basedir/release/grub-customizer_* $basedir/releases/$subdir/wily
+echo '#!/bin/sh
+dput ppa:danielrichter2007/grub-customizer '$basedir'/releases/'$subdir'/wily/grub-customizer_'$version'-0ubuntu1~ppa'$rev'w_source.changes' > $basedir/releases/$subdir/wily/upload.sh
+echo '#!/bin/sh
+cd '$basedir/releases/$subdir/wily' && export BD=build_`date +%s` && mkdir $BD && sudo mount none $BD -t tmpfs && tar -xzf *.orig.tar.gz -C $BD && tar -xzf *.debian.tar.gz -C $BD/* && cp *.orig.tar.gz $BD/ && cd $BD/* && dpkg-buildpackage && cd ../.. && mv $BD/*.deb ./ && sudo umount $BD && rm -rf $BD' > $basedir/releases/$subdir/wily/compile.sh
+chmod +x $basedir/releases/$subdir/wily/*.sh
+# </wily>
+
+# <xenial>
+cp $basedir/releases/$subdir/grub-customizer_$version.orig.tar.gz $basedir/release/grub-customizer_$version.orig.tar.gz
+$sourcedir/debian/changelog.d x xenial > debian/changelog
+debuild -S;
+mkdir $basedir/releases/$subdir/xenial
+mv $basedir/release/grub-customizer_* $basedir/releases/$subdir/xenial
+echo '#!/bin/sh
+dput ppa:danielrichter2007/grub-customizer '$basedir'/releases/'$subdir'/xenial/grub-customizer_'$version'-0ubuntu1~ppa'$rev'x_source.changes' > $basedir/releases/$subdir/xenial/upload.sh
+echo '#!/bin/sh
+cd '$basedir/releases/$subdir/xenial' && export BD=build_`date +%s` && mkdir $BD && sudo mount none $BD -t tmpfs && tar -xzf *.orig.tar.gz -C $BD && tar -xzf *.debian.tar.gz -C $BD/* && cp *.orig.tar.gz $BD/ && cd $BD/* && dpkg-buildpackage && cd ../.. && mv $BD/*.deb ./ && sudo umount $BD && rm -rf $BD' > $basedir/releases/$subdir/xenial/compile.sh
+chmod +x $basedir/releases/$subdir/xenial/*.sh
+# </xenial>
+
 echo '#!/bin/sh
 '$basedir'/releases/'$subdir'/lucid/upload.sh
 '$basedir'/releases/'$subdir'/precise/upload.sh

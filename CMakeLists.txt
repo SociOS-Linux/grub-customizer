@@ -213,6 +213,14 @@ install(FILES translation/translation-ko.mo
 	DESTINATION share/locale/ko/LC_MESSAGES/
 	RENAME grub-customizer.mo)
 
+install(FILES translation/translation-pt.mo
+	DESTINATION share/locale/pt/LC_MESSAGES/
+	RENAME grub-customizer.mo)
+
+install(FILES translation/translation-ta.mo
+	DESTINATION share/locale/ta/LC_MESSAGES/
+	RENAME grub-customizer.mo)
+
 install(FILES misc/grub-customizer.desktop
 	DESTINATION /usr/share/applications
 )
