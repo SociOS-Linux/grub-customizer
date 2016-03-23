@@ -406,6 +406,10 @@ class View_Gtk_Settings :
 
 	public: void setDefEntry(std::string const& defEntry)
 	{
+		if (this->defEntryValueMapping.size() == 0) { // not initialized yet
+			return;
+		}
+
 		this->event_lock = true;
 
 		int pos = -1;
