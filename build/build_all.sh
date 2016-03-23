@@ -89,9 +89,6 @@ function build() {
 	chmod +x "$releasedir/$subdir/$distribution"/*.sh
 }
 
-build p precise
-build q quantal
-build s saucy
 build t trusty
 build v vivid
 build w wily
@@ -99,9 +96,6 @@ build x xenial
 
 
 echo '#!/bin/sh
-'$releasedir'/'$subdir'/precise/upload.sh
-'$releasedir'/'$subdir'/quantal/upload.sh
-'$releasedir'/'$subdir'/saucy/upload.sh
 '$releasedir'/'$subdir'/trusty/upload.sh
 '$releasedir'/'$subdir'/vivid/upload.sh
 '$releasedir'/'$subdir'/wily/upload.sh
