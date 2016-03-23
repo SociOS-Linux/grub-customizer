@@ -1,3 +1,9 @@
+v 5.0.2
+	* fixed errors when using theme editor
+
+v 5.0.1
+	* fixed error on startup when default entry selected
+
 v 5.0.0
 	* improved default os selector
 	* improved entry editor
