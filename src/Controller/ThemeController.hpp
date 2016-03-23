@@ -78,7 +78,7 @@ class ThemeController :
 
 		this->applicationObject->onListModelChange.addHandler(std::bind(std::mem_fn(&ThemeController::updateSettingsDataAction), this));
 
-		this->applicationObject->onSettingModelChange.addHandler(std::bind(std::mem_fn(&ThemeController::loadThemesAction), this));
+		this->applicationObject->onLoad.addHandler(std::bind(std::mem_fn(&ThemeController::loadThemesAction), this));
 		this->applicationObject->onSettingModelChange.addHandler(std::bind(std::mem_fn(&ThemeController::updateFontSizeAction), this));
 
 		this->applicationObject->onSave.addHandler(std::bind(std::mem_fn(&ThemeController::saveAction), this));
@@ -246,7 +246,7 @@ class ThemeController :
 			Model_ThemeFile* themeFile = &theme->getFileByNewName(file);
 			std::string originalFileName = themeFile->localFileName;
 			bool isImage = this->isImage(file);
-			this->currentThemeFile = originalFileName;
+			this->currentThemeFile = themeFile->newLocalFileName;
 			if (themeFile->content != "") {
 				this->view->setText(themeFile->content);
 			} else if (themeFile->externalSource != "") {

@@ -363,6 +363,7 @@ class MainController :
 						this->log("saved grub list not found", Logger::WARNING);
 						this->config_has_been_different_on_startup_but_unsaved = false;
 					}
+					this->threadHelper->runDispatched([this] {this->applicationObject->onLoad.exec();});
 				}
 				if (preserveConfig){
 					this->log("restoring settings", Logger::IMPORTANT_EVENT);

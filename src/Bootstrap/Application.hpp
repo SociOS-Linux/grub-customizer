@@ -67,6 +67,7 @@ class Bootstrap_Application_Object
 
 	public: Bootstrap_Application_Event<> onInit;
 	public: Bootstrap_Application_Event<> onSettingModelChange;
+	public: Bootstrap_Application_Event<> onLoad; // loading finished (without preserving data)
 	public: Bootstrap_Application_Event<> onSave;
 
 	public: std::map<ViewOption, bool> viewOptions;
