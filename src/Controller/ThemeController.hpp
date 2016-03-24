@@ -231,6 +231,7 @@ class ThemeController :
 			Model_ThemeFile* fileObj = &this->themeManager->getTheme(this->currentTheme).getFileByNewName(file);
 			this->themeManager->getTheme(this->currentTheme).removeFile(*fileObj);
 			this->themeManager->getTheme(this->currentTheme).isModified = true;
+			this->currentThemeFile = "";
 			this->syncFiles();
 		} catch (Exception const& e) {
 			this->applicationObject->onError.exec(e);
