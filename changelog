@@ -1,3 +1,6 @@
+v 5.0.3
+	* fixed error when removing theme file
+
 v 5.0.2
 	* fixed errors when using theme editor
 
