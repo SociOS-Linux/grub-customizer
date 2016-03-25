@@ -251,7 +251,7 @@ class Model_Script : public Model_EntryPathFollower, public Trait_LoggerAware, p
 			parent = this->root;
 		}
 		for (auto iter = parent->subEntries.begin(); iter != parent->subEntries.end(); iter++) {
-			if (&*iter == &entry) {
+			if (*iter == entry) {
 				parent->subEntries.erase(iter);
 				this->root->isModified = true;
 				return;
