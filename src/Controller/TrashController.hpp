@@ -246,9 +246,10 @@ class TrashController :
 				return rule;
 			}
 			if (rule->subRules.size()) {
-				auto subRule = this->findRule(rulePtr, rule);
-				if (subRule) {
-					return subRule;
+				try {
+					return this->findRule(rulePtr, rule);
+				} catch (ItemNotFoundException const& e) {
+					// continue
 				}
 			}
 		}
