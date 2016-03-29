@@ -19,12 +19,20 @@
 #define LOGGER_H_INCLUDED
 
 #include <string>
+#include <memory>
 
-class Logger {
-public:
-	virtual inline ~Logger() {};
+class Logger
+{
+	public: virtual inline ~Logger() {};
 
-	enum Priority {
+	public: static std::shared_ptr<Logger>& getInstance()
+	{
+		static std::shared_ptr<Logger> logger;
+
+		return logger;
+	}
+
+	public: enum Priority {
 		EVENT,
 		IMPORTANT_EVENT,
 		INFO,
@@ -33,11 +41,11 @@ public:
 		DEBUG,
 		EXCEPTION
 	};
-	virtual void log(std::string const& str, Priority prio) = 0;
-	virtual void logActionBegin(std::string const& controller, std::string const& action) = 0;
-	virtual void logActionEnd() = 0;
-	virtual void logActionBeginThreaded(std::string const& controller, std::string const& action) = 0;
-	virtual void logActionEndThreaded() = 0;
+	public: virtual void log(std::string const& str, Priority prio) = 0;
+	public: virtual void logActionBegin(std::string const& controller, std::string const& action) = 0;
+	public: virtual void logActionEnd() = 0;
+	public: virtual void logActionBeginThreaded(std::string const& controller, std::string const& action) = 0;
+	public: virtual void logActionEndThreaded() = 0;
 };
 
 #endif

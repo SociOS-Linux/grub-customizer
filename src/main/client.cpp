@@ -57,6 +57,8 @@ int main(int argc, char** argv){
 
 	auto logger = std::make_shared<Logger_Stream>(std::cout);
 
+	Logger::getInstance() = logger;
+
 	try {
 		auto application          = std::make_shared<Bootstrap_Application>(argc, argv);
 		auto view                 = std::make_shared<Bootstrap_View>();

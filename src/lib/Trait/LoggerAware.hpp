@@ -30,6 +30,13 @@ class Trait_LoggerAware
 
 	public: virtual ~Trait_LoggerAware() {}
 
+	public: Trait_LoggerAware()
+	{
+		if (Logger::getInstance()) {
+			this->logger = Logger::getInstance();
+		}
+	}
+
 	public: void setLogger(std::shared_ptr<Logger> logger) {
 		this->logger = logger;
 		this->initLogger();
