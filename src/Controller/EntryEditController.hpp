@@ -352,7 +352,7 @@ class EntryEditController :
 		try {
 			this->view->setSourcecode(this->currentContentParser->buildSource());
 			this->view->setApplyEnabled(true);
-		} catch (RegExNotMatchedException const& e) {
+		} catch (ParserException const& e) {
 			this->view->showSourceBuildError();
 			this->view->setApplyEnabled(false);
 		}
