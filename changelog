@@ -1,3 +1,7 @@
+v 5.0.5
+	* fixed some errors on entry editor
+	* fixed error on trash view when selecting rule behind submenu
+
 v 5.0.4
 	* fixed error on entry deletion
 
