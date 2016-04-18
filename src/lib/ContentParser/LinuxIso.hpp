@@ -88,25 +88,27 @@ public:
 			isoPath = this->options.at("iso_path");
 		}
 
-		Model_DeviceMap_PartitionIndex pIndex = this->deviceMap->getHarddriveIndexByPartitionUuid(partitionUuid);
-		std::map<int, std::string> newValues;
-		newValues[1] = pIndex.hddNum;
-		newValues[2] = pIndex.partNum;
-		newValues[3] = partitionUuid;
-		newValues[4] = this->escape(isoPath);
-		newValues[5] = this->escape("(loop)" + this->options.at("linux_image"));
-		newValues[6] = this->escape(isoPath);
-		newValues[7] = this->options.at("other_params").size() ? " " + this->options.at("other_params") : "";
-		newValues[8] = this->escape("(loop)" + this->options.at("initramfs"));
-
-		std::string result;
 		try {
+			Model_DeviceMap_PartitionIndex pIndex = this->deviceMap->getHarddriveIndexByPartitionUuid(partitionUuid);
+			std::map<int, std::string> newValues;
+			newValues[1] = pIndex.hddNum;
+			newValues[2] = pIndex.partNum;
+			newValues[3] = partitionUuid;
+			newValues[4] = this->escape(isoPath);
+			newValues[5] = this->escape("(loop)" + this->options.at("linux_image"));
+			newValues[6] = this->escape(isoPath);
+			newValues[7] = this->options.at("other_params").size() ? " " + this->options.at("other_params") : "";
+			newValues[8] = this->escape("(loop)" + this->options.at("initramfs"));
+
+			std::string result;
+
 			result = this->regexEngine->replace(ContentParser_LinuxIso::_regex, this->sourceCode, newValues, '\\', '_');
 			this->regexEngine->match(ContentParser_LinuxIso::_regex, result, '\\', '_');
+
+			return result;
 		} catch (RegExNotMatchedException const& e) {
 			throw ParserException("parsing failed - RegEx not matched", __FILE__, __LINE__);
 		}
-		return result;
 	}
 
 

@@ -80,22 +80,23 @@ public:
 			filePath = this->options.at("memtest_image");
 		}
 
-		Model_DeviceMap_PartitionIndex pIndex = this->deviceMap->getHarddriveIndexByPartitionUuid(partitionUuid);
-		std::map<int, std::string> newValues;
-		newValues[1] = pIndex.hddNum;
-		newValues[2] = pIndex.partNum;
-		newValues[3] = partitionUuid;
-		newValues[4] = this->escape(filePath);
-
-		std::string result;
 		try {
+			Model_DeviceMap_PartitionIndex pIndex = this->deviceMap->getHarddriveIndexByPartitionUuid(partitionUuid);
+			std::map<int, std::string> newValues;
+			newValues[1] = pIndex.hddNum;
+			newValues[2] = pIndex.partNum;
+			newValues[3] = partitionUuid;
+			newValues[4] = this->escape(filePath);
+
+			std::string result;
+
 			result = this->regexEngine->replace(ContentParser_Memtest::_regex, this->sourceCode, newValues, '\\', '_');
 			this->regexEngine->match(ContentParser_Memtest::_regex, result, '\\', '_');
+
+			return result;
 		} catch (RegExNotMatchedException const& e) {
 			throw ParserException("parsing failed - RegEx not matched", __FILE__, __LINE__);
 		}
-
-		return result;
 	}
 
 

@@ -49,21 +49,22 @@ public:
 	}
 
 	std::string buildSource() const {
-		Model_DeviceMap_PartitionIndex pIndex = deviceMap->getHarddriveIndexByPartitionUuid(this->options.at("partition_uuid"));
-		std::map<int, std::string> newValues;
-		newValues[1] = pIndex.hddNum;
-		newValues[2] = pIndex.partNum;
-		newValues[3] = this->options.at("partition_uuid");
-
-		std::string result;
 		try {
+			Model_DeviceMap_PartitionIndex pIndex = deviceMap->getHarddriveIndexByPartitionUuid(this->options.at("partition_uuid"));
+			std::map<int, std::string> newValues;
+			newValues[1] = pIndex.hddNum;
+			newValues[2] = pIndex.partNum;
+			newValues[3] = this->options.at("partition_uuid");
+
+			std::string result;
+
 			result = this->regexEngine->replace(ContentParser_Chainloader::_regex, this->sourceCode, newValues, '\\', '_');
 			this->regexEngine->match(ContentParser_Chainloader::_regex, result, '\\', '_');
+
+			return result;
 		} catch (RegExNotMatchedException const& e) {
 			throw ParserException("parsing failed - RegEx not matched", __FILE__, __LINE__);
 		}
-
-		return result;
 	}
 
 	void buildDefaultEntry() {
