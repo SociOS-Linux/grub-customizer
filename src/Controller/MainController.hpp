@@ -647,70 +647,45 @@ class MainController :
 			bool stickyPlaceholders = !this->view->getOptions().at(VIEW_SHOW_PLACEHOLDERS);
 			try {
 				assert(direction == -1 || direction == 1);
-				int distance = 1;
+
 				if (stickyPlaceholders) {
-					rules = this->populateSelection(rules);
+					auto nextRealRule = this->findNextRealRule(this->grublistCfg->findRule(direction == -1 ? rules.front() : rules.back()), direction);
+					rules = this->populateSelection(rules, nextRealRule->type == Model_Rule::SUBMENU);
 					rules = this->grublistCfg->getNormalizedRuleOrder(rules);
-					distance = this->countRulesUntilNextRealRule(this->grublistCfg->findRule(direction == -1 ? rules.front() : rules.back()), direction);
 				}
 
-				std::list<Rule*> movedRules;
+				if (direction == 1) {
+					rules.reverse();
+				}
 
-				for (int j = 0; j < distance; j++) { // move the range multiple times
-					int ruleCount = rules.size();
-					auto rulePtr = this->grublistCfg->findRule(direction == -1 ? rules.front() : rules.back());
-					for (int i = 0; i < ruleCount; i++) { // move multiple rules
-						std::string currentRulePath = this->grublistCfg->getRulePath(rulePtr);
-						std::string currentDefaultRulePath = this->settings->getValue("GRUB_DEFAULT");
-						bool updateDefault = this->ruleAffectsCurrentDefaultOs(rulePtr, currentRulePath, currentDefaultRulePath);
+				for (auto& rulePtr : rules) { // move multiple rules
+					auto rule = this->grublistCfg->findRule(rulePtr);
+					int distance = 1;
+					if (stickyPlaceholders) {
+						distance = this->countRulesUntilNextRealRule(rule, direction);
+					}
 
-						//rulePtr = this->grublistCfg->moveRule(rulePtr, direction);
+					std::string currentRulePath = this->grublistCfg->getRulePath(rule);
+					std::string currentDefaultRulePath = this->settings->getValue("GRUB_DEFAULT");
+					bool updateDefault = this->ruleAffectsCurrentDefaultOs(rule, currentRulePath, currentDefaultRulePath);
+
+					for (int j = 0; j < distance; j++) { // move the range multiple times
 						this->ruleMover->move(
-							rulePtr,
+							rule,
 							direction == -1 ? Controller_Helper_RuleMover_AbstractStrategy::Direction::UP : Controller_Helper_RuleMover_AbstractStrategy::Direction::DOWN
 						);
-
-						if (updateDefault) {
-							this->updateCurrentDefaultOs(rulePtr, currentRulePath, currentDefaultRulePath);
-						}
-
-						if (i < ruleCount - 1) {
-							bool isEndOfList = false;
-							bool targetFound = false;
-							try {
-								rulePtr = *this->grublistCfg->proxies.getNextVisibleRule(rulePtr, -direction);
-							} catch (NoMoveTargetException const& e) {
-								isEndOfList = true;
-								rulePtr = this->grublistCfg->proxies.getProxyByRule(rulePtr)->getParentRule(rulePtr);
-							}
-							if (!isEndOfList && rulePtr->type == Model_Rule::SUBMENU) {
-								rulePtr = direction == -1 ? rulePtr->subRules.front() : rulePtr->subRules.back();
-								if (rulePtr->isVisible) {
-									targetFound = true;
-								}
-							}
-
-							if (!targetFound) {
-								rulePtr = *this->grublistCfg->proxies.getNextVisibleRule(rulePtr, -direction);
-							}
-						}
 					}
 
-					movedRules.clear();
-					movedRules.push_back(rulePtr.get());
-					for (int i = 1; i < ruleCount; i++) {
-						movedRules.push_back(this->grublistCfg->proxies.getNextVisibleRule(this->grublistCfg->findRule(movedRules.back()), direction)->get());
+					if (updateDefault) {
+						this->updateCurrentDefaultOs(rule, currentRulePath, currentDefaultRulePath);
 					}
-					movedRules = this->grublistCfg->getNormalizedRuleOrder(movedRules);
-
-					rules = movedRules;
 				}
 
 				this->applicationObject->onListModelChange.exec();
 				if (stickyPlaceholders) {
-					movedRules = this->removePlaceholdersFromSelection(movedRules);
+					rules = this->removePlaceholdersFromSelection(rules);
 				}
-				this->view->selectRules(movedRules);
+				this->view->selectRules(rules);
 				this->env->modificationsUnsaved = true;
 			} catch (NoMoveTargetException const& e) {
 				this->view->showErrorMessage(gettext("cannot move this entry"));
@@ -1137,13 +1112,13 @@ class MainController :
 		return false;
 	}
 
-	private: std::list<Rule*> populateSelection(std::list<Rule*> rules)
+	private: std::list<Rule*> populateSelection(std::list<Rule*> rules, bool ignorePlaintext)
 	{
 		std::list<Rule*> result;
 		for (auto rule : rules) {
-			this->populateSelection(result, this->grublistCfg->findRule(rule), -1, rule == rules.front());
+			this->populateSelection(result, this->grublistCfg->findRule(rule), -1, rule == rules.front(), ignorePlaintext);
 			result.push_back(rule);
-			this->populateSelection(result, this->grublistCfg->findRule(rule), 1, rule == rules.back());
+			this->populateSelection(result, this->grublistCfg->findRule(rule), 1, rule == rules.back(), ignorePlaintext);
 		}
 		// remove duplicates
 		std::list<Rule*> result2;
@@ -1157,7 +1132,7 @@ class MainController :
 		return result2;
 	}
 
-	private: void populateSelection(std::list<Rule*>& rules, std::shared_ptr<Model_Rule> baseRule, int direction, bool checkScript)
+	private: void populateSelection(std::list<Rule*>& rules, std::shared_ptr<Model_Rule> baseRule, int direction, bool checkScript, bool ignorePlaintext)
 	{
 		assert(direction == 1 || direction == -1);
 		bool placeholderFound = false;
@@ -1171,7 +1146,7 @@ class MainController :
 				auto scriptCurrent = this->grublistCfg->repository.getScriptByEntry(currentRule->dataSource);
 				auto scriptBase    = this->grublistCfg->repository.getScriptByEntry(baseRule->dataSource);
 
-				if ((scriptCurrent == scriptBase || !checkScript) && (currentRule->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER || currentRule->type == Model_Rule::PLAINTEXT)) {
+				if ((scriptCurrent == scriptBase || !checkScript) && (currentRule->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER || (currentRule->type == Model_Rule::PLAINTEXT && !ignorePlaintext))) {
 					if (direction == 1) {
 						rules.push_back(currentRule.get());
 					} else {
@@ -1207,6 +1182,27 @@ class MainController :
 			}
 		} while (placeholderFound);
 		return result;
+	}
+
+	private: std::shared_ptr<Model_Rule> findNextRealRule(std::shared_ptr<Model_Rule> baseRule, int direction)
+	{
+		bool placeholderFound = false;
+		auto currentRule = baseRule;
+		do {
+			try {
+				currentRule = *this->grublistCfg->proxies.getNextVisibleRule(currentRule, direction);
+
+				if (currentRule->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER || currentRule->type == Model_Rule::PLAINTEXT) {
+					placeholderFound = true;
+				} else {
+					placeholderFound = false;
+				}
+			} catch (NoMoveTargetException const& e) {
+				placeholderFound = false;
+			}
+		} while (placeholderFound);
+
+		return currentRule;
 	}
 
 	private: std::list<Rule*> removePlaceholdersFromSelection(std::list<Rule*> rules)
