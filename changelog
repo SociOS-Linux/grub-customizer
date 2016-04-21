@@ -1,3 +1,7 @@
+v 5.0.6
+	* preventing plaintext entries from being moved into submenu (when they are not visible)
+	* fixed some errors on entry editor
+
 v 5.0.5
 	* fixed some errors on entry editor
 	* fixed error on trash view when selecting rule behind submenu
