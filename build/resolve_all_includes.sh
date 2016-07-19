@@ -6,8 +6,8 @@ function resolve(){
 	local extension="$2"
 	local prefix="$3";
 	echo "resolving $file.$extension"
-	echo "#include \"${prefix}lib/Helper.hpp\"" > "$currentDir/../src/$file.inc.$extension";
-	"$currentDir/resolve_includes.sh" "$file.$extension" "$prefix" >> "$currentDir/../src/$file.inc.$extension";
+	#echo "#include \"${prefix}lib/Helper.hpp\"" > "$currentDir/../src/$file.inc.$extension";
+	"$currentDir/resolve_includes.sh" "$file.$extension" "$prefix" > "$currentDir/../src/$file.inc.$extension";
 }
 
 resolve "Bootstrap/GtkApplication" "cpp" ../

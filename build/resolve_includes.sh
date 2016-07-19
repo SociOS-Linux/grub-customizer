@@ -13,8 +13,8 @@ fileToResolve="$1"
 prefix="$2"
 
 declare -a files;
-files=();
-classes=();
+files=("lib/Helper.hpp");
+classes=("assert");
 
 # ================= scan files =================
 
