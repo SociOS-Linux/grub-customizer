@@ -1,5 +1,4 @@
 /.cproject
 /.project
-/.settings
 build/tmp/*
 src/config.hpp

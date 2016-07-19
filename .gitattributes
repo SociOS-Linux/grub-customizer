@@ -9,6 +9,7 @@
 .pc/debian-changes-2.4.1-0ubuntu1~ppa1o/.project -text
 .pc/debian-changes-2.4.1-0ubuntu1~ppa1o/.settings/org.eclipse.cdt.ui.prefs -text
 .pc/debian-changes-2.4.1-0ubuntu1~ppa1o/.settings/org.eclipse.ltk.core.refactoring.prefs -text
+.settings/language.settings.xml -text
 .settings/org.eclipse.cdt.ui.prefs -text
 .settings/org.eclipse.ltk.core.refactoring.prefs -text
 /CMakeLists.txt -text
