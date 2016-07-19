@@ -16,8 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef CONTENT_PARSER_LINUXISO_H_
-#define CONTENT_PARSER_LINUXISO_H_
+
 
 
 class ContentParser_LinuxIso :
@@ -137,4 +136,4 @@ const char* ContentParser_LinuxIso::_regex =
 	"[ \t]*linux[ \\t]+(\"\\(loop\\)[^\"]*\"|\\(loop\\)[^ \\t]*)[ \\t]+boot=casper iso-scan/filename=(\"[^\"]*\"|[^ \\t]+)(.*)\\n"
 	"[ \t]*initrd[ \\t]+(\"\\(loop\\)[^\"]*\"|\\(loop\\)[^ \\t]*)";
 
-#endif /* CONTENT_PARSER_LINUXISO_H_ */
+

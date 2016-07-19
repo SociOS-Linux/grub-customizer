@@ -16,8 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef REGEX_H_INCLUDED
-#define REGEX_H_INCLUDED
+
 #include <string>
 #include <vector>
 #include <map>
@@ -51,4 +50,4 @@ class Regex_RegexConnection
 	}
 };
 
-#endif
+

@@ -16,8 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef GLIBREGEX_H_
-#define GLIBREGEX_H_
+
 #include <glibmm/thread.h>
 
 #include <string>
@@ -96,4 +95,4 @@ class Regex_GLib :
 	}
 };
 
-#endif /* GLIBMUTEX_H_ */
+

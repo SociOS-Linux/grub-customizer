@@ -16,8 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef GRUBENVEDITORGTK_H_
-#define GRUBENVEDITORGTK_H_
+
 
 #include <gtkmm.h>
 #include <libintl.h>
@@ -313,4 +312,4 @@ class View_Gtk_EnvEditor :
 	}
 };
 
-#endif /* GRUBENVEDITOR_H_ */
+

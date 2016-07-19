@@ -16,8 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef GRUBENVEDITOR_H_
-#define GRUBENVEDITOR_H_
+
 #include <map>
 #include <functional>
 
@@ -56,4 +55,4 @@ public:
 	virtual void showErrorMessage(MountExceptionType type)=0;
 };
 
-#endif /* GRUBENVEDITOR_H_ */
+

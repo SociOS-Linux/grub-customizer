@@ -16,8 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef SRC_BOOTSTRAP_FACTORY_HPP_
-#define SRC_BOOTSTRAP_FACTORY_HPP_
+
 
 #include <memory>
 
@@ -165,4 +164,4 @@ class Bootstrap_Factory
 	private: std::shared_ptr<Controller_Helper_Thread> createThreadHelper();
 };
 
-#endif /* SRC_BOOTSTRAP_FACTORY_HPP_ */
+

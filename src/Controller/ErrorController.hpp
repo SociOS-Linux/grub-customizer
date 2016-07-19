@@ -16,8 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef ERRORCONTROLLERIMPL_H_
-#define ERRORCONTROLLERIMPL_H_
+
 
 #include <libintl.h>
 #include <locale.h>
@@ -85,4 +84,4 @@ class ErrorController :
 
 };
 
-#endif
+

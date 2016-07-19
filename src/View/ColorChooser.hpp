@@ -16,8 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef COLOR_CHOOSER_INCLUDED
-#define COLOR_CHOOSER_INCLUDED
+
 #include <string>
 /**
  * base class to be implemented by color chooser controls
@@ -33,4 +32,4 @@ public:
 	virtual std::string getSelectedColor() const=0;
 };
 
-#endif
+

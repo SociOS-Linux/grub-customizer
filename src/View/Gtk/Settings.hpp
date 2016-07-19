@@ -16,8 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef SETTING_DLG_GTK_INCLUDED
-#define SETTING_DLG_GTK_INCLUDED
+
 #include <gtkmm.h>
 #include <libintl.h>
 #include <string>
@@ -688,4 +687,4 @@ class View_Gtk_Settings :
 	}
 };
 
-#endif
+

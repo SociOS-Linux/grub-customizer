@@ -16,8 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef CSV_H_
-#define CSV_H_
+
 
 #include <list>
 #include <map>
@@ -124,4 +123,4 @@ public:
 };
 
 
-#endif /* CSV_H_ */
+

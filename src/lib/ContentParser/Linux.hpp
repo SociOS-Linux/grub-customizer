@@ -16,8 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef CONTENT_PARSER_LINUX_H_
-#define CONTENT_PARSER_LINUX_H_
+
 
 class ContentParser_Linux :
 	public ContentParser_Abstract,
@@ -103,4 +102,4 @@ const char* ContentParser_Linux::_regex =
 	"([ \t]*echo[ \t]+.*\n)?"
 	"[ \t]*initrd[ \t]+(\"[^\"]*\"|[^ \\n]+)[ \\n\t]*$";
 
-#endif /* CONTENT_PARSER_LINUX_H_ */
+

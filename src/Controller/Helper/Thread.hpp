@@ -16,8 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef HELPER_THREAD_H_INCLUDED
-#define HELPER_THREAD_H_INCLUDED
+
 #include <functional>
 
 class Controller_Helper_Thread : public Trait_LoggerAware
@@ -40,4 +39,4 @@ class Controller_Helper_Thread_Connection
 	}
 };
 
-#endif /* HELPER_THREAD_H_INCLUDED */
+

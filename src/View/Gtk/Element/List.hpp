@@ -16,8 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef LIST_H_
-#define LIST_H_
+
 #include <gtkmm.h>
 #include <libintl.h>
 
@@ -263,4 +262,4 @@ class View_Gtk_Element_List :
 };
 
 
-#endif /* LIST_H_ */
+

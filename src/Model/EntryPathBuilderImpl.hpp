@@ -17,8 +17,7 @@
  */
 
 
-#ifndef ENTRYPATHBUILDERIMPL_H_
-#define ENTRYPATHBUILDERIMPL_H_
+
 #include <map>
 
 class Model_EntryPathBuilderImpl : public Model_EntryPathBilder
@@ -73,4 +72,4 @@ class Model_EntryPathBuilderImpl : public Model_EntryPathBilder
 
 };
 
-#endif
+

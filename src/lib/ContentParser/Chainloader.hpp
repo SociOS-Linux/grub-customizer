@@ -16,8 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef CONTENT_PARSER_CHAINLOADER_H_
-#define CONTENT_PARSER_CHAINLOADER_H_
+
 
 
 class ContentParser_Chainloader :
@@ -85,4 +84,4 @@ const char* ContentParser_Chainloader::_regex =
 	"[ \t]*search[ \t]+--no-floppy[ \t]+--fs-uuid[ \t]+--set(?:=root)?[ \t]+([-0-9a-fA-F]+)\\n"
 	"(.|\\n)*"
 	"[ \t]*chainloader[ \t]+\\+1\\n?[ \t]*";
-#endif /* CONTENT_PARSER_CHAINLOADER_H_ */
+

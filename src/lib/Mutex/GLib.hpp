@@ -16,8 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef GLIBMUTEX_H_
-#define GLIBMUTEX_H_
+
 #include <glibmm/thread.h>
 
 class Mutex_GLib : public Mutex {
@@ -38,4 +37,4 @@ public:
 
 };
 
-#endif /* GLIBMUTEX_H_ */
+

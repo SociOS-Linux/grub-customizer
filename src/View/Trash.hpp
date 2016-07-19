@@ -16,8 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef ENTRYADDDLG_H_
-#define ENTRYADDDLG_H_
+
 
 #include <list>
 #include <string>
@@ -60,4 +59,4 @@ public:
 	virtual void setDeleteButtonVisibility(bool visibility) = 0;
 };
 
-#endif
+

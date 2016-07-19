@@ -16,8 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef CONTENTPARSERFACTORY_H_
-#define CONTENTPARSERFACTORY_H_
+
 #include <list>
 #include <string>
 #include <memory>
@@ -43,4 +42,4 @@ class ContentParserFactory_Connection
 	}
 };
 
-#endif /* CONTENTPARSERFACTORY_H_ */
+

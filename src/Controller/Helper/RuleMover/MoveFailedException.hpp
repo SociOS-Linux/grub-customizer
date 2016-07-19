@@ -16,12 +16,11 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef INC_Controller_Helper_RuleMover_MoveFailedException
-#define INC_Controller_Helper_RuleMover_MoveFailedException
+
 
 class Controller_Helper_RuleMover_MoveFailedException : public Exception
 {
 	public: inline Controller_Helper_RuleMover_MoveFailedException(std::string const& message, std::string const& file = "", int line = -1)
 	   : Exception(message, file, line) {}
 };
-#endif
+

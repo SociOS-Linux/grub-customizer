@@ -16,8 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef GRUB_CUSTOMIZER_PROXYLIST_INCLUDED
-#define GRUB_CUSTOMIZER_PROXYLIST_INCLUDED
+
 #include <list>
 #include <sstream>
 #include <memory>
@@ -429,4 +428,4 @@ class Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public T
 
 };
 
-#endif
+

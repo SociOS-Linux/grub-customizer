@@ -16,8 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef FILESYSTEM_H_
-#define FILESYSTEM_H_
+
 #include <sys/stat.h>
 #include <dirent.h>
 #include <string>
@@ -61,4 +60,4 @@ public:
 
 };
 
-#endif /* FILESYSTEM_H_ */
+

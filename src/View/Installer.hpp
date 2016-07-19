@@ -16,8 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef GRUBINSTALLDLG_H_
-#define GRUBINSTALLDLG_H_
+
 #include <functional>
 
 
@@ -38,4 +37,4 @@ public:
 	virtual void showMessageGrubInstallCompleted(std::string const& msg)=0;
 };
 
-#endif
+

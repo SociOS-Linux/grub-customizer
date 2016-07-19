@@ -16,8 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef SETTINGSDLG_H_
-#define SETTINGSDLG_H_
+
 #include <functional>
 
 
@@ -118,4 +117,4 @@ public:
 	virtual std::string getResolution()=0;
 };
 
-#endif
+

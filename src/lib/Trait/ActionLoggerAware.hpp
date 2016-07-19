@@ -16,8 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef TRAIT_ACTIONLOGGERAWARE_H_
-#define TRAIT_ACTIONLOGGERAWARE_H_
+
 
 class Trait_ActionLoggerAware : public Trait_LoggerAware {
 	std::string _controllerName;
@@ -51,4 +50,4 @@ protected:
 };
 
 
-#endif /* TRAIT_ACTIONLOGGERAWARE_H_ */
+

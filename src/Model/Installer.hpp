@@ -16,8 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef GRUB_INSTALLER_INCLUDED
-#define GRUB_INSTALLER_INCLUDED
+
 #include <string>
 #include <cstdio>
 #include <functional>
@@ -72,4 +71,4 @@ class Model_Installer_Connection
 	}
 };
 
-#endif
+

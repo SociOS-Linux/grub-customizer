@@ -15,8 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
-#ifndef HELPER_H_INCLUDED
-#define HELPER_H_INCLUDED
+
 
 #include <cstdio>
 #include <openssl/md5.h>
@@ -136,4 +135,4 @@ class Helper {
 };
 
 
-#endif
+

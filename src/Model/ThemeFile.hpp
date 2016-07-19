@@ -16,8 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef THEMEFILE_H_
-#define THEMEFILE_H_
+
 #include <string>
 
 struct Model_ThemeFile {
@@ -37,4 +36,4 @@ struct Model_ThemeFile {
 };
 
 
-#endif /* THEMEFILE_H_ */
+

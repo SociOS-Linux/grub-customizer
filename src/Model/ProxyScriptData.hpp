@@ -16,8 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef GRUB_CFG_LIBProxyScriptData_PARSER_INCLUDED
-#define GRUB_CFG_LIBProxyScriptData_PARSER_INCLUDED
+
 #include <cstdio>
 #include <string>
 
@@ -165,4 +164,4 @@ struct Model_ProxyScriptData {
 	}
 };
 
-#endif
+

@@ -16,8 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef DEVICEDATALIST_IFACE_H_
-#define DEVICEDATALIST_IFACE_H_
+
 #include <map>
 #include <string>
 #include <memory>
@@ -40,4 +39,4 @@ class Model_DeviceDataListInterface_Connection
 	}
 };
 
-#endif
+

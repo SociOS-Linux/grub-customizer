@@ -16,8 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef GRUBLISTCFGDLG_H_
-#define GRUBLISTCFGDLG_H_
+
 
 #include <string>
 #include <vector>
@@ -144,4 +143,4 @@ public:
 	virtual void setEntryVisibility(Rule* entry, bool value) = 0;
 };
 
-#endif
+

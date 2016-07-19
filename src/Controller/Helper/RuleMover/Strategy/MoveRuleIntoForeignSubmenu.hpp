@@ -16,8 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef INC_Controller_Helper_RuleMover_Strategy_MoveRuleIntoForeignSubmenu
-#define INC_Controller_Helper_RuleMover_Strategy_MoveRuleIntoForeignSubmenu
+
 
 #include <memory>
 
@@ -93,4 +92,4 @@ class Controller_Helper_RuleMover_Strategy_MoveRuleIntoForeignSubmenu :
 
 
 
-#endif /* MOVERULEINTOFOREIGNSUBMENU_HPP_ */
+

@@ -16,8 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef SETTING_MANAGER_DATASTORE_INCLUDED
-#define SETTING_MANAGER_DATASTORE_INCLUDED
+
 #include <sys/stat.h> //mkdir
 #include <sstream>
 #include <map>
@@ -272,4 +271,4 @@ class Model_SettingsManagerData_Connection
 		this->settings = settings;
 	}
 };
-#endif
+

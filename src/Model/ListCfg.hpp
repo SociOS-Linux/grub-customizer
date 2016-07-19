@@ -16,8 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef GRUB_CUSTOMIZER_GrublistCfg_INCLUDED
-#define GRUB_CUSTOMIZER_GrublistCfg_INCLUDED
+
 #include <list>
 #include <string>
 #include <sys/stat.h>
@@ -1339,4 +1338,4 @@ class Model_ListCfg_Connection
 };
 
 
-#endif
+

@@ -16,8 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef ENTRY_PATH_FOLLOWER_INCLUDED
-#define ENTRY_PATH_FOLLOWER_INCLUDED
+
 #include <string>
 #include <list>
 
@@ -28,4 +27,4 @@ public:
 	virtual std::shared_ptr<Model_Entry> getEntryByPath(std::list<std::string> const& path)=0;
 };
 
-#endif
+

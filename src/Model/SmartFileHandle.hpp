@@ -16,8 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef SMARTFILEHANDLE_H_
-#define SMARTFILEHANDLE_H_
+
 #include <cstdio>
 #include <string>
 
@@ -133,4 +132,4 @@ public:
 
 };
 
-#endif
+

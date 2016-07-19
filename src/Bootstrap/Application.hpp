@@ -16,14 +16,11 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef SRC_BOOTSTRAP_APPLICATION_HPP_
-#define SRC_BOOTSTRAP_APPLICATION_HPP_
+
 #include <memory>
 #include <functional>
 #include <list>
 #include <map>
-#include "../lib/Exception.hpp"
-#include "../lib/Type.hpp"
 
 template <typename... Args>
 class Bootstrap_Application_Event
@@ -104,4 +101,4 @@ class Bootstrap_Application
 	public: Bootstrap_Application(int argc, char** argv);
 };
 
-#endif /* SRC_BOOTSTRAP_APPLICATION_HPP_ */
+

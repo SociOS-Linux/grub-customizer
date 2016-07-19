@@ -16,8 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef CONTROLLER_ABSTRACT_H_
-#define CONTROLLER_ABSTRACT_H_
+
 
 
 class Controller_Common_ControllerAbstract :
@@ -29,4 +28,4 @@ class Controller_Common_ControllerAbstract :
 	}
 };
 
-#endif /* CONTROLLER_ABSTRACT_H_ */
+

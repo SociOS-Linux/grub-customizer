@@ -16,8 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef VIEW_VIEWAWARE_H_
-#define VIEW_VIEWAWARE_H_
+
 
 template <typename T>
 class View_Trait_ViewAware {
@@ -36,4 +35,4 @@ class View_Trait_ViewAware {
 	}
 };
 
-#endif /* VIEW_VIEWAWARE_H_ */
+

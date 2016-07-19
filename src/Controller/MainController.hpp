@@ -16,8 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef MAINCONNTROLLER_INCLUDED
-#define MAINCONNTROLLER_INCLUDED
+
 
 #include <libintl.h>
 #include <locale.h>
@@ -1223,4 +1222,4 @@ class MainController :
 	}
 };
 
-#endif
+

@@ -16,8 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef TYPE_H_
-#define TYPE_H_
+
 
 enum ViewOption {
 	VIEW_SHOW_DETAILS,
@@ -47,4 +46,4 @@ public:
 // to be used as dummy class
 class Nothing {};
 
-#endif /* TYPE_H_ */
+

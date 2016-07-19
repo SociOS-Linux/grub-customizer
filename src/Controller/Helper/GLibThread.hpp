@@ -16,8 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef HELPER_GLIBTHREAD_H_INCLUDED
-#define HELPER_GLIBTHREAD_H_INCLUDED
+
 
 #include <functional>
 #include <queue>
@@ -68,4 +67,4 @@ class Controller_Helper_GLibThread : public Controller_Helper_Thread
 	}
 };
 
-#endif /* HELPER_GLIBTHREAD_H_INCLUDED */
+

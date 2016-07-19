@@ -16,8 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef GRUBENV_INCLUDED
-#define GRUBENV_INCLUDED
+
 
 #include <string>
 #include <cstdio>
@@ -426,4 +425,4 @@ class Model_Env_Connection
 	}
 };
 
-#endif
+

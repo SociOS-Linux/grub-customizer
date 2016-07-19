@@ -16,8 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef ERROR_H_
-#define ERROR_H_
+
 
 #include <string>
 #include <functional>
@@ -31,4 +30,4 @@ public:
 };
 
 
-#endif /* ERROR_H_ */
+

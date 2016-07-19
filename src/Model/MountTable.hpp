@@ -16,8 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef MOUNT_TABLE_INCLUDED
-#define MOUNT_TABLE_INCLUDED
+
 #include <list>
 #include <cstdio>
 #include <string>
@@ -299,5 +298,5 @@ class Model_MountTable_Connection
 	}
 };
 
-#endif
+
 
