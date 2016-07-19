@@ -4,12 +4,13 @@ shopt -s globstar
 currentDir=$(dirname `readlink -f $0`)
 sourcePath="$currentDir/../src"
 
-if [ $# -ne 1 ] ; then
-	echo 'Error: You must run this command with exactly one argument containing the file path to be resolved' > /dev/stderr
+if [ $# -ne 2 ] ; then
+	echo 'Error: wrong argument count' > /dev/stderr
 	exit 1
 fi
 
 fileToResolve="$1"
+prefix="$2"
 
 declare -a files;
 files=();
@@ -76,5 +77,5 @@ resolve "$fileToResolve"
 # ================= output =================
 
 for file in ${resolvedIncludes[@]}; do
-	echo "#include \"$file\"";
+	echo "#include \"$prefix$file\"";
 done
