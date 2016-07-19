@@ -38,11 +38,23 @@ fi
 # ================= lookup =================
 
 declare -a resolvedIncludes;
+declare -a dispatchedIncludes;
 
 function isAlreadyAdded(){
 	local file="$1"
 
 	for existingFile in ${resolvedIncludes[@]}; do
+		if [ "$existingFile" == "$file" ] ; then
+			return 0
+		fi
+	done
+
+	return 1
+}
+function isAlreadyDispatched(){
+	local file="$1"
+
+	for existingFile in ${dispatchedIncludes[@]}; do
 		if [ "$existingFile" == "$file" ] ; then
 			return 0
 		fi
@@ -57,15 +69,16 @@ function resolve(){
 	local i;
 	for i in ${!files[@]}; do
 		if echo -n "$fileContent" | grep -Eq "([^A-Za-z0-9_.]|^)${classes[$i]}([^A-Za-z0-9_.]|$)" ; then
-			if ! isAlreadyAdded "${files[$i]}" ; then
+			if ! isAlreadyDispatched "${files[$i]}" ; then
+				dispatchedIncludes+=("${files[$i]}")
 				if [ "${files[$i]}" != "$file" ] ; then
-					#echo "[+] scanning children of ${files[$i]} (POS: $i)";
+					echo "[+] scanning children of ${files[$i]} (POS: $i)" >> /dev/stderr;
 					resolve "${files[$i]}"
-					#echo "[-] finished scanning children of ${files[$i]} (POS: $i)";
+					echo "[-] finished scanning children of ${files[$i]} (POS: $i)" >> /dev/stderr;
 				fi
 			
-				if ! isAlreadyAdded "${files[$i]}" && [ "${files[$i]}" != "$fileToResolve" ] ; then
-					#echo "adding ${files[$i]}"
+				if ! isAlreadyAdded "${files[$i]}" && [ "${files[$i]}" != "$fileToResolve" ]  && [ "${files[$i]}" != "$file" ] ; then
+					echo "adding ${files[$i]}" >> /dev/stderr
 					resolvedIncludes+=("${files[$i]}")
 				fi
 			fi
