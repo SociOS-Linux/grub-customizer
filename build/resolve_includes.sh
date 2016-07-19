@@ -64,7 +64,8 @@ function resolve(){
 					#echo "[-] finished scanning children of ${files[$i]} (POS: $i)";
 				fi
 			
-				if ! isAlreadyAdded "${files[$i]}" ; then
+				if ! isAlreadyAdded "${files[$i]}" && [ "${files[$i]}" != "$fileToResolve" ] ; then
+					#echo "adding ${files[$i]}"
 					resolvedIncludes+=("${files[$i]}")
 				fi
 			fi
