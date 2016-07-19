@@ -16,7 +16,8 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#include "Application.hpp"
+#include "GtkApplication.inc.cpp"
+
 #include <gtkmm/main.h>
 #include <list>
 

@@ -47,9 +47,13 @@ misc/pkexec_policy.in -text
 src/Bootstrap/Application.hpp -text
 src/Bootstrap/Factory.hpp -text
 src/Bootstrap/FactoryImpl/GLibRegex.cpp -text
+src/Bootstrap/FactoryImpl/GLibRegex.inc.cpp -text
 src/Bootstrap/FactoryImpl/GlibThread.cpp -text
+src/Bootstrap/FactoryImpl/GlibThread.inc.cpp -text
 src/Bootstrap/GtkApplication.cpp -text
+src/Bootstrap/GtkApplication.inc.cpp -text
 src/Bootstrap/GtkView.cpp -text
+src/Bootstrap/GtkView.inc.cpp -text
 src/Bootstrap/View.hpp -text
 src/Controller/AboutController.hpp -text
 src/Controller/Common/ControllerAbstract.hpp -text
@@ -147,7 +151,9 @@ src/lib/Trait/ActionLoggerAware.hpp -text
 src/lib/Trait/LoggerAware.hpp -text
 src/lib/Type.hpp -text
 src/main/client.cpp -text
+src/main/client.inc.cpp -text
 src/main/proxy.cpp -text
+src/main/proxy.inc.cpp -text
 translation/compile_all.sh -text
 translation/translation-ar.mo -text svneol=unset#unset
 translation/translation-ar.po -text
