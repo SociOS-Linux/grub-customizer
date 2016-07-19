@@ -1,3 +1,4 @@
+#include "../lib/Helper.hpp"
 #include "../lib/Type.hpp"
 #include "../lib/ArrayStructure.hpp"
 #include "../lib/Exception.hpp"

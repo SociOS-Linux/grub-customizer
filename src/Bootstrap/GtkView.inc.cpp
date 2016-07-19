@@ -1,3 +1,4 @@
+#include "../lib/Helper.hpp"
 #include "../Bootstrap/View.hpp"
 #include "../Model/DeviceDataListInterface.hpp"
 #include "../lib/Logger.hpp"
