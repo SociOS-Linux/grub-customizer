@@ -12,7 +12,7 @@ function resolve(){
 resolve "Bootstrap/GtkApplication" "cpp" ../
 resolve "Bootstrap/FactoryImpl/GlibThread" "cpp" ../../
 resolve "Bootstrap/FactoryImpl/GLibRegex" "cpp" ../../
-resolve "Bootstrap/FactoryImpl/GlibThread" "cpp" ../
+resolve "Bootstrap/FactoryImpl/GlibThread" "cpp" ../../
 resolve "Bootstrap/GtkView" "cpp" ../
 resolve "main/proxy" "cpp" ../
 resolve "main/client" "cpp" ../
