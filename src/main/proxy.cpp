@@ -18,6 +18,7 @@
 
 #include <iostream>
 #include <memory>
+#include "../config.hpp"
 #include "proxy.inc.cpp"
 
 int main(int argc, char** argv){

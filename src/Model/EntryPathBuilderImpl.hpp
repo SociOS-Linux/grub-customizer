@@ -19,9 +19,7 @@
 
 #ifndef ENTRYPATHBUILDERIMPL_H_
 #define ENTRYPATHBUILDERIMPL_H_
-#include "../Model/EntryPathBuilder.hpp"
 #include <map>
-#include "Script.hpp"
 
 class Model_EntryPathBuilderImpl : public Model_EntryPathBilder
 {

@@ -23,9 +23,6 @@
 #include <list>
 #include <functional>
 
-#include "../lib/Type.hpp"
-#include "../lib/Trait/LoggerAware.hpp"
-#include "../Model/DeviceDataListInterface.hpp"
 
 class View_EntryEditor :
 	public Trait_LoggerAware,

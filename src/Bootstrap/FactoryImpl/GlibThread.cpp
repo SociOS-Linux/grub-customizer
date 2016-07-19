@@ -16,6 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
+#include "../../config.hpp"
 #include "GlibThread.inc.cpp"
 
 std::shared_ptr<Controller_Helper_Thread> Bootstrap_Factory::createThreadHelper()

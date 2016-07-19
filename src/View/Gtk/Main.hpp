@@ -18,15 +18,9 @@
 
 #ifndef GRUBLIST_CFG_DLG_GTK_INCLUDED
 #define GRUBLIST_CFG_DLG_GTK_INCLUDED
-#include "../Main.hpp"
 
 #include <gtkmm.h>
 #include <libintl.h>
-#include "../../config.hpp"
-#include "../../lib/Helper.hpp"
-#include "../../lib/Type.hpp"
-#include "Element/List.hpp"
-#include "Settings.hpp"
 
 class ImageMenuItemOwnKey : public Gtk::ImageMenuItem {
 	public: ImageMenuItemOwnKey(const Gtk::StockID& id, const Gtk::AccelKey& accel_key) :

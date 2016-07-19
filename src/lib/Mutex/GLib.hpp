@@ -19,7 +19,6 @@
 #ifndef GLIBMUTEX_H_
 #define GLIBMUTEX_H_
 #include <glibmm/thread.h>
-#include "../Mutex.hpp"
 
 class Mutex_GLib : public Mutex {
 protected:

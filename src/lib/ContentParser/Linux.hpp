@@ -18,9 +18,6 @@
 
 #ifndef CONTENT_PARSER_LINUX_H_
 #define CONTENT_PARSER_LINUX_H_
-#include "../../Model/DeviceMap.hpp"
-#include "../Regex.hpp"
-#include "Abstract.hpp"
 
 class ContentParser_Linux :
 	public ContentParser_Abstract,

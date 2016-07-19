@@ -25,7 +25,6 @@
 #include <cstdio>
 #include <stdexcept>
 
-#include "Helper.hpp"
 
 class CsvReader {
 	FILE* _file;

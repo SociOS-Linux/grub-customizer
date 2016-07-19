@@ -21,8 +21,6 @@
 
 #include <memory>
 
-#include "../Exception.hpp"
-#include "../Logger.hpp"
 
 class Trait_LoggerAware
 {

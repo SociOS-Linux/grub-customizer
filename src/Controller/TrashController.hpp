@@ -19,28 +19,9 @@
 #ifndef TRASHCONTROLLERIMPL_H_
 #define TRASHCONTROLLERIMPL_H_
 
-#include "../Model/ListCfg.hpp"
-#include "../View/Main.hpp"
 #include <libintl.h>
 #include <locale.h>
 #include <sstream>
-#include "../config.hpp"
-
-#include "../Model/Env.hpp"
-
-#include "../Model/MountTable.hpp"
-
-#include "../View/Trash.hpp"
-
-#include "../View/EnvEditor.hpp"
-#include "../View/Trait/ViewAware.hpp"
-#include "../Mapper/EntryName.hpp"
-
-#include "Common/ControllerAbstract.hpp"
-
-#include "../Model/DeviceDataListInterface.hpp"
-#include "../lib/ContentParserFactory.hpp"
-#include "Helper/DeviceInfo.hpp"
 
 class TrashController :
 	public Controller_Common_ControllerAbstract,

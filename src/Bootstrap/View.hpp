@@ -19,19 +19,8 @@
 #ifndef SRC_BOOTSTRAP_VIEW_HPP_
 #define SRC_BOOTSTRAP_VIEW_HPP_
 
+#include "../config.hpp"
 #include <memory>
-
-#include "../View/Main.hpp"
-#include "../View/About.hpp"
-#include "../View/Installer.hpp"
-#include "../View/Trash.hpp"
-#include "../View/EntryEditor.hpp"
-#include "../View/Settings.hpp"
-#include "../View/EnvEditor.hpp"
-#include "../View/Error.hpp"
-#include "../View/Theme.hpp"
-
-#include "../Model/DeviceDataListInterface.hpp"
 
 class Bootstrap_View :
 	public Model_DeviceDataListInterface_Connection

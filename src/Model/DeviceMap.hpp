@@ -18,11 +18,8 @@
 
 #ifndef GRUBDEVICEMAP_H_
 #define GRUBDEVICEMAP_H_
-#include "../lib/Regex.hpp"
 #include <map>
 #include <unistd.h>
-#include "Env.hpp"
-#include "SmartFileHandle.hpp"
 
 struct Model_DeviceMap_PartitionIndex {
 	std::string hddNum, partNum;

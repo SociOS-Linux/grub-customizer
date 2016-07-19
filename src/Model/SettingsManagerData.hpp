@@ -19,12 +19,8 @@
 #ifndef SETTING_MANAGER_DATASTORE_INCLUDED
 #define SETTING_MANAGER_DATASTORE_INCLUDED
 #include <sys/stat.h> //mkdir
-#include "../lib/Trait/LoggerAware.hpp"
 #include <sstream>
-#include "../lib/Helper.hpp"
 #include <map>
-#include "Env.hpp"
-#include "SettingsStore.hpp"
 
 class Model_SettingsManagerData :
 	public Model_SettingsStore,

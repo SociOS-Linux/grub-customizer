@@ -23,14 +23,6 @@
 #include <cstdlib>
 #include <sys/stat.h>
 #include <unistd.h>
-#include "../Model/EntryPathFollower.hpp"
-#include "../lib/Trait/LoggerAware.hpp"
-#include "../lib/Helper.hpp"
-#include "../config.hpp"
-#include "../lib/Exception.hpp"
-#include "../lib/ArrayStructure.hpp"
-#include "../lib/Type.hpp"
-#include "Entry.hpp"
 
 class Model_Script : public Model_EntryPathFollower, public Trait_LoggerAware, public Script {
 	public: std::string name, fileName;

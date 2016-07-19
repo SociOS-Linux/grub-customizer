@@ -21,8 +21,6 @@
 #include <string>
 #include <cstdio>
 #include <functional>
-#include "../lib/Trait/LoggerAware.hpp"
-#include "Env.hpp"
 
 class Model_Installer :
 	public Trait_LoggerAware,

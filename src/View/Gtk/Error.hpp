@@ -18,7 +18,6 @@
 
 #ifndef ERRORGTK_H_
 #define ERRORGTK_H_
-#include "../Error.hpp"
 
 #include <gtkmm.h>
 #include <libintl.h>

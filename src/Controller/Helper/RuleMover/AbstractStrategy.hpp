@@ -19,8 +19,6 @@
 #ifndef INC_Controller_Helper_RuleMover_AbstractStrategy
 #define INC_Controller_Helper_RuleMover_AbstractStrategy
 
-#include "../../../Model/Rule.hpp"
-#include "../../../Model/ListCfg.hpp"
 #include <memory>
 #include <string>
 

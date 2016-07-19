@@ -20,7 +20,6 @@
 #define SMARTFILEHANDLE_H_
 #include <cstdio>
 #include <string>
-#include "../lib/Exception.hpp"
 
 class Model_SmartFileHandle {
 public:

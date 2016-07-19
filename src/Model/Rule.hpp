@@ -21,12 +21,6 @@
 #include <string>
 #include <ostream>
 #include <memory>
-#include "../lib/Helper.hpp"
-#include "../lib/ArrayStructure.hpp"
-#include "../lib/Type.hpp"
-#include "Entry.hpp"
-#include "EntryPathBuilder.hpp"
-#include "EntryPathFollower.hpp"
 
 class Model_Rule : public Rule {
 	public: std::shared_ptr<Model_Entry> dataSource; //assigned when using RuleType::OTHER_ENTRIES_PLACEHOLDER

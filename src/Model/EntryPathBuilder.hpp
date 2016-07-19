@@ -21,7 +21,6 @@
 #include <string>
 #include <list>
 #include <memory>
-#include "../Model/Entry.hpp"
 
 class Model_EntryPathBilder {
 public:

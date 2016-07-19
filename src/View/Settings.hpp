@@ -20,7 +20,6 @@
 #define SETTINGSDLG_H_
 #include <functional>
 
-#include "../lib/Trait/LoggerAware.hpp"
 
 /**
  * Interface to be implemented by settings dialogs

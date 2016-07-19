@@ -22,13 +22,6 @@
 #include <libintl.h>
 #include <locale.h>
 #include <sstream>
-#include "../config.hpp"
-
-#include "../Model/Env.hpp"
-
-#include "../View/About.hpp"
-#include "../View/Trait/ViewAware.hpp"
-#include "Common/ControllerAbstract.hpp"
 
 class AboutController :
 	public Controller_Common_ControllerAbstract,

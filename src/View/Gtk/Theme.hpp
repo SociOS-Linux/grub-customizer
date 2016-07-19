@@ -19,7 +19,6 @@
 #ifndef THEME_GTK_H_
 #define THEME_GTK_H_
 
-#include "../Theme.hpp"
 
 #include <gtkmm.h>
 #include <string>

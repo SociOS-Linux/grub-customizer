@@ -22,8 +22,6 @@
 #include <string>
 #include <memory>
 
-#include "ContentParser.hpp"
-#include "Exception.hpp"
 
 class ContentParserFactory {
 public:

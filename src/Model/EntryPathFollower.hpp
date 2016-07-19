@@ -20,7 +20,6 @@
 #define ENTRY_PATH_FOLLOWER_INCLUDED
 #include <string>
 #include <list>
-#include "../Model/Entry.hpp"
 
 class Model_EntryPathFollower {
 public:

@@ -21,8 +21,6 @@
 #include <map>
 #include <cstdio>
 #include <string>
-#include "../Model/DeviceDataListInterface.hpp"
-#include "../lib/Trait/LoggerAware.hpp"
 
 class Model_DeviceDataList : public Model_DeviceDataListInterface, public Trait_LoggerAware {
 public:

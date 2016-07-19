@@ -21,10 +21,6 @@
 #include <list>
 #include <sstream>
 #include <memory>
-#include "../lib/Trait/LoggerAware.hpp"
-#include "../lib/Exception.hpp"
-#include "../lib/ArrayStructure.hpp"
-#include "Proxy.hpp"
 
 struct Model_Proxylist_Item {
 	std::string labelPathValue;

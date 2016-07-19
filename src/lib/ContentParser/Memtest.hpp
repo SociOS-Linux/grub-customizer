@@ -19,9 +19,6 @@
 #ifndef CONTENT_PARSER_MEMTEST_H_
 #define CONTENT_PARSER_MEMTEST_H_
 
-#include "../Regex.hpp"
-#include "../../Model/DeviceMap.hpp"
-#include "Abstract.hpp"
 
 class ContentParser_Memtest :
 	public ContentParser_Abstract,

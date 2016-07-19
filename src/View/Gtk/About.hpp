@@ -18,10 +18,8 @@
 
 #ifndef GC_ABOUNTDIALOG_GTK_INCLUDED
 #define GC_ABOUNTDIALOG_GTK_INCLUDED
-#include "../About.hpp"
 
 #include <gtkmm.h>
-#include "../../config.hpp"
 #include <libintl.h>
 
 class View_Gtk_About :

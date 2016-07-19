@@ -18,7 +18,6 @@
 
 #ifndef ABOUTDIALOG_H_
 #define ABOUTDIALOG_H_
-#include "../lib/Trait/LoggerAware.hpp"
 
 /**
  * base class to be implemented by about dialogs

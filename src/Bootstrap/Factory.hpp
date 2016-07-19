@@ -19,21 +19,7 @@
 #ifndef SRC_BOOTSTRAP_FACTORY_HPP_
 #define SRC_BOOTSTRAP_FACTORY_HPP_
 
-#include "../View/Trait/ViewAware.hpp"
-#include "../Model/Env.hpp"
-#include "../Model/ListCfg.hpp"
-#include "../Model/MountTable.hpp"
-#include "../Model/SettingsManagerData.hpp"
-#include "../Model/Installer.hpp"
-#include "../Model/FbResolutionsGetter.hpp"
-#include "../Model/DeviceDataList.hpp"
-#include "../lib/ContentParser/FactoryImpl.hpp"
-#include "../Mapper/EntryNameImpl.hpp"
-#include "../Model/ThemeManager.hpp"
-#include "../Model/DeviceMap.hpp"
-#include "../Controller/Helper/Thread.hpp"
-#include "../Controller/Helper/RuleMover.hpp"
-#include "Application.hpp"
+#include <memory>
 
 class Bootstrap_Factory
 {

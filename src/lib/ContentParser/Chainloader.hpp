@@ -19,9 +19,6 @@
 #ifndef CONTENT_PARSER_CHAINLOADER_H_
 #define CONTENT_PARSER_CHAINLOADER_H_
 
-#include "../Regex.hpp"
-#include "../../Model/DeviceMap.hpp"
-#include "Abstract.hpp"
 
 class ContentParser_Chainloader :
 	public ContentParser_Abstract,

@@ -20,9 +20,6 @@
 #define THEMEMANAGER_H_
 
 #include <list>
-#include "../lib/Exception.hpp"
-#include "Env.hpp"
-#include "Theme.hpp"
 
 class Model_ThemeManager :
 	public Model_Env_Connection

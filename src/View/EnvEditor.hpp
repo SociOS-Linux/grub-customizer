@@ -21,8 +21,6 @@
 #include <map>
 #include <functional>
 
-#include "../lib/Trait/LoggerAware.hpp"
-#include "../Model/DeviceDataListInterface.hpp"
 
 class View_EnvEditor :
 	public Trait_LoggerAware,

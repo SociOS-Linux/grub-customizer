@@ -19,32 +19,9 @@
 #ifndef SETTINGSCONTROLLERIMPL_H_
 #define SETTINGSCONTROLLERIMPL_H_
 
-#include "../Model/ListCfg.hpp"
 #include <libintl.h>
 #include <locale.h>
 #include <sstream>
-#include "../config.hpp"
-
-#include "../Model/Env.hpp"
-
-#include "../Model/MountTable.hpp"
-
-#include "../Model/Installer.hpp"
-
-#include "../Model/ListCfg.hpp"
-#include "../View/Settings.hpp"
-#include "../View/Trait/ViewAware.hpp"
-#include "../Model/FbResolutionsGetter.hpp"
-#include "../Model/DeviceDataList.hpp"
-#include "../lib/ContentParserFactory.hpp"
-#include "../Mapper/EntryName.hpp"
-
-#include "Common/ControllerAbstract.hpp"
-
-#include "../lib/Trait/LoggerAware.hpp"
-
-#include "../lib/Exception.hpp"
-#include "Helper/Thread.hpp"
 
 class SettingsController :
 	public Controller_Common_ControllerAbstract,

@@ -18,12 +18,9 @@
 
 #ifndef ENTRY_ADD_DLG_INCLUDED
 #define ENTRY_ADD_DLG_INCLUDED
-#include "../Trash.hpp"
 
 #include <gtkmm.h>
 #include <libintl.h>
-#include "../../lib/Type.hpp"
-#include "Element/List.hpp"
 
 class View_Gtk_Trash :
 	public Gtk::Window,

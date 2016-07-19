@@ -19,8 +19,6 @@
 #ifndef DEVICEINFO_H_
 #define DEVICEINFO_H_
 
-#include "../../lib/ContentParserFactory.hpp"
-#include "../../Model/DeviceDataListInterface.hpp"
 
 class Controller_Helper_DeviceInfo
 {

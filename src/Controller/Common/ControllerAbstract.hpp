@@ -19,7 +19,6 @@
 #ifndef CONTROLLER_ABSTRACT_H_
 #define CONTROLLER_ABSTRACT_H_
 
-#include "../../lib/Trait/ActionLoggerAware.hpp"
 
 class Controller_Common_ControllerAbstract :
 	public Trait_ActionLoggerAware

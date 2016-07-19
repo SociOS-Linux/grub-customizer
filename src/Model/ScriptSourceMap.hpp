@@ -23,9 +23,6 @@
 #include <string>
 #include <dirent.h>
 
-#include "../lib/CsvProcessor.hpp"
-#include "../lib/Trait/LoggerAware.hpp"
-#include "Env.hpp"
 
 class Model_ScriptSourceMap :
 	public std::map<std::string, std::string>,

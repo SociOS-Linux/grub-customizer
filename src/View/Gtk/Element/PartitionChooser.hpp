@@ -20,7 +20,6 @@
 #define PARTITIONCHOOSER_DROPDOWN_H_
 #include <gtkmm.h>
 #include <string>
-#include "../../../Model/DeviceDataListInterface.hpp"
 #include <libintl.h>
 
 class View_Gtk_Element_PartitionChooser :

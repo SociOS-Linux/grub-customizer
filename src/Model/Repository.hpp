@@ -22,12 +22,6 @@
 #include <dirent.h>
 #include <map>
 #include <memory>
-#include "../lib/Trait/LoggerAware.hpp"
-#include "../lib/ArrayStructure.hpp"
-#include "../lib/Helper.hpp"
-#include "ProxyScriptData.hpp"
-#include "PscriptnameTranslator.hpp"
-#include "Script.hpp"
 
 class Model_Repository : public std::list<std::shared_ptr<Model_Script>>, public Trait_LoggerAware
 {

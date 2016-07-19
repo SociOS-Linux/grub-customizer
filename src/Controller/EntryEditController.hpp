@@ -16,31 +16,9 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef ENTRY_EDIT_CONTROLLER_INCLUDED
-#define ENTRY_EDIT_CONTROLLER_INCLUDED
-
-#include "../View/Main.hpp"
 #include <libintl.h>
 #include <locale.h>
 #include <sstream>
-#include "../config.hpp"
-
-#include "../Model/Env.hpp"
-
-#include "../View/EntryEditor.hpp"
-#include "../View/Trait/ViewAware.hpp"
-
-#include "../Model/ListCfg.hpp"
-#include "../lib/Trait/LoggerAware.hpp"
-#include "Common/ControllerAbstract.hpp"
-#include "../lib/ContentParserFactory.hpp"
-#include "../lib/Exception.hpp"
-#include "../Model/DeviceDataList.hpp"
-#include "../Model/Installer.hpp"
-#include "../Model/ListCfg.hpp"
-#include "Helper/Thread.hpp"
-#include "Helper/RuleMover.hpp"
-
 
 class EntryEditController :
 	public Controller_Common_ControllerAbstract,
@@ -365,5 +343,3 @@ class EntryEditController :
 		return script;
 	}
 };
-
-#endif

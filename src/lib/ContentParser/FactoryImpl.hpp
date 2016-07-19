@@ -18,11 +18,8 @@
 
 #ifndef CONTENTPARSERFACTORYIMPL_H_
 #define CONTENTPARSERFACTORYIMPL_H_
-#include "../../lib/ContentParserFactory.hpp"
-#include "../../lib/ContentParser.hpp"
 #include <list>
 #include <memory>
-#include "../Exception.hpp"
 
 class ContentParser_FactoryImpl : public ContentParserFactory {
 	private: std::list<std::shared_ptr<ContentParser>> parsers;

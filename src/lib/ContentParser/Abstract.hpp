@@ -23,9 +23,6 @@
 #include <climits>
 #include <cstdlib>
 #include <cstdio>
-#include "../../lib/ContentParser.hpp"
-#include "../../lib/Trait/LoggerAware.hpp"
-#include "../../lib/Helper.hpp"
 
 class ContentParser_Abstract :
 	public ContentParser,

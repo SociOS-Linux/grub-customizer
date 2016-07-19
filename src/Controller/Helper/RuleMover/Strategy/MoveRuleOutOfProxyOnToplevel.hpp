@@ -19,10 +19,6 @@
 #ifndef INC_Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel
 #define INC_Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel
 
-#include "../../../../Model/Rule.hpp"
-#include "../../../../Model/ListCfg.hpp"
-#include "../AbstractStrategy.hpp"
-#include "../../../../lib/Trait/LoggerAware.hpp"
 #include <memory>
 #include <bitset>
 #include <set>

@@ -22,20 +22,6 @@
 #include <libintl.h>
 #include <locale.h>
 #include <sstream>
-#include "../config.hpp"
-
-#include "../Model/Env.hpp"
-
-#include "../Model/Installer.hpp"
-#include "../View/Installer.hpp"
-#include "../View/Trait/ViewAware.hpp"
-
-#include "Common/ControllerAbstract.hpp"
-
-#include "../lib/Exception.hpp"
-
-#include "Helper/Thread.hpp"
-
 
 class InstallerController :
 	public Controller_Common_ControllerAbstract,

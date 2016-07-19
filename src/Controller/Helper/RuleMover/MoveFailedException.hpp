@@ -18,7 +18,6 @@
 
 #ifndef INC_Controller_Helper_RuleMover_MoveFailedException
 #define INC_Controller_Helper_RuleMover_MoveFailedException
-#include "../../../lib/Exception.hpp"
 
 class Controller_Helper_RuleMover_MoveFailedException : public Exception
 {

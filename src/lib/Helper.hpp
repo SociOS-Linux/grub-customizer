@@ -22,7 +22,6 @@
 #include <openssl/md5.h>
 #include <string>
 #include <map>
-#include "Exception.hpp"
 
 # define ASSERT_VOID_CAST static_cast<void>
 

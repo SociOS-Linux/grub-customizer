@@ -22,18 +22,6 @@
 #include <libintl.h>
 #include <locale.h>
 #include <sstream>
-#include "../config.hpp"
-#include "../Model/DeviceMap.hpp"
-
-#include "../Model/Env.hpp"
-
-#include "../Model/MountTable.hpp"
-
-#include "../View/EnvEditor.hpp"
-#include "../View/Trait/ViewAware.hpp"
-
-#include "Common/ControllerAbstract.hpp"
-
 
 class EnvEditorController :
 	public Controller_Common_ControllerAbstract,

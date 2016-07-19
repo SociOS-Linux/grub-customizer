@@ -19,10 +19,8 @@
 #ifndef SETTING_DLG_GTK_INCLUDED
 #define SETTING_DLG_GTK_INCLUDED
 #include <gtkmm.h>
-#include "../Settings.hpp"
 #include <libintl.h>
 #include <string>
-#include "../ColorChooser.hpp"
 
 
 class View_Gtk_Settings :

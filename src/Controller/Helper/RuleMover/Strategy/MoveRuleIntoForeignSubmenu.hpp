@@ -19,10 +19,6 @@
 #ifndef INC_Controller_Helper_RuleMover_Strategy_MoveRuleIntoForeignSubmenu
 #define INC_Controller_Helper_RuleMover_Strategy_MoveRuleIntoForeignSubmenu
 
-#include "../../../../Model/Rule.hpp"
-#include "../../../../Model/ListCfg.hpp"
-#include "../AbstractStrategy.hpp"
-#include "../../../../lib/Trait/LoggerAware.hpp"
 #include <memory>
 
 class Controller_Helper_RuleMover_Strategy_MoveRuleIntoForeignSubmenu :

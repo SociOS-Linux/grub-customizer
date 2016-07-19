@@ -18,7 +18,6 @@
 
 #ifndef GRUB_INSTALL_DLG_GTK_INCLUDED
 #define GRUB_INSTALL_DLG_GTK_INCLUDED
-#include "../Installer.hpp"
 
 #include <gtkmm.h>
 #include <libintl.h>

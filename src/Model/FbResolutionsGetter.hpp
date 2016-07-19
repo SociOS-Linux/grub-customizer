@@ -22,7 +22,6 @@
 #include <list>
 #include <cstdio>
 #include <functional>
-#include "../lib/Trait/LoggerAware.hpp"
 
 class Model_FbResolutionsGetter : public Trait_LoggerAware {
 	std::list<std::string> data;

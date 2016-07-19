@@ -22,10 +22,6 @@
 #include <string>
 #include <list>
 #include <memory>
-#include "../lib/Trait/LoggerAware.hpp"
-#include "../lib/Helper.hpp"
-#include "../lib/ArrayStructure.hpp"
-#include "../lib/Type.hpp"
 
 class Model_Entry_Row
 {

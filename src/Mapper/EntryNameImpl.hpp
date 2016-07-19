@@ -19,9 +19,6 @@
 #ifndef ENTRYNAMEIMPL_H_
 #define ENTRYNAMEIMPL_H_
 
-#include "../View/Main.hpp"
-#include "../View/Trait/ViewAware.hpp"
-#include "EntryName.hpp"
 
 class Mapper_EntryNameImpl : public Mapper_EntryName, public View_Trait_ViewAware<View_Main> {
 public:

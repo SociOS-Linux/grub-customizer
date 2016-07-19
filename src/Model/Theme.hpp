@@ -23,11 +23,9 @@
 #include <sys/stat.h>
 #include <dirent.h>
 #include <fstream>
-#include "../lib/Exception.hpp"
 #include <archive.h>
 #include <archive_entry.h>
 #include <map>
-#include "ThemeFile.hpp"
 
 struct Model_Theme {
 	std::string directory;

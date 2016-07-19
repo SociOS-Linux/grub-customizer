@@ -1,4 +1,3 @@
-#include "../lib/Helper.hpp"
 #include "../Model/DeviceDataListInterface.hpp"
 #include "../lib/Logger.hpp"
 #include "../lib/Trait/LoggerAware.hpp"

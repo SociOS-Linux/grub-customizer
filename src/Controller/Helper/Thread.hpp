@@ -18,7 +18,6 @@
 
 #ifndef HELPER_THREAD_H_INCLUDED
 #define HELPER_THREAD_H_INCLUDED
-#include "../../lib/Trait/LoggerAware.hpp"
 #include <functional>
 
 class Controller_Helper_Thread : public Trait_LoggerAware

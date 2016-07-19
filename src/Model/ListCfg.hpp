@@ -30,24 +30,11 @@
 #include <unistd.h>
 #include <fstream>
 
-#include "../config.hpp"
 
-#include "../lib/Mutex.hpp"
-#include "../lib/Trait/LoggerAware.hpp"
 
-#include "../lib/Exception.hpp"
-#include "../lib/ArrayStructure.hpp"
-#include "../lib/Helper.hpp"
 #include <stack>
 #include <algorithm>
 #include <functional>
-#include "Env.hpp"
-#include "MountTable.hpp"
-#include "Proxylist.hpp"
-#include "ProxyScriptData.hpp"
-#include "Repository.hpp"
-#include "ScriptSourceMap.hpp"
-#include "SettingsManagerData.hpp"
 
 class Model_ListCfg :
 	public Trait_LoggerAware,

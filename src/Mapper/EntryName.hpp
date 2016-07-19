@@ -20,7 +20,6 @@
 #define ENTRYNAME_H_
 
 #include <string>
-#include "../Model/Entry.hpp"
 
 class Mapper_EntryName {
 public:

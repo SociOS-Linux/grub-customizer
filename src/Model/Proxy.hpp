@@ -22,13 +22,6 @@
 #include <unistd.h>
 #include <map>
 #include <memory>
-#include "../lib/Exception.hpp"
-#include "../lib/ArrayStructure.hpp"
-#include "../lib/Type.hpp"
-#include "EntryPathBuilderImpl.hpp"
-#include "ProxyScriptData.hpp"
-#include "Rule.hpp"
-#include "Script.hpp"
 
 class Model_Proxy : public Proxy
 {

@@ -19,10 +19,6 @@
 #ifndef LIST_H_
 #define LIST_H_
 #include <gtkmm.h>
-#include "../../../lib/Type.hpp"
-#include "../../../lib/Exception.hpp"
-#include "../../Model/ListItem.hpp"
-#include "../../../lib/Helper.hpp"
 #include <libintl.h>
 
 template<typename TItem, typename TWrapper>

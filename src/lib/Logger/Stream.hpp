@@ -18,7 +18,6 @@
 
 #ifndef STREAM_LOGGER_H_
 #define STREAM_LOGGER_H_
-#include "../Logger.hpp"
 #include <ostream>
 #include <string>
 

@@ -21,7 +21,6 @@
 #include <cstdlib>
 #include <memory>
 
-#include "Trait/LoggerAware.hpp"
 
 class Mutex : public Trait_LoggerAware {
 public:

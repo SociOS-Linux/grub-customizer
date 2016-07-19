@@ -18,7 +18,6 @@
 
 #ifndef TRAIT_ACTIONLOGGERAWARE_H_
 #define TRAIT_ACTIONLOGGERAWARE_H_
-#include "LoggerAware.hpp"
 
 class Trait_ActionLoggerAware : public Trait_LoggerAware {
 	std::string _controllerName;

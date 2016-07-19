@@ -18,17 +18,8 @@
 
 #ifndef THEMECONTROLLERIMPL_H_
 #define THEMECONTROLLERIMPL_H_
-#include "../Model/Env.hpp"
-#include "../View/Theme.hpp"
-#include "../View/Trait/ViewAware.hpp"
-#include "../Model/SettingsManagerData.hpp"
-#include "../Model/ListCfg.hpp"
 #include <algorithm>
 #include <functional>
-
-#include "../Model/ThemeManager.hpp"
-#include "Common/ControllerAbstract.hpp"
-#include "Helper/Thread.hpp"
 
 class ThemeController :
 	public Controller_Common_ControllerAbstract,

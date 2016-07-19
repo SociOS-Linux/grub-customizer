@@ -19,10 +19,6 @@
 #ifndef RULEMOVER_HPP_
 #define RULEMOVER_HPP_
 
-#include "../../Model/Rule.hpp"
-#include "../../Model/ListCfg.hpp"
-#include "RuleMover/AbstractStrategy.hpp"
-#include "RuleMover/MoveFailedException.hpp"
 #include <memory>
 
 class Controller_Helper_RuleMover :

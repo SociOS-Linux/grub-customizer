@@ -22,8 +22,6 @@
 #include <list>
 #include <functional>
 
-#include "../lib/Trait/LoggerAware.hpp"
-#include "ColorChooser.hpp"
 
 class View_Theme :
 	public Trait_LoggerAware

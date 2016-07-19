@@ -19,32 +19,12 @@
 #ifndef MAINCONNTROLLER_INCLUDED
 #define MAINCONNTROLLER_INCLUDED
 
-#include "../Model/ListCfg.hpp"
-#include "../View/Main.hpp"
-#include "../View/Trait/ViewAware.hpp"
 #include <libintl.h>
 #include <locale.h>
 #include <sstream>
 #include <algorithm>
 #include <functional>
 #include <memory>
-#include "../config.hpp"
-
-#include "../Model/Env.hpp"
-
-#include "../Model/ListCfg.hpp"
-#include "../Model/DeviceDataList.hpp"
-#include "../lib/ContentParserFactory.hpp"
-
-#include "Common/ControllerAbstract.hpp"
-
-#include "../lib/Trait/LoggerAware.hpp"
-#include "../lib/Exception.hpp"
-#include "../Mapper/EntryName.hpp"
-#include "../Model/FbResolutionsGetter.hpp"
-#include "../View/Model/ListItem.hpp"
-#include "Helper/DeviceInfo.hpp"
-#include "Helper/Thread.hpp"
 
 /**
  * This controller operates on the entry list
