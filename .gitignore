@@ -1,4 +1,5 @@
 /.cproject
 /.project
+build/resolve_includes
 build/tmp/*
 src/config.hpp
