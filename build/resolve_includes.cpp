@@ -8,6 +8,7 @@
 #include <dirent.h>
 #include <regex>
 #include <algorithm>
+#include <sys/time.h>
 
 std::string get_directory(std::string argv0)
 {
@@ -66,14 +67,15 @@ std::string readFile(std::string file)
 	return std::string(&bytes[0], fileSize);
 }
 
-int regexTime = 0;
-int buildRegexTime = 0;
-int readFileTime = 0;
+clock_t regexTime = 0;
+clock_t buildRegexTime = 0;
+clock_t readFileTime = 0;
 
 class Resolver
 {
 	public: std::list<std::string> files;
 	public: std::list<std::string> classes;
+	public: std::map<std::string, std::string> classToFile;
 	public: std::string sourcePath;
 
 	public: std::list<std::string> resolvedIncludes;
@@ -88,50 +90,70 @@ class Resolver
 			std::smatch matches;
 			std::string::const_iterator searchStart(fileContent.cbegin());
 			while (std::regex_search(searchStart, fileContent.cend(), matches, regex)) {
+				searchStart += matches.position() + matches.length();
+				if (matches[1] == "stat" || matches[1] == "dirent") {
+					continue; // stat must be written as "struct stat" but it's not a structure definition
+				}
 				this->files.push_back(file.substr(this->sourcePath.size() + 1));
 				this->classes.push_back(matches[1]);
-				searchStart += matches.position() + matches.length();
+				this->classToFile[this->classes.back()] = this->files.back();
 			}
 		}
 	}
 
-	public: void resolve(std::string fileToResolve)
+	public: void resolve(std::string fileToResolve, int level = 0)
 	{
-		int timeBeforeRead = time(NULL);
+		int timeBeforeRead = clock();
 		std::string fileContent = readFile(this->sourcePath + "/" + fileToResolve);
-		readFileTime += time(NULL) - timeBeforeRead;
+		readFileTime += clock() - timeBeforeRead;
 
-		auto fileIter = this->files.begin();
-		auto classIter = this->classes.begin();
-		for (int i = 0; i < this->files.size(); i++) {
-			int timeBeforeBuild = time(NULL);
-			std::regex regex("(?:[^A-Za-z0-9_.]|^|\n)" + *classIter + "(?:[^A-Za-z0-9_.]|$|\n)");
-			buildRegexTime += time(NULL) - timeBeforeBuild;
+		int timeBeforeBuild = clock();
+		auto allClasses = std::accumulate(this->classes.begin(), this->classes.end(), std::string(),
+		    [](const std::string& a, const std::string& b) -> std::string {
+		        return a + (a.length() > 0 ? "|" : "") + b;
+		    } );
 
-			int timeBefore = time(NULL);
-			if (std::regex_search(fileContent, regex)) {
-				regexTime += time(NULL) - timeBefore;
-				if (std::count(this->dispatchedIncludes.begin(), this->dispatchedIncludes.end(), *fileIter) == 0) {
-					this->dispatchedIncludes.push_back(*fileIter);
-					if (*fileIter != fileToResolve) {
-						std::cerr << "[+] scanning children of " << *fileIter << " (POS: " << i << ")" << std::endl;
-						resolve(*fileIter);
-						std::cerr << "[-] finished scanning children of " << *fileIter << " (POS: " << i << ")" << std::endl;
-					}
+		std::regex regex("(?:[^A-Za-z0-9_.]|^|\n)(" + allClasses + ")(?:[^A-Za-z0-9_.]|$|\n)");
+		buildRegexTime += clock() - timeBeforeBuild;
 
-					if (std::count(this->resolvedIncludes.begin(), this->resolvedIncludes.end(), *fileIter) == 0
-						&& *fileIter != fileToResolve) { // TODO: camparing global file to resolve really required?
+		std::string::const_iterator searchStart(fileContent.cbegin());
 
-						std::cerr << "adding " << *fileIter << std::endl;
-						this->resolvedIncludes.push_back(*fileIter);
-					}
+		std::smatch matches;
+
+		time_t timeBefore = clock();
+		while (std::regex_search(searchStart, fileContent.cend(), matches, regex)) {
+			regexTime += clock() - timeBefore;
+			std::string file = this->classToFile[matches[1]];
+			if (file != "" && std::count(this->dispatchedIncludes.begin(), this->dispatchedIncludes.end(), file) == 0) {
+				std::cerr << std::string(level*4, ' ') << "  > found dependency: " << matches[1] << " (processing)" << std::endl;
+				this->dispatchedIncludes.push_back(file);
+				if (file != fileToResolve) {
+					std::cerr << std::string(level*4, ' ') << "[+] scanning children of " << file << std::endl;
+					resolve(file, level + 1);
+					std::cerr << std::string(level*4, ' ') << "[-] finished scanning children of " << file << std::endl;
+				}
+
+				if (std::count(this->resolvedIncludes.begin(), this->resolvedIncludes.end(), file) == 0
+					&& file != fileToResolve) { // TODO: camparing global file to resolve really required?
+
+					std::cerr << std::string(level*4, ' ') << "  + adding " << file << std::endl;
+					this->resolvedIncludes.push_back(file);
 				}
 			} else {
-				regexTime += time(NULL) - timeBefore;
+				std::string reason = file == "" ? "no file" : "already processing";
+				std::cerr << std::string(level*4, ' ') << "  # found dependency: " << matches[1] << " (skipping - " << reason << ")" << std::endl;
 			}
-			fileIter++;
-			classIter++;
+			searchStart += matches.position() + matches.length();
+			timeBefore = clock();
 		}
+		regexTime += clock() - timeBefore;
+	}
+
+	public: void addClass(std::string className, std::string fileName)
+	{
+		this->classes.push_back(className);
+		this->files.push_back(fileName);
+		this->classToFile[className] = fileName;
 	}
 };
 
@@ -150,14 +172,13 @@ int main(int argc, char** argv)
 	std::string fileToResolve = argv[1];
 	std::string prefix = argv[2];
 
-	resolver.files = {"lib/Helper.hpp"};
-	resolver.classes = {"assert"};
+	resolver.addClass("assert", "lib/Helper.hpp");
 	resolver.sourcePath = currentDir + "/../src";
 
 	resolver.scanFiles();
-	int fullTimeBefore = time(NULL);
+	clock_t fullTimeBefore = clock();
 	resolver.resolve(fileToResolve);
-	std::cerr << "time used: " << time(NULL) - fullTimeBefore << std::endl;
+	std::cerr << "time used: " << clock() - fullTimeBefore << std::endl;
 	std::cerr << "regex time: " << regexTime << std::endl;
 	std::cerr << "build regex time: " << buildRegexTime << std::endl;
 	std::cerr << "readFile time: " << readFileTime << std::endl;
