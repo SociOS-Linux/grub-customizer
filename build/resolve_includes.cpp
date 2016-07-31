@@ -81,11 +81,13 @@ class Resolver
 	public: std::list<std::string> resolvedIncludes;
 	public: std::list<std::string> dispatchedIncludes;
 
+	public: int verbosityLevel = 0;
+
 	public: void scanFiles()
 	{
 		for (auto file : getFiles(this->sourcePath, {"hpp", "cpp"})) {
 			std::string fileContent = readFile(file);
-			std::regex regex("(?:^|\n)(?:[\\t ]*(?:class|struct) )([^ <>\n]+)");
+			std::regex regex("(?:^|\n)(?:[\\t ]*(?:class|struct|enum class|enum) )([^ <>\n]+)");
 
 			std::smatch matches;
 			std::string::const_iterator searchStart(fileContent.cbegin());
@@ -103,6 +105,9 @@ class Resolver
 
 	public: void resolve(std::string fileToResolve, int level = 0)
 	{
+		if (level == 0) {
+			this->reset();
+		}
 		int timeBeforeRead = clock();
 		std::string fileContent = readFile(this->sourcePath + "/" + fileToResolve);
 		readFileTime += clock() - timeBeforeRead;
@@ -125,23 +130,23 @@ class Resolver
 			regexTime += clock() - timeBefore;
 			std::string file = this->classToFile[matches[1]];
 			if (file != "" && std::count(this->dispatchedIncludes.begin(), this->dispatchedIncludes.end(), file) == 0) {
-				std::cerr << std::string(level*4, ' ') << "  > found dependency: " << matches[1] << " (processing)" << std::endl;
+				this->printProgress(1, "  > found dependency: " + std::string(matches[1]) + " (processing)", level);
 				this->dispatchedIncludes.push_back(file);
 				if (file != fileToResolve) {
-					std::cerr << std::string(level*4, ' ') << "[+] scanning children of " << file << std::endl;
+					this->printProgress(1, "[+] scanning children of " + file, level);
 					resolve(file, level + 1);
-					std::cerr << std::string(level*4, ' ') << "[-] finished scanning children of " << file << std::endl;
+					this->printProgress(1, "[-] finished scanning children of " + file, level);
 				}
 
 				if (std::count(this->resolvedIncludes.begin(), this->resolvedIncludes.end(), file) == 0
 					&& file != fileToResolve) { // TODO: camparing global file to resolve really required?
 
-					std::cerr << std::string(level*4, ' ') << "  + adding " << file << std::endl;
+					this->printProgress(1, "  + adding " + file, level);
 					this->resolvedIncludes.push_back(file);
 				}
 			} else {
 				std::string reason = file == "" ? "no file" : "already processing";
-				std::cerr << std::string(level*4, ' ') << "  # found dependency: " << matches[1] << " (skipping - " << reason << ")" << std::endl;
+				this->printProgress(2, "  # found dependency: " + std::string(matches[1]) + " (skipping - " + reason + ")", level);
 			}
 			searchStart += matches.position() + matches.length();
 			timeBefore = clock();
@@ -155,35 +160,77 @@ class Resolver
 		this->files.push_back(fileName);
 		this->classToFile[className] = fileName;
 	}
+
+	private: void reset()
+	{
+		this->resolvedIncludes.clear();
+		this->dispatchedIncludes.clear();
+	}
+
+	private: void printProgress(int verbosityLevel, std::string info, int nestingLevel)
+	{
+		if (verbosityLevel <= this->verbosityLevel) {
+			std::cerr << std::string(nestingLevel * 4, ' ') << info << std::endl;
+		}
+	}
 };
 
 int main(int argc, char** argv)
 {
 	std::string currentDir = get_directory(argv[0]);
 
-
-	if (argc != 3) {
-		std::cerr << "Error: wrong argument count" << std::endl;
-		return 1;
-	}
-
 	Resolver resolver;
 
-	std::string fileToResolve = argv[1];
-	std::string prefix = argv[2];
+	if (argc >= 2) {
+		resolver.verbosityLevel = std::stoi(argv[1]);
+	}
 
 	resolver.addClass("assert", "lib/Helper.hpp");
 	resolver.sourcePath = currentDir + "/../src";
 
 	resolver.scanFiles();
-	clock_t fullTimeBefore = clock();
-	resolver.resolve(fileToResolve);
-	std::cerr << "time used: " << clock() - fullTimeBefore << std::endl;
-	std::cerr << "regex time: " << regexTime << std::endl;
-	std::cerr << "build regex time: " << buildRegexTime << std::endl;
-	std::cerr << "readFile time: " << readFileTime << std::endl;
 
-	for (auto file : resolver.resolvedIncludes) {
-		std::cout << "#include \"" << prefix << file << "\"" << std::endl;
+	std::vector<std::string> baseFiles = {
+		"Bootstrap/GtkApplication.cpp",
+		"Bootstrap/FactoryImpl/GlibThread.cpp",
+		"Bootstrap/FactoryImpl/GLibRegex.cpp",
+		"Bootstrap/FactoryImpl/GlibThread.cpp",
+		"Bootstrap/GtkView.cpp",
+		"main/proxy.cpp",
+		"main/client.cpp"
+	};
+
+	if (argc >= 3) {
+		baseFiles = {argv[2]}; // override by argument for testing purposes
+	}
+
+	for (std::string fileToResolve : baseFiles) {
+		std::cerr << std::endl;
+		std::cerr << "#-------------------" << std::endl;
+		std::cerr << "# processing " << fileToResolve << std::endl;
+		std::cerr << "#-------------------" << std::endl << std::endl;
+
+		int nestingLevel = std::count(fileToResolve.begin(), fileToResolve.end(), '/');
+		std::string prefix;
+		for (int i = 0; i < nestingLevel; i++) {
+			prefix += "../";
+		}
+		std::string outFile = fileToResolve;
+		outFile.replace(fileToResolve.find_last_of('.'), 0, ".inc"); // inject ".inc" before .cpp
+
+		clock_t fullTimeBefore = clock();
+		resolver.resolve(fileToResolve);
+
+		std::cerr << std::endl << "Stats" << std::endl;
+		std::cerr << "time used: " << clock() - fullTimeBefore << std::endl;
+		std::cerr << "regex time: " << regexTime << std::endl;
+		std::cerr << "build regex time: " << buildRegexTime << std::endl;
+		std::cerr << "readFile time: " << readFileTime << std::endl;
+
+		std::ofstream outFileStream(resolver.sourcePath + "/" + outFile, std::ofstream::out);
+
+		for (auto file : resolver.resolvedIncludes) {
+			outFileStream << "#include \"" << prefix << file << "\"" << std::endl;
+		}
 	}
 }
