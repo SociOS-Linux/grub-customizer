@@ -67,10 +67,6 @@ std::string readFile(std::string file)
 	return std::string(&bytes[0], fileSize);
 }
 
-clock_t regexTime = 0;
-clock_t buildRegexTime = 0;
-clock_t readFileTime = 0;
-
 class Resolver
 {
 	public: std::list<std::string> files;
@@ -82,6 +78,10 @@ class Resolver
 	public: std::list<std::string> dispatchedIncludes;
 
 	public: int verbosityLevel = 0;
+
+	public: clock_t regexTime = 0;
+	public: clock_t buildRegexTime = 0;
+	public: clock_t readFileTime = 0;
 
 	public: void scanFiles()
 	{
@@ -110,7 +110,7 @@ class Resolver
 		}
 		int timeBeforeRead = clock();
 		std::string fileContent = readFile(this->sourcePath + "/" + fileToResolve);
-		readFileTime += clock() - timeBeforeRead;
+		this->readFileTime += clock() - timeBeforeRead;
 
 		int timeBeforeBuild = clock();
 		auto allClasses = std::accumulate(this->classes.begin(), this->classes.end(), std::string(),
@@ -119,7 +119,7 @@ class Resolver
 		    } );
 
 		std::regex regex("(?:[^A-Za-z0-9_.]|^|\n)(" + allClasses + ")(?:[^A-Za-z0-9_.]|$|\n)");
-		buildRegexTime += clock() - timeBeforeBuild;
+		this->buildRegexTime += clock() - timeBeforeBuild;
 
 		std::string::const_iterator searchStart(fileContent.cbegin());
 
@@ -127,7 +127,7 @@ class Resolver
 
 		time_t timeBefore = clock();
 		while (std::regex_search(searchStart, fileContent.cend(), matches, regex)) {
-			regexTime += clock() - timeBefore;
+			this->regexTime += clock() - timeBefore;
 			std::string file = this->classToFile[matches[1]];
 			if (file != "" && std::count(this->dispatchedIncludes.begin(), this->dispatchedIncludes.end(), file) == 0) {
 				this->printProgress(1, "  > found dependency: " + std::string(matches[1]) + " (processing)", level);
@@ -151,7 +151,7 @@ class Resolver
 			searchStart += matches.position() + matches.length();
 			timeBefore = clock();
 		}
-		regexTime += clock() - timeBefore;
+		this->regexTime += clock() - timeBefore;
 	}
 
 	public: void addClass(std::string className, std::string fileName)
@@ -165,6 +165,10 @@ class Resolver
 	{
 		this->resolvedIncludes.clear();
 		this->dispatchedIncludes.clear();
+
+		this->regexTime = 0;
+		this->buildRegexTime = 0;
+		this->readFileTime = 0;
 	}
 
 	private: void printProgress(int verbosityLevel, std::string info, int nestingLevel)
@@ -223,9 +227,9 @@ int main(int argc, char** argv)
 
 		std::cerr << std::endl << "Stats" << std::endl;
 		std::cerr << "time used: " << clock() - fullTimeBefore << std::endl;
-		std::cerr << "regex time: " << regexTime << std::endl;
-		std::cerr << "build regex time: " << buildRegexTime << std::endl;
-		std::cerr << "readFile time: " << readFileTime << std::endl;
+		std::cerr << "regex time: " << resolver.regexTime << std::endl;
+		std::cerr << "build regex time: " << resolver.buildRegexTime << std::endl;
+		std::cerr << "readFile time: " << resolver.readFileTime << std::endl;
 
 		std::ofstream outFileStream(resolver.sourcePath + "/" + outFile, std::ofstream::out);
 
