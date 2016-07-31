@@ -66,6 +66,10 @@ std::string readFile(std::string file)
 	return std::string(&bytes[0], fileSize);
 }
 
+int regexTime = 0;
+int buildRegexTime = 0;
+int readFileTime = 0;
+
 class Resolver
 {
 	public: std::list<std::string> files;
@@ -93,14 +97,20 @@ class Resolver
 
 	public: void resolve(std::string fileToResolve)
 	{
+		int timeBeforeRead = time(NULL);
 		std::string fileContent = readFile(this->sourcePath + "/" + fileToResolve);
+		readFileTime += time(NULL) - timeBeforeRead;
 
 		auto fileIter = this->files.begin();
 		auto classIter = this->classes.begin();
 		for (int i = 0; i < this->files.size(); i++) {
-			std::regex regex("([^A-Za-z0-9_.]|^|\n)" + *classIter + "([^A-Za-z0-9_.]|$|\n)");
+			int timeBeforeBuild = time(NULL);
+			std::regex regex("(?:[^A-Za-z0-9_.]|^|\n)" + *classIter + "(?:[^A-Za-z0-9_.]|$|\n)");
+			buildRegexTime += time(NULL) - timeBeforeBuild;
 
+			int timeBefore = time(NULL);
 			if (std::regex_search(fileContent, regex)) {
+				regexTime += time(NULL) - timeBefore;
 				if (std::count(this->dispatchedIncludes.begin(), this->dispatchedIncludes.end(), *fileIter) == 0) {
 					this->dispatchedIncludes.push_back(*fileIter);
 					if (*fileIter != fileToResolve) {
@@ -116,6 +126,8 @@ class Resolver
 						this->resolvedIncludes.push_back(*fileIter);
 					}
 				}
+			} else {
+				regexTime += time(NULL) - timeBefore;
 			}
 			fileIter++;
 			classIter++;
@@ -143,7 +155,12 @@ int main(int argc, char** argv)
 	resolver.sourcePath = currentDir + "/../src";
 
 	resolver.scanFiles();
+	int fullTimeBefore = time(NULL);
 	resolver.resolve(fileToResolve);
+	std::cerr << "time used: " << time(NULL) - fullTimeBefore << std::endl;
+	std::cerr << "regex time: " << regexTime << std::endl;
+	std::cerr << "build regex time: " << buildRegexTime << std::endl;
+	std::cerr << "readFile time: " << readFileTime << std::endl;
 
 	for (auto file : resolver.resolvedIncludes) {
 		std::cout << "#include \"" << prefix << file << "\"" << std::endl;
