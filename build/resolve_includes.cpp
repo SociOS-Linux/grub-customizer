@@ -69,8 +69,6 @@ std::string readFile(std::string file)
 
 class Resolver
 {
-	public: std::list<std::string> files;
-	public: std::list<std::string> classes;
 	public: std::map<std::string, std::string> classToFile;
 	public: std::string sourcePath;
 
@@ -96,9 +94,7 @@ class Resolver
 				if (matches[1] == "stat" || matches[1] == "dirent") {
 					continue; // stat must be written as "struct stat" but it's not a structure definition
 				}
-				this->files.push_back(file.substr(this->sourcePath.size() + 1));
-				this->classes.push_back(matches[1]);
-				this->classToFile[this->classes.back()] = this->files.back();
+				this->classToFile[matches[1]] = file.substr(this->sourcePath.size() + 1);
 			}
 		}
 	}
@@ -113,10 +109,15 @@ class Resolver
 		this->readFileTime += clock() - timeBeforeRead;
 
 		int timeBeforeBuild = clock();
-		auto allClasses = std::accumulate(this->classes.begin(), this->classes.end(), std::string(),
-		    [](const std::string& a, const std::string& b) -> std::string {
-		        return a + (a.length() > 0 ? "|" : "") + b;
-		    } );
+		auto allClasses = std::accumulate(
+			this->classToFile.begin(),
+			this->classToFile.end(),
+			std::string(),
+		    [] (const std::string& a, const std::map<std::string, std::string>::value_type& b) -> std::string
+			{
+		        return a + (a.length() > 0 ? "|" : "") + b.first;
+		    }
+		);
 
 		std::regex regex("(?:[^A-Za-z0-9_.]|^|\n)(" + allClasses + ")(?:[^A-Za-z0-9_.]|$|\n)");
 		this->buildRegexTime += clock() - timeBeforeBuild;
@@ -156,8 +157,6 @@ class Resolver
 
 	public: void addClass(std::string className, std::string fileName)
 	{
-		this->classes.push_back(className);
-		this->files.push_back(fileName);
 		this->classToFile[className] = fileName;
 	}
 
