@@ -2,3 +2,5 @@
 /.project
 build/tmp/*
 src/config.hpp
+/.pc/
+/.settings/

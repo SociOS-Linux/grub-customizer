@@ -3,8 +3,6 @@
 - rerun the indexer
 - build command: bash -c "cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX=. ${ProjDirPath} && make install"
 - build directory: ${ProjDirPath}/build/tmp
+- add -std=c++11 at projects settings: C/C++ General -> Preprocessor Include Paths, Macros -> Providers
 - build the project
 - choose the binary at build/tmp/grub-customizer at the run/debug settings
-
-global settings:
-- C/C++ -> Build -> Settings -> Discovery: add "-std=c++11" to the CDT Built-in Compiler Settings
