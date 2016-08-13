@@ -1,6 +1,6 @@
 /.cproject
 /.project
-build/tmp/*
+build/tmp
 src/config.hpp
 /.pc/
 /.settings/
