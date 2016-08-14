@@ -50,7 +50,7 @@ class TrashController :
 	public Model_DeviceDataListInterface_Connection,
 	public ContentParserFactory_Connection,
 	public Model_Env_Connection,
-	public Bootstrap_Application_Object_Connection
+	public Gc::Bootstrap::ApplicationHelper::ObjectConnection
 {
 	private: std::list<std::shared_ptr<Model_Rule>> data;
 

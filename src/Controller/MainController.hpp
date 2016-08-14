@@ -62,7 +62,7 @@ class MainController :
 	public Mapper_EntryName_Connection,
 	public Model_Env_Connection,
 	public Controller_Helper_Thread_Connection,
-	public Bootstrap_Application_Object_Connection,
+	public Gc::Bootstrap::ApplicationHelper::ObjectConnection,
 	public Controller_Helper_RuleMover_Connection
 {
 	private: std::shared_ptr<Model_SettingsManagerData> settingsOnDisk; //buffer for the existing settings

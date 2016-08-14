@@ -43,7 +43,7 @@ class InstallerController :
 	public Model_Installer_Connection,
 	public Model_Env_Connection,
 	public Controller_Helper_Thread_Connection,
-	public Bootstrap_Application_Object_Connection
+	public Gc::Bootstrap::ApplicationHelper::ObjectConnection
 {
 	public:	InstallerController() :
 		Controller_Common_ControllerAbstract("installer")

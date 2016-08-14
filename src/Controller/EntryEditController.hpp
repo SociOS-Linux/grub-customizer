@@ -50,7 +50,7 @@ class EntryEditController :
 	public Model_DeviceDataListInterface_Connection,
 	public Model_Env_Connection,
 	public Controller_Helper_Thread_Connection,
-	public Bootstrap_Application_Object_Connection,
+	public Gc::Bootstrap::ApplicationHelper::ObjectConnection,
 	public Controller_Helper_RuleMover_Connection
 {
 	private: std::shared_ptr<ContentParser> currentContentParser;

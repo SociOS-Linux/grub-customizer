@@ -33,7 +33,7 @@
 class AboutController :
 	public Controller_Common_ControllerAbstract,
 	public View_Trait_ViewAware<View_About>,
-	public Bootstrap_Application_Object_Connection
+	public Gc::Bootstrap::ApplicationHelper::ObjectConnection
 {
 	public:	AboutController() :
 		Controller_Common_ControllerAbstract("about")

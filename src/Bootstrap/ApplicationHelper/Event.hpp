@@ -16,38 +16,25 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#include "Application.hpp"
-#include <gtkmm/main.h>
-#include <list>
+#ifndef SRC_BOOTSTRAP_APPLICATIONHELPER_EVENT_HPP_
+#define SRC_BOOTSTRAP_APPLICATIONHELPER_EVENT_HPP_
 
-namespace Gc { namespace Bootstrap { class GtkApplicationObject : public Gc::Bootstrap::ApplicationHelper::Object
+
+namespace Gc { namespace Bootstrap { namespace ApplicationHelper { template <typename... Args> class Event
 {
-	private: Gtk::Main app;
-	private: std::list<std::function<void ()>> shutdownHandlers;
+	private: std::list<std::function<void (Args...)>> eventHandlers;
 
-	public: GtkApplicationObject(int argc, char** argv)
-		: app(argc, argv)
+	public: void addHandler(std::function<void (Args...)> eventHandler)
 	{
+		this->eventHandlers.push_back(eventHandler);
 	}
 
-	public: void run()
+	public: void exec(Args... args)
 	{
-		this->app.run();
-	}
-
-	public: void shutdown() {
-		for (auto func : this->shutdownHandlers) {
-			func();
+		for (auto func : this->eventHandlers) {
+			func(args...);
 		}
-		this->app.quit();
 	}
+};}}}
 
-	public: void addShutdownHandler(std::function<void ()> callback) {
-		this->shutdownHandlers.push_back(callback);
-	}
-};}}
-
-Gc::Bootstrap::Application::Application(int argc, char** argv)
-{
-	this->applicationObject = std::make_shared<Gc::Bootstrap::GtkApplicationObject>(argc, argv);
-}
+#endif /* SRC_BOOTSTRAP_APPLICATIONHELPER_EVENT_HPP_ */

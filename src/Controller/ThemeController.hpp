@@ -38,7 +38,7 @@ class ThemeController :
 	public Model_ListCfg_Connection,
 	public Model_Env_Connection,
 	public Controller_Helper_Thread_Connection,
-	public Bootstrap_Application_Object_Connection
+	public Gc::Bootstrap::ApplicationHelper::ObjectConnection
 {
 	private: std::string currentTheme, currentThemeFile;
 	private: bool syncActive; // should only be controlled by syncSettings()

@@ -34,6 +34,7 @@
 #include "../Controller/Helper/Thread.hpp"
 #include "../Controller/Helper/RuleMover.hpp"
 #include "Application.hpp"
+#include "ApplicationHelper/ObjectConnection.hpp"
 
 class Bootstrap_Factory
 {
@@ -54,9 +55,9 @@ class Bootstrap_Factory
 	public: std::shared_ptr<Regex> regexEngine;
 	public: std::shared_ptr<Controller_Helper_Thread> threadHelper;
 
-	public: std::shared_ptr<Bootstrap_Application_Object> applicationObject;
+	public: std::shared_ptr<Gc::Bootstrap::ApplicationHelper::Object> applicationObject;
 
-	public: Bootstrap_Factory(std::shared_ptr<Bootstrap_Application_Object> applicationObject, std::shared_ptr<Logger> logger)
+	public: Bootstrap_Factory(std::shared_ptr<Gc::Bootstrap::ApplicationHelper::Object> applicationObject, std::shared_ptr<Logger> logger)
 	{
 		this->applicationObject    = applicationObject;
 		this->logger               = logger;

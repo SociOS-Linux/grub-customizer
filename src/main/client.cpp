@@ -60,7 +60,7 @@ int main(int argc, char** argv){
 	Logger::getInstance() = logger;
 
 	try {
-		auto application          = std::make_shared<Bootstrap_Application>(argc, argv);
+		auto application          = std::make_shared<Gc::Bootstrap::Application>(argc, argv);
 		auto view                 = std::make_shared<Bootstrap_View>();
 		auto factory              = std::make_shared<Bootstrap_Factory>(application->applicationObject, logger);
 

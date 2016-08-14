@@ -39,7 +39,7 @@ class EnvEditorController :
 	public Controller_Common_ControllerAbstract,
 	public View_Trait_ViewAware<View_EnvEditor>,
 	public Model_Env_Connection,
-	public Bootstrap_Application_Object_Connection,
+	public Gc::Bootstrap::ApplicationHelper::ObjectConnection,
 	public Model_MountTable_Connection,
 	public Model_DeviceMap_Connection
 {
