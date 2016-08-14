@@ -18,7 +18,7 @@
 #include "../../lib/Regex/GLib.hpp"
 #include "../Factory.hpp"
 
-std::shared_ptr<Regex> Bootstrap_Factory::createRegexExgine()
+std::shared_ptr<Regex> Gc::Bootstrap::Factory::createRegexExgine()
 {
 	return std::make_shared<Regex_GLib>();
 }

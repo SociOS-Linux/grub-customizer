@@ -36,7 +36,7 @@
 #include "Application.hpp"
 #include "ApplicationHelper/ObjectConnection.hpp"
 
-class Bootstrap_Factory
+namespace Gc { namespace Bootstrap { class Factory
 {
 	public: std::shared_ptr<Model_Env> env;
 	public: std::shared_ptr<Model_ListCfg> listcfg;
@@ -57,7 +57,7 @@ class Bootstrap_Factory
 
 	public: std::shared_ptr<Gc::Bootstrap::ApplicationHelper::Object> applicationObject;
 
-	public: Bootstrap_Factory(std::shared_ptr<Gc::Bootstrap::ApplicationHelper::Object> applicationObject, std::shared_ptr<Logger> logger)
+	public: Factory(std::shared_ptr<Gc::Bootstrap::ApplicationHelper::Object> applicationObject, std::shared_ptr<Logger> logger)
 	{
 		this->applicationObject    = applicationObject;
 		this->logger               = logger;
@@ -178,6 +178,6 @@ class Bootstrap_Factory
 	private: std::shared_ptr<Regex> createRegexExgine();
 	private: std::shared_ptr<Mutex> createMutex();
 	private: std::shared_ptr<Controller_Helper_Thread> createThreadHelper();
-};
+};}}
 
 #endif /* SRC_BOOTSTRAP_FACTORY_HPP_ */

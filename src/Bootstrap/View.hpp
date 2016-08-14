@@ -33,7 +33,7 @@
 
 #include "../Model/DeviceDataListInterface.hpp"
 
-class Bootstrap_View :
+namespace Gc { namespace Bootstrap { class View :
 	public Model_DeviceDataListInterface_Connection
 {
 	public: std::shared_ptr<View_About> about;
@@ -48,9 +48,9 @@ class Bootstrap_View :
 
 	public: void setDeviceDataList(Model_DeviceDataListInterface& deviceDataList);
 
-	public: Bootstrap_View();
-	public: ~Bootstrap_View();
-};
+	public: View();
+	public: ~View();
+};}}
 
 
 

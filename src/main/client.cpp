@@ -61,8 +61,8 @@ int main(int argc, char** argv){
 
 	try {
 		auto application          = std::make_shared<Gc::Bootstrap::Application>(argc, argv);
-		auto view                 = std::make_shared<Bootstrap_View>();
-		auto factory              = std::make_shared<Bootstrap_Factory>(application->applicationObject, logger);
+		auto view                 = std::make_shared<Gc::Bootstrap::View>();
+		auto factory              = std::make_shared<Gc::Bootstrap::Factory>(application->applicationObject, logger);
 
 		auto settingsOnDisk       = factory->create<Model_SettingsManagerData>();
 		auto savedListCfg         = factory->create<Model_ListCfg>();

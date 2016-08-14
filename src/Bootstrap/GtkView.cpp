@@ -26,7 +26,7 @@
 #include "../View/Gtk/Trash.hpp"
 #include "View.hpp"
 
-Bootstrap_View::Bootstrap_View() {
+Gc::Bootstrap::View::View() {
 	auto about = std::make_shared<View_Gtk_About>();
 	auto entryEditor = std::make_shared<View_Gtk_EntryEditor>();
 	auto envEditor = std::make_shared<View_Gtk_EnvEditor>();
@@ -53,5 +53,5 @@ Bootstrap_View::Bootstrap_View() {
 	this->trash = trash;
 }
 
-Bootstrap_View::~Bootstrap_View() {
+Gc::Bootstrap::View::~View() {
 }
