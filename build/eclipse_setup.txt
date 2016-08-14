@@ -1,7 +1,0 @@
-- create project as Makefile project -> Empty project
-- import the includes from build/eclipse_gtkmm-3.0_includes.xml
-- rerun the indexer
-- build command: build/testrun.sh
-- add -std=c++11 at projects settings: C/C++ General -> Preprocessor Include Paths, Macros -> Providers
-- build the project
-- choose the binary at build/tmp/grub-customizer at the run/debug settings
