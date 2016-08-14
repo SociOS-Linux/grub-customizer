@@ -16,8 +16,8 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef INC_Controller_Helper_RuleMover_Strategy_MoveRuleOutOfSubmenu
-#define INC_Controller_Helper_RuleMover_Strategy_MoveRuleOutOfSubmenu
+#ifndef INC_Gc_Controller_Helper_RuleMover_Strategy_MoveRuleOutOfSubmenu
+#define INC_Gc_Controller_Helper_RuleMover_Strategy_MoveRuleOutOfSubmenu
 
 #include "../../../../Model/Rule.hpp"
 #include "../../../../Model/ListCfg.hpp"
@@ -25,22 +25,23 @@
 #include "../../../../lib/Trait/LoggerAware.hpp"
 #include <memory>
 
-class Controller_Helper_RuleMover_Strategy_MoveRuleOutOfSubmenu :
-	public Controller_Helper_RuleMover_AbstractStrategy,
+namespace Gc { namespace Controller { namespace Helper { namespace RuleMover { namespace Strategy {
+class MoveRuleOutOfSubmenu :
+	public Gc::Controller::Helper::RuleMover::AbstractStrategy,
 	public Model_ListCfg_Connection,
 	public Trait_LoggerAware
 {
-	public: Controller_Helper_RuleMover_Strategy_MoveRuleOutOfSubmenu()
-		: Controller_Helper_RuleMover_AbstractStrategy("MoveRuleOutOfSubmenu")
+	public: MoveRuleOutOfSubmenu()
+		: Gc::Controller::Helper::RuleMover::AbstractStrategy("MoveRuleOutOfSubmenu")
 	{}
 
-	public: void move(std::shared_ptr<Model_Rule> rule, Controller_Helper_RuleMover_AbstractStrategy::Direction direction)
+	public: void move(std::shared_ptr<Model_Rule> rule, Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction)
 	{
 		auto proxy = this->grublistCfg->proxies.getProxyByRule(rule);
 		auto parentRule = proxy->getParentRule(rule);
 
 		if (parentRule == nullptr) {
-			throw Controller_Helper_RuleMover_MoveFailedException(
+			throw Gc::Controller::Helper::RuleMover::MoveFailedException(
 				"having no parent rule - so we already are on toplevel and cannot move out", __FILE__, __LINE__
 			);
 		}
@@ -60,5 +61,5 @@ class Controller_Helper_RuleMover_Strategy_MoveRuleOutOfSubmenu :
 			this->removeFromList(destinationRuleList, parentRule);
 		}
 	}
-};
+};}}}}}
 #endif

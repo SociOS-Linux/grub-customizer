@@ -24,7 +24,8 @@
 #include <memory>
 #include <string>
 
-class Controller_Helper_RuleMover_AbstractStrategy
+namespace Gc { namespace Controller { namespace Helper { namespace RuleMover {
+class AbstractStrategy
 {
 	public: enum class Direction {
 		DOWN = 1,
@@ -33,18 +34,18 @@ class Controller_Helper_RuleMover_AbstractStrategy
 
 	protected: std::string name;
 
-	Controller_Helper_RuleMover_AbstractStrategy(std::string const& name)
+	protected: AbstractStrategy(std::string const& name)
 		: name(name)
 	{}
 
-	public: virtual void move(std::shared_ptr<Model_Rule> rule, Controller_Helper_RuleMover_AbstractStrategy::Direction direction) = 0;
+	public: virtual void move(std::shared_ptr<Model_Rule> rule, Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction) = 0;
 
 	public: virtual std::string getName()
 	{
 		return this->name;
 	}
 
-	public: virtual ~Controller_Helper_RuleMover_AbstractStrategy(){};
+	public: virtual ~AbstractStrategy(){};
 
 
 	protected: std::list<std::shared_ptr<Model_Rule>> findVisibleRules(
@@ -65,11 +66,11 @@ class Controller_Helper_RuleMover_AbstractStrategy
 	protected: std::shared_ptr<Model_Rule> getNextRule(
 		std::list<std::shared_ptr<Model_Rule>> list,
 		std::shared_ptr<Model_Rule> base,
-		Controller_Helper_RuleMover_AbstractStrategy::Direction direction
+		Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction
 	) {
 		auto currentPosition = std::find(list.begin(), list.end(), base);
 
-		if (direction == Controller_Helper_RuleMover_AbstractStrategy::Direction::UP) {
+		if (direction == Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction::UP) {
 			if (currentPosition == list.begin()) {
 				return nullptr;
 			}
@@ -77,7 +78,7 @@ class Controller_Helper_RuleMover_AbstractStrategy
 			return *currentPosition;
 		}
 
-		if (direction == Controller_Helper_RuleMover_AbstractStrategy::Direction::DOWN) {
+		if (direction == Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction::DOWN) {
 			currentPosition++; // iterator returned by end points behind to list so we have to increase before
 			if (currentPosition == list.end()) {
 				return nullptr;
@@ -100,10 +101,10 @@ class Controller_Helper_RuleMover_AbstractStrategy
 		std::list<std::shared_ptr<Model_Rule>>& list,
 		std::shared_ptr<Model_Rule> ruleToInsert,
 		std::shared_ptr<Model_Rule> position,
-		Controller_Helper_RuleMover_AbstractStrategy::Direction direction
+		Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction
 	) {
 		auto insertPosition = std::find(list.begin(), list.end(), position);
-		if (direction == Controller_Helper_RuleMover_AbstractStrategy::Direction::DOWN) {
+		if (direction == Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction::DOWN) {
 			insertPosition++;
 		}
 		list.insert(insertPosition, ruleToInsert);
@@ -130,11 +131,11 @@ class Controller_Helper_RuleMover_AbstractStrategy
 	protected: std::shared_ptr<Model_Proxy> getNextProxy(
 		std::list<std::shared_ptr<Model_Proxy>> list,
 		std::shared_ptr<Model_Proxy> base,
-		Controller_Helper_RuleMover_AbstractStrategy::Direction direction
+		Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction
 	) {
 		auto currentPosition = std::find(list.begin(), list.end(), base);
 
-		if (direction == Controller_Helper_RuleMover_AbstractStrategy::Direction::UP) {
+		if (direction == Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction::UP) {
 			if (currentPosition == list.begin()) {
 				return nullptr;
 			}
@@ -142,7 +143,7 @@ class Controller_Helper_RuleMover_AbstractStrategy
 			return *currentPosition;
 		}
 
-		if (direction == Controller_Helper_RuleMover_AbstractStrategy::Direction::DOWN) {
+		if (direction == Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction::DOWN) {
 			currentPosition++; // iterator returned by end points behind to list so we have to increase before
 			if (currentPosition == list.end()) {
 				return nullptr;
@@ -155,17 +156,17 @@ class Controller_Helper_RuleMover_AbstractStrategy
 
 	protected: std::shared_ptr<Model_Rule> getFirstVisibleRule(
 		std::shared_ptr<Model_Proxy> proxy,
-		Controller_Helper_RuleMover_AbstractStrategy::Direction direction
+		Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction
 	) {
 		auto visibleRules = this->findVisibleRules(proxy->rules, nullptr);
 		if (visibleRules.size() == 0) {
 			return nullptr;
 		}
-		if (direction == Controller_Helper_RuleMover_AbstractStrategy::Direction::UP) {
+		if (direction == Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction::UP) {
 			return visibleRules.back();
 		}
 
-		if (direction == Controller_Helper_RuleMover_AbstractStrategy::Direction::DOWN) {
+		if (direction == Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction::DOWN) {
 			return visibleRules.front();
 		}
 
@@ -175,13 +176,13 @@ class Controller_Helper_RuleMover_AbstractStrategy
 	protected: void insertIntoSubmenu(
 		std::shared_ptr<Model_Rule>& submenu,
 		std::shared_ptr<Model_Rule> ruleToInsert,
-		Controller_Helper_RuleMover_AbstractStrategy::Direction direction
+		Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction
 	) {
-		if (direction == Controller_Helper_RuleMover_AbstractStrategy::Direction::DOWN) {
+		if (direction == Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction::DOWN) {
 			submenu->subRules.push_front(ruleToInsert);
 		}
 
-		if (direction == Controller_Helper_RuleMover_AbstractStrategy::Direction::UP) {
+		if (direction == Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction::UP) {
 			submenu->subRules.push_back(ruleToInsert);
 		}
 	}
@@ -199,15 +200,15 @@ class Controller_Helper_RuleMover_AbstractStrategy
 		return count;
 	}
 
-	protected: Controller_Helper_RuleMover_AbstractStrategy::Direction flipDirection(
-		Controller_Helper_RuleMover_AbstractStrategy::Direction in
+	protected: Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction flipDirection(
+		Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction in
 	) {
-		if (in == Controller_Helper_RuleMover_AbstractStrategy::Direction::UP) {
-			return Controller_Helper_RuleMover_AbstractStrategy::Direction::DOWN;
+		if (in == Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction::UP) {
+			return Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction::DOWN;
 		}
 
-		if (in == Controller_Helper_RuleMover_AbstractStrategy::Direction::DOWN) {
-			return Controller_Helper_RuleMover_AbstractStrategy::Direction::UP;
+		if (in == Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction::DOWN) {
+			return Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction::UP;
 		}
 
 		throw LogicException("cannot handle given direction", __FILE__, __LINE__);
@@ -217,7 +218,7 @@ class Controller_Helper_RuleMover_AbstractStrategy
 		std::shared_ptr<Model_Rule> ruleToMove,
 		std::shared_ptr<Model_Proxy> sourceProxy,
 		std::shared_ptr<Model_Proxy> destination,
-		Controller_Helper_RuleMover_AbstractStrategy::Direction direction
+		Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction
 	) {
 		// replace ruleToMove by an invisible copy
 		auto ruleToMoveSource = std::find(sourceProxy->rules.begin(), sourceProxy->rules.end(), ruleToMove);
@@ -231,14 +232,14 @@ class Controller_Helper_RuleMover_AbstractStrategy
 	protected: void insertIntoProxy(
 		std::shared_ptr<Model_Rule> ruleToInsert,
 		std::shared_ptr<Model_Proxy> destination,
-		Controller_Helper_RuleMover_AbstractStrategy::Direction direction
+		Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction
 	) {
 		// remove old equivalent rule
 		destination->removeEquivalentRules(ruleToInsert);
 
 		// do the insertion
 		auto insertPosition = destination->rules.begin();
-		if (direction == Controller_Helper_RuleMover_AbstractStrategy::Direction::UP) {
+		if (direction == Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction::UP) {
 			insertPosition = destination->rules.end();
 		}
 
@@ -253,7 +254,7 @@ class Controller_Helper_RuleMover_AbstractStrategy
 		std::shared_ptr<Model_Proxy> proxyToCopy,
 		std::shared_ptr<Model_Proxy> destination,
 		std::shared_ptr<Model_ListCfg> listCfg,
-		Controller_Helper_RuleMover_AbstractStrategy::Direction direction,
+		Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction,
 		bool reAddOldRuleInvisible = true
 	) {
 		// replace existing rule on old proxy with invisible copy
@@ -270,7 +271,7 @@ class Controller_Helper_RuleMover_AbstractStrategy
 		std::shared_ptr<Model_Script> sourceScript,
 		std::shared_ptr<Model_Proxy> destination,
 		std::shared_ptr<Model_ListCfg> listCfg,
-		Controller_Helper_RuleMover_AbstractStrategy::Direction direction
+		Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction
 	) {
 		// prepare new proxy containing ruleToMove as the only visible entry
 		auto newProxy = std::make_shared<Model_Proxy>(sourceScript, false);
@@ -278,10 +279,10 @@ class Controller_Helper_RuleMover_AbstractStrategy
 		newProxy->removeEquivalentRules(ruleToMove);
 
 		switch (direction) {
-			case Controller_Helper_RuleMover_AbstractStrategy::Direction::UP:
+			case Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction::UP:
 				newProxy->rules.push_back(ruleToMove);
 				break;
-			case Controller_Helper_RuleMover_AbstractStrategy::Direction::DOWN:
+			case Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction::DOWN:
 				newProxy->rules.push_front(ruleToMove);
 				break;
 			default:
@@ -290,7 +291,7 @@ class Controller_Helper_RuleMover_AbstractStrategy
 
 		// insert the new proxy
 		auto insertPosition = std::find(listCfg->proxies.begin(), listCfg->proxies.end(), destination);
-		if (direction == Controller_Helper_RuleMover_AbstractStrategy::Direction::DOWN) {
+		if (direction == Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction::DOWN) {
 			insertPosition++;
 		}
 
@@ -298,6 +299,6 @@ class Controller_Helper_RuleMover_AbstractStrategy
 
 		listCfg->renumerate();
 	}
-};
+};}}}}
 
 #endif

@@ -31,12 +31,12 @@
 #include "Common/ControllerAbstract.hpp"
 
 class AboutController :
-	public Controller_Common_ControllerAbstract,
+	public Gc::Controller::Common::ControllerAbstract,
 	public View_Trait_ViewAware<View_About>,
 	public Gc::Bootstrap::ApplicationHelper::ObjectConnection
 {
 	public:	AboutController() :
-		Controller_Common_ControllerAbstract("about")
+		Gc::Controller::Common::ControllerAbstract("about")
 	{
 	}
 

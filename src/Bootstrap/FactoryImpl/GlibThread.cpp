@@ -20,11 +20,11 @@
 #include "../../lib/Mutex/GLib.hpp"
 #include "../Factory.hpp"
 
-std::shared_ptr<Controller_Helper_Thread> Gc::Bootstrap::Factory::createThreadHelper()
+std::shared_ptr<Gc::Controller::Helper::Thread> Gc::Bootstrap::Factory::createThreadHelper()
 {
 	Glib::thread_init();
 
-	return std::make_shared<Controller_Helper_GLibThread>();
+	return std::make_shared<Gc::Controller::Helper::GLibThread>();
 }
 
 std::shared_ptr<Mutex> Gc::Bootstrap::Factory::createMutex()

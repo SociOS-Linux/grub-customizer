@@ -36,7 +36,7 @@
 
 
 class EnvEditorController :
-	public Controller_Common_ControllerAbstract,
+	public Gc::Controller::Common::ControllerAbstract,
 	public View_Trait_ViewAware<View_EnvEditor>,
 	public Model_Env_Connection,
 	public Gc::Bootstrap::ApplicationHelper::ObjectConnection,
@@ -57,7 +57,7 @@ class EnvEditorController :
 
 
 	public: EnvEditorController() :
-		Controller_Common_ControllerAbstract("env-editor")
+		Gc::Controller::Common::ControllerAbstract("env-editor")
 	{
 	}
 

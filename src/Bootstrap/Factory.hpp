@@ -32,7 +32,8 @@
 #include "../Model/ThemeManager.hpp"
 #include "../Model/DeviceMap.hpp"
 #include "../Controller/Helper/Thread.hpp"
-#include "../Controller/Helper/RuleMover.hpp"
+#include "../Controller/Helper/ThreadConnection.hpp"
+#include "../Controller/Helper/RuleMoverConnection.hpp"
 #include "Application.hpp"
 #include "ApplicationHelper/ObjectConnection.hpp"
 
@@ -49,11 +50,11 @@ namespace Gc { namespace Bootstrap { class Factory
 	public: std::shared_ptr<Mapper_EntryNameImpl> entryNameMapper;
 	public: std::shared_ptr<Model_ThemeManager> themeManager;
 	public: std::shared_ptr<Model_DeviceMap> deviceMap;
-	public: std::shared_ptr<Controller_Helper_RuleMover> ruleMover;
+	public: std::shared_ptr<Gc::Controller::Helper::RuleMoverHelper> ruleMover;
 	public: std::shared_ptr<Logger> logger;
 
 	public: std::shared_ptr<Regex> regexEngine;
-	public: std::shared_ptr<Controller_Helper_Thread> threadHelper;
+	public: std::shared_ptr<Gc::Controller::Helper::Thread> threadHelper;
 
 	public: std::shared_ptr<Gc::Bootstrap::ApplicationHelper::Object> applicationObject;
 
@@ -76,7 +77,7 @@ namespace Gc { namespace Bootstrap { class Factory
 		this->entryNameMapper      = this->create<Mapper_EntryNameImpl>();
 		this->themeManager         = this->create<Model_ThemeManager>();
 		this->deviceMap            = this->create<Model_DeviceMap>();
-		this->ruleMover            = this->create<Controller_Helper_RuleMover>();
+		this->ruleMover            = this->create<Gc::Controller::Helper::RuleMoverHelper>();
 
 		this->bootstrap(this->regexEngine);
 		this->bootstrap(this->threadHelper);
@@ -165,11 +166,11 @@ namespace Gc { namespace Bootstrap { class Factory
 			if (objc) {objc->setMutex(this->createMutex());}
 		}
 		{
-			std::shared_ptr<Controller_Helper_Thread_Connection> objc = std::dynamic_pointer_cast<Controller_Helper_Thread_Connection>(obj);
+			std::shared_ptr<Gc::Controller::Helper::ThreadConnection> objc = std::dynamic_pointer_cast<Gc::Controller::Helper::ThreadConnection>(obj);
 			if (objc) {assert(this->threadHelper); objc->setThreadHelper(this->threadHelper);}
 		}
 		{
-			std::shared_ptr<Controller_Helper_RuleMover_Connection> objc = std::dynamic_pointer_cast<Controller_Helper_RuleMover_Connection>(obj);
+			std::shared_ptr<Gc::Controller::Helper::RuleMoverConnection> objc = std::dynamic_pointer_cast<Gc::Controller::Helper::RuleMoverConnection>(obj);
 			if (objc) {assert(this->ruleMover); objc->setRuleMover(this->ruleMover);}
 		}
 	}
@@ -177,7 +178,7 @@ namespace Gc { namespace Bootstrap { class Factory
 	// external implementations
 	private: std::shared_ptr<Regex> createRegexExgine();
 	private: std::shared_ptr<Mutex> createMutex();
-	private: std::shared_ptr<Controller_Helper_Thread> createThreadHelper();
+	private: std::shared_ptr<Gc::Controller::Helper::Thread> createThreadHelper();
 };}}
 
 #endif /* SRC_BOOTSTRAP_FACTORY_HPP_ */

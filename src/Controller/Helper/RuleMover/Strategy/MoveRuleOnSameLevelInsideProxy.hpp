@@ -16,8 +16,8 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef INC_Controller_Helper_RuleMover_Strategy_MoveRuleOnSameLevelInsideProxy
-#define INC_Controller_Helper_RuleMover_Strategy_MoveRuleOnSameLevelInsideProxy
+#ifndef INC_Gc_Controller_Helper_RuleMover_Strategy_MoveRuleOnSameLevelInsideProxy
+#define INC_Gc_Controller_Helper_RuleMover_Strategy_MoveRuleOnSameLevelInsideProxy
 
 #include "../../../../Model/Rule.hpp"
 #include "../../../../Model/ListCfg.hpp"
@@ -25,16 +25,17 @@
 #include "../../../../lib/Trait/LoggerAware.hpp"
 #include <memory>
 
-class Controller_Helper_RuleMover_Strategy_MoveRuleOnSameLevelInsideProxy :
-	public Controller_Helper_RuleMover_AbstractStrategy,
+namespace Gc { namespace Controller { namespace Helper { namespace RuleMover { namespace Strategy {
+class MoveRuleOnSameLevelInsideProxy :
+	public Gc::Controller::Helper::RuleMover::AbstractStrategy,
 	public Model_ListCfg_Connection,
 	public Trait_LoggerAware
 {
-	public: Controller_Helper_RuleMover_Strategy_MoveRuleOnSameLevelInsideProxy()
-		: Controller_Helper_RuleMover_AbstractStrategy("MoveRuleOnSameLevelInsideProxy")
+	public: MoveRuleOnSameLevelInsideProxy()
+		: Gc::Controller::Helper::RuleMover::AbstractStrategy("MoveRuleOnSameLevelInsideProxy")
 	{}
 
-	public: void move(std::shared_ptr<Model_Rule> rule, Controller_Helper_RuleMover_AbstractStrategy::Direction direction)
+	public: void move(std::shared_ptr<Model_Rule> rule, Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction)
 	{
 		auto proxy = this->grublistCfg->proxies.getProxyByRule(rule);
 		auto& ruleList = proxy->getRuleList(proxy->getParentRule(rule));
@@ -43,11 +44,11 @@ class Controller_Helper_RuleMover_Strategy_MoveRuleOnSameLevelInsideProxy :
 
 		auto nextRule = this->getNextRule(visibleRules, rule, direction);
 		if (nextRule == nullptr) {
-			throw Controller_Helper_RuleMover_MoveFailedException("no next rule found", __FILE__, __LINE__);
+			throw Gc::Controller::Helper::RuleMover::MoveFailedException("no next rule found", __FILE__, __LINE__);
 		}
 
 		this->removeFromList(ruleList, rule);
 		this->insertBehind(ruleList, rule, nextRule, direction);
 	}
-};
+};}}}}}
 #endif

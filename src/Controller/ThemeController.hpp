@@ -31,13 +31,13 @@
 #include "Helper/Thread.hpp"
 
 class ThemeController :
-	public Controller_Common_ControllerAbstract,
+	public Gc::Controller::Common::ControllerAbstract,
 	public View_Trait_ViewAware<View_Theme>,
 	public Model_ThemeManager_Connection,
 	public Model_SettingsManagerData_Connection,
 	public Model_ListCfg_Connection,
 	public Model_Env_Connection,
-	public Controller_Helper_Thread_Connection,
+	public Gc::Controller::Helper::ThreadConnection,
 	public Gc::Bootstrap::ApplicationHelper::ObjectConnection
 {
 	private: std::string currentTheme, currentThemeFile;
@@ -45,7 +45,7 @@ class ThemeController :
 	
 
 	public: ThemeController() :
-		Controller_Common_ControllerAbstract("theme"),
+		Gc::Controller::Common::ControllerAbstract("theme"),
 		syncActive(false)
 	{
 	}

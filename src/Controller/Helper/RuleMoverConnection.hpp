@@ -16,18 +16,21 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef HELPER_THREAD_H_INCLUDED
-#define HELPER_THREAD_H_INCLUDED
-#include "../../lib/Trait/LoggerAware.hpp"
-#include <functional>
+#ifndef SRC_CONTROLLER_HELPER_RULEMOVERCONNECTION_HPP_
+#define SRC_CONTROLLER_HELPER_RULEMOVERCONNECTION_HPP_
 
-namespace Gc { namespace Controller { namespace Helper { class Thread :
-	public Trait_LoggerAware
+#include "RuleMoverHelper.hpp"
+
+namespace Gc { namespace Controller { namespace Helper { class RuleMoverConnection
 {
-	public: virtual inline ~Thread() {};
-	public: virtual void runDispatched(std::function<void ()> function) = 0;
-	public: virtual void runDelayed(std::function<void ()> function, int delayInMilliSec) = 0;
-	public: virtual void runAsThread(std::function<void ()> function) = 0;
+	protected: std::shared_ptr<Gc::Controller::Helper::RuleMoverHelper> ruleMover;
+
+	public:	virtual ~RuleMoverConnection(){}
+
+	public: void setRuleMover(std::shared_ptr<Gc::Controller::Helper::RuleMoverHelper> ruleMover)
+	{
+		this->ruleMover = ruleMover;
+	}
 };}}}
 
-#endif /* HELPER_THREAD_H_INCLUDED */
+#endif /* SRC_CONTROLLER_HELPER_RULEMOVERCONNECTION_HPP_ */

@@ -25,13 +25,13 @@
 #include "RuleMover/MoveFailedException.hpp"
 #include <memory>
 
-class Controller_Helper_RuleMover :
+namespace Gc { namespace Controller { namespace Helper { class RuleMoverHelper :
 	public Model_ListCfg_Connection,
 	public Trait_LoggerAware
 {
-	private: std::list<std::shared_ptr<Controller_Helper_RuleMover_AbstractStrategy>> strategies;
+	private: std::list<std::shared_ptr<Gc::Controller::Helper::RuleMover::AbstractStrategy>> strategies;
 
-	public: void move(std::shared_ptr<Model_Rule> rule, Controller_Helper_RuleMover_AbstractStrategy::Direction direction)
+	public: void move(std::shared_ptr<Model_Rule> rule, Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction)
 	{
 		assert(this->grublistCfg != nullptr);
 
@@ -41,29 +41,17 @@ class Controller_Helper_RuleMover :
 				strategy->move(rule, direction);
 				this->log("move strategy \"" + strategy->getName() + "\" was successful", Logger::INFO);
 				return;
-			} catch (Controller_Helper_RuleMover_MoveFailedException const& e) {
+			} catch (Gc::Controller::Helper::RuleMover::MoveFailedException const& e) {
 				continue;
 			}
 		}
 		throw NoMoveTargetException("cannot move this rule. No successful strategy found", __FILE__, __LINE__);
 	}
 
-	public: void addStrategy(std::shared_ptr<Controller_Helper_RuleMover_AbstractStrategy> strategy)
+	public: void addStrategy(std::shared_ptr<Gc::Controller::Helper::RuleMover::AbstractStrategy> strategy)
 	{
 		this->strategies.push_back(strategy);
 	}
-};
-
-class Controller_Helper_RuleMover_Connection
-{
-	protected: std::shared_ptr<Controller_Helper_RuleMover> ruleMover;
-
-	public:	virtual ~Controller_Helper_RuleMover_Connection(){}
-
-	public: void setRuleMover(std::shared_ptr<Controller_Helper_RuleMover> ruleMover)
-	{
-		this->ruleMover = ruleMover;
-	}
-};
+};}}}
 
 #endif /* RULEMOVER_HPP_ */

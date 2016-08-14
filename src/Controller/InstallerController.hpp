@@ -38,15 +38,15 @@
 
 
 class InstallerController :
-	public Controller_Common_ControllerAbstract,
+	public Gc::Controller::Common::ControllerAbstract,
 	public View_Trait_ViewAware<View_Installer>,
 	public Model_Installer_Connection,
 	public Model_Env_Connection,
-	public Controller_Helper_Thread_Connection,
+	public Gc::Controller::Helper::ThreadConnection,
 	public Gc::Bootstrap::ApplicationHelper::ObjectConnection
 {
 	public:	InstallerController() :
-		Controller_Common_ControllerAbstract("installer")
+		Gc::Controller::Common::ControllerAbstract("installer")
 	{
 	}
 

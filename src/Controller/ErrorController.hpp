@@ -34,9 +34,9 @@
 
 
 class ErrorController :
-	public Controller_Common_ControllerAbstract,
+	public Gc::Controller::Common::ControllerAbstract,
 	public View_Trait_ViewAware<View_Error>,
-	public Controller_Helper_Thread_Connection,
+	public Gc::Controller::Helper::ThreadConnection,
 	public Gc::Bootstrap::ApplicationHelper::ObjectConnection
 {
 	private: bool applicationStarted;
@@ -47,7 +47,7 @@ class ErrorController :
 	}
 
 	public:	ErrorController() :
-		Controller_Common_ControllerAbstract("error"),
+		Gc::Controller::Common::ControllerAbstract("error"),
 		applicationStarted(false)
 	{
 	}

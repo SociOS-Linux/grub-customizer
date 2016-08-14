@@ -28,15 +28,16 @@
 
 #include <glibmm.h>
 
-class Controller_Helper_GLibThread : public Controller_Helper_Thread
+namespace Gc { namespace Controller { namespace Helper { class GLibThread :
+	public Gc::Controller::Helper::Thread
 {
 	private: std::queue<std::function<void ()>> dispatchQueue;
 	private: Glib::Dispatcher dispatcher; // the new general dispatcher
 	private: Glib::Threads::Mutex mutex;
 
-	public: Controller_Helper_GLibThread()
+	public: GLibThread()
 	{
-		this->dispatcher.connect(sigc::mem_fun(this, &Controller_Helper_GLibThread::dispatcherCallback));
+		this->dispatcher.connect(sigc::mem_fun(this, &Gc::Controller::Helper::GLibThread::dispatcherCallback));
 	}
 
 	public: void runDispatched(std::function<void ()> function)
@@ -67,6 +68,6 @@ class Controller_Helper_GLibThread : public Controller_Helper_Thread
 
 		func();
 	}
-};
+};}}}
 
 #endif /* HELPER_GLIBTHREAD_H_INCLUDED */

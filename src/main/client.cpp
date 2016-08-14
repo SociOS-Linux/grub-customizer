@@ -104,12 +104,12 @@ int main(int argc, char** argv){
 
 		view->entryEditor->setAvailableEntryTypes(factory->contentParserFactory->getNames());
 
-		factory->ruleMover->addStrategy(factory->create<Controller_Helper_RuleMover_Strategy_MoveRuleIntoSubmenu>());
-		factory->ruleMover->addStrategy(factory->create<Controller_Helper_RuleMover_Strategy_MoveRuleOnSameLevelInsideProxy>());
-		factory->ruleMover->addStrategy(factory->create<Controller_Helper_RuleMover_Strategy_MoveForeignRuleFromSubmenuToToplevel>());
-		factory->ruleMover->addStrategy(factory->create<Controller_Helper_RuleMover_Strategy_MoveRuleOutOfSubmenu>());
-		factory->ruleMover->addStrategy(factory->create<Controller_Helper_RuleMover_Strategy_MoveRuleIntoForeignSubmenu>());
-		factory->ruleMover->addStrategy(factory->create<Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel>());
+		factory->ruleMover->addStrategy(factory->create<Gc::Controller::Helper::RuleMover::Strategy::MoveRuleIntoSubmenu>());
+		factory->ruleMover->addStrategy(factory->create<Gc::Controller::Helper::RuleMover::Strategy::MoveRuleOnSameLevelInsideProxy>());
+		factory->ruleMover->addStrategy(factory->create<Gc::Controller::Helper::RuleMover::Strategy::MoveForeignRuleFromSubmenuToToplevel>());
+		factory->ruleMover->addStrategy(factory->create<Gc::Controller::Helper::RuleMover::Strategy::MoveRuleOutOfSubmenu>());
+		factory->ruleMover->addStrategy(factory->create<Gc::Controller::Helper::RuleMover::Strategy::MoveRuleIntoForeignSubmenu>());
+		factory->ruleMover->addStrategy(factory->create<Gc::Controller::Helper::RuleMover::Strategy::MoveRuleOutOfProxyOnToplevel>());
 
 		mainController->initAction();
 		errorController->setApplicationStarted(true);

@@ -43,7 +43,7 @@
 #include "Helper/DeviceInfo.hpp"
 
 class TrashController :
-	public Controller_Common_ControllerAbstract,
+	public Gc::Controller::Common::ControllerAbstract,
 	public View_Trait_ViewAware<View_Trash>,
 	public Model_ListCfg_Connection,
 	public Mapper_EntryName_Connection,
@@ -55,7 +55,7 @@ class TrashController :
 	private: std::list<std::shared_ptr<Model_Rule>> data;
 
 	public:	TrashController() :
-		Controller_Common_ControllerAbstract("trash")
+		Gc::Controller::Common::ControllerAbstract("trash")
 	{
 	}
 
@@ -202,7 +202,7 @@ class TrashController :
 			listItem.parentEntry = parent.get();
 
 			if (rule->dataSource) {
-				listItem.options = Controller_Helper_DeviceInfo::fetch(
+				listItem.options = Gc::Controller::Helper::DeviceInfo::fetch(
 					rule->dataSource->content,
 					*this->contentParserFactory,
 					*this->deviceDataList

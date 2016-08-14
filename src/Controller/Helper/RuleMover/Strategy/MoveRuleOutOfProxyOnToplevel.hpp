@@ -16,8 +16,8 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef INC_Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel
-#define INC_Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel
+#ifndef INC_Gc_Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel
+#define INC_Gc_Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel
 
 #include "../../../../Model/Rule.hpp"
 #include "../../../../Model/ListCfg.hpp"
@@ -28,8 +28,9 @@
 #include <set>
 #include <unordered_map>
 
-class Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel :
-	public Controller_Helper_RuleMover_AbstractStrategy,
+namespace Gc { namespace Controller { namespace Helper { namespace RuleMover { namespace Strategy {
+class MoveRuleOutOfProxyOnToplevel :
+	public Gc::Controller::Helper::RuleMover::AbstractStrategy,
 	public Model_ListCfg_Connection,
 	public Trait_LoggerAware
 {
@@ -45,18 +46,18 @@ class Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel :
 		MoveNewProxiesToTheMiddle
 	};
 
-	public: Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel()
-		: Controller_Helper_RuleMover_AbstractStrategy("MoveRuleOutOfProxyOnToplevel")
+	public: MoveRuleOutOfProxyOnToplevel()
+		: Gc::Controller::Helper::RuleMover::AbstractStrategy("MoveRuleOutOfProxyOnToplevel")
 	{}
 
-	public: void move(std::shared_ptr<Model_Rule> rule, Controller_Helper_RuleMover_AbstractStrategy::Direction direction)
+	public: void move(std::shared_ptr<Model_Rule> rule, Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction)
 	{
 		auto proxy = this->grublistCfg->proxies.getProxyByRule(rule);
 		auto proxiesWithVisibleEntries = this->findProxiesWithVisibleToplevelEntries(this->grublistCfg->proxies);
 
 		auto nextProxy = this->getNextProxy(proxiesWithVisibleEntries, proxy, direction);
 		if (nextProxy == nullptr) {
-			throw Controller_Helper_RuleMover_MoveFailedException("need next proxy", __FILE__, __LINE__);
+			throw Gc::Controller::Helper::RuleMover::MoveFailedException("need next proxy", __FILE__, __LINE__);
 		}
 
 		auto afterNextProxy = this->getNextProxy(proxiesWithVisibleEntries, nextProxy, direction);
@@ -150,10 +151,10 @@ class Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel :
 	private: void moveProxy(
 		std::shared_ptr<Model_Proxy> proxyToMove,
 		std::shared_ptr<Model_Proxy> destination, // proxyToMove will be moved behind destination
-		Controller_Helper_RuleMover_AbstractStrategy::Direction direction
+		Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction
 	) {
 		auto insertPosition = std::find(this->grublistCfg->proxies.begin(), this->grublistCfg->proxies.end(), destination);
-		if (direction == Controller_Helper_RuleMover_AbstractStrategy::Direction::DOWN) {
+		if (direction == Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction::DOWN) {
 			insertPosition++;
 		}
 		auto elementPosition = std::find(this->grublistCfg->proxies.begin(), this->grublistCfg->proxies.end(), proxyToMove);
@@ -166,7 +167,7 @@ class Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel :
 	private: void moveNewProxiesToTheMiddle(
 		std::shared_ptr<Model_Proxy> oldOwnProxy,
 		std::shared_ptr<Model_Proxy> oldNextProxy,
-		Controller_Helper_RuleMover_AbstractStrategy::Direction direction
+		Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction
 	) {
 		auto visibleProxies = this->findProxiesWithVisibleToplevelEntries(this->grublistCfg->proxies);
 		auto afterNextProxy = this->getNextProxy(visibleProxies, oldNextProxy, direction);
@@ -175,5 +176,5 @@ class Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel :
 		this->moveProxy(oldNextProxy, afterNextProxy, direction);
 		this->moveProxy(oldOwnProxy, previousProxy, this->flipDirection(direction));
 	}
-};
+};}}}}}
 #endif

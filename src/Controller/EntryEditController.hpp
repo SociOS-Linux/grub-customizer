@@ -38,25 +38,25 @@
 #include "../Model/DeviceDataList.hpp"
 #include "../Model/Installer.hpp"
 #include "../Model/ListCfg.hpp"
+#include "Helper/RuleMoverHelper.hpp"
 #include "Helper/Thread.hpp"
-#include "Helper/RuleMover.hpp"
 
 
 class EntryEditController :
-	public Controller_Common_ControllerAbstract,
+	public Gc::Controller::Common::ControllerAbstract,
 	public View_Trait_ViewAware<View_EntryEditor>,
 	public Model_ListCfg_Connection,
 	public ContentParserFactory_Connection,
 	public Model_DeviceDataListInterface_Connection,
 	public Model_Env_Connection,
-	public Controller_Helper_Thread_Connection,
+	public Gc::Controller::Helper::ThreadConnection,
 	public Gc::Bootstrap::ApplicationHelper::ObjectConnection,
-	public Controller_Helper_RuleMover_Connection
+	public Gc::Controller::Helper::RuleMoverConnection
 {
 	private: std::shared_ptr<ContentParser> currentContentParser;
 
 	public: EntryEditController() :
-		Controller_Common_ControllerAbstract("entry-edit"),
+		Gc::Controller::Common::ControllerAbstract("entry-edit"),
 		currentContentParser(NULL)
 	{
 	}
@@ -270,7 +270,7 @@ class EntryEditController :
 					dummySubmenu->subRules.push_back(ruleCopy);
 					ruleList.insert(proxy->getListIterator(rule, ruleList), dummySubmenu);
 	
-					this->ruleMover->move(ruleCopy, Controller_Helper_RuleMover_AbstractStrategy::Direction::UP);
+					this->ruleMover->move(ruleCopy, Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction::UP);
 					rule = ruleCopy;
 					this->grublistCfg->renumerate();
 	

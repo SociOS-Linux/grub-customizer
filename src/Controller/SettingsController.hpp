@@ -47,13 +47,13 @@
 #include "Helper/Thread.hpp"
 
 class SettingsController :
-	public Controller_Common_ControllerAbstract,
+	public Gc::Controller::Common::ControllerAbstract,
 	public View_Trait_ViewAware<View_Settings>,
 	public Model_ListCfg_Connection,
 	public Model_SettingsManagerData_Connection,
 	public Model_FbResolutionsGetter_Connection,
 	public Model_Env_Connection,
-	public Controller_Helper_Thread_Connection,
+	public Gc::Controller::Helper::ThreadConnection,
 	public Gc::Bootstrap::ApplicationHelper::ObjectConnection
 {
 	private: bool syncActive; // should only be controlled by syncSettings()
@@ -70,7 +70,7 @@ class SettingsController :
 	}
 
 	public: SettingsController() :
-		Controller_Common_ControllerAbstract("settings"),
+		Gc::Controller::Common::ControllerAbstract("settings"),
 		syncActive(false)
 	{
 	}

@@ -51,7 +51,7 @@
  */
 
 class MainController :
-	public Controller_Common_ControllerAbstract,
+	public Gc::Controller::Common::ControllerAbstract,
 	public View_Trait_ViewAware<View_Main>,
 	public Model_ListCfg_Connection,
 	public Model_SettingsManagerData_Connection,
@@ -61,9 +61,9 @@ class MainController :
 	public ContentParserFactory_Connection,
 	public Mapper_EntryName_Connection,
 	public Model_Env_Connection,
-	public Controller_Helper_Thread_Connection,
+	public Gc::Controller::Helper::ThreadConnection,
 	public Gc::Bootstrap::ApplicationHelper::ObjectConnection,
-	public Controller_Helper_RuleMover_Connection
+	public Gc::Controller::Helper::RuleMoverConnection
 {
 	private: std::shared_ptr<Model_SettingsManagerData> settingsOnDisk; //buffer for the existing settings
 	private: std::shared_ptr<Model_ListCfg> savedListCfg;
@@ -433,7 +433,7 @@ class MainController :
 	}
 
 	public: MainController() :
-		Controller_Common_ControllerAbstract("main"),
+		Gc::Controller::Common::ControllerAbstract("main"),
 		config_has_been_different_on_startup_but_unsaved(false),
 		is_loading(false),
 		currentContentParser(NULL),
@@ -672,7 +672,7 @@ class MainController :
 					for (int j = 0; j < distance; j++) { // move the range multiple times
 						this->ruleMover->move(
 							rule,
-							direction == -1 ? Controller_Helper_RuleMover_AbstractStrategy::Direction::UP : Controller_Helper_RuleMover_AbstractStrategy::Direction::DOWN
+							direction == -1 ? Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction::UP : Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction::DOWN
 						);
 					}
 
@@ -1035,7 +1035,7 @@ class MainController :
 			// parse content to show additional informations
 			std::map<std::string, std::string> options;
 			if (rule->dataSource) {
-				options = Controller_Helper_DeviceInfo::fetch(rule->dataSource->content, *this->contentParserFactory, *deviceDataList);
+				options = Gc::Controller::Helper::DeviceInfo::fetch(rule->dataSource->content, *this->contentParserFactory, *deviceDataList);
 			}
 
 			auto proxy = this->grublistCfg->proxies.getProxyByRule(rule);

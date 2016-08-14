@@ -22,7 +22,7 @@
 #include "../../lib/ContentParserFactory.hpp"
 #include "../../Model/DeviceDataListInterface.hpp"
 
-class Controller_Helper_DeviceInfo
+namespace Gc { namespace Controller { namespace Helper { class DeviceInfo
 {
 	public: static std::map<std::string, std::string> fetch(
 		std::string const& menuEntryData,
@@ -48,7 +48,7 @@ class Controller_Helper_DeviceInfo
 		return options;
 	}
 
-};
+};}}}
 
 
 #endif /* DEVICEINFO_H_ */

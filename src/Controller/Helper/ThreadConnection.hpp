@@ -16,18 +16,21 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef HELPER_THREAD_H_INCLUDED
-#define HELPER_THREAD_H_INCLUDED
-#include "../../lib/Trait/LoggerAware.hpp"
-#include <functional>
+#ifndef HELPER_THREADCONNECTION_H_INCLUDED
+#define HELPER_THREADCONNECTION_H_INCLUDED
 
-namespace Gc { namespace Controller { namespace Helper { class Thread :
-	public Trait_LoggerAware
+#include "Thread.hpp"
+
+namespace Gc { namespace Controller { namespace Helper { class ThreadConnection
 {
-	public: virtual inline ~Thread() {};
-	public: virtual void runDispatched(std::function<void ()> function) = 0;
-	public: virtual void runDelayed(std::function<void ()> function, int delayInMilliSec) = 0;
-	public: virtual void runAsThread(std::function<void ()> function) = 0;
+	protected: std::shared_ptr<Gc::Controller::Helper::Thread> threadHelper;
+
+	public: virtual ~ThreadConnection(){}
+
+	public: void setThreadHelper(std::shared_ptr<Gc::Controller::Helper::Thread> threadHelper)
+	{
+		this->threadHelper = threadHelper;
+	}
 };}}}
 
 #endif /* HELPER_THREAD_H_INCLUDED */

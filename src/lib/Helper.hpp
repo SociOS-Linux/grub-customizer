@@ -29,7 +29,7 @@
 # define assert(expr)							\
   ((expr)								\
    ? ASSERT_VOID_CAST (0)						\
-   : Helper::assert_fail (__STRING(expr), __FILE__, __LINE__, __func__))
+   : ::Helper::assert_fail (__STRING(expr), __FILE__, __LINE__, __func__))
 
 class Helper {
 	public: static void assert_fail(std::string const& expr, std::string const& file, int line, std::string const& func) {

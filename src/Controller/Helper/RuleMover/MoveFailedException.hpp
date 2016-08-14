@@ -20,9 +20,10 @@
 #define INC_Controller_Helper_RuleMover_MoveFailedException
 #include "../../../lib/Exception.hpp"
 
-class Controller_Helper_RuleMover_MoveFailedException : public Exception
+namespace Gc { namespace Controller { namespace Helper { namespace RuleMover { class MoveFailedException :
+	public Exception
 {
-	public: inline Controller_Helper_RuleMover_MoveFailedException(std::string const& message, std::string const& file = "", int line = -1)
+	public: inline MoveFailedException(std::string const& message, std::string const& file = "", int line = -1)
 	   : Exception(message, file, line) {}
-};
+};}}}}
 #endif
