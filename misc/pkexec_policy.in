@@ -4,7 +4,7 @@
  "http://www.freedesktop.org/standards/PolicyKit/1/policyconfig.dtd">
 <policyconfig>
 
-  <action id="net.launchpad.danielrichter2007.pkexec.grub-customizer">
+  <action id="${POLICYKIT_FILENAME}">
     <message>Authentication is required to run Grub Customizer</message>
     <icon_name>grub-customizer</icon_name>
     <defaults>

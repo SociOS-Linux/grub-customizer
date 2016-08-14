@@ -35,6 +35,11 @@ else()
 set ( ERROR_LOG_FILE /tmp/grub-customizer_mkconfig_output.log )
 endif()
 
+if ( POLICYKIT_FILENAME )
+else()
+set ( POLICYKIT_FILENAME net.launchpad.danielrichter2007.pkexec.grub-customizer.policy )
+endif()
+
 
 link_directories(
     ${GTKMM_LIBRARY_DIRS} ${OPENSSL_LIBRARY_DIRS} ${LIBARCHIVE_LIBRARY_DIRS} )
@@ -65,7 +70,8 @@ configure_file ("config.hpp.in" "${CMAKE_CURRENT_SOURCE_DIR}/src/config.hpp")
 
 configure_file ("misc/pkexec_policy.in" "${CMAKE_CURRENT_BINARY_DIR}/net.launchpad.danielrichter2007.pkexec.grub-customizer.policy")
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/net.launchpad.danielrichter2007.pkexec.grub-customizer.policy
-    DESTINATION /usr/share/polkit-1/actions)
+    DESTINATION /usr/share/polkit-1/actions
+    RENAME "${POLICYKIT_FILENAME}")
 
 
 install(TARGETS grubcfg-proxy 

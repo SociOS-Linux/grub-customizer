@@ -11,5 +11,5 @@ fi
 
 cd "$currentDir/tmp"
 
-cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX="$currentDir/tmp" "$currentDir/.."
+cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX="$currentDir/tmp" -DPOLICYKIT_FILENAME=gc_test.policy "$currentDir/.."
 make install
