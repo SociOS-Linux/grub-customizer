@@ -30,7 +30,7 @@
 #include "Common/ControllerAbstract.hpp"
 #include "Helper/Thread.hpp"
 
-class ThemeController :
+namespace Gc { namespace Controller { class ThemeController :
 	public Gc::Controller::Common::ControllerAbstract,
 	public View_Trait_ViewAware<View_Theme>,
 	public Model_ThemeManager_Connection,
@@ -614,7 +614,7 @@ class ThemeController :
 			}
 		}
 	}
-};
+};}}
 
 
 #endif /* THEMECONTROLLERIMPL_H_ */

@@ -37,7 +37,7 @@
 #include "Helper/Thread.hpp"
 
 
-class InstallerController :
+namespace Gc { namespace Controller { class InstallerController :
 	public Gc::Controller::Common::ControllerAbstract,
 	public View_Trait_ViewAware<View_Installer>,
 	public Model_Installer_Connection,
@@ -122,6 +122,6 @@ class InstallerController :
 		this->logActionEnd();
 	}
 
-};
+};}}
 
 #endif

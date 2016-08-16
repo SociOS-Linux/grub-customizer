@@ -42,7 +42,7 @@
 #include "../lib/ContentParserFactory.hpp"
 #include "Helper/DeviceInfo.hpp"
 
-class TrashController :
+namespace Gc { namespace Controller { class TrashController :
 	public Gc::Controller::Common::ControllerAbstract,
 	public View_Trait_ViewAware<View_Trash>,
 	public Model_ListCfg_Connection,
@@ -255,6 +255,6 @@ class TrashController :
 		}
 		throw ItemNotFoundException("rule not found in trash data", __FILE__, __LINE__);
 	}
-};
+};}}
 
 #endif

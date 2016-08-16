@@ -42,7 +42,7 @@
 #include "Helper/Thread.hpp"
 
 
-class EntryEditController :
+namespace Gc { namespace Controller { class EntryEditController :
 	public Gc::Controller::Common::ControllerAbstract,
 	public View_Trait_ViewAware<View_EntryEditor>,
 	public Model_ListCfg_Connection,
@@ -364,6 +364,6 @@ class EntryEditController :
 		script->isCustomScript = true;
 		return script;
 	}
-};
+};}}
 
 #endif

@@ -69,15 +69,15 @@ int main(int argc, char** argv){
 
 		factory->entryNameMapper->setView(view->main);
 
-		auto entryEditController = factory->createController<EntryEditController>(view->entryEditor);
-		auto mainController      = factory->createController<MainController>(view->main);
-		auto settingsController  = factory->createController<SettingsController>(view->settings);
-		auto envEditController   = factory->createController<EnvEditorController>(view->envEditor);
-		auto trashController     = factory->createController<TrashController>(view->trash);
-		auto installController   = factory->createController<InstallerController>(view->installer);
-		auto aboutController     = factory->createController<AboutController>(view->about);
-		auto errorController     = factory->createController<ErrorController>(view->error);
-		auto themeController     = factory->createController<ThemeController>(view->theme);
+		auto entryEditController = factory->createController<Gc::Controller::EntryEditController>(view->entryEditor);
+		auto mainController      = factory->createController<Gc::Controller::MainController>(view->main);
+		auto settingsController  = factory->createController<Gc::Controller::SettingsController>(view->settings);
+		auto envEditController   = factory->createController<Gc::Controller::EnvEditorController>(view->envEditor);
+		auto trashController     = factory->createController<Gc::Controller::TrashController>(view->trash);
+		auto installController   = factory->createController<Gc::Controller::InstallerController>(view->installer);
+		auto aboutController     = factory->createController<Gc::Controller::AboutController>(view->about);
+		auto errorController     = factory->createController<Gc::Controller::ErrorController>(view->error);
+		auto themeController     = factory->createController<Gc::Controller::ThemeController>(view->theme);
 
 		mainController->setSettingsBuffer(settingsOnDisk);
 		mainController->setSavedListCfg(savedListCfg);

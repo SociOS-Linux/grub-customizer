@@ -50,7 +50,7 @@
  * This controller operates on the entry list
  */
 
-class MainController :
+namespace Gc { namespace Controller { class MainController :
 	public Gc::Controller::Common::ControllerAbstract,
 	public View_Trait_ViewAware<View_Main>,
 	public Model_ListCfg_Connection,
@@ -1241,6 +1241,6 @@ class MainController :
 		oldDefaultRulePath.replace(0, oldRulePath.length(), this->grublistCfg->getRulePath(rule));
 		this->settings->setValue("GRUB_DEFAULT", oldDefaultRulePath);
 	}
-};
+};}}
 
 #endif

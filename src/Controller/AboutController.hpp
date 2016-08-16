@@ -30,7 +30,7 @@
 #include "../View/Trait/ViewAware.hpp"
 #include "Common/ControllerAbstract.hpp"
 
-class AboutController :
+namespace Gc { namespace Controller { class AboutController :
 	public Gc::Controller::Common::ControllerAbstract,
 	public View_Trait_ViewAware<View_About>,
 	public Gc::Bootstrap::ApplicationHelper::ObjectConnection
@@ -56,6 +56,6 @@ class AboutController :
 		this->logActionEnd();
 	}
 
-};
+};}}
 
 #endif

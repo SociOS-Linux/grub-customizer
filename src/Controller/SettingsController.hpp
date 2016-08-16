@@ -46,7 +46,7 @@
 #include "../lib/Exception.hpp"
 #include "Helper/Thread.hpp"
 
-class SettingsController :
+namespace Gc { namespace Controller { class SettingsController :
 	public Gc::Controller::Common::ControllerAbstract,
 	public View_Trait_ViewAware<View_Settings>,
 	public Model_ListCfg_Connection,
@@ -443,6 +443,6 @@ class SettingsController :
 		this->applicationObject->onSettingModelChange.exec();
 		this->syncActive = false;
 	}
-};
+};}}
 
 #endif

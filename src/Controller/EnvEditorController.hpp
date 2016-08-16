@@ -35,7 +35,7 @@
 #include "Common/ControllerAbstract.hpp"
 
 
-class EnvEditorController :
+namespace Gc { namespace Controller { class EnvEditorController :
 	public Gc::Controller::Common::ControllerAbstract,
 	public View_Trait_ViewAware<View_EnvEditor>,
 	public Model_Env_Connection,
@@ -233,6 +233,6 @@ class EnvEditorController :
 		this->logActionEnd();
 	}
 
-};
+};}}
 
 #endif

@@ -33,7 +33,7 @@
 #include "Helper/Thread.hpp"
 
 
-class ErrorController :
+namespace Gc { namespace Controller { class ErrorController :
 	public Gc::Controller::Common::ControllerAbstract,
 	public View_Trait_ViewAware<View_Error>,
 	public Gc::Controller::Helper::ThreadConnection,
@@ -93,6 +93,6 @@ class ErrorController :
 		}
 	}
 
-};
+};}}
 
 #endif
