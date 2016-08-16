@@ -37,7 +37,7 @@
 #include "../Model/FbResolutionsGetter.hpp"
 #include "../Model/DeviceDataList.hpp"
 #include "../lib/ContentParserFactory.hpp"
-#include "../Mapper/EntryName.hpp"
+#include "../View/Mapper/EntryName.hpp"
 
 #include "Common/ControllerAbstract.hpp"
 

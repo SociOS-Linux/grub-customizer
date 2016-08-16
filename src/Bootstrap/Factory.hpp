@@ -28,7 +28,8 @@
 #include "../Model/FbResolutionsGetter.hpp"
 #include "../Model/DeviceDataList.hpp"
 #include "../lib/ContentParser/FactoryImpl.hpp"
-#include "../Mapper/EntryNameImpl.hpp"
+#include "../View/Mapper/EntryNameImpl.hpp"
+#include "../View/Mapper/EntryNameConnection.hpp"
 #include "../Model/ThemeManager.hpp"
 #include "../Model/DeviceMap.hpp"
 #include "../Controller/Helper/Thread.hpp"
@@ -47,7 +48,7 @@ namespace Gc { namespace Bootstrap { class Factory
 	public: std::shared_ptr<Model_FbResolutionsGetter> fbResolutionsGetter;
 	public: std::shared_ptr<Model_DeviceDataList> deviceDataList;
 	public: std::shared_ptr<ContentParser_FactoryImpl> contentParserFactory;
-	public: std::shared_ptr<Mapper_EntryNameImpl> entryNameMapper;
+	public: std::shared_ptr<Gc::View::Mapper::EntryNameImpl> entryNameMapper;
 	public: std::shared_ptr<Model_ThemeManager> themeManager;
 	public: std::shared_ptr<Model_DeviceMap> deviceMap;
 	public: std::shared_ptr<Gc::Controller::Helper::RuleMoverHelper> ruleMover;
@@ -74,7 +75,7 @@ namespace Gc { namespace Bootstrap { class Factory
 		this->fbResolutionsGetter  = this->create<Model_FbResolutionsGetter>();
 		this->deviceDataList       = this->create<Model_DeviceDataList>();
 		this->contentParserFactory = this->create<ContentParser_FactoryImpl>();
-		this->entryNameMapper      = this->create<Mapper_EntryNameImpl>();
+		this->entryNameMapper      = this->create<Gc::View::Mapper::EntryNameImpl>();
 		this->themeManager         = this->create<Model_ThemeManager>();
 		this->deviceMap            = this->create<Model_DeviceMap>();
 		this->ruleMover            = this->create<Gc::Controller::Helper::RuleMoverHelper>();
@@ -142,7 +143,7 @@ namespace Gc { namespace Bootstrap { class Factory
 			if (objc) {assert(this->contentParserFactory); objc->setContentParserFactory(this->contentParserFactory);}
 		}
 		{
-			std::shared_ptr<Mapper_EntryName_Connection> objc = std::dynamic_pointer_cast<Mapper_EntryName_Connection>(obj);
+			std::shared_ptr<Gc::View::Mapper::EntryNameConnection> objc = std::dynamic_pointer_cast<Gc::View::Mapper::EntryNameConnection>(obj);
 			if (objc) {assert(this->entryNameMapper); objc->setEntryNameMapper(this->entryNameMapper);}
 		}
 		{

@@ -34,7 +34,7 @@
 
 #include "../View/EnvEditor.hpp"
 #include "../View/Trait/ViewAware.hpp"
-#include "../Mapper/EntryName.hpp"
+#include "../View/Mapper/EntryName.hpp"
 
 #include "Common/ControllerAbstract.hpp"
 
@@ -46,7 +46,7 @@ namespace Gc { namespace Controller { class TrashController :
 	public Gc::Controller::Common::ControllerAbstract,
 	public View_Trait_ViewAware<View_Trash>,
 	public Model_ListCfg_Connection,
-	public Mapper_EntryName_Connection,
+	public Gc::View::Mapper::EntryNameConnection,
 	public Model_DeviceDataListInterface_Connection,
 	public ContentParserFactory_Connection,
 	public Model_Env_Connection,

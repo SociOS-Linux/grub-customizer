@@ -19,13 +19,14 @@
 #ifndef ENTRYNAMEIMPL_H_
 #define ENTRYNAMEIMPL_H_
 
-#include "../View/Main.hpp"
-#include "../View/Trait/ViewAware.hpp"
+#include "../Main.hpp"
+#include "../Trait/ViewAware.hpp"
 #include "EntryName.hpp"
 
-class Mapper_EntryNameImpl : public Mapper_EntryName, public View_Trait_ViewAware<View_Main> {
-public:
-	std::string map(std::shared_ptr<Model_Entry> sourceEntry, std::string const& defaultName, bool treatSubmenuAsPlaceholder) {
+namespace Gc { namespace View { namespace Mapper { class EntryNameImpl :
+	public Gc::View::Mapper::EntryName, public View_Trait_ViewAware<View_Main>
+{
+	public:	std::string map(std::shared_ptr<Model_Entry> sourceEntry, std::string const& defaultName, bool treatSubmenuAsPlaceholder) {
 		assert(this->view != NULL);
 		std::string name;
 		bool is_other_entries_ph = sourceEntry && treatSubmenuAsPlaceholder ? sourceEntry->type == Model_Entry::SUBMENU || sourceEntry->type == Model_Entry::SCRIPT_ROOT : false;
@@ -44,7 +45,7 @@ public:
 		return name;
 	}
 
-};
+};}}}
 
 
 #endif /* ENTRYNAMEIMPL_H_ */

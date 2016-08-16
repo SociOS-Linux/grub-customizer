@@ -33,7 +33,7 @@
 #include "../Controller/Helper/RuleMover/Strategy/MoveRuleIntoForeignSubmenu.hpp"
 #include "../Controller/Helper/RuleMover/Strategy/MoveForeignRuleFromSubmenuToToplevel.hpp"
 #include "../lib/Logger/Stream.hpp"
-#include "../Mapper/EntryNameImpl.hpp"
+#include "../View/Mapper/EntryNameImpl.hpp"
 #include "../config.hpp"
 #include "../Controller/AboutController.hpp"
 #include "../Controller/EntryEditController.hpp"

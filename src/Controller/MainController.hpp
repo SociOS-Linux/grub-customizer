@@ -40,7 +40,7 @@
 
 #include "../lib/Trait/LoggerAware.hpp"
 #include "../lib/Exception.hpp"
-#include "../Mapper/EntryName.hpp"
+#include "../View/Mapper/EntryName.hpp"
 #include "../Model/FbResolutionsGetter.hpp"
 #include "../View/Model/ListItem.hpp"
 #include "Helper/DeviceInfo.hpp"
@@ -59,7 +59,7 @@ namespace Gc { namespace Controller { class MainController :
 	public Model_DeviceDataList_Connection,
 	public Model_MountTable_Connection,
 	public ContentParserFactory_Connection,
-	public Mapper_EntryName_Connection,
+	public Gc::View::Mapper::EntryNameConnection,
 	public Model_Env_Connection,
 	public Gc::Controller::Helper::ThreadConnection,
 	public Gc::Bootstrap::ApplicationHelper::ObjectConnection,

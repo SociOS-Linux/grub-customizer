@@ -16,26 +16,20 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef ENTRYNAME_H_
-#define ENTRYNAME_H_
+#ifndef ENTRYNAMECONNECTION_H_
+#define ENTRYNAMECONNECTION_H_
 
+#include "EntryName.hpp"
 #include <string>
-#include "../Model/Entry.hpp"
 
-class Mapper_EntryName {
-public:
-	virtual inline ~Mapper_EntryName(){};
-	virtual std::string map(std::shared_ptr<Model_Entry> sourceEntry, std::string const& defaultName, bool treatSubmenuAsPlaceholder) = 0;
-};
-
-class Mapper_EntryName_Connection
+namespace Gc { namespace View { namespace Mapper { class EntryNameConnection
 {
-	protected: std::shared_ptr<Mapper_EntryName> entryNameMapper;
+	protected: std::shared_ptr<Gc::View::Mapper::EntryName> entryNameMapper;
 
-	public: void setEntryNameMapper(std::shared_ptr<Mapper_EntryName> mapper)
+	public: void setEntryNameMapper(std::shared_ptr<Gc::View::Mapper::EntryName> mapper)
 	{
 		this->entryNameMapper = mapper;
 	}
-};
+};}}}
 
 #endif /* ENTRYNAME_H_ */
