@@ -22,11 +22,11 @@
 #include <list>
 #include <functional>
 
-#include "../lib/Trait/LoggerAware.hpp"
+#include "../Model/Logger/Trait/LoggerAware.hpp"
 #include "ColorChooser.hpp"
 
 class View_Theme :
-	public Trait_LoggerAware
+	public Gc::Model::Logger::Trait::LoggerAware
 {
 public:
 	enum EditorType {

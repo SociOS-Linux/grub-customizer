@@ -18,12 +18,12 @@
 
 #ifndef ABOUTDIALOG_H_
 #define ABOUTDIALOG_H_
-#include "../lib/Trait/LoggerAware.hpp"
+#include "../Model/Logger/Trait/LoggerAware.hpp"
 
 /**
  * base class to be implemented by about dialogs
  */
-class View_About : public Trait_LoggerAware {
+class View_About : public Gc::Model::Logger::Trait::LoggerAware {
 public:
 	virtual inline ~View_About() {};
 	//show the about dialog, don't block

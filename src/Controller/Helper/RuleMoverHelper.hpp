@@ -27,7 +27,7 @@
 
 namespace Gc { namespace Controller { namespace Helper { class RuleMoverHelper :
 	public Model_ListCfg_Connection,
-	public Trait_LoggerAware
+	public Gc::Model::Logger::Trait::LoggerAware
 {
 	private: std::list<std::shared_ptr<Gc::Controller::Helper::RuleMover::AbstractStrategy>> strategies;
 
@@ -37,9 +37,9 @@ namespace Gc { namespace Controller { namespace Helper { class RuleMoverHelper :
 
 		for (auto strategy : this->strategies) {
 			try {
-				this->log("trying move strategy \"" + strategy->getName() + "\"", Logger::INFO);
+				this->log("trying move strategy \"" + strategy->getName() + "\"", Gc::Model::Logger::GenericLogger::INFO);
 				strategy->move(rule, direction);
-				this->log("move strategy \"" + strategy->getName() + "\" was successful", Logger::INFO);
+				this->log("move strategy \"" + strategy->getName() + "\" was successful", Gc::Model::Logger::GenericLogger::INFO);
 				return;
 			} catch (Gc::Controller::Helper::RuleMover::MoveFailedException const& e) {
 				continue;

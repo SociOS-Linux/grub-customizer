@@ -182,7 +182,7 @@ class View_Gtk_Settings :
 		try {
 			dynamic_cast<Gtk::CellRendererText&>(*cellRenderer).property_ellipsize().set_value(Pango::ELLIPSIZE_END);
 		} catch (std::bad_cast const& e) {
-			this->log("cannot set ellipsizing mode because of an cast error", Logger::ERROR);
+			this->log("cannot set ellipsizing mode because of an cast error", Gc::Model::Logger::GenericLogger::ERROR);
 		}
 
 		//view group

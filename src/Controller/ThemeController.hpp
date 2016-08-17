@@ -92,7 +92,7 @@ namespace Gc { namespace Controller { class ThemeController :
 			try {
 				this->themeManager->load();
 			} catch (FileReadException const& e) {
-				this->log("Theme directory not found", Logger::INFO);
+				this->log("Theme directory not found", Gc::Model::Logger::GenericLogger::INFO);
 			}
 			this->syncSettings();
 		} catch (Exception const& e) {
@@ -581,7 +581,7 @@ namespace Gc { namespace Controller { class ThemeController :
 			try {
 				themeName = this->themeManager->extractThemeName(this->settings->getValue("GRUB_THEME"));
 			} catch (InvalidStringFormatException const& e) {
-				this->log(e, Logger::ERROR);
+				this->log(e, Gc::Model::Logger::GenericLogger::ERROR);
 			}
 		}
 
@@ -590,7 +590,7 @@ namespace Gc { namespace Controller { class ThemeController :
 				if (this->themeManager->themeExists(themeName)) {
 					this->loadThemeAction(themeName);
 				} else {
-					this->log("theme " + themeName + " not found!", Logger::ERROR);
+					this->log("theme " + themeName + " not found!", Gc::Model::Logger::GenericLogger::ERROR);
 				}
 			} else if (!this->settings->isActive("GRUB_THEME")) {
 				this->showSimpleThemeConfigAction();

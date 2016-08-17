@@ -16,33 +16,20 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef CONTENTPARSERFACTORY_H_
-#define CONTENTPARSERFACTORY_H_
-#include <list>
-#include <string>
+#ifndef CONTENTPARSERFACTORYCONNECTION_H_
+#define CONTENTPARSERFACTORYCONNECTION_H_
 #include <memory>
 
-#include "ContentParser.hpp"
-#include "Exception.hpp"
+#include "GenericFactory.hpp"
 
-class ContentParserFactory {
-public:
-	virtual inline ~ContentParserFactory() {};
-
-	virtual std::shared_ptr<ContentParser> create(std::string const& sourceCode) = 0;
-	virtual std::shared_ptr<ContentParser> createByName(std::string const& name) = 0;
-	virtual std::list<std::string> const& getNames() const = 0;
-	virtual std::string getNameByInstance(ContentParser const& instance) const = 0;
-};
-
-class ContentParserFactory_Connection
+namespace Gc { namespace Model { namespace ContentParser { class GenericFactoryConnection
 {
-	protected: std::shared_ptr<ContentParserFactory> contentParserFactory;
+	protected: std::shared_ptr<Gc::Model::ContentParser::GenericFactory> contentParserFactory;
 
-	public:	void setContentParserFactory(std::shared_ptr<ContentParserFactory> contentParserFactory)
+	public:	void setContentParserFactory(std::shared_ptr<Gc::Model::ContentParser::GenericFactory> contentParserFactory)
 	{
 		this->contentParserFactory = contentParserFactory;
 	}
-};
+};}}}
 
-#endif /* CONTENTPARSERFACTORY_H_ */
+#endif /* CONTENTPARSERFACTORYCONNECTION_H_ */

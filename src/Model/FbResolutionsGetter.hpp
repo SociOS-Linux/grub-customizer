@@ -22,9 +22,9 @@
 #include <list>
 #include <cstdio>
 #include <functional>
-#include "../lib/Trait/LoggerAware.hpp"
+#include "../Model/Logger/Trait/LoggerAware.hpp"
 
-class Model_FbResolutionsGetter : public Trait_LoggerAware {
+class Model_FbResolutionsGetter : public Gc::Model::Logger::Trait::LoggerAware {
 	std::list<std::string> data;
 	bool _isLoading;
 public:

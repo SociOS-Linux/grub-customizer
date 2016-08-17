@@ -19,10 +19,10 @@
 #ifndef CONTROLLER_ABSTRACT_H_
 #define CONTROLLER_ABSTRACT_H_
 
-#include "../../lib/Trait/ActionLoggerAware.hpp"
+#include "../../Model/Logger/Trait/ActionLoggerAware.hpp"
 
 namespace Gc { namespace Controller { namespace Common { class ControllerAbstract :
-	public Trait_ActionLoggerAware
+	public Gc::Model::Logger::Trait::ActionLoggerAware
 {
 	public: ControllerAbstract(std::string const& controllerName)
 	{

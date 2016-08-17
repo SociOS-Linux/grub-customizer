@@ -24,7 +24,7 @@
 #include <cstdlib>
 
 #include "../lib/Exception.hpp"
-#include "../lib/Trait/LoggerAware.hpp"
+#include "../Model/Logger/Trait/LoggerAware.hpp"
 #include "../lib/Helper.hpp"
 
 
@@ -74,7 +74,7 @@ struct Model_MountTable_Mountpoint {
 
 };
 
-class Model_MountTable : public std::list<Model_MountTable_Mountpoint>, public Trait_LoggerAware {
+class Model_MountTable : public std::list<Model_MountTable_Mountpoint>, public Gc::Model::Logger::Trait::LoggerAware {
 	private: bool loaded;
 
 	public: Model_MountTable(FILE* source, std::string const& prefix, bool default_isMounted_flag)

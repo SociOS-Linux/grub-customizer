@@ -39,7 +39,7 @@
 #include "Common/ControllerAbstract.hpp"
 
 #include "../Model/DeviceDataListInterface.hpp"
-#include "../lib/ContentParserFactory.hpp"
+#include "../Model/ContentParser/GenericFactory.hpp"
 #include "Helper/DeviceInfo.hpp"
 
 namespace Gc { namespace Controller { class TrashController :
@@ -48,7 +48,7 @@ namespace Gc { namespace Controller { class TrashController :
 	public Model_ListCfg_Connection,
 	public Gc::View::Mapper::EntryNameConnection,
 	public Model_DeviceDataListInterface_Connection,
-	public ContentParserFactory_Connection,
+	public Gc::Model::ContentParser::GenericFactoryConnection,
 	public Model_Env_Connection,
 	public Gc::Bootstrap::ApplicationHelper::ObjectConnection
 {

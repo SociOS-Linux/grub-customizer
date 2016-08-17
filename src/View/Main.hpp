@@ -25,14 +25,14 @@
 #include <list>
 
 #include "../lib/Type.hpp"
-#include "../lib/Trait/LoggerAware.hpp"
+#include "../Model/Logger/Trait/LoggerAware.hpp"
 #include "Model/ListItem.hpp"
 #include <functional>
 
 /**
  * Interface for dialogs which lets the user control the grub list
  */
-class View_Main : public Trait_LoggerAware {
+class View_Main : public Gc::Model::Logger::Trait::LoggerAware {
 public:
 	virtual inline ~View_Main() {};
 

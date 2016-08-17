@@ -33,7 +33,7 @@
 #include "../config.hpp"
 
 #include "../lib/Mutex.hpp"
-#include "../lib/Trait/LoggerAware.hpp"
+#include "../Model/Logger/Trait/LoggerAware.hpp"
 
 #include "../lib/Exception.hpp"
 #include "../lib/ArrayStructure.hpp"
@@ -50,7 +50,7 @@
 #include "SettingsManagerData.hpp"
 
 class Model_ListCfg :
-	public Trait_LoggerAware,
+	public Gc::Model::Logger::Trait::LoggerAware,
 	public Mutex_Connection,
 	public Model_Env_Connection
 {
@@ -175,7 +175,7 @@ class Model_ListCfg :
 			}
 	
 			//load scripts
-			this->log("loading scripts…", Logger::EVENT);
+			this->log("loading scripts…", Gc::Model::Logger::GenericLogger::EVENT);
 			this->lock();
 			repository.load(this->env->cfg_dir, false);
 			repository.load(this->env->cfg_dir+"/proxifiedScripts", true);
@@ -184,7 +184,7 @@ class Model_ListCfg :
 		
 		
 			//load proxies
-			this->log("loading proxies…", Logger::EVENT);
+			this->log("loading proxies…", Gc::Model::Logger::GenericLogger::EVENT);
 			this->lock();
 			struct dirent *entry;
 			struct stat fileProperties;
@@ -218,14 +218,14 @@ class Model_ListCfg :
 	
 	
 			//clean up proxy configuration
-			this->log("cleaning up proxy configuration…", Logger::EVENT);
+			this->log("cleaning up proxy configuration…", Gc::Model::Logger::GenericLogger::EVENT);
 			this->lock();
 	
 			bool proxyRemoved = false;
 			do {
 				for (auto proxy : this->proxies) {
 					if (!proxy->isExecutable() || !proxy->hasVisibleRules()) {
-						this->log(proxy->fileName + " has no visible entries and will be removed / disabled", Logger::INFO);
+						this->log(proxy->fileName + " has no visible entries and will be removed / disabled", Gc::Model::Logger::GenericLogger::INFO);
 						this->proxies.deleteProxy(proxy);
 						proxyRemoved = true;
 						break;
@@ -243,7 +243,7 @@ class Model_ListCfg :
 		}
 	
 		//create proxifiedScript links & chmod other files
-		this->log("creating proxifiedScript links & chmodding other files…", Logger::EVENT);
+		this->log("creating proxifiedScript links & chmodding other files…", Gc::Model::Logger::GenericLogger::EVENT);
 	
 		this->lock();
 		for (auto script : this->repository) {
@@ -273,7 +273,7 @@ class Model_ListCfg :
 		}
 	
 		//run mkconfig
-		this->log("running " + this->env->mkconfig_cmd, Logger::EVENT);
+		this->log("running " + this->env->mkconfig_cmd, Gc::Model::Logger::GenericLogger::EVENT);
 		FILE* mkconfigProc = popen((this->env->mkconfig_cmd + " 2> " + this->errorLogFile).c_str(), "r");
 		readGeneratedFile(mkconfigProc);
 		
@@ -283,7 +283,7 @@ class Model_ListCfg :
 		} else {
 			remove(errorLogFile.c_str()); //remove file, if everything was ok
 		}
-		this->log("mkconfig successfull completed", Logger::INFO);
+		this->log("mkconfig successfull completed", Gc::Model::Logger::GenericLogger::INFO);
 	
 		this->send_new_load_progress(0.9);
 	
@@ -291,21 +291,21 @@ class Model_ListCfg :
 		
 		this->env->useDirectBackgroundProps = this->repository.getScriptByName("debian_theme") == NULL;
 		if (this->env->useDirectBackgroundProps) {
-			this->log("using simple background image settings", Logger::INFO);
+			this->log("using simple background image settings", Gc::Model::Logger::GenericLogger::INFO);
 		} else {
-			this->log("using /usr/share/desktop-base/grub_background.sh to configure colors and the background image", Logger::INFO);
+			this->log("using /usr/share/desktop-base/grub_background.sh to configure colors and the background image", Gc::Model::Logger::GenericLogger::INFO);
 		}
 	
 		
 		//restore old configuration
-		this->log("restoring grub configuration", Logger::EVENT);
+		this->log("restoring grub configuration", Gc::Model::Logger::GenericLogger::EVENT);
 		this->lock();
 		for (auto script : this->repository){
 			if (script->isInScriptDir(env->cfg_dir)){
 				//removeScriptForwarder & reset proxy permissions
 				bool result = removeScriptForwarder(script->fileName);
 				if (!result) {
-					this->log("removing of script forwarder not successful!", Logger::ERROR);
+					this->log("removing of script forwarder not successful!", Gc::Model::Logger::GenericLogger::ERROR);
 				}
 			}
 			auto relatedProxies = proxies.getProxiesByScript(script);
@@ -316,7 +316,7 @@ class Model_ListCfg :
 		this->unlock();
 		
 		//remove invalid proxies from list (no file system action here)
-		this->log("removing invalid proxies from list", Logger::EVENT);
+		this->log("removing invalid proxies from list", Gc::Model::Logger::GenericLogger::EVENT);
 		std::string invalidProxies = "";
 		bool foundInvalidScript = false;
 		do {
@@ -333,16 +333,16 @@ class Model_ListCfg :
 		} while (foundInvalidScript);
 	
 		if (invalidProxies != "") {
-			this->log("found invalid proxies: " + Helper::rtrim(invalidProxies, ","), Logger::INFO);
+			this->log("found invalid proxies: " + Helper::rtrim(invalidProxies, ","), Gc::Model::Logger::GenericLogger::INFO);
 		}
 	
 		//fix conflicts (same number, same name but one script with "-proxy" the other without
 		if (this->proxies.hasConflicts()) {
-			this->log("found conflicts - renumerating", Logger::INFO);
+			this->log("found conflicts - renumerating", Gc::Model::Logger::GenericLogger::INFO);
 			this->renumerate();
 		}
 	
-		this->log("loading completed", Logger::EVENT);
+		this->log("loading completed", Gc::Model::Logger::GenericLogger::EVENT);
 		send_new_load_progress(1);
 	}
 
@@ -414,7 +414,7 @@ class Model_ListCfg :
 					relatedProxies.front()->fileName = script->fileName; // update filename
 				}
 				else {
-					this->log("GrublistCfg::save: cannot move proxy… only one expected!", Logger::ERROR);
+					this->log("GrublistCfg::save: cannot move proxy… only one expected!", Gc::Model::Logger::GenericLogger::ERROR);
 				}
 			}	
 		}
@@ -472,11 +472,11 @@ class Model_ListCfg :
 					fclose(proxyBinTarget);
 					chmod((this->env->cfg_dir+"/bin/grubcfg_proxy").c_str(), 0755);
 				} else {
-					this->log("could not open proxy output file!", Logger::ERROR);
+					this->log("could not open proxy output file!", Gc::Model::Logger::GenericLogger::ERROR);
 				}
 				fclose(proxyBinSource);
 			} else {
-				this->log("proxy could not be copied, generating dummy!", Logger::ERROR);
+				this->log("proxy could not be copied, generating dummy!", Gc::Model::Logger::GenericLogger::ERROR);
 				FILE* proxyBinTarget = fopen((this->env->cfg_dir+"/bin/grubcfg_proxy").c_str(), "w");
 				if (proxyBinTarget){
 					fputs(dummyproxy_code.c_str(), proxyBinTarget);
@@ -484,7 +484,7 @@ class Model_ListCfg :
 					fclose(proxyBinTarget);
 					chmod((this->env->cfg_dir+"/bin/grubcfg_proxy").c_str(), 0755);
 				} else {
-					this->log("coundn't create proxy!", Logger::ERROR);
+					this->log("coundn't create proxy!", Gc::Model::Logger::GenericLogger::ERROR);
 				}
 			}
 		}
@@ -497,7 +497,7 @@ class Model_ListCfg :
 		//update modified "custom" scripts
 		for (auto script : this->repository) {
 			if (script->isCustomScript && script->isModified()) {
-				this->log("modifying script \"" + script->name + "\"", Logger::INFO);
+				this->log("modifying script \"" + script->name + "\"", Gc::Model::Logger::GenericLogger::INFO);
 				assert(script->fileName != "");
 				auto dummyProxy = std::make_shared<Model_Proxy>(script);
 				std::ofstream scriptStream(script->fileName.c_str());
@@ -524,7 +524,7 @@ class Model_ListCfg :
 				saveProcOutput += char(c);
 				if (c == '\n') {
 					send_new_save_progress(0.5); //a gui should use pulse() instead of set_fraction
-					this->log(row, Logger::INFO);
+					this->log(row, Gc::Model::Logger::GenericLogger::INFO);
 					row = "";
 				} else {
 					row += char(c);
@@ -648,7 +648,7 @@ class Model_ListCfg :
 				if (script != nullptr) {
 					result[rule->dataSource] = script;
 				} else {
-					this->log("error finding the associated script! (" + rule->outputName + ")", Logger::WARNING);
+					this->log("error finding the associated script! (" + rule->outputName + ")", Gc::Model::Logger::GenericLogger::WARNING);
 				}
 			} else if (rule->type == Model_Rule::SUBMENU) {
 				auto subResult = this->getEntrySources(proxy, rule);
@@ -681,7 +681,7 @@ class Model_ListCfg :
 			this->progress_max = max;
 			this->onLoadStateChange();
 		} else if (this->verbose) {
-			this->log("cannot show updated load progress - no event handler assigned!", Logger::ERROR);
+			this->log("cannot show updated load progress - no event handler assigned!", Gc::Model::Logger::GenericLogger::ERROR);
 		}
 	}
 
@@ -691,7 +691,7 @@ class Model_ListCfg :
 			this->progress = newProgress;
 			this->onSaveStateChange();
 		} else if (this->verbose) {
-			this->log("cannot show updated save progress - no event handler assigned!", Logger::ERROR);
+			this->log("cannot show updated save progress - no event handler assigned!", Gc::Model::Logger::GenericLogger::ERROR);
 		}
 	}
 
@@ -744,7 +744,7 @@ class Model_ListCfg :
 						isDefaultNumber = true;
 					}
 				} catch (InvalidStringFormatException const& e) {
-					this->log(e, Logger::ERROR);
+					this->log(e, Gc::Model::Logger::GenericLogger::ERROR);
 				}
 			}
 	
@@ -802,7 +802,7 @@ class Model_ListCfg :
 
 	public: void cleanupCfgDir()
 	{
-		this->log("cleaning up cfg dir!", Logger::IMPORTANT_EVENT);
+		this->log("cleaning up cfg dir!", Gc::Model::Logger::GenericLogger::IMPORTANT_EVENT);
 		
 		DIR* hGrubCfgDir = opendir(this->env->cfg_dir.c_str());
 		if (hGrubCfgDir){
@@ -827,18 +827,18 @@ class Model_ListCfg :
 			closedir(hGrubCfgDir);
 			
 			for (std::list<std::string>::iterator iter = lsfiles.begin(); iter != lsfiles.end(); iter++){
-				this->log("deleting " + *iter, Logger::EVENT);
+				this->log("deleting " + *iter, Gc::Model::Logger::GenericLogger::EVENT);
 				unlink((this->env->cfg_dir+"/"+(*iter)).c_str());
 			}
 			//proxyscripts will be disabled before loading the config. While the provious mode will only be saved on the objects, every script should be made executable
 			for (std::list<std::string>::iterator iter = proxyscripts.begin(); iter != proxyscripts.end(); iter++){
-				this->log("re-activating " + *iter, Logger::EVENT);
+				this->log("re-activating " + *iter, Gc::Model::Logger::GenericLogger::EVENT);
 				chmod((this->env->cfg_dir+"/"+(*iter)).c_str(), 0755);
 			}
 	
 			//remove the DS_ prefix  (DS_10_foo -> 10_foo)
 			for (std::list<std::string>::iterator iter = dsfiles.begin(); iter != dsfiles.end(); iter++) {
-				this->log("renaming " + *iter, Logger::EVENT);
+				this->log("renaming " + *iter, Gc::Model::Logger::GenericLogger::EVENT);
 				std::string newPath = this->env->cfg_dir+"/"+iter->substr(3);
 				Helper::assert_filepath_empty(newPath, __FILE__, __LINE__);
 				rename((this->env->cfg_dir+"/"+(*iter)).c_str(), newPath.c_str());
@@ -847,7 +847,7 @@ class Model_ListCfg :
 			//remove the PS_ prefix and add index prefix (PS_foo -> 10_foo)
 			int i = 20; //prefix
 			for (std::list<std::string>::iterator iter = psfiles.begin(); iter != psfiles.end(); iter++) {
-				this->log("renaming " + *iter, Logger::EVENT);
+				this->log("renaming " + *iter, Gc::Model::Logger::GenericLogger::EVENT);
 				std::string out = *iter;
 				out.replace(0, 2, (std::string("") + char('0' + (i/10)%10) + char('0' + i%10)));
 				std::string newPath = this->env->cfg_dir+"/"+out;
@@ -1192,7 +1192,7 @@ class Model_ListCfg :
 			auto oldScript = this->repository.getScriptByFilename(oldScriptPath);
 			auto newScript = this->repository.getScriptByFilename(newScriptPath);
 			if (!oldScript || !newScript) {
-				this->log("applyScriptUpdates failed for " + oldScriptPath + " (" + newScriptPath + ")", Logger::ERROR);
+				this->log("applyScriptUpdates failed for " + oldScriptPath + " (" + newScriptPath + ")", Gc::Model::Logger::GenericLogger::ERROR);
 				continue;
 			}
 	
@@ -1261,7 +1261,7 @@ class Model_ListCfg :
 				newProxy->index = Model_Script::extractIndexFromPath(sourceFileName, this->env->cfg_dir);
 			} catch (InvalidStringFormatException const& e) {
 				newProxy->index = i++;
-				this->log(e, Logger::ERROR);
+				this->log(e, Gc::Model::Logger::GenericLogger::ERROR);
 			}
 	
 			// avoid duplicates

@@ -27,14 +27,14 @@
 #include <sys/stat.h>
 
 #include "../lib/ArrayStructure.hpp"
-#include "../lib/Trait/LoggerAware.hpp"
+#include "../Model/Logger/Trait/LoggerAware.hpp"
 #include "../lib/Exception.hpp"
 #include "../lib/FileSystem.hpp"
 #include "../lib/Type.hpp"
 #include "MountTable.hpp"
 #include "SettingsStore.hpp"
 
-struct Model_Env : public Trait_LoggerAware {
+struct Model_Env : public Gc::Model::Logger::Trait::LoggerAware {
 public:
 	enum Mode {
 		GRUB_MODE,
@@ -64,7 +64,7 @@ public:
 			this->burgMode = true;
 			FILE* burg_cfg = fopen((dir_prefix + "/etc/grub-customizer/burg.cfg").c_str(), "r");
 			if (burg_cfg) { // try to use the settings file ...
-				this->log("using custom BURG configuration", Logger::INFO);
+				this->log("using custom BURG configuration", Gc::Model::Logger::GenericLogger::INFO);
 				this->loadFromFile(burg_cfg, dir_prefix);
 				fclose(burg_cfg);
 			} else { // otherwise use the built-in config
@@ -85,7 +85,7 @@ public:
 			this->burgMode = false;
 			FILE* grub_cfg = fopen((dir_prefix + "/etc/grub-customizer/grub.cfg").c_str(), "r");
 			if (grub_cfg) { // try to use the settings file ...
-				this->log("using custom Grub2 configuration", Logger::INFO);
+				this->log("using custom Grub2 configuration", Gc::Model::Logger::GenericLogger::INFO);
 				this->loadFromFile(grub_cfg, dir_prefix);
 				fclose(grub_cfg);
 			} else { // otherwise use the built-in config
@@ -105,7 +105,7 @@ public:
 		}
 		
 		this->update_cmd = this->mkconfig_cmd + " -o \"" + this->output_config_file.substr(dir_prefix.size()) + "\"";
-		this->log("update-CMD: " + this->update_cmd, Logger::INFO);
+		this->log("update-CMD: " + this->update_cmd, Gc::Model::Logger::GenericLogger::INFO);
 	
 		bool is_valid = check_cmd(mkconfig_cmd, cmd_prefix) && check_cmd(update_cmd, cmd_prefix) && check_cmd(install_cmd, cmd_prefix) && check_dir(cfg_dir);
 		
@@ -293,7 +293,7 @@ public:
 	}
 
 	bool check_cmd(std::string const& cmd, std::string const& cmd_prefix = "") const {
-		this->log("checking the " + this->trim_cmd(cmd) + " command… ", Logger::INFO);
+		this->log("checking the " + this->trim_cmd(cmd) + " command… ", Gc::Model::Logger::GenericLogger::INFO);
 		FILE* proc = popen((cmd_prefix + " which " + this->trim_cmd(cmd) + " 2>&1").c_str(), "r");
 		std::string output;
 		int c;
@@ -304,9 +304,9 @@ public:
 		}
 		bool result = pclose(proc) == 0;
 		if (result == true) {
-			this->log("found at: " + output, Logger::INFO);
+			this->log("found at: " + output, Gc::Model::Logger::GenericLogger::INFO);
 		} else {
-			this->log("not found", Logger::INFO);
+			this->log("not found", Gc::Model::Logger::GenericLogger::INFO);
 		}
 		return result;
 	}

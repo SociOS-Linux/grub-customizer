@@ -21,13 +21,13 @@
 #include <string>
 #include <memory>
 
-class Logger
+namespace Gc { namespace Model { namespace Logger { class GenericLogger
 {
-	public: virtual inline ~Logger() {};
+	public: virtual inline ~GenericLogger() {};
 
-	public: static std::shared_ptr<Logger>& getInstance()
+	public: static std::shared_ptr<Gc::Model::Logger::GenericLogger>& getInstance()
 	{
-		static std::shared_ptr<Logger> logger;
+		static std::shared_ptr<Gc::Model::Logger::GenericLogger> logger;
 
 		return logger;
 	}
@@ -41,11 +41,12 @@ class Logger
 		DEBUG,
 		EXCEPTION
 	};
+
 	public: virtual void log(std::string const& str, Priority prio) = 0;
 	public: virtual void logActionBegin(std::string const& controller, std::string const& action) = 0;
 	public: virtual void logActionEnd() = 0;
 	public: virtual void logActionBeginThreaded(std::string const& controller, std::string const& action) = 0;
 	public: virtual void logActionEndThreaded() = 0;
-};
+};}}}
 
 #endif

@@ -22,7 +22,7 @@
 #include "../../../../Model/Rule.hpp"
 #include "../../../../Model/ListCfg.hpp"
 #include "../AbstractStrategy.hpp"
-#include "../../../../lib/Trait/LoggerAware.hpp"
+#include "../../../../Model/Logger/Trait/LoggerAware.hpp"
 #include <memory>
 #include <bitset>
 #include <set>
@@ -32,7 +32,7 @@ namespace Gc { namespace Controller { namespace Helper { namespace RuleMover { n
 class MoveRuleOutOfProxyOnToplevel :
 	public Gc::Controller::Helper::RuleMover::AbstractStrategy,
 	public Model_ListCfg_Connection,
-	public Trait_LoggerAware
+	public Gc::Model::Logger::Trait::LoggerAware
 {
 	private: enum Task
 	{
@@ -108,42 +108,42 @@ class MoveRuleOutOfProxyOnToplevel :
 
 		// it's important to handle all tasks!
 		if (currentTaskList.count(Task::MoveOwnProxy)) {
-			this->log("using Task::MoveOwnProxy", Logger::INFO);
+			this->log("using Task::MoveOwnProxy", Gc::Model::Logger::GenericLogger::INFO);
 			this->moveProxy(proxy, nextProxy, direction);
 		}
 
 		if (currentTaskList.count(Task::MoveOwnEntry)) {
-			this->log("using Task::MoveOwnEntry", Logger::INFO);
+			this->log("using Task::MoveOwnEntry", Gc::Model::Logger::GenericLogger::INFO);
 			this->moveRuleToOtherProxy(rule, proxy, afterNextProxy, direction);
 		}
 
 		if (currentTaskList.count(Task::MoveForeignEntry)) {
-			this->log("using Task::MoveForeignEntry", Logger::INFO);
+			this->log("using Task::MoveForeignEntry", Gc::Model::Logger::GenericLogger::INFO);
 			this->moveRuleToOtherProxy(firstVisibleRuleOfNextProxy, nextProxy, previousProxy, this->flipDirection(direction));
 		}
 
 		if (currentTaskList.count(Task::SplitOwnProxy)) {
-			this->log("using Task::SplitOwnProxy", Logger::INFO);
+			this->log("using Task::SplitOwnProxy", Gc::Model::Logger::GenericLogger::INFO);
 			this->insertAsNewProxy(rule, proxy, nextProxy, this->grublistCfg, direction);
 		}
 
 		if (currentTaskList.count(Task::SplitForeignProxy)) {
-			this->log("using Task::SplitForeignProxy", Logger::INFO);
+			this->log("using Task::SplitForeignProxy", Gc::Model::Logger::GenericLogger::INFO);
 			this->insertAsNewProxy(firstVisibleRuleOfNextProxy, nextProxy, proxy, this->grublistCfg, this->flipDirection(direction));
 		}
 
 		if (currentTaskList.count(Task::MoveNewProxiesToTheMiddle)) {
-			this->log("using Task::MoveNewProxiesToTheMiddle", Logger::INFO);
+			this->log("using Task::MoveNewProxiesToTheMiddle", Gc::Model::Logger::GenericLogger::INFO);
 			this->moveNewProxiesToTheMiddle(proxy, nextProxy, direction);
 		}
 
 		if (currentTaskList.count(Task::DeleteOwnProxy)) {
-			this->log("using Task::DeleteOwnProxy", Logger::INFO);
+			this->log("using Task::DeleteOwnProxy", Gc::Model::Logger::GenericLogger::INFO);
 			this->grublistCfg->proxies.deleteProxy(proxy);
 		}
 
 		if (currentTaskList.count(Task::DeleteForeignProxy)) {
-			this->log("using Task::DeleteForeignProxy", Logger::INFO);
+			this->log("using Task::DeleteForeignProxy", Gc::Model::Logger::GenericLogger::INFO);
 			this->grublistCfg->proxies.deleteProxy(nextProxy);
 		}
 	}

@@ -23,14 +23,14 @@
 #include <string>
 #include <functional>
 #include "../lib/Type.hpp"
-#include "../lib/Trait/LoggerAware.hpp"
+#include "../Model/Logger/Trait/LoggerAware.hpp"
 #include "Model/ListItem.hpp"
 
 /**
  * Interface to be implemented by dialogs which lets the user adding scripts
  */
 class View_Trash :
-	public Trait_LoggerAware
+	public Gc::Model::Logger::Trait::LoggerAware
 {
 public:
 	virtual inline ~View_Trash() {};

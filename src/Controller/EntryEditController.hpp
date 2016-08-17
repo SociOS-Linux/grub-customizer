@@ -31,9 +31,9 @@
 #include "../View/Trait/ViewAware.hpp"
 
 #include "../Model/ListCfg.hpp"
-#include "../lib/Trait/LoggerAware.hpp"
+#include "../Model/Logger/Trait/LoggerAware.hpp"
 #include "Common/ControllerAbstract.hpp"
-#include "../lib/ContentParserFactory.hpp"
+#include "../Model/ContentParser/GenericFactory.hpp"
 #include "../lib/Exception.hpp"
 #include "../Model/DeviceDataList.hpp"
 #include "../Model/Installer.hpp"
@@ -46,14 +46,14 @@ namespace Gc { namespace Controller { class EntryEditController :
 	public Gc::Controller::Common::ControllerAbstract,
 	public View_Trait_ViewAware<View_EntryEditor>,
 	public Model_ListCfg_Connection,
-	public ContentParserFactory_Connection,
+	public Gc::Model::ContentParser::GenericFactoryConnection,
 	public Model_DeviceDataListInterface_Connection,
 	public Model_Env_Connection,
 	public Gc::Controller::Helper::ThreadConnection,
 	public Gc::Bootstrap::ApplicationHelper::ObjectConnection,
 	public Gc::Controller::Helper::RuleMoverConnection
 {
-	private: std::shared_ptr<ContentParser> currentContentParser;
+	private: std::shared_ptr<Gc::Model::ContentParser::GenericParser> currentContentParser;
 
 	public: EntryEditController() :
 		Gc::Controller::Common::ControllerAbstract("entry-edit"),

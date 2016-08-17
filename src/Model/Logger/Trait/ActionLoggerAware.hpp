@@ -20,36 +20,39 @@
 #define TRAIT_ACTIONLOGGERAWARE_H_
 #include "LoggerAware.hpp"
 
-class Trait_ActionLoggerAware : public Trait_LoggerAware {
-	std::string _controllerName;
-protected:
-	void setControllerName(std::string const& name) {
+namespace Gc { namespace Model { namespace Logger { namespace Trait { class ActionLoggerAware :
+	public Gc::Model::Logger::Trait::LoggerAware
+{
+	private: std::string _controllerName;
+
+	protected: void setControllerName(std::string const& name) {
 		this->_controllerName = name;
 	}
 
-	void logActionBegin(std::string const& action) const {
+	protected: void logActionBegin(std::string const& action) const {
 		if (this->logger) {
 			this->logger->logActionBegin(this->_controllerName, action);
 		}
 	}
 
-	void logActionEnd() const {
+	protected: void logActionEnd() const {
 		if (this->logger) {
 			this->logger->logActionEnd();
 		}
 	}
-	void logActionBeginThreaded(std::string const& action) const {
+
+	protected: void logActionBeginThreaded(std::string const& action) const {
 		if (this->logger) {
 			this->logger->logActionBeginThreaded(this->_controllerName, action);
 		}
 	}
 
-	void logActionEndThreaded() const {
+	protected: void logActionEndThreaded() const {
 		if (this->logger) {
 			this->logger->logActionEndThreaded();
 		}
 	}
-};
+};}}}}
 
 
 #endif /* TRAIT_ACTIONLOGGERAWARE_H_ */

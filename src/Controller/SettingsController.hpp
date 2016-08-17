@@ -36,12 +36,12 @@
 #include "../View/Trait/ViewAware.hpp"
 #include "../Model/FbResolutionsGetter.hpp"
 #include "../Model/DeviceDataList.hpp"
-#include "../lib/ContentParserFactory.hpp"
+#include "../Model/ContentParser/GenericFactory.hpp"
 #include "../View/Mapper/EntryName.hpp"
 
 #include "Common/ControllerAbstract.hpp"
 
-#include "../lib/Trait/LoggerAware.hpp"
+#include "../Model/Logger/Trait/LoggerAware.hpp"
 
 #include "../lib/Exception.hpp"
 #include "Helper/Thread.hpp"
@@ -106,7 +106,7 @@ namespace Gc { namespace Controller { class SettingsController :
 		this->applicationObject->onInit.addHandler(
 			[this] () {
 				//loading the framebuffer resolutions in background…
-				this->log("Loading Framebuffer resolutions (background process)", Logger::EVENT);
+				this->log("Loading Framebuffer resolutions (background process)", Gc::Model::Logger::GenericLogger::EVENT);
 				this->threadHelper->runAsThread(std::bind(std::mem_fn(&SettingsController::loadResolutionsAction), this));
 			}
 		);

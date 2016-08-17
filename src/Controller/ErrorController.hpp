@@ -70,7 +70,7 @@ namespace Gc { namespace Controller { class ErrorController :
 	
 	public:	void errorAction(Exception const& e)
 	{
-		this->log(e, Logger::EXCEPTION);
+		this->log(e, Gc::Model::Logger::GenericLogger::EXCEPTION);
 		this->view->showErrorMessage(e, this->applicationStarted);
 	}
 
@@ -79,7 +79,7 @@ namespace Gc { namespace Controller { class ErrorController :
 		if (this->threadHelper) {
 			this->threadHelper->runDispatched(std::bind(std::mem_fn(&ErrorController::errorAction), this, Exception(e)));
 		} else {
-			this->log(e, Logger::EXCEPTION);
+			this->log(e, Gc::Model::Logger::GenericLogger::EXCEPTION);
 			exit(1);
 		}
 	}

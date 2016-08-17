@@ -34,11 +34,11 @@
 
 #include "../Model/ListCfg.hpp"
 #include "../Model/DeviceDataList.hpp"
-#include "../lib/ContentParserFactory.hpp"
+#include "../Model/ContentParser/GenericFactory.hpp"
 
 #include "Common/ControllerAbstract.hpp"
 
-#include "../lib/Trait/LoggerAware.hpp"
+#include "../Model/Logger/Trait/LoggerAware.hpp"
 #include "../lib/Exception.hpp"
 #include "../View/Mapper/EntryName.hpp"
 #include "../Model/FbResolutionsGetter.hpp"
@@ -58,7 +58,7 @@ namespace Gc { namespace Controller { class MainController :
 	public Model_FbResolutionsGetter_Connection,
 	public Model_DeviceDataList_Connection,
 	public Model_MountTable_Connection,
-	public ContentParserFactory_Connection,
+	public Gc::Model::ContentParser::GenericFactoryConnection,
 	public Gc::View::Mapper::EntryNameConnection,
 	public Model_Env_Connection,
 	public Gc::Controller::Helper::ThreadConnection,
@@ -67,7 +67,7 @@ namespace Gc { namespace Controller { class MainController :
 {
 	private: std::shared_ptr<Model_SettingsManagerData> settingsOnDisk; //buffer for the existing settings
 	private: std::shared_ptr<Model_ListCfg> savedListCfg;
-	private: ContentParser* currentContentParser;
+	private: Gc::Model::ContentParser::GenericParser* currentContentParser;
 
 	private: bool config_has_been_different_on_startup_but_unsaved;
 	private: bool is_loading;
@@ -180,11 +180,11 @@ namespace Gc { namespace Controller { class MainController :
 		) {
 			throw ConfigException("init(): missing some objects", __FILE__, __LINE__);
 		}
-		this->log("initializing (w/o specified bootloader type)…", Logger::IMPORTANT_EVENT);
+		this->log("initializing (w/o specified bootloader type)…", Gc::Model::Logger::GenericLogger::IMPORTANT_EVENT);
 
 		savedListCfg->verbose = false;
 
-		this->log("reading partition info…", Logger::EVENT);
+		this->log("reading partition info…", Gc::Model::Logger::GenericLogger::EVENT);
 		FILE* blkidProc = popen("blkid", "r");
 		if (blkidProc){
 			deviceDataList->clear();
@@ -202,14 +202,14 @@ namespace Gc { namespace Controller { class MainController :
 
 		//dir_prefix may be set by partition chooser (if not, the root partition is used)
 
-		this->log("Finding out if this is a live CD", Logger::EVENT);
+		this->log("Finding out if this is a live CD", Gc::Model::Logger::GenericLogger::EVENT);
 		//aufs is the virtual root fileSystem used by live cds
 		if (mountTable->getEntryByMountpoint("").isLiveCdFs() && env->cfg_dir_prefix == ""){
-			this->log("is live CD", Logger::INFO);
+			this->log("is live CD", Gc::Model::Logger::GenericLogger::INFO);
 			this->env->init(Model_Env::GRUB_MODE, "");
 			this->showEnvEditorAction();
 		} else {
-			this->log("running on an installed system", Logger::INFO);
+			this->log("running on an installed system", Gc::Model::Logger::GenericLogger::INFO);
 			std::list<Model_Env::Mode> modes = this->env->getAvailableModes();
 			if (modes.size() == 2) {
 				this->view->showBurgSwitcher();
@@ -223,7 +223,7 @@ namespace Gc { namespace Controller { class MainController :
 
 	public: void init(Model_Env::Mode mode, bool initEnv = true)
 	{
-		this->log("initializing (w/ specified bootloader type)…", Logger::IMPORTANT_EVENT);
+		this->log("initializing (w/ specified bootloader type)…", Gc::Model::Logger::GenericLogger::IMPORTANT_EVENT);
 		if (initEnv) {
 			this->env->init(mode, env->cfg_dir_prefix);
 		}
@@ -233,13 +233,13 @@ namespace Gc { namespace Controller { class MainController :
 		this->view->hideBurgSwitcher();
 		this->view->hideScriptUpdateInfo();
 
-		this->log("Checking if the config directory is clean", Logger::EVENT);
+		this->log("Checking if the config directory is clean", Gc::Model::Logger::GenericLogger::EVENT);
 		if (this->grublistCfg->cfgDirIsClean() == false) {
-			this->log("cleaning up config dir", Logger::IMPORTANT_EVENT);
+			this->log("cleaning up config dir", Gc::Model::Logger::GenericLogger::IMPORTANT_EVENT);
 			this->grublistCfg->cleanupCfgDir();
 		}
 
-		this->log("loading configuration", Logger::IMPORTANT_EVENT);
+		this->log("loading configuration", Gc::Model::Logger::GenericLogger::IMPORTANT_EVENT);
 		this->threadHelper->runAsThread(std::bind(std::mem_fn(&MainController::loadThreadedAction), this, false));
 	}
 
@@ -319,60 +319,60 @@ namespace Gc { namespace Controller { class MainController :
 		this->logActionBeginThreaded("load-threaded");
 		try {
 			if (!is_loading){ //allow only one load thread at the same time!
-				this->log(std::string("loading - preserveConfig: ") + (preserveConfig ? "yes" : "no"), Logger::IMPORTANT_EVENT);
+				this->log(std::string("loading - preserveConfig: ") + (preserveConfig ? "yes" : "no"), Gc::Model::Logger::GenericLogger::IMPORTANT_EVENT);
 				is_loading = true;
 				this->env->activeThreadCount++;
 
 				try {
 					this->view->setOptions(this->env->loadViewOptions());
 				} catch (FileReadException e) {
-					this->log("view options not found", Logger::INFO);
+					this->log("view options not found", Gc::Model::Logger::GenericLogger::INFO);
 				}
 				this->applicationObject->viewOptions = this->view->getOptions();
 
 				if (!preserveConfig){
-					this->log("unsetting saved config", Logger::EVENT);
+					this->log("unsetting saved config", Gc::Model::Logger::GenericLogger::EVENT);
 					this->grublistCfg->reset();
 					this->savedListCfg->reset();
 					//load the burg/grub settings file
-					this->log("loading settings", Logger::IMPORTANT_EVENT);
+					this->log("loading settings", Gc::Model::Logger::GenericLogger::IMPORTANT_EVENT);
 					this->settings->load();
 					this->threadHelper->runDispatched(std::bind(std::mem_fn(&MainController::activateSettingsAction), this));
 				} else {
-					this->log("switching settings", Logger::IMPORTANT_EVENT);
+					this->log("switching settings", Gc::Model::Logger::GenericLogger::IMPORTANT_EVENT);
 					this->settingsOnDisk->load();
 					this->settings->save();
 				}
 
 				try {
-					this->log("loading grub list", Logger::IMPORTANT_EVENT);
+					this->log("loading grub list", Gc::Model::Logger::GenericLogger::IMPORTANT_EVENT);
 					this->grublistCfg->load(preserveConfig);
-					this->log("grub list completely loaded", Logger::IMPORTANT_EVENT);
+					this->log("grub list completely loaded", Gc::Model::Logger::GenericLogger::IMPORTANT_EVENT);
 				} catch (CmdExecException const& e){
-					this->log("error while loading the grub list", Logger::ERROR);
+					this->log("error while loading the grub list", Gc::Model::Logger::GenericLogger::ERROR);
 					this->thrownException = e;
 					this->threadHelper->runDispatched(std::bind(std::mem_fn(&MainController::dieAction), this));
 					return; //cancel
 				}
 
 				if (!preserveConfig){
-					this->log("loading saved grub list", Logger::IMPORTANT_EVENT);
+					this->log("loading saved grub list", Gc::Model::Logger::GenericLogger::IMPORTANT_EVENT);
 					if (this->savedListCfg->loadStaticCfg()) {
 						this->config_has_been_different_on_startup_but_unsaved = !this->grublistCfg->compare(*this->savedListCfg);
 					} else {
-						this->log("saved grub list not found", Logger::WARNING);
+						this->log("saved grub list not found", Gc::Model::Logger::GenericLogger::WARNING);
 						this->config_has_been_different_on_startup_but_unsaved = false;
 					}
 					this->threadHelper->runDispatched([this] {this->applicationObject->onLoad.exec();});
 				}
 				if (preserveConfig){
-					this->log("restoring settings", Logger::IMPORTANT_EVENT);
+					this->log("restoring settings", Gc::Model::Logger::GenericLogger::IMPORTANT_EVENT);
 					this->settingsOnDisk->save();
 				}
 				this->env->activeThreadCount--;
 				this->is_loading = false;
 			} else {
-				this->log("ignoring load request (only one load thread allowed at the same time)", Logger::WARNING);
+				this->log("ignoring load request (only one load thread allowed at the same time)", Gc::Model::Logger::GenericLogger::WARNING);
 			}
 		} catch (Exception const& e) {
 			this->applicationObject->onThreadError.exec(e);
@@ -402,13 +402,13 @@ namespace Gc { namespace Controller { class MainController :
 		this->logActionBeginThreaded("save-threaded");
 		try {
 			this->env->createBackup();
-			this->log("writing settings file", Logger::IMPORTANT_EVENT);
+			this->log("writing settings file", Gc::Model::Logger::GenericLogger::IMPORTANT_EVENT);
 			this->settings->save();
 			if (this->settings->color_helper_required) {
 				this->grublistCfg->addColorHelper();
 			}
 			this->applicationObject->onSave.exec();
-			this->log("writing grub list configuration", Logger::IMPORTANT_EVENT);
+			this->log("writing grub list configuration", Gc::Model::Logger::GenericLogger::IMPORTANT_EVENT);
 			try {
 				this->grublistCfg->save();
 			} catch (CmdExecException const& e){
@@ -606,7 +606,7 @@ namespace Gc { namespace Controller { class MainController :
 
 				for (auto emptyProxy : emptyProxies) {
 					this->grublistCfg->proxies.deleteProxy(emptyProxy.first);
-					this->log("proxy removed", Logger::INFO);
+					this->log("proxy removed", Gc::Model::Logger::GenericLogger::INFO);
 				}
 
 				this->applicationObject->onListModelChange.exec();
@@ -793,7 +793,7 @@ namespace Gc { namespace Controller { class MainController :
 	{
 		this->logActionBegin("sync-save-state");
 		try {
-			this->log("running MainControllerImpl::syncListView_save", Logger::INFO);
+			this->log("running MainControllerImpl::syncListView_save", Gc::Model::Logger::GenericLogger::INFO);
 			this->view->progress_pulse();
 			if (this->grublistCfg->getProgress() == 1){
 				if (this->grublistCfg->error_proxy_not_found){
@@ -814,7 +814,7 @@ namespace Gc { namespace Controller { class MainController :
 			else {
 				this->view->setStatusText(gettext("updating configuration"));
 			}
-			this->log("MainControllerImpl::syncListView_save completed", Logger::INFO);
+			this->log("MainControllerImpl::syncListView_save completed", Gc::Model::Logger::GenericLogger::INFO);
 		} catch (Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
@@ -825,7 +825,7 @@ namespace Gc { namespace Controller { class MainController :
 	{
 		this->logActionBegin("sync-load-state");
 		try {
-			this->log("running MainControllerImpl::syncListView_load", Logger::INFO);
+			this->log("running MainControllerImpl::syncListView_load", Gc::Model::Logger::GenericLogger::INFO);
 			this->view->setLockState(1|4);
 			double progress = this->grublistCfg->getProgress();
 			if (progress != 1) {
@@ -856,7 +856,7 @@ namespace Gc { namespace Controller { class MainController :
 
 				this->applicationObject->onListModelChange.exec();
 			}
-			this->log("MainControllerImpl::syncListView_load completed", Logger::INFO);
+			this->log("MainControllerImpl::syncListView_load completed", Gc::Model::Logger::GenericLogger::INFO);
 		} catch (Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
@@ -976,7 +976,7 @@ namespace Gc { namespace Controller { class MainController :
 				this->applicationObject->viewOptions = this->view->getOptions();
 				this->env->saveViewOptions(this->view->getOptions());
 			} catch (FileSaveException e) {
-				this->log("option saving failed", Logger::ERROR);
+				this->log("option saving failed", Gc::Model::Logger::GenericLogger::ERROR);
 			}
 			this->applicationObject->onListModelChange.exec();
 		} catch (Exception const& e) {
@@ -1035,7 +1035,7 @@ namespace Gc { namespace Controller { class MainController :
 			// parse content to show additional informations
 			std::map<std::string, std::string> options;
 			if (rule->dataSource) {
-				options = Gc::Controller::Helper::DeviceInfo::fetch(rule->dataSource->content, *this->contentParserFactory, *deviceDataList);
+				options = Gc::Controller::Helper::DeviceInfo::fetch(rule->dataSource->content, *contentParserFactory, *deviceDataList);
 			}
 
 			auto proxy = this->grublistCfg->proxies.getProxyByRule(rule);

@@ -20,13 +20,13 @@
 #define SETTINGSDLG_H_
 #include <functional>
 
-#include "../lib/Trait/LoggerAware.hpp"
+#include "../Model/Logger/Trait/LoggerAware.hpp"
 
 /**
  * Interface to be implemented by settings dialogs
  */
 class View_Settings :
-	public Trait_LoggerAware {
+	public Gc::Model::Logger::Trait::LoggerAware {
 public:
 	std::function<void ()> onDefaultSystemChange;
 	std::function<void (std::string const& name)> onCustomSettingChange;

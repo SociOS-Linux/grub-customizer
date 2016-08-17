@@ -21,23 +21,23 @@
 
 #include <memory>
 
-#include "../Exception.hpp"
-#include "../Logger.hpp"
+#include "../../../lib/Exception.hpp"
+#include "../GenericLogger.hpp"
 
-class Trait_LoggerAware
+namespace Gc { namespace Model { namespace Logger { namespace Trait { class LoggerAware
 {
-	protected: mutable std::shared_ptr<Logger> logger;
+	protected: mutable std::shared_ptr<Gc::Model::Logger::GenericLogger> logger;
 
-	public: virtual ~Trait_LoggerAware() {}
+	public: virtual ~LoggerAware() {}
 
-	public: Trait_LoggerAware()
+	public: LoggerAware()
 	{
-		if (Logger::getInstance()) {
-			this->logger = Logger::getInstance();
+		if (Gc::Model::Logger::GenericLogger::getInstance()) {
+			this->logger = Gc::Model::Logger::GenericLogger::getInstance();
 		}
 	}
 
-	public: void setLogger(std::shared_ptr<Logger> logger) {
+	public: void setLogger(std::shared_ptr<Gc::Model::Logger::GenericLogger> logger) {
 		this->logger = logger;
 		this->initLogger();
 	}
@@ -46,7 +46,7 @@ class Trait_LoggerAware
 		// override to add initializations
 	}
 
-	public: std::shared_ptr<Logger> getLogger() {
+	public: std::shared_ptr<Gc::Model::Logger::GenericLogger> getLogger() {
 		return this->logger;
 	}
 
@@ -55,13 +55,13 @@ class Trait_LoggerAware
 		return this->logger != nullptr;
 	}
 
-	protected: void log(std::string const& message, Logger::Priority prio) const
+	protected: void log(std::string const& message, Gc::Model::Logger::GenericLogger::Priority prio) const
 	{
 		if (this->logger) {
 			this->logger->log(message, prio);
 		}
 	}
-};
+};}}}}
 
 
 #endif /* TRAIT_LOGGERAWARE_INCLUDED */

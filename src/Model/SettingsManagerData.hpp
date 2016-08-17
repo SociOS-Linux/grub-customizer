@@ -19,7 +19,7 @@
 #ifndef SETTING_MANAGER_DATASTORE_INCLUDED
 #define SETTING_MANAGER_DATASTORE_INCLUDED
 #include <sys/stat.h> //mkdir
-#include "../lib/Trait/LoggerAware.hpp"
+#include "../Model/Logger/Trait/LoggerAware.hpp"
 #include <sstream>
 #include "../lib/Helper.hpp"
 #include <map>
@@ -28,7 +28,7 @@
 
 class Model_SettingsManagerData :
 	public Model_SettingsStore,
-	public Trait_LoggerAware,
+	public Gc::Model::Logger::Trait::LoggerAware,
 	public Model_Env_Connection
 {
 	bool _reloadRequired;
@@ -104,13 +104,13 @@ public:
 			stream << fontSize;
 			sizeParam = " --size='" + stream.str() + "'";
 			if (fontSize > 72) {
-				this->log("Error: font too large: " + stream.str() + "!", Logger::ERROR);
+				this->log("Error: font too large: " + stream.str() + "!", Gc::Model::Logger::GenericLogger::ERROR);
 				return ""; // fehler
 			}
 		}
 		outputPath = outputPath != "" ? outputPath : this->env->output_config_dir_noprefix + "/unicode.pf2";
 		std::string cmd = this->env->mkfont_cmd + " --output='" + Helper::str_replace("'", "\\'", outputPath) + "'" + sizeParam + " '" + Helper::str_replace("'", "\\'", fontFile) + "' 2>&1";
-		this->log("running " + cmd, Logger::INFO);
+		this->log("running " + cmd, Gc::Model::Logger::GenericLogger::INFO);
 		FILE* mkfont_proc = popen(cmd.c_str(), "r");
 		int c;
 	//	std::string row = "";
@@ -123,7 +123,7 @@ public:
 		}
 		int result = pclose(mkfont_proc);
 		if (result != 0) {
-			this->log("error running " + this->env->mkfont_cmd, Logger::ERROR);
+			this->log("error running " + this->env->mkfont_cmd, Gc::Model::Logger::GenericLogger::ERROR);
 			return "";
 		}
 		this->setValue("GRUB_FONT", outputPath);
@@ -139,9 +139,9 @@ public:
 			this->grubFontSize = -1;
 			if (this->getValue("GRUB_FONT") != "") {
 				this->oldFontFile = this->getValue("GRUB_FONT");
-				this->log("parsing " + this->getValue("GRUB_FONT"), Logger::INFO);
+				this->log("parsing " + this->getValue("GRUB_FONT"), Gc::Model::Logger::GenericLogger::INFO);
 				this->grubFont = Model_SettingsManagerData::parsePf2(this->env->cfg_dir_prefix + this->getValue("GRUB_FONT"))["NAME"];
-				this->log("result " + this->grubFont, Logger::INFO);
+				this->log("result " + this->grubFont, Gc::Model::Logger::GenericLogger::INFO);
 				this->removeItem("GRUB_FONT");
 			}
 	
@@ -212,10 +212,10 @@ public:
 			if (isGraphical && generatedFont == "") {
 				FILE* fontFile = fopen((this->env->output_config_dir + "/unicode.pf2").c_str(), "r");
 				if (fontFile) {
-					this->log("font file exists", Logger::INFO);
+					this->log("font file exists", Gc::Model::Logger::GenericLogger::INFO);
 					fclose(fontFile);
 				} else {
-					this->log("generating the font file", Logger::EVENT);
+					this->log("generating the font file", Gc::Model::Logger::GenericLogger::EVENT);
 					this->mkFont("/usr/share/fonts/dejavu/DejaVuSansMono.ttf");
 				}
 			}

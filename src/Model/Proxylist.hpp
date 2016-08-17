@@ -21,7 +21,7 @@
 #include <list>
 #include <sstream>
 #include <memory>
-#include "../lib/Trait/LoggerAware.hpp"
+#include "../Model/Logger/Trait/LoggerAware.hpp"
 #include "../lib/Exception.hpp"
 #include "../lib/ArrayStructure.hpp"
 #include "Proxy.hpp"
@@ -32,7 +32,7 @@ struct Model_Proxylist_Item {
 	std::string numericPathValue;
 	std::string numericPathLabel;
 };
-class Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public Trait_LoggerAware
+class Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public Gc::Model::Logger::Trait::LoggerAware
 {
 	public: std::list<std::shared_ptr<Model_Proxy>> trash; //removed proxies
 

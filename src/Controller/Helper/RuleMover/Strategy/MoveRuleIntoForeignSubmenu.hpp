@@ -22,14 +22,14 @@
 #include "../../../../Model/Rule.hpp"
 #include "../../../../Model/ListCfg.hpp"
 #include "../AbstractStrategy.hpp"
-#include "../../../../lib/Trait/LoggerAware.hpp"
+#include "../../../../Model/Logger/Trait/LoggerAware.hpp"
 #include <memory>
 
 namespace Gc { namespace Controller { namespace Helper { namespace RuleMover { namespace Strategy {
 class MoveRuleIntoForeignSubmenu :
 	public Gc::Controller::Helper::RuleMover::AbstractStrategy,
 	public Model_ListCfg_Connection,
-	public Trait_LoggerAware
+	public Gc::Model::Logger::Trait::LoggerAware
 {
 	public: MoveRuleIntoForeignSubmenu()
 		: Gc::Controller::Helper::RuleMover::AbstractStrategy("MoveRuleIntoForeignSubmenu")

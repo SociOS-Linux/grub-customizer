@@ -21,9 +21,9 @@
 #include <cstdlib>
 #include <memory>
 
-#include "Trait/LoggerAware.hpp"
+#include "../Model/Logger/Trait/LoggerAware.hpp"
 
-class Mutex : public Trait_LoggerAware {
+class Mutex : public Gc::Model::Logger::Trait::LoggerAware {
 public:
 	virtual inline ~Mutex() {};
 

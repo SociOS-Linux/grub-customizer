@@ -19,26 +19,27 @@
 #ifndef CONTENT_PARSER_MEMTEST_H_
 #define CONTENT_PARSER_MEMTEST_H_
 
-#include "../Regex.hpp"
+#include "../../lib/Regex.hpp"
 #include "../../Model/DeviceMap.hpp"
-#include "Abstract.hpp"
+#include "AbstractParser.hpp"
 
-class ContentParser_Memtest :
-	public ContentParser_Abstract,
+namespace Gc { namespace Model { namespace ContentParser { class Memtest :
+	public Gc::Model::ContentParser::AbstractParser,
 	public Regex_RegexConnection,
 	public Model_DeviceMap_Connection,
 	public Model_MountTable_Connection,
 	public Model_DeviceDataList_Connection
 {
-	static const char* _regex;
-	std::string sourceCode;
-public:
-	void parse(std::string const& sourceCode) {
+	private: static const char* _regex;
+	private: std::string sourceCode;
+
+	public: void parse(std::string const& sourceCode)
+	{
 		this->sourceCode = sourceCode;
 		try {
-			std::vector<std::string> result = this->regexEngine->match(ContentParser_Memtest::_regex, this->sourceCode, '\\', '_');
+			std::vector<std::string> result = this->regexEngine->match(Gc::Model::ContentParser::Memtest::_regex, this->sourceCode, '\\', '_');
 	
-	
+
 			//check partition indices by uuid
 			Model_DeviceMap_PartitionIndex pIndex = this->deviceMap->getHarddriveIndexByPartitionUuid(result[3]);
 			if (pIndex.hddNum != result[1] || pIndex.partNum != result[2]){
@@ -67,7 +68,8 @@ public:
 		}
 	}
 
-	std::string buildSource() const {
+	public: std::string buildSource() const
+	{
 		std::string partitionUuid, filePath;
 
 		if (this->options.find("memtest_image_full") != this->options.end()) {
@@ -90,8 +92,8 @@ public:
 
 			std::string result;
 
-			result = this->regexEngine->replace(ContentParser_Memtest::_regex, this->sourceCode, newValues, '\\', '_');
-			this->regexEngine->match(ContentParser_Memtest::_regex, result, '\\', '_');
+			result = this->regexEngine->replace(Gc::Model::ContentParser::Memtest::_regex, this->sourceCode, newValues, '\\', '_');
+			this->regexEngine->match(Gc::Model::ContentParser::Memtest::_regex, result, '\\', '_');
 
 			return result;
 		} catch (RegExNotMatchedException const& e) {
@@ -99,8 +101,8 @@ public:
 		}
 	}
 
-
-	void buildDefaultEntry() {
+	public: void buildDefaultEntry()
+	{
 		std::string defaultEntry =
 			"set root='(hd0,0)'\n"
 			"search --no-floppy --fs-uuid --set 000\n"
@@ -108,15 +110,15 @@ public:
 
 		this->sourceCode = defaultEntry;
 
-		assert(this->regexEngine->match(ContentParser_Memtest::_regex, defaultEntry, '\\', '_').size() > 0);
+		assert(this->regexEngine->match(Gc::Model::ContentParser::Memtest::_regex, defaultEntry, '\\', '_').size() > 0);
 
 		this->options.clear();
 		this->options["memtest_image_full"] = "/boot/memtest86+.bin";
 	}
 
-};
+};}}}
 
-const char* ContentParser_Memtest::_regex =
+const char* Gc::Model::ContentParser::Memtest::_regex =
 	"[ \t]*set root='\\(hd([0-9]+)[^0-9]+([0-9]+)\\)'\\n"
 	"[ \t]*search[ \t]+--no-floppy[ \t]+--fs-uuid[ \t]+--set(?:=root)? ([-0-9a-fA-F]+)\\n"
 	"[ \t]*linux16[ \t]*(\"[^\"]*\"|[^ \\t\\n]+).*$";

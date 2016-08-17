@@ -18,11 +18,11 @@
 
 #ifndef HELPER_THREAD_H_INCLUDED
 #define HELPER_THREAD_H_INCLUDED
-#include "../../lib/Trait/LoggerAware.hpp"
+#include "../../Model/Logger/Trait/LoggerAware.hpp"
 #include <functional>
 
 namespace Gc { namespace Controller { namespace Helper { class Thread :
-	public Trait_LoggerAware
+	public Gc::Model::Logger::Trait::LoggerAware
 {
 	public: virtual inline ~Thread() {};
 	public: virtual void runDispatched(std::function<void ()> function) = 0;

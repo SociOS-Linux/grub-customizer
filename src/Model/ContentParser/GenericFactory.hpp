@@ -15,27 +15,23 @@
  * along with this program; if not, write to the Free Software
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
- 
-#ifndef CONTENTPARSER_H_
-#define CONTENTPARSER_H_
-#include <map>
+
+#ifndef CONTENTPARSERFACTORY_H_
+#define CONTENTPARSERFACTORY_H_
+#include <list>
 #include <string>
+#include <memory>
 
-#include "Exception.hpp"
+#include "GenericParser.hpp"
 
-class ContentParser {
-public:
-	virtual inline ~ContentParser() {};
-	virtual void parse(std::string const& sourceCode) = 0;
-	virtual std::map<std::string, std::string> getOptions() const = 0;
-	virtual std::string getOption(std::string const& name) const = 0;
-	virtual bool hasOption(std::string const& name) const = 0;
-	virtual void setOption(std::string const& name, std::string const& value) = 0;
-	virtual void setOptions(std::map<std::string, std::string> const& options) = 0;
-	virtual std::string buildSource() const = 0;
-	virtual void buildDefaultEntry() = 0;
-	virtual std::list<std::string> getErrors() = 0;
-};
+namespace Gc { namespace Model { namespace ContentParser { class GenericFactory
+{
+	public: virtual inline ~GenericFactory() {};
 
-#endif /* CONTENTPARSER_H_ */
- 
+	public: virtual std::shared_ptr<Gc::Model::ContentParser::GenericParser> create(std::string const& sourceCode) = 0;
+	public: virtual std::shared_ptr<Gc::Model::ContentParser::GenericParser> createByName(std::string const& name) = 0;
+	public: virtual std::list<std::string> const& getNames() const = 0;
+	public: virtual std::string getNameByInstance(Gc::Model::ContentParser::GenericParser const& instance) const = 0;
+};}}}
+
+#endif /* CONTENTPARSERFACTORY_H_ */

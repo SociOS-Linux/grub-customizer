@@ -22,7 +22,7 @@
 #include <string>
 #include <list>
 #include <memory>
-#include "../lib/Trait/LoggerAware.hpp"
+#include "../Model/Logger/Trait/LoggerAware.hpp"
 #include "../lib/Helper.hpp"
 #include "../lib/ArrayStructure.hpp"
 #include "../lib/Type.hpp"
@@ -56,7 +56,7 @@ class Model_Entry_Row
 	}
 };
 
-class Model_Entry : public Trait_LoggerAware, public Entry
+class Model_Entry : public Gc::Model::Logger::Trait::LoggerAware, public Entry
 {
 	public: enum EntryType {
 		MENUENTRY,
@@ -79,7 +79,7 @@ class Model_Entry : public Trait_LoggerAware, public Entry
 		: name(name), extension(extension), content(content), isValid(true), type(type), isModified(false), quote('\'')
 	{}
 	
-	public: Model_Entry(FILE* sourceFile, Model_Entry_Row firstRow = Model_Entry_Row(), std::shared_ptr<Logger> logger = nullptr, std::string* plaintextBuffer = NULL)
+	public: Model_Entry(FILE* sourceFile, Model_Entry_Row firstRow = Model_Entry_Row(), std::shared_ptr<Gc::Model::Logger::GenericLogger> logger = nullptr, std::string* plaintextBuffer = NULL)
 		: isValid(false), type(MENUENTRY), quote('\''), isModified(false)
 	{
 		if (logger) {

@@ -19,21 +19,22 @@
 #ifndef CONTENT_PARSER_LINUX_H_
 #define CONTENT_PARSER_LINUX_H_
 #include "../../Model/DeviceMap.hpp"
-#include "../Regex.hpp"
-#include "Abstract.hpp"
+#include "../../lib/Regex.hpp"
+#include "AbstractParser.hpp"
 
-class ContentParser_Linux :
-	public ContentParser_Abstract,
+namespace Gc { namespace Model { namespace ContentParser { class Linux :
+	public Gc::Model::ContentParser::AbstractParser,
 	public Regex_RegexConnection,
 	public Model_DeviceMap_Connection
 {
-	static const char* _regex;
-	std::string sourceCode;
-public:
-	void parse(std::string const& sourceCode) {
+	private: static const char* _regex;
+	private: std::string sourceCode;
+
+	public: void parse(std::string const& sourceCode)
+	{
 		this->sourceCode = sourceCode;
 		try {
-			std::vector<std::string> result = this->regexEngine->match(ContentParser_Linux::_regex, sourceCode, '\\', '_');
+			std::vector<std::string> result = this->regexEngine->match(Gc::Model::ContentParser::Linux::_regex, sourceCode, '\\', '_');
 	
 			//check partition indices by uuid
 			Model_DeviceMap_PartitionIndex pIndex = this->deviceMap->getHarddriveIndexByPartitionUuid(result[6]);
@@ -55,7 +56,8 @@ public:
 		}
 	}
 
-	std::string buildSource() const {
+	public: std::string buildSource() const
+	{
 		try {
 			Model_DeviceMap_PartitionIndex pIndex = this->deviceMap->getHarddriveIndexByPartitionUuid(this->options.at("partition_uuid"));
 			std::map<int, std::string> newValues;
@@ -69,8 +71,8 @@ public:
 
 			std::string result;
 
-			result = this->regexEngine->replace(ContentParser_Linux::_regex, this->sourceCode, newValues, '\\', '_');
-			this->regexEngine->match(ContentParser_Linux::_regex, result, '\\', '_');
+			result = this->regexEngine->replace(Gc::Model::ContentParser::Linux::_regex, this->sourceCode, newValues, '\\', '_');
+			this->regexEngine->match(Gc::Model::ContentParser::Linux::_regex, result, '\\', '_');
 
 			return result;
 		} catch (RegExNotMatchedException const& e) {
@@ -78,14 +80,15 @@ public:
 		}
 	}
 
-	void buildDefaultEntry() {
+	public: void buildDefaultEntry()
+	{
 		std::string defaultEntry =
 			"set root='(hd0,0)'\n"
 			"search --no-floppy --fs-uuid --set=root 000\n"
 			"linux ___ root=UUID=000\n"
 			"initrd ___";
 
-		assert(this->regexEngine->match(ContentParser_Linux::_regex, defaultEntry, '\\', '_').size() > 0);
+		assert(this->regexEngine->match(Gc::Model::ContentParser::Linux::_regex, defaultEntry, '\\', '_').size() > 0);
 
 		this->sourceCode = defaultEntry;
 
@@ -96,9 +99,9 @@ public:
 		this->options["other_params"] = "";
 	}
 
-};
+};}}}
 
-const char* ContentParser_Linux::_regex =
+const char* Gc::Model::ContentParser::Linux::_regex =
 	"[ \t]*set root='\\(hd([0-9]+)[^0-9]+([0-9]+)\\)'\\n"
 	"[ \t]*search[ \t]+--no-floppy[ \t]+--fs-uuid[ \t]+--set(?:=root)? ([-0-9a-fA-F]+)\\n"
 	"([ \t]*echo[ \t]+.*\n)?"

@@ -18,23 +18,26 @@
 
 #ifndef CONTENTPARSERFACTORYIMPL_H_
 #define CONTENTPARSERFACTORYIMPL_H_
-#include "../../lib/ContentParserFactory.hpp"
-#include "../../lib/ContentParser.hpp"
+#include "GenericFactory.hpp"
+#include "GenericParser.hpp"
 #include <list>
 #include <memory>
-#include "../Exception.hpp"
 
-class ContentParser_FactoryImpl : public ContentParserFactory {
-	private: std::list<std::shared_ptr<ContentParser>> parsers;
+namespace Gc { namespace Model { namespace ContentParser { class FactoryImpl :
+	public Gc::Model::ContentParser::GenericFactory
+{
+	private: std::list<std::shared_ptr<Gc::Model::ContentParser::GenericParser>> parsers;
 	private: std::list<std::string> names;
 
-	public: void registerParser(std::shared_ptr<ContentParser> parser, std::string const& name) {
+	public: void registerParser(std::shared_ptr<Gc::Model::ContentParser::GenericParser> parser, std::string const& name)
+	{
 		assert(this->parsers.size() == this->names.size());
 		this->parsers.push_back(parser);
 		this->names.push_back(name);
 	}
 
-	public: std::shared_ptr<ContentParser> create(std::string const& sourceCode) {
+	public: std::shared_ptr<Gc::Model::ContentParser::GenericParser> create(std::string const& sourceCode)
+	{
 		for (auto parser : this->parsers) {
 			try {
 				parser->parse(sourceCode);
@@ -46,7 +49,8 @@ class ContentParser_FactoryImpl : public ContentParserFactory {
 		throw ParserNotFoundException("no matching parser found", __FILE__, __LINE__);
 	}
 
-	public: std::shared_ptr<ContentParser> createByName(std::string const& name) {
+	public: std::shared_ptr<Gc::Model::ContentParser::GenericParser> createByName(std::string const& name)
+	{
 		assert(this->parsers.size() == this->names.size());
 	
 		std::list<std::string>::iterator namesIter = this->names.begin();
@@ -59,11 +63,13 @@ class ContentParser_FactoryImpl : public ContentParserFactory {
 		throw ItemNotFoundException("no parser found by name '" + name + "'", __FILE__, __LINE__);
 	}
 
-	public: std::list<std::string> const& getNames() const {
+	public: std::list<std::string> const& getNames() const
+	{
 		return this->names;
 	}
 
-	public: std::string getNameByInstance(ContentParser const& instance) const {
+	public: std::string getNameByInstance(Gc::Model::ContentParser::GenericParser const& instance) const
+	{
 		assert(this->parsers.size() == this->names.size());
 	
 		std::list<std::string>::const_iterator namesIter = this->names.begin();
@@ -76,6 +82,6 @@ class ContentParser_FactoryImpl : public ContentParserFactory {
 		throw ItemNotFoundException("no parser found by instance pointer", __FILE__, __LINE__);
 	}
 
-};
+};}}}
 
 #endif /* CONTENTPARSERFACTORYIMPL_H_ */

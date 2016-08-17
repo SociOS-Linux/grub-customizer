@@ -791,7 +791,7 @@ class View_Gtk_Theme :
 			try {
 				this->onRemoveFile(this->getSelectedFileName());
 			} catch (ItemNotFoundException const& e) {
-				this->log("no file selected - ignoring event", Logger::ERROR);
+				this->log("no file selected - ignoring event", Gc::Model::Logger::GenericLogger::ERROR);
 			}
 		}
 	}
@@ -802,7 +802,7 @@ class View_Gtk_Theme :
 			try {
 				this->onSelect(this->getSelectedFileName());
 			} catch (ItemNotFoundException const& e) {
-				this->log("no file selected - ignoring event", Logger::INFO);
+				this->log("no file selected - ignoring event", Gc::Model::Logger::GenericLogger::INFO);
 			}
 		}
 	}
@@ -813,7 +813,7 @@ class View_Gtk_Theme :
 			try {
 				this->onRename(this->getSelectedFileName());
 			} catch (ItemNotFoundException const& e) {
-				this->log("no file selected - ignoring event", Logger::ERROR);
+				this->log("no file selected - ignoring event", Gc::Model::Logger::GenericLogger::ERROR);
 			}
 		}
 	}

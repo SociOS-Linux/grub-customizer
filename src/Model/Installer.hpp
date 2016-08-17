@@ -21,11 +21,11 @@
 #include <string>
 #include <cstdio>
 #include <functional>
-#include "../lib/Trait/LoggerAware.hpp"
+#include "../Model/Logger/Trait/LoggerAware.hpp"
 #include "Env.hpp"
 
 class Model_Installer :
-	public Trait_LoggerAware,
+	public Gc::Model::Logger::Trait::LoggerAware,
 	public Model_Env_Connection
 {
 	std::string install_result;

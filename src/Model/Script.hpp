@@ -24,7 +24,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include "../Model/EntryPathFollower.hpp"
-#include "../lib/Trait/LoggerAware.hpp"
+#include "../Model/Logger/Trait/LoggerAware.hpp"
 #include "../lib/Helper.hpp"
 #include "../config.hpp"
 #include "../lib/Exception.hpp"
@@ -32,7 +32,7 @@
 #include "../lib/Type.hpp"
 #include "Entry.hpp"
 
-class Model_Script : public Model_EntryPathFollower, public Trait_LoggerAware, public Script {
+class Model_Script : public Model_EntryPathFollower, public Gc::Model::Logger::Trait::LoggerAware, public Script {
 	public: std::string name, fileName;
 	public: bool isCustomScript;
 	public: std::shared_ptr<Model_Entry> root;

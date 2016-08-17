@@ -21,11 +21,11 @@
 #include <map>
 #include <functional>
 
-#include "../lib/Trait/LoggerAware.hpp"
+#include "../Model/Logger/Trait/LoggerAware.hpp"
 #include "../Model/DeviceDataListInterface.hpp"
 
 class View_EnvEditor :
-	public Trait_LoggerAware,
+	public Gc::Model::Logger::Trait::LoggerAware,
 	public Model_DeviceDataListInterface_Connection
 {
 public:

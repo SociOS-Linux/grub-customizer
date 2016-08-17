@@ -23,17 +23,17 @@
 #include <climits>
 #include <cstdlib>
 #include <cstdio>
-#include "../../lib/ContentParser.hpp"
-#include "../../lib/Trait/LoggerAware.hpp"
+#include "GenericParser.hpp"
+#include "../Logger/Trait/LoggerAware.hpp"
 #include "../../lib/Helper.hpp"
 
-class ContentParser_Abstract :
-	public ContentParser,
-	public Trait_LoggerAware
+namespace Gc { namespace Model { namespace ContentParser { class AbstractParser :
+	public Gc::Model::ContentParser::GenericParser,
+	public Gc::Model::Logger::Trait::LoggerAware
 {
 	protected: std::map<std::string, std::string> options;
 
-	public:	virtual inline ~ContentParser_Abstract() {}
+	public:	virtual inline ~AbstractParser() {}
 
 	public:	std::map<std::string, std::string> getOptions() const
 	{
@@ -130,6 +130,6 @@ class ContentParser_Abstract :
 		}
 		return Helper::str_unescape(value, '\\');
 	}
-};
+};}}}
 
 #endif /* CONTENT_PARSER_ABSTRACT_H_ */

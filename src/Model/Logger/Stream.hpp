@@ -18,51 +18,60 @@
 
 #ifndef STREAM_LOGGER_H_
 #define STREAM_LOGGER_H_
-#include "../Logger.hpp"
+#include "GenericLogger.hpp"
 #include <ostream>
 #include <string>
 
-class Logger_Stream : public Logger {
-	std::ostream* stream;
-	int actionStackDepth;
-public:
-	enum LogLevel {
+namespace Gc { namespace Model { namespace Logger { class Stream :
+	public Gc::Model::Logger::GenericLogger
+{
+	private: std::ostream* stream;
+	private: int actionStackDepth;
+
+	public: enum LogLevel {
 		LOG_NOTHING,
 		LOG_DEBUG_ONLY,
 		LOG_IMPORTANT,
 		LOG_EVENT,
 		LOG_VERBOSE
 	} logLevel;
-	Logger_Stream(std::ostream& stream) : stream(&stream), actionStackDepth(0), logLevel(LOG_NOTHING) {}
 
-	void log(std::string const& message, Logger::Priority prio) {
+	public: Stream(std::ostream& stream) :
+		stream(&stream),
+		actionStackDepth(0),
+		logLevel(LOG_NOTHING)
+	{}
+
+	public: void log(std::string const& message, Gc::Model::Logger::GenericLogger::Priority prio)
+	{
 		if (prio != ERROR && (
 			this->logLevel == LOG_NOTHING ||
-			(this->logLevel == LOG_DEBUG_ONLY && prio != Logger::DEBUG && prio != Logger::EXCEPTION) ||
-			(this->logLevel == LOG_IMPORTANT && prio != Logger::IMPORTANT_EVENT) ||
-			(this->logLevel == LOG_EVENT && prio != Logger::EVENT && prio != Logger::IMPORTANT_EVENT))) {
+			(this->logLevel == LOG_DEBUG_ONLY && prio != Gc::Model::Logger::GenericLogger::DEBUG && prio != Gc::Model::Logger::GenericLogger::EXCEPTION) ||
+			(this->logLevel == LOG_IMPORTANT && prio != Gc::Model::Logger::GenericLogger::IMPORTANT_EVENT) ||
+			(this->logLevel == LOG_EVENT && prio != Gc::Model::Logger::GenericLogger::EVENT && prio != Gc::Model::Logger::GenericLogger::IMPORTANT_EVENT))) {
 			return;
 		}
-		if (prio == Logger::IMPORTANT_EVENT) {
+		if (prio == Gc::Model::Logger::GenericLogger::IMPORTANT_EVENT) {
 			*this->stream << " *** ";
-		} else if (prio == Logger::EVENT) {
+		} else if (prio == Gc::Model::Logger::GenericLogger::EVENT) {
 			*this->stream << "   * ";
 		} else {
 			*this->stream << "     ";
 		}
 	
-		if (prio == Logger::INFO) {
+		if (prio == Gc::Model::Logger::GenericLogger::INFO) {
 			*this->stream << "[";
 		}
 		*this->stream << message;
-		if (prio == Logger::INFO) {
+		if (prio == Gc::Model::Logger::GenericLogger::INFO) {
 			*this->stream << "]";
 		}
 	
 		*this->stream << std::endl;
 	}
 
-	void logActionBegin(std::string const& controller, std::string const& action) {
+	public: void logActionBegin(std::string const& controller, std::string const& action)
+	{
 		if (this->logLevel == LOG_DEBUG_ONLY || this->logLevel == LOG_VERBOSE) {
 			actionStackDepth++;
 			for (int i = 0; i < actionStackDepth; i++) {
@@ -72,7 +81,8 @@ public:
 		}
 	}
 
-	void logActionEnd() {
+	public: void logActionEnd()
+	{
 		if (this->logLevel == LOG_DEBUG_ONLY || this->logLevel == LOG_VERBOSE) {
 			if (actionStackDepth) {
 				actionStackDepth--;
@@ -83,18 +93,21 @@ public:
 		}
 	}
 
-	void logActionBeginThreaded(std::string const& controller, std::string const& action) {
+	public: void logActionBeginThreaded(std::string const& controller, std::string const& action)
+	{
 		// not yet implemented
 	}
 
-	void logActionEndThreaded() {
+	public: void logActionEndThreaded()
+	{
 		// not yet implemented
 	}
 
-	void setLogLevel(LogLevel level) {
+	public: void setLogLevel(LogLevel level)
+	{
 		this->logLevel = level;
 	}
 
-};
+};}}}
 
 #endif

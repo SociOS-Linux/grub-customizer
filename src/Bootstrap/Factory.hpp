@@ -27,7 +27,8 @@
 #include "../Model/Installer.hpp"
 #include "../Model/FbResolutionsGetter.hpp"
 #include "../Model/DeviceDataList.hpp"
-#include "../lib/ContentParser/FactoryImpl.hpp"
+#include "../Model/ContentParser/FactoryImpl.hpp"
+#include "../Model/ContentParser/GenericFactoryConnection.hpp"
 #include "../View/Mapper/EntryNameImpl.hpp"
 #include "../View/Mapper/EntryNameConnection.hpp"
 #include "../Model/ThemeManager.hpp"
@@ -47,19 +48,19 @@ namespace Gc { namespace Bootstrap { class Factory
 	public: std::shared_ptr<Model_MountTable> mountTable;
 	public: std::shared_ptr<Model_FbResolutionsGetter> fbResolutionsGetter;
 	public: std::shared_ptr<Model_DeviceDataList> deviceDataList;
-	public: std::shared_ptr<ContentParser_FactoryImpl> contentParserFactory;
+	public: std::shared_ptr<Gc::Model::ContentParser::FactoryImpl> contentParserFactory;
 	public: std::shared_ptr<Gc::View::Mapper::EntryNameImpl> entryNameMapper;
 	public: std::shared_ptr<Model_ThemeManager> themeManager;
 	public: std::shared_ptr<Model_DeviceMap> deviceMap;
 	public: std::shared_ptr<Gc::Controller::Helper::RuleMoverHelper> ruleMover;
-	public: std::shared_ptr<Logger> logger;
+	public: std::shared_ptr<Gc::Model::Logger::GenericLogger> logger;
 
 	public: std::shared_ptr<Regex> regexEngine;
 	public: std::shared_ptr<Gc::Controller::Helper::Thread> threadHelper;
 
 	public: std::shared_ptr<Gc::Bootstrap::ApplicationHelper::Object> applicationObject;
 
-	public: Factory(std::shared_ptr<Gc::Bootstrap::ApplicationHelper::Object> applicationObject, std::shared_ptr<Logger> logger)
+	public: Factory(std::shared_ptr<Gc::Bootstrap::ApplicationHelper::Object> applicationObject, std::shared_ptr<Gc::Model::Logger::GenericLogger> logger)
 	{
 		this->applicationObject    = applicationObject;
 		this->logger               = logger;
@@ -74,7 +75,7 @@ namespace Gc { namespace Bootstrap { class Factory
 		this->mountTable           = this->create<Model_MountTable>();
 		this->fbResolutionsGetter  = this->create<Model_FbResolutionsGetter>();
 		this->deviceDataList       = this->create<Model_DeviceDataList>();
-		this->contentParserFactory = this->create<ContentParser_FactoryImpl>();
+		this->contentParserFactory = this->create<Gc::Model::ContentParser::FactoryImpl>();
 		this->entryNameMapper      = this->create<Gc::View::Mapper::EntryNameImpl>();
 		this->themeManager         = this->create<Model_ThemeManager>();
 		this->deviceMap            = this->create<Model_DeviceMap>();
@@ -138,8 +139,9 @@ namespace Gc { namespace Bootstrap { class Factory
 			std::shared_ptr<Model_DeviceDataListInterface_Connection> objc = std::dynamic_pointer_cast<Model_DeviceDataListInterface_Connection>(obj);
 			if (objc) {assert(this->deviceDataList); objc->setDeviceDataList(this->deviceDataList);}
 		}
+
 		{
-			std::shared_ptr<ContentParserFactory_Connection> objc = std::dynamic_pointer_cast<ContentParserFactory_Connection>(obj);
+			std::shared_ptr<Gc::Model::ContentParser::GenericFactoryConnection> objc = std::dynamic_pointer_cast<Gc::Model::ContentParser::GenericFactoryConnection>(obj);
 			if (objc) {assert(this->contentParserFactory); objc->setContentParserFactory(this->contentParserFactory);}
 		}
 		{
@@ -155,7 +157,7 @@ namespace Gc { namespace Bootstrap { class Factory
 			if (objc) {assert(this->deviceMap); objc->setDeviceMap(this->deviceMap);}
 		}
 		{
-			std::shared_ptr<Trait_LoggerAware> objc = std::dynamic_pointer_cast<Trait_LoggerAware>(obj);
+			std::shared_ptr<Gc::Model::Logger::Trait::LoggerAware> objc = std::dynamic_pointer_cast<Gc::Model::Logger::Trait::LoggerAware>(obj);
 			if (objc) {assert(this->logger); objc->setLogger(this->logger);}
 		}
 		{

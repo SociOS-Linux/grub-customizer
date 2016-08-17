@@ -19,24 +19,25 @@
 #ifndef CONTENT_PARSER_LINUXISO_H_
 #define CONTENT_PARSER_LINUXISO_H_
 
-#include "../Regex.hpp"
+#include "../../lib/Regex.hpp"
 #include "../../Model/DeviceMap.hpp"
-#include "Abstract.hpp"
+#include "AbstractParser.hpp"
 
-class ContentParser_LinuxIso :
-	public ContentParser_Abstract,
+namespace Gc { namespace Model { namespace ContentParser { class LinuxIso :
+	public Gc::Model::ContentParser::AbstractParser,
 	public Regex_RegexConnection,
 	public Model_DeviceMap_Connection,
 	public Model_MountTable_Connection,
 	public Model_DeviceDataList_Connection
 {
-	static const char* _regex;
-	std::string sourceCode;
-public:
-	void parse(std::string const& sourceCode) {
+	private: static const char* _regex;
+	private: std::string sourceCode;
+
+	public: void parse(std::string const& sourceCode)
+	{
 		this->sourceCode = sourceCode;
 		try {
-			std::vector<std::string> result = this->regexEngine->match(ContentParser_LinuxIso::_regex, this->sourceCode, '\\', '_');
+			std::vector<std::string> result = this->regexEngine->match(Gc::Model::ContentParser::LinuxIso::_regex, this->sourceCode, '\\', '_');
 	
 			//check partition indices by uuid
 			Model_DeviceMap_PartitionIndex pIndex = this->deviceMap->getHarddriveIndexByPartitionUuid(result[3]);
@@ -75,7 +76,8 @@ public:
 		}
 	}
 
-	std::string buildSource() const {
+	public: std::string buildSource() const
+	{
 		std::string partitionUuid, isoPath;
 
 		if (this->options.find("iso_path_full") != this->options.end()) {
@@ -102,8 +104,8 @@ public:
 
 			std::string result;
 
-			result = this->regexEngine->replace(ContentParser_LinuxIso::_regex, this->sourceCode, newValues, '\\', '_');
-			this->regexEngine->match(ContentParser_LinuxIso::_regex, result, '\\', '_');
+			result = this->regexEngine->replace(Gc::Model::ContentParser::LinuxIso::_regex, this->sourceCode, newValues, '\\', '_');
+			this->regexEngine->match(Gc::Model::ContentParser::LinuxIso::_regex, result, '\\', '_');
 
 			return result;
 		} catch (RegExNotMatchedException const& e) {
@@ -112,7 +114,8 @@ public:
 	}
 
 
-	void buildDefaultEntry() {
+	public: void buildDefaultEntry()
+	{
 		std::string defaultEntry =
 			"set root='(hd0,0)'\n"
 			"search --no-floppy --fs-uuid --set=root 000000000000000000\n"
@@ -120,7 +123,7 @@ public:
 			"linux (loop)___ boot=casper iso-scan/filename=___\n"
 			"initrd (loop)___\n";
 
-		assert(this->regexEngine->match(ContentParser_LinuxIso::_regex, defaultEntry, '\\', '_').size() > 0);
+		assert(this->regexEngine->match(Gc::Model::ContentParser::LinuxIso::_regex, defaultEntry, '\\', '_').size() > 0);
 
 		this->sourceCode = defaultEntry;
 
@@ -131,9 +134,9 @@ public:
 		this->options["other_params"] = "quiet splash locale=en_US bootkbd=us console-setup/layoutcode=us noeject --";
 	}
 
-};
+};}}}
 
-const char* ContentParser_LinuxIso::_regex =
+const char* Gc::Model::ContentParser::LinuxIso::_regex =
 	"[ \t]*set root='\\(hd([0-9]+)[^0-9]+([0-9]+)\\)'\\n"
 	"[ \t]*search[ \\t]+--no-floppy[ \\t]+--fs-uuid[ \\t]+--set(?:=root)? ([-0-9a-fA-F]+)\\n"
 	"[ \t]*loopback[ \\t]+loop[ \t]+(\"[^\"]*\"|[^ \\t]+)\\n"

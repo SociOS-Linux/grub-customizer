@@ -19,22 +19,23 @@
 #ifndef CONTENT_PARSER_CHAINLOADER_H_
 #define CONTENT_PARSER_CHAINLOADER_H_
 
-#include "../Regex.hpp"
+#include "../../lib/Regex.hpp"
 #include "../../Model/DeviceMap.hpp"
-#include "Abstract.hpp"
+#include "AbstractParser.hpp"
 
-class ContentParser_Chainloader :
-	public ContentParser_Abstract,
+namespace Gc { namespace Model { namespace ContentParser { class Chainloader :
+	public Gc::Model::ContentParser::AbstractParser,
 	public Regex_RegexConnection,
 	public Model_DeviceMap_Connection
 {
-	static const char* _regex;
-	std::string sourceCode;
-public:
-	void parse(std::string const& sourceCode) {
+	private: static const char* _regex;
+	private: std::string sourceCode;
+
+	public: void parse(std::string const& sourceCode)
+	{
 		this->sourceCode = sourceCode;
 		try {
-			std::vector<std::string> result = this->regexEngine->match(ContentParser_Chainloader::_regex, this->sourceCode, '\\', '_');
+			std::vector<std::string> result = this->regexEngine->match(Gc::Model::ContentParser::Chainloader::_regex, this->sourceCode, '\\', '_');
 	
 			//check partition indices by uuid
 			Model_DeviceMap_PartitionIndex pIndex = this->deviceMap->getHarddriveIndexByPartitionUuid(result[3]);
@@ -48,7 +49,8 @@ public:
 		}
 	}
 
-	std::string buildSource() const {
+	public: std::string buildSource() const
+	{
 		try {
 			Model_DeviceMap_PartitionIndex pIndex = deviceMap->getHarddriveIndexByPartitionUuid(this->options.at("partition_uuid"));
 			std::map<int, std::string> newValues;
@@ -58,8 +60,8 @@ public:
 
 			std::string result;
 
-			result = this->regexEngine->replace(ContentParser_Chainloader::_regex, this->sourceCode, newValues, '\\', '_');
-			this->regexEngine->match(ContentParser_Chainloader::_regex, result, '\\', '_');
+			result = this->regexEngine->replace(Gc::Model::ContentParser::Chainloader::_regex, this->sourceCode, newValues, '\\', '_');
+			this->regexEngine->match(Gc::Model::ContentParser::Chainloader::_regex, result, '\\', '_');
 
 			return result;
 		} catch (RegExNotMatchedException const& e) {
@@ -67,23 +69,24 @@ public:
 		}
 	}
 
-	void buildDefaultEntry() {
+	public: void buildDefaultEntry()
+	{
 		std::string defaultEntry =
 			"set root='(hd0,0)'\n"
 			"search --no-floppy --fs-uuid --set 000\n"
 			"drivemap -s (hd0) ${root}\n"
 			"chainloader +1";
 
-		assert(this->regexEngine->match(ContentParser_Chainloader::_regex, defaultEntry, '\\', '_').size() > 0);
+		assert(this->regexEngine->match(Gc::Model::ContentParser::Chainloader::_regex, defaultEntry, '\\', '_').size() > 0);
 
 		this->sourceCode = defaultEntry;
 
 		this->options.clear();
 		this->options["partition_uuid"] = "";
 	}
-};
+};}}}
 
-const char* ContentParser_Chainloader::_regex =
+const char* Gc::Model::ContentParser::Chainloader::_regex =
 	"[ \t]*set[ \t]+root='\\(hd([0-9]+)[^0-9]+([0-9]+)\\)'\\n"
 	"[ \t]*search[ \t]+--no-floppy[ \t]+--fs-uuid[ \t]+--set(?:=root)?[ \t]+([-0-9a-fA-F]+)\\n"
 	"(.|\\n)*"
