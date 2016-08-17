@@ -22,7 +22,7 @@
 #include <ostream>
 #include <memory>
 #include "../Common/Helper.hpp"
-#include "../Common/ArrayStructure.hpp"
+#include "../Common/ArrayStructure/Container.hpp"
 #include "../Common/Type.hpp"
 #include "Entry.hpp"
 #include "EntryPathBuilder.hpp"
@@ -198,19 +198,19 @@ class Model_Rule : public Rule {
 		return result;
 	}
 
-	public: operator ArrayStructure() const {
-		ArrayStructure result;
+	public: operator Gc::Common::ArrayStructure::Container() const {
+		Gc::Common::ArrayStructure::Container result;
 
 		result["dataSource"] = this->dataSource.get();
 		result["outputName"] = this->outputName;
 		result["__idHash"] = this->__idHash;
-		result["__idpath"] = ArrayStructure(this->__idpath);
+		result["__idpath"] = Gc::Common::ArrayStructure::Container(this->__idpath);
 		result["__sourceScriptPath"] = this->__sourceScriptPath;
 		result["isVisible"] = this->isVisible;
 		result["subRules"].isArray = true;
 		int i = 0;
 		for (auto rule : this->subRules) {
-			result["subRules"][i] = ArrayStructure(*rule);
+			result["subRules"][i] = Gc::Common::ArrayStructure::Container(*rule);
 			i++;
 		}
 		result["type"] = this->type;

@@ -28,7 +28,7 @@
 #include "../Common/Helper.hpp"
 #include "../config.hpp"
 #include "../Common/Exception.hpp"
-#include "../Common/ArrayStructure.hpp"
+#include "../Common/ArrayStructure/Container.hpp"
 #include "../Common/Type.hpp"
 #include "Entry.hpp"
 
@@ -276,14 +276,14 @@ class Model_Script : public Model_EntryPathFollower, public Gc::Model::Logger::T
 			return false;
 	}
 
-	public: operator ArrayStructure() const
+	public: operator Gc::Common::ArrayStructure::Container() const
 	{
-		ArrayStructure result;
+		Gc::Common::ArrayStructure::Container result;
 
 		result["name"] = this->name;
 		result["fileName"] = this->fileName;
 		result["isCustomScript"] = this->isCustomScript;
-		result["root"] = ArrayStructure(*this->root);
+		result["root"] = Gc::Common::ArrayStructure::Container(*this->root);
 
 		return result;
 	}

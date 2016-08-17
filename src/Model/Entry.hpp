@@ -24,7 +24,7 @@
 #include <memory>
 #include "../Model/Logger/Trait/LoggerAware.hpp"
 #include "../Common/Helper.hpp"
-#include "../Common/ArrayStructure.hpp"
+#include "../Common/ArrayStructure/Container.hpp"
 #include "../Common/Type.hpp"
 
 class Model_Entry_Row
@@ -179,9 +179,9 @@ class Model_Entry : public Gc::Model::Logger::Trait::LoggerAware, public Entry
 		return isValid;
 	}
 
-	public: operator ArrayStructure() const
+	public: operator Gc::Common::ArrayStructure::Container() const
 	{
-		ArrayStructure result;
+		Gc::Common::ArrayStructure::Container result;
 		result["type"] = this->type;
 		result["isValid"] = this->isValid;
 		result["isModified"] = this->isModified;
@@ -193,7 +193,7 @@ class Model_Entry : public Gc::Model::Logger::Trait::LoggerAware, public Entry
 		result["rulepointer"] = this;
 		int i = 0;
 		for (auto entry : this->subEntries) {
-			result["subEntries"][i] = ArrayStructure(*entry);
+			result["subEntries"][i] = Gc::Common::ArrayStructure::Container(*entry);
 			i++;
 		}
 

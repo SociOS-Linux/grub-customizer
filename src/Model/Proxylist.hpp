@@ -23,7 +23,7 @@
 #include <memory>
 #include "../Model/Logger/Trait/LoggerAware.hpp"
 #include "../Common/Exception.hpp"
-#include "../Common/ArrayStructure.hpp"
+#include "../Common/ArrayStructure/Container.hpp"
 #include "Proxy.hpp"
 
 struct Model_Proxylist_Item {
@@ -414,18 +414,18 @@ class Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public G
 		return false;
 	}
 
-	operator ArrayStructure() const {
-		ArrayStructure result;
+	operator Gc::Common::ArrayStructure::Container() const {
+		Gc::Common::ArrayStructure::Container result;
 		int trashIterPos = 0;
 		result["trash"].isArray = true;
 		for (auto trashedProxy : this->trash) {
-			result["trash"][trashIterPos] = ArrayStructure(*trashedProxy);
+			result["trash"][trashIterPos] = Gc::Common::ArrayStructure::Container(*trashedProxy);
 			trashIterPos++;
 		}
 		int itemsIterPos = 0;
 		result["(items)"].isArray = true;
 		for (auto proxy : *this) {
-			result["(items)"][itemsIterPos] = ArrayStructure(*proxy);
+			result["(items)"][itemsIterPos] = Gc::Common::ArrayStructure::Container(*proxy);
 			itemsIterPos++;
 		}
 		return result;

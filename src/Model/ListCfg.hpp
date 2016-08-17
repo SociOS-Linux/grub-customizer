@@ -35,7 +35,7 @@
 #include "../Model/Logger/Trait/LoggerAware.hpp"
 
 #include "../Common/Exception.hpp"
-#include "../Common/ArrayStructure.hpp"
+#include "../Common/ArrayStructure/Container.hpp"
 #include "../Common/Helper.hpp"
 #include <stack>
 #include <algorithm>
@@ -1312,10 +1312,10 @@ class Model_ListCfg :
 	}
 
 
-	public: operator ArrayStructure() const  {
-		ArrayStructure result;
-		result["proxies"] = ArrayStructure(this->proxies);
-		result["repository"] = ArrayStructure(this->repository);
+	public: operator Gc::Common::ArrayStructure::Container() const  {
+		Gc::Common::ArrayStructure::Container result;
+		result["proxies"] = Gc::Common::ArrayStructure::Container(this->proxies);
+		result["repository"] = Gc::Common::ArrayStructure::Container(this->repository);
 		result["progress"] = this->progress;
 		result["progress_name"] = this->progress_name;
 		result["progress_pos"] = this->progress_pos;
@@ -1324,9 +1324,9 @@ class Model_ListCfg :
 		result["verbose"] = this->verbose;
 		result["error_proxy_not_found"] = this->error_proxy_not_found;
 		if (this->env) {
-			result["env"] = ArrayStructure(*this->env);
+			result["env"] = Gc::Common::ArrayStructure::Container(*this->env);
 		} else {
-			result["env"] = ArrayStructureItem(NULL);
+			result["env"] = Gc::Common::ArrayStructure::Item(NULL);
 		}
 		result["ignoreLock"] = this->ignoreLock;
 		result["cancelThreadsRequested"] = this->cancelThreadsRequested;

@@ -23,7 +23,7 @@
 #include <map>
 #include <memory>
 #include "../Common/Exception.hpp"
-#include "../Common/ArrayStructure.hpp"
+#include "../Common/ArrayStructure/Container.hpp"
 #include "../Common/Type.hpp"
 #include "EntryPathBuilderImpl.hpp"
 #include "ProxyScriptData.hpp"
@@ -778,8 +778,8 @@ class Model_Proxy : public Proxy
 		return result;
 	}
 
-	public: operator ArrayStructure() const {
-		ArrayStructure result;
+	public: operator Gc::Common::ArrayStructure::Container() const {
+		Gc::Common::ArrayStructure::Container result;
 		result["rules"].isArray = true;
 		int ruleIterPos = 0;
 		for (auto rule : this->rules) {
@@ -796,7 +796,7 @@ class Model_Proxy : public Proxy
 				result["__idPathList"]["k"] = *idPath.first;
 				int i = 0;
 				for (auto idPathPart : idPath.second) {
-					result["__idPathList"]["v"][i] = ArrayStructure(idPathPart);
+					result["__idPathList"]["v"][i] = Gc::Common::ArrayStructure::Container(idPathPart);
 					i++;
 				}
 			}
@@ -807,7 +807,7 @@ class Model_Proxy : public Proxy
 				result["__idPathList_OtherEntriesPlaceHolders"]["k"] = *oepPath.first;
 				int i = 0;
 				for (auto oepPathPart : oepPath.second) {
-					result["__idPathList_OtherEntriesPlaceHolders"]["v"][i] = ArrayStructure(oepPathPart);
+					result["__idPathList_OtherEntriesPlaceHolders"]["v"][i] = Gc::Common::ArrayStructure::Container(oepPathPart);
 					i++;
 				}
 			}

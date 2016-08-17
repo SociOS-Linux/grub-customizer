@@ -26,7 +26,7 @@
 #include <map>
 #include <sys/stat.h>
 
-#include "../Common/ArrayStructure.hpp"
+#include "../Common/ArrayStructure/Container.hpp"
 #include "../Common/FileSystem.hpp"
 #include "../Model/Logger/Trait/LoggerAware.hpp"
 #include "../Common/Exception.hpp"
@@ -390,8 +390,8 @@ public:
 		}
 	}
 
-	operator ArrayStructure() {
-		ArrayStructure result;
+	operator Gc::Common::ArrayStructure::Container() {
+		Gc::Common::ArrayStructure::Container result;
 		result["cfg_dir"] = this->cfg_dir;
 		result["cfg_dir_noprefix"] = this->cfg_dir_noprefix;
 		result["mkconfig_cmd"] = this->mkconfig_cmd;

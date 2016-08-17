@@ -23,7 +23,7 @@
 #include <map>
 #include <memory>
 #include "../Model/Logger/Trait/LoggerAware.hpp"
-#include "../Common/ArrayStructure.hpp"
+#include "../Common/ArrayStructure/Container.hpp"
 #include "../Common/Helper.hpp"
 #include "ProxyScriptData.hpp"
 #include "PscriptnameTranslator.hpp"
@@ -201,13 +201,13 @@ class Model_Repository : public std::list<std::shared_ptr<Model_Script>>, public
 		this->trash.clear();
 	}
 
-	public: operator ArrayStructure() const
+	public: operator Gc::Common::ArrayStructure::Container() const
 	{
-		ArrayStructure result;
+		Gc::Common::ArrayStructure::Container result;
 		result["(items)"].isArray = true;
 		int i = 0;
 		for (auto script : *this) {
-			result["(items)"][i] = ArrayStructure(*script);
+			result["(items)"][i] = Gc::Common::ArrayStructure::Container(*script);
 			i++;
 		}
 		return result;
