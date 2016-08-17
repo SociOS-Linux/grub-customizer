@@ -16,8 +16,8 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef CSV_H_
-#define CSV_H_
+#ifndef CSV_READER_H_
+#define CSV_READER_H_
 
 #include <list>
 #include <map>
@@ -25,12 +25,16 @@
 #include <cstdio>
 #include <stdexcept>
 
-#include "../Common/Helper.hpp"
+#include "../../Common/Helper.hpp"
 
-class CsvReader {
-	FILE* _file;
-	std::list<std::string> _keys;
-	std::list<std::string> _parseRow() {
+namespace Gc { namespace Model { namespace Csv { class Reader
+{
+	private: FILE* _file;
+
+	private: std::list<std::string> _keys;
+
+	private: std::list<std::string> _parseRow()
+	{
 		std::list<std::string> dataRow;
 		int c = 0;
 		std::string field;
@@ -65,10 +69,11 @@ class CsvReader {
 		return dataRow;
 	}
 
-public:
-	CsvReader(FILE* file) : _file(file) {}
+	public: Reader(FILE* file) :
+		_file(file)
+	{}
 	
-	std::map<std::string, std::string> read() {
+	public: std::map<std::string, std::string> read() {
 		if (this->_keys.size() == 0) {
 			this->_keys = this->_parseRow();
 		}
@@ -82,47 +87,7 @@ public:
 		return result;
 	}
 
-};
-
-class CsvWriter {
-	FILE* _file;
-	std::list<std::string> _keys;
-	void _writeValue(std::string const& value) {
-		fputs(("\"" + Helper::str_replace("\"", "\"\"", value) + "\"").c_str(), this->_file);
-	}
-
-public:
-	CsvWriter(FILE* file) : _file(file) {}
-
-	void write(std::map<std::string, std::string> const& data) {
-		if (this->_keys.size() == 0) {
-			for (std::map<std::string, std::string>::const_iterator cellIter = data.begin(); cellIter != data.end(); cellIter++) {
-				this->_keys.push_back(cellIter->first);
-	
-				if (cellIter != data.begin()) {
-					fputc(';', this->_file);
-				}
-				this->_writeValue(cellIter->first);
-			}
-			fputc('\n', this->_file);
-		}
-	
-		for (std::list<std::string>::iterator keyIter = this->_keys.begin(); keyIter != this->_keys.end(); keyIter++) {
-			std::string value;
-			try {
-				value = data.at(*keyIter);
-			} catch (std::out_of_range const& e) {
-				value = "";
-			}
-			if (keyIter != this->_keys.begin()) {
-				fputc(';', this->_file);
-			}
-			this->_writeValue(value);
-		}
-		fputc('\n', this->_file);
-	}
-
-};
+};}}}
 
 
-#endif /* CSV_H_ */
+#endif /* CSV_READER_H_ */

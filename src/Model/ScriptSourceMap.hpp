@@ -23,7 +23,8 @@
 #include <string>
 #include <dirent.h>
 
-#include "../Common/CsvProcessor.hpp"
+#include "../Model/Csv/Reader.hpp"
+#include "../Model/Csv/Writer.hpp"
 #include "../Model/Logger/Trait/LoggerAware.hpp"
 #include "Env.hpp"
 
@@ -51,7 +52,7 @@ public:
 		FILE* file = fopen(this->_getFilePath().c_str(), "r");
 		if (file) {
 			this->_fileExists = true;
-			CsvReader csv(file);
+			Gc::Model::Csv::Reader csv(file);
 			std::map<std::string, std::string> dataRow;
 			while ((dataRow = csv.read()).size()) {
 				(*this)[this->env->cfg_dir + "/" + dataRow["default_name"]] = this->env->cfg_dir + "/" + dataRow["current_name"];
@@ -80,7 +81,7 @@ public:
 	void save() {
 		FILE* file = fopen(this->_getFilePath().c_str(), "w");
 		assert(file != NULL);
-		CsvWriter csv(file);
+		Gc::Model::Csv::Writer csv(file);
 		for (std::map<std::string, std::string>::iterator iter = this->begin(); iter != this->end(); iter++) {
 			if (iter->first == iter->second) {
 				continue;
