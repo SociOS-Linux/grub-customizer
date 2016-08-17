@@ -26,9 +26,9 @@
 #include <glib.h>
 #include <iostream>
 
-#include "../Exception.hpp"
-#include "../Regex.hpp"
-#include "../Helper.hpp"
+#include "../../Common/Exception.hpp"
+#include "../../Common/Helper.hpp"
+#include "../../Common/Regex.hpp"
 
 class Regex_GLib :
 	public Regex

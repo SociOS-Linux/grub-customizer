@@ -20,7 +20,7 @@
 #define THEMEMANAGER_H_
 
 #include <list>
-#include "../lib/Exception.hpp"
+#include "../Common/Exception.hpp"
 #include "Env.hpp"
 #include "Theme.hpp"
 

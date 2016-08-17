@@ -22,8 +22,9 @@
 #include <functional>
 #include <list>
 #include <map>
-#include "../lib/Exception.hpp"
-#include "../lib/Type.hpp"
+
+#include "../Common/Exception.hpp"
+#include "../Common/Type.hpp"
 #include "ApplicationHelper/Object.hpp"
 
 namespace Gc { namespace Bootstrap { class Application

@@ -25,11 +25,11 @@
 #include <unistd.h>
 #include "../Model/EntryPathFollower.hpp"
 #include "../Model/Logger/Trait/LoggerAware.hpp"
-#include "../lib/Helper.hpp"
+#include "../Common/Helper.hpp"
 #include "../config.hpp"
-#include "../lib/Exception.hpp"
-#include "../lib/ArrayStructure.hpp"
-#include "../lib/Type.hpp"
+#include "../Common/Exception.hpp"
+#include "../Common/ArrayStructure.hpp"
+#include "../Common/Type.hpp"
 #include "Entry.hpp"
 
 class Model_Script : public Model_EntryPathFollower, public Gc::Model::Logger::Trait::LoggerAware, public Script {

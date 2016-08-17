@@ -19,7 +19,7 @@
 #ifndef CONTENT_PARSER_MEMTEST_H_
 #define CONTENT_PARSER_MEMTEST_H_
 
-#include "../../lib/Regex.hpp"
+#include "../../Common/Regex.hpp"
 #include "../../Model/DeviceMap.hpp"
 #include "AbstractParser.hpp"
 

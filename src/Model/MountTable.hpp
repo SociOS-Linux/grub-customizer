@@ -23,9 +23,9 @@
 #include <string>
 #include <cstdlib>
 
-#include "../lib/Exception.hpp"
+#include "../Common/Exception.hpp"
 #include "../Model/Logger/Trait/LoggerAware.hpp"
-#include "../lib/Helper.hpp"
+#include "../Common/Helper.hpp"
 
 
 struct Model_MountTable_Mountpoint {

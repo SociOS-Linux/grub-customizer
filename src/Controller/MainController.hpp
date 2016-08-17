@@ -39,7 +39,7 @@
 #include "Common/ControllerAbstract.hpp"
 
 #include "../Model/Logger/Trait/LoggerAware.hpp"
-#include "../lib/Exception.hpp"
+#include "../Common/Exception.hpp"
 #include "../View/Mapper/EntryName.hpp"
 #include "../Model/FbResolutionsGetter.hpp"
 #include "../View/Model/ListItem.hpp"

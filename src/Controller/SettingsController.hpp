@@ -43,7 +43,7 @@
 
 #include "../Model/Logger/Trait/LoggerAware.hpp"
 
-#include "../lib/Exception.hpp"
+#include "../Common/Exception.hpp"
 #include "Helper/Thread.hpp"
 
 namespace Gc { namespace Controller { class SettingsController :

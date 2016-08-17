@@ -23,7 +23,7 @@
 #include <sys/stat.h>
 #include <dirent.h>
 #include <fstream>
-#include "../lib/Exception.hpp"
+#include "../Common/Exception.hpp"
 #include <archive.h>
 #include <archive_entry.h>
 #include <map>

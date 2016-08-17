@@ -20,10 +20,10 @@
 #define ENTRYEDITDLGGTK_H_
 #include "../EntryEditor.hpp"
 
-#include "../../lib/Helper.hpp"
 #include <libintl.h>
 #include <gtkmm.h>
 
+#include "../../Common/Helper.hpp"
 #include "Element/PartitionChooser.hpp"
 
 class View_Gtk_EntryEditor :

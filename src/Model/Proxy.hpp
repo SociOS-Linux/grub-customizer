@@ -22,9 +22,9 @@
 #include <unistd.h>
 #include <map>
 #include <memory>
-#include "../lib/Exception.hpp"
-#include "../lib/ArrayStructure.hpp"
-#include "../lib/Type.hpp"
+#include "../Common/Exception.hpp"
+#include "../Common/ArrayStructure.hpp"
+#include "../Common/Type.hpp"
 #include "EntryPathBuilderImpl.hpp"
 #include "ProxyScriptData.hpp"
 #include "Rule.hpp"

@@ -32,7 +32,7 @@
 
 #include "Common/ControllerAbstract.hpp"
 
-#include "../lib/Exception.hpp"
+#include "../Common/Exception.hpp"
 
 #include "Helper/Thread.hpp"
 

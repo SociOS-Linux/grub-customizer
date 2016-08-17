@@ -19,7 +19,7 @@
 #ifndef CONTENT_PARSER_LINUX_H_
 #define CONTENT_PARSER_LINUX_H_
 #include "../../Model/DeviceMap.hpp"
-#include "../../lib/Regex.hpp"
+#include "../../Common/Regex.hpp"
 #include "AbstractParser.hpp"
 
 namespace Gc { namespace Model { namespace ContentParser { class Linux :

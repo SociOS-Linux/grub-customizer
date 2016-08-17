@@ -16,27 +16,21 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef GLIBMUTEX_H_
-#define GLIBMUTEX_H_
-#include <glibmm/thread.h>
-#include "../Mutex.hpp"
+#ifndef MUTEX_H_INCLUDED
+#define MUTEX_H_INCLUDED
+#include <cstdlib>
+#include <memory>
 
-class Mutex_GLib : public Mutex {
-protected:
-	Glib::Mutex mutex;
-public:
-	void lock() {
-		this->mutex.lock();
-	}
+#include "../../Model/Logger/Trait/LoggerAware.hpp"
 
-	bool trylock() {
-		return this->mutex.trylock();
-	}
+namespace Gc { namespace Common { namespace Mutex { class Generic :
+	public Gc::Model::Logger::Trait::LoggerAware
+{
+	public: virtual inline ~Generic() {};
 
-	void unlock() {
-		this->mutex.unlock();
-	}
+	public: virtual void lock() = 0;
+	public: virtual bool trylock() = 0;
+	public: virtual void unlock() = 0;
+};}}}
 
-};
-
-#endif /* GLIBMUTEX_H_ */
+#endif

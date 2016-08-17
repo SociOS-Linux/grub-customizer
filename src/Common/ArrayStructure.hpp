@@ -24,7 +24,7 @@
 #include <sstream>
 #include <iostream>
 
-#include "Helper.hpp"
+#include "../Common/Helper.hpp"
 
 struct ArrayStructureItem {
 public:

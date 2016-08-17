@@ -22,8 +22,8 @@
 #include <sstream>
 #include <memory>
 #include "../Model/Logger/Trait/LoggerAware.hpp"
-#include "../lib/Exception.hpp"
-#include "../lib/ArrayStructure.hpp"
+#include "../Common/Exception.hpp"
+#include "../Common/ArrayStructure.hpp"
 #include "Proxy.hpp"
 
 struct Model_Proxylist_Item {

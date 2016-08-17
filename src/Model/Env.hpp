@@ -26,11 +26,11 @@
 #include <map>
 #include <sys/stat.h>
 
-#include "../lib/ArrayStructure.hpp"
+#include "../Common/ArrayStructure.hpp"
+#include "../Common/FileSystem.hpp"
 #include "../Model/Logger/Trait/LoggerAware.hpp"
-#include "../lib/Exception.hpp"
-#include "../lib/FileSystem.hpp"
-#include "../lib/Type.hpp"
+#include "../Common/Exception.hpp"
+#include "../Common/Type.hpp"
 #include "MountTable.hpp"
 #include "SettingsStore.hpp"
 

@@ -23,7 +23,7 @@
 #include <list>
 #include <functional>
 
-#include "../lib/Type.hpp"
+#include "../Common/Type.hpp"
 #include "../Model/Logger/Trait/LoggerAware.hpp"
 #include "../Model/DeviceDataListInterface.hpp"
 

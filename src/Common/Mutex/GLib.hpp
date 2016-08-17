@@ -16,18 +16,29 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#include "../../Common/Mutex/GLib.hpp"
-#include "../../Controller/Helper/GLibThread.hpp"
-#include "../Factory.hpp"
+#ifndef GLIBMUTEX_H_
+#define GLIBMUTEX_H_
+#include <glibmm/thread.h>
 
-std::shared_ptr<Gc::Controller::Helper::Thread> Gc::Bootstrap::Factory::createThreadHelper()
+#include "Generic.hpp"
+
+namespace Gc { namespace Common { namespace Mutex { class GLib :
+	public Gc::Common::Mutex::Generic
 {
-	Glib::thread_init();
+	protected: Glib::Mutex mutex;
 
-	return std::make_shared<Gc::Controller::Helper::GLibThread>();
-}
+	public:	void lock() {
+		this->mutex.lock();
+	}
 
-std::shared_ptr<Gc::Common::Mutex::Generic> Gc::Bootstrap::Factory::createMutex()
-{
-	return std::make_shared<Gc::Common::Mutex::GLib>();
-}
+	public:	bool trylock() {
+		return this->mutex.trylock();
+	}
+
+	public:	void unlock() {
+		this->mutex.unlock();
+	}
+
+};}}}
+
+#endif /* GLIBMUTEX_H_ */

@@ -16,30 +16,20 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef MUTEX_H_INCLUDED
-#define MUTEX_H_INCLUDED
-#include <cstdlib>
+#ifndef MUTEX_CONNECTION_H_INCLUDED
+#define MUTEX_CONNECTION_H_INCLUDED
 #include <memory>
 
-#include "../Model/Logger/Trait/LoggerAware.hpp"
+#include "Generic.hpp"
 
-class Mutex : public Gc::Model::Logger::Trait::LoggerAware {
-public:
-	virtual inline ~Mutex() {};
-
-	virtual void lock() = 0;
-	virtual bool trylock() = 0;
-	virtual void unlock() = 0;
-};
-
-class Mutex_Connection
+namespace Gc { namespace Common { namespace Mutex { class GenericConnection
 {
-	protected: std::shared_ptr<Mutex> mutex;
+	protected: std::shared_ptr<Gc::Common::Mutex::Generic> mutex;
 
-	public: void setMutex(std::shared_ptr<Mutex> mutex)
+	public: void setMutex(std::shared_ptr<Gc::Common::Mutex::Generic> mutex)
 	{
 		this->mutex = mutex;
 	}
-};
+};}}}
 
 #endif

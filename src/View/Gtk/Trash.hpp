@@ -22,7 +22,7 @@
 
 #include <gtkmm.h>
 #include <libintl.h>
-#include "../../lib/Type.hpp"
+#include "../../Common/Type.hpp"
 #include "Element/List.hpp"
 
 class View_Gtk_Trash :

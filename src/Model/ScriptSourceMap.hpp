@@ -23,7 +23,7 @@
 #include <string>
 #include <dirent.h>
 
-#include "../lib/CsvProcessor.hpp"
+#include "../Common/CsvProcessor.hpp"
 #include "../Model/Logger/Trait/LoggerAware.hpp"
 #include "Env.hpp"
 

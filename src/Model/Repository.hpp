@@ -23,8 +23,8 @@
 #include <map>
 #include <memory>
 #include "../Model/Logger/Trait/LoggerAware.hpp"
-#include "../lib/ArrayStructure.hpp"
-#include "../lib/Helper.hpp"
+#include "../Common/ArrayStructure.hpp"
+#include "../Common/Helper.hpp"
 #include "ProxyScriptData.hpp"
 #include "PscriptnameTranslator.hpp"
 #include "Script.hpp"

@@ -24,7 +24,8 @@
 #include <fstream>
 #include <list>
 #include <algorithm>
-#include "Exception.hpp"
+
+#include "../Common/Exception.hpp"
 
 class FileSystem {
 public:

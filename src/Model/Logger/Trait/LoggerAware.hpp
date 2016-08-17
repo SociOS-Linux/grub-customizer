@@ -21,7 +21,7 @@
 
 #include <memory>
 
-#include "../../../lib/Exception.hpp"
+#include "../../../Common/Exception.hpp"
 #include "../GenericLogger.hpp"
 
 namespace Gc { namespace Model { namespace Logger { namespace Trait { class LoggerAware

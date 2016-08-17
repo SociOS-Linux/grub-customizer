@@ -24,7 +24,7 @@
 #include <map>
 #include <list>
 
-#include "../lib/Type.hpp"
+#include "../Common/Type.hpp"
 #include "../Model/Logger/Trait/LoggerAware.hpp"
 #include "Model/ListItem.hpp"
 #include <functional>

@@ -34,7 +34,7 @@
 #include "../Model/Logger/Trait/LoggerAware.hpp"
 #include "Common/ControllerAbstract.hpp"
 #include "../Model/ContentParser/GenericFactory.hpp"
-#include "../lib/Exception.hpp"
+#include "../Common/Exception.hpp"
 #include "../Model/DeviceDataList.hpp"
 #include "../Model/Installer.hpp"
 #include "../Model/ListCfg.hpp"

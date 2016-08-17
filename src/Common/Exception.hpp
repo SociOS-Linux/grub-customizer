@@ -24,16 +24,22 @@
 #include <typeinfo>
 
 class Exception {
-	std::string _message;
-	std::string _file;
-	int _line;
-public:
-	Exception(std::string const& message, std::string const& file = "", int line = -1) : _message(message), _file(file), _line(line)
-	{
-	}
+	private: std::string _message;
+	private: std::string _file;
+	private: int _line;
 
-	virtual inline ~Exception(){}
-	virtual operator std::string() const {
+	public:	Exception(
+		std::string const& message,
+		std::string const& file = "",
+		int line = -1
+	) :
+		_message(message),
+		_file(file),
+		_line(line)
+	{}
+
+	public:	virtual inline ~Exception(){}
+	public:	virtual operator std::string() const {
 		std::ostringstream out;
 		out << "exception '" << typeid(*this).name()
 			<< "'\n with message '" << this->_message;
@@ -43,11 +49,11 @@ public:
 		return out.str();
 	}
 
-	virtual std::string getMessage() const {
+	public:	virtual std::string getMessage() const {
 		return this->_message;
 	}
 
-	virtual operator bool() const {
+	public:	virtual operator bool() const {
 		return this->_message != "";
 	}
 };

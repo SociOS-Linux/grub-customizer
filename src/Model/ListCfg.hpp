@@ -32,15 +32,17 @@
 
 #include "../config.hpp"
 
-#include "../lib/Mutex.hpp"
 #include "../Model/Logger/Trait/LoggerAware.hpp"
 
-#include "../lib/Exception.hpp"
-#include "../lib/ArrayStructure.hpp"
-#include "../lib/Helper.hpp"
+#include "../Common/Exception.hpp"
+#include "../Common/ArrayStructure.hpp"
+#include "../Common/Helper.hpp"
 #include <stack>
 #include <algorithm>
 #include <functional>
+
+#include "../Common/Mutex/Generic.hpp"
+#include "../Common/Mutex/GenericConnection.hpp"
 #include "Env.hpp"
 #include "MountTable.hpp"
 #include "Proxylist.hpp"
@@ -51,7 +53,7 @@
 
 class Model_ListCfg :
 	public Gc::Model::Logger::Trait::LoggerAware,
-	public Mutex_Connection,
+	public Gc::Common::Mutex::GenericConnection,
 	public Model_Env_Connection
 {
 	private: double progress;

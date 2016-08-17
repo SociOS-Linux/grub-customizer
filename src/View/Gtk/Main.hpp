@@ -23,8 +23,8 @@
 #include <gtkmm.h>
 #include <libintl.h>
 #include "../../config.hpp"
-#include "../../lib/Helper.hpp"
-#include "../../lib/Type.hpp"
+#include "../../Common/Helper.hpp"
+#include "../../Common/Type.hpp"
 #include "Element/List.hpp"
 #include "Settings.hpp"
 

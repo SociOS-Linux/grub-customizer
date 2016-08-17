@@ -21,7 +21,7 @@
 #include <sys/stat.h> //mkdir
 #include "../Model/Logger/Trait/LoggerAware.hpp"
 #include <sstream>
-#include "../lib/Helper.hpp"
+#include "../Common/Helper.hpp"
 #include <map>
 #include "Env.hpp"
 #include "SettingsStore.hpp"

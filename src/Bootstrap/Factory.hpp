@@ -165,7 +165,7 @@ namespace Gc { namespace Bootstrap { class Factory
 			if (objc) {assert(this->regexEngine); objc->setRegexEngine(this->regexEngine);}
 		}
 		{
-			std::shared_ptr<Mutex_Connection> objc = std::dynamic_pointer_cast<Mutex_Connection>(obj);
+			std::shared_ptr<Gc::Common::Mutex::GenericConnection> objc = std::dynamic_pointer_cast<Gc::Common::Mutex::GenericConnection>(obj);
 			if (objc) {objc->setMutex(this->createMutex());}
 		}
 		{
@@ -180,7 +180,7 @@ namespace Gc { namespace Bootstrap { class Factory
 
 	// external implementations
 	private: std::shared_ptr<Regex> createRegexExgine();
-	private: std::shared_ptr<Mutex> createMutex();
+	private: std::shared_ptr<Gc::Common::Mutex::Generic> createMutex();
 	private: std::shared_ptr<Gc::Controller::Helper::Thread> createThreadHelper();
 };}}
 

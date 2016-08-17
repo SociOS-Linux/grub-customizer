@@ -23,9 +23,9 @@
 #include <list>
 #include <memory>
 #include "../Model/Logger/Trait/LoggerAware.hpp"
-#include "../lib/Helper.hpp"
-#include "../lib/ArrayStructure.hpp"
-#include "../lib/Type.hpp"
+#include "../Common/Helper.hpp"
+#include "../Common/ArrayStructure.hpp"
+#include "../Common/Type.hpp"
 
 class Model_Entry_Row
 {

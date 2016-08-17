@@ -18,9 +18,10 @@
 
 #ifndef GRUBDEVICEMAP_H_
 #define GRUBDEVICEMAP_H_
-#include "../lib/Regex.hpp"
 #include <map>
 #include <unistd.h>
+
+#include "../Common/Regex.hpp"
 #include "Env.hpp"
 #include "SmartFileHandle.hpp"
 

@@ -21,9 +21,9 @@
 #include <string>
 #include <ostream>
 #include <memory>
-#include "../lib/Helper.hpp"
-#include "../lib/ArrayStructure.hpp"
-#include "../lib/Type.hpp"
+#include "../Common/Helper.hpp"
+#include "../Common/ArrayStructure.hpp"
+#include "../Common/Type.hpp"
 #include "Entry.hpp"
 #include "EntryPathBuilder.hpp"
 #include "EntryPathFollower.hpp"
