@@ -16,39 +16,23 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef REGEX_H_INCLUDED
-#define REGEX_H_INCLUDED
+#ifndef REGEX_CONNECTION_H_INCLUDED
+#define REGEX_CONNECTION_H_INCLUDED
 #include <string>
 #include <vector>
 #include <map>
 #include <memory>
 
-class Regex {
-	public: virtual ~Regex(){}
-	public: virtual std::vector<std::string> match(
-		std::string const& pattern,
-		std::string const& str,
-		char const& escapeCharacter = '\0',
-		char const& replaceCharacter = '\0'
-	) = 0;
+#include "Generic.hpp"
 
-	public: virtual std::string replace(
-		std::string const& pattern,
-		std::string const& str,
-		std::map<int, std::string> const& newValues,
-		char const& escapeCharacter = '\0',
-		char const& replaceCharacter = '\0'
-	) = 0;
-};
-
-class Regex_RegexConnection
+namespace Gc { namespace Common { namespace Regex { class GenericConnection
 {
-	protected: std::shared_ptr<Regex> regexEngine;
+	protected: std::shared_ptr<Gc::Common::Regex::Generic> regexEngine;
 
-	public: void setRegexEngine(std::shared_ptr<Regex> regexEngine)
+	public: void setRegexEngine(std::shared_ptr<Gc::Common::Regex::Generic> regexEngine)
 	{
 		this->regexEngine = regexEngine;
 	}
-};
+};}}}
 
 #endif

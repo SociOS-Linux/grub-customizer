@@ -28,10 +28,10 @@
 
 #include "../../Common/Exception.hpp"
 #include "../../Common/Helper.hpp"
-#include "../../Common/Regex.hpp"
+#include "../../Common/Regex/Generic.hpp"
 
-class Regex_GLib :
-	public Regex
+namespace Gc { namespace Common { namespace Regex { class GLib :
+	public Gc::Common::Regex::Generic
 {
 	public: std::vector<std::string> match(
 		std::string const& pattern,
@@ -97,6 +97,6 @@ class Regex_GLib :
 		g_regex_unref(gr);
 		return result;
 	}
-};
+};}}}
 
 #endif /* GLIBMUTEX_H_ */

@@ -15,10 +15,32 @@
  * along with this program; if not, write to the Free Software
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
-#include "../../Common/Regex/GLib.hpp"
-#include "../Factory.hpp"
 
-std::shared_ptr<Gc::Common::Regex::Generic> Gc::Bootstrap::Factory::createRegexExgine()
+#ifndef REGEX_H_INCLUDED
+#define REGEX_H_INCLUDED
+#include <string>
+#include <vector>
+#include <map>
+#include <memory>
+
+namespace Gc { namespace Common { namespace Regex { class Generic
 {
-	return std::make_shared<Gc::Common::Regex::GLib>();
-}
+	public: virtual ~Generic(){}
+
+	public: virtual std::vector<std::string> match(
+		std::string const& pattern,
+		std::string const& str,
+		char const& escapeCharacter = '\0',
+		char const& replaceCharacter = '\0'
+	) = 0;
+
+	public: virtual std::string replace(
+		std::string const& pattern,
+		std::string const& str,
+		std::map<int, std::string> const& newValues,
+		char const& escapeCharacter = '\0',
+		char const& replaceCharacter = '\0'
+	) = 0;
+};}}}
+
+#endif

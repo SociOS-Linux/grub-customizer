@@ -19,12 +19,12 @@
 #ifndef CONTENT_PARSER_LINUX_H_
 #define CONTENT_PARSER_LINUX_H_
 #include "../../Model/DeviceMap.hpp"
-#include "../../Common/Regex.hpp"
+#include "../../Common/Regex/Generic.hpp"
 #include "AbstractParser.hpp"
 
 namespace Gc { namespace Model { namespace ContentParser { class Linux :
 	public Gc::Model::ContentParser::AbstractParser,
-	public Regex_RegexConnection,
+	public Gc::Common::Regex::GenericConnection,
 	public Model_DeviceMap_Connection
 {
 	private: static const char* _regex;

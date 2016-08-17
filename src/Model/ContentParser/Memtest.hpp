@@ -19,13 +19,13 @@
 #ifndef CONTENT_PARSER_MEMTEST_H_
 #define CONTENT_PARSER_MEMTEST_H_
 
-#include "../../Common/Regex.hpp"
+#include "../../Common/Regex/Generic.hpp"
 #include "../../Model/DeviceMap.hpp"
 #include "AbstractParser.hpp"
 
 namespace Gc { namespace Model { namespace ContentParser { class Memtest :
 	public Gc::Model::ContentParser::AbstractParser,
-	public Regex_RegexConnection,
+	public Gc::Common::Regex::GenericConnection,
 	public Model_DeviceMap_Connection,
 	public Model_MountTable_Connection,
 	public Model_DeviceDataList_Connection

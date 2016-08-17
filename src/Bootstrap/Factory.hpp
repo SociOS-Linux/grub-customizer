@@ -55,7 +55,7 @@ namespace Gc { namespace Bootstrap { class Factory
 	public: std::shared_ptr<Gc::Controller::Helper::RuleMoverHelper> ruleMover;
 	public: std::shared_ptr<Gc::Model::Logger::GenericLogger> logger;
 
-	public: std::shared_ptr<Regex> regexEngine;
+	public: std::shared_ptr<Gc::Common::Regex::Generic> regexEngine;
 	public: std::shared_ptr<Gc::Controller::Helper::Thread> threadHelper;
 
 	public: std::shared_ptr<Gc::Bootstrap::ApplicationHelper::Object> applicationObject;
@@ -161,7 +161,7 @@ namespace Gc { namespace Bootstrap { class Factory
 			if (objc) {assert(this->logger); objc->setLogger(this->logger);}
 		}
 		{
-			std::shared_ptr<Regex_RegexConnection> objc = std::dynamic_pointer_cast<Regex_RegexConnection>(obj);
+			std::shared_ptr<Gc::Common::Regex::GenericConnection> objc = std::dynamic_pointer_cast<Gc::Common::Regex::GenericConnection>(obj);
 			if (objc) {assert(this->regexEngine); objc->setRegexEngine(this->regexEngine);}
 		}
 		{
@@ -179,7 +179,7 @@ namespace Gc { namespace Bootstrap { class Factory
 	}
 
 	// external implementations
-	private: std::shared_ptr<Regex> createRegexExgine();
+	private: std::shared_ptr<Gc::Common::Regex::Generic> createRegexExgine();
 	private: std::shared_ptr<Gc::Common::Mutex::Generic> createMutex();
 	private: std::shared_ptr<Gc::Controller::Helper::Thread> createThreadHelper();
 };}}

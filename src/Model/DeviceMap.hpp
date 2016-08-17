@@ -21,7 +21,8 @@
 #include <map>
 #include <unistd.h>
 
-#include "../Common/Regex.hpp"
+#include "../Common/Regex/Generic.hpp"
+#include "../Common/Regex/GenericConnection.hpp"
 #include "Env.hpp"
 #include "SmartFileHandle.hpp"
 
@@ -31,7 +32,7 @@ struct Model_DeviceMap_PartitionIndex {
 
 class Model_DeviceMap :
 	public Model_Env_Connection,
-	public Regex_RegexConnection
+	public Gc::Common::Regex::GenericConnection
 {
 	mutable std::map<std::string, Model_DeviceMap_PartitionIndex> _cache;
 public:
