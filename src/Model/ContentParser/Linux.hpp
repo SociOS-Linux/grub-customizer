@@ -49,7 +49,7 @@ namespace Gc { namespace Model { namespace ContentParser { class Linux :
 			//assign data
 			this->options["partition_uuid"] = result[6];
 			this->options["linux_image"] = this->unescape(result[5]);
-			this->options["other_params"] = Helper::ltrim(result[7], " ");
+			this->options["other_params"] = Gc::Common::Functions::ltrim(result[7], " ");
 			this->options["initramfs"] = this->unescape(result[9]);
 		} catch (RegExNotMatchedException const& e) {
 			throw ParserException("parsing failed - RegEx not matched", __FILE__, __LINE__);

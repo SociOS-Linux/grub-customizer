@@ -25,7 +25,7 @@
 #include <cstdio>
 #include <stdexcept>
 
-#include "../../Common/Helper.hpp"
+#include "../../Common/Functions.hpp"
 
 namespace Gc { namespace Model { namespace Csv { class Reader
 {

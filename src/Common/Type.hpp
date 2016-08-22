@@ -19,11 +19,13 @@
 #ifndef TYPE_H_
 #define TYPE_H_
 
-enum ViewOption {
-	VIEW_SHOW_DETAILS,
-	VIEW_SHOW_HIDDEN_ENTRIES,
-	VIEW_GROUP_BY_SCRIPT,
-	VIEW_SHOW_PLACEHOLDERS
+namespace Gc { namespace Common { namespace Type {
+
+enum class ViewOption {
+	SHOW_DETAILS,
+	SHOW_HIDDEN_ENTRIES,
+	GROUP_BY_SCRIPT,
+	SHOW_PLACEHOLDERS
 };
 
 // Just a basic class, no own functionality - used as storage type
@@ -46,5 +48,7 @@ public:
 
 // to be used as dummy class
 class Nothing {};
+
+}}}
 
 #endif /* TYPE_H_ */

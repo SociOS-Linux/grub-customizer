@@ -24,7 +24,7 @@
 #include <memory>
 #include "../Model/Logger/Trait/LoggerAware.hpp"
 #include "../Common/ArrayStructure/Container.hpp"
-#include "../Common/Helper.hpp"
+#include "../Common/Functions.hpp"
 #include "ProxyScriptData.hpp"
 #include "PscriptnameTranslator.hpp"
 #include "Script.hpp"
@@ -145,7 +145,7 @@ class Model_Repository : public std::list<std::shared_ptr<Model_Script>>, public
 		std::string const& fileName,
 		std::string const& content
 	) {
-		Helper::assert_filepath_empty(fileName, __FILE__, __LINE__);
+		Gc::Common::Functions::assert_filepath_empty(fileName, __FILE__, __LINE__);
 		FILE* script = fopen(fileName.c_str(), "w");
 		if (script) {
 			fputs(content.c_str(), script);
@@ -159,7 +159,7 @@ class Model_Repository : public std::list<std::shared_ptr<Model_Script>>, public
 
 	public: void createScript(std::shared_ptr<Model_Script> script, std::string const& content)
 	{
-		Helper::assert_filepath_empty(script->fileName, __FILE__, __LINE__);
+		Gc::Common::Functions::assert_filepath_empty(script->fileName, __FILE__, __LINE__);
 		FILE* scriptFile = fopen(script->fileName.c_str(), "w");
 		if (scriptFile) {
 			fputs(content.c_str(), scriptFile);

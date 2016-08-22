@@ -52,7 +52,7 @@ namespace Gc { namespace Model { namespace ContentParser { class Memtest :
 
 			try {
 				std::string device = this->deviceDataList->getDeviceByUuid(this->options["partition_uuid"]);
-				this->options["memtest_image_full"] = Helper::rtrim(this->mountTable->findByDevice(device).mountpoint, "/") + "/" + Helper::ltrim(this->options["memtest_image"], "/");
+				this->options["memtest_image_full"] = Gc::Common::Functions::rtrim(this->mountTable->findByDevice(device).mountpoint, "/") + "/" + Gc::Common::Functions::ltrim(this->options["memtest_image"], "/");
 				if (!this->_fileExists(this->options["memtest_image_full"])) {
 					throw ItemNotFoundException("memtest image '" + this->options["memtest_image_full"] + "'not found!", __FILE__, __LINE__);
 				}

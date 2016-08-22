@@ -30,7 +30,7 @@
 #include "Rule.hpp"
 #include "Script.hpp"
 
-class Model_Proxy : public Proxy
+class Model_Proxy : public Gc::Common::Type::Proxy
 {
 	public: std::list<std::shared_ptr<Model_Rule>> rules;
 	public: int index;
@@ -458,9 +458,9 @@ class Model_Proxy : public Proxy
 		std::map<std::shared_ptr<Model_Entry>, std::shared_ptr<Model_Script>> const& entrySourceMap,
 		std::map<std::shared_ptr<Model_Script>, std::string> const& scriptTargetMap
 	) const {
-		std::map<std::string, Nothing> uniqueList; // the pointer (value) is just a dummy
+		std::map<std::string, Gc::Common::Type::Nothing> uniqueList; // the pointer (value) is just a dummy
 		for (auto entrySource : entrySourceMap) {
-			uniqueList[scriptTargetMap.find(entrySource.second)->second] = Nothing();
+			uniqueList[scriptTargetMap.find(entrySource.second)->second] = Gc::Common::Type::Nothing();
 		}
 		std::list<std::string> result;
 		result.push_back(scriptTargetMap.find(this->dataSource)->second); // the own script must be the first entry

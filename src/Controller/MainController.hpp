@@ -147,7 +147,7 @@ namespace Gc { namespace Controller { class MainController :
 		);
 
 		this->applicationObject->onTrashEntrySelection.addHandler(
-			std::bind(std::mem_fn(&MainController::selectRulesAction), this, std::list<Rule*>())
+			std::bind(std::mem_fn(&MainController::selectRulesAction), this, std::list<Gc::Common::Type::Rule*>())
 		);
 
 		this->applicationObject->onEntryInsertionRequest.addHandler(
@@ -483,7 +483,7 @@ namespace Gc { namespace Controller { class MainController :
 	}
 
 
-	public: void showEntryEditorAction(Rule* rule)
+	public: void showEntryEditorAction(Gc::Common::Type::Rule* rule)
 	{
 		this->logActionBegin("show-entry-editor");
 		try {
@@ -535,7 +535,7 @@ namespace Gc { namespace Controller { class MainController :
 		for (auto& proxy : this->grublistCfg->proxies){
 			std::string name = proxy->getScriptName();
 			if ((name != "header" && name != "debian_theme" && name != "grub-customizer_menu_color_helper") || proxy->isModified()) {
-				View_Model_ListItem<Rule, Proxy> listItem;
+				View_Model_ListItem<Gc::Common::Type::Rule, Gc::Common::Type::Proxy> listItem;
 				listItem.name = name;
 				listItem.scriptPtr = proxy.get();
 				listItem.is_submenu = true;
@@ -551,8 +551,8 @@ namespace Gc { namespace Controller { class MainController :
 
 	public: void updateTrashView()
 	{
-		bool placeholdersVisible = this->view->getOptions().at(VIEW_SHOW_PLACEHOLDERS);
-		bool hiddenEntriesVisible = this->view->getOptions().at(VIEW_SHOW_HIDDEN_ENTRIES);
+		bool placeholdersVisible = this->view->getOptions().at(Gc::Common::Type::ViewOption::SHOW_PLACEHOLDERS);
+		bool hiddenEntriesVisible = this->view->getOptions().at(Gc::Common::Type::ViewOption::SHOW_HIDDEN_ENTRIES);
 		this->view->setTrashPaneVisibility(
 			this->grublistCfg->getRemovedEntries(NULL, !placeholdersVisible).size() >= 1 && !hiddenEntriesVisible
 		);
@@ -584,7 +584,7 @@ namespace Gc { namespace Controller { class MainController :
 	}
 
 
-	public: void removeRulesAction(std::list<Rule*> rules, bool force)
+	public: void removeRulesAction(std::list<Gc::Common::Type::Rule*> rules, bool force)
 	{
 		this->logActionBegin("remove-rules");
 		try {
@@ -593,14 +593,14 @@ namespace Gc { namespace Controller { class MainController :
 			} else if (!force && this->listHasPlaintextRules(rules)) {
 				this->view->showPlaintextRemoveWarning();
 			} else {
-				std::list<Entry*> entriesOfRemovedRules;
-				std::map<std::shared_ptr<Model_Proxy>, Nothing> emptyProxies;
-				for (std::list<Rule*>::iterator iter = rules.begin(); iter != rules.end(); iter++) {
+				std::list<Gc::Common::Type::Entry*> entriesOfRemovedRules;
+				std::map<std::shared_ptr<Model_Proxy>, Gc::Common::Type::Nothing> emptyProxies;
+				for (std::list<Gc::Common::Type::Rule*>::iterator iter = rules.begin(); iter != rules.end(); iter++) {
 					std::shared_ptr<Model_Rule> rule = this->grublistCfg->findRule(*iter);
 					rule->setVisibility(false);
 					entriesOfRemovedRules.push_back(rule->dataSource.get());
 					if (!this->grublistCfg->proxies.getProxyByRule(rule)->hasVisibleRules()) {
-						emptyProxies[this->grublistCfg->proxies.getProxyByRule(rule)] = Nothing();
+						emptyProxies[this->grublistCfg->proxies.getProxyByRule(rule)] = Gc::Common::Type::Nothing();
 					}
 				}
 
@@ -620,7 +620,7 @@ namespace Gc { namespace Controller { class MainController :
 		this->logActionEnd();
 	}
 
-	public: void renameRuleAction(Rule* entry, std::string const& newText)
+	public: void renameRuleAction(Gc::Common::Type::Rule* entry, std::string const& newText)
 	{
 		this->logActionBegin("rename-rule");
 		try {
@@ -640,11 +640,11 @@ namespace Gc { namespace Controller { class MainController :
 		this->logActionEnd();
 	}
 
-	public: void moveAction(std::list<Rule*> rules, int direction)
+	public: void moveAction(std::list<Gc::Common::Type::Rule*> rules, int direction)
 	{
 		this->logActionBegin("move");
 		try {
-			bool stickyPlaceholders = !this->view->getOptions().at(VIEW_SHOW_PLACEHOLDERS);
+			bool stickyPlaceholders = !this->view->getOptions().at(Gc::Common::Type::ViewOption::SHOW_PLACEHOLDERS);
 			try {
 				assert(direction == -1 || direction == 1);
 
@@ -697,7 +697,7 @@ namespace Gc { namespace Controller { class MainController :
 		this->logActionEnd();
 	}
 
-	public: void createSubmenuAction(std::list<Rule*> childItems)
+	public: void createSubmenuAction(std::list<Gc::Common::Type::Rule*> childItems)
 	{
 		this->logActionBegin("create-submenu");
 		try {
@@ -715,12 +715,12 @@ namespace Gc { namespace Controller { class MainController :
 		this->logActionEnd();
 	}
 
-	public: void removeSubmenuAction(std::list<Rule*> childItems)
+	public: void removeSubmenuAction(std::list<Gc::Common::Type::Rule*> childItems)
 	{
 		this->logActionBegin("remove-submenu");
 		try {
 			auto firstItem = this->grublistCfg->splitSubmenu(this->grublistCfg->findRule(childItems.front()));
-			std::list<Rule*> movedRules;
+			std::list<Gc::Common::Type::Rule*> movedRules;
 			movedRules.push_back(firstItem.get());
 			for (int i = 1; i < childItems.size(); i++) {
 				movedRules.push_back(this->grublistCfg->proxies.getNextVisibleRule(this->grublistCfg->findRule(movedRules.back()), 1)->get());
@@ -885,11 +885,11 @@ namespace Gc { namespace Controller { class MainController :
 		this->logActionEnd();
 	}
 
-	public: void addEntriesAction(std::list<Rule*> rulePtrs)
+	public: void addEntriesAction(std::list<Gc::Common::Type::Rule*> rulePtrs)
 	{
 		this->logActionBegin("add-entries");
 		try {
-			std::list<Rule*> addedRules;
+			std::list<Gc::Common::Type::Rule*> addedRules;
 			for (auto rulePtr : rulePtrs) {
 				auto& modelRule = dynamic_cast<Model_Rule&>(*rulePtr);
 				auto entry = modelRule.dataSource;
@@ -931,7 +931,7 @@ namespace Gc { namespace Controller { class MainController :
 		this->logActionEnd();
 	}
 
-	public: void selectRulesAction(std::list<Rule*> rules)
+	public: void selectRulesAction(std::list<Gc::Common::Type::Rule*> rules)
 	{
 		this->logActionBegin("select-rules");
 		try {
@@ -942,7 +942,7 @@ namespace Gc { namespace Controller { class MainController :
 		this->logActionEnd();
 	}
 
-	public: void selectRuleAction(Rule* rule, bool startEdit)
+	public: void selectRuleAction(Gc::Common::Type::Rule* rule, bool startEdit)
 	{
 		this->logActionBegin("select-rule");
 		try {
@@ -967,7 +967,7 @@ namespace Gc { namespace Controller { class MainController :
 		this->logActionEnd();
 	}
 
-	public: void setViewOptionAction(ViewOption option, bool value)
+	public: void setViewOptionAction(Gc::Common::Type::ViewOption option, bool value)
 	{
 		this->logActionBegin("set-view-option");
 		try {
@@ -985,7 +985,7 @@ namespace Gc { namespace Controller { class MainController :
 		this->logActionEnd();
 	}
 
-	public: void entryStateToggledAction(Rule* entry, bool state)
+	public: void entryStateToggledAction(Gc::Common::Type::Rule* entry, bool state)
 	{
 		this->logActionBegin("entry-state-toggled");
 		try {
@@ -997,7 +997,7 @@ namespace Gc { namespace Controller { class MainController :
 		this->logActionEnd();
 	}
 
-	public: void updateSelectionAction(std::list<Rule*> selectedRules)
+	public: void updateSelectionAction(std::list<Gc::Common::Type::Rule*> selectedRules)
 	{
 		this->logActionBegin("update-selection");
 		try {
@@ -1040,7 +1040,7 @@ namespace Gc { namespace Controller { class MainController :
 
 			auto proxy = this->grublistCfg->proxies.getProxyByRule(rule);
 
-			View_Model_ListItem<Rule, Proxy> listItem;
+			View_Model_ListItem<Gc::Common::Type::Rule, Gc::Common::Type::Proxy> listItem;
 			listItem.name = name;
 			listItem.entryPtr = rule.get();
 			listItem.is_placeholder = is_other_entries_ph || is_plaintext;
@@ -1063,7 +1063,7 @@ namespace Gc { namespace Controller { class MainController :
 		}
 	}
 
-	private: bool listHasPlaintextRules(std::list<Rule*> const& rules)
+	private: bool listHasPlaintextRules(std::list<Gc::Common::Type::Rule*> const& rules)
 	{
 		for (auto rulePtr : rules) {
 			auto rule = this->grublistCfg->findRule(rulePtr);
@@ -1074,7 +1074,7 @@ namespace Gc { namespace Controller { class MainController :
 		return false;
 	}
 
-	private: bool listHasAllCurrentSystemRules(std::list<Rule*> const& rules)
+	private: bool listHasAllCurrentSystemRules(std::list<Gc::Common::Type::Rule*> const& rules)
 	{
 		int visibleSystemRulesCount = 0;
 		int selectedSystemRulesCount = 0;
@@ -1112,18 +1112,18 @@ namespace Gc { namespace Controller { class MainController :
 		return false;
 	}
 
-	private: std::list<Rule*> populateSelection(std::list<Rule*> rules, bool ignorePlaintext)
+	private: std::list<Gc::Common::Type::Rule*> populateSelection(std::list<Gc::Common::Type::Rule*> rules, bool ignorePlaintext)
 	{
-		std::list<Rule*> result;
+		std::list<Gc::Common::Type::Rule*> result;
 		for (auto rule : rules) {
 			this->populateSelection(result, this->grublistCfg->findRule(rule), -1, rule == rules.front(), ignorePlaintext);
 			result.push_back(rule);
 			this->populateSelection(result, this->grublistCfg->findRule(rule), 1, rule == rules.back(), ignorePlaintext);
 		}
 		// remove duplicates
-		std::list<Rule*> result2;
-		std::map<Rule*, Rule*> duplicateIndex; // key: pointer to the rule, value: always NULL
-		for (std::list<Rule*>::iterator ruleIter = result.begin(); ruleIter != result.end(); ruleIter++) {
+		std::list<Gc::Common::Type::Rule*> result2;
+		std::map<Gc::Common::Type::Rule*, Gc::Common::Type::Rule*> duplicateIndex; // key: pointer to the rule, value: always NULL
+		for (std::list<Gc::Common::Type::Rule*>::iterator ruleIter = result.begin(); ruleIter != result.end(); ruleIter++) {
 			if (duplicateIndex.find(*ruleIter) == duplicateIndex.end()) {
 				duplicateIndex[*ruleIter] = nullptr;
 				result2.push_back(*ruleIter);
@@ -1132,7 +1132,7 @@ namespace Gc { namespace Controller { class MainController :
 		return result2;
 	}
 
-	private: void populateSelection(std::list<Rule*>& rules, std::shared_ptr<Model_Rule> baseRule, int direction, bool checkScript, bool ignorePlaintext)
+	private: void populateSelection(std::list<Gc::Common::Type::Rule*>& rules, std::shared_ptr<Model_Rule> baseRule, int direction, bool checkScript, bool ignorePlaintext)
 	{
 		assert(direction == 1 || direction == -1);
 		bool placeholderFound = false;
@@ -1205,9 +1205,9 @@ namespace Gc { namespace Controller { class MainController :
 		return currentRule;
 	}
 
-	private: std::list<Rule*> removePlaceholdersFromSelection(std::list<Rule*> rules)
+	private: std::list<Gc::Common::Type::Rule*> removePlaceholdersFromSelection(std::list<Gc::Common::Type::Rule*> rules)
 	{
-		std::list<Rule*> result;
+		std::list<Gc::Common::Type::Rule*> result;
 		for (auto rulePtr : rules) {
 			auto rule = this->grublistCfg->findRule(rulePtr);
 			if (!(rule->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER || rule->type == Model_Rule::PLAINTEXT)) {

@@ -27,9 +27,14 @@
 
 #include "../Common/Exception.hpp"
 
-class FileSystem {
-public:
-	void copy(std::string const& srcPath, std::string const& destPath, bool recursive = false, std::list<std::string> ignoreList = std::list<std::string>() ) {
+namespace Gc { namespace Common { class FileSystem
+{
+	public: void copy(
+		std::string const& srcPath,
+		std::string const& destPath,
+		bool recursive = false,
+		std::list<std::string> ignoreList = std::list<std::string>()
+	) {
 		if (std::find(ignoreList.begin(), ignoreList.end(), srcPath) != ignoreList.end()) {
 			return;
 		}
@@ -61,6 +66,6 @@ public:
 		}
 	}
 
-};
+};}}
 
 #endif /* FILESYSTEM_H_ */

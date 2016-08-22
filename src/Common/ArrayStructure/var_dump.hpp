@@ -24,8 +24,7 @@
 #include <sstream>
 #include <iostream>
 
-#include "../Common/Helper.hpp"
-
+#include "../Functions.hpp"
 #include "Container.hpp"
 
 
@@ -60,7 +59,7 @@ inline void var_dump(std::map<std::string, Gc::Common::ArrayStructure::Item> con
 				val = "\"" + val + "\"";
 			}
 
-			std::cout << "\"" << key << "\"" << " : " << Helper::str_replace("\n", "\n" + indentStr, val) << std::endl;
+			std::cout << "\"" << key << "\"" << " : " << Gc::Common::Functions::str_replace("\n", "\n" + indentStr, val) << std::endl;
 		} else {
 			std::cout << "\"" << key << "\"" << " : Array(" << iter->second.subItems.size() << ")" << (iter->second.value != "" ? " [" + iter->second.value + "]" : "") << std::endl;
 			if (iter->second.subItems.size()) {

@@ -27,7 +27,7 @@ namespace Gc { namespace Bootstrap { namespace ApplicationHelper { class Object
 	public: Gc::Bootstrap::ApplicationHelper::Event<Exception> onThreadError;
 
 	public: Gc::Bootstrap::ApplicationHelper::Event<> onAboutDlgShowRequest;
-	public: Gc::Bootstrap::ApplicationHelper::Event<Rule*> onEntryEditorShowRequest;
+	public: Gc::Bootstrap::ApplicationHelper::Event<Gc::Common::Type::Rule*> onEntryEditorShowRequest;
 	public: Gc::Bootstrap::ApplicationHelper::Event<> onEnvEditorShowRequest;
 	public: Gc::Bootstrap::ApplicationHelper::Event<> onInstallerShowRequest;
 	public: Gc::Bootstrap::ApplicationHelper::Event<> onSettingsShowRequest;
@@ -37,18 +37,18 @@ namespace Gc { namespace Bootstrap { namespace ApplicationHelper { class Object
 	public: Gc::Bootstrap::ApplicationHelper::Event<> onListRelevantSettingChange;
 
 	// param 1: the modified rule, param 2: whether it's a new rule
-	public: Gc::Bootstrap::ApplicationHelper::Event<Rule*, bool> onListRuleChange;
+	public: Gc::Bootstrap::ApplicationHelper::Event<Gc::Common::Type::Rule*, bool> onListRuleChange;
 	public: Gc::Bootstrap::ApplicationHelper::Event<> onTrashEntrySelection;
 	public: Gc::Bootstrap::ApplicationHelper::Event<> onEntrySelection;
-	public: Gc::Bootstrap::ApplicationHelper::Event<std::list<Rule*>> onEntryInsertionRequest; // TODO: do just selection - not the insertion itself
-	public: Gc::Bootstrap::ApplicationHelper::Event<std::list<Entry*>> onEntryRemove;
+	public: Gc::Bootstrap::ApplicationHelper::Event<std::list<Gc::Common::Type::Rule*>> onEntryInsertionRequest; // TODO: do just selection - not the insertion itself
+	public: Gc::Bootstrap::ApplicationHelper::Event<std::list<Gc::Common::Type::Entry*>> onEntryRemove;
 
 	public: Gc::Bootstrap::ApplicationHelper::Event<> onInit;
 	public: Gc::Bootstrap::ApplicationHelper::Event<> onSettingModelChange;
 	public: Gc::Bootstrap::ApplicationHelper::Event<> onLoad; // loading finished (without preserving data)
 	public: Gc::Bootstrap::ApplicationHelper::Event<> onSave;
 
-	public: std::map<ViewOption, bool> viewOptions;
+	public: std::map<Gc::Common::Type::ViewOption, bool> viewOptions;
 
 	public: virtual void addShutdownHandler(std::function<void ()> callback) = 0;
 	public: virtual void shutdown() = 0;

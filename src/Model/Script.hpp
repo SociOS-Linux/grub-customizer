@@ -25,14 +25,14 @@
 #include <unistd.h>
 #include "../Model/EntryPathFollower.hpp"
 #include "../Model/Logger/Trait/LoggerAware.hpp"
-#include "../Common/Helper.hpp"
+#include "../Common/Functions.hpp"
 #include "../config.hpp"
 #include "../Common/Exception.hpp"
 #include "../Common/ArrayStructure/Container.hpp"
 #include "../Common/Type.hpp"
 #include "Entry.hpp"
 
-class Model_Script : public Model_EntryPathFollower, public Gc::Model::Logger::Trait::LoggerAware, public Script {
+class Model_Script : public Model_EntryPathFollower, public Gc::Model::Logger::Trait::LoggerAware, public Gc::Common::Type::Script {
 	public: std::string name, fileName;
 	public: bool isCustomScript;
 	public: std::shared_ptr<Model_Entry> root;
@@ -123,7 +123,7 @@ class Model_Script : public Model_EntryPathFollower, public Gc::Model::Logger::T
 		std::list<std::shared_ptr<Model_Entry>>& parentList
 	) {
 		for (auto entry : parentList) {
-			if (entry->type == Model_Entry::MENUENTRY && entry->content != "" && Helper::md5(entry->content) == hash) {
+			if (entry->type == Model_Entry::MENUENTRY && entry->content != "" && Gc::Common::Functions::md5(entry->content) == hash) {
 				return entry;
 			} else if (entry->type == Model_Entry::SUBMENU) {
 				auto result = this->getEntryByHash(hash, entry->subEntries);
@@ -154,7 +154,7 @@ class Model_Script : public Model_EntryPathFollower, public Gc::Model::Logger::T
 		else {
 			newPath = cfg_dir+"/DS_"+this->fileName.substr(cfg_dir.length()+1);
 		}
-		Helper::assert_filepath_empty(newPath, __FILE__, __LINE__);
+		Gc::Common::Functions::assert_filepath_empty(newPath, __FILE__, __LINE__);
 		int renameSuccess = rename(this->fileName.c_str(), newPath.c_str());
 		if (renameSuccess == 0)
 			this->fileName = newPath;
@@ -163,7 +163,7 @@ class Model_Script : public Model_EntryPathFollower, public Gc::Model::Logger::T
 	//moves the file from any location to grub.d and adds the prefix PS_ (proxified Script) or DS_ (default script)
 	public: bool moveFile(std::string const& newPath, short int permissions = -1)
 	{
-		Helper::assert_filepath_empty(newPath, __FILE__, __LINE__);
+		Gc::Common::Functions::assert_filepath_empty(newPath, __FILE__, __LINE__);
 		int rename_success = rename(this->fileName.c_str(), newPath.c_str());
 		if (rename_success == 0){
 			this->fileName = newPath;
@@ -212,7 +212,7 @@ class Model_Script : public Model_EntryPathFollower, public Gc::Model::Logger::T
 			if (result != "") {
 				result += "/";
 			}
-			result += "'"+Helper::str_replace("'", "''", *iter)+"'";
+			result += "'"+Gc::Common::Functions::str_replace("'", "''", *iter)+"'";
 		}
 	
 		if (withOtherEntriesPlaceholder) {

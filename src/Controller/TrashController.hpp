@@ -75,7 +75,7 @@ namespace Gc { namespace Controller { class TrashController :
 		this->applicationObject->onEnvChange.addHandler(std::bind(std::mem_fn(&TrashController::hideAction), this));
 		this->applicationObject->onListModelChange.addHandler(std::bind(std::mem_fn(&TrashController::updateAction), this));
 		this->applicationObject->onEntryRemove.addHandler(std::bind(std::mem_fn(&TrashController::selectEntriesAction), this, _1));
-		this->applicationObject->onEntrySelection.addHandler(std::bind(std::mem_fn(&TrashController::selectEntriesAction), this, std::list<Entry*>()));
+		this->applicationObject->onEntrySelection.addHandler(std::bind(std::mem_fn(&TrashController::selectEntriesAction), this, std::list<Gc::Common::Type::Entry*>()));
 	}
 	
 	public:	void updateAction()
@@ -94,7 +94,7 @@ namespace Gc { namespace Controller { class TrashController :
 	{
 		this->logActionBegin("apply");
 		try {
-			std::list<Rule*> rulePtrs = view->getSelectedEntries();
+			std::list<Gc::Common::Type::Rule*> rulePtrs = view->getSelectedEntries();
 			this->applicationObject->onEntryInsertionRequest.exec(rulePtrs);
 		} catch (Exception const& e) {
 			this->applicationObject->onError.exec(e);
@@ -123,19 +123,19 @@ namespace Gc { namespace Controller { class TrashController :
 				this->grublistCfg->deleteEntry(this->findRule(rulePtr)->dataSource);
 			}
 			this->refresh();
-			this->updateSelectionAction(std::list<Rule*>());
+			this->updateSelectionAction(std::list<Gc::Common::Type::Rule*>());
 		} catch (Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
 
-	public: void selectEntriesAction(std::list<Entry*> const& entries)
+	public: void selectEntriesAction(std::list<Gc::Common::Type::Entry*> const& entries)
 	{
 		this->logActionBegin("select-entries");
 		try {
 			// first look for rules in local data, linking to the the given entries
-			std::list<Rule*> rules;
+			std::list<Gc::Common::Type::Rule*> rules;
 			for (auto entryPtr : entries) {
 				for (auto rule : this->data) {
 					if (entryPtr == rule->dataSource.get()) {
@@ -150,7 +150,7 @@ namespace Gc { namespace Controller { class TrashController :
 		this->logActionEnd();
 	}
 
-	public: void updateSelectionAction(std::list<Rule*> const& selectedEntries)
+	public: void updateSelectionAction(std::list<Gc::Common::Type::Rule*> const& selectedEntries)
 	{
 		this->logActionBegin("update-selection");
 		try {
@@ -191,7 +191,7 @@ namespace Gc { namespace Controller { class TrashController :
 				name = this->entryNameMapper->map(rule->dataSource, name, rule->type != Model_Rule::SUBMENU);
 			}
 
-			View_Model_ListItem<Rule, Script> listItem;
+			View_Model_ListItem<Gc::Common::Type::Rule, Gc::Common::Type::Script> listItem;
 			listItem.name = name;
 			listItem.entryPtr = rule.get();
 			listItem.scriptPtr = nullptr;
@@ -217,7 +217,7 @@ namespace Gc { namespace Controller { class TrashController :
 		}
 	}
 
-	private: bool ruleListIsDeletable(std::list<Rule*> const& selectedEntries)
+	private: bool ruleListIsDeletable(std::list<Gc::Common::Type::Rule*> const& selectedEntries)
 	{
 		if (selectedEntries.size() == 0) {
 			return false;
@@ -237,7 +237,7 @@ namespace Gc { namespace Controller { class TrashController :
 		return true;
 	}
 
-	private: std::shared_ptr<Model_Rule> findRule(Rule* rulePtr, std::shared_ptr<Model_Rule> parent = nullptr)
+	private: std::shared_ptr<Model_Rule> findRule(Gc::Common::Type::Rule* rulePtr, std::shared_ptr<Model_Rule> parent = nullptr)
 	{
 		std::list<std::shared_ptr<Model_Rule>>& list = parent ? parent->subRules : this->data;
 

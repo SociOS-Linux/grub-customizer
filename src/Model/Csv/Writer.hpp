@@ -25,7 +25,7 @@
 #include <cstdio>
 #include <stdexcept>
 
-#include "../../Common/Helper.hpp"
+#include "../../Common/Functions.hpp"
 
 namespace Gc { namespace Model { namespace Csv { class Writer
 {
@@ -35,7 +35,7 @@ namespace Gc { namespace Model { namespace Csv { class Writer
 
 	private: void _writeValue(std::string const& value)
 	{
-		fputs(("\"" + Helper::str_replace("\"", "\"\"", value) + "\"").c_str(), this->_file);
+		fputs(("\"" + Gc::Common::Functions::str_replace("\"", "\"\"", value) + "\"").c_str(), this->_file);
 	}
 
 	public: Writer(FILE* file) : _file(file) {}

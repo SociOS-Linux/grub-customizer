@@ -30,14 +30,14 @@ class View_Gtk_Trash :
 	public View_Trash
 {
 	private: Gtk::ScrolledWindow scrEntryBox;
-	private: View_Gtk_Element_List<Rule, Script> list;
+	private: View_Gtk_Element_List<Gc::Common::Type::Rule, Gc::Common::Type::Script> list;
 	private: Gtk::Frame frmList;
 	private: Gtk::VBox vbList;
 	private: Gtk::HBox hbList;
 	private: Gtk::Button bttRestore;
 	private: Gtk::Button bttDelete;
 
-	private: std::map<ViewOption, bool> options;
+	private: std::map<Gc::Common::Type::ViewOption, bool> options;
 
 	private: Gtk::MenuItem miContext;
 	private: Gtk::Menu contextMenu;
@@ -122,9 +122,9 @@ class View_Gtk_Trash :
 		event_lock = false;
 	}
 
-	public: std::list<Rule*> getSelectedEntries()
+	public: std::list<Gc::Common::Type::Rule*> getSelectedEntries()
 	{
-		std::list<Rule*> result;
+		std::list<Gc::Common::Type::Rule*> result;
 		std::vector<Gtk::TreePath> pathes = list.get_selection()->get_selected_rows();
 		for (std::vector<Gtk::TreePath>::iterator pathIter = pathes.begin(); pathIter != pathes.end(); pathIter++) {
 			Gtk::TreeModel::iterator elementIter = list.refTreeStore->get_iter(*pathIter);
@@ -133,7 +133,7 @@ class View_Gtk_Trash :
 		return result;
 	}
 
-	private: void addItem(View_Model_ListItem<Rule, Script> const& listItem)
+	private: void addItem(View_Model_ListItem<Gc::Common::Type::Rule, Gc::Common::Type::Script> const& listItem)
 	{
 		this->list.addListItem(listItem, this->options, *this);
 	}
@@ -180,12 +180,12 @@ class View_Gtk_Trash :
 		micDelete.set_sensitive(visibility);
 	}
 
-	public: void setOptions(std::map<ViewOption, bool> const& viewOptions)
+	public: void setOptions(std::map<Gc::Common::Type::ViewOption, bool> const& viewOptions)
 	{
 		this->options = viewOptions;
 	}
 
-	public: void selectEntries(std::list<Rule*> const& entries)
+	public: void selectEntries(std::list<Gc::Common::Type::Rule*> const& entries)
 	{
 		this->list.selectRules(entries);
 	}

@@ -78,7 +78,7 @@ namespace Gc { namespace Controller { class EntryEditController :
 		this->applicationObject->onEntryEditorShowRequest.addHandler(std::bind(std::mem_fn(&EntryEditController::showAction), this, _1));
 	}
 
-	public: void showAction(Rule* rule)
+	public: void showAction(Gc::Common::Type::Rule* rule)
 	{
 		if (rule == nullptr) {
 			this->showCreatorAction();

@@ -51,15 +51,15 @@ namespace Gc { namespace Model { namespace ContentParser { class LinuxIso :
 
 			//assign data
 			this->options["partition_uuid"] = result[3];
-			this->options["linux_image"] = Helper::str_replace("(loop)", "", this->unescape(result[5]));
-			this->options["initramfs"] = Helper::str_replace("(loop)", "", this->unescape(result[8]));
+			this->options["linux_image"] = Gc::Common::Functions::str_replace("(loop)", "", this->unescape(result[5]));
+			this->options["initramfs"] = Gc::Common::Functions::str_replace("(loop)", "", this->unescape(result[8]));
 			this->options["iso_path"] = this->unescape(result[4]);
 			this->options["iso_path_full"] = "";
-			this->options["other_params"] = Helper::ltrim(result[7], " ");
+			this->options["other_params"] = Gc::Common::Functions::ltrim(result[7], " ");
 
 			try {
 				std::string device = this->deviceDataList->getDeviceByUuid(this->options["partition_uuid"]);
-				this->options["iso_path_full"] = Helper::rtrim(this->mountTable->findByDevice(device).mountpoint, "/") + "/" + Helper::ltrim(this->options["iso_path"], "/");
+				this->options["iso_path_full"] = Gc::Common::Functions::rtrim(this->mountTable->findByDevice(device).mountpoint, "/") + "/" + Gc::Common::Functions::ltrim(this->options["iso_path"], "/");
 				if (!this->_fileExists(this->options["iso_path_full"])) {
 					throw ItemNotFoundException("iso file '" + this->options["iso_path_full"] + "'not found!", __FILE__, __LINE__);
 				}

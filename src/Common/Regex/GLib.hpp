@@ -27,8 +27,8 @@
 #include <iostream>
 
 #include "../../Common/Exception.hpp"
-#include "../../Common/Helper.hpp"
 #include "../../Common/Regex/Generic.hpp"
+#include "../Functions.hpp"
 
 namespace Gc { namespace Common { namespace Regex { class GLib :
 	public Gc::Common::Regex::Generic
@@ -43,7 +43,7 @@ namespace Gc { namespace Common { namespace Regex { class GLib :
 		std::vector<std::string> result;
 		GMatchInfo* mi = NULL;
 		GRegex* gr = g_regex_new(pattern.c_str(), GRegexCompileFlags(0), GRegexMatchFlags(0), NULL);
-		std::string escapedStr = escapeCharacter == '\0' ? "" : Helper::str_replace_escape(str, escapeCharacter, replaceCharacter);
+		std::string escapedStr = escapeCharacter == '\0' ? "" : Gc::Common::Functions::str_replace_escape(str, escapeCharacter, replaceCharacter);
 		const gchar* matchStr = escapeCharacter == '\0' ? str.c_str() : escapedStr.c_str();
 		bool success = g_regex_match(gr, matchStr, GRegexMatchFlags(0), &mi);
 		if (!success)
@@ -75,7 +75,7 @@ namespace Gc { namespace Common { namespace Regex { class GLib :
 		GMatchInfo* mi = NULL;
 		GRegex* gr = g_regex_new(pattern.c_str(), GRegexCompileFlags(0), GRegexMatchFlags(0), NULL);
 
-		std::string escapedStr = escapeCharacter == '\0' ? "" : Helper::str_replace_escape(str, escapeCharacter, replaceCharacter);
+		std::string escapedStr = escapeCharacter == '\0' ? "" : Gc::Common::Functions::str_replace_escape(str, escapeCharacter, replaceCharacter);
 		const gchar* matchStr = escapeCharacter == '\0' ? str.c_str() : escapedStr.c_str();
 
 		bool success = g_regex_match(gr, matchStr, GRegexMatchFlags(0), &mi);

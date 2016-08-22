@@ -22,7 +22,7 @@
 #include "../../../Common/Type.hpp"
 #include "../../../Common/Exception.hpp"
 #include "../../Model/ListItem.hpp"
-#include "../../../Common/Helper.hpp"
+#include "../../../Common/Functions.hpp"
 #include <libintl.h>
 
 template<typename TItem, typename TWrapper>
@@ -98,17 +98,17 @@ class View_Gtk_Element_List :
 
 	public:	void addListItem(
 		View_Model_ListItem<TItem, TWrapper> const& listItem,
-		std::map<ViewOption, bool> const& options,
+		std::map<Gc::Common::Type::ViewOption, bool> const& options,
 		Gtk::Window& window
 	)
 	{
-		if (!listItem.isVisible && !options.at(VIEW_SHOW_HIDDEN_ENTRIES)) {
+		if (!listItem.isVisible && !options.at(Gc::Common::Type::ViewOption::SHOW_HIDDEN_ENTRIES)) {
 			return;
 		}
-		if (listItem.entryPtr == NULL && !options.at(VIEW_GROUP_BY_SCRIPT)) {
+		if (listItem.entryPtr == NULL && !options.at(Gc::Common::Type::ViewOption::GROUP_BY_SCRIPT)) {
 			return;
 		}
-		if (listItem.is_placeholder && !options.at(VIEW_SHOW_PLACEHOLDERS)) {
+		if (listItem.is_placeholder && !options.at(Gc::Common::Type::ViewOption::SHOW_PLACEHOLDERS)) {
 			return;
 		}
 		Gtk::TreeIter entryRow;
@@ -118,18 +118,18 @@ class View_Gtk_Element_List :
 			} catch (ItemNotFoundException const& e) {
 				return; // this usually happens when there's a visible entry below a hidden submenu. Just don't show it in this case.
 			}
-		} else if (listItem.parentScript && options.at(VIEW_GROUP_BY_SCRIPT)) {
+		} else if (listItem.parentScript && options.at(Gc::Common::Type::ViewOption::GROUP_BY_SCRIPT)) {
 			entryRow = this->refTreeStore->append(this->getIterByScriptPtr(listItem.parentScript)->children());
 		} else {
 			entryRow = this->refTreeStore->append();
 		}
 
 		Glib::RefPtr<Gdk::Pixbuf> icon;
-		std::string outputName = Helper::escapeXml(listItem.name);
+		std::string outputName = Gc::Common::Functions::escapeXml(listItem.name);
 		if (!listItem.is_placeholder) {
 			outputName = "<b>" + outputName + "</b>";
 		}
-		if (options.at(VIEW_SHOW_DETAILS)) {
+		if (options.at(Gc::Common::Type::ViewOption::SHOW_DETAILS)) {
 			outputName += "\n<small>";
 			if (listItem.scriptPtr != NULL) {
 				outputName += gettext("script");
@@ -141,36 +141,36 @@ class View_Gtk_Element_List :
 				outputName += gettext("menuentry");
 			}
 			if (listItem.scriptName != "") {
-				outputName += std::string(" / ") + Helper::escapeXml(Glib::ustring::compose(gettext("script: %1"), listItem.scriptName));
+				outputName += std::string(" / ") + Gc::Common::Functions::escapeXml(Glib::ustring::compose(gettext("script: %1"), listItem.scriptName));
 			}
 
 			if (listItem.defaultName != "" && listItem.name != listItem.defaultName) {
-				outputName += std::string(" / ") + Helper::escapeXml(Glib::ustring::compose(gettext("default name: %1"), listItem.defaultName));
+				outputName += std::string(" / ") + Gc::Common::Functions::escapeXml(Glib::ustring::compose(gettext("default name: %1"), listItem.defaultName));
 			}
 
 			if (listItem.options.find("_deviceName") != listItem.options.end()) {
-				outputName += Helper::escapeXml(Glib::ustring(" / ") + Helper::escapeXml(Glib::ustring::compose(gettext("partition: %1"), listItem.options.at("_deviceName"))));
+				outputName += Gc::Common::Functions::escapeXml(Glib::ustring(" / ") + Gc::Common::Functions::escapeXml(Glib::ustring::compose(gettext("partition: %1"), listItem.options.at("_deviceName"))));
 			}
 
 			if (listItem.options.find("iso_path_full") != listItem.options.end()) {
-				outputName += Helper::escapeXml(Glib::ustring(" / ") + gettext("ISO-Image: ") + listItem.options.at("iso_path_full"));
+				outputName += Gc::Common::Functions::escapeXml(Glib::ustring(" / ") + gettext("ISO-Image: ") + listItem.options.at("iso_path_full"));
 			}
 
 			if (listItem.options.find("memtest_image_full") != listItem.options.end()) {
-				outputName += Helper::escapeXml(Glib::ustring(" / ") + gettext("Memtest-Image: ") + listItem.options.at("memtest_image_full"));
+				outputName += Gc::Common::Functions::escapeXml(Glib::ustring(" / ") + gettext("Memtest-Image: ") + listItem.options.at("memtest_image_full"));
 			}
 
 			outputName += "</small>";
 		}
 
 		if (listItem.scriptPtr != NULL) {
-			icon = window.render_icon_pixbuf(Gtk::Stock::FILE, options.at(VIEW_SHOW_DETAILS) ? Gtk::ICON_SIZE_LARGE_TOOLBAR : Gtk::ICON_SIZE_MENU);
+			icon = window.render_icon_pixbuf(Gtk::Stock::FILE, options.at(Gc::Common::Type::ViewOption::SHOW_DETAILS) ? Gtk::ICON_SIZE_LARGE_TOOLBAR : Gtk::ICON_SIZE_MENU);
 		} else if (listItem.is_submenu) {
-			icon = window.render_icon_pixbuf(Gtk::Stock::DIRECTORY, options.at(VIEW_SHOW_DETAILS) ? Gtk::ICON_SIZE_LARGE_TOOLBAR : Gtk::ICON_SIZE_MENU);
+			icon = window.render_icon_pixbuf(Gtk::Stock::DIRECTORY, options.at(Gc::Common::Type::ViewOption::SHOW_DETAILS) ? Gtk::ICON_SIZE_LARGE_TOOLBAR : Gtk::ICON_SIZE_MENU);
 		} else if (listItem.is_placeholder) {
-			icon = window.render_icon_pixbuf(Gtk::Stock::FIND, options.at(VIEW_SHOW_DETAILS) ? Gtk::ICON_SIZE_LARGE_TOOLBAR : Gtk::ICON_SIZE_MENU);
+			icon = window.render_icon_pixbuf(Gtk::Stock::FIND, options.at(Gc::Common::Type::ViewOption::SHOW_DETAILS) ? Gtk::ICON_SIZE_LARGE_TOOLBAR : Gtk::ICON_SIZE_MENU);
 		} else {
-			icon = window.render_icon_pixbuf(Gtk::Stock::EXECUTE, options.at(VIEW_SHOW_DETAILS) ? Gtk::ICON_SIZE_LARGE_TOOLBAR : Gtk::ICON_SIZE_MENU);
+			icon = window.render_icon_pixbuf(Gtk::Stock::EXECUTE, options.at(Gc::Common::Type::ViewOption::SHOW_DETAILS) ? Gtk::ICON_SIZE_LARGE_TOOLBAR : Gtk::ICON_SIZE_MENU);
 		}
 
 		if (listItem.isModified) {

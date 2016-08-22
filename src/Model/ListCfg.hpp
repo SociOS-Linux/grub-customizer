@@ -36,7 +36,7 @@
 
 #include "../Common/Exception.hpp"
 #include "../Common/ArrayStructure/Container.hpp"
-#include "../Common/Helper.hpp"
+#include "../Common/Functions.hpp"
 #include <stack>
 #include <algorithm>
 #include <functional>
@@ -123,7 +123,7 @@ class Model_ListCfg :
 		std::string outputFilePath = this->env->cfg_dir+"/LS_"+scriptNameNoPath;
 		FILE* existingScript = fopen(outputFilePath.c_str(), "r");
 		if (existingScript == NULL){
-			Helper::assert_filepath_empty(outputFilePath, __FILE__, __LINE__);
+			Gc::Common::Functions::assert_filepath_empty(outputFilePath, __FILE__, __LINE__);
 			FILE* fwdScript = fopen(outputFilePath.c_str(), "w");
 			if (fwdScript){
 				fputs("#!/bin/sh\n", fwdScript);
@@ -335,7 +335,7 @@ class Model_ListCfg :
 		} while (foundInvalidScript);
 	
 		if (invalidProxies != "") {
-			this->log("found invalid proxies: " + Helper::rtrim(invalidProxies, ","), Gc::Model::Logger::GenericLogger::INFO);
+			this->log("found invalid proxies: " + Gc::Common::Functions::rtrim(invalidProxies, ","), Gc::Model::Logger::GenericLogger::INFO);
 		}
 	
 		//fix conflicts (same number, same name but one script with "-proxy" the other without
@@ -562,7 +562,7 @@ class Model_ListCfg :
 		int innerCount = 0;
 		double progressbarScriptSpace = 0.7 / this->repository.size();
 		while (!cancelThreadsRequested && (row = Model_Entry_Row(source))){
-			std::string rowText = Helper::ltrim(row.text);
+			std::string rowText = Gc::Common::Functions::ltrim(row.text);
 			if (!inScript && rowText.substr(0,10) == ("### BEGIN ") && rowText.substr(rowText.length()-4,4) == " ###"){
 				this->lock();
 				if (script) {
@@ -842,7 +842,7 @@ class Model_ListCfg :
 			for (std::list<std::string>::iterator iter = dsfiles.begin(); iter != dsfiles.end(); iter++) {
 				this->log("renaming " + *iter, Gc::Model::Logger::GenericLogger::EVENT);
 				std::string newPath = this->env->cfg_dir+"/"+iter->substr(3);
-				Helper::assert_filepath_empty(newPath, __FILE__, __LINE__);
+				Gc::Common::Functions::assert_filepath_empty(newPath, __FILE__, __LINE__);
 				rename((this->env->cfg_dir+"/"+(*iter)).c_str(), newPath.c_str());
 			}
 	
@@ -853,7 +853,7 @@ class Model_ListCfg :
 				std::string out = *iter;
 				out.replace(0, 2, (std::string("") + char('0' + (i/10)%10) + char('0' + i%10)));
 				std::string newPath = this->env->cfg_dir+"/"+out;
-				Helper::assert_filepath_empty(newPath, __FILE__, __LINE__);
+				Gc::Common::Functions::assert_filepath_empty(newPath, __FILE__, __LINE__);
 				rename((this->env->cfg_dir+"/"+(*iter)).c_str(), newPath.c_str());
 				i++;
 			}
@@ -1088,12 +1088,12 @@ class Model_ListCfg :
 	}
 
 
-	public: std::list<Rule*> getNormalizedRuleOrder(std::list<Rule*> rules)
+	public: std::list<Gc::Common::Type::Rule*> getNormalizedRuleOrder(std::list<Gc::Common::Type::Rule*> rules)
 	{
 		if (rules.size() == 0 || rules.size() == 1) {
 			return rules;
 		}
-		std::list<Rule*> result;
+		std::list<Gc::Common::Type::Rule*> result;
 	
 		auto firstRuleOfList = this->findRule(rules.front());
 		std::list<std::shared_ptr<Model_Rule>>::iterator currentRule;
@@ -1281,7 +1281,7 @@ class Model_ListCfg :
 		this->proxies.sort();
 	}
 
-	public: std::shared_ptr<Model_Rule> findRule(Rule const* rulePtr)
+	public: std::shared_ptr<Model_Rule> findRule(Gc::Common::Type::Rule const* rulePtr)
 	{
 		auto allProxies = this->proxies;
 		allProxies.insert(allProxies.end(), this->proxies.trash.begin(), this->proxies.trash.end());
@@ -1296,7 +1296,7 @@ class Model_ListCfg :
 		throw ItemNotFoundException("rule not found", __FILE__, __LINE__);
 	}
 
-	private: std::shared_ptr<Model_Rule> findRule(Rule const* rulePtr, std::list<std::shared_ptr<Model_Rule>> list)
+	private: std::shared_ptr<Model_Rule> findRule(Gc::Common::Type::Rule const* rulePtr, std::list<std::shared_ptr<Model_Rule>> list)
 	{
 		for (auto rule : list) {
 			if (rule.get() == rulePtr) {

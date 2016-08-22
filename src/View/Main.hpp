@@ -36,28 +36,28 @@ class View_Main : public Gc::Model::Logger::Trait::LoggerAware {
 public:
 	virtual inline ~View_Main() {};
 
-	std::function<void (std::list<Rule*> rules, bool force)> onRemoveRulesClick;
+	std::function<void (std::list<Gc::Common::Type::Rule*> rules, bool force)> onRemoveRulesClick;
 	std::function<void ()> onShowSettingsClick;
 	std::function<void ()> onReloadClick;
 	std::function<void ()> onSaveClick;
 	std::function<void ()> onShowEnvEditorClick;
 	std::function<void ()> onShowInstallerClick;
-	std::function<void (std::list<Rule*> childItems)> onCreateSubmenuClick;
-	std::function<void (std::list<Rule*> childItems)> onRemoveSubmenuClick;
-	std::function<void (Rule* rule)> onShowEntryEditorClick;
+	std::function<void (std::list<Gc::Common::Type::Rule*> childItems)> onCreateSubmenuClick;
+	std::function<void (std::list<Gc::Common::Type::Rule*> childItems)> onRemoveSubmenuClick;
+	std::function<void (Gc::Common::Type::Rule* rule)> onShowEntryEditorClick;
 	std::function<void ()> onShowEntryCreatorClick;
 	std::function<void ()> onShowAboutClick;
 	std::function<void ()> onExitClick;
-	std::function<void (Rule* entry, std::string const& newText)> onRenameClick;
+	std::function<void (Gc::Common::Type::Rule* entry, std::string const& newText)> onRenameClick;
 	std::function<void ()> onRevertClick;
-	std::function<void (std::list<Rule*> rules, int direction)> onMoveClick;
+	std::function<void (std::list<Gc::Common::Type::Rule*> rules, int direction)> onMoveClick;
 	std::function<void ()> onCancelBurgSwitcherClick;
 	std::function<void (bool burgChosen)> onInitModeClick;
-	std::function<void (Rule* rule, bool startEdit)> onRuleSelection;
+	std::function<void (Gc::Common::Type::Rule* rule, bool startEdit)> onRuleSelection;
 	std::function<void (unsigned int pos)> onTabChange;
-	std::function<void (ViewOption option, bool value)> onViewOptionChange;
-	std::function<void (Rule* entry, bool state)> onEntryStateChange;
-	std::function<void (std::list<Rule*> selectedRules)> onSelectionChange;
+	std::function<void (Gc::Common::Type::ViewOption option, bool value)> onViewOptionChange;
+	std::function<void (Gc::Common::Type::Rule* entry, bool state)> onEntryStateChange;
+	std::function<void (std::list<Gc::Common::Type::Rule*> selectedRules)> onSelectionChange;
 
 
 	//show this dialog without waiting
@@ -91,7 +91,7 @@ public:
 	virtual void setStatusText(std::string const& new_status_text)=0;
 	virtual void setStatusText(std::string const& name, int pos, int max)=0;
 	//add entry to the end of the last script of the list
-	virtual void appendEntry(View_Model_ListItem<Rule, Proxy> const& listItem)=0;
+	virtual void appendEntry(View_Model_ListItem<Gc::Common::Type::Rule, Gc::Common::Type::Proxy> const& listItem)=0;
 	//notifies the user about the problem that no grublistcfg_proxy has been found
 	virtual void showProxyNotFoundMessage()=0;
 	//creates a string for an other entry placeholder
@@ -115,13 +115,13 @@ public:
 	virtual bool confirmUnsavedSwitch() = 0;
 
 	//assigns a new name to the rule item
-	virtual void setRuleName(Rule* rule, std::string const& newName)=0;
+	virtual void setRuleName(Gc::Common::Type::Rule* rule, std::string const& newName)=0;
 
 	//select the given rule
-	virtual void selectRule(Rule* rule, bool startEdit = false)=0;
+	virtual void selectRule(Gc::Common::Type::Rule* rule, bool startEdit = false)=0;
 
 	// select multiple rules
-	virtual void selectRules(std::list<Rule*> rules)=0;
+	virtual void selectRules(std::list<Gc::Common::Type::Rule*> rules)=0;
 
 	// set whether the trash pane should be visible
 	virtual void setTrashPaneVisibility(bool value) = 0;
@@ -139,12 +139,12 @@ public:
 
 	virtual void showSystemRuleRemoveWarning() = 0;
 
-	virtual void setOption(ViewOption option, bool value) = 0;
+	virtual void setOption(Gc::Common::Type::ViewOption option, bool value) = 0;
 
-	virtual std::map<ViewOption, bool> const& getOptions() = 0;
-	virtual void setOptions(std::map<ViewOption, bool> const& options) = 0;
+	virtual std::map<Gc::Common::Type::ViewOption, bool> const& getOptions() = 0;
+	virtual void setOptions(std::map<Gc::Common::Type::ViewOption, bool> const& options) = 0;
 
-	virtual void setEntryVisibility(Rule* entry, bool value) = 0;
+	virtual void setEntryVisibility(Gc::Common::Type::Rule* entry, bool value) = 0;
 };
 
 #endif

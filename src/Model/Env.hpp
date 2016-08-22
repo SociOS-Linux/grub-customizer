@@ -27,10 +27,10 @@
 #include <sys/stat.h>
 
 #include "../Common/ArrayStructure/Container.hpp"
-#include "../Common/FileSystem.hpp"
 #include "../Model/Logger/Trait/LoggerAware.hpp"
 #include "../Common/Exception.hpp"
 #include "../Common/Type.hpp"
+#include "../Common/FileSystem.hpp"
 #include "MountTable.hpp"
 #include "SettingsStore.hpp"
 
@@ -161,7 +161,7 @@ public:
 		fclose(cfg_file);
 	}
 
-	void saveViewOptions(std::map<ViewOption, bool> const& options) {
+	void saveViewOptions(std::map<Gc::Common::Type::ViewOption, bool> const& options) {
 		FILE* cfg_file = NULL;
 		DIR* dir = opendir((cfg_dir_prefix + "/etc/grub-customizer").c_str());
 		if (dir) {
@@ -177,14 +177,14 @@ public:
 			throw FileSaveException("cannot save the view config file (file creation)", __FILE__, __LINE__);
 		}
 		Model_SettingsStore ds;
-		for (std::map<ViewOption, bool>::const_iterator iter = options.begin(); iter != options.end(); iter++) {
+		for (std::map<Gc::Common::Type::ViewOption, bool>::const_iterator iter = options.begin(); iter != options.end(); iter++) {
 			std::string optionText = "";
 			switch (iter->first) {
-			case VIEW_SHOW_DETAILS: optionText = "SHOW_DETAILS"; break;
-			case VIEW_SHOW_HIDDEN_ENTRIES: optionText = "SHOW_HIDDEN_ENTRIES"; break;
-			case VIEW_GROUP_BY_SCRIPT: optionText = "GROUP_BY_SCRIPT"; break;
-			case VIEW_SHOW_PLACEHOLDERS: optionText = "SHOW_PLACEHOLDERS"; break;
-			default: throw LogicException("option mapping failed");
+				case Gc::Common::Type::ViewOption::SHOW_DETAILS: optionText = "SHOW_DETAILS"; break;
+				case Gc::Common::Type::ViewOption::SHOW_HIDDEN_ENTRIES: optionText = "SHOW_HIDDEN_ENTRIES"; break;
+				case Gc::Common::Type::ViewOption::GROUP_BY_SCRIPT: optionText = "GROUP_BY_SCRIPT"; break;
+				case Gc::Common::Type::ViewOption::SHOW_PLACEHOLDERS: optionText = "SHOW_PLACEHOLDERS"; break;
+				default: throw LogicException("option mapping failed");
 			}
 			ds.setValue(optionText, iter->second ? "true" : "false");
 		}
@@ -192,33 +192,33 @@ public:
 		fclose(cfg_file);
 	}
 
-	std::map<ViewOption, bool> loadViewOptions() {
+	std::map<Gc::Common::Type::ViewOption, bool> loadViewOptions() {
 		FILE* file = fopen((cfg_dir_prefix + "/etc/grub-customizer/viewOptions.cfg").c_str(), "r");
 		if (file == NULL) {
 			throw FileReadException("viewOptions not found");
 		}
 		Model_SettingsStore ds(file);
 		fclose(file);
-		std::map<ViewOption, bool> result;
+		std::map<Gc::Common::Type::ViewOption, bool> result;
 		if (ds.getValue("SHOW_DETAILS") != "") {
-			result[VIEW_SHOW_DETAILS] = ds.getValue("SHOW_DETAILS") == "true";
+			result[Gc::Common::Type::ViewOption::SHOW_DETAILS] = ds.getValue("SHOW_DETAILS") == "true";
 		} else {
-			result[VIEW_SHOW_DETAILS] = true;
+			result[Gc::Common::Type::ViewOption::SHOW_DETAILS] = true;
 		}
 		if (ds.getValue("SHOW_HIDDEN_ENTRIES") != "") {
-			result[VIEW_SHOW_HIDDEN_ENTRIES] = ds.getValue("SHOW_HIDDEN_ENTRIES") == "true";
+			result[Gc::Common::Type::ViewOption::SHOW_HIDDEN_ENTRIES] = ds.getValue("SHOW_HIDDEN_ENTRIES") == "true";
 		} else {
-			result[VIEW_SHOW_HIDDEN_ENTRIES] = false;
+			result[Gc::Common::Type::ViewOption::SHOW_HIDDEN_ENTRIES] = false;
 		}
 		if (ds.getValue("GROUP_BY_SCRIPT") != "") {
-			result[VIEW_GROUP_BY_SCRIPT] = ds.getValue("GROUP_BY_SCRIPT") == "true";
+			result[Gc::Common::Type::ViewOption::GROUP_BY_SCRIPT] = ds.getValue("GROUP_BY_SCRIPT") == "true";
 		} else {
-			result[VIEW_GROUP_BY_SCRIPT] = false;
+			result[Gc::Common::Type::ViewOption::GROUP_BY_SCRIPT] = false;
 		}
 		if (ds.getValue("SHOW_PLACEHOLDERS") != "") {
-			result[VIEW_SHOW_PLACEHOLDERS] = ds.getValue("SHOW_PLACEHOLDERS") == "true";
+			result[Gc::Common::Type::ViewOption::SHOW_PLACEHOLDERS] = ds.getValue("SHOW_PLACEHOLDERS") == "true";
 		} else {
-			result[VIEW_SHOW_PLACEHOLDERS] = false;
+			result[Gc::Common::Type::ViewOption::SHOW_PLACEHOLDERS] = false;
 		}
 		return result;
 	}
@@ -372,7 +372,7 @@ public:
 			std::list<std::string> ignoreList;
 			ignoreList.push_back(backupDir);
 	
-			FileSystem fileSystem;
+			Gc::Common::FileSystem fileSystem;
 			fileSystem.copy(this->cfg_dir, backupDir + "/etc_grub_d", true, ignoreList);
 			fileSystem.copy(this->output_config_dir, backupDir + "/boot_grub", true, ignoreList);
 			fileSystem.copy(this->settings_file, backupDir + "/default_grub", true, ignoreList);

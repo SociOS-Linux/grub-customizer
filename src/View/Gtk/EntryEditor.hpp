@@ -23,7 +23,7 @@
 #include <libintl.h>
 #include <gtkmm.h>
 
-#include "../../Common/Helper.hpp"
+#include "../../Common/Functions.hpp"
 #include "Element/PartitionChooser.hpp"
 
 class View_Gtk_EntryEditor :
@@ -52,7 +52,7 @@ class View_Gtk_EntryEditor :
 	private: Gtk::Button* bttApply = nullptr;
 	private: bool lock_state = false;
 
-	private: Rule* rulePtr = nullptr;
+	private: Gc::Common::Type::Rule* rulePtr = nullptr;
 
 	public:	View_Gtk_EntryEditor() :
 		lblType(gettext("_Type:"), true),
@@ -131,7 +131,7 @@ class View_Gtk_EntryEditor :
 		this->tvSource.show();
 		this->frmSource.set_shadow_type(Gtk::SHADOW_NONE);
 
-		std::string optimizedSource = Helper::str_replace("\n\t", "\n", source);
+		std::string optimizedSource = Gc::Common::Functions::str_replace("\n\t", "\n", source);
 		if (optimizedSource[0] == '\t') {
 			optimizedSource = optimizedSource.substr(1);
 		}
@@ -141,7 +141,7 @@ class View_Gtk_EntryEditor :
 	public:	std::string getSourcecode()
 	{
 		std::string optimizedSourcecode = this->tvSource.get_buffer()->get_text();
-		std::string withIndent = Helper::str_replace("\n", "\n\t", optimizedSourcecode);
+		std::string withIndent = Gc::Common::Functions::str_replace("\n", "\n\t", optimizedSourcecode);
 		if (withIndent.size() >= 2 && withIndent.substr(withIndent.size() - 2) == "\n\t") {
 			withIndent.replace(withIndent.size() - 2, 2, "\n");
 		} else if (withIndent.size() >= 1 && withIndent[withIndent.size() - 1] != '\n') {
@@ -280,12 +280,12 @@ class View_Gtk_EntryEditor :
 		this->iconMap.clear();
 	}
 
-	public:	void setRulePtr(Rule* rulePtr)
+	public:	void setRulePtr(Gc::Common::Type::Rule* rulePtr)
 	{
 		this->rulePtr = rulePtr;
 	}
 
-	public:	Rule* getRulePtr()
+	public:	Gc::Common::Type::Rule* getRulePtr()
 	{
 		return this->rulePtr;
 	}
@@ -449,7 +449,7 @@ class View_Gtk_EntryEditor :
 		else if (name == "memtest_image_full")
 			return gettext("_Memtest-Image");
 		else
-			return Helper::str_replace("_", "__", name);
+			return Gc::Common::Functions::str_replace("_", "__", name);
 	}
 };
 

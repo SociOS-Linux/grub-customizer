@@ -23,7 +23,7 @@
 #include <gtkmm.h>
 #include <libintl.h>
 #include "../../config.hpp"
-#include "../../Common/Helper.hpp"
+#include "../../Common/Functions.hpp"
 #include "../../Common/Type.hpp"
 #include "Element/List.hpp"
 #include "Settings.hpp"
@@ -54,7 +54,7 @@ class View_Gtk_Main : public View_Main {
 	private: Gtk::VBox vbEntryList;
 	private: Gtk::Statusbar statusbar;
 	
-	private: View_Gtk_Element_List<Rule, Proxy> tvConfList;
+	private: View_Gtk_Element_List<Gc::Common::Type::Rule, Gc::Common::Type::Proxy> tvConfList;
 	private: Gtk::ProgressBar progressBar;
 	private: Gtk::HPaned hpLists;
 	private: Gtk::Widget* trashList = nullptr;
@@ -81,7 +81,7 @@ class View_Gtk_Main : public View_Main {
 
 	private: bool lock_state;
 
-	private: std::map<ViewOption, bool> options;
+	private: std::map<Gc::Common::Type::ViewOption, bool> options;
 
 	private: Gtk::MessageDialog burgSwitcher;
 
@@ -233,10 +233,10 @@ class View_Gtk_Main : public View_Main {
 		tbttReload.set_tooltip_text(gettext("reloads the configuration. Unsaved changes will be preserved."));
 
 		this->setLockState(3);
-		this->options[VIEW_SHOW_DETAILS] = true;
-		this->options[VIEW_SHOW_HIDDEN_ENTRIES] = false;
-		this->options[VIEW_SHOW_PLACEHOLDERS] = false;
-		this->options[VIEW_GROUP_BY_SCRIPT] = false;
+		this->options[Gc::Common::Type::ViewOption::SHOW_DETAILS] = true;
+		this->options[Gc::Common::Type::ViewOption::SHOW_HIDDEN_ENTRIES] = false;
+		this->options[Gc::Common::Type::ViewOption::SHOW_PLACEHOLDERS] = false;
+		this->options[Gc::Common::Type::ViewOption::GROUP_BY_SCRIPT] = false;
 
 		//menu
 		menu.append(miFile);
@@ -538,7 +538,7 @@ class View_Gtk_Main : public View_Main {
 		}
 	}
 
-	public: void appendEntry(View_Model_ListItem<Rule, Proxy> const& listItem)
+	public: void appendEntry(View_Model_ListItem<Gc::Common::Type::Rule, Gc::Common::Type::Proxy> const& listItem)
 	{
 		this->tvConfList.addListItem(listItem, this->options, this->win);
 
@@ -648,19 +648,19 @@ class View_Gtk_Main : public View_Main {
 		return response == Gtk::RESPONSE_YES;
 	}
 
-	public: void setRuleName(Rule* rule, std::string const& newName)
+	public: void setRuleName(Gc::Common::Type::Rule* rule, std::string const& newName)
 	{
 		this->setLockState(~0);
 		this->tvConfList.setRuleName(rule, newName);
 		this->setLockState(0);
 	}
 
-	public: void selectRule(Rule* rule, bool startEdit = false)
+	public: void selectRule(Gc::Common::Type::Rule* rule, bool startEdit = false)
 	{
 		this->tvConfList.selectRule(rule, startEdit);
 	}
 
-	public: void selectRules(std::list<Rule*> rules)
+	public: void selectRules(std::list<Gc::Common::Type::Rule*> rules)
 	{
 		this->tvConfList.selectRules(rules);
 	}
@@ -712,39 +712,39 @@ class View_Gtk_Main : public View_Main {
 		}
 	}
 
-	public: void setOption(ViewOption option, bool value)
+	public: void setOption(Gc::Common::Type::ViewOption option, bool value)
 	{
 		int oldLockState = this->lock_state;
 		this->setLockState(~0);
 		this->options[option] = value;
 		switch (option) {
-		case VIEW_SHOW_DETAILS: this->miShowDetails.set_active(value); break;
-		case VIEW_SHOW_HIDDEN_ENTRIES:
+		case Gc::Common::Type::ViewOption::SHOW_DETAILS: this->miShowDetails.set_active(value); break;
+		case Gc::Common::Type::ViewOption::SHOW_HIDDEN_ENTRIES:
 			this->miShowHiddenEntries.set_active(value);
 			this->tvConfList.toggleRenderer.set_visible(value);
 			this->tvConfList.pixbufRenderer.set_visible(!value);
 			break;
-		case VIEW_GROUP_BY_SCRIPT: this->miGroupByScript.set_active(value); break;
-		case VIEW_SHOW_PLACEHOLDERS: this->miShowPlaceholders.set_active(value); break;
+		case Gc::Common::Type::ViewOption::GROUP_BY_SCRIPT: this->miGroupByScript.set_active(value); break;
+		case Gc::Common::Type::ViewOption::SHOW_PLACEHOLDERS: this->miShowPlaceholders.set_active(value); break;
 		default:
 			throw LogicException("unexpected option");
 		}
 		this->setLockState(oldLockState);
 	}
 
-	public: std::map<ViewOption, bool> const& getOptions()
+	public: std::map<Gc::Common::Type::ViewOption, bool> const& getOptions()
 	{
 		return this->options;
 	}
 
-	public: void setOptions(std::map<ViewOption, bool> const& options)
+	public: void setOptions(std::map<Gc::Common::Type::ViewOption, bool> const& options)
 	{
-		for (std::map<ViewOption, bool>::const_iterator iter = options.begin(); iter != options.end(); iter++) {
+		for (std::map<Gc::Common::Type::ViewOption, bool>::const_iterator iter = options.begin(); iter != options.end(); iter++) {
 			this->setOption(iter->first, iter->second);
 		}
 	}
 
-	public: void setEntryVisibility(Rule* entry, bool value)
+	public: void setEntryVisibility(Gc::Common::Type::Rule* entry, bool value)
 	{
 		this->tvConfList.setEntryVisibility(entry, value);
 	}
@@ -769,7 +769,7 @@ class View_Gtk_Main : public View_Main {
 	{
 		if (this->lock_state == 0){
 			Gtk::TreeModel::iterator iter = this->tvConfList.refTreeStore->get_iter(path);
-			this->onRenameClick((Rule*)(*iter)[tvConfList.treeModel.relatedRule], new_text);
+			this->onRenameClick((Gc::Common::Type::Rule*)(*iter)[tvConfList.treeModel.relatedRule], new_text);
 		}
 	}
 
@@ -853,7 +853,7 @@ class View_Gtk_Main : public View_Main {
 
 	private: void signal_entry_edit_click()
 	{
-		std::list<Rule*> rules = this->getSelectedRules();
+		std::list<Gc::Common::Type::Rule*> rules = this->getSelectedRules();
 		assert(rules.size() == 1);
 		this->onShowEntryEditorClick(rules.front());
 	}
@@ -979,28 +979,28 @@ class View_Gtk_Main : public View_Main {
 	private: void signal_viewopt_details_toggled()
 	{
 		if (this->onViewOptionChange) {
-			this->onViewOptionChange(VIEW_SHOW_DETAILS, this->miShowDetails.get_active());
+			this->onViewOptionChange(Gc::Common::Type::ViewOption::SHOW_DETAILS, this->miShowDetails.get_active());
 		}
 	}
 
 	private: void signal_viewopt_checkboxes_toggled()
 	{
 		if (this->onViewOptionChange) {
-			this->onViewOptionChange(VIEW_SHOW_HIDDEN_ENTRIES, this->miShowHiddenEntries.get_active());
+			this->onViewOptionChange(Gc::Common::Type::ViewOption::SHOW_HIDDEN_ENTRIES, this->miShowHiddenEntries.get_active());
 		}
 	}
 
 	private: void signal_viewopt_script_toggled()
 	{
 		if (this->onViewOptionChange) {
-			this->onViewOptionChange(VIEW_GROUP_BY_SCRIPT, this->miGroupByScript.get_active());
+			this->onViewOptionChange(Gc::Common::Type::ViewOption::GROUP_BY_SCRIPT, this->miGroupByScript.get_active());
 		}
 	}
 
 	private: void signal_viewopt_placeholders_toggled()
 	{
 		if (this->onViewOptionChange) {
-			this->onViewOptionChange(VIEW_SHOW_PLACEHOLDERS, this->miShowPlaceholders.get_active());
+			this->onViewOptionChange(Gc::Common::Type::ViewOption::SHOW_PLACEHOLDERS, this->miShowPlaceholders.get_active());
 		}
 	}
 
@@ -1142,7 +1142,7 @@ class View_Gtk_Main : public View_Main {
 		return true;
 	}
 
-	private: std::list<Rule*> getSelectedRules()
+	private: std::list<Gc::Common::Type::Rule*> getSelectedRules()
 	{
 		return this->tvConfList.getSelectedRules();
 	}

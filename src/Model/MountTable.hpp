@@ -25,7 +25,7 @@
 
 #include "../Common/Exception.hpp"
 #include "../Model/Logger/Trait/LoggerAware.hpp"
-#include "../Common/Helper.hpp"
+#include "../Common/Functions.hpp"
 
 
 struct Model_MountTable_Mountpoint {
@@ -148,12 +148,12 @@ class Model_MountTable : public std::list<Model_MountTable_Mountpoint>, public G
 	private: void add(std::string const& prefix, Model_MountTable_Mountpoint& newMp)
 	{
 		// decode
-		newMp.device     = Helper::str_replace("\\040", " ", newMp.device);
-		newMp.mountpoint = Helper::str_replace("\\040", " ", newMp.mountpoint);
-		newMp.fileSystem = Helper::str_replace("\\040", " ", newMp.fileSystem);
-		newMp.options    = Helper::str_replace("\\040", " ", newMp.options);
-		newMp.dump       = Helper::str_replace("\\040", " ", newMp.dump);
-		newMp.pass       = Helper::str_replace("\\040", " ", newMp.pass);
+		newMp.device     = Gc::Common::Functions::str_replace("\\040", " ", newMp.device);
+		newMp.mountpoint = Gc::Common::Functions::str_replace("\\040", " ", newMp.mountpoint);
+		newMp.fileSystem = Gc::Common::Functions::str_replace("\\040", " ", newMp.fileSystem);
+		newMp.options    = Gc::Common::Functions::str_replace("\\040", " ", newMp.options);
+		newMp.dump       = Gc::Common::Functions::str_replace("\\040", " ", newMp.dump);
+		newMp.pass       = Gc::Common::Functions::str_replace("\\040", " ", newMp.pass);
 
 		bool isRoot = newMp.mountpoint == prefix + "/";
 

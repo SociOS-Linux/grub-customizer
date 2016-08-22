@@ -25,7 +25,7 @@
 #include <cstdio>
 #include "GenericParser.hpp"
 #include "../Logger/Trait/LoggerAware.hpp"
-#include "../../Common/Helper.hpp"
+#include "../../Common/Functions.hpp"
 
 namespace Gc { namespace Model { namespace ContentParser { class AbstractParser :
 	public Gc::Model::ContentParser::GenericParser,
@@ -118,7 +118,7 @@ namespace Gc { namespace Model { namespace ContentParser { class AbstractParser 
 	protected: std::string escape(std::string value) const
 	{
 		if (value.find_first_of(" \"") != -1 || value.size() == 0) {
-			value = "\"" + Helper::str_escape(value, '\\', "\\\"") + "\"";
+			value = "\"" + Gc::Common::Functions::str_escape(value, '\\', "\\\"") + "\"";
 		}
 		return value;
 	}
@@ -128,7 +128,7 @@ namespace Gc { namespace Model { namespace ContentParser { class AbstractParser 
 		if (value[0] == '"' && value[value.size() - 1] == '"') {
 			value = value.substr(1, value.size() - 2);
 		}
-		return Helper::str_unescape(value, '\\');
+		return Gc::Common::Functions::str_unescape(value, '\\');
 	}
 };}}}
 

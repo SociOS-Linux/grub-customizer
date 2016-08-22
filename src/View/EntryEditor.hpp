@@ -52,8 +52,8 @@ public:
 	virtual std::map<std::string, std::string> getOptions() const = 0;
 	virtual void removeOptions() = 0;
 
-	virtual void setRulePtr(Rule* rulePtr) = 0;
-	virtual Rule* getRulePtr() = 0;
+	virtual void setRulePtr(Gc::Common::Type::Rule* rulePtr) = 0;
+	virtual Gc::Common::Type::Rule* getRulePtr() = 0;
 
 	virtual void hide() = 0;
 

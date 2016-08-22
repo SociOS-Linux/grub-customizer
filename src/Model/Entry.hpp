@@ -23,7 +23,7 @@
 #include <list>
 #include <memory>
 #include "../Model/Logger/Trait/LoggerAware.hpp"
-#include "../Common/Helper.hpp"
+#include "../Common/Functions.hpp"
 #include "../Common/ArrayStructure/Container.hpp"
 #include "../Common/Type.hpp"
 
@@ -56,7 +56,7 @@ class Model_Entry_Row
 	}
 };
 
-class Model_Entry : public Gc::Model::Logger::Trait::LoggerAware, public Entry
+class Model_Entry : public Gc::Model::Logger::Trait::LoggerAware, public Gc::Common::Type::Entry
 {
 	public: enum EntryType {
 		MENUENTRY,
@@ -87,7 +87,7 @@ class Model_Entry : public Gc::Model::Logger::Trait::LoggerAware, public Entry
 		}
 		Model_Entry_Row row;
 		while ((row = firstRow) || (row = Model_Entry_Row(sourceFile))){
-			std::string rowText = Helper::ltrim(row.text);
+			std::string rowText = Gc::Common::Functions::ltrim(row.text);
 	
 			if (rowText.substr(0, 10) == "menuentry "){
 				this->readMenuEntry(sourceFile, row);
@@ -106,7 +106,7 @@ class Model_Entry : public Gc::Model::Logger::Trait::LoggerAware, public Entry
 	
 	private: void readSubmenu(FILE* sourceFile, Model_Entry_Row firstRow)
 	{
-		std::string rowText = Helper::ltrim(firstRow.text);
+		std::string rowText = Gc::Common::Functions::ltrim(firstRow.text);
 		int endOfEntryName = rowText.find('"', 10);
 		if (endOfEntryName == -1)
 			endOfEntryName = rowText.find('\'', 10);
@@ -118,11 +118,11 @@ class Model_Entry : public Gc::Model::Logger::Trait::LoggerAware, public Entry
 		}
 		Model_Entry_Row row;
 		while ((row = Model_Entry_Row(sourceFile))) {
-			std::string rowText = Helper::ltrim(row.text);
+			std::string rowText = Gc::Common::Functions::ltrim(row.text);
 	
 			if (rowText.substr(0, 10) == "menuentry " || rowText.substr(0, 8) == "submenu "){
 				this->subEntries.push_back(std::make_shared<Model_Entry>(sourceFile, row));
-			} else if (Helper::trim(rowText) == "}") {
+			} else if (Gc::Common::Functions::trim(rowText) == "}") {
 				this->isValid = true;
 				break; //read only one submenu
 			}
@@ -131,7 +131,7 @@ class Model_Entry : public Gc::Model::Logger::Trait::LoggerAware, public Entry
 
 	private: void readMenuEntry(FILE* sourceFile, Model_Entry_Row firstRow)
 	{
-		std::string rowText = Helper::ltrim(firstRow.text);
+		std::string rowText = Gc::Common::Functions::ltrim(firstRow.text);
 		char quote = '"';
 		int endOfEntryName = rowText.find('"', 12);
 		if (endOfEntryName == -1) {
@@ -155,9 +155,9 @@ class Model_Entry : public Gc::Model::Logger::Trait::LoggerAware, public Entry
 	
 		Model_Entry_Row row;
 		while ((row = Model_Entry_Row(sourceFile))){
-			std::string rowText = Helper::ltrim(row.text);
+			std::string rowText = Gc::Common::Functions::ltrim(row.text);
 	
-			if (Helper::trim(rowText) == "}" && --depth == 0) {
+			if (Gc::Common::Functions::trim(rowText) == "}" && --depth == 0) {
 				this->isValid = true;
 				break; //read only one menuentry
 			} else {

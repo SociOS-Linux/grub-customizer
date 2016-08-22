@@ -21,14 +21,14 @@
 #include <string>
 #include <ostream>
 #include <memory>
-#include "../Common/Helper.hpp"
+#include "../Common/Functions.hpp"
 #include "../Common/ArrayStructure/Container.hpp"
 #include "../Common/Type.hpp"
 #include "Entry.hpp"
 #include "EntryPathBuilder.hpp"
 #include "EntryPathFollower.hpp"
 
-class Model_Rule : public Rule {
+class Model_Rule : public Gc::Common::Type::Rule {
 	public: std::shared_ptr<Model_Entry> dataSource; //assigned when using RuleType::OTHER_ENTRIES_PLACEHOLDER
 	public: std::string outputName;
 	public: std::string __idHash; //should only be used by sync()!
@@ -113,7 +113,7 @@ class Model_Rule : public Rule {
 		} else if (dataSource) {
 			result += pathBuilder.buildPathString(this->dataSource, this->type == OTHER_ENTRIES_PLACEHOLDER);
 			if (this->dataSource->content.size() && this->type != Model_Rule::OTHER_ENTRIES_PLACEHOLDER) {
-				result += "~" + Helper::md5(this->dataSource->content) + "~";
+				result += "~" + Gc::Common::Functions::md5(this->dataSource->content) + "~";
 			}
 		} else if (type == Model_Rule::SUBMENU) {
 			result += "'SUBMENU'"; // dummy data source
@@ -121,7 +121,7 @@ class Model_Rule : public Rule {
 			result += "???";
 		}
 		if (type == Model_Rule::SUBMENU || (type == Model_Rule::NORMAL && dataSource && dataSource->name != outputName)) {
-			result += " as '"+Helper::str_replace("'", "''", outputName)+"'";
+			result += " as '"+Gc::Common::Functions::str_replace("'", "''", outputName)+"'";
 		}
 	
 		if (this->dataSource) {
