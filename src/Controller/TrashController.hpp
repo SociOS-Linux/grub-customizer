@@ -19,7 +19,7 @@
 #ifndef TRASHCONTROLLERIMPL_H_
 #define TRASHCONTROLLERIMPL_H_
 
-#include "../Model/ListCfg.hpp"
+#include "../Model/ListCfg/ListCfg.hpp"
 #include "../View/Main.hpp"
 #include <libintl.h>
 #include <locale.h>
@@ -45,14 +45,14 @@
 namespace Gc { namespace Controller { class TrashController :
 	public Gc::Controller::Common::ControllerAbstract,
 	public View_Trait_ViewAware<View_Trash>,
-	public Model_ListCfg_Connection,
+	public Gc::Model::ListCfg::ListCfgConnection,
 	public Gc::View::Mapper::EntryNameConnection,
 	public Model_DeviceDataListInterface_Connection,
 	public Gc::Model::ContentParser::GenericFactoryConnection,
 	public Model_Env_Connection,
 	public Gc::Bootstrap::ApplicationHelper::ObjectConnection
 {
-	private: std::list<std::shared_ptr<Model_Rule>> data;
+	private: std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>> data;
 
 	public:	TrashController() :
 		Gc::Controller::Common::ControllerAbstract("trash")
@@ -180,7 +180,7 @@ namespace Gc { namespace Controller { class TrashController :
 		this->refreshView(nullptr);
 	}
 
-	private: void refreshView(std::shared_ptr<Model_Rule> parent)
+	private: void refreshView(std::shared_ptr<Gc::Model::ListCfg::Rule> parent)
 	{
 		auto& list = parent ? parent->subRules : this->data;
 		for (auto rule : list) {
@@ -188,15 +188,15 @@ namespace Gc { namespace Controller { class TrashController :
 
 			std::string name = rule->outputName;
 			if (rule->dataSource && script) {
-				name = this->entryNameMapper->map(rule->dataSource, name, rule->type != Model_Rule::SUBMENU);
+				name = this->entryNameMapper->map(rule->dataSource, name, rule->type != Gc::Model::ListCfg::Rule::SUBMENU);
 			}
 
 			View_Model_ListItem<Gc::Common::Type::Rule, Gc::Common::Type::Script> listItem;
 			listItem.name = name;
 			listItem.entryPtr = rule.get();
 			listItem.scriptPtr = nullptr;
-			listItem.is_placeholder = rule->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER || rule->type == Model_Rule::PLAINTEXT;
-			listItem.is_submenu = rule->type == Model_Rule::SUBMENU;
+			listItem.is_placeholder = rule->type == Gc::Model::ListCfg::Rule::OTHER_ENTRIES_PLACEHOLDER || rule->type == Gc::Model::ListCfg::Rule::PLAINTEXT;
+			listItem.is_submenu = rule->type == Gc::Model::ListCfg::Rule::SUBMENU;
 			listItem.scriptName = script ? script->name : "";
 			listItem.isVisible = true;
 			listItem.parentEntry = parent.get();
@@ -224,7 +224,7 @@ namespace Gc { namespace Controller { class TrashController :
 		}
 
 		for (auto& entry : selectedEntries) {
-			if (this->findRule(entry)->type != Model_Rule::NORMAL || this->findRule(entry)->dataSource == nullptr) {
+			if (this->findRule(entry)->type != Gc::Model::ListCfg::Rule::NORMAL || this->findRule(entry)->dataSource == nullptr) {
 				return false;
 			}
 			auto script = this->grublistCfg->repository.getScriptByEntry(this->findRule(entry)->dataSource);
@@ -237,9 +237,9 @@ namespace Gc { namespace Controller { class TrashController :
 		return true;
 	}
 
-	private: std::shared_ptr<Model_Rule> findRule(Gc::Common::Type::Rule* rulePtr, std::shared_ptr<Model_Rule> parent = nullptr)
+	private: std::shared_ptr<Gc::Model::ListCfg::Rule> findRule(Gc::Common::Type::Rule* rulePtr, std::shared_ptr<Gc::Model::ListCfg::Rule> parent = nullptr)
 	{
-		std::list<std::shared_ptr<Model_Rule>>& list = parent ? parent->subRules : this->data;
+		std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>>& list = parent ? parent->subRules : this->data;
 
 		for (auto rule : list) {
 			if (rule.get() == rulePtr) {

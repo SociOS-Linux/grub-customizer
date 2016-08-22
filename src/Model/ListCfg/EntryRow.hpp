@@ -16,17 +16,42 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef ENTRY_PATH_FOLLOWER_INCLUDED
-#define ENTRY_PATH_FOLLOWER_INCLUDED
-#include <string>
-#include <list>
-#include "ListCfg/Entry.hpp"
+#ifndef GRUB_CUSTOMIZER_ENTRYROW_INCLUDED
+#define GRUB_CUSTOMIZER_ENTRYROW_INCLUDED
 
-class Model_EntryPathFollower {
-public:
-	virtual inline ~Model_EntryPathFollower() {};
+#include <cstdio>
 
-	virtual std::shared_ptr<Gc::Model::ListCfg::Entry> getEntryByPath(std::list<std::string> const& path)=0;
-};
+namespace Gc { namespace Model { namespace ListCfg { class EntryRow
+{
+	public: EntryRow(FILE* sourceFile) :
+		eof(false),
+		is_loaded(true)
+	{
+		this->eof = true; //will be set to false on the first loop run
+		int c;
+		while ((c = fgetc(sourceFile)) != EOF){
+			this->eof = false;
+			if (c != '\n'){
+				this->text += char(c);
+			}
+			else {
+				break;
+			}
+		}
+	}
+
+	public: EntryRow() :
+		eof(false),
+		is_loaded(true)
+	{}
+
+	public: std::string text;
+	public: bool eof;
+	public: bool is_loaded;
+	public: operator bool()
+	{
+		return !eof && is_loaded;
+	}
+};}}}
 
 #endif

@@ -26,13 +26,13 @@
 namespace Gc { namespace View { namespace Mapper { class EntryNameImpl :
 	public Gc::View::Mapper::EntryName, public View_Trait_ViewAware<View_Main>
 {
-	public:	std::string map(std::shared_ptr<Model_Entry> sourceEntry, std::string const& defaultName, bool treatSubmenuAsPlaceholder) {
+	public:	std::string map(std::shared_ptr<Gc::Model::ListCfg::Entry> sourceEntry, std::string const& defaultName, bool treatSubmenuAsPlaceholder) {
 		assert(this->view != NULL);
 		std::string name;
-		bool is_other_entries_ph = sourceEntry && treatSubmenuAsPlaceholder ? sourceEntry->type == Model_Entry::SUBMENU || sourceEntry->type == Model_Entry::SCRIPT_ROOT : false;
-		bool is_plaintext = sourceEntry ? sourceEntry->type == Model_Entry::PLAINTEXT : false;
+		bool is_other_entries_ph = sourceEntry && treatSubmenuAsPlaceholder ? sourceEntry->type == Gc::Model::ListCfg::Entry::SUBMENU || sourceEntry->type == Gc::Model::ListCfg::Entry::SCRIPT_ROOT : false;
+		bool is_plaintext = sourceEntry ? sourceEntry->type == Gc::Model::ListCfg::Entry::PLAINTEXT : false;
 		if (is_other_entries_ph) {
-			if (sourceEntry->type != Model_Entry::SCRIPT_ROOT) {
+			if (sourceEntry->type != Gc::Model::ListCfg::Entry::SCRIPT_ROOT) {
 				name = this->view->createNewEntriesPlaceholderString(sourceEntry->name);
 			} else {
 				name = this->view->createNewEntriesPlaceholderString("");

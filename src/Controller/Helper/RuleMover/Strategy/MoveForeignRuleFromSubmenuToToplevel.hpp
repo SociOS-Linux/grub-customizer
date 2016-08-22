@@ -19,8 +19,8 @@
 #ifndef INC_Gc_Controller_Helper_RuleMover_Strategy_MoveForeignRuleFromSubmenuToToplevel
 #define INC_Gc_Controller_Helper_RuleMover_Strategy_MoveForeignRuleFromSubmenuToToplevel
 
-#include "../../../../Model/Rule.hpp"
-#include "../../../../Model/ListCfg.hpp"
+#include "../../../../Model/ListCfg/Rule.hpp"
+#include "../../../../Model/ListCfg/ListCfg.hpp"
 #include "../AbstractStrategy.hpp"
 #include "../../../../Model/Logger/Trait/LoggerAware.hpp"
 #include <memory>
@@ -28,14 +28,14 @@
 namespace Gc { namespace Controller { namespace Helper { namespace RuleMover { namespace Strategy {
 class MoveForeignRuleFromSubmenuToToplevel :
 	public Gc::Controller::Helper::RuleMover::AbstractStrategy,
-	public Model_ListCfg_Connection,
+	public Gc::Model::ListCfg::ListCfgConnection,
 	public Gc::Model::Logger::Trait::LoggerAware
 {
 	public: MoveForeignRuleFromSubmenuToToplevel()
 		: Gc::Controller::Helper::RuleMover::AbstractStrategy("MoveForeignRuleFromSubmenuToToplevel")
 	{}
 
-	public: void move(std::shared_ptr<Model_Rule> rule, Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction)
+	public: void move(std::shared_ptr<Gc::Model::ListCfg::Rule> rule, Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction)
 	{
 		if (rule->dataSource == nullptr) {
 			throw Gc::Controller::Helper::RuleMover::MoveFailedException("rule must have a dataSource", __FILE__, __LINE__);
@@ -87,15 +87,15 @@ class MoveForeignRuleFromSubmenuToToplevel :
 	}
 
 	private: void splitProxyAndInsertBetween(
-		std::shared_ptr<Model_Rule> ruleToInsert,
-		std::shared_ptr<Model_Script> scriptOfRuleToInsert,
-		std::list<std::shared_ptr<Model_Proxy>>& proxyList,
-		std::shared_ptr<Model_Proxy> proxyToSplit,
-		std::shared_ptr<Model_Rule> position,
+		std::shared_ptr<Gc::Model::ListCfg::Rule> ruleToInsert,
+		std::shared_ptr<Gc::Model::ListCfg::Script> scriptOfRuleToInsert,
+		std::list<std::shared_ptr<Gc::Model::ListCfg::Proxy>>& proxyList,
+		std::shared_ptr<Gc::Model::ListCfg::Proxy> proxyToSplit,
+		std::shared_ptr<Gc::Model::ListCfg::Rule> position,
 		Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction
 	) {
 		//auto splitPos = proxy
-		auto newProxy = std::make_shared<Model_Proxy>(proxyToSplit->dataSource, false);
+		auto newProxy = std::make_shared<Gc::Model::ListCfg::Proxy>(proxyToSplit->dataSource, false);
 
 		bool isAfterPosition = false;
 		for (auto rule : proxyToSplit->rules) {

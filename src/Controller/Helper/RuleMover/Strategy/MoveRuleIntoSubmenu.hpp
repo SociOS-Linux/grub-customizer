@@ -19,8 +19,8 @@
 #ifndef INC_Gc_Controller_Helper_RuleMover_Strategy_MoveRuleIntoSubmenu
 #define INC_Gc_Controller_Helper_RuleMover_Strategy_MoveRuleIntoSubmenu
 
-#include "../../../../Model/Rule.hpp"
-#include "../../../../Model/ListCfg.hpp"
+#include "../../../../Model/ListCfg/Rule.hpp"
+#include "../../../../Model/ListCfg/ListCfg.hpp"
 #include "../AbstractStrategy.hpp"
 #include "../../../../Model/Logger/Trait/LoggerAware.hpp"
 #include <memory>
@@ -28,14 +28,14 @@
 namespace Gc { namespace Controller { namespace Helper { namespace RuleMover { namespace Strategy {
 class MoveRuleIntoSubmenu :
 	public Gc::Controller::Helper::RuleMover::AbstractStrategy,
-	public Model_ListCfg_Connection,
+	public Gc::Model::ListCfg::ListCfgConnection,
 	public Gc::Model::Logger::Trait::LoggerAware
 {
 	public: MoveRuleIntoSubmenu()
 		: Gc::Controller::Helper::RuleMover::AbstractStrategy("MoveRuleIntoSubmenu")
 	{}
 
-	public: void move(std::shared_ptr<Model_Rule> rule, Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction)
+	public: void move(std::shared_ptr<Gc::Model::ListCfg::Rule> rule, Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction)
 	{
 		auto proxy = this->grublistCfg->proxies.getProxyByRule(rule);
 		auto& ruleList = proxy->getRuleList(proxy->getParentRule(rule));
@@ -48,7 +48,7 @@ class MoveRuleIntoSubmenu :
 			throw Gc::Controller::Helper::RuleMover::MoveFailedException("next rule not found", __FILE__, __LINE__);
 		}
 
-		if (nextRule->type != Model_Rule::SUBMENU) {
+		if (nextRule->type != Gc::Model::ListCfg::Rule::SUBMENU) {
 			throw Gc::Controller::Helper::RuleMover::MoveFailedException("next rule is not a submenu", __FILE__, __LINE__);
 		}
 

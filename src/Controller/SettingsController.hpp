@@ -19,7 +19,7 @@
 #ifndef SETTINGSCONTROLLERIMPL_H_
 #define SETTINGSCONTROLLERIMPL_H_
 
-#include "../Model/ListCfg.hpp"
+#include "../Model/ListCfg/ListCfg.hpp"
 #include <libintl.h>
 #include <locale.h>
 #include <sstream>
@@ -31,7 +31,7 @@
 
 #include "../Model/Installer.hpp"
 
-#include "../Model/ListCfg.hpp"
+#include "../Model/ListCfg/ListCfg.hpp"
 #include "../View/Settings.hpp"
 #include "../View/Trait/ViewAware.hpp"
 #include "../Model/FbResolutionsGetter.hpp"
@@ -49,7 +49,7 @@
 namespace Gc { namespace Controller { class SettingsController :
 	public Gc::Controller::Common::ControllerAbstract,
 	public View_Trait_ViewAware<View_Settings>,
-	public Model_ListCfg_Connection,
+	public Gc::Model::ListCfg::ListCfgConnection,
 	public Model_SettingsManagerData_Connection,
 	public Model_FbResolutionsGetter_Connection,
 	public Model_Env_Connection,
@@ -120,11 +120,11 @@ namespace Gc { namespace Controller { class SettingsController :
 	{
 		this->logActionBegin("update-settings-data");
 		try {
-			std::list<Model_Proxylist_Item> entryTitles = this->grublistCfg->proxies.generateEntryTitleList();
+			std::list<Gc::Model::ListCfg::ProxylistItem> entryTitles = this->grublistCfg->proxies.generateEntryTitleList();
 	
 			this->view->clearDefaultEntryChooser();
 			this->view->addEntryToDefaultEntryChooser("0", "");
-			for (std::list<Model_Proxylist_Item>::iterator iter = entryTitles.begin(); iter != entryTitles.end(); iter++) {
+			for (std::list<Gc::Model::ListCfg::ProxylistItem>::iterator iter = entryTitles.begin(); iter != entryTitles.end(); iter++) {
 				this->view->addEntryToDefaultEntryChooser(iter->labelPathValue, iter->labelPathLabel);
 			}
 			this->view->addEntryToDefaultEntryChooser("", "");

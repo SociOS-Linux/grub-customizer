@@ -32,7 +32,7 @@
  *
  * Example of usage:
  * 	ArrayStructure test;
- *  test["x"] = "Model_Proxy";
+ *  test["x"] = "Gc::Model::ListCfg::Proxy";
  *  test["x"]["y"];
  *  test["x"]["z"] = (Foo*)NULL;
  *  test["x"]["a"] = 10.4;

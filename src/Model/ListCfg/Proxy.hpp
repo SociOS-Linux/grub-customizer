@@ -22,36 +22,37 @@
 #include <unistd.h>
 #include <map>
 #include <memory>
-#include "../Common/Exception.hpp"
-#include "../Common/ArrayStructure/Container.hpp"
-#include "../Common/Type.hpp"
-#include "EntryPathBuilderImpl.hpp"
+#include "../../Common/Exception.hpp"
+#include "../../Common/ArrayStructure/Container.hpp"
+#include "../../Common/Type.hpp"
+#include "../EntryPathBuilderImpl.hpp"
 #include "ProxyScriptData.hpp"
 #include "Rule.hpp"
 #include "Script.hpp"
 
-class Model_Proxy : public Gc::Common::Type::Proxy
+namespace Gc { namespace Model { namespace ListCfg { class Proxy :
+	public Gc::Common::Type::Proxy
 {
-	public: std::list<std::shared_ptr<Model_Rule>> rules;
+	public: std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>> rules;
 	public: int index;
 	public: short int permissions;
 	public: std::string fileName; //may be the same as Script::fileName
-	public: std::shared_ptr<Model_Script> dataSource;
+	public: std::shared_ptr<Gc::Model::ListCfg::Script> dataSource;
 
-	private: std::map<std::shared_ptr<Model_Script>, std::list<std::list<std::string> > > __idPathList; //to be used by sync()
-	private: std::map<std::shared_ptr<Model_Script>, std::list<std::list<std::string> > > __idPathList_OtherEntriesPlaceHolders; //to be used by sync()
+	private: std::map<std::shared_ptr<Gc::Model::ListCfg::Script>, std::list<std::list<std::string> > > __idPathList; //to be used by sync()
+	private: std::map<std::shared_ptr<Gc::Model::ListCfg::Script>, std::list<std::list<std::string> > > __idPathList_OtherEntriesPlaceHolders; //to be used by sync()
 
-	public: Model_Proxy()
+	public: Proxy()
 		: dataSource(nullptr), permissions(0755), index(90)
 	{
 	}
 
-	public: Model_Proxy(std::shared_ptr<Model_Script> dataSource, bool activateRules = true)
+	public: Proxy(std::shared_ptr<Gc::Model::ListCfg::Script> dataSource, bool activateRules = true)
 		: dataSource(dataSource), permissions(0755), index(90)
 	{
 		rules.push_back(
-			std::make_shared<Model_Rule>(
-				Model_Rule::OTHER_ENTRIES_PLACEHOLDER,
+			std::make_shared<Gc::Model::ListCfg::Rule>(
+				Gc::Model::ListCfg::Rule::OTHER_ENTRIES_PLACEHOLDER,
 				std::list<std::string>(),
 				"*",
 				activateRules
@@ -73,11 +74,11 @@ class Model_Proxy : public Gc::Common::Type::Proxy
 			permissions &= ~0111;
 	}
 
-	public: static std::list<std::shared_ptr<Model_Rule>> parseRuleString(
+	public: static std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>> parseRuleString(
 		const char** ruleString,
 		std::string const& cfgDirPrefix
 	) {
-		std::list<std::shared_ptr<Model_Rule>> rules;
+		std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>> rules;
 	
 		bool inString = false, inAlias = false, inHash = false, inFromClause = false;
 		std::string name;
@@ -100,7 +101,7 @@ class Model_Proxy : public Gc::Common::Type::Proxy
 							rules.back()->__sourceScriptPath = cfgDirPrefix + name;
 						} else {
 							path.push_back(name);
-							rules.push_back(std::make_shared<Model_Rule>(Model_Rule::NORMAL, path, visible));
+							rules.push_back(std::make_shared<Gc::Model::ListCfg::Rule>(Gc::Model::ListCfg::Rule::NORMAL, path, visible));
 							path.clear();
 						}
 						inAlias = false;
@@ -109,11 +110,11 @@ class Model_Proxy : public Gc::Common::Type::Proxy
 					name = "";
 				}
 			} else if (!inString && *iter == '*') {
-				rules.push_back(std::make_shared<Model_Rule>(Model_Rule::OTHER_ENTRIES_PLACEHOLDER, path, "*", visible));
+				rules.push_back(std::make_shared<Gc::Model::ListCfg::Rule>(Gc::Model::ListCfg::Rule::OTHER_ENTRIES_PLACEHOLDER, path, "*", visible));
 				path.clear();
 			} else if (!inString && *iter == '#' && *++iter == 't' && *++iter == 'e' && *++iter == 'x' && *++iter == 't') {
 				path.push_back("#text");
-				rules.push_back(std::make_shared<Model_Rule>(Model_Rule::PLAINTEXT, path, "#text", visible));
+				rules.push_back(std::make_shared<Gc::Model::ListCfg::Rule>(Gc::Model::ListCfg::Rule::PLAINTEXT, path, "#text", visible));
 				path.clear();
 				name = "";
 			} else if (inString) {
@@ -131,8 +132,8 @@ class Model_Proxy : public Gc::Common::Type::Proxy
 				name = "";
 			} else if (!inString && !inAlias && !inFromClause && *iter == '{') {
 				iter++;
-				rules.back()->subRules = Model_Proxy::parseRuleString(&iter, cfgDirPrefix);
-				rules.back()->type = Model_Rule::SUBMENU;
+				rules.back()->subRules = Gc::Model::ListCfg::Proxy::parseRuleString(&iter, cfgDirPrefix);
+				rules.back()->type = Gc::Model::ListCfg::Rule::SUBMENU;
 			} else if (!inString && *iter == '~') {
 				inHash = !inHash;
 				if (!inHash) {
@@ -147,13 +148,13 @@ class Model_Proxy : public Gc::Common::Type::Proxy
 
 	public: void importRuleString(const char* ruleString, std::string const& cfgDirPrefix)
 	{
-		rules = Model_Proxy::parseRuleString(&ruleString, cfgDirPrefix);
+		rules = Gc::Model::ListCfg::Proxy::parseRuleString(&ruleString, cfgDirPrefix);
 	}
 
-	public: std::shared_ptr<Model_Rule> getRuleByEntry(
-		std::shared_ptr<Model_Entry> const& entry,
-		std::list<std::shared_ptr<Model_Rule>>& list,
-		Model_Rule::RuleType ruletype
+	public: std::shared_ptr<Gc::Model::ListCfg::Rule> getRuleByEntry(
+		std::shared_ptr<Gc::Model::ListCfg::Entry> const& entry,
+		std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>>& list,
+		Gc::Model::ListCfg::Rule::RuleType ruletype
 	) {
 		for (auto rule : list){
 			if (entry == rule->dataSource && rule->type == ruletype)
@@ -168,11 +169,11 @@ class Model_Proxy : public Gc::Common::Type::Proxy
 		return nullptr;
 	}
 
-	public: std::list<std::shared_ptr<Model_Rule>> getForeignRules(std::shared_ptr<Model_Rule> parent = nullptr)
+	public: std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>> getForeignRules(std::shared_ptr<Gc::Model::ListCfg::Rule> parent = nullptr)
 	{
 		assert(this->dataSource != nullptr);
 	
-		std::list<std::shared_ptr<Model_Rule>> result;
+		std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>> result;
 		auto& list = parent ? parent->subRules : this->rules;
 	
 		for (auto rule : list) {
@@ -187,7 +188,7 @@ class Model_Proxy : public Gc::Common::Type::Proxy
 		return result;
 	}
 
-	public: void unsync(std::shared_ptr<Model_Rule> parent = nullptr)
+	public: void unsync(std::shared_ptr<Gc::Model::ListCfg::Rule> parent = nullptr)
 	{
 		auto& list = parent ? parent->subRules : this->rules;
 		for (auto rule : list) {
@@ -201,7 +202,7 @@ class Model_Proxy : public Gc::Common::Type::Proxy
 	public: bool sync(
 		bool deleteInvalidRules = true,
 		bool expand = true,
-		std::map<std::string, std::shared_ptr<Model_Script>> scriptMap = std::map<std::string, std::shared_ptr<Model_Script>>()
+		std::map<std::string, std::shared_ptr<Gc::Model::ListCfg::Script>> scriptMap = std::map<std::string, std::shared_ptr<Gc::Model::ListCfg::Script>>()
 	) {
 		if (this->dataSource){
 			this->sync_connectExisting(nullptr, scriptMap);
@@ -221,8 +222,8 @@ class Model_Proxy : public Gc::Common::Type::Proxy
 	}
 
 	public: void sync_connectExisting(
-		std::shared_ptr<Model_Rule> parent = nullptr,
-		std::map<std::string, std::shared_ptr<Model_Script>> scriptMap = std::map<std::string, std::shared_ptr<Model_Script>>()
+		std::shared_ptr<Gc::Model::ListCfg::Rule> parent = nullptr,
+		std::map<std::string, std::shared_ptr<Gc::Model::ListCfg::Script>> scriptMap = std::map<std::string, std::shared_ptr<Gc::Model::ListCfg::Script>>()
 	) {
 		assert(this->dataSource != nullptr);
 		if (parent == nullptr) {
@@ -231,10 +232,10 @@ class Model_Proxy : public Gc::Common::Type::Proxy
 		}
 		auto& list = parent ? parent->subRules : this->rules;
 		for (auto rule : list) {
-			if (rule->type != Model_Rule::SUBMENU) { // don't sync submenu entries
+			if (rule->type != Gc::Model::ListCfg::Rule::SUBMENU) { // don't sync submenu entries
 				std::list<std::string> path = rule->__idpath;
 	
-				std::shared_ptr<Model_Script> script = nullptr;
+				std::shared_ptr<Gc::Model::ListCfg::Script> script = nullptr;
 				if (rule->__sourceScriptPath == "") { // main dataSource
 					script = this->dataSource;
 				} else if (scriptMap.size()) {
@@ -244,7 +245,7 @@ class Model_Proxy : public Gc::Common::Type::Proxy
 					continue; // don't sync foreign entries if scriptMap is empty
 				}
 	
-				if (rule->type != Model_Rule::OTHER_ENTRIES_PLACEHOLDER) {
+				if (rule->type != Gc::Model::ListCfg::Rule::OTHER_ENTRIES_PLACEHOLDER) {
 					this->__idPathList[script].push_back(path);
 				} else {
 					this->__idPathList_OtherEntriesPlaceHolders[script].push_back(path);
@@ -259,14 +260,14 @@ class Model_Proxy : public Gc::Common::Type::Proxy
 	}
 
 	public: void sync_connectExistingByHash(
-		std::shared_ptr<Model_Rule> parent = nullptr,
-		std::map<std::string, std::shared_ptr<Model_Script>> scriptMap = std::map<std::string, std::shared_ptr<Model_Script>>()
+		std::shared_ptr<Gc::Model::ListCfg::Rule> parent = nullptr,
+		std::map<std::string, std::shared_ptr<Gc::Model::ListCfg::Script>> scriptMap = std::map<std::string, std::shared_ptr<Gc::Model::ListCfg::Script>>()
 	) {
 		assert(this->dataSource != nullptr);
 		auto& list = parent ? parent->subRules : this->rules;
 		for (auto rule : list) {
 			if (rule->dataSource == nullptr && rule->__idHash != "") {
-				std::shared_ptr<Model_Script> script = nullptr;
+				std::shared_ptr<Gc::Model::ListCfg::Script> script = nullptr;
 				if (rule->__sourceScriptPath == "") {
 					script = this->dataSource;
 				} else if (scriptMap.size()) {
@@ -287,8 +288,8 @@ class Model_Proxy : public Gc::Common::Type::Proxy
 	}
 
 	public: void sync_add_placeholders(
-		std::shared_ptr<Model_Rule> parent = nullptr,
-		std::map<std::string, std::shared_ptr<Model_Script>> scriptMap = std::map<std::string, std::shared_ptr<Model_Script>>()
+		std::shared_ptr<Gc::Model::ListCfg::Rule> parent = nullptr,
+		std::map<std::string, std::shared_ptr<Gc::Model::ListCfg::Script>> scriptMap = std::map<std::string, std::shared_ptr<Gc::Model::ListCfg::Script>>()
 	) {
 		assert(parent == nullptr || parent->dataSource != nullptr);
 	
@@ -305,8 +306,8 @@ class Model_Proxy : public Gc::Common::Type::Proxy
 	
 		auto& list = parent ? parent->subRules : this->rules;
 		if (!eop_is_blacklisted) {
-			auto newRule = std::make_shared<Model_Rule>(
-				Model_Rule::OTHER_ENTRIES_PLACEHOLDER,
+			auto newRule = std::make_shared<Gc::Model::ListCfg::Rule>(
+				Gc::Model::ListCfg::Rule::OTHER_ENTRIES_PLACEHOLDER,
 				parent ? this->dataSource->buildPath(parent->dataSource) : std::list<std::string>(),
 				"*",
 				true
@@ -318,7 +319,7 @@ class Model_Proxy : public Gc::Common::Type::Proxy
 	
 		//sub entries (recursion)
 		for (auto rule : list) {
-			if (rule->dataSource && rule->type == Model_Rule::SUBMENU) {
+			if (rule->dataSource && rule->type == Gc::Model::ListCfg::Rule::SUBMENU) {
 				this->sync_add_placeholders(rule);
 			}
 		}
@@ -326,21 +327,21 @@ class Model_Proxy : public Gc::Common::Type::Proxy
 
 	public: void sync_expand(
 		std::map<std::string,
-		std::shared_ptr<Model_Script>> scriptMap = std::map<std::string, std::shared_ptr<Model_Script>>()
+		std::shared_ptr<Gc::Model::ListCfg::Script>> scriptMap = std::map<std::string, std::shared_ptr<Gc::Model::ListCfg::Script>>()
 	) {
 		assert(this->dataSource != nullptr);
 		for (auto scriptMapEnt : this->__idPathList_OtherEntriesPlaceHolders) {
 			for (auto oepPath : this->__idPathList_OtherEntriesPlaceHolders[scriptMapEnt.first]) {
 				auto dataSource = scriptMapEnt.first->getEntryByPath(oepPath);
 				if (dataSource) {
-					auto oep = this->getRuleByEntry(dataSource, this->rules, Model_Rule::OTHER_ENTRIES_PLACEHOLDER);
+					auto oep = this->getRuleByEntry(dataSource, this->rules, Gc::Model::ListCfg::Rule::OTHER_ENTRIES_PLACEHOLDER);
 					assert(oep != nullptr);
 					auto parentRule = this->getParentRule(oep);
 					auto& dataTarget = parentRule ? parentRule->subRules : this->rules;
 	
 					auto dataTargetIter = dataTarget.begin();
 					while (dataTargetIter != dataTarget.end()
-						&& !(dataTargetIter->get()->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER
+						&& !(dataTargetIter->get()->type == Gc::Model::ListCfg::Rule::OTHER_ENTRIES_PLACEHOLDER
 							&& dataTargetIter->get()->__idpath == oepPath
 							&& ((dataTargetIter->get()->__sourceScriptPath != ""
 									&& scriptMap.size()
@@ -352,14 +353,14 @@ class Model_Proxy : public Gc::Common::Type::Proxy
 						) {
 						dataTargetIter++;
 					}
-					std::list<std::shared_ptr<Model_Rule>> newRules;
+					std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>> newRules;
 					for (auto subEntry : dataSource->subEntries){
-						auto relatedRule = this->getRuleByEntry(subEntry, this->rules, Model_Rule::NORMAL);
-						auto relatedRulePt = this->getRuleByEntry(subEntry, this->rules, Model_Rule::PLAINTEXT);
-						auto relatedRuleOep = this->getRuleByEntry(subEntry, this->rules, Model_Rule::OTHER_ENTRIES_PLACEHOLDER);
+						auto relatedRule = this->getRuleByEntry(subEntry, this->rules, Gc::Model::ListCfg::Rule::NORMAL);
+						auto relatedRulePt = this->getRuleByEntry(subEntry, this->rules, Gc::Model::ListCfg::Rule::PLAINTEXT);
+						auto relatedRuleOep = this->getRuleByEntry(subEntry, this->rules, Gc::Model::ListCfg::Rule::OTHER_ENTRIES_PLACEHOLDER);
 						if (!relatedRule && !relatedRuleOep && !relatedRulePt){
 							newRules.push_back(
-								std::make_shared<Model_Rule>(
+								std::make_shared<Gc::Model::ListCfg::Rule>(
 									subEntry,
 									dataTargetIter->get()->isVisible,
 									scriptMapEnt.first,
@@ -377,8 +378,8 @@ class Model_Proxy : public Gc::Common::Type::Proxy
 	}
 
 	public: void sync_cleanup(
-		std::shared_ptr<Model_Rule> parent = nullptr,
-		std::map<std::string, std::shared_ptr<Model_Script>> scriptMap = std::map<std::string, std::shared_ptr<Model_Script>>()
+		std::shared_ptr<Gc::Model::ListCfg::Rule> parent = nullptr,
+		std::map<std::string, std::shared_ptr<Gc::Model::ListCfg::Script>> scriptMap = std::map<std::string, std::shared_ptr<Gc::Model::ListCfg::Script>>()
 	) {
 		auto& list = parent ? parent->subRules : this->rules;
 	
@@ -386,10 +387,10 @@ class Model_Proxy : public Gc::Common::Type::Proxy
 		do {
 			bool listModified = false;
 			for (auto iter = list.begin(); !listModified && iter != list.end(); iter++) {
-				if (!((iter->get()->type == Model_Rule::NORMAL && iter->get()->dataSource) ||
-					  (iter->get()->type == Model_Rule::SUBMENU && iter->get()->subRules.size()) ||
-					  (iter->get()->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER && iter->get()->dataSource) ||
-					  (iter->get()->type == Model_Rule::PLAINTEXT && iter->get()->dataSource))) {
+				if (!((iter->get()->type == Gc::Model::ListCfg::Rule::NORMAL && iter->get()->dataSource) ||
+					  (iter->get()->type == Gc::Model::ListCfg::Rule::SUBMENU && iter->get()->subRules.size()) ||
+					  (iter->get()->type == Gc::Model::ListCfg::Rule::OTHER_ENTRIES_PLACEHOLDER && iter->get()->dataSource) ||
+					  (iter->get()->type == Gc::Model::ListCfg::Rule::PLAINTEXT && iter->get()->dataSource))) {
 					if (iter->get()->__sourceScriptPath == "" || scriptMap.size()) {
 						list.erase(iter);
 						listModified = true; //after ereasing something we have to create a new iterator
@@ -405,8 +406,8 @@ class Model_Proxy : public Gc::Common::Type::Proxy
 	}
 
 	public: bool isModified(
-		std::shared_ptr<Model_Rule> parentRule = nullptr,
-		std::shared_ptr<Model_Entry> parentEntry = nullptr
+		std::shared_ptr<Gc::Model::ListCfg::Rule> parentRule = nullptr,
+		std::shared_ptr<Gc::Model::ListCfg::Entry> parentEntry = nullptr
 	) const {
 		assert(this->dataSource != nullptr);
 		bool result = false;
@@ -416,7 +417,7 @@ class Model_Proxy : public Gc::Common::Type::Proxy
 		if (rlist.size()-1 == elist.size()){ //rules contains the other entries placeholder, so there is one more entry
 			auto ruleIter = rlist.begin();
 			auto entryIter = elist.begin();
-			if (ruleIter->get()->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER){ //the first element is the OTHER_ENTRIES_PLACEHOLDER by default.
+			if (ruleIter->get()->type == Gc::Model::ListCfg::Rule::OTHER_ENTRIES_PLACEHOLDER){ //the first element is the OTHER_ENTRIES_PLACEHOLDER by default.
 				result = !ruleIter->get()->isVisible; //If not visible, it's modified…
 				ruleIter++;
 			} else {
@@ -424,13 +425,13 @@ class Model_Proxy : public Gc::Common::Type::Proxy
 			}
 			while (!result && ruleIter != rlist.end() && entryIter != elist.end()){
 				// type compare
-				if ((ruleIter->get()->type == Model_Rule::NORMAL && entryIter->get()->type != Model_Entry::MENUENTRY)
-					|| (ruleIter->get()->type == Model_Rule::PLAINTEXT && entryIter->get()->type != Model_Entry::PLAINTEXT)
-					|| (ruleIter->get()->type == Model_Rule::SUBMENU && entryIter->get()->type != Model_Entry::SUBMENU)) {
+				if ((ruleIter->get()->type == Gc::Model::ListCfg::Rule::NORMAL && entryIter->get()->type != Gc::Model::ListCfg::Entry::MENUENTRY)
+					|| (ruleIter->get()->type == Gc::Model::ListCfg::Rule::PLAINTEXT && entryIter->get()->type != Gc::Model::ListCfg::Entry::PLAINTEXT)
+					|| (ruleIter->get()->type == Gc::Model::ListCfg::Rule::SUBMENU && entryIter->get()->type != Gc::Model::ListCfg::Entry::SUBMENU)) {
 					result = true;
 				} else if (ruleIter->get()->outputName != entryIter->get()->name || !ruleIter->get()->isVisible) { // data compare
 					result = true;
-				} else if (ruleIter->get()->type == Model_Rule::SUBMENU) { // submenu check
+				} else if (ruleIter->get()->type == Gc::Model::ListCfg::Rule::SUBMENU) { // submenu check
 					result = this->isModified(*ruleIter, *entryIter);
 				}
 	
@@ -445,7 +446,7 @@ class Model_Proxy : public Gc::Common::Type::Proxy
 
 	public: bool deleteFile()
 	{
-		assert(Model_ProxyScriptData::is_proxyscript(this->fileName));
+		assert(Gc::Model::ListCfg::ProxyScriptData::isProxyscript(this->fileName));
 		int success = unlink(this->fileName.c_str());
 		if (success == 0){
 			this->fileName = "";
@@ -455,8 +456,8 @@ class Model_Proxy : public Gc::Common::Type::Proxy
 	}
 
 	public: std::list<std::string> getScriptList(
-		std::map<std::shared_ptr<Model_Entry>, std::shared_ptr<Model_Script>> const& entrySourceMap,
-		std::map<std::shared_ptr<Model_Script>, std::string> const& scriptTargetMap
+		std::map<std::shared_ptr<Gc::Model::ListCfg::Entry>, std::shared_ptr<Gc::Model::ListCfg::Script>> const& entrySourceMap,
+		std::map<std::shared_ptr<Gc::Model::ListCfg::Script>, std::string> const& scriptTargetMap
 	) const {
 		std::map<std::string, Gc::Common::Type::Nothing> uniqueList; // the pointer (value) is just a dummy
 		for (auto entrySource : entrySourceMap) {
@@ -474,8 +475,8 @@ class Model_Proxy : public Gc::Common::Type::Proxy
 		std::string const& path,
 		int cfg_dir_prefix_length,
 		std::string const& cfg_dir_noprefix,
-		std::map<std::shared_ptr<Model_Entry>, std::shared_ptr<Model_Script>> entrySourceMap,
-		std::map<std::shared_ptr<Model_Script>, std::string> const& scriptTargetMap
+		std::map<std::shared_ptr<Gc::Model::ListCfg::Entry>, std::shared_ptr<Gc::Model::ListCfg::Script>> entrySourceMap,
+		std::map<std::shared_ptr<Gc::Model::ListCfg::Script>, std::string> const& scriptTargetMap
 	) {
 		if (this->dataSource){
 			FILE* proxyFile = fopen(path.c_str(), "w");
@@ -527,12 +528,12 @@ class Model_Proxy : public Gc::Common::Type::Proxy
 		}
 	}
 
-	public: std::list<std::shared_ptr<Model_Rule>>::iterator getNextVisibleRule(
-		std::list<std::shared_ptr<Model_Rule>>::iterator base,
+	public: std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>>::iterator getNextVisibleRule(
+		std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>>::iterator base,
 		int direction
 	) {
 		assert(direction == -1 || direction == 1);
-		std::shared_ptr<Model_Rule> parent = nullptr;
+		std::shared_ptr<Gc::Model::ListCfg::Rule> parent = nullptr;
 		try {
 			parent = this->getParentRule(*base);
 		} catch (ItemNotFoundException const& e) {} // leave parent in nullptr state
@@ -551,12 +552,12 @@ class Model_Proxy : public Gc::Common::Type::Proxy
 		return base;
 	}
 
-	public: std::shared_ptr<Model_Rule> splitSubmenu(std::shared_ptr<Model_Rule> position) {
-		std::shared_ptr<Model_Rule> parent = this->getParentRule(position);
+	public: std::shared_ptr<Gc::Model::ListCfg::Rule> splitSubmenu(std::shared_ptr<Gc::Model::ListCfg::Rule> position) {
+		std::shared_ptr<Gc::Model::ListCfg::Rule> parent = this->getParentRule(position);
 	
 		// search items before and after the submenu
-		std::list<std::shared_ptr<Model_Rule>> rulesBefore;
-		std::list<std::shared_ptr<Model_Rule>> rulesAfter;
+		std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>> rulesBefore;
+		std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>> rulesAfter;
 	
 		bool isBehindChildtem = false;
 		for (auto rule : parent->subRules) {
@@ -574,7 +575,7 @@ class Model_Proxy : public Gc::Common::Type::Proxy
 		auto oldSubmenu = parent;
 		oldSubmenu->subRules.clear();
 	
-		std::list<std::shared_ptr<Model_Rule>>* list = nullptr;
+		std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>>* list = nullptr;
 		auto parentRule = this->getParentRule(parent);
 		if (parentRule) {
 			list = &parentRule->subRules;
@@ -584,13 +585,13 @@ class Model_Proxy : public Gc::Common::Type::Proxy
 		assert(list != nullptr);
 		// add the rules before and/or after to new submenus
 		if (rulesBefore.size()) {
-			auto newSubmenu = std::make_shared<Model_Rule>(*oldSubmenu);
+			auto newSubmenu = std::make_shared<Gc::Model::ListCfg::Rule>(*oldSubmenu);
 			newSubmenu->subRules = rulesBefore;
 			list->insert(this->getListIterator(parent, *list), newSubmenu);
 		}
 	
 	
-		auto newSubmenu = std::make_shared<Model_Rule>(*oldSubmenu);
+		auto newSubmenu = std::make_shared<Gc::Model::ListCfg::Rule>(*oldSubmenu);
 		newSubmenu->subRules = rulesAfter;
 		auto iter = this->getListIterator(parent, *list);
 		iter++;
@@ -602,19 +603,19 @@ class Model_Proxy : public Gc::Common::Type::Proxy
 		return insertPos->get()->subRules.front();
 	}
 
-	public: std::shared_ptr<Model_Rule> createSubmenu(std::shared_ptr<Model_Rule> position) {
+	public: std::shared_ptr<Gc::Model::ListCfg::Rule> createSubmenu(std::shared_ptr<Gc::Model::ListCfg::Rule> position) {
 		auto& list = this->getRuleList(this->getParentRule(position));
 
 		auto posIter = this->getListIterator(position, list);
 		auto insertPos = list.insert(
 			posIter,
-			std::make_shared<Model_Rule>(Model_Rule::SUBMENU, std::list<std::string>(), "", true)
+			std::make_shared<Gc::Model::ListCfg::Rule>(Gc::Model::ListCfg::Rule::SUBMENU, std::list<std::string>(), "", true)
 		);
 	
 		return *insertPos;
 	}
 
-	public: bool ruleIsFromOwnScript(std::shared_ptr<Model_Rule> rule) const {
+	public: bool ruleIsFromOwnScript(std::shared_ptr<Gc::Model::ListCfg::Rule> rule) const {
 		assert(this->dataSource != nullptr);
 		assert(rule->dataSource != nullptr);
 		if (this->dataSource->hasEntry(rule->dataSource)) {
@@ -624,7 +625,7 @@ class Model_Proxy : public Gc::Common::Type::Proxy
 		}
 	}
 
-	public: void removeForeignChildRules(std::shared_ptr<Model_Rule> parent) {
+	public: void removeForeignChildRules(std::shared_ptr<Gc::Model::ListCfg::Rule> parent) {
 		bool loopRestartRequired = false;
 		do { // required to restart the loop after an entry has been removed
 			loopRestartRequired = false;
@@ -647,7 +648,7 @@ class Model_Proxy : public Gc::Common::Type::Proxy
 		} while (loopRestartRequired);
 	}
 
-	public: void removeEquivalentRules(std::shared_ptr<Model_Rule> base) {
+	public: void removeEquivalentRules(std::shared_ptr<Gc::Model::ListCfg::Rule> base) {
 		if (base->dataSource) {
 			auto eqRule = this->getRuleByEntry(base->dataSource, this->rules, base->type);
 			if (eqRule) {
@@ -660,9 +661,9 @@ class Model_Proxy : public Gc::Common::Type::Proxy
 		}
 	}
 
-	public: void removeRule(std::shared_ptr<Model_Rule> rule) {
+	public: void removeRule(std::shared_ptr<Gc::Model::ListCfg::Rule> rule) {
 		assert(rule != nullptr);
-		std::shared_ptr<Model_Rule> parent = nullptr;
+		std::shared_ptr<Gc::Model::ListCfg::Rule> parent = nullptr;
 		int rlist_size = 0;
 		do {
 			try {
@@ -679,9 +680,9 @@ class Model_Proxy : public Gc::Common::Type::Proxy
 		} while (rlist_size == 0 && parent != nullptr); // delete all the empty submenus above
 	}
 
-	public: std::list<std::shared_ptr<Model_Rule>>::iterator getListIterator(
-		std::shared_ptr<Model_Rule> needle,
-		std::list<std::shared_ptr<Model_Rule>>& haystack
+	public: std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>>::iterator getListIterator(
+		std::shared_ptr<Gc::Model::ListCfg::Rule> needle,
+		std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>>& haystack
 	) {
 		for (auto iter = haystack.begin(); iter != haystack.end(); iter++) {
 			if (*iter == needle)
@@ -691,16 +692,16 @@ class Model_Proxy : public Gc::Common::Type::Proxy
 		throw ItemNotFoundException("specified rule not found", __FILE__, __LINE__);
 	}
 
-	public: std::shared_ptr<Model_Rule> getParentRule(
-		std::shared_ptr<Model_Rule> child,
-		std::shared_ptr<Model_Rule> root = nullptr
+	public: std::shared_ptr<Gc::Model::ListCfg::Rule> getParentRule(
+		std::shared_ptr<Gc::Model::ListCfg::Rule> child,
+		std::shared_ptr<Gc::Model::ListCfg::Rule> root = nullptr
 	) {
 		auto& list = root ? root->subRules : this->rules;
 		for (auto rule : list) {
 			if (rule == child)
 				return root;
 			else if (rule->subRules.size()) {
-				std::shared_ptr<Model_Rule> parentRule = nullptr;
+				std::shared_ptr<Gc::Model::ListCfg::Rule> parentRule = nullptr;
 				try {
 					parentRule = this->getParentRule(child, rule);
 				} catch (ItemNotFoundException const& e) {
@@ -714,7 +715,7 @@ class Model_Proxy : public Gc::Common::Type::Proxy
 		throw ItemNotFoundException("specified rule not found", __FILE__, __LINE__);
 	}
 
-	public: std::list<std::shared_ptr<Model_Rule>>& getRuleList(std::shared_ptr<Model_Rule> parentElement)
+	public: std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>>& getRuleList(std::shared_ptr<Gc::Model::ListCfg::Rule> parentElement)
 	{
 		if (parentElement)
 			return parentElement->subRules;
@@ -722,11 +723,11 @@ class Model_Proxy : public Gc::Common::Type::Proxy
 			return this->rules;
 	}
 
-	public: bool hasVisibleRules(std::shared_ptr<Model_Rule> parent = nullptr) const {
+	public: bool hasVisibleRules(std::shared_ptr<Gc::Model::ListCfg::Rule> parent = nullptr) const {
 		auto& list = parent ? parent->subRules : this->rules;
 		for (auto iter = list.begin(); iter != list.end(); iter++) {
 			if (iter->get()->isVisible) {
-				if (iter->get()->type == Model_Rule::SUBMENU) {
+				if (iter->get()->type == Gc::Model::ListCfg::Rule::SUBMENU) {
 					bool has = this->hasVisibleRules(*iter);
 					if (has) {
 						return true;
@@ -739,9 +740,9 @@ class Model_Proxy : public Gc::Common::Type::Proxy
 		return false;
 	}
 
-	public: std::shared_ptr<Model_Rule> getVisibleRuleForEntry(
-		std::shared_ptr<Model_Entry> const& entry,
-		std::shared_ptr<Model_Rule> parent = nullptr
+	public: std::shared_ptr<Gc::Model::ListCfg::Rule> getVisibleRuleForEntry(
+		std::shared_ptr<Gc::Model::ListCfg::Entry> const& entry,
+		std::shared_ptr<Gc::Model::ListCfg::Rule> parent = nullptr
 	) {
 		auto& list = parent ? parent->subRules : this->rules;
 		for (auto rule : list) {
@@ -756,11 +757,11 @@ class Model_Proxy : public Gc::Common::Type::Proxy
 		return nullptr;
 	}
 
-	public: std::list<std::shared_ptr<Model_Rule>> getVisibleRulesByType(
-		Model_Rule::RuleType type,
-		std::shared_ptr<Model_Rule> parent = nullptr
+	public: std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>> getVisibleRulesByType(
+		Gc::Model::ListCfg::Rule::RuleType type,
+		std::shared_ptr<Gc::Model::ListCfg::Rule> parent = nullptr
 	) {
-		std::list<std::shared_ptr<Model_Rule>> result;
+		std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>> result;
 		auto& list = parent ? parent->subRules : this->rules;
 	
 		for (auto rule : list) {
@@ -816,7 +817,7 @@ class Model_Proxy : public Gc::Common::Type::Proxy
 		return result;
 	}
 
-	private: static void adjustIterator(std::list<Model_Rule>::iterator& iter, int adjustment) {
+	private: static void adjustIterator(std::list<Gc::Model::ListCfg::Rule>::iterator& iter, int adjustment) {
 		if (adjustment > 0) {
 			for (int i = 0; i < adjustment; i++) {
 				iter++;
@@ -828,6 +829,6 @@ class Model_Proxy : public Gc::Common::Type::Proxy
 		}
 	}
 
-};
+};}}}
 
 #endif

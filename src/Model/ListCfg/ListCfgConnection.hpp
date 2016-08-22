@@ -16,17 +16,28 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef ENTRY_PATH_FOLLOWER_INCLUDED
-#define ENTRY_PATH_FOLLOWER_INCLUDED
-#include <string>
-#include <list>
-#include "ListCfg/Entry.hpp"
+#ifndef SRC_MODEL_LISTCFG_LISTCFGCONNECTION_HPP_
+#define SRC_MODEL_LISTCFG_LISTCFGCONNECTION_HPP_
 
-class Model_EntryPathFollower {
-public:
-	virtual inline ~Model_EntryPathFollower() {};
 
-	virtual std::shared_ptr<Gc::Model::ListCfg::Entry> getEntryByPath(std::list<std::string> const& path)=0;
-};
+namespace Gc { namespace Model { namespace ListCfg { class ListCfgConnection
+{
+	protected: std::shared_ptr<Gc::Model::ListCfg::ListCfg> grublistCfg;
 
-#endif
+	public:	virtual ~ListCfgConnection(){}
+
+	public: void setListCfg(std::shared_ptr<Gc::Model::ListCfg::ListCfg> grublistCfg)
+	{
+		this->grublistCfg = grublistCfg;
+
+		this->initListCfgEvents();
+	}
+
+	public: virtual void initListCfgEvents()
+	{
+		// override to initialize specific view events
+	}
+};}}}
+
+
+#endif /* SRC_MODEL_LISTCFG_LISTCFGCONNECTION_HPP_ */

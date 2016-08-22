@@ -22,7 +22,7 @@
 #include "../View/Theme.hpp"
 #include "../View/Trait/ViewAware.hpp"
 #include "../Model/SettingsManagerData.hpp"
-#include "../Model/ListCfg.hpp"
+#include "../Model/ListCfg/ListCfg.hpp"
 #include <algorithm>
 #include <functional>
 
@@ -35,7 +35,7 @@ namespace Gc { namespace Controller { class ThemeController :
 	public View_Trait_ViewAware<View_Theme>,
 	public Model_ThemeManager_Connection,
 	public Model_SettingsManagerData_Connection,
-	public Model_ListCfg_Connection,
+	public Gc::Model::ListCfg::ListCfgConnection,
 	public Model_Env_Connection,
 	public Gc::Controller::Helper::ThreadConnection,
 	public Gc::Bootstrap::ApplicationHelper::ObjectConnection

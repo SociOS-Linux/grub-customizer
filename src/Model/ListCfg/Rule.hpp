@@ -21,52 +21,54 @@
 #include <string>
 #include <ostream>
 #include <memory>
-#include "../Common/Functions.hpp"
-#include "../Common/ArrayStructure/Container.hpp"
-#include "../Common/Type.hpp"
+#include "../../Common/Functions.hpp"
+#include "../../Common/ArrayStructure/Container.hpp"
+#include "../../Common/Type.hpp"
 #include "Entry.hpp"
-#include "EntryPathBuilder.hpp"
-#include "EntryPathFollower.hpp"
+#include "../EntryPathBuilder.hpp"
+#include "../EntryPathFollower.hpp"
 
-class Model_Rule : public Gc::Common::Type::Rule {
-	public: std::shared_ptr<Model_Entry> dataSource; //assigned when using RuleType::OTHER_ENTRIES_PLACEHOLDER
+namespace Gc { namespace Model { namespace ListCfg { class Rule
+	: public Gc::Common::Type::Rule
+{
+	public: std::shared_ptr<Gc::Model::ListCfg::Entry> dataSource; //assigned when using RuleType::OTHER_ENTRIES_PLACEHOLDER
 	public: std::string outputName;
 	public: std::string __idHash; //should only be used by sync()!
 	public: std::list<std::string> __idpath; //should only be used by sync()!
 	public: std::string __sourceScriptPath; //should only be used by sync()!
 	public: bool isVisible;
-	public: std::list<std::shared_ptr<Model_Rule>> subRules;
+	public: std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>> subRules;
 	public: enum RuleType {
 		NORMAL, OTHER_ENTRIES_PLACEHOLDER, PLAINTEXT, SUBMENU
 	};
 
 	public: RuleType type;
 
-	public: Model_Rule(RuleType type, std::list<std::string> path, std::string outputName, bool isVisible)
+	public: Rule(RuleType type, std::list<std::string> path, std::string outputName, bool isVisible)
 		: type(type), isVisible(isVisible), __idpath(path), outputName(outputName), dataSource(nullptr)
 	{}
 
-	public: Model_Rule(RuleType type, std::list<std::string> path, bool isVisible)
+	public: Rule(RuleType type, std::list<std::string> path, bool isVisible)
 		: type(type), isVisible(isVisible), __idpath(path), outputName(path.back()), dataSource(nullptr)
 	{}
 
 	//generate rule for given entry
-	public: Model_Rule(
-		std::shared_ptr<Model_Entry> source,
+	public: Rule(
+		std::shared_ptr<Gc::Model::ListCfg::Entry> source,
 		bool isVisible,
 		std::shared_ptr<Model_EntryPathFollower> pathFollower,
 		std::list<std::list<std::string>> const& pathesToIgnore = std::list<std::list<std::string>>(),
 		std::list<std::string> const& currentPath = std::list<std::string>()
 	) :
-		type(source->type == Model_Entry::PLAINTEXT ? Model_Rule::PLAINTEXT : (source->type == Model_Entry::SUBMENU ? Model_Rule::SUBMENU : Model_Rule::NORMAL)),
+		type(source->type == Gc::Model::ListCfg::Entry::PLAINTEXT ? Gc::Model::ListCfg::Rule::PLAINTEXT : (source->type == Gc::Model::ListCfg::Entry::SUBMENU ? Gc::Model::ListCfg::Rule::SUBMENU : Gc::Model::ListCfg::Rule::NORMAL)),
 		isVisible(isVisible),
 		__idpath(currentPath),
 		outputName(source->name),
-		dataSource(source->type == Model_Entry::SUBMENU ? nullptr : source)
+		dataSource(source->type == Gc::Model::ListCfg::Entry::SUBMENU ? nullptr : source)
 	{
-		if (source->type == Model_Entry::SUBMENU) {
-			auto placeholder = std::make_shared<Model_Rule>(
-				Model_Rule::OTHER_ENTRIES_PLACEHOLDER,
+		if (source->type == Gc::Model::ListCfg::Entry::SUBMENU) {
+			auto placeholder = std::make_shared<Gc::Model::ListCfg::Rule>(
+				Gc::Model::ListCfg::Rule::OTHER_ENTRIES_PLACEHOLDER,
 				currentPath,
 				"*",
 				this->isVisible
@@ -90,7 +92,7 @@ class Model_Rule : public Gc::Common::Type::Rule {
 			//add this entry as rule if not blacklisted
 			if (!currentPath_in_loop_is_blacklisted){
 				this->subRules.push_back(
-					std::make_shared<Model_Rule>(
+					std::make_shared<Gc::Model::ListCfg::Rule>(
 						entry,
 						isVisible,
 						pathFollower,
@@ -102,25 +104,25 @@ class Model_Rule : public Gc::Common::Type::Rule {
 		}
 	}
 
-	public: Model_Rule()
-		: type(Model_Rule::NORMAL), isVisible(false), dataSource(nullptr)
+	public: Rule()
+		: type(Gc::Model::ListCfg::Rule::NORMAL), isVisible(false), dataSource(nullptr)
 	{}
 
 	public: std::string toString(Model_EntryPathBilder const& pathBuilder) {
 		std::string result = isVisible ? "+" : "-";
-		if (type == Model_Rule::PLAINTEXT) {
+		if (type == Gc::Model::ListCfg::Rule::PLAINTEXT) {
 			result += "#text";
 		} else if (dataSource) {
 			result += pathBuilder.buildPathString(this->dataSource, this->type == OTHER_ENTRIES_PLACEHOLDER);
-			if (this->dataSource->content.size() && this->type != Model_Rule::OTHER_ENTRIES_PLACEHOLDER) {
+			if (this->dataSource->content.size() && this->type != Gc::Model::ListCfg::Rule::OTHER_ENTRIES_PLACEHOLDER) {
 				result += "~" + Gc::Common::Functions::md5(this->dataSource->content) + "~";
 			}
-		} else if (type == Model_Rule::SUBMENU) {
+		} else if (type == Gc::Model::ListCfg::Rule::SUBMENU) {
 			result += "'SUBMENU'"; // dummy data source
 		} else {
 			result += "???";
 		}
-		if (type == Model_Rule::SUBMENU || (type == Model_Rule::NORMAL && dataSource && dataSource->name != outputName)) {
+		if (type == Gc::Model::ListCfg::Rule::SUBMENU || (type == Gc::Model::ListCfg::Rule::NORMAL && dataSource && dataSource->name != outputName)) {
 			result += " as '"+Gc::Common::Functions::str_replace("'", "''", outputName)+"'";
 		}
 	
@@ -131,7 +133,7 @@ class Model_Rule : public Gc::Common::Type::Rule {
 			}
 		}
 	
-		if (type == Model_Rule::SUBMENU && this->subRules.size() > 0) {
+		if (type == Gc::Model::ListCfg::Rule::SUBMENU && this->subRules.size() > 0) {
 			result += "{";
 			for (auto iter = this->subRules.begin(); iter != this->subRules.end(); iter++) {
 				if (iter != this->subRules.begin())
@@ -145,7 +147,7 @@ class Model_Rule : public Gc::Common::Type::Rule {
 
 	public: bool hasRealSubrules() const {
 		for (auto subRule : this->subRules) {
-			if (subRule->isVisible && ((subRule->type == Model_Rule::NORMAL && subRule->dataSource) || (subRule->type == Model_Rule::SUBMENU && subRule->hasRealSubrules()))) {
+			if (subRule->isVisible && ((subRule->type == Gc::Model::ListCfg::Rule::NORMAL && subRule->dataSource) || (subRule->type == Gc::Model::ListCfg::Rule::SUBMENU && subRule->hasRealSubrules()))) {
 				return true;
 			}
 		}
@@ -154,14 +156,14 @@ class Model_Rule : public Gc::Common::Type::Rule {
 
 	public: void print(std::ostream& out) const {
 		if (this->isVisible) {
-			if (this->type == Model_Rule::PLAINTEXT && this->dataSource) {
+			if (this->type == Gc::Model::ListCfg::Rule::PLAINTEXT && this->dataSource) {
 				out << this->dataSource->content;
-			} else if (this->type == Model_Rule::NORMAL && this->dataSource) {
+			} else if (this->type == Gc::Model::ListCfg::Rule::NORMAL && this->dataSource) {
 				out << "menuentry";
 				out << " \"" << this->outputName << "\"" << this->dataSource->extension << "{\n";
 				out << this->dataSource->content;
 				out << "}\n";
-			} else if (this->type == Model_Rule::SUBMENU && this->hasRealSubrules()) {
+			} else if (this->type == Gc::Model::ListCfg::Rule::SUBMENU && this->hasRealSubrules()) {
 				out << "submenu" << " \"" << this->outputName << "\"" << "{\n";
 				for (auto rule : this->subRules) {
 					rule->print(out);
@@ -185,9 +187,9 @@ class Model_Rule : public Gc::Common::Type::Rule {
 		}
 	}
 
-	public: std::shared_ptr<Model_Rule> clone()
+	public: std::shared_ptr<Gc::Model::ListCfg::Rule> clone()
 	{
-		auto result = std::make_shared<Model_Rule>(*this);
+		auto result = std::make_shared<Gc::Model::ListCfg::Rule>(*this);
 
 		result->subRules.clear();
 
@@ -217,6 +219,6 @@ class Model_Rule : public Gc::Common::Type::Rule {
 
 		return result;
 	}
-};
+};}}}
 
 #endif

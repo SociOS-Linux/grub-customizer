@@ -22,16 +22,18 @@
 #include <dirent.h>
 #include <map>
 #include <memory>
-#include "../Model/Logger/Trait/LoggerAware.hpp"
-#include "../Common/ArrayStructure/Container.hpp"
-#include "../Common/Functions.hpp"
+#include "../Logger/Trait/LoggerAware.hpp"
+#include "../../Common/ArrayStructure/Container.hpp"
+#include "../../Common/Functions.hpp"
 #include "ProxyScriptData.hpp"
 #include "PscriptnameTranslator.hpp"
 #include "Script.hpp"
 
-class Model_Repository : public std::list<std::shared_ptr<Model_Script>>, public Gc::Model::Logger::Trait::LoggerAware
+namespace Gc { namespace Model { namespace ListCfg { class Repository :
+	public std::list<std::shared_ptr<Gc::Model::ListCfg::Script>>,
+	public Gc::Model::Logger::Trait::LoggerAware
 {
-	public: std::list<std::shared_ptr<Model_Script>> trash;
+	public: std::list<std::shared_ptr<Gc::Model::ListCfg::Script>> trash;
 
 	public: void load(std::string const& directory, bool is_proxifiedScript_dir)
 	{
@@ -43,11 +45,11 @@ class Model_Repository : public std::list<std::shared_ptr<Model_Script>>, public
 				stat((directory+"/"+entry->d_name).c_str(), &fileProperties);
 				if ((fileProperties.st_mode & S_IFMT) != S_IFDIR){ //ignore directories
 					bool scriptAdded = false;
-					if (!is_proxifiedScript_dir && !Model_ProxyScriptData::is_proxyscript(directory+"/"+entry->d_name) && std::string(entry->d_name).length() >= 4 && entry->d_name[0] >= '0' && entry->d_name[0] <= '9' && entry->d_name[1] >= '0' && entry->d_name[1] <= '9' && entry->d_name[2] == '_'){
-						this->push_back(std::make_shared<Model_Script>(std::string(entry->d_name).substr(3), directory+"/"+entry->d_name));
+					if (!is_proxifiedScript_dir && !Gc::Model::ListCfg::ProxyScriptData::isProxyscript(directory+"/"+entry->d_name) && std::string(entry->d_name).length() >= 4 && entry->d_name[0] >= '0' && entry->d_name[0] <= '9' && entry->d_name[1] >= '0' && entry->d_name[1] <= '9' && entry->d_name[2] == '_'){
+						this->push_back(std::make_shared<Gc::Model::ListCfg::Script>(std::string(entry->d_name).substr(3), directory+"/"+entry->d_name));
 						scriptAdded = true;
 					} else if (is_proxifiedScript_dir) {
-						this->push_back(std::make_shared<Model_Script>(Model_PscriptnameTranslator::decode(entry->d_name), directory+"/"+entry->d_name));
+						this->push_back(std::make_shared<Gc::Model::ListCfg::Script>(Gc::Model::ListCfg::PscriptnameTranslator::decode(entry->d_name), directory+"/"+entry->d_name));
 						scriptAdded = true;
 					}
 					if (scriptAdded && this->hasLogger()) {
@@ -59,14 +61,14 @@ class Model_Repository : public std::list<std::shared_ptr<Model_Script>>, public
 		}
 	}
 
-	public: std::shared_ptr<Model_Script> getScriptByFilename(std::string const& fileName, bool createScriptIfNotFound = false)
+	public: std::shared_ptr<Gc::Model::ListCfg::Script> getScriptByFilename(std::string const& fileName, bool createScriptIfNotFound = false)
 	{
 		for (auto script : *this) {
 			if (script->fileName == fileName)
 				return script;
 		}
 		if (createScriptIfNotFound){
-			this->push_back(std::make_shared<Model_Script>("noname", fileName));
+			this->push_back(std::make_shared<Gc::Model::ListCfg::Script>("noname", fileName));
 			auto newScript = this->back();
 	
 			if (this->hasLogger()) {
@@ -78,7 +80,7 @@ class Model_Repository : public std::list<std::shared_ptr<Model_Script>>, public
 		return nullptr;
 	}
 
-	public: std::shared_ptr<Model_Script> getScriptByName(std::string const& name)
+	public: std::shared_ptr<Gc::Model::ListCfg::Script> getScriptByName(std::string const& name)
 	{
 		for (auto script : *this) {
 			if (script->name == name) {
@@ -88,7 +90,7 @@ class Model_Repository : public std::list<std::shared_ptr<Model_Script>>, public
 		return nullptr;
 	}
 
-	public: std::shared_ptr<Model_Script> getScriptByEntry(std::shared_ptr<Model_Entry> entry)
+	public: std::shared_ptr<Gc::Model::ListCfg::Script> getScriptByEntry(std::shared_ptr<Gc::Model::ListCfg::Entry> entry)
 	{
 		for (auto script : *this) {
 			if (script->hasEntry(entry)) {
@@ -98,7 +100,7 @@ class Model_Repository : public std::list<std::shared_ptr<Model_Script>>, public
 		return nullptr;
 	}
 
-	public: std::shared_ptr<Model_Script const> getScriptByEntry(std::shared_ptr<Model_Entry> entry) const
+	public: std::shared_ptr<Gc::Model::ListCfg::Script const> getScriptByEntry(std::shared_ptr<Gc::Model::ListCfg::Entry> entry) const
 	{
 		for (auto script : *this) {
 			if (script->hasEntry(entry)) {
@@ -108,7 +110,7 @@ class Model_Repository : public std::list<std::shared_ptr<Model_Script>>, public
 		return nullptr;
 	}
 
-	public: std::shared_ptr<Model_Script> getCustomScript()
+	public: std::shared_ptr<Gc::Model::ListCfg::Script> getCustomScript()
 	{
 		for (auto script : *this) {
 			if (script->isCustomScript) {
@@ -118,7 +120,7 @@ class Model_Repository : public std::list<std::shared_ptr<Model_Script>>, public
 		return nullptr;
 	}
 
-	public: std::shared_ptr<Model_Script> getNthScript(int pos)
+	public: std::shared_ptr<Gc::Model::ListCfg::Script> getNthScript(int pos)
 	{
 		int i = 0;
 		for (auto script : *this) {
@@ -140,7 +142,7 @@ class Model_Repository : public std::list<std::shared_ptr<Model_Script>>, public
 		}
 	}
 
-	public: std::shared_ptr<Model_Script> createScript(
+	public: std::shared_ptr<Gc::Model::ListCfg::Script> createScript(
 		std::string const& name,
 		std::string const& fileName,
 		std::string const& content
@@ -151,13 +153,13 @@ class Model_Repository : public std::list<std::shared_ptr<Model_Script>>, public
 			fputs(content.c_str(), script);
 			fclose(script);
 
-			this->push_back(std::make_shared<Model_Script>(name, fileName));
+			this->push_back(std::make_shared<Gc::Model::ListCfg::Script>(name, fileName));
 			return this->back();
 		}
 		return nullptr;
 	}
 
-	public: void createScript(std::shared_ptr<Model_Script> script, std::string const& content)
+	public: void createScript(std::shared_ptr<Gc::Model::ListCfg::Script> script, std::string const& content)
 	{
 		Gc::Common::Functions::assert_filepath_empty(script->fileName, __FILE__, __LINE__);
 		FILE* scriptFile = fopen(script->fileName.c_str(), "w");
@@ -170,9 +172,9 @@ class Model_Repository : public std::list<std::shared_ptr<Model_Script>>, public
 	}
 
 	// create existing script (in scriptlist) on file system
-	public: std::map<std::string, std::shared_ptr<Model_Script>> getScriptPathMap()
+	public: std::map<std::string, std::shared_ptr<Gc::Model::ListCfg::Script>> getScriptPathMap()
 	{
-		std::map<std::string, std::shared_ptr<Model_Script>> map;
+		std::map<std::string, std::shared_ptr<Gc::Model::ListCfg::Script>> map;
 		for (auto script : *this) {
 			map[script->fileName] = script;
 		}
@@ -182,7 +184,7 @@ class Model_Repository : public std::list<std::shared_ptr<Model_Script>>, public
 		return map;
 	}
 
-	public: void removeScript(std::shared_ptr<Model_Script> script)
+	public: void removeScript(std::shared_ptr<Gc::Model::ListCfg::Script> script)
 	{
 		for (auto scriptIter = this->begin(); scriptIter != this->end(); scriptIter++) {
 			if (*scriptIter == script) {
@@ -213,6 +215,6 @@ class Model_Repository : public std::list<std::shared_ptr<Model_Script>>, public
 		return result;
 	}
 
-};
+};}}}
 
 #endif

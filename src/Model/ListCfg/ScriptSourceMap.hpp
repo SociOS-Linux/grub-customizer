@@ -23,28 +23,25 @@
 #include <string>
 #include <dirent.h>
 
-#include "../Model/Csv/Reader.hpp"
-#include "../Model/Csv/Writer.hpp"
-#include "../Model/Logger/Trait/LoggerAware.hpp"
-#include "Env.hpp"
+#include "../Csv/Reader.hpp"
+#include "../Csv/Writer.hpp"
+#include "../Logger/Trait/LoggerAware.hpp"
+#include "../Env.hpp"
 
-class Model_ScriptSourceMap :
+namespace Gc { namespace Model { namespace ListCfg { class ScriptSourceMap :
 	public std::map<std::string, std::string>,
 	public Gc::Model::Logger::Trait::LoggerAware,
 	public Model_Env_Connection
 {
-	std::string _getFilePath() {
-		return this->env->cfg_dir + "/.script_sources.txt";
-	}
+	private: bool _fileExists;
+	private: std::list<std::string> _newSources;
 
-	bool _fileExists;
-	std::list<std::string> _newSources;
-public:
-	Model_ScriptSourceMap() : _fileExists(false)
+	public: ScriptSourceMap() :
+		_fileExists(false)
+	{}
+
+	public: void load()
 	{
-	}
-
-	void load() {
 		this->clear();
 		this->_fileExists = false;
 		this->_newSources.clear();
@@ -61,7 +58,8 @@ public:
 		}
 	}
 
-	void registerMove(std::string const& sourceName, std::string const& destinationName) {
+	public: void registerMove(std::string const& sourceName, std::string const& destinationName)
+	{
 		std::string originalSourceName = this->getSourceName(sourceName);
 		if (originalSourceName != "") { // update existing script entry
 			(*this)[originalSourceName] = destinationName;
@@ -70,7 +68,8 @@ public:
 		}
 	}
 
-	void addScript(std::string const& sourceName) {
+	public: void addScript(std::string const& sourceName)
+	{
 		if (this->has(sourceName)) {
 			this->_newSources.push_back(sourceName);
 		} else {
@@ -78,7 +77,8 @@ public:
 		}
 	}
 
-	void save() {
+	public: void save()
+	{
 		FILE* file = fopen(this->_getFilePath().c_str(), "w");
 		assert(file != NULL);
 		Gc::Model::Csv::Writer csv(file);
@@ -101,11 +101,13 @@ public:
 		fclose(file);
 	}
 
-	bool has(std::string const& sourceName) {
+	public: bool has(std::string const& sourceName)
+	{
 		return this->find(sourceName) != this->end();
 	}
 
-	std::string getSourceName(std::string const& destinationName) {
+	public: std::string getSourceName(std::string const& destinationName)
+	{
 		for (std::map<std::string, std::string>::iterator iter = this->begin(); iter != this->end(); iter++) {
 			if (iter->second == destinationName) {
 				return iter->first;
@@ -114,19 +116,26 @@ public:
 		return "";
 	}
 
-	bool fileExists() {
+	public: bool fileExists()
+	{
 		return this->_fileExists;
 	}
 
-	std::list<std::string> getUpdates() const {
+	public: std::list<std::string> getUpdates() const
+	{
 		return this->_newSources;
 	}
 
-	void deleteUpdates() {
+	public: void deleteUpdates()
+	{
 		this->_newSources.clear();
 	}
 
-};
+	private: std::string _getFilePath()
+	{
+		return this->env->cfg_dir + "/.script_sources.txt";
+	}
+};}}}
 
 
 #endif /* SCRIPTSOURCEMAP_H_ */

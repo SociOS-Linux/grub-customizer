@@ -19,8 +19,8 @@
 #ifndef INC_Controller_Helper_RuleMover_AbstractStrategy
 #define INC_Controller_Helper_RuleMover_AbstractStrategy
 
-#include "../../../Model/Rule.hpp"
-#include "../../../Model/ListCfg.hpp"
+#include "../../../Model/ListCfg/Rule.hpp"
+#include "../../../Model/ListCfg/ListCfg.hpp"
 #include <memory>
 #include <string>
 
@@ -38,7 +38,7 @@ class AbstractStrategy
 		: name(name)
 	{}
 
-	public: virtual void move(std::shared_ptr<Model_Rule> rule, Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction) = 0;
+	public: virtual void move(std::shared_ptr<Gc::Model::ListCfg::Rule> rule, Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction) = 0;
 
 	public: virtual std::string getName()
 	{
@@ -48,11 +48,11 @@ class AbstractStrategy
 	public: virtual ~AbstractStrategy(){};
 
 
-	protected: std::list<std::shared_ptr<Model_Rule>> findVisibleRules(
-		std::list<std::shared_ptr<Model_Rule>> ruleList,
-		std::shared_ptr<Model_Rule> ruleAlwaysToInclude
+	protected: std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>> findVisibleRules(
+		std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>> ruleList,
+		std::shared_ptr<Gc::Model::ListCfg::Rule> ruleAlwaysToInclude
 	) {
-		std::list<std::shared_ptr<Model_Rule>> result;
+		std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>> result;
 
 		for (auto rule : ruleList) {
 			if (rule->isVisible || rule == ruleAlwaysToInclude) {
@@ -63,9 +63,9 @@ class AbstractStrategy
 		return result;
 	}
 
-	protected: std::shared_ptr<Model_Rule> getNextRule(
-		std::list<std::shared_ptr<Model_Rule>> list,
-		std::shared_ptr<Model_Rule> base,
+	protected: std::shared_ptr<Gc::Model::ListCfg::Rule> getNextRule(
+		std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>> list,
+		std::shared_ptr<Gc::Model::ListCfg::Rule> base,
 		Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction
 	) {
 		auto currentPosition = std::find(list.begin(), list.end(), base);
@@ -90,17 +90,17 @@ class AbstractStrategy
 	}
 
 	protected: void removeFromList(
-		std::list<std::shared_ptr<Model_Rule>>& list,
-		std::shared_ptr<Model_Rule> ruleToRemove
+		std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>>& list,
+		std::shared_ptr<Gc::Model::ListCfg::Rule> ruleToRemove
 	) {
 		auto position = std::find(list.begin(), list.end(), ruleToRemove);
 		list.erase(position);
 	}
 
 	protected: void insertBehind(
-		std::list<std::shared_ptr<Model_Rule>>& list,
-		std::shared_ptr<Model_Rule> ruleToInsert,
-		std::shared_ptr<Model_Rule> position,
+		std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>>& list,
+		std::shared_ptr<Gc::Model::ListCfg::Rule> ruleToInsert,
+		std::shared_ptr<Gc::Model::ListCfg::Rule> position,
 		Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction
 	) {
 		auto insertPosition = std::find(list.begin(), list.end(), position);
@@ -110,10 +110,10 @@ class AbstractStrategy
 		list.insert(insertPosition, ruleToInsert);
 	}
 
-	protected: std::list<std::shared_ptr<Model_Proxy>> findProxiesWithVisibleToplevelEntries(
-		std::list<std::shared_ptr<Model_Proxy>> proxies
+	protected: std::list<std::shared_ptr<Gc::Model::ListCfg::Proxy>> findProxiesWithVisibleToplevelEntries(
+		std::list<std::shared_ptr<Gc::Model::ListCfg::Proxy>> proxies
 	) {
-		std::list<std::shared_ptr<Model_Proxy>> result;
+		std::list<std::shared_ptr<Gc::Model::ListCfg::Proxy>> result;
 
 		for (auto proxy : proxies) {
 			for (auto rule : proxy->rules) {
@@ -128,9 +128,9 @@ class AbstractStrategy
 		return result;
 	}
 
-	protected: std::shared_ptr<Model_Proxy> getNextProxy(
-		std::list<std::shared_ptr<Model_Proxy>> list,
-		std::shared_ptr<Model_Proxy> base,
+	protected: std::shared_ptr<Gc::Model::ListCfg::Proxy> getNextProxy(
+		std::list<std::shared_ptr<Gc::Model::ListCfg::Proxy>> list,
+		std::shared_ptr<Gc::Model::ListCfg::Proxy> base,
 		Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction
 	) {
 		auto currentPosition = std::find(list.begin(), list.end(), base);
@@ -154,8 +154,8 @@ class AbstractStrategy
 		throw LogicException("cannot handle given direction", __FILE__, __LINE__);
 	}
 
-	protected: std::shared_ptr<Model_Rule> getFirstVisibleRule(
-		std::shared_ptr<Model_Proxy> proxy,
+	protected: std::shared_ptr<Gc::Model::ListCfg::Rule> getFirstVisibleRule(
+		std::shared_ptr<Gc::Model::ListCfg::Proxy> proxy,
 		Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction
 	) {
 		auto visibleRules = this->findVisibleRules(proxy->rules, nullptr);
@@ -174,8 +174,8 @@ class AbstractStrategy
 	}
 
 	protected: void insertIntoSubmenu(
-		std::shared_ptr<Model_Rule>& submenu,
-		std::shared_ptr<Model_Rule> ruleToInsert,
+		std::shared_ptr<Gc::Model::ListCfg::Rule>& submenu,
+		std::shared_ptr<Gc::Model::ListCfg::Rule> ruleToInsert,
 		Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction
 	) {
 		if (direction == Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction::DOWN) {
@@ -187,7 +187,7 @@ class AbstractStrategy
 		}
 	}
 
-	protected: unsigned int countVisibleRulesOnToplevel(std::shared_ptr<Model_Proxy> proxy)
+	protected: unsigned int countVisibleRulesOnToplevel(std::shared_ptr<Gc::Model::ListCfg::Proxy> proxy)
 	{
 		unsigned int count = 0;
 
@@ -215,9 +215,9 @@ class AbstractStrategy
 	}
 
 	protected: void moveRuleToOtherProxy(
-		std::shared_ptr<Model_Rule> ruleToMove,
-		std::shared_ptr<Model_Proxy> sourceProxy,
-		std::shared_ptr<Model_Proxy> destination,
+		std::shared_ptr<Gc::Model::ListCfg::Rule> ruleToMove,
+		std::shared_ptr<Gc::Model::ListCfg::Proxy> sourceProxy,
+		std::shared_ptr<Gc::Model::ListCfg::Proxy> destination,
 		Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction
 	) {
 		// replace ruleToMove by an invisible copy
@@ -230,8 +230,8 @@ class AbstractStrategy
 	}
 
 	protected: void insertIntoProxy(
-		std::shared_ptr<Model_Rule> ruleToInsert,
-		std::shared_ptr<Model_Proxy> destination,
+		std::shared_ptr<Gc::Model::ListCfg::Rule> ruleToInsert,
+		std::shared_ptr<Gc::Model::ListCfg::Proxy> destination,
 		Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction
 	) {
 		// remove old equivalent rule
@@ -250,10 +250,10 @@ class AbstractStrategy
 	 * extended version with replacement of old rule
 	 */
 	protected: void insertAsNewProxy(
-		std::shared_ptr<Model_Rule> ruleToMove,
-		std::shared_ptr<Model_Proxy> proxyToCopy,
-		std::shared_ptr<Model_Proxy> destination,
-		std::shared_ptr<Model_ListCfg> listCfg,
+		std::shared_ptr<Gc::Model::ListCfg::Rule> ruleToMove,
+		std::shared_ptr<Gc::Model::ListCfg::Proxy> proxyToCopy,
+		std::shared_ptr<Gc::Model::ListCfg::Proxy> destination,
+		std::shared_ptr<Gc::Model::ListCfg::ListCfg> listCfg,
 		Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction,
 		bool reAddOldRuleInvisible = true
 	) {
@@ -267,14 +267,14 @@ class AbstractStrategy
 	}
 
 	protected: void insertAsNewProxy(
-		std::shared_ptr<Model_Rule> ruleToMove,
-		std::shared_ptr<Model_Script> sourceScript,
-		std::shared_ptr<Model_Proxy> destination,
-		std::shared_ptr<Model_ListCfg> listCfg,
+		std::shared_ptr<Gc::Model::ListCfg::Rule> ruleToMove,
+		std::shared_ptr<Gc::Model::ListCfg::Script> sourceScript,
+		std::shared_ptr<Gc::Model::ListCfg::Proxy> destination,
+		std::shared_ptr<Gc::Model::ListCfg::ListCfg> listCfg,
 		Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction
 	) {
 		// prepare new proxy containing ruleToMove as the only visible entry
-		auto newProxy = std::make_shared<Model_Proxy>(sourceScript, false);
+		auto newProxy = std::make_shared<Gc::Model::ListCfg::Proxy>(sourceScript, false);
 
 		newProxy->removeEquivalentRules(ruleToMove);
 

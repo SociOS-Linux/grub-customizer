@@ -21,31 +21,31 @@
 #define ENTRYPATHBUILDERIMPL_H_
 #include "../Model/EntryPathBuilder.hpp"
 #include <map>
-#include "Script.hpp"
+#include "ListCfg/Script.hpp"
 
 class Model_EntryPathBuilderImpl : public Model_EntryPathBilder
 {
-	private: std::shared_ptr<Model_Script> mainScript;
-	private: std::map<std::shared_ptr<Model_Entry>, std::shared_ptr<Model_Script>> entrySourceMap;
-	private: std::map<std::shared_ptr<Model_Script>, std::string> scriptTargetMap;
+	private: std::shared_ptr<Gc::Model::ListCfg::Script> mainScript;
+	private: std::map<std::shared_ptr<Gc::Model::ListCfg::Entry>, std::shared_ptr<Gc::Model::ListCfg::Script>> entrySourceMap;
+	private: std::map<std::shared_ptr<Gc::Model::ListCfg::Script>, std::string> scriptTargetMap;
 	private: int prefixLength;
 
-	public: Model_EntryPathBuilderImpl(std::shared_ptr<Model_Script> mainScript) : prefixLength(0), mainScript(NULL)
+	public: Model_EntryPathBuilderImpl(std::shared_ptr<Gc::Model::ListCfg::Script> mainScript) : prefixLength(0), mainScript(NULL)
 	{
 		this->setMainScript(mainScript);
 	}
 
-	public: void setMainScript(std::shared_ptr<Model_Script> mainScript)
+	public: void setMainScript(std::shared_ptr<Gc::Model::ListCfg::Script> mainScript)
 	{
 		this->mainScript = mainScript;
 	}
 
-	public: void setEntrySourceMap(std::map<std::shared_ptr<Model_Entry>, std::shared_ptr<Model_Script>> const& entrySourceMap)
+	public: void setEntrySourceMap(std::map<std::shared_ptr<Gc::Model::ListCfg::Entry>, std::shared_ptr<Gc::Model::ListCfg::Script>> const& entrySourceMap)
 	{
 		this->entrySourceMap = entrySourceMap;
 	}
 
-	public: void setScriptTargetMap(std::map<std::shared_ptr<Model_Script>, std::string> const& scriptTargetMap)
+	public: void setScriptTargetMap(std::map<std::shared_ptr<Gc::Model::ListCfg::Script>, std::string> const& scriptTargetMap)
 	{
 		this->scriptTargetMap = scriptTargetMap;
 	}
@@ -55,19 +55,19 @@ class Model_EntryPathBuilderImpl : public Model_EntryPathBilder
 		this->prefixLength = length;
 	}
 
-	public: std::list<std::string> buildPath(std::shared_ptr<Model_Entry> entry) const
+	public: std::list<std::string> buildPath(std::shared_ptr<Gc::Model::ListCfg::Entry> entry) const
 	{
 		auto script = entrySourceMap.find(entry) != entrySourceMap.end() ? entrySourceMap.find(entry)->second : this->mainScript;
 		return script->buildPath(entry);
 	}
 
-	public: std::string buildPathString(std::shared_ptr<Model_Entry> entry, bool withOtherEntriesPlaceholder = false) const
+	public: std::string buildPathString(std::shared_ptr<Gc::Model::ListCfg::Entry> entry, bool withOtherEntriesPlaceholder = false) const
 	{
 		auto script = entrySourceMap.find(entry) != entrySourceMap.end() ? entrySourceMap.find(entry)->second : this->mainScript;
 		return script->buildPathString(entry, withOtherEntriesPlaceholder);
 	}
 
-	public: std::string buildScriptPath(std::shared_ptr<Model_Entry> entry) const
+	public: std::string buildScriptPath(std::shared_ptr<Gc::Model::ListCfg::Entry> entry) const
 	{
 		auto script = entrySourceMap.find(entry) != entrySourceMap.end() ? entrySourceMap.find(entry)->second : nullptr;
 		return script ? this->scriptTargetMap.find(script)->second.substr(this->prefixLength) : "";

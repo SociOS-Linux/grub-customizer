@@ -19,19 +19,20 @@
 #ifndef RULEMOVER_HPP_
 #define RULEMOVER_HPP_
 
-#include "../../Model/Rule.hpp"
-#include "../../Model/ListCfg.hpp"
+#include "../../Model/ListCfg/Rule.hpp"
+#include "../../Model/ListCfg/ListCfg.hpp"
+#include "../../Model/ListCfg/ListCfgConnection.hpp"
 #include "RuleMover/AbstractStrategy.hpp"
 #include "RuleMover/MoveFailedException.hpp"
 #include <memory>
 
 namespace Gc { namespace Controller { namespace Helper { class RuleMoverHelper :
-	public Model_ListCfg_Connection,
+	public Gc::Model::ListCfg::ListCfgConnection,
 	public Gc::Model::Logger::Trait::LoggerAware
 {
 	private: std::list<std::shared_ptr<Gc::Controller::Helper::RuleMover::AbstractStrategy>> strategies;
 
-	public: void move(std::shared_ptr<Model_Rule> rule, Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction)
+	public: void move(std::shared_ptr<Gc::Model::ListCfg::Rule> rule, Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction)
 	{
 		assert(this->grublistCfg != nullptr);
 

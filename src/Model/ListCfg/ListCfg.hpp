@@ -30,28 +30,28 @@
 #include <unistd.h>
 #include <fstream>
 
-#include "../config.hpp"
+#include "../../config.hpp"
 
-#include "../Model/Logger/Trait/LoggerAware.hpp"
+#include "../Logger/Trait/LoggerAware.hpp"
 
-#include "../Common/Exception.hpp"
-#include "../Common/ArrayStructure/Container.hpp"
-#include "../Common/Functions.hpp"
+#include "../../Common/Exception.hpp"
+#include "../../Common/ArrayStructure/Container.hpp"
+#include "../../Common/Functions.hpp"
 #include <stack>
 #include <algorithm>
 #include <functional>
 
-#include "../Common/Mutex/Generic.hpp"
-#include "../Common/Mutex/GenericConnection.hpp"
-#include "Env.hpp"
-#include "MountTable.hpp"
+#include "../../Common/Mutex/Generic.hpp"
+#include "../../Common/Mutex/GenericConnection.hpp"
+#include "../Env.hpp"
+#include "../MountTable.hpp"
 #include "Proxylist.hpp"
 #include "ProxyScriptData.hpp"
 #include "Repository.hpp"
 #include "ScriptSourceMap.hpp"
-#include "SettingsManagerData.hpp"
+#include "../SettingsManagerData.hpp"
 
-class Model_ListCfg :
+namespace Gc { namespace Model { namespace ListCfg { class ListCfg :
 	public Gc::Model::Logger::Trait::LoggerAware,
 	public Gc::Common::Mutex::GenericConnection,
 	public Model_Env_Connection
@@ -61,12 +61,17 @@ class Model_ListCfg :
 	private: int progress_pos, progress_max;
 	private: std::string errorLogFile;
 
-	private: Model_ScriptSourceMap scriptSourceMap;
+	private: Gc::Model::ListCfg::ScriptSourceMap scriptSourceMap;
 
-	public: Model_ListCfg() : error_proxy_not_found(false),
-	 progress(0),
-	 cancelThreadsRequested(false), verbose(true),
-	 errorLogFile(ERROR_LOG_FILE), ignoreLock(false), progress_pos(0), progress_max(0)
+	public: ListCfg() :
+		error_proxy_not_found(false),
+		progress(0),
+		cancelThreadsRequested(false),
+		verbose(true),
+		errorLogFile(ERROR_LOG_FILE),
+		ignoreLock(false),
+		progress_pos(0),
+		progress_max(0)
 	{}
 
 	public: void initLogger() override {
@@ -80,8 +85,8 @@ class Model_ListCfg :
 	}
 
 
-	public: Model_Proxylist proxies;
-	public: Model_Repository repository;
+	public: Gc::Model::ListCfg::Proxylist proxies;
+	public: Gc::Model::ListCfg::Repository repository;
 	
 	public: std::function<void ()> onLoadStateChange;
 	public: std::function<void ()> onSaveStateChange;
@@ -194,13 +199,13 @@ class Model_ListCfg :
 				stat((this->env->cfg_dir+"/"+entry->d_name).c_str(), &fileProperties);
 				if ((fileProperties.st_mode & S_IFMT) != S_IFDIR){ //ignore directories
 					if (entry->d_name[2] == '_'){ //check whether it's an script (they should be named XX_scriptname)…
-						this->proxies.push_back(std::make_shared<Model_Proxy>());
+						this->proxies.push_back(std::make_shared<Gc::Model::ListCfg::Proxy>());
 						this->proxies.back()->fileName = this->env->cfg_dir+"/"+entry->d_name;
 						this->proxies.back()->index = (entry->d_name[0]-'0')*10 + (entry->d_name[1]-'0');
 						this->proxies.back()->permissions = fileProperties.st_mode & ~S_IFMT;
 					
 						FILE* proxyFile = fopen((this->env->cfg_dir+"/"+entry->d_name).c_str(), "r");
-						Model_ProxyScriptData data(proxyFile);
+						Gc::Model::ListCfg::ProxyScriptData data(proxyFile);
 						fclose(proxyFile);
 						if (data){
 							this->proxies.back()->dataSource = repository.getScriptByFilename(this->env->cfg_dir_prefix+data.scriptCmd);
@@ -356,7 +361,7 @@ class Model_ListCfg :
 		proxies.clearTrash(); //delete all files of removed proxies
 		repository.clearTrash();
 		
-		std::map<std::shared_ptr<Model_Script>, std::string> scriptFilenameMap; // stores original filenames
+		std::map<std::shared_ptr<Gc::Model::ListCfg::Script>, std::string> scriptFilenameMap; // stores original filenames
 		for (auto script : this->repository) {
 			scriptFilenameMap[script] = script->fileName;
 		}
@@ -378,11 +383,11 @@ class Model_ListCfg :
 		int mkdir_result = mkdir((this->env->cfg_dir+"/proxifiedScripts").c_str(), 0755); //create this directory if it doesn't already exist
 	
 		// get new script locations
-		std::map<std::shared_ptr<Model_Script>, std::string> scriptTargetMap; // scripts and their target directories
+		std::map<std::shared_ptr<Gc::Model::ListCfg::Script>, std::string> scriptTargetMap; // scripts and their target directories
 		for (auto script : repository) {
 			auto relatedProxies = proxies.getProxiesByScript(script);
 			if (proxies.proxyRequired(script)){
-				scriptTargetMap[script] = this->env->cfg_dir+"/proxifiedScripts/"+Model_PscriptnameTranslator::encode(script->name, samename_counter[script->name]++);
+				scriptTargetMap[script] = this->env->cfg_dir+"/proxifiedScripts/"+Gc::Model::ListCfg::PscriptnameTranslator::encode(script->name, samename_counter[script->name]++);
 			} else {
 				std::ostringstream nameStream;
 				nameStream << std::setw(2) << std::setfill('0') << relatedProxies.front()->index << "_" << script->name;
@@ -501,7 +506,7 @@ class Model_ListCfg :
 			if (script->isCustomScript && script->isModified()) {
 				this->log("modifying script \"" + script->name + "\"", Gc::Model::Logger::GenericLogger::INFO);
 				assert(script->fileName != "");
-				auto dummyProxy = std::make_shared<Model_Proxy>(script);
+				auto dummyProxy = std::make_shared<Gc::Model::ListCfg::Proxy>(script);
 				std::ofstream scriptStream(script->fileName.c_str());
 				scriptStream << CUSTOM_SCRIPT_SHEBANG << "\n" << CUSTOM_SCRIPT_PREFIX << "\n";
 				for (auto rule : dummyProxy->rules) {
@@ -554,20 +559,20 @@ class Model_ListCfg :
 
 	public: void readGeneratedFile(FILE* source, bool createScriptIfNotFound = false, bool createProxyIfNotFound = false)
 	{
-		Model_Entry_Row row;
-		std::shared_ptr<Model_Script> script = nullptr;
+		Gc::Model::ListCfg::EntryRow row;
+		std::shared_ptr<Gc::Model::ListCfg::Script> script = nullptr;
 		int i = 0;
 		bool inScript = false;
 		std::string plaintextBuffer = "";
 		int innerCount = 0;
 		double progressbarScriptSpace = 0.7 / this->repository.size();
-		while (!cancelThreadsRequested && (row = Model_Entry_Row(source))){
+		while (!cancelThreadsRequested && (row = Gc::Model::ListCfg::EntryRow(source))){
 			std::string rowText = Gc::Common::Functions::ltrim(row.text);
 			if (!inScript && rowText.substr(0,10) == ("### BEGIN ") && rowText.substr(rowText.length()-4,4) == " ###"){
 				this->lock();
 				if (script) {
 					if (plaintextBuffer != "" && !script->isModified()) {
-						auto newEntry = std::make_shared<Model_Entry>("#text", "", plaintextBuffer, Model_Entry::PLAINTEXT);
+						auto newEntry = std::make_shared<Gc::Model::ListCfg::Entry>("#text", "", plaintextBuffer, Gc::Model::ListCfg::Entry::PLAINTEXT);
 						if (this->hasLogger()) {
 							newEntry->setLogger(this->getLogger());
 						}
@@ -584,7 +589,7 @@ class Model_ListCfg :
 				}
 				script = repository.getScriptByFilename(realScriptName, createScriptIfNotFound);
 				if (createScriptIfNotFound && createProxyIfNotFound){ //for the compare-configuration
-					this->proxies.push_back(std::make_shared<Model_Proxy>(script));
+					this->proxies.push_back(std::make_shared<Gc::Model::ListCfg::Proxy>(script));
 				}
 				this->unlock();
 				if (script){
@@ -599,7 +604,7 @@ class Model_ListCfg :
 				if (innerCount < 10) {
 					innerCount++;
 				}
-				auto newEntry = std::make_shared<Model_Entry>(source, row, this->getLogger());
+				auto newEntry = std::make_shared<Gc::Model::ListCfg::Entry>(source, row, this->getLogger());
 				if (!script->isModified()) {
 					script->entries().push_back(newEntry);
 				}
@@ -608,7 +613,7 @@ class Model_ListCfg :
 				this->send_new_load_progress(0.1 + (progressbarScriptSpace * i + (progressbarScriptSpace/10*innerCount)), script->name, i, this->repository.size());
 			} else if (script != NULL && rowText.substr(0, 8) == "submenu ") {
 				this->lock();
-				auto newEntry = std::make_shared<Model_Entry>(source, row, this->getLogger());
+				auto newEntry = std::make_shared<Gc::Model::ListCfg::Entry>(source, row, this->getLogger());
 				script->entries().push_back(newEntry);
 				this->proxies.sync_all(false, false, script);
 				this->unlock();
@@ -620,7 +625,7 @@ class Model_ListCfg :
 		this->lock();
 		if (script) {
 			if (plaintextBuffer != "" && !script->isModified()) {
-				auto newEntry = std::make_shared<Model_Entry>("#text", "", plaintextBuffer, Model_Entry::PLAINTEXT);
+				auto newEntry = std::make_shared<Gc::Model::ListCfg::Entry>("#text", "", plaintextBuffer, Gc::Model::ListCfg::Entry::PLAINTEXT);
 				if (this->hasLogger()) {
 					newEntry->setLogger(this->getLogger());
 				}
@@ -635,13 +640,13 @@ class Model_ListCfg :
 		this->unlock();
 	}
 
-	public: std::map<std::shared_ptr<Model_Entry>, std::shared_ptr<Model_Script>> getEntrySources(
-		std::shared_ptr<Model_Proxy> proxy,
-		std::shared_ptr<Model_Rule> parent = nullptr
+	public: std::map<std::shared_ptr<Gc::Model::ListCfg::Entry>, std::shared_ptr<Gc::Model::ListCfg::Script>> getEntrySources(
+		std::shared_ptr<Gc::Model::ListCfg::Proxy> proxy,
+		std::shared_ptr<Gc::Model::ListCfg::Rule> parent = nullptr
 	) {
 		auto& list = parent ? parent->subRules : proxy->rules;
 
-		std::map<std::shared_ptr<Model_Entry>, std::shared_ptr<Model_Script>> result;
+		std::map<std::shared_ptr<Gc::Model::ListCfg::Entry>, std::shared_ptr<Gc::Model::ListCfg::Script>> result;
 		assert(proxy->dataSource != nullptr);
 
 		for (auto rule : list) {
@@ -652,7 +657,7 @@ class Model_ListCfg :
 				} else {
 					this->log("error finding the associated script! (" + rule->outputName + ")", Gc::Model::Logger::GenericLogger::WARNING);
 				}
-			} else if (rule->type == Model_Rule::SUBMENU) {
+			} else if (rule->type == Gc::Model::ListCfg::Rule::SUBMENU) {
 				auto subResult = this->getEntrySources(proxy, rule);
 				if (subResult.size()) {
 					result.insert(subResult.begin(), subResult.end());
@@ -740,7 +745,7 @@ class Model_ListCfg :
 			if (favorDefaultOrder && proxy->dataSource) {
 				std::string sourceFileName = this->scriptSourceMap.getSourceName(proxy->dataSource->fileName);
 				try {
-					int prefixNum = Model_Script::extractIndexFromPath(sourceFileName, this->env->cfg_dir);
+					int prefixNum = Gc::Model::ListCfg::Script::extractIndexFromPath(sourceFileName, this->env->cfg_dir);
 					if (prefixNum >= i) {
 						i = prefixNum;
 						isDefaultNumber = true;
@@ -776,12 +781,12 @@ class Model_ListCfg :
 		}
 	}
 
-	public: std::shared_ptr<Model_Rule> createSubmenu(std::shared_ptr<Model_Rule> position)
+	public: std::shared_ptr<Gc::Model::ListCfg::Rule> createSubmenu(std::shared_ptr<Gc::Model::ListCfg::Rule> position)
 	{
 		return this->proxies.getProxyByRule(position)->createSubmenu(position);
 	}
 
-	public: std::shared_ptr<Model_Rule> splitSubmenu(std::shared_ptr<Model_Rule> child)
+	public: std::shared_ptr<Gc::Model::ListCfg::Rule> splitSubmenu(std::shared_ptr<Gc::Model::ListCfg::Rule> child)
 	{
 		return this->proxies.getProxyByRule(child)->splitSubmenu(child);
 	}
@@ -861,11 +866,11 @@ class Model_ListCfg :
 	}
 
 	
-	public: bool compare(Model_ListCfg const& other) const
+	public: bool compare(Gc::Model::ListCfg::ListCfg const& other) const
 	{
-		std::array<std::list<std::shared_ptr<Model_Rule>>, 2> rlist;
+		std::array<std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>>, 2> rlist;
 		for (int i = 0; i < 2; i++){
-			const Model_ListCfg* gc = i == 0 ? this : &other;
+			const Gc::Model::ListCfg::ListCfg* gc = i == 0 ? this : &other;
 			for (auto proxy : gc->proxies) {
 				assert(proxy->dataSource != nullptr);
 				if (proxy->isExecutable() && proxy->dataSource){
@@ -880,21 +885,21 @@ class Model_ListCfg :
 				}
 			}
 		}
-		return Model_ListCfg::compareLists(rlist[0], rlist[1]);
+		return Gc::Model::ListCfg::ListCfg::compareLists(rlist[0], rlist[1]);
 	}
 
-	public: static std::list<std::shared_ptr<Model_Rule>> getComparableRules(std::list<std::shared_ptr<Model_Rule>> const& list)
+	public: static std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>> getComparableRules(std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>> const& list)
 	{
-		std::list<std::shared_ptr<Model_Rule>> result;
+		std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>> result;
 		for (auto rule : list) {
-			if (((rule->type == Model_Rule::NORMAL && rule->dataSource) || (rule->type == Model_Rule::SUBMENU && rule->hasRealSubrules())) && rule->isVisible){
+			if (((rule->type == Gc::Model::ListCfg::Rule::NORMAL && rule->dataSource) || (rule->type == Gc::Model::ListCfg::Rule::SUBMENU && rule->hasRealSubrules())) && rule->isVisible){
 				result.push_back(rule);
 			}
 		}
 		return result;
 	}
 
-	public: static bool compareLists(std::list<std::shared_ptr<Model_Rule>> a, std::list<std::shared_ptr<Model_Rule>> b)
+	public: static bool compareLists(std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>> a, std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>> b)
 	{
 		if (a.size() != b.size()) {
 			return false;
@@ -918,7 +923,7 @@ class Model_ListCfg :
 					return false;
 			}
 			//check rules inside the submenu
-			if ((*self_iter)->type == Model_Rule::SUBMENU && !Model_ListCfg::compareLists(Model_ListCfg::getComparableRules((*self_iter)->subRules), Model_ListCfg::getComparableRules((*other_iter)->subRules))) {
+			if ((*self_iter)->type == Gc::Model::ListCfg::Rule::SUBMENU && !Gc::Model::ListCfg::ListCfg::compareLists(Gc::Model::ListCfg::ListCfg::getComparableRules((*self_iter)->subRules), Gc::Model::ListCfg::ListCfg::getComparableRules((*other_iter)->subRules))) {
 				return false;
 			}
 			self_iter++;
@@ -928,12 +933,12 @@ class Model_ListCfg :
 	}
 
 
-	public: void renameRule(std::shared_ptr<Model_Rule> rule, std::string const& newName)
+	public: void renameRule(std::shared_ptr<Gc::Model::ListCfg::Rule> rule, std::string const& newName)
 	{
 		rule->outputName = newName;
 	}
 
-	public: std::string getRulePath(std::shared_ptr<Model_Rule> rule)
+	public: std::string getRulePath(std::shared_ptr<Gc::Model::ListCfg::Rule> rule)
 	{
 		auto proxy = this->proxies.getProxyByRule(rule);
 		std::stack<std::string> ruleNameStack;
@@ -969,7 +974,7 @@ class Model_ListCfg :
 	public: void addColorHelper()
 	{
 		if (this->repository.getScriptByName("grub-customizer_menu_color_helper") == nullptr) {
-			std::shared_ptr<Model_Script> newScript = this->repository.createScript("grub-customizer_menu_color_helper", this->env->cfg_dir + "06_grub-customizer_menu_color_helper", "#!/bin/sh\n\
+			std::shared_ptr<Gc::Model::ListCfg::Script> newScript = this->repository.createScript("grub-customizer_menu_color_helper", this->env->cfg_dir + "06_grub-customizer_menu_color_helper", "#!/bin/sh\n\
 	\n\
 	if [ \"x${GRUB_BACKGROUND}\" != \"x\" ] ; then\n\
 		if [ \"x${GRUB_COLOR_NORMAL}\" != \"x\" ] ; then\n\
@@ -982,50 +987,50 @@ class Model_ListCfg :
 	fi\n\
 	");
 			assert(newScript != nullptr);
-			auto newProxy = std::make_shared<Model_Proxy>(newScript);
+			auto newProxy = std::make_shared<Gc::Model::ListCfg::Proxy>(newScript);
 			newProxy->index = 6;
 			this->proxies.push_back(newProxy);
 		}
 	}
 
 
-	public: std::list<std::shared_ptr<Model_Rule>> getRemovedEntries(
-		std::shared_ptr<Model_Entry> parent = nullptr,
+	public: std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>> getRemovedEntries(
+		std::shared_ptr<Gc::Model::ListCfg::Entry> parent = nullptr,
 		bool ignorePlaceholders = false
 	) {
-		std::list<std::shared_ptr<Model_Rule>> result;
+		std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>> result;
 		if (parent == nullptr) {
 			for (auto script : this->repository) {
 				auto subResult = this->getRemovedEntries(script->root, ignorePlaceholders);
 				result.insert(result.end(), subResult.begin(), subResult.end());
 			}
 		} else {
-			if (parent->type == Model_Entry::SUBMENU || parent->type == Model_Entry::SCRIPT_ROOT) {
+			if (parent->type == Gc::Model::ListCfg::Entry::SUBMENU || parent->type == Gc::Model::ListCfg::Entry::SCRIPT_ROOT) {
 				for (auto entry : parent->subEntries) {
 					auto subResult = this->getRemovedEntries(entry, ignorePlaceholders);
-					std::shared_ptr<Model_Rule> currentSubmenu = nullptr;
+					std::shared_ptr<Gc::Model::ListCfg::Rule> currentSubmenu = nullptr;
 					if (subResult.size()) {
-						auto submenu = std::make_shared<Model_Rule>(Model_Rule::SUBMENU, std::list<std::string>(), entry->name, true);
+						auto submenu = std::make_shared<Gc::Model::ListCfg::Rule>(Gc::Model::ListCfg::Rule::SUBMENU, std::list<std::string>(), entry->name, true);
 						submenu->subRules = subResult;
 						submenu->dataSource = entry;
 						result.push_back(submenu);
 						currentSubmenu = result.back();
 					}
 	
-					if ((entry->type == Model_Entry::MENUENTRY || !ignorePlaceholders) && !this->proxies.getVisibleRuleForEntry(entry)) {
-						Model_Rule::RuleType ruleType = Model_Rule::NORMAL;
+					if ((entry->type == Gc::Model::ListCfg::Entry::MENUENTRY || !ignorePlaceholders) && !this->proxies.getVisibleRuleForEntry(entry)) {
+						Gc::Model::ListCfg::Rule::RuleType ruleType = Gc::Model::ListCfg::Rule::NORMAL;
 						switch (entry->type) {
-						case Model_Entry::MENUENTRY:
-							ruleType = Model_Rule::NORMAL;
+						case Gc::Model::ListCfg::Entry::MENUENTRY:
+							ruleType = Gc::Model::ListCfg::Rule::NORMAL;
 							break;
-						case Model_Entry::PLAINTEXT:
-							ruleType = Model_Rule::PLAINTEXT;
+						case Gc::Model::ListCfg::Entry::PLAINTEXT:
+							ruleType = Gc::Model::ListCfg::Rule::PLAINTEXT;
 							break;
-						case Model_Entry::SUBMENU:
-							ruleType = Model_Rule::OTHER_ENTRIES_PLACEHOLDER;
+						case Gc::Model::ListCfg::Entry::SUBMENU:
+							ruleType = Gc::Model::ListCfg::Rule::OTHER_ENTRIES_PLACEHOLDER;
 							break;
 						}
-						auto newRule = std::make_shared<Model_Rule>(ruleType, std::list<std::string>(), entry->name, true);
+						auto newRule = std::make_shared<Gc::Model::ListCfg::Rule>(ruleType, std::list<std::string>(), entry->name, true);
 						newRule->dataSource = entry;
 						if (currentSubmenu) {
 							currentSubmenu->subRules.push_front(newRule);
@@ -1039,29 +1044,29 @@ class Model_ListCfg :
 		return result;
 	}
 
-	public: std::shared_ptr<Model_Rule> addEntry(
-		std::shared_ptr<Model_Entry> entry,
+	public: std::shared_ptr<Gc::Model::ListCfg::Rule> addEntry(
+		std::shared_ptr<Gc::Model::ListCfg::Entry> entry,
 		bool insertAsOtherEntriesPlaceholder = false
 	) {
 		auto sourceScript = this->repository.getScriptByEntry(entry);
 		assert(sourceScript != nullptr);
 	
-		std::shared_ptr<Model_Proxy> targetProxy = nullptr;
+		std::shared_ptr<Gc::Model::ListCfg::Proxy> targetProxy = nullptr;
 		if (this->proxies.size() && this->proxies.back()->dataSource == sourceScript) {
 			targetProxy = this->proxies.back();
 			targetProxy->set_isExecutable(true);
 		} else {
-			this->proxies.push_back(std::make_shared<Model_Proxy>(sourceScript, false));
+			this->proxies.push_back(std::make_shared<Gc::Model::ListCfg::Proxy>(sourceScript, false));
 			targetProxy = this->proxies.back();
 			this->renumerate();
 		}
 	
-		std::shared_ptr<Model_Rule> rule = nullptr;
+		std::shared_ptr<Gc::Model::ListCfg::Rule> rule = nullptr;
 		if (insertAsOtherEntriesPlaceholder) {
-			rule = std::make_shared<Model_Rule>(Model_Rule::OTHER_ENTRIES_PLACEHOLDER, sourceScript->buildPath(entry), true);
+			rule = std::make_shared<Gc::Model::ListCfg::Rule>(Gc::Model::ListCfg::Rule::OTHER_ENTRIES_PLACEHOLDER, sourceScript->buildPath(entry), true);
 			rule->dataSource = entry;
 		} else {
-			rule = std::make_shared<Model_Rule>(
+			rule = std::make_shared<Gc::Model::ListCfg::Rule>(
 				entry,
 				true,
 				sourceScript,
@@ -1076,10 +1081,10 @@ class Model_ListCfg :
 	}
 
 
-	public: void deleteEntry(std::shared_ptr<Model_Entry> entry)
+	public: void deleteEntry(std::shared_ptr<Gc::Model::ListCfg::Entry> entry)
 	{
 		for (auto proxy : this->proxies) {
-			auto rule = proxy->getRuleByEntry(entry, proxy->rules, Model_Rule::NORMAL);
+			auto rule = proxy->getRuleByEntry(entry, proxy->rules, Gc::Model::ListCfg::Rule::NORMAL);
 			if (rule) {
 				proxy->removeRule(rule);
 			}
@@ -1096,7 +1101,7 @@ class Model_ListCfg :
 		std::list<Gc::Common::Type::Rule*> result;
 	
 		auto firstRuleOfList = this->findRule(rules.front());
-		std::list<std::shared_ptr<Model_Rule>>::iterator currentRule;
+		std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>>::iterator currentRule;
 	
 		auto parentRule = this->proxies.getProxyByRule(firstRuleOfList)->getParentRule(firstRuleOfList);
 		if (parentRule) {
@@ -1123,9 +1128,9 @@ class Model_ListCfg :
 	}
 
 
-	public: std::list<std::shared_ptr<Model_Script>> getProxifiedScripts()
+	public: std::list<std::shared_ptr<Gc::Model::ListCfg::Script>> getProxifiedScripts()
 	{
-		std::list<std::shared_ptr<Model_Script>> result;
+		std::list<std::shared_ptr<Gc::Model::ListCfg::Script>> result;
 	
 		for (auto script : this->repository) {
 			if (this->proxies.proxyRequired(script)) {
@@ -1208,7 +1213,7 @@ class Model_ListCfg :
 			// copy entries of custom scripts
 			if (oldScript->isCustomScript && newScript->isCustomScript && oldScript->entries().size()) {
 				for (auto entry : oldScript->entries()) {
-					if (entry->type == Model_Entry::PLAINTEXT && newScript->getPlaintextEntry()) {
+					if (entry->type == Gc::Model::ListCfg::Entry::PLAINTEXT && newScript->getPlaintextEntry()) {
 						newScript->getPlaintextEntry()->content = entry->content; // copy plaintext instead of adding another entry
 						newScript->getPlaintextEntry()->isModified = true;
 					} else {
@@ -1257,10 +1262,10 @@ class Model_ListCfg :
 		std::list<std::string> usedIndices;
 		int i = 50; // unknown scripts starting at position 50
 		for (auto script : this->repository) {
-			auto newProxy = std::make_shared<Model_Proxy>(script);
+			auto newProxy = std::make_shared<Gc::Model::ListCfg::Proxy>(script);
 			std::string sourceFileName = this->scriptSourceMap.getSourceName(script->fileName);
 			try {
-				newProxy->index = Model_Script::extractIndexFromPath(sourceFileName, this->env->cfg_dir);
+				newProxy->index = Gc::Model::ListCfg::Script::extractIndexFromPath(sourceFileName, this->env->cfg_dir);
 			} catch (InvalidStringFormatException const& e) {
 				newProxy->index = i++;
 				this->log(e, Gc::Model::Logger::GenericLogger::ERROR);
@@ -1281,7 +1286,7 @@ class Model_ListCfg :
 		this->proxies.sort();
 	}
 
-	public: std::shared_ptr<Model_Rule> findRule(Gc::Common::Type::Rule const* rulePtr)
+	public: std::shared_ptr<Gc::Model::ListCfg::Rule> findRule(Gc::Common::Type::Rule const* rulePtr)
 	{
 		auto allProxies = this->proxies;
 		allProxies.insert(allProxies.end(), this->proxies.trash.begin(), this->proxies.trash.end());
@@ -1296,7 +1301,7 @@ class Model_ListCfg :
 		throw ItemNotFoundException("rule not found", __FILE__, __LINE__);
 	}
 
-	private: std::shared_ptr<Model_Rule> findRule(Gc::Common::Type::Rule const* rulePtr, std::list<std::shared_ptr<Model_Rule>> list)
+	private: std::shared_ptr<Gc::Model::ListCfg::Rule> findRule(Gc::Common::Type::Rule const* rulePtr, std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>> list)
 	{
 		for (auto rule : list) {
 			if (rule.get() == rulePtr) {
@@ -1332,26 +1337,6 @@ class Model_ListCfg :
 		result["cancelThreadsRequested"] = this->cancelThreadsRequested;
 		return result;
 	}
-};
-
-class Model_ListCfg_Connection
-{
-	protected: std::shared_ptr<Model_ListCfg> grublistCfg;
-
-	public:	virtual ~Model_ListCfg_Connection(){}
-
-	public: void setListCfg(std::shared_ptr<Model_ListCfg> grublistCfg)
-	{
-		this->grublistCfg = grublistCfg;
-
-		this->initListCfgEvents();
-	}
-
-	public: virtual void initListCfgEvents()
-	{
-		// override to initialize specific view events
-	}
-};
-
+};}}}
 
 #endif

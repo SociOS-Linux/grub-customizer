@@ -19,8 +19,8 @@
 #ifndef INC_Gc_Controller_Helper_RuleMover_Strategy_MoveRuleOutOfSubmenu
 #define INC_Gc_Controller_Helper_RuleMover_Strategy_MoveRuleOutOfSubmenu
 
-#include "../../../../Model/Rule.hpp"
-#include "../../../../Model/ListCfg.hpp"
+#include "../../../../Model/ListCfg/Rule.hpp"
+#include "../../../../Model/ListCfg/ListCfg.hpp"
 #include "../AbstractStrategy.hpp"
 #include "../../../../Model/Logger/Trait/LoggerAware.hpp"
 #include <memory>
@@ -28,14 +28,14 @@
 namespace Gc { namespace Controller { namespace Helper { namespace RuleMover { namespace Strategy {
 class MoveRuleOutOfSubmenu :
 	public Gc::Controller::Helper::RuleMover::AbstractStrategy,
-	public Model_ListCfg_Connection,
+	public Gc::Model::ListCfg::ListCfgConnection,
 	public Gc::Model::Logger::Trait::LoggerAware
 {
 	public: MoveRuleOutOfSubmenu()
 		: Gc::Controller::Helper::RuleMover::AbstractStrategy("MoveRuleOutOfSubmenu")
 	{}
 
-	public: void move(std::shared_ptr<Model_Rule> rule, Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction)
+	public: void move(std::shared_ptr<Gc::Model::ListCfg::Rule> rule, Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction)
 	{
 		auto proxy = this->grublistCfg->proxies.getProxyByRule(rule);
 		auto parentRule = proxy->getParentRule(rule);

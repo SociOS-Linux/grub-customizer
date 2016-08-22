@@ -16,27 +16,27 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#include "../Model/Entry.hpp"
+#include "../Model/ListCfg/Entry.hpp"
 #include <iostream>
 #include <memory>
-#include "../Model/ListCfg.hpp" // multi
-#include "../Model/Proxy.hpp"
-#include "../Model/Rule.hpp"
-#include "../Model/Script.hpp"
+#include "../Model/ListCfg/ListCfg.hpp" // multi
+#include "../Model/ListCfg/Proxy.hpp"
+#include "../Model/ListCfg/Rule.hpp"
+#include "../Model/ListCfg/Script.hpp"
 
 int main(int argc, char** argv){
 	if (argc == 2) {
-		auto script = std::make_shared<Model_Script>("noname", "");
-		std::shared_ptr<Model_Entry> newEntry;
+		auto script = std::make_shared<Gc::Model::ListCfg::Script>("noname", "");
+		std::shared_ptr<Gc::Model::ListCfg::Entry> newEntry;
 		std::string plaintextBuffer;
-		while (*(newEntry = std::make_shared<Model_Entry>(stdin, Model_Entry_Row(), nullptr, &plaintextBuffer))) {
+		while (*(newEntry = std::make_shared<Gc::Model::ListCfg::Entry>(stdin, Gc::Model::ListCfg::EntryRow(), nullptr, &plaintextBuffer))) {
 			script->entries().push_back(newEntry);
 		}
 		if (plaintextBuffer.size()) {
-			script->entries().push_front(std::make_shared<Model_Entry>("#text", "", plaintextBuffer, Model_Entry::PLAINTEXT));
+			script->entries().push_front(std::make_shared<Gc::Model::ListCfg::Entry>("#text", "", plaintextBuffer, Gc::Model::ListCfg::Entry::PLAINTEXT));
 		}
 
-		auto proxy = std::make_shared<Model_Proxy>();
+		auto proxy = std::make_shared<Gc::Model::ListCfg::Proxy>();
 		proxy->importRuleString(argv[1], "");
 
 		proxy->dataSource = script;
@@ -48,11 +48,11 @@ int main(int argc, char** argv){
 		return 0;
 	} else if (argc == 3 && std::string(argv[2]) == "multi") {
 		auto env = std::make_shared<Model_Env>();
-		Model_ListCfg scriptSource;
+		Gc::Model::ListCfg::ListCfg scriptSource;
 		scriptSource.setEnv(env);
 		scriptSource.ignoreLock = true;
 		{ // this scope prevents access to the unused proxy variable - push_back takes a copy!
-			auto proxy = std::make_shared<Model_Proxy>();
+			auto proxy = std::make_shared<Gc::Model::ListCfg::Proxy>();
 			proxy->importRuleString(argv[1], env->cfg_dir_prefix);
 			scriptSource.proxies.push_back(proxy);
 		}

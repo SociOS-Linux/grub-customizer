@@ -19,7 +19,7 @@
 #ifndef MAINCONNTROLLER_INCLUDED
 #define MAINCONNTROLLER_INCLUDED
 
-#include "../Model/ListCfg.hpp"
+#include "../Model/ListCfg/ListCfg.hpp"
 #include "../View/Main.hpp"
 #include "../View/Trait/ViewAware.hpp"
 #include <libintl.h>
@@ -32,7 +32,7 @@
 
 #include "../Model/Env.hpp"
 
-#include "../Model/ListCfg.hpp"
+#include "../Model/ListCfg/ListCfg.hpp"
 #include "../Model/DeviceDataList.hpp"
 #include "../Model/ContentParser/GenericFactory.hpp"
 
@@ -53,7 +53,7 @@
 namespace Gc { namespace Controller { class MainController :
 	public Gc::Controller::Common::ControllerAbstract,
 	public View_Trait_ViewAware<View_Main>,
-	public Model_ListCfg_Connection,
+	public Gc::Model::ListCfg::ListCfgConnection,
 	public Model_SettingsManagerData_Connection,
 	public Model_FbResolutionsGetter_Connection,
 	public Model_DeviceDataList_Connection,
@@ -66,7 +66,7 @@ namespace Gc { namespace Controller { class MainController :
 	public Gc::Controller::Helper::RuleMoverConnection
 {
 	private: std::shared_ptr<Model_SettingsManagerData> settingsOnDisk; //buffer for the existing settings
-	private: std::shared_ptr<Model_ListCfg> savedListCfg;
+	private: std::shared_ptr<Gc::Model::ListCfg::ListCfg> savedListCfg;
 	private: Gc::Model::ContentParser::GenericParser* currentContentParser;
 
 	private: bool config_has_been_different_on_startup_but_unsaved;
@@ -78,7 +78,7 @@ namespace Gc { namespace Controller { class MainController :
 		this->settingsOnDisk = settings;
 	}
 
-	public: void setSavedListCfg(std::shared_ptr<Model_ListCfg> savedListCfg)
+	public: void setSavedListCfg(std::shared_ptr<Gc::Model::ListCfg::ListCfg> savedListCfg)
 	{
 		this->savedListCfg = savedListCfg;
 	}
@@ -441,9 +441,9 @@ namespace Gc { namespace Controller { class MainController :
 	{
 	}
 
-	public: void renameEntry(std::shared_ptr<Model_Rule> rule, std::string const& newName)
+	public: void renameEntry(std::shared_ptr<Gc::Model::ListCfg::Rule> rule, std::string const& newName)
 	{
-		if (rule->type != Model_Rule::PLAINTEXT) {
+		if (rule->type != Gc::Model::ListCfg::Rule::PLAINTEXT) {
 
 			std::string currentRulePath = this->grublistCfg->getRulePath(rule);
 			std::string currentDefaultRulePath = this->settings->getValue("GRUB_DEFAULT");
@@ -594,9 +594,9 @@ namespace Gc { namespace Controller { class MainController :
 				this->view->showPlaintextRemoveWarning();
 			} else {
 				std::list<Gc::Common::Type::Entry*> entriesOfRemovedRules;
-				std::map<std::shared_ptr<Model_Proxy>, Gc::Common::Type::Nothing> emptyProxies;
+				std::map<std::shared_ptr<Gc::Model::ListCfg::Proxy>, Gc::Common::Type::Nothing> emptyProxies;
 				for (std::list<Gc::Common::Type::Rule*>::iterator iter = rules.begin(); iter != rules.end(); iter++) {
-					std::shared_ptr<Model_Rule> rule = this->grublistCfg->findRule(*iter);
+					std::shared_ptr<Gc::Model::ListCfg::Rule> rule = this->grublistCfg->findRule(*iter);
 					rule->setVisibility(false);
 					entriesOfRemovedRules.push_back(rule->dataSource.get());
 					if (!this->grublistCfg->proxies.getProxyByRule(rule)->hasVisibleRules()) {
@@ -650,7 +650,7 @@ namespace Gc { namespace Controller { class MainController :
 
 				if (stickyPlaceholders) {
 					auto nextRealRule = this->findNextRealRule(this->grublistCfg->findRule(direction == -1 ? rules.front() : rules.back()), direction);
-					rules = this->populateSelection(rules, nextRealRule->type == Model_Rule::SUBMENU);
+					rules = this->populateSelection(rules, nextRealRule->type == Gc::Model::ListCfg::Rule::SUBMENU);
 					rules = this->grublistCfg->getNormalizedRuleOrder(rules);
 				}
 
@@ -748,7 +748,7 @@ namespace Gc { namespace Controller { class MainController :
 	}
 
 
-	public: void showProxyInfo(Model_Proxy* proxy)
+	public: void showProxyInfo(Gc::Model::ListCfg::Proxy* proxy)
 	{
 		this->view->setStatusText("");
 	}
@@ -891,10 +891,10 @@ namespace Gc { namespace Controller { class MainController :
 		try {
 			std::list<Gc::Common::Type::Rule*> addedRules;
 			for (auto rulePtr : rulePtrs) {
-				auto& modelRule = dynamic_cast<Model_Rule&>(*rulePtr);
+				auto& modelRule = dynamic_cast<Gc::Model::ListCfg::Rule&>(*rulePtr);
 				auto entry = modelRule.dataSource;
 				assert(entry != nullptr);
-				addedRules.push_back(this->grublistCfg->addEntry(entry, modelRule.type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER).get());
+				addedRules.push_back(this->grublistCfg->addEntry(entry, modelRule.type == Gc::Model::ListCfg::Rule::OTHER_ENTRIES_PLACEHOLDER).get());
 			}
 
 			this->applicationObject->onListModelChange.exec();
@@ -1010,16 +1010,16 @@ namespace Gc { namespace Controller { class MainController :
 		this->logActionEnd();
 	}
 
-	private: void appendRuleToView(std::shared_ptr<Model_Rule> rule, std::shared_ptr<Model_Rule> parentRule = nullptr)
+	private: void appendRuleToView(std::shared_ptr<Gc::Model::ListCfg::Rule> rule, std::shared_ptr<Gc::Model::ListCfg::Rule> parentRule = nullptr)
 	{
-		bool is_other_entries_ph = rule->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER;
-		bool is_plaintext = rule->dataSource && rule->dataSource->type == Model_Entry::PLAINTEXT;
-		bool is_submenu = rule->type == Model_Rule::SUBMENU;
+		bool is_other_entries_ph = rule->type == Gc::Model::ListCfg::Rule::OTHER_ENTRIES_PLACEHOLDER;
+		bool is_plaintext = rule->dataSource && rule->dataSource->type == Gc::Model::ListCfg::Entry::PLAINTEXT;
+		bool is_submenu = rule->type == Gc::Model::ListCfg::Rule::SUBMENU;
 
 		if (rule->dataSource || is_submenu){
 			std::string name = this->entryNameMapper->map(rule->dataSource, rule->outputName, true);
 
-			bool isSubmenu = rule->type == Model_Rule::SUBMENU;
+			bool isSubmenu = rule->type == Gc::Model::ListCfg::Rule::SUBMENU;
 			std::string scriptName = "", defaultName = "";
 			if (rule->dataSource) {
 				auto script = this->grublistCfg->repository.getScriptByEntry(rule->dataSource);
@@ -1029,7 +1029,7 @@ namespace Gc { namespace Controller { class MainController :
 					defaultName = rule->dataSource->name;
 				}
 			}
-			bool isEditable = rule->type == Model_Rule::NORMAL || rule->type == Model_Rule::PLAINTEXT;
+			bool isEditable = rule->type == Gc::Model::ListCfg::Rule::NORMAL || rule->type == Gc::Model::ListCfg::Rule::PLAINTEXT;
 			bool isModified = rule->dataSource && rule->dataSource->isModified;
 
 			// parse content to show additional informations
@@ -1055,7 +1055,7 @@ namespace Gc { namespace Controller { class MainController :
 			listItem.parentScript = proxy.get();
 			this->view->appendEntry(listItem);
 
-			if (rule->type == Model_Rule::SUBMENU) {
+			if (rule->type == Gc::Model::ListCfg::Rule::SUBMENU) {
 				for (auto subRule : rule->subRules) {
 					this->appendRuleToView(subRule, rule);
 				}
@@ -1067,7 +1067,7 @@ namespace Gc { namespace Controller { class MainController :
 	{
 		for (auto rulePtr : rules) {
 			auto rule = this->grublistCfg->findRule(rulePtr);
-			if (rule->type == Model_Rule::PLAINTEXT) {
+			if (rule->type == Gc::Model::ListCfg::Rule::PLAINTEXT) {
 				return true;
 			}
 		}
@@ -1079,12 +1079,12 @@ namespace Gc { namespace Controller { class MainController :
 		int visibleSystemRulesCount = 0;
 		int selectedSystemRulesCount = 0;
 
-		std::shared_ptr<Model_Script> linuxScript = nullptr;
+		std::shared_ptr<Gc::Model::ListCfg::Script> linuxScript = nullptr;
 
 		// count selected entries related to linux script
 		for (auto rulePtr : rules) {
 			auto rule = this->grublistCfg->findRule(rulePtr);
-			if (rule->type == Model_Rule::NORMAL) {
+			if (rule->type == Gc::Model::ListCfg::Rule::NORMAL) {
 				assert(rule->dataSource != nullptr);
 				auto script = this->grublistCfg->repository.getScriptByEntry(rule->dataSource);
 				if (script->name == "linux") {
@@ -1101,7 +1101,7 @@ namespace Gc { namespace Controller { class MainController :
 			auto proxies = this->grublistCfg->proxies.getProxiesByScript(linuxScript);
 			bool visibleRulesFound = false;
 			for (auto proxy : proxies) {
-				visibleSystemRulesCount += proxy->getVisibleRulesByType(Model_Rule::NORMAL).size();
+				visibleSystemRulesCount += proxy->getVisibleRulesByType(Gc::Model::ListCfg::Rule::NORMAL).size();
 			}
 
 			if (selectedSystemRulesCount == visibleSystemRulesCount) {
@@ -1132,7 +1132,7 @@ namespace Gc { namespace Controller { class MainController :
 		return result2;
 	}
 
-	private: void populateSelection(std::list<Gc::Common::Type::Rule*>& rules, std::shared_ptr<Model_Rule> baseRule, int direction, bool checkScript, bool ignorePlaintext)
+	private: void populateSelection(std::list<Gc::Common::Type::Rule*>& rules, std::shared_ptr<Gc::Model::ListCfg::Rule> baseRule, int direction, bool checkScript, bool ignorePlaintext)
 	{
 		assert(direction == 1 || direction == -1);
 		bool placeholderFound = false;
@@ -1146,7 +1146,7 @@ namespace Gc { namespace Controller { class MainController :
 				auto scriptCurrent = this->grublistCfg->repository.getScriptByEntry(currentRule->dataSource);
 				auto scriptBase    = this->grublistCfg->repository.getScriptByEntry(baseRule->dataSource);
 
-				if ((scriptCurrent == scriptBase || !checkScript) && (currentRule->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER || (currentRule->type == Model_Rule::PLAINTEXT && !ignorePlaintext))) {
+				if ((scriptCurrent == scriptBase || !checkScript) && (currentRule->type == Gc::Model::ListCfg::Rule::OTHER_ENTRIES_PLACEHOLDER || (currentRule->type == Gc::Model::ListCfg::Rule::PLAINTEXT && !ignorePlaintext))) {
 					if (direction == 1) {
 						rules.push_back(currentRule.get());
 					} else {
@@ -1162,7 +1162,7 @@ namespace Gc { namespace Controller { class MainController :
 		} while (placeholderFound);
 	}
 
-	private: int countRulesUntilNextRealRule(std::shared_ptr<Model_Rule> baseRule, int direction)
+	private: int countRulesUntilNextRealRule(std::shared_ptr<Gc::Model::ListCfg::Rule> baseRule, int direction)
 	{
 		int result = 1;
 		bool placeholderFound = false;
@@ -1171,7 +1171,7 @@ namespace Gc { namespace Controller { class MainController :
 			try {
 				currentRule = *this->grublistCfg->proxies.getNextVisibleRule(currentRule, direction);
 
-				if (currentRule->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER || currentRule->type == Model_Rule::PLAINTEXT) {
+				if (currentRule->type == Gc::Model::ListCfg::Rule::OTHER_ENTRIES_PLACEHOLDER || currentRule->type == Gc::Model::ListCfg::Rule::PLAINTEXT) {
 					result++;
 					placeholderFound = true;
 				} else {
@@ -1184,7 +1184,7 @@ namespace Gc { namespace Controller { class MainController :
 		return result;
 	}
 
-	private: std::shared_ptr<Model_Rule> findNextRealRule(std::shared_ptr<Model_Rule> baseRule, int direction)
+	private: std::shared_ptr<Gc::Model::ListCfg::Rule> findNextRealRule(std::shared_ptr<Gc::Model::ListCfg::Rule> baseRule, int direction)
 	{
 		bool placeholderFound = false;
 		auto currentRule = baseRule;
@@ -1192,7 +1192,7 @@ namespace Gc { namespace Controller { class MainController :
 			try {
 				currentRule = *this->grublistCfg->proxies.getNextVisibleRule(currentRule, direction);
 
-				if (currentRule->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER || currentRule->type == Model_Rule::PLAINTEXT) {
+				if (currentRule->type == Gc::Model::ListCfg::Rule::OTHER_ENTRIES_PLACEHOLDER || currentRule->type == Gc::Model::ListCfg::Rule::PLAINTEXT) {
 					placeholderFound = true;
 				} else {
 					placeholderFound = false;
@@ -1210,7 +1210,7 @@ namespace Gc { namespace Controller { class MainController :
 		std::list<Gc::Common::Type::Rule*> result;
 		for (auto rulePtr : rules) {
 			auto rule = this->grublistCfg->findRule(rulePtr);
-			if (!(rule->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER || rule->type == Model_Rule::PLAINTEXT)) {
+			if (!(rule->type == Gc::Model::ListCfg::Rule::OTHER_ENTRIES_PLACEHOLDER || rule->type == Gc::Model::ListCfg::Rule::PLAINTEXT)) {
 				result.push_back(rule.get());
 			}
 		}
@@ -1218,14 +1218,14 @@ namespace Gc { namespace Controller { class MainController :
 	}
 
 	private: bool ruleAffectsCurrentDefaultOs(
-		std::shared_ptr<Model_Rule> rule,
+		std::shared_ptr<Gc::Model::ListCfg::Rule> rule,
 		std::string const& currentRulePath,
 		std::string const& currentDefaultRulePath
 	)
 	{
 		bool result = false;
 
-		if (rule->type == Model_Rule::SUBMENU) {
+		if (rule->type == Gc::Model::ListCfg::Rule::SUBMENU) {
 			if (currentDefaultRulePath.substr(0, currentRulePath.length() + 1) == currentRulePath + ">") {
 				result = true;
 			}
@@ -1237,7 +1237,7 @@ namespace Gc { namespace Controller { class MainController :
 		return result;
 	}
 
-	private: void updateCurrentDefaultOs(std::shared_ptr<Model_Rule> rule, std::string const& oldRulePath, std::string oldDefaultRulePath) {
+	private: void updateCurrentDefaultOs(std::shared_ptr<Gc::Model::ListCfg::Rule> rule, std::string const& oldRulePath, std::string oldDefaultRulePath) {
 		oldDefaultRulePath.replace(0, oldRulePath.length(), this->grublistCfg->getRulePath(rule));
 		this->settings->setValue("GRUB_DEFAULT", oldDefaultRulePath);
 	}

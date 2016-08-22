@@ -16,31 +16,18 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef PSCRIPTNAME_TRANSLATOR_INCLUDED
-#define PSCRIPTNAME_TRANSLATOR_INCLUDED
+#ifndef SRC_MODEL_LISTCFG_PROXYLISTITEM_HPP_
+#define SRC_MODEL_LISTCFG_PROXYLISTITEM_HPP_
 
 #include <string>
-#include <sstream>
 
-class Model_PscriptnameTranslator {
-public:
-	static std::string decode(std::string const& input) {
-		std::string result = input;
-		int last_nonnum_pos = input.find_last_not_of("0123456789");
-		if (last_nonnum_pos != -1 && result[last_nonnum_pos] == '~' && last_nonnum_pos != input.length()-1)
-			result = result.substr(0, last_nonnum_pos);
-		return result;
-	}
+namespace Gc { namespace Model { namespace ListCfg { class ProxylistItem
+{
+	public: std::string labelPathValue;
+	public: std::string labelPathLabel;
+	public: std::string numericPathValue;
+	public: std::string numericPathLabel;
+};}}}
 
-	static std::string encode(std::string const& input, int x) {
-		std::ostringstream out;
-		out << input;
-		int last_nonnum_pos = input.find_last_not_of("0123456789");
-		if (x != 0 || ((last_nonnum_pos != -1 && input[last_nonnum_pos] == '~') && last_nonnum_pos != input.length()-1))
-			out << "~" << x;
-		return out.str();
-	}
 
-};
-
-#endif
+#endif /* SRC_MODEL_LISTCFG_PROXYLISTITEM_HPP_ */

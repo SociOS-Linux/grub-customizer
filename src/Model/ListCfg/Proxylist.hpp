@@ -21,24 +21,22 @@
 #include <list>
 #include <sstream>
 #include <memory>
-#include "../Model/Logger/Trait/LoggerAware.hpp"
-#include "../Common/Exception.hpp"
-#include "../Common/ArrayStructure/Container.hpp"
+#include "../Logger/Trait/LoggerAware.hpp"
+#include "../../Common/Exception.hpp"
+#include "../../Common/ArrayStructure/Container.hpp"
 #include "Proxy.hpp"
+#include "ProxylistItem.hpp"
 
-struct Model_Proxylist_Item {
-	std::string labelPathValue;
-	std::string labelPathLabel;
-	std::string numericPathValue;
-	std::string numericPathLabel;
-};
-class Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public Gc::Model::Logger::Trait::LoggerAware
+
+namespace Gc { namespace Model { namespace ListCfg { class Proxylist :
+	public std::list<std::shared_ptr<Gc::Model::ListCfg::Proxy>>,
+	public Gc::Model::Logger::Trait::LoggerAware
 {
-	public: std::list<std::shared_ptr<Model_Proxy>> trash; //removed proxies
+	public: std::list<std::shared_ptr<Gc::Model::ListCfg::Proxy>> trash; //removed proxies
 
-	public: std::list<std::shared_ptr<Model_Proxy>> getProxiesByScript(std::shared_ptr<Model_Script> script)
+	public: std::list<std::shared_ptr<Gc::Model::ListCfg::Proxy>> getProxiesByScript(std::shared_ptr<Gc::Model::ListCfg::Script> script)
 	{
-		std::list<std::shared_ptr<Model_Proxy>> result;
+		std::list<std::shared_ptr<Gc::Model::ListCfg::Proxy>> result;
 		for (auto proxy : *this) {
 			if (proxy->dataSource == script)
 				result.push_back(proxy);
@@ -46,9 +44,9 @@ class Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public G
 		return result;
 	}
 
-	public: std::list<std::shared_ptr<Model_Proxy>> getProxiesByScript(std::shared_ptr<Model_Script> script) const
+	public: std::list<std::shared_ptr<Gc::Model::ListCfg::Proxy>> getProxiesByScript(std::shared_ptr<Gc::Model::ListCfg::Script> script) const
 	{
-		std::list<std::shared_ptr<Model_Proxy>> result;
+		std::list<std::shared_ptr<Gc::Model::ListCfg::Proxy>> result;
 		for (auto proxy : *this){
 			if (proxy->dataSource == script)
 				result.push_back(proxy);
@@ -56,9 +54,9 @@ class Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public G
 		return result;
 	}
 
-	public: std::list<std::shared_ptr<Model_Rule>> getForeignRules()
+	public: std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>> getForeignRules()
 	{
-		std::list<std::shared_ptr<Model_Rule>> result;
+		std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>> result;
 	
 		for (auto proxy : *this) {
 			auto subResult = proxy->getForeignRules();
@@ -72,8 +70,8 @@ class Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public G
 	public: void sync_all(
 		bool deleteInvalidRules = true,
 		bool expand = true,
-		std::shared_ptr<Model_Script> relatedScript = nullptr,
-		std::map<std::string, std::shared_ptr<Model_Script>> scriptMap = std::map<std::string, std::shared_ptr<Model_Script>>()
+		std::shared_ptr<Gc::Model::ListCfg::Script> relatedScript = nullptr,
+		std::map<std::string, std::shared_ptr<Gc::Model::ListCfg::Script>> scriptMap = std::map<std::string, std::shared_ptr<Gc::Model::ListCfg::Script>>()
 	) {
 		for (auto proxy : *this) {
 			if (relatedScript == nullptr || proxy->dataSource == relatedScript)
@@ -88,7 +86,7 @@ class Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public G
 		}
 	}
 
-	public: bool proxyRequired(std::shared_ptr<Model_Script> script) const
+	public: bool proxyRequired(std::shared_ptr<Gc::Model::ListCfg::Script> script) const
 	{
 		auto plist = this->getProxiesByScript(script);
 		if (plist.size() == 1){
@@ -107,7 +105,7 @@ class Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public G
 		}
 	}
 
-	public: static bool compare_proxies(std::shared_ptr<Model_Proxy> const& a, std::shared_ptr<Model_Proxy> const& b)
+	public: static bool compare_proxies(std::shared_ptr<Gc::Model::ListCfg::Proxy> const& a, std::shared_ptr<Gc::Model::ListCfg::Proxy> const& b)
 	{
 		if (a->index != b->index) {
 			return a->index < b->index;
@@ -122,10 +120,10 @@ class Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public G
 
 	public: void sort()
 	{
-		std::list<std::shared_ptr<Model_Proxy>>::sort(Model_Proxylist::compare_proxies);
+		std::list<std::shared_ptr<Gc::Model::ListCfg::Proxy>>::sort(Gc::Model::ListCfg::Proxylist::compare_proxies);
 	}
 
-	public: void deleteProxy(std::shared_ptr<Model_Proxy> proxyPointer) {
+	public: void deleteProxy(std::shared_ptr<Gc::Model::ListCfg::Proxy> proxyPointer) {
 		for (auto proxyIter = this->begin(); proxyIter != this->end(); proxyIter++) {
 			if (*proxyIter == proxyPointer){
 				//if the file must be deleted when saving, move it to trash
@@ -147,13 +145,13 @@ class Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public G
 		}
 	}
 
-	public: std::list<Model_Proxylist_Item> generateEntryTitleList() const
+	public: std::list<Gc::Model::ListCfg::ProxylistItem> generateEntryTitleList() const
 	{
-		std::list<Model_Proxylist_Item> result;
+		std::list<Gc::Model::ListCfg::ProxylistItem> result;
 		int offset = 0;
 		for (auto proxy : *this) {
 			if (proxy->isExecutable()){
-				std::list<Model_Proxylist_Item> subList = Model_Proxylist::generateEntryTitleList(proxy->rules, "", "", "", &offset);
+				std::list<Gc::Model::ListCfg::ProxylistItem> subList = Gc::Model::ListCfg::Proxylist::generateEntryTitleList(proxy->rules, "", "", "", &offset);
 				result.splice(result.end(), subList);
 			}
 		}
@@ -166,7 +164,7 @@ class Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public G
 		for (auto proxy : *this) {
 			if (proxy->isExecutable()){
 				for (auto rule : proxy->rules) {
-					if (rule->isVisible && rule->type == Model_Rule::NORMAL) {
+					if (rule->isVisible && rule->type == Gc::Model::ListCfg::Rule::NORMAL) {
 						result.push_back(rule->outputName);
 					}
 				}
@@ -175,25 +173,25 @@ class Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public G
 		return result;
 	}
 
-	public: static std::list<Model_Proxylist_Item> generateEntryTitleList(
-		std::list<std::shared_ptr<Model_Rule>> const& parent,
+	public: static std::list<Gc::Model::ListCfg::ProxylistItem> generateEntryTitleList(
+		std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>> const& parent,
 		std::string const& labelPathPrefix,
 		std::string const& numericPathPrefix,
 		std::string const& numericPathLabelPrefix,
 		int* offset = nullptr
 	) {
-		std::list<Model_Proxylist_Item> result;
+		std::list<Gc::Model::ListCfg::ProxylistItem> result;
 		int i = (offset != nullptr ? *offset : 0);
 		for (auto rule : parent){
-			if (rule->isVisible && (rule->type == Model_Rule::NORMAL || rule->type == Model_Rule::SUBMENU)) {
+			if (rule->isVisible && (rule->type == Gc::Model::ListCfg::Rule::NORMAL || rule->type == Gc::Model::ListCfg::Rule::SUBMENU)) {
 				std::ostringstream currentNumPath;
 				currentNumPath << numericPathPrefix << i;
 				std::ostringstream currentLabelNumPath;
 				currentLabelNumPath << numericPathLabelPrefix << (i+1);
 
 				bool addedSomething = true;
-				if (rule->type == Model_Rule::SUBMENU) {
-					std::list<Model_Proxylist_Item> subList = Model_Proxylist::generateEntryTitleList(
+				if (rule->type == Gc::Model::ListCfg::Rule::SUBMENU) {
+					std::list<Gc::Model::ListCfg::ProxylistItem> subList = Gc::Model::ListCfg::Proxylist::generateEntryTitleList(
 						rule->subRules,
 						labelPathPrefix + rule->outputName + ">",
 						currentNumPath.str() + ">",
@@ -204,7 +202,7 @@ class Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public G
 					}
 					result.splice(result.end(), subList);
 				} else {
-					Model_Proxylist_Item newItem;
+					Gc::Model::ListCfg::ProxylistItem newItem;
 					newItem.labelPathLabel = labelPathPrefix + rule->outputName;
 					newItem.labelPathValue = labelPathPrefix + rule->outputName;
 					result.push_back(newItem);
@@ -220,10 +218,10 @@ class Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public G
 		return result;
 	}
 
-	public: std::shared_ptr<Model_Proxy> getProxyByRule(
-		std::shared_ptr<Model_Rule> rule,
-		std::list<std::shared_ptr<Model_Rule>> const& list,
-		std::shared_ptr<Model_Proxy> parentProxy
+	public: std::shared_ptr<Gc::Model::ListCfg::Proxy> getProxyByRule(
+		std::shared_ptr<Gc::Model::ListCfg::Rule> rule,
+		std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>> const& list,
+		std::shared_ptr<Gc::Model::ListCfg::Proxy> parentProxy
 	) {
 		for (auto loop_rule : list) {
 			if (loop_rule == rule)
@@ -239,7 +237,7 @@ class Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public G
 		throw ItemNotFoundException("proxy by rule not found", __FILE__, __LINE__);
 	}
 
-	public: std::shared_ptr<Model_Proxy> getProxyByRule(std::shared_ptr<Model_Rule> rule) {
+	public: std::shared_ptr<Gc::Model::ListCfg::Proxy> getProxyByRule(std::shared_ptr<Gc::Model::ListCfg::Rule> rule) {
 		for (auto proxy : *this) {
 			try {
 				return this->getProxyByRule(rule, proxy->rules, proxy);
@@ -250,10 +248,10 @@ class Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public G
 		throw ItemNotFoundException("proxy by rule not found", __FILE__, __LINE__);
 	}
 
-	public: std::list<std::shared_ptr<Model_Rule>>::iterator moveRuleToNewProxy(
-		std::shared_ptr<Model_Rule> rule,
+	public: std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>>::iterator moveRuleToNewProxy(
+		std::shared_ptr<Gc::Model::ListCfg::Rule> rule,
 		int direction,
-		std::shared_ptr<Model_Script> dataSource = nullptr
+		std::shared_ptr<Gc::Model::ListCfg::Script> dataSource = nullptr
 	) {
 		auto currentProxy = this->getProxyByRule(rule);
 		auto proxyIter = this->begin();
@@ -271,11 +269,11 @@ class Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public G
 		if (dataSource == nullptr) {
 			dataSource = currentProxy->dataSource;
 		}
-		auto newProxy = *this->insert(proxyIter, std::make_shared<Model_Proxy>(dataSource, false));
+		auto newProxy = *this->insert(proxyIter, std::make_shared<Gc::Model::ListCfg::Proxy>(dataSource, false));
 		newProxy->removeEquivalentRules(rule);
 		auto movedRule = newProxy->rules.insert(
 			direction == -1 ? newProxy->rules.end() : newProxy->rules.begin(),
-			std::make_shared<Model_Rule>(*rule)
+			std::make_shared<Gc::Model::ListCfg::Rule>(*rule)
 		);
 		rule->setVisibility(false);
 	
@@ -285,14 +283,14 @@ class Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public G
 		return movedRule;
 	}
 
-	public: std::list<std::shared_ptr<Model_Rule>>::iterator getNextVisibleRule(std::shared_ptr<Model_Rule> base, int direction) {
+	public: std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>>::iterator getNextVisibleRule(std::shared_ptr<Gc::Model::ListCfg::Rule> base, int direction) {
 		auto proxy = this->getProxyByRule(base);
 		auto iter = proxy->getListIterator(base, proxy->getRuleList(proxy->getParentRule(base, nullptr)));
 		return this->getNextVisibleRule(iter, direction);
 	}
 
-	public: std::list<std::shared_ptr<Model_Rule>>::iterator getNextVisibleRule(
-		std::list<std::shared_ptr<Model_Rule>>::iterator base,
+	public: std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>>::iterator getNextVisibleRule(
+		std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>>::iterator base,
 		int direction
 	) {
 		auto proxyIter = this->getIter(this->getProxyByRule(*base));
@@ -333,7 +331,7 @@ class Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public G
 		throw NoMoveTargetException("next visible rule not found", __FILE__, __LINE__);
 	}
 
-	std::list<std::shared_ptr<Model_Proxy>>::iterator getIter(std::shared_ptr<Model_Proxy> proxy) {
+	std::list<std::shared_ptr<Gc::Model::ListCfg::Proxy>>::iterator getIter(std::shared_ptr<Gc::Model::ListCfg::Proxy> proxy) {
 		auto iter = this->begin();
 		while (iter != this->end()) {
 			if (*iter == proxy) {
@@ -344,13 +342,13 @@ class Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public G
 		return iter;
 	}
 
-	void splitProxy(std::shared_ptr<Model_Proxy> proxyToSplit, std::shared_ptr<Model_Rule> firstRuleOfPart2, int direction) {
+	void splitProxy(std::shared_ptr<Gc::Model::ListCfg::Proxy> proxyToSplit, std::shared_ptr<Gc::Model::ListCfg::Rule> firstRuleOfPart2, int direction) {
 		auto iter = this->getIter(proxyToSplit);
 		auto sourceProxy = *iter;
 		if (direction == 1) {
 			iter++;
 		}
-		auto newProxy = *this->insert(iter, std::make_shared<Model_Proxy>(sourceProxy->dataSource, false));
+		auto newProxy = *this->insert(iter, std::make_shared<Gc::Model::ListCfg::Proxy>(sourceProxy->dataSource, false));
 	
 		bool isSecondPart = false;
 		if (direction == 1) {
@@ -378,10 +376,10 @@ class Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public G
 		}
 	}
 
-	std::shared_ptr<Model_Rule> getVisibleRuleForEntry(std::shared_ptr<Model_Entry> entry) {
+	std::shared_ptr<Gc::Model::ListCfg::Rule> getVisibleRuleForEntry(std::shared_ptr<Gc::Model::ListCfg::Entry> entry) {
 		for (auto proxy : *this) {
 			if (proxy->isExecutable()) {
-				std::shared_ptr<Model_Rule> result = proxy->getVisibleRuleForEntry(entry);
+				std::shared_ptr<Gc::Model::ListCfg::Rule> result = proxy->getVisibleRuleForEntry(entry);
 				if (result) {
 					return result;
 				}
@@ -405,7 +403,7 @@ class Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public G
 		return false;
 	}
 
-	bool hasProxy(std::shared_ptr<Model_Proxy> proxy) {
+	bool hasProxy(std::shared_ptr<Gc::Model::ListCfg::Proxy> proxy) {
 		for (auto proxy_loop : *this) {
 			if (proxy_loop == proxy) {
 				return true;
@@ -431,6 +429,6 @@ class Model_Proxylist : public std::list<std::shared_ptr<Model_Proxy>>, public G
 		return result;
 	}
 
-};
+};}}}
 
 #endif

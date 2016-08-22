@@ -21,21 +21,24 @@
 #include <cstdio>
 #include <string>
 
-struct Model_ProxyScriptData {
-	std::string scriptCmd, proxyCmd, ruleString;
-	bool is_valid;
-	Model_ProxyScriptData(FILE* fpProxyScript) : is_valid(false)
+namespace Gc { namespace Model { namespace ListCfg { class ProxyScriptData
+{
+	public: std::string scriptCmd, proxyCmd, ruleString;
+	public: bool is_valid;
+
+	public: ProxyScriptData(FILE* fpProxyScript) : is_valid(false)
 	{
 		load(fpProxyScript);
 	}
 
-	bool load(FILE* fpProxyScript) {
+	public: bool load(FILE* fpProxyScript)
+	{
 		//THIS ALGORITHM IS ONLY USEFUL FOR GENERATED PROXIES
 		this->scriptCmd = "";
 		this->proxyCmd = "";
 		this->ruleString = "";
 		
-		if (Model_ProxyScriptData::is_proxyscript(fpProxyScript)){
+		if (Gc::Model::ListCfg::ProxyScriptData::isProxyscript(fpProxyScript)){
 			int c;
 			bool is_begin_of_row = true, is_comment = false, readingScriptRow = false;
 			int parseStep = -2;
@@ -118,7 +121,8 @@ struct Model_ProxyScriptData {
 		}
 	}
 
-	static bool is_proxyscript(FILE* proxy_fp){
+	static bool isProxyscript(FILE* proxy_fp)
+	{
 		int c;
 		//skip first line
 		while ((c = fgetc(proxy_fp)) != EOF){
@@ -150,19 +154,21 @@ struct Model_ProxyScriptData {
 		return !match_error;
 	}
 
-	static bool is_proxyscript(std::string const& filePath) {
+	public: static bool isProxyscript(std::string const& filePath)
+	{
 		bool result = false;
 		FILE* f = fopen(filePath.c_str(), "r");
 		if (f){
-			result = Model_ProxyScriptData::is_proxyscript(f);
+			result = Gc::Model::ListCfg::ProxyScriptData::isProxyscript(f);
 			fclose(f);
 		}
 		return result;
 	}
 
-	operator bool() {
+	public: operator bool()
+	{
 		return is_valid;
 	}
-};
+};}}}
 
 #endif

@@ -21,7 +21,7 @@
 
 #include "../View/Trait/ViewAware.hpp"
 #include "../Model/Env.hpp"
-#include "../Model/ListCfg.hpp"
+#include "../Model/ListCfg/ListCfg.hpp"
 #include "../Model/MountTable.hpp"
 #include "../Model/SettingsManagerData.hpp"
 #include "../Model/Installer.hpp"
@@ -42,7 +42,7 @@
 namespace Gc { namespace Bootstrap { class Factory
 {
 	public: std::shared_ptr<Model_Env> env;
-	public: std::shared_ptr<Model_ListCfg> listcfg;
+	public: std::shared_ptr<Gc::Model::ListCfg::ListCfg> listcfg;
 	public: std::shared_ptr<Model_SettingsManagerData> settings;
 	public: std::shared_ptr<Model_Installer> installer;
 	public: std::shared_ptr<Model_MountTable> mountTable;
@@ -69,7 +69,7 @@ namespace Gc { namespace Bootstrap { class Factory
 		this->threadHelper         = this->createThreadHelper();
 
 		this->env                  = this->create<Model_Env>();
-		this->listcfg              = this->create<Model_ListCfg>();
+		this->listcfg              = this->create<Gc::Model::ListCfg::ListCfg>();
 		this->settings             = this->create<Model_SettingsManagerData>();
 		this->installer            = this->create<Model_Installer>();
 		this->mountTable           = this->create<Model_MountTable>();
@@ -112,7 +112,7 @@ namespace Gc { namespace Bootstrap { class Factory
 			if (objc) {assert(this->env); objc->setEnv(this->env);}
 		}
 		{
-			std::shared_ptr<Model_ListCfg_Connection> objc = std::dynamic_pointer_cast<Model_ListCfg_Connection>(obj);
+			std::shared_ptr<Gc::Model::ListCfg::ListCfgConnection> objc = std::dynamic_pointer_cast<Gc::Model::ListCfg::ListCfgConnection>(obj);
 			if (objc) {assert(this->listcfg); objc->setListCfg(this->listcfg);}
 		}
 		{

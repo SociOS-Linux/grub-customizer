@@ -30,14 +30,14 @@
 #include "../View/EntryEditor.hpp"
 #include "../View/Trait/ViewAware.hpp"
 
-#include "../Model/ListCfg.hpp"
+#include "../Model/ListCfg/ListCfg.hpp"
 #include "../Model/Logger/Trait/LoggerAware.hpp"
 #include "Common/ControllerAbstract.hpp"
 #include "../Model/ContentParser/GenericFactory.hpp"
 #include "../Common/Exception.hpp"
 #include "../Model/DeviceDataList.hpp"
 #include "../Model/Installer.hpp"
-#include "../Model/ListCfg.hpp"
+#include "../Model/ListCfg/ListCfg.hpp"
 #include "Helper/RuleMoverHelper.hpp"
 #include "Helper/Thread.hpp"
 
@@ -45,7 +45,7 @@
 namespace Gc { namespace Controller { class EntryEditController :
 	public Gc::Controller::Common::ControllerAbstract,
 	public View_Trait_ViewAware<View_EntryEditor>,
-	public Model_ListCfg_Connection,
+	public Gc::Model::ListCfg::ListCfgConnection,
 	public Gc::Model::ContentParser::GenericFactoryConnection,
 	public Model_DeviceDataListInterface_Connection,
 	public Model_Env_Connection,
@@ -89,7 +89,7 @@ namespace Gc { namespace Controller { class EntryEditController :
 			this->view->setRulePtr(rule);
 			this->view->setName(this->grublistCfg->findRule(rule)->outputName);
 			this->view->setSourcecode(this->grublistCfg->findRule(rule)->dataSource->content);
-			if (this->grublistCfg->findRule(rule)->dataSource->type == Model_Entry::PLAINTEXT) {
+			if (this->grublistCfg->findRule(rule)->dataSource->type == Gc::Model::ListCfg::Entry::PLAINTEXT) {
 				this->view->selectType("[TEXT]");
 				this->view->setNameFieldVisibility(false);
 			} else {
@@ -216,14 +216,14 @@ namespace Gc { namespace Controller { class EntryEditController :
 	{
 		this->logActionBegin("apply");
 		try {
-			std::shared_ptr<Model_Rule> rule = nullptr;
+			std::shared_ptr<Gc::Model::ListCfg::Rule> rule = nullptr;
 			if (this->view->getRulePtr() != nullptr) {
 				rule = this->grublistCfg->findRule(this->view->getRulePtr());
 			}
 			bool isAdded = false;
 
-			Model_Entry::EntryType type = this->view->getSelectedType() == "[TEXT]" ? Model_Entry::PLAINTEXT : Model_Entry::MENUENTRY;
-			Model_Rule::RuleType ruleType = type == Model_Entry::PLAINTEXT ? Model_Rule::PLAINTEXT : Model_Rule::NORMAL;
+			Gc::Model::ListCfg::Entry::EntryType type = this->view->getSelectedType() == "[TEXT]" ? Gc::Model::ListCfg::Entry::PLAINTEXT : Gc::Model::ListCfg::Entry::MENUENTRY;
+			Gc::Model::ListCfg::Rule::RuleType ruleType = type == Gc::Model::ListCfg::Entry::PLAINTEXT ? Gc::Model::ListCfg::Rule::PLAINTEXT : Gc::Model::ListCfg::Rule::NORMAL;
 
 			if (rule == nullptr) { // insert
 				auto script = this->grublistCfg->repository.getCustomScript();
@@ -231,19 +231,19 @@ namespace Gc { namespace Controller { class EntryEditController :
 					script = this->createCustomScript();
 				}
 				assert(script != nullptr);
-				script->entries().push_back(std::make_shared<Model_Entry>("new", "", "", type));
+				script->entries().push_back(std::make_shared<Gc::Model::ListCfg::Entry>("new", "", "", type));
 	
-				auto newRule = std::make_shared<Model_Rule>(script->entries().back(), true, script);
+				auto newRule = std::make_shared<Gc::Model::ListCfg::Rule>(script->entries().back(), true, script);
 	
 				auto proxies = this->grublistCfg->proxies.getProxiesByScript(script);
 				if (proxies.size() == 0) {
-					this->grublistCfg->proxies.push_back(std::make_shared<Model_Proxy>(script, false));
+					this->grublistCfg->proxies.push_back(std::make_shared<Gc::Model::ListCfg::Proxy>(script, false));
 					proxies = this->grublistCfg->proxies.getProxiesByScript(script);
 				}
 				assert(proxies.size() != 0);
 	
 				for (auto proxy : proxies) {
-					proxy->rules.push_back(std::make_shared<Model_Rule>(*newRule));
+					proxy->rules.push_back(std::make_shared<Gc::Model::ListCfg::Rule>(*newRule));
 					newRule->isVisible = false; // if there are more rules of this type, add them invisible
 				}
 				rule = proxies.front()->rules.back();
@@ -258,7 +258,7 @@ namespace Gc { namespace Controller { class EntryEditController :
 						script = this->createCustomScript();
 					}
 					assert(script != nullptr);
-					script->entries().push_back(std::make_shared<Model_Entry>(*rule->dataSource));
+					script->entries().push_back(std::make_shared<Gc::Model::ListCfg::Entry>(*rule->dataSource));
 	
 					auto ruleCopy = rule->clone();
 					rule->setVisibility(false);
@@ -266,7 +266,7 @@ namespace Gc { namespace Controller { class EntryEditController :
 					auto proxy = this->grublistCfg->proxies.getProxyByRule(rule);
 					auto& ruleList = proxy->getRuleList(proxy->getParentRule(rule));
 	
-					auto dummySubmenu = std::make_shared<Model_Rule>(Model_Rule::SUBMENU, std::list<std::string>(), "DUMMY", true);
+					auto dummySubmenu = std::make_shared<Gc::Model::ListCfg::Rule>(Gc::Model::ListCfg::Rule::SUBMENU, std::list<std::string>(), "DUMMY", true);
 					dummySubmenu->subRules.push_back(ruleCopy);
 					ruleList.insert(proxy->getListIterator(rule, ruleList), dummySubmenu);
 	
@@ -277,7 +277,7 @@ namespace Gc { namespace Controller { class EntryEditController :
 					auto proxies = this->grublistCfg->proxies.getProxiesByScript(script);
 					for (auto proxy : proxies) {
 						if (!proxy->getRuleByEntry(rule->dataSource, proxy->rules, rule->type)) {
-							proxy->rules.push_back(std::make_shared<Model_Rule>(rule->dataSource, false, script));
+							proxy->rules.push_back(std::make_shared<Gc::Model::ListCfg::Rule>(rule->dataSource, false, script));
 						}
 					}
 				}
@@ -358,8 +358,8 @@ namespace Gc { namespace Controller { class EntryEditController :
 		}
 	}
 
-	private: std::shared_ptr<Model_Script> createCustomScript() {
-		this->grublistCfg->repository.push_back(std::make_shared<Model_Script>("custom", ""));
+	private: std::shared_ptr<Gc::Model::ListCfg::Script> createCustomScript() {
+		this->grublistCfg->repository.push_back(std::make_shared<Gc::Model::ListCfg::Script>("custom", ""));
 		auto script = this->grublistCfg->repository.back();
 		script->isCustomScript = true;
 		return script;

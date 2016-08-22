@@ -23,29 +23,33 @@
 #include <cstdlib>
 #include <sys/stat.h>
 #include <unistd.h>
-#include "../Model/EntryPathFollower.hpp"
-#include "../Model/Logger/Trait/LoggerAware.hpp"
-#include "../Common/Functions.hpp"
-#include "../config.hpp"
-#include "../Common/Exception.hpp"
-#include "../Common/ArrayStructure/Container.hpp"
-#include "../Common/Type.hpp"
+#include "../EntryPathFollower.hpp"
+#include "../Logger/Trait/LoggerAware.hpp"
+#include "../../Common/Functions.hpp"
+#include "../../config.hpp"
+#include "../../Common/Exception.hpp"
+#include "../../Common/ArrayStructure/Container.hpp"
+#include "../../Common/Type.hpp"
 #include "Entry.hpp"
 
-class Model_Script : public Model_EntryPathFollower, public Gc::Model::Logger::Trait::LoggerAware, public Gc::Common::Type::Script {
+namespace Gc { namespace Model { namespace ListCfg { class Script :
+	public Model_EntryPathFollower,
+	public Gc::Model::Logger::Trait::LoggerAware,
+	public Gc::Common::Type::Script
+{
 	public: std::string name, fileName;
 	public: bool isCustomScript;
-	public: std::shared_ptr<Model_Entry> root;
+	public: std::shared_ptr<Gc::Model::ListCfg::Entry> root;
 
-	public: Model_Script(std::string const& name, std::string const& fileName) :
+	public: Script(std::string const& name, std::string const& fileName) :
 		name(name),
 		fileName(fileName),
-		root(std::make_shared<Model_Entry>("DUMMY", "DUMMY", "DUMMY", Model_Entry::SCRIPT_ROOT)),
+		root(std::make_shared<Gc::Model::ListCfg::Entry>("DUMMY", "DUMMY", "DUMMY", Gc::Model::ListCfg::Entry::SCRIPT_ROOT)),
 		isCustomScript(false)
 	{
 		FILE* script = fopen(fileName.c_str(), "r");
 		if (script) {
-			Model_Entry_Row row1(script), row2(script);
+			Gc::Model::ListCfg::EntryRow row1(script), row2(script);
 			if (row1.text == CUSTOM_SCRIPT_SHEBANG && row2.text == CUSTOM_SCRIPT_PREFIX) {
 				isCustomScript = true;
 			}
@@ -53,7 +57,7 @@ class Model_Script : public Model_EntryPathFollower, public Gc::Model::Logger::T
 		}
 	}
 
-	public: bool isModified(std::shared_ptr<Model_Entry> parent = nullptr)
+	public: bool isModified(std::shared_ptr<Gc::Model::ListCfg::Entry> parent = nullptr)
 	{
 		if (!parent) {
 			parent = this->root;
@@ -64,7 +68,7 @@ class Model_Script : public Model_EntryPathFollower, public Gc::Model::Logger::T
 		for (auto entry : parent->subEntries) {
 			if (entry->isModified) {
 				return true;
-			} else if (entry->type == Model_Entry::SUBMENU) {
+			} else if (entry->type == Gc::Model::ListCfg::Entry::SUBMENU) {
 				bool modified = this->isModified(entry);
 				if (modified) {
 					return true;
@@ -74,12 +78,12 @@ class Model_Script : public Model_EntryPathFollower, public Gc::Model::Logger::T
 		return false;
 	}
 
-	public: std::list<std::shared_ptr<Model_Entry>>& entries()
+	public: std::list<std::shared_ptr<Gc::Model::ListCfg::Entry>>& entries()
 	{
 		return this->root->subEntries;
 	}
 
-	public: std::list<std::shared_ptr<Model_Entry>> const& entries() const
+	public: std::list<std::shared_ptr<Gc::Model::ListCfg::Entry>> const& entries() const
 			{
 		return this->root->subEntries;
 	}
@@ -89,8 +93,8 @@ class Model_Script : public Model_EntryPathFollower, public Gc::Model::Logger::T
 		return this->fileName.substr(cfg_dir.length(), std::string("/proxifiedScripts/").length()) == "/proxifiedScripts/";
 	}
 
-	public: std::shared_ptr<Model_Entry> getEntryByPath(std::list<std::string> const& path) {
-		std::shared_ptr<Model_Entry> result = nullptr;
+	public: std::shared_ptr<Gc::Model::ListCfg::Entry> getEntryByPath(std::list<std::string> const& path) {
+		std::shared_ptr<Gc::Model::ListCfg::Entry> result = nullptr;
 		if (path.size() == 0) { // top level oep
 			result = this->root;
 		} else {
@@ -103,11 +107,11 @@ class Model_Script : public Model_EntryPathFollower, public Gc::Model::Logger::T
 		return result;
 	}
 
-	public: std::shared_ptr<Model_Entry> getEntryByName(
+	public: std::shared_ptr<Gc::Model::ListCfg::Entry> getEntryByName(
 		std::string const& name,
-		std::list<std::shared_ptr<Model_Entry>>& parentList
+		std::list<std::shared_ptr<Gc::Model::ListCfg::Entry>>& parentList
 	) {
-		std::list<std::shared_ptr<Model_Entry>> results;
+		std::list<std::shared_ptr<Gc::Model::ListCfg::Entry>> results;
 		for (auto entry : parentList) {
 			if (entry->name == name)
 				results.push_back(entry);
@@ -118,14 +122,14 @@ class Model_Script : public Model_EntryPathFollower, public Gc::Model::Logger::T
 		return nullptr;
 	}
 
-	public: std::shared_ptr<Model_Entry> getEntryByHash(
+	public: std::shared_ptr<Gc::Model::ListCfg::Entry> getEntryByHash(
 		std::string const& hash,
-		std::list<std::shared_ptr<Model_Entry>>& parentList
+		std::list<std::shared_ptr<Gc::Model::ListCfg::Entry>>& parentList
 	) {
 		for (auto entry : parentList) {
-			if (entry->type == Model_Entry::MENUENTRY && entry->content != "" && Gc::Common::Functions::md5(entry->content) == hash) {
+			if (entry->type == Gc::Model::ListCfg::Entry::MENUENTRY && entry->content != "" && Gc::Common::Functions::md5(entry->content) == hash) {
 				return entry;
-			} else if (entry->type == Model_Entry::SUBMENU) {
+			} else if (entry->type == Gc::Model::ListCfg::Entry::SUBMENU) {
 				auto result = this->getEntryByHash(hash, entry->subEntries);
 				if (result != nullptr) {
 					return result;
@@ -135,10 +139,10 @@ class Model_Script : public Model_EntryPathFollower, public Gc::Model::Logger::T
 		return nullptr;
 	}
 
-	public: std::shared_ptr<Model_Entry> getPlaintextEntry()
+	public: std::shared_ptr<Gc::Model::ListCfg::Entry> getPlaintextEntry()
 	{
 		for (auto entry : this->entries()) {
-			if (entry->type == Model_Entry::PLAINTEXT) {
+			if (entry->type == Gc::Model::ListCfg::Entry::PLAINTEXT) {
 				return entry;
 			}
 		}
@@ -174,7 +178,7 @@ class Model_Script : public Model_EntryPathFollower, public Gc::Model::Logger::T
 		return false;
 	}
 
-	public: std::list<std::string> buildPath(std::shared_ptr<Model_Entry> entry, std::shared_ptr<Model_Entry> parent) const
+	public: std::list<std::string> buildPath(std::shared_ptr<Gc::Model::ListCfg::Entry> entry, std::shared_ptr<Gc::Model::ListCfg::Entry> parent) const
 	{
 		if (entry == this->root) { // return an empty list if it's the root entry!
 			return std::list<std::string>();
@@ -186,7 +190,7 @@ class Model_Script : public Model_EntryPathFollower, public Gc::Model::Logger::T
 				result.push_back(loop_entry->name);
 				return result;
 			}
-			if (loop_entry->type == Model_Entry::SUBMENU) {
+			if (loop_entry->type == Gc::Model::ListCfg::Entry::SUBMENU) {
 				try {
 					std::list<std::string> result = this->buildPath(entry, loop_entry);
 					result.push_front(loop_entry->name);
@@ -199,12 +203,12 @@ class Model_Script : public Model_EntryPathFollower, public Gc::Model::Logger::T
 		throw ItemNotFoundException("entry not found inside of specified parent", __FILE__, __LINE__);
 	}
 
-	public: std::list<std::string> buildPath(std::shared_ptr<Model_Entry> entry) const
+	public: std::list<std::string> buildPath(std::shared_ptr<Gc::Model::ListCfg::Entry> entry) const
 	{
 		return this->buildPath(entry, nullptr);
 	}
 
-	public: std::string buildPathString(std::shared_ptr<Model_Entry> entry, bool withOtherEntriesPlaceholder = false) const
+	public: std::string buildPathString(std::shared_ptr<Gc::Model::ListCfg::Entry> entry, bool withOtherEntriesPlaceholder = false) const
 	{
 		std::string result;
 		std::list<std::string> list = this->buildPath(entry, NULL);
@@ -222,8 +226,8 @@ class Model_Script : public Model_EntryPathFollower, public Gc::Model::Logger::T
 	}
 
 	public: bool hasEntry(
-		std::shared_ptr<Model_Entry const> entry,
-		std::shared_ptr<Model_Entry const> parent = nullptr
+		std::shared_ptr<Gc::Model::ListCfg::Entry const> entry,
+		std::shared_ptr<Gc::Model::ListCfg::Entry const> parent = nullptr
 	) const {
 		if (parent == nullptr && this->root == entry) { // check toplevel entry
 			return true;
@@ -235,7 +239,7 @@ class Model_Script : public Model_EntryPathFollower, public Gc::Model::Logger::T
 			if (loop_entry == entry) {
 				return true;
 			}
-			if (loop_entry->type == Model_Entry::SUBMENU) {
+			if (loop_entry->type == Gc::Model::ListCfg::Entry::SUBMENU) {
 				bool has = this->hasEntry(entry, loop_entry);
 				if (has) {
 					return true;
@@ -245,7 +249,7 @@ class Model_Script : public Model_EntryPathFollower, public Gc::Model::Logger::T
 		return false;
 	}
 
-	public: void deleteEntry(std::shared_ptr<Model_Entry> entry, std::shared_ptr<Model_Entry> parent = nullptr)
+	public: void deleteEntry(std::shared_ptr<Gc::Model::ListCfg::Entry> entry, std::shared_ptr<Gc::Model::ListCfg::Entry> parent = nullptr)
 	{
 		if (parent == nullptr) {
 			parent = this->root;
@@ -300,6 +304,6 @@ class Model_Script : public Model_EntryPathFollower, public Gc::Model::Logger::T
 		throw InvalidStringFormatException("unable to parse index from " + path, __FILE__, __LINE__);
 	}
 
-};
+};}}}
 
 #endif

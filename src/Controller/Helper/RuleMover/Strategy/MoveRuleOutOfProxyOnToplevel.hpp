@@ -19,8 +19,8 @@
 #ifndef INC_Gc_Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel
 #define INC_Gc_Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel
 
-#include "../../../../Model/Rule.hpp"
-#include "../../../../Model/ListCfg.hpp"
+#include "../../../../Model/ListCfg/Rule.hpp"
+#include "../../../../Model/ListCfg/ListCfg.hpp"
 #include "../AbstractStrategy.hpp"
 #include "../../../../Model/Logger/Trait/LoggerAware.hpp"
 #include <memory>
@@ -31,7 +31,7 @@
 namespace Gc { namespace Controller { namespace Helper { namespace RuleMover { namespace Strategy {
 class MoveRuleOutOfProxyOnToplevel :
 	public Gc::Controller::Helper::RuleMover::AbstractStrategy,
-	public Model_ListCfg_Connection,
+	public Gc::Model::ListCfg::ListCfgConnection,
 	public Gc::Model::Logger::Trait::LoggerAware
 {
 	private: enum Task
@@ -50,7 +50,7 @@ class MoveRuleOutOfProxyOnToplevel :
 		: Gc::Controller::Helper::RuleMover::AbstractStrategy("MoveRuleOutOfProxyOnToplevel")
 	{}
 
-	public: void move(std::shared_ptr<Model_Rule> rule, Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction)
+	public: void move(std::shared_ptr<Gc::Model::ListCfg::Rule> rule, Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction)
 	{
 		auto proxy = this->grublistCfg->proxies.getProxyByRule(rule);
 		auto proxiesWithVisibleEntries = this->findProxiesWithVisibleToplevelEntries(this->grublistCfg->proxies);
@@ -149,8 +149,8 @@ class MoveRuleOutOfProxyOnToplevel :
 	}
 
 	private: void moveProxy(
-		std::shared_ptr<Model_Proxy> proxyToMove,
-		std::shared_ptr<Model_Proxy> destination, // proxyToMove will be moved behind destination
+		std::shared_ptr<Gc::Model::ListCfg::Proxy> proxyToMove,
+		std::shared_ptr<Gc::Model::ListCfg::Proxy> destination, // proxyToMove will be moved behind destination
 		Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction
 	) {
 		auto insertPosition = std::find(this->grublistCfg->proxies.begin(), this->grublistCfg->proxies.end(), destination);
@@ -165,8 +165,8 @@ class MoveRuleOutOfProxyOnToplevel :
 	}
 
 	private: void moveNewProxiesToTheMiddle(
-		std::shared_ptr<Model_Proxy> oldOwnProxy,
-		std::shared_ptr<Model_Proxy> oldNextProxy,
+		std::shared_ptr<Gc::Model::ListCfg::Proxy> oldOwnProxy,
+		std::shared_ptr<Gc::Model::ListCfg::Proxy> oldNextProxy,
 		Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction
 	) {
 		auto visibleProxies = this->findProxiesWithVisibleToplevelEntries(this->grublistCfg->proxies);
