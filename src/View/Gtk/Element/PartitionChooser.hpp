@@ -20,7 +20,7 @@
 #define PARTITIONCHOOSER_DROPDOWN_H_
 #include <gtkmm.h>
 #include <string>
-#include "../../../Model/DeviceDataListInterface.hpp"
+#include "../../../Model/Device/DeviceDataListInterface.hpp"
 #include <libintl.h>
 
 class View_Gtk_Element_PartitionChooser :
@@ -28,13 +28,13 @@ class View_Gtk_Element_PartitionChooser :
 {
 	private: std::map<std::string, std::string> uuid_map;
 	private: Glib::ustring activePartition_uuid;
-	private: Model_DeviceDataListInterface const* deviceDataList;
+	private: Gc::Model::Device::DeviceDataListInterface const* deviceDataList;
 	private: bool prependCurrentPartition;
 	private: std::string currentPartitionName;
 
 	public:	View_Gtk_Element_PartitionChooser(
 		Glib::ustring const& activePartition_uuid,
-		Model_DeviceDataListInterface const& deviceDataList,
+		Gc::Model::Device::DeviceDataListInterface const& deviceDataList,
 		bool prependCurrentPartition = false,
 		std::string const& currentPartitionName = ""
 	) :
@@ -53,7 +53,7 @@ class View_Gtk_Element_PartitionChooser :
 			this->append(currentPartitionName + "\n(" + gettext("current") + ")");
 			this->set_active(0);
 		}
-		for (Model_DeviceDataListInterface::const_iterator iter = deviceDataList->begin(); iter != deviceDataList->end(); iter++) {
+		for (Gc::Model::Device::DeviceDataListInterface::const_iterator iter = deviceDataList->begin(); iter != deviceDataList->end(); iter++) {
 			if (iter->second.find("UUID") != iter->second.end()) {
 				Glib::ustring text = iter->first + "\n(" + (iter->second.find("LABEL") != iter->second.end() ? iter->second.at("LABEL") + ", " : "") + (iter->second.find("TYPE") != iter->second.end() ? iter->second.at("TYPE") : "") + ")";
 				uuid_map[text] = iter->second.at("UUID");

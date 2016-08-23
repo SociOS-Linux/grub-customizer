@@ -16,28 +16,13 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef DEVICEDATALIST_IFACE_H_
-#define DEVICEDATALIST_IFACE_H_
-#include <map>
-#include <string>
-#include <memory>
+#ifndef SRC_MODEL_DEVICE_DEVICEMAPDEVICEMAPPARTITIONINDEX_HPP_
+#define SRC_MODEL_DEVICE_DEVICEMAPDEVICEMAPPARTITIONINDEX_HPP_
 
-class Model_DeviceDataListInterface : public std::map<std::string, std::map<std::string, std::string> > {
-public:
-	virtual inline ~Model_DeviceDataListInterface() {};
-
-	virtual void loadData(FILE* blkidOutput)=0;
-	virtual void clear()=0;
-};
-
-class Model_DeviceDataListInterface_Connection
+namespace Gc { namespace Model { namespace Device { class DeviceMapPartitionIndex
 {
-	protected: std::shared_ptr<Model_DeviceDataListInterface> deviceDataList;
+	public: std::string hddNum;
+	public: std::string partNum;
+};}}}
 
-	public: void setDeviceDataList(std::shared_ptr<Model_DeviceDataListInterface> deviceDataList)
-	{
-		this->deviceDataList = deviceDataList;
-	}
-};
-
-#endif
+#endif /* SRC_MODEL_DEVICE_DEVICEMAPDEVICEMAPPARTITIONINDEX_HPP_ */

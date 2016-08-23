@@ -31,7 +31,7 @@
 #include "../Common/Exception.hpp"
 #include "../Common/Type.hpp"
 #include "../Common/FileSystem.hpp"
-#include "MountTable.hpp"
+#include "Device/MountTable.hpp"
 #include "SettingsStore.hpp"
 
 struct Model_Env : public Gc::Model::Logger::Trait::LoggerAware {
@@ -340,7 +340,7 @@ public:
 
 	std::string getRootDevice() {
 		FILE* mtabFile = fopen("/etc/mtab", "r");
-		Model_MountTable mtab;
+		Gc::Model::Device::MountTable mtab;
 		if (mtabFile){
 			mtab.loadData(mtabFile, "");
 			fclose(mtabFile);

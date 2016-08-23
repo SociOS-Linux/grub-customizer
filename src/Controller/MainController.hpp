@@ -33,7 +33,7 @@
 #include "../Model/Env.hpp"
 
 #include "../Model/ListCfg/ListCfg.hpp"
-#include "../Model/DeviceDataList.hpp"
+#include "../Model/Device/DeviceDataList.hpp"
 #include "../Model/ContentParser/GenericFactory.hpp"
 
 #include "Common/ControllerAbstract.hpp"
@@ -56,8 +56,8 @@ namespace Gc { namespace Controller { class MainController :
 	public Gc::Model::ListCfg::ListCfgConnection,
 	public Model_SettingsManagerData_Connection,
 	public Model_FbResolutionsGetter_Connection,
-	public Model_DeviceDataList_Connection,
-	public Model_MountTable_Connection,
+	public Gc::Model::Device::DeviceDataListConnection,
+	public Gc::Model::Device::MountTableConnection,
 	public Gc::Model::ContentParser::GenericFactoryConnection,
 	public Gc::View::Mapper::EntryNameConnection,
 	public Model_Env_Connection,

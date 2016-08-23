@@ -20,15 +20,15 @@
 #define CONTENT_PARSER_LINUXISO_H_
 
 #include "../../Common/Regex/Generic.hpp"
-#include "../../Model/DeviceMap.hpp"
+#include "../Device/DeviceMap.hpp"
 #include "AbstractParser.hpp"
 
 namespace Gc { namespace Model { namespace ContentParser { class LinuxIso :
 	public Gc::Model::ContentParser::AbstractParser,
 	public Gc::Common::Regex::GenericConnection,
-	public Model_DeviceMap_Connection,
-	public Model_MountTable_Connection,
-	public Model_DeviceDataList_Connection
+	public Gc::Model::Device::DeviceMapConnection,
+	public Gc::Model::Device::MountTableConnection,
+	public Gc::Model::Device::DeviceDataListConnection
 {
 	private: static const char* _regex;
 	private: std::string sourceCode;
@@ -40,7 +40,7 @@ namespace Gc { namespace Model { namespace ContentParser { class LinuxIso :
 			std::vector<std::string> result = this->regexEngine->match(Gc::Model::ContentParser::LinuxIso::_regex, this->sourceCode, '\\', '_');
 	
 			//check partition indices by uuid
-			Model_DeviceMap_PartitionIndex pIndex = this->deviceMap->getHarddriveIndexByPartitionUuid(result[3]);
+			Gc::Model::Device::DeviceMapPartitionIndex pIndex = this->deviceMap->getHarddriveIndexByPartitionUuid(result[3]);
 			if (pIndex.hddNum != result[1] || pIndex.partNum != result[2]){
 				throw ParserException("parsing failed - hdd num check", __FILE__, __LINE__);
 			}
@@ -82,7 +82,7 @@ namespace Gc { namespace Model { namespace ContentParser { class LinuxIso :
 
 		if (this->options.find("iso_path_full") != this->options.end()) {
 			std::string realIsoPath = this->_realpath(this->options.at("iso_path_full"));
-			Model_MountTable_Mountpoint& mountpoint = this->mountTable->getByFilePath(realIsoPath);
+			Gc::Model::Device::MountTableMountpoint& mountpoint = this->mountTable->getByFilePath(realIsoPath);
 			partitionUuid = (*this->deviceDataList)[mountpoint.device]["UUID"];
 			isoPath = realIsoPath.substr(mountpoint.mountpoint.size());
 		} else {
@@ -91,7 +91,7 @@ namespace Gc { namespace Model { namespace ContentParser { class LinuxIso :
 		}
 
 		try {
-			Model_DeviceMap_PartitionIndex pIndex = this->deviceMap->getHarddriveIndexByPartitionUuid(partitionUuid);
+			Gc::Model::Device::DeviceMapPartitionIndex pIndex = this->deviceMap->getHarddriveIndexByPartitionUuid(partitionUuid);
 			std::map<int, std::string> newValues;
 			newValues[1] = pIndex.hddNum;
 			newValues[2] = pIndex.partNum;

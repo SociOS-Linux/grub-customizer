@@ -31,10 +31,10 @@
 #include "../View/Error.hpp"
 #include "../View/Theme.hpp"
 
-#include "../Model/DeviceDataListInterface.hpp"
+#include "../Model/Device/DeviceDataListInterface.hpp"
 
 namespace Gc { namespace Bootstrap { class View :
-	public Model_DeviceDataListInterface_Connection
+	public Gc::Model::Device::DeviceDataListInterfaceConnection
 {
 	public: std::shared_ptr<View_About> about;
 	public: std::shared_ptr<View_EntryEditor> entryEditor;
@@ -46,7 +46,7 @@ namespace Gc { namespace Bootstrap { class View :
 	public: std::shared_ptr<View_Theme> theme;
 	public: std::shared_ptr<View_Trash> trash;
 
-	public: void setDeviceDataList(Model_DeviceDataListInterface& deviceDataList);
+	public: void setDeviceDataList(Gc::Model::Device::DeviceDataListInterface& deviceDataList);
 
 	public: View();
 	public: ~View();

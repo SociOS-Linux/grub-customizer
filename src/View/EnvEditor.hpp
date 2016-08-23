@@ -22,11 +22,11 @@
 #include <functional>
 
 #include "../Model/Logger/Trait/LoggerAware.hpp"
-#include "../Model/DeviceDataListInterface.hpp"
+#include "../Model/Device/DeviceDataListInterface.hpp"
 
 class View_EnvEditor :
 	public Gc::Model::Logger::Trait::LoggerAware,
-	public Model_DeviceDataListInterface_Connection
+	public Gc::Model::Device::DeviceDataListInterfaceConnection
 {
 public:
 	virtual inline ~View_EnvEditor() {};

@@ -20,15 +20,15 @@
 #define CONTENT_PARSER_MEMTEST_H_
 
 #include "../../Common/Regex/Generic.hpp"
-#include "../../Model/DeviceMap.hpp"
+#include "../Device/DeviceMap.hpp"
 #include "AbstractParser.hpp"
 
 namespace Gc { namespace Model { namespace ContentParser { class Memtest :
 	public Gc::Model::ContentParser::AbstractParser,
 	public Gc::Common::Regex::GenericConnection,
-	public Model_DeviceMap_Connection,
-	public Model_MountTable_Connection,
-	public Model_DeviceDataList_Connection
+	public Gc::Model::Device::DeviceMapConnection,
+	public Gc::Model::Device::MountTableConnection,
+	public Gc::Model::Device::DeviceDataListConnection
 {
 	private: static const char* _regex;
 	private: std::string sourceCode;
@@ -41,7 +41,7 @@ namespace Gc { namespace Model { namespace ContentParser { class Memtest :
 	
 
 			//check partition indices by uuid
-			Model_DeviceMap_PartitionIndex pIndex = this->deviceMap->getHarddriveIndexByPartitionUuid(result[3]);
+			Gc::Model::Device::DeviceMapPartitionIndex pIndex = this->deviceMap->getHarddriveIndexByPartitionUuid(result[3]);
 			if (pIndex.hddNum != result[1] || pIndex.partNum != result[2]){
 				throw ParserException("parsing failed - hdd num check", __FILE__, __LINE__);
 			}
@@ -74,7 +74,7 @@ namespace Gc { namespace Model { namespace ContentParser { class Memtest :
 
 		if (this->options.find("memtest_image_full") != this->options.end()) {
 			std::string realMemtestPath = this->_realpath(this->options.at("memtest_image_full"));
-			Model_MountTable_Mountpoint& mountpoint = this->mountTable->getByFilePath(realMemtestPath);
+			Gc::Model::Device::MountTableMountpoint& mountpoint = this->mountTable->getByFilePath(realMemtestPath);
 			partitionUuid = (*this->deviceDataList)[mountpoint.device]["UUID"];
 			filePath = realMemtestPath.substr(mountpoint.mountpoint.size());
 		} else {
@@ -83,7 +83,7 @@ namespace Gc { namespace Model { namespace ContentParser { class Memtest :
 		}
 
 		try {
-			Model_DeviceMap_PartitionIndex pIndex = this->deviceMap->getHarddriveIndexByPartitionUuid(partitionUuid);
+			Gc::Model::Device::DeviceMapPartitionIndex pIndex = this->deviceMap->getHarddriveIndexByPartitionUuid(partitionUuid);
 			std::map<int, std::string> newValues;
 			newValues[1] = pIndex.hddNum;
 			newValues[2] = pIndex.partNum;

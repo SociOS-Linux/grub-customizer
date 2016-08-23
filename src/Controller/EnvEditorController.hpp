@@ -23,11 +23,11 @@
 #include <locale.h>
 #include <sstream>
 #include "../config.hpp"
-#include "../Model/DeviceMap.hpp"
+#include "../Model/Device/DeviceMap.hpp"
 
 #include "../Model/Env.hpp"
 
-#include "../Model/MountTable.hpp"
+#include "../Model/Device/MountTable.hpp"
 
 #include "../View/EnvEditor.hpp"
 #include "../View/Trait/ViewAware.hpp"
@@ -40,8 +40,8 @@ namespace Gc { namespace Controller { class EnvEditorController :
 	public View_Trait_ViewAware<View_EnvEditor>,
 	public Model_Env_Connection,
 	public Gc::Bootstrap::ApplicationHelper::ObjectConnection,
-	public Model_MountTable_Connection,
-	public Model_DeviceMap_Connection
+	public Gc::Model::Device::MountTableConnection,
+	public Gc::Model::Device::DeviceMapConnection
 {
 	public: void showAction(bool resetPartitionChooser = false) {
 		this->logActionBegin("show");

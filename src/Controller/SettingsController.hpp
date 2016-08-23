@@ -27,7 +27,7 @@
 
 #include "../Model/Env.hpp"
 
-#include "../Model/MountTable.hpp"
+#include "../Model/Device/MountTable.hpp"
 
 #include "../Model/Installer.hpp"
 
@@ -35,7 +35,7 @@
 #include "../View/Settings.hpp"
 #include "../View/Trait/ViewAware.hpp"
 #include "../Model/FbResolutionsGetter.hpp"
-#include "../Model/DeviceDataList.hpp"
+#include "../Model/Device/DeviceDataList.hpp"
 #include "../Model/ContentParser/GenericFactory.hpp"
 #include "../View/Mapper/EntryName.hpp"
 

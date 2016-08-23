@@ -23,101 +23,65 @@
 #include <string>
 #include <cstdlib>
 
-#include "../Common/Exception.hpp"
-#include "../Model/Logger/Trait/LoggerAware.hpp"
-#include "../Common/Functions.hpp"
+#include "../../Common/Exception.hpp"
+#include "../Logger/Trait/LoggerAware.hpp"
+#include "../../Common/Functions.hpp"
+#include "MountTableMountpoint.hpp"
 
 
-struct Model_MountTable_Mountpoint {
-	std::string device, mountpoint, fileSystem, options, dump, pass;
-	bool isMounted;
-	bool isValid(std::string const& prefix = "", bool isRoot = false) const {
-		return device != "" && (mountpoint != prefix || isRoot) && mountpoint != prefix+"none" && fileSystem != "" && options != "" && dump != "" && pass != "";
-	}
-
-	operator bool() const {
-		return this->isValid();
-	}
-
-	Model_MountTable_Mountpoint(std::string const& mountpoint = "", bool isMounted = false)
-		: isMounted(isMounted), mountpoint(mountpoint)
-	{}
-	
-	Model_MountTable_Mountpoint(std::string const& device, std::string const& mountpoint, std::string const& options, bool isMounted = false)
-		: device(device), mountpoint(mountpoint), isMounted(isMounted), options(options)
-	{
-	}
-
-	void mount() {
-		if (!isMounted){
-			int res = system(("mount '"+device+"' '"+mountpoint+"'"+(options != "" ? " -o '"+options+"'" : "")).c_str());
-			if (res != 0)
-				throw MountException("mount failed", __FILE__, __LINE__);
-	
-			this->isMounted = true;
-		}
-	}
-
-	void umount() {
-		if (isMounted){
-			int res = system(("umount '"+mountpoint+"'").c_str());
-			if (res != 0)
-				throw UMountException("umount failed", __FILE__, __LINE__);
-	
-			this->isMounted = false;
-		}
-	}
-
-	bool isLiveCdFs() {
-		return this->fileSystem == "aufs" | this->fileSystem == "overlayfs";
-	}
-
-};
-
-class Model_MountTable : public std::list<Model_MountTable_Mountpoint>, public Gc::Model::Logger::Trait::LoggerAware {
+namespace Gc { namespace Model { namespace Device { class MountTable :
+	public std::list<Gc::Model::Device::MountTableMountpoint>,
+	public Gc::Model::Logger::Trait::LoggerAware
+{
 	private: bool loaded;
 
-	public: Model_MountTable(FILE* source, std::string const& prefix, bool default_isMounted_flag)
+	public: MountTable(FILE* source, std::string const& prefix, bool default_isMounted_flag)
 		: loaded(false)
 	{
 		this->loadData(source, prefix, default_isMounted_flag);
 	}
 
-	public: Model_MountTable(std::string const& rootDirectory) : loaded(false)
+	public: MountTable(std::string const& rootDirectory) : loaded(false)
 	{
 		this->loadData(rootDirectory);
 	}
 
-	public: Model_MountTable() : loaded(false) {}
+	public: MountTable() :
+		loaded(false)
+	{}
 
-	public: void sync(Model_MountTable const& mtab) {
-		for (Model_MountTable::const_iterator iter = mtab.begin(); iter != mtab.end(); iter++){
+	public: void sync(Gc::Model::Device::MountTable const& mtab)
+	{
+		for (Gc::Model::Device::MountTable::const_iterator iter = mtab.begin(); iter != mtab.end(); iter++){
 			this->add(*iter);
 		}
 	}
 
-	public: bool isLoaded() const {
+	public: bool isLoaded() const
+	{
 		return loaded;
 	}
 
-	public: operator bool() const {
+	public: operator bool() const
+	{
 		return isLoaded();
 	}
 
-	public: void loadData(FILE* source, std::string const& prefix, bool default_isMounted_flag = false) {
+	public: void loadData(FILE* source, std::string const& prefix, bool default_isMounted_flag = false)
+	{
 		int c;
 		int rowEntryPos = 0;
 		bool isComment = false;
 		bool isBeginOfRow = true;
 		char previousChar = 0;
-		Model_MountTable_Mountpoint newMp(prefix, default_isMounted_flag);
+		Gc::Model::Device::MountTableMountpoint newMp(prefix, default_isMounted_flag);
 		while ((c = fgetc(source)) != EOF){
 			if (isBeginOfRow && c == '#') {
 				isComment = true;
 			} else if (c == '\n'){
 				this->add(prefix, newMp);
 
-				newMp = Model_MountTable_Mountpoint(prefix, default_isMounted_flag);
+				newMp = Gc::Model::Device::MountTableMountpoint(prefix, default_isMounted_flag);
 				rowEntryPos = 0;
 				isBeginOfRow = true;
 				isComment = false;
@@ -145,7 +109,7 @@ class Model_MountTable : public std::list<Model_MountTable_Mountpoint>, public G
 		loaded = true;
 	}
 
-	private: void add(std::string const& prefix, Model_MountTable_Mountpoint& newMp)
+	private: void add(std::string const& prefix, Gc::Model::Device::MountTableMountpoint& newMp)
 	{
 		// decode
 		newMp.device     = Gc::Common::Functions::str_replace("\\040", " ", newMp.device);
@@ -167,14 +131,15 @@ class Model_MountTable : public std::list<Model_MountTable_Mountpoint>, public G
 		}
 	}
 
-	public: void loadData(std::string const& rootDirectory) {
+	public: void loadData(std::string const& rootDirectory)
+	{
 		FILE* fstabFile = fopen((rootDirectory+"/etc/fstab").c_str(), "r");
 		if (fstabFile != NULL){
 			this->loadData(fstabFile, rootDirectory);
-			Model_MountTable mtab;
+			Gc::Model::Device::MountTable mtab;
 			FILE* mtabfile = fopen("/etc/mtab", "r"); //use global mtab - the local one is unmanaged
 			if (mtabfile){
-				mtab = Model_MountTable(mtabfile, "", true);
+				mtab = Gc::Model::Device::MountTable(mtabfile, "", true);
 				fclose(mtabfile);
 			}
 			this->sync(mtab);
@@ -182,8 +147,9 @@ class Model_MountTable : public std::list<Model_MountTable_Mountpoint>, public G
 		}
 	}
 
-	public: void clear(std::string const& prefix) {
-		Model_MountTable::iterator iter = this->begin();
+	public: void clear(std::string const& prefix)
+	{
+		Gc::Model::Device::MountTable::iterator iter = this->begin();
 		while (iter != this->end()){
 			if (iter->mountpoint.substr(0, prefix.length()) == prefix){
 				this->erase(iter);
@@ -195,30 +161,34 @@ class Model_MountTable : public std::list<Model_MountTable_Mountpoint>, public G
 		loaded = false;
 	}
 
-	public: Model_MountTable_Mountpoint getEntryByMountpoint(std::string const& mountPoint) const {
-		for (std::list<Model_MountTable_Mountpoint>::const_iterator iter = this->begin(); iter != this->end(); iter++){
+	public: Gc::Model::Device::MountTableMountpoint getEntryByMountpoint(std::string const& mountPoint) const
+	{
+		for (std::list<Gc::Model::Device::MountTableMountpoint>::const_iterator iter = this->begin(); iter != this->end(); iter++){
 			if (iter->mountpoint == mountPoint)
 				return *iter;
 		}
-		return Model_MountTable_Mountpoint();
+		return Gc::Model::Device::MountTableMountpoint();
 	}
 
-	public: Model_MountTable_Mountpoint& getEntryRefByMountpoint(std::string const& mountPoint) {
-		for (std::list<Model_MountTable_Mountpoint>::iterator iter = this->begin(); iter != this->end(); iter++){
+	public: Gc::Model::Device::MountTableMountpoint& getEntryRefByMountpoint(std::string const& mountPoint)
+	{
+		for (std::list<Gc::Model::Device::MountTableMountpoint>::iterator iter = this->begin(); iter != this->end(); iter++){
 			if (iter->mountpoint == mountPoint)
 				return *iter;
 		}
 		throw MountpointNotFoundException("mountpoint not found", __FILE__, __LINE__);
 	}
 
-	public: Model_MountTable_Mountpoint& add(Model_MountTable_Mountpoint const& mpToAdd) {
+	public: Gc::Model::Device::MountTableMountpoint& add(Gc::Model::Device::MountTableMountpoint const& mpToAdd)
+	{
 		this->remove(mpToAdd); //remove existing mountpoints with the same directory
 		this->push_back(mpToAdd);
 		return this->back();
 	}
 
-	public: void remove(Model_MountTable_Mountpoint const& mountpoint) {
-		for (std::list<Model_MountTable_Mountpoint>::iterator iter = this->begin(); iter != this->end(); iter++){
+	public: void remove(Gc::Model::Device::MountTableMountpoint const& mountpoint)
+	{
+		for (std::list<Gc::Model::Device::MountTableMountpoint>::iterator iter = this->begin(); iter != this->end(); iter++){
 			if (iter->mountpoint == mountpoint.mountpoint){
 				this->erase(iter);
 				break;
@@ -226,8 +196,9 @@ class Model_MountTable : public std::list<Model_MountTable_Mountpoint>, public G
 		}
 	}
 
-	public: void umountAll(std::string const& prefix) {
-		for (Model_MountTable::reverse_iterator iter = this->rbegin(); iter != this->rend(); iter++){
+	public: void umountAll(std::string const& prefix)
+	{
+		for (Gc::Model::Device::MountTable::reverse_iterator iter = this->rbegin(); iter != this->rend(); iter++){
 			if (iter->mountpoint.substr(0, prefix.length()) == prefix && iter->mountpoint != prefix && iter->isMounted){
 				iter->umount();
 			}
@@ -236,17 +207,18 @@ class Model_MountTable : public std::list<Model_MountTable_Mountpoint>, public G
 		this->getEntryRefByMountpoint(prefix).umount();
 	}
 
-	public: void mountRootFs(std::string const& device, std::string const& mountpoint) {
-		this->add(Model_MountTable_Mountpoint(device, mountpoint, "")).mount();
+	public: void mountRootFs(std::string const& device, std::string const& mountpoint)
+	{
+		this->add(Gc::Model::Device::MountTableMountpoint(device, mountpoint, "")).mount();
 		this->loadData(mountpoint);
 		FILE* fstab = fopen((mountpoint + "/etc/fstab").c_str(), "r");
 		if (fstab){
 			fclose(fstab); //opening of fstab is just a test
 	
 			try {
-				this->add(Model_MountTable_Mountpoint("/proc", mountpoint + "/proc", "bind")).mount();
-				this->add(Model_MountTable_Mountpoint("/sys", mountpoint + "/sys", "bind")).mount();
-				this->add(Model_MountTable_Mountpoint("/dev", mountpoint + "/dev", "bind")).mount();
+				this->add(Gc::Model::Device::MountTableMountpoint("/proc", mountpoint + "/proc", "bind")).mount();
+				this->add(Gc::Model::Device::MountTableMountpoint("/sys", mountpoint + "/sys", "bind")).mount();
+				this->add(Gc::Model::Device::MountTableMountpoint("/dev", mountpoint + "/dev", "bind")).mount();
 			}
 			//errors while mounting any of this partitions may not be a problem
 			catch (SystemException const& e){}
@@ -257,8 +229,9 @@ class Model_MountTable : public std::list<Model_MountTable_Mountpoint>, public G
 		this->loaded = true;
 	}
 
-	public: Model_MountTable_Mountpoint& findByDevice(std::string device) {
-		for (std::list<Model_MountTable_Mountpoint>::iterator iter = this->begin(); iter != this->end(); iter++){
+	public: Gc::Model::Device::MountTableMountpoint& findByDevice(std::string device)
+	{
+		for (std::list<Gc::Model::Device::MountTableMountpoint>::iterator iter = this->begin(); iter != this->end(); iter++){
 			if (iter->device == device) {
 				return *iter;
 			}
@@ -266,9 +239,10 @@ class Model_MountTable : public std::list<Model_MountTable_Mountpoint>, public G
 		throw ItemNotFoundException("no mountpoint found by device " + device);
 	}
 
-	public: Model_MountTable_Mountpoint& getByFilePath(std::string path) {
-		Model_MountTable_Mountpoint* result = NULL;
-		for (std::list<Model_MountTable_Mountpoint>::iterator iter = this->begin(); iter != this->end(); iter++) {
+	public: Gc::Model::Device::MountTableMountpoint& getByFilePath(std::string path)
+	{
+		Gc::Model::Device::MountTableMountpoint* result = NULL;
+		for (std::list<Gc::Model::Device::MountTableMountpoint>::iterator iter = this->begin(); iter != this->end(); iter++) {
 			// look for the longest matching mountpoint because "/" matches as well as "/mnt" if filename is "/mnt/foo.iso"
 			if (path.substr(0, iter->mountpoint.size()) == iter->mountpoint && (result == NULL || iter->mountpoint.size() > result->mountpoint.size())) {
 				result = &*iter;
@@ -282,25 +256,16 @@ class Model_MountTable : public std::list<Model_MountTable_Mountpoint>, public G
 		}
 	}
 
-	public: operator std::string() const {
+	public: operator std::string() const
+	{
 		std::string result;
-		for (Model_MountTable::const_iterator iter = this->begin(); iter != this->end(); iter++){
+		for (Gc::Model::Device::MountTable::const_iterator iter = this->begin(); iter != this->end(); iter++){
 			result += std::string("[") + (iter->isMounted ? "x" : " ")  + "] " + iter->device + " " + iter->mountpoint + "\n";
 		}
 		return result;
 	}
 
-};
-
-class Model_MountTable_Connection
-{
-	protected: std::shared_ptr<Model_MountTable> mountTable;
-
-	public: void setMountTable(std::shared_ptr<Model_MountTable> mountTable)
-	{
-		this->mountTable = mountTable;
-	}
-};
+};}}}
 
 #endif
 

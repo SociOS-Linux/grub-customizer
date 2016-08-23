@@ -35,7 +35,7 @@
 #include "Common/ControllerAbstract.hpp"
 #include "../Model/ContentParser/GenericFactory.hpp"
 #include "../Common/Exception.hpp"
-#include "../Model/DeviceDataList.hpp"
+#include "../Model/Device/DeviceDataList.hpp"
 #include "../Model/Installer.hpp"
 #include "../Model/ListCfg/ListCfg.hpp"
 #include "Helper/RuleMoverHelper.hpp"
@@ -47,7 +47,7 @@ namespace Gc { namespace Controller { class EntryEditController :
 	public View_Trait_ViewAware<View_EntryEditor>,
 	public Gc::Model::ListCfg::ListCfgConnection,
 	public Gc::Model::ContentParser::GenericFactoryConnection,
-	public Model_DeviceDataListInterface_Connection,
+	public Gc::Model::Device::DeviceDataListInterfaceConnection,
 	public Model_Env_Connection,
 	public Gc::Controller::Helper::ThreadConnection,
 	public Gc::Bootstrap::ApplicationHelper::ObjectConnection,

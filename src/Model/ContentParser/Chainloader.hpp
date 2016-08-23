@@ -20,13 +20,13 @@
 #define CONTENT_PARSER_CHAINLOADER_H_
 
 #include "../../Common/Regex/Generic.hpp"
-#include "../../Model/DeviceMap.hpp"
+#include "../Device/DeviceMap.hpp"
 #include "AbstractParser.hpp"
 
 namespace Gc { namespace Model { namespace ContentParser { class Chainloader :
 	public Gc::Model::ContentParser::AbstractParser,
 	public Gc::Common::Regex::GenericConnection,
-	public Model_DeviceMap_Connection
+	public Gc::Model::Device::DeviceMapConnection
 {
 	private: static const char* _regex;
 	private: std::string sourceCode;
@@ -38,7 +38,7 @@ namespace Gc { namespace Model { namespace ContentParser { class Chainloader :
 			std::vector<std::string> result = this->regexEngine->match(Gc::Model::ContentParser::Chainloader::_regex, this->sourceCode, '\\', '_');
 	
 			//check partition indices by uuid
-			Model_DeviceMap_PartitionIndex pIndex = this->deviceMap->getHarddriveIndexByPartitionUuid(result[3]);
+			Gc::Model::Device::DeviceMapPartitionIndex pIndex = this->deviceMap->getHarddriveIndexByPartitionUuid(result[3]);
 			if (pIndex.hddNum != result[1] || pIndex.partNum != result[2]){
 				throw ParserException("parsing failed - hdd num check", __FILE__, __LINE__);
 			}
@@ -52,7 +52,7 @@ namespace Gc { namespace Model { namespace ContentParser { class Chainloader :
 	public: std::string buildSource() const
 	{
 		try {
-			Model_DeviceMap_PartitionIndex pIndex = deviceMap->getHarddriveIndexByPartitionUuid(this->options.at("partition_uuid"));
+			Gc::Model::Device::DeviceMapPartitionIndex pIndex = deviceMap->getHarddriveIndexByPartitionUuid(this->options.at("partition_uuid"));
 			std::map<int, std::string> newValues;
 			newValues[1] = pIndex.hddNum;
 			newValues[2] = pIndex.partNum;

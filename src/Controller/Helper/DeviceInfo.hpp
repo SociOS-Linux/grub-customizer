@@ -20,14 +20,14 @@
 #define DEVICEINFO_H_
 
 #include "../../Model/ContentParser/GenericFactory.hpp"
-#include "../../Model/DeviceDataListInterface.hpp"
+#include "../../Model/Device/DeviceDataListInterface.hpp"
 
 namespace Gc { namespace Controller { namespace Helper { class DeviceInfo
 {
 	public: static std::map<std::string, std::string> fetch(
 		std::string const& menuEntryData,
 		Gc::Model::ContentParser::GenericFactory& contentParserFactory,
-		Model_DeviceDataListInterface const& deviceDataList
+		Gc::Model::Device::DeviceDataListInterface const& deviceDataList
 	)
 	{
 		std::map<std::string, std::string> options;

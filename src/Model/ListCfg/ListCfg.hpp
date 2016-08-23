@@ -44,7 +44,7 @@
 #include "../../Common/Mutex/Generic.hpp"
 #include "../../Common/Mutex/GenericConnection.hpp"
 #include "../Env.hpp"
-#include "../MountTable.hpp"
+#include "../Device/MountTable.hpp"
 #include "Proxylist.hpp"
 #include "ProxyScriptData.hpp"
 #include "Repository.hpp"

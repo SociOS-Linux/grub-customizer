@@ -25,49 +25,49 @@
 
 #include "../Common/Type.hpp"
 #include "../Model/Logger/Trait/LoggerAware.hpp"
-#include "../Model/DeviceDataListInterface.hpp"
+#include "../Model/Device/DeviceDataListInterface.hpp"
+#include "../Model/Device/DeviceDataListInterfaceConnection.hpp"
 
 class View_EntryEditor :
 	public Gc::Model::Logger::Trait::LoggerAware,
-	public Model_DeviceDataListInterface_Connection
+	public Gc::Model::Device::DeviceDataListInterfaceConnection
 {
-public:
-	std::function<void ()> onApplyClick;
-	std::function<void ()> onSourceModification;
-	std::function<void ()> onOptionModification;
-	std::function<void (std::string const& newType)> onTypeSwitch;
-	std::function<void (std::string, std::string, std::list<std::string>)> onFileChooserSelection;
-	std::function<void ()> onNameChange;
+	public: std::function<void ()> onApplyClick;
+	public: std::function<void ()> onSourceModification;
+	public: std::function<void ()> onOptionModification;
+	public: std::function<void (std::string const& newType)> onTypeSwitch;
+	public: std::function<void (std::string, std::string, std::list<std::string>)> onFileChooserSelection;
+	public: std::function<void ()> onNameChange;
 
-	virtual inline ~View_EntryEditor() {};
+	public: virtual inline ~View_EntryEditor() {};
 
-	virtual void show() = 0;
-	virtual void setSourcecode(std::string const& source) = 0;
-	virtual void showSourceBuildError() = 0;
-	virtual void setApplyEnabled(bool value) = 0;
-	virtual std::string getSourcecode() = 0;
+	public: virtual void show() = 0;
+	public: virtual void setSourcecode(std::string const& source) = 0;
+	public: virtual void showSourceBuildError() = 0;
+	public: virtual void setApplyEnabled(bool value) = 0;
+	public: virtual std::string getSourcecode() = 0;
 
-	virtual void addOption(std::string const& name, std::string const& value) = 0;
-	virtual void setOptions(std::map<std::string, std::string> options) = 0;
-	virtual std::map<std::string, std::string> getOptions() const = 0;
-	virtual void removeOptions() = 0;
+	public: virtual void addOption(std::string const& name, std::string const& value) = 0;
+	public: virtual void setOptions(std::map<std::string, std::string> options) = 0;
+	public: virtual std::map<std::string, std::string> getOptions() const = 0;
+	public: virtual void removeOptions() = 0;
 
-	virtual void setRulePtr(Gc::Common::Type::Rule* rulePtr) = 0;
-	virtual Gc::Common::Type::Rule* getRulePtr() = 0;
+	public: virtual void setRulePtr(Gc::Common::Type::Rule* rulePtr) = 0;
+	public: virtual Gc::Common::Type::Rule* getRulePtr() = 0;
 
-	virtual void hide() = 0;
+	public: virtual void hide() = 0;
 
-	virtual void setAvailableEntryTypes(std::list<std::string> const& names) = 0;
-	virtual void selectType(std::string const& name) = 0;
-	virtual std::string getSelectedType() const = 0;
-	virtual void setName(std::string const& name) = 0;
-	virtual std::string getName() = 0;
-	virtual void setNameFieldVisibility(bool visible) = 0;
+	public: virtual void setAvailableEntryTypes(std::list<std::string> const& names) = 0;
+	public: virtual void selectType(std::string const& name) = 0;
+	public: virtual std::string getSelectedType() const = 0;
+	public: virtual void setName(std::string const& name) = 0;
+	public: virtual std::string getName() = 0;
+	public: virtual void setNameFieldVisibility(bool visible) = 0;
 
-	virtual void setErrors(std::list<std::string> const& errors) = 0;
+	public: virtual void setErrors(std::list<std::string> const& errors) = 0;
 
-	virtual void setNameIsValid(bool valid) = 0;
-	virtual void setTypeIsValid(bool valid) = 0;
+	public: virtual void setNameIsValid(bool valid) = 0;
+	public: virtual void setTypeIsValid(bool valid) = 0;
 };
 
 #endif /* ENTRYEDITDLG_H_ */

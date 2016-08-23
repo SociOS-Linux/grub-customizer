@@ -21,22 +21,20 @@
 #include <map>
 #include <unistd.h>
 
-#include "../Common/Regex/Generic.hpp"
-#include "../Common/Regex/GenericConnection.hpp"
-#include "Env.hpp"
-#include "SmartFileHandle.hpp"
+#include "../../Common/Regex/Generic.hpp"
+#include "../../Common/Regex/GenericConnection.hpp"
+#include "../Env.hpp"
+#include "../SmartFileHandle.hpp"
+#include "DeviceMapDeviceMapPartitionIndex.hpp"
 
-struct Model_DeviceMap_PartitionIndex {
-	std::string hddNum, partNum;
-};
-
-class Model_DeviceMap :
+namespace Gc { namespace Model { namespace Device { class DeviceMap :
 	public Model_Env_Connection,
 	public Gc::Common::Regex::GenericConnection
 {
-	mutable std::map<std::string, Model_DeviceMap_PartitionIndex> _cache;
-public:
-	Model_SmartFileHandle getFileHandle() const {
+	private: mutable std::map<std::string, Gc::Model::Device::DeviceMapPartitionIndex> _cache;
+
+	public: Model_SmartFileHandle getFileHandle() const
+	{
 		Model_SmartFileHandle result;
 		try {
 			result.open(env->devicemap_file, "r", Model_SmartFileHandle::TYPE_FILE);
@@ -77,12 +75,13 @@ public:
 		return result;
 	}
 
-	Model_DeviceMap_PartitionIndex getHarddriveIndexByPartitionUuid(std::string partitionUuid) const {
+	public: Gc::Model::Device::DeviceMapPartitionIndex getHarddriveIndexByPartitionUuid(std::string partitionUuid) const
+	{
 		if (this->_cache.find(partitionUuid) != this->_cache.end()) {
 			return this->_cache[partitionUuid];
 		}
 	
-		Model_DeviceMap_PartitionIndex result;
+		Gc::Model::Device::DeviceMapPartitionIndex result;
 		char deviceBuf[101];
 		int size = readlink((this->env->cfg_dir_prefix + "/dev/disk/by-uuid/" + partitionUuid).c_str(), deviceBuf, 100);
 		if (size == -1) { //if this didn't work, try to convert the uuid to uppercase
@@ -129,20 +128,11 @@ public:
 		return result;
 	}
 
-	void clearCache() {
+	public: void clearCache()
+	{
 		this->_cache.clear();
 	}
 
-};
-
-class Model_DeviceMap_Connection
-{
-	protected: std::shared_ptr<Model_DeviceMap> deviceMap;
-
-	public: void setDeviceMap(std::shared_ptr<Model_DeviceMap> deviceMap)
-	{
-		this->deviceMap = deviceMap;
-	}
-};
+};}}}
 
 #endif

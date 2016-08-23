@@ -21,18 +21,22 @@
 #include <map>
 #include <cstdio>
 #include <string>
-#include "../Model/DeviceDataListInterface.hpp"
-#include "../Model/Logger/Trait/LoggerAware.hpp"
+#include "DeviceDataListInterface.hpp"
+#include "../Logger/Trait/LoggerAware.hpp"
 
-class Model_DeviceDataList : public Model_DeviceDataListInterface, public Gc::Model::Logger::Trait::LoggerAware {
-public:
-	Model_DeviceDataList(FILE* blkidOutput){
+namespace Gc { namespace Model { namespace Device { class DeviceDataList :
+	public Gc::Model::Device::DeviceDataListInterface,
+	public Gc::Model::Logger::Trait::LoggerAware
+{
+	public: DeviceDataList(FILE* blkidOutput)
+	{
 		loadData(blkidOutput);
 	}
 
-	Model_DeviceDataList() {}
+	public: DeviceDataList() {}
 
-	void loadData(FILE* blkidOutput) {
+	public: void loadData(FILE* blkidOutput)
+	{
 		std::string deviceName, attributeName;
 		bool inAttributeValue = false;
 		bool deviceNameIsComplete = false, attributeNameIsComplete = false;
@@ -69,11 +73,13 @@ public:
 		}
 	}
 
-	void clear() {
+	public: void clear()
+	{
 		this->std::map<std::string, std::map<std::string, std::string> >::clear();
 	}
 
-	std::string getDeviceByUuid(std::string const& uuid) const {
+	public: std::string getDeviceByUuid(std::string const& uuid) const
+	{
 		for (std::map<std::string, std::map<std::string, std::string> >::const_iterator iter = this->begin(); iter != this->end(); iter++) {
 			if (iter->second.find("UUID") != iter->second.end() && iter->second.at("UUID") == uuid) {
 				return iter->first;
@@ -82,15 +88,7 @@ public:
 		throw ItemNotFoundException("no device found by uuid " + uuid, __FILE__, __LINE__);
 	}
 
-};
+};}}}
 
-class Model_DeviceDataList_Connection
-{
-	protected: std::shared_ptr<Model_DeviceDataList> deviceDataList;
 
-	public: void setDeviceDataList(std::shared_ptr<Model_DeviceDataList> deviceDataList)
-	{
-		this->deviceDataList = deviceDataList;
-	}
-};
 #endif

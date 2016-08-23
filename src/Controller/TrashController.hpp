@@ -28,7 +28,7 @@
 
 #include "../Model/Env.hpp"
 
-#include "../Model/MountTable.hpp"
+#include "../Model/Device/MountTable.hpp"
 
 #include "../View/Trash.hpp"
 
@@ -38,7 +38,7 @@
 
 #include "Common/ControllerAbstract.hpp"
 
-#include "../Model/DeviceDataListInterface.hpp"
+#include "../Model/Device/DeviceDataListInterface.hpp"
 #include "../Model/ContentParser/GenericFactory.hpp"
 #include "Helper/DeviceInfo.hpp"
 
@@ -47,7 +47,7 @@ namespace Gc { namespace Controller { class TrashController :
 	public View_Trait_ViewAware<View_Trash>,
 	public Gc::Model::ListCfg::ListCfgConnection,
 	public Gc::View::Mapper::EntryNameConnection,
-	public Model_DeviceDataListInterface_Connection,
+	public Gc::Model::Device::DeviceDataListInterfaceConnection,
 	public Gc::Model::ContentParser::GenericFactoryConnection,
 	public Model_Env_Connection,
 	public Gc::Bootstrap::ApplicationHelper::ObjectConnection
