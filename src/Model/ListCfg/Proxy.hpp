@@ -25,7 +25,7 @@
 #include "../../Common/Exception.hpp"
 #include "../../Common/ArrayStructure/Container.hpp"
 #include "../../Common/Type.hpp"
-#include "../EntryPathBuilderImpl.hpp"
+#include "EntryPathBuilderImpl.hpp"
 #include "ProxyScriptData.hpp"
 #include "Rule.hpp"
 #include "Script.hpp"
@@ -501,7 +501,7 @@ namespace Gc { namespace Model { namespace ListCfg { class Proxy :
 				fputs((" | "+cfg_dir_noprefix+"/bin/grubcfg_proxy \"").c_str(), proxyFile);
 				for (auto rule : this->rules) {
 					assert(this->dataSource != nullptr);
-					Model_EntryPathBuilderImpl entryPathBuilder(this->dataSource);
+					Gc::Model::ListCfg::EntryPathBuilderImpl entryPathBuilder(this->dataSource);
 					entryPathBuilder.setScriptTargetMap(scriptTargetMap);
 					entryPathBuilder.setEntrySourceMap(entrySourceMap);
 					entryPathBuilder.setPrefixLength(cfg_dir_prefix_length);

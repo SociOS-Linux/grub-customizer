@@ -23,7 +23,7 @@
 #include <cstdlib>
 #include <sys/stat.h>
 #include <unistd.h>
-#include "../EntryPathFollower.hpp"
+#include "EntryPathFollower.hpp"
 #include "../Logger/Trait/LoggerAware.hpp"
 #include "../../Common/Functions.hpp"
 #include "../../config.hpp"
@@ -33,7 +33,7 @@
 #include "Entry.hpp"
 
 namespace Gc { namespace Model { namespace ListCfg { class Script :
-	public Model_EntryPathFollower,
+	public Gc::Model::ListCfg::EntryPathFollower,
 	public Gc::Model::Logger::Trait::LoggerAware,
 	public Gc::Common::Type::Script
 {

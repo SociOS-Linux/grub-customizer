@@ -25,8 +25,8 @@
 #include "../../Common/ArrayStructure/Container.hpp"
 #include "../../Common/Type.hpp"
 #include "Entry.hpp"
-#include "../EntryPathBuilder.hpp"
-#include "../EntryPathFollower.hpp"
+#include "EntryPathBuilder.hpp"
+#include "EntryPathFollower.hpp"
 
 namespace Gc { namespace Model { namespace ListCfg { class Rule
 	: public Gc::Common::Type::Rule
@@ -56,7 +56,7 @@ namespace Gc { namespace Model { namespace ListCfg { class Rule
 	public: Rule(
 		std::shared_ptr<Gc::Model::ListCfg::Entry> source,
 		bool isVisible,
-		std::shared_ptr<Model_EntryPathFollower> pathFollower,
+		std::shared_ptr<Gc::Model::ListCfg::EntryPathFollower> pathFollower,
 		std::list<std::list<std::string>> const& pathesToIgnore = std::list<std::list<std::string>>(),
 		std::list<std::string> const& currentPath = std::list<std::string>()
 	) :
@@ -108,7 +108,7 @@ namespace Gc { namespace Model { namespace ListCfg { class Rule
 		: type(Gc::Model::ListCfg::Rule::NORMAL), isVisible(false), dataSource(nullptr)
 	{}
 
-	public: std::string toString(Model_EntryPathBilder const& pathBuilder) {
+	public: std::string toString(Gc::Model::ListCfg::EntryPathBilder const& pathBuilder) {
 		std::string result = isVisible ? "+" : "-";
 		if (type == Gc::Model::ListCfg::Rule::PLAINTEXT) {
 			result += "#text";

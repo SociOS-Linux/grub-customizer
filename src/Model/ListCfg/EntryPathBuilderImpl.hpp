@@ -19,18 +19,21 @@
 
 #ifndef ENTRYPATHBUILDERIMPL_H_
 #define ENTRYPATHBUILDERIMPL_H_
-#include "../Model/EntryPathBuilder.hpp"
+#include "EntryPathBuilder.hpp"
 #include <map>
-#include "ListCfg/Script.hpp"
+#include "Script.hpp"
 
-class Model_EntryPathBuilderImpl : public Model_EntryPathBilder
+namespace Gc { namespace Model { namespace ListCfg { class EntryPathBuilderImpl :
+	public Gc::Model::ListCfg::EntryPathBilder
 {
 	private: std::shared_ptr<Gc::Model::ListCfg::Script> mainScript;
 	private: std::map<std::shared_ptr<Gc::Model::ListCfg::Entry>, std::shared_ptr<Gc::Model::ListCfg::Script>> entrySourceMap;
 	private: std::map<std::shared_ptr<Gc::Model::ListCfg::Script>, std::string> scriptTargetMap;
 	private: int prefixLength;
 
-	public: Model_EntryPathBuilderImpl(std::shared_ptr<Gc::Model::ListCfg::Script> mainScript) : prefixLength(0), mainScript(NULL)
+	public: EntryPathBuilderImpl(std::shared_ptr<Gc::Model::ListCfg::Script> mainScript) :
+		prefixLength(0),
+		mainScript(nullptr)
 	{
 		this->setMainScript(mainScript);
 	}
@@ -73,6 +76,6 @@ class Model_EntryPathBuilderImpl : public Model_EntryPathBilder
 		return script ? this->scriptTargetMap.find(script)->second.substr(this->prefixLength) : "";
 	}
 
-};
+};}}}
 
 #endif

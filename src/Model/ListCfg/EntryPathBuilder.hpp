@@ -16,17 +16,20 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef ENTRY_PATH_FOLLOWER_INCLUDED
-#define ENTRY_PATH_FOLLOWER_INCLUDED
+#ifndef ENTRY_PATH_BUILDER_INCLUDED
+#define ENTRY_PATH_BUILDER_INCLUDED
 #include <string>
 #include <list>
-#include "ListCfg/Entry.hpp"
+#include <memory>
+#include "Entry.hpp"
 
-class Model_EntryPathFollower {
-public:
-	virtual inline ~Model_EntryPathFollower() {};
+namespace Gc { namespace Model { namespace ListCfg { class EntryPathBilder
+{
+	public: virtual inline ~EntryPathBilder() {};
 
-	virtual std::shared_ptr<Gc::Model::ListCfg::Entry> getEntryByPath(std::list<std::string> const& path)=0;
-};
+	public: virtual std::list<std::string> buildPath(std::shared_ptr<Gc::Model::ListCfg::Entry> entry) const =0;
+	public: virtual std::string buildPathString(std::shared_ptr<Gc::Model::ListCfg::Entry> entry, bool withOtherEntriesPlaceholder = false) const =0;
+	public: virtual std::string buildScriptPath(std::shared_ptr<Gc::Model::ListCfg::Entry> entry) const =0;
+};}}}
 
 #endif
