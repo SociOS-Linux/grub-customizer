@@ -64,7 +64,7 @@ int main(int argc, char** argv){
 		auto view                 = std::make_shared<Gc::Bootstrap::View>();
 		auto factory              = std::make_shared<Gc::Bootstrap::Factory>(application->applicationObject, logger);
 
-		auto settingsOnDisk       = factory->create<Model_SettingsManagerData>();
+		auto settingsOnDisk       = factory->create<Gc::Model::SettingsManagerData>();
 		auto savedListCfg         = factory->create<Gc::Model::ListCfg::ListCfg>();
 
 		factory->entryNameMapper->setView(view->main);

@@ -34,33 +34,39 @@
 #include "Device/MountTable.hpp"
 #include "SettingsStore.hpp"
 
-struct Model_Env : public Gc::Model::Logger::Trait::LoggerAware {
-public:
-	enum Mode {
-		GRUB_MODE,
-		BURG_MODE
+namespace Gc { namespace Model { class Env :
+	public Gc::Model::Logger::Trait::LoggerAware
+{
+	public: enum class Mode {
+		GRUB,
+		BURG
 	};
 
 	// application status flags:
-	bool quit_requested;
-	int activeThreadCount;
-	bool modificationsUnsaved;
-	std::string rootDeviceName;
+	public: bool quit_requested;
+	public: int activeThreadCount;
+	public: bool modificationsUnsaved;
+	public: std::string rootDeviceName;
+	public: std::string cfg_dir, cfg_dir_noprefix, mkconfig_cmd, mkfont_cmd, cfg_dir_prefix, update_cmd, install_cmd, output_config_file, output_config_dir, output_config_dir_noprefix, settings_file, devicemap_file, mkdevicemap_cmd, cmd_prefix;
+	public: bool burgMode;
+	public: bool useDirectBackgroundProps; // Whether background settings should be set directly or by creating a desktop-base script
 
-	Model_Env() : burgMode(false),
-		  useDirectBackgroundProps(false),
-		  modificationsUnsaved(false),
-		  quit_requested(false),
-		  activeThreadCount(0)
+	public: Env() :
+		burgMode(false),
+		useDirectBackgroundProps(false),
+		modificationsUnsaved(false),
+		quit_requested(false),
+		activeThreadCount(0)
 	{}
 
-	bool init(Model_Env::Mode mode, std::string const& dir_prefix) {
+	public: bool init(Gc::Model::Env::Mode mode, std::string const& dir_prefix)
+	{
 		useDirectBackgroundProps = false;
 		this->cmd_prefix = dir_prefix != "" ? "chroot '"+dir_prefix+"' " : "";
 		this->cfg_dir_prefix = dir_prefix;
 		std::string output_config_file_noprefix;
 		switch (mode){
-		case BURG_MODE: {
+		case Mode::BURG: {
 			this->burgMode = true;
 			FILE* burg_cfg = fopen((dir_prefix + "/etc/grub-customizer/burg.cfg").c_str(), "r");
 			if (burg_cfg) { // try to use the settings file ...
@@ -81,7 +87,7 @@ public:
 				this->devicemap_file = dir_prefix+"/boot/burg/device.map";
 			}
 			} break;
-		case GRUB_MODE: {
+		case Mode::GRUB: {
 			this->burgMode = false;
 			FILE* grub_cfg = fopen((dir_prefix + "/etc/grub-customizer/grub.cfg").c_str(), "r");
 			if (grub_cfg) { // try to use the settings file ...
@@ -118,8 +124,9 @@ public:
 		return is_valid;
 	}
 
-	void loadFromFile(FILE* cfg_file, std::string const& dir_prefix) {
-		Model_SettingsStore ds(cfg_file);
+	public: void loadFromFile(FILE* cfg_file, std::string const& dir_prefix)
+	{
+		Gc::Model::SettingsStore ds(cfg_file);
 		this->mkconfig_cmd = ds.getValue("MKCONFIG_CMD");
 		this->install_cmd = ds.getValue("INSTALL_CMD");
 		this->mkfont_cmd = ds.getValue("MKFONT_CMD");
@@ -133,7 +140,8 @@ public:
 		this->devicemap_file = dir_prefix + ds.getValue("DEVICEMAP_FILE");
 	}
 
-	void save() {
+	public: void save()
+	{
 		FILE* cfg_file = NULL;
 		DIR* dir = opendir((cfg_dir_prefix + "/etc/grub-customizer").c_str());
 		if (dir) {
@@ -152,7 +160,7 @@ public:
 		if (!cfg_file) {
 			throw FileSaveException("cannot save the config file (file creation)", __FILE__, __LINE__);
 		}
-		Model_SettingsStore ds;
+		Gc::Model::SettingsStore ds;
 		std::map<std::string, std::string> props = this->getProperties();
 		for (std::map<std::string, std::string>::iterator iter = props.begin(); iter != props.end(); iter++) {
 			ds.setValue(iter->first, iter->second);
@@ -161,7 +169,8 @@ public:
 		fclose(cfg_file);
 	}
 
-	void saveViewOptions(std::map<Gc::Common::Type::ViewOption, bool> const& options) {
+	public: void saveViewOptions(std::map<Gc::Common::Type::ViewOption, bool> const& options)
+	{
 		FILE* cfg_file = NULL;
 		DIR* dir = opendir((cfg_dir_prefix + "/etc/grub-customizer").c_str());
 		if (dir) {
@@ -176,7 +185,7 @@ public:
 		if (!cfg_file) {
 			throw FileSaveException("cannot save the view config file (file creation)", __FILE__, __LINE__);
 		}
-		Model_SettingsStore ds;
+		Gc::Model::SettingsStore ds;
 		for (std::map<Gc::Common::Type::ViewOption, bool>::const_iterator iter = options.begin(); iter != options.end(); iter++) {
 			std::string optionText = "";
 			switch (iter->first) {
@@ -192,12 +201,13 @@ public:
 		fclose(cfg_file);
 	}
 
-	std::map<Gc::Common::Type::ViewOption, bool> loadViewOptions() {
+	public: std::map<Gc::Common::Type::ViewOption, bool> loadViewOptions()
+	{
 		FILE* file = fopen((cfg_dir_prefix + "/etc/grub-customizer/viewOptions.cfg").c_str(), "r");
 		if (file == NULL) {
 			throw FileReadException("viewOptions not found");
 		}
-		Model_SettingsStore ds(file);
+		Gc::Model::SettingsStore ds(file);
 		fclose(file);
 		std::map<Gc::Common::Type::ViewOption, bool> result;
 		if (ds.getValue("SHOW_DETAILS") != "") {
@@ -223,7 +233,8 @@ public:
 		return result;
 	}
 
-	std::map<std::string, std::string> getProperties() {
+	public: std::map<std::string, std::string> getProperties()
+	{
 		std::map<std::string, std::string> result;
 		result["MKCONFIG_CMD"] = this->mkconfig_cmd.substr(this->cmd_prefix.size());
 		result["INSTALL_CMD"] = this->install_cmd.substr(this->cmd_prefix.size());
@@ -238,7 +249,8 @@ public:
 		return result;
 	}
 
-	void setProperties(std::map<std::string, std::string> const& props) {
+	public: void setProperties(std::map<std::string, std::string> const& props)
+	{
 		this->mkconfig_cmd = this->cmd_prefix + props.at("MKCONFIG_CMD");
 		this->install_cmd = this->cmd_prefix + props.at("INSTALL_CMD");
 		this->mkfont_cmd = this->cmd_prefix + props.at("MKFONT_CMD");
@@ -252,7 +264,8 @@ public:
 		this->devicemap_file = this->cfg_dir_prefix + props.at("DEVICEMAP_FILE");
 	}
 
-	std::list<std::string> getRequiredProperties() {
+	public: std::list<std::string> getRequiredProperties()
+	{
 		std::list<std::string> result;
 		result.push_back("MKCONFIG_CMD");
 		result.push_back("INSTALL_CMD");
@@ -260,7 +273,8 @@ public:
 		return result;
 	}
 
-	std::list<std::string> getValidProperties() {
+	public: std::list<std::string> getValidProperties()
+	{
 		std::list<std::string> result;
 		if (this->check_cmd(this->mkconfig_cmd.substr(this->cmd_prefix.size()), this->cmd_prefix)) {
 			result.push_back("MKCONFIG_CMD");
@@ -292,7 +306,8 @@ public:
 		return result;
 	}
 
-	bool check_cmd(std::string const& cmd, std::string const& cmd_prefix = "") const {
+	public: bool check_cmd(std::string const& cmd, std::string const& cmd_prefix = "") const
+	{
 		this->log("checking the " + this->trim_cmd(cmd) + " command… ", Gc::Model::Logger::GenericLogger::INFO);
 		FILE* proc = popen((cmd_prefix + " which " + this->trim_cmd(cmd) + " 2>&1").c_str(), "r");
 		std::string output;
@@ -311,7 +326,8 @@ public:
 		return result;
 	}
 
-	bool check_dir(std::string const& dir_str) const {
+	public: bool check_dir(std::string const& dir_str) const
+	{
 		DIR* dir = opendir(dir_str.c_str());
 		if (dir){
 			closedir(dir);
@@ -320,7 +336,8 @@ public:
 		return false;
 	}
 
-	bool check_file(std::string const& file_str) const {
+	public: bool check_file(std::string const& file_str) const
+	{
 		FILE* file = fopen(file_str.c_str(), "r");
 		if (file){
 			fclose(file);
@@ -329,7 +346,8 @@ public:
 		return false;
 	}
 
-	std::string trim_cmd(std::string const& cmd) const {
+	public: std::string trim_cmd(std::string const& cmd) const
+	{
 		int firstSpace = cmd.find_first_of(' ');
 		if (firstSpace != -1) {
 			return cmd.substr(0, firstSpace);
@@ -338,7 +356,8 @@ public:
 		}
 	}
 
-	std::string getRootDevice() {
+	public: std::string getRootDevice()
+	{
 		FILE* mtabFile = fopen("/etc/mtab", "r");
 		Gc::Model::Device::MountTable mtab;
 		if (mtabFile){
@@ -348,19 +367,18 @@ public:
 		return mtab.getEntryByMountpoint(cfg_dir_prefix == "" ? "/" : cfg_dir_prefix).device;
 	}
 
-	std::string cfg_dir, cfg_dir_noprefix, mkconfig_cmd, mkfont_cmd, cfg_dir_prefix, update_cmd, install_cmd, output_config_file, output_config_dir, output_config_dir_noprefix, settings_file, devicemap_file, mkdevicemap_cmd, cmd_prefix;
-	bool burgMode;
-	bool useDirectBackgroundProps; // Whether background settings should be set directly or by creating a desktop-base script
-	std::list<Model_Env::Mode> getAvailableModes() {
+	public: std::list<Gc::Model::Env::Mode> getAvailableModes()
+	{
 		std::list<Mode> result;
-		if (this->init(Model_Env::BURG_MODE, this->cfg_dir_prefix))
-			result.push_back(Model_Env::BURG_MODE);
-		if (this->init(Model_Env::GRUB_MODE, this->cfg_dir_prefix))
-			result.push_back(Model_Env::GRUB_MODE);
+		if (this->init(Gc::Model::Env::Mode::BURG, this->cfg_dir_prefix))
+			result.push_back(Gc::Model::Env::Mode::BURG);
+		if (this->init(Gc::Model::Env::Mode::GRUB, this->cfg_dir_prefix))
+			result.push_back(Gc::Model::Env::Mode::GRUB);
 		return result;
 	}
 
-	void createBackup() {
+	public: void createBackup()
+	{
 		std::string backupDir = this->cfg_dir + "/backup";
 		DIR* dirChk = opendir(backupDir.c_str());
 		if (dirChk) {
@@ -390,7 +408,8 @@ public:
 		}
 	}
 
-	operator Gc::Common::ArrayStructure::Container() {
+	public: operator Gc::Common::ArrayStructure::Container()
+	{
 		Gc::Common::ArrayStructure::Container result;
 		result["cfg_dir"] = this->cfg_dir;
 		result["cfg_dir_noprefix"] = this->cfg_dir_noprefix;
@@ -413,24 +432,6 @@ public:
 		return result;
 	}
 
-};
-
-class Model_Env_Connection
-{
-	protected: std::shared_ptr<Model_Env> env;
-
-	public: virtual ~Model_Env_Connection(){}
-
-	public: void setEnv(std::shared_ptr<Model_Env> env)
-	{
-		this->env = env;
-		this->initEnv();
-	}
-
-	public: virtual void initEnv()
-	{
-		// override to add custom functionality
-	}
-};
+};}}
 
 #endif

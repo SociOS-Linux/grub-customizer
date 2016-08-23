@@ -54,18 +54,18 @@ namespace Gc { namespace Controller { class MainController :
 	public Gc::Controller::Common::ControllerAbstract,
 	public View_Trait_ViewAware<View_Main>,
 	public Gc::Model::ListCfg::ListCfgConnection,
-	public Model_SettingsManagerData_Connection,
-	public Model_FbResolutionsGetter_Connection,
+	public Gc::Model::SettingsManagerDataConnection,
+	public Gc::Model::FbResolutionsGetterConnection,
 	public Gc::Model::Device::DeviceDataListConnection,
 	public Gc::Model::Device::MountTableConnection,
 	public Gc::Model::ContentParser::GenericFactoryConnection,
 	public Gc::View::Mapper::EntryNameConnection,
-	public Model_Env_Connection,
+	public Gc::Model::EnvConnection,
 	public Gc::Controller::Helper::ThreadConnection,
 	public Gc::Bootstrap::ApplicationHelper::ObjectConnection,
 	public Gc::Controller::Helper::RuleMoverConnection
 {
-	private: std::shared_ptr<Model_SettingsManagerData> settingsOnDisk; //buffer for the existing settings
+	private: std::shared_ptr<Gc::Model::SettingsManagerData> settingsOnDisk; //buffer for the existing settings
 	private: std::shared_ptr<Gc::Model::ListCfg::ListCfg> savedListCfg;
 	private: Gc::Model::ContentParser::GenericParser* currentContentParser;
 
@@ -73,7 +73,7 @@ namespace Gc { namespace Controller { class MainController :
 	private: bool is_loading;
 	private: CmdExecException thrownException; //to be used from the die() function
 
-	public: void setSettingsBuffer(std::shared_ptr<Model_SettingsManagerData> settings)
+	public: void setSettingsBuffer(std::shared_ptr<Gc::Model::SettingsManagerData> settings)
 	{
 		this->settingsOnDisk = settings;
 	}
@@ -83,7 +83,7 @@ namespace Gc { namespace Controller { class MainController :
 		this->savedListCfg = savedListCfg;
 	}
 
-	public: Model_FbResolutionsGetter& getFbResolutionsGetter() {
+	public: Gc::Model::FbResolutionsGetter& getFbResolutionsGetter() {
 		return *this->fbResolutionsGetter;
 	}
 
@@ -206,11 +206,11 @@ namespace Gc { namespace Controller { class MainController :
 		//aufs is the virtual root fileSystem used by live cds
 		if (mountTable->getEntryByMountpoint("").isLiveCdFs() && env->cfg_dir_prefix == ""){
 			this->log("is live CD", Gc::Model::Logger::GenericLogger::INFO);
-			this->env->init(Model_Env::GRUB_MODE, "");
+			this->env->init(Gc::Model::Env::Mode::GRUB, "");
 			this->showEnvEditorAction();
 		} else {
 			this->log("running on an installed system", Gc::Model::Logger::GenericLogger::INFO);
-			std::list<Model_Env::Mode> modes = this->env->getAvailableModes();
+			std::list<Gc::Model::Env::Mode> modes = this->env->getAvailableModes();
 			if (modes.size() == 2) {
 				this->view->showBurgSwitcher();
 			} else if (modes.size() == 1) {
@@ -221,14 +221,14 @@ namespace Gc { namespace Controller { class MainController :
 		}
 	}
 
-	public: void init(Model_Env::Mode mode, bool initEnv = true)
+	public: void init(Gc::Model::Env::Mode mode, bool initEnv = true)
 	{
 		this->log("initializing (w/ specified bootloader type)…", Gc::Model::Logger::GenericLogger::IMPORTANT_EVENT);
 		if (initEnv) {
 			this->env->init(mode, env->cfg_dir_prefix);
 		}
 		this->view->setLockState(1|4|8);
-		this->view->setIsBurgMode(mode == Model_Env::BURG_MODE);
+		this->view->setIsBurgMode(mode == Gc::Model::Env::Mode::BURG);
 		this->view->show();
 		this->view->hideBurgSwitcher();
 		this->view->hideScriptUpdateInfo();
@@ -258,7 +258,7 @@ namespace Gc { namespace Controller { class MainController :
 	{
 		this->logActionBegin("re-init");
 		try {
-			Model_Env::Mode mode = burgMode ? Model_Env::BURG_MODE : Model_Env::GRUB_MODE;
+			Gc::Model::Env::Mode mode = burgMode ? Gc::Model::Env::Mode::BURG : Gc::Model::Env::Mode::GRUB;
 			this->init(mode, false);
 		} catch (Exception const& e) {
 			this->applicationObject->onError.exec(e);
@@ -878,7 +878,7 @@ namespace Gc { namespace Controller { class MainController :
 	{
 		this->logActionBegin("init-mode");
 		try {
-			this->init(burgChosen ? Model_Env::BURG_MODE : Model_Env::GRUB_MODE);
+			this->init(burgChosen ? Gc::Model::Env::Mode::BURG : Gc::Model::Env::Mode::GRUB);
 		} catch (Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}

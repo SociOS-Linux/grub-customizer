@@ -49,7 +49,7 @@ namespace Gc { namespace Controller { class TrashController :
 	public Gc::View::Mapper::EntryNameConnection,
 	public Gc::Model::Device::DeviceDataListInterfaceConnection,
 	public Gc::Model::ContentParser::GenericFactoryConnection,
-	public Model_Env_Connection,
+	public Gc::Model::EnvConnection,
 	public Gc::Bootstrap::ApplicationHelper::ObjectConnection
 {
 	private: std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>> data;

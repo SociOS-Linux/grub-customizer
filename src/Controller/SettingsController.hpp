@@ -50,15 +50,15 @@ namespace Gc { namespace Controller { class SettingsController :
 	public Gc::Controller::Common::ControllerAbstract,
 	public View_Trait_ViewAware<View_Settings>,
 	public Gc::Model::ListCfg::ListCfgConnection,
-	public Model_SettingsManagerData_Connection,
-	public Model_FbResolutionsGetter_Connection,
-	public Model_Env_Connection,
+	public Gc::Model::SettingsManagerDataConnection,
+	public Gc::Model::FbResolutionsGetterConnection,
+	public Gc::Model::EnvConnection,
 	public Gc::Controller::Helper::ThreadConnection,
 	public Gc::Bootstrap::ApplicationHelper::ObjectConnection
 {
 	private: bool syncActive; // should only be controlled by syncSettings()
 
-	public:	Model_FbResolutionsGetter& getFbResolutionsGetter()
+	public:	Gc::Model::FbResolutionsGetter& getFbResolutionsGetter()
 	{
 		return *this->fbResolutionsGetter;
 	}
@@ -400,7 +400,7 @@ namespace Gc { namespace Controller { class SettingsController :
 		this->syncActive = true;
 		std::string sel = this->view->getSelectedCustomOption();
 		this->view->removeAllSettingRows();
-		for (std::list<Model_SettingsStore_Row>::iterator iter = this->settings->begin(); iter != this->settings->end(); this->settings->iter_to_next_setting(iter)){
+		for (std::list<Gc::Model::SettingsStoreRow>::iterator iter = this->settings->begin(); iter != this->settings->end(); this->settings->iter_to_next_setting(iter)){
 			this->view->addCustomOption(iter->isActive, iter->name, iter->value);
 		}
 		this->view->selectCustomOption(sel);

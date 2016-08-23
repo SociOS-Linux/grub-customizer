@@ -28,19 +28,19 @@
 #include "DeviceMapDeviceMapPartitionIndex.hpp"
 
 namespace Gc { namespace Model { namespace Device { class DeviceMap :
-	public Model_Env_Connection,
+	public Gc::Model::EnvConnection,
 	public Gc::Common::Regex::GenericConnection
 {
 	private: mutable std::map<std::string, Gc::Model::Device::DeviceMapPartitionIndex> _cache;
 
-	public: Model_SmartFileHandle getFileHandle() const
+	public: Gc::Model::SmartFileHandle getFileHandle() const
 	{
-		Model_SmartFileHandle result;
+		Gc::Model::SmartFileHandle result;
 		try {
-			result.open(env->devicemap_file, "r", Model_SmartFileHandle::TYPE_FILE);
+			result.open(env->devicemap_file, "r", Gc::Model::SmartFileHandle::Type::FILE);
 		} catch (FileReadException const& e) {
 			if (env->check_cmd(env->mkdevicemap_cmd, env->cmd_prefix)) {
-				result.open(env->mkdevicemap_cmd, "r", Model_SmartFileHandle::TYPE_COMMAND);
+				result.open(env->mkdevicemap_cmd, "r", Gc::Model::SmartFileHandle::Type::COMMAND);
 			} else {
 				std::string staticMap = std::string() +
 									 + "(hd0)\t/dev/sda\n"
@@ -69,7 +69,7 @@ namespace Gc { namespace Model { namespace Device { class DeviceMap :
 									 + "(hd23)\t/dev/sdx\n"
 									 + "(hd24)\t/dev/sdy\n"
 									 + "(hd25)\t/dev/sdz\n";
-				result.open(staticMap, "r", Model_SmartFileHandle::TYPE_STRING);
+				result.open(staticMap, "r", Gc::Model::SmartFileHandle::Type::STRING);
 			}
 		}
 		return result;
@@ -100,7 +100,7 @@ namespace Gc { namespace Model { namespace Device { class DeviceMap :
 	
 		std::string diskDevice = regexResult[1];
 	
-		Model_SmartFileHandle handle = this->getFileHandle();
+		Gc::Model::SmartFileHandle handle = this->getFileHandle();
 	
 		try {
 			while (result.hddNum == "") {

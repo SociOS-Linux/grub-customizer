@@ -16,30 +16,28 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef THEMEFILE_H_
-#define THEMEFILE_H_
-#include <string>
+#ifndef SRC_FbResolutionsGetterCONNECTION_HPP_
+#define SRC_FbResolutionsGetterCONNECTION_HPP_
 
-namespace Gc { namespace Model { class ThemeFile
+#include "FbResolutionsGetter.hpp"
+
+namespace Gc { namespace Model { class FbResolutionsGetterConnection
 {
-	public: std::string localFileName, newLocalFileName; // path inside of the theme directory
-	public: bool contentLoaded; // say whether the content is loaded (text only)
-	public: std::string content; // loaded content (text only)
-	public: bool isAddedByUser;
-	public: std::string externalSource;
+	protected: std::shared_ptr<Gc::Model::FbResolutionsGetter> fbResolutionsGetter;
 
-	public: ThemeFile(std::string localFileName, bool isAddedByUser = false) :
-		localFileName(localFileName),
-		contentLoaded(false),
-		newLocalFileName(localFileName),
-		isAddedByUser(isAddedByUser)
-	{}
+	public: virtual ~FbResolutionsGetterConnection() {}
 
-	public: static bool compareLocalPath(Gc::Model::ThemeFile const& a, Gc::Model::ThemeFile const& b)
+	public: void setFbResolutionsGetter(std::shared_ptr<Gc::Model::FbResolutionsGetter> fbResolutionsGetter)
 	{
-		return a.newLocalFileName < b.newLocalFileName;
+		this->fbResolutionsGetter = fbResolutionsGetter;
+
+		this->initFbResolutionsGetterEvents();
+	}
+
+	public: virtual void initFbResolutionsGetterEvents()
+	{
+		// override to initialize specific view events
 	}
 };}}
 
-
-#endif /* THEMEFILE_H_ */
+#endif /* SRC_FbResolutionsGetterCONNECTION_HPP_ */

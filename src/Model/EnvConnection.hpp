@@ -16,30 +16,28 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef THEMEFILE_H_
-#define THEMEFILE_H_
-#include <string>
+#ifndef SRC_MODEL_ENVCONNECTION_HPP_
+#define SRC_MODEL_ENVCONNECTION_HPP_
 
-namespace Gc { namespace Model { class ThemeFile
+#include "Env.hpp"
+
+namespace Gc { namespace Model { class EnvConnection
 {
-	public: std::string localFileName, newLocalFileName; // path inside of the theme directory
-	public: bool contentLoaded; // say whether the content is loaded (text only)
-	public: std::string content; // loaded content (text only)
-	public: bool isAddedByUser;
-	public: std::string externalSource;
+	protected: std::shared_ptr<Gc::Model::Env> env;
 
-	public: ThemeFile(std::string localFileName, bool isAddedByUser = false) :
-		localFileName(localFileName),
-		contentLoaded(false),
-		newLocalFileName(localFileName),
-		isAddedByUser(isAddedByUser)
-	{}
+	public: virtual ~EnvConnection(){}
 
-	public: static bool compareLocalPath(Gc::Model::ThemeFile const& a, Gc::Model::ThemeFile const& b)
+	public: void setEnv(std::shared_ptr<Gc::Model::Env> env)
 	{
-		return a.newLocalFileName < b.newLocalFileName;
+		this->env = env;
+		this->initEnv();
+	}
+
+	public: virtual void initEnv()
+	{
+		// override to add custom functionality
 	}
 };}}
 
 
-#endif /* THEMEFILE_H_ */
+#endif /* SRC_MODEL_ENVCONNECTION_HPP_ */

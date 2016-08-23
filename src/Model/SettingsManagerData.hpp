@@ -26,25 +26,29 @@
 #include "Env.hpp"
 #include "SettingsStore.hpp"
 
-class Model_SettingsManagerData :
-	public Model_SettingsStore,
+namespace Gc { namespace Model { class SettingsManagerData :
+	public Gc::Model::SettingsStore,
 	public Gc::Model::Logger::Trait::LoggerAware,
-	public Model_Env_Connection
+	public Gc::Model::EnvConnection
 {
-	bool _reloadRequired;
-public:
-	bool color_helper_required;
-	std::string grubFont, oldFontFile;
-	int grubFontSize;
-	Model_SettingsManagerData() : _reloadRequired(false), color_helper_required(false), grubFontSize(-1)
-	{
-	}
+	private: bool _reloadRequired;
 
-	bool reloadRequired() const {
+	public: bool color_helper_required;
+	public: std::string grubFont, oldFontFile;
+	public: int grubFontSize;
+	public: SettingsManagerData() :
+		_reloadRequired(false),
+		color_helper_required(false),
+		grubFontSize(-1)
+	{}
+
+	public: bool reloadRequired() const
+	{
 		return this->_reloadRequired;
 	}
 
-	static std::map<std::string, std::string> parsePf2(std::string const& fileName) {
+	public: static std::map<std::string, std::string> parsePf2(std::string const& fileName)
+	{
 		std::map<std::string, std::string> result;
 		FILE* file = fopen(fileName.c_str(), "rb");
 		if (file) {
@@ -69,7 +73,8 @@ public:
 		return result;
 	}
 
-	static std::string getFontFileByName(std::string const& name) {
+	public: static std::string getFontFileByName(std::string const& name)
+	{
 		std::string result;
 		std::string translatedName = name;
 		int lastWhitespacePos = translatedName.find_last_of(' ');
@@ -92,10 +97,11 @@ public:
 		return result;
 	}
 
-	std::string mkFont(std::string fontFile = "", std::string outputPath = "") {
+	public: std::string mkFont(std::string fontFile = "", std::string outputPath = "")
+	{
 		int fontSize = -1;
 		if (fontFile == "") {
-			fontFile = Model_SettingsManagerData::getFontFileByName(this->grubFont);
+			fontFile = Gc::Model::SettingsManagerData::getFontFileByName(this->grubFont);
 			fontSize = this->grubFontSize;
 		}
 		std::string sizeParam;
@@ -130,17 +136,18 @@ public:
 		return outputPath;
 	}
 
-	bool load() {
+	public: bool load()
+	{
 		settings.clear();
 	
 		FILE* file = fopen(this->env->settings_file.c_str(), "r");
 		if (file){
-			Model_SettingsStore::load(file);
+			Gc::Model::SettingsStore::load(file);
 			this->grubFontSize = -1;
 			if (this->getValue("GRUB_FONT") != "") {
 				this->oldFontFile = this->getValue("GRUB_FONT");
 				this->log("parsing " + this->getValue("GRUB_FONT"), Gc::Model::Logger::GenericLogger::INFO);
-				this->grubFont = Model_SettingsManagerData::parsePf2(this->env->cfg_dir_prefix + this->getValue("GRUB_FONT"))["NAME"];
+				this->grubFont = Gc::Model::SettingsManagerData::parsePf2(this->env->cfg_dir_prefix + this->getValue("GRUB_FONT"))["NAME"];
 				this->log("result " + this->grubFont, Gc::Model::Logger::GenericLogger::INFO);
 				this->removeItem("GRUB_FONT");
 			}
@@ -152,7 +159,8 @@ public:
 			return false;
 	}
 
-	bool save() {
+	public: bool save()
+	{
 		const char* background_script = "\
 	#! /bin/sh -e\n\
 	# Name of this script: 'grub_background.sh'\n\
@@ -182,7 +190,7 @@ public:
 			bool background_script_required = false;
 			bool isGraphical = false;
 			this->color_helper_required = false;
-			for (std::list<Model_SettingsStore_Row>::iterator iter = this->begin(false); iter != this->end(); iter++){
+			for (std::list<Gc::Model::SettingsStoreRow>::iterator iter = this->begin(false); iter != this->end(); iter++){
 				if (iter != this->begin(false)) {
 					fputs("\n", outFile);
 				}
@@ -228,8 +236,9 @@ public:
 			return false;
 	}
 
-	bool setValue(std::string const& name, std::string const& value) {
-		for (std::list<Model_SettingsStore_Row>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
+	public: bool setValue(std::string const& name, std::string const& value)
+	{
+		for (std::list<Gc::Model::SettingsStoreRow>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
 			if (name == iter->name){
 	
 				if (iter->value != value){ //only set when the new value is really new
@@ -242,7 +251,7 @@ public:
 			}
 		}
 	
-		settings.push_back(Model_SettingsStore_Row());
+		settings.push_back(Gc::Model::SettingsStoreRow());
 		settings.back().name = name;
 		settings.back().value = value;
 		settings.back().validate();
@@ -251,8 +260,9 @@ public:
 		return false;
 	}
 
-	bool setIsActive(std::string const& name, bool value) {
-		for (std::list<Model_SettingsStore_Row>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
+	public: bool setIsActive(std::string const& name, bool value)
+	{
+		for (std::list<Gc::Model::SettingsStoreRow>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
 			if (name == iter->name){
 				if (iter->isActive != value){
 					iter->isActive = value;
@@ -265,15 +275,7 @@ public:
 		return false;
 	}
 
-};
+};}}
 
-class Model_SettingsManagerData_Connection
-{
-	protected: std::shared_ptr<Model_SettingsManagerData> settings;
 
-	public: void setSettingsManager(std::shared_ptr<Model_SettingsManagerData> settings)
-	{
-		this->settings = settings;
-	}
-};
 #endif

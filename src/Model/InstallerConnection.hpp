@@ -16,30 +16,28 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef THEMEFILE_H_
-#define THEMEFILE_H_
-#include <string>
+#ifndef SRC_MODEL_INSTALLERCONNECTION_HPP_
+#define SRC_MODEL_INSTALLERCONNECTION_HPP_
 
-namespace Gc { namespace Model { class ThemeFile
+#include "Installer.hpp"
+
+namespace Gc { namespace Model { class InstallerConnection
 {
-	public: std::string localFileName, newLocalFileName; // path inside of the theme directory
-	public: bool contentLoaded; // say whether the content is loaded (text only)
-	public: std::string content; // loaded content (text only)
-	public: bool isAddedByUser;
-	public: std::string externalSource;
+	protected: std::shared_ptr<Gc::Model::Installer> installer;
 
-	public: ThemeFile(std::string localFileName, bool isAddedByUser = false) :
-		localFileName(localFileName),
-		contentLoaded(false),
-		newLocalFileName(localFileName),
-		isAddedByUser(isAddedByUser)
-	{}
+	public: virtual ~InstallerConnection(){}
 
-	public: static bool compareLocalPath(Gc::Model::ThemeFile const& a, Gc::Model::ThemeFile const& b)
+	public: void setInstaller(std::shared_ptr<Gc::Model::Installer> installer)
 	{
-		return a.newLocalFileName < b.newLocalFileName;
+		this->installer = installer;
+
+		this->initInstallerEvents();
+	}
+
+	public: virtual void initInstallerEvents()
+	{
+		// override to initialize specific view events
 	}
 };}}
 
-
-#endif /* THEMEFILE_H_ */
+#endif /* SRC_MODEL_INSTALLERCONNECTION_HPP_ */

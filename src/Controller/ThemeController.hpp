@@ -33,10 +33,10 @@
 namespace Gc { namespace Controller { class ThemeController :
 	public Gc::Controller::Common::ControllerAbstract,
 	public View_Trait_ViewAware<View_Theme>,
-	public Model_ThemeManager_Connection,
-	public Model_SettingsManagerData_Connection,
+	public Gc::Model::ThemeManagerConnection,
+	public Gc::Model::SettingsManagerDataConnection,
 	public Gc::Model::ListCfg::ListCfgConnection,
-	public Model_Env_Connection,
+	public Gc::Model::EnvConnection,
 	public Gc::Controller::Helper::ThreadConnection,
 	public Gc::Bootstrap::ApplicationHelper::ObjectConnection
 {
@@ -191,9 +191,9 @@ namespace Gc { namespace Controller { class ThemeController :
 		this->logActionBegin("add-file");
 		try {
 			std::string defaultName = this->view->getDefaultName();
-			Model_Theme* theme = &this->themeManager->getTheme(this->currentTheme);
+			Gc::Model::Theme* theme = &this->themeManager->getTheme(this->currentTheme);
 			if (!theme->hasConflicts(defaultName)) {
-				Model_ThemeFile newFile(defaultName, true);
+				Gc::Model::ThemeFile newFile(defaultName, true);
 				newFile.content = "";
 				newFile.contentLoaded = true;
 				theme->files.push_back(newFile);
@@ -228,7 +228,7 @@ namespace Gc { namespace Controller { class ThemeController :
 	{
 		this->logActionBegin("remove-file");
 		try {
-			Model_ThemeFile* fileObj = &this->themeManager->getTheme(this->currentTheme).getFileByNewName(file);
+			Gc::Model::ThemeFile* fileObj = &this->themeManager->getTheme(this->currentTheme).getFileByNewName(file);
 			this->themeManager->getTheme(this->currentTheme).removeFile(*fileObj);
 			this->themeManager->getTheme(this->currentTheme).isModified = true;
 			this->currentThemeFile = "";
@@ -243,8 +243,8 @@ namespace Gc { namespace Controller { class ThemeController :
 	{
 		this->logActionBegin("update-edit-area");
 		try {
-			Model_Theme* theme = &this->themeManager->getTheme(this->currentTheme);
-			Model_ThemeFile* themeFile = &theme->getFileByNewName(file);
+			Gc::Model::Theme* theme = &this->themeManager->getTheme(this->currentTheme);
+			Gc::Model::ThemeFile* themeFile = &theme->getFileByNewName(file);
 			std::string originalFileName = themeFile->localFileName;
 			bool isImage = this->isImage(file);
 			this->currentThemeFile = themeFile->newLocalFileName;
@@ -280,7 +280,7 @@ namespace Gc { namespace Controller { class ThemeController :
 	{
 		this->logActionBegin("rename");
 		try {
-			Model_ThemeFile* themeFile = &this->themeManager->getTheme(this->currentTheme).getFile(this->currentThemeFile);
+			Gc::Model::ThemeFile* themeFile = &this->themeManager->getTheme(this->currentTheme).getFile(this->currentThemeFile);
 			if (themeFile->newLocalFileName == newName) {
 				// do nothing
 			} else if (!this->themeManager->getTheme(this->currentTheme).hasConflicts(newName)) {
@@ -312,7 +312,7 @@ namespace Gc { namespace Controller { class ThemeController :
 				return;
 			}
 			this->themeManager->getTheme(this->currentTheme).isModified = true;
-			Model_ThemeFile* file = &this->themeManager->getTheme(this->currentTheme).getFile(this->currentThemeFile);
+			Gc::Model::ThemeFile* file = &this->themeManager->getTheme(this->currentTheme).getFile(this->currentThemeFile);
 			file->externalSource = externalPath;
 			file->content = "";
 			file->contentLoaded = false;
@@ -328,7 +328,7 @@ namespace Gc { namespace Controller { class ThemeController :
 		this->logActionBegin("save-text");
 		try {
 			this->themeManager->getTheme(this->currentTheme).isModified = true;
-			Model_ThemeFile* themeFile = &this->themeManager->getTheme(this->currentTheme).getFile(this->currentThemeFile);
+			Gc::Model::ThemeFile* themeFile = &this->themeManager->getTheme(this->currentTheme).getFile(this->currentThemeFile);
 			themeFile->externalSource = "";
 			this->view->setCurrentExternalThemeFilePath(themeFile->externalSource);
 			themeFile->content = newText;
@@ -605,7 +605,7 @@ namespace Gc { namespace Controller { class ThemeController :
 	{
 		this->view->clear();
 		if (this->currentTheme != "") {
-			Model_Theme* theme = &this->themeManager->getTheme(this->currentTheme);
+			Gc::Model::Theme* theme = &this->themeManager->getTheme(this->currentTheme);
 			for (auto& themeFile : theme->files) {
 				this->view->addFile(themeFile.newLocalFileName);
 			}

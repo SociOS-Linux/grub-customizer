@@ -27,11 +27,12 @@
 #include "../Csv/Writer.hpp"
 #include "../Logger/Trait/LoggerAware.hpp"
 #include "../Env.hpp"
+#include "../EnvConnection.hpp"
 
 namespace Gc { namespace Model { namespace ListCfg { class ScriptSourceMap :
 	public std::map<std::string, std::string>,
 	public Gc::Model::Logger::Trait::LoggerAware,
-	public Model_Env_Connection
+	public Gc::Model::EnvConnection
 {
 	private: bool _fileExists;
 	private: std::list<std::string> _newSources;

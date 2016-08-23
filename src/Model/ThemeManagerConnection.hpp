@@ -16,30 +16,20 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef THEMEFILE_H_
-#define THEMEFILE_H_
-#include <string>
+#ifndef SRC_MODEL_THEMEMANAGERCONNECTION_HPP_
+#define SRC_MODEL_THEMEMANAGERCONNECTION_HPP_
 
-namespace Gc { namespace Model { class ThemeFile
+#include "ThemeManager.hpp"
+
+namespace Gc { namespace Model { class ThemeManagerConnection
 {
-	public: std::string localFileName, newLocalFileName; // path inside of the theme directory
-	public: bool contentLoaded; // say whether the content is loaded (text only)
-	public: std::string content; // loaded content (text only)
-	public: bool isAddedByUser;
-	public: std::string externalSource;
+	protected: std::shared_ptr<Gc::Model::ThemeManager> themeManager;
 
-	public: ThemeFile(std::string localFileName, bool isAddedByUser = false) :
-		localFileName(localFileName),
-		contentLoaded(false),
-		newLocalFileName(localFileName),
-		isAddedByUser(isAddedByUser)
-	{}
-
-	public: static bool compareLocalPath(Gc::Model::ThemeFile const& a, Gc::Model::ThemeFile const& b)
+	public:	void setThemeManager(std::shared_ptr<Gc::Model::ThemeManager> themeManager)
 	{
-		return a.newLocalFileName < b.newLocalFileName;
+		this->themeManager = themeManager;
 	}
 };}}
 
 
-#endif /* THEMEFILE_H_ */
+#endif /* SRC_MODEL_THEMEMANAGERCONNECTION_HPP_ */

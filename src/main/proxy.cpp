@@ -47,7 +47,7 @@ int main(int argc, char** argv){
 		}
 		return 0;
 	} else if (argc == 3 && std::string(argv[2]) == "multi") {
-		auto env = std::make_shared<Model_Env>();
+		auto env = std::make_shared<Gc::Model::Env>();
 		Gc::Model::ListCfg::ListCfg scriptSource;
 		scriptSource.setEnv(env);
 		scriptSource.ignoreLock = true;

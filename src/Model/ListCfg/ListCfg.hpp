@@ -54,7 +54,7 @@
 namespace Gc { namespace Model { namespace ListCfg { class ListCfg :
 	public Gc::Model::Logger::Trait::LoggerAware,
 	public Gc::Common::Mutex::GenericConnection,
-	public Model_Env_Connection
+	public Gc::Model::EnvConnection
 {
 	private: double progress;
 	private: std::string progress_name;

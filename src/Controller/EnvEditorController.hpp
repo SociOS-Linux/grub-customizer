@@ -38,7 +38,7 @@
 namespace Gc { namespace Controller { class EnvEditorController :
 	public Gc::Controller::Common::ControllerAbstract,
 	public View_Trait_ViewAware<View_EnvEditor>,
-	public Model_Env_Connection,
+	public Gc::Model::EnvConnection,
 	public Gc::Bootstrap::ApplicationHelper::ObjectConnection,
 	public Gc::Model::Device::MountTableConnection,
 	public Gc::Model::Device::DeviceMapConnection
@@ -156,7 +156,7 @@ namespace Gc { namespace Controller { class EnvEditorController :
 				try {
 					mountTable->clear(PARTCHOOSER_MOUNTPOINT);
 					mountTable->mountRootFs(selectedDevice, PARTCHOOSER_MOUNTPOINT);
-					this->env->init(env->burgMode ? Model_Env::BURG_MODE : Model_Env::GRUB_MODE, PARTCHOOSER_MOUNTPOINT);
+					this->env->init(env->burgMode ? Gc::Model::Env::Mode::BURG : Gc::Model::Env::Mode::GRUB, PARTCHOOSER_MOUNTPOINT);
 					this->generateSubmountpointSelection(PARTCHOOSER_MOUNTPOINT);
 					this->showAction();
 				}
@@ -170,7 +170,7 @@ namespace Gc { namespace Controller { class EnvEditorController :
 					this->switchPartitionAction("");
 				}
 			} else {
-				this->env->init(env->burgMode ? Model_Env::BURG_MODE : Model_Env::GRUB_MODE, selectedDevice);
+				this->env->init(env->burgMode ? Gc::Model::Env::Mode::BURG : Gc::Model::Env::Mode::GRUB, selectedDevice);
 				this->showAction(true);
 			}
 		} catch (Exception const& e) {
@@ -183,7 +183,7 @@ namespace Gc { namespace Controller { class EnvEditorController :
 	{
 		this->logActionBegin("switch-bootloader-type");
 		try {
-			this->env->init(newTypeIndex == 0 ? Model_Env::GRUB_MODE : Model_Env::BURG_MODE, this->env->cfg_dir_prefix);
+			this->env->init(newTypeIndex == 0 ? Gc::Model::Env::Mode::GRUB : Gc::Model::Env::Mode::BURG, this->env->cfg_dir_prefix);
 			this->showAction();
 		} catch (Exception const& e) {
 			this->applicationObject->onError.exec(e);

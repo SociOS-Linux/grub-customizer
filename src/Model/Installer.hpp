@@ -24,22 +24,24 @@
 #include "../Model/Logger/Trait/LoggerAware.hpp"
 #include "Env.hpp"
 
-class Model_Installer :
+namespace Gc { namespace Model { class Installer :
 	public Gc::Model::Logger::Trait::LoggerAware,
-	public Model_Env_Connection
+	public Gc::Model::EnvConnection
 {
-	std::string install_result;
-public:
-	std::function<void (std::string const& msg)> onFinish;
+	private: std::string install_result;
 
-	void threadable_install(std::string const& device) {
+	public: std::function<void (std::string const& msg)> onFinish;
+
+	public: void threadable_install(std::string const& device)
+	{
 		this->install_result = this->install(device);
 		if (this->onFinish) {
 			this->onFinish(this->install_result);
 		}
 	}
 
-	std::string install(std::string const& device) {
+	public: std::string install(std::string const& device)
+	{
 		FILE* install_proc = popen((this->env->install_cmd+" '"+device+"' 2>&1").c_str(), "r");
 		std::string output;
 		int c;
@@ -53,25 +55,6 @@ public:
 			return output;
 	}
 
-};
-
-class Model_Installer_Connection
-{
-	protected: std::shared_ptr<Model_Installer> installer;
-
-	public: virtual ~Model_Installer_Connection(){}
-
-	public: void setInstaller(std::shared_ptr<Model_Installer> installer)
-	{
-		this->installer = installer;
-
-		this->initInstallerEvents();
-	}
-
-	public: virtual void initInstallerEvents()
-	{
-		// override to initialize specific view events
-	}
-};
+};}}
 
 #endif

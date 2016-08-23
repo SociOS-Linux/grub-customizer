@@ -24,18 +24,21 @@
 #include "Env.hpp"
 #include "Theme.hpp"
 
-class Model_ThemeManager :
-	public Model_Env_Connection
+namespace Gc { namespace Model { class ThemeManager :
+	public Gc::Model::EnvConnection
 {
-	bool gotSaveErrors;
-	std::string saveErrors;
-public:
-	std::list<Model_Theme> themes;
-	std::list<Model_Theme> removedThemes;
-	Model_ThemeManager() : gotSaveErrors(false)
+	private: bool gotSaveErrors;
+	private: std::string saveErrors;
+
+	public: std::list<Gc::Model::Theme> themes;
+	public: std::list<Gc::Model::Theme> removedThemes;
+
+	public: ThemeManager() :
+		gotSaveErrors(false)
 	{}
 
-	void load() {
+	public: void load()
+	{
 		this->themes.clear();
 		std::string path = this->env->output_config_dir + "/" + "themes";
 	
@@ -49,7 +52,7 @@ public:
 				}
 				std::string currentFileName = path + "/" + entry->d_name;
 				stat(currentFileName.c_str(), &fileProperties);
-				this->themes.push_back(Model_Theme(currentFileName, "", entry->d_name));
+				this->themes.push_back(Gc::Model::Theme(currentFileName, "", entry->d_name));
 			}
 			closedir(dir);
 		} else {
@@ -57,8 +60,9 @@ public:
 		}
 	}
 
-	Model_Theme& getTheme(std::string const& name) {
-		for (std::list<Model_Theme>::iterator themeIter = this->themes.begin(); themeIter != this->themes.end(); themeIter++) {
+	public: Gc::Model::Theme& getTheme(std::string const& name)
+	{
+		for (std::list<Gc::Model::Theme>::iterator themeIter = this->themes.begin(); themeIter != this->themes.end(); themeIter++) {
 			if (themeIter->name == name) {
 				return *themeIter;
 			}
@@ -66,7 +70,8 @@ public:
 		throw ItemNotFoundException("getTheme: Theme not found: " + name, __FILE__, __LINE__);
 	}
 
-	bool themeExists(std::string const& name) {
+	public: bool themeExists(std::string const& name)
+	{
 		try {
 			this->getTheme(name);
 			return true;
@@ -75,7 +80,8 @@ public:
 		return false;
 	}
 
-	std::string extractThemeName(std::string const& indexFile) {
+	public: std::string extractThemeName(std::string const& indexFile)
+	{
 		std::string themePath = this->env->output_config_dir + "/themes";
 		if (indexFile.substr(0, themePath.size()) != themePath) {
 			throw InvalidStringFormatException("theme index file path must contain '" + themePath + "' given path: '" + indexFile + "'", __FILE__, __LINE__);
@@ -90,7 +96,8 @@ public:
 		return indexFile.substr(themePath.size() + 1, themeNameSize);
 	}
 
-	std::string addThemePackage(std::string const& fileName) {
+	public: std::string addThemePackage(std::string const& fileName)
+	{
 		int lastSlashPos = fileName.find_last_of('/');
 		std::string name = lastSlashPos != -1 ? fileName.substr(lastSlashPos + 1) : fileName;
 		int firstDotPos = name.find_first_of('.');
@@ -98,12 +105,13 @@ public:
 		while (this->themeExists(name)) {
 			name += "-";
 		}
-		this->themes.push_back(Model_Theme("", fileName, name));
+		this->themes.push_back(Gc::Model::Theme("", fileName, name));
 		return name;
 	}
 
-	void removeTheme(Model_Theme const& theme) {
-		for (std::list<Model_Theme>::iterator themeIter = this->themes.begin(); themeIter != this->themes.end(); themeIter++) {
+	public: void removeTheme(Gc::Model::Theme const& theme)
+	{
+		for (std::list<Gc::Model::Theme>::iterator themeIter = this->themes.begin(); themeIter != this->themes.end(); themeIter++) {
 			if (&*themeIter == &theme) {
 				if (themeIter->directory != "") {
 					this->removedThemes.push_back(*themeIter);
@@ -114,19 +122,20 @@ public:
 		}
 	}
 
-	void save() {
+	public: void save()
+	{
 		this->saveErrors = "";
 		this->gotSaveErrors = false;
 	
 		std::string dirName = this->env->output_config_dir + "/themes";
 		mkdir(dirName.c_str(), 0755);
-		for (std::list<Model_Theme>::iterator themeIter = this->removedThemes.begin(); themeIter != this->removedThemes.end(); themeIter++) {
+		for (std::list<Gc::Model::Theme>::iterator themeIter = this->removedThemes.begin(); themeIter != this->removedThemes.end(); themeIter++) {
 			themeIter->deleteThemeFiles(dirName);
 		}
 		this->removedThemes.clear();
 	
 		bool themesSaved = false;
-		for (std::list<Model_Theme>::iterator themeIter = this->themes.begin(); themeIter != this->themes.end(); themeIter++) {
+		for (std::list<Gc::Model::Theme>::iterator themeIter = this->themes.begin(); themeIter != this->themes.end(); themeIter++) {
 			if (themeIter->isModified) {
 				try {
 					themeIter->save(dirName);
@@ -142,29 +151,22 @@ public:
 		}
 	}
 
-	std::string getThemePath() {
+	public: std::string getThemePath()
+	{
 		return this->env->output_config_dir + "/themes";
 	}
 
-	bool hasSaveErrors() {
+	public: bool hasSaveErrors()
+	{
 		return this->gotSaveErrors;
 	}
 
-	std::string getSaveErrors() {
+	public: std::string getSaveErrors()
+	{
 		return this->saveErrors;
 	}
 
-};
-
-class Model_ThemeManager_Connection
-{
-	protected: std::shared_ptr<Model_ThemeManager> themeManager;
-
-	public:	void setThemeManager(std::shared_ptr<Model_ThemeManager> themeManager)
-	{
-		this->themeManager = themeManager;
-	}
-};
+};}}
 
 
 #endif /* THEMEMANAGER_H_ */

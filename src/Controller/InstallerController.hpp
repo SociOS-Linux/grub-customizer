@@ -40,8 +40,8 @@
 namespace Gc { namespace Controller { class InstallerController :
 	public Gc::Controller::Common::ControllerAbstract,
 	public View_Trait_ViewAware<View_Installer>,
-	public Model_Installer_Connection,
-	public Model_Env_Connection,
+	public Gc::Model::InstallerConnection,
+	public Gc::Model::EnvConnection,
 	public Gc::Controller::Helper::ThreadConnection,
 	public Gc::Bootstrap::ApplicationHelper::ObjectConnection
 {

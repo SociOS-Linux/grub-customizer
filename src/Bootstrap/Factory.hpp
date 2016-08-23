@@ -25,8 +25,11 @@
 #include "../Model/Device/MountTable.hpp"
 #include "../Model/Device/MountTableConnection.hpp"
 #include "../Model/SettingsManagerData.hpp"
+#include "../Model/SettingsManagerDataConnection.hpp"
 #include "../Model/Installer.hpp"
+#include "../Model/InstallerConnection.hpp"
 #include "../Model/FbResolutionsGetter.hpp"
+#include "../Model/FbResolutionsGetterConnection.hpp"
 #include "../Model/Device/DeviceDataListConnection.hpp"
 #include "../Model/Device/DeviceDataListInterfaceConnection.hpp"
 #include "../Model/ContentParser/FactoryImpl.hpp"
@@ -34,6 +37,7 @@
 #include "../View/Mapper/EntryNameImpl.hpp"
 #include "../View/Mapper/EntryNameConnection.hpp"
 #include "../Model/ThemeManager.hpp"
+#include "../Model/ThemeManagerConnection.hpp"
 #include "../Model/Device/DeviceMap.hpp"
 #include "../Model/Device/DeviceMapConnection.hpp"
 #include "../Controller/Helper/Thread.hpp"
@@ -44,16 +48,16 @@
 
 namespace Gc { namespace Bootstrap { class Factory
 {
-	public: std::shared_ptr<Model_Env> env;
+	public: std::shared_ptr<Gc::Model::Env> env;
 	public: std::shared_ptr<Gc::Model::ListCfg::ListCfg> listcfg;
-	public: std::shared_ptr<Model_SettingsManagerData> settings;
-	public: std::shared_ptr<Model_Installer> installer;
+	public: std::shared_ptr<Gc::Model::SettingsManagerData> settings;
+	public: std::shared_ptr<Gc::Model::Installer> installer;
 	public: std::shared_ptr<Gc::Model::Device::MountTable> mountTable;
-	public: std::shared_ptr<Model_FbResolutionsGetter> fbResolutionsGetter;
+	public: std::shared_ptr<Gc::Model::FbResolutionsGetter> fbResolutionsGetter;
 	public: std::shared_ptr<Gc::Model::Device::DeviceDataList> deviceDataList;
 	public: std::shared_ptr<Gc::Model::ContentParser::FactoryImpl> contentParserFactory;
 	public: std::shared_ptr<Gc::View::Mapper::EntryNameImpl> entryNameMapper;
-	public: std::shared_ptr<Model_ThemeManager> themeManager;
+	public: std::shared_ptr<Gc::Model::ThemeManager> themeManager;
 	public: std::shared_ptr<Gc::Model::Device::DeviceMap> deviceMap;
 	public: std::shared_ptr<Gc::Controller::Helper::RuleMoverHelper> ruleMover;
 	public: std::shared_ptr<Gc::Model::Logger::GenericLogger> logger;
@@ -71,16 +75,16 @@ namespace Gc { namespace Bootstrap { class Factory
 		this->regexEngine          = this->createRegexExgine();
 		this->threadHelper         = this->createThreadHelper();
 
-		this->env                  = this->create<Model_Env>();
+		this->env                  = this->create<Gc::Model::Env>();
 		this->listcfg              = this->create<Gc::Model::ListCfg::ListCfg>();
-		this->settings             = this->create<Model_SettingsManagerData>();
-		this->installer            = this->create<Model_Installer>();
+		this->settings             = this->create<Gc::Model::SettingsManagerData>();
+		this->installer            = this->create<Gc::Model::Installer>();
 		this->mountTable           = this->create<Gc::Model::Device::MountTable>();
-		this->fbResolutionsGetter  = this->create<Model_FbResolutionsGetter>();
+		this->fbResolutionsGetter  = this->create<Gc::Model::FbResolutionsGetter>();
 		this->deviceDataList       = this->create<Gc::Model::Device::DeviceDataList>();
 		this->contentParserFactory = this->create<Gc::Model::ContentParser::FactoryImpl>();
 		this->entryNameMapper      = this->create<Gc::View::Mapper::EntryNameImpl>();
-		this->themeManager         = this->create<Model_ThemeManager>();
+		this->themeManager         = this->create<Gc::Model::ThemeManager>();
 		this->deviceMap            = this->create<Gc::Model::Device::DeviceMap>();
 		this->ruleMover            = this->create<Gc::Controller::Helper::RuleMoverHelper>();
 
@@ -111,7 +115,7 @@ namespace Gc { namespace Bootstrap { class Factory
 	public: template <typename T> void bootstrap(std::shared_ptr<T> obj)
 	{
 		{
-			std::shared_ptr<Model_Env_Connection> objc = std::dynamic_pointer_cast<Model_Env_Connection>(obj);
+			std::shared_ptr<Gc::Model::EnvConnection> objc = std::dynamic_pointer_cast<Gc::Model::EnvConnection>(obj);
 			if (objc) {assert(this->env); objc->setEnv(this->env);}
 		}
 		{
@@ -119,11 +123,11 @@ namespace Gc { namespace Bootstrap { class Factory
 			if (objc) {assert(this->listcfg); objc->setListCfg(this->listcfg);}
 		}
 		{
-			std::shared_ptr<Model_SettingsManagerData_Connection> objc = std::dynamic_pointer_cast<Model_SettingsManagerData_Connection>(obj);
+			std::shared_ptr<Gc::Model::SettingsManagerDataConnection> objc = std::dynamic_pointer_cast<Gc::Model::SettingsManagerDataConnection>(obj);
 			if (objc) {assert(this->settings); objc->setSettingsManager(this->settings);}
 		}
 		{
-			std::shared_ptr<Model_Installer_Connection> objc = std::dynamic_pointer_cast<Model_Installer_Connection>(obj);
+			std::shared_ptr<Gc::Model::InstallerConnection> objc = std::dynamic_pointer_cast<Gc::Model::InstallerConnection>(obj);
 			if (objc) {assert(this->installer); objc->setInstaller(this->installer);}
 		}
 		{
@@ -131,7 +135,7 @@ namespace Gc { namespace Bootstrap { class Factory
 			if (objc) {assert(this->mountTable); objc->setMountTable(this->mountTable);}
 		}
 		{
-			std::shared_ptr<Model_FbResolutionsGetter_Connection> objc = std::dynamic_pointer_cast<Model_FbResolutionsGetter_Connection>(obj);
+			std::shared_ptr<Gc::Model::FbResolutionsGetterConnection> objc = std::dynamic_pointer_cast<Gc::Model::FbResolutionsGetterConnection>(obj);
 			if (objc) {assert(this->fbResolutionsGetter); objc->setFbResolutionsGetter(this->fbResolutionsGetter);}
 		}
 		{
@@ -151,7 +155,7 @@ namespace Gc { namespace Bootstrap { class Factory
 			if (objc) {assert(this->entryNameMapper); objc->setEntryNameMapper(this->entryNameMapper);}
 		}
 		{
-			std::shared_ptr<Model_ThemeManager_Connection> objc = std::dynamic_pointer_cast<Model_ThemeManager_Connection>(obj);
+			std::shared_ptr<Gc::Model::ThemeManagerConnection> objc = std::dynamic_pointer_cast<Gc::Model::ThemeManagerConnection>(obj);
 			if (objc) {assert(this->themeManager); objc->setThemeManager(this->themeManager);}
 		}
 		{

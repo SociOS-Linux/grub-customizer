@@ -48,7 +48,7 @@ namespace Gc { namespace Controller { class EntryEditController :
 	public Gc::Model::ListCfg::ListCfgConnection,
 	public Gc::Model::ContentParser::GenericFactoryConnection,
 	public Gc::Model::Device::DeviceDataListInterfaceConnection,
-	public Model_Env_Connection,
+	public Gc::Model::EnvConnection,
 	public Gc::Controller::Helper::ThreadConnection,
 	public Gc::Bootstrap::ApplicationHelper::ObjectConnection,
 	public Gc::Controller::Helper::RuleMoverConnection

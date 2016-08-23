@@ -22,24 +22,25 @@
 #include <string>
 #include "../Common/Exception.hpp"
 
-class Model_SmartFileHandle {
-public:
-	enum Type {
-		TYPE_FILE,
-		TYPE_COMMAND,
-		TYPE_STRING
+namespace Gc { namespace Model { class SmartFileHandle
+{
+	public:	enum class Type {
+		FILE,
+		COMMAND,
+		STRING
 	};
-private:
-	FILE* proc_or_file;
-	Model_SmartFileHandle::Type type;
-	std::string string; // content for TYPE_STRING
-public:
-	Model_SmartFileHandle() : type(TYPE_STRING), proc_or_file(NULL)
-	{
-	}
+	private: FILE* proc_or_file;
+	private: Gc::Model::SmartFileHandle::Type type;
+	private: std::string string; // content for TYPE_STRING
 
-	char getChar() {
-		if (type == TYPE_STRING) {
+	public:	SmartFileHandle() :
+		type(Gc::Model::SmartFileHandle::Type::STRING),
+		proc_or_file(nullptr)
+	{}
+
+	public:	char getChar()
+	{
+		if (type == Gc::Model::SmartFileHandle::Type::STRING) {
 			if (this->string.size()) {
 				int c = (int) this->string[0];
 				this->string = this->string.substr(1);
@@ -56,7 +57,8 @@ public:
 		}
 	}
 
-	std::string getRow() {
+	public:	std::string getRow()
+	{
 		std::string result;
 		int c;
 		try {
@@ -71,7 +73,8 @@ public:
 		return result;
 	}
 
-	std::string getAll() {
+	public:	std::string getAll()
+	{
 		std::string result;
 		int c;
 		try {
@@ -86,7 +89,8 @@ public:
 		return result;
 	}
 
-	void open(std::string const& cmd_or_file, std::string const& mode, Type type) {
+	public:	void open(std::string const& cmd_or_file, std::string const& mode, Type type)
+	{
 		if (this->proc_or_file || this->string != "")
 			throw HandleNotClosedException("handle not closed - cannot open", __FILE__, __LINE__);
 	
@@ -94,37 +98,38 @@ public:
 		this->string = "";
 	
 		switch (type) {
-			case TYPE_STRING:
+			case Gc::Model::SmartFileHandle::Type::STRING:
 				this->string = cmd_or_file;
 				break;
-			case TYPE_COMMAND:
+			case Gc::Model::SmartFileHandle::Type::COMMAND:
 				this->proc_or_file = popen(cmd_or_file.c_str(), mode.c_str());
 				break;
-			case TYPE_FILE:
+			case Gc::Model::SmartFileHandle::Type::FILE:
 				this->proc_or_file = fopen(cmd_or_file.c_str(), mode.c_str());
 				break;
 			default:
 				throw LogicException("unexpected type given");
 		}
 	
-		if (this->proc_or_file || type == TYPE_STRING)
+		if (this->proc_or_file || type == Gc::Model::SmartFileHandle::Type::STRING)
 			this->type = type;
 		else
 			throw FileReadException("Cannot read the file/cmd: " + cmd_or_file, __FILE__, __LINE__);
 	}
 
-	void close() {
-		if (this->type != TYPE_STRING && !this->proc_or_file)
+	public:	void close()
+	{
+		if (this->type != Gc::Model::SmartFileHandle::Type::STRING && !this->proc_or_file)
 			throw HandleNotOpenedException("handle not opened - cannot close", __FILE__, __LINE__);
 	
 		switch (type) {
-			case TYPE_STRING:
+			case Gc::Model::SmartFileHandle::Type::STRING:
 				this->string = "";
 				break;
-			case TYPE_COMMAND:
+			case Gc::Model::SmartFileHandle::Type::COMMAND:
 				pclose(this->proc_or_file);
 				break;
-			case TYPE_FILE:
+			case Gc::Model::SmartFileHandle::Type::FILE:
 				fclose(this->proc_or_file);
 				break;
 			default:
@@ -132,6 +137,6 @@ public:
 		}
 	}
 
-};
+};}}
 
 #endif
