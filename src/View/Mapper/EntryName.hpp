@@ -22,10 +22,14 @@
 #include <string>
 #include "../../Model/ListCfg/Entry.hpp"
 
-namespace Gc { namespace View { namespace Mapper { class EntryName {
-public:
-	virtual inline ~EntryName(){};
-	virtual std::string map(std::shared_ptr<Gc::Model::ListCfg::Entry> sourceEntry, std::string const& defaultName, bool treatSubmenuAsPlaceholder) = 0;
+namespace Gc { namespace View { namespace Mapper { class EntryName
+{
+	public: virtual inline ~EntryName(){};
+	public: virtual std::string map(
+		std::shared_ptr<Gc::Model::ListCfg::Entry> sourceEntry,
+		std::string const& defaultName,
+		bool treatSubmenuAsPlaceholder
+	) = 0;
 };}}}
 
 #endif /* ENTRYNAME_H_ */

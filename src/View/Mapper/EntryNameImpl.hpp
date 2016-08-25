@@ -24,10 +24,14 @@
 #include "EntryName.hpp"
 
 namespace Gc { namespace View { namespace Mapper { class EntryNameImpl :
-	public Gc::View::Mapper::EntryName, public View_Trait_ViewAware<View_Main>
+	public Gc::View::Mapper::EntryName,
+	public View_Trait_ViewAware<View_Main>
 {
-	public:	std::string map(std::shared_ptr<Gc::Model::ListCfg::Entry> sourceEntry, std::string const& defaultName, bool treatSubmenuAsPlaceholder) {
-		assert(this->view != NULL);
+	public:	std::string map(
+		std::shared_ptr<Gc::Model::ListCfg::Entry> sourceEntry,
+		std::string const& defaultName, bool treatSubmenuAsPlaceholder
+	) {
+		assert(this->view != nullptr);
 		std::string name;
 		bool is_other_entries_ph = sourceEntry && treatSubmenuAsPlaceholder ? sourceEntry->type == Gc::Model::ListCfg::Entry::SUBMENU || sourceEntry->type == Gc::Model::ListCfg::Entry::SCRIPT_ROOT : false;
 		bool is_plaintext = sourceEntry ? sourceEntry->type == Gc::Model::ListCfg::Entry::PLAINTEXT : false;
