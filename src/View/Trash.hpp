@@ -43,7 +43,7 @@ namespace Gc { namespace View { class Trash :
 	//gets the index of the selected script item
 	public: virtual std::list<Gc::Common::Type::Rule*> getSelectedEntries()=0;
 	//adds a new item
-	public: virtual void addItem(View_Model_ListItem<Gc::Common::Type::Rule, Gc::Common::Type::Script> const& listItem)=0;
+	public: virtual void addItem(Gc::View::Model::ListItem<Gc::Common::Type::Rule, Gc::Common::Type::Script> const& listItem)=0;
 	//whether to active the delete button
 	public: virtual void setDeleteButtonEnabled(bool val) = 0;
 	//show this dialog

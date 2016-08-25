@@ -133,7 +133,7 @@ class View_Gtk_Trash :
 		return result;
 	}
 
-	private: void addItem(View_Model_ListItem<Gc::Common::Type::Rule, Gc::Common::Type::Script> const& listItem)
+	private: void addItem(Gc::View::Model::ListItem<Gc::Common::Type::Rule, Gc::Common::Type::Script> const& listItem)
 	{
 		this->list.addListItem(listItem, this->options, *this);
 	}

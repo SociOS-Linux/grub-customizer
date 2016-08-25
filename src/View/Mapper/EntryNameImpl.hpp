@@ -25,7 +25,7 @@
 
 namespace Gc { namespace View { namespace Mapper { class EntryNameImpl :
 	public Gc::View::Mapper::EntryName,
-	public View_Trait_ViewAware<Gc::View::Main>
+	public Gc::View::Trait::ViewAware<Gc::View::Main>
 {
 	public:	std::string map(
 		std::shared_ptr<Gc::Model::ListCfg::Entry> sourceEntry,

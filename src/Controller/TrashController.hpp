@@ -44,7 +44,7 @@
 
 namespace Gc { namespace Controller { class TrashController :
 	public Gc::Controller::Common::ControllerAbstract,
-	public View_Trait_ViewAware<Gc::View::Trash>,
+	public Gc::View::Trait::ViewAware<Gc::View::Trash>,
 	public Gc::Model::ListCfg::ListCfgConnection,
 	public Gc::View::Mapper::EntryNameConnection,
 	public Gc::Model::Device::DeviceDataListInterfaceConnection,
@@ -191,7 +191,7 @@ namespace Gc { namespace Controller { class TrashController :
 				name = this->entryNameMapper->map(rule->dataSource, name, rule->type != Gc::Model::ListCfg::Rule::SUBMENU);
 			}
 
-			View_Model_ListItem<Gc::Common::Type::Rule, Gc::Common::Type::Script> listItem;
+			Gc::View::Model::ListItem<Gc::Common::Type::Rule, Gc::Common::Type::Script> listItem;
 			listItem.name = name;
 			listItem.entryPtr = rule.get();
 			listItem.scriptPtr = nullptr;

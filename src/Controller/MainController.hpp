@@ -52,7 +52,7 @@
 
 namespace Gc { namespace Controller { class MainController :
 	public Gc::Controller::Common::ControllerAbstract,
-	public View_Trait_ViewAware<Gc::View::Main>,
+	public Gc::View::Trait::ViewAware<Gc::View::Main>,
 	public Gc::Model::ListCfg::ListCfgConnection,
 	public Gc::Model::SettingsManagerDataConnection,
 	public Gc::Model::FbResolutionsGetterConnection,
@@ -535,7 +535,7 @@ namespace Gc { namespace Controller { class MainController :
 		for (auto& proxy : this->grublistCfg->proxies){
 			std::string name = proxy->getScriptName();
 			if ((name != "header" && name != "debian_theme" && name != "grub-customizer_menu_color_helper") || proxy->isModified()) {
-				View_Model_ListItem<Gc::Common::Type::Rule, Gc::Common::Type::Proxy> listItem;
+				Gc::View::Model::ListItem<Gc::Common::Type::Rule, Gc::Common::Type::Proxy> listItem;
 				listItem.name = name;
 				listItem.scriptPtr = proxy.get();
 				listItem.is_submenu = true;
@@ -1040,7 +1040,7 @@ namespace Gc { namespace Controller { class MainController :
 
 			auto proxy = this->grublistCfg->proxies.getProxyByRule(rule);
 
-			View_Model_ListItem<Gc::Common::Type::Rule, Gc::Common::Type::Proxy> listItem;
+			Gc::View::Model::ListItem<Gc::Common::Type::Rule, Gc::Common::Type::Proxy> listItem;
 			listItem.name = name;
 			listItem.entryPtr = rule.get();
 			listItem.is_placeholder = is_other_entries_ph || is_plaintext;

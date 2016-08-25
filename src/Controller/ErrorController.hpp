@@ -35,7 +35,7 @@
 
 namespace Gc { namespace Controller { class ErrorController :
 	public Gc::Controller::Common::ControllerAbstract,
-	public View_Trait_ViewAware<Gc::View::Error>,
+	public Gc::View::Trait::ViewAware<Gc::View::Error>,
 	public Gc::Controller::Helper::ThreadConnection,
 	public Gc::Bootstrap::ApplicationHelper::ObjectConnection
 {

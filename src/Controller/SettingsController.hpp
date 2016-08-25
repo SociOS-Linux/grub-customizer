@@ -48,7 +48,7 @@
 
 namespace Gc { namespace Controller { class SettingsController :
 	public Gc::Controller::Common::ControllerAbstract,
-	public View_Trait_ViewAware<Gc::View::Settings>,
+	public Gc::View::Trait::ViewAware<Gc::View::Settings>,
 	public Gc::Model::ListCfg::ListCfgConnection,
 	public Gc::Model::SettingsManagerDataConnection,
 	public Gc::Model::FbResolutionsGetterConnection,

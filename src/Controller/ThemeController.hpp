@@ -32,7 +32,7 @@
 
 namespace Gc { namespace Controller { class ThemeController :
 	public Gc::Controller::Common::ControllerAbstract,
-	public View_Trait_ViewAware<Gc::View::Theme>,
+	public Gc::View::Trait::ViewAware<Gc::View::Theme>,
 	public Gc::Model::ThemeManagerConnection,
 	public Gc::Model::SettingsManagerDataConnection,
 	public Gc::Model::ListCfg::ListCfgConnection,

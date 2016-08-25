@@ -37,7 +37,7 @@
 
 namespace Gc { namespace Controller { class EnvEditorController :
 	public Gc::Controller::Common::ControllerAbstract,
-	public View_Trait_ViewAware<View_EnvEditor>,
+	public Gc::View::Trait::ViewAware<View_EnvEditor>,
 	public Gc::Model::EnvConnection,
 	public Gc::Bootstrap::ApplicationHelper::ObjectConnection,
 	public Gc::Model::Device::MountTableConnection,

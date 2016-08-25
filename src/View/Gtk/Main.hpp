@@ -538,7 +538,7 @@ class View_Gtk_Main : public Gc::View::Main {
 		}
 	}
 
-	public: void appendEntry(View_Model_ListItem<Gc::Common::Type::Rule, Gc::Common::Type::Proxy> const& listItem)
+	public: void appendEntry(Gc::View::Model::ListItem<Gc::Common::Type::Rule, Gc::Common::Type::Proxy> const& listItem)
 	{
 		this->tvConfList.addListItem(listItem, this->options, this->win);
 

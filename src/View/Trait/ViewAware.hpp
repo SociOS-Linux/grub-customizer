@@ -19,11 +19,13 @@
 #ifndef VIEW_VIEWAWARE_H_
 #define VIEW_VIEWAWARE_H_
 
+namespace Gc { namespace View { namespace Trait {
 template <typename T>
-class View_Trait_ViewAware {
+class ViewAware
+{
 	protected: std::shared_ptr<T> view;
 
-	public: virtual ~View_Trait_ViewAware(){}
+	public: virtual ~ViewAware(){}
 
 	public: void setView(std::shared_ptr<T> view) {
 		this->view = view;
@@ -34,6 +36,6 @@ class View_Trait_ViewAware {
 	{
 		// override to initialize specific view events
 	}
-};
+};}}}
 
 #endif /* VIEW_VIEWAWARE_H_ */

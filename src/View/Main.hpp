@@ -92,7 +92,7 @@ namespace Gc { namespace View { class Main :
 	public: virtual void setStatusText(std::string const& new_status_text) = 0;
 	public: virtual void setStatusText(std::string const& name, int pos, int max) = 0;
 	//add entry to the end of the last script of the list
-	public: virtual void appendEntry(View_Model_ListItem<Gc::Common::Type::Rule, Gc::Common::Type::Proxy> const& listItem) = 0;
+	public: virtual void appendEntry(Gc::View::Model::ListItem<Gc::Common::Type::Rule, Gc::Common::Type::Proxy> const& listItem) = 0;
 	//notifies the user about the problem that no grublistcfg_proxy has been found
 	public: virtual void showProxyNotFoundMessage() = 0;
 	//creates a string for an other entry placeholder

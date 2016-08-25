@@ -97,7 +97,7 @@ class View_Gtk_Element_List :
 	}
 
 	public:	void addListItem(
-		View_Model_ListItem<TItem, TWrapper> const& listItem,
+		Gc::View::Model::ListItem<TItem, TWrapper> const& listItem,
 		std::map<Gc::Common::Type::ViewOption, bool> const& options,
 		Gtk::Window& window
 	)
