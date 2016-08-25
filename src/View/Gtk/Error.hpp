@@ -24,7 +24,7 @@
 #include <libintl.h>
 
 class View_Gtk_Error :
-	public View_Error
+	public Gc::View::Error
 {
 	void showErrorMessage(std::string const& errorMessage, bool allowContinue)
 	{

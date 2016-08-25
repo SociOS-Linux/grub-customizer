@@ -27,7 +27,7 @@
 
 class View_Gtk_Trash :
 	public Gtk::Window,
-	public View_Trash
+	public Gc::View::Trash
 {
 	private: Gtk::ScrolledWindow scrEntryBox;
 	private: View_Gtk_Element_List<Gc::Common::Type::Rule, Gc::Common::Type::Script> list;

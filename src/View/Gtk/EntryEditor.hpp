@@ -27,7 +27,7 @@
 #include "Element/PartitionChooser.hpp"
 
 class View_Gtk_EntryEditor :
-	public View_EntryEditor,
+	public Gc::View::EntryEditor,
 	public Gtk::Dialog
 {
 	private: Gtk::VBox vbMainSections;

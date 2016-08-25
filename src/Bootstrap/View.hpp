@@ -36,15 +36,15 @@
 namespace Gc { namespace Bootstrap { class View :
 	public Gc::Model::Device::DeviceDataListInterfaceConnection
 {
-	public: std::shared_ptr<View_About> about;
-	public: std::shared_ptr<View_EntryEditor> entryEditor;
+	public: std::shared_ptr<Gc::View::About> about;
+	public: std::shared_ptr<Gc::View::EntryEditor> entryEditor;
 	public: std::shared_ptr<View_EnvEditor> envEditor;
-	public: std::shared_ptr<View_Error> error;
-	public: std::shared_ptr<View_Installer> installer;
-	public: std::shared_ptr<View_Main> main;
-	public: std::shared_ptr<View_Settings> settings;
-	public: std::shared_ptr<View_Theme> theme;
-	public: std::shared_ptr<View_Trash> trash;
+	public: std::shared_ptr<Gc::View::Error> error;
+	public: std::shared_ptr<Gc::View::Installer> installer;
+	public: std::shared_ptr<Gc::View::Main> main;
+	public: std::shared_ptr<Gc::View::Settings> settings;
+	public: std::shared_ptr<Gc::View::Theme> theme;
+	public: std::shared_ptr<Gc::View::Trash> trash;
 
 	public: void setDeviceDataList(Gc::Model::Device::DeviceDataListInterface& deviceDataList);
 

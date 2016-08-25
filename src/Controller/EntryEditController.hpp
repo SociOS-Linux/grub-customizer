@@ -44,7 +44,7 @@
 
 namespace Gc { namespace Controller { class EntryEditController :
 	public Gc::Controller::Common::ControllerAbstract,
-	public View_Trait_ViewAware<View_EntryEditor>,
+	public View_Trait_ViewAware<Gc::View::EntryEditor>,
 	public Gc::Model::ListCfg::ListCfgConnection,
 	public Gc::Model::ContentParser::GenericFactoryConnection,
 	public Gc::Model::Device::DeviceDataListInterfaceConnection,

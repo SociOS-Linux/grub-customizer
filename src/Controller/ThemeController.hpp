@@ -32,7 +32,7 @@
 
 namespace Gc { namespace Controller { class ThemeController :
 	public Gc::Controller::Common::ControllerAbstract,
-	public View_Trait_ViewAware<View_Theme>,
+	public View_Trait_ViewAware<Gc::View::Theme>,
 	public Gc::Model::ThemeManagerConnection,
 	public Gc::Model::SettingsManagerDataConnection,
 	public Gc::Model::ListCfg::ListCfgConnection,
@@ -105,14 +105,14 @@ namespace Gc { namespace Controller { class ThemeController :
 	{
 		this->logActionBegin("load-theme");
 		try {
-			this->view->setEditorType(View_Theme::EDITORTYPE_THEME);
+			this->view->setEditorType(Gc::View::Theme::EditorType::THEME);
 			this->view->setRemoveFunctionalityEnabled(true);
 			this->view->selectTheme(name);
 			this->currentTheme = name;
 			try {
 				this->themeManager->getTheme(name).getFileByNewName("theme.txt");
 			} catch (ItemNotFoundException const& e) {
-				this->view->showError(View_Theme::ERROR_THEMEFILE_NOT_FOUND);
+				this->view->showError(Gc::View::Theme::Error::THEMEFILE_NOT_FOUND);
 			}
 			this->settings->setValue("GRUB_THEME", this->themeManager->getThemePath() + "/" + name + "/theme.txt");
 			this->settings->setIsActive("GRUB_THEME", true);
@@ -136,7 +136,7 @@ namespace Gc { namespace Controller { class ThemeController :
 				this->syncSettings();
 				this->view->selectTheme(themeName);
 			} catch (InvalidFileTypeException const& e) {
-				this->view->showError(View_Theme::ERROR_INVALID_THEME_PACK_FORMAT);
+				this->view->showError(Gc::View::Theme::Error::INVALID_THEME_PACK_FORMAT);
 			}
 		} catch (const Exception& e) {
 			this->applicationObject->onError.exec(e);
@@ -172,7 +172,7 @@ namespace Gc { namespace Controller { class ThemeController :
 	{
 		this->logActionBegin("show-simple-theme-config");
 		try {
-			this->view->setEditorType(View_Theme::EDITORTYPE_CUSTOM);
+			this->view->setEditorType(Gc::View::Theme::EditorType::CUSTOM);
 			this->view->setRemoveFunctionalityEnabled(false);
 			this->view->selectTheme("");
 			this->updateColorSettingsAction();
@@ -205,7 +205,7 @@ namespace Gc { namespace Controller { class ThemeController :
 					10
 				);
 			} else {
-				this->view->showError(View_Theme::ERROR_RENAME_CONFLICT);
+				this->view->showError(Gc::View::Theme::Error::RENAME_CONFLICT);
 			}
 		} catch (Exception const& e) {
 			this->applicationObject->onError.exec(e);
@@ -292,7 +292,7 @@ namespace Gc { namespace Controller { class ThemeController :
 				}
 				this->updateEditAreaAction(newName);
 			} else {
-				this->view->showError(View_Theme::ERROR_RENAME_CONFLICT);
+				this->view->showError(Gc::View::Theme::Error::RENAME_CONFLICT);
 			}
 	
 			this->themeManager->getTheme(this->currentTheme).sort();
@@ -308,7 +308,7 @@ namespace Gc { namespace Controller { class ThemeController :
 		this->logActionBegin("load-file");
 		try {
 			if (this->currentThemeFile == "") {
-				this->view->showError(View_Theme::ERROR_NO_FILE_SELECTED);
+				this->view->showError(Gc::View::Theme::Error::NO_FILE_SELECTED);
 				return;
 			}
 			this->themeManager->getTheme(this->currentTheme).isModified = true;
@@ -344,13 +344,13 @@ namespace Gc { namespace Controller { class ThemeController :
 	{
 		this->logActionBegin("update-color-settings");
 		try {
-			if (this->view->getColorChooser(View_Theme::COLOR_CHOOSER_DEFAULT_FONT).getSelectedColor() != "" && this->view->getColorChooser(View_Theme::COLOR_CHOOSER_DEFAULT_BACKGROUND).getSelectedColor() != ""){
-				this->settings->setValue("GRUB_COLOR_NORMAL", this->view->getColorChooser(View_Theme::COLOR_CHOOSER_DEFAULT_FONT).getSelectedColor() + "/" + this->view->getColorChooser(View_Theme::COLOR_CHOOSER_DEFAULT_BACKGROUND).getSelectedColor());
+			if (this->view->getColorChooser(Gc::View::Theme::ColorChooserType::DEFAULT_FONT).getSelectedColor() != "" && this->view->getColorChooser(Gc::View::Theme::ColorChooserType::DEFAULT_BACKGROUND).getSelectedColor() != ""){
+				this->settings->setValue("GRUB_COLOR_NORMAL", this->view->getColorChooser(Gc::View::Theme::ColorChooserType::DEFAULT_FONT).getSelectedColor() + "/" + this->view->getColorChooser(Gc::View::Theme::ColorChooserType::DEFAULT_BACKGROUND).getSelectedColor());
 				this->settings->setIsActive("GRUB_COLOR_NORMAL", true);
 				this->settings->setIsExport("GRUB_COLOR_NORMAL", true);
 			}
-			if (this->view->getColorChooser(View_Theme::COLOR_CHOOSER_HIGHLIGHT_FONT).getSelectedColor() != "" && this->view->getColorChooser(View_Theme::COLOR_CHOOSER_HIGHLIGHT_BACKGROUND).getSelectedColor() != ""){
-				this->settings->setValue("GRUB_COLOR_HIGHLIGHT", this->view->getColorChooser(View_Theme::COLOR_CHOOSER_HIGHLIGHT_FONT).getSelectedColor() + "/" + this->view->getColorChooser(View_Theme::COLOR_CHOOSER_HIGHLIGHT_BACKGROUND).getSelectedColor());
+			if (this->view->getColorChooser(Gc::View::Theme::ColorChooserType::HIGHLIGHT_FONT).getSelectedColor() != "" && this->view->getColorChooser(Gc::View::Theme::ColorChooserType::HIGHLIGHT_BACKGROUND).getSelectedColor() != ""){
+				this->settings->setValue("GRUB_COLOR_HIGHLIGHT", this->view->getColorChooser(Gc::View::Theme::ColorChooserType::HIGHLIGHT_FONT).getSelectedColor() + "/" + this->view->getColorChooser(Gc::View::Theme::ColorChooserType::HIGHLIGHT_BACKGROUND).getSelectedColor());
 				this->settings->setIsActive("GRUB_COLOR_HIGHLIGHT", true);
 				this->settings->setIsExport("GRUB_COLOR_HIGHLIGHT", true);
 			}
@@ -494,7 +494,7 @@ namespace Gc { namespace Controller { class ThemeController :
 		this->logActionBegin("post-save");
 		try {
 			if (this->themeManager->hasSaveErrors()) {
-				this->view->showError(View_Theme::ERROR_SAVE_FAILED, this->themeManager->getSaveErrors());
+				this->view->showError(Gc::View::Theme::Error::SAVE_FAILED, this->themeManager->getSaveErrors());
 			}
 			this->syncSettings();
 			this->syncFiles();
@@ -534,21 +534,21 @@ namespace Gc { namespace Controller { class ThemeController :
 		std::string nColor = this->settings->getValue("GRUB_COLOR_NORMAL");
 		std::string hColor = this->settings->getValue("GRUB_COLOR_HIGHLIGHT");
 		if (nColor != ""){
-			this->view->getColorChooser(View_Theme::COLOR_CHOOSER_DEFAULT_FONT).selectColor(nColor.substr(0, nColor.find('/')));
-			this->view->getColorChooser(View_Theme::COLOR_CHOOSER_DEFAULT_BACKGROUND).selectColor(nColor.substr(nColor.find('/')+1));
+			this->view->getColorChooser(Gc::View::Theme::ColorChooserType::DEFAULT_FONT).selectColor(nColor.substr(0, nColor.find('/')));
+			this->view->getColorChooser(Gc::View::Theme::ColorChooserType::DEFAULT_BACKGROUND).selectColor(nColor.substr(nColor.find('/')+1));
 		} else {
 			//default grub menu colors
-			this->view->getColorChooser(View_Theme::COLOR_CHOOSER_DEFAULT_FONT).selectColor("light-gray");
-			this->view->getColorChooser(View_Theme::COLOR_CHOOSER_DEFAULT_BACKGROUND).selectColor("black");
+			this->view->getColorChooser(Gc::View::Theme::ColorChooserType::DEFAULT_FONT).selectColor("light-gray");
+			this->view->getColorChooser(Gc::View::Theme::ColorChooserType::DEFAULT_BACKGROUND).selectColor("black");
 		}
 
 		if (hColor != ""){
-			this->view->getColorChooser(View_Theme::COLOR_CHOOSER_HIGHLIGHT_FONT).selectColor(hColor.substr(0, hColor.find('/')));
-			this->view->getColorChooser(View_Theme::COLOR_CHOOSER_HIGHLIGHT_BACKGROUND).selectColor(hColor.substr(hColor.find('/')+1));
+			this->view->getColorChooser(Gc::View::Theme::ColorChooserType::HIGHLIGHT_FONT).selectColor(hColor.substr(0, hColor.find('/')));
+			this->view->getColorChooser(Gc::View::Theme::ColorChooserType::HIGHLIGHT_BACKGROUND).selectColor(hColor.substr(hColor.find('/')+1));
 		} else {
 			//default grub menu colors
-			this->view->getColorChooser(View_Theme::COLOR_CHOOSER_HIGHLIGHT_FONT).selectColor("magenta");
-			this->view->getColorChooser(View_Theme::COLOR_CHOOSER_HIGHLIGHT_BACKGROUND).selectColor("black");
+			this->view->getColorChooser(Gc::View::Theme::ColorChooserType::HIGHLIGHT_FONT).selectColor("magenta");
+			this->view->getColorChooser(Gc::View::Theme::ColorChooserType::HIGHLIGHT_BACKGROUND).selectColor("black");
 		}
 
 		std::string wallpaper_key = this->env->useDirectBackgroundProps ? "GRUB_BACKGROUND" : "GRUB_MENU_PICTURE";

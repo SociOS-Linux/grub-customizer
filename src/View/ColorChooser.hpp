@@ -16,21 +16,21 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef COLOR_CHOOSER_INCLUDED
-#define COLOR_CHOOSER_INCLUDED
+#ifndef ColorChooserType_INCLUDED
+#define ColorChooserType_INCLUDED
 #include <string>
 /**
  * base class to be implemented by color chooser controls
  */
-class View_ColorChooser {
-public:
-	virtual inline ~View_ColorChooser() {};
+namespace Gc { namespace View { class ColorChooser
+{
+	public: virtual inline ~ColorChooser() {};
 
 	//choose one of the colors provided by this control
-	virtual void selectColor(std::string const& codeName)=0;
+	public: virtual void selectColor(std::string const& codeName) = 0;
 
 	//determine which color is currently selected
-	virtual std::string getSelectedColor() const=0;
-};
+	public: virtual std::string getSelectedColor() const = 0;
+};}}
 
 #endif

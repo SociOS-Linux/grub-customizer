@@ -28,7 +28,7 @@
 #include "../Model/Device/DeviceDataListInterface.hpp"
 #include "../Model/Device/DeviceDataListInterfaceConnection.hpp"
 
-class View_EntryEditor :
+namespace Gc { namespace View { class EntryEditor :
 	public Gc::Model::Logger::Trait::LoggerAware,
 	public Gc::Model::Device::DeviceDataListInterfaceConnection
 {
@@ -39,7 +39,7 @@ class View_EntryEditor :
 	public: std::function<void (std::string, std::string, std::list<std::string>)> onFileChooserSelection;
 	public: std::function<void ()> onNameChange;
 
-	public: virtual inline ~View_EntryEditor() {};
+	public: virtual inline ~EntryEditor() {};
 
 	public: virtual void show() = 0;
 	public: virtual void setSourcecode(std::string const& source) = 0;
@@ -68,6 +68,6 @@ class View_EntryEditor :
 
 	public: virtual void setNameIsValid(bool valid) = 0;
 	public: virtual void setTypeIsValid(bool valid) = 0;
-};
+};}}
 
 #endif /* ENTRYEDITDLG_H_ */

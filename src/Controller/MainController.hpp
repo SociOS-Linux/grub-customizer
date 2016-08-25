@@ -52,7 +52,7 @@
 
 namespace Gc { namespace Controller { class MainController :
 	public Gc::Controller::Common::ControllerAbstract,
-	public View_Trait_ViewAware<View_Main>,
+	public View_Trait_ViewAware<Gc::View::Main>,
 	public Gc::Model::ListCfg::ListCfgConnection,
 	public Gc::Model::SettingsManagerDataConnection,
 	public Gc::Model::FbResolutionsGetterConnection,

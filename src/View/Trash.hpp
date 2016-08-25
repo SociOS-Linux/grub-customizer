@@ -29,38 +29,37 @@
 /**
  * Interface to be implemented by dialogs which lets the user adding scripts
  */
-class View_Trash :
+namespace Gc { namespace View { class Trash :
 	public Gc::Model::Logger::Trait::LoggerAware
 {
-public:
-	virtual inline ~View_Trash() {};
+	public: virtual inline ~Trash() {};
 
-	std::function<void ()> onRestore;
-	std::function<void ()> onDeleteClick;
-	std::function<void (std::list<Gc::Common::Type::Rule*> const& selectedEntries)> onSelectionChange;
+	public: std::function<void ()> onRestore;
+	public: std::function<void ()> onDeleteClick;
+	public: std::function<void (std::list<Gc::Common::Type::Rule*> const& selectedEntries)> onSelectionChange;
 
 	//clear the script menu
-	virtual void clear()=0;
+	public: virtual void clear()=0;
 	//gets the index of the selected script item
-	virtual std::list<Gc::Common::Type::Rule*> getSelectedEntries()=0;
+	public: virtual std::list<Gc::Common::Type::Rule*> getSelectedEntries()=0;
 	//adds a new item
-	virtual void addItem(View_Model_ListItem<Gc::Common::Type::Rule, Gc::Common::Type::Script> const& listItem)=0;
+	public: virtual void addItem(View_Model_ListItem<Gc::Common::Type::Rule, Gc::Common::Type::Script> const& listItem)=0;
 	//whether to active the delete button
-	virtual void setDeleteButtonEnabled(bool val) = 0;
+	public: virtual void setDeleteButtonEnabled(bool val) = 0;
 	//show this dialog
-	virtual void show()=0;
+	public: virtual void show()=0;
 	//thise this dialog
-	virtual void hide()=0;
+	public: virtual void hide()=0;
 
-	virtual void askForDeletion(std::list<std::string> const& names) = 0;
+	public: virtual void askForDeletion(std::list<std::string> const& names) = 0;
 
-	virtual void setOptions(std::map<Gc::Common::Type::ViewOption, bool> const& viewOptions) = 0;
+	public: virtual void setOptions(std::map<Gc::Common::Type::ViewOption, bool> const& viewOptions) = 0;
 
-	virtual void selectEntries(std::list<Gc::Common::Type::Rule*> const& entries) = 0;
+	public: virtual void selectEntries(std::list<Gc::Common::Type::Rule*> const& entries) = 0;
 
-	virtual void setRestoreButtonSensitivity(bool sensitivity) = 0;
+	public: virtual void setRestoreButtonSensitivity(bool sensitivity) = 0;
 
-	virtual void setDeleteButtonVisibility(bool visibility) = 0;
-};
+	public: virtual void setDeleteButtonVisibility(bool visibility) = 0;
+};}}
 
 #endif

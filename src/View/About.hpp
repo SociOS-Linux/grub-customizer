@@ -23,11 +23,12 @@
 /**
  * base class to be implemented by about dialogs
  */
-class View_About : public Gc::Model::Logger::Trait::LoggerAware {
-public:
-	virtual inline ~View_About() {};
+namespace Gc { namespace View { class About :
+	public Gc::Model::Logger::Trait::LoggerAware
+{
+	public: virtual inline ~About() {};
 	//show the about dialog, don't block
-	virtual void show()=0;
-};
+	public: virtual void show()=0;
+};}}
 
 #endif

@@ -25,98 +25,98 @@
 /**
  * Interface to be implemented by settings dialogs
  */
-class View_Settings :
-	public Gc::Model::Logger::Trait::LoggerAware {
-public:
-	std::function<void ()> onDefaultSystemChange;
-	std::function<void (std::string const& name)> onCustomSettingChange;
-	std::function<void ()> onAddCustomSettingClick;
-	std::function<void (std::string const& name)> onRemoveCustomSettingClick;
-	std::function<void ()> onShowMenuSettingChange;
-	std::function<void ()> onOsProberSettingChange;
-	std::function<void ()> onTimeoutSettingChange;
-	std::function<void ()> onKernelParamsChange;
-	std::function<void ()> onRecoverySettingChange;
-	std::function<void ()> onCustomResolutionChange;
-	std::function<void ()> onUseCustomResolutionChange;
-	std::function<void ()> onHide;
+namespace Gc { namespace View { class Settings :
+	public Gc::Model::Logger::Trait::LoggerAware
+{
+	public: std::function<void ()> onDefaultSystemChange;
+	public: std::function<void (std::string const& name)> onCustomSettingChange;
+	public: std::function<void ()> onAddCustomSettingClick;
+	public: std::function<void (std::string const& name)> onRemoveCustomSettingClick;
+	public: std::function<void ()> onShowMenuSettingChange;
+	public: std::function<void ()> onOsProberSettingChange;
+	public: std::function<void ()> onTimeoutSettingChange;
+	public: std::function<void ()> onKernelParamsChange;
+	public: std::function<void ()> onRecoverySettingChange;
+	public: std::function<void ()> onCustomResolutionChange;
+	public: std::function<void ()> onUseCustomResolutionChange;
+	public: std::function<void ()> onHide;
 
-	virtual inline ~View_Settings() {};
+	public: virtual inline ~Settings() {};
 
-	enum DefEntryType {
-		DEF_ENTRY_PREDEFINED,
-		DEF_ENTRY_SAVED
+	public: enum class DefEntryType {
+		PREDEFINED,
+		SAVED
 	};
-	struct CustomOption {
-		std::string name, old_name, value;
-		bool isActive;
+	public: class CustomOption {
+		public: std::string name, old_name, value;
+		public: bool isActive;
 	};
 	//show this dialog
-	virtual void show()=0;
+	public: virtual void show()=0;
 	//hide this dialog
-	virtual void hide()=0;
+	public: virtual void hide()=0;
 	//reads the selection row from the custom options list
-	virtual std::string getSelectedCustomOption()=0;
+	public: virtual std::string getSelectedCustomOption()=0;
 	//adds an entry to the end of the default entry chooser
-	virtual void addEntryToDefaultEntryChooser(std::string const& value, std::string const& label)=0;
+	public: virtual void addEntryToDefaultEntryChooser(std::string const& value, std::string const& label)=0;
 	//removes all items from the default entry chooser
-	virtual void clearDefaultEntryChooser()=0;
+	public: virtual void clearDefaultEntryChooser()=0;
 	//removes all item from the resolution chooser
-	virtual void clearResolutionChooser()=0;
+	public: virtual void clearResolutionChooser()=0;
 	//adds an item to the end of the resolution chooser
-	virtual void addResolution(std::string const& resolution)=0;
+	public: virtual void addResolution(std::string const& resolution)=0;
 	//gets the name of the default menu entry
-	virtual std::string getSelectedDefaultGrubValue()=0;
+	public: virtual std::string getSelectedDefaultGrubValue()=0;
 	//adds an option the the generic setting list
-	virtual void addCustomOption(bool isActive, std::string const& name, std::string const& value)=0;
+	public: virtual void addCustomOption(bool isActive, std::string const& name, std::string const& value)=0;
 	//select the specified custom option entry
-	virtual void selectCustomOption(std::string const& name)=0;
+	public: virtual void selectCustomOption(std::string const& name)=0;
 	//removes all generic setting rows
-	virtual void removeAllSettingRows()=0;
+	public: virtual void removeAllSettingRows()=0;
 	//reads the given generic option
-	virtual CustomOption getCustomOption(std::string const& name)=0;
+	public: virtual CustomOption getCustomOption(std::string const& name)=0;
 	//sets which type of default entry to use
-	virtual void setActiveDefEntryOption(DefEntryType option)=0;
+	public: virtual void setActiveDefEntryOption(DefEntryType option)=0;
 	//determines which type of default entry should be used
-	virtual DefEntryType getActiveDefEntryOption()=0;
+	public: virtual DefEntryType getActiveDefEntryOption()=0;
 	//sets the default entry
-	virtual void setDefEntry(std::string const& defEntry)=0;
+	public: virtual void setDefEntry(std::string const& defEntry)=0;
 	//sets whether the show menu checkbox should be active or not
-	virtual void setShowMenuCheckboxState(bool isActive)=0;
+	public: virtual void setShowMenuCheckboxState(bool isActive)=0;
 	//determines whether the show menu checkbox is active or not
-	virtual bool getShowMenuCheckboxState()=0;
+	public: virtual bool getShowMenuCheckboxState()=0;
 	//sets whether the os-prober checkbox should be active or not
-	virtual void setOsProberCheckboxState(bool isActive)=0;
+	public: virtual void setOsProberCheckboxState(bool isActive)=0;
 	//sets whether the os-prober checkbox is active or not
-	virtual bool getOsProberCheckboxState()=0;
+	public: virtual bool getOsProberCheckboxState()=0;
 	//shows the information about a conflict between os-prober and hidden menus
-	virtual void showHiddenMenuOsProberConflictMessage()=0;
+	public: virtual void showHiddenMenuOsProberConflictMessage()=0;
 	//sets the grub menu timeout
-	virtual void setTimeoutValue(int value)=0;
+	public: virtual void setTimeoutValue(int value)=0;
 	//sets weather the grub menu timeout is active
-	virtual void setTimeoutActive(bool active)=0;
+	public: virtual void setTimeoutActive(bool active)=0;
 	//reads the grub menu timeout
-	virtual int getTimeoutValue()=0;
+	public: virtual int getTimeoutValue()=0;
 	//reads the grub menu timeout as string
-	virtual std::string getTimeoutValueString()=0;
+	public: virtual std::string getTimeoutValueString()=0;
 	//says wheather the timeout checkbox is activates
-	virtual bool getTimeoutActive()=0;
+	public: virtual bool getTimeoutActive()=0;
 	//sets kernel params
-	virtual void setKernelParams(std::string const& params)=0;
+	public: virtual void setKernelParams(std::string const& params)=0;
 	//reads kernel params
-	virtual std::string getKernelParams()=0;
+	public: virtual std::string getKernelParams()=0;
 	//sets whether the recovery checkbox should be active or not
-	virtual void setRecoveryCheckboxState(bool isActive)=0;
+	public: virtual void setRecoveryCheckboxState(bool isActive)=0;
 	//determines whether the recovery checkbox is active or not
-	virtual bool getRecoveryCheckboxState()=0;
+	public: virtual bool getRecoveryCheckboxState()=0;
 	//sets whether the resolution should be active or not
-	virtual void setResolutionCheckboxState(bool isActive)=0;
+	public: virtual void setResolutionCheckboxState(bool isActive)=0;
 	//determines whether the resolution is active or not
-	virtual bool getResolutionCheckboxState()=0;
+	public: virtual bool getResolutionCheckboxState()=0;
 	//sets the selected resolution
-	virtual void setResolution(std::string const& resolution)=0;
+	public: virtual void setResolution(std::string const& resolution)=0;
 	//reads the selected resolution
-	virtual std::string getResolution()=0;
-};
+	public: virtual std::string getResolution()=0;
+};}}
 
 #endif

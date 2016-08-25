@@ -90,7 +90,7 @@ namespace Gc { namespace Controller { class EnvEditorController :
 			try {
 				this->mountTable->getEntryRefByMountpoint(PARTCHOOSER_MOUNTPOINT + submountpoint).mount();
 			} catch (MountException const& e){
-				this->view->showErrorMessage(View_EnvEditor::SUB_MOUNT_FAILED);
+				this->view->showErrorMessage(View_EnvEditor::MountExceptionType::SUB_MOUNT_FAILED);
 				this->view->setSubmountpointSelectionState(submountpoint, false);
 				this->view->show();
 			} catch (SystemException const& e){
@@ -110,7 +110,7 @@ namespace Gc { namespace Controller { class EnvEditorController :
 			try {
 				this->mountTable->getEntryRefByMountpoint(PARTCHOOSER_MOUNTPOINT + submountpoint).umount();
 			} catch (UMountException const& e){
-				this->view->showErrorMessage(View_EnvEditor::SUB_UMOUNT_FAILED);
+				this->view->showErrorMessage(View_EnvEditor::MountExceptionType::SUB_UMOUNT_FAILED);
 				this->view->setSubmountpointSelectionState(submountpoint, true);
 				this->view->show();
 			} catch (SystemException const& e){
@@ -161,11 +161,11 @@ namespace Gc { namespace Controller { class EnvEditorController :
 					this->showAction();
 				}
 				catch (MountException const& e) {
-					this->view->showErrorMessage(View_EnvEditor::MOUNT_FAILED);
+					this->view->showErrorMessage(View_EnvEditor::MountExceptionType::MOUNT_FAILED);
 					this->switchPartitionAction("");
 				}
 				catch (MissingFstabException const& e) {
-					this->view->showErrorMessage(View_EnvEditor::MOUNT_ERR_NO_FSTAB);
+					this->view->showErrorMessage(View_EnvEditor::MountExceptionType::MOUNT_ERR_NO_FSTAB);
 					mountTable->getEntryRefByMountpoint(PARTCHOOSER_MOUNTPOINT).umount();
 					this->switchPartitionAction("");
 				}

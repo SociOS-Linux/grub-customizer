@@ -26,7 +26,7 @@
 
 class View_Gtk_About :
 	public Gtk::AboutDialog,
-	public View_About
+	public Gc::View::About
 {
 	private: Glib::ustring appName, appVersion;
 	private: std::vector<Glib::ustring> authors;

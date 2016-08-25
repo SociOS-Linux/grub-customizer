@@ -27,7 +27,7 @@
 
 class View_Gtk_Settings :
 	public Gtk::Dialog,
-	public View_Settings
+	public Gc::View::Settings
 {
 	struct AdvancedSettingsTreeModel : public Gtk::TreeModelColumnRecord {
 		Gtk::TreeModelColumn<bool> active;
@@ -388,11 +388,11 @@ class View_Gtk_Settings :
 	public: void setActiveDefEntryOption(DefEntryType option)
 	{
 		this->event_lock = true;
-		if (option == this->DEF_ENTRY_SAVED) {
+		if (option == DefEntryType::SAVED) {
 			rbDefSaved.set_active(true);
 			cbDefEntry.set_sensitive(false);
 		}
-		else if (option == this->DEF_ENTRY_PREDEFINED) {
+		else if (option == DefEntryType::PREDEFINED) {
 			rbDefPredefined.set_active(true);
 			cbDefEntry.set_sensitive(true);
 		}
@@ -401,7 +401,7 @@ class View_Gtk_Settings :
 
 	public: DefEntryType getActiveDefEntryOption()
 	{
-		return rbDefSaved.get_active() ? DEF_ENTRY_SAVED : DEF_ENTRY_PREDEFINED;
+		return rbDefSaved.get_active() ? DefEntryType::SAVED : DefEntryType::PREDEFINED;
 	}
 
 	public: void setDefEntry(std::string const& defEntry)

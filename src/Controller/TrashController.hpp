@@ -44,7 +44,7 @@
 
 namespace Gc { namespace Controller { class TrashController :
 	public Gc::Controller::Common::ControllerAbstract,
-	public View_Trait_ViewAware<View_Trash>,
+	public View_Trait_ViewAware<Gc::View::Trash>,
 	public Gc::Model::ListCfg::ListCfgConnection,
 	public Gc::View::Mapper::EntryNameConnection,
 	public Gc::Model::Device::DeviceDataListInterfaceConnection,

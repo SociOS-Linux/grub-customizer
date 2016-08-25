@@ -25,7 +25,7 @@
 
 class View_Gtk_Installer :
 	public Gtk::Dialog,
-	public View_Installer
+	public Gc::View::Installer
 {
 	private: Gtk::Label lblDescription;
 	private: Gtk::HBox hbDevice;

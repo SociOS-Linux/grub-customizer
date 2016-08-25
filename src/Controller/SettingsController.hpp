@@ -48,7 +48,7 @@
 
 namespace Gc { namespace Controller { class SettingsController :
 	public Gc::Controller::Common::ControllerAbstract,
-	public View_Trait_ViewAware<View_Settings>,
+	public View_Trait_ViewAware<Gc::View::Settings>,
 	public Gc::Model::ListCfg::ListCfgConnection,
 	public Gc::Model::SettingsManagerDataConnection,
 	public Gc::Model::FbResolutionsGetterConnection,
@@ -178,7 +178,7 @@ namespace Gc { namespace Controller { class SettingsController :
 	{
 		this->logActionBegin("update-default-system");
 		try {
-			if (this->view->getActiveDefEntryOption() == View_Settings::DEF_ENTRY_SAVED){
+			if (this->view->getActiveDefEntryOption() == Gc::View::Settings::DefEntryType::SAVED){
 				this->settings->setValue("GRUB_DEFAULT", "saved");
 				this->settings->setValue("GRUB_SAVEDEFAULT", "true");
 				this->settings->setIsActive("GRUB_SAVEDEFAULT", true);
@@ -199,7 +199,7 @@ namespace Gc { namespace Controller { class SettingsController :
 	{
 		this->logActionBegin("update-custom-setting");
 		try {
-			View_Settings::CustomOption c = this->view->getCustomOption(name);
+			Gc::View::Settings::CustomOption c = this->view->getCustomOption(name);
 			this->settings->renameItem(c.old_name, c.name);
 			this->settings->setValue(c.name, c.value);
 			this->settings->setIsActive(c.name, c.isActive);
@@ -406,10 +406,10 @@ namespace Gc { namespace Controller { class SettingsController :
 		this->view->selectCustomOption(sel);
 		std::string defEntry = this->settings->getValue("GRUB_DEFAULT");
 		if (defEntry == "saved"){
-			this->view->setActiveDefEntryOption(View_Settings::DEF_ENTRY_SAVED);
+			this->view->setActiveDefEntryOption(Gc::View::Settings::DefEntryType::SAVED);
 		}
 		else {
-			this->view->setActiveDefEntryOption(View_Settings::DEF_ENTRY_PREDEFINED);
+			this->view->setActiveDefEntryOption(Gc::View::Settings::DefEntryType::PREDEFINED);
 			this->view->setDefEntry(defEntry);
 		}
 

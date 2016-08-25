@@ -36,7 +36,7 @@ class ImageMenuItemOwnKey : public Gtk::ImageMenuItem {
 	}
 };
 
-class View_Gtk_Main : public View_Main {
+class View_Gtk_Main : public Gc::View::Main {
 	private: Gtk::Window win;
 	private: Gtk::VBox vbMainSplit;
 	private: Gtk::Notebook notebook;

@@ -32,7 +32,7 @@
 
 namespace Gc { namespace Controller { class AboutController :
 	public Gc::Controller::Common::ControllerAbstract,
-	public View_Trait_ViewAware<View_About>,
+	public View_Trait_ViewAware<Gc::View::About>,
 	public Gc::Bootstrap::ApplicationHelper::ObjectConnection
 {
 	public:	AboutController() :

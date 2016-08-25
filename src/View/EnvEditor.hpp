@@ -28,34 +28,33 @@ class View_EnvEditor :
 	public Gc::Model::Logger::Trait::LoggerAware,
 	public Gc::Model::Device::DeviceDataListInterfaceConnection
 {
-public:
-	virtual inline ~View_EnvEditor() {};
+	public: virtual inline ~View_EnvEditor() {};
 
-	std::function<void (std::string const& submountpoint)> onMountSubmountpointClick;
-	std::function<void (std::string const& submountpoint)> onUmountSubmountpointClick;
-	std::function<void (std::string const& newPartition)> onSwitchPartition;
-	std::function<void (int newTypeIndex)> onSwitchBootloaderType;
-	std::function<void ()> onOptionChange;
-	std::function<void (bool saveConfig)> onApplyClick;
-	std::function<void ()> onExitClick;
+	public: std::function<void (std::string const& submountpoint)> onMountSubmountpointClick;
+	public: std::function<void (std::string const& submountpoint)> onUmountSubmountpointClick;
+	public: std::function<void (std::string const& newPartition)> onSwitchPartition;
+	public: std::function<void (int newTypeIndex)> onSwitchBootloaderType;
+	public: std::function<void ()> onOptionChange;
+	public: std::function<void (bool saveConfig)> onApplyClick;
+	public: std::function<void ()> onExitClick;
 
-	enum MountExceptionType {
+	public: enum class MountExceptionType {
 		MOUNT_FAILED,
 		UMOUNT_FAILED,
 		MOUNT_ERR_NO_FSTAB,
 		SUB_MOUNT_FAILED,
 		SUB_UMOUNT_FAILED
 	};
-	virtual void show(bool resetPartitionChooser = false) = 0;
-	virtual void hide() = 0;
-	virtual void removeAllSubmountpoints() = 0;
-	virtual void addSubmountpoint(std::string const& name, bool isActive) = 0;
-	virtual void setEnvSettings(std::map<std::string, std::string> const& props, std::list<std::string> const& requiredProps, std::list<std::string> const& validProps) = 0;
-	virtual std::map<std::string, std::string> getEnvSettings() = 0;
-	virtual void setRootDeviceName(std::string const& rootDeviceName) = 0;
-	virtual int getBootloaderType() const = 0;
-	virtual void setSubmountpointSelectionState(std::string const& submountpoint, bool new_isSelected) = 0;
-	virtual void showErrorMessage(MountExceptionType type)=0;
+	public: virtual void show(bool resetPartitionChooser = false) = 0;
+	public: virtual void hide() = 0;
+	public: virtual void removeAllSubmountpoints() = 0;
+	public: virtual void addSubmountpoint(std::string const& name, bool isActive) = 0;
+	public: virtual void setEnvSettings(std::map<std::string, std::string> const& props, std::list<std::string> const& requiredProps, std::list<std::string> const& validProps) = 0;
+	public: virtual std::map<std::string, std::string> getEnvSettings() = 0;
+	public: virtual void setRootDeviceName(std::string const& rootDeviceName) = 0;
+	public: virtual int getBootloaderType() const = 0;
+	public: virtual void setSubmountpointSelectionState(std::string const& submountpoint, bool new_isSelected) = 0;
+	public: virtual void showErrorMessage(MountExceptionType type)=0;
 };
 
 #endif /* GRUBENVEDITOR_H_ */

@@ -26,7 +26,7 @@
 #include <libintl.h>
 
 //a gtkmm combobox with colorful foreground and background. useful to choose an item of a predefined color set
-class View_Gtk_Theme_ColorChooser : public Gtk::ComboBox, public View_ColorChooser {
+class View_Gtk_Theme_ColorChooser : public Gtk::ComboBox, public Gc::View::ColorChooser {
 	struct Columns : public Gtk::TreeModelColumnRecord {
 		Gtk::TreeModelColumn<Glib::ustring> name;
 		Gtk::TreeModelColumn<Glib::ustring> idName;
@@ -132,7 +132,7 @@ public: GrubColorChooser(bool blackIsTransparent = false) :
 };
 
 class View_Gtk_Theme :
-	public View_Theme,
+	public Gc::View::Theme,
 	public Gtk::Dialog
 {
 	private: Gtk::VBox vbMain;
@@ -529,11 +529,11 @@ class View_Gtk_Theme :
 		this->frmThemeEditor.hide();
 
 		switch (type) {
-		case EDITORTYPE_CUSTOM:
+		case EditorType::CUSTOM:
 			this->frmCustomTheme.show();
 			this->frmCustomTheme.show_all_children(true);
 			break;
-		case EDITORTYPE_THEME:
+		case EditorType::THEME:
 			this->frmThemeEditor.show();
 			this->frmThemeEditor.show_all_children(true);
 			break;
@@ -550,23 +550,23 @@ class View_Gtk_Theme :
 	public:	void showError(Error const& e, std::string const& info = "")
 	{
 		switch (e) {
-		case ERROR_INVALID_THEME_PACK_FORMAT:
+		case Error::INVALID_THEME_PACK_FORMAT:
 			Gtk::MessageDialog(gettext("The chosen file cannot be loaded as theme"), false, Gtk::MESSAGE_ERROR).run();
 			break;
-		case ERROR_RENAME_CONFLICT:
+		case Error::RENAME_CONFLICT:
 			Gtk::MessageDialog(gettext("The given filename cannot be used"), false, Gtk::MESSAGE_ERROR).run();
 			break;
-		case ERROR_THEMEFILE_NOT_FOUND:
+		case Error::THEMEFILE_NOT_FOUND:
 			Gtk::MessageDialog(Glib::ustring::compose(gettext("This theme doesn't contain a %1. Please look for the config file and rename it to \"%1\"!"), "theme.txt"), false, Gtk::MESSAGE_WARNING).run();
 			break;
-		case ERROR_SAVE_FAILED:
+		case Error::SAVE_FAILED:
 			Gtk::MessageDialog(Glib::ustring(gettext("Saving of themes didn't succeed completely!")) + "\n" + info, false, Gtk::MESSAGE_WARNING).run();
 			break;
-		case ERROR_NO_FILE_SELECTED:
+		case Error::NO_FILE_SELECTED:
 			Gtk::MessageDialog(gettext("File replacement failed. Please select a theme file first!"), false, Gtk::MESSAGE_ERROR).run();
 			break;
 		default:
-			throw NotImplementedException("the current value of View_Theme::Error is not processed", __FILE__, __LINE__);
+			throw NotImplementedException("the current value of Gc::View::Theme::Error is not processed", __FILE__, __LINE__);
 		}
 	}
 
@@ -587,14 +587,14 @@ class View_Gtk_Theme :
 		return "[" + std::string(gettext("filename")) + "]";
 	}
 
-	public:	View_ColorChooser& getColorChooser(ColorChooserType type)
+	public:	Gc::View::ColorChooser& getColorChooser(ColorChooserType type)
 	{
-		View_ColorChooser* result = nullptr;
+		Gc::View::ColorChooser* result = nullptr;
 		switch (type){
-			case COLOR_CHOOSER_DEFAULT_BACKGROUND: result = &this->gccNormalBackground; break;
-			case COLOR_CHOOSER_DEFAULT_FONT: result = &this->gccNormalForeground; break;
-			case COLOR_CHOOSER_HIGHLIGHT_BACKGROUND: result = &this->gccHighlightBackground; break;
-			case COLOR_CHOOSER_HIGHLIGHT_FONT: result = &this->gccHighlightForeground; break;
+			case ColorChooserType::DEFAULT_BACKGROUND: result = &this->gccNormalBackground; break;
+			case ColorChooserType::DEFAULT_FONT: result = &this->gccNormalForeground; break;
+			case ColorChooserType::HIGHLIGHT_BACKGROUND: result = &this->gccHighlightBackground; break;
+			case ColorChooserType::HIGHLIGHT_FONT: result = &this->gccHighlightForeground; break;
 		}
 
 		assert(result != nullptr);
