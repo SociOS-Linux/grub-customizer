@@ -24,11 +24,11 @@
 #include "../Model/Logger/Trait/LoggerAware.hpp"
 #include "../Model/Device/DeviceDataListInterface.hpp"
 
-class View_EnvEditor :
+namespace Gc { namespace View { class EnvEditor :
 	public Gc::Model::Logger::Trait::LoggerAware,
 	public Gc::Model::Device::DeviceDataListInterfaceConnection
 {
-	public: virtual inline ~View_EnvEditor() {};
+	public: virtual inline ~EnvEditor() {};
 
 	public: std::function<void (std::string const& submountpoint)> onMountSubmountpointClick;
 	public: std::function<void (std::string const& submountpoint)> onUmountSubmountpointClick;
@@ -55,6 +55,6 @@ class View_EnvEditor :
 	public: virtual int getBootloaderType() const = 0;
 	public: virtual void setSubmountpointSelectionState(std::string const& submountpoint, bool new_isSelected) = 0;
 	public: virtual void showErrorMessage(MountExceptionType type)=0;
-};
+};}}
 
 #endif /* GRUBENVEDITOR_H_ */

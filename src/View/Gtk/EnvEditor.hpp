@@ -28,7 +28,7 @@ namespace Gc { namespace View { namespace Gtk {
 namespace Gtk = ::Gtk;
 class EnvEditor :
 	public Gtk::Dialog,
-	public View_EnvEditor
+	public Gc::View::EnvEditor
 {
 	private: Gtk::VBox vbContent;
 	private: Gtk::Table tblLayout;

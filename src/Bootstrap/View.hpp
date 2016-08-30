@@ -38,7 +38,7 @@ namespace Gc { namespace Bootstrap { class View :
 {
 	public: std::shared_ptr<Gc::View::About> about;
 	public: std::shared_ptr<Gc::View::EntryEditor> entryEditor;
-	public: std::shared_ptr<View_EnvEditor> envEditor;
+	public: std::shared_ptr<Gc::View::EnvEditor> envEditor;
 	public: std::shared_ptr<Gc::View::Error> error;
 	public: std::shared_ptr<Gc::View::Installer> installer;
 	public: std::shared_ptr<Gc::View::Main> main;

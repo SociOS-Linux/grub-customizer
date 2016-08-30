@@ -37,7 +37,7 @@
 
 namespace Gc { namespace Controller { class EnvEditorController :
 	public Gc::Controller::Common::ControllerAbstract,
-	public Gc::View::Trait::ViewAware<View_EnvEditor>,
+	public Gc::View::Trait::ViewAware<Gc::View::EnvEditor>,
 	public Gc::Model::EnvConnection,
 	public Gc::Bootstrap::ApplicationHelper::ObjectConnection,
 	public Gc::Model::Device::MountTableConnection,
@@ -90,7 +90,7 @@ namespace Gc { namespace Controller { class EnvEditorController :
 			try {
 				this->mountTable->getEntryRefByMountpoint(PARTCHOOSER_MOUNTPOINT + submountpoint).mount();
 			} catch (MountException const& e){
-				this->view->showErrorMessage(View_EnvEditor::MountExceptionType::SUB_MOUNT_FAILED);
+				this->view->showErrorMessage(Gc::View::EnvEditor::MountExceptionType::SUB_MOUNT_FAILED);
 				this->view->setSubmountpointSelectionState(submountpoint, false);
 				this->view->show();
 			} catch (SystemException const& e){
@@ -110,7 +110,7 @@ namespace Gc { namespace Controller { class EnvEditorController :
 			try {
 				this->mountTable->getEntryRefByMountpoint(PARTCHOOSER_MOUNTPOINT + submountpoint).umount();
 			} catch (UMountException const& e){
-				this->view->showErrorMessage(View_EnvEditor::MountExceptionType::SUB_UMOUNT_FAILED);
+				this->view->showErrorMessage(Gc::View::EnvEditor::MountExceptionType::SUB_UMOUNT_FAILED);
 				this->view->setSubmountpointSelectionState(submountpoint, true);
 				this->view->show();
 			} catch (SystemException const& e){
@@ -161,11 +161,11 @@ namespace Gc { namespace Controller { class EnvEditorController :
 					this->showAction();
 				}
 				catch (MountException const& e) {
-					this->view->showErrorMessage(View_EnvEditor::MountExceptionType::MOUNT_FAILED);
+					this->view->showErrorMessage(Gc::View::EnvEditor::MountExceptionType::MOUNT_FAILED);
 					this->switchPartitionAction("");
 				}
 				catch (MissingFstabException const& e) {
-					this->view->showErrorMessage(View_EnvEditor::MountExceptionType::MOUNT_ERR_NO_FSTAB);
+					this->view->showErrorMessage(Gc::View::EnvEditor::MountExceptionType::MOUNT_ERR_NO_FSTAB);
 					mountTable->getEntryRefByMountpoint(PARTCHOOSER_MOUNTPOINT).umount();
 					this->switchPartitionAction("");
 				}
