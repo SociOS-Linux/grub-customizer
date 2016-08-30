@@ -27,15 +27,15 @@
 #include "View.hpp"
 
 Gc::Bootstrap::View::View() {
-	auto about = std::make_shared<View_Gtk_About>();
-	auto entryEditor = std::make_shared<View_Gtk_EntryEditor>();
-	auto envEditor = std::make_shared<View_Gtk_EnvEditor>();
-	auto error = std::make_shared<View_Gtk_Error>();
-	auto installer = std::make_shared<View_Gtk_Installer>();
-	auto main = std::make_shared<View_Gtk_Main>();
-	auto settings = std::make_shared<View_Gtk_Settings>();
-	auto theme = std::make_shared<View_Gtk_Theme>();
-	auto trash = std::make_shared<View_Gtk_Trash>();
+	auto about = std::make_shared<Gc::View::Gtk::About>();
+	auto entryEditor = std::make_shared<Gc::View::Gtk::EntryEditor>();
+	auto envEditor = std::make_shared<Gc::View::Gtk::EnvEditor>();
+	auto error = std::make_shared<Gc::View::Gtk::Error>();
+	auto installer = std::make_shared<Gc::View::Gtk::Installer>();
+	auto main = std::make_shared<Gc::View::Gtk::Main>();
+	auto settings = std::make_shared<Gc::View::Gtk::Settings>();
+	auto theme = std::make_shared<Gc::View::Gtk::Theme>();
+	auto trash = std::make_shared<Gc::View::Gtk::Trash>();
 
 	main->putSettingsDialog(settings->getCommonSettingsPane(), settings->getAppearanceSettingsPane());
 	main->putTrashList(trash->getList());

@@ -24,114 +24,11 @@
 #include <gtkmm.h>
 #include <string>
 #include <libintl.h>
+#include "Element/GrubColorChooser.hpp"
 
-//a gtkmm combobox with colorful foreground and background. useful to choose an item of a predefined color set
-class View_Gtk_Theme_ColorChooser : public Gtk::ComboBox, public Gc::View::ColorChooser {
-	struct Columns : public Gtk::TreeModelColumnRecord {
-		Gtk::TreeModelColumn<Glib::ustring> name;
-		Gtk::TreeModelColumn<Glib::ustring> idName;
-		Gtk::TreeModelColumn<Glib::ustring> colorCode_background;
-		Gtk::TreeModelColumn<Glib::ustring> colorCode_foreground;
-		Columns() {
-			this->add(this->idName);
-			this->add(this->name);
-			this->add(this->colorCode_background);
-			this->add(this->colorCode_foreground);
-		}
-	};
-	private: Columns columns;
-	private: Glib::RefPtr<Gtk::ListStore> refListStore;
-	public: bool event_lock = false;
-
-	public:	View_Gtk_Theme_ColorChooser()
-	{
-		refListStore = Gtk::ListStore::create(columns);
-		this->set_model(refListStore);
-
-		this->pack_start(columns.name);
-
-		Glib::ListHandle<Gtk::CellRenderer*> cellRenderers = this->get_cells();
-		Gtk::CellRenderer* cellRenderer = *cellRenderers.begin();
-
-		this->add_attribute(*cellRenderer, "background", columns.colorCode_background);
-		this->add_attribute(*cellRenderer, "foreground", columns.colorCode_foreground);
-	}
-
-	public:	void addColor(
-		std::string const& codeName,
-		std::string const& outputName,
-		std::string const& cell_background,
-		std::string const& cell_foreground
-	)
-	{
-		this->event_lock = true;
-		Gtk::TreeModel::iterator iter = refListStore->append();
-		(*iter)[columns.idName] = codeName;
-		(*iter)[columns.name] = outputName;
-		(*iter)[columns.colorCode_background] = cell_background;
-		(*iter)[columns.colorCode_foreground] = cell_foreground;
-		this->event_lock = false;
-	}
-
-	public:	void selectColor(std::string const& codeName)
-	{
-		this->event_lock = true;
-		this->set_active(0);
-		for (Gtk::TreeModel::iterator iter = this->get_active(); iter; iter++){
-			if ((*iter)[columns.idName] == codeName){
-				this->set_active(iter);
-				break;
-			}
-		}
-		this->event_lock = false;
-	}
-
-	public:	std::string getSelectedColor() const
-	{
-		Gtk::TreeModel::iterator iter = this->get_active();
-		if (iter)
-			return (Glib::ustring)(*iter)[columns.idName];
-		else
-			return "";
-	}
-
-	public:	Pango::Color getSelectedColorAsPangoObject() const
-	{
-		Pango::Color color;
-		Gtk::TreeModel::iterator iter = this->get_active();
-		if (iter) {
-			color.parse((Glib::ustring)(*iter)[columns.colorCode_background]);
-		}
-		return color;
-	}
-};
-
-//a color chooser with predefined colors for grub
-class GrubColorChooser : public View_Gtk_Theme_ColorChooser {
-public: GrubColorChooser(bool blackIsTransparent = false) :
-	View_Gtk_Theme_ColorChooser()
-{
-		this->addColor("white",          gettext("white"),         "#ffffff", "#000000");
-		this->addColor("yellow",         gettext("yellow"),        "#fefe54", "#000000");
-		this->addColor("light-cyan",     gettext("light-cyan"),    "#54fefe", "#000000");
-		this->addColor("cyan",           gettext("cyan"),          "#00a8a8", "#000000");
-		this->addColor("light-blue",     gettext("light-blue"),    "#5454fe", "#000000");
-		this->addColor("blue",           gettext("blue"),          "#0000a8", "#000000");
-		this->addColor("light-green",    gettext("light-green"),   "#54fe54", "#000000");
-		this->addColor("green",          gettext("green"),         "#00a800", "#000000");
-		this->addColor("light-magenta",  gettext("light-magenta"), "#eb4eeb", "#000000");
-		this->addColor("magenta",        gettext("magenta"),       "#a800a8", "#000000");
-		this->addColor("light-red",      gettext("light-red"),     "#fe5454", "#000000");
-		this->addColor("red",            gettext("red"),           "#ff0000", "#000000");
-		this->addColor("brown",          gettext("brown"),         "#a85400", "#000000");
-		this->addColor("light-gray",     gettext("light-gray"),    "#a8a8a8", "#000000");
-		this->addColor("dark-gray",      gettext("dark-gray"),     "#545454", "#000000");
-		this->addColor("black", blackIsTransparent ? gettext("transparent") : gettext("black"), "#000000", "#ffffff");
-	}
-
-};
-
-class View_Gtk_Theme :
+namespace Gc { namespace View { namespace Gtk {
+namespace Gtk = ::Gtk;
+class Theme :
 	public Gc::View::Theme,
 	public Gtk::Dialog
 {
@@ -173,7 +70,7 @@ class View_Gtk_Theme :
 
 	//color chooser
 	private: Gtk::VBox vbColorChoosers;
-	private: GrubColorChooser gccNormalForeground, gccNormalBackground, gccHighlightForeground, gccHighlightBackground;
+	private: Gc::View::Gtk::Element::GrubColorChooser gccNormalForeground, gccNormalBackground, gccHighlightForeground, gccHighlightBackground;
 	private: Gtk::Label lblNormalForeground, lblNormalBackground, lblHighlightForeground, lblHighlightBackground;
 	private: Gtk::VBox vbNormalForeground, vbNormalBackground, vbHighlightForeground, vbHighlightBackground;
 	private: Gtk::Frame groupNormalForeground, groupNormalBackground, groupHighlightForeground, groupHighlightBackground;
@@ -205,7 +102,7 @@ class View_Gtk_Theme :
 
 	private: bool event_lock = false;
 
-	public:	View_Gtk_Theme() :
+	public:	Theme() :
 		lvFiles(1, true),
 		lblFileSelection(gettext("_Load file: "), true),
 		tbttAdd(Gtk::Stock::ADD),
@@ -402,29 +299,29 @@ class View_Gtk_Theme :
 		this->add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
 		this->add_button(Gtk::Stock::SAVE, Gtk::RESPONSE_APPLY);
 
-		tbttAdd.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Theme::signal_fileAddClick));
-		tbttRemove.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Theme::signal_fileRemoveClick));
-		lvFiles.get_selection()->signal_changed().connect(sigc::mem_fun(this, &View_Gtk_Theme::signal_fileSelected));
-		lvFiles.get_model()->signal_row_changed().connect(sigc::mem_fun(this, &View_Gtk_Theme::signal_fileRenamed));
-		fcFileSelection.signal_file_set().connect(sigc::mem_fun(this, &View_Gtk_Theme::signal_fileChosen));
-		txtEdit.get_buffer()->signal_changed().connect(sigc::mem_fun(this, &View_Gtk_Theme::signal_textChanged));
-		cbTheme.signal_changed().connect(sigc::mem_fun(this, &View_Gtk_Theme::signal_themeChosen));
-		bttAddTheme.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Theme::signal_addThemeClicked));
-		bttRemoveTheme.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Theme::signal_removeThemeClicked));
-		bttThemeHelp.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Theme::signal_help_click));
-		fcThemeFileChooser.signal_response().connect(sigc::mem_fun(this, &View_Gtk_Theme::signal_themeFileChooserResponse));
-		this->signal_response().connect(sigc::mem_fun(this, &View_Gtk_Theme::signal_dialogResponse));
+		tbttAdd.signal_clicked().connect(sigc::mem_fun(this, &Gc::View::Gtk::Theme::signal_fileAddClick));
+		tbttRemove.signal_clicked().connect(sigc::mem_fun(this, &Gc::View::Gtk::Theme::signal_fileRemoveClick));
+		lvFiles.get_selection()->signal_changed().connect(sigc::mem_fun(this, &Gc::View::Gtk::Theme::signal_fileSelected));
+		lvFiles.get_model()->signal_row_changed().connect(sigc::mem_fun(this, &Gc::View::Gtk::Theme::signal_fileRenamed));
+		fcFileSelection.signal_file_set().connect(sigc::mem_fun(this, &Gc::View::Gtk::Theme::signal_fileChosen));
+		txtEdit.get_buffer()->signal_changed().connect(sigc::mem_fun(this, &Gc::View::Gtk::Theme::signal_textChanged));
+		cbTheme.signal_changed().connect(sigc::mem_fun(this, &Gc::View::Gtk::Theme::signal_themeChosen));
+		bttAddTheme.signal_clicked().connect(sigc::mem_fun(this, &Gc::View::Gtk::Theme::signal_addThemeClicked));
+		bttRemoveTheme.signal_clicked().connect(sigc::mem_fun(this, &Gc::View::Gtk::Theme::signal_removeThemeClicked));
+		bttThemeHelp.signal_clicked().connect(sigc::mem_fun(this, &Gc::View::Gtk::Theme::signal_help_click));
+		fcThemeFileChooser.signal_response().connect(sigc::mem_fun(this, &Gc::View::Gtk::Theme::signal_themeFileChooserResponse));
+		this->signal_response().connect(sigc::mem_fun(this, &Gc::View::Gtk::Theme::signal_dialogResponse));
 
-		gccNormalForeground.signal_changed().connect(sigc::bind<View_Gtk_Theme_ColorChooser&>(sigc::mem_fun(this, &View_Gtk_Theme::signal_color_changed), gccNormalForeground));
-		gccNormalBackground.signal_changed().connect(sigc::bind<View_Gtk_Theme_ColorChooser&>(sigc::mem_fun(this, &View_Gtk_Theme::signal_color_changed), gccNormalBackground));
-		gccHighlightForeground.signal_changed().connect(sigc::bind<View_Gtk_Theme_ColorChooser&>(sigc::mem_fun(this, &View_Gtk_Theme::signal_color_changed), gccHighlightForeground));
-		gccHighlightBackground.signal_changed().connect(sigc::bind<View_Gtk_Theme_ColorChooser&>(sigc::mem_fun(this, &View_Gtk_Theme::signal_color_changed), gccHighlightBackground));
-		bttFont.signal_font_set().connect(sigc::mem_fun(this, &View_Gtk_Theme::signal_font_changed));
-		bttRemoveFont.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Theme::signal_font_removed));
-		fcBackgroundImage.signal_file_set().connect(sigc::mem_fun(this, &View_Gtk_Theme::signal_other_image_chosen));
-		bttRemoveBackground.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Theme::signal_bttRemoveBackground_clicked));
+		gccNormalForeground.signal_changed().connect(sigc::bind<Gc::View::Gtk::Element::ColorChooser&>(sigc::mem_fun(this, &Gc::View::Gtk::Theme::signal_color_changed), gccNormalForeground));
+		gccNormalBackground.signal_changed().connect(sigc::bind<Gc::View::Gtk::Element::ColorChooser&>(sigc::mem_fun(this, &Gc::View::Gtk::Theme::signal_color_changed), gccNormalBackground));
+		gccHighlightForeground.signal_changed().connect(sigc::bind<Gc::View::Gtk::Element::ColorChooser&>(sigc::mem_fun(this, &Gc::View::Gtk::Theme::signal_color_changed), gccHighlightForeground));
+		gccHighlightBackground.signal_changed().connect(sigc::bind<Gc::View::Gtk::Element::ColorChooser&>(sigc::mem_fun(this, &Gc::View::Gtk::Theme::signal_color_changed), gccHighlightBackground));
+		bttFont.signal_font_set().connect(sigc::mem_fun(this, &Gc::View::Gtk::Theme::signal_font_changed));
+		bttRemoveFont.signal_clicked().connect(sigc::mem_fun(this, &Gc::View::Gtk::Theme::signal_font_removed));
+		fcBackgroundImage.signal_file_set().connect(sigc::mem_fun(this, &Gc::View::Gtk::Theme::signal_other_image_chosen));
+		bttRemoveBackground.signal_clicked().connect(sigc::mem_fun(this, &Gc::View::Gtk::Theme::signal_bttRemoveBackground_clicked));
 
-		drwBackgroundPreview.signal_draw().connect(sigc::mem_fun(this, &View_Gtk_Theme::signal_redraw_preview));
+		drwBackgroundPreview.signal_draw().connect(sigc::mem_fun(this, &Gc::View::Gtk::Theme::signal_redraw_preview));
 	}
 
 
@@ -711,9 +608,9 @@ class View_Gtk_Theme :
 					this->previewEntryTitles_mutex.lock();
 					for (std::list<std::string>::iterator iter = this->previewEntryTitles.begin(); iter != this->previewEntryTitles.end(); iter++) {
 						if (iter == this->previewEntryTitles.begin()) {
-							exampleTexts.push_back(View_Gtk_Theme::createFormattedText(context, *iter, fontName, fg_s.get_red() / 255, fg_s.get_green() / 255, fg_s.get_blue() / 255, bg_s.get_red() / 255, bg_s.get_green() / 255, bg_s.get_blue() / 255));
+							exampleTexts.push_back(Gc::View::Gtk::Theme::createFormattedText(context, *iter, fontName, fg_s.get_red() / 255, fg_s.get_green() / 255, fg_s.get_blue() / 255, bg_s.get_red() / 255, bg_s.get_green() / 255, bg_s.get_blue() / 255));
 						} else {
-							exampleTexts.push_back(View_Gtk_Theme::createFormattedText(context, *iter, fontName, fg_n.get_red() / 255, fg_n.get_green() / 255, fg_n.get_blue() / 255, bg_n.get_red() / 255, bg_n.get_green() / 255, bg_n.get_blue() / 255));
+							exampleTexts.push_back(Gc::View::Gtk::Theme::createFormattedText(context, *iter, fontName, fg_n.get_red() / 255, fg_n.get_green() / 255, fg_n.get_blue() / 255, bg_n.get_red() / 255, bg_n.get_green() / 255, bg_n.get_blue() / 255));
 						}
 					}
 					this->previewEntryTitles_mutex.unlock();
@@ -895,7 +792,7 @@ class View_Gtk_Theme :
 	}
 
 
-	private: void signal_color_changed(View_Gtk_Theme_ColorChooser& caller)
+	private: void signal_color_changed(Gc::View::Gtk::Element::ColorChooser& caller)
 	{
 		if (!event_lock && !caller.event_lock){
 			this->onColorChange();
@@ -972,7 +869,7 @@ class View_Gtk_Theme :
 		}
 		return result;
 	}
-};
+};}}}
 
 
 #endif /* THEME_GTK_H_ */

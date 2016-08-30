@@ -25,8 +25,10 @@
 #include "../../../Common/Functions.hpp"
 #include <libintl.h>
 
+namespace Gc { namespace View { namespace Gtk { namespace Element {
+namespace Gtk = ::Gtk;
 template<typename TItem, typename TWrapper>
-class View_Gtk_Element_List :
+class List :
 	public Gtk::TreeView
 {
 	public:	struct TreeModel :
@@ -71,7 +73,7 @@ class View_Gtk_Element_List :
 	public: Gtk::TreeViewColumn mainColumn;
 	public: Pango::EllipsizeMode ellipsizeMode;
 
-	public:	View_Gtk_Element_List() :
+	public:	List() :
 		ellipsizeMode(Pango::ELLIPSIZE_NONE)
 	{
 		refTreeStore = Gtk::TreeStore::create(treeModel);
@@ -264,7 +266,7 @@ class View_Gtk_Element_List :
 
 		return rules;
 	}
-};
+};}}}}
 
 
 #endif /* LIST_H_ */

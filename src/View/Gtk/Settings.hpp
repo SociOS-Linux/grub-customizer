@@ -25,24 +25,26 @@
 #include "../ColorChooser.hpp"
 
 
-class View_Gtk_Settings :
+namespace Gc { namespace View { namespace Gtk {
+namespace Gtk = ::Gtk;
+class Settings :
 	public Gtk::Dialog,
 	public Gc::View::Settings
 {
-	struct AdvancedSettingsTreeModel : public Gtk::TreeModelColumnRecord {
-		Gtk::TreeModelColumn<bool> active;
-		Gtk::TreeModelColumn<Glib::ustring> name;
-		Gtk::TreeModelColumn<Glib::ustring> old_name;
-		Gtk::TreeModelColumn<Glib::ustring> value;
-		AdvancedSettingsTreeModel() {
+	private: class AdvancedSettingsTreeModel : public Gtk::TreeModelColumnRecord {
+		public: Gtk::TreeModelColumn<bool> active;
+		public: Gtk::TreeModelColumn<Glib::ustring> name;
+		public: Gtk::TreeModelColumn<Glib::ustring> old_name;
+		public: Gtk::TreeModelColumn<Glib::ustring> value;
+		public: AdvancedSettingsTreeModel() {
 			this->add(active);
 			this->add(name);
 			this->add(old_name);
 			this->add(value);
 		}
 	};
-	struct CustomOption_obj : public CustomOption {
-		CustomOption_obj(std::string name, std::string old_name, std::string value, bool isActive) {
+	class CustomOption_obj : public CustomOption {
+		public: CustomOption_obj(std::string name, std::string old_name, std::string value, bool isActive) {
 			this->name = name;
 			this->old_name = old_name;
 			this->value = value;
@@ -107,7 +109,7 @@ class View_Gtk_Settings :
 	private: Gtk::CheckButton chkResolution;
 	private: Gtk::ComboBoxText cbResolution;
 
-	public: View_Gtk_Settings() :
+	public: Settings() :
 		bttAddCustomEntry(Gtk::Stock::ADD),
 		bttRemoveCustomEntry(Gtk::Stock::REMOVE),
 		rbDefPredefined(gettext("pre_defined: "), true),
@@ -144,7 +146,7 @@ class View_Gtk_Settings :
 		tvAllEntries.append_column_editable(gettext("is active"), asTreeModel.active);
 		tvAllEntries.append_column_editable(gettext("name"), asTreeModel.name);
 		tvAllEntries.append_column_editable(gettext("value"), asTreeModel.value);
-		refAsListStore->signal_row_changed().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_setting_row_changed));
+		refAsListStore->signal_row_changed().connect(sigc::mem_fun(this, &Gc::View::Gtk::Settings::signal_setting_row_changed));
 		vbCommonSettings.set_spacing(15);
 		vbAppearanceSettings.set_spacing(5);
 
@@ -246,21 +248,21 @@ class View_Gtk_Settings :
 
 
 		//<signals>
-		rbDefPredefined.signal_toggled().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_default_entry_predefined_toggeled));
-		rbDefSaved.signal_toggled().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_default_entry_saved_toggeled));
-		cbDefEntry.signal_changed().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_default_entry_changed));
-		txtDefEntry.signal_changed().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_default_entry_changed));
-		chkShowMenu.signal_toggled().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_showMenu_toggled));
-		chkOsProber.signal_toggled().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_osProber_toggled));
-		spTimeout.signal_value_changed().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_timeout_changed));
-		chkTimeout.signal_toggled().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_timeout_checkbox_toggled));
-		txtKernelParams.signal_changed().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_kernelparams_changed));
-		chkGenerateRecovery.signal_toggled().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_recovery_toggled));
-		chkResolution.signal_toggled().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_chkResolution_toggled));
-		cbResolution.get_entry()->signal_changed().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_resolution_selected));
-		bttAddCustomEntry.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_add_row_button_clicked));
-		bttRemoveCustomEntry.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_remove_row_button_clicked));
-		bttDefaultEntryHelp.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Settings::signal_defEntryHelpClick));
+		rbDefPredefined.signal_toggled().connect(sigc::mem_fun(this, &Gc::View::Gtk::Settings::signal_default_entry_predefined_toggeled));
+		rbDefSaved.signal_toggled().connect(sigc::mem_fun(this, &Gc::View::Gtk::Settings::signal_default_entry_saved_toggeled));
+		cbDefEntry.signal_changed().connect(sigc::mem_fun(this, &Gc::View::Gtk::Settings::signal_default_entry_changed));
+		txtDefEntry.signal_changed().connect(sigc::mem_fun(this, &Gc::View::Gtk::Settings::signal_default_entry_changed));
+		chkShowMenu.signal_toggled().connect(sigc::mem_fun(this, &Gc::View::Gtk::Settings::signal_showMenu_toggled));
+		chkOsProber.signal_toggled().connect(sigc::mem_fun(this, &Gc::View::Gtk::Settings::signal_osProber_toggled));
+		spTimeout.signal_value_changed().connect(sigc::mem_fun(this, &Gc::View::Gtk::Settings::signal_timeout_changed));
+		chkTimeout.signal_toggled().connect(sigc::mem_fun(this, &Gc::View::Gtk::Settings::signal_timeout_checkbox_toggled));
+		txtKernelParams.signal_changed().connect(sigc::mem_fun(this, &Gc::View::Gtk::Settings::signal_kernelparams_changed));
+		chkGenerateRecovery.signal_toggled().connect(sigc::mem_fun(this, &Gc::View::Gtk::Settings::signal_recovery_toggled));
+		chkResolution.signal_toggled().connect(sigc::mem_fun(this, &Gc::View::Gtk::Settings::signal_chkResolution_toggled));
+		cbResolution.get_entry()->signal_changed().connect(sigc::mem_fun(this, &Gc::View::Gtk::Settings::signal_resolution_selected));
+		bttAddCustomEntry.signal_clicked().connect(sigc::mem_fun(this, &Gc::View::Gtk::Settings::signal_add_row_button_clicked));
+		bttRemoveCustomEntry.signal_clicked().connect(sigc::mem_fun(this, &Gc::View::Gtk::Settings::signal_remove_row_button_clicked));
+		bttDefaultEntryHelp.signal_clicked().connect(sigc::mem_fun(this, &Gc::View::Gtk::Settings::signal_defEntryHelpClick));
 
 		this->add_button(Gtk::Stock::CLOSE, Gtk::RESPONSE_CLOSE);
 		this->set_default_size(500, 600);
@@ -688,6 +690,6 @@ class View_Gtk_Settings :
 	{
 		this->onHide();
 	}
-};
+};}}}
 
 #endif

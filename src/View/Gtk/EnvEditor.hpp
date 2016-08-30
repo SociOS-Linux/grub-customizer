@@ -24,7 +24,9 @@
 #include <libintl.h>
 #include "Element/PartitionChooser.hpp"
 
-class View_Gtk_EnvEditor :
+namespace Gc { namespace View { namespace Gtk {
+namespace Gtk = ::Gtk;
+class EnvEditor :
 	public Gtk::Dialog,
 	public View_EnvEditor
 {
@@ -37,7 +39,7 @@ class View_Gtk_EnvEditor :
 	private: Gtk::ScrolledWindow scrSubmountpoints;
 	private: Gtk::VBox vbSubmountpoints;
 	private: Gtk::Label lblSubmountpoints;
-	private: View_Gtk_Element_PartitionChooser* pChooser = nullptr;
+	private: Gc::View::Gtk::Element::PartitionChooser* pChooser = nullptr;
 	private: std::map<std::string, Gtk::Entry*> optionMap;
 	private: std::map<std::string, Gtk::Label*> labelMap;
 	private: std::map<std::string, Gtk::Image*> imageMap;
@@ -48,7 +50,7 @@ class View_Gtk_EnvEditor :
 
 	private: std::string rootDeviceName;
 
-	public: View_Gtk_EnvEditor() :
+	public: EnvEditor() :
 		lblPartition(gettext("_Partition:"), true),
 		lblType(gettext("_Type:"), true),
 		lblSubmountpoints(gettext("Submountpoints:")),
@@ -84,7 +86,7 @@ class View_Gtk_EnvEditor :
 		this->cbType.append(gettext("Grub 2"));
 		this->cbType.append(gettext("BURG"));
 		this->cbType.set_active(0);
-		this->cbType.signal_changed().connect(sigc::mem_fun(this, &View_Gtk_EnvEditor::signal_bootloaderType_changed));
+		this->cbType.signal_changed().connect(sigc::mem_fun(this, &Gc::View::Gtk::EnvEditor::signal_bootloaderType_changed));
 
 		lblPartition.set_alignment(Pango::ALIGN_RIGHT);
 		lblType.set_alignment(Pango::ALIGN_RIGHT);
@@ -96,12 +98,12 @@ class View_Gtk_EnvEditor :
 		this->add_button(Gtk::Stock::QUIT, Gtk::RESPONSE_CLOSE);
 		this->add_button(Gtk::Stock::APPLY, Gtk::RESPONSE_APPLY);
 
-		this->signal_response().connect(sigc::mem_fun(this, &View_Gtk_EnvEditor::signal_response_action));
+		this->signal_response().connect(sigc::mem_fun(this, &Gc::View::Gtk::EnvEditor::signal_response_action));
 
 		this->eventLock = false;
 	}
 
-	public: ~View_Gtk_EnvEditor()
+	public: ~EnvEditor()
 	{
 		if (this->pChooser) {
 			this->tblLayout.remove(*this->pChooser);
@@ -142,7 +144,7 @@ class View_Gtk_EnvEditor :
 				entryCreated = true;
 				this->tblLayout.attach(*entry, 1, 2, pos, pos+1, Gtk::EXPAND | Gtk::FILL, Gtk::SHRINK);
 				label->set_mnemonic_widget(*entry);
-				entry->signal_changed().connect(sigc::mem_fun(this, &View_Gtk_EnvEditor::signal_optionModified));
+				entry->signal_changed().connect(sigc::mem_fun(this, &Gc::View::Gtk::EnvEditor::signal_optionModified));
 				this->optionMap[property.first] = entry;
 			} else {
 				entry = this->optionMap[property.first];
@@ -202,8 +204,8 @@ class View_Gtk_EnvEditor :
 		}
 
 		if (!this->pChooser) {
-			this->pChooser = new View_Gtk_Element_PartitionChooser("", *this->deviceDataList, true, this->rootDeviceName);
-			this->pChooser->signal_changed().connect(sigc::mem_fun(this, &View_Gtk_EnvEditor::signal_partitionChanged));
+			this->pChooser = new Gc::View::Gtk::Element::PartitionChooser("", *this->deviceDataList, true, this->rootDeviceName);
+			this->pChooser->signal_changed().connect(sigc::mem_fun(this, &Gc::View::Gtk::EnvEditor::signal_partitionChanged));
 		}
 		if (resetPartitionChooser) {
 			this->pChooser->set_active(0);
@@ -238,7 +240,7 @@ class View_Gtk_EnvEditor :
 	{
 		Gtk::CheckButton* cb = new Gtk::CheckButton(name);
 		cb->set_active(isActive);
-		cb->signal_toggled().connect(sigc::bind<Gtk::CheckButton&>(sigc::mem_fun(this, &View_Gtk_EnvEditor::signal_submountpointToggled), *cb));
+		cb->signal_toggled().connect(sigc::bind<Gtk::CheckButton&>(sigc::mem_fun(this, &Gc::View::Gtk::EnvEditor::signal_submountpointToggled), *cb));
 		this->vbSubmountpoints.pack_start(*cb, Gtk::PACK_SHRINK);
 		this->subMountpoints[name] = cb;
 
@@ -323,6 +325,6 @@ class View_Gtk_EnvEditor :
 			}
 		}
 	}
-};
+};}}}
 
 #endif /* GRUBENVEDITOR_H_ */

@@ -23,10 +23,12 @@
 #include <gtkmm.h>
 #include <libintl.h>
 
-class View_Gtk_Error :
+namespace Gc { namespace View { namespace Gtk {
+namespace Gtk = ::Gtk;
+class Error :
 	public Gc::View::Error
 {
-	void showErrorMessage(std::string const& errorMessage, bool allowContinue)
+	private: void showErrorMessage(std::string const& errorMessage, bool allowContinue)
 	{
 		Gtk::MessageDialog msgDlg(gettext("An error occurred"), false, Gtk::MESSAGE_ERROR, Gtk::BUTTONS_NONE, true);
 		msgDlg.set_secondary_text(gettext("please Inform the author about this problem. The following information could be helpful:") + std::string("\n\n") + errorMessage);
@@ -39,7 +41,7 @@ class View_Gtk_Error :
 			this->onQuitClick();
 		}
 	}
-};
+};}}}
 
 
 #endif /* ERRORGTK_H_ */

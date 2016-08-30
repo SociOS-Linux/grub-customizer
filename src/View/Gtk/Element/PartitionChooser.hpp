@@ -23,7 +23,9 @@
 #include "../../../Model/Device/DeviceDataListInterface.hpp"
 #include <libintl.h>
 
-class View_Gtk_Element_PartitionChooser :
+namespace Gc { namespace View { namespace Gtk { namespace Element {
+namespace Gtk = ::Gtk;
+class PartitionChooser :
 	public Gtk::ComboBoxText
 {
 	private: std::map<std::string, std::string> uuid_map;
@@ -32,7 +34,7 @@ class View_Gtk_Element_PartitionChooser :
 	private: bool prependCurrentPartition;
 	private: std::string currentPartitionName;
 
-	public:	View_Gtk_Element_PartitionChooser(
+	public:	PartitionChooser(
 		Glib::ustring const& activePartition_uuid,
 		Gc::Model::Device::DeviceDataListInterface const& deviceDataList,
 		bool prependCurrentPartition = false,
@@ -82,6 +84,6 @@ class View_Gtk_Element_PartitionChooser :
 		return str;
 	}
 
-};
+};}}}}
 
 #endif
