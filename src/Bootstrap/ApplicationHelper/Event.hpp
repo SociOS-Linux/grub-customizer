@@ -19,6 +19,7 @@
 #ifndef SRC_BOOTSTRAP_APPLICATIONHELPER_EVENT_HPP_
 #define SRC_BOOTSTRAP_APPLICATIONHELPER_EVENT_HPP_
 
+#include <list>
 
 namespace Gc { namespace Bootstrap { namespace ApplicationHelper { template <typename... Args> class Event
 {

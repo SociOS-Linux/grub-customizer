@@ -15,16 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
-#include "../View/Gtk/About.hpp"
-#include "../View/Gtk/EntryEditor.hpp"
-#include "../View/Gtk/EnvEditor.hpp"
-#include "../View/Gtk/Error.hpp"
-#include "../View/Gtk/Installer.hpp"
-#include "../View/Gtk/Main.hpp"
-#include "../View/Gtk/Settings.hpp"
-#include "../View/Gtk/Theme.hpp"
-#include "../View/Gtk/Trash.hpp"
-#include "View.hpp"
+#include "GtkView.cpp.inc.hpp"
 
 Gc::Bootstrap::View::View() {
 	auto about = std::make_shared<Gc::View::Gtk::About>();

@@ -15,8 +15,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
-#include "../../Common/Regex/GLib.hpp"
-#include "../Factory.hpp"
+#include "GLibRegex.cpp.inc.hpp"
 
 std::shared_ptr<Gc::Common::Regex::Generic> Gc::Bootstrap::Factory::createRegexExgine()
 {

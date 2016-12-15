@@ -20,6 +20,7 @@
 #define SRC_BOOTSTRAP_APPLICATIONHELPER_OBJECT_HPP_
 
 #include "Event.hpp"
+#include <map>
 
 namespace Gc { namespace Bootstrap { namespace ApplicationHelper { class Object
 {
