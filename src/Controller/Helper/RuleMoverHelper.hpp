@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef RULEMOVER_HPP_
-#define RULEMOVER_HPP_
 
 #include <memory>
 
@@ -51,4 +49,3 @@ namespace Gc { namespace Controller { namespace Helper { class RuleMoverHelper :
 	}
 };}}}
 
-#endif /* RULEMOVER_HPP_ */

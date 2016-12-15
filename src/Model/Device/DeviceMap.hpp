@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef GRUBDEVICEMAP_H_
-#define GRUBDEVICEMAP_H_
 #include <map>
 #include <unistd.h>
 
@@ -130,4 +128,3 @@ namespace Gc { namespace Model { namespace Device { class DeviceMap :
 
 };}}}
 
-#endif

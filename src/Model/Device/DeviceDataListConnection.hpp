@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef SRC_MODEL_DEVICE_DEVICEDATALISTCONNECTION_HPP_
-#define SRC_MODEL_DEVICE_DEVICEDATALISTCONNECTION_HPP_
 
 
 namespace Gc { namespace Model { namespace Device { class DeviceDataListConnection
@@ -30,4 +28,3 @@ namespace Gc { namespace Model { namespace Device { class DeviceDataListConnecti
 	}
 };}}}
 
-#endif /* SRC_MODEL_DEVICE_DEVICEDATALISTCONNECTION_HPP_ */

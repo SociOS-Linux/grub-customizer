@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef ARRAYSTRUCTUREITEM_H_
-#define ARRAYSTRUCTUREITEM_H_
 #include <string>
 #include <map>
 #include <list>
@@ -112,4 +110,3 @@ namespace Gc { namespace Common { namespace ArrayStructure { class Item
 
 
 
-#endif /* ARRAYSTRUCTUREITEM_H_ */

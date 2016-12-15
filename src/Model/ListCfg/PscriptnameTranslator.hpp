@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef PSCRIPTNAME_TRANSLATOR_INCLUDED
-#define PSCRIPTNAME_TRANSLATOR_INCLUDED
 
 #include <string>
 #include <sstream>
@@ -45,4 +43,3 @@ namespace Gc { namespace Model { namespace ListCfg { class PscriptnameTranslator
 
 };}}}
 
-#endif

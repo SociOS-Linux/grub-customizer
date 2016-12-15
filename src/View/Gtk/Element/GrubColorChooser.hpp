@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef SRC_VIEW_GTK_ELEMENT_GRUBCOLORCHOOSER_HPP_
-#define SRC_VIEW_GTK_ELEMENT_GRUBCOLORCHOOSER_HPP_
 
 
 //a color chooser with predefined colors for grub
@@ -48,4 +46,3 @@ namespace Gc { namespace View { namespace Gtk { namespace Element { class GrubCo
 };}}}}
 
 
-#endif /* SRC_VIEW_GTK_ELEMENT_GRUBCOLORCHOOSER_HPP_ */

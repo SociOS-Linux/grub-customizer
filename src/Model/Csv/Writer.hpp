@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef CSV_WRITER_H_
-#define CSV_WRITER_H_
 
 #include <list>
 #include <map>
@@ -70,4 +68,3 @@ namespace Gc { namespace Model { namespace Csv { class Writer
 };}}}
 
 
-#endif /* CSV_WRITER_H_ */

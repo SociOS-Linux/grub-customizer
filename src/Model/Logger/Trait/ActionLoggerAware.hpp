@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef TRAIT_ACTIONLOGGERAWARE_H_
-#define TRAIT_ACTIONLOGGERAWARE_H_
 
 namespace Gc { namespace Model { namespace Logger { namespace Trait { class ActionLoggerAware :
 	public Gc::Model::Logger::Trait::LoggerAware
@@ -54,4 +52,3 @@ namespace Gc { namespace Model { namespace Logger { namespace Trait { class Acti
 };}}}}
 
 
-#endif /* TRAIT_ACTIONLOGGERAWARE_H_ */

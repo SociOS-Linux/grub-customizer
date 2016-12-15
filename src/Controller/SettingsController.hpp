@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef SETTINGSCONTROLLERIMPL_H_
-#define SETTINGSCONTROLLERIMPL_H_
 
 #include <libintl.h>
 #include <locale.h>
@@ -424,4 +422,3 @@ namespace Gc { namespace Controller { class SettingsController :
 	}
 };}}
 
-#endif

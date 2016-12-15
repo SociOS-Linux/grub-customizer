@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef SRC_CONTROLLER_HELPER_RULEMOVERCONNECTION_HPP_
-#define SRC_CONTROLLER_HELPER_RULEMOVERCONNECTION_HPP_
 
 namespace Gc { namespace Controller { namespace Helper { class RuleMoverConnection
 {
@@ -31,4 +29,3 @@ namespace Gc { namespace Controller { namespace Helper { class RuleMoverConnecti
 	}
 };}}}
 
-#endif /* SRC_CONTROLLER_HELPER_RULEMOVERCONNECTION_HPP_ */

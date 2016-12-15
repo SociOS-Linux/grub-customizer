@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef GRUB_CUSTOMIZER_PROXY_INCLUDED
-#define GRUB_CUSTOMIZER_PROXY_INCLUDED
 #include <sys/stat.h>
 #include <unistd.h>
 #include <map>
@@ -824,4 +822,3 @@ namespace Gc { namespace Model { namespace ListCfg { class Proxy :
 
 };}}}
 
-#endif

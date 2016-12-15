@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef GRUBENV_INCLUDED
-#define GRUBENV_INCLUDED
 
 #include <string>
 #include <cstdio>
@@ -427,4 +425,3 @@ namespace Gc { namespace Model { class Env :
 
 };}}
 
-#endif

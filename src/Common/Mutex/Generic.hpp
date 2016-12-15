@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef MUTEX_H_INCLUDED
-#define MUTEX_H_INCLUDED
 #include <cstdlib>
 #include <memory>
 
@@ -31,4 +29,3 @@ namespace Gc { namespace Common { namespace Mutex { class Generic :
 	public: virtual void unlock() = 0;
 };}}}
 
-#endif

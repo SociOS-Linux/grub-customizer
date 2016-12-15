@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef SRC_BOOTSTRAP_FACTORY_HPP_
-#define SRC_BOOTSTRAP_FACTORY_HPP_
 
 namespace Gc { namespace Bootstrap { class Factory
 {
@@ -163,4 +161,3 @@ namespace Gc { namespace Bootstrap { class Factory
 	private: std::shared_ptr<Gc::Controller::Helper::Thread> createThreadHelper();
 };}}
 
-#endif /* SRC_BOOTSTRAP_FACTORY_HPP_ */

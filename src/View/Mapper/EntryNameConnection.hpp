@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef ENTRYNAMECONNECTION_H_
-#define ENTRYNAMECONNECTION_H_
 
 #include <string>
 
@@ -31,4 +29,3 @@ namespace Gc { namespace View { namespace Mapper { class EntryNameConnection
 	}
 };}}}
 
-#endif /* ENTRYNAME_H_ */

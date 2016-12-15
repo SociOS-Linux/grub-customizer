@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef HELPER_THREAD_H_INCLUDED
-#define HELPER_THREAD_H_INCLUDED
 #include <functional>
 
 namespace Gc { namespace Controller { namespace Helper { class Thread :
@@ -29,4 +27,3 @@ namespace Gc { namespace Controller { namespace Helper { class Thread :
 	public: virtual void runAsThread(std::function<void ()> function) = 0;
 };}}}
 
-#endif /* HELPER_THREAD_H_INCLUDED */

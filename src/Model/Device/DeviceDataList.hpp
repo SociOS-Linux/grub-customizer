@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef DEVICE_DATALIST_INCLUDED
-#define DEVICE_DATALIST_INCLUDED
 #include <map>
 #include <cstdio>
 #include <string>
@@ -89,4 +87,3 @@ namespace Gc { namespace Model { namespace Device { class DeviceDataList :
 };}}}
 
 
-#endif

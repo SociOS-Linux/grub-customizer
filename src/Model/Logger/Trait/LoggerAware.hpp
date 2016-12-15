@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef TRAIT_LOGGERAWARE_INCLUDED
-#define TRAIT_LOGGERAWARE_INCLUDED
 
 #include <memory>
 
@@ -61,4 +59,3 @@ namespace Gc { namespace Model { namespace Logger { namespace Trait { class Logg
 };}}}}
 
 
-#endif /* TRAIT_LOGGERAWARE_INCLUDED */

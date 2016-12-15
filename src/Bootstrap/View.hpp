@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef SRC_BOOTSTRAP_VIEW_HPP_
-#define SRC_BOOTSTRAP_VIEW_HPP_
 
 #include <memory>
 
@@ -42,4 +40,3 @@ namespace Gc { namespace Bootstrap { class View :
 
 
 
-#endif /* SRC_BOOTSTRAP_VIEW_HPP_ */

@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef SCRIPTSOURCEMAP_H_
-#define SCRIPTSOURCEMAP_H_
 
 #include <map>
 #include <string>
@@ -134,4 +132,3 @@ namespace Gc { namespace Model { namespace ListCfg { class ScriptSourceMap :
 };}}}
 
 
-#endif /* SCRIPTSOURCEMAP_H_ */

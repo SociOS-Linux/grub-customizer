@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef ENTRY_EDIT_CONTROLLER_INCLUDED
-#define ENTRY_EDIT_CONTROLLER_INCLUDED
 
 #include <libintl.h>
 #include <locale.h>
@@ -349,4 +347,3 @@ namespace Gc { namespace Controller { class EntryEditController :
 	}
 };}}
 
-#endif

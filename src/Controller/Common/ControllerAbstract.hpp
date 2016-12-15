@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef CONTROLLER_ABSTRACT_H_
-#define CONTROLLER_ABSTRACT_H_
 
 namespace Gc { namespace Controller { namespace Common { class ControllerAbstract :
 	public Gc::Model::Logger::Trait::ActionLoggerAware
@@ -28,4 +26,3 @@ namespace Gc { namespace Controller { namespace Common { class ControllerAbstrac
 	}
 };}}}
 
-#endif /* CONTROLLER_ABSTRACT_H_ */

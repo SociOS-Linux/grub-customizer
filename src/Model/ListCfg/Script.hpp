@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef GRUB_CUSTOMIZER_SCRIPT_INCLUDED
-#define GRUB_CUSTOMIZER_SCRIPT_INCLUDED
 #include <string>
 #include <list>
 #include <cstdlib>
@@ -299,4 +297,3 @@ namespace Gc { namespace Model { namespace ListCfg { class Script :
 
 };}}}
 
-#endif

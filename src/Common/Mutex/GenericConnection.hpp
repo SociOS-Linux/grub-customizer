@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef MUTEX_CONNECTION_H_INCLUDED
-#define MUTEX_CONNECTION_H_INCLUDED
 #include <memory>
 
 namespace Gc { namespace Common { namespace Mutex { class GenericConnection
@@ -30,4 +28,3 @@ namespace Gc { namespace Common { namespace Mutex { class GenericConnection
 	}
 };}}}
 
-#endif

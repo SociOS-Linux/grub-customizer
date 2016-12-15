@@ -15,8 +15,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
-#ifndef LOGGER_H_INCLUDED
-#define LOGGER_H_INCLUDED
 
 #include <string>
 #include <memory>
@@ -49,4 +47,3 @@ namespace Gc { namespace Model { namespace Logger { class GenericLogger
 	public: virtual void logActionEndThreaded() = 0;
 };}}}
 
-#endif

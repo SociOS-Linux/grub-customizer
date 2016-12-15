@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef GRUBLISTCFGDLG_H_
-#define GRUBLISTCFGDLG_H_
 
 #include <string>
 #include <vector>
@@ -145,4 +143,3 @@ namespace Gc { namespace View { class Main :
 	public: virtual void setEntryVisibility(Gc::Common::Type::Rule* entry, bool value) = 0;
 };}}
 
-#endif

@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef THEMEFILE_H_
-#define THEMEFILE_H_
 #include <string>
 
 namespace Gc { namespace Model { class ThemeFile
@@ -42,4 +40,3 @@ namespace Gc { namespace Model { class ThemeFile
 };}}
 
 
-#endif /* THEMEFILE_H_ */

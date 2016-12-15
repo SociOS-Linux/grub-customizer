@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef GRUB_CUSTOMIZER_REPOSITORY_INCLUDED
-#define GRUB_CUSTOMIZER_REPOSITORY_INCLUDED
 #include <sys/stat.h>
 #include <dirent.h>
 #include <map>
@@ -211,4 +209,3 @@ namespace Gc { namespace Model { namespace ListCfg { class Repository :
 
 };}}}
 
-#endif

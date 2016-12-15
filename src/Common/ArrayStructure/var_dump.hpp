@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef ARRAYSTRUCTUREDUMP_H_
-#define ARRAYSTRUCTUREDUMP_H_
 #include <string>
 #include <map>
 #include <list>
@@ -69,4 +67,3 @@ inline void var_dump(std::map<std::string, Gc::Common::ArrayStructure::Item> con
 }}}
 
 
-#endif /* ARRAYSTRUCTUREDUMP_H_ */

@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef MODEL_THEME_H_
-#define MODEL_THEME_H_
 #include <list>
 #include <cstdio>
 #include <sys/stat.h>
@@ -388,4 +386,3 @@ namespace Gc { namespace Model { class Theme {
 };}}
 
 
-#endif /* MODEL_THEME_H_ */

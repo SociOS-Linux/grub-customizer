@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef REGEX_CONNECTION_H_INCLUDED
-#define REGEX_CONNECTION_H_INCLUDED
 #include <string>
 #include <vector>
 #include <map>
@@ -33,4 +31,3 @@ namespace Gc { namespace Common { namespace Regex { class GenericConnection
 	}
 };}}}
 
-#endif

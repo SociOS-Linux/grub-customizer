@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef GRUB_INSTALL_DLG_GTK_INCLUDED
-#define GRUB_INSTALL_DLG_GTK_INCLUDED
 
 #include <gtkmm.h>
 #include <libintl.h>
@@ -98,4 +96,3 @@ class Installer :
 		}
 	}
 };}}}
-#endif

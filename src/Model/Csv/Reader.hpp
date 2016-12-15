@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef CSV_READER_H_
-#define CSV_READER_H_
 
 #include <list>
 #include <map>
@@ -89,4 +87,3 @@ namespace Gc { namespace Model { namespace Csv { class Reader
 };}}}
 
 
-#endif /* CSV_READER_H_ */

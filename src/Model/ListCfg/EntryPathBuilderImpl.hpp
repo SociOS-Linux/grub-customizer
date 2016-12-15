@@ -17,8 +17,6 @@
  */
 
 
-#ifndef ENTRYPATHBUILDERIMPL_H_
-#define ENTRYPATHBUILDERIMPL_H_
 #include <map>
 
 namespace Gc { namespace Model { namespace ListCfg { class EntryPathBuilderImpl :
@@ -76,4 +74,3 @@ namespace Gc { namespace Model { namespace ListCfg { class EntryPathBuilderImpl 
 
 };}}}
 
-#endif

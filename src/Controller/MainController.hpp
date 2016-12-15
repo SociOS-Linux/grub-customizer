@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef MAINCONNTROLLER_INCLUDED
-#define MAINCONNTROLLER_INCLUDED
 
 #include <libintl.h>
 #include <locale.h>
@@ -1224,4 +1222,3 @@ namespace Gc { namespace Controller { class MainController :
 	}
 };}}
 
-#endif

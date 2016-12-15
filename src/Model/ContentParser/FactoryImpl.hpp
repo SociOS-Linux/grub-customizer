@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef CONTENTPARSERFACTORYIMPL_H_
-#define CONTENTPARSERFACTORYIMPL_H_
 #include <list>
 #include <memory>
 
@@ -82,4 +80,3 @@ namespace Gc { namespace Model { namespace ContentParser { class FactoryImpl :
 
 };}}}
 
-#endif /* CONTENTPARSERFACTORYIMPL_H_ */

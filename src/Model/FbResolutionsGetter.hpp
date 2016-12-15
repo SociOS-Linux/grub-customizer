@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef FB_RESOLUTIONS_GETTER
-#define FB_RESOLUTIONS_GETTER
 #include <string>
 #include <list>
 #include <cstdio>
@@ -80,4 +78,3 @@ namespace Gc { namespace Model { class FbResolutionsGetter :
 
 };}}
 
-#endif

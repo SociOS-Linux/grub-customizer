@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef DEVICEINFO_H_
-#define DEVICEINFO_H_
 
 namespace Gc { namespace Controller { namespace Helper { class DeviceInfo
 {
@@ -48,4 +46,3 @@ namespace Gc { namespace Controller { namespace Helper { class DeviceInfo
 };}}}
 
 
-#endif /* DEVICEINFO_H_ */

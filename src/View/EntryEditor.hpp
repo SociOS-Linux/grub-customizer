@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef ENTRYEDITDLG_H_
-#define ENTRYEDITDLG_H_
 #include <string>
 #include <map>
 #include <list>
@@ -66,4 +64,3 @@ namespace Gc { namespace View { class EntryEditor :
 	public: virtual void setTypeIsValid(bool valid) = 0;
 };}}
 
-#endif /* ENTRYEDITDLG_H_ */

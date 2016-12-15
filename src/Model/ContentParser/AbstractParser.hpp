@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef CONTENT_PARSER_ABSTRACT_H_
-#define CONTENT_PARSER_ABSTRACT_H_
 #include <map>
 #include <string>
 #include <climits>
@@ -129,4 +127,3 @@ namespace Gc { namespace Model { namespace ContentParser { class AbstractParser 
 	}
 };}}}
 
-#endif /* CONTENT_PARSER_ABSTRACT_H_ */

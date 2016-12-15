@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef SRC_BOOTSTRAP_APPLICATIONHELPER_EVENT_HPP_
-#define SRC_BOOTSTRAP_APPLICATIONHELPER_EVENT_HPP_
 
 #include <list>
 
@@ -38,4 +36,3 @@ namespace Gc { namespace Bootstrap { namespace ApplicationHelper { template <typ
 	}
 };}}}
 
-#endif /* SRC_BOOTSTRAP_APPLICATIONHELPER_EVENT_HPP_ */

@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef THEME_GTK_H_
-#define THEME_GTK_H_
 
 
 #include <gtkmm.h>
@@ -870,4 +868,3 @@ class Theme :
 };}}}
 
 
-#endif /* THEME_GTK_H_ */
