@@ -167,7 +167,7 @@ namespace Gc { namespace Model { namespace ListCfg { class Repository :
 			fputs(content.c_str(), scriptFile);
 			fclose(scriptFile);
 		} else {
-			throw FileSaveException("cannot open file for saving: " + script->fileName, __FILE__, __LINE__);
+			throw Gc::Common::FileSaveException("cannot open file for saving: " + script->fileName, __FILE__, __LINE__);
 		}
 	}
 

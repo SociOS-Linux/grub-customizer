@@ -149,7 +149,7 @@ namespace Gc { namespace Model { class Env :
 		} else {
 			int res = mkdir((cfg_dir_prefix + "/etc/grub-customizer").c_str(), 0755);
 			if (res != 0) {
-				throw FileSaveException("cannot save the config file (directory creation)", __FILE__, __LINE__);
+				throw Gc::Common::FileSaveException("cannot save the config file (directory creation)", __FILE__, __LINE__);
 			}
 		}
 		if (this->burgMode) {
@@ -158,7 +158,7 @@ namespace Gc { namespace Model { class Env :
 			cfg_file = fopen((cfg_dir_prefix + "/etc/grub-customizer/grub.cfg").c_str(), "w");
 		}
 		if (!cfg_file) {
-			throw FileSaveException("cannot save the config file (file creation)", __FILE__, __LINE__);
+			throw Gc::Common::FileSaveException("cannot save the config file (file creation)", __FILE__, __LINE__);
 		}
 		Gc::Model::SettingsStore ds;
 		std::map<std::string, std::string> props = this->getProperties();
@@ -178,12 +178,12 @@ namespace Gc { namespace Model { class Env :
 		} else {
 			int res = mkdir((cfg_dir_prefix + "/etc/grub-customizer").c_str(), 0755);
 			if (res != 0) {
-				throw FileSaveException("cannot save the view config file (directory creation)", __FILE__, __LINE__);
+				throw Gc::Common::FileSaveException("cannot save the view config file (directory creation)", __FILE__, __LINE__);
 			}
 		}
 		cfg_file = fopen((cfg_dir_prefix + "/etc/grub-customizer/viewOptions.cfg").c_str(), "w");
 		if (!cfg_file) {
-			throw FileSaveException("cannot save the view config file (file creation)", __FILE__, __LINE__);
+			throw Gc::Common::FileSaveException("cannot save the view config file (file creation)", __FILE__, __LINE__);
 		}
 		Gc::Model::SettingsStore ds;
 		for (std::map<Gc::Common::Type::ViewOption, bool>::const_iterator iter = options.begin(); iter != options.end(); iter++) {
@@ -193,7 +193,7 @@ namespace Gc { namespace Model { class Env :
 				case Gc::Common::Type::ViewOption::SHOW_HIDDEN_ENTRIES: optionText = "SHOW_HIDDEN_ENTRIES"; break;
 				case Gc::Common::Type::ViewOption::GROUP_BY_SCRIPT: optionText = "GROUP_BY_SCRIPT"; break;
 				case Gc::Common::Type::ViewOption::SHOW_PLACEHOLDERS: optionText = "SHOW_PLACEHOLDERS"; break;
-				default: throw LogicException("option mapping failed");
+				default: throw Gc::Common::LogicException("option mapping failed");
 			}
 			ds.setValue(optionText, iter->second ? "true" : "false");
 		}
@@ -205,7 +205,7 @@ namespace Gc { namespace Model { class Env :
 	{
 		FILE* file = fopen((cfg_dir_prefix + "/etc/grub-customizer/viewOptions.cfg").c_str(), "r");
 		if (file == NULL) {
-			throw FileReadException("viewOptions not found");
+			throw Gc::Common::FileReadException("viewOptions not found");
 		}
 		Gc::Model::SettingsStore ds(file);
 		fclose(file);

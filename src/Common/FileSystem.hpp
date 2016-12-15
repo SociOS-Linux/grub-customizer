@@ -43,7 +43,7 @@ namespace Gc { namespace Common { class FileSystem
 	
 		if (S_ISDIR(fileProperties.st_mode)) {
 			if (!recursive) {
-				throw LogicException(srcPath + " is an directory but copying shouldn't be recursive (recursive=false)", __FILE__, __LINE__);
+				throw Gc::Common::LogicException(srcPath + " is an directory but copying shouldn't be recursive (recursive=false)", __FILE__, __LINE__);
 			}
 			DIR* dir = opendir(srcPath.c_str());
 			if (dir) {
@@ -57,7 +57,7 @@ namespace Gc { namespace Common { class FileSystem
 				}
 				closedir(dir);
 			} else {
-				throw FileReadException("cannot read directory: " + srcPath, __FILE__, __LINE__);
+				throw Gc::Common::FileReadException("cannot read directory: " + srcPath, __FILE__, __LINE__);
 			}
 		} else {
 			std::ifstream src(srcPath.c_str(), std::ios::binary);

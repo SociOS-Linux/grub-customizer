@@ -56,7 +56,7 @@ namespace Gc { namespace Model { class ThemeManager :
 			}
 			closedir(dir);
 		} else {
-			throw FileReadException("cannot read the theme directory: " + path);
+			throw Gc::Common::FileReadException("cannot read the theme directory: " + path);
 		}
 	}
 
@@ -67,7 +67,7 @@ namespace Gc { namespace Model { class ThemeManager :
 				return *themeIter;
 			}
 		}
-		throw ItemNotFoundException("getTheme: Theme not found: " + name, __FILE__, __LINE__);
+		throw Gc::Common::ItemNotFoundException("getTheme: Theme not found: " + name, __FILE__, __LINE__);
 	}
 
 	public: bool themeExists(std::string const& name)
@@ -75,7 +75,7 @@ namespace Gc { namespace Model { class ThemeManager :
 		try {
 			this->getTheme(name);
 			return true;
-		} catch (ItemNotFoundException const& e) {
+		} catch (Gc::Common::ItemNotFoundException const& e) {
 		}
 		return false;
 	}
@@ -84,11 +84,11 @@ namespace Gc { namespace Model { class ThemeManager :
 	{
 		std::string themePath = this->env->output_config_dir + "/themes";
 		if (indexFile.substr(0, themePath.size()) != themePath) {
-			throw InvalidStringFormatException("theme index file path must contain '" + themePath + "' given path: '" + indexFile + "'", __FILE__, __LINE__);
+			throw Gc::Common::InvalidStringFormatException("theme index file path must contain '" + themePath + "' given path: '" + indexFile + "'", __FILE__, __LINE__);
 		}
 		int slashPos = indexFile.find('/', themePath.size() + 1);
 		if (slashPos == -1) {
-			throw InvalidStringFormatException("theme index file path incomplete", __FILE__, __LINE__);
+			throw Gc::Common::InvalidStringFormatException("theme index file path incomplete", __FILE__, __LINE__);
 		}
 	
 		int themeNameSize = slashPos - themePath.size() - 1;
@@ -139,7 +139,7 @@ namespace Gc { namespace Model { class ThemeManager :
 			if (themeIter->isModified) {
 				try {
 					themeIter->save(dirName);
-				} catch (Exception const& e) {
+				} catch (Gc::Common::Exception const& e) {
 					this->saveErrors += e + "\n";
 					this->gotSaveErrors = true;
 				}

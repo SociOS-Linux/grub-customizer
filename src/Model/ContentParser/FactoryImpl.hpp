@@ -42,11 +42,11 @@ namespace Gc { namespace Model { namespace ContentParser { class FactoryImpl :
 			try {
 				parser->parse(sourceCode);
 				return parser;
-			} catch (ParserException const& e) {
+			} catch (Gc::Common::ParserException const& e) {
 				continue;
 			}
 		}
-		throw ParserNotFoundException("no matching parser found", __FILE__, __LINE__);
+		throw Gc::Common::ParserNotFoundException("no matching parser found", __FILE__, __LINE__);
 	}
 
 	public: std::shared_ptr<Gc::Model::ContentParser::GenericParser> createByName(std::string const& name)
@@ -60,7 +60,7 @@ namespace Gc { namespace Model { namespace ContentParser { class FactoryImpl :
 			}
 			namesIter++;
 		}
-		throw ItemNotFoundException("no parser found by name '" + name + "'", __FILE__, __LINE__);
+		throw Gc::Common::ItemNotFoundException("no parser found by name '" + name + "'", __FILE__, __LINE__);
 	}
 
 	public: std::list<std::string> const& getNames() const
@@ -79,7 +79,7 @@ namespace Gc { namespace Model { namespace ContentParser { class FactoryImpl :
 			}
 			namesIter++;
 		}
-		throw ItemNotFoundException("no parser found by instance pointer", __FILE__, __LINE__);
+		throw Gc::Common::ItemNotFoundException("no parser found by instance pointer", __FILE__, __LINE__);
 	}
 
 };}}}

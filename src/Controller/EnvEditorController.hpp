@@ -49,7 +49,7 @@ namespace Gc { namespace Controller { class EnvEditorController :
 			this->view->setEnvSettings(this->env->getProperties(), this->env->getRequiredProperties(), this->env->getValidProperties());
 			this->view->setRootDeviceName(this->env->rootDeviceName);
 			this->view->show(false);
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -89,15 +89,15 @@ namespace Gc { namespace Controller { class EnvEditorController :
 		try {
 			try {
 				this->mountTable->getEntryRefByMountpoint(PARTCHOOSER_MOUNTPOINT + submountpoint).mount();
-			} catch (MountException const& e){
+			} catch (Gc::Common::MountException const& e){
 				this->view->showErrorMessage(Gc::View::EnvEditor::MountExceptionType::SUB_MOUNT_FAILED);
 				this->view->setSubmountpointSelectionState(submountpoint, false);
 				this->view->show();
-			} catch (SystemException const& e){
+			} catch (Gc::Common::SystemException const& e){
 				this->view->setSubmountpointSelectionState(submountpoint, false);
 				this->view->show();
 			}
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -109,15 +109,15 @@ namespace Gc { namespace Controller { class EnvEditorController :
 		try {
 			try {
 				this->mountTable->getEntryRefByMountpoint(PARTCHOOSER_MOUNTPOINT + submountpoint).umount();
-			} catch (UMountException const& e){
+			} catch (Gc::Common::UMountException const& e){
 				this->view->showErrorMessage(Gc::View::EnvEditor::MountExceptionType::SUB_UMOUNT_FAILED);
 				this->view->setSubmountpointSelectionState(submountpoint, true);
 				this->view->show();
-			} catch (SystemException const& e){
+			} catch (Gc::Common::SystemException const& e){
 				this->view->setSubmountpointSelectionState(submountpoint, true);
 				this->view->show();
 			}
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -160,11 +160,11 @@ namespace Gc { namespace Controller { class EnvEditorController :
 					this->generateSubmountpointSelection(PARTCHOOSER_MOUNTPOINT);
 					this->showAction();
 				}
-				catch (MountException const& e) {
+				catch (Gc::Common::MountException const& e) {
 					this->view->showErrorMessage(Gc::View::EnvEditor::MountExceptionType::MOUNT_FAILED);
 					this->switchPartitionAction("");
 				}
-				catch (MissingFstabException const& e) {
+				catch (Gc::Common::MissingFstabException const& e) {
 					this->view->showErrorMessage(Gc::View::EnvEditor::MountExceptionType::MOUNT_ERR_NO_FSTAB);
 					mountTable->getEntryRefByMountpoint(PARTCHOOSER_MOUNTPOINT).umount();
 					this->switchPartitionAction("");
@@ -173,7 +173,7 @@ namespace Gc { namespace Controller { class EnvEditorController :
 				this->env->init(env->burgMode ? Gc::Model::Env::Mode::BURG : Gc::Model::Env::Mode::GRUB, selectedDevice);
 				this->showAction(true);
 			}
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -185,7 +185,7 @@ namespace Gc { namespace Controller { class EnvEditorController :
 		try {
 			this->env->init(newTypeIndex == 0 ? Gc::Model::Env::Mode::GRUB : Gc::Model::Env::Mode::BURG, this->env->cfg_dir_prefix);
 			this->showAction();
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -197,7 +197,7 @@ namespace Gc { namespace Controller { class EnvEditorController :
 		try {
 			this->env->setProperties(this->view->getEnvSettings());
 			this->showAction();
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -215,7 +215,7 @@ namespace Gc { namespace Controller { class EnvEditorController :
 			}
 			this->deviceMap->clearCache();
 			this->applicationObject->onEnvChange.exec(isBurgMode);
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -227,7 +227,7 @@ namespace Gc { namespace Controller { class EnvEditorController :
 		this->logActionBegin("exit");
 		try {
 			this->applicationObject->shutdown();
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();

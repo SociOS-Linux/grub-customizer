@@ -42,12 +42,12 @@ namespace Gc { namespace Model { namespace ContentParser { class LinuxIso :
 			//check partition indices by uuid
 			Gc::Model::Device::DeviceMapPartitionIndex pIndex = this->deviceMap->getHarddriveIndexByPartitionUuid(result[3]);
 			if (pIndex.hddNum != result[1] || pIndex.partNum != result[2]){
-				throw ParserException("parsing failed - hdd num check", __FILE__, __LINE__);
+				throw Gc::Common::ParserException("parsing failed - hdd num check", __FILE__, __LINE__);
 			}
 	
 			//check if the iso filepaths are the same
 			if (this->unescape(result[4]) != this->unescape(result[6]))
-				throw ParserException("parsing failed - iso filepaths are different", __FILE__, __LINE__);
+				throw Gc::Common::ParserException("parsing failed - iso filepaths are different", __FILE__, __LINE__);
 
 			//assign data
 			this->options["partition_uuid"] = result[3];
@@ -61,18 +61,18 @@ namespace Gc { namespace Model { namespace ContentParser { class LinuxIso :
 				std::string device = this->deviceDataList->getDeviceByUuid(this->options["partition_uuid"]);
 				this->options["iso_path_full"] = Gc::Common::Functions::rtrim(this->mountTable->findByDevice(device).mountpoint, "/") + "/" + Gc::Common::Functions::ltrim(this->options["iso_path"], "/");
 				if (!this->_fileExists(this->options["iso_path_full"])) {
-					throw ItemNotFoundException("iso file '" + this->options["iso_path_full"] + "'not found!", __FILE__, __LINE__);
+					throw Gc::Common::ItemNotFoundException("iso file '" + this->options["iso_path_full"] + "'not found!", __FILE__, __LINE__);
 				}
 				this->options.erase("partition_uuid");
 				this->options.erase("iso_path");
-			} catch (ItemNotFoundException const& e) {
+			} catch (Gc::Common::ItemNotFoundException const& e) {
 				// partition not mounted or file not found
 				this->options.erase("iso_path_full");
 			}
 
 
-		} catch (RegExNotMatchedException const& e) {
-			throw ParserException("parsing failed - RegEx not matched", __FILE__, __LINE__);
+		} catch (Gc::Common::RegExNotMatchedException const& e) {
+			throw Gc::Common::ParserException("parsing failed - RegEx not matched", __FILE__, __LINE__);
 		}
 	}
 
@@ -108,8 +108,8 @@ namespace Gc { namespace Model { namespace ContentParser { class LinuxIso :
 			this->regexEngine->match(Gc::Model::ContentParser::LinuxIso::_regex, result, '\\', '_');
 
 			return result;
-		} catch (RegExNotMatchedException const& e) {
-			throw ParserException("parsing failed - RegEx not matched", __FILE__, __LINE__);
+		} catch (Gc::Common::RegExNotMatchedException const& e) {
+			throw Gc::Common::ParserException("parsing failed - RegEx not matched", __FILE__, __LINE__);
 		}
 	}
 

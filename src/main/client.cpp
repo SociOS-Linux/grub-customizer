@@ -115,7 +115,7 @@ int main(int argc, char** argv){
 		errorController->setApplicationStarted(true);
 
 		application->applicationObject->run();
-	} catch (Exception const& e) {
+	} catch (Gc::Common::Exception const& e) {
 		logger->log(e, Gc::Model::Logger::GenericLogger::ERROR);
 		return 1;
 	}

@@ -23,6 +23,7 @@
 #include <sstream>
 #include <typeinfo>
 
+namespace Gc { namespace Common {
 class Exception {
 	private: std::string _message;
 	private: std::string _file;
@@ -58,144 +59,146 @@ class Exception {
 	}
 };
 
-class LogicException : public Exception {
+class LogicException : public Gc::Common::Exception {
 	public: inline LogicException(std::string const& message, std::string const& file = "", int line = -1)
-	   : Exception(message, file, line) {}
+	   : Gc::Common::Exception(message, file, line) {}
 };
 
-class HandleNotOpenedException : public LogicException {
+class HandleNotOpenedException : public Gc::Common::LogicException {
 	public: inline HandleNotOpenedException(std::string const& message, std::string const& file = "", int line = -1)
-	   : LogicException(message, file, line) {}
+	   : Gc::Common::LogicException(message, file, line) {}
 };
 
-class HandleNotClosedException : public LogicException {
+class HandleNotClosedException : public Gc::Common::LogicException {
 	public: inline HandleNotClosedException(std::string const& message, std::string const& file = "", int line = -1)
-	   : LogicException(message, file, line) {}
+	   : Gc::Common::LogicException(message, file, line) {}
 };
 
-class EndOfFileException : public LogicException {
+class EndOfFileException : public Gc::Common::LogicException {
 	public: inline EndOfFileException(std::string const& message, std::string const& file = "", int line = -1)
-	   : LogicException(message, file, line) {}
+	   : Gc::Common::LogicException(message, file, line) {}
 };
 
-class MustBeProxyException : public LogicException {
+class MustBeProxyException : public Gc::Common::LogicException {
 	public: inline MustBeProxyException(std::string const& message, std::string const& file = "", int line = -1)
-	   : LogicException(message, file, line) {}
+	   : Gc::Common::LogicException(message, file, line) {}
 };
 
-class ItemNotFoundException : public LogicException {
+class ItemNotFoundException : public Gc::Common::LogicException {
 	public: inline ItemNotFoundException(std::string const& message, std::string const& file = "", int line = -1)
-	   : LogicException(message, file, line) {}
+	   : Gc::Common::LogicException(message, file, line) {}
 };
 
-class ParserException : public LogicException {
+class ParserException : public Gc::Common::LogicException {
 	public: inline ParserException(std::string const& message, std::string const& file = "", int line = -1)
-	   : LogicException(message, file, line) {}
+	   : Gc::Common::LogicException(message, file, line) {}
 };
 
-class RegExNotMatchedException : public LogicException {
+class RegExNotMatchedException : public Gc::Common::LogicException {
 	public: inline RegExNotMatchedException(std::string const& message, std::string const& file = "", int line = -1)
-	   : LogicException(message, file, line) {}
+	   : Gc::Common::LogicException(message, file, line) {}
 };
 
-class NoMoveTargetException : public LogicException {
+class NoMoveTargetException : public Gc::Common::LogicException {
 	public: inline NoMoveTargetException(std::string const& message, std::string const& file = "", int line = -1)
-	   : LogicException(message, file, line) {}
+	   : Gc::Common::LogicException(message, file, line) {}
 };
 
-class ParserNotFoundException : public ItemNotFoundException {
+class ParserNotFoundException : public Gc::Common::ItemNotFoundException {
 	public: inline ParserNotFoundException(std::string const& message, std::string const& file = "", int line = -1)
-	   : ItemNotFoundException(message, file, line) {}
+	   : Gc::Common::ItemNotFoundException(message, file, line) {}
 };
 
-class MountpointNotFoundException : public ItemNotFoundException {
+class MountpointNotFoundException : public Gc::Common::ItemNotFoundException {
 	public: inline MountpointNotFoundException(std::string const& message, std::string const& file = "", int line = -1)
-	   : ItemNotFoundException(message, file, line) {}
+	   : Gc::Common::ItemNotFoundException(message, file, line) {}
 };
 
-class TechnicalException : public Exception {
+class TechnicalException : public Gc::Common::Exception {
 	public: inline TechnicalException(std::string const& message, std::string const& file = "", int line = -1)
-	   : Exception(message, file, line) {}
+	   : Gc::Common::Exception(message, file, line) {}
 };
 
-class AssertException : public TechnicalException {
+class AssertException : public Gc::Common::TechnicalException {
 	public: inline AssertException(std::string const& message, std::string const& file = "", int line = -1)
-	   : TechnicalException(message, file, line) {}
+	   : Gc::Common::TechnicalException(message, file, line) {}
 };
 
-class NullPointerException : public TechnicalException {
+class NullPointerException : public Gc::Common::TechnicalException {
 	public: inline NullPointerException(std::string const& message, std::string const& file = "", int line = -1)
-	   : TechnicalException(message, file, line) {}
+	   : Gc::Common::TechnicalException(message, file, line) {}
 };
 
-class ConfigException : public TechnicalException {
+class ConfigException : public Gc::Common::TechnicalException {
 	public: inline ConfigException(std::string const& message, std::string const& file = "", int line = -1)
-	   : TechnicalException(message, file, line) {}
+	   : Gc::Common::TechnicalException(message, file, line) {}
 };
 
-class SystemException : public TechnicalException {
+class SystemException : public Gc::Common::TechnicalException {
 	public: inline SystemException(std::string const& message, std::string const& file = "", int line = -1)
-	   : TechnicalException(message, file, line) {}
+	   : Gc::Common::TechnicalException(message, file, line) {}
 };
 
-class FileReadException : public SystemException {
+class FileReadException : public Gc::Common::SystemException {
 	public: inline FileReadException(std::string const& message, std::string const& file = "", int line = -1)
-	   : SystemException(message, file, line) {}
+	   : Gc::Common::SystemException(message, file, line) {}
 };
 
-class FileSaveException : public SystemException {
+class FileSaveException : public Gc::Common::SystemException {
 	public: inline FileSaveException(std::string const& message, std::string const& file = "", int line = -1)
-	   : SystemException(message, file, line) {}
+	   : Gc::Common::SystemException(message, file, line) {}
 };
 
-class DirectoryNotFoundException : public SystemException {
+class DirectoryNotFoundException : public Gc::Common::SystemException {
 	public: inline DirectoryNotFoundException(std::string const& message, std::string const& file = "", int line = -1)
-	   : SystemException(message, file, line) {}
+	   : Gc::Common::SystemException(message, file, line) {}
 };
 
-class CmdExecException : public SystemException {
+class CmdExecException : public Gc::Common::SystemException {
 	public: inline CmdExecException(std::string const& message, std::string const& file = "", int line = -1)
-	   : SystemException(message, file, line) {}
+	   : Gc::Common::SystemException(message, file, line) {}
 };
 
-class MountException : public SystemException {
+class MountException : public Gc::Common::SystemException {
 	public: inline MountException(std::string const& message, std::string const& file = "", int line = -1)
-	   : SystemException(message, file, line) {}
+	   : Gc::Common::SystemException(message, file, line) {}
 };
 
-class UMountException : public SystemException {
+class UMountException : public Gc::Common::SystemException {
 	public: inline UMountException(std::string const& message, std::string const& file = "", int line = -1)
-	   : SystemException(message, file, line) {}
+	   : Gc::Common::SystemException(message, file, line) {}
 };
 
-class MissingFstabException : public SystemException {
+class MissingFstabException : public Gc::Common::SystemException {
 	public: inline MissingFstabException(std::string const& message, std::string const& file = "", int line = -1)
-	   : SystemException(message, file, line) {}
+	   : Gc::Common::SystemException(message, file, line) {}
 };
 
-class BadCastException : public TechnicalException {
+class BadCastException : public Gc::Common::TechnicalException {
 public: inline BadCastException(std::string const& message, std::string const& file = "", int line = -1)
-   : TechnicalException(message, file, line) {}
+   : Gc::Common::TechnicalException(message, file, line) {}
 };
 
-class InvalidStringFormatException : public LogicException {
+class InvalidStringFormatException : public Gc::Common::LogicException {
 	public: inline InvalidStringFormatException(std::string const& message, std::string const& file = "", int line = -1)
-	   : LogicException(message, file, line) {}
+	   : Gc::Common::LogicException(message, file, line) {}
 };
 
-class InvalidFileTypeException : public LogicException {
+class InvalidFileTypeException : public Gc::Common::LogicException {
 	public: inline InvalidFileTypeException(std::string const& message, std::string const& file = "", int line = -1)
-	   : LogicException(message, file, line) {}
+	   : Gc::Common::LogicException(message, file, line) {}
 };
 
-class NotImplementedException : public LogicException {
+class NotImplementedException : public Gc::Common::LogicException {
 	public: inline NotImplementedException(std::string const& message, std::string const& file = "", int line = -1)
-	   : LogicException(message, file, line) {}
+	   : Gc::Common::LogicException(message, file, line) {}
 };
+
+}}
 
 // Template:
 //class CLASSNAME : public BASECLASS {
-//	public: inline CLASSNAME(std::string const& message, std::string const& file = "", int line = -1)
+//	public: inline  CLASSNAME(std::string const& message, std::string const& file = "", int line = -1)
 //	   : BASECLASS(message, file, line) {}
 //};
 

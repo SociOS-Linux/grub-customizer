@@ -71,7 +71,7 @@ namespace Gc { namespace Controller { class MainController :
 
 	private: bool config_has_been_different_on_startup_but_unsaved;
 	private: bool is_loading;
-	private: CmdExecException thrownException; //to be used from the die() function
+	private: Gc::Common::CmdExecException thrownException; //to be used from the die() function
 
 	public: void setSettingsBuffer(std::shared_ptr<Gc::Model::SettingsManagerData> settings)
 	{
@@ -178,7 +178,7 @@ namespace Gc { namespace Controller { class MainController :
 			or !threadHelper
 			or !entryNameMapper
 		) {
-			throw ConfigException("init(): missing some objects", __FILE__, __LINE__);
+			throw Gc::Common::ConfigException("init(): missing some objects", __FILE__, __LINE__);
 		}
 		this->log("initializing (w/o specified bootloader type)…", Gc::Model::Logger::GenericLogger::IMPORTANT_EVENT);
 
@@ -248,7 +248,7 @@ namespace Gc { namespace Controller { class MainController :
 		this->logActionBegin("init");
 		try {
 			this->init();
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -260,7 +260,7 @@ namespace Gc { namespace Controller { class MainController :
 		try {
 			Gc::Model::Env::Mode mode = burgMode ? Gc::Model::Env::Mode::BURG : Gc::Model::Env::Mode::GRUB;
 			this->init(mode, false);
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -280,7 +280,7 @@ namespace Gc { namespace Controller { class MainController :
 			this->view->hide();
 
 			this->applicationObject->onEnvEditorShowRequest.exec();
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -293,7 +293,7 @@ namespace Gc { namespace Controller { class MainController :
 			if (!this->view->isVisible()) {
 				this->applicationObject->shutdown();
 			}
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -308,7 +308,7 @@ namespace Gc { namespace Controller { class MainController :
 			this->view->hideReloadRecommendation();
 			this->view->setLockState(1|4|8);
 			this->threadHelper->runAsThread(std::bind(std::mem_fn(&MainController::loadThreadedAction), this, true));
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -325,7 +325,7 @@ namespace Gc { namespace Controller { class MainController :
 
 				try {
 					this->view->setOptions(this->env->loadViewOptions());
-				} catch (FileReadException e) {
+				} catch (Gc::Common::FileReadException e) {
 					this->log("view options not found", Gc::Model::Logger::GenericLogger::INFO);
 				}
 				this->applicationObject->viewOptions = this->view->getOptions();
@@ -348,7 +348,7 @@ namespace Gc { namespace Controller { class MainController :
 					this->log("loading grub list", Gc::Model::Logger::GenericLogger::IMPORTANT_EVENT);
 					this->grublistCfg->load(preserveConfig);
 					this->log("grub list completely loaded", Gc::Model::Logger::GenericLogger::IMPORTANT_EVENT);
-				} catch (CmdExecException const& e){
+				} catch (Gc::Common::CmdExecException const& e){
 					this->log("error while loading the grub list", Gc::Model::Logger::GenericLogger::ERROR);
 					this->thrownException = e;
 					this->threadHelper->runDispatched(std::bind(std::mem_fn(&MainController::dieAction), this));
@@ -374,7 +374,7 @@ namespace Gc { namespace Controller { class MainController :
 			} else {
 				this->log("ignoring load request (only one load thread allowed at the same time)", Gc::Model::Logger::GenericLogger::WARNING);
 			}
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onThreadError.exec(e);
 		}
 		this->logActionEndThreaded();
@@ -391,7 +391,7 @@ namespace Gc { namespace Controller { class MainController :
 			this->view->setLockState(1|4|8);
 			this->env->activeThreadCount++; //not in save_thead() to be faster set
 			this->threadHelper->runAsThread(std::bind(std::mem_fn(&MainController::saveThreadedAction), this));
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -411,11 +411,11 @@ namespace Gc { namespace Controller { class MainController :
 			this->log("writing grub list configuration", Gc::Model::Logger::GenericLogger::IMPORTANT_EVENT);
 			try {
 				this->grublistCfg->save();
-			} catch (CmdExecException const& e){
+			} catch (Gc::Common::CmdExecException const& e){
 				this->threadHelper->runDispatched(std::bind(std::mem_fn(&MainController::showConfigSavingErrorAction), this, e.getMessage()));
 			}
 			this->env->activeThreadCount--;
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onThreadError.exec(e);
 		}
 		this->logActionEndThreaded();
@@ -426,7 +426,7 @@ namespace Gc { namespace Controller { class MainController :
 		this->logActionBeginThreaded("show-config-saving-error");
 		try {
 			this->view->showConfigSavingError(errorMessage);
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onThreadError.exec(e);
 		}
 		this->logActionEndThreaded();
@@ -476,7 +476,7 @@ namespace Gc { namespace Controller { class MainController :
 		this->logActionBegin("show-installer");
 		try {
 			this->applicationObject->onInstallerShowRequest.exec();
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -488,7 +488,7 @@ namespace Gc { namespace Controller { class MainController :
 		this->logActionBegin("show-entry-editor");
 		try {
 			this->applicationObject->onEntryEditorShowRequest.exec(rule);
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -499,7 +499,7 @@ namespace Gc { namespace Controller { class MainController :
 		this->logActionBegin("show-entry-creator");
 		try {
 			this->applicationObject->onEntryEditorShowRequest.exec(nullptr);
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -522,7 +522,7 @@ namespace Gc { namespace Controller { class MainController :
 			} else {
 				this->applicationObject->shutdown();
 			}
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -577,7 +577,7 @@ namespace Gc { namespace Controller { class MainController :
 					this->applicationObject->shutdown();
 				}
 			}
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -614,7 +614,7 @@ namespace Gc { namespace Controller { class MainController :
 				this->applicationObject->onEntryRemove.exec(entriesOfRemovedRules);
 				this->env->modificationsUnsaved = true;
 			}
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -634,7 +634,7 @@ namespace Gc { namespace Controller { class MainController :
 				this->renameEntry(entry2, newText);
 			}
 			this->env->modificationsUnsaved = true;
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -687,11 +687,11 @@ namespace Gc { namespace Controller { class MainController :
 				}
 				this->view->selectRules(rules);
 				this->env->modificationsUnsaved = true;
-			} catch (NoMoveTargetException const& e) {
+			} catch (Gc::Common::NoMoveTargetException const& e) {
 				this->view->showErrorMessage(gettext("cannot move this entry"));
 				this->applicationObject->onListModelChange.exec();
 			}
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -709,7 +709,7 @@ namespace Gc { namespace Controller { class MainController :
 				std::bind(std::mem_fn(&MainController::selectRuleAction), this, newItem.get(), true),
 				10
 			);
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -727,7 +727,7 @@ namespace Gc { namespace Controller { class MainController :
 			}
 
 			this->moveAction(movedRules, -1);
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -741,7 +741,7 @@ namespace Gc { namespace Controller { class MainController :
 			this->grublistCfg->revert();
 			this->applicationObject->onListModelChange.exec();
 			this->env->modificationsUnsaved = true;
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -759,7 +759,7 @@ namespace Gc { namespace Controller { class MainController :
 		this->logActionBegin("show-about");
 		try {
 			this->applicationObject->onAboutDlgShowRequest.exec();
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -771,7 +771,7 @@ namespace Gc { namespace Controller { class MainController :
 		this->logActionBeginThreaded("sync-load-state-threaded");
 		try {
 			this->threadHelper->runDispatched(std::bind(std::mem_fn(&MainController::syncLoadStateAction), this));
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onThreadError.exec(e);
 		}
 		this->logActionEndThreaded();
@@ -782,7 +782,7 @@ namespace Gc { namespace Controller { class MainController :
 		this->logActionBeginThreaded("sync-save-state-threaded");
 		try {
 			this->threadHelper->runDispatched(std::bind(std::mem_fn(&MainController::syncSaveStateAction), this));
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onThreadError.exec(e);
 		}
 		this->logActionEndThreaded();
@@ -815,7 +815,7 @@ namespace Gc { namespace Controller { class MainController :
 				this->view->setStatusText(gettext("updating configuration"));
 			}
 			this->log("MainControllerImpl::syncListView_save completed", Gc::Model::Logger::GenericLogger::INFO);
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -857,7 +857,7 @@ namespace Gc { namespace Controller { class MainController :
 				this->applicationObject->onListModelChange.exec();
 			}
 			this->log("MainControllerImpl::syncListView_load completed", Gc::Model::Logger::GenericLogger::INFO);
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -868,7 +868,7 @@ namespace Gc { namespace Controller { class MainController :
 		this->logActionBegin("show-settings");
 		try {
 			this->applicationObject->onSettingsShowRequest.exec();
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -879,7 +879,7 @@ namespace Gc { namespace Controller { class MainController :
 		this->logActionBegin("init-mode");
 		try {
 			this->init(burgChosen ? Gc::Model::Env::Mode::BURG : Gc::Model::Env::Mode::GRUB);
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -902,7 +902,7 @@ namespace Gc { namespace Controller { class MainController :
 			this->view->selectRules(addedRules);
 
 			this->env->modificationsUnsaved = true;
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -914,7 +914,7 @@ namespace Gc { namespace Controller { class MainController :
 		try {
 			this->view->setLockState(1);
 			this->applicationObject->onSettingModelChange.exec();
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -925,7 +925,7 @@ namespace Gc { namespace Controller { class MainController :
 		this->logActionBegin("show-reload-recommendation");
 		try {
 			this->view->showReloadRecommendation();
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -936,7 +936,7 @@ namespace Gc { namespace Controller { class MainController :
 		this->logActionBegin("select-rules");
 		try {
 			this->view->selectRules(rules);
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -947,7 +947,7 @@ namespace Gc { namespace Controller { class MainController :
 		this->logActionBegin("select-rule");
 		try {
 			this->view->selectRule(rule, startEdit);
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -961,7 +961,7 @@ namespace Gc { namespace Controller { class MainController :
 				this->applicationObject->onSettingModelChange.exec();
 			}
 			this->view->updateLockState();
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -975,11 +975,11 @@ namespace Gc { namespace Controller { class MainController :
 			try {
 				this->applicationObject->viewOptions = this->view->getOptions();
 				this->env->saveViewOptions(this->view->getOptions());
-			} catch (FileSaveException e) {
+			} catch (Gc::Common::FileSaveException e) {
 				this->log("option saving failed", Gc::Model::Logger::GenericLogger::ERROR);
 			}
 			this->applicationObject->onListModelChange.exec();
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -991,7 +991,7 @@ namespace Gc { namespace Controller { class MainController :
 		try {
 			this->grublistCfg->findRule(entry)->setVisibility(state);
 			this->applicationObject->onListModelChange.exec();
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -1004,7 +1004,7 @@ namespace Gc { namespace Controller { class MainController :
 			if (selectedRules.size()) {
 				this->applicationObject->onEntrySelection.exec();
 			}
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -1156,7 +1156,7 @@ namespace Gc { namespace Controller { class MainController :
 				} else {
 					placeholderFound = false;
 				}
-			} catch (NoMoveTargetException const& e) {
+			} catch (Gc::Common::NoMoveTargetException const& e) {
 				placeholderFound = false;
 			}
 		} while (placeholderFound);
@@ -1177,7 +1177,7 @@ namespace Gc { namespace Controller { class MainController :
 				} else {
 					placeholderFound = false;
 				}
-			} catch (NoMoveTargetException const& e) {
+			} catch (Gc::Common::NoMoveTargetException const& e) {
 				placeholderFound = false;
 			}
 		} while (placeholderFound);
@@ -1197,7 +1197,7 @@ namespace Gc { namespace Controller { class MainController :
 				} else {
 					placeholderFound = false;
 				}
-			} catch (NoMoveTargetException const& e) {
+			} catch (Gc::Common::NoMoveTargetException const& e) {
 				placeholderFound = false;
 			}
 		} while (placeholderFound);

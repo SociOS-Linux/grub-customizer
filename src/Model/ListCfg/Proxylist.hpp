@@ -229,23 +229,23 @@ namespace Gc { namespace Model { namespace ListCfg { class Proxylist :
 			else {
 				try {
 					return this->getProxyByRule(rule, loop_rule->subRules, parentProxy);
-				} catch (ItemNotFoundException const& e) {
+				} catch (Gc::Common::ItemNotFoundException const& e) {
 					// do nothing
 				}
 			}
 		}
-		throw ItemNotFoundException("proxy by rule not found", __FILE__, __LINE__);
+		throw Gc::Common::ItemNotFoundException("proxy by rule not found", __FILE__, __LINE__);
 	}
 
 	public: std::shared_ptr<Gc::Model::ListCfg::Proxy> getProxyByRule(std::shared_ptr<Gc::Model::ListCfg::Rule> rule) {
 		for (auto proxy : *this) {
 			try {
 				return this->getProxyByRule(rule, proxy->rules, proxy);
-			} catch (ItemNotFoundException const& e) {
+			} catch (Gc::Common::ItemNotFoundException const& e) {
 				// do nothing
 			}
 		}
-		throw ItemNotFoundException("proxy by rule not found", __FILE__, __LINE__);
+		throw Gc::Common::ItemNotFoundException("proxy by rule not found", __FILE__, __LINE__);
 	}
 
 	public: std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>>::iterator moveRuleToNewProxy(
@@ -303,22 +303,22 @@ namespace Gc { namespace Model { namespace ListCfg { class Proxylist :
 		while (proxyIter != this->end()) {
 			try {
 				return proxyIter->get()->getNextVisibleRule(base, direction);
-			} catch (NoMoveTargetException const& e) {
+			} catch (Gc::Common::NoMoveTargetException const& e) {
 
 				if (hasParent) {
-					throw NoMoveTargetException("next visible rule not found", __FILE__, __LINE__);
+					throw Gc::Common::NoMoveTargetException("next visible rule not found", __FILE__, __LINE__);
 				}
 
 				if (direction == 1) {
 					proxyIter++;
 					if (proxyIter == this->end()) {
-						throw NoMoveTargetException("next visible rule not found", __FILE__, __LINE__);
+						throw Gc::Common::NoMoveTargetException("next visible rule not found", __FILE__, __LINE__);
 					}
 					base = proxyIter->get()->rules.begin();
 				} else {
 					proxyIter--;
 					if (proxyIter == this->end()) {
-						throw NoMoveTargetException("next visible rule not found", __FILE__, __LINE__);
+						throw Gc::Common::NoMoveTargetException("next visible rule not found", __FILE__, __LINE__);
 					}
 					base = proxyIter->get()->rules.end();
 					base--;
@@ -328,7 +328,7 @@ namespace Gc { namespace Model { namespace ListCfg { class Proxylist :
 				}
 			}
 		}
-		throw NoMoveTargetException("next visible rule not found", __FILE__, __LINE__);
+		throw Gc::Common::NoMoveTargetException("next visible rule not found", __FILE__, __LINE__);
 	}
 
 	std::list<std::shared_ptr<Gc::Model::ListCfg::Proxy>>::iterator getIter(std::shared_ptr<Gc::Model::ListCfg::Proxy> proxy) {

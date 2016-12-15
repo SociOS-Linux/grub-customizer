@@ -23,8 +23,9 @@
 #include "../../Model/ListCfg/ListCfg.hpp"
 #include "../../Model/ListCfg/ListCfgConnection.hpp"
 #include "RuleMover/AbstractStrategy.hpp"
-#include "RuleMover/MoveFailedException.hpp"
 #include <memory>
+
+#include "RuleMover/MoveFailedException.hpp"
 
 namespace Gc { namespace Controller { namespace Helper { class RuleMoverHelper :
 	public Gc::Model::ListCfg::ListCfgConnection,
@@ -46,7 +47,7 @@ namespace Gc { namespace Controller { namespace Helper { class RuleMoverHelper :
 				continue;
 			}
 		}
-		throw NoMoveTargetException("cannot move this rule. No successful strategy found", __FILE__, __LINE__);
+		throw Gc::Common::NoMoveTargetException("cannot move this rule. No successful strategy found", __FILE__, __LINE__);
 	}
 
 	public: void addStrategy(std::shared_ptr<Gc::Controller::Helper::RuleMover::AbstractStrategy> strategy)

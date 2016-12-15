@@ -21,9 +21,9 @@
 #include "../../../Common/Exception.hpp"
 
 namespace Gc { namespace Controller { namespace Helper { namespace RuleMover { class MoveFailedException :
-	public Exception
+	public Gc::Common::Exception
 {
 	public: inline MoveFailedException(std::string const& message, std::string const& file = "", int line = -1)
-	   : Exception(message, file, line) {}
+	   : Gc::Common::Exception(message, file, line) {}
 };}}}}
 #endif

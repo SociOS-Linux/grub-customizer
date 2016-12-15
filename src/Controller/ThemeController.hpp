@@ -91,11 +91,11 @@ namespace Gc { namespace Controller { class ThemeController :
 		try {
 			try {
 				this->themeManager->load();
-			} catch (FileReadException const& e) {
+			} catch (Gc::Common::FileReadException const& e) {
 				this->log("Theme directory not found", Gc::Model::Logger::GenericLogger::INFO);
 			}
 			this->syncSettings();
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -111,7 +111,7 @@ namespace Gc { namespace Controller { class ThemeController :
 			this->currentTheme = name;
 			try {
 				this->themeManager->getTheme(name).getFileByNewName("theme.txt");
-			} catch (ItemNotFoundException const& e) {
+			} catch (Gc::Common::ItemNotFoundException const& e) {
 				this->view->showError(Gc::View::Theme::Error::THEMEFILE_NOT_FOUND);
 			}
 			this->settings->setValue("GRUB_THEME", this->themeManager->getThemePath() + "/" + name + "/theme.txt");
@@ -119,7 +119,7 @@ namespace Gc { namespace Controller { class ThemeController :
 	
 			this->syncFiles();
 			this->syncSettings();
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -135,10 +135,10 @@ namespace Gc { namespace Controller { class ThemeController :
 				this->loadThemeAction(themeName);
 				this->syncSettings();
 				this->view->selectTheme(themeName);
-			} catch (InvalidFileTypeException const& e) {
+			} catch (Gc::Common::InvalidFileTypeException const& e) {
 				this->view->showError(Gc::View::Theme::Error::INVALID_THEME_PACK_FORMAT);
 			}
-		} catch (const Exception& e) {
+		} catch (const Gc::Common::Exception& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -151,7 +151,7 @@ namespace Gc { namespace Controller { class ThemeController :
 			this->themeManager->removeTheme(this->themeManager->getTheme(name));
 			this->showSimpleThemeConfigAction();
 			this->syncSettings();
-		} catch (const Exception& e) {
+		} catch (const Gc::Common::Exception& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -162,7 +162,7 @@ namespace Gc { namespace Controller { class ThemeController :
 		this->logActionBegin("show-theme-installer");
 		try {
 			this->view->showThemeFileChooser();
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -180,7 +180,7 @@ namespace Gc { namespace Controller { class ThemeController :
 			this->currentTheme = "";
 			this->currentThemeFile = "";
 			this->syncSettings();
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -207,7 +207,7 @@ namespace Gc { namespace Controller { class ThemeController :
 			} else {
 				this->view->showError(Gc::View::Theme::Error::RENAME_CONFLICT);
 			}
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -218,7 +218,7 @@ namespace Gc { namespace Controller { class ThemeController :
 		this->logActionBegin("select-file");
 		try {
 			this->view->selectFile(file, true);
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -233,7 +233,7 @@ namespace Gc { namespace Controller { class ThemeController :
 			this->themeManager->getTheme(this->currentTheme).isModified = true;
 			this->currentThemeFile = "";
 			this->syncFiles();
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -270,7 +270,7 @@ namespace Gc { namespace Controller { class ThemeController :
 				}
 			}
 			this->view->setCurrentExternalThemeFilePath(themeFile->externalSource);
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -297,7 +297,7 @@ namespace Gc { namespace Controller { class ThemeController :
 	
 			this->themeManager->getTheme(this->currentTheme).sort();
 			this->syncFiles();
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -317,7 +317,7 @@ namespace Gc { namespace Controller { class ThemeController :
 			file->content = "";
 			file->contentLoaded = false;
 			this->updateEditAreaAction(file->newLocalFileName);
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -333,7 +333,7 @@ namespace Gc { namespace Controller { class ThemeController :
 			this->view->setCurrentExternalThemeFilePath(themeFile->externalSource);
 			themeFile->content = newText;
 			themeFile->contentLoaded = true;
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -356,7 +356,7 @@ namespace Gc { namespace Controller { class ThemeController :
 			}
 			this->syncSettings();
 			this->env->modificationsUnsaved = true;
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -396,7 +396,7 @@ namespace Gc { namespace Controller { class ThemeController :
 	
 			this->syncSettings();
 			this->env->modificationsUnsaved = true;
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -407,7 +407,7 @@ namespace Gc { namespace Controller { class ThemeController :
 		this->logActionBegin("update-font-size");
 		try {
 			this->settings->grubFontSize = this->view->getFontSize();
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -427,7 +427,7 @@ namespace Gc { namespace Controller { class ThemeController :
 			}
 			this->syncSettings();
 			this->env->modificationsUnsaved = true;
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -444,7 +444,7 @@ namespace Gc { namespace Controller { class ThemeController :
 			}
 			this->syncSettings();
 			this->env->modificationsUnsaved = true;
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -459,7 +459,7 @@ namespace Gc { namespace Controller { class ThemeController :
 			this->view->setPreviewEntryTitles(labelListToplevel);
 	
 			this->syncSettings();
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -471,7 +471,7 @@ namespace Gc { namespace Controller { class ThemeController :
 		this->logActionBegin("sync");
 		try {
 			this->syncSettings();
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -483,7 +483,7 @@ namespace Gc { namespace Controller { class ThemeController :
 		try {
 			this->themeManager->save();
 			this->threadHelper->runDispatched(std::bind(std::mem_fn(&ThemeController::postSaveAction), this));
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -500,7 +500,7 @@ namespace Gc { namespace Controller { class ThemeController :
 			this->syncFiles();
 			this->currentThemeFile = "";
 			this->view->selectFile("");
-		} catch (Exception const& e) {
+		} catch (Gc::Common::Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -580,7 +580,7 @@ namespace Gc { namespace Controller { class ThemeController :
 		if (this->settings->isActive("GRUB_THEME")) {
 			try {
 				themeName = this->themeManager->extractThemeName(this->settings->getValue("GRUB_THEME"));
-			} catch (InvalidStringFormatException const& e) {
+			} catch (Gc::Common::InvalidStringFormatException const& e) {
 				this->log(e, Gc::Model::Logger::GenericLogger::ERROR);
 			}
 		}

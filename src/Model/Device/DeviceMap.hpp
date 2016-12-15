@@ -38,7 +38,7 @@ namespace Gc { namespace Model { namespace Device { class DeviceMap :
 		Gc::Model::SmartFileHandle result;
 		try {
 			result.open(env->devicemap_file, "r", Gc::Model::SmartFileHandle::Type::FILE);
-		} catch (FileReadException const& e) {
+		} catch (Gc::Common::FileReadException const& e) {
 			if (env->check_cmd(env->mkdevicemap_cmd, env->cmd_prefix)) {
 				result.open(env->mkdevicemap_cmd, "r", Gc::Model::SmartFileHandle::Type::COMMAND);
 			} else {
@@ -119,7 +119,7 @@ namespace Gc { namespace Model { namespace Device { class DeviceMap :
 					break;
 				}
 			}
-		} catch (EndOfFileException const& e) {
+		} catch (Gc::Common::EndOfFileException const& e) {
 			//don't throw if we didn't find the mapped value
 		}
 		handle.close();
