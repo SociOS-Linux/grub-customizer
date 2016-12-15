@@ -23,20 +23,24 @@
 #include <sys/stat.h>
 #include <dirent.h>
 #include <fstream>
-#include "../lib/Exception.hpp"
+#include "../Common/Exception.hpp"
 #include <archive.h>
 #include <archive_entry.h>
 #include <map>
 #include "ThemeFile.hpp"
 
-struct Model_Theme {
-	std::string directory;
-	std::string zipFile;
-	std::list<Model_ThemeFile> files;
-	std::string name;
-	bool isModified;
+namespace Gc { namespace Model { class Theme {
+	public: std::string directory;
+	public: std::string zipFile;
+	public: std::list<Gc::Model::ThemeFile> files;
+	public: std::string name;
+	public: bool isModified;
 
-	Model_Theme(std::string const& directory, std::string const& zipFile, std::string const& name) : directory(directory), name(name), zipFile(zipFile), isModified(false)
+	public: Theme(std::string const& directory, std::string const& zipFile, std::string const& name) :
+		directory(directory),
+		name(name),
+		zipFile(zipFile),
+		isModified(false)
 	{
 		if (directory != "") {
 			this->load(directory);
@@ -47,7 +51,8 @@ struct Model_Theme {
 		}
 	}
 
-	void load(std::string const& directory) {
+	public: void load(std::string const& directory)
+	{
 		DIR* dir = opendir(directory.c_str());
 		if (dir) {
 			struct dirent *entry;
@@ -61,7 +66,7 @@ struct Model_Theme {
 				if (S_ISDIR(fileProperties.st_mode)) {
 					this->load(currentFileName);
 				} else {
-					this->files.push_back(Model_ThemeFile(this->extractLocalPath(currentFileName)));
+					this->files.push_back(Gc::Model::ThemeFile(this->extractLocalPath(currentFileName)));
 				}
 			}
 			closedir(dir);
@@ -71,11 +76,13 @@ struct Model_Theme {
 		}
 	}
 
-	void sort() {
-		this->files.sort(&Model_ThemeFile::compareLocalPath);
+	public: void sort()
+	{
+		this->files.sort(&Gc::Model::ThemeFile::compareLocalPath);
 	}
 
-	void loadZipFile(std::string const& zipFile) {
+	public: void loadZipFile(std::string const& zipFile)
+	{
 		struct archive *a;
 		struct archive_entry *entry;
 		int r;
@@ -102,7 +109,8 @@ struct Model_Theme {
 		this->removeSubdir();
 	}
 
-	std::string loadFileContent(std::string localFileName) {
+	public: std::string loadFileContent(std::string localFileName)
+	{
 		if (this->directory != "") {
 			return this->loadFileContentFromDirectory(localFileName);
 		} else if (this->zipFile != "") {
@@ -112,7 +120,8 @@ struct Model_Theme {
 		}
 	}
 
-	std::string loadFileContentExternal(std::string const& externalPath) {
+	public: std::string loadFileContentExternal(std::string const& externalPath)
+	{
 		std::string data;
 		FILE* file = fopen(externalPath.c_str(), "r");
 		if (file) {
@@ -128,7 +137,8 @@ struct Model_Theme {
 		return data;
 	}
 
-	std::string getFullFileName(std::string localFileName) {
+	public: std::string getFullFileName(std::string localFileName)
+	{
 		if (this->directory != "") {
 			return this->directory + "/" + localFileName;
 		} else {
@@ -143,8 +153,9 @@ struct Model_Theme {
 		}
 	}
 
-	Model_ThemeFile& getFile(std::string localFileName) {
-		for (std::list<Model_ThemeFile>::iterator fileIter = this->files.begin(); fileIter != this->files.end(); fileIter++) {
+	public: Gc::Model::ThemeFile& getFile(std::string localFileName)
+	{
+		for (std::list<Gc::Model::ThemeFile>::iterator fileIter = this->files.begin(); fileIter != this->files.end(); fileIter++) {
 			if (fileIter->localFileName == localFileName) {
 				return *fileIter;
 			}
@@ -152,8 +163,9 @@ struct Model_Theme {
 		throw ItemNotFoundException("themefile " + localFileName + " not found!", __FILE__, __LINE__);
 	}
 
-	Model_ThemeFile& getFileByNewName(std::string localFileName) {
-		for (std::list<Model_ThemeFile>::iterator fileIter = this->files.begin(); fileIter != this->files.end(); fileIter++) {
+	public: Gc::Model::ThemeFile& getFileByNewName(std::string localFileName)
+	{
+		for (std::list<Gc::Model::ThemeFile>::iterator fileIter = this->files.begin(); fileIter != this->files.end(); fileIter++) {
 			if (fileIter->newLocalFileName == localFileName) {
 				return *fileIter;
 			}
@@ -161,8 +173,9 @@ struct Model_Theme {
 		throw ItemNotFoundException("themefile " + localFileName + " not found!", __FILE__, __LINE__);
 	}
 
-	void removeFile(Model_ThemeFile const& file) {
-		for (std::list<Model_ThemeFile>::iterator fileIter = this->files.begin(); fileIter != this->files.end(); fileIter++) {
+	public: void removeFile(Gc::Model::ThemeFile const& file)
+	{
+		for (std::list<Gc::Model::ThemeFile>::iterator fileIter = this->files.begin(); fileIter != this->files.end(); fileIter++) {
 			if (&*fileIter == &file) {
 				this->files.erase(fileIter);
 				return;
@@ -171,11 +184,12 @@ struct Model_Theme {
 		throw ItemNotFoundException("themefile " + file.localFileName + " not found!", __FILE__, __LINE__);
 	}
 
-	void save(std::string const& baseDirectory) {
+	public: void save(std::string const& baseDirectory)
+	{
 		std::string sourceThemeDir = baseDirectory + "/" + this->name;
 		std::string destThemeDir = baseDirectory + "/" + this->name + ".__new";
 		mkdir(destThemeDir.c_str(), 0755);
-		for (std::list<Model_ThemeFile>::iterator fileIter = this->files.begin(); fileIter != this->files.end(); fileIter++) {
+		for (std::list<Gc::Model::ThemeFile>::iterator fileIter = this->files.begin(); fileIter != this->files.end(); fileIter++) {
 			if (this->zipFile != "" && !fileIter->contentLoaded) {
 				fileIter->content = this->loadFileContentFromZip(fileIter->localFileName);
 				fileIter->contentLoaded = true;
@@ -206,7 +220,8 @@ struct Model_Theme {
 		}
 	}
 
-	void renameFile(std::string const& oldName, std::string const& newName) {
+	public: void renameFile(std::string const& oldName, std::string const& newName)
+	{
 		this->createFilePath(newName);
 		int success = std::rename(oldName.c_str(), newName.c_str());
 		if (success != 0) {
@@ -214,14 +229,15 @@ struct Model_Theme {
 		}
 	}
 
-	bool hasConflicts(std::string const& localFilename) {
+	public: bool hasConflicts(std::string const& localFilename)
+	{
 		try {
 			this->getFileByNewName(localFilename);
 			return true;
 		} catch (ItemNotFoundException const& e) {
 		}
 	
-		for (std::list<Model_ThemeFile>::iterator fileIter = this->files.begin(); fileIter != this->files.end(); fileIter++) {
+		for (std::list<Gc::Model::ThemeFile>::iterator fileIter = this->files.begin(); fileIter != this->files.end(); fileIter++) {
 			if (fileIter->newLocalFileName.substr(0, localFilename.length() + 1) == localFilename + "/") {
 				return true;
 			}
@@ -233,14 +249,15 @@ struct Model_Theme {
 		return false;
 	}
 
-	void deleteThemeFiles(std::string const& baseDirectory) {
+	public: void deleteThemeFiles(std::string const& baseDirectory)
+	{
 		this->deleteDirectory(baseDirectory + "/" + this->name);
 	}
 
-private:
-	void removeSubdir() {
+	private: void removeSubdir()
+	{
 		std::map<std::string, int> toplevelFileCount;
-		for (std::list<Model_ThemeFile>::iterator themeFileIter = this->files.begin(); themeFileIter != this->files.end(); themeFileIter++) {
+		for (std::list<Gc::Model::ThemeFile>::iterator themeFileIter = this->files.begin(); themeFileIter != this->files.end(); themeFileIter++) {
 			int slashPos = themeFileIter->localFileName.find("/");
 			toplevelFileCount[themeFileIter->localFileName.substr(0, slashPos)]++;
 		}
@@ -248,21 +265,24 @@ private:
 		if (toplevelFileCount.size() == 1) { // subdir found
 			std::string subdir = toplevelFileCount.begin()->first;
 	
-			for (std::list<Model_ThemeFile>::iterator themeFileIter = this->files.begin(); themeFileIter != this->files.end(); themeFileIter++) {
+			for (std::list<Gc::Model::ThemeFile>::iterator themeFileIter = this->files.begin(); themeFileIter != this->files.end(); themeFileIter++) {
 				themeFileIter->newLocalFileName = themeFileIter->localFileName.substr(subdir.length() + 1);
 			}
 		}
 	}
 
-	std::string extractLocalPath(std::string fullPath) {
+	private: std::string extractLocalPath(std::string fullPath)
+	{
 		return fullPath.substr(this->directory.size() + 1);
 	}
 
-	std::string loadFileContentFromDirectory(std::string localFileName) {
+	private: std::string loadFileContentFromDirectory(std::string localFileName)
+	{
 		return this->loadFileContentExternal(this->directory + "/" + localFileName);
 	}
 
-	std::string loadFileContentFromZip(std::string localFileName) {
+	private: std::string loadFileContentFromZip(std::string localFileName)
+	{
 		struct archive *a;
 		struct archive_entry *entry;
 		int r;
@@ -293,7 +313,8 @@ private:
 		return result;
 	}
 
-	void writeFile(Model_ThemeFile& file, std::string const& path) {
+	private: void writeFile(Gc::Model::ThemeFile& file, std::string const& path)
+	{
 		this->createFilePath(path);
 		FILE* outFile = fopen(path.c_str(), "w");
 		if (outFile) {
@@ -306,7 +327,8 @@ private:
 		}
 	}
 
-	bool fileExists(std::string const& path) {
+	private: bool fileExists(std::string const& path)
+	{
 		FILE* file = fopen(path.c_str(), "r");
 		if (file) {
 			fclose(file);
@@ -316,7 +338,8 @@ private:
 		}
 	}
 
-	bool isDir(std::string const& path) {
+	private: bool isDir(std::string const& path)
+	{
 		DIR* dir = opendir(path.c_str());
 		if (dir) {
 			closedir(dir);
@@ -326,7 +349,8 @@ private:
 		}
 	}
 
-	void createFilePath(std::string const& path) {
+	private: void createFilePath(std::string const& path)
+	{
 		std::string currentPart = "";
 		for (std::string::const_iterator pathIter = path.begin(); pathIter != path.end(); pathIter++) {
 			if (*pathIter == '/') {
@@ -336,7 +360,8 @@ private:
 		}
 	}
 
-	void deleteDirectory(std::string const& path) {
+	private: void deleteDirectory(std::string const& path)
+	{
 		assert(path != "" && path != "/");
 	
 		DIR* dir = opendir(path.c_str());
@@ -362,7 +387,7 @@ private:
 		}
 	}
 
-};
+};}}
 
 
 #endif /* MODEL_THEME_H_ */

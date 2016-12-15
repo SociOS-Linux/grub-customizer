@@ -22,22 +22,24 @@
 
 #include <gtkmm.h>
 #include <libintl.h>
-#include "../../lib/Type.hpp"
+#include "../../Common/Type.hpp"
 #include "Element/List.hpp"
 
-class View_Gtk_Trash :
+namespace Gc { namespace View { namespace Gtk {
+namespace Gtk = ::Gtk;
+class Trash :
 	public Gtk::Window,
-	public View_Trash
+	public Gc::View::Trash
 {
 	private: Gtk::ScrolledWindow scrEntryBox;
-	private: View_Gtk_Element_List<Rule, Script> list;
+	private: Gc::View::Gtk::Element::List<Gc::Common::Type::Rule, Gc::Common::Type::Script> list;
 	private: Gtk::Frame frmList;
 	private: Gtk::VBox vbList;
 	private: Gtk::HBox hbList;
 	private: Gtk::Button bttRestore;
 	private: Gtk::Button bttDelete;
 
-	private: std::map<ViewOption, bool> options;
+	private: std::map<Gc::Common::Type::ViewOption, bool> options;
 
 	private: Gtk::MenuItem miContext;
 	private: Gtk::Menu contextMenu;
@@ -46,7 +48,7 @@ class View_Gtk_Trash :
 
 	private: bool event_lock = false;
 
-	public: View_Gtk_Trash() :
+	public: Trash() :
 		micRestore(Gtk::Stock::ADD),
 		bttRestore(Gtk::Stock::UNDELETE),
 		bttDelete(Gtk::Stock::DELETE),
@@ -87,14 +89,14 @@ class View_Gtk_Trash :
 		this->contextMenu.attach(this->micRestore, 0, 1, 0, 1);
 		this->contextMenu.attach(this->micDelete, 0, 1, 1, 2);
 
-		this->list.get_selection()->signal_changed().connect(sigc::mem_fun(this, &View_Gtk_Trash::signal_treeview_selection_changed));
-		this->list.signal_row_activated().connect(sigc::mem_fun(this, &View_Gtk_Trash::signal_item_dblClick));
-		this->list.signal_button_press_event().connect_notify(sigc::mem_fun(this, &View_Gtk_Trash::signal_button_press));
-		this->list.signal_popup_menu().connect(sigc::mem_fun(this, &View_Gtk_Trash::signal_popup));
-		this->micRestore.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Trash::restore_button_click));
-		this->bttRestore.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Trash::restore_button_click));
-		this->micDelete.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Trash::delete_button_click));
-		this->bttDelete.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Trash::delete_button_click));
+		this->list.get_selection()->signal_changed().connect(sigc::mem_fun(this, &Gc::View::Gtk::Trash::signal_treeview_selection_changed));
+		this->list.signal_row_activated().connect(sigc::mem_fun(this, &Gc::View::Gtk::Trash::signal_item_dblClick));
+		this->list.signal_button_press_event().connect_notify(sigc::mem_fun(this, &Gc::View::Gtk::Trash::signal_button_press));
+		this->list.signal_popup_menu().connect(sigc::mem_fun(this, &Gc::View::Gtk::Trash::signal_popup));
+		this->micRestore.signal_activate().connect(sigc::mem_fun(this, &Gc::View::Gtk::Trash::restore_button_click));
+		this->bttRestore.signal_clicked().connect(sigc::mem_fun(this, &Gc::View::Gtk::Trash::restore_button_click));
+		this->micDelete.signal_activate().connect(sigc::mem_fun(this, &Gc::View::Gtk::Trash::delete_button_click));
+		this->bttDelete.signal_clicked().connect(sigc::mem_fun(this, &Gc::View::Gtk::Trash::delete_button_click));
 	}
 
 	private: void signal_item_dblClick(Gtk::TreeModel::Path const& path, Gtk::TreeViewColumn* column)
@@ -122,9 +124,9 @@ class View_Gtk_Trash :
 		event_lock = false;
 	}
 
-	public: std::list<Rule*> getSelectedEntries()
+	public: std::list<Gc::Common::Type::Rule*> getSelectedEntries()
 	{
-		std::list<Rule*> result;
+		std::list<Gc::Common::Type::Rule*> result;
 		std::vector<Gtk::TreePath> pathes = list.get_selection()->get_selected_rows();
 		for (std::vector<Gtk::TreePath>::iterator pathIter = pathes.begin(); pathIter != pathes.end(); pathIter++) {
 			Gtk::TreeModel::iterator elementIter = list.refTreeStore->get_iter(*pathIter);
@@ -133,7 +135,7 @@ class View_Gtk_Trash :
 		return result;
 	}
 
-	private: void addItem(View_Model_ListItem<Rule, Script> const& listItem)
+	private: void addItem(Gc::View::Model::ListItem<Gc::Common::Type::Rule, Gc::Common::Type::Script> const& listItem)
 	{
 		this->list.addListItem(listItem, this->options, *this);
 	}
@@ -180,12 +182,12 @@ class View_Gtk_Trash :
 		micDelete.set_sensitive(visibility);
 	}
 
-	public: void setOptions(std::map<ViewOption, bool> const& viewOptions)
+	public: void setOptions(std::map<Gc::Common::Type::ViewOption, bool> const& viewOptions)
 	{
 		this->options = viewOptions;
 	}
 
-	public: void selectEntries(std::list<Rule*> const& entries)
+	public: void selectEntries(std::list<Gc::Common::Type::Rule*> const& entries)
 	{
 		this->list.selectRules(entries);
 	}
@@ -216,6 +218,6 @@ class View_Gtk_Trash :
 		contextMenu.popup(0, gdk_event_get_time(nullptr));
 		return true;
 	}
-};
+};}}}
 
 #endif

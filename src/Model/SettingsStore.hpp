@@ -22,79 +22,35 @@
 #include <list>
 #include <string>
 #include <cstdio>
+#include "SettingsStoreRow.hpp"
 
-struct Model_SettingsStore_Row {
-	Model_SettingsStore_Row() : isActive(true), hasExportPrefix(false), isSetting(true) {}
+namespace Gc { namespace Model { class SettingsStore
+{
+	private: std::string filePath;
+	protected: std::list<Gc::Model::SettingsStoreRow> settings;
 
-	std::string name, value, comment, plaintext;
-	bool hasExportPrefix, isActive, isSetting;
-	void validate() {
-		isActive = false;
-		hasExportPrefix = false;
-		isSetting = false;
-	
-		// trim name and value
-		name = name.substr(name.find_first_not_of(' ') == -1 ? 0 : name.find_first_not_of(' ')); // ltrim
-		name = name.substr(0, name.find_last_not_of(' ') + 1); // rtrim
-		value = value.substr(value.find_first_not_of(' ') == -1 ? 0 : value.find_first_not_of(' ')); // ltrim
-		value = value.substr(0, value.find_last_not_of(' ') + 1); // rtrim
-	
-		if (name != "" && value != "" && (name.length() < 2 || name.substr(0,2) != "# ")){
-			isSetting = true;
-			if (name[0] != '#')
-				isActive = true;
-			else
-				name = name.substr(1);
-	
-			if (name.length() > 7 && name.substr(0,7) == "export "){
-				hasExportPrefix = true;
-				int pos = name.find_first_not_of(' ', 7);
-				name = name.substr(pos != -1 ? pos : 7); // try to use trimmed value, but use pos 7 if there's an error
-			}
-		}
-		else {
-			name = "";
-			value = "";
-		}
-	}
-
-	std::string getOutput() {
-		if (isSetting) {
-			if (name != "") {
-				return (isActive ? "" : "#")+std::string(hasExportPrefix ? "export " : "")+name+"=\""+value+"\""+(comment != "" ? " #"+comment : "");
-			} else {
-				return "#UNNAMED_OPTION=\""+value+"\""; //unnamed options would destroy the grub confuguration
-			}
-		} else {
-			return plaintext;
-		}
-	}
-
-};
-
-class Model_SettingsStore {
-	std::string filePath;
-protected:
-	std::list<Model_SettingsStore_Row> settings;
-public:
-	Model_SettingsStore(FILE* source = NULL) {
+	public: SettingsStore(FILE* source = nullptr)
+	{
 		if (source) {
 			this->load(source);
 		}
 	}
 
-	std::list<Model_SettingsStore_Row>::iterator begin(bool jumpOverPlaintext = true) {
-		std::list<Model_SettingsStore_Row>::iterator iter = settings.begin();
+	public: std::list<Gc::Model::SettingsStoreRow>::iterator begin(bool jumpOverPlaintext = true)
+	{
+		std::list<Gc::Model::SettingsStoreRow>::iterator iter = settings.begin();
 		if (!iter->isSetting && jumpOverPlaintext)
 			iter_to_next_setting(iter);
 		return iter;
 	}
 
-	std::list<Model_SettingsStore_Row>::iterator end() {
+	public: std::list<Gc::Model::SettingsStoreRow>::iterator end()
+	{
 		return settings.end();
 	}
 
-	void iter_to_next_setting(std::list<Model_SettingsStore_Row>::iterator& iter) {
+	public: void iter_to_next_setting(std::list<Gc::Model::SettingsStoreRow>::iterator& iter)
+	{
 		iter++;
 		while (iter != settings.end()){
 			if (iter->isSetting)
@@ -104,16 +60,18 @@ public:
 		}
 	}
 
-	std::string getValue(std::string const& name) {
-		for (std::list<Model_SettingsStore_Row>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
+	public: std::string getValue(std::string const& name)
+	{
+		for (std::list<Gc::Model::SettingsStoreRow>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
 			if (name == iter->name)
 				return iter->value;
 		}
 		return "";
 	}
 
-	bool setValue(std::string const& name, std::string const& value) {
-		for (std::list<Model_SettingsStore_Row>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
+	public: bool setValue(std::string const& name, std::string const& value)
+	{
+		for (std::list<Gc::Model::SettingsStoreRow>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
 			if (name == iter->name){
 				if (iter->value != value){ //only set when the new value is really new
 					iter->value = value;
@@ -122,7 +80,7 @@ public:
 			}
 		}
 	
-		settings.push_back(Model_SettingsStore_Row());
+		settings.push_back(Gc::Model::SettingsStoreRow());
 		settings.back().name = name;
 		settings.back().value = value;
 		settings.back().validate();
@@ -130,15 +88,17 @@ public:
 		return false;
 	}
 
-	std::string addNewItem() {
-		Model_SettingsStore_Row newRow;
+	public: std::string addNewItem()
+	{
+		Gc::Model::SettingsStoreRow newRow;
 		newRow.name = "";
 		settings.push_back(newRow);
 		return newRow.name;
 	}
 
-	void removeItem(std::string const& name) {
-		for (std::list<Model_SettingsStore_Row>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
+	public: void removeItem(std::string const& name)
+	{
+		for (std::list<Gc::Model::SettingsStoreRow>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
 			if (iter->name == name){
 				settings.erase(iter);
 				break; //must break because the iterator is invalid now!
@@ -146,8 +106,9 @@ public:
 		}
 	}
 
-	void renameItem(std::string const& old_name, std::string const& new_name) {
-		for (std::list<Model_SettingsStore_Row>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
+	public: void renameItem(std::string const& old_name, std::string const& new_name)
+	{
+		for (std::list<Gc::Model::SettingsStoreRow>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
 			if (iter->name == old_name){
 				iter->name = new_name;
 				break; //must break because the iterator is invalid now!
@@ -155,16 +116,18 @@ public:
 		}
 	}
 
-	bool isActive(std::string const& name, bool checkValueToo = false) {
-		for (std::list<Model_SettingsStore_Row>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
+	public: bool isActive(std::string const& name, bool checkValueToo = false)
+	{
+		for (std::list<Gc::Model::SettingsStoreRow>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
 			if (name == iter->name)
 				return iter->isActive && (!checkValueToo || iter->value != "false");
 		}
 		return false;
 	}
 
-	bool setIsActive(std::string const& name, bool value) {
-		for (std::list<Model_SettingsStore_Row>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
+	public: bool setIsActive(std::string const& name, bool value)
+	{
+		for (std::list<Gc::Model::SettingsStoreRow>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
 			if (name == iter->name){
 				if (iter->isActive != value){
 					iter->isActive = value;
@@ -175,8 +138,9 @@ public:
 		return false;
 	}
 
-	bool setIsExport(std::string const& name, bool isExport) {
-		for (std::list<Model_SettingsStore_Row>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
+	public: bool setIsExport(std::string const& name, bool isExport)
+	{
+		for (std::list<Gc::Model::SettingsStoreRow>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
 			if (name == iter->name){
 				if (iter->hasExportPrefix != isExport){
 					iter->hasExportPrefix = isExport;
@@ -187,17 +151,18 @@ public:
 		return false;
 	}
 
-	void load(FILE* source) {
+	public: void load(FILE* source)
+	{
 		std::string row;
 		int c;
 		int step = 0; //0: name parsing, 1: value parsing
 		bool inQuotes = false;
 		char quoteChar;
-		settings.push_back(Model_SettingsStore_Row());
+		settings.push_back(Gc::Model::SettingsStoreRow());
 		while ((c = fgetc(source)) != EOF){
 			if (c == '\n'){
 				settings.back().validate();
-				settings.push_back(Model_SettingsStore_Row());
+				settings.push_back(Gc::Model::SettingsStoreRow());
 				inQuotes = false;
 				step = 0;
 			}
@@ -225,8 +190,9 @@ public:
 			settings.back().validate();
 	}
 
-	void save(FILE* target) {
-		for (std::list<Model_SettingsStore_Row>::iterator iter = this->begin(false); iter != this->end(); iter++){
+	public: void save(FILE* target)
+	{
+		for (std::list<Gc::Model::SettingsStoreRow>::iterator iter = this->begin(false); iter != this->end(); iter++){
 			if (iter != this->begin(false)) {
 				fputs("\n", target);
 			}
@@ -234,10 +200,11 @@ public:
 		}
 	}
 
-	void clear() {
+	public: void clear()
+	{
 		this->settings.clear();
 	}
 
-};
+};}}
 
 #endif /* SETTINGSSTORE_H_ */

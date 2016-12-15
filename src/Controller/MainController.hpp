@@ -19,7 +19,7 @@
 #ifndef MAINCONNTROLLER_INCLUDED
 #define MAINCONNTROLLER_INCLUDED
 
-#include "../Model/ListCfg.hpp"
+#include "../Model/ListCfg/ListCfg.hpp"
 #include "../View/Main.hpp"
 #include "../View/Trait/ViewAware.hpp"
 #include <libintl.h>
@@ -32,15 +32,15 @@
 
 #include "../Model/Env.hpp"
 
-#include "../Model/ListCfg.hpp"
-#include "../Model/DeviceDataList.hpp"
-#include "../lib/ContentParserFactory.hpp"
+#include "../Model/ListCfg/ListCfg.hpp"
+#include "../Model/Device/DeviceDataList.hpp"
+#include "../Model/ContentParser/GenericFactory.hpp"
 
 #include "Common/ControllerAbstract.hpp"
 
-#include "../lib/Trait/LoggerAware.hpp"
-#include "../lib/Exception.hpp"
-#include "../Mapper/EntryName.hpp"
+#include "../Model/Logger/Trait/LoggerAware.hpp"
+#include "../Common/Exception.hpp"
+#include "../View/Mapper/EntryName.hpp"
 #include "../Model/FbResolutionsGetter.hpp"
 #include "../View/Model/ListItem.hpp"
 #include "Helper/DeviceInfo.hpp"
@@ -50,40 +50,40 @@
  * This controller operates on the entry list
  */
 
-class MainController :
-	public Controller_Common_ControllerAbstract,
-	public View_Trait_ViewAware<View_Main>,
-	public Model_ListCfg_Connection,
-	public Model_SettingsManagerData_Connection,
-	public Model_FbResolutionsGetter_Connection,
-	public Model_DeviceDataList_Connection,
-	public Model_MountTable_Connection,
-	public ContentParserFactory_Connection,
-	public Mapper_EntryName_Connection,
-	public Model_Env_Connection,
-	public Controller_Helper_Thread_Connection,
-	public Bootstrap_Application_Object_Connection,
-	public Controller_Helper_RuleMover_Connection
+namespace Gc { namespace Controller { class MainController :
+	public Gc::Controller::Common::ControllerAbstract,
+	public Gc::View::Trait::ViewAware<Gc::View::Main>,
+	public Gc::Model::ListCfg::ListCfgConnection,
+	public Gc::Model::SettingsManagerDataConnection,
+	public Gc::Model::FbResolutionsGetterConnection,
+	public Gc::Model::Device::DeviceDataListConnection,
+	public Gc::Model::Device::MountTableConnection,
+	public Gc::Model::ContentParser::GenericFactoryConnection,
+	public Gc::View::Mapper::EntryNameConnection,
+	public Gc::Model::EnvConnection,
+	public Gc::Controller::Helper::ThreadConnection,
+	public Gc::Bootstrap::ApplicationHelper::ObjectConnection,
+	public Gc::Controller::Helper::RuleMoverConnection
 {
-	private: std::shared_ptr<Model_SettingsManagerData> settingsOnDisk; //buffer for the existing settings
-	private: std::shared_ptr<Model_ListCfg> savedListCfg;
-	private: ContentParser* currentContentParser;
+	private: std::shared_ptr<Gc::Model::SettingsManagerData> settingsOnDisk; //buffer for the existing settings
+	private: std::shared_ptr<Gc::Model::ListCfg::ListCfg> savedListCfg;
+	private: Gc::Model::ContentParser::GenericParser* currentContentParser;
 
 	private: bool config_has_been_different_on_startup_but_unsaved;
 	private: bool is_loading;
 	private: CmdExecException thrownException; //to be used from the die() function
 
-	public: void setSettingsBuffer(std::shared_ptr<Model_SettingsManagerData> settings)
+	public: void setSettingsBuffer(std::shared_ptr<Gc::Model::SettingsManagerData> settings)
 	{
 		this->settingsOnDisk = settings;
 	}
 
-	public: void setSavedListCfg(std::shared_ptr<Model_ListCfg> savedListCfg)
+	public: void setSavedListCfg(std::shared_ptr<Gc::Model::ListCfg::ListCfg> savedListCfg)
 	{
 		this->savedListCfg = savedListCfg;
 	}
 
-	public: Model_FbResolutionsGetter& getFbResolutionsGetter() {
+	public: Gc::Model::FbResolutionsGetter& getFbResolutionsGetter() {
 		return *this->fbResolutionsGetter;
 	}
 
@@ -147,7 +147,7 @@ class MainController :
 		);
 
 		this->applicationObject->onTrashEntrySelection.addHandler(
-			std::bind(std::mem_fn(&MainController::selectRulesAction), this, std::list<Rule*>())
+			std::bind(std::mem_fn(&MainController::selectRulesAction), this, std::list<Gc::Common::Type::Rule*>())
 		);
 
 		this->applicationObject->onEntryInsertionRequest.addHandler(
@@ -180,11 +180,11 @@ class MainController :
 		) {
 			throw ConfigException("init(): missing some objects", __FILE__, __LINE__);
 		}
-		this->log("initializing (w/o specified bootloader type)…", Logger::IMPORTANT_EVENT);
+		this->log("initializing (w/o specified bootloader type)…", Gc::Model::Logger::GenericLogger::IMPORTANT_EVENT);
 
 		savedListCfg->verbose = false;
 
-		this->log("reading partition info…", Logger::EVENT);
+		this->log("reading partition info…", Gc::Model::Logger::GenericLogger::EVENT);
 		FILE* blkidProc = popen("blkid", "r");
 		if (blkidProc){
 			deviceDataList->clear();
@@ -202,15 +202,15 @@ class MainController :
 
 		//dir_prefix may be set by partition chooser (if not, the root partition is used)
 
-		this->log("Finding out if this is a live CD", Logger::EVENT);
+		this->log("Finding out if this is a live CD", Gc::Model::Logger::GenericLogger::EVENT);
 		//aufs is the virtual root fileSystem used by live cds
 		if (mountTable->getEntryByMountpoint("").isLiveCdFs() && env->cfg_dir_prefix == ""){
-			this->log("is live CD", Logger::INFO);
-			this->env->init(Model_Env::GRUB_MODE, "");
+			this->log("is live CD", Gc::Model::Logger::GenericLogger::INFO);
+			this->env->init(Gc::Model::Env::Mode::GRUB, "");
 			this->showEnvEditorAction();
 		} else {
-			this->log("running on an installed system", Logger::INFO);
-			std::list<Model_Env::Mode> modes = this->env->getAvailableModes();
+			this->log("running on an installed system", Gc::Model::Logger::GenericLogger::INFO);
+			std::list<Gc::Model::Env::Mode> modes = this->env->getAvailableModes();
 			if (modes.size() == 2) {
 				this->view->showBurgSwitcher();
 			} else if (modes.size() == 1) {
@@ -221,25 +221,25 @@ class MainController :
 		}
 	}
 
-	public: void init(Model_Env::Mode mode, bool initEnv = true)
+	public: void init(Gc::Model::Env::Mode mode, bool initEnv = true)
 	{
-		this->log("initializing (w/ specified bootloader type)…", Logger::IMPORTANT_EVENT);
+		this->log("initializing (w/ specified bootloader type)…", Gc::Model::Logger::GenericLogger::IMPORTANT_EVENT);
 		if (initEnv) {
 			this->env->init(mode, env->cfg_dir_prefix);
 		}
 		this->view->setLockState(1|4|8);
-		this->view->setIsBurgMode(mode == Model_Env::BURG_MODE);
+		this->view->setIsBurgMode(mode == Gc::Model::Env::Mode::BURG);
 		this->view->show();
 		this->view->hideBurgSwitcher();
 		this->view->hideScriptUpdateInfo();
 
-		this->log("Checking if the config directory is clean", Logger::EVENT);
+		this->log("Checking if the config directory is clean", Gc::Model::Logger::GenericLogger::EVENT);
 		if (this->grublistCfg->cfgDirIsClean() == false) {
-			this->log("cleaning up config dir", Logger::IMPORTANT_EVENT);
+			this->log("cleaning up config dir", Gc::Model::Logger::GenericLogger::IMPORTANT_EVENT);
 			this->grublistCfg->cleanupCfgDir();
 		}
 
-		this->log("loading configuration", Logger::IMPORTANT_EVENT);
+		this->log("loading configuration", Gc::Model::Logger::GenericLogger::IMPORTANT_EVENT);
 		this->threadHelper->runAsThread(std::bind(std::mem_fn(&MainController::loadThreadedAction), this, false));
 	}
 
@@ -258,7 +258,7 @@ class MainController :
 	{
 		this->logActionBegin("re-init");
 		try {
-			Model_Env::Mode mode = burgMode ? Model_Env::BURG_MODE : Model_Env::GRUB_MODE;
+			Gc::Model::Env::Mode mode = burgMode ? Gc::Model::Env::Mode::BURG : Gc::Model::Env::Mode::GRUB;
 			this->init(mode, false);
 		} catch (Exception const& e) {
 			this->applicationObject->onError.exec(e);
@@ -319,60 +319,60 @@ class MainController :
 		this->logActionBeginThreaded("load-threaded");
 		try {
 			if (!is_loading){ //allow only one load thread at the same time!
-				this->log(std::string("loading - preserveConfig: ") + (preserveConfig ? "yes" : "no"), Logger::IMPORTANT_EVENT);
+				this->log(std::string("loading - preserveConfig: ") + (preserveConfig ? "yes" : "no"), Gc::Model::Logger::GenericLogger::IMPORTANT_EVENT);
 				is_loading = true;
 				this->env->activeThreadCount++;
 
 				try {
 					this->view->setOptions(this->env->loadViewOptions());
 				} catch (FileReadException e) {
-					this->log("view options not found", Logger::INFO);
+					this->log("view options not found", Gc::Model::Logger::GenericLogger::INFO);
 				}
 				this->applicationObject->viewOptions = this->view->getOptions();
 
 				if (!preserveConfig){
-					this->log("unsetting saved config", Logger::EVENT);
+					this->log("unsetting saved config", Gc::Model::Logger::GenericLogger::EVENT);
 					this->grublistCfg->reset();
 					this->savedListCfg->reset();
 					//load the burg/grub settings file
-					this->log("loading settings", Logger::IMPORTANT_EVENT);
+					this->log("loading settings", Gc::Model::Logger::GenericLogger::IMPORTANT_EVENT);
 					this->settings->load();
 					this->threadHelper->runDispatched(std::bind(std::mem_fn(&MainController::activateSettingsAction), this));
 				} else {
-					this->log("switching settings", Logger::IMPORTANT_EVENT);
+					this->log("switching settings", Gc::Model::Logger::GenericLogger::IMPORTANT_EVENT);
 					this->settingsOnDisk->load();
 					this->settings->save();
 				}
 
 				try {
-					this->log("loading grub list", Logger::IMPORTANT_EVENT);
+					this->log("loading grub list", Gc::Model::Logger::GenericLogger::IMPORTANT_EVENT);
 					this->grublistCfg->load(preserveConfig);
-					this->log("grub list completely loaded", Logger::IMPORTANT_EVENT);
+					this->log("grub list completely loaded", Gc::Model::Logger::GenericLogger::IMPORTANT_EVENT);
 				} catch (CmdExecException const& e){
-					this->log("error while loading the grub list", Logger::ERROR);
+					this->log("error while loading the grub list", Gc::Model::Logger::GenericLogger::ERROR);
 					this->thrownException = e;
 					this->threadHelper->runDispatched(std::bind(std::mem_fn(&MainController::dieAction), this));
 					return; //cancel
 				}
 
 				if (!preserveConfig){
-					this->log("loading saved grub list", Logger::IMPORTANT_EVENT);
+					this->log("loading saved grub list", Gc::Model::Logger::GenericLogger::IMPORTANT_EVENT);
 					if (this->savedListCfg->loadStaticCfg()) {
 						this->config_has_been_different_on_startup_but_unsaved = !this->grublistCfg->compare(*this->savedListCfg);
 					} else {
-						this->log("saved grub list not found", Logger::WARNING);
+						this->log("saved grub list not found", Gc::Model::Logger::GenericLogger::WARNING);
 						this->config_has_been_different_on_startup_but_unsaved = false;
 					}
 					this->threadHelper->runDispatched([this] {this->applicationObject->onLoad.exec();});
 				}
 				if (preserveConfig){
-					this->log("restoring settings", Logger::IMPORTANT_EVENT);
+					this->log("restoring settings", Gc::Model::Logger::GenericLogger::IMPORTANT_EVENT);
 					this->settingsOnDisk->save();
 				}
 				this->env->activeThreadCount--;
 				this->is_loading = false;
 			} else {
-				this->log("ignoring load request (only one load thread allowed at the same time)", Logger::WARNING);
+				this->log("ignoring load request (only one load thread allowed at the same time)", Gc::Model::Logger::GenericLogger::WARNING);
 			}
 		} catch (Exception const& e) {
 			this->applicationObject->onThreadError.exec(e);
@@ -402,13 +402,13 @@ class MainController :
 		this->logActionBeginThreaded("save-threaded");
 		try {
 			this->env->createBackup();
-			this->log("writing settings file", Logger::IMPORTANT_EVENT);
+			this->log("writing settings file", Gc::Model::Logger::GenericLogger::IMPORTANT_EVENT);
 			this->settings->save();
 			if (this->settings->color_helper_required) {
 				this->grublistCfg->addColorHelper();
 			}
 			this->applicationObject->onSave.exec();
-			this->log("writing grub list configuration", Logger::IMPORTANT_EVENT);
+			this->log("writing grub list configuration", Gc::Model::Logger::GenericLogger::IMPORTANT_EVENT);
 			try {
 				this->grublistCfg->save();
 			} catch (CmdExecException const& e){
@@ -433,7 +433,7 @@ class MainController :
 	}
 
 	public: MainController() :
-		Controller_Common_ControllerAbstract("main"),
+		Gc::Controller::Common::ControllerAbstract("main"),
 		config_has_been_different_on_startup_but_unsaved(false),
 		is_loading(false),
 		currentContentParser(NULL),
@@ -441,9 +441,9 @@ class MainController :
 	{
 	}
 
-	public: void renameEntry(std::shared_ptr<Model_Rule> rule, std::string const& newName)
+	public: void renameEntry(std::shared_ptr<Gc::Model::ListCfg::Rule> rule, std::string const& newName)
 	{
-		if (rule->type != Model_Rule::PLAINTEXT) {
+		if (rule->type != Gc::Model::ListCfg::Rule::PLAINTEXT) {
 
 			std::string currentRulePath = this->grublistCfg->getRulePath(rule);
 			std::string currentDefaultRulePath = this->settings->getValue("GRUB_DEFAULT");
@@ -483,7 +483,7 @@ class MainController :
 	}
 
 
-	public: void showEntryEditorAction(Rule* rule)
+	public: void showEntryEditorAction(Gc::Common::Type::Rule* rule)
 	{
 		this->logActionBegin("show-entry-editor");
 		try {
@@ -535,7 +535,7 @@ class MainController :
 		for (auto& proxy : this->grublistCfg->proxies){
 			std::string name = proxy->getScriptName();
 			if ((name != "header" && name != "debian_theme" && name != "grub-customizer_menu_color_helper") || proxy->isModified()) {
-				View_Model_ListItem<Rule, Proxy> listItem;
+				Gc::View::Model::ListItem<Gc::Common::Type::Rule, Gc::Common::Type::Proxy> listItem;
 				listItem.name = name;
 				listItem.scriptPtr = proxy.get();
 				listItem.is_submenu = true;
@@ -551,8 +551,8 @@ class MainController :
 
 	public: void updateTrashView()
 	{
-		bool placeholdersVisible = this->view->getOptions().at(VIEW_SHOW_PLACEHOLDERS);
-		bool hiddenEntriesVisible = this->view->getOptions().at(VIEW_SHOW_HIDDEN_ENTRIES);
+		bool placeholdersVisible = this->view->getOptions().at(Gc::Common::Type::ViewOption::SHOW_PLACEHOLDERS);
+		bool hiddenEntriesVisible = this->view->getOptions().at(Gc::Common::Type::ViewOption::SHOW_HIDDEN_ENTRIES);
 		this->view->setTrashPaneVisibility(
 			this->grublistCfg->getRemovedEntries(NULL, !placeholdersVisible).size() >= 1 && !hiddenEntriesVisible
 		);
@@ -584,7 +584,7 @@ class MainController :
 	}
 
 
-	public: void removeRulesAction(std::list<Rule*> rules, bool force)
+	public: void removeRulesAction(std::list<Gc::Common::Type::Rule*> rules, bool force)
 	{
 		this->logActionBegin("remove-rules");
 		try {
@@ -593,20 +593,20 @@ class MainController :
 			} else if (!force && this->listHasPlaintextRules(rules)) {
 				this->view->showPlaintextRemoveWarning();
 			} else {
-				std::list<Entry*> entriesOfRemovedRules;
-				std::map<std::shared_ptr<Model_Proxy>, Nothing> emptyProxies;
-				for (std::list<Rule*>::iterator iter = rules.begin(); iter != rules.end(); iter++) {
-					std::shared_ptr<Model_Rule> rule = this->grublistCfg->findRule(*iter);
+				std::list<Gc::Common::Type::Entry*> entriesOfRemovedRules;
+				std::map<std::shared_ptr<Gc::Model::ListCfg::Proxy>, Gc::Common::Type::Nothing> emptyProxies;
+				for (std::list<Gc::Common::Type::Rule*>::iterator iter = rules.begin(); iter != rules.end(); iter++) {
+					std::shared_ptr<Gc::Model::ListCfg::Rule> rule = this->grublistCfg->findRule(*iter);
 					rule->setVisibility(false);
 					entriesOfRemovedRules.push_back(rule->dataSource.get());
 					if (!this->grublistCfg->proxies.getProxyByRule(rule)->hasVisibleRules()) {
-						emptyProxies[this->grublistCfg->proxies.getProxyByRule(rule)] = Nothing();
+						emptyProxies[this->grublistCfg->proxies.getProxyByRule(rule)] = Gc::Common::Type::Nothing();
 					}
 				}
 
 				for (auto emptyProxy : emptyProxies) {
 					this->grublistCfg->proxies.deleteProxy(emptyProxy.first);
-					this->log("proxy removed", Logger::INFO);
+					this->log("proxy removed", Gc::Model::Logger::GenericLogger::INFO);
 				}
 
 				this->applicationObject->onListModelChange.exec();
@@ -620,7 +620,7 @@ class MainController :
 		this->logActionEnd();
 	}
 
-	public: void renameRuleAction(Rule* entry, std::string const& newText)
+	public: void renameRuleAction(Gc::Common::Type::Rule* entry, std::string const& newText)
 	{
 		this->logActionBegin("rename-rule");
 		try {
@@ -640,17 +640,17 @@ class MainController :
 		this->logActionEnd();
 	}
 
-	public: void moveAction(std::list<Rule*> rules, int direction)
+	public: void moveAction(std::list<Gc::Common::Type::Rule*> rules, int direction)
 	{
 		this->logActionBegin("move");
 		try {
-			bool stickyPlaceholders = !this->view->getOptions().at(VIEW_SHOW_PLACEHOLDERS);
+			bool stickyPlaceholders = !this->view->getOptions().at(Gc::Common::Type::ViewOption::SHOW_PLACEHOLDERS);
 			try {
 				assert(direction == -1 || direction == 1);
 
 				if (stickyPlaceholders) {
 					auto nextRealRule = this->findNextRealRule(this->grublistCfg->findRule(direction == -1 ? rules.front() : rules.back()), direction);
-					rules = this->populateSelection(rules, nextRealRule->type == Model_Rule::SUBMENU);
+					rules = this->populateSelection(rules, nextRealRule->type == Gc::Model::ListCfg::Rule::SUBMENU);
 					rules = this->grublistCfg->getNormalizedRuleOrder(rules);
 				}
 
@@ -672,7 +672,7 @@ class MainController :
 					for (int j = 0; j < distance; j++) { // move the range multiple times
 						this->ruleMover->move(
 							rule,
-							direction == -1 ? Controller_Helper_RuleMover_AbstractStrategy::Direction::UP : Controller_Helper_RuleMover_AbstractStrategy::Direction::DOWN
+							direction == -1 ? Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction::UP : Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction::DOWN
 						);
 					}
 
@@ -697,7 +697,7 @@ class MainController :
 		this->logActionEnd();
 	}
 
-	public: void createSubmenuAction(std::list<Rule*> childItems)
+	public: void createSubmenuAction(std::list<Gc::Common::Type::Rule*> childItems)
 	{
 		this->logActionBegin("create-submenu");
 		try {
@@ -715,12 +715,12 @@ class MainController :
 		this->logActionEnd();
 	}
 
-	public: void removeSubmenuAction(std::list<Rule*> childItems)
+	public: void removeSubmenuAction(std::list<Gc::Common::Type::Rule*> childItems)
 	{
 		this->logActionBegin("remove-submenu");
 		try {
 			auto firstItem = this->grublistCfg->splitSubmenu(this->grublistCfg->findRule(childItems.front()));
-			std::list<Rule*> movedRules;
+			std::list<Gc::Common::Type::Rule*> movedRules;
 			movedRules.push_back(firstItem.get());
 			for (int i = 1; i < childItems.size(); i++) {
 				movedRules.push_back(this->grublistCfg->proxies.getNextVisibleRule(this->grublistCfg->findRule(movedRules.back()), 1)->get());
@@ -748,7 +748,7 @@ class MainController :
 	}
 
 
-	public: void showProxyInfo(Model_Proxy* proxy)
+	public: void showProxyInfo(Gc::Model::ListCfg::Proxy* proxy)
 	{
 		this->view->setStatusText("");
 	}
@@ -793,7 +793,7 @@ class MainController :
 	{
 		this->logActionBegin("sync-save-state");
 		try {
-			this->log("running MainControllerImpl::syncListView_save", Logger::INFO);
+			this->log("running MainControllerImpl::syncListView_save", Gc::Model::Logger::GenericLogger::INFO);
 			this->view->progress_pulse();
 			if (this->grublistCfg->getProgress() == 1){
 				if (this->grublistCfg->error_proxy_not_found){
@@ -814,7 +814,7 @@ class MainController :
 			else {
 				this->view->setStatusText(gettext("updating configuration"));
 			}
-			this->log("MainControllerImpl::syncListView_save completed", Logger::INFO);
+			this->log("MainControllerImpl::syncListView_save completed", Gc::Model::Logger::GenericLogger::INFO);
 		} catch (Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
@@ -825,7 +825,7 @@ class MainController :
 	{
 		this->logActionBegin("sync-load-state");
 		try {
-			this->log("running MainControllerImpl::syncListView_load", Logger::INFO);
+			this->log("running MainControllerImpl::syncListView_load", Gc::Model::Logger::GenericLogger::INFO);
 			this->view->setLockState(1|4);
 			double progress = this->grublistCfg->getProgress();
 			if (progress != 1) {
@@ -856,7 +856,7 @@ class MainController :
 
 				this->applicationObject->onListModelChange.exec();
 			}
-			this->log("MainControllerImpl::syncListView_load completed", Logger::INFO);
+			this->log("MainControllerImpl::syncListView_load completed", Gc::Model::Logger::GenericLogger::INFO);
 		} catch (Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
@@ -878,23 +878,23 @@ class MainController :
 	{
 		this->logActionBegin("init-mode");
 		try {
-			this->init(burgChosen ? Model_Env::BURG_MODE : Model_Env::GRUB_MODE);
+			this->init(burgChosen ? Gc::Model::Env::Mode::BURG : Gc::Model::Env::Mode::GRUB);
 		} catch (Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
 
-	public: void addEntriesAction(std::list<Rule*> rulePtrs)
+	public: void addEntriesAction(std::list<Gc::Common::Type::Rule*> rulePtrs)
 	{
 		this->logActionBegin("add-entries");
 		try {
-			std::list<Rule*> addedRules;
+			std::list<Gc::Common::Type::Rule*> addedRules;
 			for (auto rulePtr : rulePtrs) {
-				auto& modelRule = dynamic_cast<Model_Rule&>(*rulePtr);
+				auto& modelRule = dynamic_cast<Gc::Model::ListCfg::Rule&>(*rulePtr);
 				auto entry = modelRule.dataSource;
 				assert(entry != nullptr);
-				addedRules.push_back(this->grublistCfg->addEntry(entry, modelRule.type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER).get());
+				addedRules.push_back(this->grublistCfg->addEntry(entry, modelRule.type == Gc::Model::ListCfg::Rule::OTHER_ENTRIES_PLACEHOLDER).get());
 			}
 
 			this->applicationObject->onListModelChange.exec();
@@ -931,7 +931,7 @@ class MainController :
 		this->logActionEnd();
 	}
 
-	public: void selectRulesAction(std::list<Rule*> rules)
+	public: void selectRulesAction(std::list<Gc::Common::Type::Rule*> rules)
 	{
 		this->logActionBegin("select-rules");
 		try {
@@ -942,7 +942,7 @@ class MainController :
 		this->logActionEnd();
 	}
 
-	public: void selectRuleAction(Rule* rule, bool startEdit)
+	public: void selectRuleAction(Gc::Common::Type::Rule* rule, bool startEdit)
 	{
 		this->logActionBegin("select-rule");
 		try {
@@ -967,7 +967,7 @@ class MainController :
 		this->logActionEnd();
 	}
 
-	public: void setViewOptionAction(ViewOption option, bool value)
+	public: void setViewOptionAction(Gc::Common::Type::ViewOption option, bool value)
 	{
 		this->logActionBegin("set-view-option");
 		try {
@@ -976,7 +976,7 @@ class MainController :
 				this->applicationObject->viewOptions = this->view->getOptions();
 				this->env->saveViewOptions(this->view->getOptions());
 			} catch (FileSaveException e) {
-				this->log("option saving failed", Logger::ERROR);
+				this->log("option saving failed", Gc::Model::Logger::GenericLogger::ERROR);
 			}
 			this->applicationObject->onListModelChange.exec();
 		} catch (Exception const& e) {
@@ -985,7 +985,7 @@ class MainController :
 		this->logActionEnd();
 	}
 
-	public: void entryStateToggledAction(Rule* entry, bool state)
+	public: void entryStateToggledAction(Gc::Common::Type::Rule* entry, bool state)
 	{
 		this->logActionBegin("entry-state-toggled");
 		try {
@@ -997,7 +997,7 @@ class MainController :
 		this->logActionEnd();
 	}
 
-	public: void updateSelectionAction(std::list<Rule*> selectedRules)
+	public: void updateSelectionAction(std::list<Gc::Common::Type::Rule*> selectedRules)
 	{
 		this->logActionBegin("update-selection");
 		try {
@@ -1010,16 +1010,16 @@ class MainController :
 		this->logActionEnd();
 	}
 
-	private: void appendRuleToView(std::shared_ptr<Model_Rule> rule, std::shared_ptr<Model_Rule> parentRule = nullptr)
+	private: void appendRuleToView(std::shared_ptr<Gc::Model::ListCfg::Rule> rule, std::shared_ptr<Gc::Model::ListCfg::Rule> parentRule = nullptr)
 	{
-		bool is_other_entries_ph = rule->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER;
-		bool is_plaintext = rule->dataSource && rule->dataSource->type == Model_Entry::PLAINTEXT;
-		bool is_submenu = rule->type == Model_Rule::SUBMENU;
+		bool is_other_entries_ph = rule->type == Gc::Model::ListCfg::Rule::OTHER_ENTRIES_PLACEHOLDER;
+		bool is_plaintext = rule->dataSource && rule->dataSource->type == Gc::Model::ListCfg::Entry::PLAINTEXT;
+		bool is_submenu = rule->type == Gc::Model::ListCfg::Rule::SUBMENU;
 
 		if (rule->dataSource || is_submenu){
 			std::string name = this->entryNameMapper->map(rule->dataSource, rule->outputName, true);
 
-			bool isSubmenu = rule->type == Model_Rule::SUBMENU;
+			bool isSubmenu = rule->type == Gc::Model::ListCfg::Rule::SUBMENU;
 			std::string scriptName = "", defaultName = "";
 			if (rule->dataSource) {
 				auto script = this->grublistCfg->repository.getScriptByEntry(rule->dataSource);
@@ -1029,18 +1029,18 @@ class MainController :
 					defaultName = rule->dataSource->name;
 				}
 			}
-			bool isEditable = rule->type == Model_Rule::NORMAL || rule->type == Model_Rule::PLAINTEXT;
+			bool isEditable = rule->type == Gc::Model::ListCfg::Rule::NORMAL || rule->type == Gc::Model::ListCfg::Rule::PLAINTEXT;
 			bool isModified = rule->dataSource && rule->dataSource->isModified;
 
 			// parse content to show additional informations
 			std::map<std::string, std::string> options;
 			if (rule->dataSource) {
-				options = Controller_Helper_DeviceInfo::fetch(rule->dataSource->content, *this->contentParserFactory, *deviceDataList);
+				options = Gc::Controller::Helper::DeviceInfo::fetch(rule->dataSource->content, *contentParserFactory, *deviceDataList);
 			}
 
 			auto proxy = this->grublistCfg->proxies.getProxyByRule(rule);
 
-			View_Model_ListItem<Rule, Proxy> listItem;
+			Gc::View::Model::ListItem<Gc::Common::Type::Rule, Gc::Common::Type::Proxy> listItem;
 			listItem.name = name;
 			listItem.entryPtr = rule.get();
 			listItem.is_placeholder = is_other_entries_ph || is_plaintext;
@@ -1055,7 +1055,7 @@ class MainController :
 			listItem.parentScript = proxy.get();
 			this->view->appendEntry(listItem);
 
-			if (rule->type == Model_Rule::SUBMENU) {
+			if (rule->type == Gc::Model::ListCfg::Rule::SUBMENU) {
 				for (auto subRule : rule->subRules) {
 					this->appendRuleToView(subRule, rule);
 				}
@@ -1063,28 +1063,28 @@ class MainController :
 		}
 	}
 
-	private: bool listHasPlaintextRules(std::list<Rule*> const& rules)
+	private: bool listHasPlaintextRules(std::list<Gc::Common::Type::Rule*> const& rules)
 	{
 		for (auto rulePtr : rules) {
 			auto rule = this->grublistCfg->findRule(rulePtr);
-			if (rule->type == Model_Rule::PLAINTEXT) {
+			if (rule->type == Gc::Model::ListCfg::Rule::PLAINTEXT) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	private: bool listHasAllCurrentSystemRules(std::list<Rule*> const& rules)
+	private: bool listHasAllCurrentSystemRules(std::list<Gc::Common::Type::Rule*> const& rules)
 	{
 		int visibleSystemRulesCount = 0;
 		int selectedSystemRulesCount = 0;
 
-		std::shared_ptr<Model_Script> linuxScript = nullptr;
+		std::shared_ptr<Gc::Model::ListCfg::Script> linuxScript = nullptr;
 
 		// count selected entries related to linux script
 		for (auto rulePtr : rules) {
 			auto rule = this->grublistCfg->findRule(rulePtr);
-			if (rule->type == Model_Rule::NORMAL) {
+			if (rule->type == Gc::Model::ListCfg::Rule::NORMAL) {
 				assert(rule->dataSource != nullptr);
 				auto script = this->grublistCfg->repository.getScriptByEntry(rule->dataSource);
 				if (script->name == "linux") {
@@ -1101,7 +1101,7 @@ class MainController :
 			auto proxies = this->grublistCfg->proxies.getProxiesByScript(linuxScript);
 			bool visibleRulesFound = false;
 			for (auto proxy : proxies) {
-				visibleSystemRulesCount += proxy->getVisibleRulesByType(Model_Rule::NORMAL).size();
+				visibleSystemRulesCount += proxy->getVisibleRulesByType(Gc::Model::ListCfg::Rule::NORMAL).size();
 			}
 
 			if (selectedSystemRulesCount == visibleSystemRulesCount) {
@@ -1112,18 +1112,18 @@ class MainController :
 		return false;
 	}
 
-	private: std::list<Rule*> populateSelection(std::list<Rule*> rules, bool ignorePlaintext)
+	private: std::list<Gc::Common::Type::Rule*> populateSelection(std::list<Gc::Common::Type::Rule*> rules, bool ignorePlaintext)
 	{
-		std::list<Rule*> result;
+		std::list<Gc::Common::Type::Rule*> result;
 		for (auto rule : rules) {
 			this->populateSelection(result, this->grublistCfg->findRule(rule), -1, rule == rules.front(), ignorePlaintext);
 			result.push_back(rule);
 			this->populateSelection(result, this->grublistCfg->findRule(rule), 1, rule == rules.back(), ignorePlaintext);
 		}
 		// remove duplicates
-		std::list<Rule*> result2;
-		std::map<Rule*, Rule*> duplicateIndex; // key: pointer to the rule, value: always NULL
-		for (std::list<Rule*>::iterator ruleIter = result.begin(); ruleIter != result.end(); ruleIter++) {
+		std::list<Gc::Common::Type::Rule*> result2;
+		std::map<Gc::Common::Type::Rule*, Gc::Common::Type::Rule*> duplicateIndex; // key: pointer to the rule, value: always NULL
+		for (std::list<Gc::Common::Type::Rule*>::iterator ruleIter = result.begin(); ruleIter != result.end(); ruleIter++) {
 			if (duplicateIndex.find(*ruleIter) == duplicateIndex.end()) {
 				duplicateIndex[*ruleIter] = nullptr;
 				result2.push_back(*ruleIter);
@@ -1132,7 +1132,7 @@ class MainController :
 		return result2;
 	}
 
-	private: void populateSelection(std::list<Rule*>& rules, std::shared_ptr<Model_Rule> baseRule, int direction, bool checkScript, bool ignorePlaintext)
+	private: void populateSelection(std::list<Gc::Common::Type::Rule*>& rules, std::shared_ptr<Gc::Model::ListCfg::Rule> baseRule, int direction, bool checkScript, bool ignorePlaintext)
 	{
 		assert(direction == 1 || direction == -1);
 		bool placeholderFound = false;
@@ -1146,7 +1146,7 @@ class MainController :
 				auto scriptCurrent = this->grublistCfg->repository.getScriptByEntry(currentRule->dataSource);
 				auto scriptBase    = this->grublistCfg->repository.getScriptByEntry(baseRule->dataSource);
 
-				if ((scriptCurrent == scriptBase || !checkScript) && (currentRule->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER || (currentRule->type == Model_Rule::PLAINTEXT && !ignorePlaintext))) {
+				if ((scriptCurrent == scriptBase || !checkScript) && (currentRule->type == Gc::Model::ListCfg::Rule::OTHER_ENTRIES_PLACEHOLDER || (currentRule->type == Gc::Model::ListCfg::Rule::PLAINTEXT && !ignorePlaintext))) {
 					if (direction == 1) {
 						rules.push_back(currentRule.get());
 					} else {
@@ -1162,7 +1162,7 @@ class MainController :
 		} while (placeholderFound);
 	}
 
-	private: int countRulesUntilNextRealRule(std::shared_ptr<Model_Rule> baseRule, int direction)
+	private: int countRulesUntilNextRealRule(std::shared_ptr<Gc::Model::ListCfg::Rule> baseRule, int direction)
 	{
 		int result = 1;
 		bool placeholderFound = false;
@@ -1171,7 +1171,7 @@ class MainController :
 			try {
 				currentRule = *this->grublistCfg->proxies.getNextVisibleRule(currentRule, direction);
 
-				if (currentRule->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER || currentRule->type == Model_Rule::PLAINTEXT) {
+				if (currentRule->type == Gc::Model::ListCfg::Rule::OTHER_ENTRIES_PLACEHOLDER || currentRule->type == Gc::Model::ListCfg::Rule::PLAINTEXT) {
 					result++;
 					placeholderFound = true;
 				} else {
@@ -1184,7 +1184,7 @@ class MainController :
 		return result;
 	}
 
-	private: std::shared_ptr<Model_Rule> findNextRealRule(std::shared_ptr<Model_Rule> baseRule, int direction)
+	private: std::shared_ptr<Gc::Model::ListCfg::Rule> findNextRealRule(std::shared_ptr<Gc::Model::ListCfg::Rule> baseRule, int direction)
 	{
 		bool placeholderFound = false;
 		auto currentRule = baseRule;
@@ -1192,7 +1192,7 @@ class MainController :
 			try {
 				currentRule = *this->grublistCfg->proxies.getNextVisibleRule(currentRule, direction);
 
-				if (currentRule->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER || currentRule->type == Model_Rule::PLAINTEXT) {
+				if (currentRule->type == Gc::Model::ListCfg::Rule::OTHER_ENTRIES_PLACEHOLDER || currentRule->type == Gc::Model::ListCfg::Rule::PLAINTEXT) {
 					placeholderFound = true;
 				} else {
 					placeholderFound = false;
@@ -1205,12 +1205,12 @@ class MainController :
 		return currentRule;
 	}
 
-	private: std::list<Rule*> removePlaceholdersFromSelection(std::list<Rule*> rules)
+	private: std::list<Gc::Common::Type::Rule*> removePlaceholdersFromSelection(std::list<Gc::Common::Type::Rule*> rules)
 	{
-		std::list<Rule*> result;
+		std::list<Gc::Common::Type::Rule*> result;
 		for (auto rulePtr : rules) {
 			auto rule = this->grublistCfg->findRule(rulePtr);
-			if (!(rule->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER || rule->type == Model_Rule::PLAINTEXT)) {
+			if (!(rule->type == Gc::Model::ListCfg::Rule::OTHER_ENTRIES_PLACEHOLDER || rule->type == Gc::Model::ListCfg::Rule::PLAINTEXT)) {
 				result.push_back(rule.get());
 			}
 		}
@@ -1218,14 +1218,14 @@ class MainController :
 	}
 
 	private: bool ruleAffectsCurrentDefaultOs(
-		std::shared_ptr<Model_Rule> rule,
+		std::shared_ptr<Gc::Model::ListCfg::Rule> rule,
 		std::string const& currentRulePath,
 		std::string const& currentDefaultRulePath
 	)
 	{
 		bool result = false;
 
-		if (rule->type == Model_Rule::SUBMENU) {
+		if (rule->type == Gc::Model::ListCfg::Rule::SUBMENU) {
 			if (currentDefaultRulePath.substr(0, currentRulePath.length() + 1) == currentRulePath + ">") {
 				result = true;
 			}
@@ -1237,10 +1237,10 @@ class MainController :
 		return result;
 	}
 
-	private: void updateCurrentDefaultOs(std::shared_ptr<Model_Rule> rule, std::string const& oldRulePath, std::string oldDefaultRulePath) {
+	private: void updateCurrentDefaultOs(std::shared_ptr<Gc::Model::ListCfg::Rule> rule, std::string const& oldRulePath, std::string oldDefaultRulePath) {
 		oldDefaultRulePath.replace(0, oldRulePath.length(), this->grublistCfg->getRulePath(rule));
 		this->settings->setValue("GRUB_DEFAULT", oldDefaultRulePath);
 	}
-};
+};}}
 
 #endif

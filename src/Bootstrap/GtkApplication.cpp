@@ -20,12 +20,12 @@
 #include <gtkmm/main.h>
 #include <list>
 
-class Bootstrap_GtkApplicationObject : public Bootstrap_Application_Object
+namespace Gc { namespace Bootstrap { class GtkApplicationObject : public Gc::Bootstrap::ApplicationHelper::Object
 {
 	private: Gtk::Main app;
 	private: std::list<std::function<void ()>> shutdownHandlers;
 
-	public: Bootstrap_GtkApplicationObject(int argc, char** argv)
+	public: GtkApplicationObject(int argc, char** argv)
 		: app(argc, argv)
 	{
 	}
@@ -45,9 +45,9 @@ class Bootstrap_GtkApplicationObject : public Bootstrap_Application_Object
 	public: void addShutdownHandler(std::function<void ()> callback) {
 		this->shutdownHandlers.push_back(callback);
 	}
-};
+};}}
 
-Bootstrap_Application::Bootstrap_Application(int argc, char** argv)
+Gc::Bootstrap::Application::Application(int argc, char** argv)
 {
-	this->applicationObject = std::make_shared<Bootstrap_GtkApplicationObject>(argc, argv);
+	this->applicationObject = std::make_shared<Gc::Bootstrap::GtkApplicationObject>(argc, argv);
 }

@@ -33,11 +33,11 @@
 #include "Helper/Thread.hpp"
 
 
-class ErrorController :
-	public Controller_Common_ControllerAbstract,
-	public View_Trait_ViewAware<View_Error>,
-	public Controller_Helper_Thread_Connection,
-	public Bootstrap_Application_Object_Connection
+namespace Gc { namespace Controller { class ErrorController :
+	public Gc::Controller::Common::ControllerAbstract,
+	public Gc::View::Trait::ViewAware<Gc::View::Error>,
+	public Gc::Controller::Helper::ThreadConnection,
+	public Gc::Bootstrap::ApplicationHelper::ObjectConnection
 {
 	private: bool applicationStarted;
 
@@ -47,7 +47,7 @@ class ErrorController :
 	}
 
 	public:	ErrorController() :
-		Controller_Common_ControllerAbstract("error"),
+		Gc::Controller::Common::ControllerAbstract("error"),
 		applicationStarted(false)
 	{
 	}
@@ -70,7 +70,7 @@ class ErrorController :
 	
 	public:	void errorAction(Exception const& e)
 	{
-		this->log(e, Logger::EXCEPTION);
+		this->log(e, Gc::Model::Logger::GenericLogger::EXCEPTION);
 		this->view->showErrorMessage(e, this->applicationStarted);
 	}
 
@@ -79,7 +79,7 @@ class ErrorController :
 		if (this->threadHelper) {
 			this->threadHelper->runDispatched(std::bind(std::mem_fn(&ErrorController::errorAction), this, Exception(e)));
 		} else {
-			this->log(e, Logger::EXCEPTION);
+			this->log(e, Gc::Model::Logger::GenericLogger::EXCEPTION);
 			exit(1);
 		}
 	}
@@ -93,6 +93,6 @@ class ErrorController :
 		}
 	}
 
-};
+};}}
 
 #endif

@@ -21,19 +21,19 @@
 #include "../Bootstrap/View.hpp"
 #include "../Bootstrap/Application.hpp"
 #include "../Bootstrap/Factory.hpp"
-#include "../lib/ContentParser/Chainloader.hpp"
-#include "../lib/ContentParser/FactoryImpl.hpp"
-#include "../lib/ContentParser/Linux.hpp"
-#include "../lib/ContentParser/LinuxIso.hpp"
-#include "../lib/ContentParser/Memtest.hpp"
+#include "../Model/ContentParser/Chainloader.hpp"
+#include "../Model/ContentParser/FactoryImpl.hpp"
+#include "../Model/ContentParser/Linux.hpp"
+#include "../Model/ContentParser/LinuxIso.hpp"
+#include "../Model/ContentParser/Memtest.hpp"
 #include "../Controller/Helper/RuleMover/Strategy/MoveRuleOnSameLevelInsideProxy.hpp"
 #include "../Controller/Helper/RuleMover/Strategy/MoveRuleIntoSubmenu.hpp"
 #include "../Controller/Helper/RuleMover/Strategy/MoveRuleOutOfSubmenu.hpp"
 #include "../Controller/Helper/RuleMover/Strategy/MoveRuleOutOfProxyOnToplevel.hpp"
 #include "../Controller/Helper/RuleMover/Strategy/MoveRuleIntoForeignSubmenu.hpp"
 #include "../Controller/Helper/RuleMover/Strategy/MoveForeignRuleFromSubmenuToToplevel.hpp"
-#include "../lib/Logger/Stream.hpp"
-#include "../Mapper/EntryNameImpl.hpp"
+#include "../Model/Logger/Stream.hpp"
+#include "../View/Mapper/EntryNameImpl.hpp"
 #include "../config.hpp"
 #include "../Controller/AboutController.hpp"
 #include "../Controller/EntryEditController.hpp"
@@ -55,68 +55,68 @@ int main(int argc, char** argv){
 	bindtextdomain("grub-customizer", LOCALEDIR);
 	textdomain("grub-customizer");
 
-	auto logger = std::make_shared<Logger_Stream>(std::cout);
+	auto logger = std::make_shared<Gc::Model::Logger::Stream>(std::cout);
 
-	Logger::getInstance() = logger;
+	Gc::Model::Logger::GenericLogger::getInstance() = logger;
 
 	try {
-		auto application          = std::make_shared<Bootstrap_Application>(argc, argv);
-		auto view                 = std::make_shared<Bootstrap_View>();
-		auto factory              = std::make_shared<Bootstrap_Factory>(application->applicationObject, logger);
+		auto application          = std::make_shared<Gc::Bootstrap::Application>(argc, argv);
+		auto view                 = std::make_shared<Gc::Bootstrap::View>();
+		auto factory              = std::make_shared<Gc::Bootstrap::Factory>(application->applicationObject, logger);
 
-		auto settingsOnDisk       = factory->create<Model_SettingsManagerData>();
-		auto savedListCfg         = factory->create<Model_ListCfg>();
+		auto settingsOnDisk       = factory->create<Gc::Model::SettingsManagerData>();
+		auto savedListCfg         = factory->create<Gc::Model::ListCfg::ListCfg>();
 
 		factory->entryNameMapper->setView(view->main);
 
-		auto entryEditController = factory->createController<EntryEditController>(view->entryEditor);
-		auto mainController      = factory->createController<MainController>(view->main);
-		auto settingsController  = factory->createController<SettingsController>(view->settings);
-		auto envEditController   = factory->createController<EnvEditorController>(view->envEditor);
-		auto trashController     = factory->createController<TrashController>(view->trash);
-		auto installController   = factory->createController<InstallerController>(view->installer);
-		auto aboutController     = factory->createController<AboutController>(view->about);
-		auto errorController     = factory->createController<ErrorController>(view->error);
-		auto themeController     = factory->createController<ThemeController>(view->theme);
+		auto entryEditController = factory->createController<Gc::Controller::EntryEditController>(view->entryEditor);
+		auto mainController      = factory->createController<Gc::Controller::MainController>(view->main);
+		auto settingsController  = factory->createController<Gc::Controller::SettingsController>(view->settings);
+		auto envEditController   = factory->createController<Gc::Controller::EnvEditorController>(view->envEditor);
+		auto trashController     = factory->createController<Gc::Controller::TrashController>(view->trash);
+		auto installController   = factory->createController<Gc::Controller::InstallerController>(view->installer);
+		auto aboutController     = factory->createController<Gc::Controller::AboutController>(view->about);
+		auto errorController     = factory->createController<Gc::Controller::ErrorController>(view->error);
+		auto themeController     = factory->createController<Gc::Controller::ThemeController>(view->theme);
 
 		mainController->setSettingsBuffer(settingsOnDisk);
 		mainController->setSavedListCfg(savedListCfg);
 
 		// configure logger
-		logger->setLogLevel(Logger_Stream::LOG_EVENT);
+		logger->setLogLevel(Gc::Model::Logger::Stream::LOG_EVENT);
 		if (argc > 1) {
 			std::string logParam = argv[1];
 			if (logParam == "debug") {
-				logger->setLogLevel(Logger_Stream::LOG_DEBUG_ONLY);
+				logger->setLogLevel(Gc::Model::Logger::Stream::LOG_DEBUG_ONLY);
 			} else if (logParam == "log-important") {
-				logger->setLogLevel(Logger_Stream::LOG_IMPORTANT);
+				logger->setLogLevel(Gc::Model::Logger::Stream::LOG_IMPORTANT);
 			} else if (logParam == "quiet") {
-				logger->setLogLevel(Logger_Stream::LOG_NOTHING);
+				logger->setLogLevel(Gc::Model::Logger::Stream::LOG_NOTHING);
 			} else if (logParam == "verbose") {
-				logger->setLogLevel(Logger_Stream::LOG_VERBOSE);
+				logger->setLogLevel(Gc::Model::Logger::Stream::LOG_VERBOSE);
 			}
 		}
 
-		factory->contentParserFactory->registerParser(factory->create<ContentParser_Linux>(), gettext("Linux"));
-		factory->contentParserFactory->registerParser(factory->create<ContentParser_LinuxIso>(), gettext("Linux-ISO"));
-		factory->contentParserFactory->registerParser(factory->create<ContentParser_Chainloader>(), gettext("Chainloader"));
-		factory->contentParserFactory->registerParser(factory->create<ContentParser_Memtest>(), gettext("Memtest"));
+		factory->contentParserFactory->registerParser(factory->create<Gc::Model::ContentParser::Linux>(), gettext("Linux"));
+		factory->contentParserFactory->registerParser(factory->create<Gc::Model::ContentParser::LinuxIso>(), gettext("Linux-ISO"));
+		factory->contentParserFactory->registerParser(factory->create<Gc::Model::ContentParser::Chainloader>(), gettext("Chainloader"));
+		factory->contentParserFactory->registerParser(factory->create<Gc::Model::ContentParser::Memtest>(), gettext("Memtest"));
 
 		view->entryEditor->setAvailableEntryTypes(factory->contentParserFactory->getNames());
 
-		factory->ruleMover->addStrategy(factory->create<Controller_Helper_RuleMover_Strategy_MoveRuleIntoSubmenu>());
-		factory->ruleMover->addStrategy(factory->create<Controller_Helper_RuleMover_Strategy_MoveRuleOnSameLevelInsideProxy>());
-		factory->ruleMover->addStrategy(factory->create<Controller_Helper_RuleMover_Strategy_MoveForeignRuleFromSubmenuToToplevel>());
-		factory->ruleMover->addStrategy(factory->create<Controller_Helper_RuleMover_Strategy_MoveRuleOutOfSubmenu>());
-		factory->ruleMover->addStrategy(factory->create<Controller_Helper_RuleMover_Strategy_MoveRuleIntoForeignSubmenu>());
-		factory->ruleMover->addStrategy(factory->create<Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel>());
+		factory->ruleMover->addStrategy(factory->create<Gc::Controller::Helper::RuleMover::Strategy::MoveRuleIntoSubmenu>());
+		factory->ruleMover->addStrategy(factory->create<Gc::Controller::Helper::RuleMover::Strategy::MoveRuleOnSameLevelInsideProxy>());
+		factory->ruleMover->addStrategy(factory->create<Gc::Controller::Helper::RuleMover::Strategy::MoveForeignRuleFromSubmenuToToplevel>());
+		factory->ruleMover->addStrategy(factory->create<Gc::Controller::Helper::RuleMover::Strategy::MoveRuleOutOfSubmenu>());
+		factory->ruleMover->addStrategy(factory->create<Gc::Controller::Helper::RuleMover::Strategy::MoveRuleIntoForeignSubmenu>());
+		factory->ruleMover->addStrategy(factory->create<Gc::Controller::Helper::RuleMover::Strategy::MoveRuleOutOfProxyOnToplevel>());
 
 		mainController->initAction();
 		errorController->setApplicationStarted(true);
 
 		application->applicationObject->run();
 	} catch (Exception const& e) {
-		logger->log(e, Logger::ERROR);
+		logger->log(e, Gc::Model::Logger::GenericLogger::ERROR);
 		return 1;
 	}
 }

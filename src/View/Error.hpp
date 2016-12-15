@@ -22,13 +22,13 @@
 #include <string>
 #include <functional>
 
-class View_Error {
-public:
-	std::function<void ()> onQuitClick;
+namespace Gc { namespace View { class Error
+{
+	public: std::function<void ()> onQuitClick;
 
-	virtual inline ~View_Error(){}
-	virtual void showErrorMessage(std::string const& errorMessage, bool allowContinue) = 0;
-};
+	public: virtual inline ~Error(){}
+	public: virtual void showErrorMessage(std::string const& errorMessage, bool allowContinue) = 0;
+};}}
 
 
 #endif /* ERROR_H_ */

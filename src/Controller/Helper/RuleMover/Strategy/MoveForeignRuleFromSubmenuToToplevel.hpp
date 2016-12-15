@@ -16,28 +16,29 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef INC_Controller_Helper_RuleMover_Strategy_MoveForeignRuleFromSubmenuToToplevel
-#define INC_Controller_Helper_RuleMover_Strategy_MoveForeignRuleFromSubmenuToToplevel
+#ifndef INC_Gc_Controller_Helper_RuleMover_Strategy_MoveForeignRuleFromSubmenuToToplevel
+#define INC_Gc_Controller_Helper_RuleMover_Strategy_MoveForeignRuleFromSubmenuToToplevel
 
-#include "../../../../Model/Rule.hpp"
-#include "../../../../Model/ListCfg.hpp"
+#include "../../../../Model/ListCfg/Rule.hpp"
+#include "../../../../Model/ListCfg/ListCfg.hpp"
 #include "../AbstractStrategy.hpp"
-#include "../../../../lib/Trait/LoggerAware.hpp"
+#include "../../../../Model/Logger/Trait/LoggerAware.hpp"
 #include <memory>
 
-class Controller_Helper_RuleMover_Strategy_MoveForeignRuleFromSubmenuToToplevel :
-	public Controller_Helper_RuleMover_AbstractStrategy,
-	public Model_ListCfg_Connection,
-	public Trait_LoggerAware
+namespace Gc { namespace Controller { namespace Helper { namespace RuleMover { namespace Strategy {
+class MoveForeignRuleFromSubmenuToToplevel :
+	public Gc::Controller::Helper::RuleMover::AbstractStrategy,
+	public Gc::Model::ListCfg::ListCfgConnection,
+	public Gc::Model::Logger::Trait::LoggerAware
 {
-	public: Controller_Helper_RuleMover_Strategy_MoveForeignRuleFromSubmenuToToplevel()
-		: Controller_Helper_RuleMover_AbstractStrategy("MoveForeignRuleFromSubmenuToToplevel")
+	public: MoveForeignRuleFromSubmenuToToplevel()
+		: Gc::Controller::Helper::RuleMover::AbstractStrategy("MoveForeignRuleFromSubmenuToToplevel")
 	{}
 
-	public: void move(std::shared_ptr<Model_Rule> rule, Controller_Helper_RuleMover_AbstractStrategy::Direction direction)
+	public: void move(std::shared_ptr<Gc::Model::ListCfg::Rule> rule, Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction)
 	{
 		if (rule->dataSource == nullptr) {
-			throw Controller_Helper_RuleMover_MoveFailedException("rule must have a dataSource", __FILE__, __LINE__);
+			throw Gc::Controller::Helper::RuleMover::MoveFailedException("rule must have a dataSource", __FILE__, __LINE__);
 		}
 
 		auto proxy = this->grublistCfg->proxies.getProxyByRule(rule);
@@ -45,7 +46,7 @@ class Controller_Helper_RuleMover_Strategy_MoveForeignRuleFromSubmenuToToplevel 
 		auto ownScript = this->grublistCfg->repository.getScriptByEntry(rule->dataSource);
 
 		if (ownScript == proxy->dataSource) {
-			throw Controller_Helper_RuleMover_MoveFailedException("rule is not a foreign rule", __FILE__, __LINE__);
+			throw Gc::Controller::Helper::RuleMover::MoveFailedException("rule is not a foreign rule", __FILE__, __LINE__);
 		}
 
 		auto parentRule = proxy->getParentRule(rule);
@@ -56,7 +57,7 @@ class Controller_Helper_RuleMover_Strategy_MoveForeignRuleFromSubmenuToToplevel 
 		auto parentOfParent = proxy->getParentRule(parentRule);
 
 		if (parentOfParent != nullptr) {
-			throw Controller_Helper_RuleMover_MoveFailedException("destination is another submenu", __FILE__, __LINE__);
+			throw Gc::Controller::Helper::RuleMover::MoveFailedException("destination is another submenu", __FILE__, __LINE__);
 		}
 
 		auto& ruleList = proxy->getRuleList(parentOfParent);
@@ -86,15 +87,15 @@ class Controller_Helper_RuleMover_Strategy_MoveForeignRuleFromSubmenuToToplevel 
 	}
 
 	private: void splitProxyAndInsertBetween(
-		std::shared_ptr<Model_Rule> ruleToInsert,
-		std::shared_ptr<Model_Script> scriptOfRuleToInsert,
-		std::list<std::shared_ptr<Model_Proxy>>& proxyList,
-		std::shared_ptr<Model_Proxy> proxyToSplit,
-		std::shared_ptr<Model_Rule> position,
-		Controller_Helper_RuleMover_AbstractStrategy::Direction direction
+		std::shared_ptr<Gc::Model::ListCfg::Rule> ruleToInsert,
+		std::shared_ptr<Gc::Model::ListCfg::Script> scriptOfRuleToInsert,
+		std::list<std::shared_ptr<Gc::Model::ListCfg::Proxy>>& proxyList,
+		std::shared_ptr<Gc::Model::ListCfg::Proxy> proxyToSplit,
+		std::shared_ptr<Gc::Model::ListCfg::Rule> position,
+		Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction
 	) {
 		//auto splitPos = proxy
-		auto newProxy = std::make_shared<Model_Proxy>(proxyToSplit->dataSource, false);
+		auto newProxy = std::make_shared<Gc::Model::ListCfg::Proxy>(proxyToSplit->dataSource, false);
 
 		bool isAfterPosition = false;
 		for (auto rule : proxyToSplit->rules) {
@@ -103,19 +104,19 @@ class Controller_Helper_RuleMover_Strategy_MoveForeignRuleFromSubmenuToToplevel 
 				continue;
 			}
 
-			auto loopDirection = Controller_Helper_RuleMover_AbstractStrategy::Direction::UP;
+			auto loopDirection = Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction::UP;
 
-			if (direction == Controller_Helper_RuleMover_AbstractStrategy::Direction::UP && !isAfterPosition) {
+			if (direction == Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction::UP && !isAfterPosition) {
 				this->moveRuleToOtherProxy(rule, proxyToSplit, newProxy, loopDirection);
 			}
 
-			if (direction == Controller_Helper_RuleMover_AbstractStrategy::Direction::DOWN && isAfterPosition) {
+			if (direction == Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction::DOWN && isAfterPosition) {
 				this->moveRuleToOtherProxy(rule, proxyToSplit, newProxy, loopDirection);
 			}
 		}
 
 		auto newProxyPosition = std::find(proxyList.begin(), proxyList.end(), proxyToSplit);
-		if (direction == Controller_Helper_RuleMover_AbstractStrategy::Direction::DOWN) {
+		if (direction == Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction::DOWN) {
 			newProxyPosition++;
 		}
 
@@ -123,6 +124,6 @@ class Controller_Helper_RuleMover_Strategy_MoveForeignRuleFromSubmenuToToplevel 
 
 		this->insertAsNewProxy(ruleToInsert, scriptOfRuleToInsert, proxyToSplit, this->grublistCfg, direction);
 	}
-};
+};}}}}}
 
 #endif

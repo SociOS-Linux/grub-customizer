@@ -16,22 +16,23 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef INC_Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel
-#define INC_Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel
+#ifndef INC_Gc_Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel
+#define INC_Gc_Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel
 
-#include "../../../../Model/Rule.hpp"
-#include "../../../../Model/ListCfg.hpp"
+#include "../../../../Model/ListCfg/Rule.hpp"
+#include "../../../../Model/ListCfg/ListCfg.hpp"
 #include "../AbstractStrategy.hpp"
-#include "../../../../lib/Trait/LoggerAware.hpp"
+#include "../../../../Model/Logger/Trait/LoggerAware.hpp"
 #include <memory>
 #include <bitset>
 #include <set>
 #include <unordered_map>
 
-class Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel :
-	public Controller_Helper_RuleMover_AbstractStrategy,
-	public Model_ListCfg_Connection,
-	public Trait_LoggerAware
+namespace Gc { namespace Controller { namespace Helper { namespace RuleMover { namespace Strategy {
+class MoveRuleOutOfProxyOnToplevel :
+	public Gc::Controller::Helper::RuleMover::AbstractStrategy,
+	public Gc::Model::ListCfg::ListCfgConnection,
+	public Gc::Model::Logger::Trait::LoggerAware
 {
 	private: enum Task
 	{
@@ -45,18 +46,18 @@ class Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel :
 		MoveNewProxiesToTheMiddle
 	};
 
-	public: Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel()
-		: Controller_Helper_RuleMover_AbstractStrategy("MoveRuleOutOfProxyOnToplevel")
+	public: MoveRuleOutOfProxyOnToplevel()
+		: Gc::Controller::Helper::RuleMover::AbstractStrategy("MoveRuleOutOfProxyOnToplevel")
 	{}
 
-	public: void move(std::shared_ptr<Model_Rule> rule, Controller_Helper_RuleMover_AbstractStrategy::Direction direction)
+	public: void move(std::shared_ptr<Gc::Model::ListCfg::Rule> rule, Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction)
 	{
 		auto proxy = this->grublistCfg->proxies.getProxyByRule(rule);
 		auto proxiesWithVisibleEntries = this->findProxiesWithVisibleToplevelEntries(this->grublistCfg->proxies);
 
 		auto nextProxy = this->getNextProxy(proxiesWithVisibleEntries, proxy, direction);
 		if (nextProxy == nullptr) {
-			throw Controller_Helper_RuleMover_MoveFailedException("need next proxy", __FILE__, __LINE__);
+			throw Gc::Controller::Helper::RuleMover::MoveFailedException("need next proxy", __FILE__, __LINE__);
 		}
 
 		auto afterNextProxy = this->getNextProxy(proxiesWithVisibleEntries, nextProxy, direction);
@@ -107,53 +108,53 @@ class Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel :
 
 		// it's important to handle all tasks!
 		if (currentTaskList.count(Task::MoveOwnProxy)) {
-			this->log("using Task::MoveOwnProxy", Logger::INFO);
+			this->log("using Task::MoveOwnProxy", Gc::Model::Logger::GenericLogger::INFO);
 			this->moveProxy(proxy, nextProxy, direction);
 		}
 
 		if (currentTaskList.count(Task::MoveOwnEntry)) {
-			this->log("using Task::MoveOwnEntry", Logger::INFO);
+			this->log("using Task::MoveOwnEntry", Gc::Model::Logger::GenericLogger::INFO);
 			this->moveRuleToOtherProxy(rule, proxy, afterNextProxy, direction);
 		}
 
 		if (currentTaskList.count(Task::MoveForeignEntry)) {
-			this->log("using Task::MoveForeignEntry", Logger::INFO);
+			this->log("using Task::MoveForeignEntry", Gc::Model::Logger::GenericLogger::INFO);
 			this->moveRuleToOtherProxy(firstVisibleRuleOfNextProxy, nextProxy, previousProxy, this->flipDirection(direction));
 		}
 
 		if (currentTaskList.count(Task::SplitOwnProxy)) {
-			this->log("using Task::SplitOwnProxy", Logger::INFO);
+			this->log("using Task::SplitOwnProxy", Gc::Model::Logger::GenericLogger::INFO);
 			this->insertAsNewProxy(rule, proxy, nextProxy, this->grublistCfg, direction);
 		}
 
 		if (currentTaskList.count(Task::SplitForeignProxy)) {
-			this->log("using Task::SplitForeignProxy", Logger::INFO);
+			this->log("using Task::SplitForeignProxy", Gc::Model::Logger::GenericLogger::INFO);
 			this->insertAsNewProxy(firstVisibleRuleOfNextProxy, nextProxy, proxy, this->grublistCfg, this->flipDirection(direction));
 		}
 
 		if (currentTaskList.count(Task::MoveNewProxiesToTheMiddle)) {
-			this->log("using Task::MoveNewProxiesToTheMiddle", Logger::INFO);
+			this->log("using Task::MoveNewProxiesToTheMiddle", Gc::Model::Logger::GenericLogger::INFO);
 			this->moveNewProxiesToTheMiddle(proxy, nextProxy, direction);
 		}
 
 		if (currentTaskList.count(Task::DeleteOwnProxy)) {
-			this->log("using Task::DeleteOwnProxy", Logger::INFO);
+			this->log("using Task::DeleteOwnProxy", Gc::Model::Logger::GenericLogger::INFO);
 			this->grublistCfg->proxies.deleteProxy(proxy);
 		}
 
 		if (currentTaskList.count(Task::DeleteForeignProxy)) {
-			this->log("using Task::DeleteForeignProxy", Logger::INFO);
+			this->log("using Task::DeleteForeignProxy", Gc::Model::Logger::GenericLogger::INFO);
 			this->grublistCfg->proxies.deleteProxy(nextProxy);
 		}
 	}
 
 	private: void moveProxy(
-		std::shared_ptr<Model_Proxy> proxyToMove,
-		std::shared_ptr<Model_Proxy> destination, // proxyToMove will be moved behind destination
-		Controller_Helper_RuleMover_AbstractStrategy::Direction direction
+		std::shared_ptr<Gc::Model::ListCfg::Proxy> proxyToMove,
+		std::shared_ptr<Gc::Model::ListCfg::Proxy> destination, // proxyToMove will be moved behind destination
+		Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction
 	) {
 		auto insertPosition = std::find(this->grublistCfg->proxies.begin(), this->grublistCfg->proxies.end(), destination);
-		if (direction == Controller_Helper_RuleMover_AbstractStrategy::Direction::DOWN) {
+		if (direction == Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction::DOWN) {
 			insertPosition++;
 		}
 		auto elementPosition = std::find(this->grublistCfg->proxies.begin(), this->grublistCfg->proxies.end(), proxyToMove);
@@ -164,9 +165,9 @@ class Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel :
 	}
 
 	private: void moveNewProxiesToTheMiddle(
-		std::shared_ptr<Model_Proxy> oldOwnProxy,
-		std::shared_ptr<Model_Proxy> oldNextProxy,
-		Controller_Helper_RuleMover_AbstractStrategy::Direction direction
+		std::shared_ptr<Gc::Model::ListCfg::Proxy> oldOwnProxy,
+		std::shared_ptr<Gc::Model::ListCfg::Proxy> oldNextProxy,
+		Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction
 	) {
 		auto visibleProxies = this->findProxiesWithVisibleToplevelEntries(this->grublistCfg->proxies);
 		auto afterNextProxy = this->getNextProxy(visibleProxies, oldNextProxy, direction);
@@ -175,5 +176,5 @@ class Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel :
 		this->moveProxy(oldNextProxy, afterNextProxy, direction);
 		this->moveProxy(oldOwnProxy, previousProxy, this->flipDirection(direction));
 	}
-};
+};}}}}}
 #endif

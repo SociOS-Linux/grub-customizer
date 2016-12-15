@@ -19,7 +19,7 @@
 #ifndef TRASHCONTROLLERIMPL_H_
 #define TRASHCONTROLLERIMPL_H_
 
-#include "../Model/ListCfg.hpp"
+#include "../Model/ListCfg/ListCfg.hpp"
 #include "../View/Main.hpp"
 #include <libintl.h>
 #include <locale.h>
@@ -28,34 +28,34 @@
 
 #include "../Model/Env.hpp"
 
-#include "../Model/MountTable.hpp"
+#include "../Model/Device/MountTable.hpp"
 
 #include "../View/Trash.hpp"
 
 #include "../View/EnvEditor.hpp"
 #include "../View/Trait/ViewAware.hpp"
-#include "../Mapper/EntryName.hpp"
+#include "../View/Mapper/EntryName.hpp"
 
 #include "Common/ControllerAbstract.hpp"
 
-#include "../Model/DeviceDataListInterface.hpp"
-#include "../lib/ContentParserFactory.hpp"
+#include "../Model/Device/DeviceDataListInterface.hpp"
+#include "../Model/ContentParser/GenericFactory.hpp"
 #include "Helper/DeviceInfo.hpp"
 
-class TrashController :
-	public Controller_Common_ControllerAbstract,
-	public View_Trait_ViewAware<View_Trash>,
-	public Model_ListCfg_Connection,
-	public Mapper_EntryName_Connection,
-	public Model_DeviceDataListInterface_Connection,
-	public ContentParserFactory_Connection,
-	public Model_Env_Connection,
-	public Bootstrap_Application_Object_Connection
+namespace Gc { namespace Controller { class TrashController :
+	public Gc::Controller::Common::ControllerAbstract,
+	public Gc::View::Trait::ViewAware<Gc::View::Trash>,
+	public Gc::Model::ListCfg::ListCfgConnection,
+	public Gc::View::Mapper::EntryNameConnection,
+	public Gc::Model::Device::DeviceDataListInterfaceConnection,
+	public Gc::Model::ContentParser::GenericFactoryConnection,
+	public Gc::Model::EnvConnection,
+	public Gc::Bootstrap::ApplicationHelper::ObjectConnection
 {
-	private: std::list<std::shared_ptr<Model_Rule>> data;
+	private: std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>> data;
 
 	public:	TrashController() :
-		Controller_Common_ControllerAbstract("trash")
+		Gc::Controller::Common::ControllerAbstract("trash")
 	{
 	}
 
@@ -75,7 +75,7 @@ class TrashController :
 		this->applicationObject->onEnvChange.addHandler(std::bind(std::mem_fn(&TrashController::hideAction), this));
 		this->applicationObject->onListModelChange.addHandler(std::bind(std::mem_fn(&TrashController::updateAction), this));
 		this->applicationObject->onEntryRemove.addHandler(std::bind(std::mem_fn(&TrashController::selectEntriesAction), this, _1));
-		this->applicationObject->onEntrySelection.addHandler(std::bind(std::mem_fn(&TrashController::selectEntriesAction), this, std::list<Entry*>()));
+		this->applicationObject->onEntrySelection.addHandler(std::bind(std::mem_fn(&TrashController::selectEntriesAction), this, std::list<Gc::Common::Type::Entry*>()));
 	}
 	
 	public:	void updateAction()
@@ -94,7 +94,7 @@ class TrashController :
 	{
 		this->logActionBegin("apply");
 		try {
-			std::list<Rule*> rulePtrs = view->getSelectedEntries();
+			std::list<Gc::Common::Type::Rule*> rulePtrs = view->getSelectedEntries();
 			this->applicationObject->onEntryInsertionRequest.exec(rulePtrs);
 		} catch (Exception const& e) {
 			this->applicationObject->onError.exec(e);
@@ -123,19 +123,19 @@ class TrashController :
 				this->grublistCfg->deleteEntry(this->findRule(rulePtr)->dataSource);
 			}
 			this->refresh();
-			this->updateSelectionAction(std::list<Rule*>());
+			this->updateSelectionAction(std::list<Gc::Common::Type::Rule*>());
 		} catch (Exception const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
 	}
 
-	public: void selectEntriesAction(std::list<Entry*> const& entries)
+	public: void selectEntriesAction(std::list<Gc::Common::Type::Entry*> const& entries)
 	{
 		this->logActionBegin("select-entries");
 		try {
 			// first look for rules in local data, linking to the the given entries
-			std::list<Rule*> rules;
+			std::list<Gc::Common::Type::Rule*> rules;
 			for (auto entryPtr : entries) {
 				for (auto rule : this->data) {
 					if (entryPtr == rule->dataSource.get()) {
@@ -150,7 +150,7 @@ class TrashController :
 		this->logActionEnd();
 	}
 
-	public: void updateSelectionAction(std::list<Rule*> const& selectedEntries)
+	public: void updateSelectionAction(std::list<Gc::Common::Type::Rule*> const& selectedEntries)
 	{
 		this->logActionBegin("update-selection");
 		try {
@@ -180,7 +180,7 @@ class TrashController :
 		this->refreshView(nullptr);
 	}
 
-	private: void refreshView(std::shared_ptr<Model_Rule> parent)
+	private: void refreshView(std::shared_ptr<Gc::Model::ListCfg::Rule> parent)
 	{
 		auto& list = parent ? parent->subRules : this->data;
 		for (auto rule : list) {
@@ -188,21 +188,21 @@ class TrashController :
 
 			std::string name = rule->outputName;
 			if (rule->dataSource && script) {
-				name = this->entryNameMapper->map(rule->dataSource, name, rule->type != Model_Rule::SUBMENU);
+				name = this->entryNameMapper->map(rule->dataSource, name, rule->type != Gc::Model::ListCfg::Rule::SUBMENU);
 			}
 
-			View_Model_ListItem<Rule, Script> listItem;
+			Gc::View::Model::ListItem<Gc::Common::Type::Rule, Gc::Common::Type::Script> listItem;
 			listItem.name = name;
 			listItem.entryPtr = rule.get();
 			listItem.scriptPtr = nullptr;
-			listItem.is_placeholder = rule->type == Model_Rule::OTHER_ENTRIES_PLACEHOLDER || rule->type == Model_Rule::PLAINTEXT;
-			listItem.is_submenu = rule->type == Model_Rule::SUBMENU;
+			listItem.is_placeholder = rule->type == Gc::Model::ListCfg::Rule::OTHER_ENTRIES_PLACEHOLDER || rule->type == Gc::Model::ListCfg::Rule::PLAINTEXT;
+			listItem.is_submenu = rule->type == Gc::Model::ListCfg::Rule::SUBMENU;
 			listItem.scriptName = script ? script->name : "";
 			listItem.isVisible = true;
 			listItem.parentEntry = parent.get();
 
 			if (rule->dataSource) {
-				listItem.options = Controller_Helper_DeviceInfo::fetch(
+				listItem.options = Gc::Controller::Helper::DeviceInfo::fetch(
 					rule->dataSource->content,
 					*this->contentParserFactory,
 					*this->deviceDataList
@@ -217,14 +217,14 @@ class TrashController :
 		}
 	}
 
-	private: bool ruleListIsDeletable(std::list<Rule*> const& selectedEntries)
+	private: bool ruleListIsDeletable(std::list<Gc::Common::Type::Rule*> const& selectedEntries)
 	{
 		if (selectedEntries.size() == 0) {
 			return false;
 		}
 
 		for (auto& entry : selectedEntries) {
-			if (this->findRule(entry)->type != Model_Rule::NORMAL || this->findRule(entry)->dataSource == nullptr) {
+			if (this->findRule(entry)->type != Gc::Model::ListCfg::Rule::NORMAL || this->findRule(entry)->dataSource == nullptr) {
 				return false;
 			}
 			auto script = this->grublistCfg->repository.getScriptByEntry(this->findRule(entry)->dataSource);
@@ -237,9 +237,9 @@ class TrashController :
 		return true;
 	}
 
-	private: std::shared_ptr<Model_Rule> findRule(Rule* rulePtr, std::shared_ptr<Model_Rule> parent = nullptr)
+	private: std::shared_ptr<Gc::Model::ListCfg::Rule> findRule(Gc::Common::Type::Rule* rulePtr, std::shared_ptr<Gc::Model::ListCfg::Rule> parent = nullptr)
 	{
-		std::list<std::shared_ptr<Model_Rule>>& list = parent ? parent->subRules : this->data;
+		std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>>& list = parent ? parent->subRules : this->data;
 
 		for (auto rule : list) {
 			if (rule.get() == rulePtr) {
@@ -255,6 +255,6 @@ class TrashController :
 		}
 		throw ItemNotFoundException("rule not found in trash data", __FILE__, __LINE__);
 	}
-};
+};}}
 
 #endif

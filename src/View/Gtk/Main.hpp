@@ -23,20 +23,15 @@
 #include <gtkmm.h>
 #include <libintl.h>
 #include "../../config.hpp"
-#include "../../lib/Helper.hpp"
-#include "../../lib/Type.hpp"
+#include "../../Common/Functions.hpp"
+#include "../../Common/Type.hpp"
 #include "Element/List.hpp"
 #include "Settings.hpp"
+#include "Element/ImageMenuItemOwnKey.hpp"
 
-class ImageMenuItemOwnKey : public Gtk::ImageMenuItem {
-	public: ImageMenuItemOwnKey(const Gtk::StockID& id, const Gtk::AccelKey& accel_key) :
-		Gtk::ImageMenuItem(id)
-	{
-		set_accel_key(accel_key);
-	}
-};
-
-class View_Gtk_Main : public View_Main {
+namespace Gc { namespace View { namespace Gtk {
+namespace Gtk = ::Gtk;
+class Main : public Gc::View::Main {
 	private: Gtk::Window win;
 	private: Gtk::VBox vbMainSplit;
 	private: Gtk::Notebook notebook;
@@ -54,7 +49,7 @@ class View_Gtk_Main : public View_Main {
 	private: Gtk::VBox vbEntryList;
 	private: Gtk::Statusbar statusbar;
 	
-	private: View_Gtk_Element_List<Rule, Proxy> tvConfList;
+	private: Gc::View::Gtk::Element::List<Gc::Common::Type::Rule, Gc::Common::Type::Proxy> tvConfList;
 	private: Gtk::ProgressBar progressBar;
 	private: Gtk::HPaned hpLists;
 	private: Gtk::Widget* trashList = nullptr;
@@ -72,7 +67,7 @@ class View_Gtk_Main : public View_Main {
 	
 	private: Gtk::MenuItem miFile, miEdit, miView, miHelp, miInstallGrub, miContext, miCAboutEntryTypes, miAboutEntryTypes;
 	private: Gtk::ImageMenuItem miExit, miSave, miAbout, miModifyEnvironment, miRevert, miCreateEntry;
-	private: ImageMenuItemOwnKey miReload, miRemove, miUp, miDown, miLeft, miRight, miEditEntry;
+	private: Gc::View::Gtk::Element::ImageMenuItemOwnKey miReload, miRemove, miUp, miDown, miLeft, miRight, miEditEntry;
 	private: Gtk::ImageMenuItem miCRemove, miCUp, miCDown, miCLeft, miCRight, miCRename, miCEditEntry;
 	private: Gtk::CheckMenuItem miShowDetails, miShowHiddenEntries, miGroupByScript, miShowPlaceholders;
 	private: Gtk::Menu subFile, subEdit, subView, subHelp, contextMenu;
@@ -81,14 +76,14 @@ class View_Gtk_Main : public View_Main {
 
 	private: bool lock_state;
 
-	private: std::map<ViewOption, bool> options;
+	private: std::map<Gc::Common::Type::ViewOption, bool> options;
 
 	private: Gtk::MessageDialog burgSwitcher;
 
 	private: Gtk::Button bttAdvancedSettings1, bttAdvancedSettings2;
 	private: Gtk::HButtonBox bbxAdvancedSettings1, bbxAdvancedSettings2;
 
-	public: View_Gtk_Main() :
+	public: Main() :
 		tbttRemove(Gtk::Stock::REMOVE),
 		tbttUp(Gtk::Stock::GO_UP),
 		tbttDown(Gtk::Stock::GO_DOWN),
@@ -233,10 +228,10 @@ class View_Gtk_Main : public View_Main {
 		tbttReload.set_tooltip_text(gettext("reloads the configuration. Unsaved changes will be preserved."));
 
 		this->setLockState(3);
-		this->options[VIEW_SHOW_DETAILS] = true;
-		this->options[VIEW_SHOW_HIDDEN_ENTRIES] = false;
-		this->options[VIEW_SHOW_PLACEHOLDERS] = false;
-		this->options[VIEW_GROUP_BY_SCRIPT] = false;
+		this->options[Gc::Common::Type::ViewOption::SHOW_DETAILS] = true;
+		this->options[Gc::Common::Type::ViewOption::SHOW_HIDDEN_ENTRIES] = false;
+		this->options[Gc::Common::Type::ViewOption::SHOW_PLACEHOLDERS] = false;
+		this->options[Gc::Common::Type::ViewOption::GROUP_BY_SCRIPT] = false;
 
 		//menu
 		menu.append(miFile);
@@ -309,62 +304,62 @@ class View_Gtk_Main : public View_Main {
 
 		//signals
 
-		tbttUp.signal_clicked().connect(sigc::bind<int>(sigc::mem_fun(this, &View_Gtk_Main::signal_move_click),-1));
-		tbttDown.signal_clicked().connect(sigc::bind<int>(sigc::mem_fun(this, &View_Gtk_Main::signal_move_click),1));
-		tvConfList.get_selection()->signal_changed().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_treeview_selection_changed));
-		tvConfList.textRenderer.signal_editing_started().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_edit_name));
-		tvConfList.textRenderer.signal_edited().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_edit_name_finished));
-		tvConfList.toggleRenderer.signal_toggled().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_checkbox_toggled));
-		tvConfList.signal_button_press_event().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_button_press), false);
-		tvConfList.signal_popup_menu().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_popup));
-		tvConfList.signal_key_press_event().connect_notify(sigc::mem_fun(this, &View_Gtk_Main::signal_key_press));
-		tbttSave.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Main::saveConfig));
-		tbttRemove.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_remove_click));
-		tbttLeft.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_move_left_click));
-		tbttRight.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_move_right_click));
-		tbttReload.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_reload_click));
-		tbttEditEntry.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_entry_edit_click));
-		tbttCreateEntry.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_entry_create_click));
-		tbttRevert.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_revert));
-		bttAdvancedSettings1.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_preference_click));
-		bttAdvancedSettings2.signal_clicked().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_preference_click));
+		tbttUp.signal_clicked().connect(sigc::bind<int>(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_move_click),-1));
+		tbttDown.signal_clicked().connect(sigc::bind<int>(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_move_click),1));
+		tvConfList.get_selection()->signal_changed().connect(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_treeview_selection_changed));
+		tvConfList.textRenderer.signal_editing_started().connect(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_edit_name));
+		tvConfList.textRenderer.signal_edited().connect(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_edit_name_finished));
+		tvConfList.toggleRenderer.signal_toggled().connect(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_checkbox_toggled));
+		tvConfList.signal_button_press_event().connect(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_button_press), false);
+		tvConfList.signal_popup_menu().connect(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_popup));
+		tvConfList.signal_key_press_event().connect_notify(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_key_press));
+		tbttSave.signal_clicked().connect(sigc::mem_fun(this, &Gc::View::Gtk::Main::saveConfig));
+		tbttRemove.signal_clicked().connect(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_remove_click));
+		tbttLeft.signal_clicked().connect(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_move_left_click));
+		tbttRight.signal_clicked().connect(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_move_right_click));
+		tbttReload.signal_clicked().connect(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_reload_click));
+		tbttEditEntry.signal_clicked().connect(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_entry_edit_click));
+		tbttCreateEntry.signal_clicked().connect(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_entry_create_click));
+		tbttRevert.signal_clicked().connect(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_revert));
+		bttAdvancedSettings1.signal_clicked().connect(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_preference_click));
+		bttAdvancedSettings2.signal_clicked().connect(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_preference_click));
 
-		miUp.signal_activate().connect(sigc::bind<int>(sigc::mem_fun(this, &View_Gtk_Main::signal_move_click),-1));
-		miCUp.signal_activate().connect(sigc::bind<int>(sigc::mem_fun(this, &View_Gtk_Main::signal_move_click),-1));
-		miDown.signal_activate().connect(sigc::bind<int>(sigc::mem_fun(this, &View_Gtk_Main::signal_move_click),1));
-		miCDown.signal_activate().connect(sigc::bind<int>(sigc::mem_fun(this, &View_Gtk_Main::signal_move_click),1));
-		miLeft.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_move_left_click));
-		miCLeft.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_move_left_click));
-		miRight.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_move_right_click));
-		miCRight.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_move_right_click));
-		miSave.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::saveConfig));
-		miEditEntry.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_entry_edit_click));
-		miCEditEntry.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_entry_edit_click));
-		miCreateEntry.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_entry_create_click));
-		miRemove.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_remove_click));
-		miCRemove.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_remove_click));
-		miCRename.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_rename_click));
-		miReload.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_reload_click));
-		miInstallGrub.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_show_grub_install_dialog_click));
-		miModifyEnvironment.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_show_envEditor));
-		miRevert.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_revert));
-		miShowDetails.signal_toggled().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_viewopt_details_toggled));
-		miShowHiddenEntries.signal_toggled().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_viewopt_checkboxes_toggled));
-		miGroupByScript.signal_toggled().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_viewopt_script_toggled));
-		miShowPlaceholders.signal_toggled().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_viewopt_placeholders_toggled));
-		miAboutEntryTypes.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_entry_type_help_click));
-		miCAboutEntryTypes.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_entry_type_help_click));
+		miUp.signal_activate().connect(sigc::bind<int>(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_move_click),-1));
+		miCUp.signal_activate().connect(sigc::bind<int>(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_move_click),-1));
+		miDown.signal_activate().connect(sigc::bind<int>(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_move_click),1));
+		miCDown.signal_activate().connect(sigc::bind<int>(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_move_click),1));
+		miLeft.signal_activate().connect(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_move_left_click));
+		miCLeft.signal_activate().connect(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_move_left_click));
+		miRight.signal_activate().connect(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_move_right_click));
+		miCRight.signal_activate().connect(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_move_right_click));
+		miSave.signal_activate().connect(sigc::mem_fun(this, &Gc::View::Gtk::Main::saveConfig));
+		miEditEntry.signal_activate().connect(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_entry_edit_click));
+		miCEditEntry.signal_activate().connect(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_entry_edit_click));
+		miCreateEntry.signal_activate().connect(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_entry_create_click));
+		miRemove.signal_activate().connect(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_remove_click));
+		miCRemove.signal_activate().connect(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_remove_click));
+		miCRename.signal_activate().connect(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_rename_click));
+		miReload.signal_activate().connect(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_reload_click));
+		miInstallGrub.signal_activate().connect(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_show_grub_install_dialog_click));
+		miModifyEnvironment.signal_activate().connect(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_show_envEditor));
+		miRevert.signal_activate().connect(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_revert));
+		miShowDetails.signal_toggled().connect(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_viewopt_details_toggled));
+		miShowHiddenEntries.signal_toggled().connect(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_viewopt_checkboxes_toggled));
+		miGroupByScript.signal_toggled().connect(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_viewopt_script_toggled));
+		miShowPlaceholders.signal_toggled().connect(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_viewopt_placeholders_toggled));
+		miAboutEntryTypes.signal_activate().connect(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_entry_type_help_click));
+		miCAboutEntryTypes.signal_activate().connect(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_entry_type_help_click));
 
-		miExit.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_quit_click));
-		miAbout.signal_activate().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_info_click));
+		miExit.signal_activate().connect(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_quit_click));
+		miAbout.signal_activate().connect(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_info_click));
 
-		burgSwitcher.signal_response().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_burg_switcher_response));
+		burgSwitcher.signal_response().connect(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_burg_switcher_response));
 
-		infoReloadRequired.signal_response().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_reload_recommendation_response));
+		infoReloadRequired.signal_response().connect(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_reload_recommendation_response));
 
-		win.signal_delete_event().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_delete_event));
+		win.signal_delete_event().connect(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_delete_event));
 
-		notebook.signal_switch_page().connect(sigc::mem_fun(this, &View_Gtk_Main::signal_tab_changed));
+		notebook.signal_switch_page().connect(sigc::mem_fun(this, &Gc::View::Gtk::Main::signal_tab_changed));
 	}
 
 	public: void putSettingsDialog(Gtk::VBox& commonSettingsPane, Gtk::VBox& appearanceSettingsPane)
@@ -538,7 +533,7 @@ class View_Gtk_Main : public View_Main {
 		}
 	}
 
-	public: void appendEntry(View_Model_ListItem<Rule, Proxy> const& listItem)
+	public: void appendEntry(Gc::View::Model::ListItem<Gc::Common::Type::Rule, Gc::Common::Type::Proxy> const& listItem)
 	{
 		this->tvConfList.addListItem(listItem, this->options, this->win);
 
@@ -648,19 +643,19 @@ class View_Gtk_Main : public View_Main {
 		return response == Gtk::RESPONSE_YES;
 	}
 
-	public: void setRuleName(Rule* rule, std::string const& newName)
+	public: void setRuleName(Gc::Common::Type::Rule* rule, std::string const& newName)
 	{
 		this->setLockState(~0);
 		this->tvConfList.setRuleName(rule, newName);
 		this->setLockState(0);
 	}
 
-	public: void selectRule(Rule* rule, bool startEdit = false)
+	public: void selectRule(Gc::Common::Type::Rule* rule, bool startEdit = false)
 	{
 		this->tvConfList.selectRule(rule, startEdit);
 	}
 
-	public: void selectRules(std::list<Rule*> rules)
+	public: void selectRules(std::list<Gc::Common::Type::Rule*> rules)
 	{
 		this->tvConfList.selectRules(rules);
 	}
@@ -712,39 +707,39 @@ class View_Gtk_Main : public View_Main {
 		}
 	}
 
-	public: void setOption(ViewOption option, bool value)
+	public: void setOption(Gc::Common::Type::ViewOption option, bool value)
 	{
 		int oldLockState = this->lock_state;
 		this->setLockState(~0);
 		this->options[option] = value;
 		switch (option) {
-		case VIEW_SHOW_DETAILS: this->miShowDetails.set_active(value); break;
-		case VIEW_SHOW_HIDDEN_ENTRIES:
+		case Gc::Common::Type::ViewOption::SHOW_DETAILS: this->miShowDetails.set_active(value); break;
+		case Gc::Common::Type::ViewOption::SHOW_HIDDEN_ENTRIES:
 			this->miShowHiddenEntries.set_active(value);
 			this->tvConfList.toggleRenderer.set_visible(value);
 			this->tvConfList.pixbufRenderer.set_visible(!value);
 			break;
-		case VIEW_GROUP_BY_SCRIPT: this->miGroupByScript.set_active(value); break;
-		case VIEW_SHOW_PLACEHOLDERS: this->miShowPlaceholders.set_active(value); break;
+		case Gc::Common::Type::ViewOption::GROUP_BY_SCRIPT: this->miGroupByScript.set_active(value); break;
+		case Gc::Common::Type::ViewOption::SHOW_PLACEHOLDERS: this->miShowPlaceholders.set_active(value); break;
 		default:
 			throw LogicException("unexpected option");
 		}
 		this->setLockState(oldLockState);
 	}
 
-	public: std::map<ViewOption, bool> const& getOptions()
+	public: std::map<Gc::Common::Type::ViewOption, bool> const& getOptions()
 	{
 		return this->options;
 	}
 
-	public: void setOptions(std::map<ViewOption, bool> const& options)
+	public: void setOptions(std::map<Gc::Common::Type::ViewOption, bool> const& options)
 	{
-		for (std::map<ViewOption, bool>::const_iterator iter = options.begin(); iter != options.end(); iter++) {
+		for (std::map<Gc::Common::Type::ViewOption, bool>::const_iterator iter = options.begin(); iter != options.end(); iter++) {
 			this->setOption(iter->first, iter->second);
 		}
 	}
 
-	public: void setEntryVisibility(Rule* entry, bool value)
+	public: void setEntryVisibility(Gc::Common::Type::Rule* entry, bool value)
 	{
 		this->tvConfList.setEntryVisibility(entry, value);
 	}
@@ -769,7 +764,7 @@ class View_Gtk_Main : public View_Main {
 	{
 		if (this->lock_state == 0){
 			Gtk::TreeModel::iterator iter = this->tvConfList.refTreeStore->get_iter(path);
-			this->onRenameClick((Rule*)(*iter)[tvConfList.treeModel.relatedRule], new_text);
+			this->onRenameClick((Gc::Common::Type::Rule*)(*iter)[tvConfList.treeModel.relatedRule], new_text);
 		}
 	}
 
@@ -853,7 +848,7 @@ class View_Gtk_Main : public View_Main {
 
 	private: void signal_entry_edit_click()
 	{
-		std::list<Rule*> rules = this->getSelectedRules();
+		std::list<Gc::Common::Type::Rule*> rules = this->getSelectedRules();
 		assert(rules.size() == 1);
 		this->onShowEntryEditorClick(rules.front());
 	}
@@ -979,28 +974,28 @@ class View_Gtk_Main : public View_Main {
 	private: void signal_viewopt_details_toggled()
 	{
 		if (this->onViewOptionChange) {
-			this->onViewOptionChange(VIEW_SHOW_DETAILS, this->miShowDetails.get_active());
+			this->onViewOptionChange(Gc::Common::Type::ViewOption::SHOW_DETAILS, this->miShowDetails.get_active());
 		}
 	}
 
 	private: void signal_viewopt_checkboxes_toggled()
 	{
 		if (this->onViewOptionChange) {
-			this->onViewOptionChange(VIEW_SHOW_HIDDEN_ENTRIES, this->miShowHiddenEntries.get_active());
+			this->onViewOptionChange(Gc::Common::Type::ViewOption::SHOW_HIDDEN_ENTRIES, this->miShowHiddenEntries.get_active());
 		}
 	}
 
 	private: void signal_viewopt_script_toggled()
 	{
 		if (this->onViewOptionChange) {
-			this->onViewOptionChange(VIEW_GROUP_BY_SCRIPT, this->miGroupByScript.get_active());
+			this->onViewOptionChange(Gc::Common::Type::ViewOption::GROUP_BY_SCRIPT, this->miGroupByScript.get_active());
 		}
 	}
 
 	private: void signal_viewopt_placeholders_toggled()
 	{
 		if (this->onViewOptionChange) {
-			this->onViewOptionChange(VIEW_SHOW_PLACEHOLDERS, this->miShowPlaceholders.get_active());
+			this->onViewOptionChange(Gc::Common::Type::ViewOption::SHOW_PLACEHOLDERS, this->miShowPlaceholders.get_active());
 		}
 	}
 
@@ -1142,7 +1137,7 @@ class View_Gtk_Main : public View_Main {
 		return true;
 	}
 
-	private: std::list<Rule*> getSelectedRules()
+	private: std::list<Gc::Common::Type::Rule*> getSelectedRules()
 	{
 		return this->tvConfList.getSelectedRules();
 	}
@@ -1156,6 +1151,6 @@ class View_Gtk_Main : public View_Main {
 			}
 		}
 	}
-};
+};}}}
 
 #endif

@@ -20,23 +20,22 @@
 #define GRUBINSTALLDLG_H_
 #include <functional>
 
-#include "../lib/Trait/LoggerAware.hpp"
+#include "../Model/Logger/Trait/LoggerAware.hpp"
 
 /**
  * Interface for dialogs which helps users to install grub into the MBR
  */
-class View_Installer :
-	public Trait_LoggerAware
+namespace Gc { namespace View { class Installer :
+	public Gc::Model::Logger::Trait::LoggerAware
 {
-public:
-	std::function<void (std::string device)> onInstallClick;
+	public: std::function<void (std::string device)> onInstallClick;
 
-	virtual inline ~View_Installer() {};
+	public: virtual inline ~Installer() {};
 
 	//show this dialog
-	virtual void show()=0;
+	public: virtual void show() = 0;
 	//show the information that grub has been installed completely
-	virtual void showMessageGrubInstallCompleted(std::string const& msg)=0;
-};
+	public: virtual void showMessageGrubInstallCompleted(std::string const& msg) = 0;
+};}}
 
 #endif

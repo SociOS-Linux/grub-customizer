@@ -24,9 +24,11 @@
 #include "../../config.hpp"
 #include <libintl.h>
 
-class View_Gtk_About :
+namespace Gc { namespace View { namespace Gtk {
+namespace Gtk = ::Gtk;
+class About :
 	public Gtk::AboutDialog,
-	public View_About
+	public Gc::View::About
 {
 	private: Glib::ustring appName, appVersion;
 	private: std::vector<Glib::ustring> authors;
@@ -39,7 +41,7 @@ class View_Gtk_About :
 		}
 	}
 
-	public: View_Gtk_About() :
+	public: About() :
 		appName("Grub Customizer"),
 		appVersion(GC_VERSION)
 	{
@@ -167,13 +169,13 @@ class View_Gtk_About :
 			"zeugma https://launchpad.net/~sunder67\n"
 			"Юрій Олексійчук https://launchpad.net/~yurolex"
 		);
-		this->signal_response().connect(sigc::mem_fun(this, &View_Gtk_About::signal_about_dlg_response));
+		this->signal_response().connect(sigc::mem_fun(this, &Gc::View::Gtk::About::signal_about_dlg_response));
 	}
 
 	public: void show()
 	{
 		Gtk::AboutDialog::show();
 	}
-};
+};}}}
 
 #endif

@@ -32,21 +32,21 @@
 
 #include "Common/ControllerAbstract.hpp"
 
-#include "../lib/Exception.hpp"
+#include "../Common/Exception.hpp"
 
 #include "Helper/Thread.hpp"
 
 
-class InstallerController :
-	public Controller_Common_ControllerAbstract,
-	public View_Trait_ViewAware<View_Installer>,
-	public Model_Installer_Connection,
-	public Model_Env_Connection,
-	public Controller_Helper_Thread_Connection,
-	public Bootstrap_Application_Object_Connection
+namespace Gc { namespace Controller { class InstallerController :
+	public Gc::Controller::Common::ControllerAbstract,
+	public Gc::View::Trait::ViewAware<Gc::View::Installer>,
+	public Gc::Model::InstallerConnection,
+	public Gc::Model::EnvConnection,
+	public Gc::Controller::Helper::ThreadConnection,
+	public Gc::Bootstrap::ApplicationHelper::ObjectConnection
 {
 	public:	InstallerController() :
-		Controller_Common_ControllerAbstract("installer")
+		Gc::Controller::Common::ControllerAbstract("installer")
 	{
 	}
 
@@ -122,6 +122,6 @@ class InstallerController :
 		this->logActionEnd();
 	}
 
-};
+};}}
 
 #endif

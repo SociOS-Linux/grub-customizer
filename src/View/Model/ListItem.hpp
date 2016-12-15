@@ -21,34 +21,24 @@
 #include <string>
 #include <map>
 
+namespace Gc { namespace View { namespace Model {
 template <typename TItem, typename TWrapper>
-struct View_Model_ListItem {
-	std::string name;
-	TItem* entryPtr;
-	TWrapper* scriptPtr;
-	bool is_placeholder;
-	bool is_submenu;
-	std::string scriptName;
-	std::string defaultName;
-	bool isEditable;
-	bool isModified;
-	std::map<std::string, std::string> options;
-	bool isVisible;
-	TItem* parentEntry;
-	TWrapper* parentScript;
-
-	View_Model_ListItem() :
-		entryPtr(NULL),
-		scriptPtr(NULL),
-		parentEntry(NULL),
-		parentScript(NULL),
-		is_placeholder(false),
-		is_submenu(false),
-		isEditable(false),
-		isModified(false),
-		isVisible(false)
-	{}
-};
+class ListItem
+{
+	public: std::string name;
+	public: TItem* entryPtr = nullptr;
+	public: TWrapper* scriptPtr = nullptr;
+	public: bool is_placeholder = false;
+	public: bool is_submenu = false;
+	public: std::string scriptName;
+	public: std::string defaultName;
+	public: bool isEditable = false;
+	public: bool isModified = false;
+	public: std::map<std::string, std::string> options;
+	public: bool isVisible = false;
+	public: TItem* parentEntry = nullptr;
+	public: TWrapper* parentScript = nullptr;
+};}}}
 
 
 #endif /* MODEL_VIEW_LISTITEM_H_INCLUDED */

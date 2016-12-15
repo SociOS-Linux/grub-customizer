@@ -20,14 +20,16 @@
 #define ENTRYEDITDLGGTK_H_
 #include "../EntryEditor.hpp"
 
-#include "../../lib/Helper.hpp"
 #include <libintl.h>
 #include <gtkmm.h>
 
+#include "../../Common/Functions.hpp"
 #include "Element/PartitionChooser.hpp"
 
-class View_Gtk_EntryEditor :
-	public View_EntryEditor,
+namespace Gc { namespace View { namespace Gtk {
+namespace Gtk = ::Gtk;
+class EntryEditor :
+	public Gc::View::EntryEditor,
 	public Gtk::Dialog
 {
 	private: Gtk::VBox vbMainSections;
@@ -52,9 +54,9 @@ class View_Gtk_EntryEditor :
 	private: Gtk::Button* bttApply = nullptr;
 	private: bool lock_state = false;
 
-	private: Rule* rulePtr = nullptr;
+	private: Gc::Common::Type::Rule* rulePtr = nullptr;
 
-	public:	View_Gtk_EntryEditor() :
+	public:	EntryEditor() :
 		lblType(gettext("_Type:"), true),
 		frmSource(gettext("Boot sequence")),
 		lblName(gettext("_Name:"), true),
@@ -114,12 +116,12 @@ class View_Gtk_EntryEditor :
 
 		this->tvSource.set_accepts_tab(false);
 
-		this->signal_response().connect(sigc::mem_fun(this, &View_Gtk_EntryEditor::signal_response_action));
-		this->txtName.signal_changed().connect(sigc::mem_fun(this, &View_Gtk_EntryEditor::signal_nameModified));
-		this->cbType.signal_changed().connect(sigc::mem_fun(this, &View_Gtk_EntryEditor::signal_nameModified));
-		this->cbType.signal_changed().connect(sigc::mem_fun(this, &View_Gtk_EntryEditor::signal_typeModified));
+		this->signal_response().connect(sigc::mem_fun(this, &Gc::View::Gtk::EntryEditor::signal_response_action));
+		this->txtName.signal_changed().connect(sigc::mem_fun(this, &Gc::View::Gtk::EntryEditor::signal_nameModified));
+		this->cbType.signal_changed().connect(sigc::mem_fun(this, &Gc::View::Gtk::EntryEditor::signal_nameModified));
+		this->cbType.signal_changed().connect(sigc::mem_fun(this, &Gc::View::Gtk::EntryEditor::signal_typeModified));
 
-		this->tvSource.signal_key_release_event().connect(sigc::mem_fun(this, &View_Gtk_EntryEditor::signal_sourceModified));
+		this->tvSource.signal_key_release_event().connect(sigc::mem_fun(this, &Gc::View::Gtk::EntryEditor::signal_sourceModified));
 	}
 
 	public:	void setSourcecode(std::string const& source)
@@ -131,7 +133,7 @@ class View_Gtk_EntryEditor :
 		this->tvSource.show();
 		this->frmSource.set_shadow_type(Gtk::SHADOW_NONE);
 
-		std::string optimizedSource = Helper::str_replace("\n\t", "\n", source);
+		std::string optimizedSource = Gc::Common::Functions::str_replace("\n\t", "\n", source);
 		if (optimizedSource[0] == '\t') {
 			optimizedSource = optimizedSource.substr(1);
 		}
@@ -141,7 +143,7 @@ class View_Gtk_EntryEditor :
 	public:	std::string getSourcecode()
 	{
 		std::string optimizedSourcecode = this->tvSource.get_buffer()->get_text();
-		std::string withIndent = Helper::str_replace("\n", "\n\t", optimizedSourcecode);
+		std::string withIndent = Gc::Common::Functions::str_replace("\n", "\n\t", optimizedSourcecode);
 		if (withIndent.size() >= 2 && withIndent.substr(withIndent.size() - 2) == "\n\t") {
 			withIndent.replace(withIndent.size() - 2, 2, "\n");
 		} else if (withIndent.size() >= 1 && withIndent[withIndent.size() - 1] != '\n') {
@@ -182,8 +184,8 @@ class View_Gtk_EntryEditor :
 		Gtk::Widget* formWidget = NULL;
 		bool showValidator = true;
 		if (name == "partition_uuid" && this->deviceDataList != NULL) {
-			View_Gtk_Element_PartitionChooser* pChooserDD = Gtk::manage(new View_Gtk_Element_PartitionChooser(value, *this->deviceDataList));
-			pChooserDD->signal_changed().connect(sigc::mem_fun(this, &View_Gtk_EntryEditor::signal_optionsModified));
+			Gc::View::Gtk::Element::PartitionChooser* pChooserDD = Gtk::manage(new Gc::View::Gtk::Element::PartitionChooser(value, *this->deviceDataList));
+			pChooserDD->signal_changed().connect(sigc::mem_fun(this, &Gc::View::Gtk::EntryEditor::signal_optionsModified));
 			formWidget = groupWidget = pChooserDD;
 		} else if (name == "iso_path_full" || name == "memtest_image_full") {
 			Gtk::FileChooserButton* isoChooser = Gtk::manage(new Gtk::FileChooserButton());
@@ -193,26 +195,26 @@ class View_Gtk_EntryEditor :
 				isoChooser->set_filename(value);
 			}
 
-			isoChooser->signal_file_set().connect(sigc::mem_fun(this, &View_Gtk_EntryEditor::signal_optionsModified));
+			isoChooser->signal_file_set().connect(sigc::mem_fun(this, &Gc::View::Gtk::EntryEditor::signal_optionsModified));
 			formWidget = groupWidget = isoChooser;
 		} else if (name == "iso_path" || name == "memtest_image") {
 			Gtk::HBox* hbFieldGroup = Gtk::manage(new Gtk::HBox());
 			Gtk::Entry* entry = Gtk::manage(new Gtk::Entry());
 			entry->set_text(value);
-			entry->signal_changed().connect(sigc::mem_fun(this, &View_Gtk_EntryEditor::signal_optionsModified));
+			entry->signal_changed().connect(sigc::mem_fun(this, &Gc::View::Gtk::EntryEditor::signal_optionsModified));
 			hbFieldGroup->pack_start(*entry, Gtk::PACK_EXPAND_WIDGET);
 			Gtk::Button* bttFileChooser = Gtk::manage(new Gtk::Button(gettext("Choose…")));
 			std::list<std::string> oldProps;
 			oldProps.push_back(name);
 			oldProps.push_back("partition_uuid");
-			bttFileChooser->signal_clicked().connect(sigc::bind<std::string>(sigc::mem_fun(this, &View_Gtk_EntryEditor::signal_fileChooseButtonClicked), name + "_full", oldProps));
+			bttFileChooser->signal_clicked().connect(sigc::bind<std::string>(sigc::mem_fun(this, &Gc::View::Gtk::EntryEditor::signal_fileChooseButtonClicked), name + "_full", oldProps));
 			hbFieldGroup->pack_start(*bttFileChooser, Gtk::PACK_SHRINK);
 			formWidget = entry;
 			groupWidget = hbFieldGroup;
 		} else {
 			Gtk::Entry* entry = Gtk::manage(new Gtk::Entry());
 			entry->set_text(value);
-			entry->signal_changed().connect(sigc::mem_fun(this, &View_Gtk_EntryEditor::signal_optionsModified));
+			entry->signal_changed().connect(sigc::mem_fun(this, &Gc::View::Gtk::EntryEditor::signal_optionsModified));
 			formWidget = groupWidget = entry;
 		}
 
@@ -246,7 +248,7 @@ class View_Gtk_EntryEditor :
 		std::map<std::string, std::string> result;
 		for (std::map<std::string, Gtk::Widget*>::const_iterator iter = this->optionMap.begin(); iter != this->optionMap.end(); iter++) {
 			try {
-				result[iter->first] = dynamic_cast<View_Gtk_Element_PartitionChooser&>(*iter->second).getSelectedUuid();
+				result[iter->first] = dynamic_cast<Gc::View::Gtk::Element::PartitionChooser&>(*iter->second).getSelectedUuid();
 			} catch (std::bad_cast const& e) {
 				try {
 					result[iter->first] = dynamic_cast<Gtk::Entry&>(*iter->second).get_text();
@@ -280,12 +282,12 @@ class View_Gtk_EntryEditor :
 		this->iconMap.clear();
 	}
 
-	public:	void setRulePtr(Rule* rulePtr)
+	public:	void setRulePtr(Gc::Common::Type::Rule* rulePtr)
 	{
 		this->rulePtr = rulePtr;
 	}
 
-	public:	Rule* getRulePtr()
+	public:	Gc::Common::Type::Rule* getRulePtr()
 	{
 		return this->rulePtr;
 	}
@@ -449,8 +451,8 @@ class View_Gtk_EntryEditor :
 		else if (name == "memtest_image_full")
 			return gettext("_Memtest-Image");
 		else
-			return Helper::str_replace("_", "__", name);
+			return Gc::Common::Functions::str_replace("_", "__", name);
 	}
-};
+};}}}
 
 #endif /* ENTRYEDITDLGGTK_H_ */

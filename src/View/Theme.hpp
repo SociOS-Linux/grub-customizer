@@ -22,87 +22,86 @@
 #include <list>
 #include <functional>
 
-#include "../lib/Trait/LoggerAware.hpp"
+#include "../Model/Logger/Trait/LoggerAware.hpp"
 #include "ColorChooser.hpp"
 
-class View_Theme :
-	public Trait_LoggerAware
+namespace Gc { namespace View { class Theme :
+	public Gc::Model::Logger::Trait::LoggerAware
 {
-public:
-	enum EditorType {
-		EDITORTYPE_CUSTOM,
-		EDITORTYPE_THEME
+	public: enum class EditorType {
+		CUSTOM,
+		THEME
 	};
-	enum ColorChooserType {
-		COLOR_CHOOSER_DEFAULT_FONT,
-		COLOR_CHOOSER_DEFAULT_BACKGROUND,
-		COLOR_CHOOSER_HIGHLIGHT_FONT,
-		COLOR_CHOOSER_HIGHLIGHT_BACKGROUND
-	};
-
-	enum Error {
-		ERROR_INVALID_THEME_PACK_FORMAT,
-		ERROR_RENAME_CONFLICT,
-		ERROR_THEMEFILE_NOT_FOUND,
-		ERROR_SAVE_FAILED,
-		ERROR_NO_FILE_SELECTED
+	public: enum class ColorChooserType {
+		DEFAULT_FONT,
+		DEFAULT_BACKGROUND,
+		HIGHLIGHT_FONT,
+		HIGHLIGHT_BACKGROUND
 	};
 
-	std::function<void (std::string const& name)> onThemeSelected;
-	std::function<void (std::string const& filePath)> onThemeFileApply;
-	std::function<void (const std::string& name)> onRemoveThemeClicked;
-	std::function<void ()> onAddThemeClicked;
-	std::function<void ()> onSimpleThemeSelected;
-	std::function<void ()> onAddFile;
-	std::function<void (std::string const& file)> onRemoveFile;
-	std::function<void (std::string const& file)> onSelect;
-	std::function<void (std::string const& newName)> onRename;
-	std::function<void (std::string const& externalPath)> onFileChoose;
-	std::function<void (std::string const& newText)> onTextChange;
-	std::function<void ()> onColorChange;
-	std::function<void (bool removeFont)> onFontChange;
-	std::function<void ()> onImageChange;
-	std::function<void ()> onImageRemove;
-	std::function<void ()> onSaveClick;
+	public: enum class Error {
+		INVALID_THEME_PACK_FORMAT,
+		RENAME_CONFLICT,
+		THEMEFILE_NOT_FOUND,
+		SAVE_FAILED,
+		NO_FILE_SELECTED
+	};
 
-	virtual void addFile(std::string const& fileName) = 0;
-	virtual void clear() = 0;
-	virtual void setText(std::string const& text) = 0;
-	virtual void setImage(std::string const& path) = 0;
-	virtual void selectFile(std::string const& fileName, bool startEdit = false) = 0;
-	virtual void selectTheme(std::string const& name) = 0;
-	virtual std::string getSelectedTheme() = 0;
-	virtual void addTheme(std::string const& name) = 0;
-	virtual void clearThemeSelection() = 0;
-	virtual void show(bool burgMode) = 0;
-	virtual void setRemoveFunctionalityEnabled(bool value) = 0;
-	virtual void setEditorType(EditorType type) = 0;
-	virtual void showThemeFileChooser() = 0;
-	virtual void showError(Error const& e, std::string const& info = "") = 0;
-	virtual void setCurrentExternalThemeFilePath(std::string const& fileName) = 0;
-	virtual std::string getDefaultName() const = 0;
+	public: std::function<void (std::string const& name)> onThemeSelected;
+	public: std::function<void (std::string const& filePath)> onThemeFileApply;
+	public: std::function<void (const std::string& name)> onRemoveThemeClicked;
+	public: std::function<void ()> onAddThemeClicked;
+	public: std::function<void ()> onSimpleThemeSelected;
+	public: std::function<void ()> onAddFile;
+	public: std::function<void (std::string const& file)> onRemoveFile;
+	public: std::function<void (std::string const& file)> onSelect;
+	public: std::function<void (std::string const& newName)> onRename;
+	public: std::function<void (std::string const& externalPath)> onFileChoose;
+	public: std::function<void (std::string const& newText)> onTextChange;
+	public: std::function<void ()> onColorChange;
+	public: std::function<void (bool removeFont)> onFontChange;
+	public: std::function<void ()> onImageChange;
+	public: std::function<void ()> onImageRemove;
+	public: std::function<void ()> onSaveClick;
+
+	public: virtual void addFile(std::string const& fileName) = 0;
+	public: virtual void clear() = 0;
+	public: virtual void setText(std::string const& text) = 0;
+	public: virtual void setImage(std::string const& path) = 0;
+	public: virtual void selectFile(std::string const& fileName, bool startEdit = false) = 0;
+	public: virtual void selectTheme(std::string const& name) = 0;
+	public: virtual std::string getSelectedTheme() = 0;
+	public: virtual void addTheme(std::string const& name) = 0;
+	public: virtual void clearThemeSelection() = 0;
+	public: virtual void show(bool burgMode) = 0;
+	public: virtual void setRemoveFunctionalityEnabled(bool value) = 0;
+	public: virtual void setEditorType(EditorType type) = 0;
+	public: virtual void showThemeFileChooser() = 0;
+	public: virtual void showError(Error const& e, std::string const& info = "") = 0;
+	public: virtual void setCurrentExternalThemeFilePath(std::string const& fileName) = 0;
+	public: virtual std::string getDefaultName() const = 0;
 
 	//returns an interface to the given color chooser
-	virtual View_ColorChooser& getColorChooser(ColorChooserType type)=0;
+	public: virtual Gc::View::ColorChooser& getColorChooser(ColorChooserType type) = 0;
 	//get the name of the selected font
-	virtual std::string getFontName()=0;
+	public: virtual std::string getFontName() = 0;
 	//get the font size
-	virtual int getFontSize()=0;
+	public: virtual int getFontSize() = 0;
 	//set the name of the selected font
-	virtual void setFontName(std::string const& value)=0;
+	public: virtual void setFontName(std::string const& value) = 0;
 
 	//shows a warning message about very large fonts
-	virtual void showFontWarning() = 0;
+	public: virtual void showFontWarning() = 0;
 
 	//sets the background image, remove it, if empty string is given
-	virtual void setBackgroundImagePreviewPath(std::string const& menuPicturePath, bool isInGrubDir)=0;
+	public: virtual void setBackgroundImagePreviewPath(std::string const& menuPicturePath, bool isInGrubDir) = 0;
 	//reads the selected background image path
-	virtual std::string getBackgroundImagePath()=0;
+	public: virtual std::string getBackgroundImagePath() = 0;
 
 	//set the entry titles to be viewed in the preview image
-	virtual void setPreviewEntryTitles(std::list<std::string> const& entries)=0;
+	public: virtual void setPreviewEntryTitles(std::list<std::string> const& entries) = 0;
 
-	virtual inline ~View_Theme() {};
-};
+	public: virtual inline ~Theme() {};
+};}}
 
 #endif /* THEME_H_ */

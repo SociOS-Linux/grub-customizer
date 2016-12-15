@@ -24,127 +24,128 @@
 #include <map>
 #include <list>
 
-#include "../lib/Type.hpp"
-#include "../lib/Trait/LoggerAware.hpp"
+#include "../Common/Type.hpp"
+#include "../Model/Logger/Trait/LoggerAware.hpp"
 #include "Model/ListItem.hpp"
 #include <functional>
 
 /**
  * Interface for dialogs which lets the user control the grub list
  */
-class View_Main : public Trait_LoggerAware {
-public:
-	virtual inline ~View_Main() {};
+namespace Gc { namespace View { class Main :
+	public Gc::Model::Logger::Trait::LoggerAware
+{
+	public: virtual inline ~Main() {};
 
-	std::function<void (std::list<Rule*> rules, bool force)> onRemoveRulesClick;
-	std::function<void ()> onShowSettingsClick;
-	std::function<void ()> onReloadClick;
-	std::function<void ()> onSaveClick;
-	std::function<void ()> onShowEnvEditorClick;
-	std::function<void ()> onShowInstallerClick;
-	std::function<void (std::list<Rule*> childItems)> onCreateSubmenuClick;
-	std::function<void (std::list<Rule*> childItems)> onRemoveSubmenuClick;
-	std::function<void (Rule* rule)> onShowEntryEditorClick;
-	std::function<void ()> onShowEntryCreatorClick;
-	std::function<void ()> onShowAboutClick;
-	std::function<void ()> onExitClick;
-	std::function<void (Rule* entry, std::string const& newText)> onRenameClick;
-	std::function<void ()> onRevertClick;
-	std::function<void (std::list<Rule*> rules, int direction)> onMoveClick;
-	std::function<void ()> onCancelBurgSwitcherClick;
-	std::function<void (bool burgChosen)> onInitModeClick;
-	std::function<void (Rule* rule, bool startEdit)> onRuleSelection;
-	std::function<void (unsigned int pos)> onTabChange;
-	std::function<void (ViewOption option, bool value)> onViewOptionChange;
-	std::function<void (Rule* entry, bool state)> onEntryStateChange;
-	std::function<void (std::list<Rule*> selectedRules)> onSelectionChange;
+	public: std::function<void (std::list<Gc::Common::Type::Rule*> rules, bool force)> onRemoveRulesClick;
+	public: std::function<void ()> onShowSettingsClick;
+	public: std::function<void ()> onReloadClick;
+	public: std::function<void ()> onSaveClick;
+	public: std::function<void ()> onShowEnvEditorClick;
+	public: std::function<void ()> onShowInstallerClick;
+	public: std::function<void (std::list<Gc::Common::Type::Rule*> childItems)> onCreateSubmenuClick;
+	public: std::function<void (std::list<Gc::Common::Type::Rule*> childItems)> onRemoveSubmenuClick;
+	public: std::function<void (Gc::Common::Type::Rule* rule)> onShowEntryEditorClick;
+	public: std::function<void ()> onShowEntryCreatorClick;
+	public: std::function<void ()> onShowAboutClick;
+	public: std::function<void ()> onExitClick;
+	public: std::function<void (Gc::Common::Type::Rule* entry, std::string const& newText)> onRenameClick;
+	public: std::function<void ()> onRevertClick;
+	public: std::function<void (std::list<Gc::Common::Type::Rule*> rules, int direction)> onMoveClick;
+	public: std::function<void ()> onCancelBurgSwitcherClick;
+	public: std::function<void (bool burgChosen)> onInitModeClick;
+	public: std::function<void (Gc::Common::Type::Rule* rule, bool startEdit)> onRuleSelection;
+	public: std::function<void (unsigned int pos)> onTabChange;
+	public: std::function<void (Gc::Common::Type::ViewOption option, bool value)> onViewOptionChange;
+	public: std::function<void (Gc::Common::Type::Rule* entry, bool state)> onEntryStateChange;
+	public: std::function<void (std::list<Gc::Common::Type::Rule*> selectedRules)> onSelectionChange;
 
 
 	//show this dialog without waiting
-	virtual void show()=0;
+	public: virtual void show() = 0;
 	//hide this dialog
-	virtual void hide() = 0;
+	public: virtual void hide() = 0;
 	//show this dialog and wait until the window has been closed
-	virtual void run()=0;
+	public: virtual void run() = 0;
 	//hide this window and close the whole application
-	virtual void close()=0;
+	public: virtual void close() = 0;
 	//show the dialog which lets the user choose burg or grub
-	virtual void showBurgSwitcher()=0;
+	public: virtual void showBurgSwitcher() = 0;
 	//hide the dialog which lets the user choose burg or grub
-	virtual void hideBurgSwitcher()=0;
+	public: virtual void hideBurgSwitcher() = 0;
 	//returns whether the list configuration window is visible at the moment
-	virtual bool isVisible()=0;
+	public: virtual bool isVisible() = 0;
 
 	//notifies the window about which mode is used (grub<>burg)
-	virtual void setIsBurgMode(bool isBurgMode)=0;
+	public: virtual void setIsBurgMode(bool isBurgMode) = 0;
 	//determines what users should be able to do and what not
-	virtual void setLockState(int state)=0;
-	virtual void updateLockState() = 0;
+	public: virtual void setLockState(int state) = 0;
+	public: virtual void updateLockState() = 0;
 
 	//set the progress of the actual action (loading/saving) to be showed as progress bar for example
-	virtual void setProgress(double progress)=0;
+	public: virtual void setProgress(double progress) = 0;
 	//pulse the progress
-	virtual void progress_pulse()=0;
+	public: virtual void progress_pulse() = 0;
 	//hide the progress bar, will be executed after loading has been completed
-	virtual void hideProgressBar()=0;
+	public: virtual void hideProgressBar() = 0;
 	//sets the text to be showed inside the status bar
-	virtual void setStatusText(std::string const& new_status_text)=0;
-	virtual void setStatusText(std::string const& name, int pos, int max)=0;
+	public: virtual void setStatusText(std::string const& new_status_text) = 0;
+	public: virtual void setStatusText(std::string const& name, int pos, int max) = 0;
 	//add entry to the end of the last script of the list
-	virtual void appendEntry(View_Model_ListItem<Rule, Proxy> const& listItem)=0;
+	public: virtual void appendEntry(Gc::View::Model::ListItem<Gc::Common::Type::Rule, Gc::Common::Type::Proxy> const& listItem) = 0;
 	//notifies the user about the problem that no grublistcfg_proxy has been found
-	virtual void showProxyNotFoundMessage()=0;
+	public: virtual void showProxyNotFoundMessage() = 0;
 	//creates a string for an other entry placeholder
-	virtual std::string createNewEntriesPlaceholderString(std::string const& parentMenu)=0;
+	public: virtual std::string createNewEntriesPlaceholderString(std::string const& parentMenu) = 0;
 	//creates the string for plaintexts
-	virtual std::string createPlaintextString() const=0;
+	public: virtual std::string createPlaintextString() const=0;
 
 	//asks the user if he wants to exit the whole application
-	virtual int showExitConfirmDialog(int type)=0;
+	public: virtual int showExitConfirmDialog(int type) = 0;
 	//show the given error message
-	virtual void showErrorMessage(std::string const& msg)=0;
+	public: virtual void showErrorMessage(std::string const& msg) = 0;
 
-	virtual void showConfigSavingError(std::string const& message) = 0;
+	public: virtual void showConfigSavingError(std::string const& message) = 0;
 
 	//shows an error message including an option for changing the environment
-	virtual bool askForEnvironmentSettings(std::string const& failedCmd, std::string const& errorMessage) = 0;
+	public: virtual bool askForEnvironmentSettings(std::string const& failedCmd, std::string const& errorMessage) = 0;
 	//remove everything from the list
-	virtual void clear()=0;
+	public: virtual void clear() = 0;
 
 	//asks the user whether the current config should be dropped while another action is started
-	virtual bool confirmUnsavedSwitch() = 0;
+	public: virtual bool confirmUnsavedSwitch() = 0;
 
 	//assigns a new name to the rule item
-	virtual void setRuleName(Rule* rule, std::string const& newName)=0;
+	public: virtual void setRuleName(Gc::Common::Type::Rule* rule, std::string const& newName) = 0;
 
 	//select the given rule
-	virtual void selectRule(Rule* rule, bool startEdit = false)=0;
+	public: virtual void selectRule(Gc::Common::Type::Rule* rule, bool startEdit = false) = 0;
 
 	// select multiple rules
-	virtual void selectRules(std::list<Rule*> rules)=0;
+	public: virtual void selectRules(std::list<Gc::Common::Type::Rule*> rules) = 0;
 
 	// set whether the trash pane should be visible
-	virtual void setTrashPaneVisibility(bool value) = 0;
+	public: virtual void setTrashPaneVisibility(bool value) = 0;
 
 	// show the warning that config has changed to propose a reload
-	virtual void showReloadRecommendation() = 0;
+	public: virtual void showReloadRecommendation() = 0;
 
 	// hide the warning that config has changed to propose a reload
-	virtual void hideReloadRecommendation() = 0;
+	public: virtual void hideReloadRecommendation() = 0;
 
-	virtual void showPlaintextRemoveWarning() = 0;
+	public: virtual void showPlaintextRemoveWarning() = 0;
 
-	virtual void showScriptUpdateInfo() = 0;
-	virtual void hideScriptUpdateInfo() = 0;
+	public: virtual void showScriptUpdateInfo() = 0;
+	public: virtual void hideScriptUpdateInfo() = 0;
 
-	virtual void showSystemRuleRemoveWarning() = 0;
+	public: virtual void showSystemRuleRemoveWarning() = 0;
 
-	virtual void setOption(ViewOption option, bool value) = 0;
+	public: virtual void setOption(Gc::Common::Type::ViewOption option, bool value) = 0;
 
-	virtual std::map<ViewOption, bool> const& getOptions() = 0;
-	virtual void setOptions(std::map<ViewOption, bool> const& options) = 0;
+	public: virtual std::map<Gc::Common::Type::ViewOption, bool> const& getOptions() = 0;
+	public: virtual void setOptions(std::map<Gc::Common::Type::ViewOption, bool> const& options) = 0;
 
-	virtual void setEntryVisibility(Rule* entry, bool value) = 0;
-};
+	public: virtual void setEntryVisibility(Gc::Common::Type::Rule* entry, bool value) = 0;
+};}}
 
 #endif

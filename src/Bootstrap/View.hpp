@@ -31,26 +31,26 @@
 #include "../View/Error.hpp"
 #include "../View/Theme.hpp"
 
-#include "../Model/DeviceDataListInterface.hpp"
+#include "../Model/Device/DeviceDataListInterface.hpp"
 
-class Bootstrap_View :
-	public Model_DeviceDataListInterface_Connection
+namespace Gc { namespace Bootstrap { class View :
+	public Gc::Model::Device::DeviceDataListInterfaceConnection
 {
-	public: std::shared_ptr<View_About> about;
-	public: std::shared_ptr<View_EntryEditor> entryEditor;
-	public: std::shared_ptr<View_EnvEditor> envEditor;
-	public: std::shared_ptr<View_Error> error;
-	public: std::shared_ptr<View_Installer> installer;
-	public: std::shared_ptr<View_Main> main;
-	public: std::shared_ptr<View_Settings> settings;
-	public: std::shared_ptr<View_Theme> theme;
-	public: std::shared_ptr<View_Trash> trash;
+	public: std::shared_ptr<Gc::View::About> about;
+	public: std::shared_ptr<Gc::View::EntryEditor> entryEditor;
+	public: std::shared_ptr<Gc::View::EnvEditor> envEditor;
+	public: std::shared_ptr<Gc::View::Error> error;
+	public: std::shared_ptr<Gc::View::Installer> installer;
+	public: std::shared_ptr<Gc::View::Main> main;
+	public: std::shared_ptr<Gc::View::Settings> settings;
+	public: std::shared_ptr<Gc::View::Theme> theme;
+	public: std::shared_ptr<Gc::View::Trash> trash;
 
-	public: void setDeviceDataList(Model_DeviceDataListInterface& deviceDataList);
+	public: void setDeviceDataList(Gc::Model::Device::DeviceDataListInterface& deviceDataList);
 
-	public: Bootstrap_View();
-	public: ~Bootstrap_View();
-};
+	public: View();
+	public: ~View();
+};}}
 
 
 

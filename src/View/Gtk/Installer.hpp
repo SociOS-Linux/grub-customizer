@@ -23,16 +23,18 @@
 #include <gtkmm.h>
 #include <libintl.h>
 
-class View_Gtk_Installer :
+namespace Gc { namespace View { namespace Gtk {
+namespace Gtk = ::Gtk;
+class Installer :
 	public Gtk::Dialog,
-	public View_Installer
+	public Gc::View::Installer
 {
 	private: Gtk::Label lblDescription;
 	private: Gtk::HBox hbDevice;
 	private: Gtk::Label lblDevice, lblInstallInfo;
 	private: Gtk::Entry txtDevice;
 
-	public:	View_Gtk_Installer() :
+	public:	Installer() :
 		lblDescription(gettext("Install the bootloader to MBR and put some\nfiles to the bootloaders data directory\n(if they don't already exist)."), Pango::ALIGN_LEFT),
 		lblDevice(gettext("_Device: "), Pango::ALIGN_LEFT, Pango::ALIGN_CENTER, true)
 	{
@@ -53,7 +55,7 @@ class View_Gtk_Installer :
 		this->set_default_response(Gtk::RESPONSE_OK);
 		txtDevice.set_activates_default(true);
 
-		this->signal_response().connect(sigc::mem_fun(this, &View_Gtk_Installer::signal_grub_install_dialog_response));
+		this->signal_response().connect(sigc::mem_fun(this, &Gc::View::Gtk::Installer::signal_grub_install_dialog_response));
 	}
 
 	public:	void show()
@@ -96,5 +98,5 @@ class View_Gtk_Installer :
 			this->hide();
 		}
 	}
-};
+};}}}
 #endif

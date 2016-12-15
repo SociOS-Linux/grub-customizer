@@ -16,46 +16,47 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef INC_Controller_Helper_RuleMover_Strategy_MoveRuleIntoForeignSubmenu
-#define INC_Controller_Helper_RuleMover_Strategy_MoveRuleIntoForeignSubmenu
+#ifndef INC_Gc_Controller_Helper_RuleMover_Strategy_MoveRuleIntoForeignSubmenu
+#define INC_Gc_Controller_Helper_RuleMover_Strategy_MoveRuleIntoForeignSubmenu
 
-#include "../../../../Model/Rule.hpp"
-#include "../../../../Model/ListCfg.hpp"
+#include "../../../../Model/ListCfg/Rule.hpp"
+#include "../../../../Model/ListCfg/ListCfg.hpp"
 #include "../AbstractStrategy.hpp"
-#include "../../../../lib/Trait/LoggerAware.hpp"
+#include "../../../../Model/Logger/Trait/LoggerAware.hpp"
 #include <memory>
 
-class Controller_Helper_RuleMover_Strategy_MoveRuleIntoForeignSubmenu :
-	public Controller_Helper_RuleMover_AbstractStrategy,
-	public Model_ListCfg_Connection,
-	public Trait_LoggerAware
+namespace Gc { namespace Controller { namespace Helper { namespace RuleMover { namespace Strategy {
+class MoveRuleIntoForeignSubmenu :
+	public Gc::Controller::Helper::RuleMover::AbstractStrategy,
+	public Gc::Model::ListCfg::ListCfgConnection,
+	public Gc::Model::Logger::Trait::LoggerAware
 {
-	public: Controller_Helper_RuleMover_Strategy_MoveRuleIntoForeignSubmenu()
-		: Controller_Helper_RuleMover_AbstractStrategy("MoveRuleIntoForeignSubmenu")
+	public: MoveRuleIntoForeignSubmenu()
+		: Gc::Controller::Helper::RuleMover::AbstractStrategy("MoveRuleIntoForeignSubmenu")
 	{}
 
-	public: void move(std::shared_ptr<Model_Rule> rule, Controller_Helper_RuleMover_AbstractStrategy::Direction direction)
+	public: void move(std::shared_ptr<Gc::Model::ListCfg::Rule> rule, Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction)
 	{
 		auto proxy = this->grublistCfg->proxies.getProxyByRule(rule);
 		auto proxiesWithVisibleEntries = this->findProxiesWithVisibleToplevelEntries(this->grublistCfg->proxies);
 
 		auto nextProxy = this->getNextProxy(proxiesWithVisibleEntries, proxy, direction);
 		if (nextProxy == nullptr) {
-			throw Controller_Helper_RuleMover_MoveFailedException("need next proxy", __FILE__, __LINE__);
+			throw Gc::Controller::Helper::RuleMover::MoveFailedException("need next proxy", __FILE__, __LINE__);
 		}
 
 		auto previousProxy = this->getNextProxy(proxiesWithVisibleEntries, proxy, this->flipDirection(direction));
 
 		if (proxy->dataSource == nextProxy->dataSource) {
-			throw Controller_Helper_RuleMover_MoveFailedException("next proxy is not a foreign proxy", __FILE__, __LINE__);
+			throw Gc::Controller::Helper::RuleMover::MoveFailedException("next proxy is not a foreign proxy", __FILE__, __LINE__);
 		}
 
 		auto firstVisibleRuleOfNextProxy = this->getFirstVisibleRule(nextProxy, direction);
 
 		assert(firstVisibleRuleOfNextProxy != nullptr); // we got the proxy from a list of proxies with visible rules
 
-		if (firstVisibleRuleOfNextProxy->type != Model_Rule::RuleType::SUBMENU) {
-			throw Controller_Helper_RuleMover_MoveFailedException("first rule of next proxy is not a submenu", __FILE__, __LINE__);
+		if (firstVisibleRuleOfNextProxy->type != Gc::Model::ListCfg::Rule::RuleType::SUBMENU) {
+			throw Gc::Controller::Helper::RuleMover::MoveFailedException("first rule of next proxy is not a submenu", __FILE__, __LINE__);
 		}
 
 		// replace old rule with invisible copy
@@ -78,12 +79,12 @@ class Controller_Helper_RuleMover_Strategy_MoveRuleIntoForeignSubmenu :
 	}
 
 	private: void mergeProxy(
-		std::shared_ptr<Model_Proxy> source,
-		std::shared_ptr<Model_Proxy> destination,
-		Controller_Helper_RuleMover_AbstractStrategy::Direction direction
+		std::shared_ptr<Gc::Model::ListCfg::Proxy> source,
+		std::shared_ptr<Gc::Model::ListCfg::Proxy> destination,
+		Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction direction
 	) {
 		auto list = this->findVisibleRules(source->rules, nullptr);
-		if (direction == Controller_Helper_RuleMover_AbstractStrategy::Direction::DOWN) {
+		if (direction == Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction::DOWN) {
 			list.reverse();
 		}
 
@@ -93,7 +94,7 @@ class Controller_Helper_RuleMover_Strategy_MoveRuleIntoForeignSubmenu :
 
 		this->grublistCfg->proxies.deleteProxy(source);
 	}
-};
+};}}}}}
 
 
 

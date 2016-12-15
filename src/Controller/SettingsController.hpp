@@ -19,7 +19,7 @@
 #ifndef SETTINGSCONTROLLERIMPL_H_
 #define SETTINGSCONTROLLERIMPL_H_
 
-#include "../Model/ListCfg.hpp"
+#include "../Model/ListCfg/ListCfg.hpp"
 #include <libintl.h>
 #include <locale.h>
 #include <sstream>
@@ -27,38 +27,38 @@
 
 #include "../Model/Env.hpp"
 
-#include "../Model/MountTable.hpp"
+#include "../Model/Device/MountTable.hpp"
 
 #include "../Model/Installer.hpp"
 
-#include "../Model/ListCfg.hpp"
+#include "../Model/ListCfg/ListCfg.hpp"
 #include "../View/Settings.hpp"
 #include "../View/Trait/ViewAware.hpp"
 #include "../Model/FbResolutionsGetter.hpp"
-#include "../Model/DeviceDataList.hpp"
-#include "../lib/ContentParserFactory.hpp"
-#include "../Mapper/EntryName.hpp"
+#include "../Model/Device/DeviceDataList.hpp"
+#include "../Model/ContentParser/GenericFactory.hpp"
+#include "../View/Mapper/EntryName.hpp"
 
 #include "Common/ControllerAbstract.hpp"
 
-#include "../lib/Trait/LoggerAware.hpp"
+#include "../Model/Logger/Trait/LoggerAware.hpp"
 
-#include "../lib/Exception.hpp"
+#include "../Common/Exception.hpp"
 #include "Helper/Thread.hpp"
 
-class SettingsController :
-	public Controller_Common_ControllerAbstract,
-	public View_Trait_ViewAware<View_Settings>,
-	public Model_ListCfg_Connection,
-	public Model_SettingsManagerData_Connection,
-	public Model_FbResolutionsGetter_Connection,
-	public Model_Env_Connection,
-	public Controller_Helper_Thread_Connection,
-	public Bootstrap_Application_Object_Connection
+namespace Gc { namespace Controller { class SettingsController :
+	public Gc::Controller::Common::ControllerAbstract,
+	public Gc::View::Trait::ViewAware<Gc::View::Settings>,
+	public Gc::Model::ListCfg::ListCfgConnection,
+	public Gc::Model::SettingsManagerDataConnection,
+	public Gc::Model::FbResolutionsGetterConnection,
+	public Gc::Model::EnvConnection,
+	public Gc::Controller::Helper::ThreadConnection,
+	public Gc::Bootstrap::ApplicationHelper::ObjectConnection
 {
 	private: bool syncActive; // should only be controlled by syncSettings()
 
-	public:	Model_FbResolutionsGetter& getFbResolutionsGetter()
+	public:	Gc::Model::FbResolutionsGetter& getFbResolutionsGetter()
 	{
 		return *this->fbResolutionsGetter;
 	}
@@ -70,7 +70,7 @@ class SettingsController :
 	}
 
 	public: SettingsController() :
-		Controller_Common_ControllerAbstract("settings"),
+		Gc::Controller::Common::ControllerAbstract("settings"),
 		syncActive(false)
 	{
 	}
@@ -106,7 +106,7 @@ class SettingsController :
 		this->applicationObject->onInit.addHandler(
 			[this] () {
 				//loading the framebuffer resolutions in background…
-				this->log("Loading Framebuffer resolutions (background process)", Logger::EVENT);
+				this->log("Loading Framebuffer resolutions (background process)", Gc::Model::Logger::GenericLogger::EVENT);
 				this->threadHelper->runAsThread(std::bind(std::mem_fn(&SettingsController::loadResolutionsAction), this));
 			}
 		);
@@ -120,11 +120,11 @@ class SettingsController :
 	{
 		this->logActionBegin("update-settings-data");
 		try {
-			std::list<Model_Proxylist_Item> entryTitles = this->grublistCfg->proxies.generateEntryTitleList();
+			std::list<Gc::Model::ListCfg::ProxylistItem> entryTitles = this->grublistCfg->proxies.generateEntryTitleList();
 	
 			this->view->clearDefaultEntryChooser();
 			this->view->addEntryToDefaultEntryChooser("0", "");
-			for (std::list<Model_Proxylist_Item>::iterator iter = entryTitles.begin(); iter != entryTitles.end(); iter++) {
+			for (std::list<Gc::Model::ListCfg::ProxylistItem>::iterator iter = entryTitles.begin(); iter != entryTitles.end(); iter++) {
 				this->view->addEntryToDefaultEntryChooser(iter->labelPathValue, iter->labelPathLabel);
 			}
 			this->view->addEntryToDefaultEntryChooser("", "");
@@ -178,7 +178,7 @@ class SettingsController :
 	{
 		this->logActionBegin("update-default-system");
 		try {
-			if (this->view->getActiveDefEntryOption() == View_Settings::DEF_ENTRY_SAVED){
+			if (this->view->getActiveDefEntryOption() == Gc::View::Settings::DefEntryType::SAVED){
 				this->settings->setValue("GRUB_DEFAULT", "saved");
 				this->settings->setValue("GRUB_SAVEDEFAULT", "true");
 				this->settings->setIsActive("GRUB_SAVEDEFAULT", true);
@@ -199,7 +199,7 @@ class SettingsController :
 	{
 		this->logActionBegin("update-custom-setting");
 		try {
-			View_Settings::CustomOption c = this->view->getCustomOption(name);
+			Gc::View::Settings::CustomOption c = this->view->getCustomOption(name);
 			this->settings->renameItem(c.old_name, c.name);
 			this->settings->setValue(c.name, c.value);
 			this->settings->setIsActive(c.name, c.isActive);
@@ -400,16 +400,16 @@ class SettingsController :
 		this->syncActive = true;
 		std::string sel = this->view->getSelectedCustomOption();
 		this->view->removeAllSettingRows();
-		for (std::list<Model_SettingsStore_Row>::iterator iter = this->settings->begin(); iter != this->settings->end(); this->settings->iter_to_next_setting(iter)){
+		for (std::list<Gc::Model::SettingsStoreRow>::iterator iter = this->settings->begin(); iter != this->settings->end(); this->settings->iter_to_next_setting(iter)){
 			this->view->addCustomOption(iter->isActive, iter->name, iter->value);
 		}
 		this->view->selectCustomOption(sel);
 		std::string defEntry = this->settings->getValue("GRUB_DEFAULT");
 		if (defEntry == "saved"){
-			this->view->setActiveDefEntryOption(View_Settings::DEF_ENTRY_SAVED);
+			this->view->setActiveDefEntryOption(Gc::View::Settings::DefEntryType::SAVED);
 		}
 		else {
-			this->view->setActiveDefEntryOption(View_Settings::DEF_ENTRY_PREDEFINED);
+			this->view->setActiveDefEntryOption(Gc::View::Settings::DefEntryType::PREDEFINED);
 			this->view->setDefEntry(defEntry);
 		}
 
@@ -443,6 +443,6 @@ class SettingsController :
 		this->applicationObject->onSettingModelChange.exec();
 		this->syncActive = false;
 	}
-};
+};}}
 
 #endif

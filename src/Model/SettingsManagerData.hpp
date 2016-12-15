@@ -19,32 +19,36 @@
 #ifndef SETTING_MANAGER_DATASTORE_INCLUDED
 #define SETTING_MANAGER_DATASTORE_INCLUDED
 #include <sys/stat.h> //mkdir
-#include "../lib/Trait/LoggerAware.hpp"
+#include "../Model/Logger/Trait/LoggerAware.hpp"
 #include <sstream>
-#include "../lib/Helper.hpp"
+#include "../Common/Functions.hpp"
 #include <map>
 #include "Env.hpp"
 #include "SettingsStore.hpp"
 
-class Model_SettingsManagerData :
-	public Model_SettingsStore,
-	public Trait_LoggerAware,
-	public Model_Env_Connection
+namespace Gc { namespace Model { class SettingsManagerData :
+	public Gc::Model::SettingsStore,
+	public Gc::Model::Logger::Trait::LoggerAware,
+	public Gc::Model::EnvConnection
 {
-	bool _reloadRequired;
-public:
-	bool color_helper_required;
-	std::string grubFont, oldFontFile;
-	int grubFontSize;
-	Model_SettingsManagerData() : _reloadRequired(false), color_helper_required(false), grubFontSize(-1)
-	{
-	}
+	private: bool _reloadRequired;
 
-	bool reloadRequired() const {
+	public: bool color_helper_required;
+	public: std::string grubFont, oldFontFile;
+	public: int grubFontSize;
+	public: SettingsManagerData() :
+		_reloadRequired(false),
+		color_helper_required(false),
+		grubFontSize(-1)
+	{}
+
+	public: bool reloadRequired() const
+	{
 		return this->_reloadRequired;
 	}
 
-	static std::map<std::string, std::string> parsePf2(std::string const& fileName) {
+	public: static std::map<std::string, std::string> parsePf2(std::string const& fileName)
+	{
 		std::map<std::string, std::string> result;
 		FILE* file = fopen(fileName.c_str(), "rb");
 		if (file) {
@@ -69,18 +73,19 @@ public:
 		return result;
 	}
 
-	static std::string getFontFileByName(std::string const& name) {
+	public: static std::string getFontFileByName(std::string const& name)
+	{
 		std::string result;
 		std::string translatedName = name;
 		int lastWhitespacePos = translatedName.find_last_of(' ');
 		if (lastWhitespacePos != -1) {
 			translatedName[lastWhitespacePos] = ':';
 		}
-		translatedName = Helper::str_replace(" Bold", ":Bold", translatedName);
-		translatedName = Helper::str_replace(" Italic", ":Italic", translatedName);
-		translatedName = Helper::str_replace(" Medium", ":Medium", translatedName);
-		translatedName = Helper::str_replace(" Oblique", ":Oblique", translatedName);
-		translatedName = Helper::str_replace(" Regular", ":Regular", translatedName);
+		translatedName = Gc::Common::Functions::str_replace(" Bold", ":Bold", translatedName);
+		translatedName = Gc::Common::Functions::str_replace(" Italic", ":Italic", translatedName);
+		translatedName = Gc::Common::Functions::str_replace(" Medium", ":Medium", translatedName);
+		translatedName = Gc::Common::Functions::str_replace(" Oblique", ":Oblique", translatedName);
+		translatedName = Gc::Common::Functions::str_replace(" Regular", ":Regular", translatedName);
 	
 		std::string cmd = "fc-match -f '%{file[0]}' '" + translatedName + "'";
 		FILE* proc = popen(cmd.c_str(), "r");
@@ -92,10 +97,11 @@ public:
 		return result;
 	}
 
-	std::string mkFont(std::string fontFile = "", std::string outputPath = "") {
+	public: std::string mkFont(std::string fontFile = "", std::string outputPath = "")
+	{
 		int fontSize = -1;
 		if (fontFile == "") {
-			fontFile = Model_SettingsManagerData::getFontFileByName(this->grubFont);
+			fontFile = Gc::Model::SettingsManagerData::getFontFileByName(this->grubFont);
 			fontSize = this->grubFontSize;
 		}
 		std::string sizeParam;
@@ -104,13 +110,13 @@ public:
 			stream << fontSize;
 			sizeParam = " --size='" + stream.str() + "'";
 			if (fontSize > 72) {
-				this->log("Error: font too large: " + stream.str() + "!", Logger::ERROR);
+				this->log("Error: font too large: " + stream.str() + "!", Gc::Model::Logger::GenericLogger::ERROR);
 				return ""; // fehler
 			}
 		}
 		outputPath = outputPath != "" ? outputPath : this->env->output_config_dir_noprefix + "/unicode.pf2";
-		std::string cmd = this->env->mkfont_cmd + " --output='" + Helper::str_replace("'", "\\'", outputPath) + "'" + sizeParam + " '" + Helper::str_replace("'", "\\'", fontFile) + "' 2>&1";
-		this->log("running " + cmd, Logger::INFO);
+		std::string cmd = this->env->mkfont_cmd + " --output='" + Gc::Common::Functions::str_replace("'", "\\'", outputPath) + "'" + sizeParam + " '" + Gc::Common::Functions::str_replace("'", "\\'", fontFile) + "' 2>&1";
+		this->log("running " + cmd, Gc::Model::Logger::GenericLogger::INFO);
 		FILE* mkfont_proc = popen(cmd.c_str(), "r");
 		int c;
 	//	std::string row = "";
@@ -123,25 +129,26 @@ public:
 		}
 		int result = pclose(mkfont_proc);
 		if (result != 0) {
-			this->log("error running " + this->env->mkfont_cmd, Logger::ERROR);
+			this->log("error running " + this->env->mkfont_cmd, Gc::Model::Logger::GenericLogger::ERROR);
 			return "";
 		}
 		this->setValue("GRUB_FONT", outputPath);
 		return outputPath;
 	}
 
-	bool load() {
+	public: bool load()
+	{
 		settings.clear();
 	
 		FILE* file = fopen(this->env->settings_file.c_str(), "r");
 		if (file){
-			Model_SettingsStore::load(file);
+			Gc::Model::SettingsStore::load(file);
 			this->grubFontSize = -1;
 			if (this->getValue("GRUB_FONT") != "") {
 				this->oldFontFile = this->getValue("GRUB_FONT");
-				this->log("parsing " + this->getValue("GRUB_FONT"), Logger::INFO);
-				this->grubFont = Model_SettingsManagerData::parsePf2(this->env->cfg_dir_prefix + this->getValue("GRUB_FONT"))["NAME"];
-				this->log("result " + this->grubFont, Logger::INFO);
+				this->log("parsing " + this->getValue("GRUB_FONT"), Gc::Model::Logger::GenericLogger::INFO);
+				this->grubFont = Gc::Model::SettingsManagerData::parsePf2(this->env->cfg_dir_prefix + this->getValue("GRUB_FONT"))["NAME"];
+				this->log("result " + this->grubFont, Gc::Model::Logger::GenericLogger::INFO);
 				this->removeItem("GRUB_FONT");
 			}
 	
@@ -152,7 +159,8 @@ public:
 			return false;
 	}
 
-	bool save() {
+	public: bool save()
+	{
 		const char* background_script = "\
 	#! /bin/sh -e\n\
 	# Name of this script: 'grub_background.sh'\n\
@@ -182,7 +190,7 @@ public:
 			bool background_script_required = false;
 			bool isGraphical = false;
 			this->color_helper_required = false;
-			for (std::list<Model_SettingsStore_Row>::iterator iter = this->begin(false); iter != this->end(); iter++){
+			for (std::list<Gc::Model::SettingsStoreRow>::iterator iter = this->begin(false); iter != this->end(); iter++){
 				if (iter != this->begin(false)) {
 					fputs("\n", outFile);
 				}
@@ -212,10 +220,10 @@ public:
 			if (isGraphical && generatedFont == "") {
 				FILE* fontFile = fopen((this->env->output_config_dir + "/unicode.pf2").c_str(), "r");
 				if (fontFile) {
-					this->log("font file exists", Logger::INFO);
+					this->log("font file exists", Gc::Model::Logger::GenericLogger::INFO);
 					fclose(fontFile);
 				} else {
-					this->log("generating the font file", Logger::EVENT);
+					this->log("generating the font file", Gc::Model::Logger::GenericLogger::EVENT);
 					this->mkFont("/usr/share/fonts/dejavu/DejaVuSansMono.ttf");
 				}
 			}
@@ -228,8 +236,9 @@ public:
 			return false;
 	}
 
-	bool setValue(std::string const& name, std::string const& value) {
-		for (std::list<Model_SettingsStore_Row>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
+	public: bool setValue(std::string const& name, std::string const& value)
+	{
+		for (std::list<Gc::Model::SettingsStoreRow>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
 			if (name == iter->name){
 	
 				if (iter->value != value){ //only set when the new value is really new
@@ -242,7 +251,7 @@ public:
 			}
 		}
 	
-		settings.push_back(Model_SettingsStore_Row());
+		settings.push_back(Gc::Model::SettingsStoreRow());
 		settings.back().name = name;
 		settings.back().value = value;
 		settings.back().validate();
@@ -251,8 +260,9 @@ public:
 		return false;
 	}
 
-	bool setIsActive(std::string const& name, bool value) {
-		for (std::list<Model_SettingsStore_Row>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
+	public: bool setIsActive(std::string const& name, bool value)
+	{
+		for (std::list<Gc::Model::SettingsStoreRow>::iterator iter = this->begin(); iter != this->end(); this->iter_to_next_setting(iter)){
 			if (name == iter->name){
 				if (iter->isActive != value){
 					iter->isActive = value;
@@ -265,15 +275,7 @@ public:
 		return false;
 	}
 
-};
+};}}
 
-class Model_SettingsManagerData_Connection
-{
-	protected: std::shared_ptr<Model_SettingsManagerData> settings;
 
-	public: void setSettingsManager(std::shared_ptr<Model_SettingsManagerData> settings)
-	{
-		this->settings = settings;
-	}
-};
 #endif

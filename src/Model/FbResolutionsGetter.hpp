@@ -22,22 +22,27 @@
 #include <list>
 #include <cstdio>
 #include <functional>
-#include "../lib/Trait/LoggerAware.hpp"
+#include "../Model/Logger/Trait/LoggerAware.hpp"
 
-class Model_FbResolutionsGetter : public Trait_LoggerAware {
-	std::list<std::string> data;
-	bool _isLoading;
-public:
-	Model_FbResolutionsGetter() : _isLoading(false)
+namespace Gc { namespace Model { class FbResolutionsGetter :
+	public Gc::Model::Logger::Trait::LoggerAware
+{
+	private: std::list<std::string> data;
+	private: bool _isLoading;
+
+	public: FbResolutionsGetter() :
+		_isLoading(false)
 	{}
 
-	std::function<void ()> onFinish;
+	public: std::function<void ()> onFinish;
 
-	const std::list<std::string>& getData() const {
+	public: const std::list<std::string>& getData() const
+	{
 		return data;
 	}
 
-	void load() {
+	public: void load()
+	{
 		if (!_isLoading){ //make sure that only one thread is running this function at the same time
 			_isLoading = true;
 			data.clear();
@@ -74,25 +79,6 @@ public:
 		}
 	}
 
-};
-
-class Model_FbResolutionsGetter_Connection
-{
-	protected: std::shared_ptr<Model_FbResolutionsGetter> fbResolutionsGetter;
-
-	public: virtual ~Model_FbResolutionsGetter_Connection() {}
-
-	public: void setFbResolutionsGetter(std::shared_ptr<Model_FbResolutionsGetter> fbResolutionsGetter)
-	{
-		this->fbResolutionsGetter = fbResolutionsGetter;
-
-		this->initFbResolutionsGetterEvents();
-	}
-
-	public: virtual void initFbResolutionsGetterEvents()
-	{
-		// override to initialize specific view events
-	}
-};
+};}}
 
 #endif

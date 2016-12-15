@@ -23,11 +23,11 @@
 #include <locale.h>
 #include <sstream>
 #include "../config.hpp"
-#include "../Model/DeviceMap.hpp"
+#include "../Model/Device/DeviceMap.hpp"
 
 #include "../Model/Env.hpp"
 
-#include "../Model/MountTable.hpp"
+#include "../Model/Device/MountTable.hpp"
 
 #include "../View/EnvEditor.hpp"
 #include "../View/Trait/ViewAware.hpp"
@@ -35,13 +35,13 @@
 #include "Common/ControllerAbstract.hpp"
 
 
-class EnvEditorController :
-	public Controller_Common_ControllerAbstract,
-	public View_Trait_ViewAware<View_EnvEditor>,
-	public Model_Env_Connection,
-	public Bootstrap_Application_Object_Connection,
-	public Model_MountTable_Connection,
-	public Model_DeviceMap_Connection
+namespace Gc { namespace Controller { class EnvEditorController :
+	public Gc::Controller::Common::ControllerAbstract,
+	public Gc::View::Trait::ViewAware<Gc::View::EnvEditor>,
+	public Gc::Model::EnvConnection,
+	public Gc::Bootstrap::ApplicationHelper::ObjectConnection,
+	public Gc::Model::Device::MountTableConnection,
+	public Gc::Model::Device::DeviceMapConnection
 {
 	public: void showAction(bool resetPartitionChooser = false) {
 		this->logActionBegin("show");
@@ -57,7 +57,7 @@ class EnvEditorController :
 
 
 	public: EnvEditorController() :
-		Controller_Common_ControllerAbstract("env-editor")
+		Gc::Controller::Common::ControllerAbstract("env-editor")
 	{
 	}
 
@@ -90,7 +90,7 @@ class EnvEditorController :
 			try {
 				this->mountTable->getEntryRefByMountpoint(PARTCHOOSER_MOUNTPOINT + submountpoint).mount();
 			} catch (MountException const& e){
-				this->view->showErrorMessage(View_EnvEditor::SUB_MOUNT_FAILED);
+				this->view->showErrorMessage(Gc::View::EnvEditor::MountExceptionType::SUB_MOUNT_FAILED);
 				this->view->setSubmountpointSelectionState(submountpoint, false);
 				this->view->show();
 			} catch (SystemException const& e){
@@ -110,7 +110,7 @@ class EnvEditorController :
 			try {
 				this->mountTable->getEntryRefByMountpoint(PARTCHOOSER_MOUNTPOINT + submountpoint).umount();
 			} catch (UMountException const& e){
-				this->view->showErrorMessage(View_EnvEditor::SUB_UMOUNT_FAILED);
+				this->view->showErrorMessage(Gc::View::EnvEditor::MountExceptionType::SUB_UMOUNT_FAILED);
 				this->view->setSubmountpointSelectionState(submountpoint, true);
 				this->view->show();
 			} catch (SystemException const& e){
@@ -156,21 +156,21 @@ class EnvEditorController :
 				try {
 					mountTable->clear(PARTCHOOSER_MOUNTPOINT);
 					mountTable->mountRootFs(selectedDevice, PARTCHOOSER_MOUNTPOINT);
-					this->env->init(env->burgMode ? Model_Env::BURG_MODE : Model_Env::GRUB_MODE, PARTCHOOSER_MOUNTPOINT);
+					this->env->init(env->burgMode ? Gc::Model::Env::Mode::BURG : Gc::Model::Env::Mode::GRUB, PARTCHOOSER_MOUNTPOINT);
 					this->generateSubmountpointSelection(PARTCHOOSER_MOUNTPOINT);
 					this->showAction();
 				}
 				catch (MountException const& e) {
-					this->view->showErrorMessage(View_EnvEditor::MOUNT_FAILED);
+					this->view->showErrorMessage(Gc::View::EnvEditor::MountExceptionType::MOUNT_FAILED);
 					this->switchPartitionAction("");
 				}
 				catch (MissingFstabException const& e) {
-					this->view->showErrorMessage(View_EnvEditor::MOUNT_ERR_NO_FSTAB);
+					this->view->showErrorMessage(Gc::View::EnvEditor::MountExceptionType::MOUNT_ERR_NO_FSTAB);
 					mountTable->getEntryRefByMountpoint(PARTCHOOSER_MOUNTPOINT).umount();
 					this->switchPartitionAction("");
 				}
 			} else {
-				this->env->init(env->burgMode ? Model_Env::BURG_MODE : Model_Env::GRUB_MODE, selectedDevice);
+				this->env->init(env->burgMode ? Gc::Model::Env::Mode::BURG : Gc::Model::Env::Mode::GRUB, selectedDevice);
 				this->showAction(true);
 			}
 		} catch (Exception const& e) {
@@ -183,7 +183,7 @@ class EnvEditorController :
 	{
 		this->logActionBegin("switch-bootloader-type");
 		try {
-			this->env->init(newTypeIndex == 0 ? Model_Env::GRUB_MODE : Model_Env::BURG_MODE, this->env->cfg_dir_prefix);
+			this->env->init(newTypeIndex == 0 ? Gc::Model::Env::Mode::GRUB : Gc::Model::Env::Mode::BURG, this->env->cfg_dir_prefix);
 			this->showAction();
 		} catch (Exception const& e) {
 			this->applicationObject->onError.exec(e);
@@ -233,6 +233,6 @@ class EnvEditorController :
 		this->logActionEnd();
 	}
 
-};
+};}}
 
 #endif

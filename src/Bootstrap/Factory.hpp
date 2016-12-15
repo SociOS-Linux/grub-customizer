@@ -21,42 +21,53 @@
 
 #include "../View/Trait/ViewAware.hpp"
 #include "../Model/Env.hpp"
-#include "../Model/ListCfg.hpp"
-#include "../Model/MountTable.hpp"
+#include "../Model/ListCfg/ListCfg.hpp"
+#include "../Model/Device/MountTable.hpp"
+#include "../Model/Device/MountTableConnection.hpp"
 #include "../Model/SettingsManagerData.hpp"
+#include "../Model/SettingsManagerDataConnection.hpp"
 #include "../Model/Installer.hpp"
+#include "../Model/InstallerConnection.hpp"
 #include "../Model/FbResolutionsGetter.hpp"
-#include "../Model/DeviceDataList.hpp"
-#include "../lib/ContentParser/FactoryImpl.hpp"
-#include "../Mapper/EntryNameImpl.hpp"
+#include "../Model/FbResolutionsGetterConnection.hpp"
+#include "../Model/Device/DeviceDataListConnection.hpp"
+#include "../Model/Device/DeviceDataListInterfaceConnection.hpp"
+#include "../Model/ContentParser/FactoryImpl.hpp"
+#include "../Model/ContentParser/GenericFactoryConnection.hpp"
+#include "../View/Mapper/EntryNameImpl.hpp"
+#include "../View/Mapper/EntryNameConnection.hpp"
 #include "../Model/ThemeManager.hpp"
-#include "../Model/DeviceMap.hpp"
+#include "../Model/ThemeManagerConnection.hpp"
+#include "../Model/Device/DeviceMap.hpp"
+#include "../Model/Device/DeviceMapConnection.hpp"
 #include "../Controller/Helper/Thread.hpp"
-#include "../Controller/Helper/RuleMover.hpp"
+#include "../Controller/Helper/ThreadConnection.hpp"
+#include "../Controller/Helper/RuleMoverConnection.hpp"
 #include "Application.hpp"
+#include "ApplicationHelper/ObjectConnection.hpp"
 
-class Bootstrap_Factory
+namespace Gc { namespace Bootstrap { class Factory
 {
-	public: std::shared_ptr<Model_Env> env;
-	public: std::shared_ptr<Model_ListCfg> listcfg;
-	public: std::shared_ptr<Model_SettingsManagerData> settings;
-	public: std::shared_ptr<Model_Installer> installer;
-	public: std::shared_ptr<Model_MountTable> mountTable;
-	public: std::shared_ptr<Model_FbResolutionsGetter> fbResolutionsGetter;
-	public: std::shared_ptr<Model_DeviceDataList> deviceDataList;
-	public: std::shared_ptr<ContentParser_FactoryImpl> contentParserFactory;
-	public: std::shared_ptr<Mapper_EntryNameImpl> entryNameMapper;
-	public: std::shared_ptr<Model_ThemeManager> themeManager;
-	public: std::shared_ptr<Model_DeviceMap> deviceMap;
-	public: std::shared_ptr<Controller_Helper_RuleMover> ruleMover;
-	public: std::shared_ptr<Logger> logger;
+	public: std::shared_ptr<Gc::Model::Env> env;
+	public: std::shared_ptr<Gc::Model::ListCfg::ListCfg> listcfg;
+	public: std::shared_ptr<Gc::Model::SettingsManagerData> settings;
+	public: std::shared_ptr<Gc::Model::Installer> installer;
+	public: std::shared_ptr<Gc::Model::Device::MountTable> mountTable;
+	public: std::shared_ptr<Gc::Model::FbResolutionsGetter> fbResolutionsGetter;
+	public: std::shared_ptr<Gc::Model::Device::DeviceDataList> deviceDataList;
+	public: std::shared_ptr<Gc::Model::ContentParser::FactoryImpl> contentParserFactory;
+	public: std::shared_ptr<Gc::View::Mapper::EntryNameImpl> entryNameMapper;
+	public: std::shared_ptr<Gc::Model::ThemeManager> themeManager;
+	public: std::shared_ptr<Gc::Model::Device::DeviceMap> deviceMap;
+	public: std::shared_ptr<Gc::Controller::Helper::RuleMoverHelper> ruleMover;
+	public: std::shared_ptr<Gc::Model::Logger::GenericLogger> logger;
 
-	public: std::shared_ptr<Regex> regexEngine;
-	public: std::shared_ptr<Controller_Helper_Thread> threadHelper;
+	public: std::shared_ptr<Gc::Common::Regex::Generic> regexEngine;
+	public: std::shared_ptr<Gc::Controller::Helper::Thread> threadHelper;
 
-	public: std::shared_ptr<Bootstrap_Application_Object> applicationObject;
+	public: std::shared_ptr<Gc::Bootstrap::ApplicationHelper::Object> applicationObject;
 
-	public: Bootstrap_Factory(std::shared_ptr<Bootstrap_Application_Object> applicationObject, std::shared_ptr<Logger> logger)
+	public: Factory(std::shared_ptr<Gc::Bootstrap::ApplicationHelper::Object> applicationObject, std::shared_ptr<Gc::Model::Logger::GenericLogger> logger)
 	{
 		this->applicationObject    = applicationObject;
 		this->logger               = logger;
@@ -64,18 +75,18 @@ class Bootstrap_Factory
 		this->regexEngine          = this->createRegexExgine();
 		this->threadHelper         = this->createThreadHelper();
 
-		this->env                  = this->create<Model_Env>();
-		this->listcfg              = this->create<Model_ListCfg>();
-		this->settings             = this->create<Model_SettingsManagerData>();
-		this->installer            = this->create<Model_Installer>();
-		this->mountTable           = this->create<Model_MountTable>();
-		this->fbResolutionsGetter  = this->create<Model_FbResolutionsGetter>();
-		this->deviceDataList       = this->create<Model_DeviceDataList>();
-		this->contentParserFactory = this->create<ContentParser_FactoryImpl>();
-		this->entryNameMapper      = this->create<Mapper_EntryNameImpl>();
-		this->themeManager         = this->create<Model_ThemeManager>();
-		this->deviceMap            = this->create<Model_DeviceMap>();
-		this->ruleMover            = this->create<Controller_Helper_RuleMover>();
+		this->env                  = this->create<Gc::Model::Env>();
+		this->listcfg              = this->create<Gc::Model::ListCfg::ListCfg>();
+		this->settings             = this->create<Gc::Model::SettingsManagerData>();
+		this->installer            = this->create<Gc::Model::Installer>();
+		this->mountTable           = this->create<Gc::Model::Device::MountTable>();
+		this->fbResolutionsGetter  = this->create<Gc::Model::FbResolutionsGetter>();
+		this->deviceDataList       = this->create<Gc::Model::Device::DeviceDataList>();
+		this->contentParserFactory = this->create<Gc::Model::ContentParser::FactoryImpl>();
+		this->entryNameMapper      = this->create<Gc::View::Mapper::EntryNameImpl>();
+		this->themeManager         = this->create<Gc::Model::ThemeManager>();
+		this->deviceMap            = this->create<Gc::Model::Device::DeviceMap>();
+		this->ruleMover            = this->create<Gc::Controller::Helper::RuleMoverHelper>();
 
 		this->bootstrap(this->regexEngine);
 		this->bootstrap(this->threadHelper);
@@ -104,79 +115,79 @@ class Bootstrap_Factory
 	public: template <typename T> void bootstrap(std::shared_ptr<T> obj)
 	{
 		{
-			std::shared_ptr<Model_Env_Connection> objc = std::dynamic_pointer_cast<Model_Env_Connection>(obj);
+			std::shared_ptr<Gc::Model::EnvConnection> objc = std::dynamic_pointer_cast<Gc::Model::EnvConnection>(obj);
 			if (objc) {assert(this->env); objc->setEnv(this->env);}
 		}
 		{
-			std::shared_ptr<Model_ListCfg_Connection> objc = std::dynamic_pointer_cast<Model_ListCfg_Connection>(obj);
+			std::shared_ptr<Gc::Model::ListCfg::ListCfgConnection> objc = std::dynamic_pointer_cast<Gc::Model::ListCfg::ListCfgConnection>(obj);
 			if (objc) {assert(this->listcfg); objc->setListCfg(this->listcfg);}
 		}
 		{
-			std::shared_ptr<Model_SettingsManagerData_Connection> objc = std::dynamic_pointer_cast<Model_SettingsManagerData_Connection>(obj);
+			std::shared_ptr<Gc::Model::SettingsManagerDataConnection> objc = std::dynamic_pointer_cast<Gc::Model::SettingsManagerDataConnection>(obj);
 			if (objc) {assert(this->settings); objc->setSettingsManager(this->settings);}
 		}
 		{
-			std::shared_ptr<Model_Installer_Connection> objc = std::dynamic_pointer_cast<Model_Installer_Connection>(obj);
+			std::shared_ptr<Gc::Model::InstallerConnection> objc = std::dynamic_pointer_cast<Gc::Model::InstallerConnection>(obj);
 			if (objc) {assert(this->installer); objc->setInstaller(this->installer);}
 		}
 		{
-			std::shared_ptr<Model_MountTable_Connection> objc = std::dynamic_pointer_cast<Model_MountTable_Connection>(obj);
+			std::shared_ptr<Gc::Model::Device::MountTableConnection> objc = std::dynamic_pointer_cast<Gc::Model::Device::MountTableConnection>(obj);
 			if (objc) {assert(this->mountTable); objc->setMountTable(this->mountTable);}
 		}
 		{
-			std::shared_ptr<Model_FbResolutionsGetter_Connection> objc = std::dynamic_pointer_cast<Model_FbResolutionsGetter_Connection>(obj);
+			std::shared_ptr<Gc::Model::FbResolutionsGetterConnection> objc = std::dynamic_pointer_cast<Gc::Model::FbResolutionsGetterConnection>(obj);
 			if (objc) {assert(this->fbResolutionsGetter); objc->setFbResolutionsGetter(this->fbResolutionsGetter);}
 		}
 		{
-			std::shared_ptr<Model_DeviceDataList_Connection> objc = std::dynamic_pointer_cast<Model_DeviceDataList_Connection>(obj);
+			std::shared_ptr<Gc::Model::Device::DeviceDataListConnection> objc = std::dynamic_pointer_cast<Gc::Model::Device::DeviceDataListConnection>(obj);
 			if (objc) {assert(this->deviceDataList); objc->setDeviceDataList(this->deviceDataList);}
 		}
 		{
-			std::shared_ptr<Model_DeviceDataListInterface_Connection> objc = std::dynamic_pointer_cast<Model_DeviceDataListInterface_Connection>(obj);
+			std::shared_ptr<Gc::Model::Device::DeviceDataListInterfaceConnection> objc = std::dynamic_pointer_cast<Gc::Model::Device::DeviceDataListInterfaceConnection>(obj);
 			if (objc) {assert(this->deviceDataList); objc->setDeviceDataList(this->deviceDataList);}
 		}
 		{
-			std::shared_ptr<ContentParserFactory_Connection> objc = std::dynamic_pointer_cast<ContentParserFactory_Connection>(obj);
+			std::shared_ptr<Gc::Model::ContentParser::GenericFactoryConnection> objc = std::dynamic_pointer_cast<Gc::Model::ContentParser::GenericFactoryConnection>(obj);
 			if (objc) {assert(this->contentParserFactory); objc->setContentParserFactory(this->contentParserFactory);}
 		}
 		{
-			std::shared_ptr<Mapper_EntryName_Connection> objc = std::dynamic_pointer_cast<Mapper_EntryName_Connection>(obj);
+			std::shared_ptr<Gc::View::Mapper::EntryNameConnection> objc = std::dynamic_pointer_cast<Gc::View::Mapper::EntryNameConnection>(obj);
 			if (objc) {assert(this->entryNameMapper); objc->setEntryNameMapper(this->entryNameMapper);}
 		}
 		{
-			std::shared_ptr<Model_ThemeManager_Connection> objc = std::dynamic_pointer_cast<Model_ThemeManager_Connection>(obj);
+			std::shared_ptr<Gc::Model::ThemeManagerConnection> objc = std::dynamic_pointer_cast<Gc::Model::ThemeManagerConnection>(obj);
 			if (objc) {assert(this->themeManager); objc->setThemeManager(this->themeManager);}
 		}
 		{
-			std::shared_ptr<Model_DeviceMap_Connection> objc = std::dynamic_pointer_cast<Model_DeviceMap_Connection>(obj);
+			std::shared_ptr<Gc::Model::Device::DeviceMapConnection> objc = std::dynamic_pointer_cast<Gc::Model::Device::DeviceMapConnection>(obj);
 			if (objc) {assert(this->deviceMap); objc->setDeviceMap(this->deviceMap);}
 		}
 		{
-			std::shared_ptr<Trait_LoggerAware> objc = std::dynamic_pointer_cast<Trait_LoggerAware>(obj);
+			std::shared_ptr<Gc::Model::Logger::Trait::LoggerAware> objc = std::dynamic_pointer_cast<Gc::Model::Logger::Trait::LoggerAware>(obj);
 			if (objc) {assert(this->logger); objc->setLogger(this->logger);}
 		}
 		{
-			std::shared_ptr<Regex_RegexConnection> objc = std::dynamic_pointer_cast<Regex_RegexConnection>(obj);
+			std::shared_ptr<Gc::Common::Regex::GenericConnection> objc = std::dynamic_pointer_cast<Gc::Common::Regex::GenericConnection>(obj);
 			if (objc) {assert(this->regexEngine); objc->setRegexEngine(this->regexEngine);}
 		}
 		{
-			std::shared_ptr<Mutex_Connection> objc = std::dynamic_pointer_cast<Mutex_Connection>(obj);
+			std::shared_ptr<Gc::Common::Mutex::GenericConnection> objc = std::dynamic_pointer_cast<Gc::Common::Mutex::GenericConnection>(obj);
 			if (objc) {objc->setMutex(this->createMutex());}
 		}
 		{
-			std::shared_ptr<Controller_Helper_Thread_Connection> objc = std::dynamic_pointer_cast<Controller_Helper_Thread_Connection>(obj);
+			std::shared_ptr<Gc::Controller::Helper::ThreadConnection> objc = std::dynamic_pointer_cast<Gc::Controller::Helper::ThreadConnection>(obj);
 			if (objc) {assert(this->threadHelper); objc->setThreadHelper(this->threadHelper);}
 		}
 		{
-			std::shared_ptr<Controller_Helper_RuleMover_Connection> objc = std::dynamic_pointer_cast<Controller_Helper_RuleMover_Connection>(obj);
+			std::shared_ptr<Gc::Controller::Helper::RuleMoverConnection> objc = std::dynamic_pointer_cast<Gc::Controller::Helper::RuleMoverConnection>(obj);
 			if (objc) {assert(this->ruleMover); objc->setRuleMover(this->ruleMover);}
 		}
 	}
 
 	// external implementations
-	private: std::shared_ptr<Regex> createRegexExgine();
-	private: std::shared_ptr<Mutex> createMutex();
-	private: std::shared_ptr<Controller_Helper_Thread> createThreadHelper();
-};
+	private: std::shared_ptr<Gc::Common::Regex::Generic> createRegexExgine();
+	private: std::shared_ptr<Gc::Common::Mutex::Generic> createMutex();
+	private: std::shared_ptr<Gc::Controller::Helper::Thread> createThreadHelper();
+};}}
 
 #endif /* SRC_BOOTSTRAP_FACTORY_HPP_ */

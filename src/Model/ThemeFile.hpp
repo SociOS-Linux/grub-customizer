@@ -20,21 +20,26 @@
 #define THEMEFILE_H_
 #include <string>
 
-struct Model_ThemeFile {
-	Model_ThemeFile(std::string localFileName, bool isAddedByUser = false) : localFileName(localFileName), contentLoaded(false), newLocalFileName(localFileName), isAddedByUser(isAddedByUser)
-	{
-	}
+namespace Gc { namespace Model { class ThemeFile
+{
+	public: std::string localFileName, newLocalFileName; // path inside of the theme directory
+	public: bool contentLoaded; // say whether the content is loaded (text only)
+	public: std::string content; // loaded content (text only)
+	public: bool isAddedByUser;
+	public: std::string externalSource;
 
-	static bool compareLocalPath(Model_ThemeFile const& a, Model_ThemeFile const& b) {
+	public: ThemeFile(std::string localFileName, bool isAddedByUser = false) :
+		localFileName(localFileName),
+		contentLoaded(false),
+		newLocalFileName(localFileName),
+		isAddedByUser(isAddedByUser)
+	{}
+
+	public: static bool compareLocalPath(Gc::Model::ThemeFile const& a, Gc::Model::ThemeFile const& b)
+	{
 		return a.newLocalFileName < b.newLocalFileName;
 	}
-
-	std::string localFileName, newLocalFileName; // path inside of the theme directory
-	bool contentLoaded; // say whether the content is loaded (text only)
-	std::string content; // loaded content (text only)
-	bool isAddedByUser;
-	std::string externalSource;
-};
+};}}
 
 
 #endif /* THEMEFILE_H_ */
