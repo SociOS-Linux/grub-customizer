@@ -48,7 +48,7 @@ namespace Gc { namespace Model { namespace ContentParser { class AbstractParser 
 	public:	std::string getOption(std::string const& name) const
 	{
 		if (!this->hasOption(name)) {
-			throw Gc::Common::ItemNotFoundException("option '" + name + "' not found", __FILE__, __LINE__);
+			throw Gc::Common::Exception::ItemNotFoundException("option '" + name + "' not found", __FILE__, __LINE__);
 		}
 
 		return this->options.at(name);

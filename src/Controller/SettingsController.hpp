@@ -130,7 +130,7 @@ namespace Gc { namespace Controller { class SettingsController :
 			this->view->addEntryToDefaultEntryChooser("", "");
 	
 			this->syncSettings();
-		} catch (Gc::Common::Exception const& e) {
+		} catch (Gc::Common::Exception::GenericException const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -141,7 +141,7 @@ namespace Gc { namespace Controller { class SettingsController :
 		this->logActionBegin("load-resolutions");
 		try {
 			this->fbResolutionsGetter->load();
-		} catch (Gc::Common::Exception const& e) {
+		} catch (Gc::Common::Exception::GenericException const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -157,7 +157,7 @@ namespace Gc { namespace Controller { class SettingsController :
 			for (std::list<std::string>::const_iterator iter = data.begin(); iter != data.end(); iter++) {
 				this->view->addResolution(*iter);
 			}
-		} catch (Gc::Common::Exception const& e) {
+		} catch (Gc::Common::Exception::GenericException const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -168,7 +168,7 @@ namespace Gc { namespace Controller { class SettingsController :
 		this->logActionBeginThreaded("update-resolutionlist-threaded");
 		try {
 			this->threadHelper->runDispatched(std::bind(std::mem_fn(&SettingsController::updateResolutionlistAction), this));
-		} catch (Gc::Common::Exception const& e) {
+		} catch (Gc::Common::Exception::GenericException const& e) {
 			this->applicationObject->onThreadError.exec(e);
 		}
 		this->logActionEndThreaded();
@@ -189,7 +189,7 @@ namespace Gc { namespace Controller { class SettingsController :
 			}
 			this->syncSettings();
 			this->env->modificationsUnsaved = true;
-		} catch (Gc::Common::Exception const& e) {
+		} catch (Gc::Common::Exception::GenericException const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -205,7 +205,7 @@ namespace Gc { namespace Controller { class SettingsController :
 			this->settings->setIsActive(c.name, c.isActive);
 			this->syncSettings();
 			this->env->modificationsUnsaved = true;
-		} catch (Gc::Common::Exception const& e) {
+		} catch (Gc::Common::Exception::GenericException const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -217,7 +217,7 @@ namespace Gc { namespace Controller { class SettingsController :
 		try {
 			std::string newSettingName = this->settings->addNewItem();
 			this->syncSettings();
-		} catch (Gc::Common::Exception const& e) {
+		} catch (Gc::Common::Exception::GenericException const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -230,7 +230,7 @@ namespace Gc { namespace Controller { class SettingsController :
 			this->settings->removeItem(name);
 			this->syncSettings();
 			this->env->modificationsUnsaved = true;
-		} catch (Gc::Common::Exception const& e) {
+		} catch (Gc::Common::Exception::GenericException const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -250,7 +250,7 @@ namespace Gc { namespace Controller { class SettingsController :
 			}
 			this->syncSettings();
 			this->env->modificationsUnsaved = true;
-		} catch (Gc::Common::Exception const& e) {
+		} catch (Gc::Common::Exception::GenericException const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -264,7 +264,7 @@ namespace Gc { namespace Controller { class SettingsController :
 			this->settings->setIsActive("GRUB_DISABLE_OS_PROBER", !this->view->getOsProberCheckboxState());
 			this->syncSettings();
 			this->env->modificationsUnsaved = true;
-		} catch (Gc::Common::Exception const& e) {
+		} catch (Gc::Common::Exception::GenericException const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -287,7 +287,7 @@ namespace Gc { namespace Controller { class SettingsController :
 			}
 			this->syncSettings();
 			this->env->modificationsUnsaved = true;
-		} catch (Gc::Common::Exception const& e) {
+		} catch (Gc::Common::Exception::GenericException const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -300,7 +300,7 @@ namespace Gc { namespace Controller { class SettingsController :
 			this->settings->setValue("GRUB_CMDLINE_LINUX_DEFAULT", this->view->getKernelParams());
 			this->syncSettings();
 			this->env->modificationsUnsaved = true;
-		} catch (Gc::Common::Exception const& e) {
+		} catch (Gc::Common::Exception::GenericException const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -324,7 +324,7 @@ namespace Gc { namespace Controller { class SettingsController :
 	
 			this->syncSettings();
 			this->env->modificationsUnsaved = true;
-		} catch (Gc::Common::Exception const& e) {
+		} catch (Gc::Common::Exception::GenericException const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -337,7 +337,7 @@ namespace Gc { namespace Controller { class SettingsController :
 			this->settings->setValue("GRUB_GFXMODE", this->view->getResolution());
 			this->syncSettings();
 			this->env->modificationsUnsaved = true;
-		} catch (Gc::Common::Exception const& e) {
+		} catch (Gc::Common::Exception::GenericException const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -353,7 +353,7 @@ namespace Gc { namespace Controller { class SettingsController :
 			this->settings->setIsActive("GRUB_GFXMODE", this->view->getResolutionCheckboxState());
 			this->syncSettings();
 			this->env->modificationsUnsaved = true;
-		} catch (Gc::Common::Exception const& e) {
+		} catch (Gc::Common::Exception::GenericException const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -364,7 +364,7 @@ namespace Gc { namespace Controller { class SettingsController :
 		this->logActionBegin("hide");
 		try {
 			this->view->hide();
-		} catch (Gc::Common::Exception const& e) {
+		} catch (Gc::Common::Exception::GenericException const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -375,7 +375,7 @@ namespace Gc { namespace Controller { class SettingsController :
 		this->logActionBegin("show");
 		try {
 			this->view->show();
-		} catch (Gc::Common::Exception const& e) {
+		} catch (Gc::Common::Exception::GenericException const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -386,7 +386,7 @@ namespace Gc { namespace Controller { class SettingsController :
 		this->logActionBegin("sync");
 		try {
 			this->syncSettings();
-		} catch (Gc::Common::Exception const& e) {
+		} catch (Gc::Common::Exception::GenericException const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();

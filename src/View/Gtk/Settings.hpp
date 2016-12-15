@@ -384,7 +384,7 @@ class Settings :
 					treeRow[asTreeModel.active]
 				 );
 		}
-		throw Gc::Common::ItemNotFoundException("requested custom option not found", __FILE__, __LINE__);
+		throw Gc::Common::Exception::ItemNotFoundException("requested custom option not found", __FILE__, __LINE__);
 	}
 
 	public: void setActiveDefEntryOption(DefEntryType option)
@@ -418,7 +418,7 @@ class Settings :
 		bool isOtherEntry = defEntry == "";
 		try {
 			pos = this->getDefEntryPosition(defEntry);
-		} catch (Gc::Common::ItemNotFoundException const& e) {
+		} catch (Gc::Common::Exception::ItemNotFoundException const& e) {
 			pos = this->getDefEntryPosition(""); // choose option "other"
 			isOtherEntry = true;
 		}
@@ -563,7 +563,7 @@ class Settings :
 			}
 		}
 
-		throw Gc::Common::ItemNotFoundException("default entry selection: unable to find position by name '" + name + "'", __FILE__, __LINE__);
+		throw Gc::Common::Exception::ItemNotFoundException("default entry selection: unable to find position by name '" + name + "'", __FILE__, __LINE__);
 	}
 
 

@@ -117,7 +117,7 @@ class List :
 		if (listItem.parentEntry) {
 			try {
 				entryRow = this->refTreeStore->append(this->getIterByRulePtr(listItem.parentEntry)->children());
-			} catch (Gc::Common::ItemNotFoundException const& e) {
+			} catch (Gc::Common::Exception::ItemNotFoundException const& e) {
 				return; // this usually happens when there's a visible entry below a hidden submenu. Just don't show it in this case.
 			}
 		} else if (listItem.parentScript && options.at(Gc::Common::Type::ViewOption::GROUP_BY_SCRIPT)) {
@@ -201,11 +201,11 @@ class List :
 				return iter;
 			try {
 				return this->getIterByRulePtr(rulePtr, &**iter); //recursively search for the treeview item
-			} catch (Gc::Common::ItemNotFoundException const& e) {
+			} catch (Gc::Common::Exception::ItemNotFoundException const& e) {
 				//(ignore ItemNotFoundException exception)
 			}
 		}
-		throw Gc::Common::ItemNotFoundException("rule not found", __FILE__, __LINE__);
+		throw Gc::Common::Exception::ItemNotFoundException("rule not found", __FILE__, __LINE__);
 	}
 
 	public:	Gtk::TreeModel::iterator getIterByScriptPtr(TWrapper* scriptPtr) const
@@ -216,7 +216,7 @@ class List :
 				return iter;
 			}
 		}
-		throw Gc::Common::ItemNotFoundException("script not found", __FILE__, __LINE__);
+		throw Gc::Common::Exception::ItemNotFoundException("script not found", __FILE__, __LINE__);
 	}
 
 	public:	void setRuleName(TItem* rule, std::string const& newName)
@@ -233,7 +233,7 @@ class List :
 			if (startEdit) {
 				this->set_cursor(this->refTreeStore->get_path(this->getIterByRulePtr(rule)), *this->get_column(0), true);
 			}
-		} catch (Gc::Common::ItemNotFoundException const& e) {
+		} catch (Gc::Common::Exception::ItemNotFoundException const& e) {
 			// do nothing
 		}
 	}
@@ -244,7 +244,7 @@ class List :
 		for (typename std::list<TItem*>::iterator iter = rules.begin(); iter != rules.end(); iter++) {
 			try {
 				this->get_selection()->select(this->getIterByRulePtr(*iter));
-			} catch (Gc::Common::ItemNotFoundException const& e) {
+			} catch (Gc::Common::Exception::ItemNotFoundException const& e) {
 				// be fault-tolerant
 			}
 		}

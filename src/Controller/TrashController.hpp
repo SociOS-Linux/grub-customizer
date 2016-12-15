@@ -84,7 +84,7 @@ namespace Gc { namespace Controller { class TrashController :
 		try {
 			this->view->setOptions(this->applicationObject->viewOptions);
 			this->refresh();
-		} catch (Gc::Common::Exception const& e) {
+		} catch (Gc::Common::Exception::GenericException const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -96,7 +96,7 @@ namespace Gc { namespace Controller { class TrashController :
 		try {
 			std::list<Gc::Common::Type::Rule*> rulePtrs = view->getSelectedEntries();
 			this->applicationObject->onEntryInsertionRequest.exec(rulePtrs);
-		} catch (Gc::Common::Exception const& e) {
+		} catch (Gc::Common::Exception::GenericException const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -107,7 +107,7 @@ namespace Gc { namespace Controller { class TrashController :
 		this->logActionBegin("hide");
 		try {
 			this->view->hide();
-		} catch (Gc::Common::Exception const& e) {
+		} catch (Gc::Common::Exception::GenericException const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -124,7 +124,7 @@ namespace Gc { namespace Controller { class TrashController :
 			}
 			this->refresh();
 			this->updateSelectionAction(std::list<Gc::Common::Type::Rule*>());
-		} catch (Gc::Common::Exception const& e) {
+		} catch (Gc::Common::Exception::GenericException const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -144,7 +144,7 @@ namespace Gc { namespace Controller { class TrashController :
 				}
 			}
 			this->view->selectEntries(rules);
-		} catch (Gc::Common::Exception const& e) {
+		} catch (Gc::Common::Exception::GenericException const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -162,7 +162,7 @@ namespace Gc { namespace Controller { class TrashController :
 				this->view->setRestoreButtonSensitivity(false);
 				this->view->setDeleteButtonVisibility(false);
 			}
-		} catch (Gc::Common::Exception const& e) {
+		} catch (Gc::Common::Exception::GenericException const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -248,12 +248,12 @@ namespace Gc { namespace Controller { class TrashController :
 			if (rule->subRules.size()) {
 				try {
 					return this->findRule(rulePtr, rule);
-				} catch (Gc::Common::ItemNotFoundException const& e) {
+				} catch (Gc::Common::Exception::ItemNotFoundException const& e) {
 					// continue
 				}
 			}
 		}
-		throw Gc::Common::ItemNotFoundException("rule not found in trash data", __FILE__, __LINE__);
+		throw Gc::Common::Exception::ItemNotFoundException("rule not found in trash data", __FILE__, __LINE__);
 	}
 };}}
 

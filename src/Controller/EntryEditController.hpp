@@ -99,7 +99,7 @@ namespace Gc { namespace Controller { class EntryEditController :
 			this->view->setTypeIsValid(true);
 			this->view->setApplyEnabled(true);
 			this->view->show();
-		} catch (Gc::Common::Exception const& e) {
+		} catch (Gc::Common::Exception::GenericException const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -120,7 +120,7 @@ namespace Gc { namespace Controller { class EntryEditController :
 			this->view->setApplyEnabled(false);
 			this->validateNameAction();
 			this->view->show();
-		} catch (Gc::Common::Exception const& e) {
+		} catch (Gc::Common::Exception::GenericException const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -134,7 +134,7 @@ namespace Gc { namespace Controller { class EntryEditController :
 				this->syncEntryEditDlg(false);
 			}
 			this->_validate();
-		} catch (Gc::Common::Exception const& e) {
+		} catch (Gc::Common::Exception::GenericException const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -146,7 +146,7 @@ namespace Gc { namespace Controller { class EntryEditController :
 		try {
 			this->syncEntryEditDlg(true);
 			this->_validate();
-		} catch (Gc::Common::Exception const& e) {
+		} catch (Gc::Common::Exception::GenericException const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -165,7 +165,7 @@ namespace Gc { namespace Controller { class EntryEditController :
 			this->view->selectType(this->contentParserFactory->getNameByInstance(*this->currentContentParser));
 
 			this->_validate();
-		} catch (Gc::Common::ParserNotFoundException const& e) {
+		} catch (Gc::Common::Exception::ParserNotFoundException const& e) {
 			this->view->selectType("");
 			this->view->setOptions(std::map<std::string, std::string>());
 		}
@@ -181,7 +181,7 @@ namespace Gc { namespace Controller { class EntryEditController :
 				try {
 					this->view->setSourcecode(this->currentContentParser->buildSource());
 					this->view->setApplyEnabled(true);
-				} catch (Gc::Common::ParserException const& e) {
+				} catch (Gc::Common::Exception::ParserException const& e) {
 					this->view->showSourceBuildError();
 					this->view->setApplyEnabled(false);
 				}
@@ -205,7 +205,7 @@ namespace Gc { namespace Controller { class EntryEditController :
 			this->view->setNameFieldVisibility(newType != "[TEXT]");
 			this->view->setTypeIsValid(true);
 			this->_validate();
-		} catch (Gc::Common::Exception const& e) {
+		} catch (Gc::Common::Exception::GenericException const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -296,7 +296,7 @@ namespace Gc { namespace Controller { class EntryEditController :
 			this->applicationObject->onListRuleChange.exec(rule.get(), false);
 	
 			this->currentContentParser = nullptr;
-		} catch (Gc::Common::Exception const& e) {
+		} catch (Gc::Common::Exception::GenericException const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -314,7 +314,7 @@ namespace Gc { namespace Controller { class EntryEditController :
 			this->view->setOptions(options);
 			this->_updateSource(options);
 			this->_validate();
-		} catch (Gc::Common::Exception const& e) {
+		} catch (Gc::Common::Exception::GenericException const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -325,7 +325,7 @@ namespace Gc { namespace Controller { class EntryEditController :
 		this->logActionBegin("validate-name");
 		try {
 			this->view->setNameIsValid(this->view->getName() != "");
-		} catch (Gc::Common::Exception const& e) {
+		} catch (Gc::Common::Exception::GenericException const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -352,7 +352,7 @@ namespace Gc { namespace Controller { class EntryEditController :
 		try {
 			this->view->setSourcecode(this->currentContentParser->buildSource());
 			this->view->setApplyEnabled(true);
-		} catch (Gc::Common::ParserException const& e) {
+		} catch (Gc::Common::Exception::ParserException const& e) {
 			this->view->showSourceBuildError();
 			this->view->setApplyEnabled(false);
 		}

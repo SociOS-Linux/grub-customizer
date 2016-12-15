@@ -722,7 +722,7 @@ class Main : public Gc::View::Main {
 		case Gc::Common::Type::ViewOption::GROUP_BY_SCRIPT: this->miGroupByScript.set_active(value); break;
 		case Gc::Common::Type::ViewOption::SHOW_PLACEHOLDERS: this->miShowPlaceholders.set_active(value); break;
 		default:
-			throw Gc::Common::LogicException("unexpected option");
+			throw Gc::Common::Exception::LogicException("unexpected option");
 		}
 		this->setLockState(oldLockState);
 	}

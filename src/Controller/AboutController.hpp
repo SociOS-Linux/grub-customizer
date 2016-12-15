@@ -50,7 +50,7 @@ namespace Gc { namespace Controller { class AboutController :
 		this->logActionBegin("show");
 		try {
 			this->view->show();
-		} catch (Gc::Common::Exception const& e) {
+		} catch (Gc::Common::Exception::GenericException const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();

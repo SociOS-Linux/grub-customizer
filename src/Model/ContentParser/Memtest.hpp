@@ -43,7 +43,7 @@ namespace Gc { namespace Model { namespace ContentParser { class Memtest :
 			//check partition indices by uuid
 			Gc::Model::Device::DeviceMapPartitionIndex pIndex = this->deviceMap->getHarddriveIndexByPartitionUuid(result[3]);
 			if (pIndex.hddNum != result[1] || pIndex.partNum != result[2]){
-				throw Gc::Common::ParserException("parsing failed - hdd num check", __FILE__, __LINE__);
+				throw Gc::Common::Exception::ParserException("parsing failed - hdd num check", __FILE__, __LINE__);
 			}
 	
 			this->options["partition_uuid"] = result[3];
@@ -54,17 +54,17 @@ namespace Gc { namespace Model { namespace ContentParser { class Memtest :
 				std::string device = this->deviceDataList->getDeviceByUuid(this->options["partition_uuid"]);
 				this->options["memtest_image_full"] = Gc::Common::Functions::rtrim(this->mountTable->findByDevice(device).mountpoint, "/") + "/" + Gc::Common::Functions::ltrim(this->options["memtest_image"], "/");
 				if (!this->_fileExists(this->options["memtest_image_full"])) {
-					throw Gc::Common::ItemNotFoundException("memtest image '" + this->options["memtest_image_full"] + "'not found!", __FILE__, __LINE__);
+					throw Gc::Common::Exception::ItemNotFoundException("memtest image '" + this->options["memtest_image_full"] + "'not found!", __FILE__, __LINE__);
 				}
 				this->options.erase("partition_uuid");
 				this->options.erase("memtest_image");
-			} catch (Gc::Common::ItemNotFoundException const& e) {
+			} catch (Gc::Common::Exception::ItemNotFoundException const& e) {
 				// partition not mounted
 				this->options.erase("memtest_image_full");
 			}
 
-		} catch (Gc::Common::RegExNotMatchedException const& e) {
-			throw Gc::Common::ParserException("parsing failed - RegEx not matched", __FILE__, __LINE__);
+		} catch (Gc::Common::Exception::RegExNotMatchedException const& e) {
+			throw Gc::Common::Exception::ParserException("parsing failed - RegEx not matched", __FILE__, __LINE__);
 		}
 	}
 
@@ -96,8 +96,8 @@ namespace Gc { namespace Model { namespace ContentParser { class Memtest :
 			this->regexEngine->match(Gc::Model::ContentParser::Memtest::_regex, result, '\\', '_');
 
 			return result;
-		} catch (Gc::Common::RegExNotMatchedException const& e) {
-			throw Gc::Common::ParserException("parsing failed - RegEx not matched", __FILE__, __LINE__);
+		} catch (Gc::Common::Exception::RegExNotMatchedException const& e) {
+			throw Gc::Common::Exception::ParserException("parsing failed - RegEx not matched", __FILE__, __LINE__);
 		}
 	}
 

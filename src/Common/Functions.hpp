@@ -23,7 +23,7 @@
 #include <string>
 #include <map>
 
-#include "../Common/Exception.hpp"
+#include "Exception.hpp"
 
 # define ASSERT_VOID_CAST static_cast<void>
 
@@ -35,14 +35,14 @@
 namespace Gc { namespace Common { class Functions
 {
 	public: static void assert_fail(std::string const& expr, std::string const& file, int line, std::string const& func) {
-		throw Gc::Common::AssertException("Assertion `" + expr + "' failed. Function: " + func, file, line);
+		throw Gc::Common::Exception::AssertException("Assertion `" + expr + "' failed. Function: " + func, file, line);
 	}
 
 	public: static void assert_filepath_empty(std::string const& filepath, std::string const& sourceCodeFile, int line) {
 		FILE* file = fopen(filepath.c_str(), "r");
 		if (file) {
 			fclose(file);
-			throw Gc::Common::AssertException("found unexpected file on path: " + filepath, sourceCodeFile, line);
+			throw Gc::Common::Exception::AssertException("found unexpected file on path: " + filepath, sourceCodeFile, line);
 		}
 	}
 

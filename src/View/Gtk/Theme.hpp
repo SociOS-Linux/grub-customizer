@@ -435,7 +435,7 @@ class Theme :
 			this->frmThemeEditor.show_all_children(true);
 			break;
 		default:
-			throw Gc::Common::LogicException("unsupported type given", __FILE__, __LINE__);
+			throw Gc::Common::Exception::LogicException("unsupported type given", __FILE__, __LINE__);
 		}
 	}
 
@@ -463,7 +463,7 @@ class Theme :
 			Gtk::MessageDialog(gettext("File replacement failed. Please select a theme file first!"), false, Gtk::MESSAGE_ERROR).run();
 			break;
 		default:
-			throw Gc::Common::NotImplementedException("the current value of Gc::View::Theme::Error is not processed", __FILE__, __LINE__);
+			throw Gc::Common::Exception::NotImplementedException("the current value of Gc::View::Theme::Error is not processed", __FILE__, __LINE__);
 		}
 	}
 
@@ -687,7 +687,7 @@ class Theme :
 		if (!event_lock) {
 			try {
 				this->onRemoveFile(this->getSelectedFileName());
-			} catch (Gc::Common::ItemNotFoundException const& e) {
+			} catch (Gc::Common::Exception::ItemNotFoundException const& e) {
 				this->log("no file selected - ignoring event", Gc::Model::Logger::GenericLogger::ERROR);
 			}
 		}
@@ -698,7 +698,7 @@ class Theme :
 		if (!event_lock) {
 			try {
 				this->onSelect(this->getSelectedFileName());
-			} catch (Gc::Common::ItemNotFoundException const& e) {
+			} catch (Gc::Common::Exception::ItemNotFoundException const& e) {
 				this->log("no file selected - ignoring event", Gc::Model::Logger::GenericLogger::INFO);
 			}
 		}
@@ -709,7 +709,7 @@ class Theme :
 		if (!event_lock) {
 			try {
 				this->onRename(this->getSelectedFileName());
-			} catch (Gc::Common::ItemNotFoundException const& e) {
+			} catch (Gc::Common::Exception::ItemNotFoundException const& e) {
 				this->log("no file selected - ignoring event", Gc::Model::Logger::GenericLogger::ERROR);
 			}
 		}
@@ -786,7 +786,7 @@ class Theme :
 				this->onSaveClick();
 				break;
 			default:
-				throw Gc::Common::NotImplementedException("the given response id is not supported", __FILE__, __LINE__);
+				throw Gc::Common::Exception::NotImplementedException("the given response id is not supported", __FILE__, __LINE__);
 			}
 		}
 	}
@@ -865,7 +865,7 @@ class Theme :
 		if (selectedFiles.size() == 1) {
 			result = this->lvFiles.get_text(selectedFiles[0]);
 		} else {
-			throw Gc::Common::ItemNotFoundException("theme editor: invalid selection count", __FILE__, __LINE__);
+			throw Gc::Common::Exception::ItemNotFoundException("theme editor: invalid selection count", __FILE__, __LINE__);
 		}
 		return result;
 	}

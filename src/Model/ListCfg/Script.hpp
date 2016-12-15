@@ -195,12 +195,12 @@ namespace Gc { namespace Model { namespace ListCfg { class Script :
 					std::list<std::string> result = this->buildPath(entry, loop_entry);
 					result.push_front(loop_entry->name);
 					return result;
-				} catch (Gc::Common::ItemNotFoundException const& e) {
+				} catch (Gc::Common::Exception::ItemNotFoundException const& e) {
 					//continue
 				}
 			}
 		}
-		throw Gc::Common::ItemNotFoundException("entry not found inside of specified parent", __FILE__, __LINE__);
+		throw Gc::Common::Exception::ItemNotFoundException("entry not found inside of specified parent", __FILE__, __LINE__);
 	}
 
 	public: std::list<std::string> buildPath(std::shared_ptr<Gc::Model::ListCfg::Entry> entry) const
@@ -263,10 +263,10 @@ namespace Gc { namespace Model { namespace ListCfg { class Script :
 				try {
 					this->deleteEntry(entry, *iter);
 					return; // if no exception the entry has been deleted
-				} catch (Gc::Common::ItemNotFoundException const& e) {}
+				} catch (Gc::Common::Exception::ItemNotFoundException const& e) {}
 			}
 		}
-		throw Gc::Common::ItemNotFoundException("entry for deletion not found");
+		throw Gc::Common::Exception::ItemNotFoundException("entry for deletion not found");
 	}
 
 	public: bool deleteFile()
@@ -301,7 +301,7 @@ namespace Gc { namespace Model { namespace ListCfg { class Script :
 				return prefixNum;
 			}
 		}
-		throw Gc::Common::InvalidStringFormatException("unable to parse index from " + path, __FILE__, __LINE__);
+		throw Gc::Common::Exception::InvalidStringFormatException("unable to parse index from " + path, __FILE__, __LINE__);
 	}
 
 };}}}

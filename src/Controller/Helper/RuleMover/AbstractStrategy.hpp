@@ -86,7 +86,7 @@ class AbstractStrategy
 			return *currentPosition;
 		}
 
-		throw Gc::Common::LogicException("cannot handle given direction", __FILE__, __LINE__);
+		throw Gc::Common::Exception::LogicException("cannot handle given direction", __FILE__, __LINE__);
 	}
 
 	protected: void removeFromList(
@@ -151,7 +151,7 @@ class AbstractStrategy
 			return *currentPosition;
 		}
 
-		throw Gc::Common::LogicException("cannot handle given direction", __FILE__, __LINE__);
+		throw Gc::Common::Exception::LogicException("cannot handle given direction", __FILE__, __LINE__);
 	}
 
 	protected: std::shared_ptr<Gc::Model::ListCfg::Rule> getFirstVisibleRule(
@@ -170,7 +170,7 @@ class AbstractStrategy
 			return visibleRules.front();
 		}
 
-		throw Gc::Common::LogicException("cannot handle given direction", __FILE__, __LINE__);
+		throw Gc::Common::Exception::LogicException("cannot handle given direction", __FILE__, __LINE__);
 	}
 
 	protected: void insertIntoSubmenu(
@@ -211,7 +211,7 @@ class AbstractStrategy
 			return Gc::Controller::Helper::RuleMover::AbstractStrategy::Direction::UP;
 		}
 
-		throw Gc::Common::LogicException("cannot handle given direction", __FILE__, __LINE__);
+		throw Gc::Common::Exception::LogicException("cannot handle given direction", __FILE__, __LINE__);
 	}
 
 	protected: void moveRuleToOtherProxy(
@@ -286,7 +286,7 @@ class AbstractStrategy
 				newProxy->rules.push_front(ruleToMove);
 				break;
 			default:
-				throw Gc::Common::LogicException("cannot handle given direction", __FILE__, __LINE__);
+				throw Gc::Common::Exception::LogicException("cannot handle given direction", __FILE__, __LINE__);
 		}
 
 		// insert the new proxy

@@ -49,7 +49,7 @@ namespace Gc { namespace Model { namespace Device { class MountTableMountpoint
 		if (!isMounted){
 			int res = system(("mount '"+device+"' '"+mountpoint+"'"+(options != "" ? " -o '"+options+"'" : "")).c_str());
 			if (res != 0)
-				throw Gc::Common::MountException("mount failed", __FILE__, __LINE__);
+				throw Gc::Common::Exception::MountException("mount failed", __FILE__, __LINE__);
 	
 			this->isMounted = true;
 		}
@@ -60,7 +60,7 @@ namespace Gc { namespace Model { namespace Device { class MountTableMountpoint
 		if (isMounted){
 			int res = system(("umount '"+mountpoint+"'").c_str());
 			if (res != 0)
-				throw Gc::Common::UMountException("umount failed", __FILE__, __LINE__);
+				throw Gc::Common::Exception::UMountException("umount failed", __FILE__, __LINE__);
 	
 			this->isMounted = false;
 		}

@@ -23,8 +23,8 @@
 
 namespace Gc { namespace Bootstrap { namespace ApplicationHelper { class Object
 {
-	public: Gc::Bootstrap::ApplicationHelper::Event<Gc::Common::Exception> onError;
-	public: Gc::Bootstrap::ApplicationHelper::Event<Gc::Common::Exception> onThreadError;
+	public: Gc::Bootstrap::ApplicationHelper::Event<Gc::Common::Exception::GenericException> onError;
+	public: Gc::Bootstrap::ApplicationHelper::Event<Gc::Common::Exception::GenericException> onThreadError;
 
 	public: Gc::Bootstrap::ApplicationHelper::Event<> onAboutDlgShowRequest;
 	public: Gc::Bootstrap::ApplicationHelper::Event<Gc::Common::Type::Rule*> onEntryEditorShowRequest;

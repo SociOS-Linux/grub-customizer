@@ -47,7 +47,7 @@ namespace Gc { namespace Common { namespace Regex { class GLib :
 		const gchar* matchStr = escapeCharacter == '\0' ? str.c_str() : escapedStr.c_str();
 		bool success = g_regex_match(gr, matchStr, GRegexMatchFlags(0), &mi);
 		if (!success)
-			throw Gc::Common::RegExNotMatchedException("RegEx doesn't match", __FILE__, __LINE__);
+			throw Gc::Common::Exception::RegExNotMatchedException("RegEx doesn't match", __FILE__, __LINE__);
 
 		gint match_count = g_match_info_get_match_count(mi);
 		gint offset = 0;
@@ -80,7 +80,7 @@ namespace Gc { namespace Common { namespace Regex { class GLib :
 
 		bool success = g_regex_match(gr, matchStr, GRegexMatchFlags(0), &mi);
 		if (!success)
-			throw Gc::Common::RegExNotMatchedException("RegEx doesn't match", __FILE__, __LINE__);
+			throw Gc::Common::Exception::RegExNotMatchedException("RegEx doesn't match", __FILE__, __LINE__);
 
 		gint match_count = g_match_info_get_match_count(mi);
 		gint offset = 0;

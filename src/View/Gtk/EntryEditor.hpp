@@ -256,7 +256,7 @@ class EntryEditor :
 					try {
 						result[iter->first] = dynamic_cast<Gtk::FileChooserButton&>(*iter->second).get_filename();
 					} catch (std::bad_cast const& e) {
-						throw Gc::Common::BadCastException("unable to cast element '" + iter->first + "'", __FILE__, __LINE__);
+						throw Gc::Common::Exception::BadCastException("unable to cast element '" + iter->first + "'", __FILE__, __LINE__);
 					}
 				}
 			}

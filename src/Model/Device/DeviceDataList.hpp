@@ -85,7 +85,7 @@ namespace Gc { namespace Model { namespace Device { class DeviceDataList :
 				return iter->first;
 			}
 		}
-		throw Gc::Common::ItemNotFoundException("no device found by uuid " + uuid, __FILE__, __LINE__);
+		throw Gc::Common::Exception::ItemNotFoundException("no device found by uuid " + uuid, __FILE__, __LINE__);
 	}
 
 };}}}

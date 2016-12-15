@@ -72,7 +72,7 @@ namespace Gc { namespace Model { class Theme {
 			closedir(dir);
 			this->sort();
 		} else {
-			throw Gc::Common::FileReadException("cannot read the theme directory: " + this->directory);
+			throw Gc::Common::Exception::FileReadException("cannot read the theme directory: " + this->directory);
 		}
 	}
 
@@ -92,7 +92,7 @@ namespace Gc { namespace Model { class Theme {
 		archive_read_support_format_all(a);
 		r = archive_read_open_filename(a, zipFile.c_str(), 10240);
 		if (r != ARCHIVE_OK) {
-			throw Gc::Common::InvalidFileTypeException("archive not readable", __FILE__, __LINE__);
+			throw Gc::Common::Exception::InvalidFileTypeException("archive not readable", __FILE__, __LINE__);
 		}
 		while (archive_read_next_header(a, &entry) == ARCHIVE_OK) {
 			std::string path = archive_entry_pathname(entry);
@@ -103,7 +103,7 @@ namespace Gc { namespace Model { class Theme {
 		}
 		r = archive_read_free(a);
 		if (r != ARCHIVE_OK) {
-			throw Gc::Common::InvalidFileTypeException("archive not readable", __FILE__, __LINE__);
+			throw Gc::Common::Exception::InvalidFileTypeException("archive not readable", __FILE__, __LINE__);
 		}
 	
 		this->removeSubdir();
@@ -116,7 +116,7 @@ namespace Gc { namespace Model { class Theme {
 		} else if (this->zipFile != "") {
 			return this->loadFileContentFromZip(localFileName);
 		} else {
-			throw Gc::Common::LogicException("neither directory nor zip file set", __FILE__, __LINE__);
+			throw Gc::Common::Exception::LogicException("neither directory nor zip file set", __FILE__, __LINE__);
 		}
 	}
 
@@ -132,7 +132,7 @@ namespace Gc { namespace Model { class Theme {
 			}
 			fclose(file);
 		} else {
-			throw Gc::Common::FileReadException("cannot read file: " + externalPath, __FILE__, __LINE__);
+			throw Gc::Common::Exception::FileReadException("cannot read file: " + externalPath, __FILE__, __LINE__);
 		}
 		return data;
 	}
@@ -145,7 +145,7 @@ namespace Gc { namespace Model { class Theme {
 			std::string fileContent = this->loadFileContentFromZip(localFileName);
 			FILE* file = fopen("/tmp/grub-customizer_theme_preview", "w");
 			if (!file) {
-				throw Gc::Common::FileSaveException("cannot write preview file to " + localFileName, __FILE__, __LINE__);
+				throw Gc::Common::Exception::FileSaveException("cannot write preview file to " + localFileName, __FILE__, __LINE__);
 			}
 			fwrite(fileContent.c_str(), fileContent.size(), 1, file);
 			fclose(file);
@@ -160,7 +160,7 @@ namespace Gc { namespace Model { class Theme {
 				return *fileIter;
 			}
 		}
-		throw Gc::Common::ItemNotFoundException("themefile " + localFileName + " not found!", __FILE__, __LINE__);
+		throw Gc::Common::Exception::ItemNotFoundException("themefile " + localFileName + " not found!", __FILE__, __LINE__);
 	}
 
 	public: Gc::Model::ThemeFile& getFileByNewName(std::string localFileName)
@@ -170,7 +170,7 @@ namespace Gc { namespace Model { class Theme {
 				return *fileIter;
 			}
 		}
-		throw Gc::Common::ItemNotFoundException("themefile " + localFileName + " not found!", __FILE__, __LINE__);
+		throw Gc::Common::Exception::ItemNotFoundException("themefile " + localFileName + " not found!", __FILE__, __LINE__);
 	}
 
 	public: void removeFile(Gc::Model::ThemeFile const& file)
@@ -181,7 +181,7 @@ namespace Gc { namespace Model { class Theme {
 				return;
 			}
 		}
-		throw Gc::Common::ItemNotFoundException("themefile " + file.localFileName + " not found!", __FILE__, __LINE__);
+		throw Gc::Common::Exception::ItemNotFoundException("themefile " + file.localFileName + " not found!", __FILE__, __LINE__);
 	}
 
 	public: void save(std::string const& baseDirectory)
@@ -225,7 +225,7 @@ namespace Gc { namespace Model { class Theme {
 		this->createFilePath(newName);
 		int success = std::rename(oldName.c_str(), newName.c_str());
 		if (success != 0) {
-			throw Gc::Common::FileSaveException("rename failed: " + oldName + " -> " + newName, __FILE__, __LINE__);
+			throw Gc::Common::Exception::FileSaveException("rename failed: " + oldName + " -> " + newName, __FILE__, __LINE__);
 		}
 	}
 
@@ -234,7 +234,7 @@ namespace Gc { namespace Model { class Theme {
 		try {
 			this->getFileByNewName(localFilename);
 			return true;
-		} catch (Gc::Common::ItemNotFoundException const& e) {
+		} catch (Gc::Common::Exception::ItemNotFoundException const& e) {
 		}
 	
 		for (std::list<Gc::Model::ThemeFile>::iterator fileIter = this->files.begin(); fileIter != this->files.end(); fileIter++) {
@@ -293,7 +293,7 @@ namespace Gc { namespace Model { class Theme {
 		archive_read_support_format_all(a);
 		r = archive_read_open_filename(a, zipFile.c_str(), 10240);
 		if (r != ARCHIVE_OK) {
-			throw Gc::Common::InvalidFileTypeException("archive not readable", __FILE__, __LINE__);
+			throw Gc::Common::Exception::InvalidFileTypeException("archive not readable", __FILE__, __LINE__);
 		}
 		while (archive_read_next_header(a, &entry) == ARCHIVE_OK) {
 			if (std::string(archive_entry_pathname(entry)) == localFileName) {
@@ -308,7 +308,7 @@ namespace Gc { namespace Model { class Theme {
 		}
 		r = archive_read_free(a);
 		if (r != ARCHIVE_OK) {
-			throw Gc::Common::InvalidFileTypeException("archive not readable", __FILE__, __LINE__);
+			throw Gc::Common::Exception::InvalidFileTypeException("archive not readable", __FILE__, __LINE__);
 		}
 		return result;
 	}
@@ -323,7 +323,7 @@ namespace Gc { namespace Model { class Theme {
 			file.content = "";
 			file.contentLoaded = false;
 		} else {
-			throw Gc::Common::FileSaveException("failed saving file to " + path, __FILE__, __LINE__);
+			throw Gc::Common::Exception::FileSaveException("failed saving file to " + path, __FILE__, __LINE__);
 		}
 	}
 
@@ -383,7 +383,7 @@ namespace Gc { namespace Model { class Theme {
 			closedir(dir);
 			rmdir(path.c_str());
 		} else {
-			throw Gc::Common::FileReadException("cannot read directory: " + path, __FILE__, __LINE__);
+			throw Gc::Common::Exception::FileReadException("cannot read directory: " + path, __FILE__, __LINE__);
 		}
 	}
 

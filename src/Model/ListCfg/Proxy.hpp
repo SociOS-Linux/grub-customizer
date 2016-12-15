@@ -536,7 +536,7 @@ namespace Gc { namespace Model { namespace ListCfg { class Proxy :
 		std::shared_ptr<Gc::Model::ListCfg::Rule> parent = nullptr;
 		try {
 			parent = this->getParentRule(*base);
-		} catch (Gc::Common::ItemNotFoundException const& e) {} // leave parent in nullptr state
+		} catch (Gc::Common::Exception::ItemNotFoundException const& e) {} // leave parent in nullptr state
 		auto& list = this->getRuleList(parent);
 	
 		do {
@@ -547,7 +547,7 @@ namespace Gc { namespace Model { namespace ListCfg { class Proxy :
 			}
 		} while (base != list.end() && !base->get()->isVisible);
 		if (base == list.end()) {
-			throw Gc::Common::NoMoveTargetException("no move target found inside of this proxy", __FILE__, __LINE__);
+			throw Gc::Common::Exception::NoMoveTargetException("no move target found inside of this proxy", __FILE__, __LINE__);
 		}
 		return base;
 	}
@@ -668,7 +668,7 @@ namespace Gc { namespace Model { namespace ListCfg { class Proxy :
 		do {
 			try {
 				parent = this->getParentRule(rule);
-			} catch (Gc::Common::ItemNotFoundException const& e) {
+			} catch (Gc::Common::Exception::ItemNotFoundException const& e) {
 				parent = nullptr;
 			}
 			auto& rlist = this->getRuleList(parent);
@@ -689,7 +689,7 @@ namespace Gc { namespace Model { namespace ListCfg { class Proxy :
 				return iter;
 		}
 	
-		throw Gc::Common::ItemNotFoundException("specified rule not found", __FILE__, __LINE__);
+		throw Gc::Common::Exception::ItemNotFoundException("specified rule not found", __FILE__, __LINE__);
 	}
 
 	public: std::shared_ptr<Gc::Model::ListCfg::Rule> getParentRule(
@@ -704,7 +704,7 @@ namespace Gc { namespace Model { namespace ListCfg { class Proxy :
 				std::shared_ptr<Gc::Model::ListCfg::Rule> parentRule = nullptr;
 				try {
 					parentRule = this->getParentRule(child, rule);
-				} catch (Gc::Common::ItemNotFoundException const& e) {
+				} catch (Gc::Common::Exception::ItemNotFoundException const& e) {
 					// do nothing
 				}
 				if (parentRule) {
@@ -712,7 +712,7 @@ namespace Gc { namespace Model { namespace ListCfg { class Proxy :
 				}
 			}
 		}
-		throw Gc::Common::ItemNotFoundException("specified rule not found", __FILE__, __LINE__);
+		throw Gc::Common::Exception::ItemNotFoundException("specified rule not found", __FILE__, __LINE__);
 	}
 
 	public: std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>>& getRuleList(std::shared_ptr<Gc::Model::ListCfg::Rule> parentElement)

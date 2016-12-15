@@ -42,7 +42,7 @@ namespace Gc { namespace Controller { namespace Helper { class DeviceInfo
 					}
 				}
 			}
-		} catch (Gc::Common::ParserNotFoundException const& e) {
+		} catch (Gc::Common::Exception::ParserNotFoundException const& e) {
 			// nothing to do
 		}
 		return options;

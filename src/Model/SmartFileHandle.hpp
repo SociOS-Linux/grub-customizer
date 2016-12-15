@@ -46,14 +46,14 @@ namespace Gc { namespace Model { class SmartFileHandle
 				this->string = this->string.substr(1);
 				return c;
 			} else {
-				throw Gc::Common::EndOfFileException("end of file", __FILE__, __LINE__);
+				throw Gc::Common::Exception::EndOfFileException("end of file", __FILE__, __LINE__);
 			}
 		} else {
 			int c = fgetc(this->proc_or_file);
 			if (c != EOF)
 				return c;
 			else
-				throw Gc::Common::EndOfFileException("end of file", __FILE__, __LINE__);
+				throw Gc::Common::Exception::EndOfFileException("end of file", __FILE__, __LINE__);
 		}
 	}
 
@@ -65,7 +65,7 @@ namespace Gc { namespace Model { class SmartFileHandle
 			while ((c = this->getChar()) != EOF && c != '\n'){
 				result += c;
 			}
-		} catch (Gc::Common::EndOfFileException const& e) {
+		} catch (Gc::Common::Exception::EndOfFileException const& e) {
 			if (result == "") {
 				throw e;
 			}
@@ -81,7 +81,7 @@ namespace Gc { namespace Model { class SmartFileHandle
 			while ((c = this->getChar()) != EOF){
 				result += c;
 			}
-		} catch (Gc::Common::EndOfFileException const& e) {
+		} catch (Gc::Common::Exception::EndOfFileException const& e) {
 			if (result == "") {
 				throw e;
 			}
@@ -92,7 +92,7 @@ namespace Gc { namespace Model { class SmartFileHandle
 	public:	void open(std::string const& cmd_or_file, std::string const& mode, Type type)
 	{
 		if (this->proc_or_file || this->string != "")
-			throw Gc::Common::HandleNotClosedException("handle not closed - cannot open", __FILE__, __LINE__);
+			throw Gc::Common::Exception::HandleNotClosedException("handle not closed - cannot open", __FILE__, __LINE__);
 	
 		this->proc_or_file = NULL;
 		this->string = "";
@@ -108,19 +108,19 @@ namespace Gc { namespace Model { class SmartFileHandle
 				this->proc_or_file = fopen(cmd_or_file.c_str(), mode.c_str());
 				break;
 			default:
-				throw Gc::Common::LogicException("unexpected type given");
+				throw Gc::Common::Exception::LogicException("unexpected type given");
 		}
 	
 		if (this->proc_or_file || type == Gc::Model::SmartFileHandle::Type::STRING)
 			this->type = type;
 		else
-			throw Gc::Common::FileReadException("Cannot read the file/cmd: " + cmd_or_file, __FILE__, __LINE__);
+			throw Gc::Common::Exception::FileReadException("Cannot read the file/cmd: " + cmd_or_file, __FILE__, __LINE__);
 	}
 
 	public:	void close()
 	{
 		if (this->type != Gc::Model::SmartFileHandle::Type::STRING && !this->proc_or_file)
-			throw Gc::Common::HandleNotOpenedException("handle not opened - cannot close", __FILE__, __LINE__);
+			throw Gc::Common::Exception::HandleNotOpenedException("handle not opened - cannot close", __FILE__, __LINE__);
 	
 		switch (type) {
 			case Gc::Model::SmartFileHandle::Type::STRING:
@@ -133,7 +133,7 @@ namespace Gc { namespace Model { class SmartFileHandle
 				fclose(this->proc_or_file);
 				break;
 			default:
-				throw Gc::Common::LogicException("unexpected type given");
+				throw Gc::Common::Exception::LogicException("unexpected type given");
 		}
 	}
 

@@ -97,7 +97,7 @@ namespace Gc { namespace Model { namespace ListCfg { class ListCfg :
 		if (this->ignoreLock)
 			return;
 		if (this->mutex == NULL)
-			throw Gc::Common::ConfigException("missing mutex", __FILE__, __LINE__);
+			throw Gc::Common::Exception::ConfigException("missing mutex", __FILE__, __LINE__);
 		this->mutex->lock();
 	}
 
@@ -105,7 +105,7 @@ namespace Gc { namespace Model { namespace ListCfg { class ListCfg :
 		if (this->ignoreLock)
 			return true;
 		if (this->mutex == NULL)
-			throw Gc::Common::ConfigException("missing mutex", __FILE__, __LINE__);
+			throw Gc::Common::Exception::ConfigException("missing mutex", __FILE__, __LINE__);
 		return this->mutex->trylock();
 	}
 
@@ -113,7 +113,7 @@ namespace Gc { namespace Model { namespace ListCfg { class ListCfg :
 		if (this->ignoreLock)
 			return;
 		if (this->mutex == NULL)
-			throw Gc::Common::ConfigException("missing mutex", __FILE__, __LINE__);
+			throw Gc::Common::Exception::ConfigException("missing mutex", __FILE__, __LINE__);
 		this->mutex->unlock();
 	}
 
@@ -178,7 +178,7 @@ namespace Gc { namespace Model { namespace ListCfg { class ListCfg :
 			DIR* hGrubCfgDir = opendir(this->env->cfg_dir.c_str());
 	
 			if (!hGrubCfgDir){
-				throw Gc::Common::DirectoryNotFoundException("grub cfg dir not found", __FILE__, __LINE__);
+				throw Gc::Common::Exception::DirectoryNotFoundException("grub cfg dir not found", __FILE__, __LINE__);
 			}
 	
 			//load scripts
@@ -286,7 +286,7 @@ namespace Gc { namespace Model { namespace ListCfg { class ListCfg :
 		
 		int success = pclose(mkconfigProc);
 		if (success != 0 && !cancelThreadsRequested){
-			throw Gc::Common::CmdExecException("failed running " + this->env->mkconfig_cmd, __FILE__, __LINE__);
+			throw Gc::Common::Exception::CmdExecException("failed running " + this->env->mkconfig_cmd, __FILE__, __LINE__);
 		} else {
 			remove(errorLogFile.c_str()); //remove file, if everything was ok
 		}
@@ -553,7 +553,7 @@ namespace Gc { namespace Model { namespace ListCfg { class ListCfg :
 		send_new_save_progress(1);
 	
 		if ((saveProcSuccess != 0 || saveProcOutput.find("Syntax errors are detected in generated GRUB config file") != -1)){
-			throw Gc::Common::CmdExecException("failed running '" + env->update_cmd + "' output:\n" + saveProcOutput, __FILE__, __LINE__);
+			throw Gc::Common::Exception::CmdExecException("failed running '" + env->update_cmd + "' output:\n" + saveProcOutput, __FILE__, __LINE__);
 		}
 	}
 
@@ -750,7 +750,7 @@ namespace Gc { namespace Model { namespace ListCfg { class ListCfg :
 						i = prefixNum;
 						isDefaultNumber = true;
 					}
-				} catch (Gc::Common::InvalidStringFormatException const& e) {
+				} catch (Gc::Common::Exception::InvalidStringFormatException const& e) {
 					this->log(e, Gc::Model::Logger::GenericLogger::ERROR);
 				}
 			}
@@ -1120,7 +1120,7 @@ namespace Gc { namespace Model { namespace ListCfg { class ListCfg :
 				}
 				currentRule = this->proxies.getNextVisibleRule(currentRule, 1);
 			}
-		} catch (Gc::Common::NoMoveTargetException const& e) {
+		} catch (Gc::Common::Exception::NoMoveTargetException const& e) {
 			// loop finished
 		}
 	
@@ -1266,7 +1266,7 @@ namespace Gc { namespace Model { namespace ListCfg { class ListCfg :
 			std::string sourceFileName = this->scriptSourceMap.getSourceName(script->fileName);
 			try {
 				newProxy->index = Gc::Model::ListCfg::Script::extractIndexFromPath(sourceFileName, this->env->cfg_dir);
-			} catch (Gc::Common::InvalidStringFormatException const& e) {
+			} catch (Gc::Common::Exception::InvalidStringFormatException const& e) {
 				newProxy->index = i++;
 				this->log(e, Gc::Model::Logger::GenericLogger::ERROR);
 			}
@@ -1298,7 +1298,7 @@ namespace Gc { namespace Model { namespace ListCfg { class ListCfg :
 			}
 		}
 
-		throw Gc::Common::ItemNotFoundException("rule not found", __FILE__, __LINE__);
+		throw Gc::Common::Exception::ItemNotFoundException("rule not found", __FILE__, __LINE__);
 	}
 
 	private: std::shared_ptr<Gc::Model::ListCfg::Rule> findRule(Gc::Common::Type::Rule const* rulePtr, std::list<std::shared_ptr<Gc::Model::ListCfg::Rule>> list)

@@ -176,7 +176,7 @@ namespace Gc { namespace Model { namespace Device { class MountTable :
 			if (iter->mountpoint == mountPoint)
 				return *iter;
 		}
-		throw Gc::Common::MountpointNotFoundException("mountpoint not found", __FILE__, __LINE__);
+		throw Gc::Common::Exception::MountpointNotFoundException("mountpoint not found", __FILE__, __LINE__);
 	}
 
 	public: Gc::Model::Device::MountTableMountpoint& add(Gc::Model::Device::MountTableMountpoint const& mpToAdd)
@@ -221,11 +221,11 @@ namespace Gc { namespace Model { namespace Device { class MountTable :
 				this->add(Gc::Model::Device::MountTableMountpoint("/dev", mountpoint + "/dev", "bind")).mount();
 			}
 			//errors while mounting any of this partitions may not be a problem
-			catch (Gc::Common::SystemException const& e){}
-			catch (Gc::Common::MountpointNotFoundException const& e){}
+			catch (Gc::Common::Exception::SystemException const& e){}
+			catch (Gc::Common::Exception::MountpointNotFoundException const& e){}
 		}
 		else
-			throw Gc::Common::MissingFstabException("fstab is required but was not found", __FILE__, __LINE__);
+			throw Gc::Common::Exception::MissingFstabException("fstab is required but was not found", __FILE__, __LINE__);
 		this->loaded = true;
 	}
 
@@ -236,7 +236,7 @@ namespace Gc { namespace Model { namespace Device { class MountTable :
 				return *iter;
 			}
 		}
-		throw Gc::Common::ItemNotFoundException("no mountpoint found by device " + device);
+		throw Gc::Common::Exception::ItemNotFoundException("no mountpoint found by device " + device);
 	}
 
 	public: Gc::Model::Device::MountTableMountpoint& getByFilePath(std::string path)
@@ -250,7 +250,7 @@ namespace Gc { namespace Model { namespace Device { class MountTable :
 		}
 
 		if (result == NULL) {
-			throw Gc::Common::ItemNotFoundException("no mountpoint found by path " + path);
+			throw Gc::Common::Exception::ItemNotFoundException("no mountpoint found by path " + path);
 		} else {
 			return *result;
 		}

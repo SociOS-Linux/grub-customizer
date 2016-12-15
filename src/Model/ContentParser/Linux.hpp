@@ -39,20 +39,20 @@ namespace Gc { namespace Model { namespace ContentParser { class Linux :
 			//check partition indices by uuid
 			Gc::Model::Device::DeviceMapPartitionIndex pIndex = this->deviceMap->getHarddriveIndexByPartitionUuid(result[6]);
 			if (pIndex.hddNum != result[1] || pIndex.partNum != result[2]){
-				throw Gc::Common::ParserException("parsing failed - hdd num check", __FILE__, __LINE__);
+				throw Gc::Common::Exception::ParserException("parsing failed - hdd num check", __FILE__, __LINE__);
 			}
 	
 			//check if the uuids (Kernel <-> search command) are the same
 			if (result[3] != result[6])
-				throw Gc::Common::ParserException("parsing failed - uuid different", __FILE__, __LINE__);
+				throw Gc::Common::Exception::ParserException("parsing failed - uuid different", __FILE__, __LINE__);
 	
 			//assign data
 			this->options["partition_uuid"] = result[6];
 			this->options["linux_image"] = this->unescape(result[5]);
 			this->options["other_params"] = Gc::Common::Functions::ltrim(result[7], " ");
 			this->options["initramfs"] = this->unescape(result[9]);
-		} catch (Gc::Common::RegExNotMatchedException const& e) {
-			throw Gc::Common::ParserException("parsing failed - RegEx not matched", __FILE__, __LINE__);
+		} catch (Gc::Common::Exception::RegExNotMatchedException const& e) {
+			throw Gc::Common::Exception::ParserException("parsing failed - RegEx not matched", __FILE__, __LINE__);
 		}
 	}
 
@@ -75,8 +75,8 @@ namespace Gc { namespace Model { namespace ContentParser { class Linux :
 			this->regexEngine->match(Gc::Model::ContentParser::Linux::_regex, result, '\\', '_');
 
 			return result;
-		} catch (Gc::Common::RegExNotMatchedException const& e) {
-			throw Gc::Common::ParserException("parsing failed - RegEx not matched", __FILE__, __LINE__);
+		} catch (Gc::Common::Exception::RegExNotMatchedException const& e) {
+			throw Gc::Common::Exception::ParserException("parsing failed - RegEx not matched", __FILE__, __LINE__);
 		}
 	}
 

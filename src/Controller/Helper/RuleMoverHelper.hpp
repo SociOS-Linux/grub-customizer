@@ -47,7 +47,7 @@ namespace Gc { namespace Controller { namespace Helper { class RuleMoverHelper :
 				continue;
 			}
 		}
-		throw Gc::Common::NoMoveTargetException("cannot move this rule. No successful strategy found", __FILE__, __LINE__);
+		throw Gc::Common::Exception::NoMoveTargetException("cannot move this rule. No successful strategy found", __FILE__, __LINE__);
 	}
 
 	public: void addStrategy(std::shared_ptr<Gc::Controller::Helper::RuleMover::AbstractStrategy> strategy)

@@ -102,7 +102,7 @@ class MoveRuleOutOfProxyOnToplevel :
 
 		// step 2: execute tasks
 		if (situationToTask.find(situation) == situationToTask.end()) {
-			throw Gc::Common::LogicException("cannot handle current situation. Programming error!", __FILE__, __LINE__);
+			throw Gc::Common::Exception::LogicException("cannot handle current situation. Programming error!", __FILE__, __LINE__);
 		}
 		auto currentTaskList = situationToTask[situation];
 

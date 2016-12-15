@@ -78,7 +78,7 @@ namespace Gc { namespace Controller { class InstallerController :
 		this->logActionBegin("show");
 		try {
 			view->show();
-		} catch (Gc::Common::Exception const& e) {
+		} catch (Gc::Common::Exception::GenericException const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -89,7 +89,7 @@ namespace Gc { namespace Controller { class InstallerController :
 		this->logActionBegin("install-grub");
 		try {
 			this->threadHelper->runAsThread(std::bind(std::mem_fn(&InstallerController::installGrubThreadedAction), this, device));
-		} catch (Gc::Common::Exception const& e) {
+		} catch (Gc::Common::Exception::GenericException const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();
@@ -105,7 +105,7 @@ namespace Gc { namespace Controller { class InstallerController :
 			if (this->env->activeThreadCount == 0 && this->env->quit_requested) {
 				this->applicationObject->shutdown();
 			}
-		} catch (Gc::Common::Exception const& e) {
+		} catch (Gc::Common::Exception::GenericException const& e) {
 			this->applicationObject->onThreadError.exec(e);
 		}
 		this->logActionEndThreaded();
@@ -116,7 +116,7 @@ namespace Gc { namespace Controller { class InstallerController :
 		this->logActionBegin("show-message");
 		try {
 			view->showMessageGrubInstallCompleted(msg);
-		} catch (Gc::Common::Exception const& e) {
+		} catch (Gc::Common::Exception::GenericException const& e) {
 			this->applicationObject->onError.exec(e);
 		}
 		this->logActionEnd();

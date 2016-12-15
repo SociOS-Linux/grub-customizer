@@ -40,12 +40,12 @@ namespace Gc { namespace Model { namespace ContentParser { class Chainloader :
 			//check partition indices by uuid
 			Gc::Model::Device::DeviceMapPartitionIndex pIndex = this->deviceMap->getHarddriveIndexByPartitionUuid(result[3]);
 			if (pIndex.hddNum != result[1] || pIndex.partNum != result[2]){
-				throw Gc::Common::ParserException("parsing failed - hdd num check", __FILE__, __LINE__);
+				throw Gc::Common::Exception::ParserException("parsing failed - hdd num check", __FILE__, __LINE__);
 			}
 	
 			this->options["partition_uuid"] = result[3];
-		} catch (Gc::Common::RegExNotMatchedException const& e) {
-			throw Gc::Common::ParserException("parsing failed - RegEx not matched", __FILE__, __LINE__);
+		} catch (Gc::Common::Exception::RegExNotMatchedException const& e) {
+			throw Gc::Common::Exception::ParserException("parsing failed - RegEx not matched", __FILE__, __LINE__);
 		}
 	}
 
@@ -64,8 +64,8 @@ namespace Gc { namespace Model { namespace ContentParser { class Chainloader :
 			this->regexEngine->match(Gc::Model::ContentParser::Chainloader::_regex, result, '\\', '_');
 
 			return result;
-		} catch (Gc::Common::RegExNotMatchedException const& e) {
-			throw Gc::Common::ParserException("parsing failed - RegEx not matched", __FILE__, __LINE__);
+		} catch (Gc::Common::Exception::RegExNotMatchedException const& e) {
+			throw Gc::Common::Exception::ParserException("parsing failed - RegEx not matched", __FILE__, __LINE__);
 		}
 	}
 

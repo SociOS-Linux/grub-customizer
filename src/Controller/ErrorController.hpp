@@ -68,16 +68,16 @@ namespace Gc { namespace Controller { class ErrorController :
 	}
 
 	
-	public:	void errorAction(Gc::Common::Exception const& e)
+	public:	void errorAction(Gc::Common::Exception::GenericException const& e)
 	{
 		this->log(e, Gc::Model::Logger::GenericLogger::EXCEPTION);
 		this->view->showErrorMessage(e, this->applicationStarted);
 	}
 
-	public:	void errorThreadedAction(Gc::Common::Exception const& e)
+	public:	void errorThreadedAction(Gc::Common::Exception::GenericException const& e)
 	{
 		if (this->threadHelper) {
-			this->threadHelper->runDispatched(std::bind(std::mem_fn(&ErrorController::errorAction), this, Gc::Common::Exception(e)));
+			this->threadHelper->runDispatched(std::bind(std::mem_fn(&ErrorController::errorAction), this, Gc::Common::Exception::GenericException(e)));
 		} else {
 			this->log(e, Gc::Model::Logger::GenericLogger::EXCEPTION);
 			exit(1);
