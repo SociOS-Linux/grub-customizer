@@ -20,7 +20,6 @@
 #define CONTENTPARSERFACTORYCONNECTION_H_
 #include <memory>
 
-#include "GenericFactory.hpp"
 
 namespace Gc { namespace Model { namespace ContentParser { class GenericFactoryConnection
 {

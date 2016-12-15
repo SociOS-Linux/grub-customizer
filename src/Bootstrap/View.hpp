@@ -21,18 +21,6 @@
 
 #include <memory>
 
-#include "../View/Main.hpp"
-#include "../View/About.hpp"
-#include "../View/Installer.hpp"
-#include "../View/Trash.hpp"
-#include "../View/EntryEditor.hpp"
-#include "../View/Settings.hpp"
-#include "../View/EnvEditor.hpp"
-#include "../View/Error.hpp"
-#include "../View/Theme.hpp"
-
-#include "../Model/Device/DeviceDataListInterface.hpp"
-
 namespace Gc { namespace Bootstrap { class View :
 	public Gc::Model::Device::DeviceDataListInterfaceConnection
 {

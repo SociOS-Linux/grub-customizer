@@ -24,15 +24,6 @@
 #include <sstream>
 #include "../config.hpp"
 
-#include "../Model/Env.hpp"
-
-#include "../View/Error.hpp"
-#include "../View/Trait/ViewAware.hpp"
-
-#include "Common/ControllerAbstract.hpp"
-#include "Helper/Thread.hpp"
-
-
 namespace Gc { namespace Controller { class ErrorController :
 	public Gc::Controller::Common::ControllerAbstract,
 	public Gc::View::Trait::ViewAware<Gc::View::Error>,

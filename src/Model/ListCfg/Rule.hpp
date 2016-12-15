@@ -21,12 +21,6 @@
 #include <string>
 #include <ostream>
 #include <memory>
-#include "../../Common/Functions.hpp"
-#include "../../Common/ArrayStructure/Container.hpp"
-#include "../../Common/Type.hpp"
-#include "Entry.hpp"
-#include "EntryPathBuilder.hpp"
-#include "EntryPathFollower.hpp"
 
 namespace Gc { namespace Model { namespace ListCfg { class Rule
 	: public Gc::Common::Type::Rule

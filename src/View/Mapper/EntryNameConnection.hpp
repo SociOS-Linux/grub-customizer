@@ -19,7 +19,6 @@
 #ifndef ENTRYNAMECONNECTION_H_
 #define ENTRYNAMECONNECTION_H_
 
-#include "EntryName.hpp"
 #include <string>
 
 namespace Gc { namespace View { namespace Mapper { class EntryNameConnection

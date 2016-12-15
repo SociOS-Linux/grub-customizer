@@ -23,8 +23,6 @@
 #include <map>
 #include <memory>
 
-#include "Generic.hpp"
-
 namespace Gc { namespace Common { namespace Regex { class GenericConnection
 {
 	protected: std::shared_ptr<Gc::Common::Regex::Generic> regexEngine;

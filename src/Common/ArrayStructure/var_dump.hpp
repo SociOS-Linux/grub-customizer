@@ -24,9 +24,6 @@
 #include <sstream>
 #include <iostream>
 
-#include "../Functions.hpp"
-#include "Container.hpp"
-
 
 namespace Gc { namespace Common { namespace ArrayStructure {
 // prefix "!" = use prefixes

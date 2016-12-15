@@ -22,7 +22,6 @@
 #include <list>
 #include <string>
 #include <cstdio>
-#include "SettingsStoreRow.hpp"
 
 namespace Gc { namespace Model { class SettingsStore
 {

@@ -19,12 +19,10 @@
 #ifndef THEME_GTK_H_
 #define THEME_GTK_H_
 
-#include "../Theme.hpp"
 
 #include <gtkmm.h>
 #include <string>
 #include <libintl.h>
-#include "Element/GrubColorChooser.hpp"
 
 namespace Gc { namespace View { namespace Gtk {
 namespace Gtk = ::Gtk;

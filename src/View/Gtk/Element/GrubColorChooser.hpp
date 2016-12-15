@@ -19,7 +19,6 @@
 #ifndef SRC_VIEW_GTK_ELEMENT_GRUBCOLORCHOOSER_HPP_
 #define SRC_VIEW_GTK_ELEMENT_GRUBCOLORCHOOSER_HPP_
 
-#include "ColorChooser.hpp"
 
 //a color chooser with predefined colors for grub
 namespace Gc { namespace View { namespace Gtk { namespace Element { class GrubColorChooser :

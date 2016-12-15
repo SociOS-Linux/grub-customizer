@@ -32,24 +32,9 @@
 
 #include "../../config.hpp"
 
-#include "../Logger/Trait/LoggerAware.hpp"
-
-#include "../../Common/Exception.hpp"
-#include "../../Common/ArrayStructure/Container.hpp"
-#include "../../Common/Functions.hpp"
 #include <stack>
 #include <algorithm>
 #include <functional>
-
-#include "../../Common/Mutex/Generic.hpp"
-#include "../../Common/Mutex/GenericConnection.hpp"
-#include "../Env.hpp"
-#include "../Device/MountTable.hpp"
-#include "Proxylist.hpp"
-#include "ProxyScriptData.hpp"
-#include "Repository.hpp"
-#include "ScriptSourceMap.hpp"
-#include "../SettingsManagerData.hpp"
 
 namespace Gc { namespace Model { namespace ListCfg { class ListCfg :
 	public Gc::Model::Logger::Trait::LoggerAware,

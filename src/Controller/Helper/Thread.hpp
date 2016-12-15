@@ -18,7 +18,6 @@
 
 #ifndef HELPER_THREAD_H_INCLUDED
 #define HELPER_THREAD_H_INCLUDED
-#include "../../Model/Logger/Trait/LoggerAware.hpp"
 #include <functional>
 
 namespace Gc { namespace Controller { namespace Helper { class Thread :

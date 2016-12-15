@@ -21,8 +21,6 @@
 #include <map>
 #include <functional>
 
-#include "../Model/Logger/Trait/LoggerAware.hpp"
-#include "../Model/Device/DeviceDataListInterface.hpp"
 
 namespace Gc { namespace View { class EnvEditor :
 	public Gc::Model::Logger::Trait::LoggerAware,

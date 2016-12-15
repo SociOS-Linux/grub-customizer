@@ -26,10 +26,6 @@
 #include <glib.h>
 #include <iostream>
 
-#include "../../Common/Regex/Generic.hpp"
-#include "../Functions.hpp"
-#include "../Exception.hpp"
-
 namespace Gc { namespace Common { namespace Regex { class GLib :
 	public Gc::Common::Regex::Generic
 {

@@ -19,7 +19,6 @@
 #ifndef SRC_MODEL_ENVCONNECTION_HPP_
 #define SRC_MODEL_ENVCONNECTION_HPP_
 
-#include "Env.hpp"
 
 namespace Gc { namespace Model { class EnvConnection
 {

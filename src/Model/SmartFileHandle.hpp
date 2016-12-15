@@ -20,7 +20,6 @@
 #define SMARTFILEHANDLE_H_
 #include <cstdio>
 #include <string>
-#include "../Common/Exception.hpp"
 
 namespace Gc { namespace Model { class SmartFileHandle
 {

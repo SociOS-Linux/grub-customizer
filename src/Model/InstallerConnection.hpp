@@ -19,7 +19,6 @@
 #ifndef SRC_MODEL_INSTALLERCONNECTION_HPP_
 #define SRC_MODEL_INSTALLERCONNECTION_HPP_
 
-#include "Installer.hpp"
 
 namespace Gc { namespace Model { class InstallerConnection
 {

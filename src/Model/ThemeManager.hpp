@@ -20,9 +20,6 @@
 #define THEMEMANAGER_H_
 
 #include <list>
-#include "../Common/Exception.hpp"
-#include "Env.hpp"
-#include "Theme.hpp"
 
 namespace Gc { namespace Model { class ThemeManager :
 	public Gc::Model::EnvConnection

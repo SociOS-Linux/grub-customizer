@@ -23,9 +23,6 @@
 #include <climits>
 #include <cstdlib>
 #include <cstdio>
-#include "GenericParser.hpp"
-#include "../Logger/Trait/LoggerAware.hpp"
-#include "../../Common/Functions.hpp"
 
 namespace Gc { namespace Model { namespace ContentParser { class AbstractParser :
 	public Gc::Model::ContentParser::GenericParser,

@@ -21,9 +21,6 @@
 
 #include <memory>
 
-#include "../../../Common/Exception.hpp"
-#include "../GenericLogger.hpp"
-
 namespace Gc { namespace Model { namespace Logger { namespace Trait { class LoggerAware
 {
 	protected: mutable std::shared_ptr<Gc::Model::Logger::GenericLogger> logger;

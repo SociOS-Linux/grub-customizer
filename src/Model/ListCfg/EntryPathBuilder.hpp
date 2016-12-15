@@ -21,7 +21,6 @@
 #include <string>
 #include <list>
 #include <memory>
-#include "Entry.hpp"
 
 namespace Gc { namespace Model { namespace ListCfg { class EntryPathBuilder
 {

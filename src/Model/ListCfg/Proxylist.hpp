@@ -21,11 +21,6 @@
 #include <list>
 #include <sstream>
 #include <memory>
-#include "../Logger/Trait/LoggerAware.hpp"
-#include "../../Common/Exception.hpp"
-#include "../../Common/ArrayStructure/Container.hpp"
-#include "Proxy.hpp"
-#include "ProxylistItem.hpp"
 
 
 namespace Gc { namespace Model { namespace ListCfg { class Proxylist :

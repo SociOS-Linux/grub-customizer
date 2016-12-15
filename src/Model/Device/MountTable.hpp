@@ -23,11 +23,6 @@
 #include <string>
 #include <cstdlib>
 
-#include "../../Common/Exception.hpp"
-#include "../Logger/Trait/LoggerAware.hpp"
-#include "../../Common/Functions.hpp"
-#include "MountTableMountpoint.hpp"
-
 
 namespace Gc { namespace Model { namespace Device { class MountTable :
 	public std::list<Gc::Model::Device::MountTableMountpoint>,

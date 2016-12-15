@@ -25,8 +25,6 @@
 #include <list>
 #include <algorithm>
 
-#include "../Common/Exception.hpp"
-
 namespace Gc { namespace Common { class FileSystem
 {
 	public: void copy(

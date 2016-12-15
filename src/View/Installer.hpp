@@ -20,7 +20,6 @@
 #define GRUBINSTALLDLG_H_
 #include <functional>
 
-#include "../Model/Logger/Trait/LoggerAware.hpp"
 
 /**
  * Interface for dialogs which helps users to install grub into the MBR

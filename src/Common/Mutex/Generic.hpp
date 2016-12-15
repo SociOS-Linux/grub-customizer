@@ -21,8 +21,6 @@
 #include <cstdlib>
 #include <memory>
 
-#include "../../Model/Logger/Trait/LoggerAware.hpp"
-
 namespace Gc { namespace Common { namespace Mutex { class Generic :
 	public Gc::Model::Logger::Trait::LoggerAware
 {

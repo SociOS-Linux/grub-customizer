@@ -19,7 +19,6 @@
 #ifndef SRC_FbResolutionsGetterCONNECTION_HPP_
 #define SRC_FbResolutionsGetterCONNECTION_HPP_
 
-#include "FbResolutionsGetter.hpp"
 
 namespace Gc { namespace Model { class FbResolutionsGetterConnection
 {

@@ -23,10 +23,6 @@
 #include <list>
 #include <map>
 
-#include "../Common/Exception.hpp"
-#include "../Common/Type.hpp"
-#include "ApplicationHelper/Object.hpp"
-
 namespace Gc { namespace Bootstrap { class Application
 {
 	public: std::shared_ptr<Gc::Bootstrap::ApplicationHelper::Object> applicationObject;

@@ -19,7 +19,6 @@
 #ifndef SRC_MODEL_DEVICE_DEVICEDATALISTCONNECTION_HPP_
 #define SRC_MODEL_DEVICE_DEVICEDATALISTCONNECTION_HPP_
 
-#include "DeviceDataList.hpp"
 
 namespace Gc { namespace Model { namespace Device { class DeviceDataListConnection
 {

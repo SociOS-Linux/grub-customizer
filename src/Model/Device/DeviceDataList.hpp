@@ -21,8 +21,6 @@
 #include <map>
 #include <cstdio>
 #include <string>
-#include "DeviceDataListInterface.hpp"
-#include "../Logger/Trait/LoggerAware.hpp"
 
 namespace Gc { namespace Model { namespace Device { class DeviceDataList :
 	public Gc::Model::Device::DeviceDataListInterface,

@@ -19,7 +19,6 @@
 #ifndef SRC_MODEL_DEVICE_MOUNTTABLECONNECTION_HPP_
 #define SRC_MODEL_DEVICE_MOUNTTABLECONNECTION_HPP_
 
-#include "MountTable.hpp"
 
 namespace Gc { namespace Model { namespace Device { class MountTableConnection
 {

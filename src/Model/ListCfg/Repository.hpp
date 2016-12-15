@@ -22,12 +22,6 @@
 #include <dirent.h>
 #include <map>
 #include <memory>
-#include "../Logger/Trait/LoggerAware.hpp"
-#include "../../Common/ArrayStructure/Container.hpp"
-#include "../../Common/Functions.hpp"
-#include "ProxyScriptData.hpp"
-#include "PscriptnameTranslator.hpp"
-#include "Script.hpp"
 
 namespace Gc { namespace Model { namespace ListCfg { class Repository :
 	public std::list<std::shared_ptr<Gc::Model::ListCfg::Script>>,

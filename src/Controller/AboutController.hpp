@@ -24,12 +24,6 @@
 #include <sstream>
 #include "../config.hpp"
 
-#include "../Model/Env.hpp"
-
-#include "../View/About.hpp"
-#include "../View/Trait/ViewAware.hpp"
-#include "Common/ControllerAbstract.hpp"
-
 namespace Gc { namespace Controller { class AboutController :
 	public Gc::Controller::Common::ControllerAbstract,
 	public Gc::View::Trait::ViewAware<Gc::View::About>,

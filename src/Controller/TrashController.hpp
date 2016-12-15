@@ -19,28 +19,10 @@
 #ifndef TRASHCONTROLLERIMPL_H_
 #define TRASHCONTROLLERIMPL_H_
 
-#include "../Model/ListCfg/ListCfg.hpp"
-#include "../View/Main.hpp"
 #include <libintl.h>
 #include <locale.h>
 #include <sstream>
 #include "../config.hpp"
-
-#include "../Model/Env.hpp"
-
-#include "../Model/Device/MountTable.hpp"
-
-#include "../View/Trash.hpp"
-
-#include "../View/EnvEditor.hpp"
-#include "../View/Trait/ViewAware.hpp"
-#include "../View/Mapper/EntryName.hpp"
-
-#include "Common/ControllerAbstract.hpp"
-
-#include "../Model/Device/DeviceDataListInterface.hpp"
-#include "../Model/ContentParser/GenericFactory.hpp"
-#include "Helper/DeviceInfo.hpp"
 
 namespace Gc { namespace Controller { class TrashController :
 	public Gc::Controller::Common::ControllerAbstract,

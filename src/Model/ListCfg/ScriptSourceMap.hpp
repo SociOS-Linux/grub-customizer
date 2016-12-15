@@ -23,11 +23,6 @@
 #include <string>
 #include <dirent.h>
 
-#include "../Csv/Reader.hpp"
-#include "../Csv/Writer.hpp"
-#include "../Logger/Trait/LoggerAware.hpp"
-#include "../Env.hpp"
-#include "../EnvConnection.hpp"
 
 namespace Gc { namespace Model { namespace ListCfg { class ScriptSourceMap :
 	public std::map<std::string, std::string>,

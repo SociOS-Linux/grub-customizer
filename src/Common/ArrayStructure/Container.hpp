@@ -24,15 +24,13 @@
 #include <sstream>
 #include <iostream>
 
-#include "Item.hpp"
-
 
 /**
  * used to dump objects implementing a cast to ArrayStructure
  *
  * Example of usage:
  * 	ArrayStructure test;
- *  test["x"] = "Gc::Model::ListCfg::Proxy";
+ *  test["x"] = "Any::Type";
  *  test["x"]["y"];
  *  test["x"]["z"] = (Foo*)NULL;
  *  test["x"]["a"] = 10.4;

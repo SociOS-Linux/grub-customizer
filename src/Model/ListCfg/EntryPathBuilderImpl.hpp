@@ -19,9 +19,7 @@
 
 #ifndef ENTRYPATHBUILDERIMPL_H_
 #define ENTRYPATHBUILDERIMPL_H_
-#include "EntryPathBuilder.hpp"
 #include <map>
-#include "Script.hpp"
 
 namespace Gc { namespace Model { namespace ListCfg { class EntryPathBuilderImpl :
 	public Gc::Model::ListCfg::EntryPathBuilder

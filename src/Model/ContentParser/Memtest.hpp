@@ -19,9 +19,6 @@
 #ifndef CONTENT_PARSER_MEMTEST_H_
 #define CONTENT_PARSER_MEMTEST_H_
 
-#include "../../Common/Regex/Generic.hpp"
-#include "../Device/DeviceMap.hpp"
-#include "AbstractParser.hpp"
 
 namespace Gc { namespace Model { namespace ContentParser { class Memtest :
 	public Gc::Model::ContentParser::AbstractParser,

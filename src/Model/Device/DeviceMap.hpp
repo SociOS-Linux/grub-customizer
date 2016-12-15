@@ -21,11 +21,6 @@
 #include <map>
 #include <unistd.h>
 
-#include "../../Common/Regex/Generic.hpp"
-#include "../../Common/Regex/GenericConnection.hpp"
-#include "../Env.hpp"
-#include "../SmartFileHandle.hpp"
-#include "DeviceMapPartitionIndex.hpp"
 
 namespace Gc { namespace Model { namespace Device { class DeviceMap :
 	public Gc::Model::EnvConnection,

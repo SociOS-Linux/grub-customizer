@@ -19,9 +19,6 @@
 #ifndef DEVICEINFO_H_
 #define DEVICEINFO_H_
 
-#include "../../Model/ContentParser/GenericFactory.hpp"
-#include "../../Model/Device/DeviceDataListInterface.hpp"
-
 namespace Gc { namespace Controller { namespace Helper { class DeviceInfo
 {
 	public: static std::map<std::string, std::string> fetch(

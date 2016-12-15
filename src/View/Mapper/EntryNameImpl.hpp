@@ -19,10 +19,6 @@
 #ifndef ENTRYNAMEIMPL_H_
 #define ENTRYNAMEIMPL_H_
 
-#include "../Main.hpp"
-#include "../Trait/ViewAware.hpp"
-#include "EntryName.hpp"
-
 namespace Gc { namespace View { namespace Mapper { class EntryNameImpl :
 	public Gc::View::Mapper::EntryName,
 	public Gc::View::Trait::ViewAware<Gc::View::Main>

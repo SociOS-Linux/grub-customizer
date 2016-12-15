@@ -18,7 +18,6 @@
 
 #ifndef INC_Controller_Helper_RuleMover_MoveFailedException
 #define INC_Controller_Helper_RuleMover_MoveFailedException
-#include "../../../Common/Exception.hpp"
 
 namespace Gc { namespace Controller { namespace Helper { namespace RuleMover { class MoveFailedException :
 	public Gc::Common::Exception::GenericException

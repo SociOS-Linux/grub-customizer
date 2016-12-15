@@ -18,11 +18,9 @@
 
 #ifndef GRUBENVEDITORGTK_H_
 #define GRUBENVEDITORGTK_H_
-#include "../EnvEditor.hpp"
 
 #include <gtkmm.h>
 #include <libintl.h>
-#include "Element/PartitionChooser.hpp"
 
 namespace Gc { namespace View { namespace Gtk {
 namespace Gtk = ::Gtk;

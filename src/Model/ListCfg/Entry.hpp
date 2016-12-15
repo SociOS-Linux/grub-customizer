@@ -22,11 +22,6 @@
 #include <string>
 #include <list>
 #include <memory>
-#include "../Logger/Trait/LoggerAware.hpp"
-#include "../../Common/Functions.hpp"
-#include "../../Common/ArrayStructure/Container.hpp"
-#include "../../Common/Type.hpp"
-#include "EntryRow.hpp"
 
 namespace Gc { namespace Model { namespace ListCfg { class Entry :
 	public Gc::Model::Logger::Trait::LoggerAware,

@@ -23,10 +23,6 @@
 #include <list>
 #include <functional>
 
-#include "../Common/Type.hpp"
-#include "../Model/Logger/Trait/LoggerAware.hpp"
-#include "../Model/Device/DeviceDataListInterface.hpp"
-#include "../Model/Device/DeviceDataListInterfaceConnection.hpp"
 
 namespace Gc { namespace View { class EntryEditor :
 	public Gc::Model::Logger::Trait::LoggerAware,

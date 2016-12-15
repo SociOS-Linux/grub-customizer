@@ -24,19 +24,6 @@
 #include <sstream>
 #include "../config.hpp"
 
-#include "../Model/Env.hpp"
-
-#include "../Model/Installer.hpp"
-#include "../View/Installer.hpp"
-#include "../View/Trait/ViewAware.hpp"
-
-#include "Common/ControllerAbstract.hpp"
-
-#include "../Common/Exception.hpp"
-
-#include "Helper/Thread.hpp"
-
-
 namespace Gc { namespace Controller { class InstallerController :
 	public Gc::Controller::Common::ControllerAbstract,
 	public Gc::View::Trait::ViewAware<Gc::View::Installer>,

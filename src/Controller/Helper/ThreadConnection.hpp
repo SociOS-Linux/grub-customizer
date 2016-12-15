@@ -19,8 +19,6 @@
 #ifndef HELPER_THREADCONNECTION_H_INCLUDED
 #define HELPER_THREADCONNECTION_H_INCLUDED
 
-#include "Thread.hpp"
-
 namespace Gc { namespace Controller { namespace Helper { class ThreadConnection
 {
 	protected: std::shared_ptr<Gc::Controller::Helper::Thread> threadHelper;

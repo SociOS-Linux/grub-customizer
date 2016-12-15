@@ -18,8 +18,6 @@
 
 #ifndef CONTENTPARSERFACTORYIMPL_H_
 #define CONTENTPARSERFACTORYIMPL_H_
-#include "GenericFactory.hpp"
-#include "GenericParser.hpp"
 #include <list>
 #include <memory>
 

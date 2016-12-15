@@ -22,13 +22,6 @@
 #include <unistd.h>
 #include <map>
 #include <memory>
-#include "../../Common/Exception.hpp"
-#include "../../Common/ArrayStructure/Container.hpp"
-#include "../../Common/Type.hpp"
-#include "EntryPathBuilderImpl.hpp"
-#include "ProxyScriptData.hpp"
-#include "Rule.hpp"
-#include "Script.hpp"
 
 namespace Gc { namespace Model { namespace ListCfg { class Proxy :
 	public Gc::Common::Type::Proxy

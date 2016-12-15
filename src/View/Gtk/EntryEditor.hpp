@@ -18,13 +18,10 @@
 
 #ifndef ENTRYEDITDLGGTK_H_
 #define ENTRYEDITDLGGTK_H_
-#include "../EntryEditor.hpp"
 
 #include <libintl.h>
 #include <gtkmm.h>
 
-#include "../../Common/Functions.hpp"
-#include "Element/PartitionChooser.hpp"
 
 namespace Gc { namespace View { namespace Gtk {
 namespace Gtk = ::Gtk;

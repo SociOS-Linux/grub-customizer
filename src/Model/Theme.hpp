@@ -23,11 +23,9 @@
 #include <sys/stat.h>
 #include <dirent.h>
 #include <fstream>
-#include "../Common/Exception.hpp"
 #include <archive.h>
 #include <archive_entry.h>
 #include <map>
-#include "ThemeFile.hpp"
 
 namespace Gc { namespace Model { class Theme {
 	public: std::string directory;

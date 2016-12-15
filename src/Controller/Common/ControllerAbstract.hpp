@@ -19,8 +19,6 @@
 #ifndef CONTROLLER_ABSTRACT_H_
 #define CONTROLLER_ABSTRACT_H_
 
-#include "../../Model/Logger/Trait/ActionLoggerAware.hpp"
-
 namespace Gc { namespace Controller { namespace Common { class ControllerAbstract :
 	public Gc::Model::Logger::Trait::ActionLoggerAware
 {

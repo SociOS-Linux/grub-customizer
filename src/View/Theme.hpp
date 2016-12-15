@@ -22,8 +22,6 @@
 #include <list>
 #include <functional>
 
-#include "../Model/Logger/Trait/LoggerAware.hpp"
-#include "ColorChooser.hpp"
 
 namespace Gc { namespace View { class Theme :
 	public Gc::Model::Logger::Trait::LoggerAware

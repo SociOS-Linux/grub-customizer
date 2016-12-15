@@ -19,8 +19,6 @@
 #ifndef SRC_CONTROLLER_HELPER_RULEMOVERCONNECTION_HPP_
 #define SRC_CONTROLLER_HELPER_RULEMOVERCONNECTION_HPP_
 
-#include "RuleMoverHelper.hpp"
-
 namespace Gc { namespace Controller { namespace Helper { class RuleMoverConnection
 {
 	protected: std::shared_ptr<Gc::Controller::Helper::RuleMoverHelper> ruleMover;

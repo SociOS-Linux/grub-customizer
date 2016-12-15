@@ -22,8 +22,6 @@
 #include <string>
 #include <memory>
 
-#include "GenericParser.hpp"
-
 namespace Gc { namespace Model { namespace ContentParser { class GenericFactory
 {
 	public: virtual inline ~GenericFactory() {};

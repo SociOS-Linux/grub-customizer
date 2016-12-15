@@ -20,8 +20,6 @@
 #define MUTEX_CONNECTION_H_INCLUDED
 #include <memory>
 
-#include "Generic.hpp"
-
 namespace Gc { namespace Common { namespace Mutex { class GenericConnection
 {
 	protected: std::shared_ptr<Gc::Common::Mutex::Generic> mutex;

@@ -22,9 +22,6 @@
 #include <list>
 #include <string>
 #include <functional>
-#include "../Common/Type.hpp"
-#include "../Model/Logger/Trait/LoggerAware.hpp"
-#include "Model/ListItem.hpp"
 
 /**
  * Interface to be implemented by dialogs which lets the user adding scripts

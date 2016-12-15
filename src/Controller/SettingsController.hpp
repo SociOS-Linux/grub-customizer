@@ -19,32 +19,11 @@
 #ifndef SETTINGSCONTROLLERIMPL_H_
 #define SETTINGSCONTROLLERIMPL_H_
 
-#include "../Model/ListCfg/ListCfg.hpp"
 #include <libintl.h>
 #include <locale.h>
 #include <sstream>
 #include "../config.hpp"
 
-#include "../Model/Env.hpp"
-
-#include "../Model/Device/MountTable.hpp"
-
-#include "../Model/Installer.hpp"
-
-#include "../Model/ListCfg/ListCfg.hpp"
-#include "../View/Settings.hpp"
-#include "../View/Trait/ViewAware.hpp"
-#include "../Model/FbResolutionsGetter.hpp"
-#include "../Model/Device/DeviceDataList.hpp"
-#include "../Model/ContentParser/GenericFactory.hpp"
-#include "../View/Mapper/EntryName.hpp"
-
-#include "Common/ControllerAbstract.hpp"
-
-#include "../Model/Logger/Trait/LoggerAware.hpp"
-
-#include "../Common/Exception.hpp"
-#include "Helper/Thread.hpp"
 
 namespace Gc { namespace Controller { class SettingsController :
 	public Gc::Controller::Common::ControllerAbstract,

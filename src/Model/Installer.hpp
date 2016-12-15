@@ -21,8 +21,6 @@
 #include <string>
 #include <cstdio>
 #include <functional>
-#include "../Model/Logger/Trait/LoggerAware.hpp"
-#include "Env.hpp"
 
 namespace Gc { namespace Model { class Installer :
 	public Gc::Model::Logger::Trait::LoggerAware,

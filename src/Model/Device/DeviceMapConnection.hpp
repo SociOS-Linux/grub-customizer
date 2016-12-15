@@ -19,7 +19,6 @@
 #ifndef SRC_MODEL_DEVICE_DEVICEMAPCONNECTION_HPP_
 #define SRC_MODEL_DEVICE_DEVICEMAPCONNECTION_HPP_
 
-#include "DeviceMap.hpp"
 
 namespace Gc { namespace Model { namespace Device { class DeviceMapConnection
 {

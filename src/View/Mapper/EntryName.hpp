@@ -20,7 +20,6 @@
 #define ENTRYNAME_H_
 
 #include <string>
-#include "../../Model/ListCfg/Entry.hpp"
 
 namespace Gc { namespace View { namespace Mapper { class EntryName
 {

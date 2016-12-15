@@ -18,7 +18,6 @@
 
 #ifndef TRAIT_ACTIONLOGGERAWARE_H_
 #define TRAIT_ACTIONLOGGERAWARE_H_
-#include "LoggerAware.hpp"
 
 namespace Gc { namespace Model { namespace Logger { namespace Trait { class ActionLoggerAware :
 	public Gc::Model::Logger::Trait::LoggerAware

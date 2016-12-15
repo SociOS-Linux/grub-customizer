@@ -26,13 +26,6 @@
 #include <map>
 #include <sys/stat.h>
 
-#include "../Common/ArrayStructure/Container.hpp"
-#include "../Model/Logger/Trait/LoggerAware.hpp"
-#include "../Common/Exception.hpp"
-#include "../Common/Type.hpp"
-#include "../Common/FileSystem.hpp"
-#include "Device/MountTable.hpp"
-#include "SettingsStore.hpp"
 
 namespace Gc { namespace Model { class Env :
 	public Gc::Model::Logger::Trait::LoggerAware

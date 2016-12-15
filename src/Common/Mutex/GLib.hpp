@@ -20,8 +20,6 @@
 #define GLIBMUTEX_H_
 #include <glibmm/thread.h>
 
-#include "Generic.hpp"
-
 namespace Gc { namespace Common { namespace Mutex { class GLib :
 	public Gc::Common::Mutex::Generic
 {

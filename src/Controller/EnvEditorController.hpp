@@ -23,16 +23,6 @@
 #include <locale.h>
 #include <sstream>
 #include "../config.hpp"
-#include "../Model/Device/DeviceMap.hpp"
-
-#include "../Model/Env.hpp"
-
-#include "../Model/Device/MountTable.hpp"
-
-#include "../View/EnvEditor.hpp"
-#include "../View/Trait/ViewAware.hpp"
-
-#include "Common/ControllerAbstract.hpp"
 
 
 namespace Gc { namespace Controller { class EnvEditorController :

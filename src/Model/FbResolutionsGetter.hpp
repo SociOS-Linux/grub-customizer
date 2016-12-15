@@ -22,7 +22,6 @@
 #include <list>
 #include <cstdio>
 #include <functional>
-#include "../Model/Logger/Trait/LoggerAware.hpp"
 
 namespace Gc { namespace Model { class FbResolutionsGetter :
 	public Gc::Model::Logger::Trait::LoggerAware

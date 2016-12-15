@@ -19,10 +19,6 @@
 #ifndef LIST_H_
 #define LIST_H_
 #include <gtkmm.h>
-#include "../../../Common/Type.hpp"
-#include "../../../Common/Exception.hpp"
-#include "../../Model/ListItem.hpp"
-#include "../../../Common/Functions.hpp"
 #include <libintl.h>
 
 namespace Gc { namespace View { namespace Gtk { namespace Element {

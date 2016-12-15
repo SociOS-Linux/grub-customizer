@@ -18,8 +18,6 @@
 
 #ifndef HELPER_GLIBTHREAD_H_INCLUDED
 #define HELPER_GLIBTHREAD_H_INCLUDED
-#include "Thread.hpp"
-
 #include <functional>
 #include <queue>
 

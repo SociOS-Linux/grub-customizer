@@ -20,7 +20,6 @@
 #define ENTRY_PATH_FOLLOWER_INCLUDED
 #include <string>
 #include <list>
-#include "Entry.hpp"
 
 namespace Gc { namespace Model { namespace ListCfg { class EntryPathFollower
 {

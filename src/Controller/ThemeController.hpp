@@ -18,17 +18,8 @@
 
 #ifndef THEMECONTROLLERIMPL_H_
 #define THEMECONTROLLERIMPL_H_
-#include "../Model/Env.hpp"
-#include "../View/Theme.hpp"
-#include "../View/Trait/ViewAware.hpp"
-#include "../Model/SettingsManagerData.hpp"
-#include "../Model/ListCfg/ListCfg.hpp"
 #include <algorithm>
 #include <functional>
-
-#include "../Model/ThemeManager.hpp"
-#include "Common/ControllerAbstract.hpp"
-#include "Helper/Thread.hpp"
 
 namespace Gc { namespace Controller { class ThemeController :
 	public Gc::Controller::Common::ControllerAbstract,
