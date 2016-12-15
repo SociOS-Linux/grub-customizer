@@ -24,7 +24,7 @@
 #include "Script.hpp"
 
 namespace Gc { namespace Model { namespace ListCfg { class EntryPathBuilderImpl :
-	public Gc::Model::ListCfg::EntryPathBilder
+	public Gc::Model::ListCfg::EntryPathBuilder
 {
 	private: std::shared_ptr<Gc::Model::ListCfg::Script> mainScript;
 	private: std::map<std::shared_ptr<Gc::Model::ListCfg::Entry>, std::shared_ptr<Gc::Model::ListCfg::Script>> entrySourceMap;

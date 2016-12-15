@@ -108,7 +108,7 @@ namespace Gc { namespace Model { namespace ListCfg { class Rule
 		: type(Gc::Model::ListCfg::Rule::NORMAL), isVisible(false), dataSource(nullptr)
 	{}
 
-	public: std::string toString(Gc::Model::ListCfg::EntryPathBilder const& pathBuilder) {
+	public: std::string toString(Gc::Model::ListCfg::EntryPathBuilder const& pathBuilder) {
 		std::string result = isVisible ? "+" : "-";
 		if (type == Gc::Model::ListCfg::Rule::PLAINTEXT) {
 			result += "#text";

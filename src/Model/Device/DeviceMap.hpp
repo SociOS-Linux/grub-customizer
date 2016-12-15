@@ -25,7 +25,7 @@
 #include "../../Common/Regex/GenericConnection.hpp"
 #include "../Env.hpp"
 #include "../SmartFileHandle.hpp"
-#include "DeviceMapDeviceMapPartitionIndex.hpp"
+#include "DeviceMapPartitionIndex.hpp"
 
 namespace Gc { namespace Model { namespace Device { class DeviceMap :
 	public Gc::Model::EnvConnection,

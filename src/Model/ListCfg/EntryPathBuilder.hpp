@@ -23,9 +23,9 @@
 #include <memory>
 #include "Entry.hpp"
 
-namespace Gc { namespace Model { namespace ListCfg { class EntryPathBilder
+namespace Gc { namespace Model { namespace ListCfg { class EntryPathBuilder
 {
-	public: virtual inline ~EntryPathBilder() {};
+	public: virtual inline ~EntryPathBuilder() {};
 
 	public: virtual std::list<std::string> buildPath(std::shared_ptr<Gc::Model::ListCfg::Entry> entry) const =0;
 	public: virtual std::string buildPathString(std::shared_ptr<Gc::Model::ListCfg::Entry> entry, bool withOtherEntriesPlaceholder = false) const =0;

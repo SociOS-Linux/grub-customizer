@@ -49,5 +49,5 @@ namespace Gc { namespace Bootstrap { class GtkApplicationObject : public Gc::Boo
 
 Gc::Bootstrap::Application::Application(int argc, char** argv)
 {
-	this->applicationObject = std::make_shared<Gc::Bootstrap::GtkApplicationObject>(argc, argv);
+	this->applicationObject = std::make_shared<GtkApplicationObject>(argc, argv);
 }
