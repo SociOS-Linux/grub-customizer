@@ -16,15 +16,11 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef THEME_GTK_H_
-#define THEME_GTK_H_
 
-#include "../Theme.hpp"
 
 #include <gtkmm.h>
 #include <string>
 #include <libintl.h>
-#include "Element/GrubColorChooser.hpp"
 
 namespace Gc { namespace View { namespace Gtk {
 namespace Gtk = ::Gtk;
@@ -872,4 +868,3 @@ class Theme :
 };}}}
 
 
-#endif /* THEME_GTK_H_ */

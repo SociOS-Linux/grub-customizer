@@ -16,13 +16,9 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef DEVICE_DATALIST_INCLUDED
-#define DEVICE_DATALIST_INCLUDED
 #include <map>
 #include <cstdio>
 #include <string>
-#include "DeviceDataListInterface.hpp"
-#include "../Logger/Trait/LoggerAware.hpp"
 
 namespace Gc { namespace Model { namespace Device { class DeviceDataList :
 	public Gc::Model::Device::DeviceDataListInterface,
@@ -91,4 +87,3 @@ namespace Gc { namespace Model { namespace Device { class DeviceDataList :
 };}}}
 
 
-#endif

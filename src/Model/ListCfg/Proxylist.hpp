@@ -16,16 +16,9 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef GRUB_CUSTOMIZER_PROXYLIST_INCLUDED
-#define GRUB_CUSTOMIZER_PROXYLIST_INCLUDED
 #include <list>
 #include <sstream>
 #include <memory>
-#include "../Logger/Trait/LoggerAware.hpp"
-#include "../../Common/Exception.hpp"
-#include "../../Common/ArrayStructure/Container.hpp"
-#include "Proxy.hpp"
-#include "ProxylistItem.hpp"
 
 
 namespace Gc { namespace Model { namespace ListCfg { class Proxylist :
@@ -431,4 +424,3 @@ namespace Gc { namespace Model { namespace ListCfg { class Proxylist :
 
 };}}}
 
-#endif

@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef ColorChooserType_INCLUDED
-#define ColorChooserType_INCLUDED
 #include <string>
 /**
  * base class to be implemented by color chooser controls
@@ -33,4 +31,3 @@ namespace Gc { namespace View { class ColorChooser
 	public: virtual std::string getSelectedColor() const = 0;
 };}}
 
-#endif

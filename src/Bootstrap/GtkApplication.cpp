@@ -16,9 +16,11 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#include "Application.hpp"
 #include <gtkmm/main.h>
 #include <list>
+#include <functional>
+
+#include "GtkApplication.cpp.inc.hpp"
 
 namespace Gc { namespace Bootstrap { class GtkApplicationObject : public Gc::Bootstrap::ApplicationHelper::Object
 {
@@ -49,5 +51,5 @@ namespace Gc { namespace Bootstrap { class GtkApplicationObject : public Gc::Boo
 
 Gc::Bootstrap::Application::Application(int argc, char** argv)
 {
-	this->applicationObject = std::make_shared<Gc::Bootstrap::GtkApplicationObject>(argc, argv);
+	this->applicationObject = std::make_shared<GtkApplicationObject>(argc, argv);
 }

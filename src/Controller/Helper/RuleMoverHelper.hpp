@@ -16,16 +16,9 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef RULEMOVER_HPP_
-#define RULEMOVER_HPP_
 
-#include "../../Model/ListCfg/Rule.hpp"
-#include "../../Model/ListCfg/ListCfg.hpp"
-#include "../../Model/ListCfg/ListCfgConnection.hpp"
-#include "RuleMover/AbstractStrategy.hpp"
 #include <memory>
 
-#include "RuleMover/MoveFailedException.hpp"
 
 namespace Gc { namespace Controller { namespace Helper { class RuleMoverHelper :
 	public Gc::Model::ListCfg::ListCfgConnection,
@@ -56,4 +49,3 @@ namespace Gc { namespace Controller { namespace Helper { class RuleMoverHelper :
 	}
 };}}}
 
-#endif /* RULEMOVER_HPP_ */

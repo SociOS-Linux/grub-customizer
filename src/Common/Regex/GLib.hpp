@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef GLIBREGEX_H_
-#define GLIBREGEX_H_
 #include <glibmm/thread.h>
 
 #include <string>
@@ -25,10 +23,6 @@
 #include <map>
 #include <glib.h>
 #include <iostream>
-
-#include "../../Common/Regex/Generic.hpp"
-#include "../Functions.hpp"
-#include "../Exception.hpp"
 
 namespace Gc { namespace Common { namespace Regex { class GLib :
 	public Gc::Common::Regex::Generic
@@ -99,4 +93,3 @@ namespace Gc { namespace Common { namespace Regex { class GLib :
 	}
 };}}}
 
-#endif /* GLIBMUTEX_H_ */

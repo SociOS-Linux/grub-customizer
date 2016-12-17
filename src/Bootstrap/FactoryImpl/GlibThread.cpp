@@ -16,9 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#include "../../Common/Mutex/GLib.hpp"
-#include "../../Controller/Helper/GLibThread.hpp"
-#include "../Factory.hpp"
+#include "GlibThread.cpp.inc.hpp"
 
 std::shared_ptr<Gc::Controller::Helper::Thread> Gc::Bootstrap::Factory::createThreadHelper()
 {

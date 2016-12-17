@@ -16,12 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef CONTENT_PARSER_MEMTEST_H_
-#define CONTENT_PARSER_MEMTEST_H_
 
-#include "../../Common/Regex/Generic.hpp"
-#include "../Device/DeviceMap.hpp"
-#include "AbstractParser.hpp"
 
 namespace Gc { namespace Model { namespace ContentParser { class Memtest :
 	public Gc::Model::ContentParser::AbstractParser,
@@ -123,4 +118,3 @@ const char* Gc::Model::ContentParser::Memtest::_regex =
 	"[ \t]*search[ \t]+--no-floppy[ \t]+--fs-uuid[ \t]+--set(?:=root)? ([-0-9a-fA-F]+)\\n"
 	"[ \t]*linux16[ \t]*(\"[^\"]*\"|[^ \\t\\n]+).*$";
 
-#endif /* CONTENT_PARSER_MEMTEST_H_ */

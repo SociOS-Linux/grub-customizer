@@ -16,11 +16,8 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef CONTENTPARSERFACTORYCONNECTION_H_
-#define CONTENTPARSERFACTORYCONNECTION_H_
 #include <memory>
 
-#include "GenericFactory.hpp"
 
 namespace Gc { namespace Model { namespace ContentParser { class GenericFactoryConnection
 {
@@ -32,4 +29,3 @@ namespace Gc { namespace Model { namespace ContentParser { class GenericFactoryC
 	}
 };}}}
 
-#endif /* CONTENTPARSERFACTORYCONNECTION_H_ */

@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef SRC_MODEL_LISTCFG_LISTCFGCONNECTION_HPP_
-#define SRC_MODEL_LISTCFG_LISTCFGCONNECTION_HPP_
 
 
 namespace Gc { namespace Model { namespace ListCfg { class ListCfgConnection
@@ -40,4 +38,3 @@ namespace Gc { namespace Model { namespace ListCfg { class ListCfgConnection
 };}}}
 
 
-#endif /* SRC_MODEL_LISTCFG_LISTCFGCONNECTION_HPP_ */

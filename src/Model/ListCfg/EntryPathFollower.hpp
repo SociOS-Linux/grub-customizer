@@ -16,11 +16,8 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef ENTRY_PATH_FOLLOWER_INCLUDED
-#define ENTRY_PATH_FOLLOWER_INCLUDED
 #include <string>
 #include <list>
-#include "Entry.hpp"
 
 namespace Gc { namespace Model { namespace ListCfg { class EntryPathFollower
 {
@@ -29,4 +26,3 @@ namespace Gc { namespace Model { namespace ListCfg { class EntryPathFollower
 	public: virtual std::shared_ptr<Gc::Model::ListCfg::Entry> getEntryByPath(std::list<std::string> const& path) = 0;
 };}}}
 
-#endif

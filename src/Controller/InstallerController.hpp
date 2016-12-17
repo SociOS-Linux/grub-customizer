@@ -16,26 +16,11 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef INSTALLERCONTROLLERIMPL_H_
-#define INSTALLERCONTROLLERIMPL_H_
 
 #include <libintl.h>
 #include <locale.h>
 #include <sstream>
 #include "../config.hpp"
-
-#include "../Model/Env.hpp"
-
-#include "../Model/Installer.hpp"
-#include "../View/Installer.hpp"
-#include "../View/Trait/ViewAware.hpp"
-
-#include "Common/ControllerAbstract.hpp"
-
-#include "../Common/Exception.hpp"
-
-#include "Helper/Thread.hpp"
-
 
 namespace Gc { namespace Controller { class InstallerController :
 	public Gc::Controller::Common::ControllerAbstract,
@@ -124,4 +109,3 @@ namespace Gc { namespace Controller { class InstallerController :
 
 };}}
 
-#endif

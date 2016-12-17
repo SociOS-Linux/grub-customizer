@@ -16,11 +16,8 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef GRUBINSTALLDLG_H_
-#define GRUBINSTALLDLG_H_
 #include <functional>
 
-#include "../Model/Logger/Trait/LoggerAware.hpp"
 
 /**
  * Interface for dialogs which helps users to install grub into the MBR
@@ -38,4 +35,3 @@ namespace Gc { namespace View { class Installer :
 	public: virtual void showMessageGrubInstallCompleted(std::string const& msg) = 0;
 };}}
 
-#endif

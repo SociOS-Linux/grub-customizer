@@ -16,16 +16,9 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef GRUBDEVICEMAP_H_
-#define GRUBDEVICEMAP_H_
 #include <map>
 #include <unistd.h>
 
-#include "../../Common/Regex/Generic.hpp"
-#include "../../Common/Regex/GenericConnection.hpp"
-#include "../Env.hpp"
-#include "../SmartFileHandle.hpp"
-#include "DeviceMapDeviceMapPartitionIndex.hpp"
 
 namespace Gc { namespace Model { namespace Device { class DeviceMap :
 	public Gc::Model::EnvConnection,
@@ -135,4 +128,3 @@ namespace Gc { namespace Model { namespace Device { class DeviceMap :
 
 };}}}
 
-#endif

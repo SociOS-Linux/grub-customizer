@@ -16,10 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef HELPER_THREADCONNECTION_H_INCLUDED
-#define HELPER_THREADCONNECTION_H_INCLUDED
-
-#include "Thread.hpp"
 
 namespace Gc { namespace Controller { namespace Helper { class ThreadConnection
 {
@@ -33,4 +29,3 @@ namespace Gc { namespace Controller { namespace Helper { class ThreadConnection
 	}
 };}}}
 
-#endif /* HELPER_THREAD_H_INCLUDED */

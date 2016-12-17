@@ -16,13 +16,9 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#include "../Model/ListCfg/Entry.hpp"
 #include <iostream>
 #include <memory>
-#include "../Model/ListCfg/ListCfg.hpp" // multi
-#include "../Model/ListCfg/Proxy.hpp"
-#include "../Model/ListCfg/Rule.hpp"
-#include "../Model/ListCfg/Script.hpp"
+#include "proxy.cpp.inc.hpp"
 
 int main(int argc, char** argv){
 	if (argc == 2) {

@@ -16,23 +16,11 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef ENVEDITORCONTROLLERIMPL_H_
-#define ENVEDITORCONTROLLERIMPL_H_
 
 #include <libintl.h>
 #include <locale.h>
 #include <sstream>
 #include "../config.hpp"
-#include "../Model/Device/DeviceMap.hpp"
-
-#include "../Model/Env.hpp"
-
-#include "../Model/Device/MountTable.hpp"
-
-#include "../View/EnvEditor.hpp"
-#include "../View/Trait/ViewAware.hpp"
-
-#include "Common/ControllerAbstract.hpp"
 
 
 namespace Gc { namespace Controller { class EnvEditorController :
@@ -235,4 +223,3 @@ namespace Gc { namespace Controller { class EnvEditorController :
 
 };}}
 
-#endif

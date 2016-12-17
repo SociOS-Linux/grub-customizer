@@ -16,30 +16,11 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef ENTRY_EDIT_CONTROLLER_INCLUDED
-#define ENTRY_EDIT_CONTROLLER_INCLUDED
 
-#include "../View/Main.hpp"
 #include <libintl.h>
 #include <locale.h>
 #include <sstream>
 #include "../config.hpp"
-
-#include "../Model/Env.hpp"
-
-#include "../View/EntryEditor.hpp"
-#include "../View/Trait/ViewAware.hpp"
-
-#include "../Model/ListCfg/ListCfg.hpp"
-#include "../Model/Logger/Trait/LoggerAware.hpp"
-#include "Common/ControllerAbstract.hpp"
-#include "../Model/ContentParser/GenericFactory.hpp"
-#include "../Common/Exception.hpp"
-#include "../Model/Device/DeviceDataList.hpp"
-#include "../Model/Installer.hpp"
-#include "../Model/ListCfg/ListCfg.hpp"
-#include "Helper/RuleMoverHelper.hpp"
-#include "Helper/Thread.hpp"
 
 
 namespace Gc { namespace Controller { class EntryEditController :
@@ -366,4 +347,3 @@ namespace Gc { namespace Controller { class EntryEditController :
 	}
 };}}
 
-#endif

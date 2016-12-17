@@ -16,21 +16,12 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef GRUB_CUSTOMIZER_SCRIPT_INCLUDED
-#define GRUB_CUSTOMIZER_SCRIPT_INCLUDED
 #include <string>
 #include <list>
 #include <cstdlib>
 #include <sys/stat.h>
 #include <unistd.h>
-#include "EntryPathFollower.hpp"
-#include "../Logger/Trait/LoggerAware.hpp"
-#include "../../Common/Functions.hpp"
 #include "../../config.hpp"
-#include "../../Common/Exception.hpp"
-#include "../../Common/ArrayStructure/Container.hpp"
-#include "../../Common/Type.hpp"
-#include "Entry.hpp"
 
 namespace Gc { namespace Model { namespace ListCfg { class Script :
 	public Gc::Model::ListCfg::EntryPathFollower,
@@ -306,4 +297,3 @@ namespace Gc { namespace Model { namespace ListCfg { class Script :
 
 };}}}
 
-#endif

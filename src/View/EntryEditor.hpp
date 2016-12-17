@@ -16,17 +16,11 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef ENTRYEDITDLG_H_
-#define ENTRYEDITDLG_H_
 #include <string>
 #include <map>
 #include <list>
 #include <functional>
 
-#include "../Common/Type.hpp"
-#include "../Model/Logger/Trait/LoggerAware.hpp"
-#include "../Model/Device/DeviceDataListInterface.hpp"
-#include "../Model/Device/DeviceDataListInterfaceConnection.hpp"
 
 namespace Gc { namespace View { class EntryEditor :
 	public Gc::Model::Logger::Trait::LoggerAware,
@@ -70,4 +64,3 @@ namespace Gc { namespace View { class EntryEditor :
 	public: virtual void setTypeIsValid(bool valid) = 0;
 };}}
 
-#endif /* ENTRYEDITDLG_H_ */

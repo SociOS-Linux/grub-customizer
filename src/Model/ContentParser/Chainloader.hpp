@@ -16,12 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef CONTENT_PARSER_CHAINLOADER_H_
-#define CONTENT_PARSER_CHAINLOADER_H_
 
-#include "../../Common/Regex/Generic.hpp"
-#include "../Device/DeviceMap.hpp"
-#include "AbstractParser.hpp"
 
 namespace Gc { namespace Model { namespace ContentParser { class Chainloader :
 	public Gc::Model::ContentParser::AbstractParser,
@@ -91,4 +86,3 @@ const char* Gc::Model::ContentParser::Chainloader::_regex =
 	"[ \t]*search[ \t]+--no-floppy[ \t]+--fs-uuid[ \t]+--set(?:=root)?[ \t]+([-0-9a-fA-F]+)\\n"
 	"(.|\\n)*"
 	"[ \t]*chainloader[ \t]+\\+1\\n?[ \t]*";
-#endif /* CONTENT_PARSER_CHAINLOADER_H_ */

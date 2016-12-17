@@ -16,14 +16,9 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef ENTRY_ADD_DLG_INCLUDED
-#define ENTRY_ADD_DLG_INCLUDED
-#include "../Trash.hpp"
 
 #include <gtkmm.h>
 #include <libintl.h>
-#include "../../Common/Type.hpp"
-#include "Element/List.hpp"
 
 namespace Gc { namespace View { namespace Gtk {
 namespace Gtk = ::Gtk;
@@ -220,4 +215,3 @@ class Trash :
 	}
 };}}}
 
-#endif

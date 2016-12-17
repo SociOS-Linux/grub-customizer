@@ -16,18 +16,14 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef MODEL_THEME_H_
-#define MODEL_THEME_H_
 #include <list>
 #include <cstdio>
 #include <sys/stat.h>
 #include <dirent.h>
 #include <fstream>
-#include "../Common/Exception.hpp"
 #include <archive.h>
 #include <archive_entry.h>
 #include <map>
-#include "ThemeFile.hpp"
 
 namespace Gc { namespace Model { class Theme {
 	public: std::string directory;
@@ -390,4 +386,3 @@ namespace Gc { namespace Model { class Theme {
 };}}
 
 
-#endif /* MODEL_THEME_H_ */

@@ -16,16 +16,11 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef CONTENT_PARSER_ABSTRACT_H_
-#define CONTENT_PARSER_ABSTRACT_H_
 #include <map>
 #include <string>
 #include <climits>
 #include <cstdlib>
 #include <cstdio>
-#include "GenericParser.hpp"
-#include "../Logger/Trait/LoggerAware.hpp"
-#include "../../Common/Functions.hpp"
 
 namespace Gc { namespace Model { namespace ContentParser { class AbstractParser :
 	public Gc::Model::ContentParser::GenericParser,
@@ -132,4 +127,3 @@ namespace Gc { namespace Model { namespace ContentParser { class AbstractParser 
 	}
 };}}}
 
-#endif /* CONTENT_PARSER_ABSTRACT_H_ */

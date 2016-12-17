@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef TYPE_H_
-#define TYPE_H_
 
 namespace Gc { namespace Common { namespace Type {
 
@@ -51,4 +49,3 @@ class Nothing {};
 
 }}}
 
-#endif /* TYPE_H_ */

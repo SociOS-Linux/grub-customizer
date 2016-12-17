@@ -16,17 +16,9 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef GRUB_CUSTOMIZER_RULE_INCLUDED
-#define GRUB_CUSTOMIZER_RULE_INCLUDED
 #include <string>
 #include <ostream>
 #include <memory>
-#include "../../Common/Functions.hpp"
-#include "../../Common/ArrayStructure/Container.hpp"
-#include "../../Common/Type.hpp"
-#include "Entry.hpp"
-#include "EntryPathBuilder.hpp"
-#include "EntryPathFollower.hpp"
 
 namespace Gc { namespace Model { namespace ListCfg { class Rule
 	: public Gc::Common::Type::Rule
@@ -108,7 +100,7 @@ namespace Gc { namespace Model { namespace ListCfg { class Rule
 		: type(Gc::Model::ListCfg::Rule::NORMAL), isVisible(false), dataSource(nullptr)
 	{}
 
-	public: std::string toString(Gc::Model::ListCfg::EntryPathBilder const& pathBuilder) {
+	public: std::string toString(Gc::Model::ListCfg::EntryPathBuilder const& pathBuilder) {
 		std::string result = isVisible ? "+" : "-";
 		if (type == Gc::Model::ListCfg::Rule::PLAINTEXT) {
 			result += "#text";
@@ -221,4 +213,3 @@ namespace Gc { namespace Model { namespace ListCfg { class Rule
 	}
 };}}}
 
-#endif

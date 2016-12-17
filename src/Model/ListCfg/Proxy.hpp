@@ -16,19 +16,10 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef GRUB_CUSTOMIZER_PROXY_INCLUDED
-#define GRUB_CUSTOMIZER_PROXY_INCLUDED
 #include <sys/stat.h>
 #include <unistd.h>
 #include <map>
 #include <memory>
-#include "../../Common/Exception.hpp"
-#include "../../Common/ArrayStructure/Container.hpp"
-#include "../../Common/Type.hpp"
-#include "EntryPathBuilderImpl.hpp"
-#include "ProxyScriptData.hpp"
-#include "Rule.hpp"
-#include "Script.hpp"
 
 namespace Gc { namespace Model { namespace ListCfg { class Proxy :
 	public Gc::Common::Type::Proxy
@@ -831,4 +822,3 @@ namespace Gc { namespace Model { namespace ListCfg { class Proxy :
 
 };}}}
 
-#endif

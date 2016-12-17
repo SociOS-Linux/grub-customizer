@@ -16,15 +16,11 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef ARRAYSTRUCTURE_H_
-#define ARRAYSTRUCTURE_H_
 #include <string>
 #include <map>
 #include <list>
 #include <sstream>
 #include <iostream>
-
-#include "Item.hpp"
 
 
 /**
@@ -32,7 +28,7 @@
  *
  * Example of usage:
  * 	ArrayStructure test;
- *  test["x"] = "Gc::Model::ListCfg::Proxy";
+ *  test["x"] = "Any::Type";
  *  test["x"]["y"];
  *  test["x"]["z"] = (Foo*)NULL;
  *  test["x"]["a"] = 10.4;
@@ -74,4 +70,3 @@ namespace Gc { namespace Common { namespace ArrayStructure { class Container :
 };}}}
 
 
-#endif /* ARRAYSTRUCTURE_H_ */

@@ -16,15 +16,10 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef ENTRYADDDLG_H_
-#define ENTRYADDDLG_H_
 
 #include <list>
 #include <string>
 #include <functional>
-#include "../Common/Type.hpp"
-#include "../Model/Logger/Trait/LoggerAware.hpp"
-#include "Model/ListItem.hpp"
 
 /**
  * Interface to be implemented by dialogs which lets the user adding scripts
@@ -62,4 +57,3 @@ namespace Gc { namespace View { class Trash :
 	public: virtual void setDeleteButtonVisibility(bool visibility) = 0;
 };}}
 
-#endif

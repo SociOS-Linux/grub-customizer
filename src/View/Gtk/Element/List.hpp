@@ -16,13 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef LIST_H_
-#define LIST_H_
 #include <gtkmm.h>
-#include "../../../Common/Type.hpp"
-#include "../../../Common/Exception.hpp"
-#include "../../Model/ListItem.hpp"
-#include "../../../Common/Functions.hpp"
 #include <libintl.h>
 
 namespace Gc { namespace View { namespace Gtk { namespace Element {
@@ -269,4 +263,3 @@ class List :
 };}}}}
 
 
-#endif /* LIST_H_ */

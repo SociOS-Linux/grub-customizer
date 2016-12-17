@@ -16,11 +16,8 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef PARTITIONCHOOSER_DROPDOWN_H_
-#define PARTITIONCHOOSER_DROPDOWN_H_
 #include <gtkmm.h>
 #include <string>
-#include "../../../Model/Device/DeviceDataListInterface.hpp"
 #include <libintl.h>
 
 namespace Gc { namespace View { namespace Gtk { namespace Element {
@@ -86,4 +83,3 @@ class PartitionChooser :
 
 };}}}}
 
-#endif

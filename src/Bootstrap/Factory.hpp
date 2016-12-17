@@ -16,35 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef SRC_BOOTSTRAP_FACTORY_HPP_
-#define SRC_BOOTSTRAP_FACTORY_HPP_
-
-#include "../View/Trait/ViewAware.hpp"
-#include "../Model/Env.hpp"
-#include "../Model/ListCfg/ListCfg.hpp"
-#include "../Model/Device/MountTable.hpp"
-#include "../Model/Device/MountTableConnection.hpp"
-#include "../Model/SettingsManagerData.hpp"
-#include "../Model/SettingsManagerDataConnection.hpp"
-#include "../Model/Installer.hpp"
-#include "../Model/InstallerConnection.hpp"
-#include "../Model/FbResolutionsGetter.hpp"
-#include "../Model/FbResolutionsGetterConnection.hpp"
-#include "../Model/Device/DeviceDataListConnection.hpp"
-#include "../Model/Device/DeviceDataListInterfaceConnection.hpp"
-#include "../Model/ContentParser/FactoryImpl.hpp"
-#include "../Model/ContentParser/GenericFactoryConnection.hpp"
-#include "../View/Mapper/EntryNameImpl.hpp"
-#include "../View/Mapper/EntryNameConnection.hpp"
-#include "../Model/ThemeManager.hpp"
-#include "../Model/ThemeManagerConnection.hpp"
-#include "../Model/Device/DeviceMap.hpp"
-#include "../Model/Device/DeviceMapConnection.hpp"
-#include "../Controller/Helper/Thread.hpp"
-#include "../Controller/Helper/ThreadConnection.hpp"
-#include "../Controller/Helper/RuleMoverConnection.hpp"
-#include "Application.hpp"
-#include "ApplicationHelper/ObjectConnection.hpp"
 
 namespace Gc { namespace Bootstrap { class Factory
 {
@@ -190,4 +161,3 @@ namespace Gc { namespace Bootstrap { class Factory
 	private: std::shared_ptr<Gc::Controller::Helper::Thread> createThreadHelper();
 };}}
 
-#endif /* SRC_BOOTSTRAP_FACTORY_HPP_ */

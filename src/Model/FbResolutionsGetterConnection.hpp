@@ -16,10 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef SRC_FbResolutionsGetterCONNECTION_HPP_
-#define SRC_FbResolutionsGetterCONNECTION_HPP_
 
-#include "FbResolutionsGetter.hpp"
 
 namespace Gc { namespace Model { class FbResolutionsGetterConnection
 {
@@ -40,4 +37,3 @@ namespace Gc { namespace Model { class FbResolutionsGetterConnection
 	}
 };}}
 
-#endif /* SRC_FbResolutionsGetterCONNECTION_HPP_ */

@@ -16,13 +16,9 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef GRUB_INSTALLER_INCLUDED
-#define GRUB_INSTALLER_INCLUDED
 #include <string>
 #include <cstdio>
 #include <functional>
-#include "../Model/Logger/Trait/LoggerAware.hpp"
-#include "Env.hpp"
 
 namespace Gc { namespace Model { class Installer :
 	public Gc::Model::Logger::Trait::LoggerAware,
@@ -57,4 +53,3 @@ namespace Gc { namespace Model { class Installer :
 
 };}}
 
-#endif

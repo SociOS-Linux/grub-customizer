@@ -16,15 +16,9 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef SETTING_MANAGER_DATASTORE_INCLUDED
-#define SETTING_MANAGER_DATASTORE_INCLUDED
 #include <sys/stat.h> //mkdir
-#include "../Model/Logger/Trait/LoggerAware.hpp"
 #include <sstream>
-#include "../Common/Functions.hpp"
 #include <map>
-#include "Env.hpp"
-#include "SettingsStore.hpp"
 
 namespace Gc { namespace Model { class SettingsManagerData :
 	public Gc::Model::SettingsStore,
@@ -278,4 +272,3 @@ namespace Gc { namespace Model { class SettingsManagerData :
 };}}
 
 
-#endif

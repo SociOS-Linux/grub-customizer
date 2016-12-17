@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef GRUB_CUSTOMIZER_GrublistCfg_INCLUDED
-#define GRUB_CUSTOMIZER_GrublistCfg_INCLUDED
 #include <list>
 #include <string>
 #include <sys/stat.h>
@@ -32,24 +30,9 @@
 
 #include "../../config.hpp"
 
-#include "../Logger/Trait/LoggerAware.hpp"
-
-#include "../../Common/Exception.hpp"
-#include "../../Common/ArrayStructure/Container.hpp"
-#include "../../Common/Functions.hpp"
 #include <stack>
 #include <algorithm>
 #include <functional>
-
-#include "../../Common/Mutex/Generic.hpp"
-#include "../../Common/Mutex/GenericConnection.hpp"
-#include "../Env.hpp"
-#include "../Device/MountTable.hpp"
-#include "Proxylist.hpp"
-#include "ProxyScriptData.hpp"
-#include "Repository.hpp"
-#include "ScriptSourceMap.hpp"
-#include "../SettingsManagerData.hpp"
 
 namespace Gc { namespace Model { namespace ListCfg { class ListCfg :
 	public Gc::Model::Logger::Trait::LoggerAware,
@@ -1339,4 +1322,3 @@ namespace Gc { namespace Model { namespace ListCfg { class ListCfg :
 	}
 };}}}
 
-#endif

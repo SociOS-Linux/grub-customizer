@@ -16,17 +16,10 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef MOUNT_TABLE_INCLUDED
-#define MOUNT_TABLE_INCLUDED
 #include <list>
 #include <cstdio>
 #include <string>
 #include <cstdlib>
-
-#include "../../Common/Exception.hpp"
-#include "../Logger/Trait/LoggerAware.hpp"
-#include "../../Common/Functions.hpp"
-#include "MountTableMountpoint.hpp"
 
 
 namespace Gc { namespace Model { namespace Device { class MountTable :
@@ -267,5 +260,4 @@ namespace Gc { namespace Model { namespace Device { class MountTable :
 
 };}}}
 
-#endif
 

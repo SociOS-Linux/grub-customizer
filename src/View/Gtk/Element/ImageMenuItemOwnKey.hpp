@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef SRC_VIEW_GTK_ELEMENT_IMAGEMENUITEMOWNKEY_HPP_
-#define SRC_VIEW_GTK_ELEMENT_IMAGEMENUITEMOWNKEY_HPP_
 
 
 namespace Gc { namespace View { namespace Gtk { namespace Element { class ImageMenuItemOwnKey :
@@ -32,4 +30,3 @@ namespace Gc { namespace View { namespace Gtk { namespace Element { class ImageM
 
 
 
-#endif /* SRC_VIEW_GTK_ELEMENT_IMAGEMENUITEMOWNKEY_HPP_ */

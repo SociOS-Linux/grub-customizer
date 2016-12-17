@@ -16,13 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef INC_Gc_Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel
-#define INC_Gc_Controller_Helper_RuleMover_Strategy_MoveRuleOutOfProxyOnToplevel
 
-#include "../../../../Model/ListCfg/Rule.hpp"
-#include "../../../../Model/ListCfg/ListCfg.hpp"
-#include "../AbstractStrategy.hpp"
-#include "../../../../Model/Logger/Trait/LoggerAware.hpp"
 #include <memory>
 #include <bitset>
 #include <set>
@@ -177,4 +171,3 @@ class MoveRuleOutOfProxyOnToplevel :
 		this->moveProxy(oldOwnProxy, previousProxy, this->flipDirection(direction));
 	}
 };}}}}}
-#endif

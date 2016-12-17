@@ -16,16 +16,10 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef SRC_BOOTSTRAP_APPLICATION_HPP_
-#define SRC_BOOTSTRAP_APPLICATION_HPP_
 #include <memory>
 #include <functional>
 #include <list>
 #include <map>
-
-#include "../Common/Exception.hpp"
-#include "../Common/Type.hpp"
-#include "ApplicationHelper/Object.hpp"
 
 namespace Gc { namespace Bootstrap { class Application
 {
@@ -34,4 +28,3 @@ namespace Gc { namespace Bootstrap { class Application
 	public: Application(int argc, char** argv);
 };}}
 
-#endif /* SRC_BOOTSTRAP_APPLICATION_HPP_ */

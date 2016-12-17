@@ -16,13 +16,9 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef SETTING_DLG_GTK_INCLUDED
-#define SETTING_DLG_GTK_INCLUDED
 #include <gtkmm.h>
-#include "../Settings.hpp"
 #include <libintl.h>
 #include <string>
-#include "../ColorChooser.hpp"
 
 
 namespace Gc { namespace View { namespace Gtk {
@@ -692,4 +688,3 @@ class Settings :
 	}
 };}}}
 
-#endif

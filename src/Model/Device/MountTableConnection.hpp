@@ -16,10 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef SRC_MODEL_DEVICE_MOUNTTABLECONNECTION_HPP_
-#define SRC_MODEL_DEVICE_MOUNTTABLECONNECTION_HPP_
 
-#include "MountTable.hpp"
 
 namespace Gc { namespace Model { namespace Device { class MountTableConnection
 {
@@ -32,4 +29,3 @@ namespace Gc { namespace Model { namespace Device { class MountTableConnection
 };}}}
 
 
-#endif /* SRC_MODEL_DEVICE_MOUNTTABLECONNECTION_HPP_ */

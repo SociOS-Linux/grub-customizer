@@ -16,10 +16,8 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef SRC_BOOTSTRAP_APPLICATIONHELPER_OBJECT_HPP_
-#define SRC_BOOTSTRAP_APPLICATIONHELPER_OBJECT_HPP_
 
-#include "Event.hpp"
+#include <map>
 
 namespace Gc { namespace Bootstrap { namespace ApplicationHelper { class Object
 {
@@ -58,4 +56,3 @@ namespace Gc { namespace Bootstrap { namespace ApplicationHelper { class Object
 
 
 
-#endif /* SRC_BOOTSTRAP_APPLICATIONHELPER_OBJECT_HPP_ */

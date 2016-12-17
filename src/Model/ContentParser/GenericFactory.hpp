@@ -16,13 +16,9 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef CONTENTPARSERFACTORY_H_
-#define CONTENTPARSERFACTORY_H_
 #include <list>
 #include <string>
 #include <memory>
-
-#include "GenericParser.hpp"
 
 namespace Gc { namespace Model { namespace ContentParser { class GenericFactory
 {
@@ -34,4 +30,3 @@ namespace Gc { namespace Model { namespace ContentParser { class GenericFactory
 	public: virtual std::string getNameByInstance(Gc::Model::ContentParser::GenericParser const& instance) const = 0;
 };}}}
 
-#endif /* CONTENTPARSERFACTORY_H_ */

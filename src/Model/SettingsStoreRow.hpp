@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef SRC_MODEL_SETTINGSSTOREROW_HPP_
-#define SRC_MODEL_SETTINGSSTOREROW_HPP_
 
 namespace Gc { namespace Model { class SettingsStoreRow
 {
@@ -77,4 +75,3 @@ namespace Gc { namespace Model { class SettingsStoreRow
 
 };}}
 
-#endif /* SRC_MODEL_SETTINGSSTOREROW_HPP_ */

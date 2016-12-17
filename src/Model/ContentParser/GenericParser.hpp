@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
  
-#ifndef CONTENTPARSER_H_
-#define CONTENTPARSER_H_
 #include <map>
 #include <string>
 
@@ -35,5 +33,4 @@ namespace Gc { namespace Model { namespace ContentParser { class GenericParser
 	public: virtual std::list<std::string> getErrors() = 0;
 };}}}
 
-#endif /* CONTENTPARSER_H_ */
  

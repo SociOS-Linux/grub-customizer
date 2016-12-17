@@ -16,18 +16,10 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef GRUB_CUSTOMIZER_REPOSITORY_INCLUDED
-#define GRUB_CUSTOMIZER_REPOSITORY_INCLUDED
 #include <sys/stat.h>
 #include <dirent.h>
 #include <map>
 #include <memory>
-#include "../Logger/Trait/LoggerAware.hpp"
-#include "../../Common/ArrayStructure/Container.hpp"
-#include "../../Common/Functions.hpp"
-#include "ProxyScriptData.hpp"
-#include "PscriptnameTranslator.hpp"
-#include "Script.hpp"
 
 namespace Gc { namespace Model { namespace ListCfg { class Repository :
 	public std::list<std::shared_ptr<Gc::Model::ListCfg::Script>>,
@@ -217,4 +209,3 @@ namespace Gc { namespace Model { namespace ListCfg { class Repository :
 
 };}}}
 
-#endif

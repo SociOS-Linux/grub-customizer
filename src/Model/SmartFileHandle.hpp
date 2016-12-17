@@ -16,11 +16,8 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef SMARTFILEHANDLE_H_
-#define SMARTFILEHANDLE_H_
 #include <cstdio>
 #include <string>
-#include "../Common/Exception.hpp"
 
 namespace Gc { namespace Model { class SmartFileHandle
 {
@@ -139,4 +136,3 @@ namespace Gc { namespace Model { class SmartFileHandle
 
 };}}
 
-#endif

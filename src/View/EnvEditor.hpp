@@ -16,13 +16,9 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef GRUBENVEDITOR_H_
-#define GRUBENVEDITOR_H_
 #include <map>
 #include <functional>
 
-#include "../Model/Logger/Trait/LoggerAware.hpp"
-#include "../Model/Device/DeviceDataListInterface.hpp"
 
 namespace Gc { namespace View { class EnvEditor :
 	public Gc::Model::Logger::Trait::LoggerAware,
@@ -57,4 +53,3 @@ namespace Gc { namespace View { class EnvEditor :
 	public: virtual void showErrorMessage(MountExceptionType type)=0;
 };}}
 
-#endif /* GRUBENVEDITOR_H_ */

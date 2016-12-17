@@ -16,11 +16,8 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef ENTRYNAME_H_
-#define ENTRYNAME_H_
 
 #include <string>
-#include "../../Model/ListCfg/Entry.hpp"
 
 namespace Gc { namespace View { namespace Mapper { class EntryName
 {
@@ -32,4 +29,3 @@ namespace Gc { namespace View { namespace Mapper { class EntryName
 	) = 0;
 };}}}
 
-#endif /* ENTRYNAME_H_ */

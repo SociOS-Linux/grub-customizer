@@ -16,19 +16,8 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef THEMECONTROLLERIMPL_H_
-#define THEMECONTROLLERIMPL_H_
-#include "../Model/Env.hpp"
-#include "../View/Theme.hpp"
-#include "../View/Trait/ViewAware.hpp"
-#include "../Model/SettingsManagerData.hpp"
-#include "../Model/ListCfg/ListCfg.hpp"
 #include <algorithm>
 #include <functional>
-
-#include "../Model/ThemeManager.hpp"
-#include "Common/ControllerAbstract.hpp"
-#include "Helper/Thread.hpp"
 
 namespace Gc { namespace Controller { class ThemeController :
 	public Gc::Controller::Common::ControllerAbstract,
@@ -617,4 +606,3 @@ namespace Gc { namespace Controller { class ThemeController :
 };}}
 
 
-#endif /* THEMECONTROLLERIMPL_H_ */

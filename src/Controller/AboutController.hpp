@@ -16,19 +16,11 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef ABOUTCONTROLLERIMPL_H_
-#define ABOUTCONTROLLERIMPL_H_
 
 #include <libintl.h>
 #include <locale.h>
 #include <sstream>
 #include "../config.hpp"
-
-#include "../Model/Env.hpp"
-
-#include "../View/About.hpp"
-#include "../View/Trait/ViewAware.hpp"
-#include "Common/ControllerAbstract.hpp"
 
 namespace Gc { namespace Controller { class AboutController :
 	public Gc::Controller::Common::ControllerAbstract,
@@ -58,4 +50,3 @@ namespace Gc { namespace Controller { class AboutController :
 
 };}}
 
-#endif

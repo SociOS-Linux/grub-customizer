@@ -16,14 +16,10 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef THEME_H_
-#define THEME_H_
 #include <string>
 #include <list>
 #include <functional>
 
-#include "../Model/Logger/Trait/LoggerAware.hpp"
-#include "ColorChooser.hpp"
 
 namespace Gc { namespace View { class Theme :
 	public Gc::Model::Logger::Trait::LoggerAware
@@ -104,4 +100,3 @@ namespace Gc { namespace View { class Theme :
 	public: virtual inline ~Theme() {};
 };}}
 
-#endif /* THEME_H_ */

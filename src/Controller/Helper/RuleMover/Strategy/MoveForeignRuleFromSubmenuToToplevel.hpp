@@ -16,13 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef INC_Gc_Controller_Helper_RuleMover_Strategy_MoveForeignRuleFromSubmenuToToplevel
-#define INC_Gc_Controller_Helper_RuleMover_Strategy_MoveForeignRuleFromSubmenuToToplevel
 
-#include "../../../../Model/ListCfg/Rule.hpp"
-#include "../../../../Model/ListCfg/ListCfg.hpp"
-#include "../AbstractStrategy.hpp"
-#include "../../../../Model/Logger/Trait/LoggerAware.hpp"
 #include <memory>
 
 namespace Gc { namespace Controller { namespace Helper { namespace RuleMover { namespace Strategy {
@@ -126,4 +120,3 @@ class MoveForeignRuleFromSubmenuToToplevel :
 	}
 };}}}}}
 
-#endif

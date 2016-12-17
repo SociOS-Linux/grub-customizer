@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef EXCEPTION_H_
-#define EXCEPTION_H_
 
 #include <string>
 #include <sstream>
@@ -203,4 +201,3 @@ class NotImplementedException : public Gc::Common::Exception::LogicException {
 //};
 
 
-#endif /* EXCEPTION_H_ */

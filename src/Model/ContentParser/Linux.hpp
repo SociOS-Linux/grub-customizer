@@ -16,11 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef CONTENT_PARSER_LINUX_H_
-#define CONTENT_PARSER_LINUX_H_
-#include "../Device/DeviceMap.hpp"
-#include "../../Common/Regex/Generic.hpp"
-#include "AbstractParser.hpp"
 
 namespace Gc { namespace Model { namespace ContentParser { class Linux :
 	public Gc::Model::ContentParser::AbstractParser,
@@ -109,4 +104,3 @@ const char* Gc::Model::ContentParser::Linux::_regex =
 	"([ \t]*echo[ \t]+.*\n)?"
 	"[ \t]*initrd[ \t]+(\"[^\"]*\"|[^ \\n]+)[ \\n\t]*$";
 
-#endif /* CONTENT_PARSER_LINUX_H_ */

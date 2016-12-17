@@ -16,10 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef SRC_MODEL_SETTINGSMANAGERDATACONNECTION_HPP_
-#define SRC_MODEL_SETTINGSMANAGERDATACONNECTION_HPP_
 
-#include "SettingsManagerData.hpp"
 
 namespace Gc { namespace Model { class SettingsManagerDataConnection
 {
@@ -31,4 +28,3 @@ namespace Gc { namespace Model { class SettingsManagerDataConnection
 	}
 };}}
 
-#endif /* SRC_MODEL_SETTINGSMANAGERDATACONNECTION_HPP_ */

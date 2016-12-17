@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef VIEW_VIEWAWARE_H_
-#define VIEW_VIEWAWARE_H_
 
 namespace Gc { namespace View { namespace Trait {
 template <typename T>
@@ -38,4 +36,3 @@ class ViewAware
 	}
 };}}}
 
-#endif /* VIEW_VIEWAWARE_H_ */

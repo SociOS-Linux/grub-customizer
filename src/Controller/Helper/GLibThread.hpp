@@ -16,10 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef HELPER_GLIBTHREAD_H_INCLUDED
-#define HELPER_GLIBTHREAD_H_INCLUDED
-#include "Thread.hpp"
-
 #include <functional>
 #include <queue>
 
@@ -70,4 +66,3 @@ namespace Gc { namespace Controller { namespace Helper { class GLibThread :
 	}
 };}}}
 
-#endif /* HELPER_GLIBTHREAD_H_INCLUDED */

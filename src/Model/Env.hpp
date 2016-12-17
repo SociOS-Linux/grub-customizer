@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef GRUBENV_INCLUDED
-#define GRUBENV_INCLUDED
 
 #include <string>
 #include <cstdio>
@@ -26,13 +24,6 @@
 #include <map>
 #include <sys/stat.h>
 
-#include "../Common/ArrayStructure/Container.hpp"
-#include "../Model/Logger/Trait/LoggerAware.hpp"
-#include "../Common/Exception.hpp"
-#include "../Common/Type.hpp"
-#include "../Common/FileSystem.hpp"
-#include "Device/MountTable.hpp"
-#include "SettingsStore.hpp"
 
 namespace Gc { namespace Model { class Env :
 	public Gc::Model::Logger::Trait::LoggerAware
@@ -434,4 +425,3 @@ namespace Gc { namespace Model { class Env :
 
 };}}
 
-#endif

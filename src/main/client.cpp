@@ -17,33 +17,9 @@
  */
 
 #include <iostream>
-
-#include "../Bootstrap/View.hpp"
-#include "../Bootstrap/Application.hpp"
-#include "../Bootstrap/Factory.hpp"
-#include "../Model/ContentParser/Chainloader.hpp"
-#include "../Model/ContentParser/FactoryImpl.hpp"
-#include "../Model/ContentParser/Linux.hpp"
-#include "../Model/ContentParser/LinuxIso.hpp"
-#include "../Model/ContentParser/Memtest.hpp"
-#include "../Controller/Helper/RuleMover/Strategy/MoveRuleOnSameLevelInsideProxy.hpp"
-#include "../Controller/Helper/RuleMover/Strategy/MoveRuleIntoSubmenu.hpp"
-#include "../Controller/Helper/RuleMover/Strategy/MoveRuleOutOfSubmenu.hpp"
-#include "../Controller/Helper/RuleMover/Strategy/MoveRuleOutOfProxyOnToplevel.hpp"
-#include "../Controller/Helper/RuleMover/Strategy/MoveRuleIntoForeignSubmenu.hpp"
-#include "../Controller/Helper/RuleMover/Strategy/MoveForeignRuleFromSubmenuToToplevel.hpp"
-#include "../Model/Logger/Stream.hpp"
-#include "../View/Mapper/EntryNameImpl.hpp"
 #include "../config.hpp"
-#include "../Controller/AboutController.hpp"
-#include "../Controller/EntryEditController.hpp"
-#include "../Controller/EnvEditorController.hpp"
-#include "../Controller/ErrorController.hpp"
-#include "../Controller/InstallerController.hpp"
-#include "../Controller/MainController.hpp"
-#include "../Controller/SettingsController.hpp"
-#include "../Controller/ThemeController.hpp"
-#include "../Controller/TrashController.hpp"
+
+#include "client.cpp.inc.hpp"
 
 
 

@@ -16,22 +16,11 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef ERRORCONTROLLERIMPL_H_
-#define ERRORCONTROLLERIMPL_H_
 
 #include <libintl.h>
 #include <locale.h>
 #include <sstream>
 #include "../config.hpp"
-
-#include "../Model/Env.hpp"
-
-#include "../View/Error.hpp"
-#include "../View/Trait/ViewAware.hpp"
-
-#include "Common/ControllerAbstract.hpp"
-#include "Helper/Thread.hpp"
-
 
 namespace Gc { namespace Controller { class ErrorController :
 	public Gc::Controller::Common::ControllerAbstract,
@@ -95,4 +84,3 @@ namespace Gc { namespace Controller { class ErrorController :
 
 };}}
 
-#endif

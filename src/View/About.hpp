@@ -16,9 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef ABOUTDIALOG_H_
-#define ABOUTDIALOG_H_
-#include "../Model/Logger/Trait/LoggerAware.hpp"
 
 /**
  * base class to be implemented by about dialogs
@@ -31,4 +28,3 @@ namespace Gc { namespace View { class About :
 	public: virtual void show()=0;
 };}}
 
-#endif

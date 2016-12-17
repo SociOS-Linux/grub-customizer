@@ -16,11 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef INC_Controller_Helper_RuleMover_AbstractStrategy
-#define INC_Controller_Helper_RuleMover_AbstractStrategy
 
-#include "../../../Model/ListCfg/Rule.hpp"
-#include "../../../Model/ListCfg/ListCfg.hpp"
 #include <memory>
 #include <string>
 
@@ -301,4 +297,3 @@ class AbstractStrategy
 	}
 };}}}}
 
-#endif

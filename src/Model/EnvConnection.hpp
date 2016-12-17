@@ -16,10 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef SRC_MODEL_ENVCONNECTION_HPP_
-#define SRC_MODEL_ENVCONNECTION_HPP_
 
-#include "Env.hpp"
 
 namespace Gc { namespace Model { class EnvConnection
 {
@@ -40,4 +37,3 @@ namespace Gc { namespace Model { class EnvConnection
 };}}
 
 
-#endif /* SRC_MODEL_ENVCONNECTION_HPP_ */

@@ -1,6 +1,7 @@
 /.cproject
 /.project
-build/tmp
-src/config.hpp
+/build/tmp
+/src/config.hpp
 /.pc/
 /.settings/
+/build/dump-autoload

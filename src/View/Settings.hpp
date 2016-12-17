@@ -16,11 +16,7 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef SETTINGSDLG_H_
-#define SETTINGSDLG_H_
 #include <functional>
-
-#include "../Model/Logger/Trait/LoggerAware.hpp"
 
 /**
  * Interface to be implemented by settings dialogs
@@ -119,4 +115,3 @@ namespace Gc { namespace View { class Settings :
 	public: virtual std::string getResolution()=0;
 };}}
 
-#endif

@@ -16,17 +16,10 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef GRUB_CUSTOMIZER_ENTRY_INCLUDED
-#define GRUB_CUSTOMIZER_ENTRY_INCLUDED
 #include <cstdio>
 #include <string>
 #include <list>
 #include <memory>
-#include "../Logger/Trait/LoggerAware.hpp"
-#include "../../Common/Functions.hpp"
-#include "../../Common/ArrayStructure/Container.hpp"
-#include "../../Common/Type.hpp"
-#include "EntryRow.hpp"
 
 namespace Gc { namespace Model { namespace ListCfg { class Entry :
 	public Gc::Model::Logger::Trait::LoggerAware,
@@ -175,4 +168,3 @@ namespace Gc { namespace Model { namespace ListCfg { class Entry :
 	}
 };}}}
 
-#endif

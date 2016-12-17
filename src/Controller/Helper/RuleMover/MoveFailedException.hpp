@@ -16,9 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef INC_Controller_Helper_RuleMover_MoveFailedException
-#define INC_Controller_Helper_RuleMover_MoveFailedException
-#include "../../../Common/Exception.hpp"
 
 namespace Gc { namespace Controller { namespace Helper { namespace RuleMover { class MoveFailedException :
 	public Gc::Common::Exception::GenericException
@@ -26,4 +23,3 @@ namespace Gc { namespace Controller { namespace Helper { namespace RuleMover { c
 	public: inline MoveFailedException(std::string const& message, std::string const& file = "", int line = -1)
 	   : Gc::Common::Exception::GenericException(message, file, line) {}
 };}}}}
-#endif

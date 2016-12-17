@@ -16,18 +16,9 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef GRUBLIST_CFG_DLG_GTK_INCLUDED
-#define GRUBLIST_CFG_DLG_GTK_INCLUDED
-#include "../Main.hpp"
 
 #include <gtkmm.h>
 #include <libintl.h>
-#include "../../config.hpp"
-#include "../../Common/Functions.hpp"
-#include "../../Common/Type.hpp"
-#include "Element/List.hpp"
-#include "Settings.hpp"
-#include "Element/ImageMenuItemOwnKey.hpp"
 
 namespace Gc { namespace View { namespace Gtk {
 namespace Gtk = ::Gtk;
@@ -1153,4 +1144,3 @@ class Main : public Gc::View::Main {
 	}
 };}}}
 
-#endif

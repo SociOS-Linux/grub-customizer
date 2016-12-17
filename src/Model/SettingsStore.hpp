@@ -16,13 +16,10 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef SETTINGSSTORE_H_
-#define SETTINGSSTORE_H_
 
 #include <list>
 #include <string>
 #include <cstdio>
-#include "SettingsStoreRow.hpp"
 
 namespace Gc { namespace Model { class SettingsStore
 {
@@ -207,4 +204,3 @@ namespace Gc { namespace Model { class SettingsStore
 
 };}}
 
-#endif /* SETTINGSSTORE_H_ */

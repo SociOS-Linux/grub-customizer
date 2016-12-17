@@ -16,8 +16,6 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
 
-#ifndef SRC_VIEW_GTK_ELEMENT_COLORCHOOSER_HPP_
-#define SRC_VIEW_GTK_ELEMENT_COLORCHOOSER_HPP_
 
 
 //a gtkmm combobox with colorful foreground and background. useful to choose an item of a predefined color set
@@ -106,4 +104,3 @@ class ColorChooser :
 };}}}}
 
 
-#endif /* SRC_VIEW_GTK_ELEMENT_COLORCHOOSER_HPP_ */
