@@ -16,79 +16,19 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  */
  
+#include "common-build.hpp"
 #include <string>
 #include <memory>
 #include <iostream>
 #include <vector>
 #include <fstream>
 #include <list>
-#include <dirent.h>
 #include <tuple>
 #include <map>
 #include <algorithm>
 
-namespace Autoload
+namespace GcBuild
 {
-
-	std::string getFileContents(std::string const& file)
-	{
-		std::ifstream ifs(file.c_str(), std::ios::in | std::ios::binary | std::ios::ate);
-
-		std::ifstream::pos_type fileSize = ifs.tellg();
-
-		if (fileSize == -1) {
-			throw std::runtime_error("file not found: " + file);
-		}
-
-		ifs.seekg(0, std::ios::beg);
-
-		std::vector<char> bytes(fileSize);
-		ifs.read(&bytes[0], fileSize);
-
-		return std::string(&bytes[0], fileSize);
-	}
-
-	std::string buildCharString(char from, char to)
-	{
-		std::string result;
-
-		for (char c = from; c <= to; c++) {
-			result += c;
-		}
-
-		return result;
-	}
-
-	bool isDir(std::string const& path)
-	{
-		DIR* dir = opendir(path.c_str());
-		if (!dir) {
-			return false;
-		}
-		closedir(dir);
-		return true;
-	}
-
-	bool isFile(std::string const& path)
-	{
-		FILE* file = fopen(path.c_str(), "r");
-		if (!file) {
-			return false;
-		}
-		fclose(file);
-		return true;
-	}
-
-	std::string stringRepeat(std::string const& str, unsigned int times)
-	{
-		std::string result;
-
-		for (unsigned int i = 0; i < times; i++) {
-			result += str;
-		}
-
-		return result;
-	}
 
 	class ClassPathParser
 	{
@@ -254,7 +194,7 @@ int main(int argc, char** argv)
 		return 1;
 	}
 
-	auto autoloadBuilder = std::make_shared<Autoload::AutoloadBuilder>(argv[1]);
+	auto autoloadBuilder = std::make_shared<GcBuild::AutoloadBuilder>(argv[1]);
 
 	autoloadBuilder->build("src/main/client.cpp");
 	autoloadBuilder->build("src/Bootstrap/GtkView.cpp");

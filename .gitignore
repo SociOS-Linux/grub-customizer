@@ -5,3 +5,4 @@
 /.pc/
 /.settings/
 /build/dump-autoload
+/build/prepare-fastbuild
