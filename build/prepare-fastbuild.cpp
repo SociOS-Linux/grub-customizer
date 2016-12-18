@@ -68,6 +68,13 @@ namespace GcBuild
 		{
 			return false;
 		}
+
+		public: virtual void optimize()
+		{
+			for (auto& child : this->children) {
+				child->optimize();
+			}
+		}
 	};
 
 	class Namespace : public AbstractContent
@@ -84,18 +91,12 @@ namespace GcBuild
 		}
 	};
 
-	class Class : public AbstractContent
+	class Property : public AbstractContent
 	{
-		public: std::string name;
-		public: std::string properties;
-		public: virtual ~Class(){}
+		public: virtual ~Property(){}
 		public: std::string describe()
 		{
-			std::string desc = "class " + this->name;
-			if (this->properties.size()) {
-				desc += " | Properties: " + renderString(this->properties);
-			}
-			return desc;
+			return "property";
 		}
 		public: virtual bool isContainer()
 		{
@@ -170,6 +171,131 @@ namespace GcBuild
 		}
 
 		private:
+	};
+
+	class Function : public AbstractContent
+	{
+		public: std::shared_ptr<GenericCode> access;
+		public: std::list<std::shared_ptr<AbstractContent>> returnValue;
+		public: std::string name;
+		public: std::list<std::shared_ptr<AbstractContent>> intermediateStuff; // between ) and {
+		public: std::shared_ptr<Bracket> parameterList;
+		public: virtual ~Function(){}
+		public: std::string describe()
+		{
+			return "function " + this->name;
+		}
+		public: virtual bool isContainer()
+		{
+			return true;
+		}
+	};
+
+	class Class : public AbstractContent
+	{
+		public: std::string name;
+		public: std::string properties;
+		public: virtual ~Class(){}
+		public: std::string describe()
+		{
+			std::string desc = "class " + this->name;
+			if (this->properties.size()) {
+				desc += " | Properties: " + renderString(this->properties);
+			}
+			return desc;
+		}
+		public: virtual bool isContainer()
+		{
+			return true;
+		}
+
+		public: virtual void optimize()
+		{
+			auto splittedChildren = this->splitChildren();
+			this->children = {};
+			for (auto& childList : splittedChildren) {
+				this->children.push_back(this->convert(childList));
+			}
+
+			AbstractContent::optimize();
+		}
+
+		/**
+		 * split by entity ends like ; and {}
+		 */
+		private: std::list<std::list<std::shared_ptr<AbstractContent>>> splitChildren()
+		{
+			std::list<std::list<std::shared_ptr<AbstractContent>>> result;
+
+			result.push_back({});
+
+			for (auto& child : this->children) {
+				result.back().push_back(child);
+
+				auto childAsBracket = dynamic_cast<Bracket*>(child.get());
+				if (childAsBracket != nullptr && childAsBracket->openingBracket == "{") {
+					result.push_back({});
+				}
+
+				auto childAsGeneric = dynamic_cast<GenericCode*>(child.get());
+				if (childAsGeneric != nullptr && childAsGeneric->type == "commandSeparator") {
+					result.push_back({});
+				}
+			}
+
+			return result;
+		}
+
+		private: std::shared_ptr<AbstractContent> convert(std::list<std::shared_ptr<AbstractContent>> list)
+		{
+			bool isFunction = false;
+			for (auto& child : list) {
+				auto childAsBracket = std::dynamic_pointer_cast<Bracket>(child);
+				if (childAsBracket && childAsBracket->openingBracket == "(") {
+					isFunction = true;
+				}
+			}
+
+			if (isFunction) {
+				auto result = std::make_shared<Function>();
+				result->children = list.back()->children; // use contents of closing bracket
+				list.pop_back();
+				// read until parameter list
+				while (list.size() > 0 && (!std::dynamic_pointer_cast<Bracket>(list.back()) || std::dynamic_pointer_cast<Bracket>(list.back())->openingBracket != "(")) {
+					result->intermediateStuff.push_back(list.back());
+					list.pop_back();
+				}
+				if (list.size() == 0) {
+					throw std::runtime_error("function read failed - parameter list not found");
+				}
+				result->parameterList = std::dynamic_pointer_cast<Bracket>(list.back());
+
+				// read until first word (function name)
+				while (list.size() > 0 && (!std::dynamic_pointer_cast<GenericCode>(list.back()) || std::dynamic_pointer_cast<GenericCode>(list.back())->type != "word")) {
+					list.pop_back();
+				}
+				if (list.size() == 0) {
+					throw std::runtime_error("function read failed - name not found");
+				}
+				result->name = dynamic_cast<GenericCode*>(list.back().get())->data;
+
+				// read return value
+				while (list.size() > 0 && (!std::dynamic_pointer_cast<GenericCode>(list.back()) || std::dynamic_pointer_cast<GenericCode>(list.back())->type != "accessControl")) {
+					result->returnValue.push_back(list.back());
+					list.pop_back();
+				}
+				if (list.size() != 0) {
+					result->access = std::dynamic_pointer_cast<GenericCode>(list.back());
+				}
+
+				return result;
+			} else {
+				auto result = std::make_shared<Property>();
+				result->children = list;
+				return result;
+			}
+		}
+
 	};
 
 	class File : public AbstractContent
@@ -451,6 +577,7 @@ namespace GcBuild
 			auto content = GcBuild::getFileContents(this->root + "/" + inputFile);
 
 			auto file = std::make_shared<Parser>(content)->parse();
+			file->optimize();
 
 			file->dumpTree();
 		}
