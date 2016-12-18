@@ -185,10 +185,13 @@ namespace GcBuild
 	{
 		public: std::string content;
 		private: size_t pos = 0;
+		private: std::string alpha;
 
 		public: Parser(std::string const& content = "")
 			: content(content)
-		{}
+		{
+			this->alpha = buildCharString('a', 'z') + buildCharString('A', 'Z') + buildCharString('0', '9');
+		}
 
 		public: std::shared_ptr<File> parse()
 		{
@@ -232,6 +235,7 @@ namespace GcBuild
 			(result = this->readPreprocessor()) ||
 			(result = this->readNamespace()) ||
 			(result = this->readClass()) ||
+			(result = this->readWord()) ||
 			(result = this->readChar());
 
 			return result;
@@ -302,7 +306,7 @@ namespace GcBuild
 		{
 			std::shared_ptr<Namespace> result = nullptr;
 
-			if (this->content.substr(this->pos, std::string("namespace").size()) == "namespace") {
+			if (this->getNextWord() == "namespace") {
 				pos += std::string("namespace").size();
 				result = std::make_shared<Namespace>();
 				size_t contentBracketPos = this->content.find_first_of('{', this->pos);
@@ -317,7 +321,7 @@ namespace GcBuild
 		{
 			std::shared_ptr<Class> result = nullptr;
 
-			if (this->content.substr(this->pos, std::string("class").size()) == "class") {
+			if (this->getNextWord() == "class") {
 				pos += std::string("class").size();
 				result = std::make_shared<Class>();
 				size_t contentBracketPos = this->content.find_first_of('{', this->pos);
@@ -361,6 +365,19 @@ namespace GcBuild
 			return result;
 		}
 
+		private: std::shared_ptr<GenericCode> readWord()
+		{
+			std::shared_ptr<GenericCode> word = nullptr;
+
+			std::string wordStr = this->getNextWord();
+			if (wordStr != "") {
+				word = std::make_shared<GenericCode>("word", wordStr);
+				this->pos += wordStr.size();
+			}
+
+			return word;
+		}
+
 		/**
 		 * just read a char - should be used as fallback
 		 */
@@ -372,6 +389,20 @@ namespace GcBuild
 			}
 			this->pos++;
 			return std::make_shared<GenericCode>("char", data);
+		}
+
+		private: std::string getNextWord()
+		{
+			std::string result;
+
+			std::string firstChar = this->content.substr(this->pos, 1);
+
+			if (firstChar.find_first_of(this->alpha) != -1) {
+				size_t end = this->content.find_first_not_of(this->alpha, this->pos);
+				result = this->content.substr(this->pos, end - this->pos);
+			}
+
+			return result;
 		}
 	};
 
