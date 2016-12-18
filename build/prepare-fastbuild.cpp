@@ -185,12 +185,12 @@ namespace GcBuild
 	{
 		public: std::string content;
 		private: size_t pos = 0;
-		private: std::string alpha;
+		private: std::string wordChars;
 
 		public: Parser(std::string const& content = "")
 			: content(content)
 		{
-			this->alpha = buildCharString('a', 'z') + buildCharString('A', 'Z') + buildCharString('0', '9');
+			this->wordChars = buildCharString('a', 'z') + buildCharString('A', 'Z') + buildCharString('0', '9') + "_";
 		}
 
 		public: std::shared_ptr<File> parse()
@@ -235,7 +235,9 @@ namespace GcBuild
 			(result = this->readPreprocessor()) ||
 			(result = this->readNamespace()) ||
 			(result = this->readClass()) ||
+			(result = this->readAccessControl()) ||
 			(result = this->readWord()) ||
+			(result = this->readCommandSeparator()) ||
 			(result = this->readChar());
 
 			return result;
@@ -365,6 +367,21 @@ namespace GcBuild
 			return result;
 		}
 
+		private: std::shared_ptr<GenericCode> readAccessControl()
+		{
+			std::shared_ptr<GenericCode> accessControl = nullptr;
+
+			std::string wordStr = this->getNextWord();
+			if (wordStr == "private" || wordStr == "protected" || wordStr == "public") {
+				this->pos += wordStr.size();
+				size_t end = this->content.find_first_of(':', this->pos);
+				accessControl = std::make_shared<GenericCode>("accessControl", wordStr + this->content.substr(this->pos, end - this->pos + 1));
+				this->pos = end  + 1;
+			}
+
+			return accessControl;
+		}
+
 		private: std::shared_ptr<GenericCode> readWord()
 		{
 			std::shared_ptr<GenericCode> word = nullptr;
@@ -376,6 +393,19 @@ namespace GcBuild
 			}
 
 			return word;
+		}
+
+		/**
+		 * just read a char - should be used as fallback
+		 */
+		private: std::shared_ptr<GenericCode> readCommandSeparator()
+		{
+			std::string data = this->content.substr(this->pos, 1);
+			if (data != ";") {
+				return nullptr;
+			}
+			this->pos++;
+			return std::make_shared<GenericCode>("commandSeparator", data);
 		}
 
 		/**
@@ -397,8 +427,8 @@ namespace GcBuild
 
 			std::string firstChar = this->content.substr(this->pos, 1);
 
-			if (firstChar.find_first_of(this->alpha) != -1) {
-				size_t end = this->content.find_first_not_of(this->alpha, this->pos);
+			if (firstChar.find_first_of(this->wordChars) != -1) {
+				size_t end = this->content.find_first_not_of(this->wordChars, this->pos);
 				result = this->content.substr(this->pos, end - this->pos);
 			}
 
