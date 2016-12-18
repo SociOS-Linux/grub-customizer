@@ -21,6 +21,7 @@
 #include <string>
 #include <iostream>
 #include <list>
+#include <map>
 
 namespace GcBuild
 {
@@ -90,6 +91,33 @@ namespace GcBuild
 			}
 			return result;
 		}
+
+		public: virtual std::string getPathPart()
+		{
+			return "";
+		}
+
+		public: virtual bool isFunction()
+		{
+			return false;
+		}
+
+		public: std::map<std::shared_ptr<AbstractContent>, std::list<std::string>> findFunctions(
+			std::list<std::string> currentPath = {}
+		) {
+			if (this->getPathPart() != "") {
+				currentPath.push_back(this->getPathPart());
+			}
+			std::map<std::shared_ptr<AbstractContent>, std::list<std::string>> result;
+			for (auto& child : this->children) {
+				if (child->isFunction()) {
+					result[child] = currentPath;
+				}
+				auto childItems = child->findFunctions(currentPath);
+				result.insert(childItems.begin(), childItems.end());
+			}
+			return result;
+		}
 	};
 
 	class Namespace : public AbstractContent
@@ -107,8 +135,13 @@ namespace GcBuild
 
 		public: virtual std::string render(std::list<std::string> path) override
 		{
-			path.push_back(this->name);
+			path.push_back(this->getPathPart());
 			return "namespace " + this->name + " {" + AbstractContent::render(path) + "}";
+		}
+
+		public: virtual std::string getPathPart() override
+		{
+			return this->name;
 		}
 	};
 
@@ -236,12 +269,16 @@ namespace GcBuild
 				content += retValPart->render(path);
 			}
 			if (dest == AbstractContent::RenderDest::SOURCE) {
-				content += "Namespace::"; // TODO
+				content += join(path, "::") + "::";
 			}
 			content += this->name;
 			content += this->parameterList->render(path);
 			if (this->name != path.back() || dest == RenderDest::SOURCE) {
 				for (auto& interPart : this->intermediateStuff) {
+					// source must not have the keyword "override"
+					if (dest == RenderDest::SOURCE && this->isWord(interPart, "override")) {
+						continue;
+					}
 					content += interPart->render(path);
 				}
 			}
@@ -253,9 +290,29 @@ namespace GcBuild
 			return content;
 		}
 
+		private: bool isWord(std::shared_ptr<AbstractContent> obj, std::string word)
+		{
+			auto objectAsGenericCode = std::dynamic_pointer_cast<GenericCode>(obj);
+			if (objectAsGenericCode == nullptr) {
+				return false;
+			}
+			if (objectAsGenericCode->type != "word") {
+				return false;
+			}
+			if (objectAsGenericCode->data != word) {
+				return false;
+			}
+			return true;
+		}
+
 		public: virtual std::string render(std::list<std::string> path) override
 		{
 			return this->render(AbstractContent::RenderDest::HEADER, path);
+		}
+
+		public: virtual bool isFunction()
+		{
+			return true;
 		}
 	};
 
@@ -383,8 +440,13 @@ namespace GcBuild
 
 		public: virtual std::string render(std::list<std::string> path) override
 		{
-			path.push_back(this->name);
+			path.push_back(this->getPathPart());
 			return "class " + this->name + this->properties + "\n{ " + AbstractContent::render(path) + "}";
+		}
+
+		public: virtual std::string getPathPart() override
+		{
+			return this->name;
 		}
 
 	};
@@ -395,6 +457,17 @@ namespace GcBuild
 		public: virtual std::string describe()
 		{
 			return "file";
+		}
+
+		public: std::string renderSource()
+		{
+			std::string result;
+
+			for (auto& functionAndPath : this->findFunctions()) {
+				result += std::dynamic_pointer_cast<Function>(functionAndPath.first)->render(RenderDest::SOURCE, functionAndPath.second);
+			}
+
+			return result;
 		}
 	};
 	
@@ -669,9 +742,9 @@ namespace GcBuild
 
 			auto file = std::make_shared<Parser>(content)->parse();
 			file->optimize();
-			//file->dumpTree();
 
-			std::cout << file->render({}) << std::endl;
+			putFileContents(this->root + "/" + headerDest, file->render({}));
+			putFileContents(this->root + "/" + implDest, file->renderSource());
 		}
 	};
 }

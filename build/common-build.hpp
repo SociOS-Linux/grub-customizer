@@ -21,6 +21,7 @@
 #include <fstream>
 #include <sstream>
 #include <dirent.h>
+#include <list>
 
 namespace GcBuild
 {
@@ -41,6 +42,12 @@ namespace GcBuild
 		ifs.read(&bytes[0], fileSize);
 
 		return std::string(&bytes[0], fileSize);
+	}
+
+	void putFileContents(std::string const& file, std::string const& data)
+	{
+		std::ofstream ofs(file.c_str(), std::ios::out);
+		ofs << data;
 	}
 
 	std::string buildCharString(char from, char to)
@@ -119,5 +126,15 @@ namespace GcBuild
 
 	std::string trim(std::string string, std::string const& chars = " \t\n\r") {
 		return rtrim(ltrim(string, chars));
+	}
+	std::string join(std::list<std::string> array, std::string separator) {
+		std::string result;
+		for (auto& item : array) {
+			if (result != "") {
+				result += separator;
+			}
+			result += item;
+		}
+		return result;
 	}
 }
