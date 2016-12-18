@@ -44,6 +44,12 @@ namespace GcBuild
 
 	class AbstractContent
 	{
+		public: enum class RenderDest
+		{
+			HEADER,
+			SOURCE
+		};
+
 		public: std::list<std::shared_ptr<AbstractContent>> children;
 
 		public: virtual ~AbstractContent(){}
@@ -75,6 +81,15 @@ namespace GcBuild
 				child->optimize();
 			}
 		}
+
+		public: virtual std::string render(std::list<std::string> path)
+		{
+			std::string result;
+			for (auto& child : this->children) {
+				result += child->render(path);
+			}
+			return result;
+		}
 	};
 
 	class Namespace : public AbstractContent
@@ -88,6 +103,12 @@ namespace GcBuild
 		public: virtual bool isContainer()
 		{
 			return true;
+		}
+
+		public: virtual std::string render(std::list<std::string> path) override
+		{
+			path.push_back(this->name);
+			return "namespace " + this->name + " {" + AbstractContent::render(path) + "}";
 		}
 	};
 
@@ -130,6 +151,11 @@ namespace GcBuild
 		{
 			return true;
 		}
+
+		public: virtual std::string render(std::list<std::string> path) override
+		{
+			return this->openingBracket + AbstractContent::render(path) + this->closingBracket;
+		}
 	};
 
 	/**
@@ -170,11 +196,15 @@ namespace GcBuild
 			return desc;
 		}
 
-		private:
+		public: virtual std::string render(std::list<std::string> path) override
+		{
+			return this->data;
+		}
 	};
 
 	class Function : public AbstractContent
 	{
+		public: std::list<std::shared_ptr<AbstractContent>> beforeAccess;
 		public: std::shared_ptr<GenericCode> access;
 		public: std::list<std::shared_ptr<AbstractContent>> returnValue;
 		public: std::string name;
@@ -188,6 +218,44 @@ namespace GcBuild
 		public: virtual bool isContainer()
 		{
 			return true;
+		}
+
+		public: virtual std::string render(RenderDest dest, std::list<std::string> path)
+		{
+			std::string content;
+			if (dest == AbstractContent::RenderDest::HEADER) {
+				for (auto& before : this->beforeAccess) {
+					content += before->render(path);
+				}
+			}
+
+			if (this->access && dest == AbstractContent::RenderDest::HEADER) {
+				content += this->access->render(path);
+			}
+			for (auto& retValPart : this->returnValue) {
+				content += retValPart->render(path);
+			}
+			if (dest == AbstractContent::RenderDest::SOURCE) {
+				content += "Namespace::"; // TODO
+			}
+			content += this->name;
+			content += this->parameterList->render(path);
+			if (this->name != path.back() || dest == RenderDest::SOURCE) {
+				for (auto& interPart : this->intermediateStuff) {
+					content += interPart->render(path);
+				}
+			}
+			if (dest == AbstractContent::RenderDest::SOURCE) {
+				content += "{" + AbstractContent::render(path) + "}";
+			} else {
+				content += ";";
+			}
+			return content;
+		}
+
+		public: virtual std::string render(std::list<std::string> path) override
+		{
+			return this->render(AbstractContent::RenderDest::HEADER, path);
 		}
 	};
 
@@ -257,18 +325,28 @@ namespace GcBuild
 			}
 
 			if (isFunction) {
+				// use first round brackets as parameter list
+				std::shared_ptr<Bracket> parameterList = nullptr;
+				for (auto& child : list) {
+					if (std::dynamic_pointer_cast<Bracket>(child) && std::dynamic_pointer_cast<Bracket>(child)->openingBracket == "(") {
+						parameterList = std::dynamic_pointer_cast<Bracket>(child);
+						break;
+					}
+				}
+
 				auto result = std::make_shared<Function>();
 				result->children = list.back()->children; // use contents of closing bracket
 				list.pop_back();
 				// read until parameter list
-				while (list.size() > 0 && (!std::dynamic_pointer_cast<Bracket>(list.back()) || std::dynamic_pointer_cast<Bracket>(list.back())->openingBracket != "(")) {
-					result->intermediateStuff.push_back(list.back());
+				while (list.size() > 0 && list.back() != parameterList) {
+					result->intermediateStuff.push_front(list.back());
 					list.pop_back();
 				}
 				if (list.size() == 0) {
 					throw std::runtime_error("function read failed - parameter list not found");
 				}
 				result->parameterList = std::dynamic_pointer_cast<Bracket>(list.back());
+				list.pop_back();
 
 				// read until first word (function name)
 				while (list.size() > 0 && (!std::dynamic_pointer_cast<GenericCode>(list.back()) || std::dynamic_pointer_cast<GenericCode>(list.back())->type != "word")) {
@@ -278,14 +356,21 @@ namespace GcBuild
 					throw std::runtime_error("function read failed - name not found");
 				}
 				result->name = dynamic_cast<GenericCode*>(list.back().get())->data;
+				list.pop_back();
 
 				// read return value
 				while (list.size() > 0 && (!std::dynamic_pointer_cast<GenericCode>(list.back()) || std::dynamic_pointer_cast<GenericCode>(list.back())->type != "accessControl")) {
-					result->returnValue.push_back(list.back());
+					result->returnValue.push_front(list.back());
 					list.pop_back();
 				}
 				if (list.size() != 0) {
 					result->access = std::dynamic_pointer_cast<GenericCode>(list.back());
+					list.pop_back();
+				}
+
+				while (list.size() != 0) {
+					result->beforeAccess.push_front(list.back());
+					list.pop_back();
 				}
 
 				return result;
@@ -294,6 +379,12 @@ namespace GcBuild
 				result->children = list;
 				return result;
 			}
+		}
+
+		public: virtual std::string render(std::list<std::string> path) override
+		{
+			path.push_back(this->name);
+			return "class " + this->name + this->properties + "\n{ " + AbstractContent::render(path) + "}";
 		}
 
 	};
@@ -459,7 +550,7 @@ namespace GcBuild
 					result->name = nameAndProperties;
 				} else {
 					result->name = GcBuild::trim(nameAndProperties.substr(0, colonPos));
-					result->properties = GcBuild::trim(nameAndProperties.substr(colonPos + 1));
+					result->properties = GcBuild::trim(nameAndProperties.substr(colonPos));
 				}
 				this->pos = contentBracketPos + 1;
 			}
@@ -578,8 +669,9 @@ namespace GcBuild
 
 			auto file = std::make_shared<Parser>(content)->parse();
 			file->optimize();
+			//file->dumpTree();
 
-			file->dumpTree();
+			std::cout << file->render({}) << std::endl;
 		}
 	};
 }
