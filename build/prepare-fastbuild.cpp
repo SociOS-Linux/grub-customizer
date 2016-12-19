@@ -374,10 +374,12 @@ namespace GcBuild
 		private: std::shared_ptr<AbstractContent> convert(std::list<std::shared_ptr<AbstractContent>> list)
 		{
 			bool isFunction = false;
-			for (auto& child : list) {
-				auto childAsBracket = std::dynamic_pointer_cast<Bracket>(child);
-				if (childAsBracket && childAsBracket->openingBracket == "(") {
-					isFunction = true;
+			if (std::dynamic_pointer_cast<Bracket>(list.back()) && std::dynamic_pointer_cast<Bracket>(list.back())->openingBracket == "{") {
+				for (auto& child : list) {
+					auto childAsBracket = std::dynamic_pointer_cast<Bracket>(child);
+					if (childAsBracket && childAsBracket->openingBracket == "(") {
+						isFunction = true;
+					}
 				}
 			}
 
