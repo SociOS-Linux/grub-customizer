@@ -6,3 +6,4 @@
 /.settings/
 /build/dump-autoload
 /build/prepare-fastbuild
+/build/fastbuild

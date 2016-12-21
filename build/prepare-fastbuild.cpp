@@ -22,6 +22,9 @@
 #include <iostream>
 #include <list>
 #include <map>
+#include <dirent.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 
 namespace GcBuild
 {
@@ -601,9 +604,14 @@ namespace GcBuild
 			std::shared_ptr<Namespace> result = nullptr;
 
 			if (this->getNextWord() == "namespace") {
+				size_t end = this->content.find_first_of(";{", this->pos + std::string("namespace").size());
+				if (this->content.substr(end, 1) == ";") {
+					// end if there follows ";" instead of "{"
+					return nullptr;
+				}
+				size_t contentBracketPos = end;
 				pos += std::string("namespace").size();
 				result = std::make_shared<Namespace>();
-				size_t contentBracketPos = this->content.find_first_of('{', this->pos);
 				result->name = GcBuild::trim(this->content.substr(this->pos, contentBracketPos - this->pos - 1));
 				this->pos = contentBracketPos + 1;
 			}
@@ -749,20 +757,39 @@ namespace GcBuild
 			putFileContents(this->root + "/" + implDest, file->renderSource());
 		}
 	};
+
+	void prepareDirectory(std::string const& basePath, std::string const& file)
+	{
+		auto parts = split(file, "/");
+		parts.pop_back();
+		std::string path = "";
+		for (auto& part : parts) {
+			path += part + "/";
+			mkdir((basePath + "/" + path).c_str(), 0777);
+		}
+	}
 }
 
 int main(int argc, char** argv)
 {
-	if (argc != 2) {
+	if (argc < 2) {
 		std::cerr << "I need the root path of the project as argument #1" << std::endl;
 		return 1;
 	}
 
 	auto optimizer = std::make_shared<GcBuild::Optimizer>(argv[1]);
 
-	optimizer->optimize(
-		"src/Controller/AboutController.hpp",
-		"src/Controller/AboutController.h",
-		"src/Controller/AboutController.cpp"
-	);
+	auto destPath = std::string(argv[1]) + "/build/fastbuild";
+
+	for (int i = 2; i < argc; i++) {
+		std::cout << "preparing " << argv[i] << std::endl;
+
+		mkdir(destPath.c_str(), 0777);
+		GcBuild::prepareDirectory(destPath, argv[i]);
+		optimizer->optimize(
+			argv[i],
+			destPath + "/" + argv[i],
+			GcBuild::substituteSuffix(destPath + "/" + argv[i], "cpp")
+		);
+	}
 }

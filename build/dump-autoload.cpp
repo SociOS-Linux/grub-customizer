@@ -189,17 +189,27 @@ namespace GcBuild
  
 int main(int argc, char** argv)
 {
-	if (argc != 2) {
+	if (argc < 2) {
 		std::cerr << "I need the root path of the project as argument #1" << std::endl;
 		return 1;
 	}
 
 	auto autoloadBuilder = std::make_shared<GcBuild::AutoloadBuilder>(argv[1]);
 
-	autoloadBuilder->build("src/main/client.cpp");
-	autoloadBuilder->build("src/Bootstrap/GtkView.cpp");
-	autoloadBuilder->build("src/Bootstrap/GtkApplication.cpp");
-	autoloadBuilder->build("src/Bootstrap/FactoryImpl/GlibThread.cpp");
-	autoloadBuilder->build("src/Bootstrap/FactoryImpl/GLibRegex.cpp");
-	autoloadBuilder->build("src/main/proxy.cpp");
+	if (argc > 2) {
+		for (int i = 2; i < argc; i++) {
+			try {
+				autoloadBuilder->build(argv[i]);
+			} catch (std::exception const& e) {
+				std::cout << "E";
+			}
+		}
+	} else {
+		autoloadBuilder->build("src/main/client.cpp");
+		autoloadBuilder->build("src/Bootstrap/GtkView.cpp");
+		autoloadBuilder->build("src/Bootstrap/GtkApplication.cpp");
+		autoloadBuilder->build("src/Bootstrap/FactoryImpl/GlibThread.cpp");
+		autoloadBuilder->build("src/Bootstrap/FactoryImpl/GLibRegex.cpp");
+		autoloadBuilder->build("src/main/proxy.cpp");
+	}
 }

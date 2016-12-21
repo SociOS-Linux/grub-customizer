@@ -137,4 +137,27 @@ namespace GcBuild
 		}
 		return result;
 	}
+	std::list<std::string> split(std::string str, std::string token)
+	{
+		std::list<std::string> result;
+		size_t pos = 0;
+		while (pos != -1) {
+			size_t end = str.find(token, pos);
+			result.push_back(str.substr(pos, end - pos));
+			pos = end;
+			if (pos != -1) {
+				pos += token.size();
+			}
+		}
+		return result;
+	}
+
+	std::string substituteSuffix(std::string const& file, std::string const& newSuffix)
+	{
+		size_t last = file.find_last_of('.');
+		if (last == -1) {
+			return file + "." + newSuffix;
+		}
+		return file.substr(0, last) + "." + newSuffix;
+	}
 }
