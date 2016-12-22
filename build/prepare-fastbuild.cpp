@@ -495,7 +495,7 @@ namespace GcBuild
 
 	};
 
-	class File : public AbstractContent
+	class File : public AbstractContent, public std::enable_shared_from_this<File>
 	{
 		public: virtual ~File(){}
 		public: virtual std::string describe()
@@ -512,6 +512,26 @@ namespace GcBuild
 			}
 
 			return result;
+		}
+
+		public: virtual void groupContainers()
+		{
+			std::list<std::shared_ptr<AbstractContent>> containerPath;
+			containerPath.push_back(this->shared_from_this());
+
+			auto childrenOriginal = this->children;
+			this->children.clear();
+			for (auto& child : childrenOriginal) {
+				if (!child->isEndOfContainer()) {
+					containerPath.back()->children.push_back(child);
+				}
+				if (child->isContainer()) {
+					containerPath.push_back(child);
+				}
+				if (child->isEndOfContainer()) {
+					containerPath.pop_back();
+				}
+			}
 		}
 	};
 	
@@ -533,20 +553,9 @@ namespace GcBuild
 
 			std::shared_ptr<File> result = std::make_shared<File>();
 
-			std::list<std::shared_ptr<AbstractContent>> containerPath;
-			containerPath.push_back(result);
-
 			std::shared_ptr<AbstractContent> nextPart = nullptr;
 			while ((nextPart = this->readNextPart())) {
-				if (!nextPart->isEndOfContainer()) {
-					containerPath.back()->children.push_back(nextPart);
-				}
-				if (nextPart->isContainer()) {
-					containerPath.push_back(nextPart);
-				}
-				if (nextPart->isEndOfContainer()) {
-					containerPath.pop_back();
-				}
+				result->children.push_back(nextPart);
 			}
 
 			return result;
@@ -784,6 +793,7 @@ namespace GcBuild
 
 			auto file = std::make_shared<Parser>(content)->parse();
 			file->groupChars();
+			file->groupContainers();
 			file->dumpTree();
 //			file->optimize();
 
