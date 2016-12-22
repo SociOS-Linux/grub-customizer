@@ -121,6 +121,30 @@ namespace GcBuild
 			}
 			return result;
 		}
+
+		public: virtual void groupChars()
+		{
+			std::list<std::shared_ptr<AbstractContent>> newList;
+			for (auto& child : this->children) {
+				child->groupChars(); // recursion
+
+				if (newList.size()) {
+					try {
+						newList.back()->mergeIfType("char", child);
+					} catch (std::runtime_error const& e) {
+						newList.push_back(child);
+					}
+				} else {
+					newList.push_back(child);
+				}
+			}
+			this->children = newList;
+		}
+
+		public: virtual void mergeIfType(std::string const& type, std::shared_ptr<AbstractContent> other)
+		{
+			throw std::runtime_error("merge not supported");
+		}
 	};
 
 	class Namespace : public AbstractContent
@@ -235,6 +259,21 @@ namespace GcBuild
 		public: virtual std::string render(std::list<std::string> path) override
 		{
 			return this->data;
+		}
+
+		public: virtual void mergeIfType(std::string const& type, std::shared_ptr<AbstractContent> other)
+		{
+			if (this->type != type) {
+				throw std::runtime_error("wrong type");
+			}
+			auto otherAsGenericCode = std::dynamic_pointer_cast<GenericCode>(other);
+			if (otherAsGenericCode == nullptr) {
+				throw std::runtime_error("other object is not generic code");
+			}
+			if (otherAsGenericCode->type != type) {
+				throw std::runtime_error("other object is wrong type");
+			}
+			this->data += otherAsGenericCode->data;
 		}
 	};
 
@@ -499,14 +538,7 @@ namespace GcBuild
 
 			std::shared_ptr<AbstractContent> nextPart = nullptr;
 			while ((nextPart = this->readNextPart())) {
-				if (dynamic_cast<GenericCode*>(nextPart.get())
-					&& dynamic_cast<GenericCode*>(nextPart.get())->type == "char"
-					&& containerPath.back()->children.size()
-					&& dynamic_cast<GenericCode*>(containerPath.back()->children.back().get())
-					&& dynamic_cast<GenericCode*>(containerPath.back()->children.back().get())->type == "char") {
-					// merge chars
-					dynamic_cast<GenericCode&>(*containerPath.back()->children.back()).data += dynamic_cast<GenericCode&>(*nextPart).data;
-				} else if (!nextPart->isEndOfContainer()) {
+				if (!nextPart->isEndOfContainer()) {
 					containerPath.back()->children.push_back(nextPart);
 				}
 				if (nextPart->isContainer()) {
@@ -751,10 +783,12 @@ namespace GcBuild
 			auto content = GcBuild::getFileContents(this->root + "/" + inputFile);
 
 			auto file = std::make_shared<Parser>(content)->parse();
-			file->optimize();
+			file->groupChars();
+			file->dumpTree();
+//			file->optimize();
 
-			putFileContents(this->root + "/" + headerDest, file->render({}));
-			putFileContents(this->root + "/" + implDest, file->renderSource());
+//			putFileContents(this->root + "/" + headerDest, file->render({}));
+//			putFileContents(this->root + "/" + implDest, file->renderSource());
 		}
 	};
 
