@@ -46,7 +46,7 @@ namespace GcBuild
 		return rendered;
 	}
 
-	class AbstractContent
+	class AbstractContent : public std::enable_shared_from_this<AbstractContent>
 	{
 		public: enum class RenderDest
 		{
@@ -55,6 +55,7 @@ namespace GcBuild
 		};
 
 		public: std::list<std::shared_ptr<AbstractContent>> children;
+		public: bool isGrouped = false;
 
 		public: virtual ~AbstractContent(){}
 
@@ -139,6 +140,34 @@ namespace GcBuild
 				}
 			}
 			this->children = newList;
+		}
+
+		public: virtual void groupContainers()
+		{
+			std::list<std::shared_ptr<AbstractContent>> containerPath;
+			containerPath.push_back(this->shared_from_this());
+
+			auto childrenOriginal = this->children;
+			this->children.clear();
+			for (auto& child : childrenOriginal) {
+				if (child->isGrouped) {
+					// if already grouped, run through children to find ungrouped containers
+					containerPath.back()->children.push_back(child);
+					child->groupContainers();
+				} else {
+					// it's still a flat container
+					if (!child->isEndOfContainer()) {
+						containerPath.back()->children.push_back(child);
+					}
+					if (child->isContainer()) {
+						containerPath.push_back(child);
+					}
+					if (child->isEndOfContainer()) {
+						containerPath.back()->isGrouped = true;
+						containerPath.pop_back();
+					}
+				}
+			}
 		}
 
 		public: virtual void mergeIfType(std::string const& type, std::shared_ptr<AbstractContent> other)
@@ -495,7 +524,7 @@ namespace GcBuild
 
 	};
 
-	class File : public AbstractContent, public std::enable_shared_from_this<File>
+	class File : public AbstractContent
 	{
 		public: virtual ~File(){}
 		public: virtual std::string describe()
@@ -512,26 +541,6 @@ namespace GcBuild
 			}
 
 			return result;
-		}
-
-		public: virtual void groupContainers()
-		{
-			std::list<std::shared_ptr<AbstractContent>> containerPath;
-			containerPath.push_back(this->shared_from_this());
-
-			auto childrenOriginal = this->children;
-			this->children.clear();
-			for (auto& child : childrenOriginal) {
-				if (!child->isEndOfContainer()) {
-					containerPath.back()->children.push_back(child);
-				}
-				if (child->isContainer()) {
-					containerPath.push_back(child);
-				}
-				if (child->isEndOfContainer()) {
-					containerPath.pop_back();
-				}
-			}
 		}
 	};
 	
@@ -793,6 +802,7 @@ namespace GcBuild
 
 			auto file = std::make_shared<Parser>(content)->parse();
 			file->groupChars();
+			file->groupContainers();
 			file->groupContainers();
 			file->dumpTree();
 //			file->optimize();
