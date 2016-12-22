@@ -46,6 +46,21 @@ namespace GcBuild
 		return rendered;
 	}
 
+	std::string getNextWord(std::string const& str, size_t pos)
+	{
+		static const std::string wordChars = buildCharString('a', 'z') + buildCharString('A', 'Z') + buildCharString('0', '9') + "_";
+		std::string result;
+
+		std::string firstChar = str.substr(pos, 1);
+
+		if (firstChar.find_first_of(wordChars) != -1) {
+			size_t end = str.find_first_not_of(wordChars, pos);
+			result = str.substr(pos, end - pos);
+		}
+
+		return result;
+	}
+
 	class AbstractContent : public std::enable_shared_from_this<AbstractContent>
 	{
 		public: enum class RenderDest
@@ -199,6 +214,25 @@ namespace GcBuild
 		{
 			return this->name;
 		}
+		public: static std::shared_ptr<Namespace> readFromString(std::string const& content, size_t& pos)
+		{
+			std::shared_ptr<Namespace> result = nullptr;
+
+			if (getNextWord(content, pos) == "namespace") {
+				size_t end = content.find_first_of(";{", pos + std::string("namespace").size());
+				if (content.substr(end, 1) == ";") {
+					// end if there follows ";" instead of "{"
+					return nullptr;
+				}
+				size_t contentBracketPos = end;
+				pos += std::string("namespace").size();
+				result = std::make_shared<Namespace>();
+				result->name = GcBuild::trim(content.substr(pos, contentBracketPos - pos - 1));
+				pos = contentBracketPos + 1;
+			}
+
+			return result;
+		}
 	};
 
 	class Property : public AbstractContent
@@ -245,6 +279,19 @@ namespace GcBuild
 		{
 			return this->openingBracket + AbstractContent::render(path) + this->closingBracket;
 		}
+
+		public: static std::shared_ptr<Bracket> readFromString(std::string const& content, size_t& pos)
+		{
+			std::shared_ptr<Bracket> result = nullptr;
+
+			std::string bracket = content.substr(pos, 1);
+			if (bracket == "{" || bracket == "(" || bracket == "[") {
+				result = std::make_shared<Bracket>(bracket);
+				pos++;
+			}
+
+			return result;
+		}
 	};
 
 	/**
@@ -262,6 +309,19 @@ namespace GcBuild
 		public: virtual bool isEndOfContainer()
 		{
 			return true;
+		}
+
+		public: static std::shared_ptr<ClosingBracket> readFromString(std::string const& content, size_t& pos)
+		{
+			std::shared_ptr<ClosingBracket> result = nullptr;
+
+			std::string bracket = content.substr(pos, 1);
+			if (bracket == "}" || bracket == ")" || bracket == "]") {
+				result = std::make_shared<ClosingBracket>(bracket);
+				pos++;
+			}
+
+			return result;
 		}
 	};
 
@@ -303,6 +363,124 @@ namespace GcBuild
 				throw std::runtime_error("other object is wrong type");
 			}
 			this->data += otherAsGenericCode->data;
+		}
+
+		public: static std::shared_ptr<GenericCode> readCommentFromString(std::string const& content, size_t& pos)
+		{
+			std::shared_ptr<GenericCode> result = nullptr;
+
+			if (content.substr(pos, 2) == "/*") {
+				size_t end = content.find("*/", pos + 2) + 2;
+				result = std::make_shared<GenericCode>("multiline-comment", content.substr(pos, end - pos));
+				pos = end;
+			} else if (content.substr(pos, 2) == "//") {
+				size_t end = content.find_first_of('\n', pos + 2) + 1;
+				result = std::make_shared<GenericCode>("singleline-comment", content.substr(pos, end - pos));
+				pos = end;
+			}
+
+			return result;
+		}
+
+		public: static std::shared_ptr<GenericCode> readStringFromString(std::string const& content, size_t& pos)
+		{
+			std::shared_ptr<GenericCode> result = nullptr;
+
+			std::string nextChar = content.substr(pos, 1);
+			if (nextChar == "'" || nextChar == "\"") {
+				result = std::make_shared<GenericCode>("string", nextChar);
+				pos++;
+				bool goOn = false;
+				do {
+					goOn = false;
+					size_t end = content.find_first_of(nextChar + "\\", pos);
+					if (end == -1) {
+						throw std::runtime_error("found unterminated string");
+					}
+					if (content[end] == '\\') {
+						// if we found an escape char, read it and the following char and coninue this loop...
+						result->data += content.substr(pos, end - pos + 2);
+						pos = end + 2;
+						goOn = true;
+					} else {
+						//... otherwise end here
+						result->data += content.substr(pos, end - pos + 1);
+						pos = end + 1;
+					}
+				} while (goOn);
+			}
+
+			return result;
+		}
+
+		public: static std::shared_ptr<GenericCode> readPreprocessorFromString(std::string const& content, size_t& pos)
+		{
+
+			std::shared_ptr<GenericCode> result = nullptr;
+
+			if (content.substr(pos, 1) == "#") {
+				size_t end = content.find_first_of('\n', pos + 2) + 1;
+				result = std::make_shared<GenericCode>("preprocessor", content.substr(pos, end - pos));
+				pos = end;
+			}
+
+			return result;
+		}
+
+
+
+		public: static std::shared_ptr<GenericCode> readAccessControlFromString(std::string const& content, size_t& pos)
+		{
+			std::shared_ptr<GenericCode> accessControl = nullptr;
+
+			std::string wordStr = getNextWord(content, pos);
+			if (wordStr == "private" || wordStr == "protected" || wordStr == "public") {
+				pos += wordStr.size();
+				size_t end = content.find_first_of(':', pos);
+				accessControl = std::make_shared<GenericCode>("accessControl", wordStr + content.substr(pos, end - pos + 1));
+				pos = end  + 1;
+			}
+
+			return accessControl;
+		}
+
+		public: static std::shared_ptr<GenericCode> readWordFromString(std::string const& content, size_t& pos)
+		{
+			std::shared_ptr<GenericCode> word = nullptr;
+
+			std::string wordStr = getNextWord(content, pos);
+			if (wordStr != "") {
+				word = std::make_shared<GenericCode>("word", wordStr);
+				pos += wordStr.size();
+			}
+
+			return word;
+		}
+
+		/**
+		 * just read a char - should be used as fallback
+		 */
+		public: static std::shared_ptr<GenericCode> readCommandSeparatorFromString(std::string const& content, size_t& pos)
+		{
+			std::string data = content.substr(pos, 1);
+			if (data != ";") {
+				return nullptr;
+			}
+			pos++;
+			return std::make_shared<GenericCode>("commandSeparator", data);
+		}
+
+		/**
+		 * just read a char - should be used as fallback
+		 */
+		public: static std::shared_ptr<GenericCode> readCharFromString(std::string const& content, size_t& pos)
+		{
+			std::string data = content.substr(pos, 1);
+			if (data == "") {
+				return nullptr;
+			}
+			pos++;
+			return std::make_shared<GenericCode>("char", data);
 		}
 	};
 
@@ -511,6 +689,28 @@ namespace GcBuild
 			}
 		}
 
+		public: static std::shared_ptr<Class> readFromString(std::string const& content, size_t& pos)
+		{
+			std::shared_ptr<Class> result = nullptr;
+
+			if (getNextWord(content, pos) == "class") {
+				pos += std::string("class").size();
+				result = std::make_shared<Class>();
+				size_t contentBracketPos = content.find_first_of('{', pos);
+				std::string nameAndProperties = content.substr(pos, contentBracketPos - pos - 1);
+				size_t colonPos = nameAndProperties.find_first_of(':');
+				if (colonPos == -1) { // no properties set
+					result->name = nameAndProperties;
+				} else {
+					result->name = GcBuild::trim(nameAndProperties.substr(0, colonPos));
+					result->properties = GcBuild::trim(nameAndProperties.substr(colonPos));
+				}
+				pos = contentBracketPos + 1;
+			}
+
+			return result;
+		}
+
 		public: virtual std::string render(std::list<std::string> path) override
 		{
 			path.push_back(this->getPathPart());
@@ -546,240 +746,42 @@ namespace GcBuild
 	
 	class Parser
 	{
-		public: std::string content;
-		private: size_t pos = 0;
-		private: std::string wordChars;
+		private: std::list<std::function<std::shared_ptr<AbstractContent>(std::string const& content, size_t& pos)>> readers;
 
-		public: Parser(std::string const& content = "")
-			: content(content)
+		public: Parser()
 		{
-			this->wordChars = buildCharString('a', 'z') + buildCharString('A', 'Z') + buildCharString('0', '9') + "_";
+			this->readers = {
+				&GenericCode::readCommentFromString,
+				&GenericCode::readStringFromString,
+				&Bracket::readFromString,
+				&ClosingBracket::readFromString,
+				&GenericCode::readPreprocessorFromString,
+				&Namespace::readFromString,
+				&Class::readFromString,
+				&GenericCode::readAccessControlFromString,
+				&GenericCode::readWordFromString,
+				&GenericCode::readCommandSeparatorFromString,
+				&GenericCode::readCharFromString
+			};
 		}
 
-		public: std::shared_ptr<File> parse()
+		public: std::shared_ptr<File> parse(std::string const& content)
 		{
-			this->pos = 0;
+			size_t pos = 0;
 
 			std::shared_ptr<File> result = std::make_shared<File>();
 
-			std::shared_ptr<AbstractContent> nextPart = nullptr;
-			while ((nextPart = this->readNextPart())) {
-				result->children.push_back(nextPart);
-			}
+			auto readerIter = this->readers.begin();
 
-			return result;
-		}
-
-		private: std::shared_ptr<AbstractContent> readNextPart()
-		{
-			std::shared_ptr<AbstractContent> result = nullptr;
-			(result = this->readComment()) ||
-			(result = this->readString()) ||
-			(result = this->readOpeningBracket()) ||
-			(result = this->readClosingBracket()) ||
-			(result = this->readPreprocessor()) ||
-			(result = this->readNamespace()) ||
-			(result = this->readClass()) ||
-			(result = this->readAccessControl()) ||
-			(result = this->readWord()) ||
-			(result = this->readCommandSeparator()) ||
-			(result = this->readChar());
-
-			return result;
-		}
-
-		private: std::shared_ptr<GenericCode> readComment()
-		{
-			std::shared_ptr<GenericCode> result = nullptr;
-
-			if (this->content.substr(this->pos, 2) == "/*") {
-				size_t end = this->content.find("*/", this->pos + 2) + 2;
-				result = std::make_shared<GenericCode>("multiline-comment", this->content.substr(this->pos, end - this->pos));
-				this->pos = end;
-			} else if (this->content.substr(this->pos, 2) == "//") {
-				size_t end = this->content.find_first_of('\n', this->pos + 2) + 1;
-				result = std::make_shared<GenericCode>("singleline-comment", this->content.substr(this->pos, end - this->pos));
-				this->pos = end;
-			}
-
-			return result;
-		}
-
-		private: std::shared_ptr<GenericCode> readString()
-		{
-			std::shared_ptr<GenericCode> result = nullptr;
-
-			std::string nextChar = this->content.substr(this->pos, 1);
-			if (nextChar == "'" || nextChar == "\"") {
-				result = std::make_shared<GenericCode>("string", nextChar);
-				this->pos++;
-				bool goOn = false;
-				do {
-					goOn = false;
-					size_t end = this->content.find_first_of(nextChar + "\\", this->pos);
-					if (end == -1) {
-						throw std::runtime_error("found unterminated string");
-					}
-					if (this->content[end] == '\\') {
-						// if we found an escape char, read it and the following char and coninue this loop...
-						result->data += this->content.substr(this->pos, end - this->pos + 2);
-						this->pos = end + 2;
-						goOn = true;
-					} else {
-						//... otherwise end here
-						result->data += this->content.substr(this->pos, end - this->pos + 1);
-						this->pos = end + 1;
-					}
-				} while (goOn);
-			}
-
-			return result;
-		}
-
-		private: std::shared_ptr<GenericCode> readPreprocessor()
-		{
-			std::shared_ptr<GenericCode> result = nullptr;
-
-			if (this->content.substr(this->pos, 1) == "#") {
-				size_t end = this->content.find_first_of('\n', this->pos + 2) + 1;
-				result = std::make_shared<GenericCode>("preprocessor", this->content.substr(this->pos, end - this->pos));
-				this->pos = end;
-			}
-
-			return result;
-		}
-
-		private: std::shared_ptr<Namespace> readNamespace()
-		{
-			std::shared_ptr<Namespace> result = nullptr;
-
-			if (this->getNextWord() == "namespace") {
-				size_t end = this->content.find_first_of(";{", this->pos + std::string("namespace").size());
-				if (this->content.substr(end, 1) == ";") {
-					// end if there follows ";" instead of "{"
-					return nullptr;
-				}
-				size_t contentBracketPos = end;
-				pos += std::string("namespace").size();
-				result = std::make_shared<Namespace>();
-				result->name = GcBuild::trim(this->content.substr(this->pos, contentBracketPos - this->pos - 1));
-				this->pos = contentBracketPos + 1;
-			}
-
-			return result;
-		}
-
-		private: std::shared_ptr<Class> readClass()
-		{
-			std::shared_ptr<Class> result = nullptr;
-
-			if (this->getNextWord() == "class") {
-				pos += std::string("class").size();
-				result = std::make_shared<Class>();
-				size_t contentBracketPos = this->content.find_first_of('{', this->pos);
-				std::string nameAndProperties = this->content.substr(this->pos, contentBracketPos - this->pos - 1);
-				size_t colonPos = nameAndProperties.find_first_of(':');
-				if (colonPos == -1) { // no properties set
-					result->name = nameAndProperties;
+			while (readerIter != this->readers.end()) {
+				auto reader = *readerIter;
+				auto subResult = reader(content, pos);
+				if (subResult) {
+					result->children.push_back(subResult);
+					readerIter = this->readers.begin();
 				} else {
-					result->name = GcBuild::trim(nameAndProperties.substr(0, colonPos));
-					result->properties = GcBuild::trim(nameAndProperties.substr(colonPos));
+					readerIter++;
 				}
-				this->pos = contentBracketPos + 1;
-			}
-
-			return result;
-		}
-
-		private: std::shared_ptr<Bracket> readOpeningBracket()
-		{
-			std::shared_ptr<Bracket> result = nullptr;
-
-			std::string bracket = this->content.substr(this->pos, 1);
-			if (bracket == "{" || bracket == "(" || bracket == "[") {
-				result = std::make_shared<Bracket>(bracket);
-				pos++;
-			}
-
-			return result;
-		}
-
-		private: std::shared_ptr<ClosingBracket> readClosingBracket()
-		{
-			std::shared_ptr<ClosingBracket> result = nullptr;
-
-			std::string bracket = this->content.substr(this->pos, 1);
-			if (bracket == "}" || bracket == ")" || bracket == "]") {
-				result = std::make_shared<ClosingBracket>(bracket);
-				pos++;
-			}
-
-			return result;
-		}
-
-		private: std::shared_ptr<GenericCode> readAccessControl()
-		{
-			std::shared_ptr<GenericCode> accessControl = nullptr;
-
-			std::string wordStr = this->getNextWord();
-			if (wordStr == "private" || wordStr == "protected" || wordStr == "public") {
-				this->pos += wordStr.size();
-				size_t end = this->content.find_first_of(':', this->pos);
-				accessControl = std::make_shared<GenericCode>("accessControl", wordStr + this->content.substr(this->pos, end - this->pos + 1));
-				this->pos = end  + 1;
-			}
-
-			return accessControl;
-		}
-
-		private: std::shared_ptr<GenericCode> readWord()
-		{
-			std::shared_ptr<GenericCode> word = nullptr;
-
-			std::string wordStr = this->getNextWord();
-			if (wordStr != "") {
-				word = std::make_shared<GenericCode>("word", wordStr);
-				this->pos += wordStr.size();
-			}
-
-			return word;
-		}
-
-		/**
-		 * just read a char - should be used as fallback
-		 */
-		private: std::shared_ptr<GenericCode> readCommandSeparator()
-		{
-			std::string data = this->content.substr(this->pos, 1);
-			if (data != ";") {
-				return nullptr;
-			}
-			this->pos++;
-			return std::make_shared<GenericCode>("commandSeparator", data);
-		}
-
-		/**
-		 * just read a char - should be used as fallback
-		 */
-		private: std::shared_ptr<GenericCode> readChar()
-		{
-			std::string data = this->content.substr(this->pos, 1);
-			if (data == "") {
-				return nullptr;
-			}
-			this->pos++;
-			return std::make_shared<GenericCode>("char", data);
-		}
-
-		private: std::string getNextWord()
-		{
-			std::string result;
-
-			std::string firstChar = this->content.substr(this->pos, 1);
-
-			if (firstChar.find_first_of(this->wordChars) != -1) {
-				size_t end = this->content.find_first_not_of(this->wordChars, this->pos);
-				result = this->content.substr(this->pos, end - this->pos);
 			}
 
 			return result;
@@ -800,7 +802,7 @@ namespace GcBuild
 		) {
 			auto content = GcBuild::getFileContents(this->root + "/" + inputFile);
 
-			auto file = std::make_shared<Parser>(content)->parse();
+			auto file = std::make_shared<Parser>()->parse(content);
 			file->groupChars();
 			file->groupContainers();
 			file->groupContainers();
