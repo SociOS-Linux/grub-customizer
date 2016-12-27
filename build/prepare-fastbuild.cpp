@@ -26,6 +26,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <algorithm>
+#include <array>
 
 namespace GcBuild
 {
@@ -61,6 +62,100 @@ namespace GcBuild
 
 		return result;
 	}
+
+	template <typename T> class Aggregator : public std::enable_shared_from_this<Aggregator<T>>
+	{
+		private: std::function<bool(T item)> startCond;
+		private: std::list<std::array<std::function<bool(T item)>, 2>> matchers;
+		private: std::function<T(std::list<std::list<T>> matchedItems)> aggregateFunction;
+
+		public: static std::shared_ptr<Aggregator> create()
+		{
+			return std::make_shared<Aggregator>();
+		}
+
+		public: std::shared_ptr<Aggregator> startsWhen(std::function<bool(T item)> startCond)
+		{
+			this->startCond = startCond;
+
+			return this->shared_from_this();
+		}
+
+		public: std::shared_ptr<Aggregator> expect(
+			std::function<bool(T item)> findCond,
+			std::function<bool(T item)> validator = nullptr
+		) {
+			this->matchers.push_back({findCond, validator});
+			return this->shared_from_this();
+		}
+
+		public: std::shared_ptr<Aggregator> aggregate(
+			std::function<T(std::list<std::list<T>> matchedItems)> aggregateFunction
+		) {
+			this->aggregateFunction = aggregateFunction;
+			return this->shared_from_this();
+		}
+
+		public: std::list<T> run(std::list<T> listToAggregate)
+		{
+			if (this->aggregateFunction == nullptr || this->startCond == nullptr) {
+				throw std::logic_error("missing dependencies");
+			}
+
+			std::list<T> result;
+
+			auto iter = listToAggregate.begin();
+
+			while (iter != listToAggregate.end()) {
+				std::list<std::list<T>> matchedItems;
+
+				auto loopStartIter = iter;
+
+				iter = std::find_if(iter, listToAggregate.end(), this->startCond);
+
+				if (iter != loopStartIter) {
+					result.insert(result.end(), loopStartIter, iter);
+				}
+
+				if (iter == listToAggregate.end()) {
+					break;
+				}
+
+				matchedItems.push_back({*iter});
+
+				iter++;
+
+				bool failed = false;
+				for (auto matcherArray : this->matchers) {
+					auto matcherStartIter = iter;
+					// find
+					iter = std::find_if(iter, listToAggregate.end(), matcherArray[0]);
+					if (iter == listToAggregate.end()) {
+						failed = true;
+						break;
+					}
+					// validate (if validation function exists)
+					if (matcherArray[1] && !matcherArray[1](*iter)) {
+						failed = true;
+						iter++;
+						break;
+					}
+					iter++;
+					matchedItems.push_back(std::list<T>(matcherStartIter, iter));
+				}
+				if (failed) {
+					result.insert(result.end(), loopStartIter, iter);
+					continue;
+				}
+
+				auto newItem = this->aggregateFunction(matchedItems);
+
+				result.push_back(newItem);
+			}
+
+			return result;
+		}
+	};
 
 	class AbstractContent : public std::enable_shared_from_this<AbstractContent>
 	{
@@ -581,65 +676,23 @@ namespace GcBuild
 
 		public: static void transformNamespaces(std::shared_ptr<AbstractContent> base)
 		{
-			auto childrenOriginal = base->children;
-			base->children.clear();
-
-			auto iter = childrenOriginal.begin();
-
-			while (iter != childrenOriginal.end()) {
-				auto loopStartIter = iter;
-
-				// find word "namespace"
-				iter = std::find_if(iter, childrenOriginal.end(), [] (std::shared_ptr<AbstractContent> item) {
+			base->children = Aggregator<std::shared_ptr<AbstractContent>>::create()
+				->startsWhen([] (std::shared_ptr<AbstractContent> item) {
 					return item->getWord() == "namespace";
-				});
-
-				// add everything in front of the word "namespace" to new list
-				if (iter != loopStartIter) {
-					base->children.insert(base->children.end(), loopStartIter, iter);
-				}
-
-				if (iter == childrenOriginal.end()) {
-					break;
-				}
-
-				auto namespaceWordIter = iter++;
-
-				// find namespace name
-				iter = std::find_if(iter, childrenOriginal.end(), &Namespace::isNonWhitespace);
-
-				if (iter == childrenOriginal.end()) {
-					base->children.insert(base->children.end(), loopStartIter, iter);
-					break;
-				}
-
-				auto namespaceNameIter = iter++;
-
-				if (!std::dynamic_pointer_cast<GenericCode>(*namespaceNameIter) || std::dynamic_pointer_cast<GenericCode>(*namespaceNameIter)->type != "word") {
-					base->children.insert(base->children.end(), loopStartIter, std::prev(iter, 1));
-					continue; // after word "namespace" we found no namespace name
-				}
-
-				// find opening bracket
-				iter = std::find_if(iter, childrenOriginal.end(), &Namespace::isNonWhitespace);
-
-				if (iter == childrenOriginal.end()) {
-					base->children.insert(base->children.end(), loopStartIter, iter);
-					break;
-				}
-
-				auto bracketIter = iter++;
-
-				if (!std::dynamic_pointer_cast<Bracket>(*bracketIter) || std::dynamic_pointer_cast<Bracket>(*bracketIter)->openingBracket != "{") {
-					base->children.insert(base->children.end(), loopStartIter, std::prev(iter, 1));
-					continue; // after namespace name we found no bracket
-				}
-
-				auto namespaceItem = std::make_shared<Namespace>();
-				namespaceItem->name = std::dynamic_pointer_cast<GenericCode>(*namespaceNameIter)->data;
-				namespaceItem->children = bracketIter->get()->children;
-				base->children.push_back(namespaceItem);
-			}
+				})
+				->expect(&Namespace::isNonWhitespace, [] (std::shared_ptr<AbstractContent> item) {
+					return std::dynamic_pointer_cast<GenericCode>(item) && std::dynamic_pointer_cast<GenericCode>(item)->type == "word";
+				})
+				->expect(&Namespace::isNonWhitespace, [] (std::shared_ptr<AbstractContent> item) {
+					return std::dynamic_pointer_cast<Bracket>(item) && std::dynamic_pointer_cast<Bracket>(item)->openingBracket == "{";
+				})
+				->aggregate([] (std::list<std::list<std::shared_ptr<AbstractContent>>> matchedItems) {
+					auto namespaceItem = std::make_shared<Namespace>();
+					namespaceItem->name = std::dynamic_pointer_cast<GenericCode>(std::next(matchedItems.begin(), 1)->back())->data;
+					namespaceItem->children = std::next(matchedItems.begin(), 2)->back()->children;
+					return namespaceItem;
+				})
+				->run(base->children);
 
 			std::for_each(base->children.begin(), base->children.end(), &Namespace::transformNamespaces);
 		}
