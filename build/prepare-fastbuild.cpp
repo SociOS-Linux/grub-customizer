@@ -708,13 +708,13 @@ namespace GcBuild
 	class Class : public AbstractContent
 	{
 		public: std::string name;
-		public: std::string properties;
+		public: std::list<std::shared_ptr<AbstractContent>> properties;
 		public: virtual ~Class(){}
 		public: std::string describe()
 		{
 			std::string desc = "class " + this->name;
 			if (this->properties.size()) {
-				desc += " | Properties: " + renderString(this->properties);
+				desc += " | Properties: " + GcBuild::intToString(this->properties.size());
 			}
 			return desc;
 		}
@@ -732,6 +732,38 @@ namespace GcBuild
 			}
 
 			AbstractContent::optimize();
+		}
+
+		public: static void transformClasses(std::shared_ptr<AbstractContent> base)
+		{
+			base->children = Aggregator<std::shared_ptr<AbstractContent>>::create()
+				->startsWhen([] (std::shared_ptr<AbstractContent> item) {
+					return item->getWord() == "class";
+				})
+				->expect(&Class::isNonWhitespace, [] (std::shared_ptr<AbstractContent> item) {
+					return std::dynamic_pointer_cast<GenericCode>(item) && std::dynamic_pointer_cast<GenericCode>(item)->type == "word";
+				})
+				->expect([] (std::shared_ptr<AbstractContent> item) {
+					return std::dynamic_pointer_cast<Bracket>(item) && std::dynamic_pointer_cast<Bracket>(item)->openingBracket == "{";
+				})
+				->aggregate([] (std::list<std::list<std::shared_ptr<AbstractContent>>> matchedItems) {
+					auto classItem = std::make_shared<Class>();
+					classItem->name = std::dynamic_pointer_cast<GenericCode>(std::next(matchedItems.begin(), 1)->back())->data;
+					classItem->properties = *std::next(matchedItems.begin(), 2);
+					classItem->properties.pop_back(); // last element is the opening bracket
+					classItem->children = std::next(matchedItems.begin(), 2)->back()->children;
+					return classItem;
+				})
+				->run(base->children);
+
+			std::for_each(base->children.begin(), base->children.end(), &Class::transformClasses);
+		}
+
+		private: static bool isNonWhitespace(std::shared_ptr<AbstractContent> item) {
+			if (std::dynamic_pointer_cast<GenericCode>(item) && (std::dynamic_pointer_cast<GenericCode>(item)->isComment() || std::dynamic_pointer_cast<GenericCode>(item)->isWhitespace())) {
+				return false; // skip comments and whitespace
+			}
+			return true; // accept anything else. Validated later.
 		}
 
 		/**
@@ -829,32 +861,14 @@ namespace GcBuild
 			}
 		}
 
-		public: static std::shared_ptr<Class> readFromString(std::string const& content, size_t& pos)
-		{
-			std::shared_ptr<Class> result = nullptr;
-
-			if (getNextWord(content, pos) == "class") {
-				pos += std::string("class").size();
-				result = std::make_shared<Class>();
-				size_t contentBracketPos = content.find_first_of('{', pos);
-				std::string nameAndProperties = content.substr(pos, contentBracketPos - pos - 1);
-				size_t colonPos = nameAndProperties.find_first_of(':');
-				if (colonPos == -1) { // no properties set
-					result->name = nameAndProperties;
-				} else {
-					result->name = GcBuild::trim(nameAndProperties.substr(0, colonPos));
-					result->properties = GcBuild::trim(nameAndProperties.substr(colonPos));
-				}
-				pos = contentBracketPos + 1;
-			}
-
-			return result;
-		}
-
 		public: virtual std::string render(std::list<std::string> path) override
 		{
+			std::string properties;
+			for (auto property : this->properties) {
+				properties += property->render(path);
+			}
 			path.push_back(this->getPathPart());
-			return "class " + this->name + this->properties + "\n{ " + AbstractContent::render(path) + "}";
+			return "class " + this->name + GcBuild::trim(properties) + "\n{ " + AbstractContent::render(path) + "}";
 		}
 
 		public: virtual std::string getPathPart() override
@@ -897,7 +911,6 @@ namespace GcBuild
 				&ClosingBracket::readFromString,
 				&GenericCode::readPreprocessorFromString,
 				&GenericCode::readAccessControlFromString,
-				&Class::readFromString,
 				&GenericCode::readWordFromString,
 				&GenericCode::readCommandSeparatorFromString,
 				&GenericCode::readCharFromString
@@ -945,6 +958,7 @@ namespace GcBuild
 			file->groupChars();
 			file->groupContainers();
 			Namespace::transformNamespaces(file);
+			Class::transformClasses(file);
 			file->dumpTree();
 //			file->optimize();
 
