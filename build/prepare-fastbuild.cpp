@@ -25,6 +25,7 @@
 #include <dirent.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <algorithm>
 
 namespace GcBuild
 {
@@ -189,49 +190,20 @@ namespace GcBuild
 		{
 			throw std::runtime_error("merge not supported");
 		}
-	};
 
-	class Namespace : public AbstractContent
-	{
-		public: std::string name;
-		public: virtual ~Namespace(){}
-		public: std::string describe()
+		public: virtual std::string getWord()
 		{
-			return "namespace " + this->name;
-		}
-		public: virtual bool isContainer()
-		{
-			return true;
+			return "";
 		}
 
-		public: virtual std::string render(std::list<std::string> path) override
+		public: virtual bool isWhitespace()
 		{
-			path.push_back(this->getPathPart());
-			return "namespace " + this->name + " {" + AbstractContent::render(path) + "}";
+			return false;
 		}
 
-		public: virtual std::string getPathPart() override
+		public: virtual bool isComment()
 		{
-			return this->name;
-		}
-		public: static std::shared_ptr<Namespace> readFromString(std::string const& content, size_t& pos)
-		{
-			std::shared_ptr<Namespace> result = nullptr;
-
-			if (getNextWord(content, pos) == "namespace") {
-				size_t end = content.find_first_of(";{", pos + std::string("namespace").size());
-				if (content.substr(end, 1) == ";") {
-					// end if there follows ";" instead of "{"
-					return nullptr;
-				}
-				size_t contentBracketPos = end;
-				pos += std::string("namespace").size();
-				result = std::make_shared<Namespace>();
-				result->name = GcBuild::trim(content.substr(pos, contentBracketPos - pos - 1));
-				pos = contentBracketPos + 1;
-			}
-
-			return result;
+			return false;
 		}
 	};
 
@@ -363,6 +335,24 @@ namespace GcBuild
 				throw std::runtime_error("other object is wrong type");
 			}
 			this->data += otherAsGenericCode->data;
+		}
+
+		public: virtual std::string getWord() override
+		{
+			if (this->type != "word") {
+				return "";
+			}
+			return this->data;
+		}
+
+		public: virtual bool isWhitespace() override
+		{
+			return this->data.find_first_not_of(" \n\r\t") == -1;
+		}
+
+		public: virtual bool isComment() override
+		{
+			return this->type == "multiline-comment" || this->type == "singleline-comment";
 		}
 
 		public: static std::shared_ptr<GenericCode> readCommentFromString(std::string const& content, size_t& pos)
@@ -565,6 +555,103 @@ namespace GcBuild
 		}
 	};
 
+	class Namespace : public AbstractContent
+	{
+		public: std::string name;
+		public: virtual ~Namespace(){}
+		public: std::string describe()
+		{
+			return "namespace " + this->name;
+		}
+		public: virtual bool isContainer()
+		{
+			return true;
+		}
+
+		public: virtual std::string render(std::list<std::string> path) override
+		{
+			path.push_back(this->getPathPart());
+			return "namespace " + this->name + " {" + AbstractContent::render(path) + "}";
+		}
+
+		public: virtual std::string getPathPart() override
+		{
+			return this->name;
+		}
+
+		public: static void transformNamespaces(std::shared_ptr<AbstractContent> base)
+		{
+			auto childrenOriginal = base->children;
+			base->children.clear();
+
+			auto iter = childrenOriginal.begin();
+
+			while (iter != childrenOriginal.end()) {
+				auto loopStartIter = iter;
+
+				// find word "namespace"
+				iter = std::find_if(iter, childrenOriginal.end(), [] (std::shared_ptr<AbstractContent> item) {
+					return item->getWord() == "namespace";
+				});
+
+				// add everything in front of the word "namespace" to new list
+				if (iter != loopStartIter) {
+					base->children.insert(base->children.end(), loopStartIter, iter);
+				}
+
+				if (iter == childrenOriginal.end()) {
+					break;
+				}
+
+				auto namespaceWordIter = iter++;
+
+				// find namespace name
+				iter = std::find_if(iter, childrenOriginal.end(), &Namespace::isNonWhitespace);
+
+				if (iter == childrenOriginal.end()) {
+					base->children.insert(base->children.end(), loopStartIter, iter);
+					break;
+				}
+
+				auto namespaceNameIter = iter++;
+
+				if (!std::dynamic_pointer_cast<GenericCode>(*namespaceNameIter) || std::dynamic_pointer_cast<GenericCode>(*namespaceNameIter)->type != "word") {
+					base->children.insert(base->children.end(), loopStartIter, std::prev(iter, 1));
+					continue; // after word "namespace" we found no namespace name
+				}
+
+				// find opening bracket
+				iter = std::find_if(iter, childrenOriginal.end(), &Namespace::isNonWhitespace);
+
+				if (iter == childrenOriginal.end()) {
+					base->children.insert(base->children.end(), loopStartIter, iter);
+					break;
+				}
+
+				auto bracketIter = iter++;
+
+				if (!std::dynamic_pointer_cast<Bracket>(*bracketIter) || std::dynamic_pointer_cast<Bracket>(*bracketIter)->openingBracket != "{") {
+					base->children.insert(base->children.end(), loopStartIter, std::prev(iter, 1));
+					continue; // after namespace name we found no bracket
+				}
+
+				auto namespaceItem = std::make_shared<Namespace>();
+				namespaceItem->name = std::dynamic_pointer_cast<GenericCode>(*namespaceNameIter)->data;
+				namespaceItem->children = bracketIter->get()->children;
+				base->children.push_back(namespaceItem);
+			}
+
+			std::for_each(base->children.begin(), base->children.end(), &Namespace::transformNamespaces);
+		}
+
+		private: static bool isNonWhitespace(std::shared_ptr<AbstractContent> item) {
+			if (std::dynamic_pointer_cast<GenericCode>(item) && (std::dynamic_pointer_cast<GenericCode>(item)->isComment() || std::dynamic_pointer_cast<GenericCode>(item)->isWhitespace())) {
+				return false; // skip comments and whitespace
+			}
+			return true; // accept anything else. Validated later.
+		}
+	};
+
 	class Class : public AbstractContent
 	{
 		public: std::string name;
@@ -756,9 +843,8 @@ namespace GcBuild
 				&Bracket::readFromString,
 				&ClosingBracket::readFromString,
 				&GenericCode::readPreprocessorFromString,
-				&Namespace::readFromString,
-				&Class::readFromString,
 				&GenericCode::readAccessControlFromString,
+				&Class::readFromString,
 				&GenericCode::readWordFromString,
 				&GenericCode::readCommandSeparatorFromString,
 				&GenericCode::readCharFromString
@@ -805,7 +891,7 @@ namespace GcBuild
 			auto file = std::make_shared<Parser>()->parse(content);
 			file->groupChars();
 			file->groupContainers();
-			file->groupContainers();
+			Namespace::transformNamespaces(file);
 			file->dumpTree();
 //			file->optimize();
 
