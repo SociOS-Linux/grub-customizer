@@ -93,6 +93,9 @@ build t trusty
 build v vivid
 build w wily
 build x xenial
+build y yakkety
+build z zesty
+build a artful
 
 
 echo '#!/bin/sh
@@ -100,6 +103,9 @@ echo '#!/bin/sh
 '$releasedir'/'$subdir'/vivid/upload.sh
 '$releasedir'/'$subdir'/wily/upload.sh
 '$releasedir'/'$subdir'/xenial/upload.sh
+'$releasedir'/'$subdir'/yakkety/upload.sh
+'$releasedir'/'$subdir'/zesty/upload.sh
+'$releasedir'/'$subdir'/artful/upload.sh
 ' > $releasedir/$subdir/upload_ppas.sh
 
 chmod +x "$releasedir/$subdir/upload_ppas.sh"

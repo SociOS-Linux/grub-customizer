@@ -1,3 +1,6 @@
+v 5.0.6.1
+	* artful hotfix (wayland)
+
 v 5.0.6
 	* preventing plaintext entries from being moved into submenu (when they are not visible)
 	* fixed some errors on entry editor

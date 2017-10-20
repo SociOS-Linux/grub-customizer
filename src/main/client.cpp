@@ -49,7 +49,7 @@
 
 int main(int argc, char** argv){
 	if (getuid() != 0 && (argc == 1 || argv[1] != std::string("no-fork"))) {
-		return system((std::string("pkexec ") + argv[0] + (argc == 2 ? std::string(" ") + argv[1] : "") + " no-fork").c_str());
+		return system((std::string("xhost +SI:localuser:root; pkexec ") + argv[0] + (argc == 2 ? std::string(" ") + argv[1] : "") + " no-fork; xhost -SI:localuser:root").c_str());
 	}
 	setlocale(LC_ALL, "");
 	bindtextdomain("grub-customizer", LOCALEDIR);
