@@ -5,4 +5,4 @@
 #define ERROR_LOG_FILE "${ERROR_LOG_FILE}"
 #define CUSTOM_SCRIPT_SHEBANG "#!/bin/sh"
 #define CUSTOM_SCRIPT_PREFIX "exec tail -n +3 $0"
-#define GC_VERSION "5.0.6.1"
+#define GC_VERSION "5.0.7"

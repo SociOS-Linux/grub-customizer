@@ -1,6 +1,6 @@
 #!/bin/sh
 cat << EOF
-grub-customizer (5.0.6.1-0ubuntu1~ppa1$1) $2; urgency=low
+grub-customizer (5.0.7-0ubuntu1~ppa1$1) $2; urgency=low
 
    * new upstream release
 
