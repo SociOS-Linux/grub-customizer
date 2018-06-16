@@ -157,7 +157,7 @@ class Model_MountTable : public std::list<Model_MountTable_Mountpoint>, public T
 
 		bool isRoot = newMp.mountpoint == prefix + "/";
 
-		if (newMp.mountpoint[newMp.mountpoint.length()-1] == '/') {
+		if (newMp.mountpoint.length() && newMp.mountpoint[newMp.mountpoint.length()-1] == '/') {
 			newMp.mountpoint = newMp.mountpoint.substr(0, newMp.mountpoint.length()-1);
 		}
 
