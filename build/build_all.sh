@@ -78,13 +78,14 @@ function build() {
 	
 	uploadFile="$releasedir/$subdir/$distribution/upload.sh"
 	
+	rm "$uploadFile";
 	echo '#!/bin/sh' >> "$uploadFile";
 	echo 'dput ppa:danielrichter2007/grub-customizer "'$releasedir'/'$subdir'/'$distribution'/grub-customizer_'$version'-0ubuntu1~ppa'$rev$versionSuffix'_source.changes"' >> "$uploadFile";
 	
 	compileFile="$releasedir/$subdir/$distribution/compile.sh"
 	
 	echo '#!/bin/sh' >> "$compileFile"
-	echo 'cd "'$releasedir/$subdir/$distribution'" && export BD=build_`date +%s` && mkdir $BD && sudo mount none $BD -t tmpfs && tar -xzf *.orig.tar.gz -C $BD && tar -xzf *.debian.tar.gz -C $BD/* && cp *.orig.tar.gz $BD/ && cd $BD/* && dpkg-buildpackage && cd ../.. && mv $BD/*.deb ./ && sudo umount $BD && rm -rf $BD' >> "$compileFile";
+	echo 'cd "'$releasedir/$subdir/$distribution'" && export BD=build_`date +%s` && mkdir $BD && sudo mount none $BD -t tmpfs && tar -xzf *.orig.tar.*z -C $BD && tar -xzf *.debian.tar.*z -C $BD/* && cp *.orig.tar.*z $BD/ && cd $BD/* && dpkg-buildpackage && cd ../.. && mv $BD/*.deb ./ && sudo umount $BD && rm -rf $BD' >> "$compileFile";
 	
 	chmod +x "$releasedir/$subdir/$distribution"/*.sh
 }
