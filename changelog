@@ -1,3 +1,6 @@
+v 5.0.8
+	* fixed error of mounttable parser
+
 v 5.0.7
 	* artful hotfix (wayland)
 
