@@ -29,7 +29,7 @@ struct Model_ProxyScriptData {
 		load(fpProxyScript);
 	}
 
-	bool load(FILE* fpProxyScript) {
+	void load(FILE* fpProxyScript) {
 		//THIS ALGORITHM IS ONLY USEFUL FOR GENERATED PROXIES
 		this->scriptCmd = "";
 		this->proxyCmd = "";
