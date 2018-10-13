@@ -1,3 +1,8 @@
+v 5.0.9
+	* version info (-v)
+	* some internal changes
+	* translation updates
+
 v 5.0.8
 	* fixed error of mounttable parser
 

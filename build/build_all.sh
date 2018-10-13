@@ -98,6 +98,7 @@ build y yakkety
 build z zesty
 build a artful
 build b bionic
+build c cosmic
 
 
 echo '#!/bin/sh
@@ -109,6 +110,7 @@ echo '#!/bin/sh
 '$releasedir'/'$subdir'/zesty/upload.sh
 '$releasedir'/'$subdir'/artful/upload.sh
 '$releasedir'/'$subdir'/bionic/upload.sh
+'$releasedir'/'$subdir'/cosmic/upload.sh
 ' > $releasedir/$subdir/upload_ppas.sh
 
 chmod +x "$releasedir/$subdir/upload_ppas.sh"
