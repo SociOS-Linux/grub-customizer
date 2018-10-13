@@ -58,6 +58,11 @@
 
 
 int main(int argc, char** argv){
+	if (argc == 2 && (std::string(argv[1]) == "-v" || std::string(argv[1]) == "--version")) {
+		std::cout << "Grub Customizer, version " << GC_VERSION << std::endl;
+		return 0;
+	}
+
 	if (getuid() != 0 && (argc == 1 || argv[1] != std::string("no-fork"))) {
 		return system((std::string("xhost +SI:localuser:root; pkexec ") + argv[0] + (argc == 2 ? std::string(" ") + argv[1] : "") + " no-fork; xhost -SI:localuser:root").c_str());
 	}
