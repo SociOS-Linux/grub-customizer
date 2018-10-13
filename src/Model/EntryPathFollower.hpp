@@ -13,9 +13,17 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
+ * 
+ * Additional permission under GNU GPL version 3 section 7
+ *
+ * If you modify this program, or any covered work, by linking or combining
+ * it with the OpenSSL library (or a modified version of that library),
+ * containing parts covered by the terms of the OpenSSL license, the licensors
+ * of this program grant you additional permission to convey the resulting work.
+ * Corresponding source for a non-source form of such a combination shall include
+ * the source code for the parts of the OpenSSL library used as well as that of
+ * the covered work.
  */
-
 #ifndef ENTRY_PATH_FOLLOWER_INCLUDED
 #define ENTRY_PATH_FOLLOWER_INCLUDED
 #include <string>
