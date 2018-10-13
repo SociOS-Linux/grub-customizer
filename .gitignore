@@ -2,3 +2,4 @@
 /.project
 build/tmp/*
 src/config.hpp
+/build/releases
