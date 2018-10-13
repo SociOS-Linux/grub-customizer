@@ -10,3 +10,4 @@ Categories=System;Settings;
 Icon=grub-customizer
 X-Ubuntu-Gettext-Domain=grub-customizer
 X-KDE-SubstituteUID=true
+Keywords=GRUB;GRUB2;BURG;configuration;settings;menu;
