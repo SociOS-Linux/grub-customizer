@@ -8,22 +8,23 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2016-03-22 22:43+0100\n"
-"PO-Revision-Date: 2016-03-22 23:40+0000\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2017-04-09 13:56+0000\n"
+"Last-Translator: Shinichirou Yamada "
+"<yamada_strong_yamada_nice_64bit@yahoo.co.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2016-04-21 19:28+0000\n"
-"X-Generator: Launchpad (build 17995)\n"
+"X-Launchpad-Export-Date: 2018-10-13 11:16+0000\n"
+"X-Generator: Launchpad (build 18790)\n"
 
 #: src/Controller/MainController.hpp:629
 msgid "Name the Entry"
-msgstr "エントリーの名前"
+msgstr "エントリー名を入力してください"
 
 #: src/Controller/MainController.hpp:715
 msgid "cannot move this entry"
-msgstr "このエントリーは動かせません"
+msgstr "このエントリーは移動できません"
 
 #: src/Controller/MainController.hpp:834
 msgid "Configuration has been saved"
@@ -36,15 +37,15 @@ msgstr "設定を更新"
 #: src/View/Gtk/About.hpp:53
 msgid ""
 "Grub Customizer is a graphical interface to configure the grub2/burg settings"
-msgstr "Grub Customizerはgrub2/burgのグラフィカルな設定インターフェースです"
+msgstr "Grub Customizerはgrub2/burgの設定を行うためのグラフィカルインターフェースです"
 
 #: src/View/Gtk/Element/List.hpp:135 src/View/Gtk/Main.hpp:897
 msgid "script"
-msgstr ""
+msgstr "スクリプト"
 
 #: src/View/Gtk/Element/List.hpp:137 src/View/Gtk/Main.hpp:888
 msgid "submenu"
-msgstr "サブ・メニュー"
+msgstr "サブメニュー"
 
 #: src/View/Gtk/Element/List.hpp:139 src/View/Gtk/Main.hpp:891
 msgid "placeholder"
@@ -56,23 +57,23 @@ msgstr "メニューエントリー"
 
 #: src/View/Gtk/Element/List.hpp:144
 msgid "script: %1"
-msgstr ""
+msgstr "スクリプト: %1"
 
 #: src/View/Gtk/Element/List.hpp:148
 msgid "default name: %1"
-msgstr ""
+msgstr "デフォルト名: %1"
 
 #: src/View/Gtk/Element/List.hpp:152
 msgid "partition: %1"
-msgstr ""
+msgstr "パーティション: %1"
 
 #: src/View/Gtk/Element/List.hpp:156
 msgid "ISO-Image: "
-msgstr ""
+msgstr "ISOイメージ: "
 
 #: src/View/Gtk/Element/List.hpp:160
 msgid "Memtest-Image: "
-msgstr ""
+msgstr "Memtestイメージ: "
 
 #: src/View/Gtk/Element/PartitionChooser.hpp:53
 msgid "current"
@@ -80,21 +81,23 @@ msgstr "現在"
 
 #: src/View/Gtk/EntryEditor.hpp:58 src/View/Gtk/EnvEditor.hpp:53
 msgid "_Type:"
-msgstr "タイプ (_T):"
+msgstr "種類(_T):"
 
 #: src/View/Gtk/EntryEditor.hpp:59
 msgid "Boot sequence"
-msgstr ""
+msgstr "ブートシーケンス"
 
 #: src/View/Gtk/EntryEditor.hpp:60
 msgid "_Name:"
-msgstr ""
+msgstr "名前(_N):"
 
 #: src/View/Gtk/EntryEditor.hpp:61
 msgid ""
 "Error building boot sequence.\n"
 "Check parameters!"
 msgstr ""
+"ブートシーケンスの構成中にエラーが発生しました。\n"
+"パラメーターを確認してください。"
 
 #: src/View/Gtk/EntryEditor.hpp:68
 msgid "Entry editor"
@@ -102,7 +105,7 @@ msgstr "エントリーエディター"
 
 #: src/View/Gtk/EntryEditor.hpp:204
 msgid "Choose…"
-msgstr ""
+msgstr "選択..."
 
 #: src/View/Gtk/EntryEditor.hpp:315 src/View/Gtk/EntryEditor.hpp:323
 #: src/View/Gtk/EntryEditor.hpp:342
@@ -112,11 +115,11 @@ msgstr "その他"
 #: src/View/Gtk/EntryEditor.hpp:316 src/View/Gtk/EntryEditor.hpp:325
 #: src/View/Gtk/EntryEditor.hpp:344 src/View/Gtk/Main.hpp:566
 msgid "(script code)"
-msgstr "(スクリプト・コード)"
+msgstr "(スクリプトコード)"
 
 #: src/View/Gtk/EntryEditor.hpp:424
 msgid "Choose file…"
-msgstr ""
+msgstr "ファイルを選択..."
 
 #: src/View/Gtk/EntryEditor.hpp:436
 msgid "_Partition"
@@ -124,15 +127,15 @@ msgstr "パーティション(_P)"
 
 #: src/View/Gtk/EntryEditor.hpp:438
 msgid "_Initial ramdisk"
-msgstr "RAMディスク初期化(_I)"
+msgstr "初期RAMディスク(_I)"
 
 #: src/View/Gtk/EntryEditor.hpp:440
 msgid "_Linux image"
-msgstr "Linux image(_L)"
+msgstr "Linuxイメージ(_L)"
 
 #: src/View/Gtk/EntryEditor.hpp:442
 msgid "_Memtest image"
-msgstr "Memtest image(_M)"
+msgstr "Memtestイメージ(_M)"
 
 #: src/View/Gtk/EntryEditor.hpp:444
 msgid "Path to iso file"
@@ -140,15 +143,15 @@ msgstr "isoファイルの場所"
 
 #: src/View/Gtk/EntryEditor.hpp:446
 msgid "Kernel params"
-msgstr "カーネル・パラメーター"
+msgstr "Kernelパラメーター"
 
 #: src/View/Gtk/EntryEditor.hpp:448
 msgid "I_SO image"
-msgstr ""
+msgstr "ISOイメージ(_S)"
 
 #: src/View/Gtk/EntryEditor.hpp:450
 msgid "_Memtest-Image"
-msgstr ""
+msgstr "Memtestイメージ(_M)"
 
 #: src/View/Gtk/EnvEditor.hpp:52
 msgid "_Partition:"
@@ -156,7 +159,7 @@ msgstr "パーティション(_P):"
 
 #: src/View/Gtk/EnvEditor.hpp:54
 msgid "Submountpoints:"
-msgstr "サブ・マウントポイント:"
+msgstr "サブマウントポイント:"
 
 #: src/View/Gtk/EnvEditor.hpp:55
 msgid "save this configuration"
@@ -172,11 +175,11 @@ msgstr "BURG"
 
 #: src/View/Gtk/EnvEditor.hpp:258
 msgid "Mount failed!"
-msgstr "マウント失敗!"
+msgstr "マウントに失敗しました"
 
 #: src/View/Gtk/EnvEditor.hpp:259
 msgid "umount failed!"
-msgstr "アンマウント失敗!"
+msgstr "アンマウントに失敗しました"
 
 #: src/View/Gtk/EnvEditor.hpp:260
 msgid "This seems not to be a root file system (no fstab found)"
@@ -236,7 +239,7 @@ msgstr "ブートローダーのインストール中..."
 
 #: src/View/Gtk/Installer.hpp:93
 msgid "Please type a device string!"
-msgstr "デバイスの文字を入力!"
+msgstr "デバイス名を入力してください"
 
 #: src/View/Gtk/Main.hpp:99
 msgid "_File"
@@ -256,27 +259,27 @@ msgstr "ヘルプ (_H)"
 
 #: src/View/Gtk/Main.hpp:107
 msgid "_Install to MBR …"
-msgstr "MBRにインストール..."
+msgstr "MBRにインストール(_I)..."
 
 #: src/View/Gtk/Main.hpp:129
 msgid "_Show details"
-msgstr ""
+msgstr "詳細を表示(_S)"
 
 #: src/View/Gtk/Main.hpp:130
 msgid "Show _hidden entries"
-msgstr ""
+msgstr "隠されたエントリーを表示(_H)"
 
 #: src/View/Gtk/Main.hpp:131
 msgid "_Group by Script"
-msgstr ""
+msgstr "スクリプト別にグループ化(_G)"
 
 #: src/View/Gtk/Main.hpp:132
 msgid "Show _Placeholders"
-msgstr ""
+msgstr "プレースホルダーを表示(_P)"
 
 #: src/View/Gtk/Main.hpp:134
 msgid "BURG found!"
-msgstr "BURGが見つかりました!"
+msgstr "BURGを見つけました"
 
 #: src/View/Gtk/Main.hpp:135 src/View/Gtk/Main.hpp:136
 msgid "advanced settings"
@@ -285,7 +288,7 @@ msgstr "高度な設定"
 #: src/View/Gtk/Main.hpp:139
 msgid ""
 "The modifications you've done affects the visible entries. Please reload!"
-msgstr "この変更は表示するエントリーに影響します。更新してください!"
+msgstr ""
 
 #: src/View/Gtk/Main.hpp:140
 msgid "Script updates found. Click save to apply the changes!"
@@ -297,23 +300,23 @@ msgstr "リスト設定(_L)"
 
 #: src/View/Gtk/Main.hpp:187
 msgid "Remove selected entries (you can restore them from trash)"
-msgstr "選択したエントリーを消去（ゴミ箱から戻すこともできます）"
+msgstr "選択されたエントリーを削除する(ゴミ箱から元に戻せます)"
 
 #: src/View/Gtk/Main.hpp:197
 msgid "Move up the selected entry or script"
-msgstr "エントリーやスクリプトを上に移動"
+msgstr "選択されたエントリーまたはスクリプトを上に移動する"
 
 #: src/View/Gtk/Main.hpp:199
 msgid "Move down the selected entry or script"
-msgstr "エントリーやスクリプトを下に移動"
+msgstr "選択されたエントリーまたはスクリプトを下に移動する"
 
 #: src/View/Gtk/Main.hpp:205
 msgid "remove this entry from the current submenu"
-msgstr "現在のサブメニューからエントリーを消去"
+msgstr "現在のサブメニューからこのエントリーを削除する"
 
 #: src/View/Gtk/Main.hpp:208
 msgid "add this entry to a new submenu"
-msgstr "新しいサブメニューにエントリーを追加"
+msgstr "新しいサブメニューにこのエントリーを追加する"
 
 #: src/View/Gtk/Main.hpp:231
 msgid "Reverts the list to the default order"
@@ -321,7 +324,7 @@ msgstr "リストをデフォルトの順番に戻す"
 
 #: src/View/Gtk/Main.hpp:233
 msgid "reloads the configuration. Unsaved changes will be preserved."
-msgstr "設定をリロード。保存していない変更は失われます。"
+msgstr "設定を再読込する(未保存の変更は維持します)"
 
 #: src/View/Gtk/Main.hpp:277
 msgid "Rename"
@@ -337,15 +340,15 @@ msgstr "下に移動"
 
 #: src/View/Gtk/Main.hpp:282 src/View/Gtk/Main.hpp:283
 msgid "Remove from submenu"
-msgstr "サブ・メニューから消去"
+msgstr "サブメニューから削除"
 
 #: src/View/Gtk/Main.hpp:284 src/View/Gtk/Main.hpp:285
 msgid "Create submenu"
-msgstr "サブ・メニュー作成"
+msgstr "サブメニューを作成"
 
 #: src/View/Gtk/Main.hpp:300
 msgid "_Change Environment …"
-msgstr "環境の変更...(_C)"
+msgstr "環境を変更(_C)..."
 
 #: src/View/Gtk/Main.hpp:307
 msgid "Do you want to configure BURG instead of grub2?"
@@ -353,7 +356,7 @@ msgstr "grub2ではなくBURGの設定をしますか?"
 
 #: src/View/Gtk/Main.hpp:374
 msgid "_General settings"
-msgstr "一般(_G)"
+msgstr "一般設定(_G)"
 
 #: src/View/Gtk/Main.hpp:381
 msgid "_Appearance settings"
@@ -365,15 +368,15 @@ msgstr "BURGモード"
 
 #: src/View/Gtk/Main.hpp:438
 msgid "Save configuration and generate a new %1"
-msgstr ""
+msgstr "設定を保存して新しい%1を生成する"
 
 #: src/View/Gtk/Main.hpp:535
 msgid "loading configuration…"
-msgstr "設定をロード..."
+msgstr "設定を読み込み中..."
 
 #: src/View/Gtk/Main.hpp:537
 msgid "loading script %2/%3 (%1)"
-msgstr "スクリプトをロード %2/%3 (%1)"
+msgstr "スクリプトを読み込み中 %2/%3 (%1)"
 
 #: src/View/Gtk/Main.hpp:550
 msgid "Proxy binary not found!"
@@ -388,15 +391,15 @@ msgstr ""
 
 #: src/View/Gtk/Main.hpp:558
 msgid "(incoming Entries of %1)"
-msgstr "(エントリー %1)"
+msgstr ""
 
 #: src/View/Gtk/Main.hpp:560
 msgid "(incoming Entries)"
-msgstr "(エントリー)"
+msgstr ""
 
 #: src/View/Gtk/Main.hpp:579
 msgid "The saved configuration is not up to date!"
-msgstr "保存した設定は最新ではありません!"
+msgstr ""
 
 #: src/View/Gtk/Main.hpp:580
 msgid ""
@@ -404,8 +407,6 @@ msgid ""
 "startup. So what you see now may not be what you see when you restart your "
 "pc. To fix this, click update!"
 msgstr ""
-"作成した設定は起動時に保存した設定と同じものではありません。今表示されているものはPCをリスタートしたときと違うかもしれません。修復するには更新をクリック"
-"します!"
 
 #: src/View/Gtk/Main.hpp:583
 msgid "_Quit without update"
@@ -417,7 +418,7 @@ msgstr "更新して終了(_U)"
 
 #: src/View/Gtk/Main.hpp:590
 msgid "Do you want to save your modifications?"
-msgstr "変更を保存しますか?"
+msgstr "変更を保存しますか？"
 
 #: src/View/Gtk/Main.hpp:593
 msgid "_Quit without saving"
@@ -429,15 +430,15 @@ msgstr "保存して終了(_S)"
 
 #: src/View/Gtk/Main.hpp:599
 msgid "AND: your modifications are still unsaved, update will save them too!"
-msgstr "そして保存していない変更があります。更新はそれも保存します!"
+msgstr ""
 
 #: src/View/Gtk/Main.hpp:620
 msgid "Failed saving grub configuration!"
-msgstr ""
+msgstr "grubの設定の保存に失敗しました"
 
 #: src/View/Gtk/Main.hpp:621
 msgid "The grub configuration cannot be saved"
-msgstr ""
+msgstr "grubの設定を保存できません"
 
 #: src/View/Gtk/Main.hpp:622
 msgid ""
@@ -445,14 +446,16 @@ msgid ""
 "bug of Grub Customizer, please create one at %1! Generally Grub Customizer "
 "should prevent errors like this."
 msgstr ""
+"以下のコマンドライン出力をご覧ください。もしこれがGrub Customizerのバグだと思うなら %1 でバグ報告してください。大体において、Grub "
+"Customizerはこのようなエラーが起こるのを防がなければなりません。"
 
 #: src/View/Gtk/Main.hpp:628
 msgid ""
 "%1 couldn't be executed successfully. error message:\n"
 " %2"
 msgstr ""
-"%1 は実行に失敗しました。エラーメッセージ:\n"
-"%2"
+"%1 は正常に実行されませんでした。エラーメッセージは以下の通り:\n"
+" %2"
 
 #: src/View/Gtk/Main.hpp:630
 msgid "Environment settings"
@@ -460,17 +463,17 @@ msgstr "環境設定"
 
 #: src/View/Gtk/Main.hpp:644
 msgid "Do you want to proceed without saving the current configuration?"
-msgstr "設定を保存せずに進めますか?"
+msgstr ""
 
 #: src/View/Gtk/Main.hpp:645
 msgid "There are unsaved modifications!"
-msgstr "保存していない変更があります!"
+msgstr ""
 
 #: src/View/Gtk/Main.hpp:697
 msgid ""
 "Removing Script Code can cause problems when trying to boot entries relying "
 "on it. Are you sure you want to do it anyway?"
-msgstr "スクリプト・コードを消去するとエントリーのブート時に問題を起こす可能性があります。本当に実行しますか?"
+msgstr ""
 
 #: src/View/Gtk/Main.hpp:707
 msgid ""
@@ -479,8 +482,6 @@ msgid ""
 "If you just want to remove old kernels: The better way is uninstalling them "
 "instead of just hiding them in boot menu."
 msgstr ""
-"現在動いているシステムのエントリーを消そうとしています。他に起動できるエントリーがあるか確認してください!\n"
-"古いカーネルを消したいのなら古いカーネルをアンインストールします。"
 
 #: src/View/Gtk/Main.hpp:887
 msgid ""
@@ -514,27 +515,27 @@ msgstr ""
 
 #: src/View/Gtk/Main.hpp:905
 msgid "About the entry types"
-msgstr ""
+msgstr "エントリーの種類について"
 
 #: src/View/Gtk/Main.hpp:957
 msgid "Are you sure?"
-msgstr "よろしいですか?"
+msgstr "本当によろしいですか？"
 
 #: src/View/Gtk/Main.hpp:958
 msgid "This removes all your list modifications of the bootloader menu!"
-msgstr "ブートローダー・メニューの変更のすべてを消去します!"
+msgstr "ブートローダーメニューのすべてのリストの変更を削除します"
 
 #: src/View/Gtk/Settings.hpp:113
 msgid "pre_defined: "
-msgstr "デフォルト起動: "
+msgstr "既定(_D): "
 
 #: src/View/Gtk/Settings.hpp:114
 msgid "previously _booted entry"
-msgstr "前回起動したエントリー"
+msgstr "前回起動したエントリー(_B)"
 
 #: src/View/Gtk/Settings.hpp:115
 msgid "default entry"
-msgstr "デフォルト エントリー"
+msgstr "デフォルトのエントリー"
 
 #: src/View/Gtk/Settings.hpp:116
 msgid "visibility"
@@ -546,11 +547,11 @@ msgstr "メニュー表示"
 
 #: src/View/Gtk/Settings.hpp:118
 msgid "kernel parameters"
-msgstr "カーネル・パラメーター"
+msgstr "Kernelパラメーター"
 
 #: src/View/Gtk/Settings.hpp:119
 msgid "generate recovery entries"
-msgstr "リカバリー・エントリーを作成"
+msgstr "リカバリーエントリーを生成"
 
 #: src/View/Gtk/Settings.hpp:120
 msgid "look for other operating systems"
@@ -590,15 +591,15 @@ msgstr "値"
 
 #: src/View/Gtk/Settings.hpp:204
 msgid "Boot default entry after %1 Seconds"
-msgstr ""
+msgstr "デフォルトのエントリーを %1 秒後に起動する"
 
 #: src/View/Gtk/Settings.hpp:297
 msgid "(first entry)"
-msgstr ""
+msgstr "(最初のエントリー)"
 
 #: src/View/Gtk/Settings.hpp:299
 msgid "(other…)"
-msgstr ""
+msgstr "(その他...)"
 
 #: src/View/Gtk/Settings.hpp:459
 msgid ""
@@ -658,11 +659,11 @@ msgstr "グリーン"
 
 #: src/View/Gtk/Theme.hpp:122
 msgid "light-magenta"
-msgstr "ライトマジェンダ"
+msgstr "ライトマゼンタ"
 
 #: src/View/Gtk/Theme.hpp:123
 msgid "magenta"
-msgstr "マジェンダ"
+msgstr "マゼンタ"
 
 #: src/View/Gtk/Theme.hpp:124
 msgid "light-red"
@@ -694,11 +695,11 @@ msgstr "ブラック"
 
 #: src/View/Gtk/Theme.hpp:210
 msgid "_Load file: "
-msgstr ""
+msgstr "ファイルを読み込み(_L): "
 
 #: src/View/Gtk/Theme.hpp:213
 msgid "_Theme:"
-msgstr ""
+msgstr "テーマ(_T):"
 
 #: src/View/Gtk/Theme.hpp:214
 msgid "background image"
@@ -706,7 +707,7 @@ msgstr "背景画像"
 
 #: src/View/Gtk/Theme.hpp:218
 msgid "Please choose a background image!"
-msgstr ""
+msgstr "背景画像を選んでください"
 
 #: src/View/Gtk/Theme.hpp:221
 msgid "_Font"
@@ -714,7 +715,7 @@ msgstr "フォント(_F)"
 
 #: src/View/Gtk/Theme.hpp:224
 msgid "choose theme file"
-msgstr ""
+msgstr "テーマファイルを選択"
 
 #: src/View/Gtk/Theme.hpp:225
 msgid "Theme contents"
@@ -722,47 +723,47 @@ msgstr ""
 
 #: src/View/Gtk/Theme.hpp:226
 msgid "Custom Theme settings"
-msgstr ""
+msgstr "テーマのカスタム設定"
 
 #: src/View/Gtk/Theme.hpp:227
 msgid "Normal: Font"
-msgstr ""
+msgstr "通常: フォント"
 
 #: src/View/Gtk/Theme.hpp:228
 msgid "Normal: Background"
-msgstr ""
+msgstr "通常: 背景"
 
 #: src/View/Gtk/Theme.hpp:229
 msgid "Highlighted: Font"
-msgstr ""
+msgstr "ハイライト: フォント"
 
 #: src/View/Gtk/Theme.hpp:230
 msgid "Highlighted: Background"
-msgstr ""
+msgstr "ハイライト: 背景"
 
 #: src/View/Gtk/Theme.hpp:301
 msgid "File"
-msgstr ""
+msgstr "ファイル"
 
 #: src/View/Gtk/Theme.hpp:312
 msgid "add theme"
-msgstr ""
+msgstr "テーマを追加"
 
 #: src/View/Gtk/Theme.hpp:313
 msgid "delete this theme"
-msgstr ""
+msgstr "このテーマを削除"
 
 #: src/View/Gtk/Theme.hpp:325
 msgid "Archive files"
-msgstr ""
+msgstr "アーカイブファイル"
 
 #: src/View/Gtk/Theme.hpp:330
 msgid "All files"
-msgstr ""
+msgstr "すべてのファイル"
 
 #: src/View/Gtk/Theme.hpp:374
 msgid "remove font"
-msgstr "フォントを消去"
+msgstr "フォントを削除"
 
 #: src/View/Gtk/Theme.hpp:393
 msgid "remove background"
@@ -770,15 +771,15 @@ msgstr "背景を消去"
 
 #: src/View/Gtk/Theme.hpp:501
 msgid "(Custom Settings)"
-msgstr ""
+msgstr "(カスタム設定)"
 
 #: src/View/Gtk/Theme.hpp:554
 msgid "The chosen file cannot be loaded as theme"
-msgstr ""
+msgstr "選択したファイルはテーマとして読み込むことができません"
 
 #: src/View/Gtk/Theme.hpp:557
 msgid "The given filename cannot be used"
-msgstr ""
+msgstr "指定されたファイル名は使用できません"
 
 #: src/View/Gtk/Theme.hpp:560
 msgid ""
@@ -796,7 +797,7 @@ msgstr ""
 
 #: src/View/Gtk/Theme.hpp:587
 msgid "filename"
-msgstr ""
+msgstr "ファイル名"
 
 #: src/View/Gtk/Theme.hpp:624
 msgid ""
@@ -825,7 +826,7 @@ msgstr ""
 
 #: src/View/Gtk/Theme.hpp:857
 msgid "Are you sure you want to remove this theme"
-msgstr ""
+msgstr "本当にこのテーマを削除してもよろしいですか"
 
 #: src/View/Gtk/Theme.hpp:931
 msgid ""
@@ -852,24 +853,24 @@ msgstr "ゴミ箱からエントリーを追加"
 
 #: src/View/Gtk/Trash.hpp:59
 msgid "Removed items"
-msgstr ""
+msgstr "削除されたアイテム"
 
 #: src/View/Gtk/Trash.hpp:69
 msgid "_Restore"
-msgstr ""
+msgstr "元に戻す(_R)"
 
 #: src/View/Gtk/Trash.hpp:71
 msgid "Restore selected entries"
-msgstr ""
+msgstr "選択されたエントリーを元に戻す"
 
 #: src/View/Gtk/Trash.hpp:76
 msgid "permanently delete selected entries"
-msgstr ""
+msgstr "選択されたエントリーを永久に削除する"
 
 #: src/View/Gtk/Trash.hpp:84
 msgid ""
 "delete entries permanently - this action is available on custom entries only"
-msgstr ""
+msgstr "エントリーを永久に削除する(このアクションはカスタムエントリーにのみ利用できます)"
 
 #: src/View/Gtk/Trash.hpp:159
 msgid "This deletes the following entries:"

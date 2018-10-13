@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2016-03-22 22:43+0100\n"
-"PO-Revision-Date: 2016-03-22 23:40+0000\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2017-02-04 10:52+0000\n"
+"Last-Translator: Marcin Mikołajczak <lubuntu@m4sk.in>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2016-04-21 19:28+0000\n"
-"X-Generator: Launchpad (build 17995)\n"
+"X-Launchpad-Export-Date: 2018-10-13 11:16+0000\n"
+"X-Generator: Launchpad (build 18790)\n"
 
 #: src/Controller/MainController.hpp:629
 msgid "Name the Entry"
@@ -41,7 +41,7 @@ msgstr ""
 
 #: src/View/Gtk/Element/List.hpp:135 src/View/Gtk/Main.hpp:897
 msgid "script"
-msgstr ""
+msgstr "skrypt"
 
 #: src/View/Gtk/Element/List.hpp:137 src/View/Gtk/Main.hpp:888
 msgid "submenu"
@@ -57,23 +57,23 @@ msgstr "wpismenu"
 
 #: src/View/Gtk/Element/List.hpp:144
 msgid "script: %1"
-msgstr ""
+msgstr "skrypt: %1"
 
 #: src/View/Gtk/Element/List.hpp:148
 msgid "default name: %1"
-msgstr ""
+msgstr "nazwa domyślna: %1"
 
 #: src/View/Gtk/Element/List.hpp:152
 msgid "partition: %1"
-msgstr ""
+msgstr "partycja: %1"
 
 #: src/View/Gtk/Element/List.hpp:156
 msgid "ISO-Image: "
-msgstr ""
+msgstr "Obraz ISO: "
 
 #: src/View/Gtk/Element/List.hpp:160
 msgid "Memtest-Image: "
-msgstr ""
+msgstr "Obraz Memtest: "
 
 #: src/View/Gtk/Element/PartitionChooser.hpp:53
 msgid "current"
@@ -85,17 +85,19 @@ msgstr "_Typ:"
 
 #: src/View/Gtk/EntryEditor.hpp:59
 msgid "Boot sequence"
-msgstr ""
+msgstr "Sekwencja uruchamiania"
 
 #: src/View/Gtk/EntryEditor.hpp:60
 msgid "_Name:"
-msgstr ""
+msgstr "_Nazwa:"
 
 #: src/View/Gtk/EntryEditor.hpp:61
 msgid ""
 "Error building boot sequence.\n"
 "Check parameters!"
 msgstr ""
+"Wystąpił błąd podczas tworzenia sekwencji uruchamiania.\n"
+"Sprawdź parametry"
 
 #: src/View/Gtk/EntryEditor.hpp:68
 msgid "Entry editor"
@@ -103,7 +105,7 @@ msgstr "Edycja wpisu"
 
 #: src/View/Gtk/EntryEditor.hpp:204
 msgid "Choose…"
-msgstr ""
+msgstr "Wybierz..."
 
 #: src/View/Gtk/EntryEditor.hpp:315 src/View/Gtk/EntryEditor.hpp:323
 #: src/View/Gtk/EntryEditor.hpp:342
@@ -117,7 +119,7 @@ msgstr "(kod skryptu)"
 
 #: src/View/Gtk/EntryEditor.hpp:424
 msgid "Choose file…"
-msgstr ""
+msgstr "Wybierz plik.."
 
 #: src/View/Gtk/EntryEditor.hpp:436
 msgid "_Partition"
@@ -145,11 +147,11 @@ msgstr "Kernel - parametry"
 
 #: src/View/Gtk/EntryEditor.hpp:448
 msgid "I_SO image"
-msgstr ""
+msgstr "Obraz I_SO"
 
 #: src/View/Gtk/EntryEditor.hpp:450
 msgid "_Memtest-Image"
-msgstr ""
+msgstr "Obraz _Memtest"
 
 #: src/View/Gtk/EnvEditor.hpp:52
 msgid "_Partition:"
@@ -263,19 +265,19 @@ msgstr "_Instalacja w MBR"
 
 #: src/View/Gtk/Main.hpp:129
 msgid "_Show details"
-msgstr ""
+msgstr "Pokaż _szczegóły"
 
 #: src/View/Gtk/Main.hpp:130
 msgid "Show _hidden entries"
-msgstr ""
+msgstr "_Pokaż ukryte elementy"
 
 #: src/View/Gtk/Main.hpp:131
 msgid "_Group by Script"
-msgstr ""
+msgstr "_Grupuj według skryptu"
 
 #: src/View/Gtk/Main.hpp:132
 msgid "Show _Placeholders"
-msgstr ""
+msgstr "_Pokaż symbole zastępcze"
 
 #: src/View/Gtk/Main.hpp:134
 msgid "BURG found!"
@@ -293,7 +295,7 @@ msgstr ""
 
 #: src/View/Gtk/Main.hpp:140
 msgid "Script updates found. Click save to apply the changes!"
-msgstr ""
+msgstr "Znaleziono aktualizacje skryptu. Naciśnij Zapisz aby zapisać zmiany!"
 
 #: src/View/Gtk/Main.hpp:152
 msgid "_List configuration"
@@ -369,7 +371,7 @@ msgstr "Tryb BURG"
 
 #: src/View/Gtk/Main.hpp:438
 msgid "Save configuration and generate a new %1"
-msgstr ""
+msgstr "Zapisz konfigurację i generuj nowy %1"
 
 #: src/View/Gtk/Main.hpp:535
 msgid "loading configuration…"
@@ -439,11 +441,11 @@ msgstr "Modyfikacje nie są zapisane, aktualizacja zapisze zmiany!"
 
 #: src/View/Gtk/Main.hpp:620
 msgid "Failed saving grub configuration!"
-msgstr ""
+msgstr "Nie udało się zapisać konfiguracji GRUB!"
 
 #: src/View/Gtk/Main.hpp:621
 msgid "The grub configuration cannot be saved"
-msgstr ""
+msgstr "Konfiguracja nie może zostać zapisana"
 
 #: src/View/Gtk/Main.hpp:622
 msgid ""
@@ -497,6 +499,8 @@ msgid ""
 "An menuentry which is visible at the grub menu and boots an operating system "
 "when activated."
 msgstr ""
+"Element menu który jest dostępny w menu GRUB i uruchamia system operacyjny "
+"kiedy jest aktywny."
 
 #: src/View/Gtk/Main.hpp:889
 msgid ""
@@ -524,7 +528,7 @@ msgstr ""
 
 #: src/View/Gtk/Main.hpp:905
 msgid "About the entry types"
-msgstr ""
+msgstr "O rodzajach wpisów"
 
 #: src/View/Gtk/Main.hpp:957
 msgid "Are you sure?"
@@ -600,15 +604,15 @@ msgstr "wartość"
 
 #: src/View/Gtk/Settings.hpp:204
 msgid "Boot default entry after %1 Seconds"
-msgstr ""
+msgstr "Uruchom domyślny wpis po %1 sekundach"
 
 #: src/View/Gtk/Settings.hpp:297
 msgid "(first entry)"
-msgstr ""
+msgstr "(pierwszy element)"
 
 #: src/View/Gtk/Settings.hpp:299
 msgid "(other…)"
-msgstr ""
+msgstr "(inne...)"
 
 #: src/View/Gtk/Settings.hpp:459
 msgid ""
@@ -706,11 +710,11 @@ msgstr "czarny"
 
 #: src/View/Gtk/Theme.hpp:210
 msgid "_Load file: "
-msgstr ""
+msgstr "Ł_aduj plik "
 
 #: src/View/Gtk/Theme.hpp:213
 msgid "_Theme:"
-msgstr ""
+msgstr "_Motyw:"
 
 #: src/View/Gtk/Theme.hpp:214
 msgid "background image"
@@ -718,7 +722,7 @@ msgstr "obrazek tła"
 
 #: src/View/Gtk/Theme.hpp:218
 msgid "Please choose a background image!"
-msgstr ""
+msgstr "Wybierz obraz tła"
 
 #: src/View/Gtk/Theme.hpp:221
 msgid "_Font"
@@ -726,51 +730,51 @@ msgstr "_Czcionka"
 
 #: src/View/Gtk/Theme.hpp:224
 msgid "choose theme file"
-msgstr ""
+msgstr "wybierz plik z motywem"
 
 #: src/View/Gtk/Theme.hpp:225
 msgid "Theme contents"
-msgstr ""
+msgstr "Zawartość motywu"
 
 #: src/View/Gtk/Theme.hpp:226
 msgid "Custom Theme settings"
-msgstr ""
+msgstr "Niestandardowe ustawienia motywu"
 
 #: src/View/Gtk/Theme.hpp:227
 msgid "Normal: Font"
-msgstr ""
+msgstr "Normalne: czcionka"
 
 #: src/View/Gtk/Theme.hpp:228
 msgid "Normal: Background"
-msgstr ""
+msgstr "Normalne: tło"
 
 #: src/View/Gtk/Theme.hpp:229
 msgid "Highlighted: Font"
-msgstr ""
+msgstr "Wyróżnienie: czcionka"
 
 #: src/View/Gtk/Theme.hpp:230
 msgid "Highlighted: Background"
-msgstr ""
+msgstr "Wyróżnienie: tło"
 
 #: src/View/Gtk/Theme.hpp:301
 msgid "File"
-msgstr ""
+msgstr "Plik"
 
 #: src/View/Gtk/Theme.hpp:312
 msgid "add theme"
-msgstr ""
+msgstr "dodaj motyw"
 
 #: src/View/Gtk/Theme.hpp:313
 msgid "delete this theme"
-msgstr ""
+msgstr "usuń ten motyw"
 
 #: src/View/Gtk/Theme.hpp:325
 msgid "Archive files"
-msgstr ""
+msgstr "Pliki archiwów"
 
 #: src/View/Gtk/Theme.hpp:330
 msgid "All files"
-msgstr ""
+msgstr "Wszystkie pliki"
 
 #: src/View/Gtk/Theme.hpp:374
 msgid "remove font"
@@ -782,33 +786,35 @@ msgstr "usuń tło"
 
 #: src/View/Gtk/Theme.hpp:501
 msgid "(Custom Settings)"
-msgstr ""
+msgstr "(Niestandardowe ustawienia)"
 
 #: src/View/Gtk/Theme.hpp:554
 msgid "The chosen file cannot be loaded as theme"
-msgstr ""
+msgstr "Ten plik nie może zostać załadowany jako motyw"
 
 #: src/View/Gtk/Theme.hpp:557
 msgid "The given filename cannot be used"
-msgstr ""
+msgstr "Ta nazwa pliku nie może zostać użyta"
 
 #: src/View/Gtk/Theme.hpp:560
 msgid ""
 "This theme doesn't contain a %1. Please look for the config file and rename "
 "it to \"%1\"!"
 msgstr ""
+"Ten motyw nie zawiera %1. Zajrzyj do pliku konfiguracyjnego i zmień nazwę na "
+"\"%1\"!"
 
 #: src/View/Gtk/Theme.hpp:563
 msgid "Saving of themes didn't succeed completely!"
-msgstr ""
+msgstr "Zapisywanie motywów zakończone niepowodzeniem!"
 
 #: src/View/Gtk/Theme.hpp:566
 msgid "File replacement failed. Please select a theme file first!"
-msgstr ""
+msgstr "Zastąpienie pliku nieudane. Proszę wybrać plik motywu!"
 
 #: src/View/Gtk/Theme.hpp:587
 msgid "filename"
-msgstr ""
+msgstr "nazwa pliku"
 
 #: src/View/Gtk/Theme.hpp:624
 msgid ""
@@ -833,11 +839,11 @@ msgstr ""
 
 #: src/View/Gtk/Theme.hpp:636
 msgid "Grub fonts can be harmful (Info)"
-msgstr ""
+msgstr "Czcionki w GRUB-ie mogą być szkodliwe (informacje)"
 
 #: src/View/Gtk/Theme.hpp:857
 msgid "Are you sure you want to remove this theme"
-msgstr ""
+msgstr "Czy na pewno chcesz usunąć ten motyw"
 
 #: src/View/Gtk/Theme.hpp:931
 msgid ""
@@ -864,24 +870,26 @@ msgstr "Dodaj wpis z kosza"
 
 #: src/View/Gtk/Trash.hpp:59
 msgid "Removed items"
-msgstr ""
+msgstr "Usunięte elementy"
 
 #: src/View/Gtk/Trash.hpp:69
 msgid "_Restore"
-msgstr ""
+msgstr "P_rzywróć"
 
 #: src/View/Gtk/Trash.hpp:71
 msgid "Restore selected entries"
-msgstr ""
+msgstr "Przywróć zaznaczone wpisy"
 
 #: src/View/Gtk/Trash.hpp:76
 msgid "permanently delete selected entries"
-msgstr ""
+msgstr "Bezpowrotnie usuwa zaznaczone wpisy"
 
 #: src/View/Gtk/Trash.hpp:84
 msgid ""
 "delete entries permanently - this action is available on custom entries only"
 msgstr ""
+"usuwa elementy nieodwracalnie - ta akcja jest dostępna tylko przy "
+"niestandardowych wpisach"
 
 #: src/View/Gtk/Trash.hpp:159
 msgid "This deletes the following entries:"

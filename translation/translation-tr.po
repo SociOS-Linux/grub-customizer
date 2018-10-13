@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2016-03-22 22:43+0100\n"
-"PO-Revision-Date: 2016-03-22 23:40+0000\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2016-10-24 09:48+0000\n"
+"Last-Translator: Mehmet Keçeci <mkececi@mehmetkececi.com>\n"
 "Language-Team: Turkish <tr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2016-04-21 19:28+0000\n"
-"X-Generator: Launchpad (build 17995)\n"
+"X-Launchpad-Export-Date: 2018-10-13 11:16+0000\n"
+"X-Generator: Launchpad (build 18790)\n"
 
 #: src/Controller/MainController.hpp:629
 msgid "Name the Entry"
@@ -57,23 +57,23 @@ msgstr "menü girdisi"
 
 #: src/View/Gtk/Element/List.hpp:144
 msgid "script: %1"
-msgstr ""
+msgstr "betik: %1"
 
 #: src/View/Gtk/Element/List.hpp:148
 msgid "default name: %1"
-msgstr ""
+msgstr "varsayılan ad: %1"
 
 #: src/View/Gtk/Element/List.hpp:152
 msgid "partition: %1"
-msgstr ""
+msgstr "bölüntü: %1"
 
 #: src/View/Gtk/Element/List.hpp:156
 msgid "ISO-Image: "
-msgstr ""
+msgstr "ISO-imai: "
 
 #: src/View/Gtk/Element/List.hpp:160
 msgid "Memtest-Image: "
-msgstr ""
+msgstr "Memtest-imaj: "
 
 #: src/View/Gtk/Element/PartitionChooser.hpp:53
 msgid "current"
@@ -85,7 +85,7 @@ msgstr "_Tür:"
 
 #: src/View/Gtk/EntryEditor.hpp:59
 msgid "Boot sequence"
-msgstr ""
+msgstr "Önyükleme sırası"
 
 #: src/View/Gtk/EntryEditor.hpp:60
 msgid "_Name:"
@@ -96,6 +96,8 @@ msgid ""
 "Error building boot sequence.\n"
 "Check parameters!"
 msgstr ""
+"Önyükleme sırasında hatası yapılandırması.\n"
+"Parametrelerini kontrol edin!"
 
 #: src/View/Gtk/EntryEditor.hpp:68
 msgid "Entry editor"
@@ -117,7 +119,7 @@ msgstr "(betik kodu)"
 
 #: src/View/Gtk/EntryEditor.hpp:424
 msgid "Choose file…"
-msgstr ""
+msgstr "Dosya seç..."
 
 #: src/View/Gtk/EntryEditor.hpp:436
 msgid "_Partition"
@@ -125,7 +127,7 @@ msgstr "Disk bölümü"
 
 #: src/View/Gtk/EntryEditor.hpp:438
 msgid "_Initial ramdisk"
-msgstr ""
+msgstr "_Başlangıç ramdiski"
 
 #: src/View/Gtk/EntryEditor.hpp:440
 msgid "_Linux image"
@@ -145,11 +147,11 @@ msgstr "Çekirdek parametreleri"
 
 #: src/View/Gtk/EntryEditor.hpp:448
 msgid "I_SO image"
-msgstr ""
+msgstr "I_SO İmajı"
 
 #: src/View/Gtk/EntryEditor.hpp:450
 msgid "_Memtest-Image"
-msgstr ""
+msgstr "_Memtest-Imajı"
 
 #: src/View/Gtk/EnvEditor.hpp:52
 msgid "_Partition:"

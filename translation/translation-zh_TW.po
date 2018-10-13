@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2016-03-22 22:43+0100\n"
-"PO-Revision-Date: 2016-03-22 23:40+0000\n"
+"PO-Revision-Date: 2017-03-01 04:25+0000\n"
 "Last-Translator: Walter Cheuk <wwycheuk@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <zh_TW@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2016-04-21 19:28+0000\n"
-"X-Generator: Launchpad (build 17995)\n"
+"X-Launchpad-Export-Date: 2018-10-13 11:16+0000\n"
+"X-Generator: Launchpad (build 18790)\n"
 
 #: src/Controller/MainController.hpp:629
 msgid "Name the Entry"
@@ -68,11 +68,11 @@ msgstr "分割區：%1"
 
 #: src/View/Gtk/Element/List.hpp:156
 msgid "ISO-Image: "
-msgstr ""
+msgstr "ISO 映像檔： "
 
 #: src/View/Gtk/Element/List.hpp:160
 msgid "Memtest-Image: "
-msgstr ""
+msgstr "Memtest 映像檔： "
 
 #: src/View/Gtk/Element/PartitionChooser.hpp:53
 msgid "current"
@@ -84,17 +84,19 @@ msgstr "類型(_T)："
 
 #: src/View/Gtk/EntryEditor.hpp:59
 msgid "Boot sequence"
-msgstr ""
+msgstr "開機次序"
 
 #: src/View/Gtk/EntryEditor.hpp:60
 msgid "_Name:"
-msgstr ""
+msgstr "名稱(_N)："
 
 #: src/View/Gtk/EntryEditor.hpp:61
 msgid ""
 "Error building boot sequence.\n"
 "Check parameters!"
 msgstr ""
+"建立開機次序時出錯。\n"
+"請檢查參數！"
 
 #: src/View/Gtk/EntryEditor.hpp:68
 msgid "Entry editor"
@@ -102,7 +104,7 @@ msgstr "項目編輯器"
 
 #: src/View/Gtk/EntryEditor.hpp:204
 msgid "Choose…"
-msgstr ""
+msgstr "選擇..."
 
 #: src/View/Gtk/EntryEditor.hpp:315 src/View/Gtk/EntryEditor.hpp:323
 #: src/View/Gtk/EntryEditor.hpp:342
@@ -116,7 +118,7 @@ msgstr "(腳本代碼)"
 
 #: src/View/Gtk/EntryEditor.hpp:424
 msgid "Choose file…"
-msgstr ""
+msgstr "選擇檔案…"
 
 #: src/View/Gtk/EntryEditor.hpp:436
 msgid "_Partition"
@@ -144,11 +146,11 @@ msgstr "內核參數"
 
 #: src/View/Gtk/EntryEditor.hpp:448
 msgid "I_SO image"
-msgstr ""
+msgstr "I_SO 映像檔"
 
 #: src/View/Gtk/EntryEditor.hpp:450
 msgid "_Memtest-Image"
-msgstr ""
+msgstr "_Memtest 映像檔"
 
 #: src/View/Gtk/EnvEditor.hpp:52
 msgid "_Partition:"
@@ -442,6 +444,7 @@ msgid ""
 "bug of Grub Customizer, please create one at %1! Generally Grub Customizer "
 "should prevent errors like this."
 msgstr ""
+"請檢視以下指令列的輸出結果。若閣下認為 Grub Customizer 有問題，請於 %1 回報！通常而言 Grub Customizer 不應該會這樣。"
 
 #: src/View/Gtk/Main.hpp:628
 msgid ""
@@ -483,14 +486,14 @@ msgstr ""
 msgid ""
 "An menuentry which is visible at the grub menu and boots an operating system "
 "when activated."
-msgstr ""
+msgstr "「選單項目(menuentry)」會出現於 grub 選單；當啟用時會以某個作業系統開機。"
 
 #: src/View/Gtk/Main.hpp:889
 msgid ""
 "A group of other operating systems. Grub shows it as a normal menuentry "
 "however when clicking it, it loads another menu which allows you to choose "
 "one the the containing menuentries."
-msgstr ""
+msgstr "一組其他的作業系統。點擊時，Grub 會將之顯示為普通選單項目，並載入另一個選單，再從中選擇作業系統。"
 
 #: src/View/Gtk/Main.hpp:892
 msgid ""
@@ -596,11 +599,11 @@ msgstr "在 %1 秒後以預設項目開機"
 
 #: src/View/Gtk/Settings.hpp:297
 msgid "(first entry)"
-msgstr ""
+msgstr "(首個項目)"
 
 #: src/View/Gtk/Settings.hpp:299
 msgid "(other…)"
-msgstr ""
+msgstr "(其他…)"
 
 #: src/View/Gtk/Settings.hpp:459
 msgid ""

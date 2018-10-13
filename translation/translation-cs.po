@@ -8,36 +8,35 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2016-03-22 22:43+0100\n"
-"PO-Revision-Date: 2016-03-22 23:40+0000\n"
-"Last-Translator: Ales Kvapil <aleskva@mailinator.com>\n"
+"PO-Revision-Date: 2018-02-27 05:56+0000\n"
+"Last-Translator: Pavel Borecki <Unknown>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2016-04-21 19:28+0000\n"
-"X-Generator: Launchpad (build 17995)\n"
+"X-Launchpad-Export-Date: 2018-10-13 11:16+0000\n"
+"X-Generator: Launchpad (build 18790)\n"
 
 #: src/Controller/MainController.hpp:629
 msgid "Name the Entry"
-msgstr "Jméno položky"
+msgstr "Název položky"
 
 #: src/Controller/MainController.hpp:715
 msgid "cannot move this entry"
-msgstr "nelzepřesunout tuto položku"
+msgstr "tuto položku nelze přesunout"
 
 #: src/Controller/MainController.hpp:834
 msgid "Configuration has been saved"
-msgstr "Konfigurace byla uložena"
+msgstr "Nastavení byla uložena"
 
 #: src/Controller/MainController.hpp:839
 msgid "updating configuration"
-msgstr "aktualizace konfigurace"
+msgstr "nastavení se aktualizuje"
 
 #: src/View/Gtk/About.hpp:53
 msgid ""
 "Grub Customizer is a graphical interface to configure the grub2/burg settings"
-msgstr ""
-"Grub Customizer is a grafická nadstavba ke konfiguraci grub2/burg nastavení"
+msgstr "Grub Customizer je grafická nadstavba pro nastavování grub2/burg"
 
 #: src/View/Gtk/Element/List.hpp:135 src/View/Gtk/Main.hpp:897
 msgid "script"
@@ -45,15 +44,15 @@ msgstr "skript"
 
 #: src/View/Gtk/Element/List.hpp:137 src/View/Gtk/Main.hpp:888
 msgid "submenu"
-msgstr "Podmenu"
+msgstr "podnabídka"
 
 #: src/View/Gtk/Element/List.hpp:139 src/View/Gtk/Main.hpp:891
 msgid "placeholder"
-msgstr "placeholder"
+msgstr "výplň"
 
 #: src/View/Gtk/Element/List.hpp:141 src/View/Gtk/Main.hpp:886
 msgid "menuentry"
-msgstr "položka menu"
+msgstr "položka nabídky"
 
 #: src/View/Gtk/Element/List.hpp:144
 msgid "script: %1"
@@ -69,11 +68,11 @@ msgstr "oddíl: %1"
 
 #: src/View/Gtk/Element/List.hpp:156
 msgid "ISO-Image: "
-msgstr ""
+msgstr "ISO-obraz: "
 
 #: src/View/Gtk/Element/List.hpp:160
 msgid "Memtest-Image: "
-msgstr ""
+msgstr "Memtest-obraz: "
 
 #: src/View/Gtk/Element/PartitionChooser.hpp:53
 msgid "current"
@@ -85,25 +84,27 @@ msgstr "_Typ:"
 
 #: src/View/Gtk/EntryEditor.hpp:59
 msgid "Boot sequence"
-msgstr ""
+msgstr "Zaváděcí (bootovací) sekvence"
 
 #: src/View/Gtk/EntryEditor.hpp:60
 msgid "_Name:"
-msgstr ""
+msgstr "_Název:"
 
 #: src/View/Gtk/EntryEditor.hpp:61
 msgid ""
 "Error building boot sequence.\n"
 "Check parameters!"
 msgstr ""
+"Chyba při vytváření zaváděcí (bootovací) sekvence.\n"
+"Zkontrolujte parametry!"
 
 #: src/View/Gtk/EntryEditor.hpp:68
 msgid "Entry editor"
-msgstr "Editor vstupu"
+msgstr "Editor položky"
 
 #: src/View/Gtk/EntryEditor.hpp:204
 msgid "Choose…"
-msgstr ""
+msgstr "Vybrat…"
 
 #: src/View/Gtk/EntryEditor.hpp:315 src/View/Gtk/EntryEditor.hpp:323
 #: src/View/Gtk/EntryEditor.hpp:342
@@ -117,7 +118,7 @@ msgstr "(kód scriptu)"
 
 #: src/View/Gtk/EntryEditor.hpp:424
 msgid "Choose file…"
-msgstr ""
+msgstr "Vybrat soubor…"
 
 #: src/View/Gtk/EntryEditor.hpp:436
 msgid "_Partition"
@@ -137,19 +138,19 @@ msgstr "_Memtest obraz"
 
 #: src/View/Gtk/EntryEditor.hpp:444
 msgid "Path to iso file"
-msgstr "Cesta k iso souboru"
+msgstr "Popis umístění iso souboru"
 
 #: src/View/Gtk/EntryEditor.hpp:446
 msgid "Kernel params"
-msgstr "Kernel parametry"
+msgstr "Parametry pro jádro systému"
 
 #: src/View/Gtk/EntryEditor.hpp:448
 msgid "I_SO image"
-msgstr ""
+msgstr "I_SO obraz"
 
 #: src/View/Gtk/EntryEditor.hpp:450
 msgid "_Memtest-Image"
-msgstr ""
+msgstr "_Memtest-obraz"
 
 #: src/View/Gtk/EnvEditor.hpp:52
 msgid "_Partition:"
@@ -169,7 +170,7 @@ msgstr "Grub 2"
 
 #: src/View/Gtk/EnvEditor.hpp:85
 msgid "BURG"
-msgstr "BRUG"
+msgstr "BURG"
 
 #: src/View/Gtk/EnvEditor.hpp:258
 msgid "Mount failed!"
@@ -182,15 +183,15 @@ msgstr "odpojení se nezdařilo!"
 #: src/View/Gtk/EnvEditor.hpp:260
 msgid "This seems not to be a root file system (no fstab found)"
 msgstr ""
-"Zdá se, že toto není kořenový souborový systém (nebyly nalezeny žádné fstab)"
+"Toto se nezdá být kořenový souborový systém (nebyl nalezen žádný fstab)"
 
 #: src/View/Gtk/EnvEditor.hpp:261
 msgid "Couldn't mount the selected partition"
-msgstr "Nemohu připojit vybraný oddíl"
+msgstr "Nelze připojit vybraný oddíl"
 
 #: src/View/Gtk/EnvEditor.hpp:262
 msgid "Couldn't umount the selected partition"
-msgstr "Nemohu odpojit vybraný oddíl"
+msgstr "Nelze odpojit vybraný oddíl"
 
 #: src/View/Gtk/Error.hpp:31 src/View/Gtk/Error.hpp:33
 msgid "An error occurred"
@@ -201,7 +202,7 @@ msgid ""
 "please Inform the author about this problem. The following information could "
 "be helpful:"
 msgstr ""
-"Informujte prosím autora o tomto problému.Následující informace mohou být "
+"Informujte prosím autora o tomto problému. Následující informace mohou být "
 "užitečné:"
 
 #: src/View/Gtk/Error.hpp:36
@@ -236,11 +237,11 @@ msgstr "Chyba při instalaci zavaděče"
 
 #: src/View/Gtk/Installer.hpp:89
 msgid "installing the bootloader…"
-msgstr "instalace zavaděče..."
+msgstr "instalace zavaděče…"
 
 #: src/View/Gtk/Installer.hpp:93
 msgid "Please type a device string!"
-msgstr "Prosím, zadejte řetězec zařízení!"
+msgstr "Zadejte řetězec představující zařízení"
 
 #: src/View/Gtk/Main.hpp:99
 msgid "_File"
@@ -260,23 +261,23 @@ msgstr "_Nápověda"
 
 #: src/View/Gtk/Main.hpp:107
 msgid "_Install to MBR …"
-msgstr "_Instalovat do MBR …"
+msgstr "Na_instalovat do MBR…"
 
 #: src/View/Gtk/Main.hpp:129
 msgid "_Show details"
-msgstr "Zobraz _detaily"
+msgstr "Zobrazit podrobno_sti"
 
 #: src/View/Gtk/Main.hpp:130
 msgid "Show _hidden entries"
-msgstr "Zobraz _skryté položky"
+msgstr "Zobrazit _skryté položky"
 
 #: src/View/Gtk/Main.hpp:131
 msgid "_Group by Script"
-msgstr "_Seskup podle skriptu"
+msgstr "_Seskupit podle skriptu"
 
 #: src/View/Gtk/Main.hpp:132
 msgid "Show _Placeholders"
-msgstr "Zobraz _placeholdery"
+msgstr "Zobrazit _placeholdery"
 
 #: src/View/Gtk/Main.hpp:134
 msgid "BURG found!"
@@ -284,13 +285,14 @@ msgstr "BURG nalezen!"
 
 #: src/View/Gtk/Main.hpp:135 src/View/Gtk/Main.hpp:136
 msgid "advanced settings"
-msgstr "rozšířené nastavení"
+msgstr "rozšířená nastavení"
 
 #: src/View/Gtk/Main.hpp:139
 msgid ""
 "The modifications you've done affects the visible entries. Please reload!"
 msgstr ""
-"Změny, které jste provedl ovlivňují viditelné položky. Prosím znovu načněte"
+"Změny, které byly provedeny ovlivňují viditelné položky. Prosím, načtěte "
+"konfiguraci znovu!"
 
 #: src/View/Gtk/Main.hpp:140
 msgid "Script updates found. Click save to apply the changes!"
@@ -298,7 +300,7 @@ msgstr "Nalezena aktualizace skriptu. Klikněte na uložit k použití změn!"
 
 #: src/View/Gtk/Main.hpp:152
 msgid "_List configuration"
-msgstr "_Seznam nastavení"
+msgstr "_Vypsat nastavení"
 
 #: src/View/Gtk/Main.hpp:187
 msgid "Remove selected entries (you can restore them from trash)"
@@ -314,19 +316,19 @@ msgstr "Posunout vybrané položky nebo skript dolů"
 
 #: src/View/Gtk/Main.hpp:205
 msgid "remove this entry from the current submenu"
-msgstr "Odebrat tuto položku ze současného submenu"
+msgstr "Odebrat tuto položku ze současné podnabídky"
 
 #: src/View/Gtk/Main.hpp:208
 msgid "add this entry to a new submenu"
-msgstr "Přidat položku do nového submenu"
+msgstr "přidat tuto položku do nové podnabídky"
 
 #: src/View/Gtk/Main.hpp:231
 msgid "Reverts the list to the default order"
-msgstr "Vrátit seznam do výchozí hodnoty"
+msgstr "Vrátit seznam do výchozího řazení"
 
 #: src/View/Gtk/Main.hpp:233
 msgid "reloads the configuration. Unsaved changes will be preserved."
-msgstr "znovu načte konfiguraci. Neuložené změny budou zachovány."
+msgstr "Znovu načíst nastavení. Neuložené změny budou zachovány."
 
 #: src/View/Gtk/Main.hpp:277
 msgid "Rename"
@@ -334,51 +336,51 @@ msgstr "Přejmenovat"
 
 #: src/View/Gtk/Main.hpp:278 src/View/Gtk/Main.hpp:279
 msgid "Move up"
-msgstr "Nahoru"
+msgstr "Posunout nahoru"
 
 #: src/View/Gtk/Main.hpp:280 src/View/Gtk/Main.hpp:281
 msgid "Move down"
-msgstr "Dolu"
+msgstr "Posunout dolů"
 
 #: src/View/Gtk/Main.hpp:282 src/View/Gtk/Main.hpp:283
 msgid "Remove from submenu"
-msgstr "Odebrat z podmenu"
+msgstr "Odebrat z podnabídky"
 
 #: src/View/Gtk/Main.hpp:284 src/View/Gtk/Main.hpp:285
 msgid "Create submenu"
-msgstr "Vytvořit podmenu"
+msgstr "Vytvořit podnabídku"
 
 #: src/View/Gtk/Main.hpp:300
 msgid "_Change Environment …"
-msgstr "Změna _prostředí ..."
+msgstr "Změnit _prostředí…"
 
 #: src/View/Gtk/Main.hpp:307
 msgid "Do you want to configure BURG instead of grub2?"
-msgstr "Chcete konfigurovat BURG místo grub2?"
+msgstr "Chcete nastavit BURG namísto grub2?"
 
 #: src/View/Gtk/Main.hpp:374
 msgid "_General settings"
-msgstr "_Základní nastavení"
+msgstr "_Obecná nastavení"
 
 #: src/View/Gtk/Main.hpp:381
 msgid "_Appearance settings"
-msgstr "_Nastavení vzhledu"
+msgstr "N_astavení vzhledu"
 
 #: src/View/Gtk/Main.hpp:434
 msgid "BURG Mode"
-msgstr "BURG mód"
+msgstr "BURG režim"
 
 #: src/View/Gtk/Main.hpp:438
 msgid "Save configuration and generate a new %1"
-msgstr "Uložit konfiguraci a vygenerovat nový %1"
+msgstr "Uložit nastavení a vytvořit nový %1"
 
 #: src/View/Gtk/Main.hpp:535
 msgid "loading configuration…"
-msgstr "načítání konfigurace..."
+msgstr "načítání nastavení…"
 
 #: src/View/Gtk/Main.hpp:537
 msgid "loading script %2/%3 (%1)"
-msgstr "nahrávám script %2/%3 (%1)"
+msgstr "načítání skriptu %2/%3 (%1)"
 
 #: src/View/Gtk/Main.hpp:550
 msgid "Proxy binary not found!"
@@ -390,11 +392,11 @@ msgid ""
 "(in most cases), when you didn't install grub gustomizer currectly."
 msgstr ""
 "Když spustíte grub, uvidíte všechny záznamy (nepřizpůsobené). Tato chyba se "
-"(většinou) objeví, když jste správně nenainstalovali grub přizpůsobovač."
+"(většinou) objeví, pokud jste správně nenainstalovali Grub Customizer."
 
 #: src/View/Gtk/Main.hpp:558
 msgid "(incoming Entries of %1)"
-msgstr "(příchozí Položky %1)"
+msgstr "(příchozí položky %1)"
 
 #: src/View/Gtk/Main.hpp:560
 msgid "(incoming Entries)"
@@ -402,7 +404,7 @@ msgstr "(příchozí položky)"
 
 #: src/View/Gtk/Main.hpp:579
 msgid "The saved configuration is not up to date!"
-msgstr "Uložená konfigurace není aktuální!"
+msgstr "Uložené nastavení není aktuální!"
 
 #: src/View/Gtk/Main.hpp:580
 msgid ""
@@ -410,9 +412,9 @@ msgid ""
 "startup. So what you see now may not be what you see when you restart your "
 "pc. To fix this, click update!"
 msgstr ""
-"vytvořená konfigurace není shodná s konfigurací uloženou při startu. To, co "
-"vidíte teď nemusí být to, co se zobrazí při restartování pc. Chcete-li tento "
-"problém odstranit, klepněte na tlačítko Aktualizovat!"
+"Vytvořená konfigurace není shodná s konfigurací uloženou při startu. To, co "
+"vidíte teď nemusí být to, co se zobrazí při restartování počítače. Chcete-li "
+"tento problém odstranit, klepněte na tlačítko Aktualizovat!"
 
 #: src/View/Gtk/Main.hpp:583
 msgid "_Quit without update"
@@ -420,7 +422,7 @@ msgstr "U_končit bez aktualizace"
 
 #: src/View/Gtk/Main.hpp:586
 msgid "_Update & Quit"
-msgstr "_Aktualizovat & ukončit"
+msgstr "Akt_ualizovat a ukončit"
 
 #: src/View/Gtk/Main.hpp:590
 msgid "Do you want to save your modifications?"
@@ -432,7 +434,7 @@ msgstr "Uko_nčit bez uložení"
 
 #: src/View/Gtk/Main.hpp:596
 msgid "_Save & Quit"
-msgstr "_Uložit & ukončit"
+msgstr "_Uložit a ukončit"
 
 #: src/View/Gtk/Main.hpp:599
 msgid "AND: your modifications are still unsaved, update will save them too!"
@@ -440,11 +442,11 @@ msgstr "A: Vaše úpravy jsou stále neuložené, aktualizací se uloží také!
 
 #: src/View/Gtk/Main.hpp:620
 msgid "Failed saving grub configuration!"
-msgstr "Chyba při ukládání konfigurace grubu!"
+msgstr "Chyba při ukládání nastavení grub!"
 
 #: src/View/Gtk/Main.hpp:621
 msgid "The grub configuration cannot be saved"
-msgstr "Konfigurace grubu nemohla být uložena"
+msgstr "Nastavení grub se nepodařilo uložit"
 
 #: src/View/Gtk/Main.hpp:622
 msgid ""
@@ -470,19 +472,19 @@ msgstr "Nastavení prostředí"
 
 #: src/View/Gtk/Main.hpp:644
 msgid "Do you want to proceed without saving the current configuration?"
-msgstr "Chcete pokračovat bez uložení aktuální konfigurace?"
+msgstr "Chcete pokračovat bez uložení aktuálního nastavení?"
 
 #: src/View/Gtk/Main.hpp:645
 msgid "There are unsaved modifications!"
-msgstr "Toto je neuložená úprava"
+msgstr "Některé úpravy nejsou uložené!"
 
 #: src/View/Gtk/Main.hpp:697
 msgid ""
 "Removing Script Code can cause problems when trying to boot entries relying "
 "on it. Are you sure you want to do it anyway?"
 msgstr ""
-"Odstranění scriptového kódu, může způsobit problémy, když se snaží zavést "
-"položky. Jste si jistý, že to chcete udělat?"
+"Odstranění kódu scriptu může způsobit problémy při pokusu zavést položky "
+"závislé na tomto skriptu. Jste si jistý, že to přesto chcete udělat?"
 
 #: src/View/Gtk/Main.hpp:707
 msgid ""
@@ -491,18 +493,18 @@ msgid ""
 "If you just want to remove old kernels: The better way is uninstalling them "
 "instead of just hiding them in boot menu."
 msgstr ""
-"Snažíte se odstranit položku z aktuálně běžícím systému. Ujistěte se, že "
-"existují i ​​jiné pracovní položky tohoto systému!\n"
-"Pokud chcete odstranit staré jádro: lepší způsob, je jej odinstalovat, než "
-"jen skrýt je v boot menu."
+"Pokoušíte se odstranit položku aktuálně běžícího systému. Ujistěte se, že "
+"existují i ​​jiné funkční položky tohoto systému!\n"
+"Pokud chcete odstranit staré jádro: Lepší cesta je jádro odinstalovat, než "
+"ho jen skrýt v boot menu."
 
 #: src/View/Gtk/Main.hpp:887
 msgid ""
 "An menuentry which is visible at the grub menu and boots an operating system "
 "when activated."
 msgstr ""
-"Položka menu, která je viditelná v grub menu a po jejím vybrání bootuje "
-"operační systém."
+"Položka nabídky, která je viditelná v nabídce grub a po jejím vybrání se "
+"spustí operační systém."
 
 #: src/View/Gtk/Main.hpp:889
 msgid ""
@@ -528,7 +530,7 @@ msgstr ""
 "dosud nebyly nakonfigurované pomocí Grub Customizeru. Kód skriptu je kód "
 "vygenerovaný grubem, který nevypadá jako položka menu. Ve většině případů je "
 "využita ke konfiguraci grubu. Měli byste se jí dotknout pouze v případě, že "
-"víte co dělá. Placeholdery jsou ve výzím nastavení skryté."
+"víte co dělá. Placeholdery jsou ve výchozím nastavení skryté."
 
 #: src/View/Gtk/Main.hpp:898
 msgid ""
@@ -546,11 +548,11 @@ msgstr "O typech položek"
 
 #: src/View/Gtk/Main.hpp:957
 msgid "Are you sure?"
-msgstr "Jste si jistý?"
+msgstr "Opravdu toto chcete?"
 
 #: src/View/Gtk/Main.hpp:958
 msgid "This removes all your list modifications of the bootloader menu!"
-msgstr "Toto odebere všechny vaše změny v menu bootloaderu!"
+msgstr "Toto odebere všechny vaše změny v nabídce zavaděče!"
 
 #: src/View/Gtk/Settings.hpp:113
 msgid "pre_defined: "
@@ -558,11 +560,11 @@ msgstr "před_definované: "
 
 #: src/View/Gtk/Settings.hpp:114
 msgid "previously _booted entry"
-msgstr "dříve _zavedený záznam"
+msgstr "předchozí _zavedená položka"
 
 #: src/View/Gtk/Settings.hpp:115
 msgid "default entry"
-msgstr "výchozí vstup"
+msgstr "výchozí položka"
 
 #: src/View/Gtk/Settings.hpp:116
 msgid "visibility"
@@ -570,11 +572,11 @@ msgstr "viditelnost"
 
 #: src/View/Gtk/Settings.hpp:117
 msgid "show menu"
-msgstr "zobrazit menu"
+msgstr "zobrazit nabídku"
 
 #: src/View/Gtk/Settings.hpp:118
 msgid "kernel parameters"
-msgstr "parametry jádra"
+msgstr "parametry jádra systému"
 
 #: src/View/Gtk/Settings.hpp:119
 msgid "generate recovery entries"
@@ -610,7 +612,7 @@ msgstr "je aktivní"
 
 #: src/View/Gtk/Settings.hpp:145
 msgid "name"
-msgstr "jméno"
+msgstr "název"
 
 #: src/View/Gtk/Settings.hpp:146
 msgid "value"
@@ -618,15 +620,15 @@ msgstr "hodnota"
 
 #: src/View/Gtk/Settings.hpp:204
 msgid "Boot default entry after %1 Seconds"
-msgstr "Bootovat výchozí položku po %1 sekundách"
+msgstr "zavést (bootovat) výchozí položku po %1 sekundách"
 
 #: src/View/Gtk/Settings.hpp:297
 msgid "(first entry)"
-msgstr ""
+msgstr "(první položka)"
 
 #: src/View/Gtk/Settings.hpp:299
 msgid "(other…)"
-msgstr ""
+msgstr "(ostatní…)"
 
 #: src/View/Gtk/Settings.hpp:459
 msgid ""
@@ -727,7 +729,7 @@ msgstr "_Načíst soubor: "
 
 #: src/View/Gtk/Theme.hpp:213
 msgid "_Theme:"
-msgstr "_Motiv:"
+msgstr "Motiv vzhledu:"
 
 #: src/View/Gtk/Theme.hpp:214
 msgid "background image"
@@ -735,7 +737,7 @@ msgstr "obrázek na pozadí"
 
 #: src/View/Gtk/Theme.hpp:218
 msgid "Please choose a background image!"
-msgstr "Prosím zvolte obrázek pozadí!"
+msgstr "Zvolte obrázek na pozadí!"
 
 #: src/View/Gtk/Theme.hpp:221
 msgid "_Font"
@@ -743,11 +745,11 @@ msgstr "_Písmo"
 
 #: src/View/Gtk/Theme.hpp:224
 msgid "choose theme file"
-msgstr "vyberte soubor motivu"
+msgstr "vyberte soubor s motivem"
 
 #: src/View/Gtk/Theme.hpp:225
 msgid "Theme contents"
-msgstr "Obsah motivu"
+msgstr "Obsah motivu vzhledu"
 
 #: src/View/Gtk/Theme.hpp:226
 msgid "Custom Theme settings"
@@ -791,7 +793,7 @@ msgstr "Všechny soubory"
 
 #: src/View/Gtk/Theme.hpp:374
 msgid "remove font"
-msgstr "smazat font"
+msgstr "odstranit písmo"
 
 #: src/View/Gtk/Theme.hpp:393
 msgid "remove background"
@@ -874,7 +876,7 @@ msgstr "Písma grubu mohou být závádná (info)"
 
 #: src/View/Gtk/Theme.hpp:857
 msgid "Are you sure you want to remove this theme"
-msgstr "Jste si jist, že chcete smazat tento motiv"
+msgstr "Jste si jisti, že chcete smazat tento motiv"
 
 #: src/View/Gtk/Theme.hpp:931
 msgid ""
@@ -952,7 +954,7 @@ msgstr "Linux-ISO"
 
 #: src/main/client.cpp:100
 msgid "Chainloader"
-msgstr "Chainloader"
+msgstr "Načtení dalšího zavaděče"
 
 #: src/main/client.cpp:101
 msgid "Memtest"

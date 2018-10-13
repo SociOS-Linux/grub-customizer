@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2016-03-22 22:43+0100\n"
-"PO-Revision-Date: 2016-03-22 23:40+0000\n"
-"Last-Translator: tibbi <tibbbi2@gmail.com>\n"
+"PO-Revision-Date: 2018-09-22 12:21+0000\n"
+"Last-Translator: Vendelín Slezák <Unknown>\n"
 "Language-Team: Slovak <sk@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2016-04-21 19:28+0000\n"
-"X-Generator: Launchpad (build 17995)\n"
+"X-Launchpad-Export-Date: 2018-10-13 11:16+0000\n"
+"X-Generator: Launchpad (build 18790)\n"
 
 #: src/Controller/MainController.hpp:629
 msgid "Name the Entry"
@@ -57,23 +57,23 @@ msgstr "položka ponuky"
 
 #: src/View/Gtk/Element/List.hpp:144
 msgid "script: %1"
-msgstr ""
+msgstr "skript: %1"
 
 #: src/View/Gtk/Element/List.hpp:148
 msgid "default name: %1"
-msgstr ""
+msgstr "predvolený názov: %1"
 
 #: src/View/Gtk/Element/List.hpp:152
 msgid "partition: %1"
-msgstr ""
+msgstr "partícia: %1"
 
 #: src/View/Gtk/Element/List.hpp:156
 msgid "ISO-Image: "
-msgstr ""
+msgstr "ISO-obraz: "
 
 #: src/View/Gtk/Element/List.hpp:160
 msgid "Memtest-Image: "
-msgstr ""
+msgstr "Memtest-obraz: "
 
 #: src/View/Gtk/Element/PartitionChooser.hpp:53
 msgid "current"
@@ -85,17 +85,19 @@ msgstr "_Typ:"
 
 #: src/View/Gtk/EntryEditor.hpp:59
 msgid "Boot sequence"
-msgstr ""
+msgstr "Bootovacia sekvencia"
 
 #: src/View/Gtk/EntryEditor.hpp:60
 msgid "_Name:"
-msgstr ""
+msgstr "_Názov:"
 
 #: src/View/Gtk/EntryEditor.hpp:61
 msgid ""
 "Error building boot sequence.\n"
 "Check parameters!"
 msgstr ""
+"Chyba pri vytváraní bootovacej sekvencie.\n"
+"Prosím skontrolujte parametre!"
 
 #: src/View/Gtk/EntryEditor.hpp:68
 msgid "Entry editor"
@@ -103,7 +105,7 @@ msgstr "Editor položky"
 
 #: src/View/Gtk/EntryEditor.hpp:204
 msgid "Choose…"
-msgstr ""
+msgstr "Vybrať..."
 
 #: src/View/Gtk/EntryEditor.hpp:315 src/View/Gtk/EntryEditor.hpp:323
 #: src/View/Gtk/EntryEditor.hpp:342
@@ -117,7 +119,7 @@ msgstr "(kód skriptu)"
 
 #: src/View/Gtk/EntryEditor.hpp:424
 msgid "Choose file…"
-msgstr ""
+msgstr "Vybrať súbor..."
 
 #: src/View/Gtk/EntryEditor.hpp:436
 msgid "_Partition"
@@ -145,11 +147,11 @@ msgstr "Parametre jadra"
 
 #: src/View/Gtk/EntryEditor.hpp:448
 msgid "I_SO image"
-msgstr ""
+msgstr "I_SO obraz"
 
 #: src/View/Gtk/EntryEditor.hpp:450
 msgid "_Memtest-Image"
-msgstr ""
+msgstr "_Memtest-obraz"
 
 #: src/View/Gtk/EnvEditor.hpp:52
 msgid "_Partition:"
@@ -374,7 +376,7 @@ msgstr "Režim BURG"
 
 #: src/View/Gtk/Main.hpp:438
 msgid "Save configuration and generate a new %1"
-msgstr ""
+msgstr "Uložiť konfiguráciu a genrovať novú %1"
 
 #: src/View/Gtk/Main.hpp:535
 msgid "loading configuration…"
@@ -627,11 +629,11 @@ msgstr "Spustiť predvolenú položku za %1 sekúnd"
 
 #: src/View/Gtk/Settings.hpp:297
 msgid "(first entry)"
-msgstr ""
+msgstr "(prvá položka)"
 
 #: src/View/Gtk/Settings.hpp:299
 msgid "(other…)"
-msgstr ""
+msgstr "(ostatné...)"
 
 #: src/View/Gtk/Settings.hpp:459
 msgid ""
@@ -819,6 +821,8 @@ msgid ""
 "This theme doesn't contain a %1. Please look for the config file and rename "
 "it to \"%1\"!"
 msgstr ""
+"Táto téma neobsahuje %1. Prosím pozrite sa na config súbor a premenujte ho "
+"na \"%1\"!"
 
 #: src/View/Gtk/Theme.hpp:563
 msgid "Saving of themes didn't succeed completely!"

@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2016-03-22 22:43+0100\n"
-"PO-Revision-Date: 2016-03-22 23:40+0000\n"
-"Last-Translator: Peterson <petersonak47@outlook.com>\n"
+"PO-Revision-Date: 2017-08-06 06:18+0000\n"
+"Last-Translator: Thiago Braga <thibraga06@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2016-04-21 19:28+0000\n"
-"X-Generator: Launchpad (build 17995)\n"
+"X-Launchpad-Export-Date: 2018-10-13 11:16+0000\n"
+"X-Generator: Launchpad (build 18790)\n"
 
 #: src/Controller/MainController.hpp:629
 msgid "Name the Entry"
@@ -70,11 +70,11 @@ msgstr "Partição : %1"
 
 #: src/View/Gtk/Element/List.hpp:156
 msgid "ISO-Image: "
-msgstr ""
+msgstr "Imagem-ISO "
 
 #: src/View/Gtk/Element/List.hpp:160
 msgid "Memtest-Image: "
-msgstr ""
+msgstr "Imagem-Memtest "
 
 #: src/View/Gtk/Element/PartitionChooser.hpp:53
 msgid "current"
@@ -86,17 +86,19 @@ msgstr "_Tipo:"
 
 #: src/View/Gtk/EntryEditor.hpp:59
 msgid "Boot sequence"
-msgstr ""
+msgstr "Ordem de boot"
 
 #: src/View/Gtk/EntryEditor.hpp:60
 msgid "_Name:"
-msgstr ""
+msgstr "_Nome:"
 
 #: src/View/Gtk/EntryEditor.hpp:61
 msgid ""
 "Error building boot sequence.\n"
 "Check parameters!"
 msgstr ""
+"Erro a criar ordem de boot.\n"
+"Reveja os parâmetros!"
 
 #: src/View/Gtk/EntryEditor.hpp:68
 msgid "Entry editor"
@@ -104,7 +106,7 @@ msgstr "Editor de entradas"
 
 #: src/View/Gtk/EntryEditor.hpp:204
 msgid "Choose…"
-msgstr ""
+msgstr "Escolher..."
 
 #: src/View/Gtk/EntryEditor.hpp:315 src/View/Gtk/EntryEditor.hpp:323
 #: src/View/Gtk/EntryEditor.hpp:342
@@ -118,7 +120,7 @@ msgstr "(código de script)"
 
 #: src/View/Gtk/EntryEditor.hpp:424
 msgid "Choose file…"
-msgstr ""
+msgstr "Escolher arquivo..."
 
 #: src/View/Gtk/EntryEditor.hpp:436
 msgid "_Partition"
@@ -146,11 +148,11 @@ msgstr "Parâmetros do kernel"
 
 #: src/View/Gtk/EntryEditor.hpp:448
 msgid "I_SO image"
-msgstr ""
+msgstr "I_SO imagem"
 
 #: src/View/Gtk/EntryEditor.hpp:450
 msgid "_Memtest-Image"
-msgstr ""
+msgstr "_Memtest-Imagem"
 
 #: src/View/Gtk/EnvEditor.hpp:52
 msgid "_Partition:"
@@ -265,7 +267,7 @@ msgstr "_Instalar na MBR..."
 
 #: src/View/Gtk/Main.hpp:129
 msgid "_Show details"
-msgstr "_Mostrar detlahes"
+msgstr "_Mostrar detalhes"
 
 #: src/View/Gtk/Main.hpp:130
 msgid "Show _hidden entries"
@@ -631,11 +633,11 @@ msgstr "boot padrão de inicialização depois de %1 segundos"
 
 #: src/View/Gtk/Settings.hpp:297
 msgid "(first entry)"
-msgstr ""
+msgstr "(primeira entrada)"
 
 #: src/View/Gtk/Settings.hpp:299
 msgid "(other…)"
-msgstr ""
+msgstr "(outros…)"
 
 #: src/View/Gtk/Settings.hpp:459
 msgid ""
@@ -662,6 +664,21 @@ msgid ""
 " 1 = \"always point to the second entry\" (counting starts by 0)\n"
 " test>0 = \"always point to the first entry of a submenu named test\""
 msgstr ""
+"Esta opção permite escolher o sistema operacional que deve ser selecionado "
+"durante a inicialização. Por padrão, este é sempre o primeiro. Esta opção "
+"significa que a seleção de entrada padrão permanece a mesma ao colocar "
+"outros sistemas operacionais lá.\n"
+"\n"
+"Em contraste com a primeira opção, as outras opções são referenciadas por "
+"nome. Portanto, o sistema padrão não é alterado quando se move para outra "
+"posição.\n"
+"\n"
+"Se você quiser usar outra referência como \"sempre aponte para a segunda "
+"entrada\" você pode usar a última opção que permite digitar uma referência "
+"personalizada. Exemplos de uso:\n"
+" 1 = \"sempre apontar para a segunda entrada\" (contagem começa por 0)\n"
+" Teste>0 = \"sempre apontar para a primeira entrada de um submenu chamado "
+"teste\""
 
 #: src/View/Gtk/Theme.hpp:114
 msgid "white"

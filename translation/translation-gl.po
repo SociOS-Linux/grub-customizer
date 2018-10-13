@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2016-03-22 22:43+0100\n"
-"PO-Revision-Date: 2016-03-22 23:40+0000\n"
+"PO-Revision-Date: 2016-05-06 17:11+0000\n"
 "Last-Translator: Marcos Lans <Unknown>\n"
 "Language-Team: Galician <gl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2016-04-21 19:28+0000\n"
-"X-Generator: Launchpad (build 17995)\n"
+"X-Launchpad-Export-Date: 2018-10-13 11:16+0000\n"
+"X-Generator: Launchpad (build 18790)\n"
 
 #: src/Controller/MainController.hpp:629
 msgid "Name the Entry"
@@ -62,19 +62,19 @@ msgstr "script: %1"
 
 #: src/View/Gtk/Element/List.hpp:148
 msgid "default name: %1"
-msgstr ""
+msgstr "nome predeterminado: %1"
 
 #: src/View/Gtk/Element/List.hpp:152
 msgid "partition: %1"
-msgstr ""
+msgstr "partición: %1"
 
 #: src/View/Gtk/Element/List.hpp:156
 msgid "ISO-Image: "
-msgstr ""
+msgstr "Imaxe-ISO: "
 
 #: src/View/Gtk/Element/List.hpp:160
 msgid "Memtest-Image: "
-msgstr ""
+msgstr "Memtest-Image: "
 
 #: src/View/Gtk/Element/PartitionChooser.hpp:53
 msgid "current"
@@ -86,17 +86,19 @@ msgstr "_Tipo"
 
 #: src/View/Gtk/EntryEditor.hpp:59
 msgid "Boot sequence"
-msgstr ""
+msgstr "Secuencia de arranque"
 
 #: src/View/Gtk/EntryEditor.hpp:60
 msgid "_Name:"
-msgstr ""
+msgstr "_Nome:"
 
 #: src/View/Gtk/EntryEditor.hpp:61
 msgid ""
 "Error building boot sequence.\n"
 "Check parameters!"
 msgstr ""
+"Produciuse un erro construíndo a secuencia de arranque.\n"
+"Comprobe os parámetros."
 
 #: src/View/Gtk/EntryEditor.hpp:68
 msgid "Entry editor"
@@ -104,7 +106,7 @@ msgstr "Editor de entradas"
 
 #: src/View/Gtk/EntryEditor.hpp:204
 msgid "Choose…"
-msgstr ""
+msgstr "Seleccionar..."
 
 #: src/View/Gtk/EntryEditor.hpp:315 src/View/Gtk/EntryEditor.hpp:323
 #: src/View/Gtk/EntryEditor.hpp:342
@@ -118,7 +120,7 @@ msgstr "(código de script)"
 
 #: src/View/Gtk/EntryEditor.hpp:424
 msgid "Choose file…"
-msgstr ""
+msgstr "Seleccionar ficheiro..."
 
 #: src/View/Gtk/EntryEditor.hpp:436
 msgid "_Partition"
@@ -146,11 +148,11 @@ msgstr "Parámetros do núcleo"
 
 #: src/View/Gtk/EntryEditor.hpp:448
 msgid "I_SO image"
-msgstr ""
+msgstr "Imase I_SO"
 
 #: src/View/Gtk/EntryEditor.hpp:450
 msgid "_Memtest-Image"
-msgstr ""
+msgstr "_Memtest-Image"
 
 #: src/View/Gtk/EnvEditor.hpp:52
 msgid "_Partition:"
@@ -269,7 +271,7 @@ msgstr "_Amosar detalles"
 
 #: src/View/Gtk/Main.hpp:130
 msgid "Show _hidden entries"
-msgstr ""
+msgstr "Mostrar entradas _ocultas"
 
 #: src/View/Gtk/Main.hpp:131
 msgid "_Group by Script"
@@ -296,6 +298,8 @@ msgstr ""
 #: src/View/Gtk/Main.hpp:140
 msgid "Script updates found. Click save to apply the changes!"
 msgstr ""
+"Atopáronse actualizacións para os scripts. Prema gardar para aplicar os "
+"cambios."
 
 #: src/View/Gtk/Main.hpp:152
 msgid "_List configuration"
@@ -307,11 +311,11 @@ msgstr "Retirar as entradas seleccionadas (pode restauralas da papeleira)"
 
 #: src/View/Gtk/Main.hpp:197
 msgid "Move up the selected entry or script"
-msgstr "Subir a entrada seleccionada ou script"
+msgstr "Subir a entrada ou script seleccionado"
 
 #: src/View/Gtk/Main.hpp:199
 msgid "Move down the selected entry or script"
-msgstr "Baixar a entrada seleccionada ou script"
+msgstr "Baixar a entrada ou script seleccionado"
 
 #: src/View/Gtk/Main.hpp:205
 msgid "remove this entry from the current submenu"
@@ -444,11 +448,11 @@ msgstr ""
 
 #: src/View/Gtk/Main.hpp:620
 msgid "Failed saving grub configuration!"
-msgstr ""
+msgstr "Produciuse un fallo ao gardar a configuración do grub"
 
 #: src/View/Gtk/Main.hpp:621
 msgid "The grub configuration cannot be saved"
-msgstr ""
+msgstr "Non foi posíbel gardar a configuración do grub"
 
 #: src/View/Gtk/Main.hpp:622
 msgid ""
@@ -615,7 +619,7 @@ msgstr ""
 
 #: src/View/Gtk/Settings.hpp:299
 msgid "(other…)"
-msgstr ""
+msgstr "(outro…)"
 
 #: src/View/Gtk/Settings.hpp:459
 msgid ""
@@ -713,7 +717,7 @@ msgstr "negro"
 
 #: src/View/Gtk/Theme.hpp:210
 msgid "_Load file: "
-msgstr ""
+msgstr "_Cargar ficheiro: "
 
 #: src/View/Gtk/Theme.hpp:213
 msgid "_Theme:"
@@ -725,7 +729,7 @@ msgstr "imaxe de fondo"
 
 #: src/View/Gtk/Theme.hpp:218
 msgid "Please choose a background image!"
-msgstr ""
+msgstr "Seleccione unha imaxe de fondo."
 
 #: src/View/Gtk/Theme.hpp:221
 msgid "_Font"
@@ -733,11 +737,11 @@ msgstr "_Tipo de letra"
 
 #: src/View/Gtk/Theme.hpp:224
 msgid "choose theme file"
-msgstr ""
+msgstr "seleccione un tema"
 
 #: src/View/Gtk/Theme.hpp:225
 msgid "Theme contents"
-msgstr ""
+msgstr "Contidos dos temas"
 
 #: src/View/Gtk/Theme.hpp:226
 msgid "Custom Theme settings"
@@ -745,19 +749,19 @@ msgstr ""
 
 #: src/View/Gtk/Theme.hpp:227
 msgid "Normal: Font"
-msgstr ""
+msgstr "Normal: tipo de letra"
 
 #: src/View/Gtk/Theme.hpp:228
 msgid "Normal: Background"
-msgstr ""
+msgstr "Normal: fondo da pantalla"
 
 #: src/View/Gtk/Theme.hpp:229
 msgid "Highlighted: Font"
-msgstr ""
+msgstr "Resaltada: tipo de letra"
 
 #: src/View/Gtk/Theme.hpp:230
 msgid "Highlighted: Background"
-msgstr ""
+msgstr "Resaltada: fondo"
 
 #: src/View/Gtk/Theme.hpp:301
 msgid "File"
@@ -765,15 +769,15 @@ msgstr "Ficheiro"
 
 #: src/View/Gtk/Theme.hpp:312
 msgid "add theme"
-msgstr ""
+msgstr "engadir tema"
 
 #: src/View/Gtk/Theme.hpp:313
 msgid "delete this theme"
-msgstr ""
+msgstr "eliminar este tema"
 
 #: src/View/Gtk/Theme.hpp:325
 msgid "Archive files"
-msgstr ""
+msgstr "Arquivar ficheiros"
 
 #: src/View/Gtk/Theme.hpp:330
 msgid "All files"
@@ -789,15 +793,15 @@ msgstr "retirar o fondo"
 
 #: src/View/Gtk/Theme.hpp:501
 msgid "(Custom Settings)"
-msgstr ""
+msgstr "(Axustes personalizados)"
 
 #: src/View/Gtk/Theme.hpp:554
 msgid "The chosen file cannot be loaded as theme"
-msgstr ""
+msgstr "O ficheiro seleccionado non se pode cargar como tema"
 
 #: src/View/Gtk/Theme.hpp:557
 msgid "The given filename cannot be used"
-msgstr ""
+msgstr "Non se pode usar o nome do ficheiro indicado"
 
 #: src/View/Gtk/Theme.hpp:560
 msgid ""
@@ -807,7 +811,7 @@ msgstr ""
 
 #: src/View/Gtk/Theme.hpp:563
 msgid "Saving of themes didn't succeed completely!"
-msgstr ""
+msgstr "A gravación dos temas non foi completamente correcta."
 
 #: src/View/Gtk/Theme.hpp:566
 msgid "File replacement failed. Please select a theme file first!"

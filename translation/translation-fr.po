@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: grub-customizer\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2016-03-22 22:43+0100\n"
-"PO-Revision-Date: 2016-03-22 23:40+0000\n"
+"PO-Revision-Date: 2016-05-21 12:45+0000\n"
 "Last-Translator: Charles Monzat <superboa@hotmail.fr>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2016-04-21 19:28+0000\n"
-"X-Generator: Launchpad (build 17995)\n"
+"X-Launchpad-Export-Date: 2018-10-13 11:16+0000\n"
+"X-Generator: Launchpad (build 18790)\n"
 
 #: src/Controller/MainController.hpp:629
 msgid "Name the Entry"
@@ -70,11 +70,11 @@ msgstr "partition : %1"
 
 #: src/View/Gtk/Element/List.hpp:156
 msgid "ISO-Image: "
-msgstr ""
+msgstr "Image ISO : "
 
 #: src/View/Gtk/Element/List.hpp:160
 msgid "Memtest-Image: "
-msgstr ""
+msgstr "Image Memtest : "
 
 #: src/View/Gtk/Element/PartitionChooser.hpp:53
 msgid "current"
@@ -86,17 +86,19 @@ msgstr "_Type :"
 
 #: src/View/Gtk/EntryEditor.hpp:59
 msgid "Boot sequence"
-msgstr ""
+msgstr "Séquence d'amorçage"
 
 #: src/View/Gtk/EntryEditor.hpp:60
 msgid "_Name:"
-msgstr ""
+msgstr "_Nom :"
 
 #: src/View/Gtk/EntryEditor.hpp:61
 msgid ""
 "Error building boot sequence.\n"
 "Check parameters!"
 msgstr ""
+"Erreur de construction de la séquence d'amorçage.\n"
+"Vérifier les paramètres !"
 
 #: src/View/Gtk/EntryEditor.hpp:68
 msgid "Entry editor"
@@ -104,7 +106,7 @@ msgstr "Éditeur d'entrée"
 
 #: src/View/Gtk/EntryEditor.hpp:204
 msgid "Choose…"
-msgstr ""
+msgstr "Choisir…"
 
 #: src/View/Gtk/EntryEditor.hpp:315 src/View/Gtk/EntryEditor.hpp:323
 #: src/View/Gtk/EntryEditor.hpp:342
@@ -114,11 +116,11 @@ msgstr "Autre"
 #: src/View/Gtk/EntryEditor.hpp:316 src/View/Gtk/EntryEditor.hpp:325
 #: src/View/Gtk/EntryEditor.hpp:344 src/View/Gtk/Main.hpp:566
 msgid "(script code)"
-msgstr "(script du code)"
+msgstr "code de script"
 
 #: src/View/Gtk/EntryEditor.hpp:424
 msgid "Choose file…"
-msgstr ""
+msgstr "Choisir un fichier..."
 
 #: src/View/Gtk/EntryEditor.hpp:436
 msgid "_Partition"
@@ -146,23 +148,23 @@ msgstr "Paramètres du noyau"
 
 #: src/View/Gtk/EntryEditor.hpp:448
 msgid "I_SO image"
-msgstr ""
+msgstr "Image I_SO"
 
 #: src/View/Gtk/EntryEditor.hpp:450
 msgid "_Memtest-Image"
-msgstr ""
+msgstr "Image _Memtest"
 
 #: src/View/Gtk/EnvEditor.hpp:52
 msgid "_Partition:"
-msgstr "_Partition :"
+msgstr "_Partition :"
 
 #: src/View/Gtk/EnvEditor.hpp:54
 msgid "Submountpoints:"
-msgstr "Points de sous-montage:"
+msgstr "Points de sous-montage :"
 
 #: src/View/Gtk/EnvEditor.hpp:55
 msgid "save this configuration"
-msgstr "enregister cette configuration"
+msgstr "sauvegarder cette configuration"
 
 #: src/View/Gtk/EnvEditor.hpp:84
 msgid "Grub 2"
@@ -174,11 +176,11 @@ msgstr "BURG"
 
 #: src/View/Gtk/EnvEditor.hpp:258
 msgid "Mount failed!"
-msgstr "Le montage a échoué !"
+msgstr "Le montage a échoué !"
 
 #: src/View/Gtk/EnvEditor.hpp:259
 msgid "umount failed!"
-msgstr "Le démontage a échoué !"
+msgstr "Le démontage a échoué !"
 
 #: src/View/Gtk/EnvEditor.hpp:260
 msgid "This seems not to be a root file system (no fstab found)"
@@ -194,7 +196,7 @@ msgstr "Impossible de démonter la partition sélectionnée"
 
 #: src/View/Gtk/Error.hpp:31 src/View/Gtk/Error.hpp:33
 msgid "An error occurred"
-msgstr "Une erreur est survenue"
+msgstr "Une erreur s'est produite"
 
 #: src/View/Gtk/Error.hpp:32
 msgid ""
@@ -202,7 +204,7 @@ msgid ""
 "be helpful:"
 msgstr ""
 "merci d'informer l'auteur de ce problème. Les informations suivantes "
-"pourraient être utiles :"
+"pourraient être utiles :"
 
 #: src/View/Gtk/Error.hpp:36
 msgid "continue (risk data loss)"
@@ -220,7 +222,7 @@ msgstr ""
 
 #: src/View/Gtk/Installer.hpp:37
 msgid "_Device: "
-msgstr "_Périphérique : "
+msgstr "_Périphérique : "
 
 #: src/View/Gtk/Installer.hpp:47
 msgid "Install to MBR"
@@ -240,7 +242,7 @@ msgstr "Installation du programme de démarrage..."
 
 #: src/View/Gtk/Installer.hpp:93
 msgid "Please type a device string!"
-msgstr "Veuillez introduire une chaîne de périphérique !"
+msgstr "Veuillez introduire une chaîne de périphérique !"
 
 #: src/View/Gtk/Main.hpp:99
 msgid "_File"
@@ -276,11 +278,11 @@ msgstr "_Grouper par script"
 
 #: src/View/Gtk/Main.hpp:132
 msgid "Show _Placeholders"
-msgstr "_Afficher les emplacements réservés"
+msgstr "_Afficher les espaces réservés"
 
 #: src/View/Gtk/Main.hpp:134
 msgid "BURG found!"
-msgstr "BURG trouvé !"
+msgstr "BURG trouvé !"
 
 #: src/View/Gtk/Main.hpp:135 src/View/Gtk/Main.hpp:136
 msgid "advanced settings"
@@ -291,7 +293,7 @@ msgid ""
 "The modifications you've done affects the visible entries. Please reload!"
 msgstr ""
 "Les modifications effectuées ont une incidence sur les entrées visibles. "
-"Merci de réactualiser !"
+"Merci de réactualiser !"
 
 #: src/View/Gtk/Main.hpp:140
 msgid "Script updates found. Click save to apply the changes!"
@@ -360,7 +362,7 @@ msgstr "_Changer d'Environnement..."
 
 #: src/View/Gtk/Main.hpp:307
 msgid "Do you want to configure BURG instead of grub2?"
-msgstr "Voulez-vous configurer BURG à la place de grub2 ?"
+msgstr "Voulez-vous configurer BURG à la place de grub2 ?"
 
 #: src/View/Gtk/Main.hpp:374
 msgid "_General settings"
@@ -388,7 +390,7 @@ msgstr "chargement du script %2/%3 (%1)"
 
 #: src/View/Gtk/Main.hpp:550
 msgid "Proxy binary not found!"
-msgstr "Binaire du proxy non trouvé !"
+msgstr "Binaire du proxy non trouvé !"
 
 #: src/View/Gtk/Main.hpp:551
 msgid ""
@@ -409,7 +411,7 @@ msgstr "(Entrées entrantes)"
 
 #: src/View/Gtk/Main.hpp:579
 msgid "The saved configuration is not up to date!"
-msgstr "La configuration enregistrée n'est pas à jour !"
+msgstr "La configuration enregistrée n'est pas à jour !"
 
 #: src/View/Gtk/Main.hpp:580
 msgid ""
@@ -418,9 +420,9 @@ msgid ""
 "pc. To fix this, click update!"
 msgstr ""
 "La configuration générée n'est pas identique à la configuration enregistrée "
-"au démarrage. Ainsi ce que vous voyez maintenant peut ne pas être ce que "
+"au démarrage. Ainsi, ce que vous voyez maintenant peut ne pas être ce que "
 "vous verrez lorsque vous redémarrerez votre ordinateur. Pour corrigez ceci, "
-"cliquez sur mettre à jour !"
+"cliquez sur mettre à jour !"
 
 #: src/View/Gtk/Main.hpp:583
 msgid "_Quit without update"
@@ -432,7 +434,7 @@ msgstr "_Mettre à jour & Quitter"
 
 #: src/View/Gtk/Main.hpp:590
 msgid "Do you want to save your modifications?"
-msgstr "Voulez-vous enregistrer vos modifications ?"
+msgstr "Voulez-vous enregistrer vos modifications ?"
 
 #: src/View/Gtk/Main.hpp:593
 msgid "_Quit without saving"
@@ -445,8 +447,8 @@ msgstr "_Enregistrer & Quitter"
 #: src/View/Gtk/Main.hpp:599
 msgid "AND: your modifications are still unsaved, update will save them too!"
 msgstr ""
-"AND : Vos modifications ne sont pas enregistrées, la mise à jour le fera "
-"automatiquement !"
+"AND : Vos modifications ne sont pas enregistrées, la mise à jour le fera "
+"automatiquement !"
 
 #: src/View/Gtk/Main.hpp:620
 msgid "Failed saving grub configuration!"
@@ -471,7 +473,7 @@ msgid ""
 "%1 couldn't be executed successfully. error message:\n"
 " %2"
 msgstr ""
-"%1 ne peut pas s’exécuter correctement. Message d'erreur :\n"
+"%1 ne peut pas s’exécuter correctement. Message d'erreur :\n"
 " %2"
 
 #: src/View/Gtk/Main.hpp:630
@@ -480,11 +482,11 @@ msgstr "Paramètres d'environnement"
 
 #: src/View/Gtk/Main.hpp:644
 msgid "Do you want to proceed without saving the current configuration?"
-msgstr "Voulez-vous continuer sans enregistrer la configuration actuelle ?"
+msgstr "Voulez-vous continuer sans enregistrer la configuration actuelle ?"
 
 #: src/View/Gtk/Main.hpp:645
 msgid "There are unsaved modifications!"
-msgstr "Il y a des modifications non enregistrées !"
+msgstr "Il y a des modifications non enregistrées !"
 
 #: src/View/Gtk/Main.hpp:697
 msgid ""
@@ -492,8 +494,8 @@ msgid ""
 "on it. Are you sure you want to do it anyway?"
 msgstr ""
 "Supprimer le code de script peut occasionner des problèmes lorsque l'on "
-"tente de démarrer les entrées s'appuyant sur celui-ci. Êtes-vous certain de "
-"vouloir faire cela?"
+"tente de démarrer les entrées s'appuyant sur celui-ci. Êtes-vous certain(e) "
+"de vouloir faire cela ?"
 
 #: src/View/Gtk/Main.hpp:707
 msgid ""
@@ -504,9 +506,9 @@ msgid ""
 msgstr ""
 "Vous essayez de supprimer une entrée provenant du système en cours "
 "d'utilisation. Assurez-vous qu'il y ait d'autres entrées fonctionnant sur ce "
-"système !\n"
-"Si vous voulez uniquement supprimer d'anciens noyaux : la meilleure façon "
-"est de les désinstaller plutôt que de seulement les masquer du menu de "
+"système !\n"
+"Si vous voulez uniquement supprimer d'anciens noyaux : la meilleure façon "
+"est de les désinstaller plutôt que de seulement les masquer dans le menu de "
 "démarrage."
 
 #: src/View/Gtk/Main.hpp:887
@@ -523,6 +525,9 @@ msgid ""
 "however when clicking it, it loads another menu which allows you to choose "
 "one the the containing menuentries."
 msgstr ""
+"Un groupe d'autres systèmes d'exploitation. Grub le montre comme une entrée "
+"de menu normale. Cependant, en cliquant dessus, cela charge un autre menu "
+"qui vous permet de choisir une des entrées contenues."
 
 #: src/View/Gtk/Main.hpp:892
 msgid ""
@@ -533,6 +538,13 @@ msgid ""
 "used to configure grub. You should only touch it when knowing what it does. "
 "Placeholders are hidden by default."
 msgstr ""
+"Il y a deux types de cette entrée spéciale : Les entrées entrantes "
+"représentent l'emplacement où Grub Customizer place les nouveaux systèmes "
+"d'exploitation qui sont détectés par grub, mais restent non configurés en "
+"utilisant Grub Customizer. Le code de script est un code généré par grub qui "
+"ne ressemble pas à une entrée de menu. Dans la plupart des cas, il est "
+"utilisé pour configurer grub. Utilisez-le uniquement si vous connaissez son "
+"fonctionnement. Les espaces réservés sont cachés par défaut."
 
 #: src/View/Gtk/Main.hpp:898
 msgid ""
@@ -547,17 +559,17 @@ msgstr "À propos des types d'entrée"
 
 #: src/View/Gtk/Main.hpp:957
 msgid "Are you sure?"
-msgstr "Êtes-vous sûr(e) ?"
+msgstr "Êtes-vous sûr(e) ?"
 
 #: src/View/Gtk/Main.hpp:958
 msgid "This removes all your list modifications of the bootloader menu!"
 msgstr ""
 "Ceci supprime l'ensemble des modifications de la liste appartenant au menu "
-"du chargeur d'amorçage !"
+"du chargeur d'amorçage !"
 
 #: src/View/Gtk/Settings.hpp:113
 msgid "pre_defined: "
-msgstr "pré_défini : "
+msgstr "pré_défini : "
 
 #: src/View/Gtk/Settings.hpp:114
 msgid "previously _booted entry"
@@ -589,7 +601,7 @@ msgstr "recherche d'autres systèmes d'exploitation"
 
 #: src/View/Gtk/Settings.hpp:121
 msgid "custom resolution: "
-msgstr "résolution personnalisée : "
+msgstr "résolution personnalisée : "
 
 #: src/View/Gtk/Settings.hpp:125
 msgid "settings"
@@ -625,11 +637,11 @@ msgstr "Démarrer l'entrée par défaut après %1 Seconde(s)"
 
 #: src/View/Gtk/Settings.hpp:297
 msgid "(first entry)"
-msgstr ""
+msgstr "(première entrée)"
 
 #: src/View/Gtk/Settings.hpp:299
 msgid "(other…)"
-msgstr ""
+msgstr "(autre...)"
 
 #: src/View/Gtk/Settings.hpp:459
 msgid ""
@@ -735,7 +747,7 @@ msgstr "_Thème :"
 
 #: src/View/Gtk/Theme.hpp:214
 msgid "background image"
-msgstr "Image de fond"
+msgstr "Image d'arrière-plan"
 
 #: src/View/Gtk/Theme.hpp:218
 msgid "Please choose a background image!"
@@ -759,7 +771,7 @@ msgstr "Paramètres personnalisés de thème"
 
 #: src/View/Gtk/Theme.hpp:227
 msgid "Normal: Font"
-msgstr ""
+msgstr "Normal : Police"
 
 #: src/View/Gtk/Theme.hpp:228
 msgid "Normal: Background"
@@ -767,11 +779,11 @@ msgstr "Normal : Arrière-plan"
 
 #: src/View/Gtk/Theme.hpp:229
 msgid "Highlighted: Font"
-msgstr ""
+msgstr "Surligné : Police"
 
 #: src/View/Gtk/Theme.hpp:230
 msgid "Highlighted: Background"
-msgstr ""
+msgstr "Surligné : Arrière-plan"
 
 #: src/View/Gtk/Theme.hpp:301
 msgid "File"
@@ -799,7 +811,7 @@ msgstr "supprimer la police"
 
 #: src/View/Gtk/Theme.hpp:393
 msgid "remove background"
-msgstr "supprime l'image de fond"
+msgstr "supprimer l'arrière-plan"
 
 #: src/View/Gtk/Theme.hpp:501
 msgid "(Custom Settings)"
@@ -823,11 +835,13 @@ msgstr ""
 
 #: src/View/Gtk/Theme.hpp:563
 msgid "Saving of themes didn't succeed completely!"
-msgstr ""
+msgstr "La sauvegarde des thèmes n'a pas  complètement réussie !"
 
 #: src/View/Gtk/Theme.hpp:566
 msgid "File replacement failed. Please select a theme file first!"
 msgstr ""
+"Échec de remplacement du fichier. Veuillez d'abord sélectionner un fichier "
+"de thème !"
 
 #: src/View/Gtk/Theme.hpp:587
 msgid "filename"
@@ -860,7 +874,7 @@ msgstr "Les polices de Grub peuvent être dangereuses (Info)"
 
 #: src/View/Gtk/Theme.hpp:857
 msgid "Are you sure you want to remove this theme"
-msgstr "Êtes-vous certain de vouloir supprimer ce thème"
+msgstr "Êtes-vous certain(e) de vouloir supprimer ce thème"
 
 #: src/View/Gtk/Theme.hpp:931
 msgid ""
@@ -910,7 +924,7 @@ msgstr ""
 
 #: src/View/Gtk/Trash.hpp:159
 msgid "This deletes the following entries:"
-msgstr "Ceci supprime les entrées suivantes :"
+msgstr "Ceci supprime les entrées suivantes :"
 
 #: src/main/client.cpp:98
 msgid "Linux"
