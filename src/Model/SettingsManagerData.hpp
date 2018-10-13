@@ -61,16 +61,26 @@ public:
 				if (fgets(nameBuf, 5, file) == NULL || nameBuf == std::string("CHIX") || nameBuf == std::string("DATA")) {
 					break;
 				}
+				
+				char* getsResult = nullptr;
 	
 				char sizeBuf [5];
-				fgets(sizeBuf, 5, file);
+				getsResult = fgets(sizeBuf, 5, file);
+				if (getsResult == nullptr) {
+					continue;
+				}
 				unsigned int size = sizeBuf[3] + (sizeBuf[2] << 8) + (sizeBuf[1] << 16) + (sizeBuf[0] << 24);
 	
 				char* contentBuf = new char[size + 1];
 	
-				fgets(contentBuf, size + 1, file);
+				getsResult = fgets(contentBuf, size + 1, file);
+				if (getsResult == nullptr) {
+					delete contentBuf;
+					continue;
+				}
 	
 				result[nameBuf] = contentBuf;
+				delete contentBuf;
 			}
 			fclose(file);
 		}
