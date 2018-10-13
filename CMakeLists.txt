@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 2.6.2) # may be lower
 
 ADD_DEFINITIONS(-std=c++11)
 
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
 find_package(PkgConfig)
 
 pkg_check_modules(GTKMM gtkmm-3.0)
