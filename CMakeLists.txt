@@ -229,13 +229,12 @@ install(FILES misc/grub-customizer.desktop
 
 
 #install icons
-install(FILES misc/icons/16x16.png DESTINATION /usr/share/icons/hicolor/16x16/apps RENAME grub-customizer.png)
-install(FILES misc/icons/22x22.png DESTINATION /usr/share/icons/hicolor/22x22/apps RENAME grub-customizer.png)
-install(FILES misc/icons/24x24.png DESTINATION /usr/share/icons/hicolor/24x24/apps RENAME grub-customizer.png)
-install(FILES misc/icons/32x32.png DESTINATION /usr/share/icons/hicolor/32x32/apps RENAME grub-customizer.png)
-install(FILES misc/icons/48x48.png DESTINATION /usr/share/icons/hicolor/48x48/apps RENAME grub-customizer.png)
-install(FILES misc/icons/64x64.png DESTINATION /usr/share/icons/hicolor/64x64/apps RENAME grub-customizer.png)
-install(FILES misc/icons/128x128.png DESTINATION /usr/share/icons/hicolor/128x128/apps RENAME grub-customizer.png)
+install(FILES misc/icons/16x16.svg DESTINATION /usr/share/icons/hicolor/16x16/apps RENAME grub-customizer.svg)
+install(FILES misc/icons/24x24.svg DESTINATION /usr/share/icons/hicolor/24x24/apps RENAME grub-customizer.svg)
+install(FILES misc/icons/32x32.svg DESTINATION /usr/share/icons/hicolor/32x32/apps RENAME grub-customizer.svg)
+install(FILES misc/icons/48x48.svg DESTINATION /usr/share/icons/hicolor/48x48/apps RENAME grub-customizer.svg)
+install(FILES misc/icons/64x64.svg DESTINATION /usr/share/icons/hicolor/64x64/apps RENAME grub-customizer.svg)
+install(FILES misc/icons/128x128.svg DESTINATION /usr/share/icons/hicolor/128x128/apps RENAME grub-customizer.svg)
 
 
 # uninstall target
