@@ -95,7 +95,7 @@ public:
 			}
 			if (iter->first.substr(0, this->env->cfg_dir.length()) != this->env->cfg_dir
 			 || iter->second.substr(0, this->env->cfg_dir.length()) != this->env->cfg_dir) {
-				this->log("invalid script prefix found: script wont be added to source map", Logger::ERROR);
+				this->log("invalid script prefix found: script won't be added to source map", Logger::ERROR);
 				continue; // ignore, if path doesn't start with cfg_dir
 			}
 			std::string defaultName = iter->first.substr(this->env->cfg_dir.length() + 1);

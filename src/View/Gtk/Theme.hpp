@@ -632,7 +632,7 @@ class View_Gtk_Theme :
 		Gtk::MessageDialog dialog(gettext("please note: large fonts on low boot screen resolutions can corrupt the boot screen\n"
 			"Because this problem depends on chosen font, it isn't possible to define a general maximum. "
 			"When you're trying to select a larger font, please do it in small steps (rebooting and checking the results).\n"
-			"The problem occurs when the grub gui elements (borders, description) wont fit into screen. "
+			"The problem occurs when the grub gui elements (borders, description) won't fit into screen. "
 			"So while there's enough vertical space you can try a larger font. "
 			"The mass of menuentries is not a problem - they are scrolled if required.\n\n"
 			"The corruption results in a endless loading time of grub2. You need a live cd to fix this:\n"

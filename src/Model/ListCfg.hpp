@@ -291,7 +291,7 @@ class Model_ListCfg :
 		} else {
 			remove(errorLogFile.c_str()); //remove file, if everything was ok
 		}
-		this->log("mkconfig successfull completed", Logger::INFO);
+		this->log("mkconfig successful completed", Logger::INFO);
 	
 		this->send_new_load_progress(0.9);
 	
