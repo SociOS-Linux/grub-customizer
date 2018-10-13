@@ -85,7 +85,7 @@ function build() {
 	compileFile="$releasedir/$subdir/$distribution/compile.sh"
 	
 	echo '#!/bin/sh' >> "$compileFile"
-	echo 'cd "'$releasedir/$subdir/$distribution'" && export BD=build_`date +%s` && mkdir $BD && sudo mount none $BD -t tmpfs && tar -xzf *.orig.tar.*z -C $BD && tar -xzf *.debian.tar.*z -C $BD/* && cp *.orig.tar.*z $BD/ && cd $BD/* && dpkg-buildpackage && cd ../.. && mv $BD/*.deb ./ && sudo umount $BD && rm -rf $BD' >> "$compileFile";
+	echo 'cd "'$releasedir/$subdir/$distribution'" && export BD=build_`date +%s` && mkdir $BD && sudo mount none $BD -t tmpfs && tar -xf *.orig.tar.*z -C $BD && tar -xf *.debian.tar.*z -C $BD/* && cp *.orig.tar.*z $BD/ && cd $BD/* && dpkg-buildpackage && cd ../.. && mv $BD/*.deb ./ && sudo umount $BD && rm -rf $BD' >> "$compileFile";
 	
 	chmod +x "$releasedir/$subdir/$distribution"/*.sh
 }
