@@ -474,9 +474,15 @@ class Model_ListCfg :
 				FILE* proxyBinTarget = fopen((this->env->cfg_dir+"/bin/grubcfg_proxy").c_str(), "w");
 				if (proxyBinTarget){
 					int c;
-					while ((c = fgetc(proxyBinSource)) != EOF){
-						fputc(c, proxyBinTarget);
-					}
+					fputs(
+						"#!/bin/sh\n"
+						"if [ -e /usr/lib/grub-customizer/grubcfg-proxy ] ; then\n"
+						"    cat | /usr/lib/grub-customizer/grubcfg-proxy \"$@\"\n"
+						"else\n"
+						"    cat\n"
+						"fi\n",
+						proxyBinTarget
+					);
 					fclose(proxyBinTarget);
 					chmod((this->env->cfg_dir+"/bin/grubcfg_proxy").c_str(), 0755);
 				} else {
