@@ -476,8 +476,14 @@ class Model_ListCfg :
 					int c;
 					fputs(
 						"#!/bin/sh\n"
-						"if [ -e /usr/lib/grub-customizer/grubcfg-proxy ] ; then\n"
-						"    cat | /usr/lib/grub-customizer/grubcfg-proxy \"$@\"\n"
+						"if [ -e ",
+						proxyBinTarget
+					);
+					fputs(LIBDIR, proxyBinTarget);
+					fputs("/grubcfg-proxy ] ; then\n"
+						"    cat | ", proxyBinTarget);
+					fputs(LIBDIR, proxyBinTarget);
+					fputs("/grubcfg-proxy \"$@\"\n"
 						"else\n"
 						"    cat\n"
 						"fi\n",
