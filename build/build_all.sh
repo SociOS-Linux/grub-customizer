@@ -99,6 +99,7 @@ build z zesty
 build a artful
 build b bionic
 build c cosmic
+build j jammy
 
 
 echo '#!/bin/sh
