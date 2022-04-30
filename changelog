@@ -1,3 +1,6 @@
+v 5.2.0
+	* changed /etc/grub.d/bin/grubcfg_proxy to a shell script, resolving update issues this way
+
 v 5.1.0
 	* version info (-v)
 	* some internal changes
